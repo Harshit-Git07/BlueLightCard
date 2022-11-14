@@ -1,5 +1,23 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Dependencies
+
+ - react
+ - nextjs
+ - react-bootstrap
+ - bootstrap
+ - storybook
+ - sass
+ - jotai
+ - react-hook-forms
+ - yup (form validation)
+ - jest
+ - testing library
+ - styled-components
+ - i18next
+ - dayjs
+ - lodash
+
 ## Getting Started
 
 First, run the development server:

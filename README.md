@@ -1,5 +1,5 @@
 ## BLC Monorepo
 
-## Dependencies
+### Dependencies
 
  - husky

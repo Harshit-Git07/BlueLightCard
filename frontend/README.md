@@ -17,6 +17,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
  - i18next
  - dayjs
  - lodash
+ - fortawesome
 
 ## Getting Started
 

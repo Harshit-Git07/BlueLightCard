@@ -6,7 +6,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
  - nextjs
  - react-bootstrap
  - bootstrap
- - storybook
+ - [i18next](https://www.i18next.com/)
+ - [next-i18next](https://github.com/i18next/next-i18next)
+ - [react-i18next](https://github.com/i18next/react-i18next)
+ - [storybook](https://storybook.js.org/)
  - sass
  - jotai
  - react-hook-forms
@@ -14,7 +17,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
  - jest
  - testing library
  - styled-components
- - i18next
  - dayjs
  - lodash
  - fortawesome

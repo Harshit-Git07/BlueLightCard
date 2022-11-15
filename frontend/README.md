@@ -15,7 +15,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
  - react-hook-forms
  - yup (form validation)
  - jest
- - testing library
+ - testing-library
  - styled-components
  - dayjs
  - lodash

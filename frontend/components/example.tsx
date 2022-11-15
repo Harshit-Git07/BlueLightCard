@@ -1,9 +1,9 @@
 import { ReactElement } from "react";
 
-interface Props {
+export interface ExampleComponentProps {
     text: string;
 }
 
-export default function Example({ text }: Props): ReactElement {
+export default function Example({ text }: ExampleComponentProps): ReactElement {
     return <h2>{text}</h2>;
 }

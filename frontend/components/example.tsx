@@ -5,5 +5,5 @@ export interface ExampleComponentProps {
 }
 
 export default function Example({ text }: ExampleComponentProps): ReactElement {
-    return <h2>{text}</h2>;
+    return <h2>{text} example</h2>;
 }

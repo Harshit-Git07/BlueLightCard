@@ -20,6 +20,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
  - dayjs
  - lodash
  - fortawesome
+ - @stripe/stripe-js
+ - @stripe/react-stripe-js
 
 ### Getting Started
 

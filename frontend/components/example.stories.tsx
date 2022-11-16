@@ -1,3 +1,4 @@
+import "../styles/main.scss";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import ExampleComponent from "./example";
 
@@ -11,5 +12,7 @@ const Template: ComponentStory<typeof ExampleComponent> = (args) => <ExampleComp
 export const ExampleComponentStory = Template.bind({});
 
 ExampleComponentStory.args = {
-    text: "Hello World"
+    text: "Hello World",
+    buttonText: "Click Me",
+    showButtonIcon: false,
 };

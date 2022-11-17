@@ -1,6 +1,15 @@
+import { GetStaticProps } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import ExampleLayout from './layout/example'
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+  }
+})
 
 export default function Home() {
   return (
@@ -15,6 +24,8 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <ExampleLayout></ExampleLayout>
 
         <p className={styles.description}>
           Get started by editing{' '}

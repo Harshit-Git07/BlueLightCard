@@ -1,4 +1,3 @@
-import "../styles/main.scss";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import ExampleComponent from "./example";
 

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckSquare } from "@fortawesome/free-regular-svg-icons";
-import { ReactElement } from "react";
+import { FC } from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -18,7 +18,7 @@ const StyledButtonIcon = styled(FontAwesomeIcon)`
     margin-right: 5px;
 `;
 
-export default function Example({ text, buttonText, showButtonIcon }: ExampleComponentProps): ReactElement {
+const Example: FC<ExampleComponentProps> = ({ text, buttonText, showButtonIcon }) => {
     const onClick = () => {
         console.info(text);
     };
@@ -33,3 +33,5 @@ export default function Example({ text, buttonText, showButtonIcon }: ExampleCom
         </div>
     );
 }
+
+export default Example;

@@ -7,6 +7,7 @@ describe("Example component", () => {
     beforeEach(() => {
         props = {
             text: "Hello World",
+            buttonText: "",
         };
     });
 

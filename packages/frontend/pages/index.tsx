@@ -1,8 +1,15 @@
+import { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+export const getStaticProps: GetStaticProps = async () => ({
+    props: {
+        test: "Hello World",
+    },
+});
+
+const Home: NextPage<any> = ({ test }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -20,6 +27,7 @@ export default function Home() {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
+        {test}
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
@@ -69,3 +77,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home;

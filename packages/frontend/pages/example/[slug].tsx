@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-/** Testing with SSG */
+/** Testing with SSG
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     props: {
@@ -15,7 +15,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
 export const getStaticPaths: GetStaticPaths = async () => ({
     paths: [{ params: { slug: "signup" } }],
     fallback: false,
-});
+});*/
 
 const ExamplePage: NextPage = (props) => {
     const router = useRouter();

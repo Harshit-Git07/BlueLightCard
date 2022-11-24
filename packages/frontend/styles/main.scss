@@ -1,2 +1,15 @@
-// main entry
+@import "./global-variables";
 @import "~bootstrap/scss/bootstrap";
+
+button {
+    &:focus:not(:focus-visible) {
+        outline: $btn-focus-outline solid 2px;
+        outline-offset: 3px;
+    }
+}
+
+@each $color, $value in $theme-colors {
+    .btn-#{$color} {
+        @include button-variant($value, $value, $hover-background: $btn-hover-bg);
+    }
+}

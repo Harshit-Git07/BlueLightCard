@@ -1,6 +1,10 @@
 $duke-blue: #000099;
+$duke-blue-light: #2929CC;
 $vivid-sky-blue: #33CCFF;
 $lilac: #996699;
 
+// theme colors
 $primary: $duke-blue;
-$secondary: $vivid-sky-blue;
+
+$btn-hover-bg: $duke-blue-light;
+$btn-focus-outline: $vivid-sky-blue;

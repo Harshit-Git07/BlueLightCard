@@ -9,7 +9,7 @@ interface StyledButtonIconProps {
 }
 
 const StyledButtonIcon = styled(FontAwesomeIcon)<StyledButtonIconProps>`
-    ${props => props.side === "left" ? css`margin-right: 5px;` : css`margin-left: 5px;`};
+    ${props => props.side === "left" ? css`margin-right: 10px;` : css`margin-left: 10px;`};
 `;
 
 const Button: FC<ButtonProps> = ({ text, iconLeft, iconRight, variant = "primary" }) => {

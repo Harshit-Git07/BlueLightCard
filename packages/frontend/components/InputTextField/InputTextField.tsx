@@ -5,6 +5,11 @@ import { Form } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { InputTextFieldProps } from "./types";
 
+/**
+ * The use of $prop are transient props, see the docs for more
+ * https://styled-components.com/docs/api#transient-props
+ */
+
 interface StyledInputTextIconProps {
     error?: boolean;
     $iconPosition?: "left" | "right";

@@ -1,5 +1,7 @@
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FormControlProps } from "react-bootstrap";
-import { UseControllerProps } from "react-hook-form";
-import { InputFieldSharedProps } from "../InputField/types";
+import { InputFieldSharedProps } from "../FieldGroup/types";
 
-export type InputTextFieldProps = FormControlProps & InputFieldSharedProps;
+export type InputTextFieldProps = FormControlProps & InputFieldSharedProps & {
+    icon?: IconDefinition;
+};

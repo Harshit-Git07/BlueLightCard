@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Form, InputGroup } from "react-bootstrap";
-import { InputFieldProps } from "./types";
+import { FieldGroupProps } from "./types";
 
-const InputField: FC<InputFieldProps> = ({
+const FieldGroup: FC<FieldGroupProps> = ({
     labelText,
     controlId,
     children,
@@ -25,4 +25,4 @@ const InputField: FC<InputFieldProps> = ({
     );
 };
 
-export default InputField;
+export default FieldGroup;

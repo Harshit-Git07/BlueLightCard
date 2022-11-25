@@ -21,7 +21,7 @@ const iconArgSelect = {
 };
 
 const componentMeta: ComponentMeta<typeof Button> = {
-    title: "Button Component",
+    title: "Component System/Button Component",
     component: Button,
     argTypes: {
         iconLeft: iconArgSelect,

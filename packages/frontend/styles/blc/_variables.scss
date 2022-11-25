@@ -1,10 +1,14 @@
-$duke-blue: #000099;
-$duke-blue-light: #2929CC;
+$duke-blue-700: #000099;
+$duke-blue-500: #2929CC;
 $vivid-sky-blue: #33CCFF;
 $lilac: #996699;
+$oxford-blue-400: #CCCCD6;
 
 // theme colors
-$primary: $duke-blue;
+$primary: $duke-blue-700;
 
-$btn-hover-bg: $duke-blue-light;
+$btn-hover-bg: $duke-blue-500;
 $btn-focus-outline: $vivid-sky-blue;
+
+$input-border-color: $oxford-blue-400;
+$input-btn-focus-width: 0;

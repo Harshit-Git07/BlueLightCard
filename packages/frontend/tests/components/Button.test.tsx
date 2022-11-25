@@ -1,5 +1,5 @@
-import Button from "@/components/button/Button";
-import { ButtonProps } from "@/components/button/types";
+import Button from "@/components/Button/Button";
+import { ButtonProps } from "@/components/Button/types";
 import { render, screen } from "@testing-library/react";
 
 describe("Button component", () => {

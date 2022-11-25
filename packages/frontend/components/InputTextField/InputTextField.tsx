@@ -22,7 +22,7 @@ const StyledInputTextIcon = styled(FontAwesomeIcon)`
 
 const StyledInputTextField = styled(Form.Control)<StyledInputTextProps>`
     ${props => props.spaceForIcon && css`padding-left: 2.1rem;`}
-    ${props => props.error && css`border-color: var(--bs-danger);`}
+    ${props => props.error && css`border-color: var(--bs-danger) !important;`}
 `;
 
 const InputTextField: FC<InputTextFieldProps> = ({ icon, error, placeholder, type = "text" }) => {

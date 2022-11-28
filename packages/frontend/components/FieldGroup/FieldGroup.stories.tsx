@@ -1,5 +1,6 @@
+import { faEnvelope } from "@fortawesome/pro-solid-svg-icons";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Form } from "react-bootstrap";
+import InputTextField from "../InputTextField/InputTextField";
 import FieldGroup from "./FieldGroup";
 
 const componentMeta: ComponentMeta<typeof FieldGroup> = {
@@ -9,7 +10,7 @@ const componentMeta: ComponentMeta<typeof FieldGroup> = {
 
 const FieldGroupTemplate: ComponentStory<typeof FieldGroup> = (args) => (
     <FieldGroup {...args}>
-        <Form.Control type="text" />
+        <InputTextField error={args.invalid} placeholder="Placeholder text" icon={faEnvelope} />
     </FieldGroup>
 );
 
@@ -17,6 +18,8 @@ export const FieldGroupStory = FieldGroupTemplate.bind({});
 
 FieldGroupStory.args = {
     labelText: "Field Group",
+    invalid: false,
+    message: "Message"
 };
 
 export default componentMeta;

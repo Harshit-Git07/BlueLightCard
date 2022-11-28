@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleExclamation, faCircleCheck } from "@fortawesome/pro-solid-svg-icons";
 import { FC } from "react";
 import { Form } from "react-bootstrap";
 import styled, { css } from "styled-components";
@@ -11,7 +11,7 @@ import { InputTextFieldProps } from "./types";
  */
 
 interface StyledInputTextIconProps {
-    error?: boolean;
+    color?: string;
     $iconPosition?: "left" | "right";
 }
 
@@ -29,7 +29,7 @@ const StyledInputTextIcon = styled(FontAwesomeIcon)<StyledInputTextIconProps>`
     top: 50%;
     ${props => props.$iconPosition === "left" ? "left" : "right"}: 0.8rem;
     transform: translateY(-50%);
-    ${props => props.error && css`color: var(--bs-danger);`}
+    color: var(${props => props.color});
 `;
 
 const StyledInputTextField = styled(Form.Control)<StyledInputTextProps>`
@@ -37,15 +37,16 @@ const StyledInputTextField = styled(Form.Control)<StyledInputTextProps>`
     ${props => props.error && css`border-color: var(--bs-danger) !important;`}
 `;
 
-const InputTextField: FC<InputTextFieldProps> = ({ icon, error, placeholder, type = "text" }) => {
+const InputTextField: FC<InputTextFieldProps> = ({ icon, error, value, placeholder, onChange, type = "text" }) => {
+    const iconColor = value && !error ? "--bs-success" : "--bs-danger";
     return (
         <StyledInputTextContainer>
             {icon &&
                 <StyledInputTextIcon icon={icon} $iconPosition="left" size="sm" />
             }
-            <StyledInputTextField type={type} $spaceForIcon={!!icon} error={error} placeholder={placeholder} />
-            {error && 
-                <StyledInputTextIcon icon={faCircleExclamation} $iconPosition="right" error={error} size="sm" />
+            <StyledInputTextField type={type} $spaceForIcon={!!icon} error={error} placeholder={placeholder} onChange={onChange} />
+            {(value || error) && 
+                <StyledInputTextIcon icon={value && !error ? faCircleCheck : faCircleExclamation} $iconPosition="right" color={iconColor} />
             }
         </StyledInputTextContainer>
     );

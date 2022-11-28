@@ -1,13 +1,14 @@
 import { ChangeEventHandler, PropsWithChildren } from "react";
 import { FormGroupProps, InputGroupProps } from "react-bootstrap";
 
-export type FieldGroupProps = Pick<FormGroupProps, "controlId"> & Pick<InputGroupProps, "hasValidation"> & PropsWithChildren & {
+export type FieldGroupProps = Pick<FormGroupProps, "controlId"> & PropsWithChildren & {
     labelText: string;
     invalid?: boolean;
-    invalidMessage?: string;
+    message?: string;
 }
 
-export interface InputFieldSharedProps {
+export interface InputFieldSharedProps<E> {
     error?: boolean;
-    onChange?: ChangeEventHandler;
+    value?: string;
+    onChange?: ChangeEventHandler<E>;
 }

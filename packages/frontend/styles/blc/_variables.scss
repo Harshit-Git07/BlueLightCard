@@ -2,8 +2,9 @@ $duke-blue-700: #000099;
 $duke-blue-500: #2929CC;
 $vivid-sky-blue: #33CCFF;
 $lilac: #996699;
-$oxford-blue-400: #CCCCD6;
 $oxford-blue-900: #000033;
+$oxford-blue-700: #4D4D70;
+$oxford-blue-400: #CCCCD6;
 
 // theme colors
 $primary: $duke-blue-700;
@@ -16,3 +17,7 @@ $btn-focus-outline: $vivid-sky-blue;
 $input-focus-border-color: $duke-blue-700;
 $input-border-color: $oxford-blue-400;
 $input-btn-focus-width: 0;
+
+:root {
+    --blc-neutral-700: #{$oxford-blue-700};
+}

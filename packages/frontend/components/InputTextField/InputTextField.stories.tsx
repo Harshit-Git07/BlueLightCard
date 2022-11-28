@@ -24,6 +24,11 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
     component: InputTextField,
     argTypes: {
         icon: iconArgSelect,
+        value: {
+            control: {
+                type: "boolean",
+            }
+        },
     },
 };
 
@@ -34,6 +39,7 @@ export const InputTextFieldStory = InputTextFieldTemplate.bind({});
 InputTextFieldStory.args = {
     placeholder: "Input text field",
     error: false,
+    value: "",
 };
 
 export default componentMeta;

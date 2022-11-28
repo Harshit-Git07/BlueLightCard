@@ -27,12 +27,14 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
         value: {
             control: {
                 type: "boolean",
-            }
+            },
         },
     },
 };
 
-const InputTextFieldTemplate: ComponentStory<typeof InputTextField> = (args) => <InputTextField {...args} />;
+const InputTextFieldTemplate: ComponentStory<typeof InputTextField> = (args) => (
+    <InputTextField {...args} />
+);
 
 export const InputTextFieldStory = InputTextFieldTemplate.bind({});
 

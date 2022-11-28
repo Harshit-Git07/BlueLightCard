@@ -1,3 +1,5 @@
+const { resolve } = require("path");
+
 module.exports = {
   "stories": [
     "../components/**/*.stories.mdx",
@@ -12,5 +14,11 @@ module.exports = {
   "framework": "@storybook/react",
   "core": {
     "builder": "@storybook/builder-webpack5"
-  }
+  },
+  webpackFinal: async(config) => {
+    config.resolve.alias = {
+      "@/components": resolve(__dirname, "../components"),
+    };
+    return config;
+  },
 }

@@ -3,18 +3,14 @@ import { Form } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { InputTextFieldProps } from "./types";
 import InputFieldWrapper from "@/components/_shared/InputFieldWrapper";
+import { StyledInputProps } from "@/components/_shared/types";
 
 /**
  * The use of $prop are transient props, see the docs for more
  * https://styled-components.com/docs/api#transient-props
  */
 
-interface StyledInputTextProps {
-    error?: boolean;
-    $spaceForIcon?: boolean;
-}
-
-const StyledInputTextField = styled(Form.Control)<StyledInputTextProps>`
+const StyledInputTextField = styled(Form.Control)<StyledInputProps>`
     ${(props) =>
         props.$spaceForIcon &&
         css`

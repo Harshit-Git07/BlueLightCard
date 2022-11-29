@@ -24,6 +24,12 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
     component: InputTextField,
     argTypes: {
         icon: iconArgSelect,
+        type: {
+            options: ["text", "password"],
+            control: {
+                type: "select",
+            },
+        },
         value: {
             control: {
                 type: "boolean",

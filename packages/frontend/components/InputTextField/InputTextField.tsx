@@ -1,4 +1,6 @@
-import { FC } from "react";
+import { faEye } from "@fortawesome/pro-solid-svg-icons/faEye";
+import { faEyeSlash } from "@fortawesome/pro-solid-svg-icons/faEyeSlash";
+import { FC, useState } from "react";
 import { Form } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { InputTextFieldProps } from "./types";
@@ -29,11 +31,25 @@ const InputTextField: FC<InputTextFieldProps> = ({
     value,
     placeholder,
     onChange,
+    onTogglePasswordVisible,
     type = "text",
 }) => {
-    const iconColor = value && !error ? "--bs-success" : "--bs-danger";
+    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+    const passwordToggleIcon = isPasswordVisible ? faEye : faEyeSlash;
+    const onRightIconClick = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+        if (onTogglePasswordVisible) {
+            onTogglePasswordVisible();
+        }
+    };
     return (
-        <InputFieldWrapper icon={icon} showRightIcon={!!value} showErrorState={error}>
+        <InputFieldWrapper
+            icon={icon}
+            showRightIcon={!!value}
+            iconRight={type === "password" ? passwordToggleIcon : undefined}
+            showErrorState={error}
+            onRightIconClick={onRightIconClick}
+        >
             <StyledInputTextField
                 type={type}
                 $spaceForIcon={!!icon}

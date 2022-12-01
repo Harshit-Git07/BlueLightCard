@@ -37,14 +37,14 @@ const InputTextField: FC<InputTextFieldProps> = ({
 }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const passwordToggleIcon = isPasswordVisible ? faEye : faEyeSlash;
+    const onRightIconClick = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
     useEffect(() => {
         if (onTogglePasswordVisible) {
             onTogglePasswordVisible(isPasswordVisible);
         }
     }, [onTogglePasswordVisible, isPasswordVisible]);
-    const onRightIconClick = () => {
-        setIsPasswordVisible(!isPasswordVisible);
-    };
     return (
         <InputFieldWrapper
             icon={icon}

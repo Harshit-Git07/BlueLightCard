@@ -37,7 +37,7 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
     const iconColor = decider([
         [showErrorState, "--bs-danger"],
         [showSuccessState, "--bs-success"],
-        [!showErrorState || !showErrorState, "none"],
+        [!showErrorState && !showSuccessState, "none"],
     ]);
     const _iconRight = decider([
         [showSuccessState, faCircleCheck],

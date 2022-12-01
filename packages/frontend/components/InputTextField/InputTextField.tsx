@@ -1,6 +1,6 @@
 import { faEye } from "@fortawesome/pro-solid-svg-icons/faEye";
 import { faEyeSlash } from "@fortawesome/pro-solid-svg-icons/faEyeSlash";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { InputTextFieldProps } from "./types";
@@ -30,28 +30,32 @@ const InputTextField: FC<InputTextFieldProps> = ({
     error,
     value,
     placeholder,
+    passwordVisible,
     onChange,
     onTogglePasswordVisible,
     type = "text",
 }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const passwordToggleIcon = isPasswordVisible ? faEye : faEyeSlash;
+    useEffect(() => {
+        if (onTogglePasswordVisible) {
+            onTogglePasswordVisible(isPasswordVisible);
+        }
+    }, [onTogglePasswordVisible, isPasswordVisible]);
     const onRightIconClick = () => {
         setIsPasswordVisible(!isPasswordVisible);
-        if (onTogglePasswordVisible) {
-            onTogglePasswordVisible();
-        }
     };
     return (
         <InputFieldWrapper
             icon={icon}
-            showRightIcon={!!value}
+            showRightIcon={type === "password"}
+            showSuccessState={!!value}
             iconRight={type === "password" ? passwordToggleIcon : undefined}
             showErrorState={error}
             onRightIconClick={onRightIconClick}
         >
             <StyledInputTextField
-                type={type}
+                type={type === "password" && passwordVisible ? "text" : type}
                 $spaceForIcon={!!icon}
                 error={error}
                 placeholder={placeholder}

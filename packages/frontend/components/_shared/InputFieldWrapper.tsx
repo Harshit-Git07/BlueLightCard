@@ -21,26 +21,36 @@ const StyledInputTextIcon = styled(FontAwesomeIcon)<StyledInputTextIconProps>`
     color: var(${(props) => props.color});
 `;
 
+function decider<T>(conditions: [boolean | undefined, T][]): T | undefined {
+    return conditions.find((condition) => !!condition[0])?.[1];
+}
+
 const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
     icon,
     iconRight,
     showRightIcon,
     showErrorState,
+    showSuccessState,
     children,
     onRightIconClick,
 }) => {
-    const iconColor = showRightIcon && !showErrorState ? "--bs-success" : "--bs-danger";
+    const iconColor = decider([
+        [showErrorState, "--bs-danger"],
+        [showSuccessState, "--bs-success"],
+        [!showErrorState || !showErrorState, "none"],
+    ]);
+    const _iconRight = decider([
+        [showSuccessState, faCircleCheck],
+        [showErrorState, faCircleExclamation],
+        [showRightIcon && !!iconRight, iconRight],
+    ]);
     return (
         <StyledInputContainer>
             {icon && <StyledInputTextIcon icon={icon} $iconPosition="left" size="sm" />}
             {children}
-            {(showRightIcon || showErrorState) && (
+            {_iconRight && (
                 <StyledInputTextIcon
-                    icon={
-                        showRightIcon && !showErrorState
-                            ? iconRight ?? faCircleCheck
-                            : faCircleExclamation
-                    }
+                    icon={_iconRight}
                     $iconPosition="right"
                     color={iconColor}
                     role="button"

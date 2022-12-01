@@ -1,6 +1,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEnvelope } from "@fortawesome/pro-solid-svg-icons";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { useState } from "react";
 import InputTextField from "./InputTextField";
 
 const icons = { faEnvelope };
@@ -35,12 +36,24 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
                 type: "boolean",
             },
         },
+        passwordVisible: {
+            control: {
+                type: null,
+            },
+        },
     },
 };
 
-const InputTextFieldTemplate: ComponentStory<typeof InputTextField> = (args) => (
-    <InputTextField {...args} />
-);
+const InputTextFieldTemplate: ComponentStory<typeof InputTextField> = (args) => {
+    const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+    return (
+        <InputTextField
+            {...args}
+            passwordVisible={passwordVisible}
+            onTogglePasswordVisible={(visible) => setPasswordVisible(visible)}
+        />
+    );
+};
 
 export const InputTextFieldStory = InputTextFieldTemplate.bind({});
 

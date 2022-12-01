@@ -6,6 +6,7 @@ export type InputFieldWrapperProps = PropsWithChildren & {
     iconRight?: IconDefinition;
     showRightIcon?: boolean;
     showErrorState?: boolean;
+    showSuccessState?: boolean;
     onRightIconClick?: MouseEventHandler;
 };
 

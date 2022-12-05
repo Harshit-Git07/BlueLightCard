@@ -2,28 +2,16 @@ import { faEye } from "@fortawesome/pro-solid-svg-icons/faEye";
 import { faEyeSlash } from "@fortawesome/pro-solid-svg-icons/faEyeSlash";
 import { FC, useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import styled, { css } from "styled-components";
 import { InputTextFieldProps } from "./types";
 import InputFieldWrapper from "@/components/_shared/InputFieldWrapper";
-import { StyledInputProps } from "@/components/_shared/types";
+import { createStyledInputField } from "@/components/_shared/StyledInputField";
 
 /**
  * The use of $prop are transient props, see the docs for more
  * https://styled-components.com/docs/api#transient-props
  */
 
-const StyledInputTextField = styled(Form.Control)<StyledInputProps>`
-    ${(props) =>
-        props.$spaceForIcon &&
-        css`
-            padding-left: 2.1rem;
-        `}
-    ${(props) =>
-        props.error &&
-        css`
-            border-color: var(--bs-danger) !important;
-        `}
-`;
+const StyledInputTextField = createStyledInputField(Form.Control);
 
 const InputTextField: FC<InputTextFieldProps> = ({
     icon,

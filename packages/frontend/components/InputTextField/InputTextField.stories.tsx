@@ -1,10 +1,11 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEnvelope } from "@fortawesome/pro-solid-svg-icons";
+import { faEnvelope } from "@fortawesome/pro-solid-svg-icons/faEnvelope";
+import { faLock } from "@fortawesome/pro-solid-svg-icons/faLock";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useState } from "react";
 import InputTextField from "./InputTextField";
 
-const icons = { faEnvelope };
+const icons = { faEnvelope, faLock };
 
 library.add(...Object.values(icons));
 
@@ -16,6 +17,7 @@ const iconArgSelect = {
         labels: {
             none: "No Icon",
             faEnvelope: "Envelope Icon",
+            faLock: "Password Icon",
         },
     },
 };
@@ -24,21 +26,30 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
     title: "Component System/Form/InputTextField",
     component: InputTextField,
     argTypes: {
-        icon: iconArgSelect,
+        icon: { name: "Field Icon", ...iconArgSelect },
         type: {
+            name: "Field Type",
             options: ["text", "password"],
             control: {
                 type: "select",
             },
         },
+        placeholder: { name: "Placeholder" },
+        error: { name: "Error State" },
         value: {
+            name: "Successful State",
             control: {
                 type: "boolean",
             },
         },
         passwordVisible: {
-            control: {
-                type: null,
+            table: {
+                disable: true,
+            },
+        },
+        onTogglePasswordVisible: {
+            table: {
+                disable: true,
             },
         },
     },

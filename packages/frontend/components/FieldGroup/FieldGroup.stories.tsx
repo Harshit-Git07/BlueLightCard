@@ -6,6 +6,19 @@ import FieldGroup from "./FieldGroup";
 const componentMeta: ComponentMeta<typeof FieldGroup> = {
     title: "Component System/Form/FieldGroup",
     component: FieldGroup,
+    argTypes: {
+        labelText: {
+            name: "Label Text",
+        },
+        invalid: {
+            name: "Invalid State",
+            description: "Toggle invalid state of component",
+        },
+        message: {
+            name: "Message Text",
+            description: "Small message text",
+        },
+    },
 };
 
 const FieldGroupTemplate: ComponentStory<typeof FieldGroup> = (args) => (
@@ -19,7 +32,7 @@ export const FieldGroupStory = FieldGroupTemplate.bind({});
 FieldGroupStory.args = {
     labelText: "Field Group",
     invalid: false,
-    message: "Message"
+    message: "Message",
 };
 
 export default componentMeta;

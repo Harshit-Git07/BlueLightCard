@@ -8,6 +8,7 @@ const icons = { faPlus, faMinus };
 library.add(...Object.values(icons));
 
 const iconArgSelect = {
+    name: "Icon",
     options: ["none"].concat(...Object.keys(icons)),
     mapping: { none: undefined, ...icons },
     control: {
@@ -24,8 +25,18 @@ const componentMeta: ComponentMeta<typeof Button> = {
     title: "Component System/Button Component",
     component: Button,
     argTypes: {
-        iconLeft: iconArgSelect,
-        iconRight: iconArgSelect,
+        text: {
+            name: "Text",
+            description: "Button text",
+        },
+        iconLeft: {
+            description: "Icon appears left of the button text",
+            ...iconArgSelect,
+        },
+        iconRight: {
+            description: "Icon appears right of the button text",
+            ...iconArgSelect,
+        },
     },
 };
 

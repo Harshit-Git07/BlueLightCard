@@ -16,9 +16,11 @@ const StyledInputContainer = styled.div`
 const StyledInputTextIcon = styled(FontAwesomeIcon)<StyledInputTextIconProps>`
     position: absolute;
     top: 50%;
+    z-index: 10;
     ${(props) => (props.$iconPosition === "left" ? "left" : "right")}: 0.8rem;
     transform: translateY(-50%);
     color: var(${(props) => props.color});
+    background-color: white;
 `;
 
 function decider<T>(conditions: [boolean | undefined, T][]): T | undefined {

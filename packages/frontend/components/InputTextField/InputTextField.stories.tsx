@@ -10,6 +10,7 @@ const icons = { faEnvelope, faLock };
 library.add(...Object.values(icons));
 
 const iconArgSelect = {
+    name: "Field Icon",
     options: ["none"].concat(...Object.keys(icons)),
     mapping: { none: undefined, ...icons },
     control: {
@@ -26,18 +27,29 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
     title: "Component System/Form/InputTextField",
     component: InputTextField,
     argTypes: {
-        icon: { name: "Field Icon", ...iconArgSelect },
+        icon: {
+            description: "Icon appears left of the select",
+            ...iconArgSelect,
+        },
         type: {
             name: "Field Type",
+            description: "Switches the input field type",
             options: ["text", "password"],
             control: {
                 type: "select",
             },
         },
-        placeholder: { name: "Placeholder" },
-        error: { name: "Error State" },
+        placeholder: {
+            name: "Placeholder",
+            description: "Placeholder text when no text inputed",
+        },
+        error: {
+            name: "Error State",
+            description: "Toggle error state of component",
+        },
         value: {
             name: "Successful State",
+            description: "Toggle success state of component",
             control: {
                 type: "boolean",
             },

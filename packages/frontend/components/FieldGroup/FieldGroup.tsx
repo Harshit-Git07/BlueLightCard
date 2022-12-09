@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { Form, InputGroup } from "react-bootstrap";
-import styled, { css } from "styled-components";
+import { Form } from "react-bootstrap";
+import styled from "styled-components";
 import { FieldGroupProps } from "./types";
 
 interface FeedbackMessageProps {
@@ -12,26 +12,20 @@ const StyledInputGroup = styled.div`
 `;
 
 const StyledFeedbackMessage = styled.p<FeedbackMessageProps>`
-    color: var(${props => props.invalid ? "--bs-danger" : "--blc-neutral-700"});
+    color: var(${(props) => (props.invalid ? "--bs-danger" : "--blc-neutral-700")});
 `;
 
-const FieldGroup: FC<FieldGroupProps> = ({
-    labelText,
-    controlId,
-    children,
-    invalid,
-    message,
-}) => {
+const FieldGroup: FC<FieldGroupProps> = ({ labelText, controlId, children, invalid, message }) => {
     return (
         <Form.Group controlId={controlId}>
             <Form.Label>{labelText}</Form.Label>
             <StyledInputGroup>
                 {children}
-                {message &&
+                {message && (
                     <StyledFeedbackMessage invalid={invalid}>
                         <small>{message}</small>
                     </StyledFeedbackMessage>
-                }
+                )}
             </StyledInputGroup>
         </Form.Group>
     );

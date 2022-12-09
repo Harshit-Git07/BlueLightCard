@@ -8,8 +8,8 @@ export type FieldGroupProps = Pick<FormGroupProps, "controlId"> &
         message?: string;
     };
 
-export interface InputFieldSharedProps<E> {
+export interface InputFieldSharedProps<E, V = string> {
     error?: boolean;
-    value?: string;
+    value?: V;
     onChange?: ChangeEventHandler<E>;
 }

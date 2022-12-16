@@ -6,5 +6,8 @@ export type InputTextFieldProps = FormControlProps &
     InputFieldSharedProps<HTMLInputElement> & {
         icon?: IconDefinition;
         passwordVisible?: boolean;
+        maxlength?: number;
+        min?: number;
+        max?: number;
         onTogglePasswordVisible?: (visible: boolean) => void;
     };

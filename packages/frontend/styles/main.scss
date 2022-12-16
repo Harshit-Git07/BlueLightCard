@@ -1,6 +1,18 @@
 @import "./global-variables";
 @import "~bootstrap/scss/bootstrap";
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
 button {
     &:focus:not(:focus-visible) {
         outline: $btn-focus-outline solid 2px;

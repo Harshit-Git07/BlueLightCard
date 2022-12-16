@@ -19,7 +19,11 @@ const InputTextField: FC<InputTextFieldProps> = ({
     value,
     placeholder,
     passwordVisible,
+    maxlength,
+    min,
+    max,
     onChange,
+    onKeyDown,
     onTogglePasswordVisible,
     type = "text",
 }) => {
@@ -47,7 +51,11 @@ const InputTextField: FC<InputTextFieldProps> = ({
                 $spaceForIcon={!!icon}
                 error={error}
                 placeholder={placeholder}
+                maxLength={maxlength}
+                min={min}
+                max={max}
                 onChange={onChange}
+                onKeyDown={onKeyDown}
             />
         </InputFieldWrapper>
     );

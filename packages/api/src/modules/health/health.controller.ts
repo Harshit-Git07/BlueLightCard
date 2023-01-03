@@ -1,9 +1,9 @@
 import { Controller, Get } from 'routing-controllers'
 
-@Controller('/')
+@Controller('/health')
 export class HealthController {
   @Get('/')
-  health() {
+  health (): string {
     return 'API Running!'
   }
 }

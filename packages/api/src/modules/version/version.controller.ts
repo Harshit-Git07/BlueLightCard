@@ -1,24 +1,23 @@
 import { Controller, Get } from 'routing-controllers'
+import * as pjson from '../../../package.json'
+import { GetVersionResponseDto } from './dto/version.request.dto'
 
 const {
-    VERSION,
-    COMMITHASH,
-    BRANCH,
-    MODE
+  COMMITHASH,
+  BRANCH,
+  ENV
 } = process.env
 
-@Controller('/')
+@Controller('/version')
 export class VersionController {
   @Get('/')
-  version() {
+  version (): GetVersionResponseDto {
     return {
-        // Added at build time
-        version: VERSION,
-        commit: COMMITHASH,
-        branch: BRANCH,
-        mode: MODE
+      // Added at build time
+      version: pjson.version,
+      commit: COMMITHASH ?? '',
+      branch: BRANCH ?? '',
+      env: ENV ?? 'production'
     }
   }
 }
-
-

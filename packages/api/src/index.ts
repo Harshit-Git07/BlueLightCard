@@ -36,9 +36,9 @@ useExpressServer(app, {
   defaultErrorHandler: false,
   controllers: [
     HealthController,
-    VersionController,
+    VersionController
   ],
-  middlewares: [ ErrorHandlerMiddleware]
+  middlewares: [ErrorHandlerMiddleware]
 })
 
 export default app

@@ -20,5 +20,5 @@ export const setClsValue = (key: string, value: any): any => {
 
 export const clsMiddleware: RequestHandler = (req, res, next) => {
   const ns = cls.getNamespace(namespace) ?? cls.createNamespace(namespace)
-  ns.run(() => next())
+  ns.run(() => { next() })
 }

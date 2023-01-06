@@ -9,7 +9,14 @@ interface StyledButtonIconProps {
 }
 
 const StyledButtonIcon = styled(FontAwesomeIcon)<StyledButtonIconProps>`
-    ${props => props.side === "left" ? css`margin-right: 10px;` : css`margin-left: 10px;`};
+    ${(props) =>
+        props.side === "left"
+            ? css`
+                  margin-right: 10px;
+              `
+            : css`
+                  margin-left: 10px;
+              `};
 `;
 
 const Button: FC<ButtonProps> = ({ text, iconLeft, iconRight, variant = "primary" }) => {
@@ -20,6 +27,6 @@ const Button: FC<ButtonProps> = ({ text, iconLeft, iconRight, variant = "primary
             {iconRight && <StyledButtonIcon icon={iconRight} side="right" />}
         </ReactButton>
     );
-}
+};
 
 export default Button;

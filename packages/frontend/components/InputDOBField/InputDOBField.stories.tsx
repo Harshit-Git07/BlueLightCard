@@ -8,7 +8,7 @@ const states: { [key: string]: any } = {
         error: false,
     },
     error: {
-        value: "false",
+        value: "",
         error: true,
     },
 };

@@ -10,4 +10,5 @@ export type InputDOBFieldProps = InputFieldSharedProps<HTMLInputElement> & {
     dd?: DOBProps;
     mm?: DOBProps;
     yyyy?: DOBProps;
+    minAgeConstraint?: number;
 };

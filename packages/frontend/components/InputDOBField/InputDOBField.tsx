@@ -9,13 +9,21 @@ const maxDayNumber = 31;
 const maxMonthNumber = 12;
 const defaultDate = new Date();
 
-const InputDOBField: FC<InputDOBFieldProps> = ({ dd, mm, yyyy, onChange }) => {
+const InputDOBField: FC<InputDOBFieldProps> = ({
+    dd,
+    mm,
+    yyyy,
+    onChange,
+    minAgeConstraint = 16,
+}) => {
     const maxFallbackYear = defaultDate.getFullYear();
+    const maxYear = maxFallbackYear - minAgeConstraint;
+
     const { captureInput } = useKeyConstraint({
         validationSchema: {
             dd: number().max(maxDayNumber),
             mm: number().max(maxMonthNumber),
-            yyyy: number().max(2100),
+            yyyy: number().max(maxYear),
         },
     });
 
@@ -51,7 +59,7 @@ const InputDOBField: FC<InputDOBFieldProps> = ({ dd, mm, yyyy, onChange }) => {
                     error={yyyy?.error}
                     type="number"
                     min={0}
-                    max={maxFallbackYear}
+                    max={maxYear}
                     placeholder={yyyy?.placeholder ?? "YYYY"}
                     onChange={onChange}
                     onKeyDown={(ev) => captureInput(ev, "yyyy")}

@@ -8,9 +8,6 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
-    sassOptions: {
-        additionalData: `@import "styles/${process.env.BLC_SITE ?? "blc"}/_variables.scss";`,
-    },
 };
 
 module.exports = nextConfig;

@@ -30,10 +30,9 @@ const componentMeta: ComponentMeta<typeof InputDOBField> = {
                 disable: true,
             },
         },
-        ["dd.value"]: {
-            name: "DD Value",
-            control: {
-                type: "text",
+        onChange: {
+            table: {
+                disable: true,
             },
         },
         dd: {
@@ -51,9 +50,11 @@ const componentMeta: ComponentMeta<typeof InputDOBField> = {
             description: "Choose different states the year field can be in",
             ...inputFieldProps,
         },
-        onChange: {
-            table: {
-                disable: true,
+        minAgeConstraint: {
+            name: "Minimum age constraint",
+            description: "Configure the minimum age allowed to be entered",
+            control: {
+                type: "number",
             },
         },
     } as any,

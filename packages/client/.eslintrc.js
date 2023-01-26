@@ -11,7 +11,7 @@ module.exports = {
   overrides: [
   ],
   parserOptions: {
-    project: 'packages/client/tsconfig.json'
+    project: 'tsconfig.json'
   },
   rules: {
   }

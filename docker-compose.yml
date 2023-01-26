@@ -3,22 +3,58 @@ version: '3.8'
 services:
 
   # Dockerize the application
+  app:
+    restart: unless-stopped
+    image: node:18-alpine
+    volumes:
+      - ./packages/api/package.json:/usr/app/package.json
+      - ./packages/api/tsconfig.json:/usr/app/tsconfig.json
+      - ./packages/api/src:/usr/app/src
+      - ./packages/api/dist:/usr/app/dist
+      - ./node_modules:/usr/app/node_modules
+    working_dir: /usr/app
+    command: npm run dev
+    ports:
+      - '1337:1337'
+    env_file:
+      - .env
+    networks:
+      - default
 
   db:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
     env_file:
       - .env
     networks:
-      - default
+      default:
+        aliases:
+          - database
     ports:
       - '3306:3306'
     volumes:
       - db:/var/lib/mysql
+
+  # Run AWS services locally
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack_main
+    environment:
+      - AWS_DEFAULT_REGION=eu-west-1
+      - EDGE_PORT=4566
+      - DEBUG=1
+      - SERVICES=sqs,s3
+      - EXTRA_CORS_ALLOWED_ORIGINS=http://localhost:3001,http://localhost:3000
+      - HOSTNAME_EXTERNAL=localstack
+    ports:
+      - "4566:4566"
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 volumes:
   db:

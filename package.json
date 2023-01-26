@@ -1,12 +1,21 @@
 {
-  "name": "blc-frontend-2.0",
+  "name": "bluelightcard",
   "version": "1.0.0",
   "description": "BLC monorepo",
-  "main": "index.js",
+  "workspaces": [
+    "packages/api",
+    "packages/client",
+    "packages/e2e"
+  ],
   "scripts": {
     "test": "echo 'Hello BLC Devs'",
     "prepare": "husky install",
-    "storybook": "npm run storybook --workspace=frontend"
+    "storybook": "npm run storybook --workspace=frontend",
+    "postinstall": "npm run prepare",
+    "lint": "npm-run-all -p lint:workspaces",
+    "lint:workspaces": "npm -ws run --if-present lint",
+    "lint:fix": "npm-run-all lint:fix:workspaces",
+    "lint:fix:workspaces": "npm -ws run --if-present lint:fix"
   },
   "repository": {
     "type": "git",
@@ -17,12 +26,21 @@
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
-    "husky": "^8.0.0"
+    "husky": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-standard-with-typescript": "^26.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.4"
   },
-  "workspaces": [
-    "packages/e2e",
-    "packages/frontend"
-  ],
   "overrides": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

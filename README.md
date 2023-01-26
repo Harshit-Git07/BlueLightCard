@@ -23,3 +23,6 @@ mysql://:example@127.0.0.1/blc
 As this project uses npm workspaces, if you need to install dependencies for a particular application (like the frontend) you need to specify the workspace to use.
 For example, if you want to install typescript for the frontend you would run `npm i -s typescript -w packages/client`.
 A full list of workspaces can be found in the `package.json` file.
+
+## Commit linting
+This monorepo uses commitlint to make sure commit messages meet the conventional commit format across the repo, read more about [commitlint](https://github.com/conventional-changelog/commitlint/#what-is-commitlint).

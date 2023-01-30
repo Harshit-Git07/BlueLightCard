@@ -1,1 +1,28 @@
+@import "./bootstrap-variables";
 @import "~bootstrap/scss/bootstrap";
+@import "./custom-variables";
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+button {
+    &:focus:not(:focus-visible) {
+        outline: $btn-focus-outline solid 2px;
+        outline-offset: 3px;
+    }
+}
+
+@each $color, $value in $theme-colors {
+    .btn-#{$color} {
+        @include button-variant($value, $value, $hover-background: $btn-hover-bg);
+    }
+}

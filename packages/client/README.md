@@ -1,27 +1,28 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
 ### Dependencies
 
- - react
- - nextjs
- - react-bootstrap
- - bootstrap
- - [i18next](https://www.i18next.com/)
- - [next-i18next](https://github.com/i18next/next-i18next)
- - [react-i18next](https://github.com/i18next/react-i18next)
- - [storybook](https://storybook.js.org/)
- - sass
- - jotai
- - react-hook-forms
- - yup (form validation)
- - jest
- - testing-library
- - styled-components
- - dayjs
- - lodash
- - fortawesome
- - @stripe/stripe-js
- - @stripe/react-stripe-js
+- react
+- [nextjs](https://nextjs.org/docs)
+- react-bootstrap
+- bootstrap
+- [i18next](https://www.i18next.com/)
+- [next-i18next](https://github.com/i18next/next-i18next)
+- [react-i18next](https://github.com/i18next/react-i18next)
+- [storybook](https://storybook.js.org/)
+- sass
+- jotai
+- react-hook-forms
+- yup (form validation)
+- jest
+- testing-library
+- styled-components
+- dayjs
+- lodash
+- fortawesome
+- @stripe/stripe-js
+- @stripe/react-stripe-js
 
 ### Getting Started
 
@@ -29,29 +30,38 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Scripts
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+`build` - Builds a distribution of the app.
+`lint` - Lints all the code.
+`test` - Runs all unit tests.
+`storybook` - Runs the storybook server.
+`storybook:deploy` - Deploys all stories to chromatic.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Components
+All components should be put in the components folder and consist of the following files for each component:
+ - [React Component].tsx
+ - [Component Story].stories.tsx
+ - types.ts - Types for the component
 
-### Learn More
+So the structure will look like:
+```
+components
+	Folder[ComponentName]
+		[ComponentName].tsx
+		[ComponentName].stories.tsx
+		types.ts
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Storybook
+We use storybook as our frontend workshop tool, to help build and manually test the white-label components in isolation.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Each component should have a corresponding story written for it i.e `[ComponentName].stories.tsx`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Stories are deployed to [chromatic](https://www.chromatic.com/) which allows us to iterate and get visual feedback on the components.
 
-### Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Read more on [Storybook](https://storybook.js.org/) and the [docs](https://storybook.js.org/docs/react/why-storybook)

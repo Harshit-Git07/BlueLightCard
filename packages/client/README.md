@@ -36,25 +36,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Scripts
 
-`build` - Builds a distribution of the app.
-`lint` - Lints all the code.
-`test` - Runs all unit tests.
-`storybook` - Runs the storybook server.
-`storybook:deploy` - Deploys all stories to chromatic.
+ - `build` - Builds a distribution of the app.
+ - `lint` - Lints all the code.
+ - `test` - Runs all unit tests.
+ - `storybook` - Runs the storybook server.
+ - `storybook:deploy` - Deploys all stories to chromatic.
 
 ### Components
 All components should be put in the components folder and consist of the following files for each component:
- - [React Component].tsx
- - [Component Story].stories.tsx
- - types.ts - Types for the component
+ - **[ComponentName]**.tsx - React component
+ - **[ComponentName]**.stories.tsx - Storybook file
+ - **types.ts** - Types for the component
 
 So the structure will look like:
 ```
-components
-	Folder[ComponentName]
-		[ComponentName].tsx
-		[ComponentName].stories.tsx
-		types.ts
+├── components
+│   ├── [ComponentName]
+│   │   ├── [ComponentName].tsx
+│   │   ├── [ComponentName].stories.tsx
+│   │   ├── types.ts
 ```
 
 ### Storybook

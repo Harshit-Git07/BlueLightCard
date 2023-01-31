@@ -8,6 +8,7 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
+    i18n,
 };
 
 module.exports = nextConfig;

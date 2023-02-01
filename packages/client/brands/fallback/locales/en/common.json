@@ -1,6 +1,5 @@
 {
   "heading": {
-    "uk": "Hello UK",
-    "au": "Hello Australia"
+    "uk": "Hello UK fallback"
   }
 }

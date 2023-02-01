@@ -1,5 +1,7 @@
-const BRAND = process.env.NEXT_APP_BRAND ?? "fallback";
-const DEFAULT_LANG = process.env.NEXT_APP_LANG ?? "en";
+const {
+  BRAND,
+  DEFAULT_LANG,
+} = require("./global-vars");
 
 /** @type {import('next-i18next').UserConfig} */
 const nexti18nextConfig = {

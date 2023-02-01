@@ -1,15 +1,9 @@
-import { GetStaticProps, NextPage } from "next"
+import { NextPage } from "next"
 import { Button } from "react-bootstrap";
-
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import getI18nStaticProps from "utils/i18nStaticProps";
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-	props: {
-		region: process.env.NEXT_APP_REGION ?? "uk",
-		...(await serverSideTranslations(locale ?? "en"))
-	}
-});
+export const getStaticProps = getI18nStaticProps;
 
 const Home: NextPage<any> = ({ region }) => {
 	const { t } = useTranslation("common");

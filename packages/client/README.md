@@ -66,7 +66,7 @@ Stories are deployed to [chromatic](https://www.chromatic.com/) which allows us 
 
 Read more on [Storybook](https://storybook.js.org/) and the [docs](https://storybook.js.org/docs/react/why-storybook)
 
-### Building distributions
+### Brand targeting
 There are 3 environment variables available to build targeted distributions i.e build a dist for blc brand in the australia region.
 
  - `NEXT_APP_BRAND` - defaults to 'fallback'
@@ -78,5 +78,9 @@ The command for building a targeted distribution for the blc brand in the austra
 `NEXT_APP_BRAND=blc NEXT_APP_REGION=au npm run build`
 
 If none of the environment variables are set, then the defaults are used.
+
+To run the app locally for a specific brand, you can do similar to the above but just swap `build` with `dev`
+
+`NEXT_APP_BRAND=blc NEXT_APP_REGION=au npm run dev`
 
 **TODO**: Handle the scenario when a brand, region or lang provided don't exist.

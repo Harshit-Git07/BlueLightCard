@@ -65,3 +65,17 @@ Each component should have a corresponding story written for it i.e `[ComponentN
 Stories are deployed to [chromatic](https://www.chromatic.com/) which allows us to iterate and get visual feedback on the components.
 
 Read more on [Storybook](https://storybook.js.org/) and the [docs](https://storybook.js.org/docs/react/why-storybook)
+
+### Building distributions
+There are 3 environment variables available to build targeted distributions i.e build a dist for blc brand in the australia region.
+
+ - `NEXT_APP_BRAND` - defaults to 'fallback'
+ - `NEXT_APP_REGION` - defaults to 'uk'
+ - `NEXT_APP_LANG` - defaults to 'en'
+
+The command for building a targeted distribution for the blc brand in the australia region:
+`NEXT_APP_BRAND=blc NEXT_APP_REGION=au npm run build`
+
+If none of the environment variables are set, then the defaults are used.
+
+**TODO**: Handle the scenario when a brand, region or lang provided don't exist.

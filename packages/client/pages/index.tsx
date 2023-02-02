@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'next-i18next';
-import getI18nStaticProps from 'utils/i18nStaticProps';
+import getI18nStaticProps from '@/utils/i18nStaticProps';
 
 export const getStaticProps = getI18nStaticProps;
 

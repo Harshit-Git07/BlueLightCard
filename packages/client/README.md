@@ -83,4 +83,4 @@ To run the app locally for a specific brand, you can do similar to the above but
 
 `NEXT_APP_BRAND=blc NEXT_APP_REGION=au npm run dev`
 
-**TODO**: Handle the scenario when a brand, region or lang provided don't exist.
+**TODO**: Handle the scenario when a brand, region or lang provided doesn't exist.

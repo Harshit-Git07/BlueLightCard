@@ -68,14 +68,7 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
 };
 
 const InputTextFieldTemplate: ComponentStory<typeof InputTextField> = (args) => {
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  return (
-    <InputTextField
-      {...args}
-      passwordVisible={passwordVisible}
-      onTogglePasswordVisible={(visible) => setPasswordVisible(visible)}
-    />
-  );
+  return <InputTextField {...args} />;
 };
 
 export const InputTextFieldStory = InputTextFieldTemplate.bind({});

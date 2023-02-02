@@ -18,7 +18,6 @@ const InputTextField: FC<InputTextFieldProps> = ({
   error,
   value,
   placeholder,
-  passwordVisible,
   maxlength,
   min,
   max,
@@ -26,17 +25,16 @@ const InputTextField: FC<InputTextFieldProps> = ({
   onKeyDown,
   onTogglePasswordVisible,
   type = 'text',
+  passwordVisible = false,
 }) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(passwordVisible);
   const passwordToggleIcon = isPasswordVisible ? faEye : faEyeSlash;
   const onRightIconClick = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
-  useEffect(() => {
+    setIsPasswordVisible(!isPasswordVisible)
     if (onTogglePasswordVisible) {
-      onTogglePasswordVisible(isPasswordVisible);
+      onTogglePasswordVisible(!isPasswordVisible);
     }
-  }, [onTogglePasswordVisible, isPasswordVisible]);
+  };
   return (
     <InputFieldWrapper
       icon={icon}
@@ -47,7 +45,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
       onRightIconClick={onRightIconClick}
     >
       <StyledInputTextField
-        type={type === 'password' && passwordVisible ? 'text' : type}
+        type={type === 'password' && isPasswordVisible ? 'text' : type}
         $spaceForIcon={!!icon}
         error={error}
         placeholder={placeholder}

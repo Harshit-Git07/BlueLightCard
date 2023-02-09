@@ -1,5 +1,20 @@
-/** Custom sass variables */
+/** Custom SCSS bootstrap overrides */
 
 // button properties
 $btn-focus-outline: $primary;
 $btn-hover-bg: darken($primary, 10);
+
+/**
+ * Custom CSS variables
+ *
+ * CSS variables for components should be in the below format.
+ * 
+ * c: Component name, this should be hyphenated
+ * p: CSS property, this should be hyphenated
+ * 
+ * --[c]-[p]
+ */
+
+:root {
+  --field-group-margin-bottom: 1rem;
+}

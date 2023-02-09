@@ -8,7 +8,7 @@ interface FeedbackMessageProps {
 }
 
 const StyledInputGroup = styled.div`
-  margin-bottom: 0.4rem;
+  margin-bottom: var(--field-group-margin-bottom);
 `;
 
 const StyledFeedbackMessage = styled.p<FeedbackMessageProps>`

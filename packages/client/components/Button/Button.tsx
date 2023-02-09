@@ -19,9 +19,9 @@ const StyledButtonIcon = styled(FontAwesomeIcon)<StyledButtonIconProps>`
         `};
 `;
 
-const Button: FC<ButtonProps> = ({ text, iconLeft, iconRight, variant = 'primary' }) => {
+const Button: FC<ButtonProps> = ({ text, iconLeft, iconRight, variant = 'primary', ...rest }) => {
   return (
-    <ReactButton variant={variant}>
+    <ReactButton variant={variant} {...rest}>
       {iconLeft && <StyledButtonIcon icon={iconLeft} side="left" />}
       {text}
       {iconRight && <StyledButtonIcon icon={iconRight} side="right" />}

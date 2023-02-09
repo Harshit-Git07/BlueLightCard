@@ -2,17 +2,20 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true
+    node: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'next/core-web-vitals',
-  ],
-  overrides: [
-  ],
+  extends: ['plugin:react/recommended', 'next/core-web-vitals', 'prettier'],
+  plugins: ['prettier'],
+  overrides: [],
   parserOptions: {
-    project: 'tsconfig.json'
+    project: 'tsconfig.json',
   },
   rules: {
-  }
-}
+    'prettier/prettier': [
+      'error',
+      {
+        printWidth: 100,
+      },
+    ],
+  },
+};

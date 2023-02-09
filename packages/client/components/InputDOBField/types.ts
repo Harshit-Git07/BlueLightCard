@@ -1,4 +1,4 @@
-import { InputFieldSharedProps } from "../FieldGroup/types";
+import { InputFieldSharedProps } from "../_shared/types";
 
 interface DOBProps {
     value?: string;

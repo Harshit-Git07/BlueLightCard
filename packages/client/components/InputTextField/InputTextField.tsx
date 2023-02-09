@@ -1,6 +1,6 @@
 import { faEye } from '@fortawesome/pro-solid-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/pro-solid-svg-icons/faEyeSlash';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { InputTextFieldProps } from './types';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
@@ -21,6 +21,8 @@ const InputTextField: FC<InputTextFieldProps> = ({
   maxlength,
   min,
   max,
+  itemRef,
+  required,
   onChange,
   onKeyDown,
   onTogglePasswordVisible,
@@ -30,7 +32,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(passwordVisible);
   const passwordToggleIcon = isPasswordVisible ? faEye : faEyeSlash;
   const onRightIconClick = () => {
-    setIsPasswordVisible(!isPasswordVisible)
+    setIsPasswordVisible(!isPasswordVisible);
     if (onTogglePasswordVisible) {
       onTogglePasswordVisible(!isPasswordVisible);
     }
@@ -39,7 +41,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
     <InputFieldWrapper
       icon={icon}
       showRightIcon={type === 'password'}
-      showSuccessState={!!value}
+      showSuccessState={!!value && !error}
       iconRight={type === 'password' ? passwordToggleIcon : undefined}
       showErrorState={error}
       onRightIconClick={onRightIconClick}
@@ -52,6 +54,8 @@ const InputTextField: FC<InputTextFieldProps> = ({
         maxLength={maxlength}
         min={min}
         max={max}
+        ref={itemRef}
+        required={required}
         onChange={onChange}
         onKeyDown={onKeyDown}
       />

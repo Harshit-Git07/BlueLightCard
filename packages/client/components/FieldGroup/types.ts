@@ -1,5 +1,5 @@
-import { ChangeEventHandler, PropsWithChildren } from "react";
-import { FormGroupProps, InputGroupProps } from "react-bootstrap";
+import { PropsWithChildren } from "react";
+import { FormGroupProps } from "react-bootstrap";
 
 export type FieldGroupProps = Pick<FormGroupProps, "controlId"> &
     PropsWithChildren & {
@@ -7,9 +7,3 @@ export type FieldGroupProps = Pick<FormGroupProps, "controlId"> &
         invalid?: boolean;
         message?: string;
     };
-
-export interface InputFieldSharedProps<E, V = string> {
-    error?: boolean;
-    value?: V;
-    onChange?: ChangeEventHandler<E>;
-}

@@ -2,7 +2,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEnvelope } from '@fortawesome/pro-solid-svg-icons/faEnvelope';
 import { faLock } from '@fortawesome/pro-solid-svg-icons/faLock';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { useState } from 'react';
 import InputTextField from './InputTextField';
 
 const icons = { faEnvelope, faLock };
@@ -34,7 +33,7 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
     type: {
       name: 'Field Type',
       description: 'Switches the input field type',
-      options: ['text', 'password'],
+      options: ['text', 'password', 'email'],
       control: {
         type: 'select',
       },

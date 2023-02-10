@@ -9,7 +9,13 @@ const maxDayNumber = 31;
 const maxMonthNumber = 12;
 const defaultDate = new Date();
 
-const InputDOBField: FC<InputDOBFieldProps> = ({ dd, mm, yyyy, onChange, minAgeConstraint = 16 }) => {
+const InputDOBField: FC<InputDOBFieldProps> = ({
+  dd,
+  mm,
+  yyyy,
+  onChange,
+  minAgeConstraint = 16,
+}) => {
   const maxFallbackYear = defaultDate.getFullYear();
   const maxYear = maxFallbackYear - minAgeConstraint;
 

@@ -1,33 +1,68 @@
 import { FC, useMemo } from 'react';
 import BootstrapForm from 'react-bootstrap/Form';
-import { Controller, useForm } from 'react-hook-form';
+import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectShape } from 'yup/lib/object';
+import flatten from 'lodash/flatten';
 import FieldGroup from '../FieldGroup/FieldGroup';
-import { FormData } from './types';
+import { FormData, FormField } from './types';
 import Button from '../Button/Button';
+import { Col, Row } from 'react-bootstrap';
+
+const FormFieldController: FC<{
+  control: Control;
+  errors: FieldErrors<{ [key: string]: unknown }>;
+  formField: FormField;
+}> = ({ control, errors, formField }) => {
+  return (
+    <Controller
+      key={formField.controlId}
+      name={formField.controlId}
+      control={control}
+      rules={{ required: formField.required }}
+      render={({ field }) => (
+        <FieldGroup
+          labelText={formField.label}
+          controlId={formField.controlId}
+          invalid={!!errors[formField.controlId]?.message}
+          message={errors[formField.controlId]?.message ?? formField.message}
+        >
+          <formField.fieldComponent
+            error={!!errors[formField.controlId]?.message}
+            required={formField.required}
+            {...formField.fieldComponentProps}
+            {...field}
+          />
+        </FieldGroup>
+      )}
+    />
+  );
+};
 
 const Form: FC<FormData> = ({ fields }) => {
-  const validationSchema = useMemo(() => {
-    const schema = fields.reduce<ObjectShape>((acc, field) => {
+  const fieldsFlattened = useMemo(() => flatten(fields), [fields]);
+  const validationSchema = yup.object().shape(
+    fieldsFlattened.reduce<ObjectShape>((acc, field) => {
       if (field.validation) {
         acc[field.controlId] = field.validation;
       }
       return acc;
-    }, {});
-    return yup.object().shape(schema);
-  }, [fields]);
+    }, {})
+  );
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<{ [key: string]: unknown }>({
-    defaultValues: fields.reduce<{ [controlId: string]: unknown | undefined }>((acc, field) => {
-      acc[field.controlId] = field.fieldComponentProps?.value;
-      return acc;
-    }, {}) as {},
+    defaultValues: fieldsFlattened.reduce<{ [controlId: string]: unknown | undefined }>(
+      (acc, field) => {
+        acc[field.controlId] = field.fieldComponentProps?.value;
+        return acc;
+      },
+      {}
+    ) as {},
     mode: 'all',
     resolver: yupResolver(validationSchema),
   });
@@ -35,35 +70,27 @@ const Form: FC<FormData> = ({ fields }) => {
   const onFormSubmit = (data: any) => {
     console.info(data);
   };
-  console.info(validationSchema);
 
   return (
     <BootstrapForm onSubmit={handleSubmit(onFormSubmit)}>
-      {fields.map((formField) => {
-        return (
-          <Controller
+      {fields.map((formField, index) =>
+        Array.isArray(formField) ? (
+          <Row key={`formRow_${index}`}>
+            {formField.map((_formField) => (
+              <Col key={_formField.controlId}>
+                <FormFieldController control={control} errors={errors} formField={_formField} />
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <FormFieldController
             key={formField.controlId}
-            name={formField.controlId}
             control={control}
-            rules={{ required: formField.required }}
-            render={({ field }) => (
-              <FieldGroup
-                labelText={formField.label}
-                controlId={formField.controlId}
-                invalid={!!errors[formField.controlId]?.message}
-                message={errors[formField.controlId]?.message}
-              >
-                <formField.fieldComponent
-                  error={!!errors[formField.controlId]?.message}
-                  required={formField.required}
-                  {...formField.fieldComponentProps}
-                  {...field}
-                />
-              </FieldGroup>
-            )}
+            errors={errors}
+            formField={formField}
           />
-        );
-      })}
+        )
+      )}
       <Button text="Submit" type="submit" />
     </BootstrapForm>
   );

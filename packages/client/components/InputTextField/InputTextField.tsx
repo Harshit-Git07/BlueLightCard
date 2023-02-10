@@ -1,6 +1,6 @@
 import { faEye } from '@fortawesome/pro-solid-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/pro-solid-svg-icons/faEyeSlash';
-import { FC, useState } from 'react';
+import { FC, useState, forwardRef } from 'react';
 import { Form } from 'react-bootstrap';
 import { InputTextFieldProps } from './types';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
@@ -21,8 +21,8 @@ const InputTextField: FC<InputTextFieldProps> = ({
   maxlength,
   min,
   max,
-  itemRef,
   required,
+  _ref,
   onChange,
   onKeyDown,
   onTogglePasswordVisible,
@@ -54,7 +54,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
         maxLength={maxlength}
         min={min}
         max={max}
-        ref={itemRef}
+        ref={_ref}
         required={required}
         onChange={onChange}
         onKeyDown={onKeyDown}
@@ -63,4 +63,9 @@ const InputTextField: FC<InputTextFieldProps> = ({
   );
 };
 
-export default InputTextField;
+// eslint-disable-next-line react/display-name
+const InputTextFieldWithRef = forwardRef<unknown, InputTextFieldProps>((props, ref) => (
+  <InputTextField {...props} _ref={ref} />
+));
+
+export default InputTextFieldWithRef;

@@ -3,9 +3,6 @@ import * as yup from 'yup';
 import Form from '@/components/Form/Form';
 import InputTextField from '../InputTextField/InputTextField';
 import { InputTextFieldProps } from '../InputTextField/types';
-import withForwardRef from '../_shared/hoc/withForwardRef';
-import InputDOBField from '../InputDOBField/InputDOBField';
-import { InputDOBFieldProps } from '../InputDOBField/types';
 
 const componentMeta: ComponentMeta<typeof Form> = {
   title: 'Component System/Form/Form',
@@ -21,9 +18,6 @@ const componentMeta: ComponentMeta<typeof Form> = {
 
 const FormTemplate: ComponentStory<typeof Form> = (args) => <Form {...args} />;
 
-const InputTextFieldWithRef = withForwardRef(InputTextField);
-const InputDOBFieldWithRef = withForwardRef(InputDOBField);
-
 export const FormStory = FormTemplate.bind({});
 
 FormStory.args = {
@@ -33,24 +27,27 @@ FormStory.args = {
         label: 'First name',
         controlId: 'firstNameFieldControl',
         required: true,
-        fieldComponent: InputTextFieldWithRef,
+        message: 'Provide your first name',
+        fieldComponent: InputTextField,
       },
       {
         label: 'Last name',
         controlId: 'lastNameFieldControl',
         required: true,
-        fieldComponent: InputTextFieldWithRef,
+        message: 'Provide your last name',
+        fieldComponent: InputTextField,
       },
     ],
     {
-      label: 'Email Address',
+      label: 'Email',
       controlId: 'emailFieldControl',
       required: true,
+      message: 'Provide a valid email address',
       validation: yup
         .string()
         .email('Email address is a required field')
         .required('Email address is required'),
-      fieldComponent: InputTextFieldWithRef,
+      fieldComponent: InputTextField,
       fieldComponentProps: {
         type: 'email',
       } as InputTextFieldProps,

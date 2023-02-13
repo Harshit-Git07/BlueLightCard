@@ -10,7 +10,8 @@
     "test": "jest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "storybook:deploy": "npx chromatic --project-token=0b8218f55902"
+    "chromatic": "npx chromatic --project-token=0b8218f55902",
+    "storybook:deploy": "npm run chromatic"
   },
   "dependencies": {
     "@fortawesome/fontawesome-pro": "^6.2.1",

@@ -40,8 +40,14 @@ const FormFieldController: FC<{
   );
 };
 
-const Form: FC<FormData> = ({ fields }) => {
+/**
+ * Form component used for building data driven forms
+ * @param props - Provide JSON schema for the form fields
+ * @returns React component
+ */
+const Form: FC<FormData> = ({ submitButtonText, fields }) => {
   const fieldsFlattened = useMemo(() => flatten(fields), [fields]);
+
   const validationSchema = yup.object().shape(
     fieldsFlattened.reduce<ObjectShape>((acc, field) => {
       if (field.validation) {
@@ -91,7 +97,7 @@ const Form: FC<FormData> = ({ fields }) => {
           />
         )
       )}
-      <Button text="Submit" type="submit" />
+      <Button text={submitButtonText ?? 'Submit'} type="submit" />
     </BootstrapForm>
   );
 };

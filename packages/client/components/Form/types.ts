@@ -11,5 +11,6 @@ export interface FormField<P = any> {
 }
 
 export interface FormData {
+  submitButtonText?: string;
   fields: Array<FormField | FormField[]>;
 }

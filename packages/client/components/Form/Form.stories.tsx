@@ -13,6 +13,11 @@ const componentMeta: ComponentMeta<typeof Form> = {
         disable: true,
       },
     },
+    onSubmit: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 

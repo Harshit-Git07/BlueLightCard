@@ -42,6 +42,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
  - `storybook` - Runs the storybook server.
  - `storybook:deploy` - Deploys all stories to chromatic.
 
+### Custom CSS variables
+Coming soon...
+
 ### Components
 All components should be put in the components folder and consist of the following files for each component:
  - **[ComponentName]**.tsx - React component

@@ -42,6 +42,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
  - `storybook` - Runs the storybook server.
  - `storybook:deploy` - Deploys all stories to chromatic.
 
+### Alias paths
+Currently there are the following alias paths setup for importing:
+ - `@/components`
+ - `@/pages`
+ - `@/hooks`
+ - `@/utils`
+
 ### Custom CSS variables
 Coming soon...
 

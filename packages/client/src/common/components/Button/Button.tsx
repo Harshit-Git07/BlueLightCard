@@ -1,12 +1,8 @@
 import ReactButton from 'react-bootstrap/Button';
 import { FC } from 'react';
-import { ButtonProps } from './types';
+import { ButtonProps, StyledButtonIconProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled, { css } from 'styled-components';
-
-interface StyledButtonIconProps {
-  side: 'left' | 'right';
-}
 
 const StyledButtonIcon = styled(FontAwesomeIcon)<StyledButtonIconProps>`
   ${(props) =>

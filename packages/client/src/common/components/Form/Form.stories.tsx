@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import * as yup from 'yup';
 import Form from '@/components/Form/Form';
-import InputTextField from '../InputTextField/InputTextField';
-import { InputTextFieldProps } from '../InputTextField/types';
+import InputTextField from '@/components/InputTextField/InputTextField';
+import { InputTextFieldProps } from '@/components/InputTextField/types';
 
 const componentMeta: ComponentMeta<typeof Form> = {
   title: 'Component System/Form/Form',

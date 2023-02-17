@@ -59,7 +59,9 @@ const componentMeta: ComponentMeta<typeof InputSelectField> = {
   },
 };
 
-const InputSelectFieldTemplate: ComponentStory<typeof InputSelectField> = (args) => <InputSelectField {...args} />;
+const InputSelectFieldTemplate: ComponentStory<typeof InputSelectField> = (args) => (
+  <InputSelectField {...args} />
+);
 
 export const InputSelectFieldStory = InputSelectFieldTemplate.bind({});
 

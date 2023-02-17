@@ -1,6 +1,6 @@
 import { faEnvelope } from '@fortawesome/pro-solid-svg-icons';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import InputTextField from '../InputTextField/InputTextField';
+import InputTextField from '@/components/InputTextField/InputTextField';
 import FieldGroup from './FieldGroup';
 
 const componentMeta: ComponentMeta<typeof FieldGroup> = {

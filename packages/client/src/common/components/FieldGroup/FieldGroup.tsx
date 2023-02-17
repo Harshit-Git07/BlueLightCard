@@ -1,11 +1,7 @@
 import { FC } from 'react';
 import { Form } from 'react-bootstrap';
 import styled from 'styled-components';
-import { FieldGroupProps } from './types';
-
-interface FeedbackMessageProps {
-  invalid?: boolean;
-}
+import { FeedbackMessageProps, FieldGroupProps } from './types';
 
 const StyledInputGroup = styled.div`
   margin-bottom: var(--field-group-margin-bottom);

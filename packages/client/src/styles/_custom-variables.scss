@@ -1,8 +1,10 @@
+@use 'sass:color';
+
 /** Custom SCSS bootstrap overrides */
 
 // button properties
 $btn-focus-outline: $primary;
-$btn-hover-bg: darken($primary, 10);
+$btn-hover-bg: color.scale($primary, $lightness: -10%);
 
 /**
  * Custom CSS variables

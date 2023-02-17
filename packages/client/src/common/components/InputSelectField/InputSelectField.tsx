@@ -11,7 +11,13 @@ import { createStyledInputField } from '@/components/_shared/StyledInputField';
 
 const StyledInputSelectField = createStyledInputField(Form.Select);
 
-const InputSelectField: FC<InputSelectFieldProps> = ({ icon, value, options, error, defaultOption }) => {
+const InputSelectField: FC<InputSelectFieldProps> = ({
+  icon,
+  value,
+  options,
+  error,
+  defaultOption,
+}) => {
   return (
     <InputFieldWrapper icon={icon} showSuccessState={!!value} showErrorState={error}>
       <StyledInputSelectField $spaceForIcon={!!icon} error={error}>

@@ -60,7 +60,9 @@ const componentMeta: ComponentMeta<typeof InputDOBField> = {
   } as any,
 };
 
-const InputDOBFieldTemplate: ComponentStory<typeof InputDOBField> = (args) => <InputDOBField {...args} />;
+const InputDOBFieldTemplate: ComponentStory<typeof InputDOBField> = (args) => (
+  <InputDOBField {...args} />
+);
 
 export const InputDOBFieldStory = InputDOBFieldTemplate.bind({});
 

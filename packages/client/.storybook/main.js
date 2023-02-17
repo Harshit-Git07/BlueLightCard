@@ -2,14 +2,15 @@ const { resolve } = require("path");
 
 module.exports = {
   "stories": [
-    "../components/**/*.stories.mdx",
-    "../components/**/*.stories.@(js|jsx|ts|tsx)"
+    "../src/common/components/**/*.stories.mdx",
+    "../src/common/components/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
     "@storybook/preset-scss",
+    "@storybook/addon-a11y",
   ],
   "framework": "@storybook/react",
   "core": {
@@ -17,8 +18,8 @@ module.exports = {
   },
   webpackFinal: async(config) => {
     config.resolve.alias = {
-      "@/components": resolve(__dirname, "../components"),
-      "@/hooks": resolve(__dirname, "../hooks"),
+      "@/components": resolve(__dirname, "../src/common/components"),
+      "@/hooks": resolve(__dirname, "../src/common/hooks"),
     };
     return config;
   },

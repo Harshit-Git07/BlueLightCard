@@ -2,12 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faCircleCheck } from '@fortawesome/pro-solid-svg-icons';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { InputFieldWrapperProps } from './types';
-
-interface StyledInputTextIconProps {
-  color?: string;
-  $iconPosition?: 'left' | 'right';
-}
+import { InputFieldWrapperProps, StyledInputTextIconProps } from './types';
 
 const StyledInputContainer = styled.div`
   position: relative;

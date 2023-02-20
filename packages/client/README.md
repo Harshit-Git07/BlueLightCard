@@ -85,12 +85,16 @@ There are 3 environment variables available to build targeted distributions i.e 
 
 The command for building a targeted distribution for the blc brand in the australia region
 
-`NEXT_APP_BRAND=blc NEXT_APP_REGION=au npm run build`
+```
+NEXT_APP_BRAND=blc NEXT_APP_REGION=AU npm run build
+```
 
 If none of the environment variables are set, then the defaults are used.
 
 To run the app locally for a specific brand, you can do similar to the above but just swap `build` with `dev`
 
-`NEXT_APP_BRAND=blc NEXT_APP_REGION=au npm run dev`
+```
+NEXT_APP_BRAND=blc NEXT_APP_REGION=AU npm run dev
+```
 
 **TODO**: Handle the scenario when a brand, region or lang provided doesn't exist.

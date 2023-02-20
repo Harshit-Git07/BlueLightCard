@@ -8,10 +8,14 @@
 ```
 
 ## Getting started
+Install the dependencies by running:
+```
+npm i
+```
 To start the backend and the database, first rename the `.env.example` file to `.env`.
 Then run the following:
 ```
-npm i && docker compose up -d
+docker compose up -d
 ```
 
 You should be able to connect to MySQL with the following URL.

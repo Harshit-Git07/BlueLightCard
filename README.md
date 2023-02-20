@@ -18,6 +18,11 @@ You should be able to connect to MySQL with the following URL.
 ```
 mysql://:example@127.0.0.1/blc
 ```
+To start the frontend app, run the following:
+```
+npm run dev -w packages/client
+```
+
 
 ## Installing dependencies
 As this project uses npm workspaces, if you need to install dependencies for a particular application (like the frontend) you need to specify the workspace to use.

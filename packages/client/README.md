@@ -80,7 +80,7 @@ Read more on [Storybook](https://storybook.js.org/) and the [docs](https://story
 There are 3 environment variables available to build targeted distributions i.e build a dist for blc brand in the australia region.
 
  - `NEXT_APP_BRAND` - defaults to 'fallback'
- - `NEXT_APP_REGION` - defaults to 'uk'
+ - `NEXT_APP_REGION` - defaults to 'GB'
  - `NEXT_APP_LANG` - defaults to 'en'
 
 The command for building a targeted distribution for the blc brand in the australia region

@@ -1,19 +1,13 @@
-const {
-  BRAND,
-  DEFAULT_LANG,
-} = require("./global-vars");
+const { BRAND, LANGUAGE } = require('./global-vars');
 
 /** @type {import('next-i18next').UserConfig} */
 const nexti18nextConfig = {
   i18n: {
-    defaultLocale: DEFAULT_LANG,
-    locales: ["en"],
-  },
-  fallbackLng: {
-    default: [DEFAULT_LANG]
+    defaultLocale: LANGUAGE,
+    locales: [LANGUAGE],
   },
   localePath: `./brands/${BRAND}/locales`,
-  localeStructure: "{{lng}}/{{ns}}"
-}
+  localeStructure: '{{lng}}/{{ns}}',
+};
 
 module.exports = nexti18nextConfig;

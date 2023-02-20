@@ -19,7 +19,9 @@ type CaptureInputSign<E> = (event: KeyboardEvent<E>, constraintKey: string) => v
  *
  * For example: DOB day field, prevent user from attempting to type more than 31 days
  */
-const useKeyConstraint: <E>(options: HookOptions) => HookReturnType<E> = ({ validationSchema }: HookOptions) => {
+const useKeyConstraint: <E>(options: HookOptions) => HookReturnType<E> = ({
+  validationSchema,
+}: HookOptions) => {
   const captureInput: CaptureInputSign<any> = (event, constraintKey) => {
     const key = event.key;
     const currentInputValue = event.currentTarget.value;

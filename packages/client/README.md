@@ -76,17 +76,17 @@ Stories are deployed to [chromatic](https://www.chromatic.com/) which allows us 
 
 Read more on [Storybook](https://storybook.js.org/) and the [docs](https://storybook.js.org/docs/react/why-storybook)
 
-### Brand targeting
-There are 3 environment variables available to build targeted distributions i.e build a dist for blc brand in the australia region.
+### Brand targeting and internationalising
+There are 3 environment variables available to build targeted distributions i.e build a dist for a brand in the australia region.
 
  - `NEXT_APP_BRAND` - defaults to 'fallback'
  - `NEXT_APP_REGION` - defaults to 'GB'
  - `NEXT_APP_LANG` - defaults to 'en'
 
-The command for building a targeted distribution for the blc brand in the australia region
+The command for building a targeted distribution for a brand in the australia region
 
 ```
-NEXT_APP_BRAND=blc NEXT_APP_REGION=AU npm run build
+NEXT_APP_BRAND=[brand name] NEXT_APP_REGION=AU npm run build
 ```
 
 If none of the environment variables are set, then the defaults are used.
@@ -94,7 +94,15 @@ If none of the environment variables are set, then the defaults are used.
 To run the app locally for a specific brand, you can do similar to the above but just swap `build` with `dev`
 
 ```
-NEXT_APP_BRAND=blc NEXT_APP_REGION=AU npm run dev
+NEXT_APP_BRAND=[brand name] NEXT_APP_REGION=AU npm run dev
+```
+The above environment variables also affect what language translation is used, as each brand has a set locales in them, so for example running the above build command will use the following translation
+```
+[brand name]/locales/en-AU
+```
+If the AU language translation is not available, then the fallback language which is english `en` will be used instead.
+```
+[brand name]/locales/en
 ```
 
 **TODO**: Handle the scenario when a brand, region or lang provided doesn't exist.

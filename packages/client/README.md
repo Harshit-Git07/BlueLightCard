@@ -38,6 +38,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
  - `build` - Builds a distribution of the app.
  - `lint` - Lints all the code.
+ - `lint:css` - Lints all the CSS/SCSS code.
  - `test` - Runs all unit tests.
  - `storybook` - Runs the storybook server.
  - `storybook:deploy` - Deploys all stories to chromatic.

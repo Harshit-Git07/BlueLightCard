@@ -7,10 +7,6 @@ import flagsmith from 'flagsmith/isomorphic';
 import featureToggleState from '../feature-toggles.json';
 import '../styles/main.scss';
 
-const UserWrapper: FC<PropsWithChildren> = ({ children }) => {
-  return <>{children}</>;
-};
-
 const userToEmail: Record<string, string> = {
   user_1: 'user_1@bluelightcard.co.uk',
   user_2: 'user_2@bluelightcard.co.uk',
@@ -34,9 +30,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
       }}
       flagsmith={flagsmith}
     >
-      <UserWrapper>
-        <Component {...pageProps} />
-      </UserWrapper>
+      <Component {...pageProps} />
     </FlagsmithProvider>
   );
 };

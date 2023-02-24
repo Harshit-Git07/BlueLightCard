@@ -19,7 +19,8 @@
 			"@/components/*": ["src/common/components/*"],
 			"@/pages/*": ["src/pages/*"],
 			"@/hooks/*": ["src/common/hooks/*"],
-			"@/utils/*": ["src/common/utils/*"]
+			"@/utils/*": ["src/common/utils/*"],
+			"@/layouts/*": ["src/common/layouts/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

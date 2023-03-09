@@ -9,7 +9,6 @@
     "lint": "next lint",
     "lint:css": "npx stylelint '**/*.{scss,css}'",
     "test": "jest",
-    "feature-toggles:dev": "flagsmith get 4d3itvPr5JdVkwEVtx5JUh -o ./src/feature-toggles.json",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chromatic": "npx chromatic --project-token=0b8218f55902",

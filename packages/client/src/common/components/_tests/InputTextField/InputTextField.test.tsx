@@ -15,7 +15,7 @@ describe('InputTextField component', () => {
     it('should render component without error', () => {
       render(<InputTextField {...props} />);
 
-      const inputTextField = screen.getByRole('input');
+      const inputTextField = screen.getByRole('textbox');
 
       expect(inputTextField).toBeTruthy();
     });

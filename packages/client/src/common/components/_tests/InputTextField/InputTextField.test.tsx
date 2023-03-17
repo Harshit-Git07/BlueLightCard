@@ -7,7 +7,7 @@ describe('InputTextField component', () => {
 
   beforeEach(() => {
     props = {
-      placeholder: 'Input text field placeholder',
+      
     };
   });
 

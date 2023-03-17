@@ -24,7 +24,7 @@ describe('Button component', () => {
     });
   });
 
-  describe('Snapshot Test', () => {
+  describe('snapshot Test', () => {
     it('renders a button with the correct icon side "left"', () => {
       const component = renderer.create(
         <Button text="Button" iconLeft={faMinus}/>,

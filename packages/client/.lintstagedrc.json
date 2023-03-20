@@ -1,0 +1,4 @@
+{
+  "**/*.{ts,tsx}": "eslint",
+  "**/*.{css,scss}": "stylelint"
+}

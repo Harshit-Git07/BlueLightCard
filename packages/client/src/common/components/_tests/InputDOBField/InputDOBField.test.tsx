@@ -1,20 +1,17 @@
 import InputDOBField from '@/components/InputDOBField/InputDOBField';
 import { InputDOBFieldProps } from '@/components/InputDOBField/types';
-import {render} from '@testing-library/react'
-
+import { render } from '@testing-library/react';
 
 describe('InputDOBField component', () => {
-    let props: InputDOBFieldProps;
+  let props: InputDOBFieldProps;
 
-    beforeEach(() => {
-        props = {
+  beforeEach(() => {
+    props = {};
+  });
 
-        }
-    })
-
-    describe('smoke test', () => {
-        it('should render component without error', () => {
-            render(<InputDOBField {...props} />)
-        })
-    })
-})
+  describe('smoke test', () => {
+    it('should render component without error', () => {
+      render(<InputDOBField {...props} />);
+    });
+  });
+});

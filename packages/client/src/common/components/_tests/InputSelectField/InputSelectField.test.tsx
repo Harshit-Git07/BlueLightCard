@@ -1,7 +1,7 @@
-import InputSelectField from "@/components/InputSelectField/InputSelectField";
-import { InputSelectFieldProps } from "@/components/InputSelectField/types";
-import {render, screen} from '@testing-library/react'
-import '@testing-library/jest-dom'
+import InputSelectField from '@/components/InputSelectField/InputSelectField';
+import { InputSelectFieldProps } from '@/components/InputSelectField/types';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 describe('InputSelectField component', () => {
   let props: InputSelectFieldProps;
@@ -24,5 +24,5 @@ describe('InputSelectField component', () => {
 
       expect(inputSelectField).toBeTruthy();
     });
-  })
+  });
 });

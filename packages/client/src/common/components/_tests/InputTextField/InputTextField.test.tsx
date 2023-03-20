@@ -6,9 +6,7 @@ describe('InputTextField component', () => {
   let props: InputTextFieldProps;
 
   beforeEach(() => {
-    props = {
-      
-    };
+    props = {};
   });
 
   describe('smoke test', () => {

@@ -1,5 +1,5 @@
-import FieldGroup from "@/components/FieldGroup/FieldGroup";
-import { FieldGroupProps } from "@/components/FieldGroup/types";
+import FieldGroup from '@/components/FieldGroup/FieldGroup';
+import { FieldGroupProps } from '@/components/FieldGroup/types';
 import { render } from '@testing-library/react';
 
 describe('FieldGroup component', () => {
@@ -13,7 +13,7 @@ describe('FieldGroup component', () => {
 
   describe('smoke test', () => {
     it('should render component without error', () => {
-        render(<FieldGroup {...props} />);
+      render(<FieldGroup {...props} />);
     });
   });
 });

@@ -9,6 +9,7 @@ module.exports = {
   overrides: [],
   parserOptions: {
     project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   rules: {
     'prettier/prettier': [

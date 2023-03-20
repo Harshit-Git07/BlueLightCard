@@ -4,12 +4,9 @@ import { render, screen } from '@testing-library/react';
 
 describe('InputTextField component', () => {
   let props: InputTextFieldProps;
-  // hello
 
   beforeEach(() => {
-    props = {
-      placeholder: 'Input text field placeholder',
-    };
+    props = {};
   });
 
   describe('smoke test', () => {

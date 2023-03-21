@@ -7,8 +7,8 @@ export interface DOBFields {
 }
 
 export type InputDOBFieldProps = InputFieldSharedProps<HTMLInputElement> & {
-  dobSeparator: string;
+  dobDelimiter?: string;
   error?: boolean;
   minAgeConstraint?: number;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
 };

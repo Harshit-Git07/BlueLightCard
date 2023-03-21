@@ -1,4 +1,4 @@
-import { FC, forwardRef, useEffect, useState } from 'react';
+import { FC, forwardRef, useEffect, useRef, useState } from 'react';
 import InputTextField from '@/components/InputTextField/InputTextField';
 import { DOBFields, InputDOBFieldProps } from './types';
 import { Col, Row } from 'react-bootstrap';
@@ -9,19 +9,25 @@ const maxDayNumber = 31;
 const maxMonthNumber = 12;
 const defaultDate = new Date();
 
+/**
+ * InputDOBField component
+ * @param props
+ * @returns React component
+ */
 const InputDOBField: FC<InputDOBFieldProps> = ({
   value,
   error,
   required,
   onChange,
-  dobSeparator = '/',
+  dobDelimiter = '/',
   minAgeConstraint = 16,
 }) => {
   const maxFallbackYear = defaultDate.getFullYear();
   const maxYear = maxFallbackYear - minAgeConstraint;
+  const initialRender = useRef(true);
 
-  // provided dob value
-  const dobValues = value?.split(dobSeparator);
+  // populated dob value
+  const dobValues = value?.split(dobDelimiter);
   const { day, month, year }: DOBFields = {
     day: dobValues?.[0],
     month: dobValues?.[1],
@@ -43,8 +49,12 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
   });
 
   useEffect(() => {
-    if (onChange) {
-      onChange([dobValue.day, dobValue.month, dobValue.year].join(dobSeparator));
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      if (onChange) {
+        onChange([dobValue.day, dobValue.month, dobValue.year].join(dobDelimiter));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dobValue]);
@@ -58,6 +68,7 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
           type="number"
           min={0}
           max={maxDayNumber}
+          name="day"
           placeholder="DD"
           required={required}
           onChange={(ev) => setDOBValue({ ...dobValue, day: ev.currentTarget.value })}
@@ -71,6 +82,7 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
           type="number"
           min={0}
           max={maxMonthNumber}
+          name="month"
           placeholder="MM"
           required={required}
           onChange={(ev) => setDOBValue({ ...dobValue, month: ev.currentTarget.value })}
@@ -84,6 +96,7 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
           type="number"
           min={0}
           max={maxYear}
+          name="year"
           placeholder="YYYY"
           required={required}
           onChange={(ev) => setDOBValue({ ...dobValue, year: ev.currentTarget.value })}

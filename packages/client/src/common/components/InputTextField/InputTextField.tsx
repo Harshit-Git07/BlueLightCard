@@ -22,6 +22,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
   min,
   max,
   required,
+  name,
   _ref,
   onChange,
   onKeyDown,
@@ -47,6 +48,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
       onRightIconClick={onRightIconClick}
     >
       <StyledInputTextField
+        value={value}
         type={type === 'password' && isPasswordVisible ? 'text' : type}
         $spaceForIcon={!!icon}
         $error={error}
@@ -55,6 +57,8 @@ const InputTextField: FC<InputTextFieldProps> = ({
         min={min}
         max={max}
         ref={_ref}
+        name={name}
+        aria-label={name}
         required={required}
         onChange={onChange}
         onKeyDown={onKeyDown}

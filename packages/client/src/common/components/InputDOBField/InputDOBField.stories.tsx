@@ -37,6 +37,7 @@ export const InputDOBFieldStory = InputDOBFieldTemplate.bind({});
 
 InputDOBFieldStory.args = {
   error: false,
+  value: '',
 };
 
 export default componentMeta;

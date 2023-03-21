@@ -21,6 +21,7 @@ export interface StyledInputProps {
 }
 
 export interface InputFieldSharedProps<E, V = string> {
+  name?: string;
   error?: boolean;
   value?: V;
   required?: boolean;

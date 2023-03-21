@@ -8,7 +8,7 @@ export const createStyledInputField = (bsComponent: any) => styled(bsComponent)<
       padding-left: 2.1rem;
     `}
   ${(props) =>
-    props.error &&
+    props.$error &&
     css`
       border-color: var(--bs-danger) !important;
     `}

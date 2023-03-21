@@ -49,7 +49,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
       <StyledInputTextField
         type={type === 'password' && isPasswordVisible ? 'text' : type}
         $spaceForIcon={!!icon}
-        error={error}
+        $error={error}
         placeholder={placeholder}
         maxLength={maxlength}
         min={min}

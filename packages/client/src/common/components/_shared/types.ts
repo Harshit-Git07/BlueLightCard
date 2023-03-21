@@ -16,7 +16,7 @@ export type InputFieldWrapperProps = PropsWithChildren & {
 };
 
 export interface StyledInputProps {
-  error?: boolean;
+  $error?: boolean;
   $spaceForIcon?: boolean;
 }
 

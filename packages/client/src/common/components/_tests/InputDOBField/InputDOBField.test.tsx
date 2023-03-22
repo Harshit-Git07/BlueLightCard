@@ -1,6 +1,6 @@
+import { render, screen } from '@testing-library/react';
 import InputDOBField from '@/components/InputDOBField/InputDOBField';
 import { InputDOBFieldProps } from '@/components/InputDOBField/types';
-import { render } from '@testing-library/react';
 
 describe('InputDOBField component', () => {
   let props: InputDOBFieldProps;
@@ -12,6 +12,35 @@ describe('InputDOBField component', () => {
   describe('smoke test', () => {
     it('should render component without error', () => {
       render(<InputDOBField {...props} />);
+    });
+  });
+
+  describe('component functionality', () => {
+    it('should render dob fields with populated values', () => {
+      props.value = '12/05/2005';
+      render(<InputDOBField {...props} />);
+
+      const dayField = screen.getByDisplayValue('12');
+      const monthField = screen.getByDisplayValue('05');
+      const yearField = screen.getByDisplayValue('2005');
+
+      expect(dayField).toBeTruthy();
+      expect(monthField).toBeTruthy();
+      expect(yearField).toBeTruthy();
+    });
+
+    it('should render dob fields with populated values matching delimiter', () => {
+      props.value = '12-05-2005';
+      props.dobDelimiter = '-';
+      render(<InputDOBField {...props} />);
+
+      const dayField = screen.getByDisplayValue('12');
+      const monthField = screen.getByDisplayValue('05');
+      const yearField = screen.getByDisplayValue('2005');
+
+      expect(dayField).toBeTruthy();
+      expect(monthField).toBeTruthy();
+      expect(yearField).toBeTruthy();
     });
   });
 });

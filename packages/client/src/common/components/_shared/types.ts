@@ -16,11 +16,12 @@ export type InputFieldWrapperProps = PropsWithChildren & {
 };
 
 export interface StyledInputProps {
-  error?: boolean;
+  $error?: boolean;
   $spaceForIcon?: boolean;
 }
 
 export interface InputFieldSharedProps<E, V = string> {
+  name?: string;
   error?: boolean;
   value?: V;
   required?: boolean;

@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC, forwardRef, useEffect, useRef, useState } from 'react';
 import InputTextField from '@/components/InputTextField/InputTextField';
-import { InputDOBFieldProps } from './types';
+import { DOBFields, InputDOBFieldProps } from './types';
 import { Col, Row } from 'react-bootstrap';
 import { number } from 'yup';
 import useKeyConstraint from '@/hooks/useKeyConstraint';
@@ -9,15 +9,36 @@ const maxDayNumber = 31;
 const maxMonthNumber = 12;
 const defaultDate = new Date();
 
+/**
+ * InputDOBField component
+ * @param props
+ * @returns React component
+ */
 const InputDOBField: FC<InputDOBFieldProps> = ({
-  dd,
-  mm,
-  yyyy,
+  value,
+  error,
+  required,
   onChange,
+  dobDelimiter = '/',
   minAgeConstraint = 16,
 }) => {
   const maxFallbackYear = defaultDate.getFullYear();
   const maxYear = maxFallbackYear - minAgeConstraint;
+  const initialRender = useRef(true);
+
+  // populated dob value
+  const dobValues = value?.split(dobDelimiter);
+  const { day, month, year }: DOBFields = {
+    day: dobValues?.[0],
+    month: dobValues?.[1],
+    year: dobValues?.[2],
+  };
+
+  const [dobValue, setDOBValue] = useState<DOBFields>({
+    day: undefined,
+    month: undefined,
+    year: undefined,
+  });
 
   const { captureInput } = useKeyConstraint({
     validationSchema: {
@@ -27,41 +48,58 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      if (onChange) {
+        onChange([dobValue.day, dobValue.month, dobValue.year].join(dobDelimiter));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dobValue]);
+
   return (
     <Row>
       <Col>
         <InputTextField
-          value={dd?.value}
-          error={dd?.error}
+          value={day}
+          error={error}
           type="number"
           min={0}
           max={maxDayNumber}
-          placeholder={dd?.placeholder ?? 'DD'}
-          onChange={onChange}
+          name="day"
+          placeholder="DD"
+          required={required}
+          onChange={(ev) => setDOBValue({ ...dobValue, day: ev.currentTarget.value })}
           onKeyDown={(ev) => captureInput(ev, 'dd')}
         />
       </Col>
       <Col>
         <InputTextField
-          value={mm?.value}
-          error={mm?.error}
+          value={month}
+          error={error}
           type="number"
           min={0}
           max={maxMonthNumber}
-          placeholder={mm?.placeholder ?? 'MM'}
-          onChange={onChange}
+          name="month"
+          placeholder="MM"
+          required={required}
+          onChange={(ev) => setDOBValue({ ...dobValue, month: ev.currentTarget.value })}
           onKeyDown={(ev) => captureInput(ev, 'mm')}
         />
       </Col>
       <Col>
         <InputTextField
-          value={yyyy?.value}
-          error={yyyy?.error}
+          value={year}
+          error={error}
           type="number"
           min={0}
           max={maxYear}
-          placeholder={yyyy?.placeholder ?? 'YYYY'}
-          onChange={onChange}
+          name="year"
+          placeholder="YYYY"
+          required={required}
+          onChange={(ev) => setDOBValue({ ...dobValue, year: ev.currentTarget.value })}
           onKeyDown={(ev) => captureInput(ev, 'yyyy')}
         />
       </Col>
@@ -69,4 +107,9 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
   );
 };
 
-export default InputDOBField;
+// eslint-disable-next-line react/display-name
+const InputDOBFieldWithRef = forwardRef<unknown, InputDOBFieldProps>((props, ref) => (
+  <InputDOBField {...props} _ref={ref} />
+));
+
+export default InputDOBFieldWithRef;

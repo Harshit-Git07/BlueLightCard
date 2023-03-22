@@ -1,14 +1,14 @@
 import { InputFieldSharedProps } from '../_shared/types';
 
-interface DOBProps {
-  value?: string;
-  error?: boolean;
-  placeholder?: string;
+export interface DOBFields {
+  day: string | undefined;
+  month: string | undefined;
+  year: string | undefined;
 }
 
 export type InputDOBFieldProps = InputFieldSharedProps<HTMLInputElement> & {
-  dd?: DOBProps;
-  mm?: DOBProps;
-  yyyy?: DOBProps;
+  dobDelimiter?: string;
+  error?: boolean;
   minAgeConstraint?: number;
+  onChange?: (value: string) => void;
 };

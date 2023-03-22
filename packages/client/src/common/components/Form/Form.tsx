@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectShape } from 'yup/lib/object';
 import flatten from 'lodash/flatten';
 import FieldGroup from '../FieldGroup/FieldGroup';
-import { FormOptions, FormField } from './types';
+import { FormProps, FormField } from './types';
 import Button from '../Button/Button';
 import { Col, Row } from 'react-bootstrap';
 
@@ -45,7 +45,7 @@ const FormFieldController: FC<{
  * @param props - Provide JSON schema for the form fields
  * @returns React component
  */
-const Form: FC<FormOptions> = ({ submitButtonText, onSubmit, fields }) => {
+const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
   const fieldsFlattened = useMemo(() => flatten(fields), [fields]);
 
   const validationSchema = yup.object().shape(

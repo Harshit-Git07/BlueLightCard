@@ -1,0 +1,37 @@
+@use 'sass:color';
+@use './typograhpy' as t;
+
+/** Custom SCSS bootstrap overrides */
+
+// button properties
+$btn-focus-outline: $primary;
+$btn-hover-bg: color.scale($primary, $lightness: -10%);
+
+/**
+ * Custom CSS variables
+ */
+
+:root {
+  /**
+   * CSS variables for components should be in the below format.
+   * 
+   * c: Component name, this should be hyphenated
+   * p: CSS property, this should be hyphenated
+   * 
+   * --[c]-[p]: [value];
+  */
+  // FieldGroup
+  --field-group-margin-bottom: 1rem;
+
+  /**
+   * CSS variables for typograhpy should be in the below format.
+   * 
+   * p: Typograhpy property, this should be hyphenated
+   * 
+   * --font-weight-[p]: [value];
+  */
+  // Font weight
+  @each $key, $weight in t.$font-weights {
+    --font-weight-#{$key}: #{$weight};
+  }
+}

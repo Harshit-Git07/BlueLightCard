@@ -10,7 +10,7 @@ export interface FormField<P = any> {
   fieldComponentProps?: P;
 }
 
-export interface FormOptions {
+export interface FormProps {
   submitButtonText?: string;
   onSubmit: () => void;
   fields: Array<FormField | FormField[]>;

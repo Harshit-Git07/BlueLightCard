@@ -3,7 +3,8 @@
   "rules": {
     "color-named": "never",
     "function-disallowed-list": ["rgba", "rgb"],
-    "unit-allowed-list": ["%", "deg", "px", "rem"]
+    "unit-allowed-list": ["%", "deg", "px", "rem"],
+    "scss/dollar-variable-empty-line-before": null
   },
   "ignoreFiles": [
     "node_modules/**/*.{css,scss}",

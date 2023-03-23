@@ -1,11 +1,23 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import PageJourney from '@/components/PageJourney/PageJourney';
 import PageJourneyContent from './PageJourneyContent';
+import { faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const componentMeta: ComponentMeta<typeof PageJourney> = {
   title: 'Component System/PageJourney',
   component: PageJourney,
   argTypes: {
+    mobileHeaderStartSlot: {
+      table: {
+        disable: true,
+      },
+    },
+    mobileHeaderEndSlot: {
+      table: {
+        disable: true,
+      },
+    },
     tabs: {
       table: {
         disable: false,
@@ -17,11 +29,10 @@ const componentMeta: ComponentMeta<typeof PageJourney> = {
 const components = {
   AboutComponent: () => <h2>About Component</h2>,
   AddressComponent: () => <h2>Address Component</h2>,
-  FinishComponent: () => <h2>Finish Component</h2>,
 };
 
 const PageJourneyTemplate: ComponentStory<typeof PageJourney> = (args) => (
-  <PageJourney {...args}>
+  <PageJourney {...args} mobileHeaderStartSlot={<FontAwesomeIcon icon={faArrowLeft} />}>
     <PageJourneyContent components={components} />
   </PageJourney>
 );
@@ -34,33 +45,29 @@ Default.args = {
       id: 'pageJourneyTab1',
       label: 'Tab One',
       complete: true,
-      contentBlocks: [
+      steps: [
         {
-          id: 'pageJourneyTab1Content1',
+          id: 'pageJourneyTab1Step1',
           componentKey: 'AboutComponent',
         },
         {
-          id: 'pageJourneyTab1Content2',
+          id: 'pageJourneyTab1Step2',
           componentKey: 'AddressComponent',
-        },
-        {
-          id: 'pageJourneyTab1Content3',
-          componentKey: 'FinishComponent',
         },
       ],
     },
     {
       id: 'pageJourneyTab2',
       label: 'Tab Two',
-      contentBlocks: [
+      steps: [
         {
-          id: 'pageJourneyTab2Content1',
+          id: 'pageJourneyTab2Step1',
           componentKey: 'AddressComponent',
           marker: true,
           current: true,
         },
         {
-          id: 'pageJourneyTab2Content2',
+          id: 'pageJourneyTab2Step2',
           componentKey: 'AboutComponent',
         },
       ],
@@ -68,7 +75,7 @@ Default.args = {
     {
       id: 'pageJourneyTab3',
       label: 'Tab Three',
-      contentBlocks: [],
+      steps: [],
     },
   ],
 };

@@ -17,5 +17,5 @@ jobs:
         with:
           node-version: 18
       - uses: bahmutov/npm-install@v1
-      - run: npm test
+      - run: npm test -w packages/client
 

@@ -1,0 +1,23 @@
+name: 'Client'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/client/**
+      - package-lock.json
+      - .github/workflows/client.yml
+jobs:
+  tests:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: packages/client
+      - run: npm test
+

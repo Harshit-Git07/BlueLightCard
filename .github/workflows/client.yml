@@ -7,9 +7,11 @@ on:
       - packages/client/**
       - package-lock.json
       - .github/workflows/client.yml
+
 env:
   WHITE_LABEL_PROJECT: 'blc-white-label'
   STATIC_ASSETS_DIR: packages/client/dist
+
 jobs:
   test:
     name: Test
@@ -23,6 +25,7 @@ jobs:
         with:
           install-command: npm install --no-audit
       - run: npm test -w packages/client
+
   deploy:
     name: Deploy to Cloudflare Pages
     runs-on: ubuntu-latest

@@ -80,6 +80,7 @@ jobs:
     needs:
       - test
       - release_candidate
+      - deploy
     steps:
       - uses: actions/checkout@v3
       - name: Deploy

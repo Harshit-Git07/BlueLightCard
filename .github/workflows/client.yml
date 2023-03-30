@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: 18
       - uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm install --no-audit
       - run: npm test -w packages/client
   deploy:
     name: Deploy to Cloudflare Pages
@@ -32,6 +34,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm install --no-audit
       - name: Build
         run: npm run build -w packages/client
       - name: Publish

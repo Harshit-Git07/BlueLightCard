@@ -7,6 +7,11 @@ on:
       - packages/client/**
       - package-lock.json
       - .github/workflows/client.yml
+  pull_request:
+    paths:
+      - packages/client/**
+      - package-lock.json
+      - .github/workflows/client.yml
 
 env:
   WHITE_LABEL_PROJECT: 'blc-white-label'
@@ -25,6 +30,23 @@ jobs:
         with:
           install-command: npm install --no-audit
       - run: npm test -w packages/client
+
+  release_candidate:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Release Candidate
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/client
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/client
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
 
   deploy:
     name: Deploy to Cloudflare Pages

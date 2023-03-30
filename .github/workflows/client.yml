@@ -13,10 +13,6 @@ on:
       - package-lock.json
       - .github/workflows/client.yml
 
-env:
-  WHITE_LABEL_PROJECT: 'blc-white-label'
-  STATIC_ASSETS_DIR: packages/client/dist
-
 jobs:
   test:
     name: Test
@@ -43,6 +39,7 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: packages/client
+          exitZeroOnChanges: false
 
   release_candidate:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -79,8 +76,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ env.WHITE_LABEL_PROJECT }}
-          directory: ${{ env.STATIC_ASSETS_DIR }}
+          projectName: 'blc-white-label'
+          directory: packages/client/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   release:

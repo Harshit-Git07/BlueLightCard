@@ -11,7 +11,7 @@ env:
   WHITE_LABEL_PROJECT: 'blc-white-label'
   STATIC_ASSETS_DIR: dist
 jobs:
-  tests:
+  test:
     name: Test
     runs-on: ubuntu-latest
     steps:
@@ -27,6 +27,8 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    needs:
+      - test
     steps:
       - uses: actions/checkout@v3
       - uses: bahmutov/npm-install@v1

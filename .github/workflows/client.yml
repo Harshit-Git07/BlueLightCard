@@ -9,7 +9,7 @@ on:
       - .github/workflows/client.yml
 env:
   WHITE_LABEL_PROJECT: 'blc-white-label'
-  STATIC_ASSETS_DIR: dist
+  STATIC_ASSETS_DIR: packages/client/dist
 jobs:
   test:
     name: Test

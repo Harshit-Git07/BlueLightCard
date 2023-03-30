@@ -27,9 +27,20 @@ jobs:
         with:
           node-version: 18
       - uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm install --no-audit
       - run: npm test -w packages/client
+
+  deploy_storybook:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deploy Stroybook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: bahmutov/npm-install@v1
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
   release_candidate:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -59,8 +70,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm install --no-audit
       - name: Build
         run: npm run build -w packages/client
       - name: Publish
@@ -79,6 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - test
+      - deploy_storybook
       - release_candidate
       - deploy
     steps:

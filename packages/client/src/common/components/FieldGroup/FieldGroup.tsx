@@ -14,7 +14,7 @@ const StyledFeedbackMessage = styled.p<FeedbackMessageProps>`
 const FieldGroup: FC<FieldGroupProps> = ({ labelText, controlId, children, invalid, message }) => {
   return (
     <Form.Group controlId={controlId}>
-      <Form.Label>{labelText} extra test</Form.Label>
+      <Form.Label>{labelText}</Form.Label>
       <StyledInputGroup>
         {children}
         {message && (

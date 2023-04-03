@@ -14,6 +14,7 @@ on:
       - .github/workflows/client.yml
 
 jobs:
+  # Run all unit tests on merge to main
   test:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Unit Tests
@@ -26,6 +27,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm test -w packages/client
 
+  # Run unit tests related to committed files on pull request
   test_pr:
     if: github.event_name == 'pull_request'
     name: PR Unit Tests
@@ -40,6 +42,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: node scripts/findRelatedTests.mjs --ci
 
+  # Deploy component library to chromatic
   deploy_storybook:
     if: github.event_name == 'pull_request'
     name: Deploy Storybook

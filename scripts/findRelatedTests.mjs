@@ -5,7 +5,7 @@ const isCIFlag = process.argv[2] === '--ci';
 
 try {
   const result = execSync(isCIFlag ?
-    `git show --name-only --pretty=format:%b ${commitSHA}` :
+    `git show --name-only --pretty=format:%b` :
     'git diff --name-only --cached'
   ).toString().split(/\s+/)[1];
 

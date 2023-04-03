@@ -1,8 +1,13 @@
 import { execSync } from 'child_process';
 import { EOL } from 'os';
 
+const isCIFlag = process.argv[2] === '--ci';
+
 try {
-  const result = execSync('git diff --name-only --cached').toString().trim();
+  const result = execSync(isCIFlag ?
+    'git show --name-only --pretty=format:%b' :
+    'git diff --name-only --cached'
+  ).toString().trim();
 
   if (result.length) {
     const paths = result.split(EOL).map((path) => path.replace('packages/client/', ''));
@@ -13,7 +18,7 @@ try {
       });
     }
   } else {
-    console.info('No staged files found');
+    console.info('No files found');
   }
 } catch (error) {
   console.error(error);

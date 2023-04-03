@@ -4,6 +4,8 @@ import { EOL } from 'os';
 const isCIFlag = process.argv[2] === '--ci';
 const commitSHA = process.argv[3];
 
+console.info(`COMMIT SHA: ${commitSHA}`);
+
 try {
   if (isCIFlag && !commitSHA) {
     throw new Error('Missing commit hash');

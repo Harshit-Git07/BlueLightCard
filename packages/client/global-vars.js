@@ -1,4 +1,4 @@
-const BRAND = process.env.NEXT_APP_BRAND ?? 'fallback';
+const BRAND = process.env.NEXT_APP_BRAND ?? 'default';
 const REGION = process.env.NEXT_APP_REGION ?? 'GB';
 const DEFAULT_LANG = process.env.NEXT_APP_LANG ?? 'en';
 const FALLBACK_LNG = 'en';

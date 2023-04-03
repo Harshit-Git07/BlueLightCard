@@ -5,12 +5,17 @@ const isCIFlag = process.argv[2] === '--ci';
 
 try {
   const result = execSync(isCIFlag ?
-    'git show --name-only --pretty=format:%b' :
+    `git show --name-only --pretty=format:%b` :
     'git diff --name-only --cached'
-  ).toString().trim();
+  ).toString().split(/\s+/)[1];
 
-  if (result.length) {
-    const paths = result.split(EOL).map((path) => path.replace('packages/client/', ''));
+  if (result && result.length) {
+    const paths = result.split(EOL).map((path) => {
+      if (isCIFlag) {
+        console.info(`File: ${path}`);
+      }
+      return path.replace('packages/client/', '');
+    });
     if (paths.length) {
       execSync(`npx jest --passWithNoTests --findRelatedTests ${paths.join(' ')}`, {
         cwd: 'packages/client',

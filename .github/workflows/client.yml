@@ -32,12 +32,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v3
         with:
           node-version: 18
       - uses: bahmutov/npm-install@v1
       # - run: node scripts/findRelatedTests.mjs --ci ${{ github.event.pull_request.head.sha }}
-      - run: git branch
+      - run: git log
 
   deploy_storybook:
     if: github.event_name == 'pull_request'

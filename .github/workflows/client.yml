@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 18
       - uses: bahmutov/npm-install@v1
-      - run: node scripts/findRelatedTests.mjs --ci
+      - run: node scripts/findRelatedTests.mjs --ci ${{ github.sha }}
 
   deploy_storybook:
     if: github.event_name == 'pull_request'

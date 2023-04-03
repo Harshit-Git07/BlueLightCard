@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-node scripts/preCommit.mjs
+node scripts/findRelatedTests.mjs
 npx lint-staged

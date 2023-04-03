@@ -38,7 +38,6 @@ const InputTextField: FC<InputTextFieldProps> = ({
       onTogglePasswordVisible(!isPasswordVisible);
     }
   };
-  // comment
   return (
     <InputFieldWrapper
       icon={icon}

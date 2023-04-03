@@ -10,7 +10,12 @@ try {
   ).toString().split(/\s+/)[1];
 
   if (result && result.length) {
-    const paths = result.split(EOL).map((path) => path.replace('packages/client/', ''));
+    const paths = result.split(EOL).map((path) => {
+      if (isCIFlag) {
+        console.info(`File: ${path}`);
+      }
+      return path.replace('packages/client/', '');
+    });
     if (paths.length) {
       execSync(`npx jest --passWithNoTests --findRelatedTests ${paths.join(' ')}`, {
         cwd: 'packages/client',

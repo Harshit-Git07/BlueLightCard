@@ -40,7 +40,7 @@ export const Default = FileUploadTemplate.bind({});
 Default.args = {
   description: 'Place on a plain, well lit surface with no obstructions, blur or glare',
   mimeTypes: [FileUploadMimeTypes.PNG, FileUploadMimeTypes.JPEG, FileUploadMimeTypes.PDF],
-  maxUploadSizeMb: 20,
+  maxUploadSizeMb: 2,
   allowMultiple: false,
 };
 

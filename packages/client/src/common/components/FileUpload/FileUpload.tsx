@@ -1,16 +1,19 @@
 import { faFileImage } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ChangeEventHandler, FC } from 'react';
+import { ChangeEventHandler, FC, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import styled from 'styled-components';
 import { desktopSmall } from '@/utils/breakpoints';
-import { FileUploadMimeTypes, FileUploadProps } from './types';
+import { FileUploadMimeTypes, FileUploadProps, StyledFUContainerProps } from './types';
 
-const StyledFUContainer = styled(Card)`
+const StyledFUContainer = styled(Card)<StyledFUContainerProps>`
   width: 100%;
   justify-content: center;
-  background-color: var(--bs-tertiary-color);
+  background-color: var(
+    ${(props) => (props.$isDragEnter ? '--file-upload-drag-enter-color' : '--bs-tertiary-color')}
+  );
   border: 2px solid var(--bs-border-color);
+  transition: background-color 0.2s;
 `;
 
 const StyledFUContent = styled(Card.Body)`
@@ -58,14 +61,34 @@ const StyledFUInputFileLabel = styled.label`
   cursor: pointer;
 `;
 
+const filterFiles = (
+  fileList: FileList,
+  maxUploadSizeMb: number
+): { successful: File[]; maxedFiles: File[] } => {
+  const files = Array.from(fileList as ArrayLike<File>);
+  const successful: File[] = [];
+  const maxedFiles: File[] = [];
+  files.forEach((file) => {
+    const fileSizeMb = Number((file.size / 1024 ** 2).toPrecision(2));
+    if (fileSizeMb > maxUploadSizeMb) {
+      maxedFiles.push(file);
+    } else {
+      successful.push(file);
+    }
+  });
+  return { successful, maxedFiles };
+};
+
 const FileUpload: FC<FileUploadProps> = ({
   allowMultiple,
   onError,
   onUpload,
-  maxUploadSizeMb = 20,
+  maxUploadSizeMb = 2,
   mimeTypes = [FileUploadMimeTypes.PNG, FileUploadMimeTypes.JPEG, FileUploadMimeTypes.PDF],
   description = 'Place on a plain, well lit surface with no obstructions, blur or glare',
 }) => {
+  const [isDragEnter, setIsDragEnter] = useState(false);
+
   const mimeTypesString = mimeTypes.reduce((acc, type, index) => {
     if (index === mimeTypes.length - 1) {
       acc = acc.slice(0, -2);
@@ -78,19 +101,8 @@ const FileUpload: FC<FileUploadProps> = ({
 
   const mimeAcceptTypes = mimeTypes.map((type) => `.${type.toLocaleLowerCase()}`).join();
 
-  const onFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const target = event.currentTarget;
-    const files = Array.from(target.files as ArrayLike<File>);
-    const successful: File[] = [];
-    const maxedFiles: File[] = [];
-    files.forEach((file) => {
-      const fileSizeMb = Number((file.size / 1024 ** 2).toPrecision(2));
-      if (fileSizeMb > maxUploadSizeMb) {
-        maxedFiles.push(file);
-      } else {
-        successful.push(file);
-      }
-    });
+  const invokePropCallbacks = (fileList: FileList) => {
+    const { successful, maxedFiles } = filterFiles(fileList, maxUploadSizeMb);
     if (onUpload && successful.length) {
       onUpload(successful);
     }
@@ -99,13 +111,53 @@ const FileUpload: FC<FileUploadProps> = ({
     }
   };
 
+  const onFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const target = event.currentTarget;
+    if (target.files) {
+      invokePropCallbacks(target.files);
+    }
+  };
+
+  const onDragEnter = (event: DragEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+  };
+
+  const onDragLeave = (event: DragEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setIsDragEnter(false);
+  };
+
+  const onDragOver = (event: DragEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setIsDragEnter(true);
+  };
+
+  const onDrop = (event: DragEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files) {
+      invokePropCallbacks(files);
+    }
+    setIsDragEnter(false);
+  };
+
   return (
-    <StyledFUContainer>
+    <StyledFUContainer
+      $isDragEnter={isDragEnter}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+    >
       <StyledFUContent>
         <StyledFUIcon icon={faFileImage} size="2x" />
         <StyledFUMessage>
           <p>
-            <StyledFUDesktopMessage>Drag your image here</StyledFUDesktopMessage> or{' '}
+            <StyledFUDesktopMessage>Drag your image here or</StyledFUDesktopMessage>{' '}
             <span>
               <StyledFUInputFileLabel htmlFor="file-upload">upload a file</StyledFUInputFileLabel>
               <StyledFUInputFile

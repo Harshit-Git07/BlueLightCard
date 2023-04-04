@@ -4,6 +4,10 @@ export enum FileUploadMimeTypes {
   PDF = 'pdf',
 }
 
+export interface StyledFUContainerProps {
+  $isDragEnter?: boolean;
+}
+
 export interface FileUploadProps {
   description?: string;
   mimeTypes?: FileUploadMimeTypes[];

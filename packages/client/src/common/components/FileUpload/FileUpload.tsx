@@ -1,9 +1,9 @@
-import { desktopSmall } from '@/utils/breakpoints';
 import { faFileImage } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC } from 'react';
+import { ChangeEventHandler, FC } from 'react';
 import Card from 'react-bootstrap/Card';
 import styled from 'styled-components';
+import { desktopSmall } from '@/utils/breakpoints';
 import { FileUploadMimeTypes, FileUploadProps } from './types';
 
 const StyledFUContainer = styled(Card)`
@@ -59,18 +59,46 @@ const StyledFUInputFileLabel = styled.label`
 `;
 
 const FileUpload: FC<FileUploadProps> = ({
-  maxUploadSize = '20mb',
+  allowMultiple,
+  onError,
+  onUpload,
+  maxUploadSizeMb = 20,
   mimeTypes = [FileUploadMimeTypes.PNG, FileUploadMimeTypes.JPEG, FileUploadMimeTypes.PDF],
   description = 'Place on a plain, well lit surface with no obstructions, blur or glare',
 }) => {
   const mimeTypesString = mimeTypes.reduce((acc, type, index) => {
     if (index === mimeTypes.length - 1) {
-      acc += `or ${type.toUpperCase()}`;
+      acc = acc.slice(0, -2);
+      acc += ` or ${type.toUpperCase()}`;
     } else {
       acc += `${type.toUpperCase()}, `;
     }
     return acc;
   }, '');
+
+  const mimeAcceptTypes = mimeTypes.map((type) => `.${type.toLocaleLowerCase()}`).join();
+
+  const onFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const target = event.currentTarget;
+    const files = Array.from(target.files as ArrayLike<File>);
+    const successful: File[] = [];
+    const maxedFiles: File[] = [];
+    files.forEach((file) => {
+      const fileSizeMb = Number((file.size / 1024 ** 2).toPrecision(2));
+      if (fileSizeMb > maxUploadSizeMb) {
+        maxedFiles.push(file);
+      } else {
+        successful.push(file);
+      }
+    });
+    if (onUpload && successful.length) {
+      onUpload(successful);
+    }
+    if (onError && maxedFiles.length) {
+      onError(maxedFiles);
+    }
+  };
+
   return (
     <StyledFUContainer>
       <StyledFUContent>
@@ -80,11 +108,17 @@ const FileUpload: FC<FileUploadProps> = ({
             <StyledFUDesktopMessage>Drag your image here</StyledFUDesktopMessage> or{' '}
             <span>
               <StyledFUInputFileLabel htmlFor="file-upload">upload a file</StyledFUInputFileLabel>
-              <StyledFUInputFile type="file" id="file-upload" />
+              <StyledFUInputFile
+                type="file"
+                id="file-upload"
+                accept={mimeAcceptTypes}
+                onChange={onFileChange}
+                multiple={allowMultiple}
+              />
             </span>
           </p>
           <p>
-            It must be a {mimeTypesString} and no larger than {maxUploadSize}
+            It must be a {mimeTypesString} and no larger than {maxUploadSizeMb}mb
           </p>
         </StyledFUMessage>
         <StyledFUDescription>{description}</StyledFUDescription>

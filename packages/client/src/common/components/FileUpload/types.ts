@@ -7,5 +7,8 @@ export enum FileUploadMimeTypes {
 export interface FileUploadProps {
   description?: string;
   mimeTypes?: FileUploadMimeTypes[];
-  maxUploadSize?: string;
+  maxUploadSizeMb?: number;
+  allowMultiple?: boolean;
+  onError?: (error: any) => void;
+  onUpload?: (files: File[]) => void;
 }

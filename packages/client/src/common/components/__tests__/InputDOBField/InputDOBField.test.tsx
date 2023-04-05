@@ -15,7 +15,7 @@ describe('InputDOBField component', () => {
     });
   });
 
-  describe('component functionality', () => {
+  describe('component rendering', () => {
     it('should render dob fields with populated values', () => {
       props.value = '12/05/2005';
       render(<InputDOBField {...props} />);

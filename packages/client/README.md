@@ -80,7 +80,7 @@ Read more on [Storybook](https://storybook.js.org/) and the [docs](https://story
 ### Brand targeting and internationalising
 There are 3 environment variables available to build targeted distributions i.e build a dist for a brand in the australia region.
 
- - `NEXT_APP_BRAND` - defaults to 'fallback'
+ - `NEXT_APP_BRAND` - defaults to 'default'
  - `NEXT_APP_REGION` - defaults to 'GB'
  - `NEXT_APP_LANG` - defaults to 'en'
 

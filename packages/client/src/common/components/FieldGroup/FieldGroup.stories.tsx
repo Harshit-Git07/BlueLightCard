@@ -4,7 +4,7 @@ import InputTextField from '@/components/InputTextField/InputTextField';
 import FieldGroup from './FieldGroup';
 
 const componentMeta: ComponentMeta<typeof FieldGroup> = {
-  title: 'Component System/Form/FieldGroup',
+  title: 'Component System/FieldGroup',
   component: FieldGroup,
   argTypes: {
     labelText: {

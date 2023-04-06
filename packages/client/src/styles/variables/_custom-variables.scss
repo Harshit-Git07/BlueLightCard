@@ -1,0 +1,67 @@
+@use 'sass:color';
+@use 'sass:map';
+@use './typograhpy' as t;
+
+/** Custom SCSS bootstrap overrides */
+
+// button properties
+$btn-focus-outline: $primary;
+$btn-hover-bg: color.scale($primary, $lightness: -10%);
+
+/**
+ * Custom CSS variables
+ */
+
+:root {
+  /**
+   * CSS variables for colours should be in the below format
+   *
+   * cv: Colour variant i.e primary, secondary
+   * p: Property affected
+   *
+   * --bs-[cv]-[p]: [value];
+  */
+  // Bootstrap CSS colour variables
+  --bs-tertiary-color: #FAFAFC;
+
+  /**
+   * CSS variables for components should be in the below format.
+   * 
+   * c: Component name, this should be hyphenated
+   * p: CSS property, this should be hyphenated
+   * 
+   * --[c]-[p]: [value];
+  */
+  // FieldGroup
+  --field-group-margin-bottom: 1rem;
+
+  // PillButton
+  --pill-buttons-default-text-color: #2929CC;
+  --pill-buttons-selected-text-color: #EDEDF2;
+  --pill-buttons-selected-color: #2929CC;
+  --pill-buttons-default-color: #EDEDF2;
+
+  // FileUpload
+  --file-upload-message-color: #4D4D70;
+  --file-upload-description-color: #BCBCC0;
+  --file-upload-drag-enter-color: #d4d4d8;
+
+  /**
+   * CSS variables for typograhpy should be in the below format.
+   * 
+   * p: Typograhpy property, this should be hyphenated
+   * 
+   * --font-weight-[p]: [value];
+  */
+  // Font weight
+  @each $key, $weight in t.$font-weights {
+    --font-weight-#{$key}: #{$weight};
+  }
+
+  // Font sizes
+  --bs-body-font-size: #{map.get(t.$font-sizes, 'body-large')};
+
+  @each $key, $size in t.$font-sizes {
+    --font-size-#{$key}: #{$size};
+  }
+}

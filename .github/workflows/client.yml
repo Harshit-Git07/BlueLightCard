@@ -1,0 +1,114 @@
+name: 'Client'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/client/**
+      - package-lock.json
+      - .github/workflows/client.yml
+  pull_request:
+    paths:
+      - packages/client/**
+      - package-lock.json
+      - .github/workflows/client.yml
+
+jobs:
+  # Run all unit tests on merge to main
+  test:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: bahmutov/npm-install@v1
+      - run: npm test -w packages/client
+
+  # Run unit tests related to committed files on pull request
+  test_pr:
+    if: github.event_name == 'pull_request'
+    name: PR Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: bahmutov/npm-install@v1
+      - run: node scripts/findRelatedTests.mjs --ci
+
+  # Deploy component library to chromatic
+  deploy_storybook:
+    if: github.event_name == 'pull_request'
+    name: Deploy Storybook
+    runs-on: ubuntu-latest
+    needs: test_pr
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: bahmutov/npm-install@v1
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: packages/client
+          exitZeroOnChanges: false
+          onlyChanged: true
+
+  release_candidate:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Release Candidate
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/client
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/client
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
+  deploy:
+    name: Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bahmutov/npm-install@v1
+      - name: Build
+        run: npm run build -w packages/client
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'blc-white-label'
+          directory: packages/client/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - release_candidate
+      - deploy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy
+        run: echo 'Deploy to production coming soon.'
+
+

@@ -3,9 +3,10 @@ import {
   FileListItemProps,
   FileListItemStatus,
   StyledFLIContainerProps,
+  StyledFLIProps,
   StyledFLIIconProps,
 } from './types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Button, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { decider } from '@/utils/decider';
@@ -20,12 +21,17 @@ const StyledFLIContainer = styled(Card)<StyledFLIContainerProps>`
   border: 1px solid var(${(props) => props.color ?? '--file-list-view-default-color'});
 `;
 
-const StyledFLIContent = styled(Card.Body)`
+const StyledFLIContent = styled(Card.Body)<StyledFLIProps>`
   padding: 0.8rem 1.2rem;
   flex: none;
   display: flex;
-  align-items: center;
+  align-items: ${(props) => (props.$imageView ? 'none' : 'center')};
   gap: 1rem;
+  ${(props) =>
+    props.$imageView &&
+    css`
+      flex-direction: column;
+    `}
 `;
 
 const StyledFLIIcon = styled(FontAwesomeIcon)<StyledFLIIconProps>`
@@ -43,9 +49,30 @@ const StyledFLIButton = styled(Button)`
   text-decoration: none;
 `;
 
-const StyledFLIImageContainer = styled.div``;
+const StyledFLIImageContainer = styled.div`
+  position: relative;
+  padding-bottom: 64%;
+  width: 100%;
+  background-color: var(--bs-tertiary-color);
+  text-align: center;
+  img {
+    max-width: 100%;
+    object-fit: contain;
+  }
+`;
 
-const imageLoader: ImageLoader = ({ src }) => `http://localhost:6006${src}`;
+const StyledFLIContentRow = styled.div<StyledFLIProps>`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  ${(props) =>
+    props.$alignRight &&
+    css`
+      justify-content: flex-end;
+      align-self: flex-end;
+    `}
+`;
 
 const FileListItem: FC<FileListItemProps> = ({
   status,
@@ -53,6 +80,10 @@ const FileListItem: FC<FileListItemProps> = ({
   showReUpload,
   fileLink,
   imageSrc,
+  imageWidth,
+  imageHeight,
+  imageSizes,
+  imageLoader,
 }) => {
   const icon = decider([
     [status === FileListItemStatus.SUCCESS, faCheckCircle],
@@ -64,17 +95,35 @@ const FileListItem: FC<FileListItemProps> = ({
   ]);
   return (
     <StyledFLIContainer color={color}>
-      <StyledFLIContent>
-        {icon && <StyledFLIIcon icon={icon} color={color} />}
-        <FontAwesomeIcon icon={faFile} />
-        <StyledFLIName>{name}</StyledFLIName>
-        {fileLink && (
-          <StyledFLIButton variant="link" href={fileLink}>
-            View
-          </StyledFLIButton>
+      <StyledFLIContent $imageView={!!imageSrc}>
+        <StyledFLIContentRow>
+          {icon && <StyledFLIIcon icon={icon} color={color} />}
+          <FontAwesomeIcon icon={faFile} />
+          <StyledFLIName>{name}</StyledFLIName>
+        </StyledFLIContentRow>
+        {imageSrc && (
+          <StyledFLIContentRow>
+            <StyledFLIImageContainer>
+              <Image
+                loader={imageLoader}
+                src={imageSrc}
+                alt={name}
+                sizes={imageSizes}
+                fill={!!(!imageWidth && !imageHeight)}
+                width={imageWidth}
+                height={imageHeight}
+              />
+            </StyledFLIImageContainer>
+          </StyledFLIContentRow>
         )}
-        {imageSrc && <Image loader={imageLoader} src={imageSrc} alt={name} fill={true} />}
-        {showReUpload && <StyledFLIButton variant="link">Re-upload</StyledFLIButton>}
+        <StyledFLIContentRow $alignRight={true}>
+          {fileLink && (
+            <StyledFLIButton variant="link" href={fileLink}>
+              View
+            </StyledFLIButton>
+          )}
+          {showReUpload && <StyledFLIButton variant="link">Re-upload</StyledFLIButton>}
+        </StyledFLIContentRow>
       </StyledFLIContent>
     </StyledFLIContainer>
   );

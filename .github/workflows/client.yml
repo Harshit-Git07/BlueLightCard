@@ -41,6 +41,7 @@ jobs:
           node-version: 18
       - uses: bahmutov/npm-install@v1
       - run: node scripts/findRelatedTests.mjs --ci
+      - run: git show --name-only --pretty=format:%b
 
   # Deploy component library to chromatic
   deploy_storybook:

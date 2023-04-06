@@ -35,8 +35,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - run: git show --name-only --pretty=format:%b ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - run: git checkout ${{ github.event.pull_request.head.sha }}
+      - run: git show --name-only --pretty=format:%b
       - uses: actions/setup-node@v3
         with:
           node-version: 18

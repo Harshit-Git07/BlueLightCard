@@ -19,4 +19,11 @@ $btn-hover-bg: color.scale($primary, $lightness: -10%);
 
 :root {
   --field-group-margin-bottom: 1rem;
+
+  // PillButton
+  --pill-buttons-default-text-color: #2929CC;
+  --pill-buttons-selected-text-color: #EDEDF2;
+  --pill-buttons-selected-color: #2929CC;
+  --pill-buttons-default-color: #EDEDF2;
+
 }

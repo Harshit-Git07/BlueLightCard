@@ -40,10 +40,11 @@ $btn-hover-bg: color.scale($primary, $lightness: -10%);
   --file-upload-description-color: #BCBCC0;
   --file-upload-drag-enter-color: #d4d4d8;
 
-  // FileListView
-  --file-list-view-default-color: #4D4D70;
-  --file-list-view-success-color: #58C322;
-  --file-list-view-error-color: #D41121;
+  // FileListItem
+  --file-list-item-default-color: #4D4D70;
+  --file-list-item-success-color: #58C322;
+  --file-list-item-error-color: #D41121;
+  --file-list-item-image-border-color: #4D4D70;
 
   /**
    * CSS variables for typograhpy should be in the below format.

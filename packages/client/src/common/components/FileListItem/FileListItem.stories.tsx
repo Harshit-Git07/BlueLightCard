@@ -39,6 +39,24 @@ Default.args = {
   showReUpload: true,
 };
 
+export const Success = FileListViewTemplate.bind({});
+
+Success.args = {
+  status: FileListItemStatus.SUCCESS,
+  name: 'file_name.pdf',
+  fileLink: 'http://localhost:6006/',
+  showReUpload: true,
+};
+
+export const Error = FileListViewTemplate.bind({});
+
+Error.args = {
+  status: FileListItemStatus.ERROR,
+  name: 'file_name.pdf',
+  fileLink: 'http://localhost:6006/',
+  showReUpload: true,
+};
+
 export const Image = FileListViewTemplate.bind({});
 
 Image.args = {

@@ -16,6 +16,7 @@ module.exports = {
   "core": {
     "builder": "@storybook/builder-webpack5"
   },
+  staticDirs: ['../local_assets'],
   webpackFinal: async(config) => {
     config.resolve.alias = {
       "@/components": resolve(__dirname, "../src/common/components"),

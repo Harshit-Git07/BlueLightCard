@@ -7,7 +7,7 @@ try {
   const result = execSync(isCIFlag ?
     `git show --name-only --pretty=format:%b` :
     'git diff --name-only --cached'
-  ).toString().split(/\s+/)[1];
+  ).toString().trim();
 
   if (result && result.length) {
     const paths = result.split(EOL).map((path) => {

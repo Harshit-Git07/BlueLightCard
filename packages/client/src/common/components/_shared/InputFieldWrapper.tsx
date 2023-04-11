@@ -3,6 +3,7 @@ import { faCircleExclamation, faCircleCheck } from '@fortawesome/pro-solid-svg-i
 import { FC } from 'react';
 import styled from 'styled-components';
 import { InputFieldWrapperProps, StyledInputTextIconProps } from './types';
+import { decider } from '@/utils/decider';
 
 const StyledInputContainer = styled.div`
   position: relative;
@@ -17,10 +18,6 @@ const StyledInputTextIcon = styled(FontAwesomeIcon)<StyledInputTextIconProps>`
   color: var(${(props) => props.color});
   background-color: white;
 `;
-
-function decider<T>(conditions: [boolean | undefined, T][]): T | undefined {
-  return conditions.find((condition) => !!condition[0])?.[1];
-}
 
 const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   icon,

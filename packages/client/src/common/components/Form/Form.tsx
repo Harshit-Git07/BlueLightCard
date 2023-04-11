@@ -30,6 +30,7 @@ const FormFieldController: FC<{
         >
           <formField.fieldComponent
             error={!!errors[formField.controlId]?.message}
+            success={!!field.value && !errors[formField.controlId]}
             required={formField.required}
             {...formField.fieldComponentProps}
             {...field}

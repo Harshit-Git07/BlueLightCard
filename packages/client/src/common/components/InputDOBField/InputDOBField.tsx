@@ -17,6 +17,7 @@ const defaultDate = new Date();
 const InputDOBField: FC<InputDOBFieldProps> = ({
   value,
   error,
+  success,
   required,
   onChange,
   dobDelimiter = '/',
@@ -64,6 +65,7 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
       <Col>
         <InputTextField
           value={day}
+          success={success}
           error={error}
           type="number"
           min={0}
@@ -78,6 +80,7 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
       <Col>
         <InputTextField
           value={month}
+          success={success}
           error={error}
           type="number"
           min={0}
@@ -92,6 +95,7 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
       <Col>
         <InputTextField
           value={year}
+          success={success}
           error={error}
           type="number"
           min={0}

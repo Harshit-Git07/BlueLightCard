@@ -36,19 +36,7 @@ const componentMeta: ComponentMeta<typeof InputSelectField> = {
         type: 'object',
       },
     },
-    value: {
-      name: 'Successful State',
-      description: 'Toggle success state of component',
-      control: {
-        type: 'boolean',
-      },
-    },
-    error: {
-      name: 'Error State',
-      description: 'Toggle error state of component',
-    },
     defaultOption: {
-      name: 'Default Option',
       description: 'Default option when no option selected',
     },
     onChange: {
@@ -63,16 +51,36 @@ const InputSelectFieldTemplate: ComponentStory<typeof InputSelectField> = (args)
   <InputSelectField {...args} />
 );
 
-export const InputSelectFieldStory = InputSelectFieldTemplate.bind({});
+export const Default = InputSelectFieldTemplate.bind({});
 
-InputSelectFieldStory.args = {
+Default.args = {
   options: {
     value0: 'Option One',
     value1: 'Option Two',
   },
   defaultOption: 'Default Option',
-  error: false,
-  value: '',
+};
+
+export const Success = InputSelectFieldTemplate.bind({});
+
+Success.args = {
+  options: {
+    value0: 'Option One',
+    value1: 'Option Two',
+  },
+  defaultOption: 'Default Option',
+  success: true,
+};
+
+export const Error = InputSelectFieldTemplate.bind({});
+
+Error.args = {
+  options: {
+    value0: 'Option One',
+    value1: 'Option Two',
+  },
+  defaultOption: 'Default Option',
+  error: true,
 };
 
 export default componentMeta;

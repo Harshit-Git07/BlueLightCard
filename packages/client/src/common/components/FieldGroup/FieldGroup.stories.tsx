@@ -27,9 +27,9 @@ const FieldGroupTemplate: ComponentStory<typeof FieldGroup> = (args) => (
   </FieldGroup>
 );
 
-export const FieldGroupStory = FieldGroupTemplate.bind({});
+export const Default = FieldGroupTemplate.bind({});
 
-FieldGroupStory.args = {
+Default.args = {
   labelText: 'Field Group',
   invalid: false,
   message: 'Message',

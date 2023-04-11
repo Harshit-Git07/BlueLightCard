@@ -16,11 +16,12 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   value,
   options,
   error,
+  success,
   defaultOption,
 }) => {
   return (
-    <InputFieldWrapper icon={icon} showSuccessState={!!value} showErrorState={error}>
-      <StyledInputSelectField $spaceForIcon={!!icon} error={error}>
+    <InputFieldWrapper icon={icon} showSuccessState={success} showErrorState={error}>
+      <StyledInputSelectField $spaceForIcon={!!icon} $error={error}>
         {defaultOption && <option>{defaultOption}</option>}
         {Object.keys(options).map((value) => (
           <option key={value} value={value}>

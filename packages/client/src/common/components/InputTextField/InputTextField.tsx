@@ -16,6 +16,7 @@ const StyledInputTextField = createStyledInputField(Form.Control);
 const InputTextField: FC<InputTextFieldProps> = ({
   icon,
   error,
+  success,
   value,
   placeholder,
   maxlength,
@@ -42,7 +43,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
     <InputFieldWrapper
       icon={icon}
       showRightIcon={type === 'password'}
-      showSuccessState={!!value && !error}
+      showSuccessState={success}
       iconRight={type === 'password' ? passwordToggleIcon : undefined}
       showErrorState={error}
       onRightIconClick={onRightIconClick}

@@ -16,11 +16,9 @@ const componentMeta: ComponentMeta<typeof InputDOBField> = {
       },
     },
     value: {
-      name: 'DOB default value',
       description: 'Default DOB value i.e dd/mm/yyyy',
     },
     minAgeConstraint: {
-      name: 'Minimum age constraint',
       description: 'Configure the minimum age allowed to be entered',
       control: {
         type: 'number',
@@ -33,11 +31,20 @@ const InputDOBFieldTemplate: ComponentStory<typeof InputDOBField> = (args) => (
   <InputDOBField {...args} />
 );
 
-export const InputDOBFieldStory = InputDOBFieldTemplate.bind({});
+export const Default = InputDOBFieldTemplate.bind({});
 
-InputDOBFieldStory.args = {
-  error: false,
-  value: '',
+Default.args = {};
+
+export const Success = InputDOBFieldTemplate.bind({});
+
+Success.args = {
+  success: true,
+};
+
+export const Error = InputDOBFieldTemplate.bind({});
+
+Error.args = {
+  error: true,
 };
 
 export default componentMeta;

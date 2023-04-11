@@ -42,9 +42,9 @@ const componentMeta: ComponentMeta<typeof Button> = {
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const ButtonStory = Template.bind({});
+export const Default = Template.bind({});
 
-ButtonStory.args = {
+Default.args = {
   text: 'Button',
 };
 

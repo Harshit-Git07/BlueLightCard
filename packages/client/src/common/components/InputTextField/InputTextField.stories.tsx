@@ -9,7 +9,6 @@ const icons = { faEnvelope, faLock };
 library.add(...Object.values(icons));
 
 const iconArgSelect = {
-  name: 'Field Icon',
   options: ['none'].concat(...Object.keys(icons)),
   mapping: { none: undefined, ...icons },
   control: {
@@ -31,26 +30,10 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
       ...iconArgSelect,
     },
     type: {
-      name: 'Field Type',
       description: 'Switches the input field type',
       options: ['text', 'password', 'email'],
       control: {
         type: 'select',
-      },
-    },
-    placeholder: {
-      name: 'Placeholder',
-      description: 'Placeholder text when no text inputed',
-    },
-    error: {
-      name: 'Error State',
-      description: 'Toggle error state of component',
-    },
-    value: {
-      name: 'Successful State',
-      description: 'Toggle success state of component',
-      control: {
-        type: 'boolean',
       },
     },
     passwordVisible: {
@@ -70,12 +53,35 @@ const InputTextFieldTemplate: ComponentStory<typeof InputTextField> = (args) => 
   return <InputTextField {...args} />;
 };
 
-export const InputTextFieldStory = InputTextFieldTemplate.bind({});
+export const Default = InputTextFieldTemplate.bind({});
 
-InputTextFieldStory.args = {
+Default.args = {
   placeholder: 'Input text field',
-  error: false,
-  value: '',
+  onChange: () => {},
+};
+
+export const Success = InputTextFieldTemplate.bind({});
+
+Success.args = {
+  placeholder: 'Input text field',
+  success: true,
+  onChange: () => {},
+};
+
+export const Error = InputTextFieldTemplate.bind({});
+
+Error.args = {
+  placeholder: 'Input text field',
+  error: true,
+  onChange: () => {},
+};
+
+export const Password = InputTextFieldTemplate.bind({});
+
+Password.args = {
+  placeholder: 'Input password field',
+  type: 'password',
+  onChange: () => {},
 };
 
 export default componentMeta;

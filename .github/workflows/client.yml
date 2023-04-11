@@ -16,7 +16,6 @@ on:
 jobs:
   # Run all unit tests on merge to main
   test:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
@@ -27,23 +26,16 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm test -w packages/client
 
-  # Run unit tests related to committed files on pull request
-  test_pr:
-    if: github.event_name == 'pull_request'
-    name: PR Unit Tests
+  lint:
+    name: Linting
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - run: |
-          git checkout ${{ github.event.pull_request.head.sha }}
-          git show --name-only --pretty=format:%b
       - uses: actions/setup-node@v3
         with:
           node-version: 18
       - uses: bahmutov/npm-install@v1
-      - run: node scripts/findRelatedTests.mjs --ci
+      - run: npm run lint:all -w packages/client
 
   # Deploy component library to chromatic
   deploy_storybook:

@@ -34,9 +34,13 @@ const StyledFLIContent = styled(Card.Body)<StyledFLIProps>`
     css`
       flex-direction: column;
     `};
-  @media only screen and (min-width: ${tablet}) {
-    flex-direction: row;
-  }
+  ${(props) =>
+    !props.$imageView &&
+    css`
+      @media only screen and (min-width: ${tablet}) {
+        flex-direction: row;
+      }
+    `}
 `;
 
 const StyledFLIIcon = styled(FontAwesomeIcon)<StyledFLIIconProps>`

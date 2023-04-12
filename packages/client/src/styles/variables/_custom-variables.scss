@@ -1,3 +1,4 @@
+/* stylelint-disable color-hex-length */
 @use 'sass:color';
 @use 'sass:map';
 @use './typograhpy' as t;
@@ -36,9 +37,10 @@ $btn-hover-bg: color.scale($primary, $lightness: -10%);
   --field-group-margin-bottom: 1rem;
 
   // PillButton
-  --pill-buttons-default-text-color: #2929CC;
-  --pill-buttons-selected-text-color: #EDEDF2;
-  --pill-buttons-selected-color: #2929CC;
+  --pill-buttons-default-text-color: #000099;
+  /* stylelint-disable-next-line color-named */
+  --pill-buttons-selected-text-color: white;
+  --pill-buttons-selected-color: #000099;
   --pill-buttons-default-color: #EDEDF2;
 
   // FileUpload

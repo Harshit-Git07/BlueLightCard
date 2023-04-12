@@ -1,11 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { withDesign } from 'storybook-addon-designs';
 import PillButtons from './PillButtons';
 
 const componentMeta: ComponentMeta<typeof PillButtons> = {
   title: 'Component System/Pill Component',
   component: PillButtons,
-  decorators: [withDesign],
   argTypes: {},
 };
 

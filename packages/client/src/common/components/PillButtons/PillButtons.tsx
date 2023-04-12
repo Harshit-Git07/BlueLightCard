@@ -4,15 +4,23 @@ import ReactButton from 'react-bootstrap/Button';
 import styled from 'styled-components';
 
 const StyledPillButton = styled(ReactButton)<StyledPillButtonProps>`
-  border-radius: 30px;
+  border-radius: 88px;
   color: var(
-    ${(props) =>
-      props.isSelected ? '--pill-buttons-selected-text-color' : '--pill-buttons-default-text-color'}
+    ${(props) => (props.isSelected ? '--pill-buttons-selected-text-color' : '--bs-body-color')}
   );
   background-color: var(
     ${(props) =>
       props.isSelected ? '--pill-buttons-selected-color' : '--pill-buttons-default-color'}
   );
+  margin-right: 1.5rem;
+  border: none;
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+  &:hover {
+    background-color: var(--pill-buttons-selected-color);
+    color: var(--pill-buttons-selected-text-color);
+  }
 `;
 
 const PillButtons: FC<PillButtonProps> = ({ pills }) => {

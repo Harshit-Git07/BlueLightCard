@@ -1,5 +1,4 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { FormControlProps } from 'react-bootstrap';
 import { InputFieldSharedProps } from '../_shared/types';
 

@@ -1,28 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# BlueLightCard Client
 
-
-### Dependencies
-
-- react
-- [nextjs](https://nextjs.org/docs)
-- react-bootstrap
-- bootstrap
-- [i18next](https://www.i18next.com/)
-- [next-i18next](https://github.com/i18next/next-i18next)
-- [react-i18next](https://github.com/i18next/react-i18next)
-- [storybook](https://storybook.js.org/)
-- sass
-- jotai
-- react-hook-forms
-- yup (form validation)
-- jest
-- testing-library
-- styled-components
-- dayjs
-- lodash
-- fortawesome
-- @stripe/stripe-js
-- @stripe/react-stripe-js
+Package for the web client
 
 ### Getting Started
 
@@ -52,6 +30,13 @@ Currently there are the following alias paths setup for importing:
 
 ### Custom CSS variables
 Coming soon...
+
+### New Relic
+To configure New Relic for distribution, set the following env vars
+```
+NEXT_PUBLIC_NEWRELIC_LICENSE_KEY
+NEXT_PUBLIC_NEWRELIC_APPLICATION_ID
+```
 
 ### Components
 All components should be put in the components folder and consist of the following files for each component:

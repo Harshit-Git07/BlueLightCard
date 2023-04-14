@@ -26,7 +26,7 @@ const StyledPasswordIconButton = styled(FontAwesomeIcon)`
 `;
 
 const StyledFeedbackMessage = styled.p<FeedbackMessageProps>`
-  color: var(${(props) => (props.invalid ? '--bs-danger' : '--blc-neutral-700')});
+  color: var(${(props) => props.color ?? '--bs-body-color'});
 `;
 
 const StyledPasswordCriteria = styled.ul`
@@ -51,9 +51,16 @@ const FieldGroup: FC<FieldGroupProps> = ({
   onTogglePasswordVisible,
 }) => {
   const passwordToggleIcon = passwordVisible ? faEye : faEyeSlash;
+  const _showPasswordCriteria = Array.isArray(message);
+  const isPasswordWeak = Array.isArray(message) && !!message.find((msg) => !!msg.invalid);
+  const isPasswordStrong = Array.isArray(message) && !message.find((msg) => !!msg.invalid);
   const passwordStrength = decider([
-    [Array.isArray(message) && !!message.find((msg) => !!msg.invalid), 'Weak'],
-    [Array.isArray(message) && !message.find((msg) => !!msg.invalid), 'Strong'],
+    [isPasswordWeak, 'Weak'],
+    [isPasswordStrong, 'Strong'],
+  ]);
+  const feedbackMessageColor = decider([
+    [invalid || isPasswordWeak, '--bs-danger'],
+    [isPasswordStrong, '--bs-success'],
   ]);
   const onIconButtonClick = () => {
     if (onTogglePasswordVisible) {
@@ -79,8 +86,11 @@ const FieldGroup: FC<FieldGroupProps> = ({
       <StyledInputGroup>
         {children}
         {message && (
-          <StyledFeedbackMessage as={Array.isArray(message) ? 'div' : 'p'} invalid={invalid}>
-            {Array.isArray(message) ? (
+          <StyledFeedbackMessage
+            as={_showPasswordCriteria ? 'div' : 'p'}
+            color={feedbackMessageColor}
+          >
+            {_showPasswordCriteria ? (
               <div>
                 <small>{passwordStrength}</small>
                 <StyledPasswordCriteria>

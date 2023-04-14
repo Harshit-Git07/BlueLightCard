@@ -2,7 +2,6 @@ import { faEnvelope } from '@fortawesome/pro-solid-svg-icons';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import InputTextField from '@/components/InputTextField/InputTextField';
 import FieldGroup from './FieldGroup';
-import { useState } from 'react';
 
 const componentMeta: ComponentMeta<typeof FieldGroup> = {
   title: 'Component System/Form/Field Group',
@@ -39,6 +38,7 @@ Default.args = {
   invalid: false,
   message: 'Message',
   password: false,
+  passwordVisible: false,
 };
 
 export const PasswordWeak = FieldGroupTemplate.bind({});

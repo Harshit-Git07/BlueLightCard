@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import { FormGroupProps } from 'react-bootstrap';
 
 export interface FeedbackMessageProps {
-  invalid?: boolean;
+  color?: string;
 }
 
 export interface FieldGroupMessage {

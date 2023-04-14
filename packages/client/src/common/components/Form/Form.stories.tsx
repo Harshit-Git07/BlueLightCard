@@ -32,22 +32,20 @@ export const FormStory = FormTemplate.bind({});
 
 FormStory.args = {
   fields: [
-    [
-      {
-        label: 'First name',
-        controlId: 'firstNameFieldControl',
-        required: true,
-        message: 'Provide your first name',
-        fieldComponent: InputTextField,
-      },
-      {
-        label: 'Last name',
-        controlId: 'lastNameFieldControl',
-        required: true,
-        message: 'Provide your last name',
-        fieldComponent: InputTextField,
-      },
-    ],
+    {
+      label: 'First name',
+      controlId: 'firstNameFieldControl',
+      required: true,
+      message: 'Provide your first name',
+      fieldComponent: InputTextField,
+    },
+    {
+      label: 'Last name',
+      controlId: 'lastNameFieldControl',
+      required: true,
+      message: 'Provide your last name',
+      fieldComponent: InputTextField,
+    },
     {
       label: 'Date of Birth',
       controlId: 'dobFieldControl',
@@ -73,7 +71,7 @@ FormStory.args = {
       message: 'Provide a valid email address',
       validation: yup
         .string()
-        .email('Email address is a required field')
+        .email('Please provide a valid email address')
         .required('Email address is required'),
       fieldComponent: InputTextField,
       fieldComponentProps: {

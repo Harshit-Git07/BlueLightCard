@@ -67,7 +67,7 @@ $btn-hover-bg: color.scale($primary, $lightness: -10%);
   }
 
   // Font sizes
-  --bs-body-font-size: #{map.get(t.$font-sizes, 'body-large')};
+  --bs-body-font-size: #{map.get(t.$font-sizes, 'body-medium')};
 
   @each $key, $size in t.$font-sizes {
     --font-size-#{$key}: #{$size};

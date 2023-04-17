@@ -26,11 +26,13 @@ const componentMeta: ComponentMeta<typeof Form> = {
   },
 };
 
-const FormTemplate: ComponentStory<typeof Form> = (args) => <Form {...args} />;
+const FormTemplate: ComponentStory<typeof Form> = (args) => (
+  <Form {...args} onSubmit={(data) => console.info(data)} />
+);
 
-export const FormStory = FormTemplate.bind({});
+export const Default = FormTemplate.bind({});
 
-FormStory.args = {
+Default.args = {
   fields: [
     {
       label: 'First name',
@@ -63,6 +65,27 @@ FormStory.args = {
         })
         .max(new Date())
         .required('Date of birth is required'),
+    },
+    {
+      label: 'Password',
+      controlId: 'passwordFieldControl',
+      required: true,
+      password: true,
+      passwordCriteria: [
+        { validationType: 'min', message: '8 characters minimum' },
+        { validationType: 'matches', message: 'One uppercase character' },
+        { validationType: 'matches', message: 'One lowercase character' },
+      ],
+      validation: yup
+        .string()
+        .min(8, '8 characters minimum')
+        .matches(/[a-z]/g, 'One lowercase character')
+        .matches(/[A-Z]/g, 'One uppercase character')
+        .required('Password is required'),
+      fieldComponent: InputTextField,
+      fieldComponentProps: {
+        type: 'password',
+      },
     },
     {
       label: 'Email',

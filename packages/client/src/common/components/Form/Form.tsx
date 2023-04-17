@@ -1,20 +1,42 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import BootstrapForm from 'react-bootstrap/Form';
-import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
+import { Control, Controller, ErrorOption, FieldErrors, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectShape } from 'yup/lib/object';
 import flatten from 'lodash/flatten';
-import FieldGroup from '../FieldGroup/FieldGroup';
-import { FormProps, FormField } from './types';
-import Button from '../Button/Button';
 import { Col, Row } from 'react-bootstrap';
+import { FormProps, FormField, FormSubmitSchema } from './types';
+import Button from '../Button/Button';
+import FieldGroup from '../FieldGroup/FieldGroup';
+import { FieldGroupMessage } from '../FieldGroup/types';
 
 const FormFieldController: FC<{
   control: Control;
-  errors: FieldErrors<{ [key: string]: unknown }>;
+  errors: FieldErrors<FormSubmitSchema>;
   formField: FormField;
 }> = ({ control, errors, formField }) => {
+  const error = errors[formField.controlId] as ErrorOption;
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  let message: string | FieldGroupMessage[] | undefined = formField.message;
+
+  if (formField.passwordCriteria && error) {
+    message = formField.passwordCriteria.reduce<FieldGroupMessage[]>((acc, criteria) => {
+      const errorMessage = error?.types?.[criteria.validationType] as string | string[];
+      const validationMessage = criteria.message;
+      acc.push({
+        invalid: !!(Array.isArray(errorMessage)
+          ? errorMessage.find((msg) => msg === validationMessage)
+          : errorMessage === validationMessage),
+        message: validationMessage,
+      });
+      return acc;
+    }, []);
+  } else if (error?.message) {
+    message = error.message;
+  }
+
   return (
     <Controller
       key={formField.controlId}
@@ -26,7 +48,12 @@ const FormFieldController: FC<{
           labelText={formField.label}
           controlId={formField.controlId}
           invalid={!!errors[formField.controlId]?.message}
-          message={errors[formField.controlId]?.message ?? formField.message}
+          password={formField.password}
+          passwordVisible={passwordVisible}
+          message={message}
+          onTogglePasswordVisible={
+            formField.password ? (visible) => setPasswordVisible(visible) : undefined
+          }
         >
           <formField.fieldComponent
             error={!!errors[formField.controlId]?.message}
@@ -34,6 +61,7 @@ const FormFieldController: FC<{
             required={formField.required}
             {...formField.fieldComponentProps}
             {...field}
+            type={passwordVisible ? 'text' : formField?.fieldComponentProps?.type}
           />
         </FieldGroup>
       )}
@@ -62,7 +90,7 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ [key: string]: unknown }>({
+  } = useForm<FormSubmitSchema>({
     defaultValues: fieldsFlattened.reduce<{ [controlId: string]: unknown | undefined }>(
       (acc, field) => {
         acc[field.controlId] = field.fieldComponentProps?.value;
@@ -71,16 +99,15 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
       {}
     ) as {},
     mode: 'all',
-    resolver: yupResolver(validationSchema),
+    criteriaMode: 'all',
+    resolver: yupResolver(validationSchema, {
+      abortEarly: false,
+      strict: false,
+    }),
   });
 
-  const onFormSubmit = (data: any) => {
-    console.info(data);
-    onSubmit();
-  };
-
   return (
-    <BootstrapForm onSubmit={handleSubmit(onFormSubmit)}>
+    <BootstrapForm onSubmit={handleSubmit(onSubmit)}>
       {fields.map((formField, index) =>
         Array.isArray(formField) ? (
           <Row key={`formRow_${index}`}>

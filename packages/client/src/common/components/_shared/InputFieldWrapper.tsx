@@ -43,7 +43,6 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
           icon={_iconRight}
           $iconPosition="right"
           color={iconColor}
-          role="button"
           aria-label="toggle button"
         />
       )}

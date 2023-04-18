@@ -81,3 +81,22 @@ const schema = [
 
 <Form fields={schema} onSubmit={(formData) => {}} />
 ```
+
+## Password Criteria
+
+```typescript
+{
+  validationType: string;
+  message: string;
+}
+```
+
+Field `validationType` must match the validation function used in `validation` and `message` must match the validation error message, for example:
+```typescript
+// criteria
+{ validationType: 'matches', message: 'One uppercase character' },
+{ validationType: 'matches', message: 'One lowercase character' },
+// validation
+.matches(/[a-z]/g, 'One lowercase character')
+.matches(/[A-Z]/g, 'One uppercase character')
+```

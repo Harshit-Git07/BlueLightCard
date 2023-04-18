@@ -6,11 +6,11 @@ import styled from 'styled-components';
 const StyledPillButton = styled(ReactButton)<StyledPillButtonProps>`
   border-radius: 88px;
   color: var(
-    ${(props) => (props.isSelected ? '--pill-buttons-selected-text-color' : '--bs-body-color')}
+    ${(props) => (props.$isSelected ? '--pill-buttons-selected-text-color' : '--bs-body-color')}
   );
   background-color: var(
     ${(props) =>
-      props.isSelected ? '--pill-buttons-selected-color' : '--pill-buttons-default-color'}
+      props.$isSelected ? '--pill-buttons-selected-color' : '--pill-buttons-default-color'}
   );
   margin-right: 1.5rem;
   border: none;
@@ -45,7 +45,7 @@ const PillButtons: FC<PillButtonProps> = ({ pills }) => {
           <StyledPillButton
             key={key}
             disabled={disabled}
-            isSelected={selected}
+            $isSelected={selected}
             onClick={() => handleClick(key)}
           >
             {pillText}

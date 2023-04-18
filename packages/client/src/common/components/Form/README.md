@@ -100,3 +100,5 @@ Field `validationType` must match the validation function used in `validation` a
 .matches(/[a-z]/g, 'One lowercase character')
 .matches(/[A-Z]/g, 'One uppercase character')
 ```
+
+This is how the password criteria status updates based on the validation rule success or fail.

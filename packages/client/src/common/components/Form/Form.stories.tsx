@@ -84,7 +84,7 @@ Default.args = {
       fieldComponent: InputTextField,
       fieldComponentProps: {
         type: 'password',
-      },
+      } as InputTextFieldProps,
     },
     {
       label: 'Email',

@@ -61,7 +61,7 @@ const schema = [
     fieldComponent: InputTextField,
     fieldComponentProps: {
       type: 'password',
-    },
+    } as InputTextFieldProps,
   },
   {
     label: 'Email',

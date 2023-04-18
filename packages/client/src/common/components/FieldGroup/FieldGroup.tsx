@@ -103,7 +103,7 @@ const FieldGroup: FC<FieldGroupProps> = ({
                 </StyledPasswordCriteria>
               </div>
             ) : (
-              <small>{message}</small>
+              <small role={invalid ? 'alert' : undefined}>{message}</small>
             )}
           </StyledFeedbackMessage>
         )}

@@ -6,6 +6,7 @@ import Form from '@/components/Form/Form';
 import InputTextField from '@/components/InputTextField/InputTextField';
 import InputDOBField from '@/components/InputDOBField/InputDOBField';
 import { InputTextFieldProps } from '@/components/InputTextField/types';
+import InputSelectField from '../InputSelectField/InputSelectField';
 
 dayjs.extend(customParseFormat);
 
@@ -63,8 +64,7 @@ Default.args = {
           }
           return originalValue;
         })
-        .max(new Date())
-        .required('Date of birth is required'),
+        .max(new Date()),
     },
     {
       label: 'Password',
@@ -80,8 +80,7 @@ Default.args = {
         .string()
         .min(8, '8 characters minimum')
         .matches(/[a-z]/g, 'One lowercase character')
-        .matches(/[A-Z]/g, 'One uppercase character')
-        .required('Password is required'),
+        .matches(/[A-Z]/g, 'One uppercase character'),
       fieldComponent: InputTextField,
       fieldComponentProps: {
         type: 'password',

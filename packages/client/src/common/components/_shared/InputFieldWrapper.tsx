@@ -21,12 +21,9 @@ const StyledInputTextIcon = styled(FontAwesomeIcon)<StyledInputTextIconProps>`
 
 const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   icon,
-  iconRight,
-  showRightIcon,
   showErrorState,
   showSuccessState,
   children,
-  onRightIconClick,
 }) => {
   const iconColor = decider([
     [showErrorState, '--bs-danger'],
@@ -36,7 +33,6 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   const _iconRight = decider([
     [showSuccessState, faCircleCheck],
     [showErrorState, faCircleExclamation],
-    [showRightIcon && !!iconRight, iconRight],
   ]);
   return (
     <StyledInputContainer>
@@ -47,9 +43,7 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
           icon={_iconRight}
           $iconPosition="right"
           color={iconColor}
-          role="button"
           aria-label="toggle button"
-          onClick={onRightIconClick}
         />
       )}
     </StyledInputContainer>

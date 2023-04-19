@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, forwardRef } from 'react';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
 import { Form } from 'react-bootstrap';
 import { InputSelectFieldProps } from './types';
@@ -13,16 +13,26 @@ const StyledInputSelectField = createStyledInputField(Form.Select);
 
 const InputSelectField: FC<InputSelectFieldProps> = ({
   icon,
-  value,
   options,
   error,
   success,
+  value,
   defaultOption,
+  required,
+  _ref,
+  onChange,
 }) => {
   return (
     <InputFieldWrapper icon={icon} showSuccessState={success} showErrorState={error}>
-      <StyledInputSelectField $spaceForIcon={!!icon} $error={error}>
-        {defaultOption && <option>{defaultOption}</option>}
+      <StyledInputSelectField
+        $spaceForIcon={!!icon}
+        $error={error}
+        required={required}
+        value={value}
+        ref={_ref}
+        onChange={onChange}
+      >
+        {defaultOption && <option value="">{defaultOption}</option>}
         {Object.keys(options).map((value) => (
           <option key={value} value={value}>
             {options[value]}
@@ -33,4 +43,9 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   );
 };
 
-export default InputSelectField;
+// eslint-disable-next-line react/display-name
+const InputSelectFieldWithRef = forwardRef<unknown, InputSelectFieldProps>((props, ref) => (
+  <InputSelectField {...props} _ref={ref} />
+));
+
+export default InputSelectFieldWithRef;

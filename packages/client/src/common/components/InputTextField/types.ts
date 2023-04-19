@@ -9,5 +9,4 @@ export type InputTextFieldProps = FormControlProps &
     maxlength?: number;
     min?: number;
     max?: number;
-    onTogglePasswordVisible?: (visible: boolean) => void;
   };

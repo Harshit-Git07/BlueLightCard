@@ -103,30 +103,57 @@ jobs:
           branch: 'staging'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
-  # staging-blcaus:
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-  #   name: Deploy BLC AUS Staging
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: read
-  #     deployments: write
-  #   needs:
-  #     - test
-  #     - lint
-  #     - release_candidate
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: bahmutov/npm-install@v1
-  #     - name: Build
-  #       run: npm run build -w packages/client
-  #     - name: Publish
-  #       uses: cloudflare/pages-action@1
-  #       with:
-  #         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-  #         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-  #         projectName: 'blc-aus'
-  #         directory: packages/client/dist
-  #         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+  staging-blcaus:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deploy BLC AUS Staging
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    needs:
+      - test
+      - lint
+      - release_candidate
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bahmutov/npm-install@v1
+      - name: Build
+        run: npm run build -w packages/client
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'blc-aus'
+          directory: packages/client/dist
+          branch: 'staging'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  staging-dds:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deploy DDS Staging
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    needs:
+      - test
+      - lint
+      - release_candidate
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bahmutov/npm-install@v1
+      - name: Build
+        run: npm run build -w packages/client
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'dds'
+          directory: packages/client/dist
+          branch: 'staging'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
@@ -137,6 +164,8 @@ jobs:
       - test
       - release_candidate
       - staging-blcuk
+      - staging-blcaus
+      - staging-dds
     steps:
       - uses: actions/checkout@v3
       - name: Deploy

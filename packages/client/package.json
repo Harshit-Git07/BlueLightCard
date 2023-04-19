@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build && next export -o dist",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint && tsc --noEmit",
     "lint:style": "npx stylelint '**/*.{scss,css}'",
     "test": "jest",
     "storybook": "start-storybook -p 6006",

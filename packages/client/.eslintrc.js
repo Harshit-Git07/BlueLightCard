@@ -4,7 +4,12 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ['plugin:react/recommended', 'next/core-web-vitals', 'prettier'],
+  extends: ['next', 'plugin:react/recommended', 'next/core-web-vitals', 'prettier'],
+  settings: {
+    next: {
+      rootDir: 'packages/client/',
+    },
+  },
   plugins: ['prettier'],
   overrides: [],
   parserOptions: {

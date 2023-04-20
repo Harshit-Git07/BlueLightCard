@@ -3,3 +3,4 @@
 
 node scripts/findRelatedTests.mjs
 npx lint-staged
+npx tsc --noEmit -p ./packages/client/tsconfig.json

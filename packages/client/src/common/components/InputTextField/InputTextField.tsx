@@ -22,7 +22,6 @@ const InputTextField: FC<InputTextFieldProps> = ({
   max,
   required,
   name,
-  _ref,
   onChange,
   onKeyDown,
   type = 'text',
@@ -30,16 +29,18 @@ const InputTextField: FC<InputTextFieldProps> = ({
 }) => {
   return (
     <InputFieldWrapper icon={icon} showSuccessState={success} showErrorState={error}>
-      <StyledInputTextField
+      <input
+        className={`${
+          error ? 'border-semantic-danger-base ' : 'focus:border-primary-type-1-base '
+        }${
+          icon ? 'pl-8 ' : ''
+        }w-full rounded-md py-2 px-3 border-neutrals-type-1-400 border focus:outline-none`}
         value={value}
         type={type === 'password' && passwordVisible ? 'text' : type}
-        $spaceForIcon={!!icon}
-        $error={error}
         placeholder={placeholder}
         maxLength={maxlength}
         min={min}
         max={max}
-        ref={_ref}
         name={name}
         aria-label={name}
         required={required}

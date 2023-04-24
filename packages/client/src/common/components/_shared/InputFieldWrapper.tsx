@@ -1,23 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faCircleCheck } from '@fortawesome/pro-solid-svg-icons';
 import { FC } from 'react';
-import styled from 'styled-components';
-import { InputFieldWrapperProps, StyledInputTextIconProps } from './types';
+import { InputFieldWrapperProps } from './types';
 import { decider } from '@/utils/decider';
-
-const StyledInputContainer = styled.div`
-  position: relative;
-`;
-
-const StyledInputTextIcon = styled(FontAwesomeIcon)<StyledInputTextIconProps>`
-  position: absolute;
-  top: 50%;
-  z-index: 10;
-  ${(props) => (props.$iconPosition === 'left' ? 'left' : 'right')}: 0.8rem;
-  transform: translateY(-50%);
-  color: var(${(props) => props.color});
-  background-color: white;
-`;
 
 const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   icon,
@@ -25,28 +10,35 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   showSuccessState,
   children,
 }) => {
-  const iconColor = decider([
-    [showErrorState, '--bs-danger'],
-    [showSuccessState, '--bs-success'],
-    [!showErrorState && !showSuccessState, 'none'],
+  const color = decider([
+    [showErrorState, 'semantic-danger-base'],
+    [showSuccessState, 'semantic-success-base'],
+    [!showErrorState && !showSuccessState, ''],
   ]);
   const _iconRight = decider([
     [showSuccessState, faCircleCheck],
     [showErrorState, faCircleExclamation],
   ]);
   return (
-    <StyledInputContainer>
-      {icon && <StyledInputTextIcon icon={icon} $iconPosition="left" size="sm" />}
+    <div className="relative">
+      {icon && (
+        <FontAwesomeIcon
+          className="-translate-y-1/2 absolute absolute left-3 top-2/4 z-10"
+          icon={icon}
+          size="sm"
+        />
+      )}
       {children}
       {_iconRight && (
-        <StyledInputTextIcon
+        <FontAwesomeIcon
+          className={`${
+            color ? `text-${color} ` : ''
+          }-translate-y-1/2 absolute right-3 top-2/4 z-10`}
           icon={_iconRight}
-          $iconPosition="right"
-          color={iconColor}
           aria-label="toggle button"
         />
       )}
-    </StyledInputContainer>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlus, faMinus } from '@fortawesome/pro-regular-svg-icons';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import Button from './Button';
 
 const icons = { faPlus, faMinus };
@@ -8,7 +8,6 @@ const icons = { faPlus, faMinus };
 library.add(...Object.values(icons));
 
 const iconArgSelect = {
-  name: 'Icon',
   options: ['none'].concat(...Object.keys(icons)),
   mapping: { none: undefined, ...icons },
   control: {
@@ -21,7 +20,7 @@ const iconArgSelect = {
   },
 };
 
-const componentMeta: ComponentMeta<typeof Button> = {
+const componentMeta: Meta<typeof Button> = {
   title: 'Component System/Button Component',
   component: Button,
   argTypes: {
@@ -40,12 +39,14 @@ const componentMeta: ComponentMeta<typeof Button> = {
   },
 };
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
+const Template: StoryFn<typeof Button> = (args) => <Button {...args} />;
 
 export const Default = Template.bind({});
 
 Default.args = {
   text: 'Button',
+  variant: 'primary',
+  disabled: false,
 };
 
 export default componentMeta;

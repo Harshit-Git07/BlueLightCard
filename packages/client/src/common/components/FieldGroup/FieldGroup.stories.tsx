@@ -1,9 +1,9 @@
 import { faEnvelope } from '@fortawesome/pro-solid-svg-icons';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import InputTextField from '@/components/InputTextField/InputTextField';
 import FieldGroup from './FieldGroup';
 
-const componentMeta: ComponentMeta<typeof FieldGroup> = {
+const componentMeta: Meta<typeof FieldGroup> = {
   title: 'Component System/Form/Field Group',
   component: FieldGroup,
   argTypes: {
@@ -16,7 +16,7 @@ const componentMeta: ComponentMeta<typeof FieldGroup> = {
   },
 };
 
-const FieldGroupTemplate: ComponentStory<typeof FieldGroup> = (args) => {
+const FieldGroupTemplate: StoryFn<typeof FieldGroup> = (args) => {
   const showSuccessState = args.password && !args.invalid;
   return (
     <FieldGroup {...args}>

@@ -86,7 +86,8 @@
     "style-loader": "^3.3.1",
     "stylelint": "^15.1.0",
     "stylelint-config-standard-scss": "^7.0.1",
-    "tailwindcss": "^3.3.1"
+    "tailwindcss": "^3.3.1",
+    "util": "^0.12.5"
   },
   "main": "jest.config.js",
   "directories": {

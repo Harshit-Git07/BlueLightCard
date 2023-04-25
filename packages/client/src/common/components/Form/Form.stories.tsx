@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import * as yup from 'yup';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
@@ -6,11 +6,10 @@ import Form from '@/components/Form/Form';
 import InputTextField from '@/components/InputTextField/InputTextField';
 import InputDOBField from '@/components/InputDOBField/InputDOBField';
 import { InputTextFieldProps } from '@/components/InputTextField/types';
-import InputSelectField from '../InputSelectField/InputSelectField';
 
 dayjs.extend(customParseFormat);
 
-const componentMeta: ComponentMeta<typeof Form> = {
+const componentMeta: Meta<typeof Form> = {
   title: 'Component System/Form/Form',
   component: Form,
   argTypes: {
@@ -27,7 +26,7 @@ const componentMeta: ComponentMeta<typeof Form> = {
   },
 };
 
-const FormTemplate: ComponentStory<typeof Form> = (args) => (
+const FormTemplate: StoryFn<typeof Form> = (args) => (
   <Form {...args} onSubmit={(data) => console.info(data)} />
 );
 

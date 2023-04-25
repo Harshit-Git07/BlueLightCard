@@ -21,6 +21,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
   return (
     <InputFieldWrapper icon={icon} showSuccessState={success} showErrorState={error}>
       <input
+        id={name}
         className={`${
           error ? 'border-semantic-danger-base ' : 'focus:border-primary-type-1-base '
         }${

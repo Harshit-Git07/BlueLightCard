@@ -1,11 +1,9 @@
 import { FC, useMemo, useState } from 'react';
-import BootstrapForm from 'react-bootstrap/Form';
 import { Control, Controller, ErrorOption, FieldErrors, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectShape } from 'yup/lib/object';
 import flatten from 'lodash/flatten';
-import { Col, Row } from 'react-bootstrap';
 import { FormProps, FormField, FormSubmitSchema } from './types';
 import Button from '../Button/Button';
 import FieldGroup from '../FieldGroup/FieldGroup';
@@ -107,16 +105,16 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
   });
 
   return (
-    <BootstrapForm onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       {fields.map((formField, index) =>
         Array.isArray(formField) ? (
-          <Row key={`formRow_${index}`}>
+          <div className="flex gap-4" key={`formRow_${index}`}>
             {formField.map((_formField) => (
-              <Col key={_formField.controlId}>
+              <div className="w-full" key={_formField.controlId}>
                 <FormFieldController control={control} errors={errors} formField={_formField} />
-              </Col>
+              </div>
             ))}
-          </Row>
+          </div>
         ) : (
           <FormFieldController
             key={formField.controlId}
@@ -127,7 +125,7 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
         )
       )}
       <Button text={submitButtonText ?? 'Submit'} type="submit" />
-    </BootstrapForm>
+    </form>
   );
 };
 

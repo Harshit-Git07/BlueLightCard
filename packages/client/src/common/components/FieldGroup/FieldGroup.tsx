@@ -34,7 +34,7 @@ const FieldGroup: FC<FieldGroupProps> = ({
     }
   };
   return (
-    <div>
+    <div className="mb-3">
       <div className="flex mb-2">
         <label className="flex-1" htmlFor={controlId}>
           {labelText}

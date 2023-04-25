@@ -11,8 +11,8 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   children,
 }) => {
   const color = decider([
-    [showErrorState, 'semantic-danger-base'],
-    [showSuccessState, 'semantic-success-base'],
+    [showErrorState, 'text-semantic-danger-base '],
+    [showSuccessState, 'text-semantic-success-base '],
     [!showErrorState && !showSuccessState, ''],
   ]);
   const _iconRight = decider([
@@ -31,9 +31,7 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
       {children}
       {_iconRight && (
         <FontAwesomeIcon
-          className={`${
-            color ? `text-${color} ` : ''
-          }-translate-y-1/2 absolute right-3 top-2/4 z-10`}
+          className={`${color}-translate-y-1/2 absolute right-3 top-2/4 z-10`}
           icon={_iconRight}
           aria-label="toggle button"
         />

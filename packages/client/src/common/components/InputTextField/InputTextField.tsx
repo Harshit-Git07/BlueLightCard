@@ -1,15 +1,6 @@
 import { FC, forwardRef } from 'react';
-import { Form } from 'react-bootstrap';
 import { InputTextFieldProps } from './types';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
-import { createStyledInputField } from '@/components/_shared/StyledInputField';
-
-/**
- * The use of $prop are transient props, see the docs for more
- * https://styled-components.com/docs/api#transient-props
- */
-
-const StyledInputTextField = createStyledInputField(Form.Control);
 
 const InputTextField: FC<InputTextFieldProps> = ({
   icon,

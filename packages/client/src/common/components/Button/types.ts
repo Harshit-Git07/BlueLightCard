@@ -1,14 +1,11 @@
+import { ThemeVariant } from '@/types/theme';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-
-export interface StyledButtonIconProps {
-  side: 'left' | 'right';
-}
 
 export type ButtonProps = {
   text: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
-  variant?: string;
+  variant?: ThemeVariant;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;
 };

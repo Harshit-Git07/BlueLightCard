@@ -41,7 +41,7 @@ const FieldGroup: FC<FieldGroupProps> = ({
         </label>
         {password && (
           <FontAwesomeIcon
-            className="mt-1.5"
+            className="mt-1.5 mr-3"
             icon={passwordToggleIcon}
             role="button"
             size="sm"

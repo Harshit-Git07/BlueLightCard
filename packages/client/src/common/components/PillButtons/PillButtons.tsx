@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { PillButtonProps } from './types';
+import React from 'react';
 
 const PillButtons: FC<PillButtonProps> = ({ pills, disabled }) => {
   const maxSelectableNumber = 2;

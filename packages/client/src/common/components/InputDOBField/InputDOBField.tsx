@@ -1,7 +1,6 @@
 import { FC, forwardRef, useEffect, useRef, useState } from 'react';
 import InputTextField from '@/components/InputTextField/InputTextField';
 import { DOBFields, InputDOBFieldProps } from './types';
-import { Col, Row } from 'react-bootstrap';
 import { number } from 'yup';
 import useKeyConstraint from '@/hooks/useKeyConstraint';
 
@@ -61,8 +60,8 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
   }, [dobValue]);
 
   return (
-    <Row>
-      <Col>
+    <div className="flex gap-4">
+      <div className="w-full">
         <InputTextField
           value={day}
           success={success}
@@ -76,8 +75,8 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
           onChange={(ev) => setDOBValue({ ...dobValue, day: ev.currentTarget.value })}
           onKeyDown={(ev) => captureInput(ev, 'dd')}
         />
-      </Col>
-      <Col>
+      </div>
+      <div className="w-full">
         <InputTextField
           value={month}
           success={success}
@@ -91,8 +90,8 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
           onChange={(ev) => setDOBValue({ ...dobValue, month: ev.currentTarget.value })}
           onKeyDown={(ev) => captureInput(ev, 'mm')}
         />
-      </Col>
-      <Col>
+      </div>
+      <div className="w-full">
         <InputTextField
           value={year}
           success={success}
@@ -106,8 +105,8 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
           onChange={(ev) => setDOBValue({ ...dobValue, year: ev.currentTarget.value })}
           onKeyDown={(ev) => captureInput(ev, 'yyyy')}
         />
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 

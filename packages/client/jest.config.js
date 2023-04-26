@@ -10,6 +10,7 @@ const customJestConfig = {
     '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
     '^@/hooks/(.*)$': '<rootDir>/src/common/hooks/$1',
     '^@/utils/(.*)$': '<rootDir>/src/common/utils/$1',
+    '^@/types/(.*)$': '<rootDir>/src/common/types/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
 };

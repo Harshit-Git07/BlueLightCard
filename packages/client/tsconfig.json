@@ -20,7 +20,8 @@
 			"@/pages/*": ["src/pages/*"],
 			"@/hooks/*": ["src/common/hooks/*"],
 			"@/utils/*": ["src/common/utils/*"],
-			"@/layouts/*": ["src/common/layouts/*"]
+			"@/layouts/*": ["src/common/layouts/*"],
+			"@/types/*": ["src/common/types/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -2,6 +2,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlus, faMinus } from '@fortawesome/pro-regular-svg-icons';
 import { Meta, StoryFn } from '@storybook/react';
 import Button from './Button';
+import { ThemeVariant } from '@/types/theme';
 
 const icons = { faPlus, faMinus };
 
@@ -25,7 +26,6 @@ const componentMeta: Meta<typeof Button> = {
   component: Button,
   argTypes: {
     text: {
-      name: 'Text',
       description: 'Button text',
     },
     iconLeft: {
@@ -45,7 +45,7 @@ export const Default = Template.bind({});
 
 Default.args = {
   text: 'Button',
-  variant: 'primary',
+  variant: ThemeVariant.Primary,
   disabled: false,
 };
 

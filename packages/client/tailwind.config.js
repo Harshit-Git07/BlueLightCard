@@ -5,6 +5,12 @@ module.exports = {
     minWidth: {
       btn: '120px',
     },
+    screens: {
+      mobile: '280px',
+      tablet: '768px',
+      laptop: '1024',
+      desktop: '1200px',
+    },
     extend: {
       colors: {
         primary: {

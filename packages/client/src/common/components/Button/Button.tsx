@@ -1,18 +1,15 @@
 import { FC } from 'react';
-import { ButtonProps, StyledButtonIconProps } from './types';
+import { ButtonProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled, { css } from 'styled-components';
+import { ThemeVariant } from '@/types/theme';
 
-const StyledButtonIcon = styled(FontAwesomeIcon)<StyledButtonIconProps>`
-  ${(props) =>
-    props.side === 'left'
-      ? css`
-          margin-right: 10px;
-        `
-      : css`
-          margin-left: 10px;
-        `};
-`;
+const colorVariants: { [key: string]: Record<string, string> } = {
+  [ThemeVariant.Primary]: {
+    hover: 'hover:bg-primary-type-1-500',
+    bg: 'bg-primary-type-1-base',
+    focus: 'focus:ring-primary-type-2-base',
+  },
+};
 
 const Button: FC<ButtonProps> = ({
   text,
@@ -20,15 +17,8 @@ const Button: FC<ButtonProps> = ({
   iconRight,
   disabled,
   type = 'button',
-  variant = 'primary',
+  variant = ThemeVariant.Primary,
 }) => {
-  const colorVariants: { [key: string]: Record<string, string> } = {
-    primary: {
-      hover: 'hover:bg-primary-type-1-500',
-      bg: 'bg-primary-type-1-base',
-      focus: 'focus:ring-primary-type-2-base',
-    },
-  };
   return (
     <button
       type={type}
@@ -39,9 +29,9 @@ const Button: FC<ButtonProps> = ({
         colorVariants[variant].focus
       }`}
     >
-      {iconLeft && <StyledButtonIcon icon={iconLeft} side="left" />}
+      {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {text}
-      {iconRight && <StyledButtonIcon icon={iconRight} side="right" />}
+      {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}
     </button>
   );
 };

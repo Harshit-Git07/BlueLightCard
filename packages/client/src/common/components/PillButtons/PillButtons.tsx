@@ -1,29 +1,8 @@
 import { FC, useState } from 'react';
-import { PillButtonProps, StyledPillButtonProps } from './types';
-import ReactButton from 'react-bootstrap/Button';
-import styled from 'styled-components';
+import { PillButtonProps } from './types';
+import React from 'react';
 
-const StyledPillButton = styled(ReactButton)<StyledPillButtonProps>`
-  border-radius: 88px;
-  color: var(
-    ${(props) => (props.$isSelected ? '--pill-buttons-selected-text-color' : '--bs-body-color')}
-  );
-  background-color: var(
-    ${(props) =>
-      props.$isSelected ? '--pill-buttons-selected-color' : '--pill-buttons-default-color'}
-  );
-  margin-right: 1.5rem;
-  border: none;
-  &:focus:not(:focus-visible) {
-    outline: none;
-  }
-  &:hover {
-    background-color: var(--pill-buttons-selected-color);
-    color: var(--pill-buttons-selected-text-color);
-  }
-`;
-
-const PillButtons: FC<PillButtonProps> = ({ pills }) => {
+const PillButtons: FC<PillButtonProps> = ({ pills, disabled }) => {
   const maxSelectableNumber = 2;
   const [isSelected, setIsSelected] = useState<string[]>([]);
 
@@ -40,16 +19,21 @@ const PillButtons: FC<PillButtonProps> = ({ pills }) => {
       {pills.map((pillText, index) => {
         const key = `pill_${index}`;
         const selected = isSelected.includes(key);
-        const disabled = isSelected.length === maxSelectableNumber && !isSelected.includes(key);
+        const _disabled =
+          (isSelected.length === maxSelectableNumber && !isSelected.includes(key)) || disabled;
+
         return (
-          <StyledPillButton
+          <button
             key={key}
-            disabled={disabled}
-            $isSelected={selected}
             onClick={() => handleClick(key)}
+            className={`${
+              _disabled ? 'opacity-25 ' : 'hover:bg-primary-type-1-900 hover:text-white '
+            }${
+              selected ? 'bg-primary-type-1-base text-white ' : 'bg-neutrals-type-1-400 text-black '
+            } transition rounded-full mr-4 py-2 px-4 min-w-btn focus:outline-none`}
           >
             {pillText}
-          </StyledPillButton>
+          </button>
         );
       })}
     </>

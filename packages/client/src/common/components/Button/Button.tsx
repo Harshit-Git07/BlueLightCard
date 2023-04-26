@@ -1,4 +1,3 @@
-import ReactButton from 'react-bootstrap/Button';
 import { FC } from 'react';
 import { ButtonProps, StyledButtonIconProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,13 +14,35 @@ const StyledButtonIcon = styled(FontAwesomeIcon)<StyledButtonIconProps>`
         `};
 `;
 
-const Button: FC<ButtonProps> = ({ text, iconLeft, iconRight, variant = 'primary', ...rest }) => {
+const Button: FC<ButtonProps> = ({
+  text,
+  iconLeft,
+  iconRight,
+  disabled,
+  type = 'button',
+  variant = 'primary',
+}) => {
+  const colorVariants: { [key: string]: Record<string, string> } = {
+    primary: {
+      hover: 'hover:bg-primary-type-1-500',
+      bg: 'bg-primary-type-1-base',
+      focus: 'focus:ring-primary-type-2-base',
+    },
+  };
   return (
-    <ReactButton variant={variant} {...rest}>
+    <button
+      type={type}
+      disabled={disabled}
+      className={`${disabled ? 'opacity-25 ' : `${colorVariants[variant].hover} `}${
+        colorVariants[variant].bg
+      } transition rounded-md py-2 px-4 text-white min-w-btn ring-offset-2 focus:ring-2 ${
+        colorVariants[variant].focus
+      }`}
+    >
       {iconLeft && <StyledButtonIcon icon={iconLeft} side="left" />}
       {text}
       {iconRight && <StyledButtonIcon icon={iconRight} side="right" />}
-    </ReactButton>
+    </button>
   );
 };
 

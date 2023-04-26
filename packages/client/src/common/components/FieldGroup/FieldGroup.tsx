@@ -1,44 +1,10 @@
 import { FC } from 'react';
-import { Form } from 'react-bootstrap';
-import styled from 'styled-components';
 import { faEye } from '@fortawesome/pro-solid-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/pro-solid-svg-icons/faEyeSlash';
-import { FeedbackMessageProps, FieldGroupProps, StyledPCItemProps } from './types';
+import { FieldGroupProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/pro-solid-svg-icons';
 import { decider } from '@/utils/decider';
-
-const StyledInputGroup = styled.div`
-  margin-bottom: var(--field-group-margin-bottom);
-`;
-
-const StyledInputGroupHeader = styled.div`
-  display: flex;
-`;
-
-const StyledInputGroupLabel = styled(Form.Label)`
-  flex: 1;
-`;
-
-const StyledPasswordIconButton = styled(FontAwesomeIcon)`
-  margin-top: 0.4rem;
-  color: var(${(props) => props.color});
-`;
-
-const StyledFeedbackMessage = styled.p<FeedbackMessageProps>`
-  color: var(${(props) => props.color ?? '--bs-body-color'});
-`;
-
-const StyledPasswordCriteria = styled.ul`
-  margin-top: 0.8rem;
-`;
-
-const StyledPasswordCriteriaItem = styled.li<StyledPCItemProps>`
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(${(props) => (props.invalid ? '--bs-danger' : '--bs-success')});
-`;
 
 const FieldGroup: FC<FieldGroupProps> = ({
   labelText,
@@ -59,8 +25,8 @@ const FieldGroup: FC<FieldGroupProps> = ({
     [isPasswordStrong, 'Strong'],
   ]);
   const feedbackMessageColor = decider([
-    [invalid || isPasswordWeak, '--bs-danger'],
-    [isPasswordStrong, '--bs-success'],
+    [invalid || isPasswordWeak, 'text-semantic-danger-base'],
+    [isPasswordStrong, 'text-semantic-success-base'],
   ]);
   const onIconButtonClick = () => {
     if (onTogglePasswordVisible) {
@@ -68,13 +34,15 @@ const FieldGroup: FC<FieldGroupProps> = ({
     }
   };
   return (
-    <Form.Group controlId={controlId}>
-      <StyledInputGroupHeader>
-        <StyledInputGroupLabel>{labelText}</StyledInputGroupLabel>
+    <div className="mb-3">
+      <div className="flex mb-2">
+        <label className="flex-1" htmlFor={controlId}>
+          {labelText}
+        </label>
         {password && (
-          <StyledPasswordIconButton
+          <FontAwesomeIcon
+            className="mt-1.5"
             icon={passwordToggleIcon}
-            color="--bs-body-color"
             role="button"
             size="sm"
             title="Toggle password visibility"
@@ -82,33 +50,35 @@ const FieldGroup: FC<FieldGroupProps> = ({
             onClick={onIconButtonClick}
           />
         )}
-      </StyledInputGroupHeader>
-      <StyledInputGroup>
+      </div>
+      <div className="mb-1.5">
         {children}
         {message && (
-          <StyledFeedbackMessage
-            as={_showPasswordCriteria ? 'div' : 'p'}
-            color={feedbackMessageColor}
-          >
+          <div className={`${feedbackMessageColor}`}>
             {_showPasswordCriteria ? (
               <div>
                 <small>{passwordStrength}</small>
-                <StyledPasswordCriteria>
+                <ul className="mt-3">
                   {message.map((msg, index) => (
-                    <StyledPasswordCriteriaItem key={`pci_${index}`} invalid={msg.invalid}>
+                    <li
+                      className={`${
+                        msg.invalid ? 'text-semantic-danger-base ' : 'text-semantic-success-base '
+                      }flex items-center gap-1.5`}
+                      key={`pci_${index}`}
+                    >
                       <FontAwesomeIcon icon={msg.invalid ? faCircleXmark : faCircleCheck} />
                       {msg.message}
-                    </StyledPasswordCriteriaItem>
+                    </li>
                   ))}
-                </StyledPasswordCriteria>
+                </ul>
               </div>
             ) : (
               <small role={invalid ? 'alert' : undefined}>{message}</small>
             )}
-          </StyledFeedbackMessage>
+          </div>
         )}
-      </StyledInputGroup>
-    </Form.Group>
+      </div>
+    </div>
   );
 };
 

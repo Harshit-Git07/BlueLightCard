@@ -41,11 +41,6 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
         disable: true,
       },
     },
-    onTogglePasswordVisible: {
-      table: {
-        disable: true,
-      },
-    },
   },
 };
 

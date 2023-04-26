@@ -1,8 +1,8 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import FileUpload from '@/components/FileUpload/FileUpload';
 import { FileUploadMimeTypes } from './types';
 
-const componentMeta: ComponentMeta<typeof FileUpload> = {
+const componentMeta: Meta<typeof FileUpload> = {
   title: 'Component System/File Upload',
   argTypes: {
     description: {
@@ -27,7 +27,7 @@ const componentMeta: ComponentMeta<typeof FileUpload> = {
   },
 };
 
-const FileUploadTemplate: ComponentStory<typeof FileUpload> = (args) => (
+const FileUploadTemplate: StoryFn<typeof FileUpload> = (args) => (
   <FileUpload
     {...args}
     onError={(files) => console.error('Failed files', files)}

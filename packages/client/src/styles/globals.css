@@ -19,7 +19,7 @@ ul {
 
 @layer base {
   a {
-    @apply text-primary-type-1-base transition;
+    @apply text-link transition;
   }
 
   a:hover {

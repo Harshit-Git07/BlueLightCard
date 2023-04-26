@@ -1,65 +1,7 @@
 import { faFileImage } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ChangeEventHandler, FC, useState } from 'react';
-import Card from 'react-bootstrap/Card';
-import styled from 'styled-components';
-import { desktopSmall } from '@/utils/breakpoints';
-import { FileUploadMimeTypes, FileUploadProps, StyledFUContainerProps } from './types';
-
-const StyledFUContainer = styled(Card)<StyledFUContainerProps>`
-  width: 100%;
-  justify-content: center;
-  background-color: var(
-    ${(props) => (props.$isDragEnter ? '--file-upload-drag-enter-color' : '--bs-tertiary-color')}
-  );
-  border: 2px solid var(--bs-border-color);
-  transition: background-color 0.2s;
-`;
-
-const StyledFUContent = styled(Card.Body)`
-  padding: 1.2rem;
-  text-align: center;
-  flex: none;
-  p {
-    margin-bottom: 0.2rem;
-  }
-`;
-
-const StyledFUDesktopMessage = styled.span`
-  display: none;
-  @media only screen and (min-width: ${desktopSmall}) {
-    display: inline;
-  }
-`;
-
-const StyledFUMessage = styled.div`
-  color: var(--file-upload-message-color);
-  margin-bottom: 1.3rem;
-`;
-
-const StyledFUIcon = styled(FontAwesomeIcon)`
-  color: var(--bs-primary);
-  margin: 1rem 0;
-`;
-
-const StyledFUDescription = styled.p`
-  font-size: var(--font-size-body-medium);
-  color: var(--file-upload-description-color);
-`;
-
-const StyledFUInputFile = styled.input`
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  visibility: hidden;
-`;
-
-const StyledFUInputFileLabel = styled.label`
-  text-decoration: underline;
-  color: var(--bs-link-color);
-  cursor: pointer;
-`;
+import { ChangeEventHandler, DragEventHandler, FC, useState } from 'react';
+import { FileUploadMimeTypes, FileUploadProps } from './types';
 
 const filterFiles = (
   fileList: FileList,
@@ -118,24 +60,24 @@ const FileUpload: FC<FileUploadProps> = ({
     }
   };
 
-  const onDragEnter = (event: DragEvent) => {
+  const onDragEnter: DragEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
     event.preventDefault();
   };
 
-  const onDragLeave = (event: DragEvent) => {
+  const onDragLeave: DragEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
     event.preventDefault();
     setIsDragEnter(false);
   };
 
-  const onDragOver = (event: DragEvent) => {
+  const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
     event.preventDefault();
     setIsDragEnter(true);
   };
 
-  const onDrop = (event: DragEvent) => {
+  const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
     event.preventDefault();
     const files = event.dataTransfer?.files;
@@ -146,21 +88,26 @@ const FileUpload: FC<FileUploadProps> = ({
   };
 
   return (
-    <StyledFUContainer
-      $isDragEnter={isDragEnter}
+    <div
+      className={`${
+        isDragEnter ? 'bg-neutrals-type-1-200 ' : 'bg-neutrals-type-1-100 '
+      }transition relative w-full content-center border-2 border-neutrals-type-1-400 rounded-md`}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <StyledFUContent>
-        <StyledFUIcon icon={faFileImage} size="2x" />
-        <StyledFUMessage>
+      <div className="p-5 text-center">
+        <FontAwesomeIcon className="my-4 text-primary-type-1-base" icon={faFileImage} size="2x" />
+        <div className="mb-5">
           <p>
-            <StyledFUDesktopMessage>Drag your image here or</StyledFUDesktopMessage>{' '}
+            <span className="hidden tablet:inline">Drag your image here or</span>{' '}
             <span>
-              <StyledFUInputFileLabel htmlFor="file-upload">upload a file</StyledFUInputFileLabel>
-              <StyledFUInputFile
+              <label className="underline text-link cursor-pointer" htmlFor="file-upload">
+                upload a file
+              </label>
+              <input
+                className="absolute top-0 left-0 opacity-0 invisible"
                 type="file"
                 id="file-upload"
                 accept={mimeAcceptTypes}
@@ -172,10 +119,10 @@ const FileUpload: FC<FileUploadProps> = ({
           <p>
             It must be a {mimeTypesString} and no larger than {maxUploadSizeMb}mb
           </p>
-        </StyledFUMessage>
-        <StyledFUDescription>{description}</StyledFUDescription>
-      </StyledFUContent>
-    </StyledFUContainer>
+        </div>
+        <p className="opacity-50">{description}</p>
+      </div>
+    </div>
   );
 };
 

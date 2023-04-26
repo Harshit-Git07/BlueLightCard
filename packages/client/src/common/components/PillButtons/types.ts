@@ -1,7 +1,4 @@
-export interface StyledPillButtonProps {
-  isSelected: boolean;
-}
-
-export interface PillButtonProps {
+export type PillButtonProps = {
   pills: string[];
-}
+  disabled?: boolean;
+};

@@ -16,3 +16,13 @@ ul {
   list-style: none;
   padding-left: 0;
 }
+
+@layer base {
+  a {
+    @apply text-primary-type-1-base transition;
+  }
+
+  a:hover {
+    @apply opacity-75;
+  }
+}

@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import InputDOBField from '@/components/InputDOBField/InputDOBField';
 
-const componentMeta: ComponentMeta<typeof InputDOBField> = {
+const componentMeta: Meta<typeof InputDOBField> = {
   title: 'Component System/Form/InputDOBField',
   component: InputDOBField,
   argTypes: {
@@ -27,9 +27,7 @@ const componentMeta: ComponentMeta<typeof InputDOBField> = {
   } as any,
 };
 
-const InputDOBFieldTemplate: ComponentStory<typeof InputDOBField> = (args) => (
-  <InputDOBField {...args} />
-);
+const InputDOBFieldTemplate: StoryFn<typeof InputDOBField> = (args) => <InputDOBField {...args} />;
 
 export const Default = InputDOBFieldTemplate.bind({});
 

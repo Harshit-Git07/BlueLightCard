@@ -1,66 +1,7 @@
 import { FC, useMemo } from 'react';
-import { ProgressBar } from 'react-bootstrap';
-import styled from 'styled-components';
 import { PageJourneyCurrentTabStep, PageJourneyProgress, PageJourneyProps } from './types';
-import { desktopSmall, tablet } from '@/utils/breakpoints';
 import PageJourneyContext from './PageJourneyContext';
 import PageJourneyContent from './PageJourneyContent';
-
-const StyledPJContainer = styled.div``;
-
-const StyledPJContainerProvider = styled(PageJourneyContext.Provider)`
-  padding: 1rem;
-`;
-
-const StyledPJTabContainer = styled.ul`
-  display: flex;
-  gap: 0.7rem;
-  margin-bottom: 1rem;
-  @media only screen and (min-width: ${tablet}) {
-    gap: 1rem;
-  }
-  @media only screen and (min-width: ${desktopSmall}) {
-    gap: 1.4rem;
-  }
-`;
-
-const StyledPJTab = styled.li`
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-`;
-
-const StyledPJTabHeader = styled.div`
-  display: none;
-  @media only screen and (min-width: ${tablet}) {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.3rem;
-  }
-`;
-
-const StyledPJTabProgressBar = styled(ProgressBar)`
-  height: 0.4rem;
-  @media only screen and (min-width: ${tablet}) {
-    height: 0.6rem;
-  }
-`;
-
-const StyledPJMobileHeader = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 0.3rem;
-  padding: 0.5rem 0;
-  @media only screen and (min-width: ${tablet}) {
-    display: none;
-  }
-`;
-
-const StyledPJMobileHeaderSlot = styled.div`
-  margin-right: 0.7rem;
-  padding-left: 0.7rem;
-`;
 
 /**
  * PageJourney component
@@ -112,34 +53,37 @@ const PageJourney: FC<PageJourneyProps> = ({
   }, [tabs]);
 
   return (
-    <StyledPJContainer>
-      <StyledPJMobileHeader>
-        {mobileHeaderStartSlot && (
-          <StyledPJMobileHeaderSlot>{mobileHeaderStartSlot}</StyledPJMobileHeaderSlot>
-        )}
+    <div>
+      <div className="flex gap-2 items-center mb-1.5 pb-2 tablet:hidden">
+        {mobileHeaderStartSlot && <div className="mr-3 pl-3">{mobileHeaderStartSlot}</div>}
         <span>
           {currentTabStep.tabIndex} of {totalTabsSize}
         </span>
-        <span className="font-weight--semi-bold">{currentTabStep.tabLabel}</span>
-        {mobileHeaderEndSlot && (
-          <StyledPJMobileHeaderSlot>{mobileHeaderEndSlot}</StyledPJMobileHeaderSlot>
-        )}
-      </StyledPJMobileHeader>
-      <StyledPJTabContainer>
+        <span className="font-semibold">{currentTabStep.tabLabel}</span>
+        {mobileHeaderEndSlot && <div className="mr-3 pl-3">{mobileHeaderEndSlot}</div>}
+      </div>
+      <ul className="flex gap-3 mb-4 laptop:gap-6 tablet:gap-4">
         {tabs.map((tab, index) => (
-          <StyledPJTab key={tab.id}>
-            <StyledPJTabHeader>
+          <li className="w-full whitespace-nowrap overflow-hidden" key={tab.id}>
+            <div className="hidden tablet:flex tablet:gap-2 mb-1.5">
               <span>{index + 1}.</span>
-              <span className="font-weight--semi-bold">{tab.label}</span>
-            </StyledPJTabHeader>
-            <StyledPJTabProgressBar now={calculateProgress[tab.id] ?? 0} />
-          </StyledPJTab>
+              <span className="font-semibold">{tab.label}</span>
+            </div>
+            <div className="relative h-1.5 tablet:h-2 w-full bg-neutrals-type-1-300">
+              <div
+                className="h-full w-full bg-primary-type-1-base"
+                style={{ width: `${calculateProgress[tab.id] ?? 0}%` }}
+                role="progressbar"
+                aria-valuenow={calculateProgress[tab.id] ?? 0}
+              ></div>
+            </div>
+          </li>
         ))}
-      </StyledPJTabContainer>
-      <StyledPJContainerProvider value={{ currentTabStep: currentTabStep.componentKey }}>
+      </ul>
+      <PageJourneyContext.Provider value={{ currentTabStep: currentTabStep.componentKey }}>
         {children}
-      </StyledPJContainerProvider>
-    </StyledPJContainer>
+      </PageJourneyContext.Provider>
+    </div>
   );
 };
 

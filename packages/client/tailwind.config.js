@@ -30,6 +30,7 @@ module.exports = {
             base: '#000033',
             100: '#FAFAFC',
             200: '#EDEDF2',
+            300: '#BEC1C6',
             400: '#CCCCD6',
             700: '#4D4D70',
           },

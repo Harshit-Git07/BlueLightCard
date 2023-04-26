@@ -13,6 +13,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        link: '#1366E2',
         primary: {
           'type-1': {
             base: '#000099',

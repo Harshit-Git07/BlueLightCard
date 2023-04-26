@@ -66,7 +66,7 @@ const FileListItem: FC<FileListItemProps> = ({
         )}
         <div className="flex items-center gap-4 flex-1 self-center tablet:justify-end tablet:self-end">
           {fileLink && (
-            <Link className="no-underline p-0.5" href={fileLink}>
+            <Link className="text-primary-type-1-base no-underline p-0.5" href={fileLink}>
               View
             </Link>
           )}

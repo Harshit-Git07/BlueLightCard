@@ -1,9 +1,9 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import PageJourney from '@/components/PageJourney/PageJourney';
 import { faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const componentMeta: ComponentMeta<typeof PageJourney> = {
+const componentMeta: Meta<typeof PageJourney> = {
   title: 'Component System/PageJourney',
   component: PageJourney,
   argTypes: {
@@ -30,8 +30,15 @@ const components = {
   AddressComponent: () => <h2>Address Component</h2>,
 };
 
-const PageJourneyTemplate: ComponentStory<typeof PageJourney> = (args) => (
-  <PageJourney {...args} mobileHeaderStartSlot={<FontAwesomeIcon icon={faArrowLeft} />}>
+const PageJourneyTemplate: StoryFn<typeof PageJourney> = (args) => (
+  <PageJourney
+    {...args}
+    mobileHeaderStartSlot={
+      <button>
+        <FontAwesomeIcon icon={faArrowLeft} />
+      </button>
+    }
+  >
     <PageJourney.PageJourneyContent components={components} />
   </PageJourney>
 );

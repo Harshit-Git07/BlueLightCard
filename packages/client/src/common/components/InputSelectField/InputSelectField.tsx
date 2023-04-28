@@ -1,15 +1,6 @@
 import { FC, forwardRef } from 'react';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
-import { Form } from 'react-bootstrap';
 import { InputSelectFieldProps } from './types';
-import { createStyledInputField } from '@/components/_shared/StyledInputField';
-
-/**
- * The use of $prop are transient props, see the docs for more
- * https://styled-components.com/docs/api#transient-props
- */
-
-const StyledInputSelectField = createStyledInputField(Form.Select);
 
 const InputSelectField: FC<InputSelectFieldProps> = ({
   icon,
@@ -18,34 +9,33 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   success,
   value,
   defaultOption,
-  required,
-  _ref,
   onChange,
 }) => {
   return (
-    <InputFieldWrapper icon={icon} showSuccessState={success} showErrorState={error}>
-      <StyledInputSelectField
-        $spaceForIcon={!!icon}
-        $error={error}
-        required={required}
+    <InputFieldWrapper icon={icon} select={true} showSuccessState={success} showErrorState={error}>
+      <select
+        className={`${
+          error ? 'border-semantic-danger-base ' : 'focus:border-primary-type-1-base '
+        }${
+          icon ? 'pl-8 ' : ''
+        }w-full rounded-md py-2 px-3 border-neutrals-type-1-400 border focus:outline-none`}
         value={value}
-        ref={_ref}
         onChange={onChange}
       >
-        {defaultOption && <option value="">{defaultOption}</option>}
+        {defaultOption && <option>{defaultOption}</option>}
         {Object.keys(options).map((value) => (
           <option key={value} value={value}>
             {options[value]}
           </option>
         ))}
-      </StyledInputSelectField>
+      </select>
     </InputFieldWrapper>
   );
 };
 
 // eslint-disable-next-line react/display-name
-const InputSelectFieldWithRef = forwardRef<unknown, InputSelectFieldProps>((props, ref) => (
-  <InputSelectField {...props} _ref={ref} />
+const InputSelectFieldWithRef = forwardRef<unknown, InputSelectFieldProps>((props) => (
+  <InputSelectField {...props} />
 ));
 
 export default InputSelectFieldWithRef;

@@ -9,6 +9,16 @@ const colorVariants: { [key: string]: Record<string, string> } = {
     bg: 'bg-primary-type-1-base',
     focus: 'focus:ring-primary-type-2-base',
   },
+  [ThemeVariant.Secondary]: {
+    hover: 'hover:bg-primary-type-1-500',
+    bg: 'bg-primary-type-1-base',
+    focus: 'focus:ring-primary-type-2-base',
+  },
+  [ThemeVariant.Tertiary]: {
+    hover: 'hover:bg-primary-type-1-500',
+    bg: 'bg-primary-type-1-base',
+    focus: 'focus:ring-primary-type-2-base',
+  },
 };
 
 const Button: FC<ButtonProps> = ({

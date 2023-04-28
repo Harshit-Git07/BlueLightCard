@@ -1,6 +1,6 @@
 import { faEnvelope } from '@fortawesome/pro-solid-svg-icons/faEnvelope';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import InputSelectField from '@/components/InputSelectField/InputSelectField';
 
 const icons = { faEnvelope };
@@ -21,7 +21,7 @@ const iconArgSelect = {
   },
 };
 
-const componentMeta: ComponentMeta<typeof InputSelectField> = {
+const componentMeta: Meta<typeof InputSelectField> = {
   title: 'Component System/Form/InputSelectField',
   component: InputSelectField,
   argTypes: {
@@ -47,7 +47,7 @@ const componentMeta: ComponentMeta<typeof InputSelectField> = {
   },
 };
 
-const InputSelectFieldTemplate: ComponentStory<typeof InputSelectField> = (args) => (
+const InputSelectFieldTemplate: StoryFn<typeof InputSelectField> = (args) => (
   <InputSelectField {...args} />
 );
 

@@ -34,8 +34,8 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
 };
 
 // eslint-disable-next-line react/display-name
-const InputSelectFieldWithRef = forwardRef<unknown, InputSelectFieldProps>((props) => (
-  <InputSelectField {...props} />
+const InputSelectFieldWithRef = forwardRef<unknown, InputSelectFieldProps>((props, ref) => (
+  <InputSelectField {...props} _ref={ref} />
 ));
 
 export default InputSelectFieldWithRef;

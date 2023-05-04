@@ -8,7 +8,10 @@ module.exports = {
     name: "@storybook/nextjs",
     options: {}
   },
-  staticDirs: ['../local_assets'],
+  staticDirs: [{
+    from: '../assets',
+    to: '/assets'
+  }],
   webpackFinal: async config => {
     config.resolve.alias = {
       "@/components": resolve(__dirname, "../src/common/components"),

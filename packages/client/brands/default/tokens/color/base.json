@@ -1,0 +1,38 @@
+{
+  "color": {
+    "link": { "value": "#1366E2" },
+    "neutral": {
+      "white": { "value": "#FFFFFF" },
+      "oxford_blue": {
+        "100": { "value": "#FAFAFC" },
+        "200": { "value": "#EDEDF2" },
+        "400": { "value": "#CCCCD6" },
+        "700": { "value": "#4D4D70" },
+        "900": { "value": "#000033" }
+      }
+    },
+    "primary": {
+      "duke_blue": {
+        "500": { "value": "#2929CC" },
+        "700": { "value": "#000099" },
+        "900": { "value": "#000580" }
+      },
+      "vivid_sky_blue": {
+        "500": { "value": "#85E0FF" },
+        "700": { "value": "#33CCFF" }
+      }
+    },
+    "semantic": {
+      "success": {
+        "300": { "value": "#D2F2C2" },
+        "500": { "value": "#71DB3B" },
+        "700": { "value": "#58C322" }
+      },
+      "danger": {
+        "300": { "value": "#F7D2D5" },
+        "500": { "value": "#EE2E3D" },
+        "700": { "value": "#D41121" }
+      }
+    }
+  }
+}

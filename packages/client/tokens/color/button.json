@@ -1,0 +1,16 @@
+{
+  "color": {
+    "button": {
+      "primary": {
+        "bg": {
+          "base": { "value": "{color.primary.duke_blue.700.value}" },
+          "hover": { "value": "{color.primary.duke_blue.500.value}" }
+        },
+        "outline": {
+          "focus": { "value": "{color.primary.vivid_sky_blue.700.value}" }
+        },
+        "text": { "value": "{color.neutral.white.value}" }
+      }
+    }
+  }
+}

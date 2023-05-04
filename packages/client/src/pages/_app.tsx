@@ -5,7 +5,7 @@ import { FlagsmithProvider } from 'flagsmith/react';
 import flagsmith from 'flagsmith/isomorphic';
 import { BRAND, REGION } from 'global-vars';
 
-import '../styles/main.scss';
+import '../styles/globals.css';
 
 const featureToggleState = require(`../../brands/${BRAND}/featureToggleConfigs/${REGION}.json`);
 

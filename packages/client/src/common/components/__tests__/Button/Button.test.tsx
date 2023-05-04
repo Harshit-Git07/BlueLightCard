@@ -9,9 +9,7 @@ describe('Button component', () => {
   let props: ButtonProps;
 
   beforeEach(() => {
-    props = {
-      text: 'Button',
-    };
+    props = {};
   });
 
   describe('smoke test', () => {
@@ -26,13 +24,13 @@ describe('Button component', () => {
 
   describe('snapshot Test', () => {
     it('renders a button with the correct icon side "left"', () => {
-      const component = renderer.create(<Button text="Button" iconLeft={faMinus} />);
+      const component = renderer.create(<Button iconLeft={faMinus}>Button</Button>);
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
 
     it('renders a button with the correct icon side "right"', () => {
-      const component = renderer.create(<Button text="Button" iconRight={faPlus} />);
+      const component = renderer.create(<Button iconRight={faPlus}>Button</Button>);
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });

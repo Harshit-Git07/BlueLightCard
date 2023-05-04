@@ -124,7 +124,7 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
           />
         )
       )}
-      <Button text={submitButtonText ?? 'Submit'} type="submit" />
+      <Button type="submit">{submitButtonText ?? 'Submit'}</Button>
     </form>
   );
 };

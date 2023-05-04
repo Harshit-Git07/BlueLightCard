@@ -25,9 +25,6 @@ const componentMeta: Meta<typeof Button> = {
   title: 'Component System/Button Component',
   component: Button,
   argTypes: {
-    text: {
-      description: 'Button text',
-    },
     iconLeft: {
       description: 'Icon appears left of the button text',
       ...iconArgSelect,
@@ -39,12 +36,11 @@ const componentMeta: Meta<typeof Button> = {
   },
 };
 
-const Template: StoryFn<typeof Button> = (args) => <Button {...args} />;
+const Template: StoryFn<typeof Button> = (args) => <Button {...args}>Button</Button>;
 
 export const Default = Template.bind({});
 
 Default.args = {
-  text: 'Button',
   variant: ThemeVariant.Primary,
   disabled: false,
 };

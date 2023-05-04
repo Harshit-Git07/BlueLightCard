@@ -5,9 +5,9 @@ import { ThemeVariant } from '@/types/theme';
 
 const colorVariants: { [key: string]: Record<string, string> } = {
   [ThemeVariant.Primary]: {
-    hover: 'hover:bg-primary-type-1-500',
-    bg: 'bg-primary-type-1-base',
-    focus: 'focus:ring-primary-type-2-base',
+    hover: 'hover:bg-button-primary-bg-hover',
+    bg: 'bg-button-primary-bg-base',
+    focus: 'focus:ring-button-primary-outline-focus',
   },
   [ThemeVariant.Secondary]: {
     hover: 'hover:bg-primary-type-1-500',
@@ -22,10 +22,10 @@ const colorVariants: { [key: string]: Record<string, string> } = {
 };
 
 const Button: FC<ButtonProps> = ({
-  text,
   iconLeft,
   iconRight,
   disabled,
+  children,
   type = 'button',
   variant = ThemeVariant.Primary,
 }) => {
@@ -40,7 +40,7 @@ const Button: FC<ButtonProps> = ({
       }`}
     >
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
-      {text}
+      {children}
       {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}
     </button>
   );

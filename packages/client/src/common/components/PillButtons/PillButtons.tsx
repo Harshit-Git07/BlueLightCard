@@ -25,12 +25,12 @@ const PillButtons: FC<PillButtonProps> = ({ pills, disabled }) => {
         return (
           <button
             key={key}
-            onClick={() => handleClick(key)}
+            onClick={() => !disabled && handleClick(key)}
             className={`${
               _disabled ? 'opacity-25 ' : 'hover:bg-primary-type-1-900 hover:text-white '
             }${
               selected ? 'bg-primary-type-1-base text-white ' : 'bg-neutrals-type-1-400 text-black '
-            } transition rounded-full mr-4 py-2 px-4 min-w-btn focus:outline-none`}
+            } transition rounded-full m-2 py-2 px-4 min-w-btn focus:outline-none`}
           >
             {pillText}
           </button>

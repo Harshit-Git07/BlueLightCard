@@ -2,6 +2,7 @@ const BRAND = process.env.NEXT_APP_BRAND ?? 'default';
 const REGION = process.env.NEXT_APP_REGION ?? 'GB';
 const DEFAULT_LANG = process.env.NEXT_APP_LANG ?? 'en';
 const FALLBACK_LNG = 'en';
+const ASSET_PREFIX = !process.env.STORYBOOK_ENV ? '/_next/static' : '';
 
 /**
  * Language is made up of the lng and region
@@ -15,4 +16,5 @@ module.exports = {
   DEFAULT_LANG,
   FALLBACK_LNG,
   LANGUAGE,
+  ASSET_PREFIX,
 };

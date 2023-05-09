@@ -10,6 +10,15 @@ export const parameters = {
     },
   },
   viewport: {
-    viewports: INITIAL_VIEWPORTS,
+    viewports: {
+      ...INITIAL_VIEWPORTS,
+      galaxyFold: {
+        name: 'Galaxy Fold',
+        styles: {
+          width: '280px',
+          height: '653px'
+        },
+      },
+    },
   },
 }

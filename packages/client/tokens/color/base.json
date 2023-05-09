@@ -8,14 +8,16 @@
         "200": { "value": "#EDEDF2" },
         "400": { "value": "#CCCCD6" },
         "700": { "value": "#4D4D70" },
-        "900": { "value": "#000033" }
+        "900": { "value": "#000033" },
+        "base": { "value": "{color.neutral.oxford_blue.900}" }
       }
     },
     "primary": {
       "duke_blue": {
         "500": { "value": "#2929CC" },
         "700": { "value": "#000099" },
-        "900": { "value": "#000580" }
+        "900": { "value": "#000580" },
+        "base": { "value": "{color.primary.duke_blue.700}" }
       },
       "vivid_sky_blue": {
         "500": { "value": "#85E0FF" },

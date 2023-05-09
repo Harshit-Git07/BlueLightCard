@@ -1,0 +1,13 @@
+{
+  "color": {
+    "navigation": {
+      "navlink": { "value": "{color.neutral.oxford_blue.base}" },
+      "bg": {
+        "base": { "value": "{color.primary.duke_blue.base}" },
+        "selector": { "value": "{color.primary.duke_blue.900}" },
+        "mobilenav": { "value": "#f8f8f8" }
+      },
+      "border": { "value": "#eee" }
+    }
+  }
+}

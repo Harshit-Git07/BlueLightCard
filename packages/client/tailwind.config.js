@@ -77,7 +77,7 @@ const config = {
     screens: {
       mobile: '280px',
       tablet: '768px',
-      laptop: '1024',
+      laptop: '1024px',
       desktop: '1200px',
     },
     fontFamily: Object.keys(themeTokens.font.family).reduce((acc, familyKey) => {

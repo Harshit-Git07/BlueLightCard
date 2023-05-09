@@ -61,8 +61,8 @@ Default.args = {
     { text: 'Holiday Discounts', link: '/' },
   ],
   countries: [
-    { key: 'uk', name: 'United Kingdom', imageSrc: 'assets/uk_flag.webp' },
-    { key: 'aus', name: 'Australia', imageSrc: 'assets/aus_flag.webp' },
+    { key: 'uk', name: 'United Kingdom', imageSrc: 'assets/uk_flag.webp', link: '/' },
+    { key: 'aus', name: 'Australia', imageSrc: 'assets/aus_flag.webp', link: '/' },
   ],
   countryKey: 'uk',
 };

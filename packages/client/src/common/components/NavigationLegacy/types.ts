@@ -7,6 +7,7 @@ export interface CountrySelector {
   key: string;
   name: string;
   imageSrc: string;
+  link: string;
 }
 
 export interface NavigationProps {

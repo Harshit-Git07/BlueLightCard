@@ -11,8 +11,8 @@ const Navigation: FC<NavigationProps> = ({
   logoImgSrc,
   navItems,
   countries = [
-    { key: 'uk', name: 'United Kingdom', imageSrc: '/assets/uk_flag.webp' },
-    { key: 'aus', name: 'Australia', imageSrc: '/assets/aus_flag.webp' },
+    { key: 'uk', name: 'United Kingdom', imageSrc: '/assets/uk_flag.webp', link: '/' },
+    { key: 'aus', name: 'Australia', imageSrc: '/assets/aus_flag.webp', link: '/' },
   ],
   countryKey = 'uk',
   assetPrefix = ASSET_PREFIX,
@@ -66,7 +66,7 @@ const Navigation: FC<NavigationProps> = ({
                       className="bg-navigation-bg-selector p-2.5 rounded-lg text-white"
                       key={country.key}
                     >
-                      <Link className="flex gap-3 items-center text-white" href="/">
+                      <Link className="flex gap-3 items-center text-white" href={country.link}>
                         <div className="relative w-[30px] h-[15px] tablet:w-[40px] tablet:h-[20px]">
                           <Image
                             className="object-contain"

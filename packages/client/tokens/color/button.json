@@ -10,6 +10,27 @@
           "focus": { "value": "{color.primary.vivid_sky_blue.700.value}" }
         },
         "text": { "value": "{color.neutral.white.value}" }
+      },
+      "secondary": {
+        "bg": {
+          "base": { "value": "rgba(0, 0, 0, 0)" },
+          "hover": { "value": "#2929CC1A" }
+        },
+        "outline": {
+          "focus": { "value": "{color.primary.vivid_sky_blue.700.value}" }
+        },
+        "border": { "value": "{color.primary.duke_blue.base.value}"},
+        "text": { "value": "{color.primary.duke_blue.base.value}" }
+      },
+      "tertiary": {
+        "bg": {
+          "base": { "value": "rgba(0, 0, 0, 0)" },
+          "hover": { "value": "#2929CC1A" }
+        },
+        "outline": {
+          "focus": { "value": "{color.primary.vivid_sky_blue.700.value}" }
+        },
+        "text": { "value": "{color.primary.duke_blue.base.value}" }
       }
     }
   }

@@ -2,7 +2,7 @@
 
 exports[`Button component snapshot Test renders a button with the correct icon side "left" 1`] = `
 <button
-  className="hover:bg-button-primary-bg-hover bg-button-primary-bg-base transition rounded-md py-2 px-4 text-white min-w-btn ring-offset-2 focus:ring-2 focus:ring-button-primary-outline-focus"
+  className="py-1.5 border-2 hover:bg-button-primary-bg-hover bg-button-primary-bg-base transition rounded-md px-4 min-w-btn ring-offset-2 focus:ring-2 focus:ring-button-primary-outline-focus border-transparent text-white"
   type="button"
 >
   <svg
@@ -28,7 +28,7 @@ exports[`Button component snapshot Test renders a button with the correct icon s
 
 exports[`Button component snapshot Test renders a button with the correct icon side "right" 1`] = `
 <button
-  className="hover:bg-button-primary-bg-hover bg-button-primary-bg-base transition rounded-md py-2 px-4 text-white min-w-btn ring-offset-2 focus:ring-2 focus:ring-button-primary-outline-focus"
+  className="py-1.5 border-2 hover:bg-button-primary-bg-hover bg-button-primary-bg-base transition rounded-md px-4 min-w-btn ring-offset-2 focus:ring-2 focus:ring-button-primary-outline-focus border-transparent text-white"
   type="button"
 >
   Button

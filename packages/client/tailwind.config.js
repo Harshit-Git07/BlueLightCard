@@ -12,6 +12,7 @@ const StyleDictionary = StyleDictionaryPackage.extend({
   platforms: {
     js: {
       transformGroup: 'js',
+      transforms: ['color/css'],
     },
   },
 });

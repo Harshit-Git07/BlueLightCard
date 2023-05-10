@@ -43,6 +43,7 @@ export const Default = Template.bind({});
 Default.args = {
   variant: ThemeVariant.Primary,
   disabled: false,
+  slim: false,
 };
 
 export default componentMeta;

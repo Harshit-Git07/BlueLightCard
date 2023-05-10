@@ -5,6 +5,7 @@ import { PropsWithChildren } from 'react';
 export type ButtonProps = PropsWithChildren & {
   type?: 'button' | 'submit';
   disabled?: boolean;
+  slim?: boolean;
   variant?: ThemeVariant;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;

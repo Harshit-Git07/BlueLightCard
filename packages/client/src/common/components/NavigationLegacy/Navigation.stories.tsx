@@ -1,7 +1,45 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ArgsTable, Description, Stories, Subtitle, Title } from '@storybook/addon-docs';
+import { ArgsTable, Description, Story, Subtitle, Title } from '@storybook/addon-docs';
 import Navigation from '@/components/NavigationLegacy/Navigation';
 import { Source } from '@storybook/addon-docs';
+
+const NavigationTemplate: StoryFn<typeof Navigation> = (args) => <Navigation {...args} />;
+
+export const Default = NavigationTemplate.bind({});
+
+Default.args = {
+  logoImgSrc: 'assets/blc_logo.webp',
+  navItems: [
+    { text: 'Home', link: '/' },
+    { text: 'About us', link: '/' },
+    { text: 'Add your business', link: '/' },
+    { text: 'FAQs', link: '/' },
+  ],
+  countries: [
+    { key: 'uk', name: 'United Kingdom', link: '/' },
+    { key: 'aus', name: 'Australia', link: '/' },
+  ],
+  countryKey: 'uk',
+};
+
+export const CallToActions = NavigationTemplate.bind({});
+
+CallToActions.args = {
+  logoImgSrc: 'assets/blc_logo.webp',
+  navItems: [
+    { text: 'Home', link: '/' },
+    { text: 'About us', link: '/' },
+    { text: 'Add your business', link: '/' },
+    { text: 'FAQs', link: '/' },
+  ],
+  countries: [
+    { key: 'uk', name: 'United Kingdom', link: '/' },
+    { key: 'aus', name: 'Australia', link: '/' },
+  ],
+  countryKey: 'uk',
+  loginLink: '/',
+  signUpLink: '/',
+};
 
 const componentMeta: Meta<typeof Navigation> = {
   title: 'Legacy/Navigation',
@@ -12,12 +50,9 @@ const componentMeta: Meta<typeof Navigation> = {
       page: () => (
         <>
           <Title />
-          <Subtitle>Legacy navigation component</Subtitle>
-          <Stories />
-          <ArgsTable />
           <Subtitle>Overview</Subtitle>
           <Description>
-            This component is a port of the navigation from our php BLC site.
+            This component is a ported version of the navigation from our php BLC site.
           </Description>
           <Subtitle>Color Tokens</Subtitle>
           <ul>
@@ -37,34 +72,25 @@ const componentMeta: Meta<typeof Navigation> = {
               Nav border color <code>{'{color.navigation.border}'}</code>
             </li>
           </ul>
-          <Subtitle>Usage</Subtitle>
-          <Source />
+          <Subtitle>Pre Select Country</Subtitle>
+          <p>
+            To pre select a country, use the countryKey which should match the key in the list of
+            countries, for example:
+            <code>{'countryKey="uk"'}</code> will select UK
+          </p>
+          <Subtitle>Component Props</Subtitle>
+          <ArgsTable />
+          <Subtitle>Default</Subtitle>
+          <Story of={Default} />
+          <Source of={Default} />
+          <Subtitle>Call To Actions</Subtitle>
+          <Description>Navigation component with call to action buttons</Description>
+          <Story of={CallToActions} />
+          <Source of={CallToActions} />
         </>
       ),
     },
   },
-};
-
-const NavigationTemplate: StoryFn<typeof Navigation> = (args) => <Navigation {...args} />;
-
-export const Default = NavigationTemplate.bind({});
-
-Default.args = {
-  logoImgSrc: '/assets/blc_logo.webp',
-  navItems: [
-    { text: 'Home', link: '/' },
-    { text: 'About us', link: '/' },
-    { text: 'Add your business', link: '/' },
-    { text: 'FAQs', link: '/' },
-    { text: 'Register now', link: '/' },
-    { text: 'Login', link: '/' },
-    { text: 'Holiday Discounts', link: '/' },
-  ],
-  countries: [
-    { key: 'uk', name: 'United Kingdom', imageSrc: 'assets/uk_flag.webp', link: '/' },
-    { key: 'aus', name: 'Australia', imageSrc: 'assets/aus_flag.webp', link: '/' },
-  ],
-  countryKey: 'uk',
 };
 
 export default componentMeta;

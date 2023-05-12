@@ -1,11 +1,14 @@
 {
   "color": {
     "navigation": {
-      "navlink": { "value": "{color.neutral.oxford_blue.base}" },
+      "navlink": { "value": "{color.neutral.white}" },
       "bg": {
         "base": { "value": "{color.primary.duke_blue.base}" },
         "selector": { "value": "{color.primary.duke_blue.900}" },
-        "mobilenav": { "value": "#f8f8f8" }
+        "mobilenav": {
+          "base": { "value": "{color.primary.duke_blue.900}" },
+          "btnfocus": { "value": "{color.primary.duke_blue.900}" }
+        }
       },
       "border": { "value": "#eee" }
     }

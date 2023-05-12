@@ -33,6 +33,9 @@ const componentMeta: Meta<typeof Button> = {
       description: 'Icon appears right of the button text',
       ...iconArgSelect,
     },
+    alternate: {
+      description: 'Use the alternate color if set for this variant',
+    },
   },
 };
 
@@ -44,6 +47,8 @@ Default.args = {
   variant: ThemeVariant.Primary,
   disabled: false,
   slim: false,
+  alternate: false,
+  noFocusRing: false,
 };
 
 export default componentMeta;

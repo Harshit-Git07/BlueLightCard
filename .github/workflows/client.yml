@@ -15,6 +15,7 @@ on:
 
 jobs:
   changes:
+    name: Changes
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read

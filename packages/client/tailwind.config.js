@@ -72,9 +72,6 @@ const config = {
     extend: {
       colors: themeTokens.color,
     },
-    minWidth: {
-      btn: '120px',
-    },
     screens: {
       mobile: '280px',
       tablet: '768px',

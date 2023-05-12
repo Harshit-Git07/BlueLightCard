@@ -6,6 +6,9 @@ export type ButtonProps = PropsWithChildren & {
   type?: 'button' | 'submit';
   disabled?: boolean;
   slim?: boolean;
+  alternate?: boolean;
+  noFocusRing?: boolean;
+  className?: string;
   variant?: ThemeVariant;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;

@@ -1,6 +1,7 @@
 import { FC, forwardRef } from 'react';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
 import { InputSelectFieldProps } from './types';
+import { cssUtil } from '@/utils/cssUtil';
 
 const InputSelectField: FC<InputSelectFieldProps> = ({
   icon,
@@ -11,17 +12,16 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   defaultOption,
   onChange,
 }) => {
+  const selectClasses = cssUtil([
+    error
+      ? 'border-inputSelectField-danger'
+      : 'border-inputSelectField-border focus:border-inputSelectField-focus',
+    icon ? 'pl-8' : '',
+    'w-full rounded-md py-2 px-3 border focus:outline-none',
+  ]);
   return (
     <InputFieldWrapper icon={icon} select={true} showSuccessState={success} showErrorState={error}>
-      <select
-        className={`${
-          error ? 'border-semantic-danger-base ' : 'focus:border-primary-type-1-base '
-        }${
-          icon ? 'pl-8 ' : ''
-        }w-full rounded-md py-2 px-3 border-neutrals-type-1-400 border focus:outline-none`}
-        value={value}
-        onChange={onChange}
-      >
+      <select className={selectClasses} value={value} onChange={onChange}>
         {defaultOption && <option>{defaultOption}</option>}
         {Object.keys(options).map((value) => (
           <option key={value} value={value}>

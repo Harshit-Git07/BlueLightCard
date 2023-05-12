@@ -29,6 +29,10 @@ ul {
     @apply text-link transition;
   }
 
+  *[disabled] {
+    @apply cursor-not-allowed;
+  }
+
   a:hover {
     @apply opacity-75;
   }

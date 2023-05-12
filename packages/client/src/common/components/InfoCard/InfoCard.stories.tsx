@@ -14,7 +14,7 @@ export const Default = Template.bind({});
 Default.args = {
   title: 'Card Title',
   text: 'This is the text of the card',
-  imageSrc: '/card_test_img.jpg',
+  imageSrc: 'assets/card_test_img.jpg',
 };
 
 export default componentMeta;

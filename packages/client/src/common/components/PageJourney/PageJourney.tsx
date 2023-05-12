@@ -69,12 +69,13 @@ const PageJourney: FC<PageJourneyProps> = ({
               <span>{index + 1}.</span>
               <span className="font-semibold">{tab.label}</span>
             </div>
-            <div className="relative h-1.5 tablet:h-2 w-full bg-neutrals-type-1-300">
+            <div className="relative h-1.5 tablet:h-2 w-full bg-pageJourney-bg-progress-base">
               <div
-                className="h-full w-full bg-primary-type-1-base"
+                className="h-full w-full bg-pageJourney-bg-progress-loaded"
                 style={{ width: `${calculateProgress[tab.id] ?? 0}%` }}
                 role="progressbar"
                 aria-valuenow={calculateProgress[tab.id] ?? 0}
+                aria-label={`${tab.label} progress`}
               ></div>
             </div>
           </li>

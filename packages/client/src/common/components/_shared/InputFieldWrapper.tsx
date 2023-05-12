@@ -12,8 +12,8 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   children,
 }) => {
   const color = decider([
-    [showErrorState, 'text-semantic-danger-base '],
-    [showSuccessState, 'text-semantic-success-base '],
+    [showErrorState, 'text-inputFieldWrapper-danger '],
+    [showSuccessState, 'text-inputFieldWrapper-success '],
     [!showErrorState && !showSuccessState, ''],
   ]);
   const _iconRight = decider([

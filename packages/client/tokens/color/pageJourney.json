@@ -1,0 +1,12 @@
+{
+  "color": {
+    "pageJourney": {
+      "bg": { 
+        "progress": {
+          "base": { "value": "{color.neutral.oxford_blue.400.value}" },
+          "loaded": { "value": "{color.primary.duke_blue.base.value}" }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { PillButtonProps } from './types';
 import React from 'react';
+import { cssUtil } from '@/utils/cssUtil';
 
 const PillButtons: FC<PillButtonProps> = ({ pills, disabled }) => {
   const maxSelectableNumber = 2;
@@ -22,15 +23,19 @@ const PillButtons: FC<PillButtonProps> = ({ pills, disabled }) => {
         const _disabled =
           (isSelected.length === maxSelectableNumber && !isSelected.includes(key)) || disabled;
 
+        const classes = cssUtil([
+          selected
+            ? 'bg-pillButtons-bg-selected text-pillButtons-text-selected'
+            : 'bg-pillButtons-bg-base  text-pillButtons-text-base',
+          _disabled ? 'opacity-25' : '',
+          'transition rounded-full m-2 py-2 px-4 min-w-btn focus:outline-none',
+        ]);
         return (
           <button
             key={key}
-            onClick={() => !disabled && handleClick(key)}
-            className={`${
-              _disabled ? 'opacity-25 ' : 'hover:bg-primary-type-1-900 hover:text-white '
-            }${
-              selected ? 'bg-primary-type-1-base text-white ' : 'bg-neutrals-type-1-400 text-black '
-            } transition rounded-full m-2 py-2 px-4 min-w-btn focus:outline-none`}
+            onClick={() => !_disabled && handleClick(key)}
+            disabled={_disabled}
+            className={classes}
           >
             {pillText}
           </button>

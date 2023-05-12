@@ -21,7 +21,8 @@
 			"@/hooks/*": ["src/common/hooks/*"],
 			"@/utils/*": ["src/common/utils/*"],
 			"@/layouts/*": ["src/common/layouts/*"],
-			"@/types/*": ["src/common/types/*"]
+			"@/types/*": ["src/common/types/*"],
+			"@/global-vars": ["global-vars"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

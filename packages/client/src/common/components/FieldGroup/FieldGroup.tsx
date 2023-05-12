@@ -5,6 +5,7 @@ import { FieldGroupProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/pro-solid-svg-icons';
 import { decider } from '@/utils/decider';
+import { cssUtil } from '@/utils/cssUtil';
 
 const FieldGroup: FC<FieldGroupProps> = ({
   labelText,
@@ -25,8 +26,8 @@ const FieldGroup: FC<FieldGroupProps> = ({
     [isPasswordStrong, 'Strong'],
   ]);
   const feedbackMessageColor = decider([
-    [invalid || isPasswordWeak, 'text-semantic-danger-base'],
-    [isPasswordStrong, 'text-semantic-success-base'],
+    [invalid || isPasswordWeak, 'text-fieldGroup-danger'],
+    [isPasswordStrong, 'text-fieldGroup-success'],
   ]);
   const onIconButtonClick = () => {
     if (onTogglePasswordVisible) {
@@ -59,17 +60,18 @@ const FieldGroup: FC<FieldGroupProps> = ({
               <div>
                 <small>{passwordStrength}</small>
                 <ul className="mt-3">
-                  {message.map((msg, index) => (
-                    <li
-                      className={`${
-                        msg.invalid ? 'text-semantic-danger-base ' : 'text-semantic-success-base '
-                      }flex items-center gap-1.5`}
-                      key={`pci_${index}`}
-                    >
-                      <FontAwesomeIcon icon={msg.invalid ? faCircleXmark : faCircleCheck} />
-                      {msg.message}
-                    </li>
-                  ))}
+                  {message.map((msg, index) => {
+                    const liClasses = cssUtil([
+                      msg.invalid ? 'text-fieldGroup-danger' : 'text-fieldGroup-success',
+                      'flex items-center gap-1.5',
+                    ]);
+                    return (
+                      <li className={liClasses} key={`pci_${index}`}>
+                        <FontAwesomeIcon icon={msg.invalid ? faCircleXmark : faCircleCheck} />
+                        {msg.message}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ) : (

@@ -1,5 +1,3 @@
-import { ImageLoader } from 'next/image';
-
 export enum FileListItemStatus {
   SUCCESS = 'success',
   ERROR = 'error',
@@ -15,7 +13,7 @@ export interface FileListItemProps {
   imageHeight?: number;
   imageSizes?: string;
   showReUpload?: boolean;
-  imageLoader?: ImageLoader;
+  assetPrefix?: string;
   onClickReUpload?: () => void;
 }
 

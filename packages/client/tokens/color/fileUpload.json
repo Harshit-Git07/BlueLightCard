@@ -1,0 +1,13 @@
+{
+  "color": {
+    "fileUpload": {
+      "border": { "value": "{color.neutral.oxford_blue.400.value}" },
+      "bg": {
+        "base": { "value": "{color.neutral.oxford_blue.100.value}" },
+        "drag": { "value": "{color.neutral.oxford_blue.200.value}" }
+      },
+      "icon": { "value": "{color.primary.duke_blue.base.value}" },
+      "text": { "value": "{color.neutral.oxford_blue.700.value}" }
+    }
+  }
+}

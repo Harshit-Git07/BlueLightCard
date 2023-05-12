@@ -6,6 +6,8 @@ import { faCheckCircle, faExclamationCircle } from '@fortawesome/pro-solid-svg-i
 import { faFile } from '@fortawesome/pro-regular-svg-icons';
 import Link from 'next/link';
 import Image from 'next/image';
+import { cssUtil } from '@/utils/cssUtil';
+import { ASSET_PREFIX } from '@/global-vars';
 
 const FileListItem: FC<FileListItemProps> = ({
   status,
@@ -16,45 +18,44 @@ const FileListItem: FC<FileListItemProps> = ({
   imageWidth,
   imageHeight,
   imageSizes,
-  imageLoader,
+  assetPrefix = ASSET_PREFIX,
 }) => {
   const icon = decider([
     [status === FileListItemStatus.SUCCESS, faCheckCircle],
     [status === FileListItemStatus.ERROR, faExclamationCircle],
   ]);
   const textColor = decider([
-    [status === FileListItemStatus.SUCCESS, 'text-semantic-success-base'],
-    [status === FileListItemStatus.ERROR, 'text-semantic-danger-base'],
+    [status === FileListItemStatus.SUCCESS, 'text-fileListItem-success'],
+    [status === FileListItemStatus.ERROR, 'text-fileListItem-danger'],
   ]);
   const borderColor = decider([
-    [status === FileListItemStatus.SUCCESS, 'border-semantic-success-base'],
-    [status === FileListItemStatus.ERROR, 'border-semantic-danger-base'],
+    [status === FileListItemStatus.SUCCESS, 'border-fileListItem-success'],
+    [status === FileListItemStatus.ERROR, 'border-fileListItem-danger'],
   ]);
+  const containerClasses = cssUtil([
+    'max-w-[700px]',
+    borderColor ?? 'border-fileListItem-border-base',
+    'flex flex-col justify-center w-full rounded-lg border',
+  ]);
+  const wrapperClasses = cssUtil([
+    !!imageSrc ? 'gap-2' : 'gap-4 tablet:flex-row items-center',
+    'flex flex-col py-3 px-5',
+  ]);
+  const prefixIconClasses = cssUtil([textColor ?? '', 'block']);
   return (
-    <div
-      className={`${
-        borderColor ? `${borderColor} ` : 'border-neutrals-type-1-base '
-      }flex flex-col justify-center w-full rounded-lg border`}
-    >
-      <div
-        className={`${
-          !!imageSrc ? 'gap-2 ' : 'gap-4 tablet:flex-row items-center '
-        }flex flex-col py-3 px-5`}
-      >
+    <div className={containerClasses}>
+      <div className={wrapperClasses}>
         <div className="flex items-center gap-4 flex-1">
-          {icon && (
-            <FontAwesomeIcon className={`${textColor ? `${textColor} ` : ''}block`} icon={icon} />
-          )}
+          {icon && <FontAwesomeIcon className={prefixIconClasses} icon={icon} />}
           <FontAwesomeIcon icon={faFile} />
           <span className="flex-1">{name}</span>
         </div>
         {imageSrc && (
-          <div className="flex items-center gap-4 flex-1 pb-2 border-b-2 border-neutrals-type-1-base">
-            <div className="relative pb-[64%] w-full bg-neutrals-type-1-200 text-center">
+          <div className="flex items-center gap-4 flex-1 pb-2 border-b-2 border-fileListItem-border-image">
+            <div className="relative pb-[64%] w-full bg-fileListItem-bg-image text-center">
               <Image
                 className="max-w-full object-contain"
-                loader={imageLoader}
-                src={imageSrc}
+                src={`${assetPrefix}/${imageSrc}`}
                 alt={name}
                 sizes={imageSizes}
                 fill={!!(!imageWidth && !imageHeight)}
@@ -66,12 +67,12 @@ const FileListItem: FC<FileListItemProps> = ({
         )}
         <div className="flex items-center gap-4 flex-1 self-center tablet:justify-end tablet:self-end">
           {fileLink && (
-            <Link className="text-primary-type-1-base no-underline p-0.5" href={fileLink}>
+            <Link className="no-underline p-0.5" href={fileLink}>
               View
             </Link>
           )}
           {showReUpload && (
-            <button className="text-primary-type-1-base transition rounded-md ring-offset-4 hover:opacity-75 focus:ring-2">
+            <button className="text-link transition rounded-md ring-offset-4 hover:opacity-75 focus:ring-2">
               Re-upload
             </button>
           )}

@@ -2,6 +2,7 @@ import { faFileImage } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChangeEventHandler, DragEventHandler, FC, useState } from 'react';
 import { FileUploadMimeTypes, FileUploadProps } from './types';
+import { cssUtil } from '@/utils/cssUtil';
 
 const filterFiles = (
   fileList: FileList,
@@ -87,19 +88,22 @@ const FileUpload: FC<FileUploadProps> = ({
     setIsDragEnter(false);
   };
 
+  const dragClasses = cssUtil([
+    isDragEnter ? 'bg-fileUpload-bg-drag' : 'bg-fileUpload-bg-base',
+    'transition relative w-full content-center border-2 border-fileUpload-border rounded-md',
+  ]);
+
   return (
     <div
-      className={`${
-        isDragEnter ? 'bg-neutrals-type-1-200 ' : 'bg-neutrals-type-1-100 '
-      }transition relative w-full content-center border-2 border-neutrals-type-1-400 rounded-md`}
+      className={dragClasses}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
       <div className="p-5 text-center">
-        <FontAwesomeIcon className="my-4 text-primary-type-1-base" icon={faFileImage} size="2x" />
-        <div className="mb-5">
+        <FontAwesomeIcon className="my-4 text-fileUpload-icon" icon={faFileImage} size="2x" />
+        <div className="mb-5 text-fileUpload-text">
           <p>
             <span className="hidden tablet:inline">Drag your image here or</span>{' '}
             <span>

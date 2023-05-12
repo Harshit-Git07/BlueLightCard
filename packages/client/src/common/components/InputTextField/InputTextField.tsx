@@ -1,6 +1,7 @@
 import { FC, forwardRef } from 'react';
 import { InputTextFieldProps } from './types';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
+import { cssUtil } from '@/utils/cssUtil';
 
 const InputTextField: FC<InputTextFieldProps> = ({
   icon,
@@ -18,15 +19,18 @@ const InputTextField: FC<InputTextFieldProps> = ({
   type = 'text',
   passwordVisible = false,
 }) => {
+  const inputClasses = cssUtil([
+    error
+      ? 'border-inputTextField-danger'
+      : 'border-inputTextField-border focus:border-inputTextField-focus',
+    icon ? 'pl-8' : '',
+    'w-full rounded-md py-2 px-3 border focus:outline-none',
+  ]);
   return (
     <InputFieldWrapper icon={icon} showSuccessState={success} showErrorState={error}>
       <input
         id={name}
-        className={`${
-          error ? 'border-semantic-danger-base ' : 'focus:border-primary-type-1-base '
-        }${
-          icon ? 'pl-8 ' : ''
-        }w-full rounded-md py-2 px-3 border-neutrals-type-1-400 border focus:outline-none`}
+        className={inputClasses}
         value={value}
         type={type === 'password' && passwordVisible ? 'text' : type}
         placeholder={placeholder}

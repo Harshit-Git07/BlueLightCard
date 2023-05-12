@@ -1,0 +1,9 @@
+{
+  "color": {
+    "inputSelectField": {
+        "danger": { "value": "{color.semantic.danger.base.value}" },
+        "border": { "value": "{color.neutral.oxford_blue.200.value}" },
+        "focus": { "value": "{color.primary.duke_blue.base.value}" }
+    }
+  }
+}

@@ -1,11 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import FileListItem from '@/components/FileListItem/FileListItem';
 import { FileListItemStatus } from './types';
-import styled from 'styled-components';
-
-const StyledStoryComponentWrapper = styled.div`
-  max-width: 700px;
-`;
 
 const componentMeta: Meta<typeof FileListItem> = {
   title: 'Component System/File List Item',
@@ -25,9 +20,9 @@ const componentMeta: Meta<typeof FileListItem> = {
 };
 
 const FileListViewTemplate: StoryFn<typeof FileListItem> = (args) => (
-  <StyledStoryComponentWrapper>
+  <div>
     <FileListItem {...args} />
-  </StyledStoryComponentWrapper>
+  </div>
 );
 
 export const Default = FileListViewTemplate.bind({});
@@ -65,8 +60,7 @@ Image.args = {
   status: FileListItemStatus.SUCCESS,
   name: 'file_name.pdf',
   fileLink: '',
-  imageSrc: '/test_id_card.jpeg',
-  imageLoader: ({ src }) => `${host}${src}`,
+  imageSrc: 'assets/test_id_card_blue.jpeg',
   showReUpload: true,
 };
 

@@ -1,0 +1,9 @@
+{
+  "color": {
+    "fieldGroup": {
+        "success": { "value": "{color.semantic.success.base.value}" },
+        "danger": { "value": "{color.semantic.danger.base.value}" },
+        "focus": { "value": "{color.primary.duke_blue.base.value}" }
+    }
+  }
+}

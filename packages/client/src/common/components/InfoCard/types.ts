@@ -3,4 +3,5 @@ export interface InfoCardProps {
   text: string;
   imageSrc?: string;
   imageSizes?: string;
+  assetPrefix?: string;
 }

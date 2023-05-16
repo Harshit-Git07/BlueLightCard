@@ -3,19 +3,14 @@ import { FC } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { FlagsmithProvider } from 'flagsmith/react';
 import flagsmith from 'flagsmith/isomorphic';
-import { BRAND, REGION } from 'global-vars';
 
 import '../styles/globals.css';
-
-const featureToggleState = require(`../../brands/${BRAND}/featureToggleConfigs/${REGION}.json`);
+import { FEATURE_FLAG_ENVIRONMENT_ID } from '@/global-vars';
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <FlagsmithProvider
-      options={{
-        environmentID: featureToggleState.environmentID,
-        state: featureToggleState,
-      }}
+      options={{ environmentID: FEATURE_FLAG_ENVIRONMENT_ID }}
       flagsmith={flagsmith}
     >
       <Component {...pageProps} />

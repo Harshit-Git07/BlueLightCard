@@ -65,30 +65,12 @@ Read more on [Storybook](https://storybook.js.org/) and the [docs](https://story
 ### Brand targeting and internationalising
 There are 3 environment variables available to build targeted distributions i.e build a dist for a brand in the australia region.
 
- - `NEXT_APP_BRAND` - defaults to 'default'
- - `NEXT_APP_REGION` - defaults to 'GB'
- - `NEXT_APP_LANG` - defaults to 'en'
+ - `NEXT_PUBLIC_APP_BRAND` - defaults to 'default'
+ - `NEXT_PUBLIC_APP_REGION` - defaults to 'GB'
+ - `NEXT_PUBLIC_APP_LANG` - defaults to 'en'
 
-The command for building a targeted distribution for a brand in the australia region
-
+To run a build or run the dev server using the above env vars
 ```
-NEXT_APP_BRAND=[brand name] NEXT_APP_REGION=AU npm run build
+NEXT_PUBLIC_APP_BRAND=blc npm run dev
+NEXT_PUBLIC_APP_BRAND=blc NEXT_PUBLIC_APP_REGION=GB npm run dev
 ```
-
-If none of the environment variables are set, then the defaults are used.
-
-To run the app locally for a specific brand, you can do similar to the above but just swap `build` with `dev`
-
-```
-NEXT_APP_BRAND=[brand name] NEXT_APP_REGION=AU npm run dev
-```
-The above environment variables also affect what language translation is used, as each brand has a set locales in them, so for example running the above build command will use the following translation
-```
-[brand name]/locales/en-AU
-```
-If the AU language translation is not available, then the fallback language which is english `en` will be used instead.
-```
-[brand name]/locales/en
-```
-
-**TODO**: Handle the scenario when a brand, region or lang provided doesn't exist.

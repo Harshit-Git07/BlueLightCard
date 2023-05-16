@@ -1,5 +1,5 @@
 import { ThemeVariant } from '@/types/theme';
-import { HTMLAttributes, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 export interface NavItem {
   text: string;

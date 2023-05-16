@@ -1,4 +1,4 @@
-import { Component, ComponentType, FC, PropsWithChildren, ReactElement } from 'react';
+import { ComponentType, PropsWithChildren, ReactElement } from 'react';
 
 interface PageJourneyTabStep {
   id: string;

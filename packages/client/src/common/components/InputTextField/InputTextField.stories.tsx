@@ -1,7 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEnvelope } from '@fortawesome/pro-solid-svg-icons/faEnvelope';
 import { faLock } from '@fortawesome/pro-solid-svg-icons/faLock';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import InputTextField from './InputTextField';
 
 const icons = { faEnvelope, faLock };
@@ -21,7 +21,7 @@ const iconArgSelect = {
   },
 };
 
-const componentMeta: ComponentMeta<typeof InputTextField> = {
+const componentMeta: Meta<typeof InputTextField> = {
   title: 'Component System/Form/InputTextField',
   component: InputTextField,
   argTypes: {
@@ -44,7 +44,7 @@ const componentMeta: ComponentMeta<typeof InputTextField> = {
   },
 };
 
-const InputTextFieldTemplate: ComponentStory<typeof InputTextField> = (args) => {
+const InputTextFieldTemplate: StoryFn<typeof InputTextField> = (args) => {
   return <InputTextField {...args} />;
 };
 

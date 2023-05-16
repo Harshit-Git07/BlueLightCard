@@ -3,7 +3,6 @@ import { ButtonProps } from '@/components/Button/types';
 import { faMinus, faPlus } from '@fortawesome/pro-solid-svg-icons';
 import { render, screen } from '@testing-library/react';
 import renderer from 'react-test-renderer';
-import 'jest-styled-components';
 
 describe('Button component', () => {
   let props: ButtonProps;

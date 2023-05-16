@@ -28,7 +28,7 @@ const PillButtons: FC<PillButtonProps> = ({ pills, disabled }) => {
             ? 'bg-pillButtons-bg-selected text-pillButtons-text-selected'
             : 'bg-pillButtons-bg-base  text-pillButtons-text-base',
           _disabled ? 'opacity-25' : '',
-          'transition rounded-full m-2 py-2 px-4 min-w-btn focus:outline-none',
+          'transition rounded-full m-2 py-2 px-8 min-w-btn focus:outline-none',
         ]);
         return (
           <button

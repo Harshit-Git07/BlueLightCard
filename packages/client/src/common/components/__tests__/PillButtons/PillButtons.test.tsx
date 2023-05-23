@@ -1,13 +1,23 @@
 import PillButtons from '@/components/PillButtons/PillButtons';
 import { PillButtonProps } from '@/components/PillButtons/types';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 
 describe('PillButtons component', () => {
   let props: PillButtonProps;
+  let user: UserEvent;
 
   beforeEach(() => {
-    props = { pills: ['Pill 1', 'Pill 2', 'Pill 3'] };
+    props = {
+      pills: [
+        { text: 'Pill 1', value: 'first-pill' },
+        { text: 'Pill 2', value: 'second-pill' },
+        { text: 'Pill 3', value: 'third-pill' },
+      ],
+    };
+    user = userEvent.setup();
   });
 
   describe('smoke test', () => {
@@ -27,6 +37,54 @@ describe('PillButtons component', () => {
       expect(pill1).toBeInTheDocument();
       expect(pill2).toBeInTheDocument();
       expect(pill3).toBeInTheDocument();
+    });
+  });
+
+  describe('component functionality', () => {
+    it('should select a pill on click', async () => {
+      render(<PillButtons {...props} />);
+
+      const pillButton = screen.getByText(/pill 1/i);
+      await user.click(pillButton);
+
+      expect(pillButton).toHaveClass('bg-pillButtons-bg-selected text-pillButtons-text-selected');
+    });
+  });
+
+  describe('component callbacks', () => {
+    it('should invoke onSelected callback with updated selected values', async () => {
+      const onSelectedMockFn = jest.fn();
+      props.onSelected = onSelectedMockFn;
+
+      render(<PillButtons {...props} />);
+
+      const pillButtonOne = screen.getByText(/pill 1/i);
+      const pillButtonThree = screen.getByText(/pill 3/i);
+      await user.click(pillButtonOne);
+      await user.click(pillButtonThree);
+
+      expect(onSelectedMockFn).toHaveBeenCalledWith(['third-pill', 'first-pill']);
+    });
+  });
+
+  describe('component callbacks', () => {
+    it('should invoke onSelected callback with updated deselected values', async () => {
+      const onSelectedMockFn = jest.fn();
+      props.onSelected = onSelectedMockFn;
+
+      render(<PillButtons {...props} />);
+
+      const pillButtonOne = screen.getByText(/pill 1/i);
+      const pillButtonThree = screen.getByText(/pill 3/i);
+
+      // Simulate selecting the pills
+      await user.click(pillButtonOne);
+      await user.click(pillButtonThree);
+
+      // Simulate deselecting the first pill
+      await user.click(pillButtonOne);
+
+      expect(onSelectedMockFn).toHaveBeenCalledWith(['third-pill']);
     });
   });
 });

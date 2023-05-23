@@ -12,8 +12,11 @@ const Template: StoryFn<typeof PillButtons> = (args) => <PillButtons {...args} /
 export const PillStory = Template.bind({});
 
 PillStory.args = {
-  pills: ['Pill 1', 'Pill 2', 'Pill 3'],
-  disabled: false,
+  pills: [
+    { text: 'Pill 1', value: 'first-pill' },
+    { text: 'Pill 2', value: 'second-pill' },
+    { text: 'Pill 3', value: 'third-pill' },
+  ],
 };
 
 export default ComponentMeta;

@@ -1,4 +1,7 @@
 export type PillButtonProps = {
-  pills: string[];
-  disabled?: boolean;
+  pills: {
+    value: string;
+    text: string;
+  }[];
+  onSelected?: (selected: string[]) => void;
 };

@@ -6,16 +6,13 @@ import { faAngleDown, faAngleUp } from '@fortawesome/pro-regular-svg-icons';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
 import { NavButtonLinkProps, NavLinkProps, NavigationProps } from './types';
 import Icon from '@/components/Icon/Icon';
-import Button from '../Button/Button';
+import Button from '@/components/Button/Button';
 import { ThemeVariant } from '@/types/theme';
 import { cssUtil } from '@/utils/cssUtil';
 import { ASSET_PREFIX } from 'global-vars';
 
 const NavLink: FC<NavLinkProps> = ({ href, children, className }) => {
-  const classes = cssUtil([
-    'border-t border-t-navigation-border laptop:border-none',
-    className ?? '',
-  ]);
+  const classes = cssUtil(['border-t border-t-palette-white laptop:border-none', className ?? '']);
   return (
     <li className={classes}>
       <Link
@@ -33,7 +30,7 @@ const NavButtonLink: FC<NavButtonLinkProps> = ({ href, variant, children, classN
   return (
     <div className={classes}>
       <Link href={href}>
-        <Button variant={variant} alternate={true} slim={true} noFocusRing={true}>
+        <Button variant={variant} slim={true} invertColor={true}>
           {children}
         </Button>
       </Link>

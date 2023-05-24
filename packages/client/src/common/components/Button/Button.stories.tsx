@@ -22,7 +22,7 @@ const iconArgSelect = {
 };
 
 const componentMeta: Meta<typeof Button> = {
-  title: 'Component System/Button Component',
+  title: 'Component System/Button',
   component: Button,
   argTypes: {
     iconLeft: {
@@ -33,22 +33,69 @@ const componentMeta: Meta<typeof Button> = {
       description: 'Icon appears right of the button text',
       ...iconArgSelect,
     },
-    alternate: {
-      description: 'Use the alternate color if set for this variant',
-    },
   },
 };
 
-const Template: StoryFn<typeof Button> = (args) => <Button {...args}>Button</Button>;
+const DefaultTemplate: StoryFn<typeof Button> = (args) => <Button {...args}>Button</Button>;
 
-export const Default = Template.bind({});
+export const Default = DefaultTemplate.bind({});
 
 Default.args = {
   variant: ThemeVariant.Primary,
   disabled: false,
   slim: false,
-  alternate: false,
-  noFocusRing: false,
+  invertColor: false,
+};
+
+export const Primary = DefaultTemplate.bind({});
+
+Primary.args = {
+  variant: ThemeVariant.Primary,
+  disabled: false,
+  slim: false,
+  invertColor: false,
+};
+
+export const Secondary = DefaultTemplate.bind({});
+
+Secondary.args = {
+  variant: ThemeVariant.Secondary,
+  disabled: false,
+  slim: false,
+  invertColor: false,
+};
+
+export const Tertiary = DefaultTemplate.bind({});
+
+Tertiary.args = {
+  variant: ThemeVariant.Tertiary,
+  disabled: false,
+  slim: false,
+  invertColor: false,
+};
+
+const InvertedTemplate: StoryFn<typeof Button> = (args) => (
+  <div className="p-5 bg-palette-primary-base">
+    <Button {...args}>Button</Button>
+  </div>
+);
+
+export const PrimaryInverted = InvertedTemplate.bind({});
+
+PrimaryInverted.args = {
+  variant: ThemeVariant.Primary,
+  disabled: false,
+  slim: false,
+  invertColor: true,
+};
+
+export const SecondaryInverted = InvertedTemplate.bind({});
+
+SecondaryInverted.args = {
+  variant: ThemeVariant.Secondary,
+  disabled: false,
+  slim: false,
+  invertColor: true,
 };
 
 export default componentMeta;

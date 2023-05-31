@@ -1,8 +1,0 @@
-# monorepo ci
-stages:
-  - test
-
-test-job:
-  stage: test
-  script:
-    - echo "Hello World"

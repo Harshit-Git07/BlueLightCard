@@ -1,19 +1,5 @@
 {
-  "eslint.workingDirectories": [
-    {
-        "directory": "packages/api",
-        "changeProcessCWD": true
-    },
-    {
-        "directory": "packages/client",
-        "changeProcessCWD": true
-    }
-  ],
-  "css.validate": false,
-  "less.validate": false,
-  "stylelint.validate": [
-    "css",
-  ],
-  "editor.formatOnSave": false,
-  "eslint.run": "onType"
+  "search.exclude": {
+    "**/.sst": true
+  }
 }

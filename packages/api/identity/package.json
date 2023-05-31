@@ -1,0 +1,19 @@
+{
+  "name": "@blc-mono/identity",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest --passWithNoTests --ci",
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.115",
+    "@types/node": "^20.2.3",
+    "sst": "^2.9.0",
+    "vitest": "^0.31.1"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.28.13",
+    "hono": "^3.2.2"
+  }
+}

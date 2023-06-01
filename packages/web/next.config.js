@@ -1,4 +1,27 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+const CopyPlugin = require('copy-webpack-plugin');
+const { BRAND } = require('./global-vars');
+const { existsSync } = require('fs');
 
-module.exports = nextConfig
+const brandsAssetsFolder = `${__dirname}/brands/${BRAND}/assets`;
+const fallbackAssetsFolder = `${__dirname}/assets`;
+const assetsFolder = existsSync(brandsAssetsFolder) ? brandsAssetsFolder : fallbackAssetsFolder;
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  trailingSlash: true,
+  compiler: {
+    styledComponents: true,
+  },
+  webpack: (config) => {
+    config.plugins.push(
+      new CopyPlugin({
+        patterns: [{ from: assetsFolder, to: 'static/assets' }],
+      })
+    );
+    return config;
+  },
+};
+
+module.exports = nextConfig;

@@ -1,0 +1,10 @@
+{
+  "color": {
+    "infoCard": {
+      "text": {
+        "title": { "value": "{color.neutral.oxford_blue.base.value}" },
+        "p": { "value": "{color.neutral.oxford_blue.700.value}" }
+      }
+    }
+  }
+}

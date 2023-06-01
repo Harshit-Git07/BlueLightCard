@@ -1,0 +1,8 @@
+{
+  "color": {
+    "inputFieldWrapper": {
+        "success": { "value": "{color.semantic.success.base.value}" },
+        "danger": { "value": "{color.semantic.danger.base.value}" }
+    }
+  }
+}

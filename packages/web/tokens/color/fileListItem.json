@@ -1,0 +1,15 @@
+{
+  "color": {
+    "fileListItem": {
+      "success": { "value": "{color.semantic.success.base}" },
+      "danger": { "value": "{color.semantic.danger.base}" },
+      "border": {
+        "base": { "value": "{color.neutral.oxford_blue.200.value}" },
+        "image": { "value": "{color.neutral.oxford_blue.base.value}" }
+      },
+      "bg": {
+        "image": { "value": "{color.neutral.oxford_blue.200.value}" }
+      }
+    }
+  }
+}

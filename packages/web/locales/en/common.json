@@ -1,5 +1,9 @@
 {
   "heading": "Hello UK fallback",
+  "seo": {
+    "title": "Welcome to Blue Light Card",
+    "description": "The UK's largest Emergency Service discount and NHS discount service for UK public sector.  Free to register online and home of the Blue Light Card High Street Card"
+  },
   "button": {
     "text": "White Label"
   }

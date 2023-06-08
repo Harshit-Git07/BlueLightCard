@@ -1,6 +1,6 @@
 import PillButtons from '@/components/PillButtons/PillButtons';
 import { PillButtonProps } from '@/components/PillButtons/types';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
@@ -45,7 +45,7 @@ describe('PillButtons component', () => {
       render(<PillButtons {...props} />);
 
       const pillButton = screen.getByText(/pill 1/i);
-      await user.click(pillButton);
+      await act(() => user.click(pillButton));
 
       expect(pillButton).toHaveClass('bg-pillButtons-bg-selected text-pillButtons-text-selected');
     });
@@ -60,8 +60,8 @@ describe('PillButtons component', () => {
 
       const pillButtonOne = screen.getByText(/pill 1/i);
       const pillButtonThree = screen.getByText(/pill 3/i);
-      await user.click(pillButtonOne);
-      await user.click(pillButtonThree);
+      await act(() => user.click(pillButtonOne));
+      await act(() => user.click(pillButtonThree));
 
       expect(onSelectedMockFn).toHaveBeenCalledWith(['third-pill', 'first-pill']);
     });
@@ -78,11 +78,10 @@ describe('PillButtons component', () => {
       const pillButtonThree = screen.getByText(/pill 3/i);
 
       // Simulate selecting the pills
-      await user.click(pillButtonOne);
-      await user.click(pillButtonThree);
-
+      await act(() => user.click(pillButtonOne));
+      await act(() => user.click(pillButtonThree));
       // Simulate deselecting the first pill
-      await user.click(pillButtonOne);
+      await act(() => user.click(pillButtonOne));
 
       expect(onSelectedMockFn).toHaveBeenCalledWith(['third-pill']);
     });

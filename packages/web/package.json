@@ -12,7 +12,8 @@
     "storybook": "STORYBOOK_ENV=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK_ENV=true storybook build",
     "chromatic": "npx chromatic --project-token=0b8218f55902",
-    "storybook:deploy": "npm run chromatic"
+    "storybook:deploy": "npm run chromatic",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "@fortawesome/fontawesome-pro": "^6.2.1",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
+    "@lhci/cli": "^0.12.0",
     "@storybook/addon-a11y": "^7.0.7",
     "@storybook/addon-actions": "^7.0.7",
     "@storybook/addon-docs": "^7.0.7",

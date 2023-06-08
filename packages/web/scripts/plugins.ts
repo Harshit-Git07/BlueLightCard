@@ -17,7 +17,8 @@ export const addFontStyles = ({ font, baseSrcUrl, addBase }: FontFacesPlugin) =>
             '@font-face': {
               fontFamily,
               fontWeight: styleKey,
-              src: `url(${baseSrcUrl}/${fontStyle.base})`,
+              src: `local('Sans-Serif'), url(${baseSrcUrl}/${fontStyle.base})`,
+              ['font-display']: 'swap',
             },
           });
       });

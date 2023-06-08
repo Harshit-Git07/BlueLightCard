@@ -1,0 +1,17 @@
+name: CI
+on: [push]
+jobs:
+  lighthouseci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: bahmutov/npm-install@v1
+      - name: Build
+        run: NEXT_PUBLIC_APP_BRAND=blc npm run build -w packages/web
+      - run: npm install -g @lhci/cli@0.11.x
+      - run: npm run lhci -w packages/web
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

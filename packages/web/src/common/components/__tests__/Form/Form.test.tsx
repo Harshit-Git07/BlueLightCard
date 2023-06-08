@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as yup from 'yup';
 import '@testing-library/jest-dom';
@@ -119,7 +119,7 @@ describe('Form component', () => {
       ];
       render(<Form {...props} />);
 
-      await user.click(screen.getByRole('button', { name: /Submit/i }));
+      await act(async () => user.click(screen.getByRole('button', { name: /Submit/i })));
 
       expect(onSubmitHandlerMock).toHaveBeenCalled();
     });
@@ -151,7 +151,7 @@ describe('Form component', () => {
       ];
       render(<Form {...props} />);
 
-      await user.click(screen.getByRole('button', { name: /Submit/i }));
+      await act(async () => user.click(screen.getByRole('button', { name: /Submit/i })));
 
       expect(onSubmitHandlerMock).not.toHaveBeenCalled();
     });
@@ -198,7 +198,7 @@ describe('Form component', () => {
       ];
       render(<Form {...props} />);
 
-      await user.click(screen.getByRole('button', { name: /Submit/i }));
+      await act(async () => user.click(screen.getByRole('button', { name: /Submit/i })));
 
       expect(onSubmitHandlerMock.mock.calls[0][0]).toStrictEqual({
         nameFieldControl: 'Hello',
@@ -238,9 +238,11 @@ describe('Form component', () => {
       ];
       render(<Form {...props} />);
 
-      await user.type(screen.getByRole('textbox', { name: /Name/i }), 'Helloooo');
-      await user.type(screen.getByRole('textbox', { name: /Address/i }), 'Addr');
-      await user.click(screen.getByRole('button', { name: /Submit/i }));
+      await act(async () => {
+        await user.type(screen.getByRole('textbox', { name: /Name/i }), 'Helloooo');
+        await user.type(screen.getByRole('textbox', { name: /Address/i }), 'Addr');
+        await user.click(screen.getByRole('button', { name: /Submit/i }));
+      });
 
       expect(onSubmitHandlerMock).not.toHaveBeenCalled();
       expect(screen.getAllByRole('alert')).toHaveLength(2);

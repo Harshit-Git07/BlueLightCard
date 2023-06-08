@@ -7,13 +7,21 @@
     "typecheck": "tsc -noEmit"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.115",
-    "@types/node": "^20.2.3",
-    "sst": "^2.9.0",
-    "vitest": "^0.31.1"
+    "@types/aws-lambda": "8.10.115",
+    "@types/node": "20.2.3",
+    "@types/uuid": "9.0.1",
+    "sst": "2.9.0",
+    "vitest": "0.31.1"
   },
   "dependencies": {
-    "@sinclair/typebox": "^0.28.13",
-    "hono": "^3.2.2"
+    "@sinclair/typebox": "0.28.13",
+    "hono": "3.2.2",
+    "@aws-lambda-powertools/commons": "1.8.0",
+    "@aws-lambda-powertools/logger": "1.7.0",
+    "@aws-lambda-powertools/metrics": "1.7.0",
+    "@aws-lambda-powertools/tracer": "1.7.0",
+    "libphonenumber-js": "1.10.34",
+    "uuid": "9.0.0",
+    "base-64": "1.0.0"
   }
 }

@@ -20,6 +20,7 @@ export default {
       },
     });
     app
+      .stack(Shared, { id: "global" })
       .stack(Identity, { id: "identity" })
       .stack(Offers, { id: "offers" })
       .stack(Web, { id: "web" });

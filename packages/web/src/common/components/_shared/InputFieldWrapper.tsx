@@ -12,8 +12,8 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
   children,
 }) => {
   const color = decider([
-    [showErrorState, 'text-inputFieldWrapper-danger '],
-    [showSuccessState, 'text-inputFieldWrapper-success '],
+    [showErrorState, 'text-palette-danger-base dark:text-palette-danger-dark '],
+    [showSuccessState, 'text-palette-success-base dark:text-palette-success-dark '],
     [!showErrorState && !showSuccessState, ''],
   ]);
   const _iconRight = decider([
@@ -24,7 +24,7 @@ const InputSharedWrapper: FC<InputFieldWrapperProps> = ({
     <div className="relative">
       {icon && (
         <FontAwesomeIcon
-          className="-translate-y-1/2 absolute absolute left-3 top-2/4 z-10"
+          className="-translate-y-1/2 absolute left-3 top-2/4 z-10"
           icon={icon}
           size="sm"
         />

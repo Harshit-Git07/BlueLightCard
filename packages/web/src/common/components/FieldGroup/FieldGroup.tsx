@@ -26,8 +26,8 @@ const FieldGroup: FC<FieldGroupProps> = ({
     [isPasswordStrong, 'Strong'],
   ]);
   const feedbackMessageColor = decider([
-    [invalid || isPasswordWeak, 'text-fieldGroup-danger'],
-    [isPasswordStrong, 'text-fieldGroup-success'],
+    [invalid || isPasswordWeak, 'text-palette-danger-base dark:text-palette-danger-dark'],
+    [isPasswordStrong, 'text-palette-success-base dark:text-palette-success-dark'],
   ]);
   const onIconButtonClick = () => {
     if (onTogglePasswordVisible) {
@@ -37,12 +37,15 @@ const FieldGroup: FC<FieldGroupProps> = ({
   return (
     <div className="mb-3">
       <div className="flex mb-2">
-        <label className="flex-1" htmlFor={controlId}>
+        <label
+          className="text-font-neutral-base dark:text-font-neutral-dark flex-1"
+          htmlFor={controlId}
+        >
           {labelText}
         </label>
         {password && (
           <FontAwesomeIcon
-            className="mt-1.5 mr-3"
+            className="mt-1.5 dark:text-palette-neutral-dark mr-3"
             icon={passwordToggleIcon}
             role="button"
             size="sm"
@@ -52,17 +55,19 @@ const FieldGroup: FC<FieldGroupProps> = ({
           />
         )}
       </div>
-      <div className="mb-1.5">
+      <div className="text-font-neutral-base mb-1.5">
         {children}
         {message && (
           <div className={`${feedbackMessageColor}`}>
             {_showPasswordCriteria ? (
               <div>
-                <small>{passwordStrength}</small>
+                <small className="">{passwordStrength}</small>
                 <ul className="mt-3">
                   {message.map((msg, index) => {
                     const liClasses = cssUtil([
-                      msg.invalid ? 'text-fieldGroup-danger' : 'text-fieldGroup-success',
+                      msg.invalid
+                        ? 'text-palette-danger-base dark:text-palette-danger-dark'
+                        : 'text-palette-success-base dark:text-palette-success-dark',
                       'flex items-center gap-1.5',
                     ]);
                     return (

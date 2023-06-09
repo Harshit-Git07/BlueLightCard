@@ -1,8 +1,11 @@
 {
   "color": {
     "background": {
-      "button": {
-        "primary": {
+      "base": { "value": "{color.shade.neutral.200.value}" },
+      "dark": { "value": "{color.shade.neutral.50.value}" },
+      "cta": {
+        "standard": {
+          "primary": {
           "enabled": {
             "base": { "value": "{color.palette.primary.base.value}" },
             "dark": { "value": "{color.shade.vividskyblue.500.value}" },
@@ -48,6 +51,27 @@
                 "amount": 0.2
               }]
             }
+          }
+        }
+      },
+        "toggle": {
+          "enabled": {
+            "base": { "value": "{color.shade.neutral.200.value}" },
+            "dark":{ "value": "{color.shade.neutral.200.value}" }
+          },
+          "hover": {
+            "base": { "value": "{color.shade.dukeblue.50.value}" },
+            "dark": {
+              "value": "{color.shade.vividskyblue.400.value}",
+              "modify": [{
+                "type": "alpha",
+                "amount": 0.2
+              }]
+            }
+          },
+          "selected": {
+            "base": { "value": "{color.palette.primary.base.value}" },
+            "dark":{ "value": "{color.shade.vividskyblue.400.value}" } 
           }
         }
       }

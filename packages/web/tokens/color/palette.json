@@ -26,6 +26,14 @@
           "dark": { "value": "{color.shade.neutral.800.value}" }
         }
       },
+      "tertiary": {
+        "base": { "value": "{color.shade.dukeblue.700.value}" },
+        "dark": { "value": "{color.shade.dukeblue.400.value}" },
+        "on": {
+          "base": { "value": "{color.shade.neutral.100.value}" },
+          "dark": { "value": "{color.shade.neutral.900.value}" }
+        }
+      },
       "info": {
         "base": { "value": "{color.shade.blue.400.value}" },
         "dark": { "value": "{color.shade.blue.200.value}" },

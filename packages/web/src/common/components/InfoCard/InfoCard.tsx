@@ -24,9 +24,13 @@ const InfoCard: FC<InfoCardProps> = ({
           />
         </div>
       )}
-      <div className="p-4">
-        <h4 className="text-xl mb-2 font-semibold text-center text-infoCard-text-title">{title}</h4>
-        <p className="mb-2 text-center text-infoCard-text-p">{text}</p>
+      <div className="bg-palette-white">
+        <h4 className="text-xl py-4 font-semibold text-center text-font-neutral-base dark:text-font-neutral-base">
+          {title}
+        </h4>
+        <p className="pb-4 text-center text-palette-neutral-base dark:text-palette-neutral-base">
+          {text}
+        </p>
       </div>
     </div>
   );

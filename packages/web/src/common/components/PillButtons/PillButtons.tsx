@@ -34,8 +34,8 @@ const PillButtons: FC<PillButtonProps> = ({ pills, onSelected }) => {
 
         const classes = cssUtil([
           selected
-            ? 'bg-pillButtons-bg-selected text-pillButtons-text-selected'
-            : 'bg-pillButtons-bg-base  text-pillButtons-text-base',
+            ? 'bg-background-cta-toggle-selected-base dark:bg-background-cta-toggle-selected-dark text-font-cta-toggle-selected-base dark:text-font-cta-toggle-selected-dark'
+            : 'bg-background-cta-toggle-enabled-base dark:bg-background-cta-toggle-enabled-dark text-font-cta-toggle-enabled-base dark:text-font-cta-toggle-enabled-dark',
           'transition rounded-full m-2 py-2 px-8 min-w-btn focus:outline-none',
         ]);
         return (

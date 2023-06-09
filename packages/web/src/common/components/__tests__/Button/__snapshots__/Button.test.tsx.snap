@@ -2,7 +2,7 @@
 
 exports[`Button component snapshot Test renders a button with the correct icon side "left" 1`] = `
 <button
-  className="py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-button-primary-base dark:text-font-button-primary-dark hover:bg-background-button-primary-hover-base dark:hover:bg-background-button-primary-hover-dark focus:outline-outline-button-base dark:focus:outline-outline-button-dark bg-background-button-primary-enabled-base dark:bg-background-button-primary-enabled-dark border-transparent "
+  className="py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent "
   type="button"
 >
   <svg
@@ -28,7 +28,7 @@ exports[`Button component snapshot Test renders a button with the correct icon s
 
 exports[`Button component snapshot Test renders a button with the correct icon side "right" 1`] = `
 <button
-  className="py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-button-primary-base dark:text-font-button-primary-dark hover:bg-background-button-primary-hover-base dark:hover:bg-background-button-primary-hover-dark focus:outline-outline-button-base dark:focus:outline-outline-button-dark bg-background-button-primary-enabled-base dark:bg-background-button-primary-enabled-dark border-transparent "
+  className="py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent "
   type="button"
 >
   Button

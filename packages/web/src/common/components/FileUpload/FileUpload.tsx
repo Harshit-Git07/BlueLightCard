@@ -89,8 +89,10 @@ const FileUpload: FC<FileUploadProps> = ({
   };
 
   const dragClasses = cssUtil([
-    isDragEnter ? 'bg-fileUpload-bg-drag' : 'bg-fileUpload-bg-base',
-    'transition relative w-full content-center border-2 border-fileUpload-border rounded-md',
+    isDragEnter
+      ? 'bg-palette-neutral-on-base dark:bg-palette-on-dark'
+      : 'bg-background-base dark:bg-background-dark',
+    'transition relative w-full content-center border-2 border-border-card-base rounded-md',
   ]);
 
   return (
@@ -102,10 +104,12 @@ const FileUpload: FC<FileUploadProps> = ({
       onDrop={onDrop}
     >
       <div className="p-5 text-center">
-        <FontAwesomeIcon className="my-4 text-fileUpload-icon" icon={faFileImage} size="2x" />
-        <div className="mb-5 text-fileUpload-text">
+        <FontAwesomeIcon className="my-4 text-palette-primary-base" icon={faFileImage} size="2x" />
+        <div className="mb-5 text-palette-neutral-base">
           <p>
-            <span className="hidden tablet:inline">Drag your image here or</span>{' '}
+            <span className="hidden tablet:inline text-font-neutral-base">
+              Drag your image here or
+            </span>{' '}
             <span>
               <label className="underline text-link cursor-pointer" htmlFor="file-upload">
                 upload a file
@@ -120,11 +124,11 @@ const FileUpload: FC<FileUploadProps> = ({
               />
             </span>
           </p>
-          <p>
+          <p className="text-font-neutral-base">
             It must be a {mimeTypesString} and no larger than {maxUploadSizeMb}mb
           </p>
         </div>
-        <p className="opacity-50">{description}</p>
+        <p className="opacity-75">{description}</p>
       </div>
     </div>
   );

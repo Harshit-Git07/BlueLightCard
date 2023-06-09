@@ -25,16 +25,25 @@ const FileListItem: FC<FileListItemProps> = ({
     [status === FileListItemStatus.ERROR, faExclamationCircle],
   ]);
   const textColor = decider([
-    [status === FileListItemStatus.SUCCESS, 'text-fileListItem-success'],
-    [status === FileListItemStatus.ERROR, 'text-fileListItem-danger'],
+    [
+      status === FileListItemStatus.SUCCESS,
+      'text-palette-success-base dark:text-palette-success-dark',
+    ],
+    [status === FileListItemStatus.ERROR, 'text-palette-danger-base dark:text-palette-danger-dark'],
   ]);
   const borderColor = decider([
-    [status === FileListItemStatus.SUCCESS, 'border-fileListItem-success'],
-    [status === FileListItemStatus.ERROR, 'border-fileListItem-danger'],
+    [
+      status === FileListItemStatus.SUCCESS,
+      'border-palette-success-base dark:border-palette-success-dark',
+    ],
+    [
+      status === FileListItemStatus.ERROR,
+      'border-palette-danger-base dark:border-palette-danger-dark',
+    ],
   ]);
   const containerClasses = cssUtil([
     'max-w-[700px]',
-    borderColor ?? 'border-fileListItem-border-base',
+    borderColor ?? 'border-border-card-base dark:border-border-card-dark',
     'flex flex-col justify-center w-full rounded-lg border',
   ]);
   const wrapperClasses = cssUtil([
@@ -51,8 +60,8 @@ const FileListItem: FC<FileListItemProps> = ({
           <span className="flex-1">{name}</span>
         </div>
         {imageSrc && (
-          <div className="flex items-center gap-4 flex-1 pb-2 border-b-2 border-fileListItem-border-image">
-            <div className="relative pb-[64%] w-full bg-fileListItem-bg-image text-center">
+          <div className="flex items-center gap-4 flex-1 pb-2 border-b-2 border-border-card-base dark:border-border-card-dark">
+            <div className="relative pb-[64%] w-full text-center">
               <Image
                 className="max-w-full object-contain"
                 src={`${assetPrefix}/${imageSrc}`}
@@ -68,12 +77,12 @@ const FileListItem: FC<FileListItemProps> = ({
         )}
         <div className="flex items-center gap-4 flex-1 self-center tablet:justify-end tablet:self-end">
           {fileLink && (
-            <Link className="no-underline p-0.5" href={fileLink}>
+            <Link className="no-underline dark:text-palette-primary-dark p-0.5" href={fileLink}>
               View
             </Link>
           )}
           {showReUpload && (
-            <button className="text-link transition rounded-md ring-offset-4 hover:opacity-75 focus:ring-2">
+            <button className="text-link dark:text-palette-primary-dark transition rounded-md ring-offset-4 hover:opacity-75 focus:ring-2">
               Re-upload
             </button>
           )}

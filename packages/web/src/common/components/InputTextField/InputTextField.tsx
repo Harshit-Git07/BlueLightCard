@@ -21,8 +21,8 @@ const InputTextField: FC<InputTextFieldProps> = ({
 }) => {
   const inputClasses = cssUtil([
     error
-      ? 'border-inputTextField-danger'
-      : 'border-inputTextField-border focus:border-inputTextField-focus',
+      ? 'border-border-error dark:border-palette-danger-dark'
+      : 'border-border-base dark:border-palette-neutral-dark focus:border-border-focus focus:dark:border-border-dark',
     icon ? 'pl-8' : '',
     'w-full rounded-md py-2 px-3 border focus:outline-none',
   ]);

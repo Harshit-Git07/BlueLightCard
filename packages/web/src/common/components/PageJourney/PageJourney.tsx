@@ -55,23 +55,32 @@ const PageJourney: FC<PageJourneyProps> = ({
   return (
     <div>
       <div className="flex gap-2 items-center mb-1.5 pb-2 tablet:hidden">
-        {mobileHeaderStartSlot && <div className="mr-3 pl-3">{mobileHeaderStartSlot}</div>}
-        <span>
+        {mobileHeaderStartSlot && (
+          <div className="text-palette-primary-base dark:text-palette-primary-dark mr-3 pl-3">
+            {mobileHeaderStartSlot}
+          </div>
+        )}
+        <span className="text-font-neutral-base dark:text-font-neutral-dark">
           {currentTabStep.tabIndex} of {totalTabsSize}
         </span>
-        <span className="font-semibold">{currentTabStep.tabLabel}</span>
+        <span className="font-semibold text-font-neutral-base dark:text-font-neutral-dark">
+          {currentTabStep.tabLabel}
+        </span>
         {mobileHeaderEndSlot && <div className="mr-3 pl-3">{mobileHeaderEndSlot}</div>}
       </div>
       <ul className="flex gap-3 mb-4 laptop:gap-6 tablet:gap-4">
         {tabs.map((tab, index) => (
-          <li className="w-full whitespace-nowrap overflow-hidden" key={tab.id}>
+          <li
+            className="w-full whitespace-nowrap text-font-neutral-base dark:text-font-neutral-dark overflow-hidden"
+            key={tab.id}
+          >
             <div className="hidden tablet:flex tablet:gap-2 mb-1.5">
               <span>{index + 1}.</span>
-              <span className="font-semibold">{tab.label}</span>
+              <span className="font-semibold dark:text-font-neutral-dark">{tab.label}</span>
             </div>
-            <div className="relative h-1.5 tablet:h-2 w-full bg-pageJourney-bg-progress-base">
+            <div className="relative h-1.5 tablet:h-2 w-full bg-background-base dark:bg-background-dark">
               <div
-                className="h-full w-full bg-pageJourney-bg-progress-loaded"
+                className="h-full w-full bg-palette-primary-base dark:bg-palette-primary-dark"
                 style={{ width: `${calculateProgress[tab.id] ?? 0}%` }}
                 role="progressbar"
                 aria-valuenow={calculateProgress[tab.id] ?? 0}

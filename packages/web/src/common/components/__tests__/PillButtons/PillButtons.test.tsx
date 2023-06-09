@@ -47,7 +47,9 @@ describe('PillButtons component', () => {
       const pillButton = screen.getByText(/pill 1/i);
       await act(() => user.click(pillButton));
 
-      expect(pillButton).toHaveClass('bg-pillButtons-bg-selected text-pillButtons-text-selected');
+      expect(pillButton).toHaveClass(
+        'bg-background-cta-toggle-selected-base dark:bg-background-cta-toggle-selected-dark text-font-cta-toggle-selected-base dark:text-font-cta-toggle-selected-dark'
+      );
     });
   });
 

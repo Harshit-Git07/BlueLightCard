@@ -1,11 +1,21 @@
 {
   "color": {
     "border": {
-      "button": {
-        "secondary": {
-          "base": { "value": "{color.palette.primary.base.value}" },
-          "dark": { "value": "{color.shade.vividskyblue.500.value}" },
-          "invert": { "value": "{color.palette.primary.on.base.value}" }
+      "card": {
+        "base": { "value": "{color.shade.oxfordblue.200.value}" },
+        "dark": { "value": "{color.palette.neutral.dark.value}" }
+      },
+        "focus": { "value": "{color.palette.primary.base.value}" },
+        "base": { "value": "{color.palette.neutral.base.value}" },
+        "dark": { "value": "{color.palette.primary.dark.value}" },
+        "error": { "value": "{color.palette.danger.base.value}" },
+      "cta": {
+        "standard":{
+          "secondary": {
+            "base": { "value": "{color.palette.primary.base.value}" },
+            "dark": { "value": "{color.shade.vividskyblue.500.value}" },
+            "invert": { "value": "{color.palette.primary.on.base.value}" }
+          }
         }
       }
     }

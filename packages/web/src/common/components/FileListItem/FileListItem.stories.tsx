@@ -20,7 +20,7 @@ const componentMeta: Meta<typeof FileListItem> = {
 };
 
 const FileListViewTemplate: StoryFn<typeof FileListItem> = (args) => (
-  <div>
+  <div className="text-font-neutral-base dark:text-font-neutral-dark">
     <FileListItem {...args} />
   </div>
 );

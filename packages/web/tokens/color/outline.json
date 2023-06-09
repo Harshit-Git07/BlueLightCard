@@ -1,10 +1,13 @@
 {
   "color": {
     "outline": {
-      "button": {
-        "base": { "value": "{color.shade.vividskyblue.500.value}" },
-        "dark": { "value": "{color.palette.secondary.base.value}" }
+      "cta":{
+        "standard": {
+          "base": { "value": "{color.shade.vividskyblue.500.value}" },
+          "dark": { "value": "{color.palette.secondary.base.value}" }
+        }
       }
+      
     }
   }
 }

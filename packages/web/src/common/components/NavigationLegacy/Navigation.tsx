@@ -12,11 +12,14 @@ import { cssUtil } from '@/utils/cssUtil';
 import { ASSET_PREFIX } from 'global-vars';
 
 const NavLink: FC<NavLinkProps> = ({ href, children, className }) => {
-  const classes = cssUtil(['border-t border-t-palette-white laptop:border-none', className ?? '']);
+  const classes = cssUtil([
+    'border-t border-t-palette-tertiary-on-base dark:border-t-palette-tertiary-on-dark laptop:border-none',
+    className ?? '',
+  ]);
   return (
     <li className={classes}>
       <Link
-        className="block p-3 laptop:px-0 text-navigation-navlink hover:underline hover:opacity-100"
+        className="block p-3 laptop:px-0 text-palette-primary-on-base dark:text-palette-primary-on-dark hover:underline hover:opacity-100"
         href={href}
       >
         {children}
@@ -64,7 +67,7 @@ const Navigation: FC<NavigationProps> = ({
 
   return (
     <div className="relative">
-      <div className="bg-navigation-bg-base py-3.5 px-3">
+      <div className="bg-palette-primary-base dark:bg-palette-primary-dark py-3.5 px-3">
         <div className="laptop:container laptop:mx-auto flex items-center">
           <div className="flex-1 mr-2">
             <Link
@@ -82,7 +85,7 @@ const Navigation: FC<NavigationProps> = ({
           <nav
             className={`${
               navExpanded ? 'max-h-[400px] ' : 'max-h-0 '
-            } w-full laptop:w-auto overflow-hidden transition-[max-height] duration-700 absolute left-0 top-full laptop:mr-2 laptop:relative laptop:top-0 laptop:max-h-none laptop:px-3.5 border-b border-b-navigation-border bg-navigation-bg-mobilenav-base laptop:bg-transparent laptop:border-b-0`}
+            } w-full laptop:w-auto overflow-hidden transition-[max-height] duration-700 absolute left-0 top-full laptop:mr-2 laptop:relative laptop:top-0 laptop:max-h-none laptop:px-3.5 bg-palette-primary-base dark:bg-palette-primary-dark laptop:bg-palette-transparent laptop:border-b-0`}
           >
             <div className="laptop:container laptop:mx-auto">
               <ul className="laptop:flex laptop:gap-6">
@@ -126,7 +129,7 @@ const Navigation: FC<NavigationProps> = ({
             <div className="relative z-10">
               <button
                 title={selectedCountry.name}
-                className="flex gap-3 w-full items-center bg-navigation-bg-selector p-2.5 rounded-lg text-white"
+                className="flex gap-3 w-full items-center dark:bg-palette-tertiary-dark bg-palette-tertiary-base p-2.5 rounded-lg text-palette-tertiary-on-base dark:text-palette-tertiary-on-dark"
                 onClick={handleSelectorClick}
               >
                 <div className="w-[30px] h-[15px] tablet:w-[35px] tablet:h-[20px]">
@@ -139,11 +142,11 @@ const Navigation: FC<NavigationProps> = ({
                   .filter((country) => country.key !== countryKey)
                   .map((country) => (
                     <li
-                      className="bg-navigation-bg-selector p-2.5 rounded-lg text-white"
+                      className="dark:bg-palette-tertiary-dark bg-palette-tertiary-base p-2.5 rounded-lg"
                       key={country.key}
                     >
                       <Link
-                        className="flex gap-3 items-center text-white"
+                        className="flex gap-3 items-center text-palette-white"
                         href={country.link}
                         title={country.name}
                       >
@@ -157,10 +160,10 @@ const Navigation: FC<NavigationProps> = ({
             </div>
           )}
           <button
-            className="block laptop:hidden px-3 py-2 focus:bg-navigation-bg-mobilenav-btnfocus"
+            className="block laptop:hidden px-3 py-2 rounded-md focus:bg-palette-tertiary-base focus:dark:bg-palette-tertiary-dark text-palette-tertiary-on-base dark:text-palette-tertiary-on-dark"
             onClick={handleMobileNavClick}
           >
-            <FontAwesomeIcon icon={faBars} size="lg" color="white" />
+            <FontAwesomeIcon icon={faBars} size="lg" />
           </button>
         </div>
       </div>

@@ -20,6 +20,12 @@ module.exports = {
     to: '/assets'
   }],
   webpackFinal: async config => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      stream: false,
+      zlib: false,
+    };
     config.resolve.alias = {
       "@/components": resolve(__dirname, "../src/common/components"),
       "@/hooks": resolve(__dirname, "../src/common/hooks"),

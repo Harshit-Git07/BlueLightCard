@@ -1,0 +1,4 @@
+{
+  "ssm:account=314658777488:parameterName=/identity/staging/blc-old/api/url:region=eu-west-2": "https://www.kchahdedevelop.bluelightcard.tech",
+  "ssm:account=314658777488:parameterName=/identity/staging/blc-old/api/auth:region=eu-west-2": "AQICAHiv7fPH5KpqY6uiweO2Xbehpr63IpvgFueB927606C/mQFZh1UbftLasHahuZMZfxslAAAAzzCBzAYJKoZIhvcNAQcGoIG+MIG7AgEAMIG1BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDJrVonmbeq5z1CGzXwIBEICBh1+Lp04ZWuO94kYgsDCB5axgLx5dpO7dPI1BF+y1Fuo9BmEBaYw8Ftt9A3M//r1MtYIARMPNzoDEEooINDL/D2r/fQ7ePqMoYi1jptWHmVetMEDuzIdDNGFCGr2nP4vE6KMJLdU/spEQVXxrCMXlyYbtIi4UjyeIXxk9IavejCFYoA7khIp1sw=="
+}

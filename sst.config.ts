@@ -26,3 +26,8 @@ export default {
       .stack(Web, { id: "web" });
   },
 } satisfies SSTConfig;
+
+
+//event bridge
+//cognito
+//DB

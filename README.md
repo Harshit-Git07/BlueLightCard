@@ -29,3 +29,11 @@ To teardown this environment run (this will remove everything except data storag
 ```
 npm run remove
 ```
+
+## Test
+
+```
+npm run test -w packages/api/{package folder name}
+```
+
+To run tests with watch

@@ -1,13 +1,17 @@
 import { StackContext, Api } from "sst/constructs";
 
 export function Offers({ stack }: StackContext) {
-  const api = new Api(stack, "offers", {
+  const offersApi = new Api(stack, "offers", {
     routes: {
-      "GET /": "packages/api/offers/src/lambda.handler",
+      "GET /": "packages/api/offers/src/offers/lambda.handler",
     },
   });
 
   stack.addOutputs({
-    OffersApiEndpoint: api.url,
+    OffersApiEndpoint: offersApi.url,
   });
+
+  return {
+    offersApi: offersApi
+  }
 }

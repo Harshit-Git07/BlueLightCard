@@ -19,4 +19,5 @@ export interface InputFieldSharedProps<E, V = string> {
   required?: boolean;
   _ref?: ForwardedRef<unknown>;
   onChange?: ChangeEventHandler<E>;
+  selectedByDefault?: boolean;
 }

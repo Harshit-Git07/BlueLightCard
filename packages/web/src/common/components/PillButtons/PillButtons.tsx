@@ -27,7 +27,7 @@ const PillButtons: FC<PillButtonProps> = ({ pills, onSelected }) => {
   };
 
   return (
-    <div role="listbox" aria-multiselectable="true">
+    <div>
       {pills.map((pill, index) => {
         const key = `key_${index}`;
         const selected = isSelected.includes(pill.value);
@@ -39,7 +39,12 @@ const PillButtons: FC<PillButtonProps> = ({ pills, onSelected }) => {
           'transition rounded-full m-2 py-2 px-8 min-w-btn focus:outline-none',
         ]);
         return (
-          <button key={key} onClick={() => toggleSelection(pill.value)} className={classes}>
+          <button
+            key={key}
+            onClick={() => toggleSelection(pill.value)}
+            className={classes}
+            aria-pressed={selected}
+          >
             {pill.text}
           </button>
         );

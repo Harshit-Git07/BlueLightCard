@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.0.0 (2023-06-15)
+
+
+### Features
+
+* Add new actions ([#54](https://github.com/bluelightcard/BlueLightCard-2.0/issues/54)) ([a76bcf5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a76bcf589553cc51d331462ff3708cd84627e566))
+* added lighthouse ci ([#44](https://github.com/bluelightcard/BlueLightCard-2.0/issues/44)) ([3fbfca9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3fbfca925e0e6692f52a842f850378626fa72d6c))
+* feature identity/ti 88 button ([#64](https://github.com/bluelightcard/BlueLightCard-2.0/issues/64)) ([7917330](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7917330ea40a2927bcf2ae3b8c8896cd8a168299))
+* **web:** infocard component created ([#81](https://github.com/bluelightcard/BlueLightCard-2.0/issues/81)) ([84ee2b1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/84ee2b138c71bd5484bb664ca8dafb789857c5e0))
+* **web:** inputradiobutton added to identity/component ([#63](https://github.com/bluelightcard/BlueLightCard-2.0/issues/63)) ([b3bc438](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b3bc438fcf9aa713f77a09dc9de8e46dede1176c))
+* **web:** inputselectfield component created ([#83](https://github.com/bluelightcard/BlueLightCard-2.0/issues/83)) ([1c8e193](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1c8e19397eecae925672e13abd8256d4bce89446))
+
+
+### Other Changes
+
+* add dark mode for components ([#68](https://github.com/bluelightcard/BlueLightCard-2.0/issues/68)) ([04fa7c0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/04fa7c0b68e43e33ee029b74fdb6ca9481514c77))
+* **deps:** bump next from 13.0.3 to 13.4.4 ([#66](https://github.com/bluelightcard/BlueLightCard-2.0/issues/66)) ([cdf478c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cdf478c617e0795f562a0ad5cfe041217063281d))
+* **deps:** bump typescript from 4.8.4 to 4.9.5 ([#65](https://github.com/bluelightcard/BlueLightCard-2.0/issues/65)) ([2da5a3c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2da5a3ce80dc38357b671e38d9e89531f7c17bb9))
+* enhance pill buttons accessibility ([#76](https://github.com/bluelightcard/BlueLightCard-2.0/issues/76)) ([e7e5ffc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e7e5ffc0f5dec2a254872dccdf0fd8f94b2f3d1d))
+* fix ([#74](https://github.com/bluelightcard/BlueLightCard-2.0/issues/74)) ([5831a1c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5831a1c7f45bbe852903f386a4386454909f1b07))
+* revert ([#59](https://github.com/bluelightcard/BlueLightCard-2.0/issues/59)) ([b88de92](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b88de929ceb63e43a30c40f983cd7585fb735e04))
+
 ## 1.0.0 (2023-03-30)
 
 

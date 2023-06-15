@@ -178,7 +178,7 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   release-blcuk:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release BLC UK
     environment: Production
     runs-on: ubuntu-latest
@@ -203,7 +203,7 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   release-blcaus:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release BLC AU
     environment: Production
     runs-on: ubuntu-latest
@@ -228,7 +228,7 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   release-dds:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release DDS
     environment: Production
     runs-on: ubuntu-latest

@@ -98,6 +98,7 @@ jobs:
           package-name: bluelightcard/web
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
 
+  # TODO - Feels a bit too repetitive, could do with templating this better so deployment jobs are more condense and less repetitive
   staging-blcuk:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy BLC UK Staging
@@ -176,9 +177,9 @@ jobs:
           branch: 'staging'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
-  release:
+  release-blcuk:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
-    name: Release
+    name: Release BLC UK
     environment: Production
     runs-on: ubuntu-latest
     needs:
@@ -189,7 +190,66 @@ jobs:
       - staging-dds
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy
-        run: echo 'Deploy to production coming soon.'
+      - uses: bahmutov/npm-install@v1
+      - name: Build
+        run: NEXT_PUBLIC_APP_BRAND=blc npm run build -w packages/web
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'blc-uk'
+          directory: packages/web/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  release-blcaus:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
+    name: Release BLC AU
+    environment: Production
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - changelog
+      - staging-blcuk
+      - staging-blcaus
+      - staging-dds
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bahmutov/npm-install@v1
+      - name: Build
+        run: NEXT_PUBLIC_APP_BRAND=blc npm run build -w packages/web
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'blc-au'
+          directory: packages/web/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  release-dds:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.release_candidate.outputs.releases_created
+    name: Release DDS
+    environment: Production
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - changelog
+      - staging-blcuk
+      - staging-blcaus
+      - staging-dds
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bahmutov/npm-install@v1
+      - name: Build
+        run: NEXT_PUBLIC_APP_BRAND=dds npm run build -w packages/web
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'blc-dds'
+          directory: packages/web/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
 

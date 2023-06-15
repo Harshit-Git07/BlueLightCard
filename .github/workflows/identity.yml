@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - ./packages/api/identity/
+      - ./stacks/
       - .github/workflows/identity.yml
       - package-lock.json
       - sst.config.ts

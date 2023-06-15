@@ -1,6 +1,10 @@
-import {StackContext, Api, Cognito, Table} from "sst/constructs";
+import {StackContext, Api, Cognito, Table, use, Queue} from "sst/constructs";
 import {StringAttribute} from "aws-cdk-lib/aws-cognito";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
+import {Shared} from "../../../stacks/stack";
+import { passwordResetRule } from './src/eventRules/passwordResetRule';
+import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
+import { emailUpdateRule } from "src/eventRules/emailUpdateRule";
 
 export function Identity({ stack }: StackContext) {
   //set tag service identity to all resources
@@ -74,4 +78,16 @@ export function Identity({ stack }: StackContext) {
     CognitoUserPool: cognito.userPoolId,
     Table: table.tableName
   });
+
+
+  //add dead letter queue 
+  const dlq = new Queue(stack, "DLQ");
+
+
+  //add event bridge rules
+  const { bus } = use(Shared);
+  bus.addRules(stack, passwordResetRule(cognito.userPoolId,dlq.queueUrl));
+  bus.addRules(stack, emailUpdateRule(cognito.userPoolId,dlq.queueUrl));
+  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl)); 
+  
 }

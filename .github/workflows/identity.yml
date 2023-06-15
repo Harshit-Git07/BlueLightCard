@@ -104,7 +104,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: eu-west-2
-          role-to-assume: arn:aws:iam::676719682338:role/github-actions-role
+          role-to-assume: arn:aws:iam::676719682338:role/github-action-role
       - uses: actions/setup-node@v3
         with:
           node-version: 18

@@ -85,6 +85,9 @@ jobs:
       - name: Deploy
         run: npx sst deploy global --stage staging && npx sst deploy identity --stage staging
   release:
+    permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Release
     environment: Production
@@ -101,7 +104,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: eu-west-2
-          role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+          role-to-assume: arn:aws:iam::676719682338:role/github-actions-role
       - uses: actions/setup-node@v3
         with:
           node-version: 18

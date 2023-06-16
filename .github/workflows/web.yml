@@ -223,7 +223,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'blc-au'
+          projectName: 'blc-aus'
           directory: packages/web/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
@@ -248,7 +248,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'blc-dds'
+          projectName: 'dds'
           directory: packages/web/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 

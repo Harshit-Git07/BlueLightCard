@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: "Eligibility API"
+servers:
+  - url: "http://www.bluelightcard.co.uk/eligibility"
+paths:
+  /{brand}/organisation:
+    get:
+      summary: "Get a list of organisations for a specific brand."
+      parameters:
+        - name: brand
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: retired
+          in: query
+          description: "Optional parameter to filter organisations that we allow retired members for"
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                properties:
+                  organisations:
+                    items:
+                      properties:
+                        organisationId:
+                          type: integer
+                        organisationName:
+                          type: string
+                example:
+                  organisations:
+                    - organisationId: ORGANISATION#1
+                      organisationName: NHS
+                    - organisationId: ORGANISATION#2
+                      organisationName: Police
+                    - organisationId: ORGANISATION#3
+                      organisationName: RNLI
+        '400':
+          description: "Bad request"
+        '404':
+          description: "Not found"
+
+  /{brand}/organisation/{organisationId}:
+    get:
+      summary: "Get more detailed information for an organisation including a list of Id's accepted and a list of employers for that organisation."
+      parameters:
+        - name: brand
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: organisationId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "Organisation Id."
+      responses:
+        '200':
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                properties:
+                  organisation:
+                    example: "NHS"
+                  idAccepted:
+                    items:
+                      type: string
+                    example:
+                      - method: "TrustedDomain"
+                        message: "Abbey Hospital"
+                      - method: "Payslip"
+                        message: "I have a payslip from the last 3 months that I can upload a clear photo of"
+                      - method: "NHSCard"
+                        message: "I have access to a valid NHS card"
+                  employersList:
+                    items:
+                      properties:
+                        employer:
+                          type: string
+                        idAccepted:
+                          items:
+                            type: string
+                    example:
+                      - employerId: "EMPLOYER#1"
+                        employer: "Abbey Hospital"
+                        idAccepted: []
+                      - employerId: "EMPLOYER#2"
+                        employer: "Health Education England"
+                        idAccepted: [{"method": "departmentCard", "message" : "I have access to a valid department card"}]
+                      - employerId: "EMPLOYER#3"
+                        employer: "Queen Elizabeth Hospital"
+                        idAccepted: []
+        '400':
+          description: "Bad request"
+        '404':
+          description: "Not found"

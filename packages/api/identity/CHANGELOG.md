@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.1.0...bluelightcard/identity-v1.1.1) (2023-06-16)
+
+
+### Bug Fixes
+
+* fix release stage ([#93](https://github.com/bluelightcard/BlueLightCard-2.0/issues/93)) ([29aa162](https://github.com/bluelightcard/BlueLightCard-2.0/commit/29aa162162e31cd024e8bcb1c0e3e448ca7a6ad6))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.0.0...bluelightcard/identity-v1.1.0) (2023-06-15)
 
 

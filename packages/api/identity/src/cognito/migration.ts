@@ -39,7 +39,7 @@ const authenticateUser = async (username: string, password: string) => {
             return {
                 email: username,
                 email_verified: "true",
-                phone_number: formatPhoneNumber(response.data.data.phone),
+                phone_number: formatPhoneNumber(response.data.data.mobile),
                 phone_number_verified: "true",
                 "custom:blc_old_id": response.data.data.id,
                 "custom:blc_old_uuid": response.data.data.uuid,

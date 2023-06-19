@@ -45,6 +45,8 @@ jobs:
           monorepo-tags: true
           package-name: bluelightcard/identity
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+      - name: Print release created output
+        run: echo "Rlease created:${{ steps.tag-release.outputs.releases_created }}"
   build:
     name: Build
     runs-on: ubuntu-latest

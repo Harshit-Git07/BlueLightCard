@@ -25,7 +25,7 @@ export const handler = async (event: any, context: any) => {
         UserPoolId: userPoolId,
         Username: username
     }).promise();
-    logger.info("user successfully deleted", { username });
+    logger.info("user successfully deleted: ", { username });
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -33,9 +33,9 @@ export const handler = async (event: any, context: any) => {
       })
     };
   } catch (err: any) {
-    logger.error("error deleting user", { username, err });
+    logger.error("error deleting user ", { username, err });
     await sendToDLQ(event);
-    throw new Error(`Error deleting user ${username} : ${err.message}`)
+    throw new Error(`Error deleting user ${username} : ${err.message}.`)
   }
 };
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.1.1...bluelightcard/identity-v1.2.0) (2023-06-19)
+
+
+### Features
+
+* change field ([#98](https://github.com/bluelightcard/BlueLightCard-2.0/issues/98)) ([bff063a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bff063aad897d03007da164edb9ec850b472ad8c))
+
+
+### Bug Fixes
+
+* add full stop and space for log. just dummy change to test ([#96](https://github.com/bluelightcard/BlueLightCard-2.0/issues/96)) ([5ea3d64](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5ea3d640a7a48dc36871eed7adf8e28c44241653))
+
 ## [1.1.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.1.0...bluelightcard/identity-v1.1.1) (2023-06-16)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.0.0...bluelightcard/web-v1.1.0) (2023-06-20)
+
+
+### Features
+
+* TI-150 inputradiobuttons ([#97](https://github.com/bluelightcard/BlueLightCard-2.0/issues/97)) ([e916edc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e916edc03bb89c0a064c9423622e3d9015d087f3))
+* **web:** sst added to project with jest as testing framework ([#71](https://github.com/bluelightcard/BlueLightCard-2.0/issues/71)) ([d5dde83](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d5dde83ea5b30a39d980cc226450500e460a708c))
+
 ## 1.0.0 (2023-06-15)
 
 

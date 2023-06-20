@@ -90,14 +90,14 @@ jobs:
     permissions:
       id-token: write   # This is required for requesting the JWT
       contents: read    # This is required for actions/checkout
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release
     environment: Production
     runs-on: ubuntu-latest
     needs:
       - test
       - staging
-#      - changelog
+      - changelog
       - build
     steps:
       - name: Checkout

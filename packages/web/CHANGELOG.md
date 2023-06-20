@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.1.0...bluelightcard/web-v1.2.0) (2023-06-20)
+
+
+### Features
+
+* add playwright ([#113](https://github.com/bluelightcard/BlueLightCard-2.0/issues/113)) ([fabdce7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fabdce77ebc37aec04362fbe0978ed257aefb3cc))
+
+
+### Bug Fixes
+
+* remove coverage action ([#112](https://github.com/bluelightcard/BlueLightCard-2.0/issues/112)) ([4ca12b2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4ca12b29b4d7b2116927618ff1f9835432b7852d))
+
+
+### Other Changes
+
+* **deps-dev:** bump @swc/core from 1.3.65 to 1.3.66 ([#106](https://github.com/bluelightcard/BlueLightCard-2.0/issues/106)) ([18070cd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/18070cd61f954102edc4db848acf59dabf1db832))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.0.0...bluelightcard/web-v1.1.0) (2023-06-20)
 
 

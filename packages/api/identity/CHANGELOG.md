@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.3.0...bluelightcard/identity-v1.3.1) (2023-06-20)
+
+
+### Other Changes
+
+* **deps:** bump libphonenumber-js from 1.10.34 to 1.10.36 ([#105](https://github.com/bluelightcard/BlueLightCard-2.0/issues/105)) ([5d04f53](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5d04f53767e9d1397d3f0d995c0acc82182f2c3e))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.2.0...bluelightcard/identity-v1.3.0) (2023-06-20)
 
 

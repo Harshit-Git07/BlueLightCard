@@ -1,10 +1,15 @@
 name: 'Next.js Bundle Analysis'
 
 on:
-  pull_request:
-  push:
+  pull_request_target:
     branches:
-      - main # change this if your default branch is named differently
+      - main
+    paths:
+      - packages/web/**
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+      - .github/workflows/web.yml
   workflow_dispatch:
 
 permissions:

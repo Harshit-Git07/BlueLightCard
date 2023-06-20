@@ -1,5 +1,15 @@
 name: CI
-on: [push]
+on:
+  pull_request_target:
+    branches:
+      - main
+    paths:
+      - packages/web/**
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+      - .github/workflows/web.yml
+
 jobs:
   lighthouseci:
     runs-on: ubuntu-latest

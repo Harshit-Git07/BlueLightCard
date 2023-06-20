@@ -4,20 +4,26 @@ on:
     branches:
       - main
     paths:
-      - ./packages/api/identity/**
-      - ./stacks/
+      - packages/api/identity/**
+      - packages/api/identity/CHANGELOG.md
+      - stacks/**
       - .github/workflows/identity.yml
       - package-lock.json
       - sst.config.ts
       - package.json
   pull_request:
     paths:
-      - ./packages/api/identity/**
-      - ./stacks/
+      - packages/api/identity/**
+      - packages/api/identity/CHANGELOG.md
+      - stacks/**
       - .github/workflows/identity.yml
       - package-lock.json
       - sst.config.ts
       - package.json
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   test:
@@ -46,8 +52,6 @@ jobs:
           monorepo-tags: true
           package-name: bluelightcard/identity
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
-      - name: Print release created output
-        run: echo "Rlease created:${{ steps.tag-release.outputs.releases_created }}"
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -62,9 +66,6 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npm run build
   staging:
-    permissions:
-      id-token: write   # This is required for requesting the JWT
-      contents: read    # This is required for actions/checkout
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -88,9 +89,6 @@ jobs:
       - name: Deploy
         run: npx sst deploy global --stage staging && npx sst deploy identity --stage staging
   release:
-    permissions:
-      id-token: write   # This is required for requesting the JWT
-      contents: read    # This is required for actions/checkout
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release
     environment: Production

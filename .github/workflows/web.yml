@@ -6,11 +6,15 @@ on:
     paths:
       - packages/web/**
       - package-lock.json
+      - sst.config.ts
+      - package.json
       - .github/workflows/web.yml
   pull_request:
     paths:
       - packages/web/**
       - package-lock.json
+      - sst.config.ts
+      - package.json
       - .github/workflows/web.yml
 
 env:
@@ -251,5 +255,3 @@ jobs:
           projectName: 'dds'
           directory: packages/web/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-
-

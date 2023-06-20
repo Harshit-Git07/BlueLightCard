@@ -10,7 +10,7 @@
     "@types/aws-lambda": "8.10.115",
     "@types/node": "20.2.3",
     "@types/uuid": "9.0.1",
-    "sst": "2.9.0"
+    "sst": "2.14.0"
   },
   "dependencies": {
     "@aws-lambda-powertools/commons": "1.8.0",

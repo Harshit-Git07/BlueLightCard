@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - ./packages/api/identity/
+      - ./packages/api/identity/**
       - ./stacks/
       - .github/workflows/identity.yml
       - package-lock.json
@@ -12,7 +12,7 @@ on:
       - package.json
   pull_request:
     paths:
-      - ./packages/api/identity/
+      - ./packages/api/identity/**
       - .github/workflows/identity.yml
       - package-lock.json
       - sst.config.ts

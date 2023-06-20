@@ -9,6 +9,11 @@ on:
       - .github/workflows/web.yml
       - .github/workflows/coverage.yml
 
+permissions:
+  contents: read # for checkout repository
+  actions: read # for fetching base branch bundle stats
+  pull-requests: write # for comments
+
 jobs:
   coverage:
       runs-on: ubuntu-latest

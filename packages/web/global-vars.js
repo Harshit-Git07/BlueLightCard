@@ -16,7 +16,7 @@ const LANGUAGE = `${DEFAULT_LANG}-${REGION}`;
  *
  * Whenever a new brand becomes available, this new brand name should be added to this list
  */
-const BRANDS = ['BLC_UK', 'BLC_AU', 'DDS_UK'];
+const BRANDS = ['blc-uk', 'blc-au', 'dds-uk'];
 
 module.exports = {
   BRAND,

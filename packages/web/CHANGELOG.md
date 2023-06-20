@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.2.0...bluelightcard/web-v1.3.0) (2023-06-20)
+
+
+### Features
+
+* updated brands ([#116](https://github.com/bluelightcard/BlueLightCard-2.0/issues/116)) ([14275a6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/14275a69e9111147b93b64c3bebd5d88e0901e1e))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.1.0...bluelightcard/web-v1.2.0) (2023-06-20)
 
 

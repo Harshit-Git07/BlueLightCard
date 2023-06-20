@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.2.0...bluelightcard/identity-v1.3.0) (2023-06-20)
+
+
+### Features
+
+* **web:** sst added to project with jest as testing framework ([#71](https://github.com/bluelightcard/BlueLightCard-2.0/issues/71)) ([d5dde83](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d5dde83ea5b30a39d980cc226450500e460a708c))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.1.1...bluelightcard/identity-v1.2.0) (2023-06-19)
 
 

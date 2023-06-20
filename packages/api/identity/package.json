@@ -20,7 +20,7 @@
     "@sinclair/typebox": "0.28.13",
     "base-64": "1.0.0",
     "hono": "3.2.2",
-    "libphonenumber-js": "1.10.34",
+    "libphonenumber-js": "1.10.36",
     "uuid": "9.0.0",
     "ajv": "8.12.0",
     "axios": "1.4.0"

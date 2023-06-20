@@ -2,6 +2,7 @@ const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
   dir: './',
+  testPathIgnorePatterns: ['./e2e', 'e2e'],
 });
 
 const customJestConfig = {

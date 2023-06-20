@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "sst bind next dev",
     "build": "next build && next export -o dist",
-    "start": "npx serve@latest dist",
+    "start": "serve dist",
     "lint": "next lint && tsc --noEmit",
     "lint:style": "npx stylelint '**/*.css'",
-    "test": "jest",
+    "test": "jest --testPathIgnorePatterns=e2e/",
     "test:coverage": "jest --coverage",
+    "test:e2e": "npx playwright test",
     "storybook": "STORYBOOK_ENV=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK_ENV=true storybook build",
     "chromatic": "npx chromatic --project-token=0b8218f55902",
@@ -38,6 +39,7 @@
     "react-hook-form": "^7.39.5",
     "react-i18next": "^12.0.0",
     "save": "^2.9.0",
+    "serve": "^14.2.0",
     "storybook-addon-designs": "^6.3.1",
     "typescript": "4.9.5",
     "yup": "^0.32.11"
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@lhci/cli": "^0.12.0",
+    "@playwright/test": "^1.35.1",
     "@storybook/addon-a11y": "^7.0.7",
     "@storybook/addon-actions": "^7.0.7",
     "@storybook/addon-docs": "^7.0.7",

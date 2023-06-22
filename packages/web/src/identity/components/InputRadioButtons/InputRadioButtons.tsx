@@ -14,7 +14,10 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange })
   return (
     <>
       {inputValues.map((input, index) => (
-        <label key={`${input.name}_${index}`} className={`m-2 border-2 rounded p-2 ${selected == input.value && 'border-[#009]'}`}>
+        <label
+          key={`${input.name}_${index}`}
+          className={`m-2 border-2 rounded p-2 ${selected == input.value && 'border-[#009]'}`}
+        >
           <input
             className="mr-2"
             type="radio"
@@ -23,15 +26,14 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange })
             checked={selected === '' ? input.selectedByDefault : selected === input.value}
             onChange={handleInputChange}
           />
-              <span className={`${selected == input.value && 'text-[#009]'}`}>
-              {input.name}
-              </span>
+          <span className={`${selected == input.value && 'text-[#009]'}`}>{input.name}</span>
         </label>
       ))}
     </>
   );
 };
 
+// eslint-disable-next-line react/display-name
 const InputRadioButtons = forwardRef<HTMLInputElement, InputRadioButtonsProps>((props, ref) => (
   <InputRadioButton {...props} />
 ));

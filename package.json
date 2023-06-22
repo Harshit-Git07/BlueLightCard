@@ -47,8 +47,5 @@
   ],
   "engines": {
     "node": ">=18.0.0 < 20.0.0"
-  },
-  "dependencies": {
-    "ts-jest": "^29.1.0"
   }
 }

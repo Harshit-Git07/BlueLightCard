@@ -2,16 +2,9 @@ const {
   resolve,
 } = require("path");
 module.exports = {
-  "stories": ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  "addons": [
-    {
-      name: "storybook-addon-next",
-      options: {
-        nextConfigPath: resolve(__dirname, '../next.config.js'),
-      }
-    },
-    "@storybook/addon-links", "@storybook/addon-docs", "@storybook/addon-essentials", "@storybook/addon-interactions", "@storybook/preset-scss", "@storybook/addon-a11y", "@storybook/addon-mdx-gfm"],
-  "framework": {
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
+  addons: ["@storybook/addon-links", "@storybook/addon-docs", "@storybook/addon-essentials", "@storybook/addon-interactions", "@storybook/preset-scss", "@storybook/addon-a11y", "@storybook/addon-mdx-gfm"],
+  framework: {
     name: "@storybook/nextjs",
     options: {}
   },

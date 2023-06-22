@@ -2,13 +2,23 @@
   "color": {
     "border": {
       "card": {
-        "base": { "value": "{color.shade.oxfordblue.200.value}" },
-        "dark": { "value": "{color.palette.neutral.dark.value}" }
+        "base": {
+          "value": "{color.palette.neutral.base.value}",
+          "modify": [{
+            "type": "alpha",
+            "amount": 0.2
+          }]
+        },
+        "dark": { "value": "{color.palette.neutral.dark.value}" },
+        "selected": {
+          "base": { "value": "{color.palette.primary.base.value}" },
+          "dark": { "value": "{color.palette.primary.dark.value}" }
+        }
       },
-        "focus": { "value": "{color.palette.primary.base.value}" },
-        "base": { "value": "{color.palette.neutral.base.value}" },
-        "dark": { "value": "{color.palette.primary.dark.value}" },
-        "error": { "value": "{color.palette.danger.base.value}" },
+      "focus": { "value": "{color.palette.primary.base.value}" },
+      "base": { "value": "{color.palette.neutral.base.value}" },
+      "dark": { "value": "{color.palette.primary.dark.value}" },
+      "error": { "value": "{color.palette.danger.base.value}" },
       "cta": {
         "standard":{
           "secondary": {

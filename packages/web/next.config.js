@@ -13,6 +13,10 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   trailingSlash: true,
+  images: {
+    loader: 'custom',
+    loaderFile: './src/imageLoader.ts',
+  },
   compiler: {
     styledComponents: true,
   },

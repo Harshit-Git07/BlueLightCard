@@ -10,6 +10,7 @@ module.exports = {
       rootDir: 'packages/web/',
     },
   },
+  root: true,
   plugins: ['prettier'],
   overrides: [],
   parserOptions: {

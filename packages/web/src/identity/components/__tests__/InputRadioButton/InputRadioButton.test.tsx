@@ -1,4 +1,3 @@
-
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InputRadioButton from '../../InputRadioButton/InputRadioButton';
@@ -20,9 +19,9 @@ describe('InputRadioButton component', () => {
   describe('smoke test', () => {
     it('should render component without error', () => {
       render(<InputRadioButton {...props} />);
-    
+
       const inputRadioButton = screen.getByRole('radio', { name: /Option 1/i });
-    
+
       expect(inputRadioButton).toBeTruthy();
     });
   });

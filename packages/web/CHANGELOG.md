@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.3.0...bluelightcard/web-v1.4.0) (2023-06-22)
+
+
+### Features
+
+* bt 2242 merge infocard updates ([#114](https://github.com/bluelightcard/BlueLightCard-2.0/issues/114)) ([913d6fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/913d6fb232d48bbb807a5f036580b71316d0cc7a))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.2.0...bluelightcard/web-v1.3.0) (2023-06-20)
 
 

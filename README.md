@@ -67,3 +67,8 @@ Need help with this error? Post it in #help on the SST Discord https://sst.dev/d
 ```
 
 The solution is to retry the command - it will work eventually 🫣
+
+## Stack
+* SST - for managing Infrastructure-as-code
+* Hono - for API routing + middleware
+* NextJS - for the web application

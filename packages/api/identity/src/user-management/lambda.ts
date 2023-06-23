@@ -9,6 +9,7 @@ import { Type as T } from "@sinclair/typebox";
 const schema = T.Object({
   firstname: T.String(),
   age: T.Number(),
+  surname: T.String(),
 });
 
 const app = new Hono();

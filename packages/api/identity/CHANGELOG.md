@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.3.1...bluelightcard/identity-v1.4.0) (2023-06-23)
+
+
+### Features
+
+* test commit ([#122](https://github.com/bluelightcard/BlueLightCard-2.0/issues/122)) ([f542bd2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f542bd23639d6ae0fb1efcae8000fca6c72a675f))
+
 ## [1.3.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.3.0...bluelightcard/identity-v1.3.1) (2023-06-20)
 
 

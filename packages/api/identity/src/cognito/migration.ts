@@ -27,7 +27,7 @@ const authenticateUser = async (username: string, password: string) => {
     try {
         const response = await axios({
             method: 'get',
-            url: `${blcApiUrl}/api/4/user/login.php?mode=1`,
+            url: `${blcApiUrl}/api/4/user/login.php?mode=1&audit=false`,
             headers: {
                 "x-duo-user": base64.encode(username),
                 "x-duo-password": base64.encode(password),
@@ -46,7 +46,7 @@ const authenticateUser = async (username: string, password: string) => {
             }
         }
     } catch (error) {
-        logger.error('error during old login', { error })
+        logger.error('error during old login', { error, username })
     }
 }
 

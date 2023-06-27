@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.4.0...bluelightcard/identity-v1.5.0) (2023-06-27)
+
+
+### Features
+
+* Remove Hono ([#126](https://github.com/bluelightcard/BlueLightCard-2.0/issues/126)) ([b4e0bf7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b4e0bf7ab67ff88ab9d2cbe9a3a8b80a7e12c5ba))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.3.1...bluelightcard/identity-v1.4.0) (2023-06-23)
 
 

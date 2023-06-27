@@ -1,3 +1,4 @@
+
 import { EventBus, StackContext } from "sst/constructs";
 
 export function Shared({ stack }: StackContext) {

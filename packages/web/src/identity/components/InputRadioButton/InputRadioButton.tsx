@@ -21,6 +21,7 @@ const InputRadioButton: FC<InputRadioButtonProps> = ({
         type="radio"
         onClick={(e) => setSelected(!selected)}
         checked={selected}
+        onChange={(e) => {}}
       />
       <label className="m-2">{name}</label>
     </>

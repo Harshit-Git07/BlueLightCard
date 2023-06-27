@@ -1,8 +1,14 @@
 import { ApiHandler } from "sst/node/api";
-import { Time } from "@blc-mono/core/time";
+import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 
-export const handler = ApiHandler(async (_evt) => {
+export const get = ApiHandler(async (_evt) => {
   return {
-    body: `Hello world. The time is ${Time.now()}`,
+    body: `GET: Hello world. The time is`,
+  };
+});
+
+export const post = ApiHandler(async (_evt) => {
+  return {
+    body: `POST: Hello world. The time is ${JSON.parse(_evt.body)}`,
   };
 });

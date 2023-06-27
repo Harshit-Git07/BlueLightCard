@@ -1,7 +1,7 @@
-import {StackContext, Api, Cognito, Table, use, Queue} from "sst/constructs";
-import {StringAttribute} from "aws-cdk-lib/aws-cognito";
+import { StackContext, Api, Cognito, Table, use, Queue } from "sst/constructs";
+import { StringAttribute } from "aws-cdk-lib/aws-cognito";
 import { StringParameter } from "aws-cdk-lib/aws-ssm";
-import {Shared} from "../../../stacks/stack";
+import { Shared } from "../../../stacks/stack";
 import { passwordResetRule } from './src/eventRules/passwordResetRule';
 import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
 import { emailUpdateRule } from "./src/eventRules/emailUpdateRule";
@@ -10,15 +10,7 @@ export function Identity({ stack }: StackContext) {
   //set tag service identity to all resources
   stack.tags.setTag("service", "identity");
   stack.tags.setTag("map-migrated", "d-server-017zxazumgiycz");
-  //apis
-  const identityApi = new Api(stack, "identity", {
-    routes: {
-      "ANY /users": "packages/api/identity/src/user-management/lambda.handler",
-      "ANY /eligibility":
-        "packages/api/identity/src/eligibility/lambda.handler",
-    },
-  });
-
+  
   //ssm parameters
   const stage = stack.stage;
   let ssmEnv = "staging";
@@ -30,8 +22,8 @@ export function Identity({ stack }: StackContext) {
     default:
       ssmEnv = "staging";
   }
-   const blcApiUrl = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/url`);
-   const blcApiAuth = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/auth`);
+  const blcApiUrl = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/url`);
+  const blcApiAuth = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/auth`);
 
   //db
   const table = new Table(stack, "table", {
@@ -44,6 +36,27 @@ export function Identity({ stack }: StackContext) {
       gsi1: { partitionKey: "sk", sortKey: "pk" },
     },
   });
+  
+//apis
+const identityApi = new Api(stack, "identity", {
+  defaults: {
+    function: {
+      timeout: 20,
+      environment: { tableName: table.tableName, service: 'identity' },
+      permissions: [table],
+    },
+  },
+  routes: {
+    "GET /users": "packages/api/identity/src/user-management/lambda.handler",
+    "GET /users/{id}": "packages/api/identity/src/user-management/lambda.handler",
+    "ANY /eligibility":
+      "packages/api/identity/src/eligibility/lambda.handler",
+      "POST /{brand}/organisation": "packages/api/identity/src/eligibility/listOrganisation.handler",
+    "POST /{brand}/organisation/{organisationId}":
+      "packages/api/identity/src/eligibility/listService.handler",
+  }
+});
+
 
   //auth
   const cognito = new Cognito(stack, 'cognito', {
@@ -53,8 +66,8 @@ export function Identity({ stack }: StackContext) {
         handler: 'packages/api/identity/src/cognito/migration.handler',
         environment: {
           SERVICE: 'identity',
-           BLC_API_URL: blcApiUrl,
-           BLC_API_AUTH: blcApiAuth
+          BLC_API_URL: blcApiUrl,
+          BLC_API_AUTH: blcApiAuth
         },
       },
     },
@@ -65,8 +78,8 @@ export function Identity({ stack }: StackContext) {
           phoneNumber: { required: true, mutable: true },
         },
         customAttributes: {
-           blc_old_id: new StringAttribute({ mutable: true }),
-           blc_old_uuid: new StringAttribute({ mutable: true }),
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
       },
     },
@@ -90,11 +103,12 @@ export function Identity({ stack }: StackContext) {
 
   //add event bridge rules
   const { bus } = use(Shared);
-  bus.addRules(stack, passwordResetRule(cognito.userPoolId,dlq.queueUrl));
-  bus.addRules(stack, emailUpdateRule(cognito.userPoolId,dlq.queueUrl));
+  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl));
+  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl));
 
   return {
     identityApi
   }
 }
+

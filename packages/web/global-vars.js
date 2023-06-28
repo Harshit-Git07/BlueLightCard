@@ -1,4 +1,4 @@
-const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'default';
+const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
 const REGION = process.env.NEXT_PUBLIC_APP_REGION ?? 'GB';
 const DEFAULT_LANG = process.env.NEXT_PUBLIC_APP_LANG ?? 'en';
 const FALLBACK_LNG = 'en';

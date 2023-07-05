@@ -40,8 +40,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
    
   const params = {
     ExpressionAttributeValues: {
-      ':pk': `BRAND#${brand}`,
-      ':sk': `ORGANISATION#${organisationId}#EMPLOYER#`
+      ':pk': `ORGANISATION#${organisationId}`,
+      ':sk': `EMPLOYER#`
     },
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -55,7 +55,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const results = await dynamodb.send(new QueryCommand(params));
     logger.debug('results', { results });
     const apiResponse = results.Items?.map((item) => ({
-      id: item.sk.replace(`ORGANISATION#${organisationId}#EMPLOYER#`, ''),
+      id: item.sk.replace(`EMPLOYER#`, ''),
       name: item.name,
     }));
     logger.info('employer found', brand);

@@ -34,8 +34,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   
   const params = {
     ExpressionAttributeValues: {
-      ':pk': `BRAND#${brand}`,
-      ':sk': `ORGANISATION#`,  
+      ':sk': `BRAND#${brand}`,
+      ':pk': `ORGANISATION#`,  
       ':retired': (data != null && data.retired != undefined && data.retired === 1) ? `true` : `false`      
     },
     ExpressionAttributeNames: {
@@ -44,15 +44,18 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       '#retired': 'retired'            
     },
     TableName: tableName,
-    KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)',
+    IndexName: 'gsi1',
+    KeyConditionExpression: '#sk= :sk And begins_with(#pk, :pk)',
     FilterExpression : "#retired = :retired",
   }
-
   try {
     const results = await dynamodb.send(new QueryCommand(params));
-    logger.debug('results', { results });
+    logger.info('results', { results });
+    const response = results.Items? results.Items : {};
+
     const apiResponse = results.Items?.map((item) => ({
-      id: item.sk.replace('ORGANISATION#', ''),
+      id: item.pk.replace('ORGANISATION#', ''),
+      code: item.code,
       name: item.name,
       retired: item.retired,
       idRequirements: item.idRequirements,

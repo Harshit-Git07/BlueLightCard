@@ -43,10 +43,10 @@ describe('List organisation by brand', () => {
     ddbMock.on(QueryCommand).resolves({
         Items: [
           {
-                pk: "BRAND#BLC_UK", sk: "ORGANISATION#test_org1#EMPLOYER#test_1", name:"test_emp1"
+                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_1", name:"test_emp1"
           },
           {
-                pk: "BRAND#BLC_UK", sk: "ORGANISATION#test_org1#EMPLOYER#test_2",name:"test_emp2"
+                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_2",name:"test_emp2"
         }
         ],
       });

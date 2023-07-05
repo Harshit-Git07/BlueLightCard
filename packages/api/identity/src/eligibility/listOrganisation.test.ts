@@ -29,8 +29,8 @@ describe('List organisation by brand', () => {
         ddbMock.on(QueryCommand).resolves({
             Items: [
                 {
-                    pk: "BRAND#BLC_UK",
-                    sk: "ORGANISATION#test_500",
+                    sk: "BRAND#BLC_UK",
+                    pk: "ORGANISATION#test_500",
                     name: "test_HM C",
                     retired: "false",
                     idRequirements: [
@@ -50,8 +50,8 @@ describe('List organisation by brand', () => {
                     maxUploads: "1"
                 },
                 {
-                    pk: "BRAND#BLC_UK",
-                    sk: "ORGANISATION#test_600",
+                    sk: "BRAND#BLC_UK",
+                    pk: "ORGANISATION#test_600",
                     name: "test_Mountain R",
                     retired: "false",
                     idRequirements: [
@@ -87,7 +87,7 @@ describe('List organisation by brand', () => {
         ddbMock.on(QueryCommand).resolves({
             Items: [
                 {
-                    pk: "BRAND#BLC_UK", sk: "ORGANISATION#test_100", name: "test_name", retired: "true"
+                    sk: "BRAND#BLC_UK", pk: "ORGANISATION#test_100", name: "test_name", retired: "true"
                 },
             ],
         });

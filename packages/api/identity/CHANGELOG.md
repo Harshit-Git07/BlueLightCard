@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.5.0...bluelightcard/identity-v1.5.1) (2023-07-05)
+
+
+### Other Changes
+
+* read from index table; more details in db design document ([#141](https://github.com/bluelightcard/BlueLightCard-2.0/issues/141)) ([ff66adf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ff66adfc61884b4db3c0d3ac76c70228888a480b))
+
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.4.0...bluelightcard/identity-v1.5.0) (2023-06-27)
 
 

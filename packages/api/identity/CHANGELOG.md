@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.5.1...bluelightcard/identity-v1.6.0) (2023-07-07)
+
+
+### Features
+
+* update Http Api to Rest Api to support request models. ([#136](https://github.com/bluelightcard/BlueLightCard-2.0/issues/136)) ([264c8f8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/264c8f883155abc2643d4b7dc30265c48fa43ce3))
+
+
+### Other Changes
+
+* **deps-dev:** bump @types/aws-lambda from 8.10.115 to 8.10.119 ([#138](https://github.com/bluelightcard/BlueLightCard-2.0/issues/138)) ([6d4a1bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6d4a1bb3a091e0bd1beb92eb15dc812c8c1ebed4))
+
 ## [1.5.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.5.0...bluelightcard/identity-v1.5.1) (2023-07-05)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.6.0...bluelightcard/identity-v1.7.0) (2023-07-10)
+
+
+### Features
+
+* add response models ([#155](https://github.com/bluelightcard/BlueLightCard-2.0/issues/155)) ([a07c807](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a07c807baf515fb70360f62dd06042670e4b97a1))
+* test commit for release pipeline ([#149](https://github.com/bluelightcard/BlueLightCard-2.0/issues/149)) ([5049e8e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5049e8e4442ff478ca6a8054d71b8c76f6f2cf98))
+
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.5.1...bluelightcard/identity-v1.6.0) (2023-07-07)
 
 

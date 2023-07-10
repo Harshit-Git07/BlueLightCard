@@ -31,5 +31,5 @@ export const BadRequestModelSchema = {
         },
       },
     },
-    required: ['message', 'errors'],
+    required: ['message'],
   };

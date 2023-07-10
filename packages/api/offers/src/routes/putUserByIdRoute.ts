@@ -1,17 +1,17 @@
-import { ApiGatewayModelGenerator } from '../../../core/src/extensions/apiGatewayExtension/agModelGenerator';
-import { Model } from '../../../core/src/extensions/apiGatewayExtension/model';
-import { MethodResponses } from '../../../core/src/extensions/apiGatewayExtension/methodResponse';
-import { ResponseModel } from '../../../core/src/extensions/apiGatewayExtension/responseModel';
+import {
+  ApiGatewayModelGenerator,
+  MethodResponses,
+  Model,
+  ResponseModel,
+} from '../../../core/src/extensions/apiGatewayExtension';
 
-
-
-export class GerUserRoute {
+export class PutUserByIdRoute {
   constructor(private apiGatewayModelGenerator: ApiGatewayModelGenerator, private agUserModel: Model) {}
 
   getRouteDetails() {
     return {
       function: {
-        handler: 'packages/api/offers/src/offers/lambda.get',
+        handler: 'packages/api/offers/src/offers/lambda.put',
       },
       cdk: {
         method: {

@@ -1,9 +1,10 @@
 import { StackContext, ApiGatewayV1Api } from 'sst/constructs';
 import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
 import { UserModel } from './src/models/user';
-import { ResponseModel } from '../core/src/extensions/apiGatewayExtension/responseModel';
-import { MethodResponses } from '../core/src/extensions/apiGatewayExtension/methodResponse';
-import { GerUserRoute } from './src/routes/getUserRoute';
+import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
+import { PostUserRoute } from 'src/routes/postUserRoute';
+import { PutUserByIdRoute } from 'src/routes/putUserByIdRoute';
+import { DeleteUserByIdRoute } from 'src/routes/deleteUserByIdRoute';
 
 export function Offers({ stack }: StackContext) {
   const offersApi = new ApiGatewayV1Api(stack, 'offers', {
@@ -15,60 +16,14 @@ export function Offers({ stack }: StackContext) {
     },
   });
 
-
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(offersApi);
   const agUserModel = apiGatewayModelGenerator.generateModel(UserModel);
 
   offersApi.addRoutes(stack, {
-    'GET /user/{id}': new GerUserRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
-    'POST /user': {
-      function: {
-        handler: 'packages/api/offers/src/offers/lambda.post',
-      },
-      cdk: {
-        method: {
-          requestModels: { 'application/json': agUserModel.getModel() },
-          methodResponses: MethodResponses.toMethodResponses([
-            new ResponseModel('201', agUserModel),
-            apiGatewayModelGenerator.getError400(),
-            ...apiGatewayModelGenerator.getDefault4xxErrors(),
-            ...apiGatewayModelGenerator.getDefault5xxErrors()
-          ]),
-        },
-      },
-    },
-    'PUT /user/{id}': {
-      function: {
-        handler: 'packages/api/offers/src/offers/lambda.put',
-      },
-      cdk: {
-        method: {
-          requestModels: { 'application/json': agUserModel.getModel() },
-          methodResponses: MethodResponses.toMethodResponses([
-            new ResponseModel('200', agUserModel),
-            apiGatewayModelGenerator.getError400(),
-            apiGatewayModelGenerator.getError404(),
-            apiGatewayModelGenerator.getError500(),
-          ]),
-        },
-      },
-    },
-    'DELETE /user/{id}': {
-      function: {
-        handler: 'packages/api/offers/src/offers/lambda.remove',
-      },
-      cdk: {
-        method: {
-          requestModels: { 'application/json': agUserModel.getModel() },
-          methodResponses: MethodResponses.toMethodResponses([
-            new ResponseModel('200', agUserModel),
-            apiGatewayModelGenerator.getError400(),
-            apiGatewayModelGenerator.getError404(),
-            apiGatewayModelGenerator.getError500(),
-          ]),
-        },
-      },
-    },
+    'GET /user/{id}': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
+    'POST /user': new PostUserRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
+    'PUT /user/{id}': new PutUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
+    'DELETE /user/{id}': new DeleteUserByIdRoute(apiGatewayModelGenerator).getRouteDetails(),
   });
 
   stack.addOutputs({

@@ -1,6 +1,7 @@
 import { StackContext, Api, Cognito, Table, use, Queue, ApiGatewayV1Api } from 'sst/constructs';
 import { StringAttribute } from 'aws-cdk-lib/aws-cognito';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { Table as TableCdk } from 'aws-cdk-lib/aws-dynamodb';
 import { Shared } from '../../../stacks/stack';
 import { passwordResetRule } from './src/eventRules/passwordResetRule';
 import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
@@ -25,20 +26,22 @@ export function Identity({ stack }: StackContext) {
   const blcApiUrl = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/url`);
   const blcApiAuth = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/auth`);
 
+  let table = TableCdk.fromTableName(stack, 'ExistingTable', `${stack.stage}-blc-mono-table`);
+
   //db
-  const table = new Table(stack, 'table', {
-    fields: {
-      pk: 'string',
-      sk: 'string',
-    },
-    primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
-    globalIndexes: {
-      gsi1: { partitionKey: 'sk', sortKey: 'pk' },
-    },
-  });
+  // const table = new Table(stack, 'table', {
+  //   fields: {
+  //     pk: 'string',
+  //     sk: 'string',
+  //   },
+  //   primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
+  //   globalIndexes: {
+  //     gsi1: { partitionKey: 'sk', sortKey: 'pk' },
+  //   }
+  // });
 
   //apis
-  const identityApi = new ApiGatewayV1Api(stack, 'identity', {
+  const identityApi = new Api(stack, 'identity', {
     defaults: {
       function: {
         timeout: 20,

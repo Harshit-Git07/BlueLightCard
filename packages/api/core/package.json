@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "typecheck": "tsc -noEmit"
+    "typecheck": "tsc -noEmit",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/node": "^20.2.3",
+    "@jest/globals": "29.5.0",
     "sst": "2.14.0"
   }
 }

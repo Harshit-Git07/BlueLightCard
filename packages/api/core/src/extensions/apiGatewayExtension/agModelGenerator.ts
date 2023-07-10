@@ -1,10 +1,8 @@
 import { ApiGatewayV1Api } from 'sst/constructs';
-import { Model } from './model';
-import { GenericResponseSchema } from './genericResponseSchema';
-import { BadRequestModelSchema } from './badRequest';
+import { Model, BadRequestModelSchema, GenericResponseSchema, ResponseModel } from './';
+
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema'
-import { ResponseModel } from './responseModel';
 
 export class ApiGatewayModelGenerator {
   private model?: Model;
@@ -26,10 +24,9 @@ export class ApiGatewayModelGenerator {
     return this.model;
   }
 
-  // generateGenericModel() {
-  //  this.genericModel = new Model(this.api, "GenericModel", GenericResponseSchema);
-  //   return this.genericModel;
-  // }
+  generateGenericModel() {
+    return this.genericModel;
+  }
 
   private makeErrorResponseModel(statusCode: string) {
     return new ResponseModel(statusCode, this.genericModel);

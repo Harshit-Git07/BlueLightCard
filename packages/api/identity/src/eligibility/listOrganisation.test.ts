@@ -47,7 +47,8 @@ describe('List organisation by brand', () => {
                             allowedFormats: "png/jpeg/jpg/pdf"
                         }
                     ],
-                    maxUploads: "1"
+                    maxUploads: "1",
+                    trustedDomain: "false"
                 },
                 {
                     sk: "BRAND#BLC_UK",
@@ -62,7 +63,8 @@ describe('List organisation by brand', () => {
                             allowedFormats: "png/jpeg/jpg/pdf"
                         }
                     ],
-                    "maxUploads": "1"
+                    "maxUploads": "1",
+                    trustedDomain: "true"
                 }
             ],
         });
@@ -77,8 +79,11 @@ describe('List organisation by brand', () => {
         );
         expect(res).toEqual({
             statusCode: 200, body: JSON.stringify({
-                organisations: [{ id: "test_500", name: "test_HM C", retired: "false", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }, { description: "payslip within the last 3 months", id: "2", title: "Payslip", allowedFormats: "png/jpeg/jpg/pdf" }], maxUploads: "1" },
-                { id: "test_600", name: "test_Mountain R", retired: "false", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }], "maxUploads": "1" }]
+                organisations: [
+                    { id: "test_500", name: "test_HM C", retired: "false", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }, 
+                { description: "payslip within the last 3 months", id: "2", title: "Payslip", allowedFormats: "png/jpeg/jpg/pdf" }], maxUploads: "1", isTrusted: "false" },
+                { id: "test_600", name: "test_Mountain R", retired: "false", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }], "maxUploads": "1", isTrusted: "true" }
+            ]
             })
         });
     });

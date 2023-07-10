@@ -59,7 +59,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       name: item.name,
       retired: item.retired,
       idRequirements: item.idRequirements,
-      maxUploads: item.maxUploads
+      maxUploads: item.maxUploads,
+      isTrusted: item.trustedDomain
     }));
     logger.info('organisation found', brand);
     return {

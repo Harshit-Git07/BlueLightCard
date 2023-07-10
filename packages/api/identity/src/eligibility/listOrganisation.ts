@@ -50,7 +50,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   }
   try {
     const results = await dynamodb.send(new QueryCommand(params));
-    logger.info('results', { results });
+    logger.info('results ', { results });
     const response = results.Items? results.Items : {};
 
     const apiResponse = results.Items?.map((item) => ({
@@ -68,7 +68,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       body: JSON.stringify({ organisations: apiResponse }),
     };
   } catch (error) {
-    logger.error('error while fetching organisation',{error});
+    logger.error('error while fetching organisation ',{error});
     return {
       statusCode: 500,
       body: JSON.stringify({ message: error }),

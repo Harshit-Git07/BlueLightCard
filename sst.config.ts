@@ -1,6 +1,7 @@
 import { SSTConfig } from "sst";
 import { Identity } from "./packages/api/identity/stack";
 import { Offers } from "./packages/api/offers/stack";
+import { Web } from "./packages/web/stack";
 import { Shared } from "./stacks/stack";
 
 export default {
@@ -22,6 +23,7 @@ export default {
       .stack(Shared, { id: "global" })
       .stack(Offers, { id: "offers" })
       .stack(Identity, { id: "identity" })
+      .stack(Web, { id: "web" })
   },
 } satisfies SSTConfig;
 

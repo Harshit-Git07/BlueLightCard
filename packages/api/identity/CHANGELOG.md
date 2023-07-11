@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.7.0...bluelightcard/identity-v1.7.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* change API gateway ([#158](https://github.com/bluelightcard/BlueLightCard-2.0/issues/158)) ([e75a3f7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e75a3f7d448419ebf05e6c8ec635c33125ff5426))
+
 ## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.6.0...bluelightcard/identity-v1.7.0) (2023-07-10)
 
 

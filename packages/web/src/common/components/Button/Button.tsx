@@ -15,6 +15,7 @@ const Button: FC<ButtonProps> = ({
   invertColor,
   type = 'button',
   variant = ThemeVariant.Primary,
+  onClick,
 }) => {
   const colorToken: any =
     invertColor && color[variant].invert ? color[variant].invert : color[variant].base;
@@ -31,7 +32,7 @@ const Button: FC<ButtonProps> = ({
     className ?? '',
   ]);
   return (
-    <button type={type} disabled={disabled} className={classes}>
+    <button type={type} disabled={disabled} className={classes} onClick={onClick}>
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}
       {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}

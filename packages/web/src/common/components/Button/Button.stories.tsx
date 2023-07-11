@@ -45,6 +45,7 @@ Default.args = {
   disabled: false,
   slim: false,
   invertColor: false,
+  onClick: () => {},
 };
 
 export const Primary = DefaultTemplate.bind({});
@@ -54,6 +55,7 @@ Primary.args = {
   disabled: false,
   slim: false,
   invertColor: false,
+  onClick: () => {},
 };
 
 export const Secondary = DefaultTemplate.bind({});
@@ -63,6 +65,7 @@ Secondary.args = {
   disabled: false,
   slim: false,
   invertColor: false,
+  onClick: () => {},
 };
 
 export const Tertiary = DefaultTemplate.bind({});
@@ -72,6 +75,7 @@ Tertiary.args = {
   disabled: false,
   slim: false,
   invertColor: false,
+  onClick: () => {},
 };
 
 const InvertedTemplate: StoryFn<typeof Button> = (args) => (
@@ -87,6 +91,7 @@ PrimaryInverted.args = {
   disabled: false,
   slim: false,
   invertColor: true,
+  onClick: () => {},
 };
 
 export const SecondaryInverted = InvertedTemplate.bind({});
@@ -96,6 +101,7 @@ SecondaryInverted.args = {
   disabled: false,
   slim: false,
   invertColor: true,
+  onClick: () => {},
 };
 
 export default componentMeta;

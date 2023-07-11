@@ -1,6 +1,6 @@
 import { ThemeVariant } from '@/types/theme';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { PropsWithChildren } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 export type ButtonProps = PropsWithChildren & {
   type?: 'button' | 'submit';
@@ -11,4 +11,5 @@ export type ButtonProps = PropsWithChildren & {
   invertColor?: boolean;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;
+  onClick?: MouseEventHandler;
 };

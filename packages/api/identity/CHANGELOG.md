@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.7.1...bluelightcard/identity-v1.7.2) (2023-07-11)
+
+
+### Bug Fixes
+
+* bring back apigateway V1 ([#162](https://github.com/bluelightcard/BlueLightCard-2.0/issues/162)) ([4e5697b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4e5697bdfbb9a730fc2502872023c79da703bcee))
+
 ## [1.7.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.7.0...bluelightcard/identity-v1.7.1) (2023-07-11)
 
 

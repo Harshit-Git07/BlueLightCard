@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.4.0...bluelightcard/web-v1.5.0) (2023-07-11)
+
+
+### Features
+
+* add page for test proxy ([#135](https://github.com/bluelightcard/BlueLightCard-2.0/issues/135)) ([a1d4bc4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a1d4bc4cbb959b3a590d3f268d0cb48602508d5d))
+* added back in callback handler ([#153](https://github.com/bluelightcard/BlueLightCard-2.0/issues/153)) ([5c84086](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5c840869947b71106e83ef12cc08adc7a50ff163))
+* Remove Hono ([#126](https://github.com/bluelightcard/BlueLightCard-2.0/issues/126)) ([b4e0bf7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b4e0bf7ab67ff88ab9d2cbe9a3a8b80a7e12c5ba))
+
+
+### Bug Fixes
+
+* increased timeout for CI ([#139](https://github.com/bluelightcard/BlueLightCard-2.0/issues/139)) ([c6eddd5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c6eddd561c004dc227ec37afb8b6772d777da757))
+* remove identity AG ([#160](https://github.com/bluelightcard/BlueLightCard-2.0/issues/160)) ([8a4b29e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8a4b29eaaad57bebfba4b93a804310f9afdcf6e5))
+
+
+### Other Changes
+
+* **deps-dev:** bump @storybook/addon-a11y from 7.0.23 to 7.0.24 ([#133](https://github.com/bluelightcard/BlueLightCard-2.0/issues/133)) ([62c0e20](https://github.com/bluelightcard/BlueLightCard-2.0/commit/62c0e20ef08670a4d1dd2cb02479eacdfcf5926e))
+* **deps-dev:** bump @storybook/addon-links from 7.0.23 to 7.0.25 ([#137](https://github.com/bluelightcard/BlueLightCard-2.0/issues/137)) ([9499225](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9499225e8c18ffe9f052ed88c722fd590c8f4efb))
+* **deps-dev:** bump storybook from 7.0.23 to 7.0.24 ([#134](https://github.com/bluelightcard/BlueLightCard-2.0/issues/134)) ([a896dea](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a896deaef49fd11d39a7ce9f6398ee4eca7fcf01))
+* **deps-dev:** bump stylelint from 15.9.0 to 15.10.1 ([#146](https://github.com/bluelightcard/BlueLightCard-2.0/issues/146)) ([404ebd0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/404ebd0cf70b25aa3a817753430c0b31fe688157))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.3.0...bluelightcard/web-v1.4.0) (2023-06-22)
 
 

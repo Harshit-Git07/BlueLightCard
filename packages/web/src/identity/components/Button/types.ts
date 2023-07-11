@@ -5,7 +5,8 @@ import { PropsWithChildren, MouseEventHandler } from 'react';
 export type ButtonProps = PropsWithChildren & {
   disabled?: boolean;
   variant?: ThemeVariant;
+  className?: string;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;
-  handleEvent?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 };

@@ -1,6 +1,5 @@
 import Navigation from '@/components/NavigationLegacy/Navigation';
 import { NextPage } from 'next';
-
 const TestPage: NextPage = () => {
   return (
     <main>

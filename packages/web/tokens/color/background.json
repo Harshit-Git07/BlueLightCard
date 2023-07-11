@@ -3,6 +3,16 @@
     "background": {
       "base": { "value": "{color.shade.neutral.200.value}" },
       "dark": { "value": "{color.shade.neutral.50.value}" },
+      "button":{
+        "standard":{
+          "primary":{
+          "enabled":{
+            "base":{"value": "{color.shade.dukeblue.600.value}"},
+            "dark":{"value":"{color.shade.dukeblue.900.value}"}
+          }
+        }
+      }
+    },
       "cta": {
         "standard": {
           "primary": {

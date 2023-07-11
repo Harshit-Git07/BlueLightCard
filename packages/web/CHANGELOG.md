@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.5.0...bluelightcard/web-v1.5.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* bring back apigateway V1 ([#162](https://github.com/bluelightcard/BlueLightCard-2.0/issues/162)) ([4e5697b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4e5697bdfbb9a730fc2502872023c79da703bcee))
+
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.4.0...bluelightcard/web-v1.5.0) (2023-07-11)
 
 

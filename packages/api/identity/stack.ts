@@ -41,22 +41,22 @@ export function Identity({ stack }: StackContext) {
   // });
 
   //apis
-  const identityApi = new Api(stack, 'identity', {
-    defaults: {
-      function: {
-        timeout: 20,
-        environment: { tableName: table.tableName, service: 'identity' },
-        permissions: [table],
-      },
-    },
-    routes: {
-      'GET /users': 'packages/api/identity/src/user-management/lambda.handler',
-      'GET /users/{id}': 'packages/api/identity/src/user-management/lambda.handler',
-      'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
-      'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
-      'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
-    },
-  });
+  // const identityApi = new Api(stack, 'identity', {
+  //   defaults: {
+  //     function: {
+  //       timeout: 20,
+  //       environment: { tableName: table.tableName, service: 'identity' },
+  //       permissions: [table],
+  //     },
+  //   },
+  //   routes: {
+  //     'GET /users': 'packages/api/identity/src/user-management/lambda.handler',
+  //     'GET /users/{id}': 'packages/api/identity/src/user-management/lambda.handler',
+  //     'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
+  //     'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
+  //     'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
+  //   },
+  // });
 
   //auth
   const cognito = new Cognito(stack, 'cognito', {
@@ -93,7 +93,7 @@ export function Identity({ stack }: StackContext) {
   stack.addOutputs({
     CognitoUserPool: cognito.userPoolId,
     Table: table.tableName,
-    IdentityApiEndpoint: identityApi.url,
+   // IdentityApiEndpoint: identityApi.url,
   });
 
   //add dead letter queue
@@ -106,6 +106,6 @@ export function Identity({ stack }: StackContext) {
   bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl));
 
   return {
-    identityApi,
+    //identityApi,
   };
 }

@@ -2,9 +2,9 @@ import { StackContext, ApiGatewayV1Api } from 'sst/constructs';
 import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
 import { UserModel } from './src/models/user';
 import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
-import { PostUserRoute } from 'src/routes/postUserRoute';
-import { PutUserByIdRoute } from 'src/routes/putUserByIdRoute';
-import { DeleteUserByIdRoute } from 'src/routes/deleteUserByIdRoute';
+import { PostUserRoute } from './src/routes/postUserRoute';
+import { PutUserByIdRoute } from './src/routes/putUserByIdRoute';
+import { DeleteUserByIdRoute } from './src/routes/deleteUserByIdRoute';
 
 export function Offers({ stack }: StackContext) {
   const offersApi = new ApiGatewayV1Api(stack, 'offers', {

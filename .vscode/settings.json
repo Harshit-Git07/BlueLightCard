@@ -18,5 +18,10 @@
     "css",
   ],
   "editor.formatOnSave": false,
-  "eslint.run": "onType"
+  "eslint.run": "onType",
+  "cucumberautocomplete.steps": [
+    "packages/web/e2e/steps/*.ts"
+  ],
+  "cucumberautocomplete.strictGherkinCompletion": true,
+  
 }

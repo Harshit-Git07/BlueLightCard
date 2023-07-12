@@ -1,0 +1,81 @@
+{
+	"folders": [
+    {
+      "path": "."
+    },
+    {
+      "name": "core",
+      "path": "packages/api/core"
+    },
+    {
+      "name": "offers",
+      "path": "packages/api/offers"
+    },
+    {
+      "name": "identity",
+      "path": "packages/api/identity"
+    },
+    {
+      "name": "server-function",
+      "path": "packages/web/.open-next/server-function"
+    },
+    {
+      "name": ".next",
+      "path": "packages/web/.open-next/server-function/packages/web/.next"
+    },
+    {
+      "name": "web",
+      "path": "packages/web"
+    },
+    {
+      "name": "standalone",
+      "path": "packages/web/.next/standalone"
+    },
+    {
+      "name": ".next",
+      "path": "packages/web/.next/standalone/packages/web/.next"
+    },
+    {
+      "name": ".next",
+      "path": "packages/web/.next"
+    },
+    {
+      "name": "types",
+      "path": "packages/web/.next/types"
+    }
+  ],
+  "settings": {
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#469fd1",
+      "activityBar.background": "#469fd1",
+      "activityBar.foreground": "#15202b",
+      "activityBar.inactiveForeground": "#15202b99",
+      "activityBarBadge.background": "#f2cce5",
+      "activityBarBadge.foreground": "#15202b",
+      "commandCenter.border": "#e7e7e799",
+      "sash.hoverBorder": "#469fd1",
+      "statusBar.background": "#2d85b7",
+      "statusBar.foreground": "#e7e7e7",
+      "statusBarItem.hoverBackground": "#469fd1",
+      "statusBarItem.remoteBackground": "#2d85b7",
+      "statusBarItem.remoteForeground": "#e7e7e7",
+      "titleBar.activeBackground": "#2d85b7",
+      "titleBar.activeForeground": "#e7e7e7",
+      "titleBar.inactiveBackground": "#2d85b799",
+      "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#2d85b7",
+    "jest.disabledWorkspaceFolders": [
+      "bluelightcard-2.0",
+      "core",
+      "offers",
+      "identity",
+      "server-function",
+      ".next",
+      "standalone",
+      ".next",
+      ".next",
+      "types"
+    ]
+  }
+}

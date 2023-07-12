@@ -14,6 +14,7 @@
 		"isolatedModules": true,
 		"jsx": "preserve",
 		"incremental": true,
+		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",
 		"paths": {
 			"@/components/*": ["src/common/components/*"],
@@ -25,7 +26,14 @@
 			"@/global-vars": ["global-vars"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"ts-node": {
+		"compilerOptions": {
+			"module": "CommonJS",
+			"target": "ES6"
+		},
+		"files":true
+	},
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","global.d.ts"],
 	"exclude": ["node_modules"]
 }
   

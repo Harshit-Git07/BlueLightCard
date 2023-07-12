@@ -11,7 +11,8 @@
     "lint:fix": "eslint --fix .",
     "test:coverage": "jest --coverage --coverageReporters json-summary",
     "test": "jest --testPathIgnorePatterns=e2e/",
-    "test:e2e": "npx playwright test",
+    "test:e2e": "npx cucumber-js",
+    "report:e2e": "npx ts-node e2e/support/reporter.ts",
     "storybook": "STORYBOOK_ENV=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK_ENV=true storybook build",
     "chromatic": "npx chromatic --project-token=0b8218f55902",
@@ -19,6 +20,7 @@
     "lhci": "lhci autorun"
   },
   "dependencies": {
+    "@cucumber/cucumber": "^9.1.2",
     "@fortawesome/fontawesome-pro": "^6.2.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/pro-regular-svg-icons": "^6.2.1",
@@ -27,6 +29,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^2.9.11",
     "@storybook/addon-controls": "^7.0.7",
+    "cucumber-html-reporter": "^7.1.1",
     "dayjs": "^1.11.7",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.3",
@@ -84,6 +87,7 @@
     "i18next-resources-to-backend": "^1.1.1",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.3.1",
+    "multiple-cucumber-html-reporter": "^3.4.0",
     "postcss": "^8.4.23",
     "postcss-loader": "^7.2.4",
     "postcss-remove-rules": "^1.0.0",

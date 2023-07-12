@@ -147,3 +147,7 @@ dist
 
 # Local oas3.0 files
 schema
+
+# E2E Test files
+packages/web/.e2e
+packages/web/e2e/test-results

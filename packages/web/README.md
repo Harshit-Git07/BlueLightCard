@@ -74,3 +74,50 @@ To run a build or run the dev server using the above env vars
 NEXT_PUBLIC_APP_BRAND=blc npm run dev
 NEXT_PUBLIC_APP_BRAND=blc NEXT_PUBLIC_APP_REGION=GB npm run dev
 ```
+### End to End tests
+1. Preconditions tools to be added:
+- Nodejs
+- Playwright 
+- Cucumber 
+- Typescript
+
+2. Install all necessary packages using npm: Run command to get all necessary packages:
+npm install
+
+3. File structure:
+e2e -> Contains all the features & Typescript code
+test-results -> Contains all the reports related file
+e2e\features -> write your features here
+e2e\steps -> Your step definitions goes here
+e2e\support\world.ts -> Browser setup and teardown logic
+cucumber.json -> cucumber configuration
+package.json -> Contains all the dependencies
+
+4. Cucumber structure:
+
+a. QA/Product to write in feature folders. Tests are to be written in Gherkin format.
+e.g.
+Feature: name of feature
+Background: background
+Scenario: the test
+Given I am on x page
+When I click on login button
+Then I should be on login page
+
+b. Developer/QA to step definitions in steps/ folder. Given structure will be provided with running feature file. Tests are to be written in typescript
+e.g.
+Given('I am on {string} page', async function (string) {
+           // Write code here that turns the phrase above into concrete actions
+           return 'pending';
+         });
+
+c. World hooks contain 
+
+6. Run tests by following command:
+- npm run test:e2e OR npm run test:e2e -w packages/web
+
+For further information please see https://bluelightcard.atlassian.net/wiki/spaces/BTB/pages/2095611905/Guide+for+Playwright+and+Cucumber
+
+
+
+

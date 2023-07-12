@@ -32,7 +32,7 @@
     "cucumber-html-reporter": "^7.1.1",
     "dayjs": "^1.11.7",
     "eslint": "8.27.0",
-    "eslint-config-next": "13.0.3",
+    "eslint-config-next": "13.4.9",
     "flagsmith": "^3.11.0",
     "i18next": "^22.0.5",
     "lodash": "^4.17.21",

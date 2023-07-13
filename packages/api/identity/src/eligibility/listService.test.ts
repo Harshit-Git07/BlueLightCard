@@ -20,7 +20,12 @@ describe('List organisation by brand', () => {
       {},
     );
     expect(res).toEqual({
-        statusCode: 400, body: JSON.stringify({message: 'Please provide a valid brand'})
+        statusCode: 400, 
+        body: JSON.stringify({message: 'Please provide brand details'}),
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*' 
+      },
       });
   });
 
@@ -35,7 +40,12 @@ describe('List organisation by brand', () => {
       {},
     );
     expect(res).toEqual({
-        statusCode: 400, body: JSON.stringify({message: 'Please provide a valid brand'})
+      statusCode: 400, 
+      body: JSON.stringify({message: 'Please provide a valid brand'}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*' 
+      },
       });
   });
 
@@ -60,7 +70,14 @@ describe('List organisation by brand', () => {
       {},
     );
     expect(res).toEqual({
-        statusCode: 200, body: JSON.stringify({employers: [{id:"test_1",name:"test_emp1"},{id:"test_2",name:"test_emp2"}]})
+     statusCode: 200, 
+     body: JSON.stringify({
+      message: 'Success',
+      data: [{id:"test_1",name:"test_emp1"},{id:"test_2",name:"test_emp2"}]}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*' 
+    },
       });
   });
 
@@ -82,7 +99,12 @@ describe('List organisation by brand', () => {
       {},
     );
     expect(res).toEqual({
-        statusCode: 400, body: JSON.stringify({message: 'Please provide a valid organisation Id'})
+    statusCode: 400, 
+    body: JSON.stringify({message: 'Please provide a valid organisation Id'}),
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*' 
+    },
       });
   });
 

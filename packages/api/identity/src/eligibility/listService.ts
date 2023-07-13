@@ -3,6 +3,7 @@ import { DynamoDBDocumentClient, GetCommand, QueryCommand } from '@aws-sdk/lib-d
 import { type APIGatewayEvent, type APIGatewayProxyStructuredResultV2, type Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger'
 import { BRANDS } from './../../../core/src/types/brands.enum'
+import { Response } from './../../../core/src/utils/restResponse/response'
 
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-list-employer` });
@@ -18,24 +19,15 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   const organisationId = event.pathParameters != null ? event.pathParameters.organisationId : null;
 
   if (brand == null) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: 'Please provide a valid brand' }),
-    };
+    return Response.BadRequest({ message: 'Please provide brand details' })
   }
 
   if (!(brand in BRANDS)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: 'Please provide a valid brand' }),
-    };
+    return Response.BadRequest({ message: 'Please provide a valid brand' });
   }
 
   if (organisationId == null) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: 'Please provide a valid organisation Id' }),
-    };
+    return Response.BadRequest({ message: 'Please provide a valid organisation Id' });
   }
    
   const params = {
@@ -59,15 +51,12 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       name: item.name,
     }));
     logger.info('employer found', brand);
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ employers: apiResponse }),
-    };
+    return Response.OK( {message: 'Success', data: apiResponse} );
   } catch (error) {
     logger.error('error while fetching employer',{error});
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: error }),
-    };
+    return Response.Error({
+      message: 'error',
+      name: ''
+    });
   }
 };

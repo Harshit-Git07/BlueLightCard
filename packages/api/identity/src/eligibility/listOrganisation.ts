@@ -3,6 +3,7 @@ import { DynamoDBDocumentClient, GetCommand, QueryCommand } from '@aws-sdk/lib-d
 import { type APIGatewayEvent, type APIGatewayProxyStructuredResultV2, type Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger'
 import { BRANDS } from './../../../core/src/types/brands.enum'
+import { Response } from './../../../core/src/utils/restResponse/response'
 
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-list-organisation` });
@@ -17,17 +18,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   const brand = event.pathParameters != null ? event.pathParameters.brand?.toUpperCase() : null;
 
   if (brand == null) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: 'Please provide brand details' }),
-    };
+    return Response.BadRequest({ message: 'Please provide brand details' });
   }
 
   if (!(brand in BRANDS)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: 'Please provide a valid brand' }),
-    };
+    return Response.BadRequest({ message: 'Please provide a valid brand' });
   }
   
   const data = event.body != null ? JSON.parse(event.body) : null;
@@ -51,7 +46,6 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   try {
     const results = await dynamodb.send(new QueryCommand(params));
     logger.info('results ', { results });
-    const response = results.Items? results.Items : {};
 
     const apiResponse = results.Items?.map((item) => ({
       id: item.pk.replace('ORGANISATION#', ''),
@@ -63,15 +57,13 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       isTrusted: item.trustedDomain
     }));
     logger.info('organisation found', brand);
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ organisations: apiResponse }),
-    };
+    return Response.OK( {message: 'Success', data: apiResponse} );
+    
   } catch (error) {
     logger.error('error while fetching organisation ',{error});
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: error }),
-    };
+    return Response.Error({
+      message: 'error',
+      name: ''
+    });
   }
 };

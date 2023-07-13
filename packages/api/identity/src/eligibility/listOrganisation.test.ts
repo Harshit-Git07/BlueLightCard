@@ -21,6 +21,10 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*' 
+            },
             statusCode: 400, body: JSON.stringify({ message: 'Please provide a valid brand' })
         });
     });
@@ -78,13 +82,19 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, body: JSON.stringify({
-                organisations: [
+            statusCode: 200, 
+            body: JSON.stringify({
+                message: 'Success',
+                data: [
                     { id: "test_500", name: "test_HM C", retired: "false", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }, 
                 { description: "payslip within the last 3 months", id: "2", title: "Payslip", allowedFormats: "png/jpeg/jpg/pdf" }], maxUploads: "1", isTrusted: "false" },
                 { id: "test_600", name: "test_Mountain R", retired: "false", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }], "maxUploads": "1", isTrusted: "true" }
             ]
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*' 
+            },
         });
     });
 
@@ -106,7 +116,15 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, body: JSON.stringify({ organisations: [{ id: "test_100", name: "test_name", retired: "true" }] })
+            statusCode: 200, 
+            body: JSON.stringify({ 
+                message: 'Success',
+                data: [{ id: "test_100", name: "test_name", retired: "true" }] 
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*' 
+            }, 
         });
     });
 

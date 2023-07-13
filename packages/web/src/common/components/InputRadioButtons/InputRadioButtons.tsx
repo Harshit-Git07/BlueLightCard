@@ -1,5 +1,5 @@
 import { FC, forwardRef, useState, ChangeEvent } from 'react';
-import { InputRadioButtonsProps } from './Types';
+import { InputRadioButtonsProps } from './types';
 
 const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange }) => {
   const [selected, setSelected] = useState('');
@@ -16,7 +16,7 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange })
       {inputValues.map((input, index) => (
         <label
           key={`${input.name}_${index}`}
-          className={`m-2 border-2 rounded p-2 ${selected == input.value && 'border-[#009]'}`}
+          className={`m-2 border-2 rounded p-2 ${selected == input.value && 'border-border-focus'}`}
         >
           <input
             className="mr-2"
@@ -26,7 +26,9 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange })
             checked={selected === '' ? input.selectedByDefault : selected === input.value}
             onChange={handleInputChange}
           />
-          <span className={`${selected == input.value && 'text-[#009]'}`}>{input.name}</span>
+          <span className={`${selected == input.value && 'text-palette-primary-base'}`}>
+            {input.name}
+          </span>
         </label>
       ))}
     </>

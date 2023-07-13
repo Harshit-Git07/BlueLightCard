@@ -44,20 +44,20 @@ describe('InputSelectField component', () => {
     });
   });
 
-  describe('component callbacks', () => {
-    it('should invoke onChange callback with updated selected values', async () => {
-      const onChangeMockFn = jest.fn();
-      props.onChange = onChangeMockFn;
+  describe('component functionality', () => {
+    describe('component callbacks', () => {
+      it('should invoke onChange callback with updated selected values', async () => {
+        const onChangeMockFn = jest.fn();
+        props.onChange = onChangeMockFn;
 
-      render(<InputSelectField {...props} />);
+        render(<InputSelectField {...props} />);
 
-      const selectElement = screen.getByLabelText('drop-down selector') as HTMLSelectElement;
+        const selectElement = screen.getByLabelText('drop-down selector') as HTMLSelectElement;
+        fireEvent.change(selectElement, { target: { value: '2' } });
+        const selectedOptionValue = selectElement.options[selectElement.selectedIndex].value;
 
-      fireEvent.change(selectElement, { target: { value: '2' } });
-
-      const selectedOptionValue = selectElement.options[selectElement.selectedIndex].value;
-
-      expect(selectedOptionValue).toBe('2');
+        expect(selectedOptionValue).toBe('2');
+      });
     });
   });
 });

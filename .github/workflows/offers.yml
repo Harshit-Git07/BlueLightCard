@@ -1,0 +1,142 @@
+name: Offers
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/api/offers/**
+      - packages/api/offers/CHANGELOG.md
+      - packages/cms/**
+      - stacks/**
+      - .github/workflows/offers.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+  pull_request:
+    paths:
+      - packages/api/offers/**
+      - packages/api/offers/CHANGELOG.md
+      - packages/cms/**
+      - stacks/**
+      - .github/workflows/offers.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - run: npm run test -w packages/api/offers
+  changelog:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/api/offers
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/offers
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - changelog
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - run: npm run build
+  staging:
+    name: Staging Deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - build
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - run: npm run build
+      - name: Deploy Stack
+        run: npx sst deploy global --stage staging && npx sst deploy offers --stage staging
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - staging
+      - changelog
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - run: npm run build
+      - name: Deploy Stack
+        run: npx sst deploy global --stage production && npx sst deploy offers --stage production

@@ -4,18 +4,18 @@
   },
   "eslint.workingDirectories": [
     {
-        "directory": "packages/api",
-        "changeProcessCWD": true
+      "directory": "packages/api",
+      "changeProcessCWD": true
     },
     {
-        "directory": "packages/web",
-        "changeProcessCWD": true
+      "directory": "packages/web",
+      "changeProcessCWD": true
     }
   ],
   "css.validate": false,
   "less.validate": false,
   "stylelint.validate": [
-    "css",
+    "css"
   ],
   "editor.formatOnSave": false,
   "eslint.run": "onType",

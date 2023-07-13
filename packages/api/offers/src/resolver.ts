@@ -145,7 +145,7 @@ async function resolveOffersBrands(event: AppSyncResolverEvent<any>) {
     };
 }
 
-exports.handler = async (event: AppSyncResolverEvent<any>) => {
+export const handler = async(event: AppSyncResolverEvent<any>) => {
 
     if (event.info.fieldName === 'offers' && event.info.parentTypeName === 'OffersContainer') {
         return await resolveOffersContainerOffers(event);

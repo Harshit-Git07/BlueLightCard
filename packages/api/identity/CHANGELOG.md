@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.7.2...bluelightcard/identity-v1.8.0) (2023-07-13)
+
+
+### Features
+
+* change response to use util cls ([#168](https://github.com/bluelightcard/BlueLightCard-2.0/issues/168)) ([7925935](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7925935149dac90e7fa50df23a36a4f1e777607e))
+
+
+### Other Changes
+
+* **deps:** bump @aws-lambda-powertools/tracer from 1.7.0 to 1.11.0 ([#156](https://github.com/bluelightcard/BlueLightCard-2.0/issues/156)) ([f919591](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f919591e3702a81c7a6fec5f725b9f2bda33c7b6))
+
 ## [1.7.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.7.1...bluelightcard/identity-v1.7.2) (2023-07-11)
 
 

@@ -21,8 +21,8 @@ export default {
     });
     app
       .stack(Shared, { id: "global" })
-      .stack(Offers, { id: "offers" })
       .stack(Identity, { id: "identity" })
+      .stack(Offers, { id: "offers" })
       .stack(Web, { id: "web" })
   },
 } satisfies SSTConfig;

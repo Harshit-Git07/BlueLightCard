@@ -10,7 +10,7 @@ export function Web({ stack }: StackContext) {
     path: 'packages/web/',
     environment: {
       IDENTITY: identityApi.url,
-      OFFERS: offersApi.url,
+      OFFERS: offersApi.graphqlUrl,
     },
   });
 

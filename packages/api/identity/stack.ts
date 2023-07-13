@@ -107,5 +107,6 @@ export function Identity({ stack }: StackContext) {
 
   return {
     identityApi,
+    cognito
   };
 }

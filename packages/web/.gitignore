@@ -21,6 +21,7 @@
 *.pem
 build-storybook.log
 .lighthouseci
+storybook-static
 
 # debug
 npm-debug.log*

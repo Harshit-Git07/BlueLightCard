@@ -54,20 +54,20 @@ const InputSelectFieldTemplate: StoryFn<typeof InputSelectField> = (args) => (
 export const Default = InputSelectFieldTemplate.bind({});
 
 Default.args = {
-  options: {
-    value0: 'Option One',
-    value1: 'Option Two',
-  },
+  options: [
+    { value: 1, text: 'Option One' },
+    { value: 2, text: 'Option Two' },
+  ],
   defaultOption: 'Default Option',
 };
 
 export const Success = InputSelectFieldTemplate.bind({});
 
 Success.args = {
-  options: {
-    value0: 'Option One',
-    value1: 'Option Two',
-  },
+  options: [
+    { value: 1, text: 'Option One' },
+    { value: 2, text: 'Option Two' },
+  ],
   defaultOption: 'Default Option',
   success: true,
 };
@@ -75,10 +75,10 @@ Success.args = {
 export const Error = InputSelectFieldTemplate.bind({});
 
 Error.args = {
-  options: {
-    value0: 'Option One',
-    value1: 'Option Two',
-  },
+  options: [
+    { value: 1, text: 'Option One' },
+    { value: 2, text: 'Option Two' },
+  ],
   defaultOption: 'Default Option',
   error: true,
 };

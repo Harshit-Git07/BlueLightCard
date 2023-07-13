@@ -1,11 +1,15 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { InputFieldSharedProps } from '../_shared/types';
+import { InputFieldSharedProps } from '@/components/_shared/types';
 
 export type InputSelectFieldProps = InputFieldSharedProps<HTMLSelectElement> & {
   icon?: IconDefinition;
   value?: string | number;
   defaultOption?: string;
-  options: {
-    [value: string]: string | number | null;
-  };
+  options: KeyValue[];
+  tabIndex?: number;
+};
+
+export type KeyValue = {
+  text: string;
+  value: string | number;
 };

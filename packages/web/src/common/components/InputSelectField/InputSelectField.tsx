@@ -1,6 +1,6 @@
 import { FC, forwardRef } from 'react';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
-import { InputSelectFieldProps } from './types';
+import { InputSelectFieldProps, KeyValue } from './types';
 import { cssUtil } from '@/utils/cssUtil';
 
 const InputSelectField: FC<InputSelectFieldProps> = ({
@@ -11,6 +11,7 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   value,
   defaultOption,
   onChange,
+  tabIndex,
 }) => {
   const selectClasses = cssUtil([
     error
@@ -21,11 +22,22 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   ]);
   return (
     <InputFieldWrapper icon={icon} select={true} showSuccessState={success} showErrorState={error}>
-      <select className={selectClasses} value={value} onChange={onChange}>
+      <select
+        aria-label="drop-down selector"
+        tabIndex={tabIndex}
+        className={selectClasses}
+        value={value}
+        onChange={onChange}
+      >
         {defaultOption && <option>{defaultOption}</option>}
-        {Object.keys(options).map((value) => (
-          <option key={value} value={value}>
-            {options[value]}
+        {options?.map((option: KeyValue) => (
+          <option
+            aria-label="drop-down option"
+            tabIndex={0}
+            key={`option_${option.value}`}
+            value={option.value}
+          >
+            {option.text}
           </option>
         ))}
       </select>

@@ -16,7 +16,7 @@
         }
       },
       "focus": { "value": "{color.palette.primary.base.value}" },
-      "base": { "value": "{color.palette.neutral.base.value}" },
+      "base": { "value": "{color.palette.neutral.on.base.value}" },
       "dark": { "value": "{color.palette.primary.dark.value}" },
       "error": { "value": "{color.palette.danger.base.value}" },
       "cta": {

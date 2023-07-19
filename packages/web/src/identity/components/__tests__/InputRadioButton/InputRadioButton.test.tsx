@@ -12,7 +12,7 @@ describe('InputRadioButton component', () => {
       required: true,
       value: 'val1',
       selectedByDefault: false,
-      onClick: () => {},
+      onChange: () => {},
     };
   });
 

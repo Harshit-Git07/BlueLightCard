@@ -6,5 +6,5 @@ export type InputRadioButtonProps = InputFieldSharedProps<HTMLInputElement> & {
   value: string;
   required?: boolean;
   selectedByDefault: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onChange?: MouseEventHandler<HTMLButtonElement>;
 };

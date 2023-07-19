@@ -1,5 +1,6 @@
 import { FC, forwardRef, useState, ChangeEvent } from 'react';
 import { InputRadioButtonsProps } from './types';
+import React from 'react';
 
 const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange }) => {
   const [selected, setSelected] = useState('');

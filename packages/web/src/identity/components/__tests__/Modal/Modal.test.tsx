@@ -43,14 +43,14 @@ describe('Modal component', () => {
     it('should invoke onClose when quit button is clicked', async () => {
       render(<Modal {...props} />);
 
-      await act(() => user.click(screen.getByText('Quit')));
+      await act(() => user.click(screen.getByRole('button', { name: 'Quit' })));
 
       expect(props.onClose).toHaveBeenCalled();
     });
     it('should invoke onConfirm when continue button is clicked', async () => {
       render(<Modal {...props} />);
 
-      await act(() => user.click(screen.getByText('Continue')));
+      await act(() => user.click(screen.getByRole('button', { name: 'Continue' })));
 
       expect(props.onConfirm).toHaveBeenCalled();
     });

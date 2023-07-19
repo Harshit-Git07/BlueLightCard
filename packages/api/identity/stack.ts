@@ -110,3 +110,4 @@ export function Identity({ stack }: StackContext) {
     cognito
   };
 }
+

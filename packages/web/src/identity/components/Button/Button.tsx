@@ -9,7 +9,7 @@ const colorVariants: ThemeColorTokens = {
     base: {
       hover: 'hover:bg-button-primary-bg-hover',
       bg: 'bg-background-button-standard-primary-enabled-base',
-      text: 'text-font-cta-standard-primary-base',
+      text: 'text-background-dark',
       focus: 'focus:ring-button-primary-outline-focus',
     },
   },
@@ -30,31 +30,26 @@ const colorVariants: ThemeColorTokens = {
     },
   },
 };
-
 const Button: FC<ButtonProps> = ({
   iconLeft,
   iconRight,
-  disabled,
+  disabled = false,
   className,
   children,
+  type = 'button',
   variant = ThemeVariant.Primary,
   onClick,
 }) => {
+  const classes = cssUtil([
+    disabled ? 'opacity-25 ' : colorVariants[variant].base.hover,
+    colorVariants[variant].base.bg,
+    'transition rounded-md px-10 p-3.5  min-w-btn ring-offset-2 focus:ring-2',
+    colorVariants[variant].base.focus,
+    colorVariants[variant].base.text,
+    className ?? '',
+  ]);
   return (
-    <button
-      aria-label="Button"
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className={cssUtil([
-        disabled ? 'opacity-25 ' : colorVariants[variant].base.hover,
-        colorVariants[variant].base.bg,
-        'transition rounded-md py-2 px-4 min-w-btn ring-offset-2 focus:ring-2',
-        colorVariants[variant].base.focus,
-        colorVariants[variant].base.text,
-        className ?? '',
-      ])}
-    >
+    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}
       {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}

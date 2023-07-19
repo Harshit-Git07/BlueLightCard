@@ -3,6 +3,5 @@ declare module '*.md?raw' {
   export default value;
 }
 declare module 'multiple-cucumber-html-reporter' {
-  export function generate (...args): void;
-  
+  export function generate(...args): void;
 }

@@ -1,6 +1,26 @@
 import Navigation from '@/components/NavigationLegacy/Navigation';
 import { NextPage } from 'next';
+import { Employer, IdRequirements, KeyValue } from '../identity/components/EligibilityCard/Types';
+import EligibilityCard from '../identity/components/EligibilityCard/EligibilityCard';
+import { useState } from 'react';
+import Modal from '../identity/components/Modal/Modal';
+import { ModalTypes } from '../identity/components/Modal/Types';
+import router from 'next/router';
 const TestPage: NextPage = () => {
+  const [employment, setEmployment] = useState('');
+  const [organisation, setOrganisation] = useState('');
+  const [employer, setEmployer] = useState('');
+  const [orgDetails, setOrgDetails] = useState<any>();
+  const [acceptedId, setAcceptedId] = useState('');
+  const [employers, setEmployers] = useState<Employer[]>([]);
+
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const [orgOptions, setOrgOptions] = useState<KeyValue[]>([]);
+  const [empOptions, setEmpOptions] = useState<KeyValue[]>([]);
+  const [acceptedMethods, setAcceptedMethods] = useState<IdRequirements[]>([]);
+  const [visible, setVisible] = useState(false);
+  const submit = async () => {};
   return (
     <main>
       <Navigation
@@ -25,9 +45,51 @@ const TestPage: NextPage = () => {
           },
         ]}
       />
-      <div className="mt-[10rem] text-center">
-        <h1 className="text-7xl">Testing reverse proxy</h1>
+      <div className="my-[90px]">
+        <EligibilityCard
+          employment={employment}
+          setEmployment={setEmployment}
+          organisation={organisation}
+          setOrganisation={setOrganisation}
+          employer={employer}
+          setEmployer={setEmployer}
+          orgDetails={orgDetails}
+          setOrgDetails={setOrgDetails}
+          acceptedId={acceptedId}
+          setAcceptedId={setAcceptedId}
+          employers={employers}
+          setEmployers={setEmployers}
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
+          orgOptions={orgOptions}
+          setOrgOptions={setOrgOptions}
+          empOptions={empOptions}
+          setEmpOptions={setEmpOptions}
+          acceptedMethods={acceptedMethods}
+          setAcceptedMethods={setAcceptedMethods}
+          visible={visible}
+          setVisible={setVisible}
+          steps={2}
+          formSubmitted={() => {}}
+          onNext={() => setCurrentStep(currentStep + 1)}
+          onSubmit={() => {
+            submit();
+            setCurrentStep(currentStep + 1);
+          }}
+          quit={() => {
+            setVisible(true);
+          }}
+        />
       </div>
+      <Modal
+        type={ModalTypes.QuitEligibility}
+        isVisible={visible}
+        onClose={() => {
+          setVisible(false);
+          router.push('/');
+        }}
+        onConfirm={() => setVisible(false)}
+      />
     </main>
   );
 };

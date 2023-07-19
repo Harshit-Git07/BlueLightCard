@@ -11,7 +11,7 @@ const Modal: FC<ModalProps> = ({ isVisible, type, onClose, onConfirm }) => {
   //different types of modal could be implemented here in the future
   if (type == ModalTypes.QuitEligibility) {
     return (
-      <article className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex flex-col justify-center items-center">
+      <article className="z-50 fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex flex-col justify-center items-center">
         <div className="w-[774px] h-[538px] px-12 py-[52px] bg-white shadow  gap-7 inline-flex">
           <div className="w-[50%] pe-[44px]">
             <Image
@@ -35,7 +35,7 @@ const Modal: FC<ModalProps> = ({ isVisible, type, onClose, onConfirm }) => {
             <div className="flex justify-end gap-2 mt-[46%]">
               <Button
                 variant={ThemeVariant.Tertiary}
-                className="px-6 py-2"
+                className="px-6 py-2 text-lg font-semibold"
                 onClick={() => onClose()}
               >
                 Quit

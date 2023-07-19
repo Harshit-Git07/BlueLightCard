@@ -1,6 +1,5 @@
 import { FC, forwardRef, useState } from 'react';
 import { InputRadioButtonProps } from './types';
-import React from 'react';
 
 const InputRadioButton: FC<InputRadioButtonProps> = ({
   value,

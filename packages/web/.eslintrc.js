@@ -5,11 +5,6 @@ module.exports = {
     node: true,
   },
   extends: ['next', 'plugin:react/recommended', 'next/core-web-vitals', 'prettier'],
-  settings: {
-    next: {
-      rootDir: 'packages/web/',
-    },
-  },
   root: true,
   plugins: ['prettier'],
   overrides: [],

@@ -13,7 +13,6 @@ export interface CountrySelector {
 }
 
 export interface NavigationProps {
-  logoImgSrc: string;
   navItems:
     | [NavItem]
     | [NavItem, NavItem]
@@ -21,7 +20,6 @@ export interface NavigationProps {
     | [NavItem, NavItem, NavItem, NavItem];
   countryKey?: string;
   countries?: CountrySelector[];
-  assetPrefix?: string;
   loginLink?: string;
   signUpLink?: string;
 }

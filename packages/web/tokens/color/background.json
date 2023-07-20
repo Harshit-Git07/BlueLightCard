@@ -16,22 +16,22 @@
       "cta": {
         "standard": {
           "primary": {
-          "enabled": {
-            "base": { "value": "{color.palette.primary.base.value}" },
-            "dark": { "value": "{color.shade.vividskyblue.500.value}" },
-            "invert": { "value": "{color.palette.primary.on.base.value}" }
-          },
-          "hover": {
-            "base": { "value": "{color.shade.dukeblue.500.value}" },
-            "dark": { "value": "{color.shade.vividskyblue.400.value}" },
-            "invert": {
-              "value": "{color.palette.primary.on.base.value}",
-              "modify": [{
-                "type": "alpha",
-                "amount": 0.7
-              }]
+            "enabled": {
+              "base": { "value": "{color.palette.primary.base.value}" },
+              "dark": { "value": "{color.shade.vividskyblue.500.value}" },
+              "invert": { "value": "{color.palette.primary.on.base.value}" }
+            },
+            "hover": {
+              "base": { "value": "{color.shade.dukeblue.500.value}" },
+              "dark": { "value": "{color.shade.vividskyblue.400.value}" },
+              "invert": {
+                "value": "{color.palette.primary.on.base.value}",
+                "modify": [{
+                  "type": "alpha",
+                  "amount": 0.7
+                }]
+              }
             }
-          }
         },
         "secondary": {
           "enabled": {

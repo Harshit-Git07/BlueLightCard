@@ -24,8 +24,6 @@ const TestPage: NextPage = () => {
   return (
     <main>
       <Navigation
-        logoImgSrc="blc_logo.webp"
-        assetPrefix=""
         navItems={[
           {
             link: '/',

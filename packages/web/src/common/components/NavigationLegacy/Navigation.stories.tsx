@@ -8,7 +8,6 @@ const NavigationTemplate: StoryFn<typeof Navigation> = (args) => <Navigation {..
 export const Default = NavigationTemplate.bind({});
 
 Default.args = {
-  logoImgSrc: 'assets/blc_logo.webp',
   navItems: [
     { text: 'Home', link: '/' },
     { text: 'About us', link: '/' },
@@ -25,7 +24,6 @@ Default.args = {
 export const CallToActions = NavigationTemplate.bind({});
 
 CallToActions.args = {
-  logoImgSrc: 'assets/blc_logo.webp',
   navItems: [
     { text: 'Home', link: '/' },
     { text: 'About us', link: '/' },

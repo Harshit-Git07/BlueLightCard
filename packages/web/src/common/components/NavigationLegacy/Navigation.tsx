@@ -1,6 +1,5 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { FC, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/pro-regular-svg-icons';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
@@ -9,7 +8,7 @@ import Icon from '@/components/Icon/Icon';
 import Button from '@/components/Button/Button';
 import { ThemeVariant } from '@/types/theme';
 import { cssUtil } from '@/utils/cssUtil';
-import { ASSET_PREFIX } from 'global-vars';
+import BrandLogo from '@brandasset/logo.svg';
 
 const NavLink: FC<NavLinkProps> = ({ href, children, className }) => {
   const classes = cssUtil([
@@ -18,12 +17,12 @@ const NavLink: FC<NavLinkProps> = ({ href, children, className }) => {
   ]);
   return (
     <li className={classes}>
-      <Link
-        className="block p-3 laptop:px-0 text-palette-primary-on-base dark:text-palette-primary-on-dark hover:underline hover:opacity-100"
+      <a
+        className="block p-3 laptop:px-0 text-palette-primary-on-base hover:underline hover:opacity-100"
         href={href}
       >
         {children}
-      </Link>
+      </a>
     </li>
   );
 };
@@ -32,17 +31,16 @@ const NavButtonLink: FC<NavButtonLinkProps> = ({ href, variant, children, classN
   const classes = cssUtil(['mr-2', className ?? '']);
   return (
     <div className={classes}>
-      <Link href={href}>
+      <a href={href}>
         <Button variant={variant} slim={true} invertColor={true}>
           {children}
         </Button>
-      </Link>
+      </a>
     </div>
   );
 };
 
 const Navigation: FC<NavigationProps> = ({
-  logoImgSrc,
   navItems,
   loginLink,
   signUpLink,
@@ -51,7 +49,6 @@ const Navigation: FC<NavigationProps> = ({
     { key: 'aus', name: 'Australia', link: '/' },
   ],
   countryKey = 'uk',
-  assetPrefix = ASSET_PREFIX,
 }) => {
   const selectedCountry = countries?.find((country) => country.key === countryKey);
   const [expanded, setExpanded] = useState(false);
@@ -70,17 +67,14 @@ const Navigation: FC<NavigationProps> = ({
       <div className="bg-palette-primary-base dark:bg-palette-primary-dark py-3.5 px-3">
         <div className="laptop:container laptop:mx-auto flex items-center">
           <div className="flex-1 mr-2">
-            <Link
+            <a
               className="relative block h-[40px] max-w-[170px] laptop:max-w-[200px] hover:opacity-100"
               href="/"
             >
-              <Image
-                className="object-contain"
-                src={`${assetPrefix}/${logoImgSrc}`}
-                alt="Logo"
-                fill
-              />
-            </Link>
+              <div className="text-palette-primary-base dark:text-palette-primary-dark">
+                <BrandLogo />
+              </div>
+            </a>
           </div>
           <nav
             className={`${
@@ -129,7 +123,7 @@ const Navigation: FC<NavigationProps> = ({
             <div className="relative z-10">
               <button
                 title={selectedCountry.name}
-                className="flex gap-3 w-full items-center dark:bg-palette-tertiary-dark bg-palette-tertiary-base p-2.5 rounded-lg text-palette-tertiary-on-base dark:text-palette-tertiary-on-dark"
+                className="flex gap-3 w-full items-center dark:bg-palette-tertiary-dark bg-palette-tertiary-base p-2.5 rounded-lg text-palette-tertiary-on-base"
                 onClick={handleSelectorClick}
               >
                 <div className="w-[30px] h-[15px] tablet:w-[35px] tablet:h-[20px]">
@@ -145,7 +139,7 @@ const Navigation: FC<NavigationProps> = ({
                       className="dark:bg-palette-tertiary-dark bg-palette-tertiary-base p-2.5 rounded-lg"
                       key={country.key}
                     >
-                      <Link
+                      <a
                         className="flex gap-3 items-center text-palette-white"
                         href={country.link}
                         title={country.name}
@@ -153,7 +147,7 @@ const Navigation: FC<NavigationProps> = ({
                         <div className="w-[30px] h-[15px] tablet:w-[35px] tablet:h-[20px]">
                           <Icon iconKey={country.key} />
                         </div>
-                      </Link>
+                      </a>
                     </li>
                   ))}
               </ul>

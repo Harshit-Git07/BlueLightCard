@@ -32,6 +32,11 @@ To start the front end run (in another terminal)
 npm run dev -w packages/web
 ```
 
+To start the admin panel frontend run (in another terminal)
+```
+npm run dev -w packages/cms
+```
+
 To teardown this environment run (this will remove everything except data storage services like S3 buckets and DynamoDB):
 ```
 npm run remove

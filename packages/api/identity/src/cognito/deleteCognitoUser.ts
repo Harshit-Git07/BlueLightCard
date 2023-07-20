@@ -21,6 +21,20 @@ export const handler = async (event: any, context: any) => {
   const userPoolId = process.env.USER_POOL_ID || '';
   const username = event.detail.user_email;
   try {
+    const existingUser = await cognito.adminGetUser({
+        UserPoolId: userPoolId,
+        Username: username
+    }).promise();
+    if (!existingUser) {
+        logger.info("user not found: ", { username });
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            message: `User ${username} not found.`
+          })
+        };
+    }
+    logger.info("user found: ", { username });
     await cognito.adminDeleteUser({
         UserPoolId: userPoolId,
         Username: username

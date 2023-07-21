@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.8.0...bluelightcard/identity-v1.9.0) (2023-07-21)
+
+
+### Features
+
+* created eligibility card component ([#125](https://github.com/bluelightcard/BlueLightCard-2.0/issues/125)) ([372e182](https://github.com/bluelightcard/BlueLightCard-2.0/commit/372e182f9e9dfc2ed44f2352c47a2fee1602edfb))
+* Feat/setup app sync offers ([#169](https://github.com/bluelightcard/BlueLightCard-2.0/issues/169)) ([9b9d6d7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9b9d6d7d42959497348ad920eac9925762657c67))
+
+
+### Bug Fixes
+
+* update identity table name ([#187](https://github.com/bluelightcard/BlueLightCard-2.0/issues/187)) ([4cd7865](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4cd7865d539a486d2a29bd37a365acada40b10f1))
+
+
+### Other Changes
+
+* **deps:** bump libphonenumber-js from 1.10.36 to 1.10.37 ([#177](https://github.com/bluelightcard/BlueLightCard-2.0/issues/177)) ([a6526a3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a6526a3ef5691b9935640535ea47c1cc9229d230))
+
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.7.2...bluelightcard/identity-v1.8.0) (2023-07-13)
 
 

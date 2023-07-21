@@ -29,16 +29,16 @@ export function Identity({ stack }: StackContext) {
   let table = TableCdk.fromTableName(stack, 'ExistingTable', `${stack.stage}-blc-mono-table`);
 
   //db
-  // const table = new Table(stack, 'table', {
-  //   fields: {
-  //     pk: 'string',
-  //     sk: 'string',
-  //   },
-  //   primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
-  //   globalIndexes: {
-  //     gsi1: { partitionKey: 'sk', sortKey: 'pk' },
-  //   }
-  // });
+  const identityTable = new Table(stack, 'identityTable', {
+    fields: {
+      pk: 'string',
+      sk: 'string',
+    },
+    primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
+    globalIndexes: {
+      gsi1: { partitionKey: 'sk', sortKey: 'pk' },
+    }
+  });
 
   //apis
   const identityApi = new ApiGatewayV1Api(stack, 'identity', {

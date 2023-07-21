@@ -1,8 +1,10 @@
 const { resolve } = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const { BRAND } = require('./global-vars');
+const { existsSync } = require('fs');
 
 const assetsFolder = `${__dirname}/assets`;
+const brandAssetFolder = resolve(__dirname, `./assets/brands/${BRAND}`);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -36,7 +38,9 @@ const nextConfig = {
     fileLoaderRule.exclude = /\.svg$/i;
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@brandasset': resolve(__dirname, `./assets/brands/${BRAND}`),
+      '@brandasset': !existsSync(brandAssetFolder)
+        ? resolve(__dirname, './assets')
+        : brandAssetFolder,
     };
     config.plugins.push(
       new CopyPlugin({

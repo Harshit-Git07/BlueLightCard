@@ -32,6 +32,8 @@ describe('EligibilityCard component', () => {
       organisation: '',
       setOrganisation: jest.fn(),
       employer: '',
+      jobRole: '',
+      setJobRole: jest.fn(),
       setEmployer: jest.fn(),
       orgDetails: {},
       setOrgDetails: jest.fn(),
@@ -64,7 +66,14 @@ describe('EligibilityCard component', () => {
   });
   describe('disabled button rendering', () => {
     it('Next button should be disabled while form is incomplete', () => {
-      render(<EligibilityCard {...props} employment="Employed" organisation="NHS" />);
+      render(
+        <EligibilityCard
+          {...props}
+          employment="Employed"
+          organisation="NHS"
+          employer="Health Education England"
+        />
+      );
       const next_button = screen.getByRole('button', { name: 'Next' });
 
       expect(next_button).toBeDisabled();
@@ -98,6 +107,7 @@ describe('EligibilityCard component', () => {
           {...props}
           employment="Employed"
           organisation="NHS"
+          jobRole="Nurse"
           employer="Health Education England"
         />
       );

@@ -16,6 +16,7 @@ import {
   fetchEmployerData,
   useEmployer,
 } from 'src/services/EligibilityApi';
+import InputTextFieldWithRef from '@/components/InputTextField/InputTextField';
 
 const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   const router = useRouter();
@@ -139,7 +140,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     }
                   }}
                   variant={ThemeVariant.Tertiary}
-                  className="text-lg font-semibold"
+                  className="w-[63px] h-12 px-6 py-2rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold "
                 >
                   Back
                 </Button>
@@ -150,7 +151,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   props.currentStep <= props.steps ? props.quit() : router.push('/');
                 }}
                 variant={ThemeVariant.Tertiary}
-                className="text-lg font-semibold"
+                className="w-[63px] h-12 px-6 py-2 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold"
               >
                 {props.currentStep <= props.steps ? 'Quit' : 'Finish'}
               </Button>
@@ -217,6 +218,16 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   </div>
                 </>
               )}
+              {props.employer && (
+                <div className="flex flex-col">
+                  <label className="font-normal pb-3">What is your job role?</label>
+                  <InputTextFieldWithRef
+                    placeholder="What do you work as?"
+                    required
+                    onChange={(e) => props.setJobRole(e.target.value)}
+                  />
+                </div>
+              )}
             </form>
           )}
 
@@ -259,34 +270,43 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               </div>
             </div>
           )}
-
           {props.employment != '' &&
             props.organisation != '' &&
             props.currentStep < props.steps && (
-              <div className="flex justify-end mt-5">
-                <Button
-                  type="button"
-                  variant={ThemeVariant.Primary}
-                  disabled={props.employer == '' || props.organisation == '' ? true : false}
-                  onClick={() => props.onNext()}
-                  className="px-10 py-3.5 text-lg font-semibold"
-                >
-                  Next
-                </Button>
+              <div>
+                <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
+                <div className="flex justify-end ">
+                  <Button
+                    type="button"
+                    variant={ThemeVariant.Primary}
+                    disabled={
+                      props.employer == '' || props.organisation == '' || props.jobRole == ''
+                        ? true
+                        : false
+                    }
+                    onClick={() => props.onNext()}
+                    className="w-[184.67px] h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 basis-1/4 self-end"
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             )}
 
           {props.currentStep == props.steps && (
-            <div className="flex justify-end mt-5">
-              <Button
-                type="button"
-                disabled={!props.acceptedId}
-                variant={ThemeVariant.Primary}
-                onClick={() => props.onSubmit()}
-                className="px-10 py-3.5 text-lg font-semibold"
-              >
-                Submit
-              </Button>
+            <div>
+              <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
+              <div className="flex justify-end">
+                <Button
+                  type="button"
+                  disabled={!props.acceptedId}
+                  variant={ThemeVariant.Primary}
+                  onClick={() => props.onSubmit()}
+                  className="w-[184.67px] h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 basis-1/4 self-end"
+                >
+                  Submit
+                </Button>
+              </div>
             </div>
           )}
         </div>

@@ -10,6 +10,7 @@ const TestPage: NextPage = () => {
   const [employment, setEmployment] = useState('');
   const [organisation, setOrganisation] = useState('');
   const [employer, setEmployer] = useState('');
+  const [jobRole, setJobRole] = useState('');
   const [orgDetails, setOrgDetails] = useState<any>();
   const [acceptedId, setAcceptedId] = useState('');
   const [employers, setEmployers] = useState<Employer[]>([]);
@@ -51,6 +52,8 @@ const TestPage: NextPage = () => {
           setOrganisation={setOrganisation}
           employer={employer}
           setEmployer={setEmployer}
+          jobRole={jobRole}
+          setJobRole={setJobRole}
           orgDetails={orgDetails}
           setOrgDetails={setOrgDetails}
           acceptedId={acceptedId}

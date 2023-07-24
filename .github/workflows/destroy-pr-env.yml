@@ -1,0 +1,25 @@
+name: Destroy PR Environment
+
+# only trigger on pull request closed events
+on:
+  pull_request:
+    types: [ closed ]
+
+env:
+  PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npx sst remove --stage $PR_PREFIX

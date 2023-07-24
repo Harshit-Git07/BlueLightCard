@@ -20,16 +20,16 @@ export default {
         JWT_SECRET: process.env.JWT_SECRET ?? 'secret',
       },
     });
+    // Remove all resources in the stack for preview environments
+    if (app.stage !== 'production' && app.stage !== 'staging') {
+      app.setDefaultRemovalPolicy('destroy');
+    }
     app
       .stack(Shared, { id: 'global' })
       .stack(Identity, { id: 'identity' })
       .stack(Offers, { id: 'offers' })
       .stack(Web, { id: 'web' })
       .stack(CMS, { id: 'cms' });
-
-    if (app.stage !== 'production') {
-      app.setDefaultRemovalPolicy('destroy');
-    }
   },
 } satisfies SSTConfig;
 

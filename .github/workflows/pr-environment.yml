@@ -1,0 +1,153 @@
+name: Pull Request Ephemeral Environment
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+  deployments: write
+
+env:
+  PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono
+
+jobs:
+  # Deploy the backend
+  backend:
+    name: Deploy Backend for PR
+    runs-on: ubuntu-latest
+    outputs:
+      identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
+      offers-api-endpoint: ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
+      - run: npm install
+      - run: npm run build
+      - name: Deploy Global
+        run: npx sst deploy global --stage $PR_PREFIX
+      - name: Deploy Identity
+        run: npx sst deploy identity --stage $PR_PREFIX
+      - name: Extract Identity URL
+        id: sst-identity-outputs
+        run: |
+          cat .sst/outputs.json
+          IDENTITY_URL=$(jq -r '.[].IdentityApiEndpoint | select(. != null)' .sst/outputs.json)
+          echo "identityApiUrl=$IDENTITY_URL" >> $GITHUB_OUTPUT
+      - name: Deploy Offers
+        run: npx sst deploy offers --stage $PR_PREFIX
+      - name: Extract Api URL and set output
+        id: sst-offers-outputs
+        run: |
+          cat .sst/outputs.json
+          OFFERS_URL=$(jq -r '.[].OffersApiEndpoint | select(. != null)' .sst/outputs.json)
+          echo "offersApiUrl=$OFFERS_URL" >> $GITHUB_OUTPUT
+      - name: Echo outputs
+        run: |
+          echo ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
+          echo ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
+
+  # Deploy the frontend
+  frontend:
+    name: Deploy Frontend BLC UK for PR
+    strategy:
+      matrix:
+        brand: ['blc-uk']
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.cloudflare-publish.outputs.url }}
+    needs:
+      - backend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - name: Cache NextJS Build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/packages/web/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('packages/web/**/*.[jt]s', 'packages/web/**/*.[jt]sx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+      - run: npm install
+      - name: Build
+        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
+        env:
+          NEXT_PUBLIC_IDENTITY_API_URL: ${{ needs.backend.outputs.identity-api-endpoint }}
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        id: cloudflare-publish
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{matrix.brand}}
+          directory: packages/web/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  # Put comment on PR
+  comment:
+    name: Comment on PR
+    runs-on: ubuntu-latest
+    needs:
+      - backend
+      - frontend
+    steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully deployed preview environment'
+
+      - name: Create Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully deployed preview environment
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
+            </td></tr>
+            <tr><td><strong>Status:</strong></td><td>&nbsp;✅&nbsp; Deploy successful!</td></tr>
+            <tr><td><strong>Preview URL:</strong></td><td>
+            <a href='${{ needs.frontend.outputs.url }}'>${{ needs.frontend.outputs.url }}</a>
+            </td></tr>
+            <tr><td><strong>Identity API URL:</strong></td><td>
+            <a href='${{ needs.backend.outputs.identity-api-endpoint }}'>${{ needs.backend.outputs.identity-api-endpoint }}</a>
+            </td></tr>
+            <tr><td><strong>Offers API URL:</strong></td><td>
+            <a href='${{ needs.backend.outputs.offers-api-endpoint }}'>${{ needs.backend.outputs.offers-api-endpoint }}</a>
+            </td></tr>
+            </table>

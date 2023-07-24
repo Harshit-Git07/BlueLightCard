@@ -21,6 +21,10 @@ export function Offers({stack}: StackContext) {
         xrayEnabled: true,
     });
 
+    stack.addOutputs({
+      OffersApiEndpoint: offersApi.graphqlUrl,
+    });
+
     const brandTable = new Table(stack, 'brandtable', {
         fields: {
             id: 'string',

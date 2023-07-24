@@ -114,6 +114,9 @@ jobs:
     name: Release
     environment: Production
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region: ['eu-west-2', 'ap-southeast-2']
     needs:
       - test
       - staging
@@ -140,4 +143,4 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: Deploy
-        run: npx sst deploy global --stage production && npx sst deploy identity --stage production
+        run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy identity --stage production --region ${{matrix.region}}

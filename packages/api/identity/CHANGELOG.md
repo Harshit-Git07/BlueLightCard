@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.9.0...bluelightcard/identity-v1.9.1) (2023-07-25)
+
+
+### Bug Fixes
+
+* remove old identity table from the code and assigned every reference to the new table ([#197](https://github.com/bluelightcard/BlueLightCard-2.0/issues/197)) ([51f0110](https://github.com/bluelightcard/BlueLightCard-2.0/commit/51f01108e9d483914aa39987a826c8d7418557b5))
+
 ## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.8.0...bluelightcard/identity-v1.9.0) (2023-07-21)
 
 

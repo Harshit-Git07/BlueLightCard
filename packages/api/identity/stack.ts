@@ -1,7 +1,6 @@
-import { StackContext, Api, Cognito, Table, use, Queue, ApiGatewayV1Api } from 'sst/constructs';
+import { StackContext, Cognito, Table, use, Queue, ApiGatewayV1Api } from 'sst/constructs';
 import { StringAttribute } from 'aws-cdk-lib/aws-cognito';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
-import { Table as TableCdk } from 'aws-cdk-lib/aws-dynamodb';
 import { Shared } from '../../../stacks/stack';
 import { passwordResetRule } from './src/eventRules/passwordResetRule';
 import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
@@ -26,8 +25,6 @@ export function Identity({ stack }: StackContext) {
   const blcApiUrl = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/url`);
   const blcApiAuth = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/auth`);
 
-  let table = TableCdk.fromTableName(stack, 'ExistingTable', `${stack.stage}-blc-mono-table`);
-
   //db
   const identityTable = new Table(stack, 'identityTable', {
     fields: {
@@ -45,8 +42,8 @@ export function Identity({ stack }: StackContext) {
     defaults: {
       function: {
         timeout: 20,
-        environment: { tableName: table.tableName, service: 'identity' },
-        permissions: [table],
+        environment: { tableName: identityTable.tableName, service: 'identity' },
+        permissions: [identityTable],
       },
     },
     routes: {
@@ -92,7 +89,7 @@ export function Identity({ stack }: StackContext) {
   });
   stack.addOutputs({
     CognitoUserPool: cognito.userPoolId,
-    Table: table.tableName,
+    Table: identityTable.tableName,
     IdentityApiEndpoint: identityApi.url,
   });
 

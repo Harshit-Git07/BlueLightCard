@@ -1,7 +1,14 @@
-import  Head  from 'next/head';
+import Head from 'next/head';
 import { NextPage } from 'next';
+import { useEffect } from 'react';
+import InvokeNativeAPICall from '@/invoke/apiCall';
+
+const apiCall = new InvokeNativeAPICall();
 
 const Home: NextPage<any> = () => {
+  useEffect(() => {
+    apiCall.requestData('/api/4/offers/promos.php');
+  }, []);
   return (
     <>
       <Head>

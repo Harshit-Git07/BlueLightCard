@@ -16,6 +16,7 @@ jobs:
   # Deploy the backend
   backend:
     name: Deploy Backend for PR
+    if: github.actor!= 'dependabot[bot]'
     runs-on: ubuntu-latest
     outputs:
       identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
@@ -66,6 +67,7 @@ jobs:
   # Deploy the frontend
   frontend:
     name: Deploy Frontend BLC UK for PR
+    if: github.actor!= 'dependabot[bot]'
     strategy:
       matrix:
         brand: ['blc-uk']
@@ -114,6 +116,7 @@ jobs:
   # Put comment on PR
   comment:
     name: Comment on PR
+    if: github.actor!= 'dependabot[bot]'
     runs-on: ubuntu-latest
     needs:
       - backend
@@ -155,6 +158,7 @@ jobs:
   # Run the E2E Test Suite
   e2e:
     name: E2E Tests
+    if: github.actor!= 'dependabot[bot]'
     runs-on: ubuntu-latest
     needs:
       - frontend

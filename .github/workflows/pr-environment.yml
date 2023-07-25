@@ -151,3 +151,28 @@ jobs:
             <a href='${{ needs.backend.outputs.offers-api-endpoint }}'>${{ needs.backend.outputs.offers-api-endpoint }}</a>
             </td></tr>
             </table>
+
+  # Run the E2E Test Suite
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs:
+      - frontend
+    env:
+      BASE_URL: ${{ needs.backend.outputs.frontend.url }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: bahmutov/npm-install@v1
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - run: npm run test:e2e -w packages/web
+      - run: npm run report:e2e -w packages/web
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cucumber-report
+          path: packages/web/e2e/test-results
+          retention-days: 30

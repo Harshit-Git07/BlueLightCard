@@ -26,4 +26,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
+      - run: npm install
       - run: npx sst remove --stage $PR_PREFIX

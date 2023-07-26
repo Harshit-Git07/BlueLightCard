@@ -1,4 +1,4 @@
-import { ApiGatewayV1Api } from 'sst/constructs';
+import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Model, BadRequestModelSchema, GenericResponseSchema, ResponseModel } from './';
 
 import { z } from 'zod';
@@ -9,7 +9,7 @@ export class ApiGatewayModelGenerator {
   private genericModel: Model;
   private badRequestModel: Model;
 
-  constructor(private api: ApiGatewayV1Api) {
+  constructor(private api: RestApi) {
      this.genericModel = new Model(this.api, "GenericModel", GenericResponseSchema);
      this.badRequestModel = new Model(this.api, "BadRequestModel", BadRequestModelSchema);
   }

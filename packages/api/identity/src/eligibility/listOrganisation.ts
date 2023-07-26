@@ -61,9 +61,6 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     
   } catch (error) {
     logger.error('error while fetching organisation ',{error});
-    return Response.Error({
-      message: 'error',
-      name: ''
-    });
+    return Response.Error(error as Error);
   }
 };

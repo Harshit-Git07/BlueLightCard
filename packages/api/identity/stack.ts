@@ -5,6 +5,12 @@ import { Shared } from '../../../stacks/stack';
 import { passwordResetRule } from './src/eventRules/passwordResetRule';
 import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
 import { emailUpdateRule } from './src/eventRules/emailUpdateRule';
+import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
+import { UserModel } from './src/models/user';
+import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
+import { PostUserRoute } from './src/routes/postUserRoute';
+import { PutUserByIdRoute } from './src/routes/putUserByIdRoute';
+import { DeleteUserByIdRoute } from './src/routes/deleteUserByIdRoute';
 
 export function Identity({ stack }: StackContext) {
   //set tag service identity to all resources
@@ -47,12 +53,20 @@ export function Identity({ stack }: StackContext) {
       },
     },
     routes: {
-      'GET /users': 'packages/api/identity/src/user-management/lambda.handler',
-      'GET /users/{id}': 'packages/api/identity/src/user-management/lambda.handler',
       'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
       'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
       'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
     },
+  });
+
+  const apiGatewayModelGenerator = new ApiGatewayModelGenerator(identityApi.cdk.restApi);
+  const agUserModel = apiGatewayModelGenerator.generateModel(UserModel);
+
+  identityApi.addRoutes(stack, {
+    'GET /users/{id}': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
+    'POST /users': new PostUserRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
+    'PUT /users/{id}': new PutUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
+    'DELETE /users/{id}': new DeleteUserByIdRoute(apiGatewayModelGenerator).getRouteDetails(),
   });
 
   //auth

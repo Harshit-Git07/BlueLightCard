@@ -1,10 +1,9 @@
-import { JsonSchemaType, JsonSchemaVersion, Model as ApiModel } from 'aws-cdk-lib/aws-apigateway';
-import { ApiGatewayV1Api } from 'sst/constructs';
+import { JsonSchemaType, JsonSchemaVersion, Model as ApiModel, RestApi } from 'aws-cdk-lib/aws-apigateway';
 
 export class Model {
   private model: ApiModel;
 
-  constructor(api: ApiGatewayV1Api, modelName: string, modelDefinition: any) {
+  constructor(api: RestApi, modelName: string, modelDefinition: any) {
     const modelSchema = {
       schema: JsonSchemaVersion.DRAFT4,
       title: modelName,
@@ -12,9 +11,8 @@ export class Model {
       properties: modelDefinition.properties,
       required: modelDefinition.required,
     };
-    //  console.log(modelSchema)
     this.model = new ApiModel(api, modelName, {
-      restApi: api.cdk.restApi,
+      restApi: api,
       contentType: 'application/json',
       modelName: modelName,
       schema: modelSchema,
@@ -22,7 +20,6 @@ export class Model {
   }
 
   getModel(): ApiModel {
-    //console.log(this.model);
     return this.model;
   }
 }

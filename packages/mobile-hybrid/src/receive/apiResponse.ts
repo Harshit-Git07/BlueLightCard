@@ -1,4 +1,5 @@
 import { Logger } from "@/logger";
+import Observable from "@/observable";
 
 /**
  * @description Used to receive api responses from the native app
@@ -39,6 +40,11 @@ export default class NativeReceiveAPIResponse implements NativeReceive.WebViewAP
     let parsedJSON;
     try {
       parsedJSON = JSON.parse(joinedChunks);
+      Observable.getInstance().notify('nativeAPIResponse', {
+        url,
+        response: parsedJSON
+      });
+
       this.logger.debug('Successfully parsed JSON', NativeReceiveAPIResponse.TAG, parsedJSON);
     } catch (error) {
       this.logger.error('Failed to parse JSON in response', NativeReceiveAPIResponse.TAG, error);

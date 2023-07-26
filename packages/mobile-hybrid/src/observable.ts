@@ -28,7 +28,7 @@ export default class Observable {
    * @param event 
    * @param callback 
    */
-  subscribe(event: string, callback: (...args: any[]) => void): void {
+  public subscribe(event: string, callback: (...args: any[]) => void): void {
     if (!this.observers[event]) {
       this.observers[event] = [];
     }
@@ -40,7 +40,7 @@ export default class Observable {
    * @param event 
    * @param args 
    */
-  notify(event: string, ...args: any[]): void {
+  public notify(event: string, ...args: any[]): void {
     if (this.observers[event]) {
       this.observers[event].forEach((observer) => {
         observer(...args);

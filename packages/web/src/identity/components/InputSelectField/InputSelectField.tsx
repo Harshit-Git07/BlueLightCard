@@ -48,7 +48,13 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
       >
         {defaultOption && <option value="">{defaultOption}</option>}
         {options?.map((option: KeyValue) => (
-          <option aria-label="drop-down option" tabIndex={0} key={option.key} value={option.key}>
+          <option
+            id={option.value}
+            aria-label={option.value}
+            tabIndex={0}
+            key={option.key}
+            value={option.key}
+          >
             {option.value}
           </option>
         ))}

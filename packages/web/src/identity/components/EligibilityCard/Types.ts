@@ -16,6 +16,10 @@ export type EligibilityCardProps = PropsWithChildren & {
   setEmployer: Dispatch<SetStateAction<string>>;
   jobRole: string;
   setJobRole: Dispatch<SetStateAction<string>>;
+  otherOrg: string;
+  setOtherOrg: Dispatch<SetStateAction<string>>;
+  otherEmp: string;
+  setOtherEmp: Dispatch<SetStateAction<string>>;
   orgDetails: any;
   setOrgDetails: Dispatch<SetStateAction<any>>;
   acceptedId: string;

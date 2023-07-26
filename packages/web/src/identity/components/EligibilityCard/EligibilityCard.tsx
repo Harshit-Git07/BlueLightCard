@@ -196,29 +196,71 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   <label className="font-normal pb-3">What organisation do you work in?</label>
                   <InputSelectField
                     defaultOption="Please select an organisation"
-                    options={props.orgOptions}
+                    options={props.orgOptions.concat([
+                      { key: 'Other', value: 'Other', data: 'Other' },
+                    ])}
                     value={props.organisation}
                     onChange={(e) => {
                       updateChange(e.target.value);
                     }}
                     handleSelectedOption={(e) => props.setAcceptedMethods(e.data)}
                   />
+                  {props.organisation == 'Other' && (
+                    <div className="flex flex-col">
+                      <p className="w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
+                        {' '}
+                        It looks like we haven&apos;t added your organisation yet, register your
+                        interest to join by telling us who you work for{' '}
+                      </p>
+                      <div className="py-2 justify-start items-center gap-0.5 inline-flex">
+                        <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
+                          Your organisation
+                        </label>
+                      </div>
+                      <InputTextFieldWithRef
+                        placeholder="Tell us the name of your organisation"
+                        required
+                        onChange={(e) => props.setOtherOrg(e.target.value)}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
-              {props.organisation && (
+              {props.organisation && props.organisation != 'Other' && (
                 <>
                   <div className="flex flex-col">
                     <label className="font-normal pb-3">Who is your employer?</label>
                     <InputSelectField
                       defaultOption="Where do you work"
-                      options={props.empOptions}
+                      options={props.empOptions.concat([
+                        { key: 'Other', value: 'Other', data: 'Other' },
+                      ])}
                       value={props.employer}
                       onChange={(e) => updateAcceptedDetails(e.target.value)}
                     />
                   </div>
                 </>
               )}
-              {props.employer && (
+              {props.employer == 'Other' && (
+                <div className="flex flex-col">
+                  <p className="w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
+                    {' '}
+                    It looks like we haven’t added your employer yet, register your interest to join
+                    by telling us who you work for{' '}
+                  </p>
+                  <div className="py-2 justify-start items-center gap-0.5 inline-flex">
+                    <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
+                      Your employer
+                    </label>
+                  </div>
+                  <InputTextFieldWithRef
+                    placeholder="Tell us the name of your employer"
+                    required
+                    onChange={(e) => props.setOtherEmp(e.target.value)}
+                  />
+                </div>
+              )}
+              {props.employer && props.employer != 'Other' && (
                 <div className="flex flex-col">
                   <label className="font-normal pb-3">What is your job role?</label>
                   <InputTextFieldWithRef
@@ -239,7 +281,9 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   title={method.title}
                   text={method.description}
                   selected={props.acceptedId == method.title}
-                  onClick={() => props.setAcceptedId(method.id)}
+                  onClick={() => {
+                    props.setAcceptedId(method.id);
+                  }}
                 />
               ))}
             </div>
@@ -272,6 +316,8 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
           )}
           {props.employment != '' &&
             props.organisation != '' &&
+            props.organisation != 'Other' &&
+            props.employer != 'Other' &&
             props.currentStep < props.steps && (
               <div>
                 <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
@@ -293,7 +339,24 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               </div>
             )}
 
-          {props.currentStep == props.steps && (
+          {(props.organisation == 'Other' || props.employer == 'Other') &&
+            props.currentStep == 1 && (
+              <div>
+                <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
+                <div className="flex justify-end">
+                  <Button
+                    type="button"
+                    disabled={props.organisation == 'Other' ? !props.otherOrg : !props.otherEmp}
+                    variant={ThemeVariant.Primary}
+                    onClick={() => props.onSubmit()}
+                    className="w-[184.67px] h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 basis-1/4 self-end"
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </div>
+            )}
+          {props.currentStep == 2 && (
             <div>
               <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
               <div className="flex justify-end">

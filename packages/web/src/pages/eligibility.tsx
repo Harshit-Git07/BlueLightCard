@@ -11,6 +11,8 @@ const TestPage: NextPage = () => {
   const [organisation, setOrganisation] = useState('');
   const [employer, setEmployer] = useState('');
   const [jobRole, setJobRole] = useState('');
+  const [otherOrg, setOtherOrg] = useState('');
+  const [otherEmp, setOtherEmp] = useState('');
   const [orgDetails, setOrgDetails] = useState<any>();
   const [acceptedId, setAcceptedId] = useState('');
   const [employers, setEmployers] = useState<Employer[]>([]);
@@ -51,6 +53,10 @@ const TestPage: NextPage = () => {
           organisation={organisation}
           setOrganisation={setOrganisation}
           employer={employer}
+          otherOrg={otherOrg}
+          setOtherOrg={setOtherOrg}
+          otherEmp={otherEmp}
+          setOtherEmp={setOtherEmp}
           setEmployer={setEmployer}
           jobRole={jobRole}
           setJobRole={setJobRole}
@@ -75,7 +81,7 @@ const TestPage: NextPage = () => {
           onNext={() => setCurrentStep(currentStep + 1)}
           onSubmit={() => {
             submit();
-            setCurrentStep(currentStep + 1);
+            setCurrentStep(currentStep + 2);
           }}
           quit={() => {
             setVisible(true);

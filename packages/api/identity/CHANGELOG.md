@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.9.1...bluelightcard/identity-v1.10.0) (2023-07-26)
+
+
+### Features
+
+* update model generator and add tests ([#201](https://github.com/bluelightcard/BlueLightCard-2.0/issues/201)) ([1ec5802](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1ec58025dd1f72d47d34ff8f6ec144c0d70b805a))
+
 ## [1.9.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.9.0...bluelightcard/identity-v1.9.1) (2023-07-25)
 
 

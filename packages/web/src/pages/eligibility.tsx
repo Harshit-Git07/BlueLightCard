@@ -17,13 +17,24 @@ const TestPage: NextPage = () => {
   const [acceptedId, setAcceptedId] = useState('');
   const [employers, setEmployers] = useState<Employer[]>([]);
 
+  const [eligible, setEligible] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
 
   const [orgOptions, setOrgOptions] = useState<KeyValue[]>([]);
   const [empOptions, setEmpOptions] = useState<KeyValue[]>([]);
   const [acceptedMethods, setAcceptedMethods] = useState<IdRequirements[]>([]);
   const [visible, setVisible] = useState(false);
-  const submit = async () => {};
+
+  const submit = async () => {
+    if (organisation != 'Other' && employer != 'Other' && acceptedId != 'None') {
+      setEligible('Yes');
+    } else if (organisation != 'Other' && employer != 'Other' && acceptedId == 'None') {
+      setEligible('No ID');
+    } else {
+      setEligible('No');
+    }
+  };
+
   return (
     <main>
       <Navigation
@@ -86,6 +97,8 @@ const TestPage: NextPage = () => {
           quit={() => {
             setVisible(true);
           }}
+          eligible={eligible}
+          setEligible={setEligible}
         />
       </div>
       <Modal

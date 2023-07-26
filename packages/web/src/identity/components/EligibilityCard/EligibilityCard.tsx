@@ -1,4 +1,4 @@
-import { faArrowLeft, faCircleCheck } from '@fortawesome/pro-solid-svg-icons';
+import { faArrowLeft, faCircleCheck, faCircleXmark } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EligibilityCardProps, Employer, IOrganisation, KeyValue } from './Types';
 import { FC, useEffect } from 'react';
@@ -125,7 +125,8 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             <div
               className={cssUtil([
                 'flex flex-row mb-1.5',
-                props.currentStep > 1 && props.currentStep <= props.steps
+                props.currentStep > 1 &&
+                (props.currentStep <= props.steps || props.eligible != 'Yes')
                   ? 'justify-between'
                   : 'justify-end',
               ])}
@@ -137,6 +138,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   onClick={() => {
                     if (props.currentStep != 1) {
                       props.setCurrentStep(props.currentStep - 1);
+                      props.setEligible('');
                     }
                   }}
                   variant={ThemeVariant.Tertiary}
@@ -145,18 +147,25 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   Back
                 </Button>
               )}
-              <Button
-                type="button"
-                onClick={() => {
-                  props.currentStep <= props.steps ? props.quit() : router.push('/');
-                }}
-                variant={ThemeVariant.Tertiary}
-                className="w-[63px] h-12 px-6 py-2 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold"
-              >
-                {props.currentStep <= props.steps ? 'Quit' : 'Finish'}
-              </Button>
+
+              {(props.eligible == '' || props.eligible == 'Yes') && (
+                <>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      props.currentStep <= props.steps ? props.quit() : router.push('/');
+                    }}
+                    variant={ThemeVariant.Tertiary}
+                    className="w-[63px] h-12 px-6 py-2 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold"
+                  >
+                    {props.currentStep <= props.steps ? 'Quit' : 'Finish'}
+                  </Button>
+                </>
+              )}
             </div>
-            <hr className={cssUtil(['text-[#EDEDF2] opacity-100'])} />
+            {(props.eligible == '' || props.eligible == 'Yes') && (
+              <hr className={cssUtil(['text-[#EDEDF2] opacity-100'])} />
+            )}
           </div>
 
           {/* card content */}
@@ -275,6 +284,13 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
 
           {props.currentStep == 2 && (
             <div className="space-y-4 pt-3">
+              <InfoCard
+                key={1}
+                title="Work Email (Recommended for instant verification)"
+                text="You will be asked to login to this account during sign up"
+                selected={props.acceptedId == 'Email'}
+                onClick={() => props.setAcceptedId('Email')}
+              />
               {props.acceptedMethods.map((method, index) => (
                 <InfoCard
                   key={method.id + index}
@@ -286,9 +302,16 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   }}
                 />
               ))}
+              <InfoCard
+                key={0}
+                title="I don't have any of the above"
+                text={''}
+                selected={props.acceptedId == 'None'}
+                onClick={() => props.setAcceptedId('None')}
+              />
             </div>
           )}
-          {props.currentStep > 2 && (
+          {props.currentStep > 2 && props.eligible == 'Yes' && (
             <div className=" flex flex-col pt-88 justify-center content-center">
               <FontAwesomeIcon
                 icon={faCircleCheck}
@@ -310,6 +333,58 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   className="px-10 py-3.5 text-lg font-semibold"
                 >
                   Sign up now
+                </Button>
+              </div>
+            </div>
+          )}
+          {props.currentStep > 2 && props.eligible == 'No' && (
+            <div className=" flex flex-col pt-88 justify-center content-center">
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className="text-[#009] text-center text-7xl pb-[32px]"
+              />
+              <div className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
+                Sorry, you are not currently eligible{' '}
+              </div>
+              <p className="text-center text-slate-950 text-lg font-normal mb-7">
+                We haven’t added your employer yet, but have noted your request to join. Our
+                application process is regularly reviewed so please check back soon to start saving!
+              </p>
+              {/* redirect to sign up form with prepopulated fields */}
+              <div className="basis-1/4 self-center">
+                <Button
+                  type="button"
+                  variant={ThemeVariant.Primary}
+                  onClick={() => router.push('/')}
+                  className="px-10 py-3.5 text-lg font-semibold"
+                >
+                  Finish
+                </Button>
+              </div>
+            </div>
+          )}
+          {props.currentStep > 2 && props.eligible == 'No ID' && (
+            <div className=" flex flex-col pt-88 justify-center content-center">
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className="text-[#009] text-center text-7xl pb-[32px]"
+              />
+              <div className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
+                Unable to verify your eligibility
+              </div>
+              <p className="text-center text-slate-950 text-lg font-normal mb-7">
+                You must be able to provide one of the accepted forms of ID to verify your
+                eligibility during sign up. Passports and driving licences are not accepted.
+              </p>
+              {/* redirect to sign up form with prepopulated fields */}
+              <div className="basis-1/4 self-center">
+                <Button
+                  type="button"
+                  variant={ThemeVariant.Primary}
+                  onClick={() => router.push('/')}
+                  className="px-10 py-3.5 text-lg font-semibold"
+                >
+                  Finish
                 </Button>
               </div>
             </div>

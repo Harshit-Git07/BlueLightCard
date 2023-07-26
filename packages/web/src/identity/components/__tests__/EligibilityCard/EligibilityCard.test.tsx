@@ -27,6 +27,8 @@ describe('EligibilityCard component', () => {
       onNext: jest.fn(),
       onSubmit: jest.fn(),
       quit: jest.fn(),
+      eligible: '',
+      setEligible: jest.fn(),
       employment: '',
       setEmployment: jest.fn(),
       organisation: '',
@@ -133,7 +135,7 @@ describe('EligibilityCard component', () => {
       expect(props.currentStep).toBeLessThan(this_step);
     });
     it('should invoke event when sign-up now button is clicked', async () => {
-      render(<EligibilityCard {...props} currentStep={3} />);
+      render(<EligibilityCard {...props} currentStep={3} eligible="Yes" />);
       const button = screen.getByRole('button', { name: 'Sign up now' });
       await act(() => user.click(button));
       //check screen to ensure that eligibility card is no longer rendered, button should no longe rbe rendered.

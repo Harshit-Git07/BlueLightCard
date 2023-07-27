@@ -8,6 +8,7 @@ describe('InputSelectField component', () => {
 
   beforeEach(() => {
     props = {
+      id: 'input-select-field',
       options: [
         { key: 1, value: 'test' },
         { key: 2, value: 'test' },

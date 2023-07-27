@@ -133,6 +133,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             >
               {props.currentStep > 1 && props.currentStep <= props.steps && (
                 <Button
+                  id="back_button"
                   iconLeft={faArrowLeft}
                   type="button"
                   onClick={() => {
@@ -151,6 +152,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               {(props.eligible == '' || props.eligible == 'Yes') && (
                 <>
                   <Button
+                    id={(props.currentStep <= props.steps ? 'quit' : 'finish').concat('_button')}
                     type="button"
                     onClick={() => {
                       props.currentStep <= props.steps ? props.quit() : router.push('/');
@@ -195,6 +197,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 </label>
                 <div className="flex flex-row">
                   <InputRadioButtons
+                    id="employment_status_radio"
                     inputValues={radioInputValues}
                     onChange={(e) => props.setEmployment(e.target.value)}
                   />
@@ -204,6 +207,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 <div className="flex flex-col">
                   <label className="font-normal pb-3">What organisation do you work in?</label>
                   <InputSelectField
+                    id="organisation_select"
                     defaultOption="Please select an organisation"
                     options={props.orgOptions.concat([
                       { key: 'Other', value: 'Other', data: 'Other' },
@@ -227,6 +231,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         </label>
                       </div>
                       <InputTextFieldWithRef
+                        name="other_organisation_field"
                         placeholder="Tell us the name of your organisation"
                         required
                         onChange={(e) => props.setOtherOrg(e.target.value)}
@@ -240,6 +245,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   <div className="flex flex-col">
                     <label className="font-normal pb-3">Who is your employer?</label>
                     <InputSelectField
+                      id="employer_select"
                       defaultOption="Where do you work"
                       options={props.empOptions.concat([
                         { key: 'Other', value: 'Other', data: 'Other' },
@@ -263,6 +269,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     </label>
                   </div>
                   <InputTextFieldWithRef
+                    name="other_employer_field"
                     placeholder="Tell us the name of your employer"
                     required
                     onChange={(e) => props.setOtherEmp(e.target.value)}
@@ -273,6 +280,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 <div className="flex flex-col">
                   <label className="font-normal pb-3">What is your job role?</label>
                   <InputTextFieldWithRef
+                    name="job_role_field"
                     placeholder="What do you work as?"
                     required
                     onChange={(e) => props.setJobRole(e.target.value)}
@@ -327,6 +335,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               {/* redirect to sign up form with prepopulated fields */}
               <div className="basis-1/4 self-center">
                 <Button
+                  id="signup_button"
                   type="button"
                   variant={ThemeVariant.Primary}
                   onClick={() => router.push('/')}
@@ -353,6 +362,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               {/* redirect to sign up form with prepopulated fields */}
               <div className="basis-1/4 self-center">
                 <Button
+                  id="finish_button"
                   type="button"
                   variant={ThemeVariant.Primary}
                   onClick={() => router.push('/')}
@@ -379,6 +389,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               {/* redirect to sign up form with prepopulated fields */}
               <div className="basis-1/4 self-center">
                 <Button
+                  id="finish_button"
                   type="button"
                   variant={ThemeVariant.Primary}
                   onClick={() => router.push('/')}
@@ -398,6 +409,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
                 <div className="flex justify-end ">
                   <Button
+                    id="next_button"
                     type="button"
                     variant={ThemeVariant.Primary}
                     disabled={
@@ -420,6 +432,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
                 <div className="flex justify-end">
                   <Button
+                    id="submit_button"
                     type="button"
                     disabled={props.organisation == 'Other' ? !props.otherOrg : !props.otherEmp}
                     variant={ThemeVariant.Primary}
@@ -436,6 +449,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
               <div className="flex justify-end">
                 <Button
+                  id="submit_button"
                   type="button"
                   disabled={!props.acceptedId}
                   variant={ThemeVariant.Primary}

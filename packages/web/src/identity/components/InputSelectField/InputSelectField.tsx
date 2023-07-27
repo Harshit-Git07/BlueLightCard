@@ -3,6 +3,7 @@ import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
 import { InputSelectFieldProps, KeyValue } from './Types';
 
 const InputSelectField: FC<InputSelectFieldProps> = ({
+  id,
   icon,
   options,
   error,
@@ -24,6 +25,7 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   return (
     <InputFieldWrapper icon={icon} select={true} showSuccessState={success} showErrorState={error}>
       <select
+        id={id}
         aria-label="drop-down selector"
         tabIndex={tabIndex}
         className={

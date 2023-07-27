@@ -34,6 +34,7 @@ const Modal: FC<ModalProps> = ({ isVisible, type, onClose, onConfirm }) => {
             </div>
             <div className="flex justify-end gap-2 mt-[46%]">
               <Button
+                id="quit_button"
                 variant={ThemeVariant.Tertiary}
                 className="px-6 py-2 text-lg font-semibold"
                 onClick={() => onClose()}
@@ -41,6 +42,7 @@ const Modal: FC<ModalProps> = ({ isVisible, type, onClose, onConfirm }) => {
                 Quit
               </Button>
               <Button
+                id="continue_button"
                 variant={ThemeVariant.Primary}
                 className="px-[40px] py-3.5 text-lg font-semibold"
                 onClick={() => onConfirm()}

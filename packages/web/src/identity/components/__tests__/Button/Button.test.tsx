@@ -1,12 +1,19 @@
+import { ThemeVariant } from '@/types/theme';
 import Button from '../../Button/Button';
-import { ButtonProps } from '@/components/Button/types';
+import { ButtonProps } from '../../Button/types';
 import { render, screen } from '@testing-library/react';
 
 describe('Button component', () => {
   let props: ButtonProps;
 
   beforeEach(() => {
-    props = {};
+    props = {
+      id: 'button',
+      children: 'Button',
+      className: '',
+      variant: ThemeVariant.Primary,
+      onClick: jest.fn(),
+    };
   });
 
   describe('smoke test', () => {

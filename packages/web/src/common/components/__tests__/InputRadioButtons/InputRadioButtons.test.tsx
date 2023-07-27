@@ -8,6 +8,7 @@ describe('InputRadioButtons component', () => {
 
   beforeEach(() => {
     props = {
+      id: 'employment',
       inputValues: [
         {
           name: 'Employed',

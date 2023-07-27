@@ -31,6 +31,7 @@ const colorVariants: ThemeColorTokens = {
   },
 };
 const Button: FC<ButtonProps> = ({
+  id,
   iconLeft,
   iconRight,
   disabled = false,
@@ -49,7 +50,7 @@ const Button: FC<ButtonProps> = ({
     className ?? '',
   ]);
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
+    <button id={id} type={type} onClick={onClick} disabled={disabled} className={classes}>
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}
       {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}

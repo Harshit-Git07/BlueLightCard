@@ -2,6 +2,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { InputFieldSharedProps } from '@/components/_shared/types';
 
 export type InputSelectFieldProps = InputFieldSharedProps<HTMLSelectElement> & {
+  id: string;
   icon?: IconDefinition;
   value?: string | number;
   defaultOption?: string;

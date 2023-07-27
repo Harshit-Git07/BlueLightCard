@@ -20,6 +20,7 @@ const Home: NextPage<any> = () => {
         <h1 className="text-2xl mb-2 font-semibold">{t('heading')}</h1>
         <p>{t('page.description', { ns: 'description' })}</p>
         <Button
+          id="start_button"
           type="button"
           onClick={() => {
             router.push('/eligibility');

@@ -2,7 +2,7 @@ import { FC, forwardRef, useState, ChangeEvent } from 'react';
 import { InputRadioButtonsProps } from './types';
 import React from 'react';
 
-const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange }) => {
+const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange, id }) => {
   const [selected, setSelected] = useState('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +20,7 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange })
           className={`m-2 border-2 rounded p-2 ${selected == input.value && 'border-border-focus'}`}
         >
           <input
+            id={id}
             className="mr-2"
             type="radio"
             name={input.name}

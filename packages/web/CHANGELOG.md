@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.5.1...bluelightcard/web-v1.6.0) (2023-07-27)
+
+
+### Features
+
+* add cucumber e2e ([#129](https://github.com/bluelightcard/BlueLightCard-2.0/issues/129)) ([ee38843](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ee3884312d94b3eaac41f6a9a87ab35f083709d1))
+* add end to end testing ([#193](https://github.com/bluelightcard/BlueLightCard-2.0/issues/193)) ([c0caab0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c0caab0fd286f40318b918240d73405135f5e041))
+* created custom modal component ([#144](https://github.com/bluelightcard/BlueLightCard-2.0/issues/144)) ([ba933b2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ba933b278cbc5d520f4b1849baee59bb524911d5))
+* created eligibility card component ([#125](https://github.com/bluelightcard/BlueLightCard-2.0/issues/125)) ([372e182](https://github.com/bluelightcard/BlueLightCard-2.0/commit/372e182f9e9dfc2ed44f2352c47a2fee1602edfb))
+* Feat/setup app sync offers ([#169](https://github.com/bluelightcard/BlueLightCard-2.0/issues/169)) ([9b9d6d7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9b9d6d7d42959497348ad920eac9925762657c67))
+* **web:** Implement TrustedDomain InfoCard on step 2 ([#205](https://github.com/bluelightcard/BlueLightCard-2.0/issues/205)) ([4a25679](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4a256795e1f96e9c72df74fb4c6b8a6245f01aa9))
+* **web:** job role free type added, unit tests for eligibility card ammended ([#188](https://github.com/bluelightcard/BlueLightCard-2.0/issues/188)) ([dedac73](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dedac73a71ccc84343c15898e8def680b00a4eb0))
+* **web:** TI-224 and T I-226 other and employer organisation dropdown  ([#204](https://github.com/bluelightcard/BlueLightCard-2.0/issues/204)) ([3199b07](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3199b07927a379363d113d6b1cc89197112cf815))
+
+
+### Bug Fixes
+
+* **web:** id's added to some components for e2e testing purposes ([#209](https://github.com/bluelightcard/BlueLightCard-2.0/issues/209)) ([99fb7d9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99fb7d972e1b7c3fffc3ac05ad0ccf65e67c9d9a))
+* **web:** stylelint updated to newest version ([#179](https://github.com/bluelightcard/BlueLightCard-2.0/issues/179)) ([981b012](https://github.com/bluelightcard/BlueLightCard-2.0/commit/981b01200c87b5252498251d8e93b877be8319cd))
+
+
+### Other Changes
+
+* bt 2375 change image format to svg ([#178](https://github.com/bluelightcard/BlueLightCard-2.0/issues/178)) ([5317189](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5317189e0ae307cddaf5f4e93773fdb83e56809e))
+* **deps-dev:** bump @testing-library/jest-dom from 5.16.5 to 5.17.0 ([#194](https://github.com/bluelightcard/BlueLightCard-2.0/issues/194)) ([6cbf3c4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6cbf3c4f68cb07ac61c5c457b51f86e75c0831ea))
+* **deps:** bump @cucumber/cucumber from 9.2.0 to 9.3.0 ([#176](https://github.com/bluelightcard/BlueLightCard-2.0/issues/176)) ([85a3734](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85a37342ce345fe4d4247df0d1ca0c658be637d1))
+* **deps:** bump eslint-config-next from 13.0.3 to 13.4.9 ([#157](https://github.com/bluelightcard/BlueLightCard-2.0/issues/157)) ([859b861](https://github.com/bluelightcard/BlueLightCard-2.0/commit/859b861762dbd0c8efa81ca6a57bb4d04e7c97c2))
+* **deps:** bump next from 13.4.4 to 13.4.12 ([#195](https://github.com/bluelightcard/BlueLightCard-2.0/issues/195)) ([0714b43](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0714b4349face69d40523895fe8e526ac1d7b121))
+* fix ([#186](https://github.com/bluelightcard/BlueLightCard-2.0/issues/186)) ([b9197a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b9197a12643c02dc1235a5140120c586fd6b4628))
+* merge input radio button changes ([#143](https://github.com/bluelightcard/BlueLightCard-2.0/issues/143)) ([6965340](https://github.com/bluelightcard/BlueLightCard-2.0/commit/69653406b22946edc252cb14d873cacfc6f362f9))
+* update input select field component ([#140](https://github.com/bluelightcard/BlueLightCard-2.0/issues/140)) ([ed11d91](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed11d91a1e9b29fbeea5b0c1c89648e718da84b8))
+
 ## [1.5.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.5.0...bluelightcard/web-v1.5.1) (2023-07-11)
 
 

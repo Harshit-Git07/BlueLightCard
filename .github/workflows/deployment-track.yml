@@ -1,7 +1,13 @@
 name: Deployment Tracking
 on:
   release:
-    types: [published]
+    types:
+      # Trigger on the following release types
+      # I'm unsure which type gets triggered so we just have them all just to be safe
+      # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#release
+      - created
+      - published
+      - released
 
 # Track deployments with Oobeya
 

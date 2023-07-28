@@ -1,0 +1,24 @@
+name: Deployment Tracking
+on:
+  release:
+    types: [published]
+
+# Track deployments with Oobeya
+
+jobs:
+  track:
+    name: Track deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record deployment with Ooobeya
+        run: |
+          curl -XPOST -H 'Oobeya-API-Key: ${{ secrets.OOBEYA_API_KEY }}' -H "Content-type: application/json" -d '{
+            "analysisId": "${{ secrets.OOBEYA_ANALYSIS_ID }}",
+            "pipelineStartAt": "${{ github.event.release.created_at }}",
+            "lastCommitSha": "${{ github.sha }}",
+            "deploymentType": "RELEASE",
+            "deployedAt": "${{ github.event.release.created_at }}",
+            "author": "${{ github.actor }}",
+            "name": "${{ github.event.release.tag_name }}",
+            "title": "${{ github.event.release.name }}"
+          }' 'https://bluelightcard.oobeya.io/apis/v1/deployments'

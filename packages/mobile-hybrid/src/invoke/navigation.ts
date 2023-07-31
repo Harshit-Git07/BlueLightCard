@@ -1,5 +1,5 @@
-import { Logger } from "@/logger";
-import Facade from "./facade";
+import { Logger } from '@/logger';
+import Facade from './facade';
 
 /**
  * @description Used to communicate navigation operations to the native app
@@ -15,7 +15,7 @@ export default class InvokeNativeNavigation extends Facade implements NativeNavi
 
   /**
    * @description Navigates to the needed page
-   * @param url 
+   * @param url
    */
   public navigate(url: string): void {
     this.logger.debug(`navigate to url ${url}`, this.TAG);

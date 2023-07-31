@@ -1,5 +1,5 @@
-import { Logger } from "@/logger";
-import Facade from "./facade";
+import { Logger } from '@/logger';
+import Facade from './facade';
 
 /**
  * @description Used to communicate analytics operations to the native app
@@ -15,14 +15,14 @@ export default class InvokeNativeAnalytics extends Facade implements NativeAnaly
 
   /**
    * @description Logs analytics events
-   * @param event 
-   * @param meta 
+   * @param event
+   * @param meta
    */
-  public logAnalyticsEvent(event: string, meta?: NativeAnalytics.Parameters): void {
-    this.logger.debug(`logging event '${event}' with data ${meta}`, this.TAG);
-    this.callFunction('logAnalyticsEvent', {
-      event,
-      parameters: meta ?? {},
-    });
+  public logAnalyticsEvent(properties: NativeAnalytics.Parameters): void {
+    this.logger.debug(
+      `logging event '${properties.event}' with data ${JSON.stringify(properties.parameters)}`,
+      this.TAG,
+    );
+    this.callFunction('logAnalyticsEvent', properties);
   }
 }

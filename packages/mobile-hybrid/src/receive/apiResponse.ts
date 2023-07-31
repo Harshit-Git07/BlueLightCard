@@ -1,5 +1,5 @@
-import { Logger } from "@/logger";
-import Observable from "@/observable";
+import { Logger } from '@/logger';
+import Observable from '@/observable';
 
 /**
  * @description Used to receive api responses from the native app
@@ -15,8 +15,8 @@ export default class NativeReceiveAPIResponse implements NativeReceive.WebViewAP
   /**
    * @description Called on receiving api response
    * @description Due to limitations on the native app side, the stringified JSON sent has to be chunked and reconstructed back to full JSON on the web side
-   * @param url 
-   * @param response 
+   * @param url
+   * @param response
    */
   public onResponse(url: string, ...response: string[]): void {
     this.logger.debug(`api response from url '${url}'`, NativeReceiveAPIResponse.TAG);
@@ -34,7 +34,10 @@ export default class NativeReceiveAPIResponse implements NativeReceive.WebViewAP
     }, '');
 
     if (invalidBase64Chunks > 0) {
-      this.logger.error(`${invalidBase64Chunks} chunks could not be decoded`, NativeReceiveAPIResponse.TAG);
+      this.logger.error(
+        `${invalidBase64Chunks} chunks could not be decoded`,
+        NativeReceiveAPIResponse.TAG,
+      );
     }
 
     let parsedJSON;
@@ -42,7 +45,7 @@ export default class NativeReceiveAPIResponse implements NativeReceive.WebViewAP
       parsedJSON = JSON.parse(joinedChunks);
       Observable.getInstance().notify('nativeAPIResponse', {
         url,
-        response: parsedJSON
+        response: parsedJSON,
       });
 
       this.logger.debug('Successfully parsed JSON', NativeReceiveAPIResponse.TAG, parsedJSON);

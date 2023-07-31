@@ -1,15 +1,28 @@
 import Head from 'next/head';
 import { NextPage } from 'next';
-import { useEffect, useContext } from 'react';
+import { useEffect, useRef, useContext } from 'react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
+import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AppContext } from '@/store';
+import trackScrollDepth from '@/utils/scrollDepth';
 
 const apiCall = new InvokeNativeAPICall();
+const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
   const { apiData } = useContext(AppContext);
-
+  const bodyHeight = useRef<HTMLElement>(null);
   useEffect(() => {
+    if (bodyHeight.current) {
+      trackScrollDepth(bodyHeight.current, (depth) => {
+        analytics.logAnalyticsEvent({
+          event: 'Pageview: Mobile homepage',
+          parameters: {
+            'Scroll Depth (%)': depth,
+          },
+        });
+      });
+    }
     apiCall.requestData('/api/4/offers/promos.php');
   }, []);
 
@@ -19,7 +32,7 @@ const Home: NextPage<any> = () => {
         <title>Mobile Hybrid</title>
         <meta name="description" />
       </Head>
-      <main className="">
+      <main ref={bodyHeight}>
         <h1 className="text-2xl font-semibold">Mobile Hybrid</h1>
         <p>
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolore at magnam quo ullam

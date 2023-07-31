@@ -15,7 +15,7 @@ const storeReducer: Reducer<AppContextStructure, DispatchActionData> = (state, a
         apiData: {
           ...state.apiData,
           [action.state.url]: action.state.data,
-        }
+        },
       };
     }
   }
@@ -31,7 +31,7 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
         state: {
           url: data.url,
           data: data.response,
-        }
+        },
       });
     });
   }, []);

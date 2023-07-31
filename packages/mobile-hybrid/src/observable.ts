@@ -25,8 +25,8 @@ export default class Observable {
 
   /**
    * @description Subscribe to a paticular event
-   * @param event 
-   * @param callback 
+   * @param event
+   * @param callback
    */
   public subscribe(event: string, callback: (...args: any[]) => void): void {
     if (!this.observers[event]) {
@@ -37,8 +37,8 @@ export default class Observable {
 
   /**
    * @description Notify all subscribers against the event
-   * @param event 
-   * @param args 
+   * @param event
+   * @param args
    */
   public notify(event: string, ...args: any[]): void {
     if (this.observers[event]) {

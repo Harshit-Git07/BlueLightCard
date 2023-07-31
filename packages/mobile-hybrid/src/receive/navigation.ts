@@ -1,4 +1,4 @@
-import { Logger } from "@/logger";
+import { Logger } from '@/logger';
 
 /**
  * @description Used to receive navigation events from the native app

@@ -4,8 +4,8 @@ const nextConfig = {
   distDir: 'dist',
   reactStrictMode: true,
   images: {
-    unoptimized: true
-  }
-}
+    unoptimized: true,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

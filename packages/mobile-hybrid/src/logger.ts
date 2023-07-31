@@ -9,8 +9,8 @@ export class Logger {
 
   /**
    * @description Creates a singleton
-   * @param options 
-   * @returns 
+   * @param options
+   * @returns
    */
   public static getInstance(): Logger {
     if (!this.instance) {
@@ -21,7 +21,7 @@ export class Logger {
 
   /**
    * @description Used for debugging in development, should be turned off for production
-   * @param message 
+   * @param message
    * @param label
    */
   public debug(message: string, label: string, extra?: any): void {
@@ -34,7 +34,7 @@ export class Logger {
 
   /**
    * @description Log information messages
-   * @param message 
+   * @param message
    */
   public info(message: string, label: string): void {
     this._log(message, 'info', label);
@@ -42,7 +42,7 @@ export class Logger {
 
   /**
    * @description Log warning messages
-   * @param message 
+   * @param message
    */
   public warn(message: string, label: string): void {
     this._log(message, 'warn', label);
@@ -50,8 +50,8 @@ export class Logger {
 
   /**
    * @description Log error messages
-   * @param message 
-   * @param stackTrace 
+   * @param message
+   * @param stackTrace
    */
   public error(message: string, label: string, stackTrace?: any): void {
     this._log(message, 'error', label, stackTrace);

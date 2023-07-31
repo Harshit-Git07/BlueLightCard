@@ -6,8 +6,8 @@ export default abstract class Facade {
 
   /**
    * @description Call the function on the native interface
-   * @param functionName 
-   * @param parameters 
+   * @param functionName
+   * @param parameters
    */
   protected callFunction(functionName: string, parameters: NativeCallParameters): void {
     const globalState = window as GlobalState;

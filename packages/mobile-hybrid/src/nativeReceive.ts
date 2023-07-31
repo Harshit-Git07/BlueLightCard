@@ -2,10 +2,10 @@
  * This module is used to register functions that will become available to the native app shell
  * that calls them, once the webview has loaded.
  */
-import { Logger } from "@/logger";
-import NativeReceiveAPIResponse from "@/receive/apiResponse";
-import NativeReceiveLifecycle from "@/receive/lifecycle";
-import NativeReceiveNavigation from "@/receive/navigation";
+import { Logger } from '@/logger';
+import NativeReceiveAPIResponse from '@/receive/apiResponse';
+import NativeReceiveLifecycle from '@/receive/lifecycle';
+import NativeReceiveNavigation from '@/receive/navigation';
 
 // Create instances of handlers use by the registered functions
 const nativeReceiveNavigation = new NativeReceiveNavigation();
@@ -16,8 +16,10 @@ Logger.debugMode = process.env.NODE_ENV !== 'production';
 
 // Map of interfaced function name to handler
 const fns: { [key: string]: any } = {
-  onNavigationRequestSuccess: nativeReceiveNavigation.onNavigationRequestSuccess.bind(nativeReceiveNavigation),
-  onNavigationRequestFailure: nativeReceiveNavigation.onNavigationRequestFailure.bind(nativeReceiveNavigation),
+  onNavigationRequestSuccess:
+    nativeReceiveNavigation.onNavigationRequestSuccess.bind(nativeReceiveNavigation),
+  onNavigationRequestFailure:
+    nativeReceiveNavigation.onNavigationRequestFailure.bind(nativeReceiveNavigation),
   onBackPressed: nativeReceiveNavigation.onBackPressed.bind(nativeReceiveNavigation),
   onLifecycle: nativeReceiveLifecycle.onLifecycle.bind(nativeReceiveLifecycle),
   onResponse: nativeReceiveAPIResponse.onResponse.bind(nativeReceiveAPIResponse),

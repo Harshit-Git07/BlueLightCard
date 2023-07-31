@@ -9,8 +9,8 @@ const Card: FC<CardProps> = ({
   text,
   textAlign,
   selected,
-  imageSrc,
   imageAlt,
+  imageSrc,
   imageWidth,
   imageHeight,
   layout,
@@ -46,15 +46,13 @@ const Card: FC<CardProps> = ({
       onClick(!isSelected);
     }
   };
-  
+
   const cardTitleClasses = cssUtil([
     'text-lg font-medium dark:text-neutral-white overflow-hidden whitespace-nowrap overflow-ellipsis',
   ]);
 
-  const cardParagraphClasses = cssUtil([
-    'text-sm font-light dark:text-neutral-white',
-  ]);
-  
+  const cardParagraphClasses = cssUtil(['text-sm font-light dark:text-neutral-white']);
+
   return (
     <div
       className={cardClasses}

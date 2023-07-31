@@ -293,6 +293,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
           {props.currentStep == 2 && (
             <div className="space-y-4 pt-3">
               <InfoCard
+                id="work_email"
                 key={1}
                 title="Work Email (Recommended for instant verification)"
                 text="You will be asked to login to this account during sign up"
@@ -301,6 +302,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               />
               {props.acceptedMethods.map((method, index) => (
                 <InfoCard
+                  id={method.id}
                   key={method.id + index}
                   title={method.title}
                   text={method.description}
@@ -311,6 +313,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 />
               ))}
               <InfoCard
+                id="no_id"
                 key={0}
                 title="I don't have any of the above"
                 text={''}

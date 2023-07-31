@@ -5,6 +5,7 @@ import Image from '@/components/Image/Image';
 import { decider } from '@/utils/decider';
 
 const InfoCard: FC<InfoCardProps> = ({
+  id,
   title,
   text,
   textAlign,
@@ -54,6 +55,7 @@ const InfoCard: FC<InfoCardProps> = ({
   };
   return (
     <div
+      id={id}
       className={cardClasses}
       role={onClick ? 'button' : undefined}
       onClick={onClick ? onCardClicked : undefined}

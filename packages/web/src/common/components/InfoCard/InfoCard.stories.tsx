@@ -13,6 +13,7 @@ const Template: StoryFn<typeof InfoCard> = (args) => (
 export const Default = Template.bind({});
 
 Default.args = {
+  id: 'test',
   title: 'Card Title',
   text: 'This is the text of the card',
   onClick: undefined,
@@ -21,6 +22,7 @@ Default.args = {
 export const Selected = Template.bind({});
 
 Selected.args = {
+  id: 'test',
   title: 'Card Title',
   text: 'This is the text of the card',
   selected: true,
@@ -36,6 +38,7 @@ const ImageTemplate: StoryFn<typeof InfoCard> = (args) => (
 export const Image = ImageTemplate.bind({});
 
 Image.args = {
+  id: 'test',
   title: 'Card Title',
   text: 'This is the text of the card',
   imageSrc: '/assets/card_test_img.jpg',
@@ -51,6 +54,7 @@ const ImageFixedSizeTemplate: StoryFn<typeof InfoCard> = (args) => (
 export const ImageFixedSize = ImageFixedSizeTemplate.bind({});
 
 ImageFixedSize.args = {
+  id: 'test',
   title: 'Card Title',
   text: 'This is the text of the card',
   imageSrc: '/assets/card_test_img.jpg',
@@ -66,6 +70,7 @@ const ImageLeftTemplate: StoryFn<typeof InfoCard> = (args) => (
 export const ImageLeft = ImageLeftTemplate.bind({});
 
 ImageLeft.args = {
+  id: 'test',
   title: 'Card Title',
   text: 'This is the text of the card',
   textAlign: 'text-left',

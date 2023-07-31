@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.control-dots{
+  bottom: -0.8rem !important;
+}
+
+.dot{
+  background-color: #ffffff !important;
+}
+
+.dot.selected {
+  background-color: white !important;
+  scale: 1.5 !important;
+  /* box-shadow: none !important; */
+  border: 1px solid #636363 !important;
+}

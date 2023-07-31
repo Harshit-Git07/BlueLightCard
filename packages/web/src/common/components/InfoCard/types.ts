@@ -16,5 +16,5 @@ export interface InfoCardProps {
   layout?: InfoCardLayout;
   selected?: boolean;
   className?: string;
-  onClick?: (isSelected: boolean) => void;
+  onClick?: () => void;
 }

@@ -298,7 +298,11 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 title="Work Email (Recommended for instant verification)"
                 text="You will be asked to login to this account during sign up"
                 selected={props.acceptedId == 'Email'}
-                onClick={() => props.setAcceptedId('Email')}
+                onClick={() =>
+                  props.acceptedId == 'Email'
+                    ? props.setAcceptedId('')
+                    : props.setAcceptedId('Email')
+                }
               />
               {props.acceptedMethods.map((method, index) => (
                 <InfoCard
@@ -306,9 +310,11 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   key={method.id + index}
                   title={method.title}
                   text={method.description}
-                  selected={props.acceptedId == method.title}
+                  selected={props.acceptedId == method.id}
                   onClick={() => {
-                    props.setAcceptedId(method.id);
+                    props.acceptedId == method.id
+                      ? props.setAcceptedId('')
+                      : props.setAcceptedId(method.id);
                   }}
                 />
               ))}
@@ -318,7 +324,9 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 title="I don't have any of the above"
                 text={''}
                 selected={props.acceptedId == 'None'}
-                onClick={() => props.setAcceptedId('None')}
+                onClick={() =>
+                  props.acceptedId == 'None' ? props.setAcceptedId('') : props.setAcceptedId('None')
+                }
               />
             </div>
           )}

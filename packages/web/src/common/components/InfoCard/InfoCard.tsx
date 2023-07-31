@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { InfoCardLayout, InfoCardProps } from './types';
 import { cssUtil } from '@/utils/cssUtil';
 import Image from '@/components/Image/Image';
@@ -19,7 +19,6 @@ const InfoCard: FC<InfoCardProps> = ({
   className,
   onClick,
 }) => {
-  const [isSelected, setIsSelected] = useState(selected);
   const fixedWidthHeight = imageWidth && imageHeight;
   const cardLayout = decider([
     [layout === InfoCardLayout.ImageLeft, 'flex-row'],
@@ -33,7 +32,7 @@ const InfoCard: FC<InfoCardProps> = ({
     'rounded-lg overflow-hidden border-2 flex',
     cardLayout ?? 'flex-col',
     onClick ? 'cursor-pointer' : '',
-    isSelected
+    selected
       ? 'border-border-card-selected-base dark:border-border-card-selected-dark'
       : 'border-border-card-base dark:border-border-card-dark',
     className ?? '',
@@ -47,18 +46,12 @@ const InfoCard: FC<InfoCardProps> = ({
     layout === InfoCardLayout.ImageLeft ? 'self-center' : '',
     textAlign ?? 'text-center',
   ]);
-  const onCardClicked = () => {
-    setIsSelected(!isSelected);
-    if (onClick) {
-      onClick(!isSelected);
-    }
-  };
   return (
     <div
       id={id}
       className={cardClasses}
       role={onClick ? 'button' : undefined}
-      onClick={onClick ? onCardClicked : undefined}
+      onClick={onClick ? onClick : undefined}
     >
       {imageSrc && (
         <div className={cardImageClasses}>

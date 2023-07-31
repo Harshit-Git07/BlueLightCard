@@ -22,6 +22,16 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
     icon: 'pl-8 ',
     defaultOptionText: 'text-[#CCCCD6]',
   };
+
+  const sortedOptions = [...options];
+  sortedOptions.sort((a, b) => {
+    // sort all the elements alphabetically except the 'Other' option
+    if (a.value.toLowerCase() === 'other') return 1;
+    if (b.value.toLowerCase() === 'other') return -1;
+
+    // otherwise sort normally
+    return a.value.localeCompare(b.value);
+  });
   return (
     <InputFieldWrapper icon={icon} select={true} showSuccessState={success} showErrorState={error}>
       <select
@@ -49,15 +59,15 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
         }}
       >
         {defaultOption && <option value="">{defaultOption}</option>}
-        {options?.map((option: KeyValue) => (
+        {sortedOptions?.map((sortedOptions: KeyValue) => (
           <option
-            id={option.value}
-            aria-label={option.value}
+            id={sortedOptions.value}
+            aria-label={sortedOptions.value}
             tabIndex={0}
-            key={option.key}
-            value={option.key}
+            key={sortedOptions.key}
+            value={sortedOptions.key}
           >
-            {option.value}
+            {sortedOptions.value}
           </option>
         ))}
       </select>

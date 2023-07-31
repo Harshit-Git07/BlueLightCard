@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.6.0...bluelightcard/web-v1.7.0) (2023-07-31)
+
+
+### Features
+
+* **web:** infocard styling functionality ([#217](https://github.com/bluelightcard/BlueLightCard-2.0/issues/217)) ([88123ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/88123add34fa18e4557198e6e87300097b6a5a3f))
+
+
+### Bug Fixes
+
+* **web:** ids added to infocard ([#215](https://github.com/bluelightcard/BlueLightCard-2.0/issues/215)) ([157fc5e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/157fc5eb7023b61cb6fb2bc8f8f5d285e433fe98))
+
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.5.1...bluelightcard/web-v1.6.0) (2023-07-27)
 
 

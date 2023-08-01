@@ -112,6 +112,7 @@ const TestPage: NextPage = () => {
         />
       </div>
       <Modal
+        id="quit_eligibility"
         type={ModalTypes.QuitEligibility}
         isVisible={visible}
         onClose={() => {

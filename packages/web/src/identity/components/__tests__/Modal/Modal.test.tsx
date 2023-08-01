@@ -10,6 +10,7 @@ describe('Modal component', () => {
   let user: UserEvent;
   beforeEach(() => {
     props = {
+      id: 'modal',
       isVisible: true,
       type: ModalTypes.QuitEligibility,
       onClose: jest.fn(),
@@ -29,6 +30,7 @@ describe('Modal component', () => {
     it('while isVisible is false, should not render component', () => {
       const modal = render(
         <Modal
+          id={props.id}
           isVisible={false}
           type={props.type}
           onClose={props.onClose}

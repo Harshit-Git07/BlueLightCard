@@ -16,6 +16,7 @@ const ModalTemplate: StoryFn<typeof Modal> = (args) => {
 export const Default = ModalTemplate.bind({});
 
 Default.args = {
+  id: 'modal',
   isVisible: true,
   type: ModalTypes.QuitEligibility,
 };

@@ -4,14 +4,17 @@ import Button from '../Button/Button';
 import { ThemeVariant } from '@/types/theme';
 import Image from '@/components/Image/Image';
 
-const Modal: FC<ModalProps> = ({ isVisible, type, onClose, onConfirm }) => {
+const Modal: FC<ModalProps> = ({ id, isVisible, type, onClose, onConfirm }) => {
   //return nothing when state variable set to false
   if (!isVisible) return null;
 
   //different types of modal could be implemented here in the future
   if (type == ModalTypes.QuitEligibility) {
     return (
-      <article className="z-50 fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex flex-col justify-center items-center">
+      <article
+        id={id}
+        className="z-50 fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex flex-col justify-center items-center"
+      >
         <div className="w-[774px] h-[538px] px-12 py-[52px] bg-white shadow  gap-7 inline-flex">
           <div className="w-[50%] pe-[44px]">
             <Image
@@ -24,9 +27,9 @@ const Modal: FC<ModalProps> = ({ isVisible, type, onClose, onConfirm }) => {
             />
           </div>
           <div className="w-[50%]">
-            <div className="text-secondary text-4xl font-semibold">
+            <h1 className="text-secondary text-4xl font-semibold">
               Are you sure you want to quit?
-            </div>
+            </h1>
             <div className="pt-[24px] text-lg">
               Check if you&apos;ll be accepted for a Blue Light card before you apply and start
               saving with your favourite brands today.
@@ -34,7 +37,7 @@ const Modal: FC<ModalProps> = ({ isVisible, type, onClose, onConfirm }) => {
             </div>
             <div className="flex justify-end gap-2 mt-[46%]">
               <Button
-                id="quit_button"
+                id="modal_quit_button"
                 variant={ThemeVariant.Tertiary}
                 className="px-6 py-2 text-lg font-semibold"
                 onClick={() => onClose()}

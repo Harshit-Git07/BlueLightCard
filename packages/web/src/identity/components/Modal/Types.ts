@@ -1,4 +1,5 @@
 export type ModalProps = {
+  id: string;
   isVisible: boolean;
   type: ModalTypes;
   onClose: () => void;

@@ -22,6 +22,7 @@ describe('EligibilityCard component', () => {
   const router = useRouter();
   beforeEach(() => {
     props = {
+      isLoading: false,
       steps: 2,
       formSubmitted: jest.fn(),
       onNext: jest.fn(),
@@ -29,11 +30,13 @@ describe('EligibilityCard component', () => {
       quit: jest.fn(),
       eligible: '',
       setEligible: jest.fn(),
-      employment: '',
+      employment: 'Employed',
       setEmployment: jest.fn(),
-      organisation: '',
+      loading: false,
+      setLoading: jest.fn(),
+      organisation: 'NHS',
       setOrganisation: jest.fn(),
-      employer: '',
+      employer: 'Health Education England',
       setEmployer: jest.fn(),
       otherOrg: '',
       setOtherOrg: jest.fn(),
@@ -72,14 +75,7 @@ describe('EligibilityCard component', () => {
   });
   describe('disabled button rendering', () => {
     it('Next button should be disabled while form is incomplete', () => {
-      render(
-        <EligibilityCard
-          {...props}
-          employment="Employed"
-          organisation="NHS"
-          employer="Health Education England"
-        />
-      );
+      render(<EligibilityCard {...props} />);
       const next_button = screen.getByRole('button', { name: 'Next' });
 
       expect(next_button).toBeDisabled();
@@ -108,15 +104,7 @@ describe('EligibilityCard component', () => {
       expect(button).toHaveFocus();
     });
     it('should invoke event when next button is clicked', async () => {
-      render(
-        <EligibilityCard
-          {...props}
-          employment="Employed"
-          organisation="NHS"
-          jobRole="Nurse"
-          employer="Health Education England"
-        />
-      );
+      render(<EligibilityCard {...props} jobRole="Nurse" />);
       const button = screen.getByRole('button', { name: 'Next' });
       await act(() => user.click(button));
       expect(props.onNext).toHaveBeenCalled();

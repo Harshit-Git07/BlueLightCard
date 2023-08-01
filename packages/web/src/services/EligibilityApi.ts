@@ -22,9 +22,11 @@ export function useOrganisation(employment: string) {
   const key = employment ? `${API_URL}, ${JSON.stringify(body)}` : null;
 
   const { data, error } = useSWR(key, fetcher);
+
   return {
     data: data,
-    isLoading: !error && !data,
+    isLoading: key && !error && !data, // isLoading is true only when a request is being made
+    isIdle: !key, // isIdle is true when no request is being made due to lack of key (employment)
     isError: error,
   };
 }
@@ -55,7 +57,8 @@ export function useEmployer(organisationId: string) {
 
   return {
     data: data,
-    isLoading: !error && !data,
+    isLoading: key && !error && !data, // isLoading is only true when a request is being made
+    isIdle: !key, // Add isIdle state to indicate when no request is being made due to lack of key
     isError: error,
   };
 }

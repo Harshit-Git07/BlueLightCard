@@ -8,10 +8,13 @@ export type EligibilityCardProps = PropsWithChildren & {
   quit: () => void;
 
   //move to Jotai tbc
+  isLoading: boolean | '' | null;
   eligible: string;
   setEligible: (eligible: string) => void;
   employment: string;
   setEmployment: Dispatch<SetStateAction<string>>;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
   organisation: string;
   setOrganisation: Dispatch<SetStateAction<string>>;
   employer: string;

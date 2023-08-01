@@ -6,8 +6,9 @@ import { useState } from 'react';
 import Modal from '../identity/components/Modal/Modal';
 import { ModalTypes } from '../identity/components/Modal/Types';
 import router from 'next/router';
+import { useEmployer, useOrganisation } from 'src/services/EligibilityApi';
 const TestPage: NextPage = () => {
-  const [employment, setEmployment] = useState('');
+  const [employment, setEmployment] = useState('employed');
   const [organisation, setOrganisation] = useState('');
   const [employer, setEmployer] = useState('');
   const [jobRole, setJobRole] = useState('');
@@ -16,6 +17,7 @@ const TestPage: NextPage = () => {
   const [orgDetails, setOrgDetails] = useState<any>();
   const [acceptedId, setAcceptedId] = useState('');
   const [employers, setEmployers] = useState<Employer[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const [eligible, setEligible] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
@@ -24,6 +26,11 @@ const TestPage: NextPage = () => {
   const [empOptions, setEmpOptions] = useState<KeyValue[]>([]);
   const [acceptedMethods, setAcceptedMethods] = useState<IdRequirements[]>([]);
   const [visible, setVisible] = useState(false);
+
+  const { isLoading: isOrgLoading } = useOrganisation(employment);
+  const { isLoading: isEmpLoading } = useEmployer(organisation);
+
+  const isLoading = isOrgLoading || isEmpLoading;
 
   const submit = async () => {
     if (organisation != 'Other' && employer != 'Other' && acceptedId != 'None') {
@@ -59,8 +66,11 @@ const TestPage: NextPage = () => {
       />
       <div className="my-[90px]">
         <EligibilityCard
+          isLoading={isLoading}
           employment={employment}
           setEmployment={setEmployment}
+          loading={loading}
+          setLoading={setLoading}
           organisation={organisation}
           setOrganisation={setOrganisation}
           employer={employer}

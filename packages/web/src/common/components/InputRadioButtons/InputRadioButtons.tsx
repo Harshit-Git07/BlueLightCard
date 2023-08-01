@@ -2,8 +2,13 @@ import { FC, forwardRef, useState, ChangeEvent } from 'react';
 import { InputRadioButtonsProps } from './types';
 import React from 'react';
 
-const InputRadioButton: FC<InputRadioButtonsProps> = ({ inputValues, onChange, id }) => {
-  const [selected, setSelected] = useState('');
+const InputRadioButton: FC<InputRadioButtonsProps> = ({
+  currentSelection,
+  inputValues,
+  onChange,
+  id,
+}) => {
+  const [selected, setSelected] = useState(currentSelection ?? '');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelected(event.target.value);

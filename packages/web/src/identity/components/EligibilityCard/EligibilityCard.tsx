@@ -216,6 +216,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     <InputRadioButtons
                       id="employment_status_radio"
                       inputValues={radioInputValues}
+                      currentSelection={props.employment}
                       onChange={(e) => props.setEmployment(e.target.value)}
                     />
                   </div>

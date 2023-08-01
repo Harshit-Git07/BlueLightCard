@@ -1,6 +1,7 @@
 export type InputRadioButtonsProps = {
   id: string;
   inputValues: InputValues[];
+  currentSelection?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 

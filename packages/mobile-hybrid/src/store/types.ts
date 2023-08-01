@@ -1,4 +1,7 @@
+import type { Dispatch } from 'react';
+
 export interface AppContextStructure {
+  loading: boolean;
   apiData: {
     [url: string]: any;
   };
@@ -11,5 +14,9 @@ export interface ActionApiData {
 
 export interface DispatchActionData {
   type: string;
-  state: ActionApiData;
+  state: any;
 }
+
+export type AppStore = AppContextStructure & {
+  dispatch: Dispatch<DispatchActionData>;
+};

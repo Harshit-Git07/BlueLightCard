@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dayjs": "^1.11.9",
     "react-responsive-carousel": "^3.2.23"
   }
 }

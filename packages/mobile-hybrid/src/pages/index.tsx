@@ -1,17 +1,19 @@
-import Head from 'next/head';
 import { NextPage } from 'next';
 import { useEffect, useRef, useContext } from 'react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
+import ListPanel from '@/components/ListPanel/ListPanel';
+import { NewsList, NewsPreview } from '@/modules/news';
+import { NewsModuleStore } from '@/modules/news/store';
 import InvokeNativeAnalytics from '@/invoke/analytics';
-import { AppContext } from '@/store';
 import trackScrollDepth from '@/utils/scrollDepth';
 
 const apiCall = new InvokeNativeAPICall();
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
-  const { apiData } = useContext(AppContext);
+  const { seeAllNews, setSeeAllNews } = useContext(NewsModuleStore);
   const bodyHeight = useRef<HTMLElement>(null);
+
   useEffect(() => {
     if (bodyHeight.current) {
       trackScrollDepth(bodyHeight.current, (depth) => {
@@ -27,24 +29,14 @@ const Home: NextPage<any> = () => {
   }, []);
 
   return (
-    <>
-      <Head>
-        <title>Mobile Hybrid</title>
-        <meta name="description" />
-      </Head>
-      <main ref={bodyHeight}>
-        <h1 className="text-2xl font-semibold">Mobile Hybrid</h1>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolore at magnam quo ullam
-          perferendis excepturi deleniti architecto recusandae aut soluta.
-        </p>
-        <ul>
-          {apiData['/api/4/offers/promos.php']?.promos.map((offer: any, idx: number) => (
-            <li key={`${idx}_${offer.title}`}>{offer.title}</li>
-          ))}
-        </ul>
-      </main>
-    </>
+    <main>
+      <div className="mb-2">
+        <NewsPreview />
+      </div>
+      <ListPanel visible={seeAllNews} onClose={() => setSeeAllNews(false)}>
+        {seeAllNews && <NewsList />}
+      </ListPanel>
+    </main>
   );
 };
 

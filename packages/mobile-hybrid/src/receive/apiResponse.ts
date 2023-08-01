@@ -42,7 +42,7 @@ export default class NativeReceiveAPIResponse implements NativeReceive.WebViewAP
 
     let parsedJSON;
     try {
-      parsedJSON = JSON.parse(joinedChunks);
+      parsedJSON = JSON.parse(decodeURIComponent(joinedChunks));
       Observable.getInstance().notify('nativeAPIResponse', {
         url,
         response: parsedJSON,

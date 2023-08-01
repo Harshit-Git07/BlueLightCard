@@ -10,6 +10,10 @@
     {
       "directory": "packages/web",
       "changeProcessCWD": true
+    },
+    {
+      "directory": "packages/mobile-hybrid",
+      "changeProcessCWD": true
     }
   ],
   "css.validate": false,

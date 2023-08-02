@@ -12,7 +12,7 @@ BeforeAll(async function () {
 Before(async function () {
   const context = await browser.newContext();
   page = await context.newPage();
-  await page.goto('https://www.demoblaze.com/');
+  await page.goto('https://www.staging.bluelightcard.tech/eligibility/');
   console.info('Spinning up browser using playwright.');
 });
 
@@ -23,11 +23,15 @@ After(async function ({ pickle, result }) {
       type: 'png',
     });
     await this.attach(img, 'image/png');
-    await page.close();
+    browser.close();
+    page.close();
+    
   }
 });
 AfterAll(async function () {
-  await browser.close();
+  browser.close();
+  page.close();
+  console.log('Test complete');
 });
 
 export { page, browser };

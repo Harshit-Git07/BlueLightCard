@@ -1,0 +1,1555 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "eligibility-calculator;employed-status",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Employed status",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 601020485
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 288326988
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 55192830
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I choose 'Police'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 25375241
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "I choose an 'Sussex Police'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 113433156
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I enter 'officer'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 101973406
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 43894357
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "I should see an option to sign up",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:75"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 55891846
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "I can close the Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:81"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 46374839
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 175840
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;employed-status",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Employed status",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 468437914
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 298786856
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 29767440
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I choose 'NHS'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18209261
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "I choose an 'Abbey Hospitals'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 239682653
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I enter 'Doctor'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 149526995
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 39879467
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "I should see an option to sign up",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:75"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 83608297
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "I can close the Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:81"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 33063599
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 222355
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;employed-status",
+        "keyword": "Scenario",
+        "line": 18,
+        "name": "Employed status",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 496486239
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 292292217
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 7,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 35412136
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I choose 'Ambulance Service'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 19640912
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "I choose an 'London Ambulance Service NHS Trust'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 97139667
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I enter 'worker'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 100768047
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 54285314
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "I should see an option to sign up",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:75"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 54320464
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "I can close the Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:81"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 46371110
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 67903
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;retired-status",
+        "keyword": "Scenario",
+        "line": 29,
+        "name": "Retired status",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 487370841
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 358183306
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 21,
+            "name": "I check Retired",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 158869072
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "I choose 'Fire Service'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 15546029
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 23,
+            "name": "I choose an 'Where do you work'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 93719453
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 85792
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;volunteer-status",
+        "keyword": "Scenario",
+        "line": 41,
+        "name": "Volunteer status",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 474171093
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 265936179
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 32,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 81895671
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "I choose 'NHS'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 72253338
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "I choose an 'NHS Professionals'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 203344897
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 35,
+            "name": "I enter 'nurse'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 111733789
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 36,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 54817063
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 37,
+            "name": "I should see an option to sign up",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:75"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 61801175
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "I can close the Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:81"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 23438388
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 86467
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;volunteer-status",
+        "keyword": "Scenario",
+        "line": 42,
+        "name": "Volunteer status",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 628486608
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 413147726
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 32,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 87694244
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "I choose 'Police'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 82229601
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "I choose an 'Cumbria Constabulary'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 196296395
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 35,
+            "name": "I enter 'officer'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 140139034
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 36,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 111375264
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 37,
+            "name": "I should see an option to sign up",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:75"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 135053807
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "I can close the Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:81"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 86217314
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 168719
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;volunteer-status",
+        "keyword": "Scenario",
+        "line": 43,
+        "name": "Volunteer status",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1023568967
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 714837496
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 32,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 68498919
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "I choose 'Ambulance Service'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 85428555
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "I choose an 'London Ambulance Service NHS Trust'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 96364871
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 35,
+            "name": "I enter 'staff'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 109217069
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 36,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 47116399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 37,
+            "name": "I should see an option to sign up",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:75"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 68875191
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "I can close the Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:81"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 51284553
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 101124
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;user-is-able-to-quit-after-entering-job-role",
+        "keyword": "Scenario",
+        "line": 54,
+        "name": "User is able to quit after entering job role",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 715454360
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 339554027
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 46,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 77181278
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 47,
+            "name": "I choose 'NHS'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 27557691
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 48,
+            "name": "I choose an 'NHS Borders'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1340932795
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 49,
+            "name": "I enter 'Nurse'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 144331648
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 50,
+            "name": "I should be able quit",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:86"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 130475382
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 109598
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;user-is-able-to-quit-on-verification-options-page",
+        "keyword": "Scenario",
+        "line": 66,
+        "name": "User is able to quit on verification options page",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 634820309
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 326216119
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 57,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 61639080
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 58,
+            "name": "I choose 'Highway Traffic Officers'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 27233054
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 59,
+            "name": "I choose an 'Highways England Traffic Officers'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 100892021
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 60,
+            "name": "I enter 'Officers'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 127079489
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 61,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 56896640
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 62,
+            "name": "I should be able quit",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:86"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 178827185
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 120201
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;user-is-able-to-continue-after-clicking-quit",
+        "keyword": "Scenario",
+        "line": 77,
+        "name": "User is able to continue after clicking quit",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 657643712
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 347440952
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 69,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 101999678
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 70,
+            "name": "I choose 'Pharmacy'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 92049885
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 71,
+            "name": "I choose an 'NHS Pharmacy'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 99715182
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 72,
+            "name": "I enter 'officer'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 110019646
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 73,
+            "name": "I should be able quit, change mind and continue",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:93"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 182632093
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 167726
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;user-is-able-to-go-back-a-step",
+        "keyword": "Scenario",
+        "line": 89,
+        "name": "User is able to go back a step",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 620190129
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker website",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 363370070
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 80,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 122332100
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 81,
+            "name": "I choose 'Police'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 91172815
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 82,
+            "name": "I choose an 'Glouchestershire Constabulary'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 207948319
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 83,
+            "name": "I enter 'officer'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 160511501
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 84,
+            "name": "I should be able to select a verification options",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 71358916
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 85,
+            "name": "I go back to previous page",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:101"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 89164898
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 145904
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "eligibility-calculator",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Eligibility Calculator",
+    "tags": [],
+    "uri": "e2e/features/eligibilityChecker.feature"
+  },
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "login-action;login-with-valid-credentials",
+        "keyword": "Scenario",
+        "line": 8,
+        "name": "Login with valid credentials",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 611198876
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigates to demoblaze website",
+            "match": {
+              "location": "e2e/steps/example.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 798863113
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 5,
+            "name": "I click on \"Log in\"",
+            "match": {
+              "location": "e2e/steps/example.ts:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 54253866
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "I enter username as 'username'",
+            "match": {
+              "location": "e2e/steps/example.ts:25"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 12540410
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I enter password as 'password'",
+            "match": {
+              "location": "e2e/steps/example.ts:30"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10114649
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "I click on the login button",
+            "match": {
+              "location": "e2e/steps/example.ts:35"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 560274335
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "Login should be success",
+            "match": {
+              "location": "e2e/steps/example.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3646816
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 76794
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@login",
+            "line": 7
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "login-action;login-should-not-be-success",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Login should not be success",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 798350510
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigates to demoblaze website",
+            "match": {
+              "location": "e2e/steps/example.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 696869799
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 5,
+            "name": "I click on \"Log in\"",
+            "match": {
+              "location": "e2e/steps/example.ts:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 67890432
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "I enter username as 'username1'",
+            "match": {
+              "location": "e2e/steps/example.ts:25"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 14615378
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "I enter password as 'password1'",
+            "match": {
+              "location": "e2e/steps/example.ts:30"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 43549650
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "I click on the login button",
+            "match": {
+              "location": "e2e/steps/example.ts:35"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 420069614
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 19,
+            "name": "Login should fail",
+            "match": {
+              "location": "e2e/steps/example.ts:51"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1319573
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 46453
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@login",
+            "line": 14
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "login-action",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Login action",
+    "tags": [],
+    "uri": "e2e/features/example.feature"
+  }
+]

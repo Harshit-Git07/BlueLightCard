@@ -27,9 +27,9 @@ Given('I navigates to demoblaze website', async function () {
     await page.locator('//div[@class="list-group"]//a[1]').click();
   });
 
-  When('I choose {string}', async function (category) {
-    await page.click(`text=${category}`);
-  });  
+ // When('I choose {string}', async function (category) {
+ //   await page.click(`text=${category}`);
+ // });  
 
   Then('Login should be success', async function () {
     await page.locator("#nameofuser").textContent();

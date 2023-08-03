@@ -11,6 +11,7 @@ import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
 import { PostUserRoute } from './src/routes/postUserRoute';
 import { PutUserByIdRoute } from './src/routes/putUserByIdRoute';
 import { DeleteUserByIdRoute } from './src/routes/deleteUserByIdRoute';
+import { userSignInMigratedRule } from './src/eventRules/userSignInMigratedRule';
 
 export function Identity({ stack }: StackContext) {
   //set tag service identity to all resources
@@ -69,6 +70,10 @@ export function Identity({ stack }: StackContext) {
     'DELETE /users/{id}': new DeleteUserByIdRoute(apiGatewayModelGenerator).getRouteDetails(),
   });
 
+  const { bus } = use(Shared);
+  //add dead letter queue
+  const dlq = new Queue(stack, 'DLQ');
+
   //auth
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
@@ -79,8 +84,13 @@ export function Identity({ stack }: StackContext) {
           SERVICE: 'identity',
           BLC_API_URL: blcApiUrl,
           BLC_API_AUTH: blcApiAuth,
+          EVENT_BUS: bus.eventBusName,
+          EVENT_SOURCE: 'user.signin.migrated',
+          DLQ_URL: dlq.queueUrl,
+          REGION: 'eu-west-2'
         },
-      },
+        permissions: [bus]
+      }
     },
     cdk: {
       userPool: {
@@ -90,7 +100,7 @@ export function Identity({ stack }: StackContext) {
         },
         customAttributes: {
           blc_old_id: new StringAttribute({ mutable: true }),
-          blc_old_uuid: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true })
         },
       },
     },
@@ -107,15 +117,11 @@ export function Identity({ stack }: StackContext) {
     IdentityApiEndpoint: identityApi.url,
   });
 
-  //add dead letter queue
-  const dlq = new Queue(stack, 'DLQ');
-
   //add event bridge rules
-  const { bus } = use(Shared);
   bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl));
-
+  bus.addRules(stack, userSignInMigratedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
   return {
     identityApi,
     cognito

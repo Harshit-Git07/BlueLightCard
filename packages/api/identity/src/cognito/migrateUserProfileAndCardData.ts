@@ -1,0 +1,112 @@
+import { SQS } from 'aws-sdk';
+import { Logger } from '@aws-lambda-powertools/logger';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { Response } from './../../../core/src/utils/restResponse/response'
+import { BRANDS } from './../../../core/src/types/brands.enum';
+import { getCardStatus } from './../../../core/src/utils/getCardStatus';
+const service: string = process.env.SERVICE as string
+const tableName = process.env.TABLE_NAME;
+const logger = new Logger({ serviceName: `${service}-migrateUserProfileAndCardData` })
+const sqs = new SQS();
+
+// Function to send a message to SQS Queue
+async function sendToDLQ(event: any) {
+  const dlqUrl = process.env.DLQ_URL || '';
+  const params = {
+    QueueUrl: dlqUrl,
+    MessageBody: JSON.stringify(event)
+  };
+  await sqs.sendMessage(params).promise();
+}
+
+const client = new DynamoDBClient({});
+const dynamodb = DynamoDBDocumentClient.from(client);
+
+export const handler = async (event: any, context: any) => {
+  logger.info('event received', event);
+  const brand = (event.detail !== undefined || event.detail !== null) ? event.detail.brand?.toUpperCase() : null;
+
+  if (brand == null) {
+    return Response.BadRequest({ message: 'Please provide brand details' });
+  }
+
+  if (!(brand in BRANDS)) {
+    return Response.BadRequest({ message: 'Please provide a valid brand' });
+  }
+
+  if(event.detail.uuid === undefined || event.detail.uuid === '' || event.detail.legacyUserId === undefined 
+  || event.detail.legacyUserId === '' || event.detail.profileUuid === undefined || event.detail.profileUuid === '' 
+  || event.detail.cardId === undefined || event.detail.cardId === ''){
+    return Response.BadRequest({ message: 'Required parameters are missing' });
+  }
+
+  const uuid = event.detail.uuid;
+  const legacyId = event.detail.legacyUserId;
+  const profileUuid = event.detail.profileUuid;
+  const legacyCardId = event.detail.cardId;
+  
+  const userParams = {
+    Item: {
+      pk: `MEMBER#${uuid}`,
+      sk: `BRAND#${brand}`,
+      legacy_id: legacyId
+    },
+    TableName: tableName
+  }
+  try {
+    const results = await dynamodb.send(new PutCommand(userParams));
+    logger.debug('results', { results });
+  } catch (err: any) {
+    logger.error("error migrating user data ", { uuid, err });
+    await sendToDLQ(event);
+  }
+  
+  const profileParams = {
+    Item: {
+      pk: `MEMBER#${uuid}`,
+      sk: `PROFILE#${profileUuid}`,
+      name: event.detail.name,
+      surname: event.detail.surname,
+      spare_email: event.detail.spareemail,
+      spare_email_validated: event.detail.spareemailvalidated,
+      organisation: event.detail.service,
+      gender: event.detail.gender,
+      dob: event.detail.dob,
+      merged_uid: event.detail.merged_uid,
+      merged_time: event.detail.merged_time,
+      mobile: event.detail.mobile,
+      employer: event.detail.trustName,
+      employerId: event.detail.trustId
+    },
+    TableName: tableName
+  }
+  try {
+    const results = await dynamodb.send(new PutCommand(profileParams));
+    logger.debug('results', { results });
+  } catch (err: any) {
+    logger.error("error inserting user profile", { uuid, err });
+    await sendToDLQ(event);
+  }
+
+  const cardParams = {
+    Item: {
+      pk: `MEMBER#${uuid}`,
+      sk: `CARD#${legacyCardId}`,
+      status: getCardStatus(event.detail.cardStatus),
+      expires: event.detail.cardExpires,
+      posted: event.detail.cardPosted
+    },
+    TableName: tableName
+  }
+  
+  try {
+    const results = await dynamodb.send(new PutCommand(cardParams));
+    logger.debug('results', { results });
+  } catch (err: any) {
+    logger.error("error migrating user card data", { uuid, err });
+    await sendToDLQ(event);
+  }
+};
+
+

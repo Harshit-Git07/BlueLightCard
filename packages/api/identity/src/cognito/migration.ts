@@ -48,7 +48,7 @@ const authenticateUser = async (username: string, password: string) => {
         logger.debug("old login response", { response })
         if (response && response.data && response.data.success) {
             //add to event bus
-            addUserSignInMigratedEvent(response.data.data);
+            await addUserSignInMigratedEvent(response.data.data);
             return {
                 email: username,
                 email_verified: "true",

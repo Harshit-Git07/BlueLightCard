@@ -5,7 +5,7 @@ import { page } from "../support/world";
 
 
 //Given
-  Given('I navigate to Eligibility Checker website', async function () {
+  Given('I navigate to Eligibility Checker', async function () {
     await page.goto('https://www.staging.bluelightcard.tech/eligibility/');
   });
 
@@ -37,6 +37,30 @@ When('I enter {string}', async function (jobRole) {
   await page.getByPlaceholder('What do you work as?').fill(jobRole);
   await page.locator("#next_button").click();  
   });
+
+When('I choose {string} as organisation', async function (Other) {
+  await page.getByRole('combobox', { name: 'drop-down selector' }).selectOption(Other);
+  });
+
+When('I should see a message', async function () {
+    await page.getByText('It looks like we haven\'t added your organisation yet, register your interest to ').isVisible();
+});   
+
+When('I can write the name of my organisation', async function () {
+  await page.getByPlaceholder('Tell us the name of your organisation').click();
+  await page.getByPlaceholder('Tell us the name of your organisation').fill('test company');
+  await page.getByRole('button', { name: 'Submit' }).click();
+});
+
+When('I can write the name of my employer', async function () {
+  await page.getByPlaceholder('Tell us the name of your employer').click();
+  await page.getByPlaceholder('Tell us the name of your employer').fill('test');
+  await page.getByRole('button', { name: 'Submit' }).click();
+});
+
+When('I choose {string} as employer', async function (Other) {
+  await page.selectOption('#employer_select', Other);
+});
   
 //Then
   Then('I should be able to select a verification options', async function () {
@@ -49,11 +73,6 @@ When('I enter {string}', async function (jobRole) {
     } else if(page.locator("id=3")){
        page.locator("id=3").textContent();
     }
-    /*
-    await expect(page.locator("id=1")).toBeTruthy && page.locator("id=1").textContent();
-    await expect(page.locator("id=2")).toBeTruthy && page.locator("id=2").textContent();
-    await expect(page.locator("id=3")).toBeTruthy && page.locator("id=3").textContent();
-    */
     await page.locator("id=no_id").textContent();
     await page.locator("id=work_email").click();
     
@@ -83,5 +102,18 @@ When('I enter {string}', async function (jobRole) {
 
   Then('I go back to previous page', async function () {
     await page.locator("#back_button").click();
+  });
+
+  Then('I see a message that I\'m not eligible', async function () {
+    await page.getByText('Sorry, you are not currently eligible').isVisible();
+     });
+  
+  Then('I click finish', async function () {
+    await page.getByRole('button', { name: 'Finish' }).click();
+       });   
+
+  Then('I should be able to see of verification options and select I don\'t have any of the above', async function () {
+    await page.locator("id=no_id").click(); 
+    await page.getByRole('button', { name: 'Submit' }).click();
   });
   

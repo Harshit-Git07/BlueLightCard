@@ -14,20 +14,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 601020485
+              "duration": 587397526
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 288326988
+              "duration": 345460630
             }
           },
           {
@@ -40,7 +40,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 55192830
+              "duration": 107223491
             }
           },
           {
@@ -53,7 +53,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 25375241
+              "duration": 20208870
             }
           },
           {
@@ -66,7 +66,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 113433156
+              "duration": 207141945
             }
           },
           {
@@ -79,7 +79,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 101973406
+              "duration": 89261737
             }
           },
           {
@@ -88,11 +88,11 @@
             "line": 11,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 43894357
+              "duration": 41312514
             }
           },
           {
@@ -101,11 +101,11 @@
             "line": 12,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:75"
+              "location": "e2e/steps/eligibilityChecker.ts:99"
             },
             "result": {
               "status": "passed",
-              "duration": 55891846
+              "duration": 46063021
             }
           },
           {
@@ -114,11 +114,11 @@
             "line": 13,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:105"
             },
             "result": {
               "status": "passed",
-              "duration": 46374839
+              "duration": 534330215
             }
           },
           {
@@ -126,7 +126,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 175840
+              "duration": 165796
             }
           }
         ],
@@ -145,20 +145,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 468437914
+              "duration": 796079337
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 298786856
+              "duration": 332337091
             }
           },
           {
@@ -171,7 +171,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 29767440
+              "duration": 68042944
             }
           },
           {
@@ -184,7 +184,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 18209261
+              "duration": 23048487
             }
           },
           {
@@ -197,7 +197,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 239682653
+              "duration": 304447271
             }
           },
           {
@@ -210,7 +210,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 149526995
+              "duration": 106207756
             }
           },
           {
@@ -219,11 +219,11 @@
             "line": 11,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 39879467
+              "duration": 53019380
             }
           },
           {
@@ -232,11 +232,11 @@
             "line": 12,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:75"
+              "location": "e2e/steps/eligibilityChecker.ts:99"
             },
             "result": {
               "status": "passed",
-              "duration": 83608297
+              "duration": 63851671
             }
           },
           {
@@ -245,11 +245,11 @@
             "line": 13,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:105"
             },
             "result": {
               "status": "passed",
-              "duration": 33063599
+              "duration": 537228012
             }
           },
           {
@@ -257,7 +257,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 222355
+              "duration": 173365
             }
           }
         ],
@@ -276,20 +276,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 496486239
+              "duration": 489937291
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 292292217
+              "duration": 868412448
             }
           },
           {
@@ -302,7 +302,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 35412136
+              "duration": 122003766
             }
           },
           {
@@ -315,7 +315,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 19640912
+              "duration": 20322286
             }
           },
           {
@@ -328,7 +328,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 97139667
+              "duration": 196150880
             }
           },
           {
@@ -341,7 +341,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 100768047
+              "duration": 92474781
             }
           },
           {
@@ -350,11 +350,11 @@
             "line": 11,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 54285314
+              "duration": 39658809
             }
           },
           {
@@ -363,11 +363,11 @@
             "line": 12,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:75"
+              "location": "e2e/steps/eligibilityChecker.ts:99"
             },
             "result": {
               "status": "passed",
-              "duration": 54320464
+              "duration": 37737128
             }
           },
           {
@@ -376,11 +376,11 @@
             "line": 13,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:105"
             },
             "result": {
               "status": "passed",
-              "duration": 46371110
+              "duration": 552063159
             }
           },
           {
@@ -388,7 +388,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 67903
+              "duration": 77492
             }
           }
         ],
@@ -407,20 +407,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 487370841
+              "duration": 520149317
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 358183306
+              "duration": 314873625
             }
           },
           {
@@ -433,7 +433,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 158869072
+              "duration": 261192771
             }
           },
           {
@@ -446,20 +446,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 15546029
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 23,
-            "name": "I choose an 'Where do you work'",
-            "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:41"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 93719453
+              "duration": 15798309
             }
           },
           {
@@ -467,7 +454,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 85792
+              "duration": 93063
             }
           }
         ],
@@ -486,20 +473,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 474171093
+              "duration": 623472872
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 265936179
+              "duration": 288265623
             }
           },
           {
@@ -512,7 +499,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 81895671
+              "duration": 153736860
             }
           },
           {
@@ -525,7 +512,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 72253338
+              "duration": 159372011
             }
           },
           {
@@ -538,7 +525,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 203344897
+              "duration": 233372487
             }
           },
           {
@@ -551,7 +538,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 111733789
+              "duration": 111500779
             }
           },
           {
@@ -560,11 +547,11 @@
             "line": 36,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 54817063
+              "duration": 57765879
             }
           },
           {
@@ -573,11 +560,11 @@
             "line": 37,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:75"
+              "location": "e2e/steps/eligibilityChecker.ts:99"
             },
             "result": {
               "status": "passed",
-              "duration": 61801175
+              "duration": 40749158
             }
           },
           {
@@ -586,11 +573,11 @@
             "line": 38,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:105"
             },
             "result": {
               "status": "passed",
-              "duration": 23438388
+              "duration": 499518496
             }
           },
           {
@@ -598,7 +585,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 86467
+              "duration": 96338
             }
           }
         ],
@@ -617,20 +604,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 628486608
+              "duration": 465284426
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 413147726
+              "duration": 342104749
             }
           },
           {
@@ -643,7 +630,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 87694244
+              "duration": 68120248
             }
           },
           {
@@ -656,7 +643,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 82229601
+              "duration": 140921613
             }
           },
           {
@@ -669,7 +656,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 196296395
+              "duration": 201175317
             }
           },
           {
@@ -682,7 +669,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 140139034
+              "duration": 95879302
             }
           },
           {
@@ -691,11 +678,11 @@
             "line": 36,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 111375264
+              "duration": 43012304
             }
           },
           {
@@ -704,11 +691,11 @@
             "line": 37,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:75"
+              "location": "e2e/steps/eligibilityChecker.ts:99"
             },
             "result": {
               "status": "passed",
-              "duration": 135053807
+              "duration": 41505593
             }
           },
           {
@@ -717,11 +704,11 @@
             "line": 38,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:105"
             },
             "result": {
               "status": "passed",
-              "duration": 86217314
+              "duration": 517517122
             }
           },
           {
@@ -729,7 +716,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 168719
+              "duration": 113351
             }
           }
         ],
@@ -748,20 +735,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1023568967
+              "duration": 541923256
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 714837496
+              "duration": 319798250
             }
           },
           {
@@ -774,7 +761,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 68498919
+              "duration": 145668897
             }
           },
           {
@@ -787,7 +774,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 85428555
+              "duration": 112790802
             }
           },
           {
@@ -800,7 +787,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 96364871
+              "duration": 201233072
             }
           },
           {
@@ -813,7 +800,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 109217069
+              "duration": 107173086
             }
           },
           {
@@ -822,11 +809,11 @@
             "line": 36,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 47116399
+              "duration": 42576449
             }
           },
           {
@@ -835,11 +822,11 @@
             "line": 37,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:75"
+              "location": "e2e/steps/eligibilityChecker.ts:99"
             },
             "result": {
               "status": "passed",
-              "duration": 68875191
+              "duration": 42503002
             }
           },
           {
@@ -848,11 +835,11 @@
             "line": 38,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:105"
             },
             "result": {
               "status": "passed",
-              "duration": 51284553
+              "duration": 493534719
             }
           },
           {
@@ -860,7 +847,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 101124
+              "duration": 82400
             }
           }
         ],
@@ -879,20 +866,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 715454360
+              "duration": 494421686
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 339554027
+              "duration": 359555862
             }
           },
           {
@@ -905,7 +892,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 77181278
+              "duration": 90288153
             }
           },
           {
@@ -918,7 +905,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 27557691
+              "duration": 17855785
             }
           },
           {
@@ -931,7 +918,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1340932795
+              "duration": 220851107
             }
           },
           {
@@ -944,7 +931,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 144331648
+              "duration": 109032428
             }
           },
           {
@@ -953,11 +940,11 @@
             "line": 50,
             "name": "I should be able quit",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:110"
             },
             "result": {
               "status": "passed",
-              "duration": 130475382
+              "duration": 570938488
             }
           },
           {
@@ -965,7 +952,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 109598
+              "duration": 91378
             }
           }
         ],
@@ -984,20 +971,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 634820309
+              "duration": 602477797
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 326216119
+              "duration": 312123044
             }
           },
           {
@@ -1010,7 +997,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 61639080
+              "duration": 101446030
             }
           },
           {
@@ -1023,7 +1010,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 27233054
+              "duration": 16311898
             }
           },
           {
@@ -1036,7 +1023,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 100892021
+              "duration": 197731827
             }
           },
           {
@@ -1049,7 +1036,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 127079489
+              "duration": 111272286
             }
           },
           {
@@ -1058,11 +1045,11 @@
             "line": 61,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 56896640
+              "duration": 56867939
             }
           },
           {
@@ -1071,11 +1058,11 @@
             "line": 62,
             "name": "I should be able quit",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:110"
             },
             "result": {
               "status": "passed",
-              "duration": 178827185
+              "duration": 621335287
             }
           },
           {
@@ -1083,7 +1070,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 120201
+              "duration": 80928
             }
           }
         ],
@@ -1102,20 +1089,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 657643712
+              "duration": 533981767
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 347440952
+              "duration": 333092316
             }
           },
           {
@@ -1128,7 +1115,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 101999678
+              "duration": 79974041
             }
           },
           {
@@ -1141,7 +1128,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 92049885
+              "duration": 148770775
             }
           },
           {
@@ -1154,7 +1141,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 99715182
+              "duration": 200141476
             }
           },
           {
@@ -1167,7 +1154,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 110019646
+              "duration": 107601319
             }
           },
           {
@@ -1176,11 +1163,11 @@
             "line": 73,
             "name": "I should be able quit, change mind and continue",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:93"
+              "location": "e2e/steps/eligibilityChecker.ts:117"
             },
             "result": {
               "status": "passed",
-              "duration": 182632093
+              "duration": 107066318
             }
           },
           {
@@ -1188,7 +1175,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 167726
+              "duration": 66523
             }
           }
         ],
@@ -1207,20 +1194,20 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 620190129
+              "duration": 483963729
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 4,
-            "name": "I navigate to Eligibility Checker website",
+            "name": "I navigate to Eligibility Checker",
             "match": {
               "location": "e2e/steps/eligibilityChecker.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 363370070
+              "duration": 621329377
             }
           },
           {
@@ -1233,7 +1220,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 122332100
+              "duration": 64615354
             }
           },
           {
@@ -1246,7 +1233,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 91172815
+              "duration": 140163735
             }
           },
           {
@@ -1259,7 +1246,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 207948319
+              "duration": 194689470
             }
           },
           {
@@ -1272,7 +1259,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 160511501
+              "duration": 103612269
             }
           },
           {
@@ -1281,11 +1268,11 @@
             "line": 84,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:54"
+              "location": "e2e/steps/eligibilityChecker.ts:83"
             },
             "result": {
               "status": "passed",
-              "duration": 71358916
+              "duration": 51124712
             }
           },
           {
@@ -1294,11 +1281,11 @@
             "line": 85,
             "name": "I go back to previous page",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:101"
+              "location": "e2e/steps/eligibilityChecker.ts:125"
             },
             "result": {
               "status": "passed",
-              "duration": 89164898
+              "duration": 61405906
             }
           },
           {
@@ -1306,7 +1293,1540 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 145904
+              "duration": 105070
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-user-is-employed,-user-selects-other-option-in-organisation",
+        "keyword": "Scenario",
+        "line": 91,
+        "name": "When user is employed, user selects other option in organisation",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 484404388
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 294906791
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 92,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 57574558
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 93,
+            "name": "I choose 'Other' as organisation",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:53"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 15891644
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 94,
+            "name": "I should see a message",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:58"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3850236
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 95,
+            "name": "I can write the name of my organisation",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:63"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 272470168
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 96,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3150559
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 97,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 41417201
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 68570
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-user-is-employed,-user-selects-other-option-employed",
+        "keyword": "Scenario",
+        "line": 109,
+        "name": "When user is employed, user selects other option employed",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 441382743
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 389330794
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 100,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 46366746
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 101,
+            "name": "I choose 'NHS'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 22586364
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 102,
+            "name": "I choose 'Other' as employer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 305391731
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 103,
+            "name": "I should see a message",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:58"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5703540
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 104,
+            "name": "I can write the name of my employer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:70"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 112365650
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 105,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3523729
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 106,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 36487789
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 56036
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-user-is-employed,-user-selects-other-option-employed",
+        "keyword": "Scenario",
+        "line": 110,
+        "name": "When user is employed, user selects other option employed",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 462304903
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 289818666
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 100,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 47470339
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 101,
+            "name": "I choose 'Police'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 20654809
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 102,
+            "name": "I choose 'Other' as employer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 194521715
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 103,
+            "name": "I should see a message",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:58"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4055492
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 104,
+            "name": "I can write the name of my employer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:70"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 88086998
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 105,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2877541
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 106,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 55975649
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 74874
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-is-employed,-user-selects-'i-don't-have-have-any-of-the-above'",
+        "keyword": "Scenario",
+        "line": 122,
+        "name": "When is employed, user selects 'I don't have have any of the above'",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 509875614
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 306581422
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 113,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 62168059
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 114,
+            "name": "I choose 'NHS'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 21032622
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 115,
+            "name": "I choose an 'NHS Professionals'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 216462730
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 116,
+            "name": "I enter 'nurse'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 104434365
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 117,
+            "name": "I should be able to see of verification options and select I don't have any of the above",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:140"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 82449864
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 118,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2318973
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 119,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 44775283
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 100157
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-is-employed,-user-selects-'i-don't-have-have-any-of-the-above'",
+        "keyword": "Scenario",
+        "line": 123,
+        "name": "When is employed, user selects 'I don't have have any of the above'",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 491078038
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 343518155
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 113,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 100786326
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 114,
+            "name": "I choose 'Police'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18974859
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 115,
+            "name": "I choose an 'Cumbria Constabulary'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 192623846
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 116,
+            "name": "I enter 'officer'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 104066591
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 117,
+            "name": "I should be able to see of verification options and select I don't have any of the above",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:140"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 82303119
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 118,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3027427
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 119,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 41972767
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 54984
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-is-employed,-user-selects-'i-don't-have-have-any-of-the-above'",
+        "keyword": "Scenario",
+        "line": 124,
+        "name": "When is employed, user selects 'I don't have have any of the above'",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 469448181
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 349626158
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 113,
+            "name": "I check Employed",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 56152384
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 114,
+            "name": "I choose 'Ambulance Service'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 19623050
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 115,
+            "name": "I choose an 'London Ambulance Service NHS Trust'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 190958858
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 116,
+            "name": "I enter 'staff'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 109336536
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 117,
+            "name": "I should be able to see of verification options and select I don't have any of the above",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:140"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 109612792
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 118,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2890523
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 119,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 58693919
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 87259
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-user-is-retired,-user-selects-other-option-in-organisation",
+        "keyword": "Scenario",
+        "line": 126,
+        "name": "When user is Retired, user selects other option in organisation",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 506685437
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 309399129
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 127,
+            "name": "I check Retired",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:26"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 262438701
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 128,
+            "name": "I choose 'Other' as organisation",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:53"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 14214715
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 129,
+            "name": "I should see a message",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:58"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2095949
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 130,
+            "name": "I can write the name of my organisation",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:63"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 179877859
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 131,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3542706
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 132,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 52207741
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 57584
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-user-is-volunteer,-user-selects-other-option-in-organisation",
+        "keyword": "Scenario",
+        "line": 149,
+        "name": "When user is Volunteer, user selects other option in organisation",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 539067189
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 303535862
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 150,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 78947585
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 151,
+            "name": "I choose 'Other' as organisation",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:53"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18572858
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 152,
+            "name": "I should see a message",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:58"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2384601
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 153,
+            "name": "I can write the name of my organisation",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:63"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 173126019
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 154,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2355283
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 155,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 47231277
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 71672
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-user-is-a-volunteer,-user-selects-other-option-in-employed",
+        "keyword": "Scenario",
+        "line": 167,
+        "name": "When user is a Volunteer, user selects other option in employed",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 513086455
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 303156744
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 158,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 88655489
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 159,
+            "name": "I choose 'NHS'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 122290515
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 160,
+            "name": "I choose 'Other' as employer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 250944287
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 161,
+            "name": "I should see a message",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:58"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8243644
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 162,
+            "name": "I can write the name of my employer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:70"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 94521542
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 163,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2846481
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 164,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 45976815
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 50292
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-is-a-volunteer,-user-selects-'i-don't-have-have-any-of-the-above'",
+        "keyword": "Scenario",
+        "line": 179,
+        "name": "When is a Volunteer, user selects 'I don't have have any of the above'",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 545266478
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 317013625
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 170,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 93520378
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 171,
+            "name": "I choose 'NHS'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 138924972
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 172,
+            "name": "I choose an 'NHS Professionals'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 300962334
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 173,
+            "name": "I enter 'nurse'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 110456781
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 174,
+            "name": "I should be able to see of verification options and select I don't have any of the above",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:140"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 128145276
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 175,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3370309
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 176,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 34725821
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 70438
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-is-a-volunteer,-user-selects-'i-don't-have-have-any-of-the-above'",
+        "keyword": "Scenario",
+        "line": 180,
+        "name": "When is a Volunteer, user selects 'I don't have have any of the above'",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 489998591
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 263360535
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 170,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 159607119
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 171,
+            "name": "I choose 'Police'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 107975918
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 172,
+            "name": "I choose an 'Cumbria Constabulary'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 204384172
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 173,
+            "name": "I enter 'officer'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 109666026
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 174,
+            "name": "I should be able to see of verification options and select I don't have any of the above",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:140"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 118213689
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 175,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5360210
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 176,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 47747417
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 75654
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eligibility-calculator;when-is-a-volunteer,-user-selects-'i-don't-have-have-any-of-the-above'",
+        "keyword": "Scenario",
+        "line": 181,
+        "name": "When is a Volunteer, user selects 'I don't have have any of the above'",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 465920210
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 4,
+            "name": "I navigate to Eligibility Checker",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 281694075
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 170,
+            "name": "I check Volunteer",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 141996702
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 171,
+            "name": "I choose 'Ambulance Service'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 139806871
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 172,
+            "name": "I choose an 'London Ambulance Service NHS Trust'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:41"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 193429093
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 173,
+            "name": "I enter 'staff'",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:46"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 106225718
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 174,
+            "name": "I should be able to see of verification options and select I don't have any of the above",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:140"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 110936301
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 175,
+            "name": "I see a message that I'm not eligible",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2830157
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 176,
+            "name": "I click finish",
+            "match": {
+              "location": "e2e/steps/eligibilityChecker.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 55753799
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 60885
             }
           }
         ],
@@ -1319,7 +2839,7 @@
     "keyword": "Feature",
     "name": "Eligibility Calculator",
     "tags": [],
-    "uri": "e2e/features/eligibilityChecker.feature"
+    "uri": "e2e/features/eligibiltyChecker/eligibilityChecker.feature"
   },
   {
     "description": "",
@@ -1336,7 +2856,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 611198876
+              "duration": 492672356
             }
           },
           {
@@ -1349,7 +2869,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 798863113
+              "duration": 707062911
             }
           },
           {
@@ -1362,7 +2882,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 54253866
+              "duration": 77344664
             }
           },
           {
@@ -1375,7 +2895,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 12540410
+              "duration": 15430411
             }
           },
           {
@@ -1388,7 +2908,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 10114649
+              "duration": 13056565
             }
           },
           {
@@ -1401,7 +2921,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 560274335
+              "duration": 460470718
             }
           },
           {
@@ -1414,7 +2934,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 3646816
+              "duration": 2262031
             }
           },
           {
@@ -1422,7 +2942,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 76794
+              "duration": 65816
             }
           }
         ],
@@ -1446,7 +2966,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 798350510
+              "duration": 749343763
             }
           },
           {
@@ -1459,7 +2979,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 696869799
+              "duration": 505761900
             }
           },
           {
@@ -1472,7 +2992,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 67890432
+              "duration": 58991739
             }
           },
           {
@@ -1485,7 +3005,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 14615378
+              "duration": 10975178
             }
           },
           {
@@ -1498,7 +3018,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 43549650
+              "duration": 11321286
             }
           },
           {
@@ -1511,7 +3031,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 420069614
+              "duration": 459371773
             }
           },
           {
@@ -1524,7 +3044,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1319573
+              "duration": 1130526
             }
           },
           {
@@ -1532,7 +3052,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 46453
+              "duration": 37202
             }
           }
         ],

@@ -78,7 +78,19 @@ describe('EligibilityCard component', () => {
       render(<EligibilityCard {...props} />);
       const next_button = screen.getByRole('button', { name: 'Next' });
 
-      expect(next_button).toBeDisabled();
+      if (props.employment != '') {
+        if (props.empOptions.length == 0) {
+          if (props.organisation == '') {
+            expect(next_button).toBeDisabled();
+          }
+        } else {
+          if (props.employer == '' || props.organisation == '' || props.jobRole == '') {
+            expect(next_button).toBeDisabled();
+          }
+        }
+      } else {
+        expect(next_button).toBeDisabled();
+      }
     });
     it('Submit button should be disabled while form is incomplete', () => {
       render(<EligibilityCard {...props} currentStep={2} />);

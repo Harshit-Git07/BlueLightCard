@@ -111,6 +111,25 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
     props.setEmployer(employer);
   };
 
+  const nextStepValidation = (): boolean => {
+    if (props.employment != '') {
+      if (props.empOptions.length == 0) {
+        if (props.organisation == '') {
+          return true;
+        }
+
+        return false;
+      } else {
+        if (props.employer == '' || props.organisation == '' || props.jobRole == '') {
+          return true;
+        }
+
+        return false;
+      }
+    }
+    return true;
+  };
+
   return (
     <article className="flex justify-center my-3">
       {props.isLoading || props.loading ? (
@@ -258,8 +277,9 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     )}
                   </div>
                 )}
-                {props.organisation && props.organisation != 'Other' && (
-                  <>
+                {props.organisation &&
+                  props.organisation != 'Other' &&
+                  props.empOptions.length != 0 && (
                     <div className="flex flex-col">
                       <label className="font-normal pb-3">Who is your employer?</label>
                       <InputSelectField
@@ -272,8 +292,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         onChange={(e) => updateAcceptedDetails(e.target.value)}
                       />
                     </div>
-                  </>
-                )}
+                  )}
                 {props.employer == 'Other' && (
                   <div className="flex flex-col">
                     <p className="w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
@@ -444,11 +463,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       id="next_button"
                       type="button"
                       variant={ThemeVariant.Primary}
-                      disabled={
-                        props.employer == '' || props.organisation == '' || props.jobRole == ''
-                          ? true
-                          : false
-                      }
+                      disabled={nextStepValidation()}
                       onClick={() => props.onNext()}
                       className="w-[184.67px] h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 basis-1/4 self-end"
                     >

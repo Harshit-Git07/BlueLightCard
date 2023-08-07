@@ -169,7 +169,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       id={(props.currentStep <= props.steps ? 'quit' : 'finish').concat('_button')}
                       type="button"
                       onClick={() => {
-                        props.currentStep <= props.steps ? props.quit() : router.push('/');
+                        props.currentStep <= props.steps ? props.quit() : router.push('/index.php');
                       }}
                       variant={ThemeVariant.Tertiary}
                       className="w-[63px] h-12 px-6 py-2 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold"

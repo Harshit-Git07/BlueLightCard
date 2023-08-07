@@ -117,7 +117,7 @@ const TestPage: NextPage = () => {
         isVisible={visible}
         onClose={() => {
           setVisible(false);
-          router.push('/');
+          router.push('/index.php');
         }}
         onConfirm={() => setVisible(false)}
       />

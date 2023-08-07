@@ -7,6 +7,7 @@ import Modal from '../identity/components/Modal/Modal';
 import { ModalTypes } from '../identity/components/Modal/Types';
 import router from 'next/router';
 import { useEmployer, useOrganisation } from 'src/services/EligibilityApi';
+import Footer from 'src/identity/components/Footer/Footer';
 const TestPage: NextPage = () => {
   const [employment, setEmployment] = useState('employed');
   const [organisation, setOrganisation] = useState('');
@@ -43,7 +44,7 @@ const TestPage: NextPage = () => {
   };
 
   return (
-    <main>
+    <main className="bg-gray-50">
       <Navigation
         navItems={[
           {
@@ -120,6 +121,15 @@ const TestPage: NextPage = () => {
           router.push('/index.php');
         }}
         onConfirm={() => setVisible(false)}
+      />
+      <Footer
+        navItems={[
+          { text: 'Terms & Conditions', link: '/terms_and_conditions.php' },
+          { text: 'Privacy Policy', link: '/privacy-notice.php' },
+          { text: 'Cookie Policy', link: '/cookies_policy.php' },
+          { text: "FAQ's", link: '/contactblc.php' },
+        ]}
+        mobileBreakpoint={768}
       />
     </main>
   );

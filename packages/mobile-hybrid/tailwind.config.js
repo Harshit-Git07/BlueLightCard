@@ -8,7 +8,9 @@ module.exports = {
           white: '#FFFFFF',
           black: '#000000',
           grey: {
-            100: '#BFBFBF',
+            100: '#ECEFF2',
+            200: '#DCDFE3',
+            400: '#9FA2A9',
             800: '#1C1D22',
           },
           oxfordblue: {

@@ -1,6 +1,15 @@
 import Head from 'next/head';
 import { NextPage } from 'next';
 import BannerCarousel from '@/components/Banner/BannerCarousel';
+import ExploreLink from '@/components/ExploreLink/ExploreLink';
+import {
+  faTag,
+  faCompass,
+  faGiftCard,
+  faThumbsUp,
+  faAward,
+  faSignsPost,
+} from '@fortawesome/pro-light-svg-icons';
 
 const slidesData = [
   {
@@ -27,9 +36,12 @@ const TestPage: NextPage<any> = () => {
         <title>Mobile Hybrid</title>
         <meta name="description" />
       </Head>
-      <div className="dark:bg-neutral-black max-h-[400px]">
-        <BannerCarousel slides={slidesData} />
-      </div>
+      <ExploreLink icon={faTag} title={'High Street'} />
+      <ExploreLink icon={faCompass} title={'Online'} />
+      <ExploreLink icon={faGiftCard} title={'Giftcards'} />
+      <ExploreLink icon={faThumbsUp} title={'Popular'} />
+      <ExploreLink icon={faAward} title={'Featured'} />
+      <ExploreLink icon={faSignsPost} title={'Local Services'} />
     </>
   );
 };

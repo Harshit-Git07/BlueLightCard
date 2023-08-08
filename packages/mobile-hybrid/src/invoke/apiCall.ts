@@ -6,10 +6,10 @@ import Facade from './facade';
  */
 export default class InvokeNativeAPICall extends Facade implements NativeAPICall.ApiCall {
   private logger: Logger;
-  private TAG = 'InvokeNativeAPICall';
+  private TAG = 'DataRequest';
 
   constructor() {
-    super('NativeAPICall');
+    super('DataRequest');
     this.logger = Logger.getInstance();
   }
 

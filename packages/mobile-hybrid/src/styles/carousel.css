@@ -2,12 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.control-dots{
+.control-dots {
   bottom: -0.8rem !important;
 }
 
-.dot{
+.carousel .slider-wrapper {
+  @apply pb-1;
+}
+
+.dot {
   background-color: #ffffff !important;
 }
 

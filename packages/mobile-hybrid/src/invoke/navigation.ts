@@ -19,6 +19,9 @@ export default class InvokeNativeNavigation extends Facade implements NativeNavi
    */
   public navigate(url: string): void {
     this.logger.debug(`navigate to url ${url}`, this.TAG);
+    this.callFunction('navigate', {
+      internalUrl: url,
+    });
   }
 
   /**

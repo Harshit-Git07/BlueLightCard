@@ -12,7 +12,8 @@ const nativeReceiveNavigation = new NativeReceiveNavigation();
 const nativeReceiveLifecycle = new NativeReceiveLifecycle();
 const nativeReceiveAPIResponse = new NativeReceiveAPIResponse();
 
-Logger.debugMode = process.env.NODE_ENV !== 'production';
+// Logger.debugMode = process.env.NODE_ENV !== 'production';
+Logger.debugMode = true;
 
 // Map of interfaced function name to handler
 const fns: { [key: string]: any } = {

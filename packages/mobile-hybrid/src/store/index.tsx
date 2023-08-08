@@ -1,9 +1,13 @@
 import { createContext, FC, useEffect, Reducer, useReducer, PropsWithChildren } from 'react';
 import Observable from '@/observable';
 import { AppContextStructure, AppStore, DispatchActionData } from './types';
+import { APIUrl } from '@/hooks/useAPIData';
 
 const initialState: AppStore = {
-  loading: false,
+  loading: {
+    [APIUrl.News]: true,
+    [APIUrl.OfferPromos]: true,
+  },
   apiData: {},
   dispatch() {},
 };
@@ -24,7 +28,10 @@ const storeReducer: Reducer<AppContextStructure, DispatchActionData> = (state, a
     case 'setLoading': {
       return {
         ...state,
-        loading: action.state.loading,
+        loading: {
+          ...state.loading,
+          [action.state.key]: action.state.loading,
+        },
       };
     }
   }
@@ -45,6 +52,7 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
       dispatch({
         type: 'setLoading',
         state: {
+          key: data.url,
           loading: false,
         },
       });

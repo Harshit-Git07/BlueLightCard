@@ -27,7 +27,7 @@ const Card: FC<CardProps> = ({
     [layout === CardLayout.ImageTop && !fixedWidthHeight, 'pb-[50%]'],
   ]);
   const cardClasses = cssUtil([
-    'rounded overflow-hidden shadow-md m-2 flex w-[290px] dark:bg-neutral-grey-800',
+    'rounded overflow-hidden shadow-md flex w-full dark:bg-neutral-grey-800',
     cardLayout ?? 'flex-col',
     onClick ? 'cursor-pointer' : '',
   ]);
@@ -51,7 +51,10 @@ const Card: FC<CardProps> = ({
     'text-lg font-medium dark:text-neutral-white overflow-hidden whitespace-nowrap overflow-ellipsis',
   ]);
 
-  const cardParagraphClasses = cssUtil(['text-sm font-light dark:text-neutral-white']);
+  const cardParagraphClasses = cssUtil([
+    'text-sm font-light dark:text-neutral-white',
+    'overflow-hidden whitespace-nowrap overflow-ellipsis',
+  ]);
 
   return (
     <div
@@ -59,7 +62,7 @@ const Card: FC<CardProps> = ({
       role={onClick ? 'button' : undefined}
       onClick={onClick ? onCardClicked : undefined}
     >
-      {imageSrc && (
+      {imageSrc !== undefined && (
         <div className={cardImageClasses}>
           <Image
             src={imageSrc}
@@ -70,10 +73,12 @@ const Card: FC<CardProps> = ({
           />
         </div>
       )}
-      <div className={cardContentClasses}>
-        <p className={cardParagraphClasses}>{text}</p>
-        {title && <h4 className={cardTitleClasses}>{title}</h4>}
-      </div>
+      {text && (
+        <div className={cardContentClasses}>
+          <p className={cardParagraphClasses}>{text}</p>
+          {title && <h4 className={cardTitleClasses}>{title}</h4>}
+        </div>
+      )}
     </div>
   );
 };

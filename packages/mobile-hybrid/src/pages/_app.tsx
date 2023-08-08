@@ -14,9 +14,10 @@ dayjs.extend(CustomParseFormat);
 
 const Loader: FC = () => {
   const { loading } = useContext(AppContext);
+  const apisLoading = Object.values(loading).find((v) => !!v);
   return (
-    loading && (
-      <div className="absolute top-0 flex items-center justify-center w-[100vw] h-[100vh] bg-neutral-grey-800/[.5]">
+    apisLoading && (
+      <div className="fixed top-0 flex items-center justify-center w-full h-full bg-white dark:bg-neutral-800">
         <Spinner />
       </div>
     )
@@ -27,7 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AppStoreProvider>
       <NewsStoreProvider>
-        <main className={`${museoFont.variable} ${sourceSansPro.variable}`}>
+        <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
           <Component {...pageProps} />
           <Loader />
         </main>

@@ -1,7 +1,7 @@
 import type { Dispatch } from 'react';
 
 export interface AppContextStructure {
-  loading: boolean;
+  loading: Record<string, boolean>;
   apiData: {
     [url: string]: any;
   };

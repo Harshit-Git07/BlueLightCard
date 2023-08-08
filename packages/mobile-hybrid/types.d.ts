@@ -6,6 +6,10 @@ declare namespace NativeNavigation {
     public static navigate(url: string): void;
     public static onRootBackClicked(): void;
   }
+
+  export interface Parameters {
+    internalUrl: string;
+  }
 }
 
 declare namespace NativeAPICall {
@@ -26,7 +30,7 @@ declare namespace NativeAnalytics {
   function logAnalyticsEvent(event: string, meta?: string): void;
 
   export abstract class Analytics {
-    static logAnalyticsEvent(event: string, meta?: string): void
+    static logAnalyticsEvent(event: string, meta?: string): void;
   }
 
   export interface Parameters {
@@ -51,19 +55,23 @@ declare namespace NativeReceive {
   }
 }
 
-declare type NativeCallParameters = NativeAPICall.Parameters | NativeAnalytics.Parameters;
+declare type NativeCallParameters =
+  | NativeNavigation.Parameters
+  | NativeAPICall.Parameters
+  | NativeAnalytics.Parameters;
 
 interface MessageArgument {
   message: string;
   parameters: NativeCallParameters;
 }
 
-declare type GlobalState = Window & typeof globalThis & {
-  webkit: {
-    messageHandlers: {
-      [nativeInterface: string]: {
-        postMessage: (json: MessageArgument) => void;
-      }
-    }
-  }
-};
+declare type GlobalState = Window &
+  typeof globalThis & {
+    webkit: {
+      messageHandlers: {
+        [nativeInterface: string]: {
+          postMessage: (json: MessageArgument) => void;
+        };
+      };
+    };
+  };

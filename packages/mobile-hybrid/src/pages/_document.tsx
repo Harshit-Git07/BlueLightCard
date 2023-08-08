@@ -5,8 +5,9 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta name="robots" content="noindex,nofollow" />
+        <meta name="color-scheme" content="dark light" />
       </Head>
-      <body className="dark:bg-neutral-black">
+      <body className="dark:bg-neutral-black" id="app-body">
         <Main />
         <NextScript />
       </body>

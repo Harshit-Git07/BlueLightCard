@@ -117,3 +117,11 @@ When('I choose {string} as employer', async function (Other) {
     await page.getByRole('button', { name: 'Submit' }).click();
   });
   
+  When('I scroll to the end of the page', async function () {
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.locator("#footer_nav").textContent();
+  });
+
+  Then('I should see copyright footer', async function () {
+    await page.locator("#footer_nav").isVisible();
+  });

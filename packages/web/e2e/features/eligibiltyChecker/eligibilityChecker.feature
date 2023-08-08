@@ -179,3 +179,7 @@ Given I navigate to Eligibility Checker
     |NHS                 |NHS Professionals                  |nurse        |
     |Police              |Cumbria Constabulary               |officer      |
     |Ambulance Service   |London Ambulance Service NHS Trust |staff        |
+
+   Scenario: Copyright footer component is visible
+      When I scroll to the end of the page
+      Then I should see copyright footer

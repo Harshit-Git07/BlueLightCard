@@ -11,12 +11,24 @@ const staticFolderPrefix = !process.env.STORYBOOK_ENV ? '/_next/static' : '';
 // only use the configured brand
 const themeTokens = buildTokens([BRAND]);
 
+const fonts = Object.keys(themeTokens.font.family).reduce((acc, familyKey) => {
+  acc[familyKey] = [
+    ...themeTokens.font.family[familyKey],
+    ...(fontFamily[familyKey as keyof typeof fontFamily] || []),
+  ];
+  return acc;
+}, {} as any);
+
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
   content: ['./src/**/*.{js,ts,tsx,mdx}'],
   theme: {
     extend: {
       colors: themeTokens.color,
+      borderRadius: themeTokens.borderRadius,
+      borderWidth: themeTokens.borderWidth,
+      spacing: themeTokens.spacing,
+      fontSize: themeTokens.font.size,
     },
     screens: {
       mobile: '280px',
@@ -24,13 +36,7 @@ const config: Config = {
       laptop: '1024px',
       desktop: '1200px',
     },
-    fontFamily: Object.keys(themeTokens.font.family).reduce((acc, familyKey) => {
-      acc[familyKey] = [
-        themeTokens.font.family[familyKey],
-        ...(fontFamily[familyKey as keyof typeof fontFamily] || []),
-      ];
-      return acc;
-    }, {} as any),
+    fontFamily: fonts,
   },
   plugins: [
     plugin(({ addBase }) =>
@@ -38,12 +44,5 @@ const config: Config = {
     ),
   ],
 };
-
-// if we have size tokens, configure tailwindcss fontSize
-if (themeTokens.size) {
-  if (themeTokens.size.font) {
-    (config.theme as any).fontSize = themeTokens.size.font;
-  }
-}
 
 export default config;

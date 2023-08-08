@@ -1,0 +1,16 @@
+{
+  "color": {
+    "components": {
+      "hyperlink": {
+        "text": {
+          "DEFAULT": { "value": "{color.palette.primary.DEFAULT.value}" },
+          "dark": { "value": "{color.palette.secondary.DEFAULT.value}" }
+        },
+        "icon": {
+          "DEFAULT": { "value": "{color.palette.primary.DEFAULT.value}" },
+          "dark": { "value": "{color.palette.secondary.DEFAULT.value}" }
+        }
+      }
+    }
+  }
+}

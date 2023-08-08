@@ -1,0 +1,10 @@
+{
+  "borderWidth": {
+    "0": { "value": "0" },
+    "1": { "value": "1px" },
+    "2": { "value": "2px" },
+    "none": { "value": "{borderWidth.0.value}" },
+    "DEFAULT": { "value": "{borderWidth.1.value}" },
+    "thick": { "value": "{borderWidth.2.value}" }
+  }
+}

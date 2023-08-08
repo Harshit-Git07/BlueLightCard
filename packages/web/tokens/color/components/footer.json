@@ -1,0 +1,16 @@
+{
+  "color": {
+    "components": {
+      "footer": {
+        "text": {
+          "DEFAULT": { "value": "{color.shade.greyscale.white.DEFAULT.value}" },
+          "light": { "value": "{color.shade.greyscale.white.DEFAULT.value}" }
+        },
+        "background": {
+          "DEFAULT": { "value": "{color.surface.brand.value}" },
+          "brand": { "value": "{color.surface.secondary.dark.value}" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "color": {
+    "components": {
+      "logo": {
+        "text": {
+          "DEFAULT": { "value": "{color.palette.primary.DEFAULT.value}" },
+          "dark": { "value": "{color.surface.primary.light.value}" }
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import StyleDictionaryPackage from 'style-dictionary';
 import path from 'path';
 import chroma from 'chroma-js';
-import { ChromaModifyAttrs } from './types';
+import { ChromaModifyAttrs, TransformedTokensResponse } from './types';
 import flattenTokens from './flattenTokens';
 
 /**
@@ -37,7 +37,7 @@ const registerColorPropertiesTransform = () => {
  * @param brands - List of brands to source tokens from
  * @returns {Object}
  */
-export const buildTokens = (brands: string[]) => {
+export const buildTokens = (brands: string[]): TransformedTokensResponse => {
   const packageRoot = path.resolve(__dirname, '../');
   const baseTokens = `${packageRoot}/tokens/**/*.json`;
   const brandedTokens = brands.map((brand) => `${packageRoot}/brands/${brand}/tokens/**/*.json`);

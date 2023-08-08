@@ -17,8 +17,14 @@ const Home: NextPage<any> = () => {
         <meta name="description" content={t('seo.description')} />
       </Head>
       <main className="p-3">
-        <h1 className="text-2xl mb-2 font-semibold">{t('heading')}</h1>
-        <p>{t('page.description', { ns: 'description' })}</p>
+        <div className="mt-1 p-5 bg-surface-brand rounded">
+          <span className="text-shade-greyscale-white">Blue Light Card</span>
+        </div>
+        <h1 className="bg-surface-grey-50 text-palette-primary font-['MuseoSans'] font-bold text-2xl my-2">
+          {t('heading')}
+        </h1>
+        <hr />
+        <p className="text-palette-body-text">{t('page.description', { ns: 'description' })}</p>
         <Button
           id="start_button"
           type="button"

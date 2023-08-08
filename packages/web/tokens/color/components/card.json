@@ -1,0 +1,18 @@
+{
+  "color": {
+    "components": {
+      "card": {
+        "background": {
+          "DEFAULT": { "value": "{color.surface.secondary.light.value}" },
+          "dark": { "value": "{color.surface.secondary.dark.value}" }
+        },
+        "tag": {
+          "background": {
+            "DEFAULT": { "value": "{color.surface.50.light.value}" },
+            "dark": { "value": "{color.surface.50.dark.value}" }
+          }
+        }
+      }
+    }
+  }
+}

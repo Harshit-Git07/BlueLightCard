@@ -1,0 +1,7 @@
+{
+  "borderRadius": {
+    "DEFAULT": { "value": "{borderRadius.4.value}" },
+    "0": { "value": "0" },
+    "4": { "value": "{spacing.1.value}" }
+  }
+}

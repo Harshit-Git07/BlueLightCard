@@ -1,5 +1,5 @@
-import { TransformedToken } from 'style-dictionary';
-import { PluginAPI } from 'tailwindcss/types/config';
+import { TransformedToken, TransformedTokens } from 'style-dictionary';
+import { PluginAPI, KeyValuePair, ResolvableTo } from 'tailwindcss/types/config';
 
 export type ChromaModifyAttrs = TransformedToken & {
   modify: {
@@ -7,6 +7,13 @@ export type ChromaModifyAttrs = TransformedToken & {
     amount: any;
   }[];
 };
+
+export type TransformedTokensResponse =
+  | TransformedTokens
+  | TransformedToken
+  | {
+      [key: string]: ResolvableTo<KeyValuePair<string, string>>;
+    };
 
 export interface FontFacesPlugin {
   font: Record<string, any>;

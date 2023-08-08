@@ -90,7 +90,8 @@ When('I choose {string} as employer', async function (Other) {
   Then('I should be able quit', async function () {
     await page.locator("#quit_button").click();
     await page.locator("#quit_eligibility").textContent();
-    await page.locator("#modal_quit_button").click();    
+    await page.locator("#modal_quit_button").click();  
+    await page.waitForURL('**/index.php');  
   });
 
   Then('I should be able quit, change mind and continue', async function () {

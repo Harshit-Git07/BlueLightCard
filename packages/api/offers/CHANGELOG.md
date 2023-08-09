@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.0.0...bluelightcard/offers-v1.1.0) (2023-08-09)
+
+
+### Features
+
+* TO-84 - Create a new structure for Offer Backend ([#247](https://github.com/bluelightcard/BlueLightCard-2.0/issues/247)) ([297b6ba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/297b6ba05e0260bcebbfb3108e1b5c7cf12a6a6e))
+
 ## 1.0.0 (2023-07-31)
 
 

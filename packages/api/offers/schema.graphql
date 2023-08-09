@@ -72,6 +72,8 @@ type OfferCategory {
 
 type Query {
   getBrand(brandID: ID!): Brand
+  getOffer(offerId: ID!): Offer
+  getOffersByType(offerTypeId: ID!, limit: Int, nextToken: String): OffersConnection
 }
 
 type Mutation {

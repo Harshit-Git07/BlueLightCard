@@ -1,0 +1,15 @@
+{
+    "version" : "2017-02-28", 
+    "operation" : "Query",  
+    "consistentRead": false, 
+    "index" : "homePageId", 
+    "query" : {
+        "expression" : "#homePageId = :homePageId",
+        "expressionNames" : {
+            "#homePageId" : "homePageId"
+        },
+        "expressionValues" : {
+            ":homePageId" : $util.dynamodb.toDynamoDBJson($ctx.source.id)
+        }
+    }
+}

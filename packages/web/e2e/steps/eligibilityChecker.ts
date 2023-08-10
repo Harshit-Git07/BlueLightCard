@@ -61,6 +61,10 @@ When('I can write the name of my employer', async function () {
 When('I choose {string} as employer', async function (Other) {
   await page.selectOption('#employer_select', Other);
 });
+
+When('I click next button', async function () {
+  await page.locator("id=next_button").click();
+  });
   
 //Then
   Then('I should be able to select a verification options', async function () {

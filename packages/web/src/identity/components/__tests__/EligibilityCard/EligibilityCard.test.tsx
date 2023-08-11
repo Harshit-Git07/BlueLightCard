@@ -1,10 +1,12 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, queryByAttribute } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import EligibilityCard from '../../EligibilityCard/EligibilityCard';
 import { EligibilityCardProps } from '../../EligibilityCard/Types';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/router';
+
+const getById = queryByAttribute.bind(null, 'id');
 
 jest.mock('next/router', () => ({
   useRouter() {
@@ -98,7 +100,17 @@ describe('EligibilityCard component', () => {
 
       expect(submit_button).toBeDisabled();
     });
+
+    it('Back and Quit buttons should be displayed on step 2', () => {
+      const dom = render(<EligibilityCard {...props} currentStep={2} />);
+      const back_button = getById(dom.container, 'back_button');
+      const quit_button = getById(dom.container, 'quit_button');
+
+      expect(back_button).toBeVisible();
+      expect(quit_button).toBeVisible();
+    });
   });
+
   describe('EligibilityCard event handling', () => {
     it('should invoke event when quit button is clicked', async () => {
       render(<EligibilityCard {...props} />);
@@ -138,7 +150,7 @@ describe('EligibilityCard component', () => {
       render(<EligibilityCard {...props} currentStep={3} eligible="Yes" />);
       const button = screen.getByRole('button', { name: 'Sign up now' });
       await act(() => user.click(button));
-      //check screen to ensure that eligibility card is no longer rendered, button should no longe rbe rendered.
+      //check screen to ensure that eligibility card is no longer rendered, button should no longer be rendered.
       expect(button).toBeInTheDocument();
     });
   });

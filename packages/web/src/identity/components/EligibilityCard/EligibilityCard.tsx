@@ -1,7 +1,12 @@
-import { faArrowLeft, faCircleCheck, faCircleXmark } from '@fortawesome/pro-solid-svg-icons';
+import {
+  faArrowLeft,
+  faCircleCheck,
+  faCircleXmark,
+  faTimes,
+} from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EligibilityCardProps, Employer, IOrganisation, KeyValue } from './Types';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import Button from '../Button/Button';
 import InfoCard from '@/components/InfoCard/InfoCard';
 import InputSelectField from '../InputSelectField/InputSelectField';
@@ -18,10 +23,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   const router = useRouter();
 
   //used to store messages for each step subtitle
-  const step_msg = [
-    'Your employment information',
-    "Looking good so far! We'll need to verfiy your employment status to check your eligibillity, please choose how you would like to do this.",
-  ];
+  const step_msg = ['Your employment information', 'Choose a verification method'];
   const radioInputValues = [
     {
       name: 'Employed',
@@ -131,10 +133,10 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   };
 
   return (
-    <article className="flex justify-center my-3">
+    <article className="flex justify-center my-3 px-3">
       {props.isLoading || props.loading ? (
         <div
-          className="w-[736px] px-[68px] pt-9 pb-[68px] max-w-[736px] min-h-[756px] drop-shadow-md rounded-0 bg-white flex justify-center items-center"
+          className="w-[736px] tablet:px-16 mobile:px-6 pt-9 pb-[68px] max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white flex justify-center items-center"
           style={{ borderTop: '9px solid #009' }}
         >
           <div className="flex flex-col pt-88 justify-center content-center items-center">
@@ -145,14 +147,14 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
         </div>
       ) : (
         <div
-          className="w-[736px] px-[68px] pt-9 pb-[68px] max-w-[736px] min-h-[756px] drop-shadow-md rounded-0 bg-white"
+          className="w-[736px] tablet:px-16 mobile:px-3 pt-9 mobile:pb-[32px] tablet:pb-[68px] max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white"
           style={{ borderTop: '9px solid #009' }}
         >
           <div className="">
             <div
               className={cssUtil([
                 'flex flex-col',
-                props.currentStep <= props.steps ? 'mb-8' : 'mb-20',
+                props.currentStep <= props.steps ? 'mb-8' : 'tablet:mb-20 mobile:mb-10',
               ])}
             >
               <div
@@ -178,7 +180,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     variant={ThemeVariant.Tertiary}
                     className="w-[63px] h-12 px-6 py-2rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold "
                   >
-                    Back
+                    <span className="mobile:hidden tablet:block">Back</span>
                   </Button>
                 )}
 
@@ -193,7 +195,12 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       variant={ThemeVariant.Tertiary}
                       className="w-[63px] h-12 px-6 py-2 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold"
                     >
-                      {props.currentStep <= props.steps ? 'Quit' : 'Finish'}
+                      <span className="mobile:hidden tablet:block">
+                        {props.currentStep <= props.steps ? 'Quit' : 'Finish'}
+                      </span>
+                      <span className="mobile:block tablet:hidden">
+                        <FontAwesomeIcon icon={faTimes} />
+                      </span>
                     </Button>
                   </>
                 )}
@@ -214,6 +221,11 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     simple steps
                   </p>
                 )}
+                {props.currentStep == 2 && (
+                  <p className="font-normal text-lg py-3">
+                    Looking good! You need to verify your employment status during sign up.
+                  </p>
+                )}
                 <p
                   className={cssUtil([
                     'text-lg font-semibold',
@@ -227,11 +239,11 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             )}
             {props.currentStep == 1 && (
               <form className="pt-4 space-y-4">
-                <div className="flex flex-col">
+                <div className="flex flex-col flex-wrap">
                   <label className="font-normal pb-3 justify-start">
                     What is your employment status?
                   </label>
-                  <div className="flex flex-row">
+                  <div className="flex flex-row flex-wrap">
                     <InputRadioButtons
                       id="employment_status_radio"
                       inputValues={radioInputValues}
@@ -257,7 +269,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     />
                     {props.organisation == 'Other' && (
                       <div className="flex flex-col">
-                        <p className="w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
+                        <p className="tablet:w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
                           {' '}
                           It looks like we haven&apos;t added your organisation yet, register your
                           interest to join by telling us who you work for{' '}
@@ -295,7 +307,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   )}
                 {props.employer == 'Other' && (
                   <div className="flex flex-col">
-                    <p className="w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
+                    <p className="tablet:w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
                       {' '}
                       It looks like we haven’t added your employer yet, register your interest to
                       join by telling us who you work for{' '}
@@ -335,6 +347,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   title="Work Email (Recommended for instant verification)"
                   text="You will be asked to login to this account during sign up"
                   selected={props.acceptedId == 'Email'}
+                  textAlign="text-left"
                   onClick={() =>
                     props.acceptedId == 'Email'
                       ? props.setAcceptedId('')
@@ -348,6 +361,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     title={method.title}
                     text={method.description}
                     selected={props.acceptedId == method.id}
+                    textAlign="text-left"
                     onClick={() => {
                       props.acceptedId == method.id
                         ? props.setAcceptedId('')
@@ -359,7 +373,8 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   id="no_id"
                   key={0}
                   title="I don't have any of the above"
-                  text={''}
+                  text={' '}
+                  textAlign="text-left"
                   selected={props.acceptedId == 'None'}
                   onClick={() =>
                     props.acceptedId == 'None'
@@ -383,13 +398,18 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   form of ID as you will be asked to provide this during sign up.
                 </p>
                 {/* redirect to sign up form with prepopulated fields */}
-                <div className="basis-1/4 self-center">
+                <div className="basis-1/4 tablet:self-center">
+                  <hr
+                    className={cssUtil([
+                      'text-[#EDEDF2] opacity-100 my-5 tablet:hidden mobile:block',
+                    ])}
+                  />
                   <Button
                     id="signup_button"
                     type="button"
                     variant={ThemeVariant.Primary}
                     onClick={() => router.push('/')}
-                    className="px-10 py-3.5 text-lg font-semibold"
+                    className="px-10 py-3.5 text-lg font-semibold w-full"
                   >
                     Sign up now
                   </Button>
@@ -411,13 +431,13 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   saving!
                 </p>
                 {/* redirect to sign up form with prepopulated fields */}
-                <div className="basis-1/4 self-center">
+                <div className="basis-1/4 tablet:self-center">
                   <Button
                     id="finish_button"
                     type="button"
                     variant={ThemeVariant.Primary}
                     onClick={() => router.push('/')}
-                    className="px-10 py-3.5 text-lg font-semibold"
+                    className="px-10 py-3.5 text-lg font-semibold w-full"
                   >
                     Finish
                   </Button>
@@ -465,7 +485,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       variant={ThemeVariant.Primary}
                       disabled={nextStepValidation()}
                       onClick={() => props.onNext()}
-                      className="w-[184.67px] h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 basis-1/4 self-end"
+                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 tablet:basis-1/4 mobile:w-full self-end"
                     >
                       Next
                     </Button>
@@ -484,7 +504,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       disabled={props.organisation == 'Other' ? !props.otherOrg : !props.otherEmp}
                       variant={ThemeVariant.Primary}
                       onClick={() => props.onSubmit()}
-                      className="w-[184.67px] h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 basis-1/4 self-end"
+                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 tablet:basis-1/4 mobile:w-full self-end"
                     >
                       Submit
                     </Button>
@@ -501,7 +521,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     disabled={!props.acceptedId}
                     variant={ThemeVariant.Primary}
                     onClick={() => props.onSubmit()}
-                    className="w-[184.67px] h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 basis-1/4 self-end"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 tablet:basis-1/4 mobile:w-full self-end"
                   >
                     Submit
                   </Button>

@@ -6,7 +6,7 @@ export enum InfoCardLayout {
 export interface InfoCardProps {
   id: string;
   title?: string;
-  text: string;
+  text?: string;
   textAlign?: 'text-center' | 'text-left' | 'text-right';
   imageSrc?: string;
   imageAlt?: string;

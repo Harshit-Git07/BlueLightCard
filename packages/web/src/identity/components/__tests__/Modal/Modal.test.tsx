@@ -49,10 +49,10 @@ describe('Modal component', () => {
 
       expect(props.onClose).toHaveBeenCalled();
     });
-    it('should invoke onConfirm when continue button is clicked', async () => {
+    it('should invoke onConfirm when back to checker button is clicked', async () => {
       render(<Modal {...props} />);
 
-      await act(() => user.click(screen.getByRole('button', { name: 'Continue' })));
+      await act(() => user.click(screen.getByRole('button', { name: 'Back to checker' })));
 
       expect(props.onConfirm).toHaveBeenCalled();
     });

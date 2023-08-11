@@ -4,6 +4,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { cssUtil } from '@/utils/cssUtil';
+
 const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -13,7 +14,9 @@ const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
     };
 
     handleResize(); // Initial check
+
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
   }, [mobileBreakpoint]);
 
@@ -22,9 +25,10 @@ const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
       id="footer_nav"
       className={cssUtil([
         'w-full bg-gray-50 flex-col inline-flex',
-        isMobile
-          ? 'h-[136px] px-[22px] py-[26px] justify-start items-start gap-5'
-          : ' h-24 px-[137px] justify-center items-center',
+
+        'mobile:h-[136px] mobile:px-[22px] mobile:py-[26px] mobile:justify-start mobile:items-start mobile:gap-5',
+
+        ' h-24 px-[137px] justify-center items-center',
       ])}
     >
       {isMobile ? (
@@ -42,6 +46,7 @@ const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
               </Link>
             ))}
           </div>
+
           <p className="text-center text-slate-600 text-sm font-normal leading-tight tracking-tight">
             ©Blue Light Card 2008 - 2023
           </p>
@@ -51,6 +56,7 @@ const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
           <p className="w-[221.79px] h-[46.31px] text-center text-slate-600 text-lg font-normal leading-7 tracking-tight">
             ©Blue Light Card 2008 - 2023
           </p>
+
           <div className="justify-start items-end gap-[35.56px] flex">
             {navItems.map((item) => (
               <Link

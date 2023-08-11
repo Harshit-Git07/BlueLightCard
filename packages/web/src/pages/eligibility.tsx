@@ -65,7 +65,7 @@ const TestPage: NextPage = () => {
           },
         ]}
       />
-      <div className="my-[90px]">
+      <div className="tablet:my-[90px] mobile:my-[48px]">
         <EligibilityCard
           isLoading={isLoading}
           employment={employment}

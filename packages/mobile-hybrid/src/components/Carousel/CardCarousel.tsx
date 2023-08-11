@@ -5,11 +5,14 @@ import { CardCarouselProps } from '@/components/Carousel/types';
 import Card from '../Card/Card';
 import { cssUtil } from '@/utils/cssUtil';
 
-const CardCarousel: FC<CardCarouselProps> = ({ slides, onSlideItemClick }) => {
+const CardCarousel: FC<CardCarouselProps> = ({ slides, onSlideItemClick, onSlideChanged }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const handleSlideChange = (index: SetStateAction<number>) => {
     setCurrentSlide(index);
+    if (onSlideChanged) {
+      onSlideChanged(index as number);
+    }
   };
 
   return (

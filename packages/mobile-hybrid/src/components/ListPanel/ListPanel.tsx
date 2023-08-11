@@ -4,7 +4,7 @@ import { cssUtil } from '@/utils/cssUtil';
 
 const ListPanel: FC<ListPanelProps> = ({ visible, children, onClose }) => {
   const rootClass = cssUtil([
-    'w-full h-full fixed transition-all duration-500 ease-in-out top-0 pb-2',
+    'w-full h-full fixed transition-all duration-500 ease-in-out z-50 top-0 pb-5 pt-5',
     'overflow-y-scroll bg-white dark:bg-neutral-black',
     visible ? 'visible opacity-100' : 'invisible opacity-0',
   ]);

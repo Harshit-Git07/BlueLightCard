@@ -1,6 +1,7 @@
 export interface CardCarouselProps {
   slides: Slide[];
   onSlideItemClick?: (data: any) => void;
+  onSlideChanged?: (index: number) => void;
 }
 
 export interface Slide {

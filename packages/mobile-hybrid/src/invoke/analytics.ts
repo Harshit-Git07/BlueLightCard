@@ -9,7 +9,7 @@ export default class InvokeNativeAnalytics extends Facade implements NativeAnaly
   private TAG = 'InvokeNativeAnalytics';
 
   constructor() {
-    super('NativeAnalytics');
+    super('AnalyticsRequest');
     this.logger = Logger.getInstance();
   }
 

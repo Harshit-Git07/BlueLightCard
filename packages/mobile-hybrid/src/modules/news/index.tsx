@@ -2,6 +2,9 @@ import { FC, useContext } from 'react';
 import useNews from '@/hooks/useNews';
 import NewsLayout from './components/NewsLayout/NewsLayout';
 import { NewsModuleStore } from './store';
+import InvokeNativeNavigation from '@/invoke/navigation';
+
+const navigation = new InvokeNativeNavigation();
 
 /**
  * Preview news articles
@@ -16,7 +19,15 @@ const NewsPreview: FC = () => {
     setSeeAllNews(true);
   };
 
-  return <NewsLayout news={previewNews} onClickSeeAll={onSeeAllClick} />;
+  return (
+    <NewsLayout
+      news={previewNews}
+      onClickSeeAll={onSeeAllClick}
+      onArticleClick={(articleId) =>
+        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`)
+      }
+    />
+  );
 };
 
 /**
@@ -25,7 +36,15 @@ const NewsPreview: FC = () => {
 const NewsList: FC = () => {
   const news = useNews();
 
-  return <NewsLayout news={news} showHeading={false} />;
+  return (
+    <NewsLayout
+      news={news}
+      showHeading={false}
+      onArticleClick={(articleId) =>
+        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`)
+      }
+    />
+  );
 };
 
 export { NewsPreview, NewsList };

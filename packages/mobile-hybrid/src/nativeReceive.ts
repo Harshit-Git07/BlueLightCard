@@ -30,7 +30,12 @@ const fns: { [key: string]: any } = {
  * so we need to make sure we only register the functions when running client side
  */
 if (typeof window !== 'undefined') {
-  const globalState = window as Window & typeof globalThis;
+  const globalState = window as GlobalState;
+
+  // control theme
+  globalState.setTheme = (mode) => {
+    document.documentElement.classList.add(mode);
+  };
 
   (Object.keys(fns) as any[]).forEach((fn) => {
     globalState[fn] = fns[fn];

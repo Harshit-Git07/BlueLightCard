@@ -74,4 +74,5 @@ declare type GlobalState = Window &
         };
       };
     };
+    setTheme: (mode: 'light' | 'dark') => void;
   };

@@ -4,9 +4,9 @@ import Image from '@/components/Image/Image';
 import { cssUtil } from '@/utils/cssUtil';
 
 const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, className, onClick }) => {
-  const rootClass = cssUtil(['flex gap-1', className ?? '']);
+  const rootClass = cssUtil(['flex gap-1', className ?? '', onClick ? 'cursor-pointer' : '']);
   return (
-    <div className={rootClass} onClick={onClick}>
+    <div className={rootClass} role={onClick ? 'button' : undefined} onClick={onClick}>
       {imageSrc && (
         <Image
           src={imageSrc}

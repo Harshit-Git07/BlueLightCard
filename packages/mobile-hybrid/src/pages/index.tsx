@@ -7,8 +7,21 @@ import { NewsModuleStore } from '@/modules/news/store';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import trackScrollDepth from '@/utils/scrollDepth';
 import Offers from '@/modules/offers';
+import ExploreLink from '@/components/ExploreLink/ExploreLink';
+import {
+  faTag,
+  faCompass,
+  faGiftCard,
+  faThumbsUp,
+  faAward,
+  faSignsPost,
+} from '@fortawesome/pro-light-svg-icons';
+import PromoBanner from '@/modules/promobanner';
+import Heading from '@/components/Heading/Heading';
+import InvokeNativeNavigation from '@/invoke/navigation';
 
 const apiCall = new InvokeNativeAPICall();
+const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
@@ -37,9 +50,41 @@ const Home: NextPage<any> = () => {
 
   return (
     <main>
-      <div className="mb-2">
+      <div className="mb-9">
+        <PromoBanner />
         <NewsPreview />
         <Offers />
+        <Heading title="Explore" size="small" />
+        <ExploreLink
+          icon={faTag}
+          title="High Street"
+          onClick={() => navigation.navigate('/offers.php?type=5')}
+        />
+        <ExploreLink
+          icon={faCompass}
+          title="Online"
+          onClick={() => navigation.navigate('/offers.php?type=0')}
+        />
+        <ExploreLink
+          icon={faGiftCard}
+          title="Giftcards"
+          onClick={() => navigation.navigate('/offers.php?type=2')}
+        />
+        <ExploreLink
+          icon={faThumbsUp}
+          title="Popular"
+          onClick={() => navigation.navigate('/offers.php?type=3')}
+        />
+        <ExploreLink
+          icon={faAward}
+          title="Featured"
+          onClick={() => navigation.navigate('/offers.php?type=9')}
+        />
+        <ExploreLink
+          icon={faSignsPost}
+          title="Local Services"
+          onClick={() => navigation.navigate('/offers.php?type=6')}
+        />
       </div>
       <ListPanel visible={seeAllNews} onClose={seeAllClick}>
         {seeAllNews && <NewsList />}

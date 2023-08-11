@@ -4,5 +4,5 @@ export interface ListItemProps {
   imageSrc?: string;
   imageAlt?: string;
   className?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }

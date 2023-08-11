@@ -3,6 +3,7 @@ import { cssUtil } from '@/utils/cssUtil';
 import Image from '@/components/Image/Image';
 import { decider } from '@/utils/decider';
 import { CardLayout, CardProps } from '@/components/Card/types';
+import decodeEntities from '@/utils/decodeEntities';
 
 const Card: FC<CardProps> = ({
   title,
@@ -69,14 +70,14 @@ const Card: FC<CardProps> = ({
             width={imageWidth}
             height={imageHeight}
             responsive={!fixedWidthHeight}
-            alt={imageAlt ?? imageSrc}
+            alt={imageAlt ?? ''}
           />
         </div>
       )}
       {text && (
         <div className={cardContentClasses}>
-          <p className={cardParagraphClasses}>{text}</p>
-          {title && <h4 className={cardTitleClasses}>{title}</h4>}
+          <p className={cardParagraphClasses}>{decodeEntities(text)}</p>
+          {title && <h4 className={cardTitleClasses}>{decodeEntities(title)}</h4>}
         </div>
       )}
     </div>

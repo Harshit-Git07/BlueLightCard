@@ -4,4 +4,5 @@ export interface NewsLayoutProps {
   news: NewsModel[];
   showHeading?: boolean;
   onClickSeeAll?: () => void;
+  onArticleClick: (articleId: string) => void;
 }

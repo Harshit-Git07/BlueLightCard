@@ -6,17 +6,18 @@
   bottom: -0.8rem !important;
 }
 
+.control-dots .dot {
+  @apply opacity-100 !important;
+  @apply scale-150;
+  @apply border border-gray-900 dark:border-neutral-white;
+  @apply bg-transparent !important;
+  @apply shadow-none !important;
+}
+
+.control-dots .dot.selected {
+  @apply bg-gray-900 dark:bg-neutral-white !important;
+}
+
 .carousel .slider-wrapper {
   @apply pb-1;
-}
-
-.dot {
-  background-color: #ffffff !important;
-}
-
-.dot.selected {
-  background-color: white !important;
-  scale: 1.5 !important;
-  /* box-shadow: none !important; */
-  border: 1px solid #636363 !important;
 }

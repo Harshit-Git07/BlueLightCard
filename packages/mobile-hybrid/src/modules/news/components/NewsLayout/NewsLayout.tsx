@@ -4,15 +4,17 @@ import { NewsLayoutProps } from './types';
 import Heading from '@/components/Heading/Heading';
 import { cssUtil } from '@/utils/cssUtil';
 import ListItem from '@/components/ListItem/ListItem';
-import InvokeNativeNavigation from '@/invoke/navigation';
 
 const formatDate = (date: string) => {
   return dayjs(date, 'YYYY-MM-DD HH:mm:ss').format('ddd DD MMM, YYYY');
 };
 
-const navigation = new InvokeNativeNavigation();
-
-const NewsLayout: FC<NewsLayoutProps> = ({ news, showHeading = true, onClickSeeAll }) => {
+const NewsLayout: FC<NewsLayoutProps> = ({
+  news,
+  showHeading = true,
+  onClickSeeAll,
+  onArticleClick,
+}) => {
   return (
     <>
       {showHeading && <Heading title="Latest news" onClickSeeAll={onClickSeeAll} />}
@@ -30,7 +32,7 @@ const NewsLayout: FC<NewsLayoutProps> = ({ news, showHeading = true, onClickSeeA
                   title={article.title}
                   text={formatDate(article.when)}
                   imageSrc={article.s3image}
-                  onClick={() => navigation.navigate(`/news/${article.nid}`)}
+                  onClick={() => onArticleClick(article.newsId)}
                 />
               </li>
             );

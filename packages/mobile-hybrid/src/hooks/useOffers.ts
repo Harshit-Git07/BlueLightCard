@@ -4,7 +4,7 @@ import useAPIData, { APIUrl } from './useAPIData';
 const useOffers = (): OfferDataModel => {
   const data = useAPIData(APIUrl.OfferPromos) ?? {};
   return {
-    deals: data?.deals ?? [],
+    deals: data?.deal ?? [],
     flexible: data?.flexible,
     groups: data?.groups ?? [],
   };

@@ -10,7 +10,7 @@ const Image: FC<ImageProps> = ({ src, alt, responsive = true, ...props }) => {
     <NextImage
       className="object-cover"
       src={src.length ? src : placeholderImage}
-      alt={alt ?? src}
+      alt={alt}
       fill={responsive}
       placeholder="blur"
       blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="

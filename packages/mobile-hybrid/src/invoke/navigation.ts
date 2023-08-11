@@ -9,7 +9,7 @@ export default class InvokeNativeNavigation extends Facade implements NativeNavi
   private TAG = 'InvokeNativeNavigation';
 
   constructor() {
-    super('NativeNavigation');
+    super('NavigationRequest');
     this.logger = Logger.getInstance();
   }
 

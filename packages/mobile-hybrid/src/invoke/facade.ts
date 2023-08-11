@@ -14,7 +14,10 @@ export default abstract class Facade {
   protected callFunction(functionName: string, parameters: NativeCallParameters): void {
     const globalState = window as GlobalState;
     if (typeof globalState?.webkit !== 'undefined') {
-      Logger.getInstance().debug(JSON.stringify(globalState.webkit.messageHandlers), 'Facade');
+      Logger.getInstance().debug(
+        `available interfaces: ${JSON.stringify(globalState.webkit.messageHandlers)}`,
+        'Facade',
+      );
       globalState.webkit.messageHandlers[this.nativeInterface].postMessage({
         message: functionName,
         parameters,

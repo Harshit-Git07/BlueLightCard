@@ -6,7 +6,7 @@ export const userSignInMigratedRule = (userPoolId: string, dlqUrl: string, table
         targets: {
             userSignInMigrationFunction: {
                 function: {
-                    permissions: ["sqs:SendMessage", "dynamodb:PutItem"],
+                    permissions: ["sqs:SendMessage", "dynamodb:PutItem", "dynamodb:Query"],
                     handler: 'packages/api/identity/src/cognito/migrateUserProfileAndCardData.handler',
                     environment: { 
                         USER_POOL_ID: userPoolId, 

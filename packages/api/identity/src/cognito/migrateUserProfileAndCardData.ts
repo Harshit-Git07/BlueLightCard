@@ -1,7 +1,7 @@
 import { SQS } from 'aws-sdk';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, QueryCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { Response } from './../../../core/src/utils/restResponse/response'
 import { BRANDS } from './../../../core/src/types/brands.enum';
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
@@ -62,30 +62,56 @@ export const handler = async (event: any, context: any) => {
     await sendToDLQ(event);
   }
   
-  const profileParams = {
-    Item: {
-      pk: `MEMBER#${uuid}`,
-      sk: `PROFILE#${profileUuid}`,
-      name: event.detail.name,
-      surname: event.detail.surname,
-      spare_email: event.detail.spareemail,
-      spare_email_validated: event.detail.spareemailvalidated,
-      organisation: event.detail.service,
-      gender: event.detail.gender,
-      dob: event.detail.dob,
-      merged_uid: event.detail.merged_uid,
-      merged_time: event.detail.merged_time,
-      mobile: event.detail.mobile,
-      employer: event.detail.trustName,
-      employerId: event.detail.trustId
+  const queryParams = {
+    TableName: tableName,
+    KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)',
+    ExpressionAttributeValues: {
+      ':pk': `MEMBER#${uuid}`,
+      ':sk': `PROFILE#`,
     },
-    TableName: tableName
-  }
-  try {
-    const results = await dynamodb.send(new PutCommand(profileParams));
-    logger.debug('results', { results });
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+  };
+  // check for existing card profile data
+  try{
+    let oldProfileUuid = null;
+    const result = await dynamodb.send(new QueryCommand(queryParams));
+    if(result.Items !== null){
+      const user = result.Items?.at(0) as Record<string, string>;
+      oldProfileUuid = user.sk;
+    }
+    const profileParams = {
+      Item: {
+        pk: `MEMBER#${uuid}`,
+        sk: oldProfileUuid !== null ? oldProfileUuid : `PROFILE#${profileUuid}`,
+        firstname: event.detail.name,
+        surname: event.detail.surname,
+        spare_email: event.detail.spareemail,
+        spare_email_validated: event.detail.spareemailvalidated,
+        organisation: event.detail.service,
+        gender: event.detail.gender,
+        dob: event.detail.dob,
+        merged_uid: event.detail.merged_uid,
+        merged_time: event.detail.merged_time,
+        mobile: event.detail.mobile,
+        employer: event.detail.trustName,
+        employer_id: event.detail.trustId,
+        ga_key: event.detail.ga_key
+      },
+      TableName: tableName
+    }
+    try {
+      const results = await dynamodb.send(new PutCommand(profileParams));
+      logger.debug('results', { results });
+    } catch (err: any) {
+      logger.error("error inserting user profile", { uuid, err });
+      await sendToDLQ(event);
+    }
+  
   } catch (err: any) {
-    logger.error("error inserting user profile", { uuid, err });
+    logger.error("error querying user profile", {uuid, err});
     await sendToDLQ(event);
   }
 

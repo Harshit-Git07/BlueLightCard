@@ -101,6 +101,7 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 trustName: data.employerdata.employer ?? ' ',
                 merged_uid: data.merged_uid == null ?? '0',
                 merged_time: data.merged_time ?? '0000-00-00 00:00:00',
+                ga_key: data.GA_Key ?? ' ',
                 cardId: data.cardid,
                 cardExpires: data.expiresiso ?? '0000-00-00 00:00:00',
                 cardStatus: data.carddata.cardstatus,

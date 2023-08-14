@@ -63,7 +63,7 @@ const Navigation: FC<NavigationProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <div className="bg-palette-primary-base dark:bg-palette-primary-dark py-3.5 px-3">
         <div className="laptop:container laptop:mx-auto flex items-center">
           <div className="flex-1 mr-2">

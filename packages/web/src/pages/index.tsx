@@ -4,6 +4,7 @@ import Button from '../identity/components/Button/Button';
 import useBrandTranslation from '@/hooks/useBrandTranslation';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import Heading from '@/components/Heading/Heading';
 
 export const getStaticProps = getI18nStaticProps;
 
@@ -20,9 +21,9 @@ const Home: NextPage<any> = () => {
         <div className="mt-1 p-5 bg-surface-brand rounded">
           <span className="text-shade-greyscale-white">Blue Light Card</span>
         </div>
-        <h1 className="bg-surface-grey-50 text-palette-primary font-['MuseoSans'] font-bold text-2xl my-2">
+        <Heading headingLevel={'h1'} className={''}>
           {t('heading')}
-        </h1>
+        </Heading>
         <hr />
         <p className="text-palette-body-text">{t('page.description', { ns: 'description' })}</p>
         <Button

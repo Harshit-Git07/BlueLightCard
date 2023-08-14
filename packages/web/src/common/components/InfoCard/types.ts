@@ -4,6 +4,7 @@ export enum InfoCardLayout {
 }
 
 export interface InfoCardProps {
+  ariaLabel: string;
   id: string;
   title?: string;
   text?: string;

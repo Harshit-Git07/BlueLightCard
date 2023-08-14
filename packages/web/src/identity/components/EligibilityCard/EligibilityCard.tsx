@@ -188,6 +188,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   <>
                     <Button
                       id={(props.currentStep <= props.steps ? 'quit' : 'finish').concat('_button')}
+                      name={props.currentStep <= props.steps ? 'Quit' : 'Finish'}
                       type="button"
                       onClick={() => {
                         props.currentStep <= props.steps ? props.quit() : router.push('/index.php');
@@ -309,8 +310,8 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   <div className="flex flex-col">
                     <p className="tablet:w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
                       {' '}
-                      It looks like we haven’t added your employer yet, register your interest to
-                      join by telling us who you work for{' '}
+                      It looks like we haven&apos;t added your employer yet, register your interest
+                      to join by telling us who you work for{' '}
                     </p>
                     <div className="py-2 justify-start items-center gap-0.5 inline-flex">
                       <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
@@ -342,6 +343,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             {props.currentStep == 2 && (
               <div className="space-y-4 pt-3">
                 <InfoCard
+                  ariaLabel="work email info card"
                   id="work_email"
                   key={1}
                   title="Work Email (Recommended for instant verification)"
@@ -353,9 +355,11 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       ? props.setAcceptedId('')
                       : props.setAcceptedId('Email')
                   }
+                  className="w-full"
                 />
                 {props.acceptedMethods.map((method, index) => (
                   <InfoCard
+                    ariaLabel={method.title + ' info card'}
                     id={method.id}
                     key={method.id + index}
                     title={method.title}
@@ -367,9 +371,11 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         ? props.setAcceptedId('')
                         : props.setAcceptedId(method.id);
                     }}
+                    className="w-full"
                   />
                 ))}
                 <InfoCard
+                  ariaLabel="no_id info card"
                   id="no_id"
                   key={0}
                   title="I don't have any of the above"
@@ -381,6 +387,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       ? props.setAcceptedId('')
                       : props.setAcceptedId('None')
                   }
+                  className="w-full"
                 />
               </div>
             )}

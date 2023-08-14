@@ -18,7 +18,7 @@ describe('InfoCard Component', () => {
   let user: UserEvent;
 
   beforeEach(() => {
-    props = { id: 'test', title: 'Card Title', text: 'This is the card text' };
+    props = { id: 'test', title: 'Card Title', text: 'This is the card text', ariaLabel: 'test' };
     user = userEvent.setup();
   });
 

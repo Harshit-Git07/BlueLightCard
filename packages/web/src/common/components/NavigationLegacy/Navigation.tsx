@@ -70,6 +70,7 @@ const Navigation: FC<NavigationProps> = ({
             <a
               className="relative block h-[40px] max-w-[170px] laptop:max-w-[200px] hover:opacity-100"
               href="/"
+              aria-label="Link to Blue Light Card home page"
             >
               <div className="text-palette-primary-base dark:text-palette-primary-dark">
                 <BrandLogo />
@@ -156,6 +157,7 @@ const Navigation: FC<NavigationProps> = ({
           <button
             className="block laptop:hidden px-3 py-2 rounded-md focus:bg-palette-tertiary-base focus:dark:bg-palette-tertiary-dark text-palette-tertiary-on-base dark:text-palette-tertiary-on-dark"
             onClick={handleMobileNavClick}
+            aria-label="Open mobile navigation menu"
           >
             <FontAwesomeIcon icon={faBars} size="lg" />
           </button>

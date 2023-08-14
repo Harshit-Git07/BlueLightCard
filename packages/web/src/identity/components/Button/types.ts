@@ -4,6 +4,7 @@ import { PropsWithChildren, MouseEventHandler } from 'react';
 
 export type ButtonProps = PropsWithChildren & {
   id: string;
+  name?: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
   variant?: ThemeVariant;

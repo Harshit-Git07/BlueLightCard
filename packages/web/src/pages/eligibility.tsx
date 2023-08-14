@@ -45,6 +45,8 @@ const TestPage: NextPage = () => {
 
   return (
     <main className="bg-gray-50">
+      <title> Blue Light Card Eligibility Checker</title>
+      <meta name="description" content="Blue Light Card Eligibility Checker" />
       <Navigation
         navItems={[
           {

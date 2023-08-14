@@ -5,6 +5,7 @@ import Image from '@/components/Image/Image';
 import { decider } from '@/utils/decider';
 
 const InfoCard: FC<InfoCardProps> = ({
+  ariaLabel,
   id,
   title,
   text,
@@ -29,7 +30,7 @@ const InfoCard: FC<InfoCardProps> = ({
     [layout === InfoCardLayout.ImageTop && !fixedWidthHeight, 'pb-[50%]'],
   ]);
   const cardClasses = cssUtil([
-    'rounded-lg overflow-hidden border-2 flex',
+    'rounded-lg overflow-hidden border-2 flex justify-items-start ',
     cardLayout ?? 'flex-col',
     onClick ? 'cursor-pointer' : '',
     selected
@@ -42,16 +43,22 @@ const InfoCard: FC<InfoCardProps> = ({
     cardLayoutHeight ?? (!fixedWidthHeight ? 'pb-[50%]' : ''),
   ]);
   const cardContentClasses = cssUtil([
-    'p-4 px-5',
+    'px-6 py-4',
     layout === InfoCardLayout.ImageLeft ? 'self-center' : '',
     textAlign ?? 'text-center',
   ]);
   return (
-    <div
+    <button
+      aria-label={ariaLabel}
       id={id}
       className={cardClasses}
       role={onClick ? 'button' : undefined}
       onClick={onClick ? onClick : undefined}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && onClick) {
+          onClick();
+        }
+      }}
     >
       {imageSrc && (
         <div className={cardImageClasses}>
@@ -73,7 +80,7 @@ const InfoCard: FC<InfoCardProps> = ({
           <div className="my-6"></div>
         )}
       </div>
-    </div>
+    </button>
   );
 };
 

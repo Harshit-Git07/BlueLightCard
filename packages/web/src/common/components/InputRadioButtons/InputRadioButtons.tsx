@@ -25,7 +25,7 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({
           className={`m-2 border-2 rounded p-2 ${selected == input.value && 'border-border-focus'}`}
         >
           <input
-            id={id}
+            id={id + '_' + index}
             className="mr-2"
             type="radio"
             name={input.name}

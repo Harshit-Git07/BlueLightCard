@@ -1,7 +1,6 @@
 {
   "name": "@blc-mono/core",
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "typecheck": "tsc -noEmit",
     "test": "jest"

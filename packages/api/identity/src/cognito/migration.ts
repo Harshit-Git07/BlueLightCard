@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 import { SQS } from 'aws-sdk';
 import axios from 'axios';
 import parsePhoneNumber from 'libphonenumber-js';
+import { isValid } from 'date-fns';
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
@@ -73,6 +74,12 @@ const formatPhoneNumber = (unparsedPhoneNumber: string) => {
     }
 };
 
+function setDate(date: any) {
+    if (!isValid(date) || date === null || date === undefined  || date === '' || date === '0000-00-00 00:00:00' || date === 'undefined') 
+      return '0000000000000000';
+    return new Date(date.toString()).getTime();
+  }
+
 const addUserSignInMigratedEvent = async (data: any) => {
     const profileUuid: string = v4();
     const uuid = data.uuid;
@@ -90,7 +97,7 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 legacyUserId: data.id,
                 name: data.fname,
                 surname: data.lname,
-                dob: data.dob ?? '0000-00-00',
+                dob: (data.dob !== '0000-00-00' || data.dob !== null || data.dob !== undefined) ? new Date(data.dob).toISOString().split('T')[0] : '0000-00-00',
                 gender: data.gender ?? 'O',
                 mobile: data.mobile,
                 spareemail: data.spareemail ?? ' ',
@@ -100,12 +107,12 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 trustId: data.employerdata.primarytrust ?? '0',
                 trustName: data.employerdata.employer ?? ' ',
                 merged_uid: data.merged_uid == null ?? '0',
-                merged_time: data.merged_time ?? '0000-00-00 00:00:00',
+                merged_time: setDate(data.merged_time),
                 ga_key: data.GA_Key ?? ' ',
                 cardId: data.cardid,
-                cardExpires: data.expiresiso ?? '0000-00-00 00:00:00',
+                cardExpires: setDate(data.expiresiso),
                 cardStatus: data.carddata.cardstatus,
-                cardPosted: data.carddata.dateposted ?? '0000-00-00 00:00:00'
+                cardPosted: setDate(data.carddata.dateposted)
             }),
             },
         ],

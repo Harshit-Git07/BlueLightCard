@@ -2,5 +2,12 @@
   "extends": "@tsconfig/node16/tsconfig.json",
   "exclude": [
     "packages"
-  ]
+  ],
+  "ts-node": {
+		"compilerOptions": {
+			"module": "ESNext",
+			"target": "es6",
+      "esModuleInterop": true,
+		}
+	},
 }

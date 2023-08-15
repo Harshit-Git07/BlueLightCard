@@ -6,9 +6,14 @@
           "DEFAULT": { "value": "{color.shade.greyscale.white.DEFAULT.value}" },
           "light": { "value": "{color.shade.greyscale.white.DEFAULT.value}" }
         },
-        "background": {
-          "DEFAULT": { "value": "{color.surface.brand.value}" },
-          "brand": { "value": "{color.surface.secondary.dark.value}" }
+        "primary": {
+          "DEFAULT": { "value": "{color.shade.duke.600.DEFAULT.value}" }
+        },
+        "secondary": {
+          "DEFAULT": { "value": "{color.shade.duke.700.value}" }
+        },        
+        "tertiary": {
+          "DEFAULT": { "value": "{color.shade.duke.800.value}" }
         }
       }
     }

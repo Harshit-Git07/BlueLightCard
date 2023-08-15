@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.7.0...bluelightcard/web-v1.8.0) (2023-08-15)
+
+
+### Features
+
+* add tests for when employer section is hidden ([#250](https://github.com/bluelightcard/BlueLightCard-2.0/issues/250)) ([7dd7697](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7dd769748e05654ddd5717dc6175f58977ead43a))
+* added updated design tokens from the figma design system ([#233](https://github.com/bluelightcard/BlueLightCard-2.0/issues/233)) ([bc8610b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bc8610b17ab0db61fe571557f849385f738db73c))
+* close journey to direct to index.php ([#244](https://github.com/bluelightcard/BlueLightCard-2.0/issues/244)) ([8601617](https://github.com/bluelightcard/BlueLightCard-2.0/commit/860161784cce6f7584f2c5562a9ab65f57456086))
+* Eligibility checker negative tests ([#241](https://github.com/bluelightcard/BlueLightCard-2.0/issues/241)) ([520eb9a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/520eb9a4dd7e4e975f4d975c4a7837daae1d966c))
+* Heading Component (TO-56) - ([#248](https://github.com/bluelightcard/BlueLightCard-2.0/issues/248)) ([cd331ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd331ad2d896e9822d4957c3e1236d5e0c848b9a))
+* TI 232- Add working tests to pipeline ([#229](https://github.com/bluelightcard/BlueLightCard-2.0/issues/229)) ([96a85ff](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96a85ff7f2cdc409cc6fe5f893a619af187f6614))
+* TO-49 Shared Footer ([#257](https://github.com/bluelightcard/BlueLightCard-2.0/issues/257)) ([584778e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/584778e8bb8bbdf4059e9132b55710ebbf371c23))
+* TO-54 - Carousel implementation ([#259](https://github.com/bluelightcard/BlueLightCard-2.0/issues/259)) ([a1e9830](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a1e98300a7e75e77535a109aa1c4de6ccda430af))
+* TO-60 home page mock ([#263](https://github.com/bluelightcard/BlueLightCard-2.0/issues/263)) ([658eead](https://github.com/bluelightcard/BlueLightCard-2.0/commit/658eeade84373bab6887c0f1ee7707b652fd9433))
+* **web:** added currentSelection prop ([#228](https://github.com/bluelightcard/BlueLightCard-2.0/issues/228)) ([0492990](https://github.com/bluelightcard/BlueLightCard-2.0/commit/04929907ade1d251d0725318640a617ad010e4b1))
+* **web:** create loader component & implement it ([#220](https://github.com/bluelightcard/BlueLightCard-2.0/issues/220)) ([8fab1c2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8fab1c282f67c8d3230100cbe233ae90631f8665))
+* **web:** employer dropdown not rendered when no employers ([#235](https://github.com/bluelightcard/BlueLightCard-2.0/issues/235)) ([72947fd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/72947fd340b98ef4b659e2a65b55021659af0dd2))
+* **web:** ensure the Eligibility Calculator meets accessibility criteria ([#255](https://github.com/bluelightcard/BlueLightCard-2.0/issues/255)) ([9c38c32](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9c38c321122f4749356509a76ada99989f58a74f))
+* **web:** ga-snippets ([#262](https://github.com/bluelightcard/BlueLightCard-2.0/issues/262)) ([f891479](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f891479b640930031bb36472bd96df9d037fda7a))
+* **web:** identity footer component created ([#238](https://github.com/bluelightcard/BlueLightCard-2.0/issues/238)) ([065db3a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/065db3a794f5f7039bc6a5358bfb1aa3387d2d89))
+* **web:** mobile design changes ([#251](https://github.com/bluelightcard/BlueLightCard-2.0/issues/251)) ([8015835](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8015835c4525d46a7c24dc5b97a81b3bcaf72091))
+* **web:** navigate to index.php route on quit ([#236](https://github.com/bluelightcard/BlueLightCard-2.0/issues/236)) ([11134d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11134d0b9d9cadef69f2d0ab1bae00060909048f))
+* **web:** quick sort function added to sort InputSelectField options ([#219](https://github.com/bluelightcard/BlueLightCard-2.0/issues/219)) ([69d2c65](https://github.com/bluelightcard/BlueLightCard-2.0/commit/69d2c659c2b9a41d93cfb06c7b580bffb658ab2f))
+
+
+### Bug Fixes
+
+* **web:** burger icon changed to white ([#261](https://github.com/bluelightcard/BlueLightCard-2.0/issues/261)) ([22dab94](https://github.com/bluelightcard/BlueLightCard-2.0/commit/22dab945178085a2f72f93b224841bca648d819a))
+* **web:** ids added to modal ([#227](https://github.com/bluelightcard/BlueLightCard-2.0/issues/227)) ([fa5066a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fa5066a8b0670097f16297795fb767e7b2f21188))
+* **web:** z index property added back into Navigation component ([#260](https://github.com/bluelightcard/BlueLightCard-2.0/issues/260)) ([10dee20](https://github.com/bluelightcard/BlueLightCard-2.0/commit/10dee207923a38e3b24cd36beadf955ecf5c82f1))
+
 ## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.6.0...bluelightcard/web-v1.7.0) (2023-07-31)
 
 

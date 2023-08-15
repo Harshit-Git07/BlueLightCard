@@ -159,7 +159,7 @@ const Navigation: FC<NavigationProps> = ({
             onClick={handleMobileNavClick}
             aria-label="Open mobile navigation menu"
           >
-            <FontAwesomeIcon icon={faBars} size="lg" />
+            <FontAwesomeIcon icon={faBars} className="text-white" size="lg" />
           </button>
         </div>
       </div>

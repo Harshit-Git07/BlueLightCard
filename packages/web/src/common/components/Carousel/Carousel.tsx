@@ -80,7 +80,7 @@ const Carousel: FC<CarouselProps> = ({
     if (autoPlay) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       const interval = setInterval(() => {
-        if (currentIndex < maxIndex) {
+        if (currentIndex < maxIndex - 1) {
           setCurrentIndex(currentIndex + 1);
         } else {
           setCurrentIndex(minIndex);
@@ -144,7 +144,7 @@ const Carousel: FC<CarouselProps> = ({
           key={index}
           className={`${
             takesFocus && index === currentIndex ? focusedClassName : ''
-          } w-full h-fit shrink-0 px-4 my-auto flex justify-center`}
+          } w-full h-fit shrink-0 px-4 mb-auto flex justify-center`}
           style={{ width: `${(1 / elementsShown) * 100}%` }}
           onClick={() => clickToScroll && updateIndex(index)}
         >

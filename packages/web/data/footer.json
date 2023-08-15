@@ -1,0 +1,81 @@
+{
+  "footer": {
+      "navigationItems": [
+          {
+            "title": "Offers",
+            "navLinks": [
+              { "label": "Online Discounts", "url": "/" },
+              { "label": "Giftcard Discounts", "url": "/" },
+              { "label": "High Street Offers", "url": "/" },
+              { "label": "Popular Discounts", "url": "/" },
+              { "label": "Offers Near You", "url": "/" },
+              { "label": "Deals of the Week", "url": "/" }
+            ]
+          },
+          {
+            "title": "Company Info",
+            "navLinks": [
+              { "label": "Blue Light Card Foundation", "url": "/" },
+              { "label": "Latest News & Blogs", "url": "/" },
+              { "label": "About Us", "url": "/" },
+              { "label": "Free Tickets", "url": "/" },
+              { "label": "Compliance", "url": "/" }
+            ]
+          },
+          {
+            "title": "Links",
+            "navLinks": [
+              { "label": "Add a discount", "url": "/" },
+              { "label": "Mobile App", "url": "/" },
+              { "label": "Competitions", "url": "/" },
+              { "label": "Sitemap", "url": "/" },
+              { "label": "Contact Us", "url": "/" }
+            ]
+          },
+          {
+            "title": "Legal",
+            "navLinks": [
+              { "label": "Legal and Regulatory", "url": "/" },
+              { "label": "Terms and Conditions", "url": "/" },
+              { "label": "Privacy Notice", "url": "/" },
+              { "label": "Candidate Privacy Notice", "url": "/" },
+              { "label": "Cookies Policy", "url": "/" },
+              { "label": "Manage Cookies", "url": "/" },
+              { "label": "Modern Slavery Act Statement", "url": "/" }
+            ]
+          }
+        ],
+      "copyrightText": "© Blue Light Card 2008 - 2023",
+      "socialLinks": [
+          {
+              "iconName": "facebook",
+              "link": "https://facebook.com",
+              "helpText": "Blue light card on Facebook"
+          },
+          {
+              "iconName": "twitter",
+              "link": "https://twitter.com",
+              "helpText": "Blue light card on Twitter"
+          },
+
+          {
+              "iconName": "instagram",
+              "link": "https://instagram.com",
+              "helpText": "Blue light card on instagram"
+          }
+      ],
+      "downloadLinks": [
+          {
+            "imageUrl": "https://cdn.bluelightcard.co.uk/web/assets/google-play-badge.png",
+            "downloadUrl": "https://play.google.com/store/apps/details?id=com.bluelightcard.user&amp;hl=en_GB",
+            "linkTitle": "Get the Blue Light Card app on Google Play"
+          },
+          {
+            "imageUrl": "https://cdn.bluelightcard.co.uk/web/assets/app-store-badge.png",
+            "downloadUrl": "https://itunes.apple.com/gb/app/blue-light-card/id689970073?mt=8",
+            "linkTitle": "Get the Blue Light Card app on Apple store"
+          } 
+      ]
+      
+  }
+}

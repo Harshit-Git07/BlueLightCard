@@ -8,7 +8,7 @@ import { ImageLoader } from 'next/image';
  */
 const loader: ImageLoader = ({ src, width, quality }) => {
   const path = src.startsWith('/') ? src.substring(1) : src;
-  return `${ASSET_PREFIX}/${path}?width=${width}&quality=${quality}`;
+  return `${path}?width=${width}&quality=${quality}`;
 };
 
 export default loader;

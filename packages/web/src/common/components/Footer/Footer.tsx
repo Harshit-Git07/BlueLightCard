@@ -17,7 +17,7 @@ const Footer: FC<FooterProps> = ({
   socialLinks,
   downloadLinks,
 }) => {
-  const horizPadding = 'mobile:px-4 tablet:px-8 laptop:px-16';
+  const horizPadding = 'mobile:px-8 tablet:px-32 laptop:px-64';
 
   return (
     <div className="w-full text-white">

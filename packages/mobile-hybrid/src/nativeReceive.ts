@@ -32,7 +32,18 @@ const fns: { [key: string]: any } = {
 if (typeof window !== 'undefined') {
   const globalState = window as GlobalState;
 
-  // control theme
+  /**
+   * Set dark mode by default based on system preferences,
+   * this will work on iOS without needing to call setTheme
+   */
+  if (
+    typeof window.matchMedia !== 'undefined' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  ) {
+    document.documentElement.classList.add('dark');
+  }
+
+  // this is needed for android, since android webview doesn't appear to auto pickup system preferences
   globalState.setTheme = (mode) => {
     document.documentElement.classList.add(mode);
   };

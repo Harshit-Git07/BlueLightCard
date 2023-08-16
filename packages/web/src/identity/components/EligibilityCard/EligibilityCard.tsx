@@ -1,9 +1,4 @@
-import {
-  faArrowLeft,
-  faCircleCheck,
-  faCircleXmark,
-  faTimes,
-} from '@fortawesome/pro-solid-svg-icons';
+import { faArrowLeft, faTimes } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EligibilityCardProps, Employer, IOrganisation, KeyValue } from './Types';
 import { FC, useEffect } from 'react';
@@ -14,7 +9,7 @@ import InputRadioButtons from '@/components/InputRadioButtons/InputRadioButtons'
 import { ThemeVariant } from '@/types/theme';
 import { useRouter } from 'next/router';
 import { cssUtil } from '@/utils/cssUtil';
-
+import Image from 'next/image';
 import { fetchOrganisationData, fetchEmployerData } from 'src/services/EligibilityApi';
 import InputTextFieldWithRef from '@/components/InputTextField/InputTextField';
 import Loader from '../Loader/Loader';
@@ -392,15 +387,19 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               </div>
             )}
             {props.currentStep > 2 && props.eligible == 'Yes' && (
-              <div className=" flex flex-col pt-88 justify-center content-center">
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  className="text-[#009] text-center text-7xl pb-[32px]"
-                />
-                <div className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
-                  Great! You are eligible{' '}
+              <div className="flex flex-col pt-88 justify-center content-center">
+                <div className="flex justify-center mb-10">
+                  <Image
+                    src="/../Successful-generic.svg"
+                    alt="Successful Check"
+                    height={192}
+                    width={192}
+                  />
                 </div>
-                <p className="text-center text-slate-950 text-lg font-normal mb-7">
+                <p className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
+                  Great! You are eligible{' '}
+                </p>
+                <p className="flex text-center text-slate-950 text-lg font-normal mb-7">
                   Before you begin your application, please ensure you have access to your chosen
                   form of ID as you will be asked to provide this during sign up.
                 </p>
@@ -425,10 +424,14 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             )}
             {props.currentStep > 2 && props.eligible == 'No' && (
               <div className=" flex flex-col pt-88 justify-center content-center">
-                <FontAwesomeIcon
-                  icon={faCircleXmark}
-                  className="text-[#009] text-center text-7xl pb-[32px]"
-                />
+                <div className="flex justify-center mb-10">
+                  <Image
+                    src="/../Unsuccessful-generic.svg"
+                    alt="Follow us on Twitter"
+                    height={192}
+                    width={192}
+                  />
+                </div>
                 <div className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
                   Sorry, you are not currently eligible{' '}
                 </div>
@@ -453,10 +456,14 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             )}
             {props.currentStep > 2 && props.eligible == 'No ID' && (
               <div className=" flex flex-col pt-88 justify-center content-center">
-                <FontAwesomeIcon
-                  icon={faCircleXmark}
-                  className="text-[#009] text-center text-7xl pb-[32px]"
-                />
+                <div className="flex justify-center mb-10">
+                  <Image
+                    src="/../Unsuccessful-generic.svg"
+                    alt="Follow us on Twitter"
+                    height={192}
+                    width={192}
+                  />
+                </div>
                 <div className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
                   Unable to verify your eligibility
                 </div>

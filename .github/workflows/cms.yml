@@ -30,7 +30,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - uses: bahmutov/npm-install@v1
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
       - run: npm test -w packages/cms
 
   e2e:
@@ -41,7 +47,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - uses: bahmutov/npm-install@v1
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - run: npm run test:e2e -w packages/cms
@@ -60,7 +72,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - uses: bahmutov/npm-install@v1
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
       - name: JavaScript and Typescript
         run: npm run lint -w packages/cms
       - name: Styles
@@ -96,7 +114,16 @@ jobs:
       - changelog
     steps:
       - uses: actions/checkout@v3
-      - uses: bahmutov/npm-install@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
       - name: Build
         run: npm run build -w packages/cms
       - name: Publish
@@ -120,7 +147,16 @@ jobs:
       - staging
     steps:
       - uses: actions/checkout@v3
-      - uses: bahmutov/npm-install@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
       - name: Build
         run: npm run build -w packages/cms
       - name: Publish

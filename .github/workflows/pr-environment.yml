@@ -169,7 +169,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - uses: bahmutov/npm-install@v1
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - run: npm run test:e2e -w packages/web

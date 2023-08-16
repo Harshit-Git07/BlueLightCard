@@ -71,7 +71,7 @@ const tableName = process.env.DYNAMO_TABLE
 
 export async function migrate(): Promise<{status: string, message: string}> {
   if (host === '' || brand === '' || password === '' || user === '' || userPoolId === '' || tableName === ''){
-    return { status: 'error', message:  'env variables missing'};
+    return { status: 'error ', message:  'env variables missing'};
   }
   
   const failedCardMigrationsFile = `Failed-${Date.now().toString()}.txt`;

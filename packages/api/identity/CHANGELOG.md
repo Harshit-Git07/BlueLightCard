@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.11.0...bluelightcard/identity-v1.11.1) (2023-08-16)
+
+
+### Other Changes
+
+* auth token for release ([#265](https://github.com/bluelightcard/BlueLightCard-2.0/issues/265)) ([5e970f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5e970f6d851d04d22b35eb89ce0d83aa81adf9ae))
+
 ## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.10.0...bluelightcard/identity-v1.11.0) (2023-08-15)
 
 

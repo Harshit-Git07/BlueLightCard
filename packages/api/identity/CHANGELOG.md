@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.11.1...bluelightcard/identity-v1.12.0) (2023-08-16)
+
+
+### Features
+
+* check count ([#275](https://github.com/bluelightcard/BlueLightCard-2.0/issues/275)) ([e902ced](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e902ceddc8ba29aebe55656ad5eba93d62bc5021))
+
 ## [1.11.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.11.0...bluelightcard/identity-v1.11.1) (2023-08-16)
 
 

@@ -78,7 +78,7 @@ export const handler = async (event: any, context: any) => {
   try{
     let oldProfileUuid = null;
     const result = await dynamodb.send(new QueryCommand(queryParams));
-    if(result.Items !== null){
+    if(result.Items !== null && result.Count !== 0){
       const user = result.Items?.at(0) as Record<string, string>;
       oldProfileUuid = user.sk;
     }

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.10.0...bluelightcard/identity-v1.11.0) (2023-08-15)
+
+
+### Features
+
+* check user profile exists ([#237](https://github.com/bluelightcard/BlueLightCard-2.0/issues/237)) ([6553675](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6553675a7f931cc18e1cb5c3a8c73800f53f546f))
+* migrate user profile and card data post cognito auth ([#231](https://github.com/bluelightcard/BlueLightCard-2.0/issues/231)) ([bfcc4f9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bfcc4f993eca334ad21b96a2d90b6718877509c4))
+* script to migrate user profile and card data ([#252](https://github.com/bluelightcard/BlueLightCard-2.0/issues/252)) ([e895302](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8953028b235f3ff68d0838fc97dd5ef486ed78c))
+
 ## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.9.1...bluelightcard/identity-v1.10.0) (2023-07-26)
 
 

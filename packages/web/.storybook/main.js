@@ -32,6 +32,7 @@ module.exports = {
     );
     fileLoaderRule.exclude = /\.svg$/i;
     config.resolve.alias = {
+      "@assets": resolve(__dirname, '../assets/'),
       "@brandasset": resolve(__dirname, `../assets/brands/${BRAND}`),
       "@/components": resolve(__dirname, "../src/common/components"),
       "@/hooks": resolve(__dirname, "../src/common/hooks"),

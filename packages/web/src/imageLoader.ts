@@ -1,4 +1,3 @@
-import { ASSET_PREFIX } from '@/global-vars';
 import { ImageLoader } from 'next/image';
 
 /**

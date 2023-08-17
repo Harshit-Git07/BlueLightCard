@@ -3,7 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { BRAND } = require('./global-vars');
 const { existsSync } = require('fs');
 
-const assetsFolder = `${__dirname}/assets`;
+const assetsFolder = resolve(__dirname, `./assets`);
 const brandAssetFolder = resolve(__dirname, `./assets/brands/${BRAND}`);
 
 /** @type {import('next').NextConfig} */
@@ -41,6 +41,7 @@ const nextConfig = {
       '@brandasset': !existsSync(brandAssetFolder)
         ? resolve(__dirname, './assets')
         : brandAssetFolder,
+      '@assets': !existsSync(assetsFolder) ? resolve(__dirname, './assets') : assetsFolder,
     };
     config.plugins.push(
       new CopyPlugin({

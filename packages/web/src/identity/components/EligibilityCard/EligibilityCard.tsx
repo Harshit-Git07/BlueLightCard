@@ -9,10 +9,11 @@ import InputRadioButtons from '@/components/InputRadioButtons/InputRadioButtons'
 import { ThemeVariant } from '@/types/theme';
 import { useRouter } from 'next/router';
 import { cssUtil } from '@/utils/cssUtil';
-import Image from 'next/image';
 import { fetchOrganisationData, fetchEmployerData } from 'src/services/EligibilityApi';
 import InputTextFieldWithRef from '@/components/InputTextField/InputTextField';
 import Loader from '../Loader/Loader';
+import SuccessfulGenericImage from '@assets/Successful-generic.svg';
+import UnsuccessfulGenericImage from '@assets/Unsuccessful-generic.svg';
 
 const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   const router = useRouter();
@@ -389,12 +390,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             {props.currentStep > 2 && props.eligible == 'Yes' && (
               <div className="flex flex-col pt-88 justify-center content-center">
                 <div className="flex justify-center mb-10">
-                  <Image
-                    src="/../Successful-generic.svg"
-                    alt="Successful Check"
-                    height={192}
-                    width={192}
-                  />
+                  <SuccessfulGenericImage height={192} width={192} />
                 </div>
                 <p className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
                   Great! You are eligible{' '}
@@ -425,12 +421,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             {props.currentStep > 2 && props.eligible == 'No' && (
               <div className=" flex flex-col pt-88 justify-center content-center">
                 <div className="flex justify-center mb-10">
-                  <Image
-                    src="/../Unsuccessful-generic.svg"
-                    alt="Follow us on Twitter"
-                    height={192}
-                    width={192}
-                  />
+                  <UnsuccessfulGenericImage height={192} width={192} />
                 </div>
                 <div className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
                   Sorry, you are not currently eligible{' '}
@@ -457,12 +448,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             {props.currentStep > 2 && props.eligible == 'No ID' && (
               <div className=" flex flex-col pt-88 justify-center content-center">
                 <div className="flex justify-center mb-10">
-                  <Image
-                    src="/../Unsuccessful-generic.svg"
-                    alt="Follow us on Twitter"
-                    height={192}
-                    width={192}
-                  />
+                  <UnsuccessfulGenericImage height={192} width={192} />
                 </div>
                 <div className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
                   Unable to verify your eligibility

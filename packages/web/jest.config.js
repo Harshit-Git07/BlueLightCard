@@ -14,6 +14,7 @@ const customJestConfig = {
     '^@/utils/(.*)$': '<rootDir>/src/common/utils/$1',
     '^@/types/(.*)$': '<rootDir>/src/common/types/$1',
     'src/services/EligibilityApi': '<rootDir>/src/services/EligibilityApi',
+    '^.+\\.(svg)$': '<rootDir>/src/__mocks__/SvgrMock.js',
   },
   testEnvironment: 'jest-environment-jsdom',
 };

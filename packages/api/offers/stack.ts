@@ -5,12 +5,14 @@ import { OffersApi } from './src/constructs/offersApi';
 import { Lambda } from './src/constructs/lambda';
 import { DataSource } from './src/graphql/dataSources';
 import { Resolver } from './src/graphql/resolvers/resolver';
+import { Buckets } from './src/constructs/buckets';
 
 export function Offers({ stack }: StackContext) {
   const { cognito } = use(Identity);
   const offersApi = OffersApi.create(stack, stack.stage, cognito.cdk.userPool, './packages/api/offers/schema.graphql');
 
   const tables = new Tables(stack);
+  const buckets = new Buckets(stack, stack.stage);
   const lambdas = new Lambda(stack, tables);
   const dataSources = new DataSource(offersApi, tables, lambdas);
   const resolvers = new Resolver(dataSources);

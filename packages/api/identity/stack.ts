@@ -24,8 +24,10 @@ export function Identity({ stack }: StackContext) {
   switch (stage) {
     case 'staging':
       ssmEnv = 'staging';
+      break;
     case 'production':
       ssmEnv = 'production';
+      break;
     default:
       ssmEnv = 'staging';
   }

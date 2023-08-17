@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.1.0...bluelightcard/offers-v1.2.0) (2023-08-17)
+
+
+### Features
+
+* TO-91 Create S3 buckets for brands ([#277](https://github.com/bluelightcard/BlueLightCard-2.0/issues/277)) ([f04f0b6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f04f0b62fde573c755bb9f689972f238a751bc03))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.0.0...bluelightcard/offers-v1.1.0) (2023-08-09)
 
 

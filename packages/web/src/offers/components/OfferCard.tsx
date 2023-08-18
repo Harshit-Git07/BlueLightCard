@@ -23,7 +23,7 @@ const OfferCard: FC<OfferCardProps> = ({
             width={0}
             height={0}
             sizes="100vw"
-            className={'h-auto w-full'}
+            className={'rounded-t-lg h-auto w-full'}
             quality={50}
           />
         </div>

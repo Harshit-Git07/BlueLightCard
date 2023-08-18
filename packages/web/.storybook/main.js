@@ -1,20 +1,28 @@
-const {
-  resolve
-} = require("path");
-const { BRAND } = require("../global-vars");
+const { resolve } = require('path');
+const { BRAND } = require('../global-vars');
 module.exports = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: ["@storybook/addon-links", "@storybook/addon-docs", "@storybook/addon-essentials", "@storybook/addon-interactions", "@storybook/preset-scss", "@storybook/addon-a11y", "@storybook/addon-mdx-gfm"],
-  staticDirs: [{
-    from: '../assets',
-    to: '/assets'
-  }],
-  webpackFinal: async config => {
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-docs',
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@storybook/preset-scss',
+    '@storybook/addon-a11y',
+    '@storybook/addon-mdx-gfm',
+  ],
+  staticDirs: [
+    {
+      from: '../assets',
+      to: '/assets',
+    },
+  ],
+  webpackFinal: async (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       stream: false,
-      zlib: false
+      zlib: false,
     };
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'));
     config.module.rules.push(
@@ -32,20 +40,21 @@ module.exports = {
     );
     fileLoaderRule.exclude = /\.svg$/i;
     config.resolve.alias = {
-      "@assets": resolve(__dirname, '../assets/'),
-      "@brandasset": resolve(__dirname, `../assets/brands/${BRAND}`),
-      "@/components": resolve(__dirname, "../src/common/components"),
-      "@/hooks": resolve(__dirname, "../src/common/hooks"),
-      "@/utils": resolve(__dirname, "../src/common/utils"),
-      "@/types": resolve(__dirname, "../src/common/types")
+      '@assets': resolve(__dirname, '../assets/'),
+      '@brandasset': resolve(__dirname, `../assets/brands/${BRAND}`),
+      '@/components': resolve(__dirname, '../src/common/components'),
+      '@/components/offers': resolve(__dirname, '../src/offers/components'),
+      '@/hooks': resolve(__dirname, '../src/common/hooks'),
+      '@/utils': resolve(__dirname, '../src/common/utils'),
+      '@/types': resolve(__dirname, '../src/common/types'),
     };
     return config;
   },
   docs: {
-    autodocs: true
+    autodocs: true,
   },
   framework: {
-    name: "@storybook/nextjs",
-    options: {}
-  }
+    name: '@storybook/nextjs',
+    options: {},
+  },
 };

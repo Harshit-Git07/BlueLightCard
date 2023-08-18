@@ -37,6 +37,7 @@ jobs:
           filters: |
             components:
               - 'packages/web/src/common/components/**'
+              - 'packages/web/src/offers/components/**'
   # Run all unit tests on merge to main
   test:
     name: Unit Tests

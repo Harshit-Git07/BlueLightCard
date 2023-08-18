@@ -3,10 +3,10 @@ import React from 'react';
 import homePageData from '../../data/homePageData.json';
 import footerConfig from '../../data/footer.json';
 import Image from 'next/image';
-import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react';
 import Heading from '@/components/Heading/Heading';
 import Carousel from '@/components/Carousel/Carousel';
 import Footer from '@/components/Footer/Footer';
+import OfferCard from '../offers/components/OfferCard';
 
 type BannerProps = {
   linkId: string;
@@ -33,7 +33,10 @@ const Banner = ({
         width="0"
         height="0"
         sizes="100vw"
-        style={{ width: '100%', height: 'auto' }}
+        style={{
+          width: '100%',
+          height: 'auto',
+        }}
       />
     </div>
   );
@@ -58,14 +61,23 @@ const PseudoCarousel = ({
   title,
   itemsToShow,
   offers,
+  flexibleMenu,
 }: {
   title: string;
   itemsToShow: number;
-  offers: { offerName: string; companyName: string; image: string }[];
+  flexibleMenu?: boolean;
+  offers: {
+    offerName: string;
+    companyName: string;
+    image: string;
+    legacyCompanyId: number;
+    legacyOfferId: number;
+  }[];
 }) => {
   return (
     <>
       <Heading headingLevel="h2">{title}</Heading>
+
       <Carousel
         showControls
         autoPlay
@@ -76,23 +88,15 @@ const PseudoCarousel = ({
       >
         {offers.map((offer, index) => {
           return (
-            <Card key={index} className="w-full">
-              <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                <Image
-                  alt="Card background"
-                  className="object-cover rounded-xl"
-                  src={offer.image}
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  style={{ width: '100%', height: 'auto' }}
-                />
-              </CardHeader>
-              <CardBody className="overflow-visible py-2">
-                <h4 className="font-bold text-large">{offer.companyName}</h4>
-                <small className="text-default-500">{offer.offerName}</small>
-              </CardBody>
-            </Card>
+            <OfferCard
+              key={index}
+              alt={'Card'}
+              offerName={offer.offerName}
+              companyName={offer.companyName}
+              imageSrc={offer.image}
+              offerLink={`https://www.bluelightcard.co.uk/offerdetails.php?cid=${offer.legacyCompanyId}&${offer.legacyOfferId}`}
+              variant={flexibleMenu ? 'small' : ''}
+            />
           );
         })}
       </Carousel>
@@ -130,6 +134,7 @@ const HomePage: NextPage<any> = (props) => {
         <PseudoCarousel
           title="Ways to save"
           itemsToShow={3}
+          flexibleMenu={true}
           offers={flexible.map((offer: any) => {
             return {
               offerName: offer.intro,

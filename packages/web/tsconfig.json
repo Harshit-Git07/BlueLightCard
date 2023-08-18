@@ -1,39 +1,63 @@
 {
-	"compilerOptions": {
-		"target": "es5",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
-		"allowSyntheticDefaultImports": true,
-		"baseUrl": ".",
-		"paths": {
-			"@/components/*": ["src/common/components/*"],
-			"@/pages/*": ["src/pages/*"],
-			"@/hooks/*": ["src/common/hooks/*"],
-			"@/utils/*": ["src/common/utils/*"],
-			"@/layouts/*": ["src/common/layouts/*"],
-			"@/types/*": ["src/common/types/*"],
-			"@/global-vars": ["global-vars"]
-		}
-	},
-	"ts-node": {
-		"compilerOptions": {
-			"module": "CommonJS",
-			"target": "ES6"
-		},
-		"files":true
-	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","global.d.ts"],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": [
+        "src/common/components/*"
+      ],
+      "@/pages/*": [
+        "src/pages/*"
+      ],
+      "@/hooks/*": [
+        "src/common/hooks/*"
+      ],
+      "@/utils/*": [
+        "src/common/utils/*"
+      ],
+      "@/layouts/*": [
+        "src/common/layouts/*"
+      ],
+      "@/types/*": [
+        "src/common/types/*"
+      ],
+      "@/global-vars": [
+        "global-vars"
+      ]
+    }
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "target": "ES6"
+    },
+    "files": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "global.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
-  

@@ -4,7 +4,8 @@ import { page } from '../support/world';
 
 //Given
 Given('I navigate to Eligibility Checker', async function () {
-  await page.goto('https://www.staging.bluelightcard.tech/eligibility/');
+  await page.goto(process.env.BASE_URL + '/eligibility');
+  await page.title();
 });
 
 //When
@@ -65,6 +66,7 @@ When('I choose {string} as employer', async function (Other) {
 When('I click next button', async function () {
   await page.locator('id=next_button').click();
 });
+
 //Then
 Then('I should be able to select a verification options', async function () {
   await page.locator('id=work_email').textContent();

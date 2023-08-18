@@ -1,18 +1,24 @@
 import { After, AfterAll, Before, BeforeAll, Status } from '@cucumber/cucumber';
-import { Browser, BrowserContext, chromium, Page } from '@playwright/test';
+import { Browser, BrowserContext, Page } from '@playwright/test';
+import { invokeBrowser } from '../helpers/browsers/browserManager';
+import * as dotenv from 'dotenv';
+
+dotenv.config({
+  path: `e2e/helpers/env/.env.${process.env.ENV}`,
+});
 
 let page: Page;
 let browser: Browser;
 let context: BrowserContext;
 
 BeforeAll(async function () {
-  browser = await chromium.launch({ headless: true });
+  browser = await invokeBrowser();
 });
 
 Before(async function () {
   const context = await browser.newContext();
   page = await context.newPage();
-  await page.goto('https://www.staging.bluelightcard.tech/eligibility/');
+  await page.title();
   console.info('Spinning up browser using playwright.');
 });
 

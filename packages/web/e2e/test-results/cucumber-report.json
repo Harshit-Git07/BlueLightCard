@@ -14,7 +14,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1385054791
+              "duration": 157779125
             }
           },
           {
@@ -27,7 +27,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 414897291
+              "duration": 899720958
             }
           },
           {
@@ -36,11 +36,11 @@
             "line": 7,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 18989083
+              "duration": 95717040
             }
           },
           {
@@ -49,11 +49,11 @@
             "line": 8,
             "name": "I choose 'Police'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 15461707
+              "duration": 20483625
             }
           },
           {
@@ -62,11 +62,11 @@
             "line": 9,
             "name": "I choose an 'Sussex Police'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 82839208
+              "duration": 826116334
             }
           },
           {
@@ -75,11 +75,11 @@
             "line": 10,
             "name": "I enter 'officer'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 84006667
+              "duration": 108092915
             }
           },
           {
@@ -88,11 +88,11 @@
             "line": 11,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 20693624
+              "duration": 32354749
             }
           },
           {
@@ -101,11 +101,11 @@
             "line": 12,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 17867666
+              "duration": 44846208
             }
           },
           {
@@ -114,11 +114,11 @@
             "line": 13,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 455775791
+              "duration": 526063417
             }
           },
           {
@@ -126,7 +126,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 196291
+              "duration": 479584
             }
           }
         ],
@@ -145,7 +145,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1065259124
+              "duration": 142488959
             }
           },
           {
@@ -158,7 +158,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 295561583
+              "duration": 391714999
             }
           },
           {
@@ -167,11 +167,11 @@
             "line": 7,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 25625791
+              "duration": 196041166
             }
           },
           {
@@ -180,11 +180,11 @@
             "line": 8,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 9867499
+              "duration": 10393249
             }
           },
           {
@@ -193,11 +193,11 @@
             "line": 9,
             "name": "I choose an 'Abbey Hospitals'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 188515249
+              "duration": 197241292
             }
           },
           {
@@ -206,11 +206,11 @@
             "line": 10,
             "name": "I enter 'Doctor'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 91587791
+              "duration": 61134832
             }
           },
           {
@@ -219,11 +219,11 @@
             "line": 11,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 21527124
+              "duration": 29615916
             }
           },
           {
@@ -232,11 +232,11 @@
             "line": 12,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 17840750
+              "duration": 45279416
             }
           },
           {
@@ -245,11 +245,11 @@
             "line": 13,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 470762709
+              "duration": 408310957
             }
           },
           {
@@ -257,7 +257,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 73084
+              "duration": 152916
             }
           }
         ],
@@ -276,7 +276,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1649169541
+              "duration": 141759542
             }
           },
           {
@@ -289,7 +289,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 629105208
+              "duration": 594607166
             }
           },
           {
@@ -298,11 +298,11 @@
             "line": 7,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 14595708
+              "duration": 43996790
             }
           },
           {
@@ -311,11 +311,11 @@
             "line": 8,
             "name": "I choose 'Ambulance Service'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 9364459
+              "duration": 26330042
             }
           },
           {
@@ -324,11 +324,11 @@
             "line": 9,
             "name": "I choose an 'London Ambulance Service NHS Trust'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 82439458
+              "duration": 99211875
             }
           },
           {
@@ -337,11 +337,11 @@
             "line": 10,
             "name": "I enter 'worker'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 77859249
+              "duration": 74079832
             }
           },
           {
@@ -350,11 +350,11 @@
             "line": 11,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 23555541
+              "duration": 30759417
             }
           },
           {
@@ -363,11 +363,11 @@
             "line": 12,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 24440665
+              "duration": 43573083
             }
           },
           {
@@ -376,11 +376,11 @@
             "line": 13,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 488821208
+              "duration": 492155582
             }
           },
           {
@@ -388,7 +388,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 66541
+              "duration": 402708
             }
           }
         ],
@@ -407,7 +407,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 828809417
+              "duration": 134650791
             }
           },
           {
@@ -420,7 +420,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 254496375
+              "duration": 375705165
             }
           },
           {
@@ -429,11 +429,11 @@
             "line": 30,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 113020750
+              "duration": 234782709
             }
           },
           {
@@ -442,11 +442,11 @@
             "line": 31,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 54828624
+              "duration": 76862000
             }
           },
           {
@@ -455,11 +455,11 @@
             "line": 32,
             "name": "I choose an 'NHS Professionals'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 185462415
+              "duration": 184583790
             }
           },
           {
@@ -468,11 +468,11 @@
             "line": 33,
             "name": "I enter 'nurse'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 49767292
+              "duration": 73589333
             }
           },
           {
@@ -481,11 +481,11 @@
             "line": 34,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 21721292
+              "duration": 26970250
             }
           },
           {
@@ -494,11 +494,11 @@
             "line": 35,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 17755916
+              "duration": 45733125
             }
           },
           {
@@ -507,11 +507,11 @@
             "line": 36,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 408690333
+              "duration": 522959999
             }
           },
           {
@@ -519,7 +519,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 71084
+              "duration": 159707
             }
           }
         ],
@@ -538,7 +538,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1167512542
+              "duration": 140883624
             }
           },
           {
@@ -551,7 +551,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 241777249
+              "duration": 500714457
             }
           },
           {
@@ -560,11 +560,11 @@
             "line": 30,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 41655292
+              "duration": 155108500
             }
           },
           {
@@ -573,11 +573,11 @@
             "line": 31,
             "name": "I choose 'Police'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 71191167
+              "duration": 84726249
             }
           },
           {
@@ -586,11 +586,11 @@
             "line": 32,
             "name": "I choose an 'Cumbria Constabulary'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 78665249
+              "duration": 85241457
             }
           },
           {
@@ -599,11 +599,11 @@
             "line": 33,
             "name": "I enter 'officer'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 50505249
+              "duration": 68333042
             }
           },
           {
@@ -612,11 +612,11 @@
             "line": 34,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 22357875
+              "duration": 31078250
             }
           },
           {
@@ -625,11 +625,11 @@
             "line": 35,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 16924166
+              "duration": 56869833
             }
           },
           {
@@ -638,11 +638,11 @@
             "line": 36,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 486803791
+              "duration": 509700667
             }
           },
           {
@@ -650,7 +650,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 84083
+              "duration": 95500
             }
           }
         ],
@@ -669,7 +669,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 506366333
+              "duration": 138860624
             }
           },
           {
@@ -682,7 +682,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 459852917
+              "duration": 667162666
             }
           },
           {
@@ -691,11 +691,11 @@
             "line": 30,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 66042333
+              "duration": 88893209
             }
           },
           {
@@ -704,11 +704,11 @@
             "line": 31,
             "name": "I choose 'Ambulance Service'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 27571540
+              "duration": 100407374
             }
           },
           {
@@ -717,11 +717,11 @@
             "line": 32,
             "name": "I choose an 'London Ambulance Service NHS Trust'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 79869999
+              "duration": 98110915
             }
           },
           {
@@ -730,11 +730,11 @@
             "line": 33,
             "name": "I enter 'staff'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 48353708
+              "duration": 62170749
             }
           },
           {
@@ -743,11 +743,11 @@
             "line": 34,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 21050417
+              "duration": 30334791
             }
           },
           {
@@ -756,11 +756,11 @@
             "line": 35,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 18720292
+              "duration": 59235915
             }
           },
           {
@@ -769,11 +769,11 @@
             "line": 36,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 455600125
+              "duration": 442065708
             }
           },
           {
@@ -781,7 +781,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 68292
+              "duration": 295167
             }
           }
         ],
@@ -800,7 +800,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1180138207
+              "duration": 140884375
             }
           },
           {
@@ -813,7 +813,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 233282750
+              "duration": 429072124
             }
           },
           {
@@ -822,11 +822,11 @@
             "line": 44,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 46617417
+              "duration": 40731916
             }
           },
           {
@@ -835,11 +835,11 @@
             "line": 45,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 11157709
+              "duration": 10939416
             }
           },
           {
@@ -848,11 +848,11 @@
             "line": 46,
             "name": "I choose an 'NHS Borders'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 184185875
+              "duration": 192310791
             }
           },
           {
@@ -861,11 +861,11 @@
             "line": 47,
             "name": "I enter 'Nurse'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 81531124
+              "duration": 69194500
             }
           },
           {
@@ -874,11 +874,11 @@
             "line": 48,
             "name": "I should be able quit",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:119"
+              "location": "e2e/steps/eligibilityChecker.ts:120"
             },
             "result": {
               "status": "passed",
-              "duration": 1292185084
+              "duration": 969561333
             }
           },
           {
@@ -886,7 +886,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 78708
+              "duration": 43666
             }
           }
         ],
@@ -905,7 +905,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 726475666
+              "duration": 115838291
             }
           },
           {
@@ -918,7 +918,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 305859750
+              "duration": 477412124
             }
           },
           {
@@ -927,11 +927,11 @@
             "line": 55,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 101287750
+              "duration": 44060166
             }
           },
           {
@@ -940,11 +940,11 @@
             "line": 56,
             "name": "I choose 'Highway Traffic Officers'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 10010333
+              "duration": 19059624
             }
           },
           {
@@ -953,11 +953,11 @@
             "line": 57,
             "name": "I choose an 'Highways England Traffic Officers'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 79666375
+              "duration": 183280207
             }
           },
           {
@@ -966,11 +966,11 @@
             "line": 58,
             "name": "I enter 'Officers'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 90518916
+              "duration": 69395417
             }
           },
           {
@@ -979,11 +979,11 @@
             "line": 59,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 21587417
+              "duration": 29937667
             }
           },
           {
@@ -992,11 +992,11 @@
             "line": 60,
             "name": "I should be able quit",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:119"
+              "location": "e2e/steps/eligibilityChecker.ts:120"
             },
             "result": {
               "status": "passed",
-              "duration": 1496793541
+              "duration": 978612124
             }
           },
           {
@@ -1004,7 +1004,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 77666
+              "duration": 39541
             }
           }
         ],
@@ -1023,7 +1023,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1574825915
+              "duration": 115946624
             }
           },
           {
@@ -1036,7 +1036,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 259749583
+              "duration": 491297292
             }
           },
           {
@@ -1045,11 +1045,11 @@
             "line": 67,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 46679457
+              "duration": 132647583
             }
           },
           {
@@ -1058,11 +1058,11 @@
             "line": 68,
             "name": "I choose 'Pharmacy'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 71200458
+              "duration": 68171333
             }
           },
           {
@@ -1071,11 +1071,11 @@
             "line": 69,
             "name": "I choose an 'NHS Pharmacy'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 79885832
+              "duration": 85005166
             }
           },
           {
@@ -1084,11 +1084,11 @@
             "line": 70,
             "name": "I enter 'officer'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 48629916
+              "duration": 78129832
             }
           },
           {
@@ -1097,11 +1097,11 @@
             "line": 71,
             "name": "I should be able quit, change mind and continue",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:127"
+              "location": "e2e/steps/eligibilityChecker.ts:128"
             },
             "result": {
               "status": "passed",
-              "duration": 36945208
+              "duration": 61043541
             }
           },
           {
@@ -1109,7 +1109,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 40791
+              "duration": 42209
             }
           }
         ],
@@ -1128,7 +1128,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 415231750
+              "duration": 115929915
             }
           },
           {
@@ -1141,7 +1141,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 227924040
+              "duration": 450811332
             }
           },
           {
@@ -1150,11 +1150,11 @@
             "line": 78,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 60168082
+              "duration": 83124291
             }
           },
           {
@@ -1163,11 +1163,11 @@
             "line": 79,
             "name": "I choose 'Police'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 62641374
+              "duration": 68967083
             }
           },
           {
@@ -1176,11 +1176,11 @@
             "line": 80,
             "name": "I choose an 'Glouchestershire Constabulary'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 79799624
+              "duration": 80373999
             }
           },
           {
@@ -1189,11 +1189,11 @@
             "line": 81,
             "name": "I enter 'officer'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 46473166
+              "duration": 69082291
             }
           },
           {
@@ -1202,11 +1202,11 @@
             "line": 82,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 22768250
+              "duration": 29324459
             }
           },
           {
@@ -1215,11 +1215,11 @@
             "line": 83,
             "name": "I go back to previous page",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:135"
+              "location": "e2e/steps/eligibilityChecker.ts:136"
             },
             "result": {
               "status": "passed",
-              "duration": 20576208
+              "duration": 62291375
             }
           },
           {
@@ -1227,7 +1227,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 46499
+              "duration": 41749
             }
           }
         ],
@@ -1246,7 +1246,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 555719875
+              "duration": 111927999
             }
           },
           {
@@ -1259,7 +1259,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 288222958
+              "duration": 488001416
             }
           },
           {
@@ -1268,11 +1268,11 @@
             "line": 90,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 37795708
+              "duration": 15362959
             }
           },
           {
@@ -1281,11 +1281,11 @@
             "line": 91,
             "name": "I choose 'Other' as organisation",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:55"
+              "location": "e2e/steps/eligibilityChecker.ts:56"
             },
             "result": {
               "status": "passed",
-              "duration": 8435582
+              "duration": 9221041
             }
           },
           {
@@ -1294,11 +1294,11 @@
             "line": 92,
             "name": "I should see a message",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:60"
+              "location": "e2e/steps/eligibilityChecker.ts:61"
             },
             "result": {
               "status": "passed",
-              "duration": 1730959
+              "duration": 1736584
             }
           },
           {
@@ -1307,11 +1307,11 @@
             "line": 93,
             "name": "I can write the name of my organisation",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:67"
+              "location": "e2e/steps/eligibilityChecker.ts:68"
             },
             "result": {
               "status": "passed",
-              "duration": 146995625
+              "duration": 165281250
             }
           },
           {
@@ -1320,11 +1320,11 @@
             "line": 94,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1573125
+              "duration": 1787832
             }
           },
           {
@@ -1333,11 +1333,11 @@
             "line": 95,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 21457250
+              "duration": 27849666
             }
           },
           {
@@ -1345,7 +1345,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 42917
+              "duration": 39125
             }
           }
         ],
@@ -1364,7 +1364,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 446694375
+              "duration": 113836540
             }
           },
           {
@@ -1377,7 +1377,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 468217708
+              "duration": 497050999
             }
           },
           {
@@ -1386,11 +1386,11 @@
             "line": 98,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 15267625
+              "duration": 191057749
             }
           },
           {
@@ -1399,11 +1399,11 @@
             "line": 99,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 10196542
+              "duration": 39080499
             }
           },
           {
@@ -1412,11 +1412,11 @@
             "line": 100,
             "name": "I choose 'Other' as employer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:82"
             },
             "result": {
               "status": "passed",
-              "duration": 184292791
+              "duration": 184320749
             }
           },
           {
@@ -1425,11 +1425,11 @@
             "line": 101,
             "name": "I should see a message",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:60"
+              "location": "e2e/steps/eligibilityChecker.ts:61"
             },
             "result": {
               "status": "passed",
-              "duration": 2632207
+              "duration": 3281250
             }
           },
           {
@@ -1438,11 +1438,11 @@
             "line": 102,
             "name": "I can write the name of my employer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:74"
+              "location": "e2e/steps/eligibilityChecker.ts:75"
             },
             "result": {
               "status": "passed",
-              "duration": 74283291
+              "duration": 103731167
             }
           },
           {
@@ -1451,11 +1451,11 @@
             "line": 103,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1288750
+              "duration": 1813834
             }
           },
           {
@@ -1464,11 +1464,11 @@
             "line": 104,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 19825625
+              "duration": 27306125
             }
           },
           {
@@ -1476,7 +1476,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 43375
+              "duration": 50707
             }
           }
         ],
@@ -1495,7 +1495,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 525372457
+              "duration": 113779416
             }
           },
           {
@@ -1508,7 +1508,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 288104916
+              "duration": 406636917
             }
           },
           {
@@ -1517,11 +1517,11 @@
             "line": 98,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 19401624
+              "duration": 88463291
             }
           },
           {
@@ -1530,11 +1530,11 @@
             "line": 99,
             "name": "I choose 'Police'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 8445042
+              "duration": 18261707
             }
           },
           {
@@ -1543,11 +1543,11 @@
             "line": 100,
             "name": "I choose 'Other' as employer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:82"
             },
             "result": {
               "status": "passed",
-              "duration": 76928082
+              "duration": 83603959
             }
           },
           {
@@ -1556,11 +1556,11 @@
             "line": 101,
             "name": "I should see a message",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:60"
+              "location": "e2e/steps/eligibilityChecker.ts:61"
             },
             "result": {
               "status": "passed",
-              "duration": 1500916
+              "duration": 2145291
             }
           },
           {
@@ -1569,11 +1569,11 @@
             "line": 102,
             "name": "I can write the name of my employer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:74"
+              "location": "e2e/steps/eligibilityChecker.ts:75"
             },
             "result": {
               "status": "passed",
-              "duration": 82487457
+              "duration": 94076791
             }
           },
           {
@@ -1582,11 +1582,11 @@
             "line": 103,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1247709
+              "duration": 1798750
             }
           },
           {
@@ -1595,11 +1595,11 @@
             "line": 104,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 21202916
+              "duration": 41751042
             }
           },
           {
@@ -1607,7 +1607,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 40582
+              "duration": 37041
             }
           }
         ],
@@ -1626,7 +1626,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 457543875
+              "duration": 115423666
             }
           },
           {
@@ -1639,7 +1639,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 389139915
+              "duration": 566906375
             }
           },
           {
@@ -1648,11 +1648,11 @@
             "line": 111,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 10436166
+              "duration": 14417916
             }
           },
           {
@@ -1661,11 +1661,11 @@
             "line": 112,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 7270624
+              "duration": 18899000
             }
           },
           {
@@ -1674,11 +1674,11 @@
             "line": 113,
             "name": "I choose an 'NHS Professionals'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 186233333
+              "duration": 185766916
             }
           },
           {
@@ -1687,11 +1687,11 @@
             "line": 114,
             "name": "I enter 'nurse'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 66874208
+              "duration": 63792750
             }
           },
           {
@@ -1700,11 +1700,11 @@
             "line": 115,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 42028458
+              "duration": 87658916
             }
           },
           {
@@ -1713,11 +1713,11 @@
             "line": 116,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1195957
+              "duration": 1885792
             }
           },
           {
@@ -1726,11 +1726,11 @@
             "line": 117,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 21495874
+              "duration": 24959042
             }
           },
           {
@@ -1738,7 +1738,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 35792
+              "duration": 35833
             }
           }
         ],
@@ -1757,7 +1757,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 491039208
+              "duration": 115720541
             }
           },
           {
@@ -1770,7 +1770,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 265993165
+              "duration": 451073334
             }
           },
           {
@@ -1779,11 +1779,11 @@
             "line": 111,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 32959333
+              "duration": 110385917
             }
           },
           {
@@ -1792,11 +1792,11 @@
             "line": 112,
             "name": "I choose 'Police'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 7516875
+              "duration": 19359042
             }
           },
           {
@@ -1805,11 +1805,11 @@
             "line": 113,
             "name": "I choose an 'Cumbria Constabulary'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 77614791
+              "duration": 97091916
             }
           },
           {
@@ -1818,11 +1818,11 @@
             "line": 114,
             "name": "I enter 'officer'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 67366000
+              "duration": 60177041
             }
           },
           {
@@ -1831,11 +1831,11 @@
             "line": 115,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 40543333
+              "duration": 75994958
             }
           },
           {
@@ -1844,11 +1844,11 @@
             "line": 116,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1169999
+              "duration": 11851707
             }
           },
           {
@@ -1857,11 +1857,11 @@
             "line": 117,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 22111083
+              "duration": 26911917
             }
           },
           {
@@ -1869,7 +1869,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 41083
+              "duration": 28958
             }
           }
         ],
@@ -1888,7 +1888,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 373536875
+              "duration": 115813082
             }
           },
           {
@@ -1901,7 +1901,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 405519834
+              "duration": 436830166
             }
           },
           {
@@ -1910,11 +1910,11 @@
             "line": 111,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 11164667
+              "duration": 58245208
             }
           },
           {
@@ -1923,11 +1923,11 @@
             "line": 112,
             "name": "I choose 'Ambulance Service'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 7106417
+              "duration": 17644541
             }
           },
           {
@@ -1936,11 +1936,11 @@
             "line": 113,
             "name": "I choose an 'London Ambulance Service NHS Trust'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 78467875
+              "duration": 101202999
             }
           },
           {
@@ -1949,11 +1949,11 @@
             "line": 114,
             "name": "I enter 'staff'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 68306792
+              "duration": 76287917
             }
           },
           {
@@ -1962,11 +1962,11 @@
             "line": 115,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 39673041
+              "duration": 76342375
             }
           },
           {
@@ -1975,11 +1975,11 @@
             "line": 116,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1232208
+              "duration": 11217124
             }
           },
           {
@@ -1988,11 +1988,11 @@
             "line": 117,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 22581542
+              "duration": 26121875
             }
           },
           {
@@ -2000,7 +2000,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 37792
+              "duration": 34582
             }
           }
         ],
@@ -2019,7 +2019,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 515079707
+              "duration": 117253166
             }
           },
           {
@@ -2032,7 +2032,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 310003666
+              "duration": 421274500
             }
           },
           {
@@ -2041,11 +2041,11 @@
             "line": 125,
             "name": "I check Retired",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:26"
+              "location": "e2e/steps/eligibilityChecker.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 205719457
+              "duration": 233333584
             }
           },
           {
@@ -2054,11 +2054,11 @@
             "line": 126,
             "name": "I choose 'Other' as organisation",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:55"
+              "location": "e2e/steps/eligibilityChecker.ts:56"
             },
             "result": {
               "status": "passed",
-              "duration": 6650000
+              "duration": 18205625
             }
           },
           {
@@ -2067,11 +2067,11 @@
             "line": 127,
             "name": "I should see a message",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:60"
+              "location": "e2e/steps/eligibilityChecker.ts:61"
             },
             "result": {
               "status": "passed",
-              "duration": 2668416
+              "duration": 1734167
             }
           },
           {
@@ -2080,11 +2080,11 @@
             "line": 128,
             "name": "I can write the name of my organisation",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:67"
+              "location": "e2e/steps/eligibilityChecker.ts:68"
             },
             "result": {
               "status": "passed",
-              "duration": 101171708
+              "duration": 165147458
             }
           },
           {
@@ -2093,11 +2093,11 @@
             "line": 129,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1187374
+              "duration": 2026083
             }
           },
           {
@@ -2106,11 +2106,11 @@
             "line": 130,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 14429917
+              "duration": 40267625
             }
           },
           {
@@ -2118,7 +2118,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 36999
+              "duration": 44041
             }
           }
         ],
@@ -2137,7 +2137,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 490776792
+              "duration": 119756625
             }
           },
           {
@@ -2150,7 +2150,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 259486958
+              "duration": 497387625
             }
           },
           {
@@ -2159,11 +2159,11 @@
             "line": 133,
             "name": "I check Retired",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:26"
+              "location": "e2e/steps/eligibilityChecker.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 206933499
+              "duration": 255936958
             }
           },
           {
@@ -2172,11 +2172,11 @@
             "line": 134,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 7487666
+              "duration": 21379792
             }
           },
           {
@@ -2185,11 +2185,11 @@
             "line": 135,
             "name": "I click next button",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:87"
             },
             "result": {
               "status": "passed",
-              "duration": 87161916
+              "duration": 105027499
             }
           },
           {
@@ -2198,11 +2198,11 @@
             "line": 136,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 41101250
+              "duration": 86258875
             }
           },
           {
@@ -2211,11 +2211,11 @@
             "line": 137,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1309457
+              "duration": 2050499
             }
           },
           {
@@ -2224,11 +2224,11 @@
             "line": 138,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 21507208
+              "duration": 40087540
             }
           },
           {
@@ -2236,7 +2236,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 36084
+              "duration": 34500
             }
           }
         ],
@@ -2255,7 +2255,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 728392874
+              "duration": 116689708
             }
           },
           {
@@ -2268,7 +2268,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 429931084
+              "duration": 501649542
             }
           },
           {
@@ -2277,11 +2277,11 @@
             "line": 133,
             "name": "I check Retired",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:26"
+              "location": "e2e/steps/eligibilityChecker.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 104707707
+              "duration": 233694875
             }
           },
           {
@@ -2290,11 +2290,11 @@
             "line": 134,
             "name": "I choose 'Frontline Ambulance Staff'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 6518374
+              "duration": 8691666
             }
           },
           {
@@ -2303,11 +2303,11 @@
             "line": 135,
             "name": "I click next button",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:87"
             },
             "result": {
               "status": "passed",
-              "duration": 89496625
+              "duration": 105423166
             }
           },
           {
@@ -2316,11 +2316,11 @@
             "line": 136,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 32402374
+              "duration": 70278334
             }
           },
           {
@@ -2329,11 +2329,11 @@
             "line": 137,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1242624
+              "duration": 11957333
             }
           },
           {
@@ -2342,11 +2342,11 @@
             "line": 138,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 14121124
+              "duration": 23232458
             }
           },
           {
@@ -2354,7 +2354,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 34458
+              "duration": 32790
             }
           }
         ],
@@ -2373,7 +2373,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 478308584
+              "duration": 118240916
             }
           },
           {
@@ -2386,7 +2386,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 426962541
+              "duration": 434464457
             }
           },
           {
@@ -2395,11 +2395,11 @@
             "line": 146,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 34415791
+              "duration": 122780042
             }
           },
           {
@@ -2408,11 +2408,11 @@
             "line": 147,
             "name": "I choose 'Other' as organisation",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:55"
+              "location": "e2e/steps/eligibilityChecker.ts:56"
             },
             "result": {
               "status": "passed",
-              "duration": 40113082
+              "duration": 18270459
             }
           },
           {
@@ -2421,11 +2421,11 @@
             "line": 148,
             "name": "I should see a message",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:60"
+              "location": "e2e/steps/eligibilityChecker.ts:61"
             },
             "result": {
               "status": "passed",
-              "duration": 1502875
+              "duration": 5671458
             }
           },
           {
@@ -2434,11 +2434,11 @@
             "line": 149,
             "name": "I can write the name of my organisation",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:67"
+              "location": "e2e/steps/eligibilityChecker.ts:68"
             },
             "result": {
               "status": "passed",
-              "duration": 68924500
+              "duration": 158494040
             }
           },
           {
@@ -2447,11 +2447,11 @@
             "line": 150,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1188167
+              "duration": 1805583
             }
           },
           {
@@ -2460,11 +2460,11 @@
             "line": 151,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 23027333
+              "duration": 41463708
             }
           },
           {
@@ -2472,7 +2472,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 50084
+              "duration": 35084
             }
           }
         ],
@@ -2491,7 +2491,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 461949083
+              "duration": 120430916
             }
           },
           {
@@ -2504,7 +2504,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 242709334
+              "duration": 485327750
             }
           },
           {
@@ -2513,11 +2513,11 @@
             "line": 154,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 39234375
+              "duration": 137403667
             }
           },
           {
@@ -2526,11 +2526,11 @@
             "line": 155,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 55508833
+              "duration": 81868250
             }
           },
           {
@@ -2539,11 +2539,11 @@
             "line": 156,
             "name": "I choose 'Other' as employer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:81"
+              "location": "e2e/steps/eligibilityChecker.ts:82"
             },
             "result": {
               "status": "passed",
-              "duration": 185586249
+              "duration": 199952084
             }
           },
           {
@@ -2552,11 +2552,11 @@
             "line": 157,
             "name": "I should see a message",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:60"
+              "location": "e2e/steps/eligibilityChecker.ts:61"
             },
             "result": {
               "status": "passed",
-              "duration": 2939625
+              "duration": 3152166
             }
           },
           {
@@ -2565,11 +2565,11 @@
             "line": 158,
             "name": "I can write the name of my employer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:74"
+              "location": "e2e/steps/eligibilityChecker.ts:75"
             },
             "result": {
               "status": "passed",
-              "duration": 37485834
+              "duration": 84517082
             }
           },
           {
@@ -2578,11 +2578,11 @@
             "line": 159,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1286791
+              "duration": 1707000
             }
           },
           {
@@ -2591,11 +2591,11 @@
             "line": 160,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 23525875
+              "duration": 26588833
             }
           },
           {
@@ -2603,7 +2603,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 46041
+              "duration": 50084
             }
           }
         ],
@@ -2622,7 +2622,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 430756417
+              "duration": 115606792
             }
           },
           {
@@ -2635,7 +2635,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 321756291
+              "duration": 436419917
             }
           },
           {
@@ -2644,11 +2644,11 @@
             "line": 166,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 43162458
+              "duration": 103998666
             }
           },
           {
@@ -2657,11 +2657,11 @@
             "line": 167,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 51710999
+              "duration": 66574334
             }
           },
           {
@@ -2670,11 +2670,11 @@
             "line": 168,
             "name": "I choose an 'NHS Professionals'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 184626083
+              "duration": 194670750
             }
           },
           {
@@ -2683,11 +2683,11 @@
             "line": 169,
             "name": "I enter 'nurse'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 51582874
+              "duration": 78753084
             }
           },
           {
@@ -2696,11 +2696,11 @@
             "line": 170,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 38344417
+              "duration": 88962499
             }
           },
           {
@@ -2709,11 +2709,11 @@
             "line": 171,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1484415
+              "duration": 1924792
             }
           },
           {
@@ -2722,11 +2722,11 @@
             "line": 172,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 24601874
+              "duration": 39997458
             }
           },
           {
@@ -2734,7 +2734,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 48667
+              "duration": 39916
             }
           }
         ],
@@ -2753,7 +2753,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 439765207
+              "duration": 118358791
             }
           },
           {
@@ -2766,7 +2766,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 244070666
+              "duration": 437395084
             }
           },
           {
@@ -2775,11 +2775,11 @@
             "line": 166,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 42530792
+              "duration": 145198540
             }
           },
           {
@@ -2788,11 +2788,11 @@
             "line": 167,
             "name": "I choose 'Police'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 54327708
+              "duration": 69442208
             }
           },
           {
@@ -2801,11 +2801,11 @@
             "line": 168,
             "name": "I choose an 'Cumbria Constabulary'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 78293167
+              "duration": 83713124
             }
           },
           {
@@ -2814,11 +2814,11 @@
             "line": 169,
             "name": "I enter 'officer'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 49380542
+              "duration": 74573125
             }
           },
           {
@@ -2827,11 +2827,11 @@
             "line": 170,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 40140332
+              "duration": 77093459
             }
           },
           {
@@ -2840,11 +2840,11 @@
             "line": 171,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1510665
+              "duration": 11549666
             }
           },
           {
@@ -2853,11 +2853,11 @@
             "line": 172,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 22518000
+              "duration": 30258249
             }
           },
           {
@@ -2865,7 +2865,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 46209
+              "duration": 66499
             }
           }
         ],
@@ -2884,7 +2884,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 486518916
+              "duration": 118732208
             }
           },
           {
@@ -2897,7 +2897,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 257630834
+              "duration": 463314082
             }
           },
           {
@@ -2906,11 +2906,11 @@
             "line": 166,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 43665834
+              "duration": 97935583
             }
           },
           {
@@ -2919,11 +2919,11 @@
             "line": 167,
             "name": "I choose 'Ambulance Service'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 78424417
+              "duration": 71383290
             }
           },
           {
@@ -2932,11 +2932,11 @@
             "line": 168,
             "name": "I choose an 'London Ambulance Service NHS Trust'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:43"
+              "location": "e2e/steps/eligibilityChecker.ts:44"
             },
             "result": {
               "status": "passed",
-              "duration": 80789708
+              "duration": 80884375
             }
           },
           {
@@ -2945,11 +2945,11 @@
             "line": 169,
             "name": "I enter 'staff'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:48"
+              "location": "e2e/steps/eligibilityChecker.ts:49"
             },
             "result": {
               "status": "passed",
-              "duration": 47430457
+              "duration": 60835208
             }
           },
           {
@@ -2958,11 +2958,11 @@
             "line": 170,
             "name": "I should be able to see of verification options and select I don't have any of the above",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:150"
+              "location": "e2e/steps/eligibilityChecker.ts:151"
             },
             "result": {
               "status": "passed",
-              "duration": 38333582
+              "duration": 85196542
             }
           },
           {
@@ -2971,11 +2971,11 @@
             "line": 171,
             "name": "I see a message that I'm not eligible",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:140"
+              "location": "e2e/steps/eligibilityChecker.ts:141"
             },
             "result": {
               "status": "passed",
-              "duration": 1352249
+              "duration": 1848833
             }
           },
           {
@@ -2984,11 +2984,11 @@
             "line": 172,
             "name": "I click finish",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:145"
+              "location": "e2e/steps/eligibilityChecker.ts:146"
             },
             "result": {
               "status": "passed",
-              "duration": 22553667
+              "duration": 42969542
             }
           },
           {
@@ -2996,7 +2996,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 55917
+              "duration": 43916
             }
           }
         ],
@@ -3015,7 +3015,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 480093875
+              "duration": 122017541
             }
           },
           {
@@ -3028,7 +3028,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 237461457
+              "duration": 443664832
             }
           },
           {
@@ -3037,11 +3037,11 @@
             "line": 180,
             "name": "I scroll to the end of the page",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:156"
+              "location": "e2e/steps/eligibilityChecker.ts:157"
             },
             "result": {
               "status": "passed",
-              "duration": 20200208
+              "duration": 13108582
             }
           },
           {
@@ -3050,11 +3050,11 @@
             "line": 181,
             "name": "I should see copyright footer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:162"
+              "location": "e2e/steps/eligibilityChecker.ts:163"
             },
             "result": {
               "status": "passed",
-              "duration": 2974708
+              "duration": 1406750
             }
           },
           {
@@ -3062,7 +3062,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 44208
+              "duration": 26792
             }
           }
         ],
@@ -3081,7 +3081,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 483543250
+              "duration": 120580749
             }
           },
           {
@@ -3094,7 +3094,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 246746958
+              "duration": 484898083
             }
           },
           {
@@ -3103,11 +3103,11 @@
             "line": 184,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 18528959
+              "duration": 85676041
             }
           },
           {
@@ -3116,11 +3116,11 @@
             "line": 185,
             "name": "I choose 'Blood Bikes'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 8841458
+              "duration": 19197625
             }
           },
           {
@@ -3129,11 +3129,11 @@
             "line": 186,
             "name": "I click next button",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:87"
             },
             "result": {
               "status": "passed",
-              "duration": 128028958
+              "duration": 114633666
             }
           },
           {
@@ -3142,11 +3142,11 @@
             "line": 187,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 13242875
+              "duration": 26918291
             }
           },
           {
@@ -3155,11 +3155,11 @@
             "line": 188,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 19687333
+              "duration": 43280500
             }
           },
           {
@@ -3168,11 +3168,11 @@
             "line": 189,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 540327708
+              "duration": 568232958
             }
           },
           {
@@ -3180,7 +3180,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 59875
+              "duration": 82791
             }
           }
         ],
@@ -3199,7 +3199,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 955978792
+              "duration": 140131625
             }
           },
           {
@@ -3212,7 +3212,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 242881208
+              "duration": 441928082
             }
           },
           {
@@ -3221,11 +3221,11 @@
             "line": 184,
             "name": "I check Employed",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:21"
+              "location": "e2e/steps/eligibilityChecker.ts:22"
             },
             "result": {
               "status": "passed",
-              "duration": 18983958
+              "duration": 50613832
             }
           },
           {
@@ -3234,11 +3234,11 @@
             "line": 185,
             "name": "I choose 'MoD Fire Service'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 7770791
+              "duration": 18469917
             }
           },
           {
@@ -3247,11 +3247,11 @@
             "line": 186,
             "name": "I click next button",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:87"
             },
             "result": {
               "status": "passed",
-              "duration": 91798375
+              "duration": 113091083
             }
           },
           {
@@ -3260,11 +3260,11 @@
             "line": 187,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 57461583
+              "duration": 26927249
             }
           },
           {
@@ -3273,11 +3273,11 @@
             "line": 188,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 23720708
+              "duration": 59503750
             }
           },
           {
@@ -3286,11 +3286,11 @@
             "line": 189,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 438572917
+              "duration": 476253375
             }
           },
           {
@@ -3298,7 +3298,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 50333
+              "duration": 79916
             }
           }
         ],
@@ -3317,7 +3317,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 837961790
+              "duration": 152189624
             }
           },
           {
@@ -3330,7 +3330,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 273907999
+              "duration": 458165624
             }
           },
           {
@@ -3339,11 +3339,11 @@
             "line": 196,
             "name": "I check Retired",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:26"
+              "location": "e2e/steps/eligibilityChecker.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 97938915
+              "duration": 151084749
             }
           },
           {
@@ -3352,11 +3352,11 @@
             "line": 197,
             "name": "I choose 'NHS'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 6993666
+              "duration": 28097458
             }
           },
           {
@@ -3365,11 +3365,11 @@
             "line": 198,
             "name": "I click next button",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:87"
             },
             "result": {
               "status": "passed",
-              "duration": 85908250
+              "duration": 111820584
             }
           },
           {
@@ -3378,11 +3378,11 @@
             "line": 199,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 23056083
+              "duration": 28322999
             }
           },
           {
@@ -3391,11 +3391,11 @@
             "line": 200,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 18073541
+              "duration": 54648374
             }
           },
           {
@@ -3404,11 +3404,11 @@
             "line": 201,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 620916542
+              "duration": 752439749
             }
           },
           {
@@ -3416,7 +3416,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 56458
+              "duration": 92333
             }
           }
         ],
@@ -3435,7 +3435,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 863792042
+              "duration": 147850124
             }
           },
           {
@@ -3448,7 +3448,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 277382249
+              "duration": 727620624
             }
           },
           {
@@ -3457,11 +3457,11 @@
             "line": 196,
             "name": "I check Retired",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:26"
+              "location": "e2e/steps/eligibilityChecker.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 118421832
+              "duration": 145709458
             }
           },
           {
@@ -3470,11 +3470,11 @@
             "line": 197,
             "name": "I choose 'Frontline Ambulance Staff'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 6793540
+              "duration": 19037917
             }
           },
           {
@@ -3483,11 +3483,11 @@
             "line": 198,
             "name": "I click next button",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:87"
             },
             "result": {
               "status": "passed",
-              "duration": 86364916
+              "duration": 127256707
             }
           },
           {
@@ -3496,11 +3496,11 @@
             "line": 199,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 22386957
+              "duration": 28056207
             }
           },
           {
@@ -3509,11 +3509,11 @@
             "line": 200,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 20043874
+              "duration": 49855166
             }
           },
           {
@@ -3522,11 +3522,11 @@
             "line": 201,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 428029249
+              "duration": 704719375
             }
           },
           {
@@ -3534,7 +3534,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 59583
+              "duration": 75124
             }
           }
         ],
@@ -3553,7 +3553,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 762455583
+              "duration": 142306290
             }
           },
           {
@@ -3566,7 +3566,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 462542875
+              "duration": 445858582
             }
           },
           {
@@ -3575,11 +3575,11 @@
             "line": 208,
             "name": "I check Volunteer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:31"
+              "location": "e2e/steps/eligibilityChecker.ts:32"
             },
             "result": {
               "status": "passed",
-              "duration": 29993084
+              "duration": 135622875
             }
           },
           {
@@ -3588,11 +3588,11 @@
             "line": 209,
             "name": "I choose 'Blood Bikes'",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:36"
+              "location": "e2e/steps/eligibilityChecker.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 53732666
+              "duration": 85198707
             }
           },
           {
@@ -3601,11 +3601,11 @@
             "line": 210,
             "name": "I click next button",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:86"
+              "location": "e2e/steps/eligibilityChecker.ts:87"
             },
             "result": {
               "status": "passed",
-              "duration": 85684082
+              "duration": 111465917
             }
           },
           {
@@ -3614,11 +3614,11 @@
             "line": 211,
             "name": "I should be able to select a verification options",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:92"
+              "location": "e2e/steps/eligibilityChecker.ts:93"
             },
             "result": {
               "status": "passed",
-              "duration": 22483500
+              "duration": 31632916
             }
           },
           {
@@ -3627,11 +3627,11 @@
             "line": 212,
             "name": "I should see an option to sign up",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:108"
+              "location": "e2e/steps/eligibilityChecker.ts:109"
             },
             "result": {
               "status": "passed",
-              "duration": 20251832
+              "duration": 54806749
             }
           },
           {
@@ -3640,11 +3640,11 @@
             "line": 213,
             "name": "I can close the Checker",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:114"
+              "location": "e2e/steps/eligibilityChecker.ts:115"
             },
             "result": {
               "status": "passed",
-              "duration": 464959541
+              "duration": 513808500
             }
           },
           {
@@ -3652,7 +3652,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 47333
+              "duration": 44708
             }
           }
         ],
@@ -3682,7 +3682,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 678241624
+              "duration": 134148915
             }
           },
           {
@@ -3695,7 +3695,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 687276499
+              "duration": 1911400583
             }
           },
           {
@@ -3708,7 +3708,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 34491333
+              "duration": 35890499
             }
           },
           {
@@ -3721,7 +3721,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 55565207
+              "duration": 4393292
             }
           },
           {
@@ -3734,7 +3734,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 2821832
+              "duration": 3754959
             }
           },
           {
@@ -3747,7 +3747,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 413993124
+              "duration": 474992750
             }
           },
           {
@@ -3760,7 +3760,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1638625
+              "duration": 2637959
             }
           },
           {
@@ -3768,7 +3768,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 34624
+              "duration": 47207
             }
           }
         ],
@@ -3792,7 +3792,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 529602833
+              "duration": 146868707
             }
           },
           {
@@ -3805,7 +3805,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 544276374
+              "duration": 2146359875
             }
           },
           {
@@ -3818,7 +3818,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 35156584
+              "duration": 53421916
             }
           },
           {
@@ -3831,7 +3831,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 51724541
+              "duration": 5497417
             }
           },
           {
@@ -3844,7 +3844,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 3567375
+              "duration": 10067083
             }
           },
           {
@@ -3857,7 +3857,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 407768833
+              "duration": 466730750
             }
           },
           {
@@ -3870,7 +3870,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 628124
+              "duration": 1210958
             }
           },
           {
@@ -3878,7 +3878,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 21167
+              "duration": 43000
             }
           }
         ],

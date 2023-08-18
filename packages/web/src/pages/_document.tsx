@@ -22,6 +22,15 @@ const AppDocument: FC = () => {
         {!!(newRelicLicenseKey && newRelicApplicationId) && (
           <NewRelicTag licenseKey={newRelicLicenseKey} applicationID={newRelicApplicationId} />
         )}
+
+        {/* Prefetch dns for cdn */}
+        <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_APP_CDN_URL} />
+
+        {/* Preconnect to cdn */}
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_APP_CDN_URL} />
+
+        {/* Cache control - Cache for 1 day, could be more? 30days? 1yr? */}
+        <meta httpEquiv="cache-control" content="max-age=86400" />
       </Head>
       <body>
         <noscript>

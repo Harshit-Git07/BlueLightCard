@@ -1,13 +1,7 @@
 import { FC } from 'react';
-import NextImage, { ImageLoader } from 'next/image';
+import NextImage from 'next/image';
 import { ImageProps } from './types';
-
-const imageLoader: ImageLoader = ({ src, width, quality }) => {
-  const optimiseParams = `?width=${width}&quality=${quality}`;
-  const srcWithSlash = src.substring(0, 1) === '/' ? src : `/${src}`;
-  const _src = `${src.startsWith('http') ? src : `_next/static${srcWithSlash}`}${optimiseParams}`;
-  return process.env.STORYBOOK_ENV ? `${src}${optimiseParams}` : _src;
-};
+import imageLoader from '../../../imageLoader';
 
 const Image: FC<ImageProps> = ({ src, alt, responsive = true, ...props }) => {
   return (

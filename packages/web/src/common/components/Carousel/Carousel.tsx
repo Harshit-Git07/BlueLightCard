@@ -206,6 +206,7 @@ const Carousel: FC<CarouselProps> = ({
               for (let index = minIndex; index < maxIndex; index++) {
                 options.push(
                   <div
+                    key={index}
                     className={`w-2 h-2 rounded-full mx-1 cursor-pointer ${
                       currentIndex === index ? 'bg-gray-400' : 'bg-gray-200'
                     }`}

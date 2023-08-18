@@ -22,8 +22,9 @@ const OfferCard: FC<OfferCardProps> = ({
             fill={false}
             width={0}
             height={0}
-            className={'rounded-t-lg h-auto w-full'}
-            quality={75}
+            sizes="100vw"
+            className={'h-auto w-full'}
+            quality={50}
           />
         </div>
         <OfferCardDetails offerName={offerName} companyName={companyName} variant={variant} />

@@ -154,6 +154,84 @@ jobs:
             <a href='${{ needs.backend.outputs.offers-api-endpoint }}'>${{ needs.backend.outputs.offers-api-endpoint }}</a>
             </td></tr>
             </table>
+  
+  # Lighthouse Audit of Web frontend
+  lighthouse:
+    name: Web Audit using Lighthouse
+    if: github.actor!= 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - frontend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        id: lighthouse_audit
+        with:
+          urls: |
+            ${{ needs.frontend.outputs.url }}/MembersHome/
+            ${{ needs.frontend.outputs.url }}/eligibility/
+          budgetPath: '.github/lighthouse/budget.json'
+          configPath: '.github/lighthouse/.lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+
+      - name: Format lighthouse result
+        id: lighthouse_result
+        if: ${{ always() }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { default: formatLighthouseResult } = await import('${{ github.workspace }}/.github/scripts/formatLighthouseResult.js')
+            const links = ${{ steps.lighthouse_audit.outputs.links }};
+            const manifest = ${{ steps.lighthouse_audit.outputs.manifest }}
+            await formatLighthouseResult({ links, manifest, core })
+
+      - name: Format budget result
+        id: budget_result
+        if: ${{ always() }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { default: formatBudgetResult } = await import('${{ github.workspace }}/.github/scripts/formatBudgetResult.js')
+            const assertions = ${{ steps.lighthouse_audit.outputs.assertionResults }}
+            await formatBudgetResult({ assertions, core })
+
+      - name: Add Lighthouse comment to PR
+        id: lighthouse_comment_to_pr
+        if: ${{ always() }}
+        uses: marocchino/sticky-pull-request-comment@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ github.event.pull_request.number }}
+          header: lighthouse
+          message: |
+            ${{ steps.lighthouse_result.outputs.comment }}
+
+      - name: Add Budget comment to PR
+        id: budget_comment_to_pr
+        if: ${{ always() }}
+        uses: marocchino/sticky-pull-request-comment@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ github.event.pull_request.number }}
+          header: budget
+          message: |
+            ${{ steps.budget_result.outputs.comment }}
 
   # Run the E2E Test Suite
   e2e:

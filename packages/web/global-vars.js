@@ -4,6 +4,7 @@ const DEFAULT_LANG = process.env.NEXT_PUBLIC_APP_LANG ?? 'en';
 const FALLBACK_LNG = 'en';
 const ASSET_PREFIX = !process.env.STORYBOOK_ENV ? '/_next/static/assets' : '';
 const FEATURE_FLAG_ENVIRONMENT_ID = process.env.FEATURE_FLAG_ENVIRONMENT_ID ?? '';
+const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcard.co.uk';
 
 /**
  * Language is made up of the lng and region
@@ -27,4 +28,5 @@ module.exports = {
   LANGUAGE,
   ASSET_PREFIX,
   FEATURE_FLAG_ENVIRONMENT_ID,
+  CDN_URL,
 };

@@ -1,12 +1,13 @@
 import { NextPage } from 'next';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import homePageData from '../../data/homePageData.json';
 import footerConfig from '../../data/footer.json';
-import Image from 'next/image';
+import Image from '@/components/Image/Image';
 import Heading from '@/components/Heading/Heading';
 import Carousel from '@/components/Carousel/Carousel';
 import Footer from '@/components/Footer/Footer';
 import OfferCard from '../offers/components/OfferCard';
+import useIsVisible from '@/hooks/useIsVisible';
 
 type BannerProps = {
   linkId: string;
@@ -29,14 +30,13 @@ const Banner = ({
     <div className="w-full relative">
       <Image
         src={image}
-        alt=""
+        alt="Banner image"
+        fill={false}
         width="0"
         height="0"
         sizes="100vw"
-        style={{
-          width: '100%',
-          height: 'auto',
-        }}
+        className={'h-auto w-full'}
+        quality={50}
       />
     </div>
   );
@@ -74,33 +74,47 @@ const PseudoCarousel = ({
     legacyOfferId: number;
   }[];
 }) => {
-  return (
-    <>
-      <Heading headingLevel="h2">{title}</Heading>
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const isVisible = useIsVisible(carouselRef);
 
-      <Carousel
-        showControls
-        autoPlay
-        elementsPerPageDesktop={itemsToShow}
-        elementsPerPageLaptop={itemsToShow}
-        elementsPerPageMobile={1}
-        elementsPerPageTablet={2}
-      >
-        {offers.map((offer, index) => {
-          return (
-            <OfferCard
-              key={index}
-              alt={'Card'}
-              offerName={offer.offerName}
-              companyName={offer.companyName}
-              imageSrc={offer.image}
-              offerLink={`https://www.bluelightcard.co.uk/offerdetails.php?cid=${offer.legacyCompanyId}&${offer.legacyOfferId}`}
-              variant={flexibleMenu ? 'small' : ''}
-            />
-          );
-        })}
-      </Carousel>
-    </>
+  /** Set temporary placeholder height to only load carousel if space on screen */
+  const [className, setClassName] = useState('h-[400px]');
+
+  /** If element is visible on screen, remove placeholder height */
+  useEffect(() => {
+    if (isVisible) setClassName('');
+  }, [isVisible]);
+
+  return (
+    <div className={className} ref={carouselRef}>
+      {isVisible && (
+        <>
+          <Heading headingLevel="h2">{title}</Heading>
+          <Carousel
+            showControls
+            autoPlay
+            elementsPerPageDesktop={itemsToShow}
+            elementsPerPageLaptop={itemsToShow}
+            elementsPerPageMobile={1}
+            elementsPerPageTablet={2}
+          >
+            {offers.map((offer, index) => {
+              return (
+                <OfferCard
+                  key={index}
+                  alt={'Card'}
+                  offerName={offer.offerName}
+                  companyName={offer.companyName}
+                  imageSrc={offer.image}
+                  offerLink={`https://www.bluelightcard.co.uk/offerdetails.php?cid=${offer.legacyCompanyId}&${offer.legacyOfferId}`}
+                  variant={flexibleMenu ? 'small' : ''}
+                />
+              );
+            })}
+          </Carousel>
+        </>
+      )}
+    </div>
   );
 };
 

@@ -53,10 +53,10 @@ describe('List organisation by brand', () => {
     ddbMock.on(QueryCommand).resolves({
         Items: [
           {
-                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_1", name:"test_emp1"
+                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_1", tk: "test_tk1", name:"test_emp1"
           },
           {
-                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_2",name:"test_emp2"
+                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_2", tk: "test_tk2", name:"test_emp2"
         }
         ],
       });
@@ -73,7 +73,41 @@ describe('List organisation by brand', () => {
      statusCode: 200, 
      body: JSON.stringify({
       message: 'Success',
-      data: [{id:"test_1",name:"test_emp1"},{id:"test_2",name:"test_emp2"}]}),
+      data: [{id:"test_1",tk: "test_tk1", name:"test_emp1"},
+      {id:"test_2", tk: "test_tk2", name:"test_emp2"}]}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*' 
+    },
+      });
+  });
+
+  test('Returns 200 with list when valid brand and valid organisation id and retired params', async () => {
+    ddbMock.on(QueryCommand).resolves({
+        Items: [
+          {
+                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_1", tk: "test_tk1", name:"test_emp1", retired: "TRUE"
+          },
+          {
+                pk: "ORGANISATION#test_org1", sk: "EMPLOYER#test_2", tk: "test_tk2", name:"test_emp2", retired: "TRUE"
+        }
+        ],
+      });
+    const res = await handler(
+     // @ts-expect-error - We're not testing the event object
+      {
+        headers: {},     
+        pathParameters: {brand: 'blc_uk', organisationId: 'test_org1'},   
+        body: JSON.stringify({retired: 1})
+      },
+      {},
+    );
+    expect(res).toEqual({
+     statusCode: 200, 
+     body: JSON.stringify({
+      message: 'Success',
+      data: [{id:"test_1",tk: "test_tk1", name:"test_emp1", retired: "TRUE"},
+      {id:"test_2", tk: "test_tk2", name:"test_emp2", retired: "TRUE"}]}),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*' 

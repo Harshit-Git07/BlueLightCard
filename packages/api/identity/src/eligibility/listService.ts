@@ -29,26 +29,55 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   if (organisationId == null) {
     return Response.BadRequest({ message: 'Please provide a valid organisation Id' });
   }
+
+  const data = event.body != null ? JSON.parse(event.body) : {employed: 1};
+  if(data != null && (data.retired == undefined || data.retired == 0) && 
+  (data.employed == undefined || data.employed == 0) && (data.volunteers == undefined || data.volunteers == 0)) {
+    data.employed = 1;
+  }
+  let filter = '';
+  let expAttrValues: Record<string,string> = {};
+  
+  let attrName: Record<string,string> = {};
+  expAttrValues[':pk']= `ORGANISATION#${organisationId}`;
+  expAttrValues[':sk']= `EMPLOYER#`;
+  attrName['#pk'] = 'pk';
+  attrName['#sk'] = 'sk';
+  if(data != null && data.retired != undefined && data.retired === 1) {
+    expAttrValues[':retired'] = `TRUE`;
+    attrName['#retired'] = 'retired';
+    filter += `and #retired = :retired`;
+  }
+  if(data != null && data.employed != undefined && data.employed === 1){
+    expAttrValues[':employed'] = `TRUE`;
+    attrName['#employed']= 'employed';
+    filter += ` and #employed = :employed`;
+  }
+  if(data != null && data.volunteers != undefined && data.volunteers === 1) {
+    expAttrValues[':volunteers'] = `TRUE` ;  
+    attrName['#volunteers']= 'volunteers';
+    filter += ` and #volunteers = :volunteers`;
+  }
+  filter = (filter.length > 0 ) ? filter.replace('and','') : '';
    
   const params = {
-    ExpressionAttributeValues: {
-      ':pk': `ORGANISATION#${organisationId}`,
-      ':sk': `EMPLOYER#`
-    },
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk'            
-    },
+    ExpressionAttributeValues: expAttrValues,
+    ExpressionAttributeNames: attrName,
     TableName: tableName,
-    KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)'
+    KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)',
+    FilterExpression : filter,
   }
-  
   try {
     const results = await dynamodb.send(new QueryCommand(params));
     logger.debug('results', { results });
     const apiResponse = results.Items?.map((item) => ({
       id: item.sk.replace(`EMPLOYER#`, ''),
+      tk: item.tk,
       name: item.name,
+      retired: item.retired,
+      volunteers: item.volunteers,
+      employed: item.employed,
+      idRequirements: item.idRequirements
     }));
     logger.info('employer found', brand);
     return Response.OK( {message: 'Success', data: apiResponse} );

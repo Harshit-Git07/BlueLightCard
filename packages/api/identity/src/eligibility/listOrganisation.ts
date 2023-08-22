@@ -25,23 +25,43 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return Response.BadRequest({ message: 'Please provide a valid brand' });
   }
   
-  const data = event.body != null ? JSON.parse(event.body) : null;
+  const data = event.body != null ? JSON.parse(event.body) : {employed: 1};
+  if(data != null  && (data.retired == undefined || data.retired == 0) && 
+  (data.employed == undefined || data.employed == 0) && (data.volunteers == undefined || data.volunteers == 0)) {
+    data.employed = 1;
+  }
+  let expAttrValues: Record<string,string> = {};
   
+  let attrName: Record<string,string> = {};
+  
+  let filter = '';
+  expAttrValues[':sk']= `BRAND#${brand}`;
+  expAttrValues[':pk']= `ORGANISATION#`;
+  attrName['#pk'] = 'pk';
+  attrName['#sk'] = 'sk';
+  if(data != null && data.retired != undefined && data.retired === 1) {
+    expAttrValues[':retired'] = `TRUE`;
+    attrName['#retired'] = 'retired';
+    filter += `and #retired = :retired`;
+  }
+  if(data != null && data.employed != undefined && data.employed === 1){
+    expAttrValues[':employed'] = `TRUE`;
+    attrName['#employed']= 'employed';
+    filter += ` and #employed = :employed`;
+  }
+  if(data != null && data.volunteers != undefined && data.volunteers === 1) {
+    expAttrValues[':volunteers'] = `TRUE` ;  
+    attrName['#volunteers']= 'volunteers';
+    filter += ` and #volunteers = :volunteers`;
+  }
+  filter = (filter.length > 0 ) ? filter.replace('and','') : '';
   const params = {
-    ExpressionAttributeValues: {
-      ':sk': `BRAND#${brand}`,
-      ':pk': `ORGANISATION#`,  
-      ':retired': (data != null && data.retired != undefined && data.retired === 1) ? `true` : `false`      
-    },
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk', 
-      '#retired': 'retired'            
-    },
+    ExpressionAttributeValues: expAttrValues,
+    ExpressionAttributeNames: attrName,
     TableName: tableName,
     IndexName: 'gsi1',
     KeyConditionExpression: '#sk= :sk And begins_with(#pk, :pk)',
-    FilterExpression : "#retired = :retired",
+    FilterExpression : filter,
   }
   try {
     const results = await dynamodb.send(new QueryCommand(params));
@@ -49,9 +69,12 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
     const apiResponse = results.Items?.map((item) => ({
       id: item.pk.replace('ORGANISATION#', ''),
+      tk: item.tk,
       code: item.code,
       name: item.name,
       retired: item.retired,
+      volunteers: item.volunteers,
+      employed: item.employed,
       idRequirements: item.idRequirements,
       maxUploads: item.maxUploads,
       isTrusted: item.trustedDomain

@@ -1,6 +1,6 @@
-import { Stack } from "aws-cdk-lib";
-import { AuthorizationType, FieldLogLevel, GraphqlApi, SchemaFile } from "aws-cdk-lib/aws-appsync";
-import { IUserPool } from "aws-cdk-lib/aws-cognito";
+import { Stack } from 'aws-cdk-lib';
+import { AuthorizationType, FieldLogLevel, GraphqlApi, SchemaFile } from 'aws-cdk-lib/aws-appsync';
+import { IUserPool } from 'aws-cdk-lib/aws-cognito';
 
 /**
  * This class creates the GraphQL API for the Offers API
@@ -11,25 +11,25 @@ import { IUserPool } from "aws-cdk-lib/aws-cognito";
  * @return The GraphQL API
  */
 export class OffersApi {
-    static api: GraphqlApi;
+  static api: GraphqlApi;
 
-    static create(stack: Stack, stage: string, userPool: IUserPool, schemaPath: string) {
-        this.api = new GraphqlApi(stack, 'Api', {
-            name: `cms-api-${stage}`,
-            schema: SchemaFile.fromAsset(schemaPath),
-            authorizationConfig: {
-                defaultAuthorization: {
-                    authorizationType: AuthorizationType.USER_POOL,
-                    userPoolConfig: {
-                        userPool: userPool,
-                    }
-                }
-            },
-            xrayEnabled: true,
-            logConfig: {
-                fieldLogLevel: FieldLogLevel.ERROR,
-            },
-        });
-        return this.api;
-    }
+  static create(stack: Stack, stage: string, userPool: IUserPool, schemaPath: string) {
+    this.api = new GraphqlApi(stack, 'Api', {
+      name: `cms-api-${stage}`,
+      schema: SchemaFile.fromAsset(schemaPath),
+      authorizationConfig: {
+        defaultAuthorization: {
+          authorizationType: AuthorizationType.USER_POOL,
+          userPoolConfig: {
+            userPool: userPool,
+          },
+        },
+      },
+      xrayEnabled: true,
+      logConfig: {
+        fieldLogLevel: FieldLogLevel.ERROR,
+      },
+    });
+    return this.api;
+  }
 }

@@ -70,10 +70,104 @@ type OfferCategory {
   title: String
 }
 
+# This type is temporary and related to Menue Items in S3
+type MarketPlaceMenus {
+  name: String
+  hidden: Boolean
+  tag: String
+  items: [MarketPlaceItemEntry!]!
+  random: Boolean
+}
+
+# This type is temporary and related to Menue Items in S3
+type MarketPlaceItemEntry {
+  id: String
+  item: MarketPlaceMenusItem
+}
+
+# This type is temporary and related to Menue Items in S3
+type MarketPlaceMenusItem {
+  id: Int;
+  compid: Int;
+  typeid: Int;
+  offername: String;
+  compnayname: String;
+  logos: String;
+  image: String;
+  agegate: Boolean;
+  restrictedto: String;
+  restrictedfrom: String;
+}
+
+# This type is temporary and related to Menue Items in S3
+type FlexibleMenu {
+  title: String
+  imagehome: String
+  imagedetail: String
+  navtitle: String
+  intro: String
+  footer: String
+  random: Boolean
+  hide: Boolean
+  items: [FlexibleMenuItems!]!
+}
+
+# This type is temporary and related to Menue Items in S3
+type FlexibleMenuItems {
+  mode: String
+  imagelist: String
+  title: String
+  subtitle: String
+  oid: Int
+  cid: String
+  tid: String
+  expires: String
+  url: String
+  auth: Boolean
+  hide: Boolean
+  restrictedto: String
+  restrictedfrom: String
+}
+
+# This type is temporary and related to Menue Items in S3
+type DealOfTheWeek {
+  id: Int
+  compid: Int
+  typeid: Int
+  offername: String
+  expires: String
+  compnayname: String
+  logos: String
+  image: String
+  agegate: Boolean
+}
+
+# This type is temporary and related to Menue Items in S3
+type FeatureMenu {
+  id: Int
+  compid: Int
+  typeid: Int
+  offername: String
+  expires: String
+  compnayname: String
+  logos: String
+  image: String
+  agegate: Int
+}
+
+# This type is temporary and related to Menue Items in S3
+type OfferMenuList {
+  marketPlace: [MarketPlaceMenus!]!
+  flexible: [FlexibleMenu!]!
+  deals: [DealOfTheWeek!]!
+  features: [FeatureMenu!]!
+}
+
 type Query {
   getBrand(brandID: ID!): Brand
   getOffer(offerId: ID!): Offer
   getOffersByType(offerTypeId: ID!, limit: Int, nextToken: String): OffersConnection
+  getOfferMenusByBrandId(brandId: ID!): OfferMenuList
 }
 
 type Mutation {
@@ -228,5 +322,3 @@ input UpdateHomePageInput {
 input DeleteHomePageInput {
   id: ID!
 }
-
-

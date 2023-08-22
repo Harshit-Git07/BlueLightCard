@@ -6,7 +6,7 @@ import { IResolver } from '../iResolver';
  * This class is creating the query resolvers
  * Any Type Query should be added here
  * @param datasources - The datasources to use in the resolvers
- */ 
+ */
 export class QueryResolver implements IResolver {
   private readonly TEMPLATE_BASE_PATH = './packages/api/offers/src/graphql/resolvers/queries/templates';
 
@@ -18,6 +18,7 @@ export class QueryResolver implements IResolver {
     this.getHomePageByBrandIDResolver();
     this.getOfferByIdResolver();
     this.getOffersByTypeResolver();
+    this.createQueryLambdaResolver();
   }
 
   private getHomePageByBrandIDResolver() {
@@ -45,5 +46,15 @@ export class QueryResolver implements IResolver {
       requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getOffersByTypeRequest.vtl`),
       responseMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getOffersByTypeResponse.vtl`),
     });
+  }
+
+  private createQueryLambdaResolver() {
+    const fields = [{ typeName: 'Query', fieldName: 'getOfferMenusByBrandId' }];
+    fields.forEach(({ typeName, fieldName }) =>
+      this.datasources.queryLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
+        typeName,
+        fieldName,
+      }),
+    );
   }
 }

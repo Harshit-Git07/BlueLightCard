@@ -9,13 +9,8 @@ import { LambdaAbstract } from './lambdaAbstract';
  * @param tables - The tables to use in the lambda
  */
 export class TypeLambda extends LambdaAbstract {
-  private stack: Stack;
-  private tables: Tables;
-
-  constructor(stack: Stack, tables: Tables) {
+  constructor(private stack: Stack, private tables: Tables) {
     super();
-    this.stack = stack;
-    this.tables = tables;
   }
 
   // This method is implementing the abstract method from LambdaAbstract to create the lambda

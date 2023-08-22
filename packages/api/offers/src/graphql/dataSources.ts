@@ -5,7 +5,7 @@ import { Lambda } from '../constructs/lambda';
 import { Tables } from '../constructs/tables';
 
 /**
- * DataSources are the way AppSync connects to data sources. 
+ * DataSources are the way AppSync connects to data sources.
  * They can be DynamoDB tables, Lambda functions, HTTP endpoints, etc.
  * @param offerApi - The GraphQL API
  * @param tables - The DynamoDB tables
@@ -23,6 +23,7 @@ export class DataSource {
   companyDS: DynamoDbDataSource;
   offerDS: DynamoDbDataSource;
   typeLambdaDS: LambdaDataSource;
+  queryLambdaDS: LambdaDataSource;
 
   constructor(offerApi: GraphqlApi, tables: Tables, lambdas: Lambda) {
     this.api = offerApi;
@@ -32,13 +33,17 @@ export class DataSource {
     //DynamoDB DataSources
     this.brandDS = this.createDynamoDbDataSource('brandDataSource', tables.brandTable.cdk.table);
     this.homePageDS = this.createDynamoDbDataSource('homePageDataSource', tables.homePageTable.cdk.table);
-    this.offersContainerDS = this.createDynamoDbDataSource('offersContainerDataSource', tables.offersContainerTable.cdk.table);
+    this.offersContainerDS = this.createDynamoDbDataSource(
+      'offersContainerDataSource',
+      tables.offersContainerTable.cdk.table,
+    );
     this.companyDS = this.createDynamoDbDataSource('companyDataSource', tables.companyTable.cdk.table);
     this.offerTypeDS = this.createDynamoDbDataSource('offerTypeDataSource', tables.offerTypeTable.cdk.table);
     this.offerDS = this.createDynamoDbDataSource('offerDataSource', tables.offerTable.cdk.table);
 
     //Lambda DataSources
     this.typeLambdaDS = this.createLambdaDataSource('typeLambdaDataSource', lambdas.typeLambda);
+    this.queryLambdaDS = this.createLambdaDataSource('queryLambdaDataSource', lambdas.queryLambda);
   }
 
   private createDynamoDbDataSource(dsId: string, table: ITable) {

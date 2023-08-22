@@ -13,7 +13,7 @@ export function Offers({ stack }: StackContext) {
 
   const tables = new Tables(stack);
   const buckets = new Buckets(stack, stack.stage);
-  const lambdas = new Lambda(stack, tables);
+  const lambdas = new Lambda(stack, tables, buckets);
   const dataSources = new DataSource(offersApi, tables, lambdas);
   const resolvers = new Resolver(dataSources);
   resolvers.initialise();

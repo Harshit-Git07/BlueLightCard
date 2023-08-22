@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.2.0...bluelightcard/offers-v1.3.0) (2023-08-22)
+
+
+### Features
+
+* TO-88 get offer menus from s3 ([#294](https://github.com/bluelightcard/BlueLightCard-2.0/issues/294)) ([746e3f4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/746e3f4172ae021f98acf9318bdfeb5cdaf9de64))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.1.0...bluelightcard/offers-v1.2.0) (2023-08-17)
 
 

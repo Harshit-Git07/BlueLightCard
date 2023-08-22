@@ -17,5 +17,6 @@ export interface InfoCardProps {
   layout?: InfoCardLayout;
   selected?: boolean;
   className?: string;
+  forceFixedHeight?: boolean;
   onClick?: () => void;
 }

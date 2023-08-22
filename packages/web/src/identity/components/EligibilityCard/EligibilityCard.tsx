@@ -352,6 +352,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       : props.setAcceptedId('Email')
                   }
                   className="w-full"
+                  forceFixedHeight
                 />
                 {props.acceptedMethods.map((method, index) => (
                   <InfoCard
@@ -368,6 +369,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         : props.setAcceptedId(method.id);
                     }}
                     className="w-full"
+                    forceFixedHeight
                   />
                 ))}
                 <InfoCard
@@ -384,6 +386,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       : props.setAcceptedId('None')
                   }
                   className="w-full"
+                  forceFixedHeight
                 />
               </div>
             )}

@@ -16,6 +16,7 @@ const InfoCard: FC<InfoCardProps> = ({
   imageSizes,
   imageWidth,
   imageHeight,
+  forceFixedHeight,
   layout,
   className,
   onClick,
@@ -30,13 +31,14 @@ const InfoCard: FC<InfoCardProps> = ({
     [layout === InfoCardLayout.ImageTop && !fixedWidthHeight, 'pb-[50%]'],
   ]);
   const cardClasses = cssUtil([
-    'rounded-lg overflow-hidden border-2 flex justify-items-start ',
+    'rounded-lg overflow-hidden border-2 flex justify-items-start justify-center',
     cardLayout ?? 'flex-col',
     onClick ? 'cursor-pointer' : '',
     selected
       ? 'border-border-card-selected-base dark:border-border-card-selected-dark'
       : 'border-border-card-base dark:border-border-card-dark',
     className ?? '',
+    forceFixedHeight ? 'h-[96px]' : '',
   ]);
   const cardImageClasses = cssUtil([
     'w-full relative bg-gray-200',

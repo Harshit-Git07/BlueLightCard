@@ -4,6 +4,7 @@ import Heading from '@/components/Heading/Heading';
 import CardCarousel from '@/components/Carousel/CardCarousel';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
+import { NewsPreview } from '../news';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -31,7 +32,7 @@ const Offers: FC = () => {
     });
   };
   return (
-    <div className="my-2">
+    <>
       {flexible && (
         <div className="mb-4">
           <Heading title={flexible.title} />
@@ -48,22 +49,25 @@ const Offers: FC = () => {
           />
         </div>
       )}
-      {groups.map((group, index) => (
-        <section key={`${group.title}_${index}`} className="mb-6">
-          <Heading title={group.title} />
-          <CardCarousel
-            slides={group.items.map((offer) => ({
-              id: offer.compid,
-              title: offer.companyname,
-              text: offer.offername,
-              imageSrc: offer.image,
-            }))}
-            onSlideItemClick={onCompanyOfferClick}
-            onSlideChanged={onSlideChange}
-          />
-        </section>
-      ))}
-    </div>
+      <NewsPreview />
+      <div className="my-2">
+        {groups.map((group, index) => (
+          <section key={`${group.title}_${index}`} className="mb-6">
+            <Heading title={group.title} />
+            <CardCarousel
+              slides={group.items.map((offer) => ({
+                id: offer.compid,
+                title: offer.companyname,
+                text: offer.offername,
+                imageSrc: offer.image?.length ? offer.image : offer.s3logos,
+              }))}
+              onSlideItemClick={onCompanyOfferClick}
+              onSlideChanged={onSlideChange}
+            />
+          </section>
+        ))}
+      </div>
+    </>
   );
 };
 

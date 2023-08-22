@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useEffect, useRef, useContext } from 'react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import ListPanel from '@/components/ListPanel/ListPanel';
-import { NewsList, NewsPreview } from '@/modules/news';
+import { NewsList } from '@/modules/news';
 import { NewsModuleStore } from '@/modules/news/store';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import trackScrollDepth from '@/utils/scrollDepth';
@@ -37,7 +37,7 @@ const Home: NextPage<any> = () => {
     if (bodyHeight.current) {
       trackScrollDepth(bodyHeight.current, (depth) => {
         analytics.logAnalyticsEvent({
-          event: 'Pageview: Mobile homepage',
+          event: 'homepage_viewed',
           parameters: {
             'Scroll Depth (%)': depth,
           },
@@ -49,10 +49,9 @@ const Home: NextPage<any> = () => {
   }, []);
 
   return (
-    <main>
+    <main ref={bodyHeight}>
       <div className="mb-9">
         <PromoBanner />
-        <NewsPreview />
         <Offers />
         <Heading title="Explore" size="small" />
         <ExploreLink

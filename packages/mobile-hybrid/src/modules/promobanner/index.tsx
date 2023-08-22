@@ -19,16 +19,18 @@ const PromoBanner: FC = () => {
   const promoImages: PromoBannerDeal[] = deals.reduce((acc, deal) => {
     const items = deal.items;
 
-    items.forEach(({ image, offername: text, compid: id }) => {
-      acc.push({ imageSrc: image, text, id });
+    items.forEach(({ image, s3logos, offername: text, compid: id }) => {
+      acc.push({ imageSrc: image?.length ? image : s3logos, text, id });
     });
     return acc;
   }, [] as PromoBannerDeal[]);
 
   return (
-    !!promoImages.length && (
-      <BannerCarousel slides={promoImages} onSlideItemClick={onSlideItemClick} />
-    )
+    <>
+      {!!promoImages.length && (
+        <BannerCarousel slides={promoImages} onSlideItemClick={onSlideItemClick} />
+      )}
+    </>
   );
 };
 

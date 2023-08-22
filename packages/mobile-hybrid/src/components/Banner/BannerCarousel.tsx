@@ -24,7 +24,7 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
       showIndicators={true} // Show the slide dots
       showArrows={false} // Show the navigation arrows
       selectedItem={currentSlide} // Set the active slide index
-      className="mb-3"
+      className="mb-4"
       onChange={handleSlideChange} // Event handler for slide change
     >
       {slides.map((slide, index) => (

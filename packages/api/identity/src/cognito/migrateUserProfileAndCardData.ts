@@ -119,7 +119,7 @@ export const handler = async (event: any, context: any) => {
     Item: {
       pk: `MEMBER#${uuid}`,
       sk: `CARD#${legacyCardId}`,
-      status: getCardStatus(event.detail.cardStatus),
+      status: getCardStatus(Number(event.detail.cardStatus)),
       expires: event.detail.cardExpires,
       posted: event.detail.cardPosted
     },

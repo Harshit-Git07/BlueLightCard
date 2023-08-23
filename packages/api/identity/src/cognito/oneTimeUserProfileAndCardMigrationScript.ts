@@ -190,7 +190,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
         Item: {
           pk: `MEMBER#${row.uuid}`,
           sk: `CARD#${row.cardId}`,
-          status: getCardStatus(row.cardStatus),
+          status: getCardStatus(Number(row.cardStatus)),
           expires: `${setDate(row.cardExpires)}`,
           posted: `${setDate(row.cardPosted)}`
         },

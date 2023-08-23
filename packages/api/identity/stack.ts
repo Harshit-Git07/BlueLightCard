@@ -12,6 +12,7 @@ import { PostUserRoute } from './src/routes/postUserRoute';
 import { PutUserByIdRoute } from './src/routes/putUserByIdRoute';
 import { DeleteUserByIdRoute } from './src/routes/deleteUserByIdRoute';
 import { userSignInMigratedRule } from './src/eventRules/userSignInMigratedRule';
+import { cardStatusUpdatedRule } from './src/eventRules/cardStatusUpdatedRule';
 
 export function Identity({ stack }: StackContext) {
   //set tag service identity to all resources
@@ -69,7 +70,7 @@ export function Identity({ stack }: StackContext) {
     'GET /users/{id}': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
     'POST /users': new PostUserRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
     'PUT /users/{id}': new PutUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
-    'DELETE /users/{id}': new DeleteUserByIdRoute(apiGatewayModelGenerator).getRouteDetails(),
+    'DELETE /users/{id}': new DeleteUserByIdRoute(apiGatewayModelGenerator).getRouteDetails()
   });
 
   const { bus } = use(Shared);
@@ -124,6 +125,7 @@ export function Identity({ stack }: StackContext) {
   bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, userSignInMigratedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
+  bus.addRules(stack, cardStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
   return {
     identityApi,
     cognito

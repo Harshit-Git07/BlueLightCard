@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.13.0...bluelightcard/identity-v1.14.0) (2023-08-23)
+
+
+### Features
+
+* add additional filters - volunteers, employed ([#290](https://github.com/bluelightcard/BlueLightCard-2.0/issues/290)) ([3b7d0c5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3b7d0c56fb6c620f62f5566a7f1234d2e09e71f3))
+* add event rules to sync card status data ([#296](https://github.com/bluelightcard/BlueLightCard-2.0/issues/296)) ([95a67aa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/95a67aada18461beb7b68f61280aebf04d621fd9))
+
 ## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.12.0...bluelightcard/identity-v1.13.0) (2023-08-17)
 
 

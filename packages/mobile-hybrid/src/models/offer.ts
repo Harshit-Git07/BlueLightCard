@@ -17,22 +17,24 @@ export interface OfferSharedModel {
   items: OfferPromosModel[];
 }
 
+export interface OfferFlexibleItemModel {
+  id: number;
+  title: string;
+  imagehome: string;
+  imagedetail: string;
+  navtitle: string;
+  intro: string;
+  footer: string;
+  random: boolean;
+  hide: boolean;
+  items: any[];
+}
+
 export interface OfferFlexibleModel {
   title: string;
   subtitle: string;
   random: boolean;
-  items: {
-    id: number;
-    title: string;
-    imagehome: string;
-    imagedetail: string;
-    navtitle: string;
-    intro: string;
-    footer: string;
-    random: boolean;
-    hide: boolean;
-    items: any[];
-  }[];
+  items: OfferFlexibleItemModel[];
 }
 
 export interface OfferDataModel {

@@ -39,7 +39,7 @@ const Home: NextPage<any> = () => {
         analytics.logAnalyticsEvent({
           event: 'homepage_viewed',
           parameters: {
-            'Scroll Depth (%)': depth,
+            'scroll_depth_(%)': depth,
           },
         });
       });

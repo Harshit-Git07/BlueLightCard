@@ -45,7 +45,11 @@ const Button: FC<ButtonProps> = ({
   const classes = cssUtil([
     disabled ? 'opacity-25 ' : colorVariants[variant].base.hover,
     colorVariants[variant].base.bg,
-    'transition rounded-md px-10 p-3.5  min-w-btn ring-offset-2 focus:ring-2',
+    'transition rounded-md min-w-btn ring-offset-2 focus:ring-2',
+    'h-12 justify-center items-center gap-2 inline-flex',
+    variant == ThemeVariant.Primary ? 'px-10 py-3.5' : '',
+    variant == ThemeVariant.Tertiary ? 'px-6 py-2' : '',
+    'text-lg font-semibold leading-normal tracking-tight',
     colorVariants[variant].base.focus,
     colorVariants[variant].base.text,
     className ?? '',

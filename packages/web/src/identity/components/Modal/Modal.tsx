@@ -14,20 +14,19 @@ const Modal: FC<ModalProps> = ({ id, isVisible, type, onClose, onConfirm }) => {
         id={id}
         className="z-50 fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex flex-col justify-center items-center"
       >
-        <div className="tablet:w-[736px] px-12 py-7 bg-white shadow  gap-7 inline-flex m-2 mobile:rounded-md tablet:rounded-none">
+        <div className="tablet:w-[736px] tablet:h-[307px] tablet:px-7 mobile:px-4 tablet:pt-7 mobile:pt-11 tablet:pb-[28px] mobile:pb-7 tablet:gap-7 mobile:gap-7 bg-white shadow inline-flex m-2 mobile:rounded-md tablet:rounded-none">
           <div className="w-full">
-            <h1 className="text-secondary tablet:text-4xl mobile:text-2xl font-semibold tablet:text-left mobile:text-center">
+            <h1 className="text-secondary tablet:text-[32px] mobile:text-2xl font-semibold tablet:text-left mobile:text-center">
               Are you sure you want to quit?
             </h1>
-            <div className="pt-[24px] text-lg tablet:text-left mobile:text-center">
+            <p className="tablet:pt-[24px] mobile:pt-3 text-lg tablet:text-left font-normal mobile:text-center">
               Your progress is not saved and will be lost. Checking your eligibility will allow you
               to apply and start saving with your favourite brands in a few easy steps.
-            </div>
-            <div className="flex justify-end gap-2 mt-[10%] mobile:flex-col-reverse tablet:flex-row">
+            </p>
+            <div className="flex justify-end gap-2 tablet:mt-[11%] mobile:mt-[32px] mobile:flex-col-reverse tablet:flex-row">
               <Button
                 id="modal_quit_button"
                 variant={ThemeVariant.Tertiary}
-                className="px-6 py-2 text-lg font-semibold"
                 onClick={() => onClose()}
               >
                 Quit
@@ -35,7 +34,6 @@ const Modal: FC<ModalProps> = ({ id, isVisible, type, onClose, onConfirm }) => {
               <Button
                 id="continue_button"
                 variant={ThemeVariant.Primary}
-                className="px-10 py-3.5 text-lg font-semibold"
                 onClick={() => onConfirm()}
               >
                 Back to checker

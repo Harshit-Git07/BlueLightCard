@@ -1,0 +1,57 @@
+export type HeaderProps = {
+  loggedIn?: boolean;
+  logoUrl: string;
+  navItems: NavItem;
+};
+
+export interface NavProp {
+  authenticated: boolean;
+  displaySearch: boolean;
+  setDisplaySearch: any;
+  navItems: NavItem;
+}
+
+export interface NavItem {
+  loggedIn: {
+    text: string;
+    link: string;
+    dropdown: { text: string; link: string }[];
+  }[];
+  loggedOut: {
+    text: string;
+    link: string;
+    dropdown: { text: string; link: string }[];
+  }[];
+}
+
+export interface NavigationProps {
+  loggedIn: boolean;
+  displaySearch: boolean;
+  setDisplaySearch: boolean;
+}
+
+export interface CountrySelector {
+  key: string;
+  name: string;
+  link: string;
+}
+
+export interface CountrySelectorProps {
+  countryKey?: string;
+  countries?: CountrySelector[];
+}
+
+export interface MenuNavProps {
+  menu: {
+    text: string;
+    link: string;
+    dropdown?: {
+      text: string;
+      link: string;
+    }[];
+  }[];
+}
+
+export type logoProps = {
+  logoUrl: string;
+};

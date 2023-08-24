@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/pro-regular-svg-icons';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
-import { NavButtonLinkProps, NavLinkProps, NavigationProps } from './types';
+import { NavButtonLinkProps, NavigationProps, NavLinkProps } from './types';
 import Icon from '@/components/Icon/Icon';
 import Button from '@/components/Button/Button';
 import { ThemeVariant } from '@/types/theme';
@@ -45,8 +45,16 @@ const Navigation: FC<NavigationProps> = ({
   loginLink,
   signUpLink,
   countries = [
-    { key: 'uk', name: 'United Kingdom', link: '/' },
-    { key: 'aus', name: 'Australia', link: '/' },
+    {
+      key: 'uk',
+      name: 'United Kingdom',
+      link: '/',
+    },
+    {
+      key: 'aus',
+      name: 'Australia',
+      link: '/',
+    },
   ],
   countryKey = 'uk',
 }) => {

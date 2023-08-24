@@ -22,7 +22,7 @@ const InputTextField: FC<InputTextFieldProps> = ({
   const inputClasses = cssUtil([
     error
       ? ' border-border-error dark:border-palette-danger-dark '
-      : 'border-neutrals-type-1-400 dark:border-palette-neutral-dark focus:border-border-focus focus:dark:border-border-dark',
+      : 'border-neutrals-type-1-400 dark:border-palette-neutral-dark bg-palette-white focus:border-border-focus focus:dark:border-border-dark',
     icon ? 'pl-8' : '',
     'w-full rounded-md py-2 px-3 border focus:outline-none',
   ]);

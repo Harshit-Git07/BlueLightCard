@@ -1,0 +1,112 @@
+{
+  "logoSource": "/assets/blc_logo.webp",
+  "navItems": {
+    "loggedOut": [
+      {
+        "text": "Home",
+        "link": "/"
+      },
+      {
+        "text": "About us",
+        "link": "/about"
+      },
+      {
+        "text": "Add your business",
+        "link": "/addbusiness"
+      },
+      {
+        "text": "FAQs",
+        "link": "/faqs"
+      },
+      {
+        "text": "Register now",
+        "link": "/newaccount"
+      },
+      {
+        "text": "Login",
+        "link": "/login"
+      },
+      {
+        "text": "Discover savings",
+        "link": "/discover",
+        "dropdown": [
+          {
+            "text": "Holidays",
+            "link": "/holidays"
+          },
+          {
+            "text": "Days Out",
+            "link": "/daysout"
+          }
+        ]
+      }
+    ],
+
+    "loggedIn": [
+      {
+        "text": "Home",
+        "link": "/members-home"
+      },
+      {
+        "text": "Offers",
+        "link": "/offers",
+        "dropdown": [
+          {
+            "text": "Online Discounts",
+            "link": "/online"
+          },
+          {
+            "text": "Giftcard Discounts",
+            "link": "/giftcard"
+          },
+          {
+            "text": "High Street Offers",
+            "link": "/highstreet"
+          },
+          {
+            "text": "Popular Discounts",
+            "link": "/popular"
+          },
+          {
+            "text": "Offers Near You",
+            "link": "/nearyou"
+          },
+          {
+            "text": "Deals of the Week",
+            "link": "/members-home"
+          }
+        ]
+      },
+      {
+        "text": "Browse categories",
+        "link": "/browse",
+        "dropdown": [
+          {
+            "text": "Holiday Discounts",
+            "link": "/holidays"
+          },
+          {
+            "text": "Days Out",
+            "link": "/daysout"
+          }
+        ]
+      },
+      {
+        "text": "My Card",
+        "link": "/mycard"
+      },
+      {
+        "text": "My Account",
+        "link": "/account"
+      },
+      {
+        "text": "FAQs",
+        "link": "/faqs"
+      },
+      {
+        "text": "Logout",
+        "link": "/logout"
+      }
+    ]
+  }
+}

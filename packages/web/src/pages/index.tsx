@@ -8,15 +8,17 @@ import Heading from '@/components/Heading/Heading';
 
 export const getStaticProps = getI18nStaticProps;
 
-const Home: NextPage<any> = () => {
+const Home: NextPage<any> = (props) => {
   const { t } = useBrandTranslation(['common', 'description']);
   const router = useRouter();
+
   return (
     <>
       <Head>
         <title>{t('seo.title')}</title>
         <meta name="description" content={t('seo.description')} />
       </Head>
+
       <main className="p-3">
         <div className="mt-1 p-5 bg-surface-brand rounded">
           <span className="text-shade-greyscale-white">Blue Light Card</span>

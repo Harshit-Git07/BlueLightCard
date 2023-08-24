@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { FlagsmithProvider } from 'flagsmith/react';
 import flagsmith from 'flagsmith/isomorphic';
+import Header from '@/components/Header/Header';
 
 import '../styles/globals.css';
 import { FEATURE_FLAG_ENVIRONMENT_ID } from '@/global-vars';

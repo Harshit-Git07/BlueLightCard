@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { PillButtonProps } from './types';
-import React from 'react';
 import { cssUtil } from '@/utils/cssUtil';
 
 const PillButtons: FC<PillButtonProps> = ({ pills, onSelected }) => {

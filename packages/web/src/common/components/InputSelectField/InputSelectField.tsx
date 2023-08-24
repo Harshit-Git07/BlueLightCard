@@ -16,7 +16,7 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   const selectClasses = cssUtil([
     error
       ? 'border-border-error dark:border-palette-danger-dark dark:text-font-neutral-dark'
-      : 'border-border-base dark:border-palette-neutral-dark focus:border-border-focus focus:dark:border-border-dark dark:text-font-neutral-dark',
+      : 'border-border-base dark:border-palette-neutral-dark focus:border-border-focus bg-palette-white focus:dark:border-border-dark dark:text-font-neutral-dark',
     icon ? 'pl-8' : '',
     'w-full rounded-md py-2 px-3 border focus:outline-none',
   ]);

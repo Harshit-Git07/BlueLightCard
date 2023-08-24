@@ -1,7 +1,9 @@
 import { NextPage } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
+import headerConfig from '../../data/header.json';
 import homePageData from '../../data/homePageData.json';
 import footerConfig from '../../data/footer.json';
+import Header from '@/components/Header/Header';
 import Image from '@/components/Image/Image';
 import Heading from '@/components/Heading/Heading';
 import Carousel from '@/components/Carousel/Carousel';
@@ -122,9 +124,10 @@ const HomePage: NextPage<any> = (props) => {
   // Unpack data
   // TODO: Wrap in layout
 
-  const { banners, dealsOfTheWeek, flexible, marketplace, featured, footer } = props;
+  const { header, banners, dealsOfTheWeek, flexible, marketplace, featured, footer } = props;
   return (
     <>
+      <Header logoUrl={header.logoSource} navItems={header.navItems} loggedIn={true} />
       <Container>
         <Carousel
           autoPlay
@@ -182,6 +185,7 @@ export async function getStaticProps(context: any) {
   // Pass data through
   return {
     props: {
+      header: headerConfig,
       banners: homePageData[0].banners,
       dealsOfTheWeek: homePageData[0].deals,
       flexible: homePageData[0].flexible,

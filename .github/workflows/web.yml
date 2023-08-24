@@ -241,6 +241,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{matrix.brand}}
+          branch: 'main'
           directory: packages/web/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Record deployment with Oobeya

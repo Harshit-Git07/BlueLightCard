@@ -1,0 +1,54 @@
+name: 'Mobile Hybrid'
+on:
+  push:
+    paths:
+      - packages/mobile-hybrid/**
+      - package-lock.json
+      - package.json
+      - .github/workflows/mobile-hybrid.yml
+  pull_request:
+    paths:
+      - packages/mobile-hybrid/**
+      - package-lock.json
+      - package.json
+      - .github/workflows/mobile-hybrid.yml
+
+jobs:
+  dev-env-mapping:
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    name: Dev env mapping
+    runs-on: ubuntu-latest
+    outputs:
+      devEnv: ${{ steps.dev-env.outputs[github.actor] }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: dev-env
+        run: echo $(grep "${{ github.actor }}=" packages/mobile-hybrid/dev-env-mapping.txt) >> "$GITHUB_OUTPUT"
+
+  dev:
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    name: Deploy Dev
+    runs-on: ubuntu-latest
+    needs: dev-env-mapping
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - name: Build
+        run: npm run build -w packages/mobile-hybrid
+      - name: Publishing env ${{ needs.dev-env-mapping.outputs.devEnv }}
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ needs.dev-env-mapping.outputs.devEnv }}
+          directory: packages/mobile-hybrid/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

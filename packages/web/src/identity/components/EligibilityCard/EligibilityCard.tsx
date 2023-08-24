@@ -192,12 +192,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       variant={ThemeVariant.Tertiary}
                       className="w-[63px] h-12 px-6 py-2 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold"
                     >
-                      <span className="mobile:hidden tablet:block">
-                        {props.currentStep <= props.steps ? 'Quit' : 'Finish'}
-                      </span>
-                      <span className="mobile:block tablet:hidden">
-                        <FontAwesomeIcon icon={faTimes} />
-                      </span>
+                      <FontAwesomeIcon icon={faTimes} />
                     </Button>
                   </>
                 )}
@@ -414,7 +409,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     type="button"
                     variant={ThemeVariant.Primary}
                     onClick={() => router.push('/')}
-                    className="px-10 py-3.5 text-lg font-semibold w-full"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 first-letter:self-end"
                   >
                     Sign up now
                   </Button>
@@ -441,7 +436,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     type="button"
                     variant={ThemeVariant.Primary}
                     onClick={() => router.push('/')}
-                    className="px-10 py-3.5 text-lg font-semibold w-full"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
                   >
                     Finish
                   </Button>
@@ -467,7 +462,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     type="button"
                     variant={ThemeVariant.Primary}
                     onClick={() => router.push('/')}
-                    className="px-10 py-3.5 text-lg font-semibold"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
                   >
                     Finish
                   </Button>
@@ -488,7 +483,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       variant={ThemeVariant.Primary}
                       disabled={nextStepValidation()}
                       onClick={() => props.onNext()}
-                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 tablet:basis-1/4 mobile:w-full self-end"
+                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
                     >
                       Next
                     </Button>
@@ -507,7 +502,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       disabled={props.organisation == 'Other' ? !props.otherOrg : !props.otherEmp}
                       variant={ThemeVariant.Primary}
                       onClick={() => props.onSubmit()}
-                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 tablet:basis-1/4 mobile:w-full self-end"
+                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
                     >
                       Submit
                     </Button>
@@ -524,7 +519,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     disabled={!props.acceptedId}
                     variant={ThemeVariant.Primary}
                     onClick={() => props.onSubmit()}
-                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 inline-flex text-lg font-semibold mt-5 tablet:basis-1/4 mobile:w-full self-end"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
                   >
                     Submit
                   </Button>

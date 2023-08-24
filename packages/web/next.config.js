@@ -12,7 +12,6 @@ const nextConfig = {
   distDir: 'dist',
   reactStrictMode: true,
   swcMinify: true,
-  trailingSlash: true,
   images: {
     loader: 'custom',
     loaderFile: './src/imageLoader.ts',

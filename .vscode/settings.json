@@ -1,4 +1,4 @@
- {
+{
   "search.exclude": {
     "**/.sst": true
   },
@@ -18,14 +18,23 @@
   ],
   "css.validate": false,
   "less.validate": false,
-  "stylelint.validate": [
-    "css"
-  ],
-  "editor.formatOnSave": false,
+  "stylelint.validate": ["css"],
+  "editor.formatOnSave": true,
   "eslint.run": "onType",
-  "cucumberautocomplete.steps": [
-    "packages/web/e2e/steps/*.ts"
-  ],
+  "cucumberautocomplete.steps": ["packages/web/e2e/steps/*.ts"],
   "cucumberautocomplete.strictGherkinCompletion": true,
 
+  "prettier.endOfLine": "auto",
+  "prettier.useTabs": true,
+  "editor.minimap.enabled": true,
+  "editor.wordWrap": "on",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.validate": ["typescript"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  "prettier.singleQuote": false,
+  "prettier.jsxSingleQuote": false,
+  "typescript.preferences.quoteStyle": "double"
 }

@@ -154,7 +154,7 @@ jobs:
             <a href='${{ needs.backend.outputs.offers-api-endpoint }}'>${{ needs.backend.outputs.offers-api-endpoint }}</a>
             </td></tr>
             </table>
-  
+
   # Lighthouse Audit of Web frontend
   lighthouse:
     name: Web Audit using Lighthouse
@@ -180,8 +180,9 @@ jobs:
         id: lighthouse_audit
         with:
           urls: |
-            ${{ needs.frontend.outputs.url }}/MembersHome/
+            ${{ needs.frontend.outputs.url }}/members-home/
             ${{ needs.frontend.outputs.url }}/eligibility/
+            ${{ needs.frontend.outputs.url }}/offers/
           budgetPath: '.github/lighthouse/budget.json'
           configPath: '.github/lighthouse/.lighthouserc.json'
           uploadArtifacts: true

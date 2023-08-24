@@ -32,7 +32,7 @@ const AppDocument: FC = () => {
         {/* Cache control - Cache for 1 day, could be more? 30days? 1yr? */}
         <meta httpEquiv="cache-control" content="max-age=86400" />
       </Head>
-      <body>
+      <body className="dark:bg-surface-primary-dark">
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-WW7M2P5"

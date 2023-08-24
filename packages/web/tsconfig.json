@@ -22,7 +22,10 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": [
-        "src/common/components/*"
+        "src/common/components/*",
+      ],
+      "@/offers/components/*": [
+        "src/offers/components/*"
       ],
       "@/pages/*": [
         "src/pages/*"
@@ -41,6 +44,10 @@
       ],
       "@/global-vars": [
         "global-vars"
+      ],
+      // TODO: Remove once data is pulled in via GQL and data folder is no longer needed.
+      "@/data/*": [
+        "data/*"
       ]
     }
   },

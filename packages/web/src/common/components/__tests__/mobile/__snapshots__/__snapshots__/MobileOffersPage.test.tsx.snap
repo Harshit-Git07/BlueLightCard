@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MobileOffersPage matches snapshot 1`] = `
+<div
+  className="flex flex-col p-4 space-y-2"
+>
+  <h3
+    className="text-xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] undefined "
+  >
+    Popular Offers
+  </h3>
+</div>
+`;
+
+exports[`MobileOffersPage with multiple offers matches snapshot 1`] = `
+<div
+  className="flex flex-col p-4 space-y-2"
+>
+  <h3
+    className="text-xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] undefined "
+  >
+    Popular Offers
+  </h3>
+  <div
+    className=""
+  >
+    <a
+      href="/"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onTouchStart={[Function]}
+    />
+  </div>
+  <div
+    className=""
+  >
+    <a
+      href="/"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onTouchStart={[Function]}
+    />
+  </div>
+  <div
+    className=""
+  >
+    <a
+      href="/"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onTouchStart={[Function]}
+    />
+  </div>
+</div>
+`;

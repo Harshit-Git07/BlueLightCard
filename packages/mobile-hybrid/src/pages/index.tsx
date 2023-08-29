@@ -19,6 +19,7 @@ import {
 import PromoBanner from '@/modules/promobanner';
 import Heading from '@/components/Heading/Heading';
 import InvokeNativeNavigation from '@/invoke/navigation';
+import Search from '@/components/Search/Search';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -32,7 +33,6 @@ const Home: NextPage<any> = () => {
     document.getElementById('app-body')?.classList.remove('noscroll');
     setSeeAllNews(false);
   };
-
   useEffect(() => {
     if (bodyHeight.current) {
       trackScrollDepth(bodyHeight.current, (depth) => {
@@ -51,6 +51,13 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
+        {/* <Search
+          onSearch={(searchTerm) =>
+            navigation.navigate(
+              `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
+            )
+          }
+        /> */}
         <PromoBanner />
         <Offers />
         <Heading title="Explore" size="small" />

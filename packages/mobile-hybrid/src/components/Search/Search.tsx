@@ -22,8 +22,8 @@ const Search: FC<SearchProps> = ({ onSearch, labelText }) => {
           id="searchInput"
           ref={initialValue}
           placeholder="Search stores or brands"
-          type="text"
-          className="px-12 py-3 font-museo rounded-full w-full overflow-x-hidden bg-neutral-grey-100 border-neutral-grey-200 border dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
+          type="search"
+          className="px-12 py-3 font-museo rounded-full w-full overflow-x-hidden bg-neutral-grey-100 border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
         />
       </div>
     </form>

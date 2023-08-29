@@ -50,5 +50,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ needs.dev-env-mapping.outputs.devEnv }}
+          branch: 'main'
           directory: packages/mobile-hybrid/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

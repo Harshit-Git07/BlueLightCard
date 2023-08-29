@@ -1,7 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Carousel from './Carousel';
-import { faChevronLeft, faChevronRight } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const componentMeta: Meta<typeof Carousel> = {
   title: 'Component System/Carousel',

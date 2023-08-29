@@ -3,22 +3,18 @@ import { CarouselProps } from '@/components/Carousel/types';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 describe('Carousel component', () => {
-  let props: CarouselProps;
-
-  beforeEach(() => {
-    props = { children: [] };
-  });
+  beforeEach(() => {});
 
   describe('Carousel component', () => {
     it('renders without crashing', () => {
-      const carouselProps = {
+      const CarouselProps = {
         elementsPerPage: 2,
         hidePillButtons: false,
         clickToScroll: true,
       };
 
       render(
-        <Carousel {...carouselProps}>
+        <Carousel {...CarouselProps}>
           <div></div>
         </Carousel>
       );
@@ -27,12 +23,12 @@ describe('Carousel component', () => {
 
   describe('carousel control functions', () => {
     it('should show control buttons', () => {
-      const carouselProps = {
+      const CarouselProps = {
         showControls: true,
       };
 
       render(
-        <Carousel {...carouselProps}>
+        <Carousel {...CarouselProps}>
           <div></div>
         </Carousel>
       );
@@ -41,12 +37,12 @@ describe('Carousel component', () => {
     });
 
     it('should have a click event', () => {
-      const carouselProps = {
+      const CarouselProps = {
         showControls: true,
       };
 
       render(
-        <Carousel {...carouselProps}>
+        <Carousel {...CarouselProps}>
           <div></div>
         </Carousel>
       );
@@ -66,12 +62,12 @@ describe('Carousel component', () => {
 
   describe('hidePillButtons prop', () => {
     it('should hide pill buttons when hidePillButtons is true', () => {
-      const carouselProps = {
+      const CarouselProps = {
         hidePillButtons: true,
       };
 
       render(
-        <Carousel {...carouselProps}>
+        <Carousel {...CarouselProps}>
           <div></div>
         </Carousel>
       );
@@ -81,12 +77,12 @@ describe('Carousel component', () => {
     });
 
     it('should show pill buttons when hidePillButtons is false', () => {
-      const carouselProps = {
+      const CarouselProps = {
         hidePillButtons: false,
       };
 
       render(
-        <Carousel {...carouselProps}>
+        <Carousel {...CarouselProps}>
           <div></div>
         </Carousel>
       );
@@ -98,11 +94,11 @@ describe('Carousel component', () => {
 
   describe('correct number of elements displayed on screen size', () => {
     Object.defineProperty(window, 'innerWidth', { value: 1200 });
-    const carouselProps = {
+    const CarouselProps = {
       elementsPerPageTablet: 3,
     };
     render(
-      <Carousel {...carouselProps}>
+      <Carousel {...CarouselProps}>
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>

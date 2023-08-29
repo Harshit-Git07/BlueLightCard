@@ -77,7 +77,7 @@ const InfoCard: FC<InfoCardProps> = ({
       <div className={cardContentClasses}>
         {title && <h4 className="text-lg font-semibold">{title}</h4>}
         {text ? (
-          <p className="text-font-neutral-base mobile:hidden tablet:block capitalize">{text}</p>
+          <p className="text-font-neutral-base mobile:hidden tablet:block">{text}</p>
         ) : (
           <div className="my-6"></div>
         )}

@@ -47,6 +47,7 @@ export interface IOrganisation {
   id: number;
   name: string;
   idRequirements: Array<IdRequirements>;
+  isTrusted: string;
 }
 
 export type IdRequirements = {
@@ -64,6 +65,7 @@ export interface IOrganisationList {
 export type Employer = {
   id: number;
   name: string;
+  idRequirements?: IdRequirements[];
 };
 
 export type KeyValue = {

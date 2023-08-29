@@ -1,7 +1,7 @@
 import { faArrowLeft, faTimes } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EligibilityCardProps, Employer, IOrganisation, KeyValue } from './Types';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import InfoCard from '@/components/InfoCard/InfoCard';
 import InputSelectField from '../InputSelectField/InputSelectField';
@@ -18,6 +18,7 @@ import UnsuccessfulGenericImage from '@assets/Unsuccessful-generic.svg';
 const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   const router = useRouter();
 
+  const [emp_criteria_flag, setEmpCriteriaFlag] = useState(false);
   //used to store messages for each step subtitle
   const step_msg = ['Your employment information', 'Choose a verification method'];
   const radioInputValues = [
@@ -33,11 +34,45 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
     },
     {
       name: 'Volunteer',
-      value: 'volunteer',
+      value: 'volunteers',
       selectedByDefault: false,
     },
   ];
+  const employer_exceptions: string[] = [
+    '25daf809-90b9-4d09-99af-1bc6f8c9faf9', // armed forces veteran
+    'b9a66aa1-480b-4d8c-b1f0-ea8ac07392bf', // NHS dentists
+    'b3e57517-a968-4e9d-9766-8cce7daa041f', // blood bikes
+    'b5500269-9e3c-4c07-8246-4e2542a5a07b', // HM coastguard
+    '8f7330b5-903e-4f59-9c0b-f44b8d5b6caf', // independent lifeboats
+    'f182e357-afa5-40fb-a3c0-c8efb9ddc399', // MOD civil servant
+    'c6d4c8bc-8dc8-4a92-93c6-6b3b9bf410cd', // MOD fire service
+    'ea94f987-99cf-4ac6-b5d0-467796d22005', // MOD police
+    '9c5be76e-63d5-42d5-a126-35f98a9d885b', // Red Cross
+    'c615c527-ab7d-41ed-aec6-b2b74974b9ca', // RNLI
+    'a538cb0c-93fa-458a-8cbd-0c95cd906316', // St. Andrews
+    '1914ee68-9419-4fb0-b3cb-27dafdaf58b0', // St. Johns
+  ];
 
+  //unit test for this?
+  const genCriteria = (criteria: string[]) => {
+    //sort criteria string alphabetically
+    criteria.sort();
+    let criteriaString = 'This must show ';
+    criteria.forEach((criterion, index) => {
+      if (criteria.length > 2 && index != criteria.length - 1 && index != criteria.length - 2) {
+        criteriaString += criterion + ', ';
+      }
+      // else if (criterion === 'your full name' && criteria.length == 1) {
+      //   criteriaString += criterion;
+      // }
+      else if (criterion.includes('your full name') && criteria.length > 1) {
+        criteriaString += ' and ' + criterion;
+      } else {
+        criteriaString += criterion;
+      }
+    });
+    return criteriaString;
+  };
   const getOrganisations = async (employment: string) => {
     // Starts a timer, if it reaches 1 second, setLoading will be called
     let timeout = setTimeout(() => props.setLoading(true), 2000);
@@ -47,25 +82,30 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
     const keyValueOrgs: KeyValue[] = result?.data.map((org: IOrganisation) => ({
       key: org.id,
       value: org.name,
-      data: org.idRequirements,
+      data: {
+        idRequirements: org.idRequirements,
+        isTrusted: org.isTrusted.toLowerCase() === 'true' ? true : false,
+      },
     }));
 
     props.setOrgOptions(keyValueOrgs);
     props.setLoading(false);
   };
 
-  const getEmployers = async () => {
+  const getEmployers = async (organisation: string, employment: string) => {
     // Starts a timer, if it reaches 1.5 seconds, setLoading will be called
     let timeout = setTimeout(() => props.setLoading(true), 2000);
-    const result = await fetchEmployerData(props.organisation);
+    const result = await fetchEmployerData(organisation, employment);
     // When data is fetched, clear the timer before it reaches 1.5 seconds
     clearTimeout(timeout);
+
     props.setOrgDetails(result.data);
     if (result.data) {
       props.setEmployers(result.data);
       const keyValueEmps: KeyValue[] = result.data?.map((emp: Employer) => ({
         key: emp.id,
         value: emp.name,
+        data: { idRequirements: emp.idRequirements ? emp.idRequirements : undefined },
       }));
       props.setEmpOptions(keyValueEmps);
     } else {
@@ -88,7 +128,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
 
   useEffect(() => {
     if (props.organisation != '') {
-      getEmployers();
+      getEmployers(props.organisation, props.employment);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.organisation]);
@@ -112,7 +152,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   const nextStepValidation = (): boolean => {
     if (props.employment != '') {
       if (props.empOptions.length == 0) {
-        if (props.organisation == '') {
+        if (props.organisation == '' || props.jobRole == '') {
           return true;
         }
 
@@ -218,12 +258,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     Looking good! You need to verify your employment status during sign up.
                   </p>
                 )}
-                <p
-                  className={cssUtil([
-                    'text-lg font-semibold',
-                    props.currentStep != 1 ? 'pt-4' : '',
-                  ])}
-                >
+                <p className={cssUtil(['text-lg font-semibold'])}>
                   Step {props.currentStep}/{props.steps} - {step_msg[props.currentStep - 1]}
                 </p>
                 <hr className="border-1 border-[#009] opacity-100 mt-6" />{' '}
@@ -232,7 +267,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             {props.currentStep == 1 && (
               <form className="pt-4 space-y-4">
                 <div className="flex flex-col flex-wrap">
-                  <label className="font-normal pb-3 justify-start">
+                  <label className="font-normal text-lg pb-3 justify-start">
                     What is your employment status?
                   </label>
                   <div className="flex flex-row flex-wrap">
@@ -246,25 +281,41 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 </div>
                 {props.employment && (
                   <div className="flex flex-col">
-                    <label className="font-normal pb-3">What organisation do you work in?</label>
+                    {props.employment == 'retired' ? (
+                      <label className="font-normal text-lg pb-3">
+                        What organisation did you work in?
+                      </label>
+                    ) : (
+                      <label className="font-normal text-lg pb-3">
+                        What organisation do you work in?
+                      </label>
+                    )}
                     <InputSelectField
                       id="organisation_select"
                       defaultOption="Please select an organisation"
                       options={props.orgOptions.concat([
-                        { key: 'Other', value: 'Other', data: 'Other' },
+                        {
+                          key: 'Other',
+                          value: 'Other',
+                          data: { idRequirements: 'Other', isTrusted: 'False' },
+                        },
                       ])}
                       value={props.organisation}
                       onChange={(e) => {
                         updateChange(e.target.value);
                       }}
-                      handleSelectedOption={(e) => props.setAcceptedMethods(e.data)}
+                      handleSelectedOption={(e) => {
+                        props.setAcceptedMethods(e.data.idRequirements);
+                        setEmpCriteriaFlag(false);
+                      }}
                     />
                     {props.organisation == 'Other' && (
                       <div className="flex flex-col">
                         <p className="tablet:w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
                           {' '}
                           It looks like we haven&apos;t added your organisation yet, register your
-                          interest to join by telling us who you work for{' '}
+                          interest to join by telling us who you{' '}
+                          {props.employment == 'retired' ? 'worked' : 'work'} for{' '}
                         </p>
                         <div className="py-2 justify-start items-center gap-0.5 inline-flex">
                           <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
@@ -273,7 +324,11 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         </div>
                         <InputTextFieldWithRef
                           name="other_organisation_field"
-                          placeholder="Tell us the name of your organisation"
+                          placeholder={
+                            props.employment == 'retired'
+                              ? 'Tell us the name of your former organisation'
+                              : 'Tell us the name of your organisation'
+                          }
                           required
                           onChange={(e) => props.setOtherOrg(e.target.value)}
                         />
@@ -283,17 +338,34 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 )}
                 {props.organisation &&
                   props.organisation != 'Other' &&
-                  props.empOptions.length != 0 && (
+                  props.empOptions.length > 1 &&
+                  // if employer is not in exceptions list, show employer select
+                  !employer_exceptions.includes(props.organisation) && (
                     <div className="flex flex-col">
-                      <label className="font-normal pb-3">Who is your employer?</label>
+                      {props.employment == 'retired' ? (
+                        <label className="font-normal text-lg pb-3">Who was your employer?</label>
+                      ) : (
+                        <label className="font-normal text-lg pb-3">Who is your employer?</label>
+                      )}
                       <InputSelectField
                         id="employer_select"
-                        defaultOption="Where do you work"
+                        defaultOption={
+                          props.employment == 'retired'
+                            ? 'Where did you work?'
+                            : 'Where do you work?'
+                        }
                         options={props.empOptions.concat([
                           { key: 'Other', value: 'Other', data: 'Other' },
                         ])}
                         value={props.employer}
                         onChange={(e) => updateAcceptedDetails(e.target.value)}
+                        handleSelectedOption={(e) => {
+                          // if selected employer has idRequirements, overwrite Accepted Methods
+                          if (e.data.idRequirements) {
+                            props.setAcceptedMethods(e.data.idRequirements);
+                            setEmpCriteriaFlag(true);
+                          }
+                        }}
                       />
                     </div>
                   )}
@@ -302,7 +374,8 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     <p className="tablet:w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
                       {' '}
                       It looks like we haven&apos;t added your employer yet, register your interest
-                      to join by telling us who you work for{' '}
+                      to join by telling us who you{' '}
+                      {props.employment == 'retired' ? 'worked' : 'work'} for{' '}
                     </p>
                     <div className="py-2 justify-start items-center gap-0.5 inline-flex">
                       <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
@@ -311,20 +384,65 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     </div>
                     <InputTextFieldWithRef
                       name="other_employer_field"
-                      placeholder="Tell us the name of your employer"
+                      placeholder={
+                        props.employment == 'retired'
+                          ? 'Tell us the name of your former employer'
+                          : 'Tell us the name of your employer'
+                      }
                       required
                       onChange={(e) => props.setOtherEmp(e.target.value)}
                     />
                   </div>
                 )}
-                {props.employer && props.employer != 'Other' && (
+                {((props.employer && props.employer != 'Other') ||
+                  (props.organisation && props.empOptions.length <= 1) ||
+                  //if organisation is NHS dentist, show job role field even when employer field is hidden
+                  props.organisation == 'b9a66aa1-480b-4d8c-b1f0-ea8ac07392bf') && (
                   <div className="flex flex-col">
-                    <label className="font-normal pb-3">What is your job role?</label>
+                    {props.employment == 'retired' ? (
+                      <label className="font-normal  text-lg pb-3">What was your job role?</label>
+                    ) : (
+                      <label className="font-normal  text-lg pb-3">What is your job role?</label>
+                    )}
                     <InputTextFieldWithRef
                       name="job_role_field"
-                      placeholder="What do you work as?"
+                      placeholder={
+                        props.employment == 'retired'
+                          ? 'what did you work as?'
+                          : 'what do you work as?'
+                      }
                       required
-                      onChange={(e) => props.setJobRole(e.target.value)}
+                      onChange={(e) => {
+                        // if only one employer, set employer to that one
+                        if (
+                          props.empOptions.length == 1 &&
+                          props.organisation != 'b9a66aa1-480b-4d8c-b1f0-ea8ac07392bf'
+                        ) {
+                          props.setEmployer(props.empOptions[0].value);
+                          props.setAcceptedMethods(
+                            props.empOptions[0].data.idRequirements
+                              ? props.empOptions[0].data.idRequirements
+                              : props.orgOptions.find((org) => org.key == props.organisation)?.data
+                                  .idRequirements
+                          );
+                        }
+                        // if organisation is NHS dental practice, make sure employer set to Dentist.
+                        else if (props.organisation == 'b9a66aa1-480b-4d8c-b1f0-ea8ac07392bf') {
+                          let temp: string | undefined = props.empOptions.find(
+                            (emp) => emp.key == 'c5591f0d-0075-4257-9f8f-1ebfd9514c19'
+                          )?.value;
+                          props.setEmployer(temp ? temp : '');
+                          props.setAcceptedMethods(
+                            props.empOptions[0].data.idRequirements
+                              ? props.empOptions.find(
+                                  (emp) => emp.key == 'c5591f0d-0075-4257-9f8f-1ebfd9514c19'
+                                )?.data.idRequirements
+                              : props.orgOptions.find((org) => org.key == props.organisation)?.data
+                                  .idRequirements
+                          );
+                        }
+                        props.setJobRole(e.target.value);
+                      }}
                     />
                   </div>
                 )}
@@ -333,46 +451,77 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
 
             {props.currentStep == 2 && (
               <div className="space-y-4 pt-3">
-                <InfoCard
-                  ariaLabel="work email info card"
-                  id="work_email"
-                  key={1}
-                  title="Work Email (Recommended for instant verification)"
-                  text="You will be asked to login to this account during sign up"
-                  selected={props.acceptedId == 'Email'}
-                  textAlign="text-left"
-                  onClick={() =>
-                    props.acceptedId == 'Email'
-                      ? props.setAcceptedId('')
-                      : props.setAcceptedId('Email')
-                  }
-                  className="w-full"
-                  forceFixedHeight
-                />
-                {props.acceptedMethods.map((method, index) => (
-                  <InfoCard
-                    ariaLabel={method.title + ' info card'}
-                    id={method.id}
-                    key={method.id + index}
-                    title={method.title}
-                    text={method.description}
-                    selected={props.acceptedId == method.id}
-                    textAlign="text-left"
-                    onClick={() => {
-                      props.acceptedId == method.id
-                        ? props.setAcceptedId('')
-                        : props.setAcceptedId(method.id);
-                    }}
-                    className="w-full"
-                    forceFixedHeight
-                  />
-                ))}
+                {
+                  // get the currently selected organisation and check if it is trusted
+                  props.orgOptions.find((selected) => selected.key == props.organisation)?.data
+                    .isTrusted &&
+                    props.employment !== 'retired' && (
+                      <InfoCard
+                        ariaLabel="work email info card"
+                        id="work_email"
+                        key={1}
+                        title="Work Email (Recommended for instant verification)"
+                        text="You must be able to access this during sign up to verify your account"
+                        selected={props.acceptedId == 'Email'}
+                        textAlign="text-left"
+                        onClick={() =>
+                          props.acceptedId == 'Email'
+                            ? props.setAcceptedId('')
+                            : props.setAcceptedId('Email')
+                        }
+                        className="w-full"
+                        forceFixedHeight
+                      />
+                    )
+                }
+                {props.acceptedMethods.map((method, index) =>
+                  props.employment === 'volunteers' &&
+                  (method.title.includes('Payslip') || method.title.includes('Pay slip')) ? null : (
+                    <InfoCard
+                      ariaLabel={method.title + ' info card'}
+                      id={method.id}
+                      key={method.id + index}
+                      title={method.title}
+                      text={
+                        //implement employment options version of this
+                        genCriteria(
+                          emp_criteria_flag
+                            ? props.empOptions
+                                .find((selected) => selected.key == props.employer)
+                                ?.data.idRequirements.find(
+                                  (selected: { id: string }) =>
+                                    selected.id == (index + 1).toString()
+                                ).criteria
+                            : props.orgOptions
+                                .find((selected) => selected.key == props.organisation)
+                                ?.data.idRequirements.find(
+                                  (selected: { id: string }) =>
+                                    selected.id == (index + 1).toString()
+                                ).criteria
+                        )
+                      }
+                      selected={props.acceptedId == method.id}
+                      textAlign="text-left"
+                      onClick={() => {
+                        props.acceptedId == method.id
+                          ? props.setAcceptedId('')
+                          : props.setAcceptedId(method.id);
+                      }}
+                      className="w-full"
+                      forceFixedHeight
+                    />
+                  )
+                )}
                 <InfoCard
                   ariaLabel="no_id info card"
                   id="no_id"
                   key={0}
                   title="I don't have any of the above"
-                  text={' '}
+                  text={
+                    props.organisation == '25daf809-90b9-4d09-99af-1bc6f8c9faf9'
+                      ? 'To obtain the above documents, please contact Veterans UK'
+                      : ' '
+                  }
                   textAlign="text-left"
                   selected={props.acceptedId == 'None'}
                   onClick={() =>

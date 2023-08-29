@@ -5,7 +5,6 @@ import { EligibilityCardProps } from '../../EligibilityCard/Types';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/router';
-
 const getById = queryByAttribute.bind(null, 'id');
 
 jest.mock('next/router', () => ({
@@ -15,6 +14,61 @@ jest.mock('next/router', () => ({
       pathname: '',
       query: '',
       push: jest.fn(),
+    };
+  },
+}));
+jest.mock('src/services/EligibilityApi.ts', () => ({
+  fetchOrganisationData(employment: string) {
+    return {
+      message: 'Success',
+      data: [
+        {
+          id: 'eadc26a7-e2cf-4f5a-92ba-a298f15d396c',
+          tk: '2',
+          code: 'NHS',
+          name: 'NHS',
+          retired: 'TRUE',
+          volunteers: 'TRUE',
+          employed: 'TRUE',
+          idRequirements: [
+            {
+              id: '1',
+              title: 'Work ID card',
+              criteria: ['your full name', 'NHS'],
+              allowedFormats: 'png/jpeg/jpg/pdf',
+            },
+            {
+              id: '2',
+              title: 'Payslip dated within the last 3 months',
+              criteria: ['your full name', 'NHS'],
+              allowedFormats: 'png/jpeg/jpg/pdf',
+            },
+            {
+              id: '3',
+              title: 'NHS Smart Card',
+              criteria: ['your full name'],
+              allowedFormats: 'png/jpeg/jpg/pdf',
+            },
+          ],
+          maxUploads: '1',
+          isTrusted: 'TRUE',
+        },
+      ],
+    };
+  },
+  fetchEmployerData(employment: string) {
+    return {
+      message: 'Success',
+      data: [
+        {
+          id: '002e4b60-038a-4623-83e0-d23f120e82ba',
+          tk: '708',
+          name: 'Aneurin Bevan Health Board',
+          retired: 'FALSE',
+          volunteers: 'TRUE',
+          employed: 'TRUE',
+        },
+      ],
     };
   },
 }));
@@ -36,7 +90,7 @@ describe('EligibilityCard component', () => {
       setEmployment: jest.fn(),
       loading: false,
       setLoading: jest.fn(),
-      organisation: 'NHS',
+      organisation: 'eadc26a7-e2cf-4f5a-92ba-a298f15d396c',
       setOrganisation: jest.fn(),
       employer: 'Health Education England',
       setEmployer: jest.fn(),

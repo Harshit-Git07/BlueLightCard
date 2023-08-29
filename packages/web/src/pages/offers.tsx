@@ -7,6 +7,7 @@ import Carousel from '@/components/Carousel/Carousel';
 import Link from 'next/link';
 import { FooterProps } from '@/components/Footer/types';
 import Footer from '@/components/Footer/Footer';
+import Header from '@/components/Header/Header';
 
 export const getStaticProps = getOffersStaticProps;
 
@@ -17,6 +18,7 @@ type OffersPageProps = {
   heroTitle?: string;
   adverts?: { imageUrl: string; imageAlt: string; linkUrl: string }[];
   footer: FooterProps;
+  header: any;
 };
 
 type OfferCardProp = {
@@ -28,9 +30,10 @@ type OfferCardProp = {
 };
 
 const OffersPage: NextPage<OffersPageProps> = (props) => {
-  const { offers, offersHeading, featuredOffers, adverts, heroTitle, footer } = props;
+  const { offers, offersHeading, featuredOffers, adverts, heroTitle, footer, header } = props;
   return (
     <>
+      <Header logoUrl={header.logoSource} navItems={header.navItems} loggedIn={true} />
       {heroTitle && (
         <div className="w-full flex justify-center bg-surface-secondary-light dark:bg-surface-secondary-dark p-10 mb-6">
           <Heading headingLevel="h1">{heroTitle}</Heading>

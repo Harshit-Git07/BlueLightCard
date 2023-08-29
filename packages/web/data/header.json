@@ -53,19 +53,19 @@
         "dropdown": [
           {
             "text": "Online Discounts",
-            "link": "/online"
+            "link": "/offers?type=0"
           },
           {
             "text": "Giftcard Discounts",
-            "link": "/giftcard"
+            "link": "/offers?type=2"
           },
           {
             "text": "High Street Offers",
-            "link": "/highstreet"
+            "link": "/offers?type=5"
           },
           {
             "text": "Popular Discounts",
-            "link": "/popular"
+            "link": "/offers?type=3"
           },
           {
             "text": "Offers Near You",

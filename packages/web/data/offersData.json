@@ -15,29 +15,104 @@
             "iconName": "world"
           },
           "companyName": "Apple",
-          "offerDescription": "New Product! Save 2% on selected Apple watches"
+          "offerDescription": "New Product! Save 2% on selected Apple watches",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/785.jpg"
         },
         {
-          "imageUrl": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8114.jpg",
-          "imageAlt": "Starbucks Logo",
-          "linkUrl": "/offerdetails.php?cid=8114&oid=7893",
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
           "offerType": {
-            "name": "High Street Offers",
+            "name": "Online Offers",
             "iconName": "tag"
           },
-          "companyName": "Starbucks",
-          "offerDescription": "Receive 10% off the bill"
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/5315.jpg"
         },
         {
-          "imageUrl": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8114.jpg",
-          "imageAlt": "Boots Shampoos",
-          "linkUrl": "/offerdetails.php?cid=810&oid=31504",
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
           "offerType": {
-            "name": "Giftcard offer",
+            "name": "Online offer",
             "iconName": "present"
           },
-          "companyName": "Boots",
-          "offerDescription": "Save on gift cards"
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/423.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
+          "imageAlt": "Exclusive Savings From Apple",
+          "linkUrl": "/offerdetails.php?cid=785&oid=3096",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "world"
+          },
+          "companyName": "Apple",
+          "offerDescription": "New Product! Save 2% on selected Apple watches",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/785.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
+          "offerType": {
+            "name": "Online Offers",
+            "iconName": "tag"
+          },
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/5315.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "present"
+          },
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/423.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
+          "imageAlt": "Exclusive Savings From Apple",
+          "linkUrl": "/offerdetails.php?cid=785&oid=3096",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "world"
+          },
+          "companyName": "Apple",
+          "offerDescription": "New Product! Save 2% on selected Apple watches",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/785.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
+          "offerType": {
+            "name": "Online Offers",
+            "iconName": "tag"
+          },
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/5315.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "present"
+          },
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/423.jpg"
         }
       ],
       "adverts": [
@@ -105,26 +180,92 @@
           "offerDescription": "New Product! Save 2% on selected Apple watches"
         },
         {
-          "imageUrl": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8114.jpg",
-          "imageAlt": "Starbucks Logo",
-          "linkUrl": "/offerdetails.php?cid=8114&oid=7893",
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
           "offerType": {
-            "name": "High Street Offers",
+            "name": "Online Offers",
             "iconName": "tag"
           },
-          "companyName": "Starbucks",
-          "offerDescription": "Receive 10% off the bill"
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com"
         },
         {
-          "imageUrl": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8114.jpg",
-          "imageAlt": "Boots Shampoos",
-          "linkUrl": "/offerdetails.php?cid=810&oid=31504",
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
           "offerType": {
-            "name": "Giftcard offer",
+            "name": "Online offer",
             "iconName": "present"
           },
-          "companyName": "Boots",
-          "offerDescription": "Save on gift cards"
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
+          "imageAlt": "Exclusive Savings From Apple",
+          "linkUrl": "/offerdetails.php?cid=785&oid=3096",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "world"
+          },
+          "companyName": "Apple",
+          "offerDescription": "New Product! Save 2% on selected Apple watches"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
+          "offerType": {
+            "name": "Online Offers",
+            "iconName": "tag"
+          },
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "present"
+          },
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
+          "imageAlt": "Exclusive Savings From Apple",
+          "linkUrl": "/offerdetails.php?cid=785&oid=3096",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "world"
+          },
+          "companyName": "Apple",
+          "offerDescription": "New Product! Save 2% on selected Apple watches"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
+          "offerType": {
+            "name": "Online Offers",
+            "iconName": "tag"
+          },
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "present"
+          },
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price"
         }
       ],
       "adverts": [
@@ -155,29 +296,98 @@
             "iconName": "world"
           },
           "companyName": "Apple",
+          "offerDescription": "New Product! Save 2% on selected Apple watches",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/785.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
+          "offerType": {
+            "name": "Online Offers",
+            "iconName": "tag"
+          },
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/5315.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "present"
+          },
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/423.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
+          "imageAlt": "Exclusive Savings From Apple",
+          "linkUrl": "/offerdetails.php?cid=785&oid=3096",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "world"
+          },
+          "companyName": "Apple",
           "offerDescription": "New Product! Save 2% on selected Apple watches"
         },
         {
-          "imageUrl": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8114.jpg",
-          "imageAlt": "Starbucks Logo",
-          "linkUrl": "/offerdetails.php?cid=8114&oid=7893",
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
           "offerType": {
-            "name": "High Street Offers",
+            "name": "Online Offers",
             "iconName": "tag"
           },
-          "companyName": "Starbucks",
-          "offerDescription": "Receive 10% off the bill"
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com"
         },
         {
-          "imageUrl": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8114.jpg",
-          "imageAlt": "Boots Shampoos",
-          "linkUrl": "/offerdetails.php?cid=810&oid=31504",
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
           "offerType": {
-            "name": "Giftcard offer",
+            "name": "Online offer",
             "iconName": "present"
           },
-          "companyName": "Boots",
-          "offerDescription": "Save on gift cards"
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
+          "imageAlt": "Exclusive Savings From Apple",
+          "linkUrl": "/offerdetails.php?cid=785&oid=3096",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "world"
+          },
+          "companyName": "Apple",
+          "offerDescription": "New Product! Save 2% on selected Apple watches"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
+          "offerType": {
+            "name": "Online Offers",
+            "iconName": "tag"
+          },
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "present"
+          },
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price"
         }
       ],
       "adverts": []
@@ -188,6 +398,40 @@
       "offersHeading": "High Street Offers",
       "featuredOffers": [],
       "offers": [
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
+          "imageAlt": "Exclusive Savings From Apple",
+          "linkUrl": "/offerdetails.php?cid=785&oid=3096",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "world"
+          },
+          "companyName": "Apple",
+          "offerDescription": "New Product! Save 2% on selected Apple watches"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1685605371609.jpg",
+          "imageAlt": "Paris",
+          "linkUrl": "/offerdetails.php?cid=5315&oid=5307",
+          "offerType": {
+            "name": "Online Offers",
+            "iconName": "tag"
+          },
+          "companyName": "Hotels.com",
+          "offerDescription": "Save 10% at hotels.com",
+          "companyLogo": "https://cdn.bluelightcard.co.uk/companyimages/compsmall/retina/785.jpg"
+        },
+        {
+          "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1687854879382.jpg",
+          "imageAlt": "People",
+          "linkUrl": "/offerdetails.php?cid=423&oid=10700",
+          "offerType": {
+            "name": "Online offer",
+            "iconName": "present"
+          },
+          "companyName": "JD Sports",
+          "offerDescription": "Save 10% off full price"
+        },
         {
           "imageUrl": "https://cdn.bluelightcard.co.uk/offerimages/1684397791467.jpg",
           "imageAlt": "Exclusive Savings From Apple",

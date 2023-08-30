@@ -1,55 +1,84 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MobileOffersPage matches snapshot 1`] = `
+exports[`MobileOffersPage renders correctly 1`] = `
 <div
-  className="flex flex-col p-4 space-y-2"
+  class="flex flex-col p-4"
 >
   <h3
-    className="text-xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] undefined "
-  >
-    Popular Offers
-  </h3>
-</div>
-`;
-
-exports[`MobileOffersPage with multiple offers matches snapshot 1`] = `
-<div
-  className="flex flex-col p-4 space-y-2"
->
-  <h3
-    className="text-xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] undefined "
+    class="text-xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] undefined "
   >
     Popular Offers
   </h3>
   <div
-    className=""
+    class="border-t-1 last:border-b-1 py-2"
   >
     <a
-      href="/"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onTouchStart={[Function]}
-    />
-  </div>
-  <div
-    className=""
-  >
-    <a
-      href="/"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onTouchStart={[Function]}
-    />
-  </div>
-  <div
-    className=""
-  >
-    <a
-      href="/"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onTouchStart={[Function]}
-    />
+      href="offer-link"
+    >
+      <div
+        class="mobile:pl-3 mobile:py-3  flex border-gray-400-30 focus:dark:bg-surface-secondary-dark dark:border-white dark:bg-palette-secondary-on-dark"
+        data-testid="horizontalCard"
+        tabindex="0"
+      >
+        <div
+          class="w-2/5 flex justify-center items-center"
+        >
+          <div
+            class="mb-auto rounded-4 w-full"
+          >
+            <img
+              alt="Company A"
+              class="rounded-4 w-full h-full object-contain max-h-full"
+              data-nimg="1"
+              decoding="async"
+              height="100"
+              loading="lazy"
+              src="_next/static/logo-url?width=384&quality=50"
+              srcset="_next/static/logo-url?width=256&quality=50 1x, _next/static/logo-url?width=384&quality=50 2x"
+              style="color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+              width="150"
+            />
+          </div>
+        </div>
+        <div
+          class="mx-3 flex w-full justify-between"
+        >
+          <div
+            class="flex-col mb-auto"
+          >
+            <h2
+              class="uppercase text-gray-400"
+            >
+              Company A
+            </h2>
+            <p
+              class="text-gray-800 dark:text-white leading-5"
+            >
+              Special offer
+            </p>
+          </div>
+          <div
+            class="px-5 my-auto text-gray-400"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-chevron-right "
+              data-icon="chevron-right"
+              data-prefix="far"
+              focusable="false"
+              role="img"
+              viewBox="0 0 320 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M305 239c9.4 9.4 9.4 24.6 0 33.9L113 465c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l175-175L79 81c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L305 239z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </a>
   </div>
 </div>
 `;

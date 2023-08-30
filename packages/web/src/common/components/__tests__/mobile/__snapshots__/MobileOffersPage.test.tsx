@@ -1,22 +1,21 @@
 import React from 'react';
-import renderer from 'react-test-renderer'; // Import the renderer
-import MobileOffersPage from '../../../../../pages/mobile/search-offers'; // Import the component
+import { render } from '@testing-library/react';
+import MobileOffersPage from '../../../../../pages/mobile/search-offers';
 
-test('MobileOffersPage matches snapshot', () => {
-  const mockOffers: any[] = [];
-  const component = renderer.create(<MobileOffersPage offers={mockOffers} />);
-  const tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
-});
+describe('MobileOffersPage', () => {
+  it('renders correctly', () => {
+    const offers = [
+      {
+        companyLogo: 'logo-url',
+        companyName: 'Company A',
+        linkUrl: 'offer-link',
+        offerDescription: 'Special offer',
+      },
+      // Add more offer objects as needed
+    ];
 
-const mockOffersMultiple = [
-  { companyName: 'Company A' },
-  { companyName: 'Company B' },
-  { companyName: 'Company C' },
-];
+    const { container } = render(<MobileOffersPage offers={offers} />);
 
-test('MobileOffersPage with multiple offers matches snapshot', () => {
-  const component = renderer.create(<MobileOffersPage offers={mockOffersMultiple} />);
-  const tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot();
+  });
 });

@@ -22,7 +22,7 @@ const HorizontalCard: FC<HortizontalCardProps> = ({ img, title, description, lin
     <Link href={link}>
       <div
         tabIndex={0}
-        className="mobile:pl-3 mobile:py-3  flex border-b-1 border-gray-400-30 focus:dark:bg-surface-secondary-dark dark:border-white dark:bg-palette-secondary-on-dark"
+        className="mobile:pl-3 mobile:py-3  flex border-gray-400-30 focus:dark:bg-surface-secondary-dark dark:border-white dark:bg-palette-secondary-on-dark"
         data-testid="horizontalCard"
       >
         <div className="w-2/5 flex justify-center items-center">
@@ -44,7 +44,7 @@ const HorizontalCard: FC<HortizontalCardProps> = ({ img, title, description, lin
             {/* Description is optional */}
             <p className="text-gray-800 dark:text-white leading-5">{description}</p>
           </div>
-          <div className="p-5 text-gray-400">{chevronRight}</div>
+          <div className="px-5 my-auto text-gray-400">{chevronRight}</div>
         </div>
       </div>
     </Link>

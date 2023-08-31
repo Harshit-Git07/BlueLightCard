@@ -188,6 +188,8 @@ jobs:
       - test
       - lint
       - changelog
+    env:
+      NEXT_PUBLIC_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation/
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -224,6 +226,8 @@ jobs:
       - test
       - changelog
       - staging
+    env:
+      NEXT_PUBLIC_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/organisation
     steps:
       - uses: actions/checkout@v3
       - name: Cache node modules

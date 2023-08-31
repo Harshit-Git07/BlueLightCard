@@ -189,7 +189,7 @@ jobs:
       - lint
       - changelog
     env:
-      NEXT_PUBLIC_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation/
+      NEXT_PUBLIC_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

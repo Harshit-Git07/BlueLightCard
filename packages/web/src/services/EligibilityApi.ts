@@ -1,8 +1,7 @@
 import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 
-const API_URL =
-  'https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const fetcher = async (key: string) => {
   const [url, body] = key.split(', ');

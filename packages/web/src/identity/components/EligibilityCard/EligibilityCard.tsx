@@ -53,7 +53,17 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
     '1914ee68-9419-4fb0-b3cb-27dafdaf58b0', // St. Johns
   ];
 
-  //unit test for this?
+  const AcceptedMethodSelection = (e: any, emp_crit: boolean) => {
+    //if selected option had exists
+    if (e) {
+      //and it has idRequirements array
+      if (e.data.idRequirements) {
+        //set Accepted Methods to the idRequirements array and set flag
+        props.setAcceptedMethods(e.data.idRequirements);
+        setEmpCriteriaFlag(emp_crit);
+      }
+    }
+  };
   const genCriteria = (criteria: string[]) => {
     //sort criteria string alphabetically
     criteria.sort();
@@ -61,11 +71,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
     criteria.forEach((criterion, index) => {
       if (criteria.length > 2 && index != criteria.length - 1 && index != criteria.length - 2) {
         criteriaString += criterion + ', ';
-      }
-      // else if (criterion === 'your full name' && criteria.length == 1) {
-      //   criteriaString += criterion;
-      // }
-      else if (criterion.includes('your full name') && criteria.length > 1) {
+      } else if (criterion.includes('your full name') && criteria.length > 1) {
         criteriaString += ' and ' + criterion;
       } else {
         criteriaString += criterion;
@@ -305,8 +311,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         updateChange(e.target.value);
                       }}
                       handleSelectedOption={(e) => {
-                        props.setAcceptedMethods(e.data.idRequirements);
-                        setEmpCriteriaFlag(false);
+                        AcceptedMethodSelection(e, false);
                       }}
                     />
                     {props.organisation == 'Other' && (
@@ -361,10 +366,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         onChange={(e) => updateAcceptedDetails(e.target.value)}
                         handleSelectedOption={(e) => {
                           // if selected employer has idRequirements, overwrite Accepted Methods
-                          if (e.data.idRequirements) {
-                            props.setAcceptedMethods(e.data.idRequirements);
-                            setEmpCriteriaFlag(true);
-                          }
+                          AcceptedMethodSelection(e, true);
                         }}
                       />
                     </div>

@@ -32,9 +32,8 @@ When('I choose an {string}', async function (employer) {
 });
 
 When('I enter {string}', async function (jobRole) {
-  await page.getByPlaceholder('What do you work as?').click();
-  await page.getByPlaceholder('What do you work as?').fill(jobRole);
-  await page.locator('#next_button').click();
+  await page.locator('id=job_role_field').click();
+  await page.locator('id=job_role_field').fill(jobRole);
 });
 
 When('I choose {string} as organisation', async function (Other) {
@@ -48,14 +47,14 @@ When('I should see a message', async function () {
 });
 
 When('I can write the name of my organisation', async function () {
-  await page.getByPlaceholder('Tell us the name of your organisation').click();
-  await page.getByPlaceholder('Tell us the name of your organisation').fill('test company');
+  await page.locator('id=other_organisation_field').click();
+  await page.locator('id=other_organisation_field').fill('test company');
   await page.getByRole('button', { name: 'Submit' }).click();
 });
 
 When('I can write the name of my employer', async function () {
-  await page.getByPlaceholder('Tell us the name of your employer').click();
-  await page.getByPlaceholder('Tell us the name of your employer').fill('test');
+  await page.locator('id=other_employer_field').click();
+  await page.locator('id=other_employer_field').fill('test');
   await page.getByRole('button', { name: 'Submit' }).click();
 });
 
@@ -64,27 +63,27 @@ When('I choose {string} as employer', async function (Other) {
 });
 
 When('I click next button', async function () {
-  await page.locator('id=next_button').click();
+  expect(page.getByRole('button', { name: 'Next' }).isEnabled()).toBeTruthy();
+  await page.getByRole('button', { name: 'Next' }).click();
 });
 
 //Then
-Then('I should be able to select a verification options', async function () {
-  await page.locator('id=work_email').textContent();
-
-  if (page.locator('id=1')) {
-    page.locator('id=1').textContent();
-  } else if (page.locator('id=2')) {
-    page.locator('id=2').textContent();
-  } else if (page.locator('id=3')) {
-    page.locator('id=3').textContent();
+Then('I should be able to select a verification option', async function () {
+  if (await page.locator('id=1').isVisible()) {
+    page.locator('id=1').click();
   }
-  await page.locator('id=no_id').textContent();
-  await page.locator('id=work_email').click();
+
+  if (await page.locator('id=work_email').isVisible()) {
+    page.locator('id=work_email').click();
+  }
 });
 
-Then('I should see an option to sign up', async function () {
-  await page.locator('#submit_button').click();
-  await page.locator('#signup_button').textContent();
+Then('I click submit button', async function () {
+  await page.getByRole('button', { name: 'Submit' }).click();
+});
+
+Then('I see the sign-up button', async function () {
+  await page.getByRole('button', { name: 'Sign up now' }).isVisible();
 });
 
 Then('I can close the Checker', async function () {
@@ -111,6 +110,13 @@ Then('I go back to previous page', async function () {
 
 Then("I see a message that I'm not eligible", async function () {
   await page.getByText('Sorry, you are not currently eligible').isVisible();
+});
+
+When('given {string} should be visible', async function (verifications) {
+  const verification_methods = verifications.split(',');
+  for (var verification_method of verification_methods) {
+    await expect(page.getByText(verification_method)).toBeVisible({ timeout: 10000 });
+  }
 });
 
 Then('I click finish', async function () {

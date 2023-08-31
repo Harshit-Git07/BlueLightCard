@@ -1,0 +1,261 @@
+AC1: Given I have selected Organisation of “Ambulance” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Ambulance and your full name”
+
+o    “Work ID Card. This must show Ambulance and your full name”
+
+o    “Work Email (recommended for instant verification). You will be asked to login to this account during sign up”
+
+o    I don’t have any of the above
+
+AC2: Given I have selected Organisation of “Blood bikes” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Work ID Card. This must show Blood bikes and your full name”
+
+o    I don’t have any of the above
+
+AC3: Given I have selected Organisation of “Fire Service” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Fire Service and your full name
+
+o    “Work ID Card. This must show Fire Service and your full name”
+
+o    “Work Email (recommended for instant verification). You will be asked to login to this account during sign up
+
+o    I don’t have any of the above
+
+AC4: Given I have selected Organisation of “Highways Traffic Officers” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Work ID Card. This must show you are a traffic officer and your full name
+
+o    I don’t have any of the above
+
+AC5: Given I have selected Organisation of “HM Armed Forces” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show HM Armed Forces and your full name
+
+o    I don’t have any of the above
+
+AC6: Given I have selected Organisation of “HM Coastguard” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show HM Coastguard and your full name
+
+o    I don’t have any of the above
+
+ AC7: Given I have selected Organisation of “HM Prison and Probation” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show HM Prison and Probation and your full name
+
+o    “Work ID Card. This must show HM Prison and Probation and your full name
+
+o    I don’t have any of the above
+
+AC8: Given I have selected Organisation of “Home Office” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Organisation of “Home Office and your full name
+
+o    “Work ID Card. This must show Organisation of “Home Office and your full name
+
+o    I don’t have any of the above
+
+AC9: Given I have selected Organisation of “Independent Lifeboat” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Work ID Card. This must show a Lifeboat organisation and your full name
+
+o    I don’t have any of the above
+
+AC10: Given I have selected Organisation of “MoD Civil Servant” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show MoD Civil Servant and your full name
+
+o    I don’t have any of the above
+
+AC11: Given I have selected Organisation of “MoD Fire Service” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show MoD Fire Service and your full name
+
+o    I don’t have any of the above
+
+AC12: Given I have selected Organisation of “MoD Police” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show MoD Police and your full name
+
+o    I don’t have any of the above
+
+ AC13: Given I have selected Organisation of “NHS Dental Practice” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show NHS Dental Practice and your full name
+
+o    “NHS Smart Card This must show your full name
+
+o    “NHS payment schedule dated in last 3 months. This must show NHS Dental Practice and your full name
+
+o    I don’t have any of the above
+
+ AC14: Given I have selected Organisation of “NHS” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show NHS and your full name”
+
+o    “Work ID Card. This must show NHS and your full name”
+
+o    “NHS Smart Card This must show your full name”
+
+o    “Work Email (recommended for instant verification). You will be asked to login to this account during sign up”
+
+o    I don’t have any of the above
+
+ AC15: Given I have selected Organisation of “Pharmacy” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Pharmacy and your full name”
+
+o    “NHS Smart Card This must show your full name”
+
+o    I don’t have any of the above
+
+ AC16: Given I have selected Organisation of “Police” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Police and your full name”
+
+o    “Work Email (recommended for instant verification). You will be asked to login to this account during sign up”
+
+o    I don’t have any of the above
+
+  AC17: Given I have selected Organisation of “Red Cross” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Work ID Card. This must show Red Cross and your full name”
+
+o    I don’t have any of the above
+
+AC18: Given I have selected Organisation of “Reserved Armed Forces” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Reserved Armed Forces and your full name”
+
+o    I don’t have any of the above
+
+ AC19: Given I have selected Organisation of “RNLI” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Work ID Card. This must show RNLI and your full name”
+
+o    I don’t have any of the above
+
+AC20: Given I have selected Organisation of “Search and Rescue” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Work ID Card. This must show Search and Rescue and your full name”
+
+o    I don’t have any of the above
+
+AC21: Given I have selected Employer of “Social Care – Care Company ” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Care Company and your full name”
+
+o    “Work ID Card. This must show Care Company and your full name”
+
+o    I don’t have any of the above
+
+ AC22: Given I have selected Employer of “Social Care – Care Home” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show care home and your full name”
+
+o    “Work ID Card. This must show care home and your full name”
+
+o    I don’t have any of the above
+
+AC23: Given I have selected Employer of “Social Care – Council” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show the social care department within the council  and your full name
+
+o    “Work ID Card. This must show the social care department within the council  and your full name”
+
+o    “Contract This must show the social care department within the council  and your full name”
+
+o    I don’t have any of the above
+
+ AC24: Given I have selected Employer of “Social Care – Foster Carers” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show foster carer and your full name”
+
+o    “Work ID Card. This must show foster carer and your full name”
+
+o    I don’t have any of the above
+
+AC25: Given I have selected Employer of “Social Care – Residential Care” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show residential care and your full name”
+
+o    “Work ID Card. This must show residential care and your full name”
+
+o    I don’t have any of the above
+
+ AC26: Given I have selected Emmployer of “Social Care – Social Worker” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show Social worker and your full name”
+
+o    “Work ID Card. This must show Social worker and your full name”
+
+o    I don’t have any of the above
+
+AC27: Given I have selected Organisation of “St Andrews Ambulance” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Payslip be dated in the last 3 months. This must show St Andrews Ambulance and your full name”
+
+o    “Work ID Card. This must show St Andrews Ambulance and your full name”
+
+o    I don’t have any of the above
+
+ AC28: Given I have selected Organisation of “St John Ambulance” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Work ID Card. This must show St John Ambulance and your full name”
+
+o    I don’t have any of the above
+
+Retired
+
+ AC1: Given I have selected Employer of “Frontline Ambulance staff” and filled in my employer and job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Pension document. This must show NHS and your full name”
+
+o    I don’t have any of the above
+
+AC2: Given I have selected Organisation of “NHS” and filled in my job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Pension document. This must show NHS and your full name”
+
+o    I don’t have any of the above
+
+AC3: Given I have selected Organisation of “Police – Bereaved Family Member” and filled in my job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Pension document. This must show Police and your full name”
+
+o    I don’t have any of the above
+
+AC4: Given I have selected Organisation of “Fire Service” and filled in my job role as “Fire fighter”, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Pension document. This must show you are a retired firefighter and your full name”
+
+o    “Certificate of service This must show Fire Service and your full name”
+
+o    “Certificate of discharge This must show Fire Service and your full name”
+
+o    I don’t have any of the above
+
+AC5: Given I have selected Organisation of “HM Armed Forces Veterans” and filled in my job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Pension document. This must show HM Armed Forces and your full name”
+
+o    “Certificate of service This must show HM Armed Forces and your full name”
+
+o    “Certificate of discharge This must show HM Armed Forces and your full name”
+
+o    I don’t have any of the above
+
+ AC6: Given I have selected Organisation of “Police” and filled in my job role, When I click next, Then I see a list of the verification methods available to me:
+
+o    “Pension document. This must Equiniti, XPS or Police affiliation and your full name”
+
+o    “Certificate of service This must show Police and your full name”
+
+o    “Certificate of discharge This must show Police and your full name”
+
+o    NARPO/RPOAS card This must show your full name
+
+o    I don’t have any of the above

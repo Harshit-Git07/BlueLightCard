@@ -8,7 +8,7 @@ The purpose of this hybridisation, is to help easily roll out experimental chang
 
 ![Architecture](images/architecture.png)
 
-Native provides a bridge to open communication between native and web UI, which is expressed through the use of interfaces. Certain communication is only one way based on it's usecase, for example sending analytics data when a user interacts with an element within the web UI is only one way, web UI doesn't need to receive anything regarding analytics from native, however there are others that are two way such as data requests.
+Native provides a bridge to open communication between native and web UI, which is expressed through the use of interfaces. Certain communication is only one way based on it's usecase, for example sending analytics data when a user interacts with an element within the web UI is only one way, web UI doesn't need to receive anything regarding analytics from native, however there are others that are two way such as data requests or more specifically this would be a round-trip.
 
 ### How does web communicate with native?
 
@@ -138,7 +138,7 @@ Web UI provides a set of invokable functions attached to the window object, base
 #### Example
 Native needs to send simple messages to web UI and web UI needs to output these on a page.
 
-  1. First step is to define the class that will handle receiving of the message. Since the message will be received from outside of NextJS lifecyle, we can use the observable pattern to help sync back within the NextJS app
+  1. First step is to define the class that will handle receiving of the message. Since the message will be received from outside of NextJS lifecyle, we can use the observable pattern to help sync back within the NextJS app - `src/receive/message.ts`
 
       ```ts
       import { Logger } from '@/logger';
@@ -166,7 +166,18 @@ Native needs to send simple messages to web UI and web UI needs to output these 
         }
       }
       ```
-  2. Next we need to consume this message from within the NextJS app and make it available for other components to consume, to do this requires merging the messages into shared state
+
+  2. Now we need to attach the `onMessage` function to the window object to `src/nativeReceive.ts`, so that native can call it
+     ```ts
+     const nativeReceiveMessage = new NativeReceiveMessage();
+
+     const fns: { [key: string]: any } = {
+      ...,
+      onMessage: nativeReceiveMessage.onMessage.bind(nativeReceiveMessage),
+     }
+     ```
+
+  3. Next we need to consume this message from within the NextJS app and make it available for other components to consume, to do this requires merging the messages into shared state - `src/store/index.tsx`
       ```ts
       // setup the initial store state with defaults
       const initialState: AppStore = {
@@ -205,7 +216,8 @@ Native needs to send simple messages to web UI and web UI needs to output these 
         return <AppContext.Provider value={{ ...state, dispatch }}>{children}</AppContext.Provider>;
       };
       ```
-  3. Finally all thats left is to consume this state from within a page
+
+  4. Finally all thats left is to consume this state from within a page
       ```tsx
       const Home: NextPage<any> = () => {
         const { messages } = useContext(AppContext);

@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.8.0...bluelightcard/web-v1.9.0) (2023-08-31)
+
+
+### Features
+
+* /TO-93-search-offers-mobile ([#293](https://github.com/bluelightcard/BlueLightCard-2.0/issues/293)) ([5031566](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5031566cbba6fec90a4f6a8458470652e107c873))
+* env and browser set up on playwright ([#274](https://github.com/bluelightcard/BlueLightCard-2.0/issues/274)) ([7904ac1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7904ac1c4c2eac4bb3deb34bb7dd7c352a79ad0e))
+* offer card component ([#285](https://github.com/bluelightcard/BlueLightCard-2.0/issues/285)) ([5cd2af0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5cd2af0648f03b0f6621c08e5b10ab3ebd5a4ba8))
+* TI-262 Replace end screen icons with images ([#258](https://github.com/bluelightcard/BlueLightCard-2.0/issues/258)) ([9d87d16](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9d87d163dc8a5d7555f3b6dd6b81c4fde17e3b17))
+* TI-262 Replace end screen icons with images ([#272](https://github.com/bluelightcard/BlueLightCard-2.0/issues/272)) ([ab83963](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ab839635af143c25fd5eb44fa1a81c48f17164a5))
+* TO-48 create header component ([#256](https://github.com/bluelightcard/BlueLightCard-2.0/issues/256)) ([5beca45](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5beca45778fac6bacd610f27d01d2a5a492aa4c7))
+* TO-57: fix esbuild and add rounded top to offer card ([#287](https://github.com/bluelightcard/BlueLightCard-2.0/issues/287)) ([25ef648](https://github.com/bluelightcard/BlueLightCard-2.0/commit/25ef6485a0c70b2177b97b0412a7d8cef46c14d5))
+* TO-61 Offers Page for browser ([#273](https://github.com/bluelightcard/BlueLightCard-2.0/issues/273)) ([7121512](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7121512ff4dc7858517fa19ef54cd782c3ecb49e))
+* TO-80 offer card list item ([#297](https://github.com/bluelightcard/BlueLightCard-2.0/issues/297)) ([dd21cc2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd21cc2eb5257af5ac725042a1d41f03c2ea8474))
+* TO-93-mobile-search-offers-cardList ([#313](https://github.com/bluelightcard/BlueLightCard-2.0/issues/313)) ([398c8a3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/398c8a3631b4d2868a8ca983ea4ec1e4194e78c2))
+* update button component to align with figma design and show qui… ([#300](https://github.com/bluelightcard/BlueLightCard-2.0/issues/300)) ([51916a4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/51916a4e4425771c4dadad3c6bbab1ccd27d7b08))
+* **web:** acceptedId changes ([#303](https://github.com/bluelightcard/BlueLightCard-2.0/issues/303)) ([4be972d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4be972d5c698506b900dda3cfa8be18318f8b7ac))
+* **web:** Apply fixed height to verification method items ([#291](https://github.com/bluelightcard/BlueLightCard-2.0/issues/291)) ([e76447e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e76447e7894d9a9bcb5c83b30b5fb91c9f89e68d))
+* **web:** modal component styling modified to better match designs ([#289](https://github.com/bluelightcard/BlueLightCard-2.0/issues/289)) ([f3f4d5f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f3f4d5fd1aa9b8f0279255b8af8a57091ec25913))
+* **web:** Update e2e tests ([#311](https://github.com/bluelightcard/BlueLightCard-2.0/issues/311)) ([284ce84](https://github.com/bluelightcard/BlueLightCard-2.0/commit/284ce84a17ec45389673e57121f7a2da942a6be7))
+
+
+### Bug Fixes
+
+* resolved issue with image src in library ([#284](https://github.com/bluelightcard/BlueLightCard-2.0/issues/284)) ([f8032a5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8032a500e816bd9ff4bb69c025c72f2550dd5d8))
+* **web:** temporary fix for npmrc issue ([#266](https://github.com/bluelightcard/BlueLightCard-2.0/issues/266)) ([f8046a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8046a1d9ecf917d0f295e599df135ad6ba99868))
+
+
+### Other Changes
+
+* add core web vitals lighthouse audit to pipeline ([#286](https://github.com/bluelightcard/BlueLightCard-2.0/issues/286)) ([6fce121](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6fce12137bcf3740106dd7ca7b77ec53500d78bd))
+
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.7.0...bluelightcard/web-v1.8.0) (2023-08-15)
 
 

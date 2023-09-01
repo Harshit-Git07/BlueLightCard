@@ -559,7 +559,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     id="signup_button"
                     type="button"
                     variant={ThemeVariant.Primary}
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/newaccount.php')}
                     className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 first-letter:self-end"
                   >
                     Sign up now
@@ -586,7 +586,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     id="finish_button"
                     type="button"
                     variant={ThemeVariant.Primary}
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/index.php')}
                     className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
                   >
                     Finish
@@ -612,7 +612,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     id="finish_button"
                     type="button"
                     variant={ThemeVariant.Primary}
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/index.php')}
                     className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
                   >
                     Finish

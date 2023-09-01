@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.9.0...bluelightcard/web-v1.9.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* **web:** correct routing added to 'finish' and 'sign up now' buttons ([#318](https://github.com/bluelightcard/BlueLightCard-2.0/issues/318)) ([02875d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/02875d21e19efd3b2922051d67f724a8f1fcd1cb))
+
 ## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.8.0...bluelightcard/web-v1.9.0) (2023-08-31)
 
 

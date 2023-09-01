@@ -19,7 +19,6 @@
   "css.validate": false,
   "less.validate": false,
   "stylelint.validate": ["css"],
-  "editor.formatOnSave": false,
   "eslint.run": "onType",
   "cucumberautocomplete.steps": ["packages/web/e2e/steps/*.ts"],
   "cucumberautocomplete.strictGherkinCompletion": true,
@@ -30,5 +29,5 @@
   "editor.wordWrap": "on",
   "editor.codeActionsOnSave": {
     "source.fixAll": true
-  },
+  }
 }

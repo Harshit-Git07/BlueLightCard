@@ -25,7 +25,7 @@ describe('Search component', () => {
 
       const searchTerm = 'example';
 
-      const inputElement = screen.getByRole('textbox');
+      const inputElement = screen.getByRole('searchbox');
 
       await act(async () => {
         await userEvent.type(inputElement, `${searchTerm}{enter}`);

@@ -51,13 +51,13 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
-        {/* <Search
+        <Search
           onSearch={(searchTerm) =>
             navigation.navigate(
               `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
             )
           }
-        /> */}
+        />
         <PromoBanner />
         <Offers />
         <Heading title="Explore" size="small" />

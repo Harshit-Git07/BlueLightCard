@@ -65,10 +65,12 @@ When('I choose {string} as employer', async function (Other) {
 When('I click next button', async function () {
   expect(page.getByRole('button', { name: 'Next' }).isEnabled()).toBeTruthy();
   await page.getByRole('button', { name: 'Next' }).click();
+  
 });
 
 //Then
 Then('I should be able to select a verification option', async function () {
+  await page.waitForSelector("'Eligibility Checker'");
   if (await page.locator('id=1').isVisible()) {
     page.locator('id=1').click();
   }

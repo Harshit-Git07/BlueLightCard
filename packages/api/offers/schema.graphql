@@ -87,16 +87,16 @@ type MarketPlaceItemEntry {
 
 # This type is temporary and related to Menue Items in S3
 type MarketPlaceMenusItem {
-  id: Int;
-  compid: Int;
-  typeid: Int;
-  offername: String;
-  compnayname: String;
-  logos: String;
-  image: String;
-  agegate: Boolean;
-  restrictedto: String;
-  restrictedfrom: String;
+  id: Int
+  compid: Int
+  typeid: Int
+  offername: String
+  compnayname: String
+  logos: String
+  image: String
+  agegate: Boolean
+  restrictedto: String
+  restrictedfrom: String
 }
 
 # This type is temporary and related to Menue Items in S3
@@ -163,6 +163,20 @@ type OfferMenuList {
   features: [FeatureMenu!]!
 }
 
+type Banners {
+  id: ID!
+  legacyId: Int!
+  name: String!
+  startsAt: Int!
+  expiresAt: Int!
+  status: Boolean!
+  link: String!
+  imageSource: String!
+  type: String!
+  legacyCompanyId: Int!
+  brand: String!
+}
+
 type Query {
   getBrand(brandID: ID!): Brand
   getOffer(offerId: ID!): Offer
@@ -192,6 +206,9 @@ type Mutation {
   createHomePage(input: CreateHomePageInput!): HomePage
   updateHomePage(input: UpdateHomePageInput!): HomePage
   deleteHomePage(input: DeleteHomePageInput!): HomePage
+  createBanner(input: CreateBannerInput!): Banners
+  updateBanner(id: ID!, input: UpdateBannerInput!): Banners
+  deleteBanner(id: ID!): Banners
 }
 
 input CreateBrandInput {
@@ -321,4 +338,36 @@ input UpdateHomePageInput {
 
 input DeleteHomePageInput {
   id: ID!
+}
+
+input CreateBannerInput {
+  legacyId: Int!
+  name: String!
+  startsAt: Int!
+  expiresAt: Int!
+  status: Boolean!
+  link: String!
+  imageSource: String!
+  type: String!
+  legacyCompanyId: Int!
+  brand: String!
+}
+
+input UpdateBannerInput {
+  id: ID!
+  legacyId: Int!
+  name: String!
+  startsAt: Int!
+  expiresAt: Int!
+  status: Boolean!
+  link: String!
+  imageSource: String!
+  type: String!
+  legacyCompanyId: Int!
+  brand: String!
+}
+
+input DeleteBannerInput {
+  id: ID!
+  _version: Int
 }

@@ -1,36 +1,38 @@
-import { Table } from 'sst/constructs';
-import { Stack } from 'aws-cdk-lib';
+import { Table } from 'sst/constructs'
+import { Stack } from 'aws-cdk-lib'
 
 /**
  *  This class creates all the tables for the Offers API
  *  @param stack - The stack to add the tables to
  */
 export class Tables {
-  brandTable: Table;
-  homePageTable: Table;
-  offersContainerTable: Table;
-  offersContainer_offerTable: Table;
-  offerTable: Table;
-  companyTable: Table;
-  categoryTable: Table;
-  offerTypeTable: Table;
-  offers_brandTable: Table;
-  offers_categoryTable: Table;
+  brandTable: Table
+  homePageTable: Table
+  offersContainerTable: Table
+  offersContainer_offerTable: Table
+  offerTable: Table
+  companyTable: Table
+  categoryTable: Table
+  offerTypeTable: Table
+  offers_brandTable: Table
+  offers_categoryTable: Table
+  bannersTable: Table
 
-  constructor(private stack: Stack) {
-    this.brandTable = this.createBrandTable();
-    this.homePageTable = this.createHomePageTable();
-    this.offersContainerTable = this.createOffersContainerTable();
-    this.offersContainer_offerTable = this.createOffersContainerOfferTable();
-    this.offerTable = this.createOfferTable();
-    this.companyTable = this.createCompanyTable();
-    this.categoryTable = this.createCategoryTable();
-    this.offerTypeTable = this.createOfferTypeTable();
-    this.offers_brandTable = this.createOffersBrandTable();
-    this.offers_categoryTable = this.createOffersCategoryTable();
+  constructor (private stack: Stack) {
+    this.brandTable = this.createBrandTable()
+    this.homePageTable = this.createHomePageTable()
+    this.offersContainerTable = this.createOffersContainerTable()
+    this.offersContainer_offerTable = this.createOffersContainerOfferTable()
+    this.offerTable = this.createOfferTable()
+    this.companyTable = this.createCompanyTable()
+    this.categoryTable = this.createCategoryTable()
+    this.offerTypeTable = this.createOfferTypeTable()
+    this.offers_brandTable = this.createOffersBrandTable()
+    this.offers_categoryTable = this.createOffersCategoryTable()
+    this.bannersTable = this.createBannersTable()
   }
 
-  private createBrandTable(): Table {
+  private createBrandTable (): Table {
     return new Table(this.stack, 'brandtable', {
       fields: {
         id: 'string',
@@ -44,10 +46,10 @@ export class Tables {
           partitionKey: 'homePageId',
         },
       },
-    });
+    })
   }
 
-  private createHomePageTable(): Table {
+  private createHomePageTable (): Table {
     return new Table(this.stack, 'homePageTable', {
       fields: {
         id: 'string',
@@ -55,10 +57,10 @@ export class Tables {
       primaryIndex: {
         partitionKey: 'id',
       },
-    });
+    })
   }
 
-  private createOffersContainerTable(): Table {
+  private createOffersContainerTable (): Table {
     return new Table(this.stack, 'offersContainerTable', {
       fields: {
         id: 'string',
@@ -72,10 +74,10 @@ export class Tables {
           partitionKey: 'homePageId',
         },
       },
-    });
+    })
   }
 
-  private createOffersContainerOfferTable(): Table {
+  private createOffersContainerOfferTable (): Table {
     return new Table(this.stack, 'offersContainerOfferTable', {
       fields: {
         offersContainerId: 'string',
@@ -91,10 +93,10 @@ export class Tables {
           sortKey: 'offerId',
         },
       },
-    });
+    })
   }
 
-  private createOfferTable(): Table {
+  private createOfferTable (): Table {
     return new Table(this.stack, 'offerTable', {
       fields: {
         id: 'string',
@@ -108,10 +110,10 @@ export class Tables {
           partitionKey: 'offerTypeId',
         },
       },
-    });
+    })
   }
 
-  private createCompanyTable(): Table {
+  private createCompanyTable (): Table {
     return new Table(this.stack, 'companyTable', {
       fields: {
         id: 'string',
@@ -119,10 +121,10 @@ export class Tables {
       primaryIndex: {
         partitionKey: 'id',
       },
-    });
+    })
   }
 
-  private createCategoryTable(): Table {
+  private createCategoryTable (): Table {
     return new Table(this.stack, 'categoryTable', {
       fields: {
         id: 'string',
@@ -130,10 +132,10 @@ export class Tables {
       primaryIndex: {
         partitionKey: 'id',
       },
-    });
+    })
   }
 
-  private createOfferTypeTable(): Table {
+  private createOfferTypeTable (): Table {
     return new Table(this.stack, 'offerTypeTable', {
       fields: {
         id: 'string',
@@ -141,10 +143,10 @@ export class Tables {
       primaryIndex: {
         partitionKey: 'id',
       },
-    });
+    })
   }
 
-  private createOffersBrandTable(): Table {
+  private createOffersBrandTable (): Table {
     return new Table(this.stack, 'offersBrandTable', {
       fields: {
         offerId: 'string',
@@ -160,10 +162,10 @@ export class Tables {
           sortKey: 'offerId',
         },
       },
-    });
+    })
   }
 
-  private createOffersCategoryTable(): Table {
+  private createOffersCategoryTable (): Table {
     return new Table(this.stack, 'offersCategoryTable', {
       fields: {
         offerId: 'string',
@@ -179,6 +181,36 @@ export class Tables {
           sortKey: 'offerId',
         },
       },
-    });
+    })
+  }
+
+  private createBannersTable (): Table {
+    return new Table(this.stack, 'bannersTable', {
+      fields: {
+        id: 'string',
+        legacyId: 'number',
+        type: 'string',
+        expiresAt: 'number',
+        legacyCompanyId: 'number',
+        brand: 'string',
+      },
+      primaryIndex: {
+        partitionKey: 'id',
+      },
+      globalIndexes: {
+        type: {
+          partitionKey: 'type',
+          sortKey: 'expiresAt',
+        },
+        legacyId: {
+          partitionKey: 'legacyId',
+          sortKey: 'brand',
+        },
+        companyId: {
+          partitionKey: 'legacyCompanyId',
+          sortKey: 'brand',
+        },
+      },
+    })
   }
 }

@@ -24,6 +24,7 @@ export class DataSource {
   offerDS: DynamoDbDataSource;
   typeLambdaDS: LambdaDataSource;
   queryLambdaDS: LambdaDataSource;
+  bannersDS: LambdaDataSource;
 
   constructor(offerApi: GraphqlApi, tables: Tables, lambdas: Lambda) {
     this.api = offerApi;
@@ -40,7 +41,8 @@ export class DataSource {
     this.companyDS = this.createDynamoDbDataSource('companyDataSource', tables.companyTable.cdk.table);
     this.offerTypeDS = this.createDynamoDbDataSource('offerTypeDataSource', tables.offerTypeTable.cdk.table);
     this.offerDS = this.createDynamoDbDataSource('offerDataSource', tables.offerTable.cdk.table);
-
+    this.bannersDS = this.createDynamoDbDataSource('bannersDataSource', tables.bannersTable.cdk.table);
+    
     //Lambda DataSources
     this.typeLambdaDS = this.createLambdaDataSource('typeLambdaDataSource', lambdas.typeLambda);
     this.queryLambdaDS = this.createLambdaDataSource('queryLambdaDataSource', lambdas.queryLambda);

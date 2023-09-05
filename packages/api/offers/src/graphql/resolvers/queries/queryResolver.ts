@@ -18,6 +18,7 @@ export class QueryResolver implements IResolver {
     this.getHomePageByBrandIDResolver();
     this.getOfferByIdResolver();
     this.getOffersByTypeResolver();
+    this.getBannersByBrandAndTypeResolver();
     this.createQueryLambdaResolver();
   }
 
@@ -46,6 +47,15 @@ export class QueryResolver implements IResolver {
       requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getOffersByTypeRequest.vtl`),
       responseMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getOffersByTypeResponse.vtl`),
     });
+  }
+
+  private getBannersByBrandAndTypeResolver() {
+    this.datasources.bannersDS.createResolver('GetBannersByBrandAndType', {
+      typeName: 'Query',
+      fieldName: 'getBannersByBrandAndType',
+      requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getBannersByBrandAndTypeRequest.vtl`),
+      responseMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getBannersByBrandAndTypeResponse.vtl`),
+    })
   }
 
   private createQueryLambdaResolver() {

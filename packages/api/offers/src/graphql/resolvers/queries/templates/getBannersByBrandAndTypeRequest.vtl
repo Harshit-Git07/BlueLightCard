@@ -1,0 +1,30 @@
+#set($currTime = $util.time.nowEpochSeconds())
+#set($status = true)
+#set($limit = $util.defaultIfNull($ctx.args.limit, 3))
+{
+  "version": "2017-02-28",
+  "operation": "Query",
+  "index": "type",
+  "query": {
+    "expression": "#type = :type AND expiresAt >= :currTime",
+    "expressionValues": {
+      ":type": $util.dynamodb.toDynamoDBJson($ctx.args.type),
+      ":currTime": $util.dynamodb.toDynamoDBJson($currTime)
+    },
+    "expressionNames": {
+      "#type": "type"
+    },
+  },
+  "filter": {
+    "expression": "brand = :brand AND startsAt <= :currTime AND #status = :status",
+    "expressionValues": {
+      ":brand": $util.dynamodb.toDynamoDBJson($ctx.args.brand),
+      ":currTime": $util.dynamodb.toDynamoDBJson($currTime),
+      ":status": $util.dynamodb.toDynamoDBJson($status)
+    },
+    "expressionNames": {
+      "#status": "status"
+    },
+  },
+  "limit": $limit
+}

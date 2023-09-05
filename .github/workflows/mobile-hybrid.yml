@@ -57,7 +57,7 @@ jobs:
         run: npm run lint -w packages/mobile-hybrid
 
   dev:
-    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main' && needs.dev-env-mapping.outputs.devEnv
     name: Deploy Dev
     runs-on: ubuntu-latest
     needs: dev-env-mapping

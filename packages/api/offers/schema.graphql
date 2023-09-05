@@ -163,7 +163,7 @@ type OfferMenuList {
   features: [FeatureMenu!]!
 }
 
-type Banners {
+type Banner {
   id: ID!
   legacyId: Int!
   name: String!
@@ -182,6 +182,7 @@ type Query {
   getOffer(offerId: ID!): Offer
   getOffersByType(offerTypeId: ID!, limit: Int, nextToken: String): OffersConnection
   getOfferMenusByBrandId(brandId: ID!): OfferMenuList
+  getBannersByBrandAndType(type: String!, brand: String!, limit: Int): [Banner!]!
 }
 
 type Mutation {
@@ -206,9 +207,9 @@ type Mutation {
   createHomePage(input: CreateHomePageInput!): HomePage
   updateHomePage(input: UpdateHomePageInput!): HomePage
   deleteHomePage(input: DeleteHomePageInput!): HomePage
-  createBanner(input: CreateBannerInput!): Banners
-  updateBanner(id: ID!, input: UpdateBannerInput!): Banners
-  deleteBanner(id: ID!): Banners
+  createBanner(input: CreateBannerInput!): Banner
+  updateBanner(id: ID!, input: UpdateBannerInput!): Banner
+  deleteBanner(id: ID!): Banner
 }
 
 input CreateBrandInput {

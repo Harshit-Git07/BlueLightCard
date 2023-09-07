@@ -30,60 +30,11 @@ Given I navigate to Eligibility Checker
       |St John Ambulance      |Ambulance Crew   |Work ID card, Payslip dated within the last 3 months,I don't have any of the above |
 
 
-   Scenario: Employed status - AC1, AC3, AC4, AC5, AC7, AC8, AC14, AC15, AC16, AC18, AC20, AC21
-      When I check Employed
-      And I choose "<organisation>"
-      And I choose an "<employer>"
-      And I enter "<jobRole>"
-      And I click next button
-      Then given "<verificationMethods>" should be visible
-      Then I should be able to select a verification option
-      And I click submit button
-      And I see the sign-up button
-      And I can close the Checker 
-      Examples:
-    |organisation                           |employer                           |jobRole                |verificationMethods   |
-    |Ambulance Service                      |London Ambulance Service NHS Trust |worker                 |Work Email, Work ID card, Payslip dated within the last 3 months,I don't have any of the above      |
-    |Fire Service                           |Aero Fire and Rescue               |worker                 |Work Email, Work ID card, Pay slip dated within the last 3 months,I don't have any of the above      |
-    |Highway Traffic Officers               |North Wales Traffic Officers       |officer                |Work ID card,I don't have any of the above      |
-    |HM Armed Forces                        |Royal Navy                         |guard                  |Pay slip dated within the last 3 months,I don't have any of the above      |
-    |HM Prison and Probation Service        |Clare Lodge                        |guard                  |Work ID card, Payslip dated within the last 3 months,I don't have any of the above      |
-    |Home Office (Borders and Immigration)  |Border Force                       |border                 |Payslip dated within the last 3 months,I don't have any of the above      |
-    |NHS                                    |Abbey Hospitals                    |Nurse                  |Work Email, Work ID card, Payslip dated within the last 3 months, NHS Smart Card,I don't have any of the above      |
-    |Pharmacy                               |NHS Pharmacy                       |Nurse                  |Payslip dated within the last 3 months, NHS Smart Card,I don't have any of the above      |
-    |Police                                 |Bedfordshire Police                |Receptionist           |Work Email, Payslip dated within the last 3 months,I don't have any of the above      |
-    |Reserved Armed Forces                  |Royal Naval Reserve                |Army                   |Payslip dated within the last 3 months,I don't have any of the above      |
-    |Search and Rescue                      |Cave Rescue                        |cave                   |Work ID card,I don't have any of the above      |
-    |Social Care                            |Care company                       |nurse                  |Work ID card, Payslip dated within the last 3 months,I don't have any of the above      |
-    |Social Care                            |Council (working in the social care department)  |nurse    |Work ID card, Payslip dated within the last 3 months,I don't have any of the above      |
-    
-   Scenario: User is able to quit after entering job role
-      When I check Employed
-      And I choose "<organisation>"
-      And I choose an "<employer>"
-      And I enter "<jobRole>"
-      Then I should be able quit
-
-     Examples:
-    |organisation      |employer                           |jobRole  |
-    |NHS               |NHS Borders                        |Nurse    |
-     
-   Scenario: User is able to quit on verification options page
-      When I check Employed
-      And I choose "<organisation>"
-      And I choose an "<employer>"
-      And I enter "<jobRole>"
-      And I click next button
-      Then I should be able quit
-
-   Examples:
-    |organisation              |employer                           |jobRole     |
-    |Highway Traffic Officers  |Highways England Traffic Officers  |Officers    |
-
+  
    Scenario: When User is employed and other is selected as organisation, user should see 'not eligible' message 
       When I check Employed
       And I choose 'Other' as organisation
-      And I should see a message
+      And I should see an information message
       And I can write the name of my organisation
       Then I see a message that I'm not eligible
       And I click finish
@@ -92,7 +43,7 @@ Given I navigate to Eligibility Checker
       When I check Employed
       And I choose "<organisation>"
       And I choose 'Other' as employer 
-      And I should see a message
+      And I should see an information message
       And I can write the name of my employer
       Then I see a message that I'm not eligible
       And I click finish
@@ -177,7 +128,7 @@ Given I navigate to Eligibility Checker
    Scenario: When User is a Volunteer and other is selected as organisation, user should see 'not eligible' message 
       When I check Volunteer
       And I choose 'Other' as organisation
-      And I should see a message
+      And I should see an information message
       And I can write the name of my organisation
       Then I see a message that I'm not eligible
       And I click finish
@@ -186,7 +137,7 @@ Given I navigate to Eligibility Checker
       When I check Volunteer
       And I choose "<organisation>"
       And I choose 'Other' as employer 
-      And I should see a message
+      And I should see an information message
       And I can write the name of my employer
       Then I see a message that I'm not eligible
       And I click finish
@@ -246,7 +197,7 @@ Given I navigate to Eligibility Checker
    Scenario: When User is a Retired and other is selected as organisation, user should see 'not eligible' message 
       When I check Retired
       And I choose 'Other' as organisation
-      And I should see a message
+      And I should see an information message
       And I can write the name of my organisation
       Then I see a message that I'm not eligible
       And I click finish

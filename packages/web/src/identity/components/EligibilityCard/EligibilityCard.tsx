@@ -286,60 +286,64 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   </div>
                 </div>
                 {props.employment && (
-                  <div className="flex flex-col">
-                    {props.employment == 'retired' ? (
-                      <label className="font-normal text-lg pb-3">
-                        What organisation did you work in?
-                      </label>
-                    ) : (
-                      <label className="font-normal text-lg pb-3">
-                        What organisation do you work in?
-                      </label>
-                    )}
-                    <InputSelectField
-                      id="organisation_select"
-                      defaultOption="Please select an organisation"
-                      options={props.orgOptions.concat([
-                        {
-                          key: 'Other',
-                          value: 'Other',
-                          data: { idRequirements: 'Other', isTrusted: 'False' },
-                        },
-                      ])}
-                      value={props.organisation}
-                      onChange={(e) => {
-                        updateChange(e.target.value);
-                      }}
-                      handleSelectedOption={(e) => {
-                        AcceptedMethodSelection(e, false);
-                      }}
-                    />
+                  <>
+                    <div className="flex flex-col">
+                      {props.employment == 'retired' ? (
+                        <label className="font-normal text-lg pb-3">
+                          What organisation did you work in?
+                        </label>
+                      ) : (
+                        <label className="font-normal text-lg pb-3">
+                          What organisation do you work in?
+                        </label>
+                      )}
+                      <InputSelectField
+                        id="organisation_select"
+                        defaultOption="Please select an organisation"
+                        options={props.orgOptions.concat([
+                          {
+                            key: 'Other',
+                            value: 'Other',
+                            data: { idRequirements: 'Other', isTrusted: 'False' },
+                          },
+                        ])}
+                        value={props.organisation}
+                        onChange={(e) => {
+                          updateChange(e.target.value);
+                        }}
+                        handleSelectedOption={(e) => {
+                          AcceptedMethodSelection(e, false);
+                        }}
+                      />
+                    </div>
                     {props.organisation == 'Other' && (
-                      <div className="flex flex-col">
-                        <p className="tablet:w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
+                      <>
+                        <p className="tablet:w-[592px] text-slate-950 text-sm mt-2 font-normal leading-tight tracking-tight">
                           {' '}
                           It looks like we haven&apos;t added your organisation yet, register your
                           interest to join by telling us who you{' '}
                           {props.employment == 'retired' ? 'worked' : 'work'} for{' '}
                         </p>
-                        <div className="py-2 justify-start items-center gap-0.5 inline-flex">
-                          <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
-                            Your organisation
-                          </label>
+                        <div className="flex flex-col">
+                          <div className="py-2 justify-start items-center gap-0.5 inline-flex">
+                            <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
+                              Your organisation
+                            </label>
+                          </div>
+                          <InputTextFieldWithRef
+                            name="other_organisation_field"
+                            placeholder={
+                              props.employment == 'retired'
+                                ? 'Tell us the name of your former organisation'
+                                : 'Tell us the name of your organisation'
+                            }
+                            required
+                            onChange={(e) => props.setOtherOrg(e.target.value)}
+                          />
                         </div>
-                        <InputTextFieldWithRef
-                          name="other_organisation_field"
-                          placeholder={
-                            props.employment == 'retired'
-                              ? 'Tell us the name of your former organisation'
-                              : 'Tell us the name of your organisation'
-                          }
-                          required
-                          onChange={(e) => props.setOtherOrg(e.target.value)}
-                        />
-                      </div>
+                      </>
                     )}
-                  </div>
+                  </>
                 )}
                 {props.organisation &&
                   props.organisation != 'Other' &&
@@ -372,29 +376,31 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     </div>
                   )}
                 {props.employer == 'Other' && (
-                  <div className="flex flex-col">
-                    <p className="tablet:w-[592px] text-slate-950 text-sm font-normal leading-tight tracking-tight">
+                  <>
+                    <p className="tablet:w-[592px] text-slate-950 text-sm mt-2 font-normal leading-tight tracking-tight">
                       {' '}
                       It looks like we haven&apos;t added your employer yet, register your interest
                       to join by telling us who you{' '}
                       {props.employment == 'retired' ? 'worked' : 'work'} for{' '}
                     </p>
-                    <div className="py-2 justify-start items-center gap-0.5 inline-flex">
-                      <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
-                        Your employer
-                      </label>
+                    <div className="flex flex-col">
+                      <div className="py-2 justify-start items-center gap-0.5 inline-flex">
+                        <label className="text-slate-950 text-lg font-normal leading-7 tracking-tight">
+                          Your employer
+                        </label>
+                      </div>
+                      <InputTextFieldWithRef
+                        name="other_employer_field"
+                        placeholder={
+                          props.employment == 'retired'
+                            ? 'Tell us the name of your former employer'
+                            : 'Tell us the name of your employer'
+                        }
+                        required
+                        onChange={(e) => props.setOtherEmp(e.target.value)}
+                      />
                     </div>
-                    <InputTextFieldWithRef
-                      name="other_employer_field"
-                      placeholder={
-                        props.employment == 'retired'
-                          ? 'Tell us the name of your former employer'
-                          : 'Tell us the name of your employer'
-                      }
-                      required
-                      onChange={(e) => props.setOtherEmp(e.target.value)}
-                    />
-                  </div>
+                  </>
                 )}
                 {((props.employer && props.employer != 'Other') ||
                   (props.organisation && props.empOptions.length <= 1) ||

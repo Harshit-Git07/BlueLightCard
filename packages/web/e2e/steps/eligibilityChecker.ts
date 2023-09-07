@@ -40,7 +40,7 @@ When('I choose {string} as organisation', async function (Other) {
   await page.getByRole('combobox', { name: 'drop-down selector' }).selectOption(Other);
 });
 
-When('I should see a message', async function () {
+When('I should see an information message', async function () {
   await page
     .getByText("It looks like we haven't added your organisation yet, register your interest to ")
     .isVisible();
@@ -65,7 +65,6 @@ When('I choose {string} as employer', async function (Other) {
 When('I click next button', async function () {
   expect(page.getByRole('button', { name: 'Next' }).isEnabled()).toBeTruthy();
   await page.getByRole('button', { name: 'Next' }).click();
-  
 });
 
 //Then

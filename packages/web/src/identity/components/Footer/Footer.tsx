@@ -24,11 +24,11 @@ const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
     <footer
       id="footer_nav"
       className={cssUtil([
-        'w-full bg-gray-50 flex-col inline-flex',
+        'w-full flex-col inline-flex',
 
         'mobile:h-[136px] mobile:px-[22px] mobile:py-[26px] mobile:justify-start mobile:items-start mobile:gap-5',
 
-        ' h-24 px-[137px] justify-center items-center',
+        'tablet:h-24 tablet:px-[132px] tablet:justify-center tablet:items-center',
       ])}
     >
       {isMobile ? (

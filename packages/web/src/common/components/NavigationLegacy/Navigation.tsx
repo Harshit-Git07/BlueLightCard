@@ -71,9 +71,9 @@ const Navigation: FC<NavigationProps> = ({
   };
 
   return (
-    <div className="relative z-10">
-      <div className="bg-palette-primary-base dark:bg-palette-primary-dark py-3.5 px-3">
-        <div className="laptop:container laptop:mx-auto flex items-center">
+    <div className="relative z-10 w-full">
+      <div className="bg-palette-primary-base dark:bg-palette-primary-dark py-3.5 mobile:px-3 tablet:px-[132px]">
+        <div className="tablet:container tablet:mx-auto flex items-center">
           <div className="flex-1 mr-2">
             <a
               className="relative block h-[40px] max-w-[170px] laptop:max-w-[200px] hover:opacity-100"

@@ -111,7 +111,7 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 ga_key: data.GA_Key ?? ' ',
                 cardId: data.cardid,
                 cardExpires: setDate(data.expiresiso),
-                cardStatus: data.carddata.cardstatus,
+                cardStatus: data.carddata.cardstatus ?? 1,
                 cardPosted: setDate(data.carddata.dateposted)
             }),
             },

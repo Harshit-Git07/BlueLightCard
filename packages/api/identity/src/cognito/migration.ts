@@ -83,6 +83,15 @@ function setDate(date: any) {
 const addUserSignInMigratedEvent = async (data: any) => {
     const profileUuid: string = v4();
     const uuid = data.uuid;
+    let cardstatus = 1;
+    if(data.carddata !== undefined && (data.carddata.cardstatus !== undefined || data.carddata.cardstatus !== null))
+    {
+        cardstatus = data.carddata.cardstatus;
+    }
+    let dateposted = '0000-00-00 00:00:00';
+    if(data.carddata !== undefined && data.carddata.dateposted !== undefined){
+        dateposted = data.carddata.dateposted;
+    }
     const input = {
         Entries: [
             {
@@ -111,8 +120,8 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 ga_key: data.GA_Key ?? ' ',
                 cardId: data.cardid,
                 cardExpires: setDate(data.expiresiso),
-                cardStatus: data.carddata.cardstatus ?? 1,
-                cardPosted: setDate(data.carddata.dateposted)
+                cardStatus: cardstatus,
+                cardPosted: setDate(dateposted)
             }),
             },
         ],

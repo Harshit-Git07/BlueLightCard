@@ -6,11 +6,13 @@ import { Logger } from '@/logger';
 import NativeReceiveAPIResponse from '@/receive/apiResponse';
 import NativeReceiveLifecycle from '@/receive/lifecycle';
 import NativeReceiveNavigation from '@/receive/navigation';
+import NativeReceiveExperiment from '@/receive/experiment';
 
 // Create instances of handlers use by the registered functions
 const nativeReceiveNavigation = new NativeReceiveNavigation();
 const nativeReceiveLifecycle = new NativeReceiveLifecycle();
 const nativeReceiveAPIResponse = new NativeReceiveAPIResponse();
+const nativeReceiveExperiments = new NativeReceiveExperiment();
 
 // Logger.debugMode = process.env.NODE_ENV !== 'production';
 Logger.debugMode = true;
@@ -24,9 +26,11 @@ const fns: { [key: string]: any } = {
   onBackPressed: nativeReceiveNavigation.onBackPressed.bind(nativeReceiveNavigation),
   onLifecycle: nativeReceiveLifecycle.onLifecycle.bind(nativeReceiveLifecycle),
   onResponse: nativeReceiveAPIResponse.onResponse.bind(nativeReceiveAPIResponse),
+  setExperiment: nativeReceiveExperiments.setExperiment.bind(nativeReceiveExperiments),
 };
 
-/* Since Next.js does CSR + SSR, when running server side the window object is not available,
+/**
+ * Since Next.js does CSR + SSR, when running server side the window object is not available,
  * so we need to make sure we only register the functions when running client side
  */
 if (typeof window !== 'undefined') {

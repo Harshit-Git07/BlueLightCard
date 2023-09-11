@@ -39,6 +39,18 @@ declare namespace NativeAnalytics {
   }
 }
 
+declare namespace NativeExperiment {
+  function experiment(keys: string[]): void;
+
+  export abstract class Experiment {
+    static experiment(keys: string[]): void;
+  }
+
+  export interface Parameters {
+    keys: string[];
+  }
+}
+
 declare namespace NativeReceive {
   export abstract class WebViewNavigation {
     onNavigationRequestSuccess(): void;
@@ -53,12 +65,17 @@ declare namespace NativeReceive {
   export abstract class WebViewAPIResponse {
     onResponse(url: string, ...response: string[]): void;
   }
+
+  export abstract class WebViewExperiment {
+    setExperiment(experiments: string): void;
+  }
 }
 
 declare type NativeCallParameters =
   | NativeNavigation.Parameters
   | NativeAPICall.Parameters
-  | NativeAnalytics.Parameters;
+  | NativeAnalytics.Parameters
+  | NativeExperiment.Parameters;
 
 interface MessageArgument {
   message: string;

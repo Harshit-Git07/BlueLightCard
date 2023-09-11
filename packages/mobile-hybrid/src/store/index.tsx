@@ -2,6 +2,7 @@ import { createContext, FC, useEffect, Reducer, useReducer, PropsWithChildren } 
 import Observable from '@/observable';
 import { AppContextStructure, AppStore, DispatchActionData } from './types';
 import { APIUrl } from '@/hooks/useAPIData';
+import { th } from 'date-fns/locale';
 
 const initialState: AppStore = {
   loading: {
@@ -9,6 +10,7 @@ const initialState: AppStore = {
     [APIUrl.OfferPromos]: true,
   },
   apiData: {},
+  experiments: '',
   dispatch() {},
 };
 
@@ -34,6 +36,12 @@ const storeReducer: Reducer<AppContextStructure, DispatchActionData> = (state, a
         },
       };
     }
+    case 'setExperiment': {
+      return {
+        ...state,
+        experiments: action.state,
+      };
+    }
   }
   throw Error(`Unknown action: ${action.type}`);
 };
@@ -55,6 +63,12 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
           key: data.url,
           loading: false,
         },
+      });
+    });
+    Observable.getInstance().subscribe('nativeExperiments', (data: any) => {
+      dispatch({
+        type: 'setExperiment',
+        state: data,
       });
     });
   }, []);

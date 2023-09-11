@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.14.0...bluelightcard/identity-v1.14.1) (2023-09-08)
+
+
+### Other Changes
+
+* Hot/set default cardstatus during migration ([#339](https://github.com/bluelightcard/BlueLightCard-2.0/issues/339)) ([b017805](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b01780507c6db46dfb202a5d358554e0a9cff86f))
+
 ## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.13.0...bluelightcard/identity-v1.14.0) (2023-08-23)
 
 

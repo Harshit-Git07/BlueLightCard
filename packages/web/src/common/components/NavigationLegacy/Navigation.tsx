@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/pro-regular-svg-icons';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';
@@ -73,15 +73,15 @@ const Navigation: FC<NavigationProps> = ({
   return (
     <div className="relative z-10 w-full">
       <div className="bg-palette-primary-base dark:bg-palette-primary-dark py-3.5 mobile:px-3 tablet:px-[132px]">
-        <div className="tablet:container tablet:mx-auto flex items-center">
+        <div className="tablet:mx-auto flex items-center">
           <div className="flex-1 mr-2">
             <a
-              className="relative block h-[40px] max-w-[170px] laptop:max-w-[200px] hover:opacity-100"
+              className="relative block h-[40px] max-w-[170px] laptop:max-w-[200px] hover:opacity-100 inline"
               href="/"
               aria-label="Link to Blue Light Card home page"
             >
-              <div className="text-palette-primary-base dark:text-palette-primary-dark">
-                <BrandLogo />
+              <div className="text-palette-primary-base dark:text-palette-primary-dark ">
+                <BrandLogo className=" mobile:w-[160px] mobile:h-[28px] tablet:w-[226px] tablet:h-[40px]" />
               </div>
             </a>
           </div>

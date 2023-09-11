@@ -178,7 +178,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
     <article className="flex justify-center my-3 px-3">
       {props.isLoading || props.loading ? (
         <div
-          className="w-[736px] tablet:px-16 mobile:px-6 pt-9 pb-[68px] max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white flex justify-center items-center"
+          className="tablet:px-16 mobile:px-6 pt-9 pb-[68px] max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white flex justify-center items-center"
           style={{ borderTop: '9px solid #009' }}
         >
           <div className="flex flex-col pt-88 justify-center content-center items-center">
@@ -189,14 +189,23 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
         </div>
       ) : (
         <div
-          className="w-[736px] tablet:px-16 mobile:px-3 pt-9 mobile:pb-[32px] tablet:pb-[68px] max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white"
+          className={cssUtil([
+            'w-[736px] tablet:px-16 tablet:py-9 max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white',
+            'mobile:px-3  mobile:pt-3',
+            //if next or submit button is visible change bottom padding
+            (props.employment != '' && props.organisation != '') || props.currentStep > props.steps
+              ? 'mobile:pb-3'
+              : 'mobile:pb-6',
+          ])}
           style={{ borderTop: '9px solid #009' }}
         >
           <div className="">
             <div
               className={cssUtil([
                 'flex flex-col',
-                props.currentStep <= props.steps ? 'mb-8' : 'tablet:mb-20 mobile:mb-10',
+                props.currentStep <= props.steps
+                  ? 'tablet:mb-6 mobile:mb-4'
+                  : 'tablet:mb-20 mobile:mb-10',
               ])}
             >
               <div
@@ -458,7 +467,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             )}
 
             {props.currentStep == 2 && (
-              <div className="space-y-4 pt-3">
+              <div className="space-y-4 pt-[20px]">
                 {
                   // get the currently selected organisation and check if it is trusted
                   props.orgOptions.find((selected) => selected.key == props.organisation)?.data
@@ -558,7 +567,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 <div className="basis-1/4 tablet:self-center">
                   <hr
                     className={cssUtil([
-                      'text-[#EDEDF2] opacity-100 my-5 tablet:hidden mobile:block',
+                      'text-[#EDEDF2] opacity-100 mt-5 tablet:hidden mobile:block',
                     ])}
                   />
                   <Button
@@ -566,7 +575,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     type="button"
                     variant={ThemeVariant.Primary}
                     onClick={() => router.push('/newaccount.php')}
-                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 first-letter:self-end"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-[18px] w-full tablet:w-48 first-letter:self-end"
                   >
                     Sign up now
                   </Button>
@@ -582,12 +591,17 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   Sorry, you are not currently eligible{' '}
                 </div>
                 <p className="text-center text-slate-950 text-lg font-normal mb-7">
-                  We haven’t added your employer yet, but have noted your request to join. Our
+                  We haven&apos;t added your employer yet, but have noted your request to join. Our
                   application process is regularly reviewed so please check back soon to start
                   saving!
                 </p>
                 {/* redirect to sign up form with prepopulated fields */}
                 <div className="basis-1/4 tablet:self-center">
+                  <hr
+                    className={cssUtil([
+                      'text-[#EDEDF2] opacity-100 mt-5 tablet:hidden mobile:block',
+                    ])}
+                  />
                   <Button
                     id="finish_button"
                     type="button"
@@ -614,12 +628,17 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                 </p>
                 {/* redirect to sign up form with prepopulated fields */}
                 <div className="basis-1/4 self-center">
+                  <hr
+                    className={cssUtil([
+                      'text-[#EDEDF2] opacity-100 mt-5 tablet:hidden mobile:block',
+                    ])}
+                  />
                   <Button
                     id="finish_button"
                     type="button"
                     variant={ThemeVariant.Primary}
                     onClick={() => router.push('/index.php')}
-                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-[18px] w-full tablet:w-48 self-end"
                   >
                     Finish
                   </Button>
@@ -632,7 +651,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               props.employer != 'Other' &&
               props.currentStep < props.steps && (
                 <div>
-                  <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
+                  <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-[32px]'])} />
                   <div className="flex justify-end ">
                     <Button
                       id="next_button"
@@ -640,7 +659,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       variant={ThemeVariant.Primary}
                       disabled={nextStepValidation()}
                       onClick={() => props.onNext()}
-                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
+                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-[18px] w-full tablet:w-48 self-end"
                     >
                       Next
                     </Button>
@@ -651,7 +670,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
             {(props.organisation == 'Other' || props.employer == 'Other') &&
               props.currentStep == 1 && (
                 <div>
-                  <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
+                  <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-[32px]'])} />
                   <div className="flex justify-end">
                     <Button
                       id="submit_button"
@@ -659,7 +678,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                       disabled={props.organisation == 'Other' ? !props.otherOrg : !props.otherEmp}
                       variant={ThemeVariant.Primary}
                       onClick={() => props.onSubmit()}
-                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
+                      className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-[18px] w-full tablet:w-48 self-end"
                     >
                       Submit
                     </Button>
@@ -668,7 +687,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
               )}
             {props.currentStep == 2 && (
               <div>
-                <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-8'])} />
+                <hr className={cssUtil(['text-[#EDEDF2] opacity-100 mt-[32px]'])} />
                 <div className="flex justify-end">
                   <Button
                     id="submit_button"
@@ -676,7 +695,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                     disabled={!props.acceptedId}
                     variant={ThemeVariant.Primary}
                     onClick={() => props.onSubmit()}
-                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-5 w-full tablet:w-48 self-end"
+                    className="h-12 px-10 py-3.5 rounded-md justify-center items-center gap-2 flex text-lg font-semibold mt-[18px] w-full tablet:w-48 self-end"
                   >
                     Submit
                   </Button>

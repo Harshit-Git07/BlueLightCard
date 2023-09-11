@@ -26,14 +26,14 @@ const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
       className={cssUtil([
         'w-full flex-col inline-flex',
 
-        'mobile:h-[136px] mobile:px-[22px] mobile:py-[26px] mobile:justify-start mobile:items-start mobile:gap-5',
+        'mobile:h-[104px] mobile:px-[22px] mobile:py-[26px] mobile:justify-start mobile:items-start mobile:gap-y-3',
 
         'tablet:h-24 tablet:px-[132px] tablet:justify-center tablet:items-center',
       ])}
     >
       {isMobile ? (
         <>
-          <div className="w-[328px] h-11 relative flex flex-wrap gap-3">
+          <div className="w-[328px] h-11 relative flex flex-wrap gap-[7px]">
             {navItems.map((item) => (
               <Link
                 id={item.text + '-nav-item'}

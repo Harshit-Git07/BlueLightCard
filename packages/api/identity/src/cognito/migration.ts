@@ -65,6 +65,9 @@ const authenticateUser = async (username: string, password: string) => {
 }
 
 const formatPhoneNumber = (unparsedPhoneNumber: string) => {
+    if (typeof unparsedPhoneNumber !== 'string'){
+        return '';
+    }
     const phoneNumber = parsePhoneNumber(unparsedPhoneNumber, 'GB');
     if (phoneNumber && phoneNumber.isValid() && phoneNumber.number) {
         logger.debug ("phoneNumber", phoneNumber.number);
@@ -92,6 +95,10 @@ const addUserSignInMigratedEvent = async (data: any) => {
     if(data.carddata !== undefined && data.carddata.dateposted !== undefined){
         dateposted = data.carddata.dateposted;
     }
+    let dob = '00/00/0000';
+    if(!isNaN(Date.parse(data.dob))){
+        dob = new Date(data.dob).toLocaleDateString();
+    }
     const input = {
         Entries: [
             {
@@ -106,9 +113,9 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 legacyUserId: data.id,
                 name: data.fname,
                 surname: data.lname,
-                dob: (data.dob !== '0000-00-00' || data.dob !== null || data.dob !== undefined) ? new Date(data.dob).toISOString().split('T')[0] : '0000-00-00',
+                dob: dob,
                 gender: data.gender ?? 'O',
-                mobile: data.mobile,
+                mobile: formatPhoneNumber(data.mobile),
                 spareemail: data.spareemail ?? ' ',
                 spareemailvalidated: data.spareemailvalidated,
                 service: data.service,

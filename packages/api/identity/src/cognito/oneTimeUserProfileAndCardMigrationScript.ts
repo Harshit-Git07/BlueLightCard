@@ -157,6 +157,10 @@ export async function migrate(): Promise<{status: string, message: string}> {
       }
 
       const profileUuid: string = v4();
+      let dob = '00/00/0000';
+      if(!isNaN(Date.parse(row.dob))){
+          dob = new Date(row.dob).toLocaleDateString();
+      }
       //profile
       const profileParams = {
         Item: {
@@ -168,7 +172,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
           spare_email_validated: row.spareemailvalidated ?? '0',
           organisation: row.service ?? ' ',
           gender: row.gender ?? 'O',
-          dob: (row.dob !== '0000-00-00' || row.dob !== null || row.dob !== undefined) ? new Date(row.dob).toISOString().split('T')[0] : '0000-00-00',
+          dob: dob,
           merged_uid: row.merged_uid ? row.merged_uid.toString() : '0',
           merged_time: `${setDate(row.merged_time)}`,
           mobile: row.mobile ?? ' ',

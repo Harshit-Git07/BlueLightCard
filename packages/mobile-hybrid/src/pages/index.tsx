@@ -51,22 +51,11 @@ const Home: NextPage<any> = () => {
     }
     apiCall.requestData('/api/4/offer/promos_new.php');
     apiCall.requestData('/api/4/news/list.php');
-    experiments.experiment(['ios-test-experiment', 'android-test-experiment']);
   }, []);
 
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
-        {expr['android-test-experiment'] != null && (
-          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
-            {expr['android-test-experiment']}
-          </button>
-        )}
-        {expr['ios-test-experiment'] != null && (
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2">
-            {expr['ios-test-experiment']}
-          </button>
-        )}
         <PromoBanner />
         <Offers />
         <Heading title="Explore" size="small" />

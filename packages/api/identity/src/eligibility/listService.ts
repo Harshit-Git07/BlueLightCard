@@ -10,7 +10,7 @@ const logger = new Logger({ serviceName: `${service}-list-employer` });
 
 const client = new DynamoDBClient({});
 const dynamodb = DynamoDBDocumentClient.from(client);
-const tableName = process.env.tableName;
+const tableName = process.env.identityTableName;
 const apiKeyTableName = process.env.apiKeysTable;
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {

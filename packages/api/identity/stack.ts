@@ -35,7 +35,7 @@ export function Identity({ stack }: StackContext) {
   const blcApiUrl = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/url`);
   const blcApiAuth = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/auth`);
 
-  //db
+  //db - identityTable
   const identityTable = new Table(stack, 'identityTable', {
     fields: {
       pk: 'string',
@@ -47,19 +47,29 @@ export function Identity({ stack }: StackContext) {
     }
   });
 
+  //db - trackingDataTable
+    const ecFormOutputData = new Table(stack, 'ecFormOutputDataTable', {
+      fields: {
+        pk: 'string',
+        sk: 'string',
+      },
+      primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
+    });
+
   //apis
   const identityApi = new ApiGatewayV1Api(stack, 'identity', {
     defaults: {
       function: {
         timeout: 20,
-        environment: { tableName: identityTable.tableName, service: 'identity' },
-        permissions: [identityTable],
+        environment: { identityTableName: identityTable.tableName, ecFormOutputDataTableName: ecFormOutputData.tableName, service: 'identity' },
+        permissions: [identityTable, ecFormOutputData],
       },
     },
     routes: {
       'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
       'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
       'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
+      'POST /{brand}/formOutputData': 'packages/api/identity/src/eligibility/ecFormOutputData.handler',
     },
   });
 

@@ -6,8 +6,9 @@ import { useState } from 'react';
 import Modal from '../identity/components/Modal/Modal';
 import { ModalTypes } from '../identity/components/Modal/Types';
 import router from 'next/router';
-import { useEmployer, useOrganisation } from 'src/services/EligibilityApi';
+import { useEmployer, useOrganisation, addECFormOutputData } from 'src/services/EligibilityApi';
 import Footer from 'src/identity/components/Footer/Footer';
+
 const TestPage: NextPage = () => {
   const [employment, setEmployment] = useState('employed');
   const [organisation, setOrganisation] = useState('');
@@ -40,7 +41,18 @@ const TestPage: NextPage = () => {
       setEligible('No ID');
     } else {
       setEligible('No');
+      storeFormOutput();
     }
+  };
+
+  const storeFormOutput = async () => {
+    const data = {
+      organisation: otherOrg,
+      jobRole: jobRole,
+      employer: otherEmp,
+      employmentStatus: employment,
+    };
+    const result = await addECFormOutputData(data);
   };
 
   return (

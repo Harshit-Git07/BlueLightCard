@@ -77,7 +77,8 @@ jobs:
     needs:
       - backend
     env:
-      NEXT_PUBLIC_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
+      NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
+      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/formOutputData
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -105,6 +106,7 @@ jobs:
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
         env:
           NEXT_PUBLIC_IDENTITY_API_URL: ${{ needs.backend.outputs.identity-api-endpoint }}
+          NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: ${{ needs.backend.outputs.identity-api-endpoint }}
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-publish

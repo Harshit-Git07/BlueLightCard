@@ -51,11 +51,21 @@ const Home: NextPage<any> = () => {
     }
     apiCall.requestData('/api/4/offer/promos_new.php');
     apiCall.requestData('/api/4/news/list.php');
+    experiments.experiment(['homepage-searchbar']);
   }, []);
 
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
+        {expr['homepage-searchbar'] === 'treatment' && (
+          <Search
+            onSearch={(searchTerm) =>
+              navigation.navigate(
+                `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
+              )
+            }
+          />
+        )}
         <PromoBanner />
         <Offers />
         <Heading title="Explore" size="small" />

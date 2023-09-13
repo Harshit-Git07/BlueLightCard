@@ -6,6 +6,7 @@ import { Lambda } from './src/constructs/lambda';
 import { DataSource } from './src/graphql/dataSources';
 import { Resolver } from './src/graphql/resolvers/resolver';
 import { Buckets } from './src/constructs/buckets';
+import { EventBridge } from './src/constructs/eventBridge';
 
 export function Offers({ stack }: StackContext) {
   const { cognito } = use(Identity);
@@ -17,11 +18,12 @@ export function Offers({ stack }: StackContext) {
   const dataSources = new DataSource(offersApi, tables, lambdas);
   const resolvers = new Resolver(dataSources);
   resolvers.initialise();
+  new EventBridge(stack, stack.stage, tables)
 
   stack.addOutputs({
     OffersApiEndpoint: offersApi.graphqlUrl,
   });
-  
+
   return {
     offersApi,
   };

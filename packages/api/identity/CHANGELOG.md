@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.14.1...bluelightcard/identity-v1.15.0) (2023-09-13)
+
+
+### Features
+
+* **web:** Add new API endpoint for adding EC form output data to dynamo ([#347](https://github.com/bluelightcard/BlueLightCard-2.0/issues/347)) ([a39e8db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a39e8db7c34ca52ad419b7a3810c3c5f1e0080b2))
+
+
+### Other Changes
+
+* add dob and mobile checks ([#341](https://github.com/bluelightcard/BlueLightCard-2.0/issues/341)) ([6ec5e85](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6ec5e8505690adaed229d34a3fcba289fc21de42))
+* err handling ([#349](https://github.com/bluelightcard/BlueLightCard-2.0/issues/349)) ([2f150ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2f150ad85420616bae47ad2acd56a5c41da8ba87))
+
 ## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.14.0...bluelightcard/identity-v1.14.1) (2023-09-08)
 
 

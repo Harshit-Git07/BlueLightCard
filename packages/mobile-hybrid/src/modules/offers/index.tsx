@@ -53,10 +53,12 @@ const Offers: FC = () => {
             <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
           )}
           <CardCarousel
-            slides={flexible.items.map((offer) => ({
-              id: offer.id,
-              imageSrc: offer.imagedetail,
-            }))}
+            slides={flexible.items
+              .filter((offer) => offer.hide == false)
+              .map((offer) => ({
+                id: offer.id,
+                imageSrc: offer.imagedetail,
+              }))}
             onSlideItemClick={(id) =>
               onFlexOfferClick(
                 flexible.title,

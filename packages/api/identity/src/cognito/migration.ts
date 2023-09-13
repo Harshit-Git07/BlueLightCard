@@ -66,14 +66,14 @@ const authenticateUser = async (username: string, password: string) => {
 
 const formatPhoneNumber = (unparsedPhoneNumber: string) => {
     if (typeof unparsedPhoneNumber !== 'string'){
-        return '';
+        return '+440000000000';
     }
     const phoneNumber = parsePhoneNumber(unparsedPhoneNumber, 'GB');
     if (phoneNumber && phoneNumber.isValid() && phoneNumber.number) {
         logger.debug ("phoneNumber", phoneNumber.number);
         return phoneNumber.number
     } else {
-        return '';
+        return '+440000000000';
     }
 };
 

@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.9.1...bluelightcard/web-v1.10.0) (2023-09-14)
+
+
+### Features
+
+* Apostrophe issue ([#332](https://github.com/bluelightcard/BlueLightCard-2.0/issues/332)) ([5af1a58](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5af1a586c32ac10663621bd0a9a110943a744940))
+* **web:** Add new API endpoint for adding EC form output data to dynamo ([#347](https://github.com/bluelightcard/BlueLightCard-2.0/issues/347)) ([a39e8db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a39e8db7c34ca52ad419b7a3810c3c5f1e0080b2))
+* **web:** navbar and footer altered to match existing desgins ([#334](https://github.com/bluelightcard/BlueLightCard-2.0/issues/334)) ([7d687b2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d687b2587611c647038fee1fbd22b87a5d802b5))
+* **web:** padding and margins altered in mobile view ([#337](https://github.com/bluelightcard/BlueLightCard-2.0/issues/337)) ([263a8b2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/263a8b2cc6377c107537fc8abf147d942c0738f3))
+
+
+### Bug Fixes
+
+* **web:** fix issues with txt spacing when other is selected for org … ([#335](https://github.com/bluelightcard/BlueLightCard-2.0/issues/335)) ([9988a79](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9988a794a80d0277d6a0b95d08d9562f4b7c5e9f))
+* **web:** minor copy correction added to final step ([#354](https://github.com/bluelightcard/BlueLightCard-2.0/issues/354)) ([7d3f62d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d3f62d154025ea1d156a6ae422d649e35737197))
+
 ## [1.9.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.9.0...bluelightcard/web-v1.9.1) (2023-09-01)
 
 

@@ -208,4 +208,13 @@ describe('EligibilityCard component', () => {
       expect(button).toBeInTheDocument();
     });
   });
+  describe('EligibilityCard Happy Path final step text rendering', () => {
+    it('should render correct text when user is eligible', () => {
+      render(<EligibilityCard {...props} currentStep={3} eligible="Yes" />);
+      const sucess_text = screen.getByText(
+        "Great! Based on the information you have provided, you're eligible."
+      );
+      expect(sucess_text).toBeInTheDocument();
+    });
+  });
 });

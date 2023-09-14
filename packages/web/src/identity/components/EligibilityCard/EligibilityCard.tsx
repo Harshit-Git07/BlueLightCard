@@ -178,7 +178,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
     <article className="flex justify-center my-3 px-3">
       {props.isLoading || props.loading ? (
         <div
-          className="tablet:px-16 mobile:px-6 pt-9 pb-[68px] max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white flex justify-center items-center"
+          className="tablet:px-16 mobile:px-6 pt-9 pb-[68px] tablet:min-w-[736px] max-w-[736px] tablet:min-h-[756px] drop-shadow-md rounded-0 bg-white flex justify-center items-center"
           style={{ borderTop: '9px solid #009' }}
         >
           <div className="flex flex-col pt-88 justify-center content-center items-center">
@@ -557,7 +557,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                   <SuccessfulGenericImage height={192} width={192} />
                 </div>
                 <p className="text-center text-slate-950 text-3xl font-semibold pb-[16px]">
-                  Great! You are eligible{' '}
+                  Great! Based on the information you have provided, you&apos;re eligible.{' '}
                 </p>
                 <p className="flex text-center text-slate-950 text-lg font-normal mb-7">
                   Before you begin your application, please ensure you have access to your chosen

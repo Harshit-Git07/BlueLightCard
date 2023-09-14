@@ -21,7 +21,7 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
       showThumbs={false} // Toggle thumbnails
       autoPlay={true}
       infiniteLoop={true}
-      showIndicators={false} // Show the slide dots
+      showIndicators={true} // Show the slide dots
       showArrows={false} // Show the navigation arrows
       selectedItem={currentSlide} // Set the active slide index
       className="mb-4"
@@ -38,7 +38,9 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
               <Image alt={slide.text} src={slide.imageSrc} className="object-cover" />
             </div>
           </div>
-          <p className="mb-2 py-3 dark:text-neutral-white">{decodeEntities(slide.text)}</p>
+          <p className="mb-2 py-3 font-museo max-h-[65px] dark:text-neutral-white line-clamp-2">
+            {decodeEntities(slide.text)}
+          </p>
         </div>
       ))}
     </Carousel>

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.10.0...bluelightcard/web-v1.11.0) (2023-09-15)
+
+
+### Features
+
+* mock login to store JWT from cognitio ([#355](https://github.com/bluelightcard/BlueLightCard-2.0/issues/355)) ([f06fb96](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f06fb964ddac2b6f757c230ee98101e728d0d31a))
+
 ## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.9.1...bluelightcard/web-v1.10.0) (2023-09-14)
 
 

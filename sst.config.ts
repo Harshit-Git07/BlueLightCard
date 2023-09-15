@@ -4,6 +4,7 @@ import { Offers } from './packages/api/offers/stack';
 import { Web } from './packages/web/stack';
 import { Shared } from './stacks/stack';
 import { CMS } from './packages/cms/stack';
+import { Redemptions } from './packages/api/redemptions/stack';
 
 export default {
   config(_input) {
@@ -29,7 +30,8 @@ export default {
       .stack(Identity, { id: 'identity' })
       .stack(Offers, { id: 'offers' })
       .stack(Web, { id: 'web' })
-      .stack(CMS, { id: 'cms' });
+      .stack(CMS, { id: 'cms' })
+      .stack(Redemptions, { id: 'redemptions'});
   },
 } satisfies SSTConfig;
 

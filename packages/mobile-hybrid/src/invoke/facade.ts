@@ -18,10 +18,17 @@ export default abstract class Facade {
         `available interfaces: ${JSON.stringify(globalState.webkit.messageHandlers)}`,
         'Facade',
       );
-      globalState.webkit.messageHandlers[this.nativeInterface].postMessage({
-        message: functionName,
-        parameters,
-      });
+      try {
+        globalState.webkit.messageHandlers[this.nativeInterface].postMessage({
+          message: functionName,
+          parameters,
+        });
+      } catch (error) {
+        Logger.getInstance().error(
+          `Error has occurred, ${this.nativeInterface} unavailable: ${error}`,
+          'Facade',
+        );
+      }
     }
   }
 }

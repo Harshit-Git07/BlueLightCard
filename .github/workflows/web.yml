@@ -191,6 +191,7 @@ jobs:
     env:
       NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/formOutputData
+      NEXT_PUBLIC_LOGIN_ROUTE: /login.php
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -202,6 +203,8 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - name: remove mock login
+        run: rm -rf packages/web/src/pages/mock-login.tsx
       - run: npm install
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
@@ -230,6 +233,7 @@ jobs:
     env:
       NEXT_PUBLIC_IDENTITY_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/formOutputData
+      NEXT_PUBLIC_LOGIN_ROUTE: /login.php
     steps:
       - uses: actions/checkout@v3
       - name: Cache node modules
@@ -239,6 +243,8 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install
+      - name: remove mock login
+        run: rm -rf packages/web/src/pages/mock-login.tsx
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
       - name: Publish

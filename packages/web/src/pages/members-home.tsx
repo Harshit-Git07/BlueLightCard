@@ -10,6 +10,7 @@ import Carousel from '@/components/Carousel/Carousel';
 import Footer from '@/components/Footer/Footer';
 import OfferCard from '../offers/components/OfferCard';
 import useIsVisible from '@/hooks/useIsVisible';
+import withAuth from '@/hoc/withAuth';
 
 type BannerProps = {
   linkId: string;
@@ -196,4 +197,5 @@ export async function getStaticProps(context: any) {
   };
 }
 
-export default HomePage;
+// export default HomePage;
+export default withAuth(HomePage);

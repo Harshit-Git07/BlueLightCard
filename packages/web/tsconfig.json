@@ -24,6 +24,12 @@
       "@/components/*": [
         "src/common/components/*",
       ],
+      "@/context/*": [
+        "src/common/context/*",
+      ],
+      "@/hoc/*": [
+        "src/common/hoc/*",
+      ],
       "@/offers/components/*": [
         "src/offers/components/*"
       ],

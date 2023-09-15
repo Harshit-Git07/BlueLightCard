@@ -3,10 +3,10 @@ import { FC } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { FlagsmithProvider } from 'flagsmith/react';
 import flagsmith from 'flagsmith/isomorphic';
-import Header from '@/components/Header/Header';
 
 import '../styles/globals.css';
 import { FEATURE_FLAG_ENVIRONMENT_ID } from '@/global-vars';
+import AuthProvider from '@/context/AuthProvider';
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
@@ -14,7 +14,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
       options={{ environmentID: FEATURE_FLAG_ENVIRONMENT_ID }}
       flagsmith={flagsmith}
     >
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
     </FlagsmithProvider>
   );
 };

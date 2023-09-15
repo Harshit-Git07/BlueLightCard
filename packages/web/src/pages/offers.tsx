@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { FooterProps } from '@/components/Footer/types';
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
+import withAuth from 'src/common/hoc/withAuth';
 
 export const getStaticProps = getOffersStaticProps;
 
@@ -107,4 +108,4 @@ const OffersPage: NextPage<OffersPageProps> = (props) => {
   );
 };
 
-export default OffersPage;
+export default withAuth(OffersPage);

@@ -79,6 +79,10 @@ jobs:
     env:
       NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/formOutputData
+      NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+      NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
+      NEXT_PUBLIC_COGNITO_IDP_ID: ${{ secrets.COGNITO_IDP_ID }}
+      NEXT_PUBLIC_LOGIN_ROUTE: /mock-login
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -160,6 +164,7 @@ jobs:
             </table>
 
   # Lighthouse Audit of Web frontend
+  # TODO: Currently not working with authenticated pages due to being redirected to login page
   lighthouse:
     name: Web Audit using Lighthouse
     if: github.actor!= 'dependabot[bot]'
@@ -184,9 +189,7 @@ jobs:
         id: lighthouse_audit
         with:
           urls: |
-            ${{ needs.frontend.outputs.url }}/members-home/
-            ${{ needs.frontend.outputs.url }}/eligibility/
-            ${{ needs.frontend.outputs.url }}/offers/
+            ${{ needs.frontend.outputs.url }}/eligibility
           budgetPath: '.github/lighthouse/budget.json'
           configPath: '.github/lighthouse/.lighthouserc.json'
           uploadArtifacts: true

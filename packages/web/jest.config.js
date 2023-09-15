@@ -3,6 +3,8 @@ const nextJest = require('next/jest');
 const createJestConfig = nextJest({
   dir: './',
   testPathIgnorePatterns: ['./e2e', 'e2e'],
+  setupFiles: ['dotenv/config'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
 });
 
 const customJestConfig = {

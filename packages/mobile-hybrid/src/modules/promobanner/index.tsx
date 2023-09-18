@@ -53,7 +53,6 @@ const PromoBanner: FC = () => {
           onSlideItemClick={(id) =>
             onSlideItemClick(deals.find((deal) => deal.id === id) as OfferPromosModel)
           }
-          onSlideChanged={onSlideChange}
         />
       )}
     </>

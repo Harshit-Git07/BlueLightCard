@@ -7,7 +7,6 @@
 -> API - REST API run on an environment tagged with your personal 'sst:stage'
 -> Web Client - NextJS frontend runs locally
 ```
-
 ## Getting started
 
 Install dependencies by running:

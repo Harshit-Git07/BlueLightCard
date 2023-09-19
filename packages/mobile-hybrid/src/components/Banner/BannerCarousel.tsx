@@ -7,6 +7,7 @@ import decodeEntities from '@/utils/decodeEntities';
 
 const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onSlideChanged }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
 
   const handleSlideChange = (index: SetStateAction<number>) => {
     setCurrentSlide(index);
@@ -17,15 +18,24 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
 
   return (
     <Carousel
-      showStatus={false} // Hide the status indicator
-      showThumbs={false} // Toggle thumbnails
+      showStatus={false}
+      showThumbs={false}
       autoPlay={true}
       infiniteLoop={true}
-      showIndicators={true} // Show the slide dots
-      showArrows={false} // Show the navigation arrows
-      selectedItem={currentSlide} // Set the active slide index
+      showIndicators={true}
+      showArrows={false}
+      selectedItem={currentSlide}
       className="mb-4"
-      onChange={handleSlideChange} // Event handler for slide change
+      onChange={(index) => {
+        if (isSwiping) {
+          setIsSwiping(false);
+          handleSlideChange(index);
+        }
+      }}
+      onSwipeMove={() => {
+        setIsSwiping(true);
+        return true;
+      }}
     >
       {slides.map((slide, index) => (
         <div

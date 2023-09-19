@@ -13,6 +13,8 @@ import { PutUserByIdRoute } from './src/routes/putUserByIdRoute';
 import { DeleteUserByIdRoute } from './src/routes/deleteUserByIdRoute';
 import { userSignInMigratedRule } from './src/eventRules/userSignInMigratedRule';
 import { cardStatusUpdatedRule } from './src/eventRules/cardStatusUpdatedRule';
+import { userProfileUpdatedRule } from './src/eventRules/userProfileUpdatedRule';
+import { userProfileCreatedRule } from './src/eventRules/userProfileCreatedRule';
 
 export function Identity({ stack }: StackContext) {
   //set tag service identity to all resources
@@ -136,6 +138,8 @@ export function Identity({ stack }: StackContext) {
   bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, userSignInMigratedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
   bus.addRules(stack, cardStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
+  bus.addRules(stack, userProfileCreatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
+  bus.addRules(stack, userProfileUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
   return {
     identityApi,
     cognito

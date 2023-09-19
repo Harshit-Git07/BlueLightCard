@@ -1,7 +1,7 @@
 import {z} from 'zod';
 
 export const UserModel = z.object({
-    id: z.string().optional(),
+    userId: z.string().optional(),
     name: z.string(),
     email: z.string(),
     age: z.number().optional()

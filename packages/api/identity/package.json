@@ -3,6 +3,7 @@
   "version": "1.15.0",
   "scripts": {
     "typecheck": "tsc -noEmit",
+    "test:identity": "jest --coverage",
     "test": "jest",
     "migrate:userprofileandcarddata": "ts-node src/cognito/oneTimeUserProfileAndCardMigrationScript.ts",
     "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain identity"

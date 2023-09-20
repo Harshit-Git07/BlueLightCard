@@ -4,7 +4,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Logger } from '@aws-lambda-powertools/logger';
 const logger = new Logger({ serviceName: `typeLambdaResolver` });
 
-const offersContainerOfferTable = process.env.OFFERS_CONTAINER_OFFER_TABLE as string;
 const brandTable = process.env.BRAND_TABLE as string;
 const offerCategoryTable = process.env.OFFER_CATEGORIES_TABLE as string;
 const offerBrandTable = process.env.OFFER_BRAND_TABLE as string;
@@ -14,55 +13,9 @@ const client = new DynamoDBClient({});
 const dynamodb = DynamoDBDocumentClient.from(client);
 
 const resolvers = new Map<string, (event: AppSyncResolverEvent<any>) => Promise<any>>([
-  ['OffersContainer:offers', resolveOffersContainerOffers],
   ['Offer:categories', resolveOffersCategories],
   ['Offer:brands', resolveOffersBrands],
 ]);
-
-async function resolveOffersContainerOffers(event: AppSyncResolverEvent<any>) {
-  const containerId = event.source?.id; // Get the ID of the OffersContainer
-
-  // Step 1: Fetch offer IDs from the many-to-many table
-  const manyToManyTableParams = {
-    TableName: offersContainerOfferTable,
-    KeyConditionExpression: 'offersContainerId = :offersContainerId',
-    ExpressionAttributeValues: {
-      ':offersContainerId': containerId,
-    },
-    IndexName: 'offersContainerId',
-  };
-
-  const result = await dynamodb.send(new QueryCommand(manyToManyTableParams));
-  if (result.Items === null || (result.Items != null && result.Items.length === 0)) {
-    return [];
-  }
-  const offerIds = result.Items?.map((item) => item.offerId);
-
-  if (!offerIds) {
-    return [];
-  }
-
-  // Step 2: Fetch the corresponding offers from the offer table
-  const offerTableParams = {
-    RequestItems: {
-      [offerTable]: {
-        Keys: offerIds.map((id) => ({ id })),
-      },
-    },
-  };
-
-  const offerData = await dynamodb.send(new BatchGetCommand(offerTableParams));
-  if (!offerData.Responses) {
-    return [];
-  }
-
-  const offers = offerData.Responses[`${offerTable}`];
-  logger.info('offerData', { offers });
-
-  return {
-    items: offers,
-  };
-}
 
 async function resolveOffersCategories(event: AppSyncResolverEvent<any>) {
   const offerId = event.source?.id; // Get the ID of the Offer

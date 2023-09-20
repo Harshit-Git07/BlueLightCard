@@ -11,40 +11,18 @@ import { IResolver } from '../iResolver';
 export class TypeResolver implements IResolver {
   private readonly TEMPLATE_BASE_PATH = './packages/api/offers/src/graphql/resolvers/types/templates';
 
-  constructor(private datasources: DataSource) {
-    this.datasources = datasources;
+  constructor(private dataSources: DataSource) {
+    this.dataSources = dataSources;
   }
 
   initialise() {
-    this.createBrandHomePageResolver();
-    this.createHomePageOffersContainersResolver();
     this.createOfferCompanyResolver();
     this.createOfferTypeResolver();
     this.createTypeLambdaResolver();
   }
 
-  private createBrandHomePageResolver() {
-    this.datasources.homePageDS.createResolver('BrandHomePageResolver', {
-      typeName: 'Brand',
-      fieldName: 'homePage',
-      requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/brandHomePageRequest.vtl`),
-      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
-    });
-  }
-
-  private createHomePageOffersContainersResolver() {
-    this.datasources.offersContainerDS.createResolver('HomePageOffersContainersResolver', {
-      typeName: 'HomePage',
-      fieldName: 'offersContainers',
-      requestMappingTemplate: MappingTemplate.fromFile(
-        `${this.TEMPLATE_BASE_PATH}/homePageOffersContainersRequest.vtl`,
-      ),
-      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
-    });
-  }
-
   private createOfferCompanyResolver() {
-    this.datasources.companyDS.createResolver('OfferCompanyResolver', {
+    this.dataSources.companyDS.createResolver('OfferCompanyResolver', {
       typeName: 'Offer',
       fieldName: 'company',
       requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/offerCompanyRequest.vtl`),
@@ -53,7 +31,7 @@ export class TypeResolver implements IResolver {
   }
 
   private createOfferTypeResolver() {
-    this.datasources.offerTypeDS.createResolver('OfferTypeResolver', {
+    this.dataSources.offerTypeDS.createResolver('OfferTypeResolver', {
       typeName: 'Offer',
       fieldName: 'offerType',
       requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/offerTypeRequest.vtl`),
@@ -63,12 +41,11 @@ export class TypeResolver implements IResolver {
 
   private createTypeLambdaResolver() {
     const fields = [
-      { typeName: 'OffersContainer', fieldName: 'offers' },
       { typeName: 'Offer', fieldName: 'brands' },
       { typeName: 'Offer', fieldName: 'categories' },
     ];
     fields.forEach(({ typeName, fieldName }) =>
-      this.datasources.typeLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
+      this.dataSources.typeLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
         typeName,
         fieldName,
       }),

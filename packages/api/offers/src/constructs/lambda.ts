@@ -6,7 +6,7 @@ import { Buckets } from './buckets';
 import { QueryLambda } from './lambdas/queryLamda';
 
 /**
- * This class centeralisies the creation of the lambdas.
+ * This class centralises the creation of the lambdas.
  * @param stack - The stack to add the lambdas to
  * @param tables - The tables to use in the lambdas
  */

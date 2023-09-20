@@ -20,13 +20,10 @@ export class TypeLambda extends LambdaAbstract {
       handler: 'handler',
       environment: {
         BRAND_TABLE: this.tables.brandTable.tableName,
-        HOMEPAGE_TABLE: this.tables.homePageTable.tableName,
-        OFFERS_CONTAINER_TABLE: this.tables.offersContainerTable.tableName,
-        OFFERS_CONTAINER_OFFER_TABLE: this.tables.offersContainer_offerTable.tableName,
         OFFER_TABLE: this.tables.offerTable.tableName,
-        OFFER_CATEGORIES_TABLE: this.tables.offers_categoryTable.tableName,
+        OFFER_CATEGORIES_TABLE: this.tables.offerCategoryConnectionTable.tableName,
         CATEGORY_TABLE: this.tables.categoryTable.tableName,
-        OFFER_BRAND_TABLE: this.tables.offers_brandTable.tableName,
+        OFFER_BRAND_TABLE: this.tables.offerBrandConnectionTable.tableName,
       },
     });
 
@@ -37,10 +34,9 @@ export class TypeLambda extends LambdaAbstract {
 
   // This method is implementing the abstract method from LambdaAbstract to grant permissions to the lambda
   protected grantPermissions(lambdaFunction: NodejsFunction): void {
-    this.tables.offersContainer_offerTable.cdk.table.grantReadWriteData(lambdaFunction);
     this.tables.offerTable.cdk.table.grantReadWriteData(lambdaFunction);
-    this.tables.offers_categoryTable.cdk.table.grantReadWriteData(lambdaFunction);
-    this.tables.offers_brandTable.cdk.table.grantReadWriteData(lambdaFunction);
+    this.tables.offerCategoryConnectionTable.cdk.table.grantReadWriteData(lambdaFunction);
+    this.tables.offerBrandConnectionTable.cdk.table.grantReadWriteData(lambdaFunction);
     this.tables.brandTable.cdk.table.grantReadWriteData(lambdaFunction);
     this.tables.categoryTable.cdk.table.grantReadWriteData(lambdaFunction);
   }

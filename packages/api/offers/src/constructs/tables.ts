@@ -7,97 +7,50 @@ import { Stack } from 'aws-cdk-lib'
  */
 export class Tables {
   brandTable: Table
-  homePageTable: Table
-  offersContainerTable: Table
-  offersContainer_offerTable: Table
   offerTable: Table
   companyTable: Table
   categoryTable: Table
   offerTypeTable: Table
-  offers_brandTable: Table
-  offers_categoryTable: Table
   bannersTable: Table
+  tagsTable: Table
+  offerBrandConnectionTable: Table;
+  offerCategoryConnectionTable: Table;
+  offerTypeConnectionTable: Table;
+  offerTagConnectionTable: Table;
+  companyTagConnectionTable: Table;
+  companyCategoryConnectionTable: Table;
+  companyBrandConnectionTable: Table;
 
   constructor (private stack: Stack) {
-    this.brandTable = this.createBrandTable()
-    this.homePageTable = this.createHomePageTable()
-    this.offersContainerTable = this.createOffersContainerTable()
-    this.offersContainer_offerTable = this.createOffersContainerOfferTable()
-    this.offerTable = this.createOfferTable()
-    this.companyTable = this.createCompanyTable()
-    this.categoryTable = this.createCategoryTable()
-    this.offerTypeTable = this.createOfferTypeTable()
-    this.offers_brandTable = this.createOffersBrandTable()
-    this.offers_categoryTable = this.createOffersCategoryTable()
-    this.bannersTable = this.createBannersTable()
+    this.brandTable = this.createBrandTable();
+    this.offerTable = this.createOfferTable();
+    this.companyTable = this.createCompanyTable();
+    this.categoryTable = this.createCategoryTable();
+    this.offerTypeTable = this.createOfferTypeTable();
+    this.bannersTable = this.createBannersTable();
+    this.tagsTable = this.createTagsTable();
+    this.offerBrandConnectionTable = this.createOfferBrandConnectionTable();
+    this.offerCategoryConnectionTable = this.createOfferCategoryConnectionTable();
+    this.offerTypeConnectionTable = this.createOfferTypeConnectionTable();
+    this.offerTagConnectionTable = this.createOfferTagConnectionTable();
+    this.companyTagConnectionTable = this.createCompanyTagConnectionTable();
+    this.companyCategoryConnectionTable = this.createCompanyCategoryConnectionTable();
+    this.companyBrandConnectionTable = this.createCompanyBrandConnectionTable();
   }
 
   private createBrandTable (): Table {
-    return new Table(this.stack, 'brandtable', {
-      fields: {
-        id: 'string',
-        homePageId: 'string',
-      },
-      primaryIndex: {
-        partitionKey: 'id',
-      },
-      globalIndexes: {
-        homePageId: {
-          partitionKey: 'homePageId',
-        },
-      },
-    })
-  }
-
-  private createHomePageTable (): Table {
-    return new Table(this.stack, 'homePageTable', {
+    return new Table(this.stack, 'brand', {
       fields: {
         id: 'string',
       },
       primaryIndex: {
         partitionKey: 'id',
-      },
-    })
-  }
-
-  private createOffersContainerTable (): Table {
-    return new Table(this.stack, 'offersContainerTable', {
-      fields: {
-        id: 'string',
-        homePageId: 'string',
-      },
-      primaryIndex: {
-        partitionKey: 'id',
-      },
-      globalIndexes: {
-        homePageId: {
-          partitionKey: 'homePageId',
-        },
-      },
-    })
-  }
-
-  private createOffersContainerOfferTable (): Table {
-    return new Table(this.stack, 'offersContainerOfferTable', {
-      fields: {
-        offersContainerId: 'string',
-        offerId: 'string',
-      },
-      primaryIndex: {
-        partitionKey: 'offerId',
-        sortKey: 'offersContainerId',
-      },
-      globalIndexes: {
-        offersContainerId: {
-          partitionKey: 'offersContainerId',
-          sortKey: 'offerId',
-        },
-      },
+      }
     })
   }
 
   private createOfferTable (): Table {
-    return new Table(this.stack, 'offerTable', {
+    return new Table(this.stack, 'offer', {
       fields: {
         id: 'string',
         offerTypeId: 'string',
@@ -114,7 +67,7 @@ export class Tables {
   }
 
   private createCompanyTable (): Table {
-    return new Table(this.stack, 'companyTable', {
+    return new Table(this.stack, 'company', {
       fields: {
         id: 'string',
       },
@@ -125,67 +78,190 @@ export class Tables {
   }
 
   private createCategoryTable (): Table {
-    return new Table(this.stack, 'categoryTable', {
+    return new Table(this.stack, 'category', {
       fields: {
         id: 'string',
+        legacyId: 'string', // Value: Brand#legacyID - ex: blc-uk#1209
+        parentCategoryId: 'string',
+        name: 'string',
+        type: 'string', //Values: offer or company
       },
       primaryIndex: {
         partitionKey: 'id',
       },
+      globalIndexes: {
+        type: {
+          partitionKey: 'type',
+          sortKey: 'name'
+        },
+        legacyId: {
+          partitionKey: 'legacyId',
+        },
+        parentCategoryId: {
+          partitionKey: 'parentCategoryId',
+          sortKey: 'name'
+        }
+      }
     })
   }
 
   private createOfferTypeTable (): Table {
-    return new Table(this.stack, 'offerTypeTable', {
+    return new Table(this.stack, 'offerType', {
       fields: {
         id: 'string',
+        legacyId: 'number', // OfferId Column in the legacy DB
       },
       primaryIndex: {
         partitionKey: 'id',
       },
+      globalIndexes: {
+        legacyId: {
+          partitionKey: 'legacyId',
+        }
+      },
     })
   }
 
-  private createOffersBrandTable (): Table {
-    return new Table(this.stack, 'offersBrandTable', {
+  private createTagsTable (): Table {
+    return new Table(this.stack, 'tags', {
+      fields: {
+        id: 'string',
+        name: 'string',
+      },
+      primaryIndex: {
+        partitionKey: 'id',
+      },
+      globalIndexes: {
+        name: {
+          partitionKey: 'name',
+        }
+      },
+    })
+  }
+
+  private createOfferBrandConnectionTable (): Table {
+    return new Table(this.stack, 'offerBrandConnection', {
       fields: {
         offerId: 'string',
         brandId: 'string',
       },
       primaryIndex: {
-        partitionKey: 'offerId',
-        sortKey: 'brandId',
+        partitionKey: 'brandId',
+        sortKey: 'offerId',
       },
       globalIndexes: {
-        brandId: {
-          partitionKey: 'brandId',
-          sortKey: 'offerId',
-        },
-      },
+        offerId: {
+          partitionKey: 'offerId',
+          sortKey: 'brandId',
+        }
+      }
     })
   }
 
-  private createOffersCategoryTable (): Table {
-    return new Table(this.stack, 'offersCategoryTable', {
+  private createOfferCategoryConnectionTable (): Table {
+    return new Table(this.stack, 'offerCategoryConnection', {
       fields: {
         offerId: 'string',
         categoryId: 'string',
       },
       primaryIndex: {
+        partitionKey: 'categoryId',
+        sortKey: 'offerId',
+      },
+      globalIndexes: {
+        offerId: {
+          partitionKey: 'offerId',
+          sortKey: 'categoryId',
+        }
+      }
+    })
+  }
+
+  private createOfferTypeConnectionTable (): Table {
+    return new Table(this.stack, 'offerTypeConnection', {
+      fields: {
+        offerId: 'string',
+        offerTypeId: 'string',
+      },
+      primaryIndex: {
+          partitionKey: 'offerTypeId',
+          sortKey: 'offerId',
+      },
+      globalIndexes: {
+        offerId: {
+          partitionKey: 'offerId',
+          sortKey: 'offerTypeId',
+        }
+      }
+    })
+  }
+
+  private createOfferTagConnectionTable (): Table {
+    return new Table(this.stack, 'offerTagConnection', {
+      fields: {
+        offerId: 'string',
+        tagId: 'string',
+      },
+      primaryIndex: {
         partitionKey: 'offerId',
+        sortKey: 'tagId',
+      }
+    })
+  }
+
+  private createCompanyTagConnectionTable (): Table {
+    return new Table(this.stack, 'companyTagConnection', {
+      fields: {
+        companyId: 'string',
+        tagId: 'string',
+      },
+      primaryIndex: {
+        partitionKey: 'companyId',
+        sortKey: 'tagId',
+      },
+    })
+  }
+
+  private createCompanyCategoryConnectionTable (): Table {
+    return new Table(this.stack, 'companyCategoryConnection', {
+      fields: {
+        companyId: 'string',
+        categoryId: 'string',
+      },
+      primaryIndex: {
+        partitionKey: 'companyId',
         sortKey: 'categoryId',
       },
       globalIndexes: {
         categoryId: {
           partitionKey: 'categoryId',
-          sortKey: 'offerId',
-        },
+          sortKey: 'companyId',
+        }
+      }
+    });
+  }
+
+  private createCompanyBrandConnectionTable (): Table {
+    return new Table(this.stack, 'companyBrandConnection', {
+      fields: {
+        companyId: 'string',
+        brandId: 'string',
       },
-    })
+      primaryIndex: {
+        partitionKey: 'brandId',
+        sortKey: 'companyId',
+      },
+      globalIndexes: {
+        companyId: {
+          partitionKey: 'companyId',
+          sortKey: 'brandId',
+        }
+      }
+    });
   }
 
   private createBannersTable (): Table {
-    return new Table(this.stack, 'bannersTable', {
+    return new Table(this.stack, 'banners', {
       fields: {
         id: 'string',
         legacyId: 'number',

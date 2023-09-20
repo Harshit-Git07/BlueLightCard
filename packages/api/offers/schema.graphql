@@ -1,56 +1,16 @@
 type Brand {
   id: ID!
   name: String
-  homePage: HomePage
-  homePageId: ID!
-}
-
-type HomePage {
-  id: ID!
-  title: String
-  offersContainers: OffersContainerConnection
-}
-
-type OffersContainerConnection {
-  items: [OffersContainer]!
-  nextToken: String
-}
-
-type OffersContainer {
-  id: ID!
-  title: String
-  offers: OffersConnection
-  homePage: HomePage
-  homePageId: ID!
-}
-
-type OffersConnection {
-  items: [Offer]!
-  nextToken: String
 }
 
 type Offer {
   id: ID!
   title: String
-  brands: BrandConnection
   company: Company
   companyId: ID!
   description: String
   termsAndConditions: String
   imageUrl: String
-  offerType: OfferType
-  offerTypeId: ID!
-  categories: OfferCategoriesConnection
-}
-
-type OfferCategoriesConnection {
-  items: [OfferCategory]!
-  nextToken: String
-}
-
-type BrandConnection {
-  items: [Brand]!
-  nextToken: String
 }
 
 type Company {
@@ -62,15 +22,22 @@ type Company {
 
 type OfferType {
   id: ID!
-  title: String
+  legacyId: Int! # OfferId in legacy DB
+  name: String!
+  isSearched: Int!
 }
 
-type OfferCategory {
-  id: ID!
-  title: String
+type Category {
+  id: ID!,
+  legacyId: Int!,
+  parentCategoryId: ID!,
+  name: String!,
+  type: String!,
+  description: String!,
+  imageThumb: String!
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type MarketPlaceMenus {
   name: String
   hidden: Boolean
@@ -79,13 +46,13 @@ type MarketPlaceMenus {
   random: Boolean
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type MarketPlaceItemEntry {
   id: String
   item: MarketPlaceMenusItem
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type MarketPlaceMenusItem {
   id: Int
   compid: Int
@@ -99,7 +66,7 @@ type MarketPlaceMenusItem {
   restrictedfrom: String
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type FlexibleMenu {
   title: String
   imagehome: String
@@ -112,7 +79,7 @@ type FlexibleMenu {
   items: [FlexibleMenuItems!]!
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type FlexibleMenuItems {
   mode: String
   imagelist: String
@@ -129,7 +96,7 @@ type FlexibleMenuItems {
   restrictedfrom: String
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type DealOfTheWeek {
   id: Int
   compid: Int
@@ -142,7 +109,7 @@ type DealOfTheWeek {
   agegate: Boolean
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type FeatureMenu {
   id: Int
   compid: Int
@@ -155,7 +122,7 @@ type FeatureMenu {
   agegate: Int
 }
 
-# This type is temporary and related to Menue Items in S3
+# This type is temporary and related to Menu Items in S3
 type OfferMenuList {
   marketPlace: [MarketPlaceMenus!]!
   flexible: [FlexibleMenu!]!
@@ -177,198 +144,17 @@ type Banner {
   brand: String!
 }
 
+type Tag {
+  id: ID!,
+  name: String!,
+  createdAt: String!,
+  updatedAt: String!,
+}
+
+
 type Query {
-  getBrand(brandID: ID!): Brand
-  getOffer(offerId: ID!): Offer
-  getOffersByType(offerTypeId: ID!, limit: Int, nextToken: String): OffersConnection
   getOfferMenusByBrandId(brandId: ID!): OfferMenuList
   getBannersByBrandAndType(type: String!, brand: String!, limit: Int): [Banner!]!
+  getOffersByType(offerType: ID!): [Offer!]!
 }
 
-type Mutation {
-  createBrand(input: CreateBrandInput!): Brand
-  updateBrand(input: UpdateBrandInput!): Brand
-  deleteBrand(input: DeleteBrandInput!): Brand
-  createCompany(input: CreateCompanyInput!): Company
-  updateCompany(input: UpdateCompanyInput!): Company
-  deleteCompany(input: DeleteCompanyInput!): Company
-  createOffer(input: CreateOfferInput!): Offer
-  updateOffer(input: UpdateOfferInput!): Offer
-  deleteOffer(input: DeleteOfferInput!): Offer
-  createOfferType(input: CreateOfferTypeInput!): OfferType
-  updateOfferType(input: UpdateOfferTypeInput!): OfferType
-  deleteOfferType(input: DeleteOfferTypeInput!): OfferType
-  createOfferCategory(input: CreateOfferCategoryInput!): OfferCategory
-  updateOfferCategory(input: UpdateOfferCategoryInput!): OfferCategory
-  deleteOfferCategory(input: DeleteOfferCategoryInput!): OfferCategory
-  createOffersContainer(input: CreateOffersContainerInput!): OffersContainer
-  updateOffersContainer(input: UpdateOffersContainerInput!): OffersContainer
-  deleteOffersContainer(input: DeleteOffersContainerInput!): OffersContainer
-  createHomePage(input: CreateHomePageInput!): HomePage
-  updateHomePage(input: UpdateHomePageInput!): HomePage
-  deleteHomePage(input: DeleteHomePageInput!): HomePage
-  createBanner(input: CreateBannerInput!): Banner
-  updateBanner(id: ID!, input: UpdateBannerInput!): Banner
-  deleteBanner(id: ID!): Banner
-}
-
-input CreateBrandInput {
-  brandID: ID!
-  name: String
-}
-
-input UpdateBrandInput {
-  brandID: ID!
-  name: String
-}
-
-input DeleteBrandInput {
-  brandID: ID!
-}
-
-input CreateCompanyInput {
-  id: ID
-  name: String
-  description: String
-  imageUrl: String
-}
-
-input UpdateCompanyInput {
-  id: ID!
-  name: String
-  description: String
-  imageUrl: String
-}
-
-input DeleteCompanyInput {
-  id: ID!
-}
-
-input CreateOfferInput {
-  id: ID
-  title: String
-  description: String
-  termsAndConditions: String
-  imageUrl: String
-  expiresAt: Int
-  offerBrandBrandID: ID
-  offerCompanyId: ID
-  offerTypeId: ID
-}
-
-input UpdateOfferInput {
-  id: ID!
-  title: String
-  description: String
-  termsAndConditions: String
-  imageUrl: String
-  expiresAt: Int
-  offerBrandBrandID: ID
-  offerCompanyId: ID
-  offerTypeId: ID
-}
-
-input DeleteOfferInput {
-  id: ID!
-  _version: Int
-}
-
-input CreateOfferTypeInput {
-  id: ID
-  title: String
-  _version: Int
-}
-
-input UpdateOfferTypeInput {
-  id: ID!
-  title: String
-  _version: Int
-}
-
-input DeleteOfferTypeInput {
-  id: ID!
-  _version: Int
-}
-
-input CreateOfferCategoryInput {
-  id: ID
-  title: String
-  _version: Int
-}
-
-input UpdateOfferCategoryInput {
-  id: ID!
-  title: String
-  _version: Int
-}
-
-input DeleteOfferCategoryInput {
-  id: ID!
-  _version: Int
-}
-
-input CreateOffersContainerInput {
-  id: ID
-  title: String
-  _version: Int
-  homePageOffersContainersId: ID
-}
-
-input UpdateOffersContainerInput {
-  id: ID!
-  title: String
-  homePageOffersContainersId: ID
-}
-
-input DeleteOffersContainerInput {
-  id: ID!
-}
-
-
-input CreateHomePageInput {
-  id: ID
-  title: String
-  brandID: ID!
-}
-
-input UpdateHomePageInput {
-  id: ID!
-  title: String
-  brandID: ID
-}
-
-input DeleteHomePageInput {
-  id: ID!
-}
-
-input CreateBannerInput {
-  legacyId: Int!
-  name: String!
-  startsAt: Int!
-  expiresAt: Int!
-  status: Boolean!
-  link: String!
-  imageSource: String!
-  type: String!
-  legacyCompanyId: Int!
-  brand: String!
-}
-
-input UpdateBannerInput {
-  id: ID!
-  legacyId: Int!
-  name: String!
-  startsAt: Int!
-  expiresAt: Int!
-  status: Boolean!
-  link: String!
-  imageSource: String!
-  type: String!
-  legacyCompanyId: Int!
-  brand: String!
-}
-
-input DeleteBannerInput {
-  id: ID!
-  _version: Int
-}

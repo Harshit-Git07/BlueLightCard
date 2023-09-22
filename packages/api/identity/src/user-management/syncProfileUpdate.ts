@@ -7,6 +7,8 @@ import { BRANDS } from '../../../core/src/types/brands.enum';
 import { UserProfileModel, UserProfile } from '../../src/models/userprofile';
 import { sendToDLQ } from '../../src/helpers/DLQ';
 import { ZodError } from 'zod';
+import { v4 } from 'uuid';
+
 
 const service: string = process.env.SERVICE as string
 const tableName = process.env.TABLE_NAME;
@@ -76,15 +78,17 @@ export const handler = async (event: any, context: any) => {
       '#sk': 'sk',
     },
   };
-  let oldProfileUuid = null;
+  let profileUuid = null;
     const result = await dynamodb.send(new QueryCommand(queryParams));
     if(result.Items === null || result.Items?.length === 0){
-      logger.info('user profile data not found', event);
-      return Response.BadRequest({ message: 'User profile data not found' });
+      logger.info('user profile data not found, will be created', event);
+      profileUuid = `PROFILE#${v4()}`;
     }else{
         const user = result.Items?.at(0) as Record<string, string>;
-        oldProfileUuid = user.sk;
+        profileUuid = user.sk;
+    }
     
+
     let updateExp = '';
   
     let expAttrValues: Record<string,any> = {};
@@ -97,7 +101,8 @@ export const handler = async (event: any, context: any) => {
         TableName: tableName,
         Key: {
             "pk"   : `MEMBER#${uuid}`,
-            "sk"  : `${oldProfileUuid}`
+            "sk"  : `${profileUuid}`
+
         },
         UpdateExpression: `set ${updateExp}`,
         ExpressionAttributeValues: expAttrValues, 
@@ -114,7 +119,7 @@ export const handler = async (event: any, context: any) => {
     logger.error("error syncing user profile data", { uuid, err });
     await sendToDLQ(event);
   }
-}
+
    
 };
 

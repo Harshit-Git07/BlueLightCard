@@ -17,8 +17,7 @@ export class TypeResolver implements IResolver {
 
   initialise() {
     this.createOfferCompanyResolver();
-    this.createOfferTypeResolver();
-    this.createTypeLambdaResolver();
+    // this.createTypeLambdaResolver();
   }
 
   private createOfferCompanyResolver() {
@@ -30,25 +29,16 @@ export class TypeResolver implements IResolver {
     });
   }
 
-  private createOfferTypeResolver() {
-    this.dataSources.offerTypeDS.createResolver('OfferTypeResolver', {
-      typeName: 'Offer',
-      fieldName: 'offerType',
-      requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/offerTypeRequest.vtl`),
-      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
-    });
-  }
-
-  private createTypeLambdaResolver() {
-    const fields = [
-      { typeName: 'Offer', fieldName: 'brands' },
-      { typeName: 'Offer', fieldName: 'categories' },
-    ];
-    fields.forEach(({ typeName, fieldName }) =>
-      this.dataSources.typeLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
-        typeName,
-        fieldName,
-      }),
-    );
-  }
+  // private createTypeLambdaResolver() {
+  //   const fields = [
+  //     { typeName: 'Offer', fieldName: 'brands' },
+  //     { typeName: 'Offer', fieldName: 'categories' },
+  //   ];
+  //   fields.forEach(({ typeName, fieldName }) =>
+  //     this.dataSources.typeLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
+  //       typeName,
+  //       fieldName,
+  //     }),
+  //   );
+  // }
 }

@@ -191,7 +191,7 @@ jobs:
     env:
       NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/formOutputData
-      NEXT_PUBLIC_LOGIN_ROUTE: /login.php
+      NEXT_PUBLIC_OFFERS_ENDPOINT: https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -233,7 +233,7 @@ jobs:
     env:
       NEXT_PUBLIC_IDENTITY_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/formOutputData
-      NEXT_PUBLIC_LOGIN_ROUTE: /login.php
+      NEXT_PUBLIC_OFFERS_ENDPOINT: https://27d2m22mtvac5cvilrvb7kviyi.appsync-api.eu-west-2.amazonaws.com/graphql
     steps:
       - uses: actions/checkout@v3
       - name: Cache node modules

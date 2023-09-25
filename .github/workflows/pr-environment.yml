@@ -82,7 +82,8 @@ jobs:
       NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
       NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
       NEXT_PUBLIC_COGNITO_IDP_ID: ${{ secrets.COGNITO_IDP_ID }}
-      NEXT_PUBLIC_LOGIN_ROUTE: /mock-login
+      NEXT_PUBLIC_LOGOUT_ROUTE: /mock-login
+      NEXT_PUBLIC_OFFERS_ENDPOINT: https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

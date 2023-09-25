@@ -79,6 +79,7 @@ export const handler = async (event: any, context: any) => {
     },
   };
   let profileUuid = null;
+  let action = 'created';
     const result = await dynamodb.send(new QueryCommand(queryParams));
     if(result.Items === null || result.Items?.length === 0){
       logger.info('user profile data not found, will be created', event);
@@ -86,6 +87,7 @@ export const handler = async (event: any, context: any) => {
     }else{
         const user = result.Items?.at(0) as Record<string, string>;
         profileUuid = user.sk;
+        action = 'updated';
     }
     
 
@@ -114,7 +116,9 @@ export const handler = async (event: any, context: any) => {
     if(results.$metadata.httpStatusCode !== 200) { 
         logger.error("error syncing user profile data", { uuid, results });
         await sendToDLQ(event);
+        return Response.BadRequest({ message: 'error syncing user profile data' });
     }   
+    return Response.OK({ message: `user profile data ${action}` });
   } catch (err: any) {
     logger.error("error syncing user profile data", { uuid, err });
     await sendToDLQ(event);

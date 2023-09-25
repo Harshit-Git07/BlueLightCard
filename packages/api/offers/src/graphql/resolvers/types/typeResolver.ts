@@ -17,7 +17,7 @@ export class TypeResolver implements IResolver {
 
   initialise() {
     this.createOfferCompanyResolver();
-    // this.createTypeLambdaResolver();
+    this.createTypeLambdaResolver();
   }
 
   private createOfferCompanyResolver() {
@@ -29,16 +29,20 @@ export class TypeResolver implements IResolver {
     });
   }
 
-  // private createTypeLambdaResolver() {
-  //   const fields = [
-  //     { typeName: 'Offer', fieldName: 'brands' },
-  //     { typeName: 'Offer', fieldName: 'categories' },
-  //   ];
-  //   fields.forEach(({ typeName, fieldName }) =>
-  //     this.dataSources.typeLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
-  //       typeName,
-  //       fieldName,
-  //     }),
-  //   );
-  // }
+  private createTypeLambdaResolver() {
+    const fields = [
+      { typeName: 'Offer', fieldName: 'brands' },
+      { typeName: 'Offer', fieldName: 'categories' },
+      { typeName: 'Offer', fieldName: 'types'},
+      { typeName: 'Company', fieldName: 'brands' },
+      { typeName: 'Company', fieldName: 'categories' },
+
+    ];
+    fields.forEach(({ typeName, fieldName }) => 
+      this.dataSources.typeLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
+        typeName,
+        fieldName,
+      })
+    );
+  }
 }

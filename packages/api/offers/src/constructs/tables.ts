@@ -52,15 +52,15 @@ export class Tables {
   private createOfferTable (): Table {
     return new Table(this.stack, 'offer', {
       fields: {
+        legacyId: 'string',
         id: 'string',
-        offerTypeId: 'string',
       },
       primaryIndex: {
         partitionKey: 'id',
       },
       globalIndexes: {
-        offerTypeId: {
-          partitionKey: 'offerTypeId',
+        legacyId: {
+          partitionKey: 'legacyId',
         },
       },
     })
@@ -69,10 +69,16 @@ export class Tables {
   private createCompanyTable (): Table {
     return new Table(this.stack, 'company', {
       fields: {
+        legacyId: 'string',
         id: 'string',
       },
       primaryIndex: {
         partitionKey: 'id',
+      },
+      globalIndexes: {
+        legacyId: {
+          partitionKey: 'legacyId',
+        },
       },
     })
   }
@@ -229,13 +235,13 @@ export class Tables {
         categoryId: 'string',
       },
       primaryIndex: {
-        partitionKey: 'companyId',
-        sortKey: 'categoryId',
+        partitionKey: 'categoryId',
+        sortKey: 'companyId',
       },
       globalIndexes: {
-        categoryId: {
-          partitionKey: 'categoryId',
-          sortKey: 'companyId',
+        companyId: {
+          partitionKey: 'companyId',
+          sortKey: 'categoryId',
         }
       }
     });

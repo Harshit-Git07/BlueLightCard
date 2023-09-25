@@ -5,31 +5,71 @@ type Brand {
 
 type Offer {
   id: ID!
-  title: String
-  company: Company
-  companyId: ID!
+  legacyId: String
+  brands: [Brand]!
+  types: [OfferType!]!
+  categories: [Category]!
+  company: Company!
+  companyId: String!
+  name: String!
   description: String
   termsAndConditions: String
-  imageUrl: String
+  url: String
+  expiresAt: Int!
+  status: String!
+  code: String
+  type: String!
+  restrictedTo: String
+  restrictedFrom: String
+  startsAt: String
+  sortOrder: Int
+  created: Int!
+  appStatus: Boolean
+  national: Boolean
+  buttonText: String
+  offerImg: String
+  openMethod: String!
 }
 
 type Company {
   id: ID!
-  name: String
+  legacyId: String
+  name: String!
+  email: String
+  phone: String
+  contactName: String
+  contactPosition: String
   description: String
-  imageUrl: String
+  largeLogo: String
+  smallLogo: String
+  url: String
+  isApproved: Boolean!
+  tradeRegion: String
+  postCode: String
+  maximumOfferCount: Int
+  building: String
+  street: String
+  county: String
+  townCity: String
+  country: String
+  eagleEyeId: Int
+  affiliateNetworkId: String
+  affiliateMerchantId: String 
+  isAgeGated: Boolean
+  brands: [Brand]!
+  categories: [Category]!
 }
 
 type OfferType {
   id: ID!
-  legacyId: Int! # OfferId in legacy DB
+  legacyId: Int # OfferId in legacy DB
   name: String!
   isSearched: Int!
 }
 
 type Category {
   id: ID!,
-  legacyId: Int!,
+  legacyId: String,
   parentCategoryId: ID!,
   name: String!,
   type: String!,
@@ -132,7 +172,7 @@ type OfferMenuList {
 
 type Banner {
   id: ID!
-  legacyId: Int!
+  legacyId: Int
   name: String!
   startsAt: Int!
   expiresAt: Int!
@@ -145,10 +185,10 @@ type Banner {
 }
 
 type Tag {
-  id: ID!,
-  name: String!,
-  createdAt: String!,
-  updatedAt: String!,
+  id: ID!
+  name: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 
@@ -156,5 +196,7 @@ type Query {
   getOfferMenusByBrandId(brandId: ID!): OfferMenuList
   getBannersByBrandAndType(type: String!, brand: String!, limit: Int): [Banner!]!
   getOffersByType(offerType: ID!): [Offer!]!
+  getOfferById(id: ID!): Offer!
+  getCompanyById(id: ID!): Company!
 }
 

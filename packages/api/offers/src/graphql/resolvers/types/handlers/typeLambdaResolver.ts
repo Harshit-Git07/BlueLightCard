@@ -1,119 +1,44 @@
 import { AppSyncResolverEvent } from 'aws-lambda';
-import { DynamoDBDocumentClient, QueryCommand, BatchGetCommand } from '@aws-sdk/lib-dynamodb';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { CompanyFieldsResolver } from './companyFieldsResolver'
+import { OfferFieldsResolver } from './offerFieldsResolver'
 const logger = new Logger({ serviceName: `typeLambdaResolver` });
 
 const brandTable = process.env.BRAND_TABLE as string;
-const offerCategoryTable = process.env.OFFER_CATEGORIES_TABLE as string;
-const offerBrandTable = process.env.OFFER_BRAND_TABLE as string;
-const offerTable: string = process.env.OFFER_TABLE as string;
 const categoryTable: string = process.env.CATEGORY_TABLE as string;
-const client = new DynamoDBClient({});
-const dynamodb = DynamoDBDocumentClient.from(client);
 
-const resolvers = new Map<string, (event: AppSyncResolverEvent<any>) => Promise<any>>([
-  ['Offer:categories', resolveOffersCategories],
-  ['Offer:brands', resolveOffersBrands],
-]);
+class ResolverHandler {
+  private resolver: Map<string, () => Promise<any>> ;
 
-async function resolveOffersCategories(event: AppSyncResolverEvent<any>) {
-  const offerId = event.source?.id; // Get the ID of the Offer
-
-  // Step 1: Fetch offer IDs from the many-to-many table
-  const manyToManyTableParams = {
-    TableName: offerCategoryTable,
-    KeyConditionExpression: 'offerId = :offerId',
-    ExpressionAttributeValues: {
-      ':offerId': offerId,
-    },
-  };
-
-  const result = await dynamodb.send(new QueryCommand(manyToManyTableParams));
-  if (result.Items === null || (result.Items != null && result.Items.length === 0)) {
-    return [];
-  }
-  const categoryIds = result.Items?.map((item) => item.categoryId);
-
-  if (!categoryIds) {
-    return [];
+  constructor (private event: AppSyncResolverEvent<any>) {
+    const offerFieldsResolver = new OfferFieldsResolver(event.source?.id, categoryTable, brandTable, logger)
+    const companyFieldsResolver = new CompanyFieldsResolver(event.source?.id, categoryTable, brandTable, logger)
+    this.resolver = new Map<string, () => Promise<any>>([
+      ['Offer:categories', offerFieldsResolver.resolveCategories.bind(offerFieldsResolver)],
+      ['Offer:brands', offerFieldsResolver.resolveBrands.bind(offerFieldsResolver)],
+      ['Offer:types', offerFieldsResolver.resolveTypes.bind(offerFieldsResolver)],
+      ['Company:categories', companyFieldsResolver.resolveCategories.bind(companyFieldsResolver)],
+      ['Company:brands', companyFieldsResolver.resolveBrands.bind(companyFieldsResolver)],
+    ]);
   }
 
-  // Step 2: Fetch the corresponding offers from the offer table
-  const categoryTableParams = {
-    RequestItems: {
-      [categoryTable]: {
-        Keys: categoryIds.map((id) => ({ id })),
-      },
-    },
-  };
-
-  const categoryData = await dynamodb.send(new BatchGetCommand(categoryTableParams));
-  if (!categoryData.Responses) {
-    return [];
+  async handle () {
+    const resolverKey = `${this.event.info.parentTypeName}:${this.event.info.fieldName}`;
+    const resolver = this.resolver.get(resolverKey);
+    if (resolver) {
+      return await resolver()
+    } else {
+      logger.error('Resolver not found', { resolverKey });
+      throw new Error(`Resolver ${resolverKey} not found.`);
+    }
   }
-
-  const categories = categoryData.Responses[`${categoryTable}`];
-  logger.info('categoriesData', { categories });
-
-  return {
-    items: categories,
-  };
-}
-async function resolveOffersBrands(event: AppSyncResolverEvent<any>) {
-  const offerId = event.source?.id; // Get the ID of the Offer
-
-  // Step 1: Fetch offer IDs from the many-to-many table
-  const manyToManyTableParams = {
-    TableName: offerBrandTable,
-    KeyConditionExpression: 'offerId = :offerId',
-    ExpressionAttributeValues: {
-      ':offerId': offerId,
-    },
-  };
-
-  const result = await dynamodb.send(new QueryCommand(manyToManyTableParams));
-  if (result.Items === null || (result.Items != null && result.Items.length === 0)) {
-    return [];
-  }
-  const brandIds = result.Items?.map((item) => item.brandId);
-
-  if (!brandIds) {
-    return [];
-  }
-
-  // Step 2: Fetch the corresponding offers from the offer table
-  const brandTableParams = {
-    RequestItems: {
-      [brandTable]: {
-        Keys: brandIds.map((id) => ({ id })),
-      },
-    },
-  };
-
-  const brandData = await dynamodb.send(new BatchGetCommand(brandTableParams));
-  if (!brandData.Responses) {
-    return [];
-  }
-
-  const brands = brandData.Responses[`${brandTable}`];
-  logger.info('categoriesData', { brands });
-
-  return {
-    items: brands,
-  };
 }
 
 export const handler = async (event: AppSyncResolverEvent<any>) => {
-  logger.info('event - handler', { event });
+  logger.info('event handler', { event });
 
-  const resolverKey = `${event.info.parentTypeName}:${event.info.fieldName}`;
-  const resolver = resolvers.get(resolverKey);
-
-  if (resolver) {
-    return await resolver(event);
-  } else {
-    logger.error('Resolver not found', { resolverKey });
-    throw new Error(`Resolver ${resolverKey} not found.`);
-  }
+  const resolver = new ResolverHandler(event);
+  return await resolver.handle();
 };
+
+

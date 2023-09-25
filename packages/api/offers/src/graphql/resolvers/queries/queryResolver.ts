@@ -17,6 +17,8 @@ export class QueryResolver implements IResolver {
   initialise() {
     this.getBannersByBrandAndTypeResolver();
     this.createQueryLambdaResolver();
+    this.getOfferByIdResolver();
+    this.getCompanyByIdResolver();
   }
 
   private getBannersByBrandAndTypeResolver() {
@@ -36,5 +38,23 @@ export class QueryResolver implements IResolver {
         fieldName,
       }),
     );
+  }
+
+  private getOfferByIdResolver() {
+    this.dataSources.offerDS.createResolver('GetOfferById', {
+      typeName: 'Query',
+      fieldName: 'getOfferById',
+      requestMappingTemplate: MappingTemplate.dynamoDbGetItem('id', 'id'),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
+    });
+  }
+
+  private getCompanyByIdResolver() {
+    this.dataSources.companyDS.createResolver('GetCompanyById', {
+      typeName: 'Query',
+      fieldName: 'getCompanyById',
+      requestMappingTemplate: MappingTemplate.dynamoDbGetItem('id', 'id'),
+      responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
+    });
   }
 }

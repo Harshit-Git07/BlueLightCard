@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.16.0...bluelightcard/identity-v1.17.0) (2023-09-25)
+
+
+### Features
+
+* add tests - pr review ([#373](https://github.com/bluelightcard/BlueLightCard-2.0/issues/373)) ([11a157b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11a157bc38396a8ab66e54580f534adc60bd3c30))
+
 ## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.15.0...bluelightcard/identity-v1.16.0) (2023-09-22)
 
 

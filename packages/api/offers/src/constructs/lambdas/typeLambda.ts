@@ -26,7 +26,7 @@ export class TypeLambda extends LambdaAbstract {
         OFFER_CATEGORY_CONNECTION_TABLE: this.tables.offerCategoryConnectionTable.tableName,
         OFFER_BRAND_CONNECTION_TABLE: this.tables.offerBrandConnectionTable.tableName,
         COMPANY_BRAND_CONNECTION_TABLE: this.tables.companyBrandConnectionTable.tableName,
-      //  COMPANY_CATEGORY_CONNECTION_TABLE: this.tables.companyCategoryConnectionTable.tableName,
+        COMPANY_CATEGORY_CONNECTION_TABLE: this.tables.companyCategoryConnectionTable.tableName,
       },
     });
 
@@ -44,6 +44,6 @@ export class TypeLambda extends LambdaAbstract {
     this.tables.offerCategoryConnectionTable.cdk.table.grantReadWriteData(lambdaFunction);
     this.tables.offerBrandConnectionTable.cdk.table.grantReadWriteData(lambdaFunction);
     this.tables.companyBrandConnectionTable.cdk.table.grantReadWriteData(lambdaFunction);
-  //  this.tables.companyCategoryConnectionTable.cdk.table.grantReadWriteData(lambdaFunction);
+    this.tables.companyCategoryConnectionTable.cdk.table.grantReadWriteData(lambdaFunction);
   }
 }

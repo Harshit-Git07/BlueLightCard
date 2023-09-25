@@ -18,7 +18,7 @@ export class Tables {
   offerTypeConnectionTable: Table;
   offerTagConnectionTable: Table;
   companyTagConnectionTable: Table;
- // companyCategoryConnectionTable: Table;
+  companyCategoryConnectionTable: Table;
   companyBrandConnectionTable: Table;
 
   constructor (private stack: Stack) {
@@ -34,7 +34,7 @@ export class Tables {
     this.offerTypeConnectionTable = this.createOfferTypeConnectionTable();
     this.offerTagConnectionTable = this.createOfferTagConnectionTable();
     this.companyTagConnectionTable = this.createCompanyTagConnectionTable();
-   // this.companyCategoryConnectionTable = this.createCompanyCategoryConnectionTable();
+    this.companyCategoryConnectionTable = this.createCompanyCategoryConnectionTable();
     this.companyBrandConnectionTable = this.createCompanyBrandConnectionTable();
   }
 
@@ -50,7 +50,7 @@ export class Tables {
   }
 
   private createOfferTable (): Table {
-    return new Table(this.stack, 'offer', {
+    return new Table(this.stack, 'offers', {
       fields: {
         legacyId: 'string',
         id: 'string',
@@ -67,7 +67,7 @@ export class Tables {
   }
 
   private createCompanyTable (): Table {
-    return new Table(this.stack, 'company', {
+    return new Table(this.stack, 'companies', {
       fields: {
         legacyId: 'string',
         id: 'string',
@@ -84,7 +84,7 @@ export class Tables {
   }
 
   private createCategoryTable (): Table {
-    return new Table(this.stack, 'category', {
+    return new Table(this.stack, 'categories', {
       fields: {
         id: 'string',
         legacyId: 'string', // Value: Brand#legacyID - ex: blc-uk#1209
@@ -112,7 +112,7 @@ export class Tables {
   }
 
   private createOfferTypeTable (): Table {
-    return new Table(this.stack, 'offerType', {
+    return new Table(this.stack, 'offerTypes', {
       fields: {
         id: 'string',
         legacyId: 'number', // OfferId Column in the legacy DB
@@ -146,7 +146,7 @@ export class Tables {
   }
 
   private createOfferBrandConnectionTable (): Table {
-    return new Table(this.stack, 'offerBrandConnection', {
+    return new Table(this.stack, 'offerBrandsConnection', {
       fields: {
         offerId: 'string',
         brandId: 'string',
@@ -165,7 +165,7 @@ export class Tables {
   }
 
   private createOfferCategoryConnectionTable (): Table {
-    return new Table(this.stack, 'offerCategoryConnection', {
+    return new Table(this.stack, 'offerCategoriesConnection', {
       fields: {
         offerId: 'string',
         categoryId: 'string',
@@ -184,7 +184,7 @@ export class Tables {
   }
 
   private createOfferTypeConnectionTable (): Table {
-    return new Table(this.stack, 'offerTypeConnection', {
+    return new Table(this.stack, 'offerTypesConnection', {
       fields: {
         offerId: 'string',
         offerTypeId: 'string',
@@ -203,7 +203,7 @@ export class Tables {
   }
 
   private createOfferTagConnectionTable (): Table {
-    return new Table(this.stack, 'offerTagConnection', {
+    return new Table(this.stack, 'offerTagsConnection', {
       fields: {
         offerId: 'string',
         tagId: 'string',
@@ -216,7 +216,7 @@ export class Tables {
   }
 
   private createCompanyTagConnectionTable (): Table {
-    return new Table(this.stack, 'companyTagConnection', {
+    return new Table(this.stack, 'companyTagsConnection', {
       fields: {
         companyId: 'string',
         tagId: 'string',
@@ -229,7 +229,7 @@ export class Tables {
   }
 
   private createCompanyCategoryConnectionTable (): Table {
-    return new Table(this.stack, 'companyCategoryConnection', {
+    return new Table(this.stack, 'companyCategoriesConnection', {
       fields: {
         companyId: 'string',
         categoryId: 'string',
@@ -248,7 +248,7 @@ export class Tables {
   }
 
   private createCompanyBrandConnectionTable (): Table {
-    return new Table(this.stack, 'companyBrandConnection', {
+    return new Table(this.stack, 'companyBrandsConnection', {
       fields: {
         companyId: 'string',
         brandId: 'string',

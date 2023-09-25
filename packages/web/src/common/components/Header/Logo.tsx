@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from '@/components/Image/Image';
-import Link from 'next/link';
+import Link from '@/components/Link/Link';
 import { logoProps } from './types';
 
 const Logo: React.FC<logoProps> = (props) => {

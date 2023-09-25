@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import OfferCard from '../../components/OfferCard';
+import OfferCard from '@/offers/components/OfferCard/OfferCard';
 
 describe('OfferCard component', () => {
   const args = {

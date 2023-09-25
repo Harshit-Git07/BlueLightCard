@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { OfferCardProps } from './types';
-import Link from 'next/link';
+import Link from '@/components/Link/Link';
 import Image from '@/components/Image/Image';
 import OfferCardDetails from './OfferCardDetails';
 
@@ -14,7 +14,7 @@ const OfferCard: FC<OfferCardProps> = ({
 }) => {
   return (
     <div className="w-full h-full rounded-lg relative shadow-lg dark:bg-surface-secondary-dark pb-5 mb-5">
-      <Link href={offerLink}>
+      <Link href={offerLink} useLegacyRouting>
         <div>
           <Image
             src={imageSrc}

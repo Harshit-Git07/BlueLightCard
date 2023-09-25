@@ -58,7 +58,7 @@ type MarketPlaceMenusItem {
   compid: Int
   typeid: Int
   offername: String
-  compnayname: String
+  companyname: String
   logos: String
   image: String
   agegate: Boolean
@@ -103,7 +103,7 @@ type DealOfTheWeek {
   typeid: Int
   offername: String
   expires: String
-  compnayname: String
+  companyname: String
   logos: String
   image: String
   agegate: Boolean
@@ -116,7 +116,7 @@ type FeatureMenu {
   typeid: Int
   offername: String
   expires: String
-  compnayname: String
+  companyname: String
   logos: String
   image: String
   agegate: Int

@@ -1,57 +1,36 @@
 import { NextPage } from 'next';
-import React, { useEffect, useRef, useState } from 'react';
-import headerConfig from '../../data/header.json';
-import homePageData from '../../data/homePageData.json';
-import footerConfig from '../../data/footer.json';
+import React, { useEffect, useState } from 'react';
+import headerConfig from '@/data/header.json';
+import footerConfig from '@/data/footer.json';
 import Header from '@/components/Header/Header';
-import Image from '@/components/Image/Image';
 import Heading from '@/components/Heading/Heading';
 import Carousel from '@/components/Carousel/Carousel';
 import Footer from '@/components/Footer/Footer';
-import OfferCard from '../offers/components/OfferCard';
-import useIsVisible from '@/hooks/useIsVisible';
 import withAuth from '@/hoc/withAuth';
+import { homePageQuery } from 'src/graphql/homePageQueries';
+import makeQuery from 'src/graphql/makeQuery';
+import Link from '@/components/Link/Link';
+import Button from '@/components/Button/Button';
+import getCDNUrl from '@/utils/getCDNUrl';
+import { BRAND, LOGOUT_ROUTE } from '@/global-vars';
+import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
+import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
+import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
+import {
+  BannerType,
+  DealsOfTheWeekType,
+  MarketPlaceMenuType,
+  MarketPlaceItemType,
+  FlexibleMenuType,
+  FeaturedOffersType,
+} from '@/page-types/members-home';
 
-type BannerProps = {
-  linkId: string;
-  image: string;
-  bannerType: string;
-  legacyCompanyId: number;
-  companyId: string;
-  ageRestricted: boolean;
-};
-
-const Banner = ({
-  linkId,
-  image,
-  bannerType,
-  legacyCompanyId,
-  companyId,
-  ageRestricted,
-}: BannerProps) => {
-  return (
-    <div className="w-full relative">
-      <Image
-        src={image}
-        alt="Banner image"
-        fill={false}
-        width="0"
-        height="0"
-        sizes="100vw"
-        className={'h-auto w-full'}
-        quality={50}
-      />
-    </div>
-  );
-};
-
-const Container = ({
-  children,
-  className = '',
-}: {
+interface ContainerProps {
   children: React.ReactNode;
   className?: string;
-}) => {
+}
+
+const Container = ({ children, className = '' }: ContainerProps) => {
   return (
     <>
       <div className={`${className} px-2 tablet:px-8 laptop:px-64 py-4 w-full`}>{children}</div>
@@ -60,120 +39,162 @@ const Container = ({
   );
 };
 
-const PseudoCarousel = ({
-  title,
-  itemsToShow,
-  offers,
-  flexibleMenu,
-}: {
-  title: string;
-  itemsToShow: number;
-  flexibleMenu?: boolean;
-  offers: {
-    offerName: string;
-    companyName: string;
-    image: string;
-    legacyCompanyId: number;
-    legacyOfferId: number;
-  }[];
-}) => {
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const isVisible = useIsVisible(carouselRef);
-
-  /** Set temporary placeholder height to only load carousel if space on screen */
-  const [className, setClassName] = useState('h-[400px]');
-
-  /** If element is visible on screen, remove placeholder height */
-  useEffect(() => {
-    if (isVisible) setClassName('');
-  }, [isVisible]);
-
-  return (
-    <div className={className} ref={carouselRef}>
-      {isVisible && (
-        <>
-          <Heading headingLevel="h2">{title}</Heading>
-          <Carousel
-            showControls
-            autoPlay
-            elementsPerPageDesktop={itemsToShow}
-            elementsPerPageLaptop={itemsToShow}
-            elementsPerPageMobile={1}
-            elementsPerPageTablet={2}
-          >
-            {offers.map((offer, index) => {
-              return (
-                <OfferCard
-                  key={index}
-                  alt={'Card'}
-                  offerName={offer.offerName}
-                  companyName={offer.companyName}
-                  imageSrc={offer.image}
-                  offerLink={`https://www.bluelightcard.co.uk/offerdetails.php?cid=${offer.legacyCompanyId}&${offer.legacyOfferId}`}
-                  variant={flexibleMenu ? 'small' : ''}
-                />
-              );
-            })}
-          </Carousel>
-        </>
-      )}
-    </div>
-  );
-};
+function cleanText(text: string) {
+  return text
+    .replace(/&nbsp;/g, ' ') // Might not matter, but just in case
+    .replace(/&amp;/g, '&')
+    .replace(/&pound;/g, '£');
+}
 
 const HomePage: NextPage<any> = (props) => {
-  // Unpack data
-  // TODO: Wrap in layout
+  const { header, footer } = props;
 
-  const { header, banners, dealsOfTheWeek, flexible, marketplace, featured, footer } = props;
+  // Store data states
+  const [banners, setBanners] = useState<BannerType[]>([]);
+  const [dealsOfTheWeek, setDealsOfTheWeek] = useState<DealsOfTheWeekType[]>([]);
+  const [marketplaceMenus, setMarketplaceMenus] = useState<MarketPlaceMenuType[]>([]);
+  const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
+  const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
+
+  // Handle loading states
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
+
+  // Fetch Data on first load
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const queryResponse = await makeQuery(homePageQuery(BRAND));
+
+        setBanners(queryResponse.data.banners as BannerType[]);
+        setDealsOfTheWeek(queryResponse.data.offerMenus.deals as DealsOfTheWeekType[]);
+        setMarketplaceMenus(queryResponse.data.offerMenus.marketPlace as MarketPlaceMenuType[]);
+        setFlexibleMenu(queryResponse.data.offerMenus.flexible as FlexibleMenuType[]);
+        setFeaturedOffers(queryResponse.data.offerMenus.features as FeaturedOffersType[]);
+        setLoadingError(false);
+      } catch (error) {
+        setLoadingError(true);
+      }
+      setHasLoaded(true);
+    };
+
+    fetchData();
+  }, []);
+
+  // Format carousel data
+  const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({
+    offername: cleanText(offer.offername),
+    companyname: cleanText(offer.companyname),
+    imageUrl: offer.image
+      ? offer.image
+      : getCDNUrl(`/companyimages/complarge/retina/${offer.logos}`),
+    href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
+  }));
+
+  const flexibleOffersData = flexibleMenu
+    .map((offer: FlexibleMenuType, index: number) => ({
+      hide: offer.hide,
+      offername: cleanText(offer.title),
+      imageUrl: cleanText(offer.imagehome),
+      href: `/flexibleOffers.php?id=${index}`,
+    }))
+    .filter((offer) => !offer.hide);
+
+  const featuredOffersData = featuredOffers.map((offer: FeaturedOffersType) => ({
+    companyname: cleanText(offer.companyname),
+    offername: cleanText(offer.offername),
+    href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
+    imageUrl: offer.image
+      ? offer.image
+      : getCDNUrl(`/companyimages/complarge/retina/${offer.logos}`),
+  }));
+
   return (
     <>
       <Header logoUrl={header.logoSource} navItems={header.navItems} loggedIn={true} />
-      <Container>
-        <Carousel
-          autoPlay
-          showControls
-          elementsPerPageLaptop={1}
-          elementsPerPageDesktop={1}
-          elementsPerPageTablet={1}
-          elementsPerPageMobile={1}
-        >
-          {banners.map((banner: any, index: number) => {
-            return <Banner key={index} {...banner} />;
-          })}
-        </Carousel>
-      </Container>
 
-      <Container className="flex flex-col">
-        <PseudoCarousel title="Deals of the week" itemsToShow={2} offers={dealsOfTheWeek} />
-      </Container>
+      {!hasLoaded && <LoadingPlaceholder />}
 
-      <Container className="flex flex-col">
-        <PseudoCarousel
-          title="Ways to save"
-          itemsToShow={3}
-          flexibleMenu={true}
-          offers={flexible.map((offer: any) => {
-            return {
-              offerName: offer.intro,
-              image: offer.imagedetail,
-              companyName: '',
-            };
-          })}
-        />
-      </Container>
+      {loadingError && (
+        <div className="w-full h-[400px] flex justify-center">
+          <div className="m-auto">
+            <Heading headingLevel={'h1'}>An error has occured when loading the page</Heading>
+            <Link href={LOGOUT_ROUTE} useLegacyRouting={process.env.NODE_ENV === 'production'}>
+              <Button>Please login again</Button>
+            </Link>
+          </div>
+        </div>
+      )}
 
-      {marketplace.map((menu: any, index: number) => {
+      {/* Banners Carousel */}
+      {banners.length > 0 && (
+        <Container>
+          <Carousel
+            autoPlay
+            showControls
+            elementsPerPageLaptop={1}
+            elementsPerPageDesktop={1}
+            elementsPerPageTablet={1}
+            elementsPerPageMobile={1}
+          >
+            {banners.map((banner: any, index: number) => {
+              return (
+                <PromoBanner key={index} image={getCDNUrl(banner.imageSource)} href={banner.link} />
+              );
+            })}
+          </Carousel>
+        </Container>
+      )}
+
+      {/* Deals of the week carousel */}
+      {dealsOfTheWeek.length > 0 && (
+        <Container className="flex flex-col">
+          <CardCarousel
+            title="Deals of the week"
+            itemsToShow={2}
+            offers={dealsOfTheWeekOffersData}
+          />
+        </Container>
+      )}
+
+      {/* Flexible offers carousel */}
+      {flexibleMenu.length > 0 && (
+        <Container className="flex flex-col">
+          <CardCarousel
+            title={'Ways to Save'}
+            itemsToShow={3}
+            useSmallCards
+            offers={flexibleOffersData}
+          />
+        </Container>
+      )}
+
+      {/* Marketplace carousels */}
+      {marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
         return (
           <Container key={index}>
-            <PseudoCarousel title={menu.name} itemsToShow={3} offers={menu.items} />
+            <CardCarousel
+              title={menu.name}
+              itemsToShow={3}
+              offers={menu.items.map(({ item }: MarketPlaceItemType) => {
+                return {
+                  offername: cleanText(item.offername),
+                  companyname: cleanText(item.companyname),
+                  imageUrl: item.image,
+                  href: `/offerdetails.php?cid=${item.compid}&oid=${item.id}`,
+                };
+              })}
+            />
           </Container>
         );
       })}
 
-      <Container className="flex flex-col">
-        <PseudoCarousel title="Featured Offers" itemsToShow={3} offers={featured} />
-      </Container>
+      {/* Featured offers carousel */}
+      {featuredOffers.length > 0 && (
+        <Container className="flex flex-col">
+          <CardCarousel title="Featured Offers" itemsToShow={3} offers={featuredOffersData} />
+        </Container>
+      )}
 
       <Footer {...footer} />
     </>
@@ -181,21 +202,13 @@ const HomePage: NextPage<any> = (props) => {
 };
 
 export async function getStaticProps(context: any) {
-  // Pull in the dummy data
-  // Format data
-  // Pass data through
+  // Pull in the dummy data for footer and header
   return {
     props: {
       header: headerConfig,
-      banners: homePageData[0].banners,
-      dealsOfTheWeek: homePageData[0].deals,
-      flexible: homePageData[0].flexible,
-      marketplace: homePageData[0].marketplace,
-      featured: homePageData[0].featured,
       footer: footerConfig.footer,
     },
   };
 }
 
-// export default HomePage;
 export default withAuth(HomePage);

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link/Link';
 import Icon from '../Icon/Icon';
 import { FC } from 'react';
 
@@ -13,6 +13,7 @@ const List: FC<{ country: { key: string; name: string; link: string } }> = (prop
         className="flex gap-3 items-center text-shade-greyscale-white"
         href={props.country.link}
         title={props.country.name}
+        useLegacyRouting={props.country?.link ? props.country.link.includes('.php') : true}
       >
         <div className="w-[30px] h-[15px] tablet:w-[35px] tablet:h-[20px]">
           <Icon iconKey={props.country.key} />

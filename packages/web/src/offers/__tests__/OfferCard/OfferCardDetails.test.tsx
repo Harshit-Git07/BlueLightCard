@@ -1,4 +1,4 @@
-import OfferCardDetails from '../../components/OfferCardDetails';
+import OfferCardDetails from '@/offers/components/OfferCard/OfferCardDetails';
 import React from 'react';
 import { render } from '@testing-library/react';
 

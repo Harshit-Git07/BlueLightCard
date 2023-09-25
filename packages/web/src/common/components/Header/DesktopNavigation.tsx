@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/Link/Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/pro-regular-svg-icons';
 import { FC } from 'react';
@@ -17,6 +17,7 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
             <Link
               href={navItem.link}
               className="block hover:underline hover:text-[#36c] text-palette-body-text"
+              useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
             >
               {navItem.text} {hasDropdown && downArrow}
             </Link>
@@ -32,6 +33,7 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
                       <Link
                         href={link.link}
                         className="text-base text-palette-body-text hover:text-[#36c] block whitespace-nowrap no-underline px-5 py-2.5 border-b-[rgba(0,0,0,0.05)] border-b border-solid bg-shade-greyscale-white"
+                        useLegacyRouting={link.link ? link.link.includes('.php') : true}
                       >
                         {link.text}
                       </Link>

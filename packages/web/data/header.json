@@ -24,7 +24,7 @@
       },
       {
         "text": "Login",
-        "link": "/login"
+        "link": "/login.php"
       },
       {
         "text": "Discover savings",
@@ -105,7 +105,7 @@
       },
       {
         "text": "Logout",
-        "link": "/logout"
+        "link": "/logout.php"
       }
     ]
   }

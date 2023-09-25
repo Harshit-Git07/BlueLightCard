@@ -1,10 +1,10 @@
 import getOffersStaticProps from '@/utils/getProps/getOffersProps';
 import Heading from '@/components/Heading/Heading';
-import OfferCard from '@/offers/components/OfferCard';
+import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { NextPage } from 'next';
 import Image from '@/components/Image/Image';
 import Carousel from '@/components/Carousel/Carousel';
-import Link from 'next/link';
+import Link from '@/components/Link/Link';
 import { FooterProps } from '@/components/Footer/types';
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';

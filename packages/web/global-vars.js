@@ -8,7 +8,7 @@ const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcar
 const COGNITO_CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID ?? '';
 const COGNITO_CLIENT_SECRET = process.env.NEXT_PUBLIC_COGNITO_CLIENT_SECRET ?? '';
 const COGNITO_IDP_ID = process.env.NEXT_PUBLIC_COGNITO_IDP_ID ?? '';
-const LOGIN_ROUTE = process.env.NEXT_PUBLIC_LOGIN_ROUTE ?? '/login.php';
+const LOGOUT_ROUTE = process.env.NEXT_PUBLIC_LOGOUT_ROUTE ?? '/logout.php';
 
 /*
  * Language is made up of the lng and region
@@ -36,5 +36,5 @@ module.exports = {
   COGNITO_CLIENT_ID,
   COGNITO_CLIENT_SECRET,
   COGNITO_IDP_ID,
-  LOGIN_ROUTE,
+  LOGOUT_ROUTE,
 };

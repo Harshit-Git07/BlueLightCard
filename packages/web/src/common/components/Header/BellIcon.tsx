@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/pro-solid-svg-icons';
-import Link from 'next/link';
+import Link from '@/components/Link/Link';
 
 const BellIcon: React.FC = () => (
   <Link legacyBehavior href="/">

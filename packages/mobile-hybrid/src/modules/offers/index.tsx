@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { FC, useContext, useMemo } from 'react';
 import useOffers from '@/hooks/useOffers';
 import Heading from '@/components/Heading/Heading';
 import CardCarousel from '@/components/Carousel/CardCarousel';
@@ -6,12 +6,29 @@ import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
 import { NewsPreview } from '../news';
+import { AppContext } from '@/store';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Offers: FC = () => {
   const { flexible, groups } = useOffers();
+  const { experiments: expr } = useContext(AppContext);
+
+  /**
+   * @experiment
+   * Locate specific offers
+   */
+  const generalOffersExperiment = useMemo(() => {
+    return groups.find((group) => group.title.toLowerCase() === `general offers - don't miss out`);
+  }, [groups]);
+
+  const offers = useMemo(() => {
+    return groups.filter(
+      (group) => group.title.toLowerCase() !== `general offers - don't miss out`,
+    );
+  }, [groups]);
+
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
     navigation.navigate(`/flexibleOffers.php?id=${id}`);
     analytics.logAnalyticsEvent({
@@ -69,9 +86,31 @@ const Offers: FC = () => {
           />
         </div>
       )}
+      {expr['non-exclusive-offers'] === 'treatment' && generalOffersExperiment && (
+        <section className="mb-6">
+          <Heading title={generalOffersExperiment.title} />
+          <CardCarousel
+            slides={generalOffersExperiment.items.map((offer) => ({
+              id: offer.compid,
+              title: offer.companyname,
+              text: offer.offername,
+              imageSrc: offer.image?.length ? offer.image : offer.s3logos,
+            }))}
+            onSlideItemClick={(id) =>
+              onCompanyOfferClick(
+                generalOffersExperiment.title,
+                generalOffersExperiment.items.find(
+                  (offer) => offer.compid === id,
+                ) as OfferPromosModel,
+              )
+            }
+            onSlideChanged={() => onSlideChange(generalOffersExperiment.title)}
+          />
+        </section>
+      )}
       <NewsPreview />
       <div className="my-2">
-        {groups.map((group, index) => (
+        {offers.map((group, index) => (
           <section key={`${group.title}_${index}`} className="mb-6">
             <Heading title={group.title} />
             <CardCarousel

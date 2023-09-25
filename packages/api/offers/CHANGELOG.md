@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.3.0...bluelightcard/offers-v1.4.0) (2023-09-25)
+
+
+### Features
+
+* add banners schema and table creation ([#312](https://github.com/bluelightcard/BlueLightCard-2.0/issues/312)) ([ed4b617](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed4b617ea7bab03b58cf857689afd235a427161d))
+* migration script ([#325](https://github.com/bluelightcard/BlueLightCard-2.0/issues/325)) ([3d334c4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3d334c4b69082943740deb9eec924705142de598))
+* ti 140 create profile ([#371](https://github.com/bluelightcard/BlueLightCard-2.0/issues/371)) ([370df61](https://github.com/bluelightcard/BlueLightCard-2.0/commit/370df6149b2c91e3f6b2b75effdd365280ff4c3a))
+* TO 197 - 203  create GQL schema and tables for Offers and Company ([#378](https://github.com/bluelightcard/BlueLightCard-2.0/issues/378)) ([18de835](https://github.com/bluelightcard/BlueLightCard-2.0/commit/18de83592f869827ee60959c142740586b761a38))
+* TO-114 get banners resolver ([#331](https://github.com/bluelightcard/BlueLightCard-2.0/issues/331)) ([2c9b97d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c9b97d2e3804e492a68c1bcdbe74d15c1a852f2))
+* TO-170 eventbridge banners ([#342](https://github.com/bluelightcard/BlueLightCard-2.0/issues/342)) ([1a176df](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1a176df1f5eb80d07b95713f76c691a1609a6f03))
+* TO-202 add standalone tables ([#362](https://github.com/bluelightcard/BlueLightCard-2.0/issues/362)) ([8881d29](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8881d2970a5575e17c3e6b583caf0f8d94ba28bf))
+* **web:** TO-89 - Populate home page with live data ([#363](https://github.com/bluelightcard/BlueLightCard-2.0/issues/363)) ([4916001](https://github.com/bluelightcard/BlueLightCard-2.0/commit/49160014f2943bdb099d7a3b6e6e70833d6c93fc))
+
+
+### Bug Fixes
+
+* remove company category connection gsi from table ([#382](https://github.com/bluelightcard/BlueLightCard-2.0/issues/382)) ([7b0ee0a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7b0ee0a9f49cc2077b282af06bdf8f6993b2525f))
+* remove companyCategoryConnectionTable to solve gsi problem ([#380](https://github.com/bluelightcard/BlueLightCard-2.0/issues/380)) ([0599a93](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0599a938ecefd12badd0d4baae10e8ede4699ccf))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.2.0...bluelightcard/offers-v1.3.0) (2023-08-22)
 
 

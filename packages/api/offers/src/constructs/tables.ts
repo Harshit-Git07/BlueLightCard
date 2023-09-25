@@ -18,7 +18,7 @@ export class Tables {
   offerTypeConnectionTable: Table;
   offerTagConnectionTable: Table;
   companyTagConnectionTable: Table;
-  companyCategoryConnectionTable: Table;
+ // companyCategoryConnectionTable: Table;
   companyBrandConnectionTable: Table;
 
   constructor (private stack: Stack) {
@@ -34,7 +34,7 @@ export class Tables {
     this.offerTypeConnectionTable = this.createOfferTypeConnectionTable();
     this.offerTagConnectionTable = this.createOfferTagConnectionTable();
     this.companyTagConnectionTable = this.createCompanyTagConnectionTable();
-    this.companyCategoryConnectionTable = this.createCompanyCategoryConnectionTable();
+   // this.companyCategoryConnectionTable = this.createCompanyCategoryConnectionTable();
     this.companyBrandConnectionTable = this.createCompanyBrandConnectionTable();
   }
 

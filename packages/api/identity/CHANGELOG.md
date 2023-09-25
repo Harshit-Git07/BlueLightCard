@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.15.0...bluelightcard/identity-v1.16.0) (2023-09-22)
+
+
+### Features
+
+* handler for user profile events ([#358](https://github.com/bluelightcard/BlueLightCard-2.0/issues/358)) ([093a1ac](https://github.com/bluelightcard/BlueLightCard-2.0/commit/093a1ac3bff4cc9d1968408d5d9b4928638d7154))
+* ti 140 create profile ([#371](https://github.com/bluelightcard/BlueLightCard-2.0/issues/371)) ([370df61](https://github.com/bluelightcard/BlueLightCard-2.0/commit/370df6149b2c91e3f6b2b75effdd365280ff4c3a))
+
+
+### Other Changes
+
+* redocly api spec ([#336](https://github.com/bluelightcard/BlueLightCard-2.0/issues/336)) ([9ad15d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9ad15d840095e7747a68f4ee2f6778a85b21c0aa))
+
 ## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.14.1...bluelightcard/identity-v1.15.0) (2023-09-13)
 
 

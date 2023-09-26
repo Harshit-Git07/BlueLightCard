@@ -33,7 +33,7 @@ const Search: FC<SearchProps> = ({ onSearch, labelText }) => {
           ref={initialValue}
           placeholder="Search stores or brands"
           type="search"
-          className="px-12 py-3 font-museo rounded-full w-full overflow-x-hidden bg-neutral-grey-100 border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
+          className="pl-12 pr-4 py-3 font-museo rounded-full w-full overflow-x-hidden bg-neutral-grey-100 border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
         />
       </div>
       {errorMessage && <div className="text-red-500">{errorMessage}</div>}

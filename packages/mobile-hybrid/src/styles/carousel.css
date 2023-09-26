@@ -6,12 +6,25 @@
   bottom: -0.8rem !important;
 }
 
+@media (min-width: 500px) {
+  .control-dots {
+    @apply scale-125 flex justify-center pb-2 my-2 text-center w-1/2 left-1/2 -translate-x-1/2 z-10 !important;
+  }
+}
+
+@media (min-width: 220px) {
+  .control-dots {
+    @apply flex justify-evenly pb-2 !important;
+  }
+}
+
 .control-dots .dot {
   @apply opacity-100 !important;
-  @apply scale-150;
+  @apply scale-125;
   @apply border border-gray-900 dark:border-neutral-white;
   @apply bg-transparent !important;
   @apply shadow-none !important;
+  @apply mx-1 !important;
 }
 
 .control-dots .dot.selected {
@@ -20,4 +33,8 @@
 
 .carousel .slider-wrapper {
   @apply pb-1;
+}
+
+.carousel-slider {
+  @apply pb-3;
 }

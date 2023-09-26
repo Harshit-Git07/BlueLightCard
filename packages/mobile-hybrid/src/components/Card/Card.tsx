@@ -48,13 +48,11 @@ const Card: FC<CardProps> = ({
     }
   };
 
-  const cardTitleClasses = cssUtil([
-    'text-lg font-medium dark:text-neutral-white overflow-hidden whitespace-nowrap overflow-ellipsis',
-  ]);
+  const cardTitleClasses = cssUtil(['text-lg font-medium dark:text-neutral-white line-clamp-1']);
 
   const cardParagraphClasses = cssUtil([
     'text-sm font-light dark:text-neutral-white',
-    'overflow-hidden whitespace-nowrap overflow-ellipsis',
+    'line-clamp-1',
   ]);
 
   return (

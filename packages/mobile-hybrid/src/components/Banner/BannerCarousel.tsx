@@ -25,7 +25,7 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
       showIndicators={true}
       showArrows={false}
       selectedItem={currentSlide}
-      className="mb-4"
+      className="mb-6"
       onChange={(index) => {
         if (isSwiping) {
           setIsSwiping(false);
@@ -43,12 +43,16 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
           role="button"
           onClick={() => onSlideItemClick && onSlideItemClick(slide.id)}
         >
-          <div className="max-h-[200px] h-[200px] flex items-center justify-center">
-            <div className="h-full w-full relative">
-              <Image alt={slide.text} src={slide.imageSrc} className="object-cover" />
+          <div>
+            <div className="relative h-auto pb-[50%]">
+              <Image
+                alt={decodeEntities(slide.text)}
+                src={slide.imageSrc}
+                className="absolute object-cover"
+              />
             </div>
           </div>
-          <p className="mb-2 py-3 font-museo max-h-[65px] dark:text-neutral-white line-clamp-2">
+          <p className="pt-2 px-2 font-museo max-h-[60px] text-md dark:text-neutral-white line-clamp-2">
             {decodeEntities(slide.text)}
           </p>
         </div>

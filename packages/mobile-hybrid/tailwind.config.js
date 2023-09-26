@@ -74,6 +74,11 @@ module.exports = {
         museo: ['var(--font-museo)'],
         sourcesans: ['var(--font-sourcesans)'],
       },
+      screens: {
+        sm: '330px',
+        md: '560px',
+        lg: '768px',
+      },
     },
   },
 };

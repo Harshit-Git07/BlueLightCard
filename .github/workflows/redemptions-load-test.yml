@@ -1,0 +1,32 @@
+name: Redemptions Artillery Load Test
+ 
+on:
+  workflow_dispatch:
+
+permissions: write-all    
+
+jobs:
+  artillery:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Make reports directory
+        run: mkdir reports
+      
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-1
+      
+      - name: Get target gateway
+        run: echo "gateway-id=$(aws apigateway get-rest-apis --region eu-west-2 --query 'items[?name==`staging-blc-mono-redemptions`].[id]' --output text)" >> $GITHUB_OUTPUT
+        id: gateway
+ 
+      - name: Execute load tests on AWS (eu-west-1 region)
+        uses: artilleryio/action-cli@v1
+        with:
+          command: run-fargate --region eu-west-1 --count 2 packages/api/redemptions/load-tests/redemptions-load-test.yml -t https://${{ steps.gateway.outputs.gateway-id }}.execute-api.eu-west-2.amazonaws.com/staging --record --key ${{ secrets.ARTILLERYIO_AUTHORIZATION }}

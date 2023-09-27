@@ -9,6 +9,7 @@ permissions:
   id-token: write
   deployments: write
 
+  
 env:
   PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono
 
@@ -21,6 +22,7 @@ jobs:
     outputs:
       identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
       offers-api-endpoint: ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
+      redemptions-api-endpoint: ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -59,10 +61,19 @@ jobs:
           cat .sst/outputs.json
           OFFERS_URL=$(jq -r '.[].OffersApiEndpoint | select(. != null)' .sst/outputs.json)
           echo "offersApiUrl=$OFFERS_URL" >> $GITHUB_OUTPUT
+      - name: Deploy Redemptions
+        run: npx sst deploy redemptions --stage $PR_PREFIX
+      - name: Extract Api URL and set output
+        id: sst-redemptions-outputs
+        run: |
+          cat .sst/outputs.json
+          REDEMPTION_URL=$(jq -r '.[].RedemptionsApiEndpoint | select(. != null)' .sst/outputs.json)
+          echo "redemptionsApiUrl=$REDEMPTION_URL" >> $GITHUB_OUTPUT
       - name: Echo outputs
         run: |
           echo ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
           echo ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
+          echo ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
 
   # Deploy the frontend
   frontend:
@@ -161,6 +172,9 @@ jobs:
             </td></tr>
             <tr><td><strong>Offers API URL:</strong></td><td>
             <a href='${{ needs.backend.outputs.offers-api-endpoint }}'>${{ needs.backend.outputs.offers-api-endpoint }}</a>
+            </td></tr>
+            <tr><td><strong>Redemptions API URL:</strong></td><td>
+            <a href='${{ needs.backend.outputs.redemptions-api-endpoint }}'>${{ needs.backend.outputs.redemptions-api-endpoint }}</a>
             </td></tr>
             </table>
 

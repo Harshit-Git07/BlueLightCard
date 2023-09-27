@@ -51,7 +51,7 @@ const Home: NextPage<any> = () => {
     }
     apiCall.requestData('/api/4/offer/promos_new.php');
     apiCall.requestData('/api/4/news/list.php');
-    experiments.experiment(['homepage-searchbar']);
+    experiments.experiment(['homepage-searchbar', 'non-exclusive-offers']);
   }, []);
 
   return (

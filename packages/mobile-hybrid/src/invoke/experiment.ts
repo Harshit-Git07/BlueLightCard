@@ -19,9 +19,9 @@ export default class InvokeNativeExperiment extends Facade implements NativeExpe
    * @param meta
    */
   public experiment(keys: string[]): void {
-    this.logger.debug(`requesting experiment variants for flag keys: ${keys.join}`, this.TAG);
+    this.logger.debug(`requesting experiment variants for flag keys: ${keys.join()}`, this.TAG);
     this.callFunction('experiment', {
-      keys: ['homepage-searchbar'],
+      keys,
     });
   }
 }

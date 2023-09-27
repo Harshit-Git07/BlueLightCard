@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.11.0...bluelightcard/web-v1.12.0) (2023-09-26)
+
+
+### Features
+
+* Scenarios can contain tags for easier identification ([#368](https://github.com/bluelightcard/BlueLightCard-2.0/issues/368)) ([f9f204f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f9f204f0366393ba4a5c83bbc4d77321175966aa))
+* **web:** jwt typescript wrapper ([#374](https://github.com/bluelightcard/BlueLightCard-2.0/issues/374)) ([8c19a14](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8c19a14067af214f852d1528ca16419b50a6cf78))
+* **web:** TO-89 - Populate home page with live data ([#363](https://github.com/bluelightcard/BlueLightCard-2.0/issues/363)) ([4916001](https://github.com/bluelightcard/BlueLightCard-2.0/commit/49160014f2943bdb099d7a3b6e6e70833d6c93fc))
+
+
+### Bug Fixes
+
+* gql endpoint ([#381](https://github.com/bluelightcard/BlueLightCard-2.0/issues/381)) ([76dde05](https://github.com/bluelightcard/BlueLightCard-2.0/commit/76dde05e594a957a4fdfc966e9e3dc935f6854af))
+
 ## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.10.0...bluelightcard/web-v1.11.0) (2023-09-15)
 
 

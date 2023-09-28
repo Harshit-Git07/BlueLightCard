@@ -95,6 +95,9 @@ export const handler = async (event: any, context: any) => {
   
     let expAttrValues: Record<string,any> = {};
     (Object.keys(detail) as (keyof typeof detail)[]).find((key) => {
+      if(key === 'dob'){
+        detail[key] = detail[key] ? new Date(String(detail[key])).toLocaleDateString() : '00/00/0000';
+      }
         updateExp += ` ${key} = :${key},`;
         expAttrValues[`:${key}`] = detail[key];
     });

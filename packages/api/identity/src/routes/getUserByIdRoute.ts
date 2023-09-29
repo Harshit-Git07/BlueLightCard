@@ -1,3 +1,4 @@
+import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import {
   ApiGatewayModelGenerator,
   MethodResponses,
@@ -11,8 +12,9 @@ export class GetUserByIdRoute {
   getRouteDetails() {
     return {
       function: {
-        handler: 'packages/api/identity/src/user-management/lambda.get',
+        handler: 'packages/api/identity/src/user-management/userData.get',
       },
+      authorizer: "identityAuthorizer",
       cdk: {
         method: {
           requestModels: { 'application/json': this.agUserModel.getModel() },
@@ -24,6 +26,6 @@ export class GetUserByIdRoute {
           ]),
         },
       },
-    };
+    } as unknown as ApiGatewayV1ApiRouteProps<any>;
   }
 }

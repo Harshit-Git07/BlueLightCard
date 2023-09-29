@@ -89,7 +89,7 @@ jobs:
       - backend
     env:
       NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
-      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/formOutputData
+      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging
       NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
       NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
       NEXT_PUBLIC_COGNITO_IDP_ID: ${{ secrets.COGNITO_IDP_ID }}
@@ -121,8 +121,8 @@ jobs:
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
         env:
-          NEXT_PUBLIC_IDENTITY_API_URL: ${{ needs.backend.outputs.identity-api-endpoint }}
-          NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: ${{ needs.backend.outputs.identity-api-endpoint }}
+          NEXT_PUBLIC_IDENTITY_API_URL: ${{ needs.backend.outputs.identity-api-endpoint }}blc_uk/organisation
+          NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: ${{ needs.backend.outputs.identity-api-endpoint }}blc_uk/formOutputData
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-publish

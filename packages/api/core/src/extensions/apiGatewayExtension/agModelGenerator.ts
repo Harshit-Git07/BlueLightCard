@@ -24,6 +24,16 @@ export class ApiGatewayModelGenerator {
     return this.model;
   }
 
+  generateModelFromZodEffect(model: z.ZodEffects<any>): Model {
+    const _modelName = (model as any)._ModelName;
+    const modelSchema = zodToJsonSchema(model, _modelName);
+    const modelDefinition = modelSchema.definitions?.[_modelName];
+    if (!this.model) {
+      this.model = new Model(this.api, _modelName, modelDefinition);
+    }
+    return this.model;
+  }
+
   generateGenericModel() {
     return this.genericModel;
   }

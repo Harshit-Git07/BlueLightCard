@@ -1,19 +1,22 @@
-import { StackContext, Cognito, Table, use, Queue, ApiGatewayV1Api } from 'sst/constructs';
-import { CfnUserPoolClient, StringAttribute } from 'aws-cdk-lib/aws-cognito';
-import { StringParameter } from 'aws-cdk-lib/aws-ssm';
-import { Shared } from '../../../stacks/stack';
-import { passwordResetRule } from './src/eventRules/passwordResetRule';
-import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
-import { emailUpdateRule } from './src/eventRules/emailUpdateRule';
-import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
-import { UserModel } from './src/models/user';
-import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
-import { userSignInMigratedRule } from './src/eventRules/userSignInMigratedRule';
-import { cardStatusUpdatedRule } from './src/eventRules/cardStatusUpdatedRule';
-import { userProfileUpdatedRule } from './src/eventRules/userProfileUpdatedRule';
-import { userProfileCreatedRule } from './src/eventRules/userProfileCreatedRule';
+import {ApiGatewayV1Api, Cognito, Queue, StackContext, Table, use} from 'sst/constructs';
+import {CfnUserPoolClient, StringAttribute} from 'aws-cdk-lib/aws-cognito';
+import {StringParameter} from 'aws-cdk-lib/aws-ssm';
+import {Shared} from '../../../stacks/stack';
+import {passwordResetRule} from './src/eventRules/passwordResetRule';
+import {userStatusUpdatedRule} from './src/eventRules/userStatusUpdated';
+import {emailUpdateRule} from './src/eventRules/emailUpdateRule';
+import {ApiGatewayModelGenerator} from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
+import {UserModel} from './src/models/user';
+import {GetUserByIdRoute} from './src/routes/getUserByIdRoute';
+import {userSignInMigratedRule} from './src/eventRules/userSignInMigratedRule';
+import {cardStatusUpdatedRule} from './src/eventRules/cardStatusUpdatedRule';
+import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
+import {userProfileCreatedRule} from './src/eventRules/userProfileCreatedRule';
+import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 
-export function Identity({ stack }: StackContext) {
+export function Identity({stack}: StackContext) {
+  const {certificateArn} = use(Shared);
+  const documentationVersion = '1.0.0';
   //set tag service identity to all resources
   stack.tags.setTag('service', 'identity');
   stack.tags.setTag('map-migrated', 'd-server-017zxazumgiycz');
@@ -102,7 +105,11 @@ export function Identity({ stack }: StackContext) {
       defaults: {
         function: {
           timeout: 20,
-          environment: { identityTableName: identityTable.tableName, ecFormOutputDataTableName: ecFormOutputData.tableName, service: 'identity' },
+          environment: {
+            identityTableName: identityTable.tableName,
+            ecFormOutputDataTableName: ecFormOutputData.tableName,
+            service: 'identity'
+          },
           permissions: [identityTable, ecFormOutputData],
         },
       },
@@ -112,6 +119,16 @@ export function Identity({ stack }: StackContext) {
         'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
         // 'POST /{brand}/formOutputData': 'packages/api/identity/src/eligibility/ecFormOutputData.handler',
       },
+      cdk: {
+        restApi: {
+          ...(['production', 'staging'].includes(stack.stage) && certificateArn && {
+            domainName: {
+              domainName: stack.stage === 'production' ? 'identity.blcshine.io' : `${stack.stage}-identity.blcshine.io`,
+              certificate: Certificate.fromCertificateArn(stack, "DomainCertificate", certificateArn),
+            },
+          })
+        }
+      }
     });
     
   

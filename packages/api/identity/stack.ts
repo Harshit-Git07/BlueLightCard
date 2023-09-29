@@ -91,8 +91,6 @@ export function Identity({ stack }: StackContext) {
     },
   });
   
-  cognito.cdk.userPool.addDomain('Domain', {cognitoDomain: {domainPrefix: stage,},});
-
     //apis
     const identityApi = new ApiGatewayV1Api(stack, 'identity', {
       authorizers: {
@@ -139,8 +137,10 @@ export function Identity({ stack }: StackContext) {
     const webClient = cognito.cdk.userPool.addClient('webClient', {
       authFlows: {
         userPassword: true,
-      }
+      },
+      generateSecret: true,
     });
+    
     stack.addOutputs({
       CognitoUserPoolWebClient: cognito.userPoolId,
     });

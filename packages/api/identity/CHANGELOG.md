@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.17.0...bluelightcard/identity-v1.18.0) (2023-09-29)
+
+
+### Features
+
+* transform dob ([#393](https://github.com/bluelightcard/BlueLightCard-2.0/issues/393)) ([3b53e57](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3b53e57bba5c8bf49e970fe606a13347be5567bb))
+* **web:** Remove Cognito domain assignment ([#397](https://github.com/bluelightcard/BlueLightCard-2.0/issues/397)) ([d26044a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d26044a27a181f3ea88bd4f362139270d59b19a5))
+* **web:** Ti 155 fetch all user data via new api ([#370](https://github.com/bluelightcard/BlueLightCard-2.0/issues/370)) ([893d872](https://github.com/bluelightcard/BlueLightCard-2.0/commit/893d8725e67012285906a1744aa2c2124fb632b3))
+
 ## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.16.0...bluelightcard/identity-v1.17.0) (2023-09-25)
 
 

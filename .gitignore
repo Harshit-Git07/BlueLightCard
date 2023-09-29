@@ -151,3 +151,6 @@ schema
 # E2E Test files
 packages/web/.e2e
 packages/web/e2e/test-results
+
+# API Documentation export
+packages/api/*/swagger.json

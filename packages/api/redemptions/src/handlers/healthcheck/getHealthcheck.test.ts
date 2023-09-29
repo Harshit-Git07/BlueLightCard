@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { handler } from './get-redemption';
+import { handler } from './getHealthcheck';
 
 describe('Get Redemption', () => {
 
@@ -16,7 +16,7 @@ describe('Get Redemption', () => {
       statusCode: 200,
       body: JSON.stringify({
         message: 'Success',
-        data: { id: '1', name: 'J' }
+        data: { status: 'success' }
       }),
       headers: {
         'Content-Type': 'application/json',

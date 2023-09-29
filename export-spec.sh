@@ -13,7 +13,7 @@ done
 
 API_ID=$(aws apigateway get-rest-apis --region $Region --query 'items[?name==`'$Stage'-blc-mono-'$Domain'`].[id]' --output text)
 
-aws apigateway get-export --parameters extensions='apigateway' --rest-api-id $API_ID --stage-name $Stage --export-type swagger swagger.json --region $Region
+aws apigateway get-export --parameters extensions='apigateway' --rest-api-id $API_ID --stage-name v1 --export-type swagger swagger.json --region $Region
 
 REDOCLY_AUTHORIZATION=$REDOCLY_AUTHORIZATION npx @redocly/cli@latest push swagger.json --destination="$Domain@$APIVersion" --organization="blc-jgk"
 

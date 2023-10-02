@@ -137,11 +137,9 @@ const HomePage: NextPage<any> = (props) => {
             elementsPerPageTablet={1}
             elementsPerPageMobile={1}
           >
-            {banners.map((banner: any, index: number) => {
-              return (
-                <PromoBanner key={index} image={getCDNUrl(banner.imageSource)} href={banner.link} />
-              );
-            })}
+            {banners.map((banner: any, index: number) => (
+              <PromoBanner key={index} image={banner.imageSource} href={banner.link} />
+            ))}
           </Carousel>
         </Container>
       )}

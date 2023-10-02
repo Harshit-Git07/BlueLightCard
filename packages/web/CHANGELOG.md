@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.12.0...bluelightcard/web-v1.13.0) (2023-09-29)
+
+
+### Features
+
+* **web:** Ti 155 fetch all user data via new api ([#370](https://github.com/bluelightcard/BlueLightCard-2.0/issues/370)) ([893d872](https://github.com/bluelightcard/BlueLightCard-2.0/commit/893d8725e67012285906a1744aa2c2124fb632b3))
+
 ## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.11.0...bluelightcard/web-v1.12.0) (2023-09-26)
 
 

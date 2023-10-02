@@ -22,6 +22,7 @@ import InvokeNativeNavigation from '@/invoke/navigation';
 import Search from '@/components/Search/Search';
 import InvokeNativeExperiment from '@/invoke/experiment';
 import { AppContext } from '@/store';
+import PopularBrandsSlider from '@/modules/popularbrands';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -51,7 +52,7 @@ const Home: NextPage<any> = () => {
     }
     apiCall.requestData('/api/4/offer/promos_new.php');
     apiCall.requestData('/api/4/news/list.php');
-    experiments.experiment(['homepage-searchbar', 'non-exclusive-offers']);
+    experiments.experiment(['homepage-searchbar', 'non-exclusive-offers', 'popular-offers']);
   }, []);
 
   return (
@@ -67,6 +68,7 @@ const Home: NextPage<any> = () => {
           />
         )}
         <PromoBanner />
+        {expr['popular-offers'] === 'treatment' && <PopularBrandsSlider />}
         <Offers />
         <Heading title="Explore" size="small" />
         <ExploreLink

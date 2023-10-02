@@ -1,0 +1,57 @@
+name: 'Member-Services-Hub'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/member-services-hub/**
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+      - .github/workflows/member-services-hub.yml
+  pull_request:
+    paths:
+      - packages/member-services-hub/**
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+      - .github/workflows/member-services-hub.yml
+
+jobs:
+  # Run all unit tests on merge to main
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - run: npm test -w packages/member-services-hub
+
+  lint:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - name: JavaScript and Typescript
+        run: npm run lint -w packages/member-services-hub
+      - name: Styles
+        run: npm run lint:style -w packages/member-services-hub

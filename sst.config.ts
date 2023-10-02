@@ -5,6 +5,7 @@ import { Web } from './packages/web/stack';
 import { Shared } from './stacks/stack';
 import { CMS } from './packages/cms/stack';
 import { Redemptions } from './packages/api/redemptions/stack';
+import { MemberServicesHub } from './packages/member-services-hub/stack';
 
 export default {
   config(_input) {
@@ -31,7 +32,8 @@ export default {
       .stack(Offers, { id: 'offers' })
       .stack(Web, { id: 'web' })
       .stack(CMS, { id: 'cms' })
-      .stack(Redemptions, { id: 'redemptions'});
+      .stack(Redemptions, { id: 'redemptions'})
+      .stack(MemberServicesHub, { id: 'member-services-hub' });
   },
 } satisfies SSTConfig;
 

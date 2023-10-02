@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.18.0...bluelightcard/identity-v1.19.0) (2023-09-29)
+
+
+### Features
+
+* TR-9, Fixed failing documentation action ([#402](https://github.com/bluelightcard/BlueLightCard-2.0/issues/402)) ([2ae876e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ae876e31c1c04badca8da6c554491dfc66978b2))
+
 ## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.17.0...bluelightcard/identity-v1.18.0) (2023-09-29)
 
 

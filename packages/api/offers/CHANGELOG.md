@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.4.0...bluelightcard/offers-v1.4.1) (2023-10-02)
+
+
+### Bug Fixes
+
+* TO-113: fix event bridge lambda and migration script to append cdn url to image location prefix ([#405](https://github.com/bluelightcard/BlueLightCard-2.0/issues/405)) ([ba0bb9e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ba0bb9e2b9440f84228737c470249f993d357e4e))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.3.0...bluelightcard/offers-v1.4.0) (2023-09-25)
 
 

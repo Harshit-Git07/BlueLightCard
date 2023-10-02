@@ -5,6 +5,9 @@ import { v4 } from 'uuid';
 import { BannerModel, Banner } from '../../../models/banner';
 import { convertDateUnix } from '../../../../../core/src/utils/date';
 
+const PRODUCTION_ENV = 'production'
+const PRODUCTION_CDN_URL = process.env.PRODUCTION_CDN_URL;
+const STAGING_CDN_URL = process.env.STAGING_CDN_URL;
 
 type BannerDetails = {
   bannerType: string;
@@ -77,32 +80,34 @@ export class BannerHandler {
   }
 
   private getBannerDetails(): BannerDetails {
+    const stage = this.event.detail.stage;
+
     let bannerType;
-    let imageLocationPrefix;
+    let imageLocationPrefix = `${stage === PRODUCTION_ENV ? PRODUCTION_CDN_URL : STAGING_CDN_URL}`;
     let companyId = this.event.detail.cid;
 
-    const bannerTypeMapping: { [key: number]: { bannerType: string; imageLocationPrefix: string } } = {
+    const bannerTypeMapping: { [key: number]: { bannerType: string; imageLocationSuffix: string } } = {
       10: {
         bannerType: 'takeover',
-        imageLocationPrefix: 'complarge/cover/',
+        imageLocationSuffix: `/complarge/cover/`,
       },
       11: {
         bannerType: 'bottom',
-        imageLocationPrefix: 'img/promotion/bottom/',
+        imageLocationSuffix: '/img/promotion/bottom/',
       },
       12: {
         bannerType: 'menu',
-        imageLocationPrefix: 'img/promotion/menu',
+        imageLocationSuffix: '/img/promotion/menu/',
       },
       13: {
         bannerType: 'sponsor',
-        imageLocationPrefix: 'img/promotion/sponsor',
+        imageLocationSuffix: '/img/promotion/sponsor/',
       },
     };
 
     if (bannerTypeMapping.hasOwnProperty(this.event.detail.promotiontype)) {
       bannerType = bannerTypeMapping[this.event.detail.promotiontype].bannerType;
-      imageLocationPrefix = bannerTypeMapping[this.event.detail.promotiontype].imageLocationPrefix;
+      imageLocationPrefix += bannerTypeMapping[this.event.detail.promotiontype].imageLocationSuffix;
     } else {
       bannerType = 'none';
       imageLocationPrefix = '';
@@ -110,7 +115,7 @@ export class BannerHandler {
 
     if (this.event.detail.promotiontype > 13 && companyId === 0) {
       bannerType = 'upgraded';
-      imageLocationPrefix = 'complarge/cover/';
+      imageLocationPrefix += '/complarge/cover/';
       companyId = this.event.detail.promotiontype;
     }
     return {

@@ -6,6 +6,16 @@ import * as dotenv from 'dotenv'
 
 import mysql from 'mysql2/promise'
 
+//get all the data from the env
+dotenv.config({
+  path: './src/migrations/.env',
+  debug: true,
+})
+
+const PRODUCTION_CDN_URL = process.env.PRODUCTION_CDN_URL;
+const STAGING_CDN_URL = process.env.STAGING_CDN_URL;
+const PRODUCTION_ENV = 'production'
+
 interface RowData {
   id: number;
   name: string;
@@ -81,11 +91,6 @@ function convertDateUnix (date: string) {
   return new Date(date).getTime() / 1000
 }
 
-//get all the data from the env
-dotenv.config({
-  path: './src/.env',
-  debug: true,
-})
 const brand = process.env.BRAND
 const host = process.env.DB_HOST
 const port = parseInt(process.env.DB_PORT ?? '3306')
@@ -94,6 +99,7 @@ const password = process.env.DB_PASSWORD
 const database = process.env.DATABASE
 const region = process.env.REGION ?? 'eu-west-2'
 const tableName = process.env.DYNAMO_TABLE
+const stage = process.env.STAGE
 
 export async function migrate (): Promise<{ status: string; message: string }> {
   if (host === '' || brand === '' || password === '' || user === '' || tableName === '') {
@@ -202,7 +208,7 @@ export async function migrate (): Promise<{ status: string; message: string }> {
       continue
     }
     let promotionType
-    let imageLocationPrefix
+    let imageLocationPrefix = stage === PRODUCTION_ENV ? PRODUCTION_CDN_URL : STAGING_CDN_URL;
     let companyId = row.cid
     switch (row.promotiontype) {
       case 9:
@@ -211,21 +217,21 @@ export async function migrate (): Promise<{ status: string; message: string }> {
       case 10:
         //banners on offer details to display
         promotionType = 'takeover'
-        imageLocationPrefix = 'complarge/cover/'
+        imageLocationPrefix += '/complarge/cover/'
         break
       case 11:
         //offer details
         promotionType = 'bottom'
-        imageLocationPrefix = 'img/promotion/bottom/'
+        imageLocationPrefix += '/img/promotion/bottom/'
         break
       case 12:
         promotionType = 'menu'
-        imageLocationPrefix = 'img/promotion/menu/'
+        imageLocationPrefix += '/img/promotion/menu/'
         break
       case 13:
         //homepage
         promotionType = 'sponsor'
-        imageLocationPrefix = 'img/promotion/sponsor/'
+        imageLocationPrefix += '/img/promotion/sponsor/'
         break
       default:
         //promotion type is 0
@@ -237,7 +243,7 @@ export async function migrate (): Promise<{ status: string; message: string }> {
     //check if upgraded banner (company id will be in promotion type and cid will be 0)
     if (row.promotiontype > 13 && row.cid === 0) {
       promotionType = 'upgraded'
-      imageLocationPrefix = 'complarge/cover/'
+      imageLocationPrefix += '/complarge/cover/'
       companyId = row.promotiontype
     }
 

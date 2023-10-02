@@ -11,6 +11,8 @@ export const bannerRule = (tableName: string, queue: IQueue) => ({
           environment: {
             SERVICE: 'offers',
             TABLE_NAME: tableName,
+            PRODUCTION_CDN_URL: 'https://cdn.bluelightcard.co.uk',
+            STAGING_CDN_URL: 'https://blcimg-dev.img.bluelightcard.co.uk'
           },
           deadLetterQueueEnabled: true,
           deadLetterQueue: queue,

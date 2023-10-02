@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.13.0...bluelightcard/web-v1.13.1) (2023-10-02)
+
+
+### Bug Fixes
+
+* TO-113: updated banner images to use image source directly ([#407](https://github.com/bluelightcard/BlueLightCard-2.0/issues/407)) ([3b51c02](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3b51c02882e767c2d4d9cc668d53c1b7d2e48822))
+
 ## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.12.0...bluelightcard/web-v1.13.0) (2023-09-29)
 
 

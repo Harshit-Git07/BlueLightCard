@@ -2,6 +2,8 @@ import { CardStatus, CardStatusNumeric } from './../../../core/src/types/cardSta
 
 export function getCardStatus(status: Number): string {
     switch (status) {
+      case CardStatusNumeric.one:
+        return CardStatus.AWAITING_ID;
       case CardStatusNumeric.two:
         return CardStatus.AWAITING_ID_APPROVAL;
       case CardStatusNumeric.three:
@@ -33,6 +35,8 @@ export function getCardStatus(status: Number): string {
 
   export function getCardStatusNumeric(status: String): Number {
     switch (status) {
+      case CardStatus.AWAITING_ID:
+        return CardStatusNumeric.one;
       case CardStatus.AWAITING_ID_APPROVAL:
         return CardStatusNumeric.two;
       case CardStatus.ID_APPROVED:
@@ -58,7 +62,7 @@ export function getCardStatus(status: Number): string {
       case CardStatus.REFUNDED:
         return CardStatusNumeric.thirteen;
       default:
-        return CardStatusNumeric.fourteen;
+        return CardStatusNumeric.zero;
     }
   }
 

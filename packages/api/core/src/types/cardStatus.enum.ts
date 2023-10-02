@@ -15,6 +15,8 @@ export enum CardStatus {
 }
 
 export enum CardStatusNumeric {
+  zero = 0,
+  one = 1,
   two = 2,
   three = 3,
   four = 4,
@@ -26,7 +28,6 @@ export enum CardStatusNumeric {
   ten = 10,
   eleven = 11,
   twelve = 12,
-  thirteen = 13,
-  fourteen = 14
+  thirteen = 13
 }
 

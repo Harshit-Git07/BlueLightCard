@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.0.0...bluelightcard/redemptions-v1.1.0) (2023-10-02)
+
+
+### Features
+
+* Added API Gateway resources: ([#391](https://github.com/bluelightcard/BlueLightCard-2.0/issues/391)) ([63ad8ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63ad8adc26dd0f0ee8e1947488be19e3a4ad534f))
+* artillery load testing ([#383](https://github.com/bluelightcard/BlueLightCard-2.0/issues/383)) ([c794e7b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c794e7b2ee09e2152103293a981dfabdd9a8f5a7))
+
 ## 1.0.0 (2023-09-15)
 
 

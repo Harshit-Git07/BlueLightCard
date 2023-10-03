@@ -14,7 +14,7 @@
     "@jest/globals": "29.5.0",
     "@types/aws-lambda": "8.10.119",
     "@types/node": "20.2.3",
-    "@types/uuid": "9.0.1",
+    "@types/uuid": "9.0.4",
     "sst": "2.14.0",
     "aws-sdk-client-mock": "2.1.1",
     "mysql2": "3.2.4"
@@ -29,7 +29,7 @@
     "axios": "1.4.0",
     "base-64": "1.0.0",
     "libphonenumber-js": "1.10.37",
-    "uuid": "9.0.0",
+    "uuid": "9.0.1",
     "ts-node": "^10.9.1",
     "date-fns": "2.30.0"
   }

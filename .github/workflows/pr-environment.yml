@@ -25,7 +25,7 @@ jobs:
       redemptions-api-endpoint: ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -96,7 +96,7 @@ jobs:
       NEXT_PUBLIC_LOGOUT_ROUTE: /mock-login
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -187,7 +187,7 @@ jobs:
     needs:
       - frontend
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -266,7 +266,7 @@ jobs:
     env:
       BASE_URL: ${{ needs.backend.outputs.frontend.url }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: 18

@@ -54,7 +54,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.2",
+    "@babel/core": "^7.23.0",
     "@lhci/cli": "^0.12.0",
     "@playwright/test": "^1.35.1",
     "@storybook/addon-a11y": "^7.1.0",

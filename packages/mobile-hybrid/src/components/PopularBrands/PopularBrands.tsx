@@ -19,7 +19,7 @@ const PopularBrands: FC<PopularBrandsProps> = ({ brands, onBrandItemClick, text 
             >
               <Image
                 src={brand.imageSrc}
-                alt={brand.altText}
+                alt={brand.brandName}
                 className="object-cover rounded-full dark:border"
               />
             </div>

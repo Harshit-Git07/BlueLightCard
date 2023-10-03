@@ -14,7 +14,7 @@ const PopularBrandsSlider: FC = () => {
       event: 'homepage_carousel_card_clicked',
       parameters: {
         carousel_name: 'popular_brands',
-        brand_name: brands.find((brand) => brand.id === compid)?.altText,
+        brand_name: brands.find((brand) => brand.id === compid)?.brandName,
       },
     });
   };

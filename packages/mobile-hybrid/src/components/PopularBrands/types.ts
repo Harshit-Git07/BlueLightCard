@@ -7,5 +7,5 @@ export interface PopularBrandsProps {
 export interface Brand {
   id: number;
   imageSrc: string;
-  altText: string;
+  brandName: string;
 }

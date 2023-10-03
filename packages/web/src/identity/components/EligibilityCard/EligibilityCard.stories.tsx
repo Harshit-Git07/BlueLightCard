@@ -1,14 +1,15 @@
-import type { Meta } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import EligibilityCard from './EligibilityCard';
 
-const meta: Meta<typeof EligibilityCard> = {
-  /* 👇 The title prop is optional.
-   * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
-   * to learn how to generate automatic titles
-   */
+const componentMeta: Meta<typeof EligibilityCard> = {
   title: 'EligibilityCard',
   component: EligibilityCard,
 };
 
-export default meta;
+const FooterTemplate: StoryFn<typeof EligibilityCard> = (args) => <EligibilityCard {...args} />;
+export const Default = FooterTemplate.bind({});
+
+Default.args = {};
+
+export default componentMeta;

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.19.0...bluelightcard/identity-v1.19.1) (2023-10-03)
+
+
+### Other Changes
+
+* **deps:** bump uuid and @types/uuid ([#366](https://github.com/bluelightcard/BlueLightCard-2.0/issues/366)) ([cdf51e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cdf51e421b5feaf0cd8bb8af5f32d8a168f9cd48))
+
 ## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.18.0...bluelightcard/identity-v1.19.0) (2023-09-29)
 
 

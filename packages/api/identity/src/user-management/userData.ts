@@ -18,7 +18,7 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 const tableName = process.env.identityTableName;
 
 export const get = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
-  logger.info('input', { event });
+  logger.debug('input', { event });
   
 
   let authorization_header = "";

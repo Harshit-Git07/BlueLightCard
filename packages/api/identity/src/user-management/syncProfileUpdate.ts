@@ -32,16 +32,16 @@ const validateFormData = (data: UserProfile) => {
   };
 
 export const handler = async (event: any, context: any) => {
-  logger.info('event received', event);
+  logger.debug('event received', event);
   const brand = (event.detail !== undefined || event.detail !== null) ? event.detail.brand?.toUpperCase() : null;
 
   if (brand == null) {
-    logger.info('brand details missing', event);
+    logger.debug('brand details missing', brand);
     return Response.BadRequest({ message: 'Please provide brand details' });
   }
 
   if (!(brand in BRANDS)) {
-    logger.info('invalid brand', event);
+    logger.debug('invalid brand', brand);
     return Response.BadRequest({ message: 'Please provide a valid brand' });
   }
 
@@ -82,7 +82,7 @@ export const handler = async (event: any, context: any) => {
   let action = 'created';
     const result = await dynamodb.send(new QueryCommand(queryParams));
     if(result.Items === null || result.Items?.length === 0){
-      logger.info('user profile data not found, will be created', event);
+      logger.debug('user profile data not found, will be created', event);
       profileUuid = `PROFILE#${v4()}`;
     }else{
         const user = result.Items?.at(0) as Record<string, string>;

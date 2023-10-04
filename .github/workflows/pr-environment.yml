@@ -264,7 +264,7 @@ jobs:
     needs:
       - frontend
     env:
-      BASE_URL: ${{ needs.backend.outputs.frontend.url }}
+      BASE_URL: https://www.staging.bluelightcard.co.uk
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3

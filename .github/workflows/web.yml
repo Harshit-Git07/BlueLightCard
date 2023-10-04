@@ -59,6 +59,8 @@ jobs:
   e2e:
     name: E2E Tests
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://www.staging.bluelightcard.co.uk
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3

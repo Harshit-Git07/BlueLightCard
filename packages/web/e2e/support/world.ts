@@ -29,10 +29,9 @@ After(async function ({ pickle, result }) {
       type: 'png',
     });
     await this.attach(img, 'image/png');
-    browser.close();
-    page.close();
   }
 });
+
 AfterAll(async function () {
   browser.close();
   page.close();

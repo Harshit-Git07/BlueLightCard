@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import Link from 'next/link';
 
-const SocialMediaIcon: FC<SocialMediaIconProps> = ({ iconName, link, helpText }) => {
+const SocialMediaIcon: FC<SocialMediaIconProps> = ({ iconName, link, helpText, id }) => {
   let icon;
   switch (iconName.toLowerCase()) {
     case 'facebook':
@@ -26,6 +26,7 @@ const SocialMediaIcon: FC<SocialMediaIconProps> = ({ iconName, link, helpText })
         <div
           className="aspect-square w-6 h-6 rounded-md flex bg-font-cta-standard-secondary-dark"
           title={helpText}
+          data-testid={id}
         >
           <FontAwesomeIcon icon={icon} className="text-palette-primary-base m-auto" size="xl" />
         </div>

@@ -2,10 +2,10 @@ import Link from '@/components/Link/Link';
 import Image from '@/components/Image/Image';
 import { PromoBannerProps } from './types';
 
-const PromoBanner = ({ image, href }: PromoBannerProps) => {
+const PromoBanner = ({ image, href, id }: PromoBannerProps) => {
   return (
     <div className="w-full relative">
-      <Link href={href} useLegacyRouting>
+      <Link href={href} useLegacyRouting data-testid={id}>
         <Image
           src={image}
           alt="Banner image"

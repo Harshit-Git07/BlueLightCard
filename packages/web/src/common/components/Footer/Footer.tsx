@@ -20,7 +20,7 @@ const Footer: FC<FooterProps> = ({
   const horizPadding = 'mobile:px-8 tablet:px-32 laptop:px-64';
 
   return (
-    <div className="w-full text-white">
+    <div className="w-full text-white" data-testid="app-footer">
       {/* Main body */}
       {((navigationItems && navigationItems.length > 0) || loginForm) && (
         <div
@@ -37,6 +37,7 @@ const Footer: FC<FooterProps> = ({
                       <Link
                         key={navLinkIndex}
                         href={navLink.url}
+                        data-testid={navLink.label + '-link'}
                         className="text-components-footer-text hover:opacity-100 hover:underline"
                       >
                         {navLink.label}
@@ -63,6 +64,7 @@ const Footer: FC<FooterProps> = ({
                     iconName={link.iconName}
                     link={link.link}
                     helpText={link.helpText}
+                    id={link.iconName + '-link'}
                   />
                 );
               })}
@@ -75,7 +77,12 @@ const Footer: FC<FooterProps> = ({
               {downloadLinks.map((link: downloadLink, index) => {
                 return (
                   <div key={index} className="w-fit h-full my-auto">
-                    <Link className="w-fit relative" href={link.downloadUrl} title={link.linkTitle}>
+                    <Link
+                      className="w-fit relative"
+                      href={link.downloadUrl}
+                      title={link.linkTitle}
+                      data-testid={link.linkTitle + '-link'}
+                    >
                       <Image
                         alt={link.linkTitle || ''}
                         src={link.imageUrl}

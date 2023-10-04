@@ -30,10 +30,12 @@ interface ContainerProps {
   className?: string;
 }
 
-const Container = ({ children, className = '' }: ContainerProps) => {
+const Container = ({ children, className = '', ...props }: ContainerProps) => {
   return (
     <>
-      <div className={`${className} px-2 tablet:px-8 laptop:px-64 py-4 w-full`}>{children}</div>
+      <div className={`${className} px-2 tablet:px-8 laptop:px-64 py-4 w-full`} {...props}>
+        {children}
+      </div>
       <hr />
     </>
   );
@@ -128,7 +130,7 @@ const HomePage: NextPage<any> = (props) => {
 
       {/* Banners Carousel */}
       {banners.length > 0 && (
-        <Container>
+        <Container data-testid="takeover-banners">
           <Carousel
             autoPlay
             showControls
@@ -138,7 +140,12 @@ const HomePage: NextPage<any> = (props) => {
             elementsPerPageMobile={1}
           >
             {banners.map((banner: any, index: number) => (
-              <PromoBanner key={index} image={banner.imageSource} href={banner.link} />
+              <PromoBanner
+                key={index}
+                image={banner.imageSource}
+                href={banner.link}
+                id={'promoBanner' + index}
+              />
             ))}
           </Carousel>
         </Container>
@@ -146,7 +153,7 @@ const HomePage: NextPage<any> = (props) => {
 
       {/* Deals of the week carousel */}
       {dealsOfTheWeek.length > 0 && (
-        <Container className="flex flex-col">
+        <Container className="flex flex-col" data-testid="deals-carousel">
           <CardCarousel
             title="Deals of the week"
             itemsToShow={2}
@@ -157,7 +164,7 @@ const HomePage: NextPage<any> = (props) => {
 
       {/* Flexible offers carousel */}
       {flexibleMenu.length > 0 && (
-        <Container className="flex flex-col">
+        <Container className="flex flex-col" data-testid="flexi-menu-carousel">
           <CardCarousel
             title={'Ways to Save'}
             itemsToShow={3}
@@ -170,7 +177,7 @@ const HomePage: NextPage<any> = (props) => {
       {/* Marketplace carousels */}
       {marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
         return (
-          <Container key={index}>
+          <Container key={index} data-testid="marketplace-menu-carousel">
             <CardCarousel
               title={menu.name}
               itemsToShow={3}
@@ -189,7 +196,7 @@ const HomePage: NextPage<any> = (props) => {
 
       {/* Featured offers carousel */}
       {featuredOffers.length > 0 && (
-        <Container className="flex flex-col">
+        <Container className="flex flex-col" data-testid="featured-menu-carousel">
           <CardCarousel title="Featured Offers" itemsToShow={3} offers={featuredOffersData} />
         </Container>
       )}

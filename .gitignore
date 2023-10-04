@@ -154,3 +154,4 @@ packages/web/e2e/test-results
 
 # API Documentation export
 packages/api/*/swagger.json
+packages/web/e2e/test-results/cucumber-report.json

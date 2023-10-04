@@ -42,6 +42,7 @@ const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouse
                   imageSrc={offer.imageUrl}
                   offerLink={offer.href}
                   variant={useSmallCards ? 'small' : ''}
+                  id={'_offer_card_' + index}
                 />
               ))}
             </Carousel>

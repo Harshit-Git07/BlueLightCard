@@ -11,9 +11,13 @@ const OfferCard: FC<OfferCardProps> = ({
   alt,
   offerLink,
   variant = 'standard',
+  id,
 }) => {
   return (
-    <div className="w-full h-full rounded-lg relative shadow-lg dark:bg-surface-secondary-dark pb-5 mb-5">
+    <div
+      className="w-full h-full rounded-lg relative shadow-lg dark:bg-surface-secondary-dark pb-5 mb-5"
+      data-testid={id}
+    >
       <Link href={offerLink} useLegacyRouting>
         <div>
           <Image

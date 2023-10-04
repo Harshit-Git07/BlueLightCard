@@ -8,7 +8,7 @@ const BellIcon: React.FC = () => (
     <FontAwesomeIcon
       icon={faBell}
       className="text-palette-white h-[20px] cursor-pointer hover:text-palette-secondary ease-in duration-100"
-      data-testid="bellicon"
+      data-testid="bell-icon"
     />
   </Link>
 );

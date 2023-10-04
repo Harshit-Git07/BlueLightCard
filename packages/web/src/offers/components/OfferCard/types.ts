@@ -5,10 +5,12 @@ export interface OfferCardProps {
   alt: string;
   offerLink: string;
   variant?: string;
+  id?: string;
 }
 
 export interface OfferCardDetailsProps {
   offerName: string;
   companyName: string;
   variant?: string;
+  id?: string;
 }

@@ -5,7 +5,7 @@ describe('Bell Icon component', () => {
   describe('smoke test', () => {
     it('should render component without error', () => {
       render(<BellIcon />);
-      const link = screen.getByTestId('bellicon');
+      const link = screen.getByTestId('bell-icon');
       expect(link).toBeTruthy();
     });
   });

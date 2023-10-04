@@ -16,6 +16,7 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
           <li className="px-3 group" key={index}>
             <Link
               href={navItem.link}
+              data-testid={navItem.text + '-link'}
               className="block hover:underline hover:text-[#36c] text-palette-body-text"
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
             >
@@ -32,6 +33,7 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
                     >
                       <Link
                         href={link.link}
+                        data-testid={link.text + '-link'}
                         className="text-base text-palette-body-text hover:text-[#36c] block whitespace-nowrap no-underline px-5 py-2.5 border-b-[rgba(0,0,0,0.05)] border-b border-solid bg-shade-greyscale-white"
                         useLegacyRouting={link.link ? link.link.includes('.php') : true}
                       >

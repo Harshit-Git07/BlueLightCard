@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/pro-regular-svg-icons';
 import { faBars } from '@fortawesome/pro-solid-svg-icons';

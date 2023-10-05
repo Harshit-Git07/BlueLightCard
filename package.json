@@ -17,7 +17,8 @@
     "lint:fix:workspaces": "npm -ws run --if-present lint:fix",
     "test": "npm -ws run --if-present test",
     "test:identity": "npm -ws run --if-present test:identity",
-    "oas": "npm -ws run --if-present oas"
+    "oas": "npm -ws run --if-present oas",
+    "e2e:identity": "npm -ws run --if-present e2e:identity"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.5",

@@ -5,7 +5,8 @@
     "typecheck": "tsc -noEmit",
     "test:identity": "jest --coverage",
     "test": "jest",
-    "migrate:userprofileandcarddata": "ts-node src/cognito/oneTimeUserProfileAndCardMigrationScript.ts"
+    "migrate:userprofileandcarddata": "ts-node src/cognito/oneTimeUserProfileAndCardMigrationScript.ts",
+    "e2e:identity": "jest e2e/"
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "3.332.0",
@@ -17,7 +18,9 @@
     "@types/uuid": "9.0.4",
     "sst": "2.14.0",
     "aws-sdk-client-mock": "2.1.1",
-    "mysql2": "3.2.4"
+    "mysql2": "3.2.4",
+    "@aws-sdk/client-secrets-manager": "3.423.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.423.0"
   },
   "dependencies": {
     "@aws-lambda-powertools/commons": "1.8.0",

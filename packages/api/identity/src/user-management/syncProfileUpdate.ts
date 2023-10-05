@@ -62,7 +62,7 @@ export const handler = async (event: any, context: any) => {
     return Response.BadRequest({ message: 'Required parameters are missing' });
   }
   }catch(err:any ){
-    logger.info('invalid data type', err.message);
+    logger.error('invalid data type', err.message);
     return Response.BadRequest({ message: 'Invalid data type' });
   }
   

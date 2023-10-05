@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.19.1...bluelightcard/identity-v1.20.0) (2023-10-05)
+
+
+### Features
+
+* ti 534 add e2e test ([#428](https://github.com/bluelightcard/BlueLightCard-2.0/issues/428)) ([8af7a7d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8af7a7d4cf9cc88bc86053e47338dfb4f93e906d))
+
+
+### Other Changes
+
+* fix spelling ([#432](https://github.com/bluelightcard/BlueLightCard-2.0/issues/432)) ([a37dea2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a37dea2006380e17e2e15031fffea94312128c23))
+* remove unused lambda; change info to debug level ([#425](https://github.com/bluelightcard/BlueLightCard-2.0/issues/425)) ([2276aa6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2276aa670338c954fe1b50bf721ec1622a89bf4b))
+
 ## [1.19.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.19.0...bluelightcard/identity-v1.19.1) (2023-10-03)
 
 

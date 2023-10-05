@@ -6,11 +6,11 @@ const brands: Brand[] = [
     imageSrc: 'brands/jd.png',
     brandName: 'JD Sports',
   },
-  {
-    id: 16990,
-    imageSrc: 'brands/sportsdirect.png',
-    brandName: 'Sports Direct',
-  },
+  // {
+  //   id: 16990,
+  //   imageSrc: 'brands/sportsdirect.png',
+  //   brandName: 'Sports Direct',
+  // },
   {
     id: 400,
     imageSrc: 'brands/newlook.png',

@@ -34,7 +34,20 @@ const OffersPage: NextPage<OffersPageProps> = (props) => {
   const { offers, offersHeading, featuredOffers, adverts, heroTitle, footer, header } = props;
   return (
     <>
-      <Header logoUrl={header.logoSource} navItems={header.navItems} loggedIn={true} />
+      <Header
+        logoUrl={header.logoSource}
+        navItems={header.navItems}
+        loggedIn={true}
+        onSearchCompanyChange={function (companyId: number, company: string): void {
+          throw new Error('Function not implemented.');
+        }}
+        onSearchCategoryChange={function (categoryId: number, company: string): void {
+          throw new Error('Function not implemented.');
+        }}
+        onSearchTerm={function (searchTerm: string): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
       {heroTitle && (
         <div className="w-full flex justify-center bg-surface-secondary-light dark:bg-surface-secondary-dark p-10 mb-6">
           <Heading headingLevel="h1">{heroTitle}</Heading>

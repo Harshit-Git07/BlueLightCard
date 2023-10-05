@@ -8,7 +8,14 @@ import Navigation from './Navigation';
 import Search from './Search';
 import SelectCountry from './SelectCountry';
 
-const Header: FC<HeaderProps> = ({ loggedIn = false, logoUrl, navItems }) => {
+const Header: FC<HeaderProps> = ({
+  loggedIn = false,
+  logoUrl,
+  navItems,
+  onSearchCompanyChange,
+  onSearchCategoryChange,
+  onSearchTerm,
+}) => {
   const [displaySearch, setDisplaySearch] = useState(false);
 
   return (
@@ -30,7 +37,13 @@ const Header: FC<HeaderProps> = ({ loggedIn = false, logoUrl, navItems }) => {
         setDisplaySearch={setDisplaySearch}
         navItems={navItems}
       />
-      {displaySearch && <Search />}
+      {displaySearch && (
+        <Search
+          onSearchCompanyChange={onSearchCompanyChange}
+          onSearchCategoryChange={onSearchCategoryChange}
+          onSearchTerm={onSearchTerm}
+        />
+      )}
     </div>
   );
 };

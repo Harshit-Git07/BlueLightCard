@@ -182,6 +182,7 @@ jobs:
   staging:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy Staging
+    environment: Staging
     strategy:
       matrix:
         brand: ['blc-uk', 'blc-au', 'dds-uk']
@@ -191,6 +192,7 @@ jobs:
       - lint
       - changelog
     env:
+      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/formOutputData
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql
@@ -233,6 +235,7 @@ jobs:
       - changelog
       - staging
     env:
+      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_IDENTITY_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/formOutputData
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://27d2m22mtvac5cvilrvb7kviyi.appsync-api.eu-west-2.amazonaws.com/graphql

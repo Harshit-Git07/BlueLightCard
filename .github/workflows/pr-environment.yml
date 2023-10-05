@@ -78,6 +78,7 @@ jobs:
   # Deploy the frontend
   frontend:
     name: Deploy Frontend BLC UK for PR
+    environment: Staging
     if: github.actor!= 'dependabot[bot]'
     strategy:
       matrix:
@@ -88,6 +89,7 @@ jobs:
     needs:
       - backend
     env:
+      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging
       NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}

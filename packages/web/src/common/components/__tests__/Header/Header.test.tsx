@@ -35,6 +35,9 @@ describe('Header component', () => {
           },
         ],
       },
+      onSearchCompanyChange(companyId, company) {},
+      onSearchCategoryChange(categoryId, company) {},
+      onSearchTerm(searchTerm) {},
     };
   });
   describe('Header is rendered', () => {

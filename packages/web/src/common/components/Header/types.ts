@@ -2,6 +2,15 @@ export type HeaderProps = {
   loggedIn?: boolean;
   logoUrl: string;
   navItems: NavItem;
+  onSearchCompanyChange: (companyId: number, company: string) => void;
+  onSearchCategoryChange: (categoryId: number, company: string) => void;
+  onSearchTerm: (searchTerm: string) => void;
+};
+
+export type SearchProps = {
+  onSearchCompanyChange: (companyId: number, company: string) => void;
+  onSearchCategoryChange: (categoryId: number, categoryName: string) => void;
+  onSearchTerm: (searchTerm: string) => void;
 };
 
 export interface NavProp {

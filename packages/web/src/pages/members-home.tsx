@@ -25,6 +25,13 @@ import {
   FeaturedOffersType,
 } from '@/page-types/members-home';
 
+import {
+  logMembersHomePage,
+  logSearchCompanyEvent,
+  logSearchCategoryEvent,
+  logSearchTermEvent,
+} from '@/utils/amplitude';
+
 interface ContainerProps {
   children: React.ReactNode;
   className?: string;
@@ -48,6 +55,18 @@ function cleanText(text: string) {
     .replace(/&pound;/g, '£');
 }
 
+const onSearchCompanyChange = (companyId: number, company: string) => {
+  logSearchCompanyEvent(companyId, company);
+};
+
+const onSearchCategoryChange = (categoryId: number, categoryName: string) => {
+  logSearchCategoryEvent(categoryId, categoryName);
+};
+
+const onSearchTerm = (searchTerm: string) => {
+  logSearchTermEvent(searchTerm);
+};
+
 const HomePage: NextPage<any> = (props) => {
   const { header, footer } = props;
 
@@ -64,6 +83,7 @@ const HomePage: NextPage<any> = (props) => {
 
   // Fetch Data on first load
   useEffect(() => {
+    logMembersHomePage();
     const fetchData = async () => {
       try {
         const queryResponse = await makeQuery(homePageQuery(BRAND));
@@ -113,7 +133,14 @@ const HomePage: NextPage<any> = (props) => {
 
   return (
     <>
-      <Header logoUrl={header.logoSource} navItems={header.navItems} loggedIn={true} />
+      <Header
+        logoUrl={header.logoSource}
+        navItems={header.navItems}
+        loggedIn={true}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchTerm={onSearchTerm}
+      />
 
       {!hasLoaded && <LoadingPlaceholder />}
 

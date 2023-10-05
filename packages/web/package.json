@@ -20,6 +20,7 @@
     "lhci": "lhci autorun"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.3.2",
     "@cucumber/cucumber": "^9.3.0",
     "@fortawesome/fontawesome-pro": "^6.2.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",

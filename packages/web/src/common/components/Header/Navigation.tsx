@@ -25,7 +25,7 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
 
   return (
     <>
-      <nav className="border-b border-slate-100 bg-shade-greyscale-white">
+      <nav className="border-b border-slate-100 bg-shade-greyscale-white" data-testid="navigation">
         <div className="flex justify-between tablet:px-[10%]">
           <div
             className="bg-[#252525] text-shade-greyscale-white w-[52px] h-[52px] leading-[52px] text-center p-3 overflow-hidden cursor-pointer flex desktop:hidden desktop:px-0"

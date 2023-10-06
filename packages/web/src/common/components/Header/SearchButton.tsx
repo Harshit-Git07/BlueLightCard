@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 const SearchButton: FC<{ displaySearch: () => void }> = (props) => {
   return (
-    <div className="flex">
+    <div className="flex" data-testid="searchNav">
       <p className="mr-2 self-center text-[#666] font-semibold tablet:block mobile:hidden">
         Search by company <i>or</i> phrase{' '}
         <span>

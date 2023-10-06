@@ -47,7 +47,10 @@ const Search: FC<SearchProps> = ({
         <Heading headingLevel="h2">Find offers</Heading>
         <div className="tablet:flex">
           <div className="w-[100%] desktop:flex tablet:w-[60%]">
-            <div className="w-[100%] pb-5 desktop:w-[50%] tablet:w-[90%] tablet:pr-8">
+            <div
+              className="w-[100%] pb-5 desktop:w-[50%] tablet:w-[90%] tablet:pr-8"
+              data-testid="byCompany"
+            >
               <label>By company</label>
               <form action={'/'} method="GET">
                 <InputSelectFieldWithRef
@@ -59,7 +62,10 @@ const Search: FC<SearchProps> = ({
                 />
               </form>
             </div>
-            <div className="w-[100%] pb-5 desktop:w-[50%] tablet:w-[90%] tablet:pr-8">
+            <div
+              className="w-[100%] pb-5 desktop:w-[50%] tablet:w-[90%] tablet:pr-8"
+              data-testid="byCategory"
+            >
               <label>
                 <i>or</i> by category
               </label>
@@ -76,7 +82,7 @@ const Search: FC<SearchProps> = ({
           </div>
           <div className="tablet:w-[40%]">
             <form action={'/'} method="GET">
-              <div className="w-full pb-5 desktop:w-[50%]">
+              <div className="w-full pb-5 desktop:w-[50%]" data-testid="byPhrase">
                 <label>
                   <i>or </i> by phrase
                 </label>
@@ -86,7 +92,7 @@ const Search: FC<SearchProps> = ({
                   }}
                 />
               </div>
-              <div>
+              <div data-testid="searchNowBtn">
                 <Button className="w-full text" onClick={searchTermHandler}>
                   Search now
                 </Button>

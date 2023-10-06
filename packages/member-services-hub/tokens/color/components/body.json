@@ -1,0 +1,16 @@
+{
+  "color": {
+    "components": {
+      "body": {
+        "text": {
+          "DEFAULT": { "value": "{color.palette.body.text.DEFAULT.value}" },
+          "dark": { "value": "{color.shade.greyscale.white.DEFAULT.value}" },
+          "light": { 
+            "DEFAULT": "{color.palette.body.text.light.value}",
+            "dark": "{color.shade.greyscale.grey.50.value}" 
+          }
+        }
+      }
+    }
+  }
+}

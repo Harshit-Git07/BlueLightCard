@@ -1,0 +1,15 @@
+{
+  "font": {
+    "family": {
+      "sans": {
+        "value": [
+          "{asset.font.sourcesanspro.name.value}",
+          "{asset.font.museosans.name.value}"
+        ]
+      }
+    },
+    "size": {
+      "base": { "value": "{spacing.4.value}" }
+    }
+  }
+}

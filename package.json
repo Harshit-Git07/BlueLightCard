@@ -57,13 +57,14 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.3",
+    "@storybook/preset-scss": "^1.0.3",
     "axios": "^1.4.0",
     "date-fns": "2.30.0",
     "dotenv": "^16.3.1",
     "grapheme-splitter": "^1.0.4",
     "graphql": "^16.8.1",
-    "node": "^20.5.1",
     "jwt-decode": "^3.1.2",
+    "node": "^20.5.1",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1"
   }

@@ -1,0 +1,20 @@
+{
+  "color": {
+    "surface": {
+      "brand": { "value": "{color.palette.primary.DEFAULT.value}" },
+      "primary": {
+          "light": { "value": "{color.shade.greyscale.white.DEFAULT.value}" },
+          "dark": { "value": "{color.shade.greyscale.black.DEFAULT.value}" }
+      },
+      "secondary": {
+          "light": { "value": "{color.shade.greyscale.grey.50.value}" },
+          "dark": { "value": "{color.shade.greyscale.grey.900.value}" }
+      },
+      "50": {
+          "light": { "value": "{color.shade.greyscale.white.50%.value}" },
+          "dark": { "value": "{color.shade.greyscale.black.50%.value}" }
+      },
+      "transparent": { "value": "{color.palette.no.fill.value" }
+    }
+  }
+}

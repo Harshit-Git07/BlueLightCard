@@ -1,0 +1,12 @@
+{
+  "color": {
+    "minimal": {
+      "light": { "value": "{color.shade.greyscale.grey.100.value}" },
+      "dark": { "value": "{color.shade.greyscale.grey.800.value}" }
+    },
+    "strong": {
+      "light": { "value": "{color.shade.greyscale.grey.300.value}" },
+      "dark": { "value": "{color.shade.greyscale.grey.500.value}" }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "color": {
+    "components": {
+      "footer": {
+        "text": {
+          "DEFAULT": { "value": "{color.shade.greyscale.white.DEFAULT.value}" },
+          "light": { "value": "{color.shade.greyscale.white.DEFAULT.value}" }
+        },
+        "primary": {
+          "DEFAULT": { "value": "{color.shade.duke.600.DEFAULT.value}" }
+        },
+        "secondary": {
+          "DEFAULT": { "value": "{color.shade.duke.700.value}" }
+        },        
+        "tertiary": {
+          "DEFAULT": { "value": "{color.shade.duke.800.value}" }
+        }
+      }
+    }
+  }
+}

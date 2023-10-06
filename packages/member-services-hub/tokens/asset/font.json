@@ -1,0 +1,64 @@
+{
+  "asset": {
+    "font": {
+      "sourcesanspro": {
+        "name": { "value": "SourceSansPro" },
+        "styles": {
+          "200": {
+            "base": { "value": "assets/fonts/sourceSansPro/SourceSansPro-ExtraLight.ttf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/SourceSansPro-ExtraLightItalic.ttf" }
+          },
+          "300": {
+            "base": { "value": "assets/fonts/sourceSansPro/SourceSansPro-Light.ttf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/SourceSansPro-LightItalic.ttf" }
+          },
+          "400": {
+            "base": { "value": "assets/fonts/sourceSansPro/SourceSansPro-Regular.ttf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/SourceSansPro-Italic.ttf" }
+          },
+          "600": {
+            "base": { "value": "assets/fonts/sourceSansPro/SourceSansPro-SemiBold.ttf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/SourceSansPro-SemiBoldItalic.ttf" }
+          },
+          "700": {
+            "base": { "value": "assets/fonts/sourceSansPro/SourceSansPro-Bold.ttf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/SourceSansPro-BoldItalic.ttf" }
+          },
+          "900": {
+            "base": { "value": "assets/fonts/sourceSansPro/SourceSansPro-Black.ttf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/SourceSansPro-BlackItalic.ttf" }
+          }
+        }
+      },
+      "museosans": {
+        "name": { "value": "MuseoSans"},
+        "styles": {
+          "100": {
+            "base": { "value": "assets/fonts/museo-sans/museo-sans-rounded-100.otf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/museo-sans-rounded-100-italic.otf" }
+          },
+          "300": {
+            "base": { "value": "assets/fonts/museo-sans/museo-sans-rounded-300.otf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/museo-sans-rounded-300-italic.otf" }
+          },
+          "500": {
+            "base": { "value": "assets/fonts/museo-sans/museo-sans-rounded-500.otf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/museo-sans-rounded-500-italic.otf" }
+          },
+          "700": {
+            "base": { "value": "assets/fonts/museo-sans/museo-sans-rounded-700.otf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/museo-sans-rounded-700-italic.otf" }
+          },
+          "900": {
+            "base": { "value": "assets/fonts/museo-sans/museo-sans-rounded-900.otf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/museo-sans-rounded-900-italic.otf" }
+          },
+          "1000": {
+            "base": { "value": "assets/fonts/museo-sans/museo-sans-rounded-1000.otf" },
+            "italic": { "value": "assets/fonts/sourceSansPro/museo-sans-rounded-1000-italic.otf" }
+          }
+        }
+      }
+    }
+  }
+}

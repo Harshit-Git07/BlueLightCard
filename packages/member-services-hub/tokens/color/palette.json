@@ -1,0 +1,71 @@
+{
+  "color": {
+    "palette": {
+      "primary": {
+        "DEFAULT": { "value": "{color.shade.duke.600.DEFAULT.value}" },
+        "opacity": {
+          "30%": { "value": "{color.shade.duke.600.30%.value}" }
+        },
+        "light": {
+          "DEFAULT": { "value": "{color.shade.duke.500.DEFAULT.value}"},
+          "opacity": {
+            "10%": { "value": "{color.shade.duke.500.10%.value}" }
+          }
+        },
+        "dark": { "value": "{color.shade.duke.800.value}" }
+      },
+      "secondary": {
+        "DEFAULT": { "value": "{color.shade.sky.400.DEFAULT.value}" },
+        "opacity": {
+          "30%": { "value": "{color.shade.sky.400.30%.value}" }
+        },
+        "light": { "value": "{color.shade.sky.300.value}" },
+        "dark": { "value": "{color.shade.sky.500.value}" }
+      },
+      "accent": {
+        "1": {
+          "DEFAULT": { "value": "{color.shade.lemon.500.DEFAULT.value}" },
+          "light": { "value": "{color.shade.lemon.100.value}" }
+        },
+        "2": {
+          "DEFAULT": { "value": "{color.shade.lilac.400.DEFAULT.value}" },
+          "light": { "value": "{color.shade.lilac.300.value}" }
+        },
+        "3": {
+          "DEFAULT": { "value": "{color.shade.rose.500.DEFAULT.value}" },
+          "light": { "value": "{color.shade.rose.400.value}" }
+        }
+      },
+      "body": {
+        "text": {
+          "DEFAULT": { "value": "{color.shade.oxford.900.DEFAULT.value}" },
+          "light": { "value": "{color.shade.oxford.600.value}" },
+          "opacity": {
+            "30%": { "value": "{color.shade.oxford.900.30%.value}" }
+          }
+        }
+      },
+      "info": {
+        "DEFAULT": { "value": "{color.shade.system.blue.500.DEFAULT.value}" },
+        "light": { "value": "{color.shade.system.blue.400.value}" }
+      },
+      "success": {
+        "DEFAULT": { "value": "{color.shade.system.green.500.DEFAULT.value}" },
+        "light": { "value": "{color.shade.system.green.400.value}" }
+      },
+      "warning": {
+        "DEFAULT": { "value": "{color.shade.system.amber.500.DEFAULT.value}" },
+        "light": { "value": "{color.shade.system.amber.400.value}" }
+      },
+      "danger": {
+        "DEFAULT": { "value": "{color.shade.system.red.500.DEFAULT.value}" },
+        "light": { "value": "{color.shade.system.red.400.value}" }
+      },
+      "no": {
+        "fill": {
+          "value": "{color.shade.greyscale.white.DEFAULT.value}"
+        }
+      }
+    }
+  }
+}

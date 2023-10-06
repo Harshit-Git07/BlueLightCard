@@ -11,7 +11,7 @@
     "lint:fix": "eslint --fix .",
     "test:coverage": "jest --coverage --coverageReporters json-summary",
     "test": "jest --testPathIgnorePatterns=e2e/",
-    "test:e2e": "cross-env ENV=staging npx cucumber-js --config=config/cucumber.js || true",
+    "test:e2e": "cross-env ENV=local npx cucumber-js --config=config/cucumber.js || true",
     "report:e2e": "npx ts-node e2e/support/reporter.ts",
     "storybook": "STORYBOOK_ENV=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK_ENV=true storybook build",

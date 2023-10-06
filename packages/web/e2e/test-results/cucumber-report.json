@@ -5949,7 +5949,7 @@
             "line": 247,
             "name": "I scroll to the end of the page",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:165"
+              "location": "e2e/steps/eligibilityChecker.ts:171"
             },
             "result": {
               "status": "skipped",
@@ -5962,7 +5962,7 @@
             "line": 248,
             "name": "I should see copyright footer",
             "match": {
-              "location": "e2e/steps/eligibilityChecker.ts:171"
+              "location": "e2e/steps/eligibilityChecker.ts:177"
             },
             "result": {
               "status": "skipped",

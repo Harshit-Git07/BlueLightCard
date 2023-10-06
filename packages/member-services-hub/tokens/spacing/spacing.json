@@ -1,0 +1,16 @@
+{
+  "spacing": {
+    "DEFAULT": { "value": "{spacing.4.value}" },
+    "base": { "value": "{spacing.4.value}" },
+    "1": { "value": "0.25rem" },
+    "2": { "value": "0.5rem" },
+    "3": { "value": "0.75rem" },
+    "4": { "value": "1rem" },
+    "5": { "value": "1.5rem" },
+    "6": { "value": "2rem" },
+    "7": { "value": "3rem" },
+    "8": { "value": "4rem" },
+    "half": { "value": "{spacing.2.value}" },
+    "double": { "value": "{spacing.6.value}" }
+  }
+}

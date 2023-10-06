@@ -4,7 +4,8 @@ import { page } from '../support/world';
 
 //Given
 Given('I navigate to Eligibility Checker', async function () {
-  await page.goto(process.env.BASE_URL + '/eligibility');
+  // await page.goto(process.env.BASE_URL + '/eligibility');
+  await page.goto('https://www.staging.bluelightcard.co.uk/eligibility');
   await page.title();
 });
 
@@ -33,9 +34,9 @@ When('I choose an {string}', async function (employer) {
 
 When('I enter {string}', async function (jobRole) {
   await page.locator('id=job_role_field').click();
-  await page.type('id=job_role_field',jobRole);
+  await page.type('id=job_role_field', jobRole);
   await page.locator('id=job_role_field').click();
-  await page.type('id=job_role_field',' ');
+  await page.type('id=job_role_field', ' ');
 });
 
 When('I choose {string} as organisation', async function (Other) {
@@ -66,8 +67,8 @@ When('I choose {string} as employer', async function (Other) {
 
 When('I click next button', async function () {
   await page.locator('#next_button').scrollIntoViewIfNeeded();
-  await page.waitForSelector('button#next_button:not([disabled])',{timeout: 16000});
-  await page.locator('#next_button').click({timeout:10000});
+  await page.waitForSelector('button#next_button:not([disabled])', { timeout: 16000 });
+  await page.locator('#next_button').click({ timeout: 10000 });
 });
 
 //Then

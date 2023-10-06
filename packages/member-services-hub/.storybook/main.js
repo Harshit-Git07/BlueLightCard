@@ -1,5 +1,5 @@
 const { resolve } = require('path');
-
+import { BRAND } from '../global-vars';
 module.exports = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -11,6 +11,12 @@ module.exports = {
     '@storybook/addon-a11y',
     '@storybook/addon-mdx-gfm',
   ],
+  // staticDirs: [
+  //   {
+  //     from: '../assets',
+  //     to: '/assets',
+  //   },
+  // ],
   webpackFinal: async (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -35,6 +41,12 @@ module.exports = {
     fileLoaderRule.exclude = /\.svg$/i;
     config.resolve.alias = {
       '@assets': resolve(__dirname, '../assets/'),
+      // '@brandasset': resolve(__dirname, `../assets/brands/${BRAND}`),
+      '@/components': resolve(__dirname, '../src/common/components'),
+      // '@/components/offers': resolve(__dirname, '../src/offers/components'),
+      '@/hooks': resolve(__dirname, '../src/common/hooks'),
+      '@/utils': resolve(__dirname, '../src/common/utils'),
+      '@/types': resolve(__dirname, '../src/common/types'),
       '@': resolve(__dirname, '../src/'),
     };
     return config;

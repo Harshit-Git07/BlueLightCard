@@ -108,16 +108,15 @@ export class BannerHandler {
     if (bannerTypeMapping.hasOwnProperty(this.event.detail.promotiontype)) {
       bannerType = bannerTypeMapping[this.event.detail.promotiontype].bannerType;
       imageLocationPrefix += bannerTypeMapping[this.event.detail.promotiontype].imageLocationSuffix;
+    } else if (this.event.detail.promotiontype > 13 && companyId === 0) {
+      bannerType = 'upgraded';
+      imageLocationPrefix += '/complarge/cover/';
+      companyId = this.event.detail.promotiontype;
     } else {
       bannerType = 'none';
       imageLocationPrefix = '';
     }
 
-    if (this.event.detail.promotiontype > 13 && companyId === 0) {
-      bannerType = 'upgraded';
-      imageLocationPrefix += '/complarge/cover/';
-      companyId = this.event.detail.promotiontype;
-    }
     return {
       bannerType: bannerType,
       imageLocationPrefix,

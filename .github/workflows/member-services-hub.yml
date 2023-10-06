@@ -1,8 +1,6 @@
 name: 'Member-Services-Hub'
 on:
   push:
-    branches:
-      - main
     paths:
       - packages/member-services-hub/**
       - package-lock.json
@@ -17,8 +15,12 @@ on:
       - package.json
       - .github/workflows/member-services-hub.yml
 
+env:
+  PKG_NAME: member-services-hub
+  STORYBOOK_PROJECT_NAME: admin-panel-storybook
+  STORYBOOK_BUILD_OUTPUT: storybook-static
+
 jobs:
-  # Run all unit tests on merge to main
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -34,7 +36,7 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install
-      - run: npm test -w packages/member-services-hub
+      - run: npm test -w packages/${{ env.PKG_NAME }}
 
   lint:
     name: Linting
@@ -52,6 +54,34 @@ jobs:
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install
       - name: JavaScript and Typescript
-        run: npm run lint -w packages/member-services-hub
+        run: npm run lint -w packages/${{ env.PKG_NAME }}
       - name: Styles
-        run: npm run lint:style -w packages/member-services-hub
+        run: npm run lint:style -w packages/${{ env.PKG_NAME }}
+  
+  storybook:
+    if: github.event_name == 'push'
+    name: Storybook Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - name: Build
+        run: npm run build-storybook -w packages/${{ env.PKG_NAME }}
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ env.STORYBOOK_PROJECT_NAME }}
+          directory: packages/${{ env.PKG_NAME }}/${{ env.STORYBOOK_BUILD_OUTPUT }}
+          branch: ${{ github.ref_name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

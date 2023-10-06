@@ -1,10 +1,10 @@
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaAbstract } from './lambdaAbstract';
 import { Stack } from 'aws-cdk-lib';
-import { Buckets } from '../buckets';
+import { Tables } from '../tables';
 
 export class QueryLambda extends LambdaAbstract {
-  constructor(private stack: Stack, private buckets: Buckets) {
+  constructor(private stack: Stack, private tables: Tables) {
     super();
   }
 
@@ -13,9 +13,7 @@ export class QueryLambda extends LambdaAbstract {
       entry: './packages/api/offers/src/graphql/resolvers/queries/handlers/queryLambdaResolver.ts',
       handler: 'handler',
       environment: {
-        BUCKET_BLC_UK: this.buckets.blcUKBucket.bucketName,
-        BUCKET_BLC_AUS: this.buckets.blcAUSBucket.bucketName,
-        BUCKET_DDS_UK: this.buckets.ddsUKBucket.bucketName,
+        OFFER_HOMEPAGE_TABLE: this.tables.offerHomepageTable.tableName
       },
     });
 
@@ -25,8 +23,6 @@ export class QueryLambda extends LambdaAbstract {
   }
 
   protected grantPermissions(lambdaFunction: NodejsFunction) {
-    this.buckets.blcUKBucket.cdk.bucket.grantRead(lambdaFunction);
-    this.buckets.blcAUSBucket.cdk.bucket.grantRead(lambdaFunction);
-    this.buckets.ddsUKBucket.cdk.bucket.grantRead(lambdaFunction);
+    this.tables.offerHomepageTable.cdk.table.grantReadData(lambdaFunction);
   }
 }

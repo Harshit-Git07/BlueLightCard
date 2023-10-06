@@ -6,6 +6,7 @@ import { Stack } from 'aws-cdk-lib'
  *  @param stack - The stack to add the tables to
  */
 export class Tables {
+  offerHomepageTable: Table
   brandTable: Table
   offerTable: Table
   companyTable: Table
@@ -22,6 +23,7 @@ export class Tables {
   companyBrandConnectionTable: Table;
 
   constructor (private stack: Stack) {
+    this.offerHomepageTable = this.createOfferHomepageTable();
     this.brandTable = this.createBrandTable();
     this.offerTable = this.createOfferTable();
     this.companyTable = this.createCompanyTable();
@@ -36,6 +38,20 @@ export class Tables {
     this.companyTagConnectionTable = this.createCompanyTagConnectionTable();
     this.companyCategoryConnectionTable = this.createCompanyCategoryConnectionTable();
     this.companyBrandConnectionTable = this.createCompanyBrandConnectionTable();
+  }
+
+  private createOfferHomepageTable (): Table {
+    return new Table(this.stack, 'offersHomepage', {
+      fields: {
+        id: 'string',
+        type: 'string',
+        json: 'string'
+      },
+      primaryIndex: {
+        partitionKey: 'id',
+        sortKey: 'type'
+      }
+    })
   }
 
   private createBrandTable (): Table {

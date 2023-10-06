@@ -14,8 +14,8 @@ export class Lambda {
   typeLambda: NodejsFunction;
   queryLambda: NodejsFunction;
 
-  constructor(private stack: Stack, private tables: Tables, private buckets: Buckets) {
+  constructor(private stack: Stack, private tables: Tables) {
     this.typeLambda = new TypeLambda(this.stack, this.tables).create();
-    this.queryLambda = new QueryLambda(this.stack, this.buckets).create();
+    this.queryLambda = new QueryLambda(this.stack, this.tables).create();
   }
 }

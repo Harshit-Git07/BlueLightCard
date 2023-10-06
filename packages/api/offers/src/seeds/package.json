@@ -1,0 +1,15 @@
+{
+  "name": "seeds",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dynamo:seed": "node seed-dynamo-data-offers-homepage-table.cjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1471.0",
+    "dotenv": "^16.3.1"
+  }
+}

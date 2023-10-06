@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.4.1...bluelightcard/offers-v1.5.0) (2023-10-06)
+
+
+### Features
+
+* hotfix created offers homepage dynamodb table and resolver pull from dynamodb ([#444](https://github.com/bluelightcard/BlueLightCard-2.0/issues/444)) ([0b072dd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0b072ddbfcd9519912b26b2746081a950c8e9977))
+
 ## [1.4.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.4.0...bluelightcard/offers-v1.4.1) (2023-10-02)
 
 

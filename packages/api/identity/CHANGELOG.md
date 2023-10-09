@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.20.0...bluelightcard/identity-v1.21.0) (2023-10-09)
+
+
+### Features
+
+* change response structure and remove some transformations plus make s… ([#435](https://github.com/bluelightcard/BlueLightCard-2.0/issues/435)) ([2c4df06](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c4df06ca55670b3289a18a350e276eebe219f75))
+
 ## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.19.1...bluelightcard/identity-v1.20.0) (2023-10-05)
 
 

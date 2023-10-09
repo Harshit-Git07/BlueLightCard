@@ -1,0 +1,95 @@
+config:
+  phases:
+    - duration: 60
+      arrivalRate: 20
+#      rampTo: 5
+#      name: Warm up phase
+#    - duration: 60
+#      arrivalRate: 5
+#      rampTo: 10
+#      name: Ramp up load
+#    - duration: 30
+#      arrivalRate: 10
+#      rampTo: 30
+#      name: Spike phase
+  plugins:
+    ensure: {}
+    metrics-by-endpoint: {}
+  ensure:
+    thresholds:
+      - http.response_time.p99: 250
+      - http.response_time.p95: 100
+
+  processor: "./js/offers-functions.js"
+
+scenarios:
+  - flow:
+      - function: "authenticateUser"
+      - post:
+          url: '/'
+          name: "GetOfferMenusByBrandId"
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            query: |
+              query OfferMenus($brandId: ID!) {
+                getOfferMenusByBrandId(brandId: $brandId) {
+                    # Deals of the week
+                    deals {
+                      compid
+                      image
+                      logos
+                      id
+                      offername
+                      companyname
+                    }
+                    # Flexible menus
+                    flexible {
+                      imagehome
+                      title
+                      hide
+                    }
+                    # Market place menus
+                    marketPlace {
+                      items {
+                        item {
+                          companyname
+                          offername
+                          image
+                          compid
+                          id
+                        }
+                      }
+                      name
+                    }
+                    # Featured offers
+                    features {
+                      companyname
+                      offername
+                      image
+                      logos
+                      compid
+                      id
+                    }
+                }
+              }
+            variables:
+              brandId: "blc-uk"
+      - post:
+          url: '/'
+          name: "GetBannersByBrandAndType"
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            query: |
+              query banners($type: String!, $brand: String!, $limit: Int!) {
+                getBannersByBrandAndType(type: $type, brand: $brand, limit: $limit) {
+                    # Banners
+                    link
+                    imageSource
+                }
+              }
+            variables:
+              type: "takeover"
+              brand: "blc-uk"
+              limit: 3

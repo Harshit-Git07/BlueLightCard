@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.13.1...bluelightcard/web-v1.14.0) (2023-10-09)
+
+
+### Features
+
+* adding base url to yml files ([#422](https://github.com/bluelightcard/BlueLightCard-2.0/issues/422)) ([aaaf423](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aaaf4239b21c23d341c4411f7ff8c6de71113f09))
+* **member-services-hub:** global navigation ([#437](https://github.com/bluelightcard/BlueLightCard-2.0/issues/437)) ([184e75a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/184e75a35e77bc7c81489ae1af3c37fdfd7ad261))
+* resolve svg issues ([#431](https://github.com/bluelightcard/BlueLightCard-2.0/issues/431)) ([709013f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/709013f01ac5e27033e0ef6a5388e7a874d87e53))
+* to-112-integrate-amplitude ([#412](https://github.com/bluelightcard/BlueLightCard-2.0/issues/412)) ([8fab240](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8fab24084d960310e8e91f39e11a8a85a01b22e1))
+* TO-237 Adding id for search navigation elements ([#443](https://github.com/bluelightcard/BlueLightCard-2.0/issues/443)) ([60b6508](https://github.com/bluelightcard/BlueLightCard-2.0/commit/60b6508ec64bc006c8e7630c1e98bc9a7b015906))
+* TO-265: Id's for homepage elements ([#417](https://github.com/bluelightcard/BlueLightCard-2.0/issues/417)) ([2e41fdf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2e41fdf45d4c8edff1ef2ce89b06a1ad0eb89720))
+* **web:** TO-186 design updates ([#392](https://github.com/bluelightcard/BlueLightCard-2.0/issues/392)) ([27be337](https://github.com/bluelightcard/BlueLightCard-2.0/commit/27be3370556dec4e47cb01c54b4674d11fa656cb))
+
+
+### Bug Fixes
+
+* fix storybook version ([#424](https://github.com/bluelightcard/BlueLightCard-2.0/issues/424)) ([ee6e4c0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ee6e4c0d749adcdf2959e1ab258f2fd842201b30))
+
+
+### Other Changes
+
+* **deps-dev:** bump @babel/core from 7.22.5 to 7.23.0 ([#384](https://github.com/bluelightcard/BlueLightCard-2.0/issues/384)) ([245125e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/245125ec901bebda01340c8e12ec0477181c8c02))
+
 ## [1.13.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.13.0...bluelightcard/web-v1.13.1) (2023-10-02)
 
 

@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 .control-dots {
-  bottom: -0.8rem !important;
+  bottom: -0.9rem !important;
 }
 
 @media (min-width: 500px) {
   .control-dots {
-    @apply scale-125 flex justify-center pb-2 my-2 text-center w-1/2 left-1/2 -translate-x-1/2 z-10 !important;
+    @apply scale-150 flex justify-center pb-2 my-2 text-center w-1/2 left-1/2 -translate-x-1/2 z-10 !important;
   }
 }
 

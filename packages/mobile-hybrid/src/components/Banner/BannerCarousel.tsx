@@ -52,7 +52,7 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
               />
             </div>
           </div>
-          <p className="pt-2 px-2 font-museo max-h-[60px] text-md dark:text-neutral-white line-clamp-2">
+          <p className="pt-2 px-2 font-museo dark:text-neutral-white line-clamp-2">
             {decodeEntities(slide.text)}
           </p>
         </div>

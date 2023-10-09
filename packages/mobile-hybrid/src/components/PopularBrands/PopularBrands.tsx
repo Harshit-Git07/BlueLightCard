@@ -8,7 +8,7 @@ const PopularBrands: FC<PopularBrandsProps> = ({ brands, onBrandItemClick, text 
     <>
       <Heading title="Popular Brands" />
       <p className="px-4 mb-3 font-museo dark:text-neutral-white">{text}</p>
-      <div className="ml-2 flex overflow-x-auto items-center h-[100px] snap-x scroll-auto">
+      <div className="ml-2 flex overflow-x-auto items-center h-[100px]">
         <div className="flex">
           {brands.map((brand) => (
             <div

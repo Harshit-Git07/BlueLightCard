@@ -48,7 +48,7 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
 
     logger.debug('Member Query Results ', results);
 
-    let userDetails: any = {};
+    let userDetails = {};
     let cardDetails = {};
     let brandDetails = {};
 
@@ -63,9 +63,13 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     })
 
     if(!isEmpty(userDetails)) {
-      const combinedUserData = {...userDetails, ...cardDetails, ...brandDetails};
-      logger.info("User Found", combinedUserData);
-      return Response.OK({ message: 'User Found', data: combinedUserData });
+      let responseModel = {
+        profile: userDetails,
+        card: cardDetails,
+        ...brandDetails,
+      }
+      logger.info("User Found", responseModel);
+      return Response.OK({ message: 'User Found', data: responseModel });
     }
     return Response.NoContent({ message: 'User not found' });
 

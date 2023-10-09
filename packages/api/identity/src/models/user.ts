@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
 
 export const UserModel = z.object({
     firstname: z.string(),
@@ -10,9 +11,12 @@ export const UserModel = z.object({
     uuid: z.string().optional(),
     service: z.string().optional(),
     spareEmail: z.string().optional(),
-    spareEmailValidated: z.string().optional(),
+    spareEmailValidated: z.number().optional().default(0),
     twoFactorAuthentication: z.boolean().optional().default(false),
-  });
+  }).transform(user => ({
+    ...user,
+    dob: transformDateToFormatYYYYMMDD(user.dob)
+  }));
 
 (UserModel as any)._ModelName = 'UserModel'
 

@@ -93,7 +93,7 @@ describe('Fetch env variables', () => {
       .catch((err) => {
         console.log(err);
       });
-    await delay(2000);
+    await delay(5000);
   });
 });
 
@@ -162,14 +162,23 @@ describe('Send user profile update event, and test user api to match data', () =
       }catch (err: any) {}
       }
     } catch (err: any) {console.log(err);}
-
     expect(res.status).toEqual(200);
     expect(res.data.message).toEqual('User Found');
-    expect(res.data.data.gender).toEqual('P');
-    expect(res.data.data.firstname).toEqual(dataToSend.firstname);
-    expect(res.data.data.surname).toEqual(dataToSend.surname);
-    expect(res.data.data.dob).toEqual('12/12/1990');
-    expect(res.data.data.mobile).toEqual('07000000000');
+    expect(res.data.data.legacyId).toEqual(2853201);
+    expect(res.data.data.uuid).toEqual('068385bb-b370-4153-9474-51dd0bfac9dc');
+    expect(res.data.data.profile.gender).toEqual('P');
+    expect(res.data.data.profile.firstname).toEqual(dataToSend.firstname);
+    expect(res.data.data.profile.surname).toEqual(dataToSend.surname);
+    expect(res.data.data.profile.dob).toEqual('1990-12-12');
+    expect(res.data.data.profile.mobile).toEqual('07000000000');
+    expect(res.data.data.profile.organisation).toEqual('AMBU');
+    expect(res.data.data.profile.twoFactorAuthentication).not.toBeNull();
+    expect(res.data.data.card.cardId).not.toBeNull();
+    expect(res.data.data.card.expires).not.toBeNull();
+    expect(res.data.data.card.cardStatus).not.toBeNull();
+    expect(res.data.data.card.datePosted).not.toBeNull();
+    expect(res.data.data.card.cardAction).not.toBeNull();
+
   });
 });
 

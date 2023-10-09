@@ -132,7 +132,7 @@ export function Identity({stack}: StackContext) {
     
   
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(identityApi.cdk.restApi);
-    const agUserModel = apiGatewayModelGenerator.generateModel(UserModel);
+    const agUserModel = apiGatewayModelGenerator.generateModelFromZodEffect(UserModel);
 
     identityApi.addRoutes(stack, {
       'GET /user': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),

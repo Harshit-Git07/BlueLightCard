@@ -4,17 +4,35 @@ import React from 'react';
 import Search from '@/components/Header/Search';
 import { SearchProps } from '@/components/Header/types';
 
+jest.mock('next/router', () => ({
+  useRouter() {
+    return {
+      route: '/',
+      pathname: '',
+      query: '',
+      asPath: '',
+      push: jest.fn(),
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+      beforePopState: jest.fn(() => null),
+      prefetch: jest.fn(() => null),
+    };
+  },
+}));
+
 describe('Search component', () => {
   let props: SearchProps;
   beforeEach(() => {
     props = {
       onSearchCompanyChange(companyId, company) {
-        companyId = 10;
+        companyId = '10';
         company = 'test';
         return companyId;
       },
       onSearchCategoryChange(categoryId, categoryName) {
-        categoryId = 123;
+        categoryId = '123';
         categoryName = 'testCat';
         return categoryName;
       },
@@ -61,7 +79,7 @@ describe('Search component', () => {
   describe('Search by category', () => {
     it('should category search', () => {
       render(<Search {...props} />);
-      const categorySearch = screen.getByText('by category');
+      const categorySearch = screen.getAllByText('by category');
       expect(categorySearch).toBeTruthy();
     });
   });

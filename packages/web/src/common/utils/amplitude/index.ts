@@ -58,7 +58,7 @@ export function logMembersHomePage() {
   });
 }
 
-export function logSearchCompanyEvent(companyId: number, companyName: string) {
+export function logSearchCompanyEvent(companyId: string, companyName: string) {
   const eventProperties = {
     company_id: companyId,
     company_name: companyName,
@@ -66,7 +66,7 @@ export function logSearchCompanyEvent(companyId: number, companyName: string) {
   amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties);
 }
 
-export function logSearchCategoryEvent(categoryId: number, categoryName: string) {
+export function logSearchCategoryEvent(categoryId: string, categoryName: string) {
   const eventProperties = {
     category_id: categoryId,
     category_name: categoryName,

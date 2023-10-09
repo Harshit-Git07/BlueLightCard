@@ -42,3 +42,13 @@ export type FeaturedOffersType = {
   compid: string;
   id: string;
 };
+
+export type CompanyType = {
+  id: string;
+  name: string;
+};
+
+export type CategoryType = {
+  id: string;
+  name: string;
+};

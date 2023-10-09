@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const homePageQuery = (brand: string) => gql`
   query HomePageQuery {
     # Banners
-    banners: getBannersByBrandAndType(type: "takeover", brand: "${brand}", limit: 3) {
+    banners: getBannersByBrandAndType(type: "takeover", brandId: "${brand}", limit: 3) {
       link
       imageSource
     }
@@ -44,6 +44,21 @@ export const homePageQuery = (brand: string) => gql`
         logos
         compid
         id
+      }
+    }
+  }
+`;
+
+export const companiesCategoriesQuery = (brand: string) => gql`
+  query CompaniesCategoriesQuery {
+    response: getCategoriesAndCompaniesByBrandId(brandId: "${brand}") {
+      categories {
+        id
+        name
+      }
+      companies {
+        id
+        name
       }
     }
   }

@@ -35,13 +35,12 @@ const OffersPage: NextPage<OffersPageProps> = (props) => {
   return (
     <>
       <Header
-        logoUrl={header.logoSource}
         navItems={header.navItems}
         loggedIn={true}
-        onSearchCompanyChange={function (companyId: number, company: string): void {
+        onSearchCompanyChange={function (companyId: string, company: string): void {
           throw new Error('Function not implemented.');
         }}
-        onSearchCategoryChange={function (categoryId: number, company: string): void {
+        onSearchCategoryChange={function (categoryId: string, company: string): void {
           throw new Error('Function not implemented.');
         }}
         onSearchTerm={function (searchTerm: string): void {

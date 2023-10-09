@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { LOGOUT_ROUTE } from '@/global-vars';
 
-function redirectToLogin(router: any) {
+export function redirectToLogin(router: any) {
   if (process.env.NODE_ENV == 'production') {
     window.location.replace(LOGOUT_ROUTE);
   } else {

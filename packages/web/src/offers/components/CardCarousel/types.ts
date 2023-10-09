@@ -6,7 +6,7 @@ export interface CardCarouselOffer {
 }
 
 export interface CardCarouselProps {
-  title: string;
+  title?: string;
   itemsToShow: number;
   useSmallCards?: boolean;
   offers: CardCarouselOffer[];

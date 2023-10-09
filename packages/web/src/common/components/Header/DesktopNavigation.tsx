@@ -4,7 +4,13 @@ import { faAngleDown } from '@fortawesome/pro-regular-svg-icons';
 import { FC } from 'react';
 import { MenuNavProps } from './types';
 
-const downArrow = <FontAwesomeIcon icon={faAngleDown} size="sm" className="pl-1" />;
+const downArrow = (
+  <FontAwesomeIcon
+    icon={faAngleDown}
+    size="sm"
+    className="relative pl-1 group-hover:text-[#36c] text-palette-body-text my-auto top-[1px]"
+  />
+);
 
 const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
   return (
@@ -13,19 +19,19 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
         const hasDropdown = navItem.dropdown?.length && navItem.dropdown.length > 0;
 
         return (
-          <li className="px-3 group" key={index}>
+          <li className="px-3 group flex flex-col" key={index}>
             <Link
               href={navItem.link}
-              data-testid={navItem.text + '-link'}
-              className="block hover:underline hover:text-[#36c] text-palette-body-text"
+              className="group-hover:underline group-hover:text-[#36c] text-palette-body-text group flex align-middle justify-start"
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
+              data-testid={navItem.text + '-link'}
             >
               {navItem.text} {hasDropdown && downArrow}
             </Link>
 
             {hasDropdown && (
-              <div className="z-100 absolute ease-in duration-300">
-                <ul className="list-none absolute z-[999] hidden min-w-[180px] h-auto shadow-[0px_6px_12px_rgba(0,0,0,0.176)] m-0 rounded-[0_0_3px_3px] border-t-2 border-solid -left-5 top-0 group-hover:block bg-shade-greyscale-white">
+              <div className="z-100 relative ease-in duration-300">
+                <ul className="list-none absolute z-[999] hidden min-w-[180px] h-auto shadow-[0px_6px_12px_rgba(0,0,0,0.176)] m-0 rounded-[0_0_3px_3px] border-t-2 border-solid group-hover:block bg-shade-greyscale-white">
                   {navItem.dropdown?.map((link, index) => (
                     <li
                       className="leading-[normal] text-sm relative font-normal group-hover:block hover:z-1000"

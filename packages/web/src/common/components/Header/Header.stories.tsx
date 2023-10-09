@@ -11,6 +11,10 @@ const componentMeta: Meta<HeaderProps> = {
 };
 
 const defaultNavItems = {
+  links: {
+    homeUrl: '/',
+    notificationsUrl: '/notifications.php',
+  },
   loggedIn: [
     {
       text: 'Logged In Item',
@@ -39,18 +43,23 @@ const defaultNavItems = {
 
 const HeaderTemplate: StoryFn<HeaderProps> = (args) => <Header {...args} />;
 
+const args = {
+  navItems: defaultNavItems,
+  onSearchCategoryChange: () => {},
+  onSearchCompanyChange: () => {},
+  onSearchTerm: () => {},
+};
+
 export const Default = HeaderTemplate.bind({});
 Default.args = {
   loggedIn: true,
-  logoUrl: '/assets/blc_logo.webp',
-  navItems: defaultNavItems,
+  ...args,
 };
 
 export const LoggedOut = HeaderTemplate.bind({});
 LoggedOut.args = {
   loggedIn: false,
-  logoUrl: '/assets/blc_logo.webp',
-  navItems: defaultNavItems,
+  ...args,
 };
 
 export default componentMeta;

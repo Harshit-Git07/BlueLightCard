@@ -8,7 +8,7 @@ import {
 import { DocumentNode } from 'graphql';
 
 export const gqlLinkWithAuthHeaders = () => {
-  const authorization = localStorage.getItem('accessToken') || '';
+  const authorization = localStorage.getItem('idToken') || '';
 
   return createHttpLink({
     uri: process.env.NEXT_PUBLIC_OFFERS_ENDPOINT || '',

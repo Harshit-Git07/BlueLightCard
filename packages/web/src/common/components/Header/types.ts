@@ -1,15 +1,14 @@
 export type HeaderProps = {
   loggedIn?: boolean;
-  logoUrl: string;
   navItems: NavItem;
-  onSearchCompanyChange: (companyId: number, company: string) => void;
-  onSearchCategoryChange: (categoryId: number, company: string) => void;
+  onSearchCompanyChange: (companyId: string, company: string) => void;
+  onSearchCategoryChange: (categoryId: string, company: string) => void;
   onSearchTerm: (searchTerm: string) => void;
 };
 
 export type SearchProps = {
-  onSearchCompanyChange: (companyId: number, company: string) => void;
-  onSearchCategoryChange: (categoryId: number, categoryName: string) => void;
+  onSearchCompanyChange: (companyId: string, company: string) => void;
+  onSearchCategoryChange: (categoryId: string, categoryName: string) => void;
   onSearchTerm: (searchTerm: string) => void;
 };
 
@@ -21,6 +20,10 @@ export interface NavProp {
 }
 
 export interface NavItem {
+  links: {
+    homeUrl: string;
+    notificationsUrl: string;
+  };
   loggedIn: {
     text: string;
     link: string;
@@ -60,7 +63,3 @@ export interface MenuNavProps {
     }[];
   }[];
 }
-
-export type logoProps = {
-  logoUrl: string;
-};

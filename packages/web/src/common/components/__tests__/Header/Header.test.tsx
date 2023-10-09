@@ -8,8 +8,11 @@ describe('Header component', () => {
   let props: HeaderProps;
   beforeEach(() => {
     props = {
-      logoUrl: 'https://www.test.com',
       navItems: {
+        links: {
+          homeUrl: '/',
+          notificationsUrl: '/notifications.php',
+        },
         loggedIn: [
           {
             text: 'Register',

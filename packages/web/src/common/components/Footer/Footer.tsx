@@ -6,10 +6,10 @@ import SocialMediaIcon from '../SocialMediaIcon/SocialMediaIcon';
 import SocialMediaIconProps from '../SocialMediaIcon/types';
 
 /**
- * Modular Footer component
- * @TODO Footer tokens need to be white labeled
- * @returns
- */
+ ** Modular Footer component
+ ** @TODO Footer tokens need to be white labeled
+ ** @returns
+ **/
 const Footer: FC<FooterProps> = ({
   copyrightText,
   loginForm,
@@ -24,7 +24,7 @@ const Footer: FC<FooterProps> = ({
       {/* Main body */}
       {((navigationItems && navigationItems.length > 0) || loginForm) && (
         <div
-          className={`${horizPadding} flex-col tablet:flex-row py-8 w-full bg-components-footer-primary flex justify-between max-mobile:flex-col tablet:flex-wrap`}
+          className={`${horizPadding} py-8 bg-components-footer-primary grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4`}
         >
           {loginForm}
           {((navigationItems && navigationItems.length > 0) || loginForm) &&
@@ -52,7 +52,7 @@ const Footer: FC<FooterProps> = ({
       {/* Socials and mobile download section */}
       {(socialLinks || downloadLinks) && (
         <div
-          className={`${horizPadding} py-6 w-full bg-components-footer-secondary flex tablet:flex-row flex-col justify-between space-y-4 tablet:space-y-0`}
+          className={`${horizPadding} py-6 w-full bg-components-footer-secondary grid grid-cols-1 tablet:grid-cols-2 space-y-2 tablet:space-y-0`}
         >
           {socialLinks && (
             <div className="flex flex-row m-auto tablet:mx-0 space-x-2">
@@ -72,13 +72,13 @@ const Footer: FC<FooterProps> = ({
           )}
 
           {downloadLinks && (
-            <div className="m-auto tablet:mx-0 flex flex-row space-x-2">
-              <p className="tablet:inline-block hidden h-fit my-auto">Download:</p>
+            <div className="m-auto tablet:mx-0 flex flex-row justify-center space-x-2 flex-wrap">
+              <p className="tablet:inline-block hidden h-fit my-auto">Download our apps:</p>
               {downloadLinks.map((link: downloadLink, index) => {
                 return (
-                  <div key={index} className="w-fit h-full my-auto">
+                  <div key={index} className="relative w-[160px] h-[50px] my-2">
                     <Link
-                      className="w-fit relative"
+                      className="flex object-contain absolute top-0 left-0 w-full h-full"
                       href={link.downloadUrl}
                       title={link.linkTitle}
                       data-testid={link.linkTitle + '-link'}
@@ -86,9 +86,8 @@ const Footer: FC<FooterProps> = ({
                       <Image
                         alt={link.linkTitle || ''}
                         src={link.imageUrl}
-                        responsive={false}
-                        width={136}
-                        height={40}
+                        responsive={true}
+                        className="object-contain object-center"
                       />
                     </Link>
                   </div>
@@ -100,7 +99,7 @@ const Footer: FC<FooterProps> = ({
       )}
       {/* Copyright */}
       {copyrightText && (
-        <div className="p-2 w-full bg-components-footer-tertiary text-center">
+        <div className="p-2 w-full bg-components-footer-secondary text-center">
           <p>{copyrightText}</p>
         </div>
       )}

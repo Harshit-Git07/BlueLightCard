@@ -1,6 +1,10 @@
 {
   "logoSource": "/assets/blc_logo.webp",
   "navItems": {
+    "links": {
+      "homeUrl": "/",
+      "notificationsUrl": "/notifications.php"
+    },
     "loggedOut": [
       {
         "text": "Home",
@@ -8,19 +12,19 @@
       },
       {
         "text": "About us",
-        "link": "/about"
+        "link": "/about_blue_light_card.php"
       },
       {
         "text": "Add your business",
-        "link": "/addbusiness"
+        "link": "/addaforcesdiscount.php"
       },
       {
         "text": "FAQs",
-        "link": "/faqs"
+        "link": "/contactblc.php"
       },
       {
         "text": "Register now",
-        "link": "/newaccount"
+        "link": "/newuser.php"
       },
       {
         "text": "Login",
@@ -28,20 +32,19 @@
       },
       {
         "text": "Discover savings",
-        "link": "/discover",
+        "link": "",
         "dropdown": [
           {
             "text": "Holidays",
-            "link": "/holidays"
+            "link": "/holiday-discounts.php"
           },
           {
             "text": "Days Out",
-            "link": "/daysout"
+            "link": "/days-out.php"
           }
         ]
       }
     ],
-
     "loggedIn": [
       {
         "text": "Home",
@@ -49,27 +52,26 @@
       },
       {
         "text": "Offers",
-        "link": "/offers",
         "dropdown": [
           {
             "text": "Online Discounts",
-            "link": "/offers?type=0"
+            "link": "/offers.php?type=0"
           },
           {
             "text": "Giftcard Discounts",
-            "link": "/offers?type=2"
+            "link": "/offers.php?type=2"
           },
           {
             "text": "High Street Offers",
-            "link": "/offers?type=5"
+            "link": "/offers.php?type=5"
           },
           {
             "text": "Popular Discounts",
-            "link": "/offers?type=3"
+            "link": "/offers.php?type=3"
           },
           {
             "text": "Offers Near You",
-            "link": "/nearyou"
+            "link": "/nearme.php"
           },
           {
             "text": "Deals of the Week",
@@ -83,25 +85,25 @@
         "dropdown": [
           {
             "text": "Holiday Discounts",
-            "link": "/holidays"
+            "link": "/holiday-discounts.php"
           },
           {
             "text": "Days Out",
-            "link": "/daysout"
+            "link": "/days-out.php"
           }
         ]
       },
       {
         "text": "My Card",
-        "link": "/mycard"
+        "link": "/highstreetcard.php"
       },
       {
         "text": "My Account",
-        "link": "/account"
+        "link": "/account.php"
       },
       {
         "text": "FAQs",
-        "link": "/faqs"
+        "link": "/support.php#questions"
       },
       {
         "text": "Logout",

@@ -3,8 +3,8 @@ import useIsVisible from '@/hooks/useIsVisible';
 import Heading from '@/components/Heading/Heading';
 import { useRef, useState, useEffect } from 'react';
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
-import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { CardCarouselProps } from './types';
+import OfferCardPlaceholder from '../OfferCard/OfferCardPlaceholder';
 
 const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -22,31 +22,35 @@ const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouse
     <div className={className} ref={carouselRef}>
       {isVisible && (
         <>
-          <Heading headingLevel="h2">{title}</Heading>
-          {offers.length === 0 && <LoadingPlaceholder />}
-          {offers.length > 0 && (
-            <Carousel
-              showControls
-              autoPlay
-              elementsPerPageDesktop={itemsToShow}
-              elementsPerPageLaptop={itemsToShow}
-              elementsPerPageMobile={1}
-              elementsPerPageTablet={2}
-            >
-              {offers.map((offer, index) => (
-                <OfferCard
-                  key={index}
-                  alt={'Card'}
-                  offerName={offer.offername ?? ''}
-                  companyName={offer.companyname ?? ''}
-                  imageSrc={offer.imageUrl}
-                  offerLink={offer.href}
-                  variant={useSmallCards ? 'small' : ''}
-                  id={'_offer_card_' + index}
-                />
-              ))}
-            </Carousel>
+          {title && (
+            <Heading headingLevel="h2" className="pb-4">
+              {title}
+            </Heading>
           )}
+          <Carousel
+            showControls
+            autoPlay
+            elementsPerPageDesktop={itemsToShow}
+            elementsPerPageLaptop={itemsToShow}
+            elementsPerPageTablet={2}
+            elementsPerPageMobile={1}
+            autoPlayIntervalMs={5000}
+          >
+            {offers.length > 0
+              ? offers.map((offer, index) => (
+                  <OfferCard
+                    key={index}
+                    alt={'Card'}
+                    offerName={offer.offername ?? ''}
+                    companyName={offer.companyname ?? ''}
+                    imageSrc={offer.imageUrl}
+                    offerLink={offer.href}
+                    variant={useSmallCards ? 'small' : ''}
+                    id={'_offer_card_' + index}
+                  />
+                ))
+              : [...Array(itemsToShow)].map((_, index) => <OfferCardPlaceholder key={index} />)}
+          </Carousel>
         </>
       )}
     </div>

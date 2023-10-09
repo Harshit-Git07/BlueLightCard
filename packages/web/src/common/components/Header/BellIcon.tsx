@@ -3,8 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/pro-solid-svg-icons';
 import Link from '@/components/Link/Link';
 
-const BellIcon: React.FC = () => (
-  <Link legacyBehavior href="/">
+interface BellIconProps {
+  url: string;
+}
+
+const BellIcon: React.FC<BellIconProps> = ({ url }) => (
+  <Link legacyBehavior href={url}>
     <FontAwesomeIcon
       icon={faBell}
       className="text-palette-white h-[20px] cursor-pointer hover:text-palette-secondary ease-in duration-100"

@@ -6,7 +6,7 @@ import { ImageLoader } from 'next/image';
  * @TODO Change loader to resolve to cloudflare cdn-cgi optimisation url
  * @returns
  */
-const loader: ImageLoader = ({ src, width, quality = 50 }) => {
+const loader: ImageLoader = ({ src, width, quality = 75 }) => {
   if (src.startsWith(CDN_URL)) {
     const IMAGE_OPTIMISATION_URL = `${CDN_URL}/cdn-cgi/image`;
     return `${IMAGE_OPTIMISATION_URL}/width=${width},quality=${quality},format=auto/${src}`;

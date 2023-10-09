@@ -7,6 +7,7 @@ import MobileNavigation from './MobileNavigation';
 import DesktopNavigation from './DesktopNavigation';
 import SearchButton from './SearchButton';
 import { NavProp } from './types';
+import StandardPadding from '../StandardPadding/StandardPadding';
 
 const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearch, navItems }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
@@ -26,9 +27,9 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
   return (
     <>
       <nav className="border-b border-slate-100 bg-shade-greyscale-white" data-testid="navigation">
-        <div className="flex justify-between tablet:px-[10%]">
+        <StandardPadding className="flex justify-between">
           <div
-            className="bg-[#252525] text-shade-greyscale-white w-[52px] h-[52px] leading-[52px] text-center p-3 overflow-hidden cursor-pointer flex desktop:hidden desktop:px-0"
+            className="bg-[#252525] text-shade-greyscale-white w-[52px] h-[52px] leading-[52px] text-center p-3 overflow-hidden cursor-pointer flex desktop:hidden desktop:px-0 items-center"
             onClick={dropdownMenuHandler}
           >
             <FontAwesomeIcon icon={faBars} className="fa-solid fa-bars w-full h-full text-center" />
@@ -36,7 +37,7 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
 
           <DesktopNavigation menu={menu} />
           {authenticated && <SearchButton displaySearch={displaySearchHandler} />}
-        </div>
+        </StandardPadding>
         {dropdownMenu && <MobileNavigation menu={menu} />}
       </nav>
     </>

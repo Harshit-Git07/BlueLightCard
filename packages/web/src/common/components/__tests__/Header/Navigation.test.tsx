@@ -13,6 +13,10 @@ describe('Navigation component for logged in and logged out', () => {
         displaySearch: false,
         setDisplaySearch: false,
         navItems: {
+          links: {
+            homeUrl: '/',
+            notificationsUrl: '/notifications.php',
+          },
           loggedIn: [
             {
               text: 'Home',
@@ -295,6 +299,10 @@ describe('Navigation component for logged in and logged out', () => {
         displaySearch: false,
         setDisplaySearch: false,
         navItems: {
+          links: {
+            homeUrl: '/',
+            notificationsUrl: '/notifications.php',
+          },
           loggedIn: [
             {
               text: 'Home',

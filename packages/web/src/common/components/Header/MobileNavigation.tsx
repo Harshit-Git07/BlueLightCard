@@ -4,7 +4,9 @@ import { faAngleDown } from '@fortawesome/pro-regular-svg-icons';
 import { FC } from 'react';
 import { MenuNavProps } from './types';
 
-const downArrow = <FontAwesomeIcon icon={faAngleDown} size="sm" className="pl-1" />;
+const downArrow = (
+  <FontAwesomeIcon icon={faAngleDown} size="sm" className="relative pl-1 top-[2px]" />
+);
 
 const MobileNavigation: FC<MenuNavProps> = ({ menu }) => (
   <div className="flex-col absolute z-[100] w-full desktop:hidden" data-testid="mobileNav">

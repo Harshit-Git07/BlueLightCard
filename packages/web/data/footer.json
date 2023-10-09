@@ -4,44 +4,45 @@
           {
             "title": "Offers",
             "navLinks": [
-              { "label": "Online Discounts", "url": "/" },
-              { "label": "Giftcard Discounts", "url": "/" },
-              { "label": "High Street Offers", "url": "/" },
-              { "label": "Popular Discounts", "url": "/" },
-              { "label": "Offers Near You", "url": "/" },
-              { "label": "Deals of the Week", "url": "/" }
+              { "label": "Online Discounts", "url": "/offers.php?type=0" },
+              { "label": "Giftcard Discounts", "url": "/offers.php?type=2" },
+              { "label": "High Street Offers", "url": "/offers.php?type=5" },
+              { "label": "Popular Discounts", "url": "/offers.php?type=3" },
+              { "label": "Offers Near You", "url": "/nearme.php" },
+              { "label": "Deals of the Week", "url": "/members-home" }
             ]
           },
           {
             "title": "Company Info",
             "navLinks": [
-              { "label": "Blue Light Card Foundation", "url": "/" },
-              { "label": "Latest News & Blogs", "url": "/" },
-              { "label": "About Us", "url": "/" },
-              { "label": "Free Tickets", "url": "/" },
-              { "label": "Compliance", "url": "/" }
+              { "label": "Blue Light Card Foundation", "url": "/foundation.php" },
+              { "label": "Latest News & Blogs", "url": "/bluelightcardnews.php" },
+              { "label": "About Us", "url": "/about_blue_light_card.php" },
+              { "label": "Free Tickets", "url": "/freenhsandbluelightcardtickets.php" },
+              { "label": "Compliance", "url": "/compliance.php" }
             ]
           },
           {
             "title": "Links",
             "navLinks": [
-              { "label": "Add a discount", "url": "/" },
-              { "label": "Mobile App", "url": "/" },
-              { "label": "Competitions", "url": "/" },
-              { "label": "Sitemap", "url": "/" },
-              { "label": "Contact Us", "url": "/" }
+              { "label": "Add a discount", "url": "/addaforcesdiscount.php" },
+              { "label": "Mobile App", "url": "/bluelightcardmobileapp.php" },
+              { "label": "Competitions", "url": "/blccompetitions.php" },
+              { "label": "Sitemap", "url": "/sitemap.php" },
+              { "label": "Contact Us", "url": "/support.php" },
+              { "label": "Careers at Blue Light Card", "url": "https://careers.bluelightcard.co.uk" }
             ]
           },
           {
             "title": "Legal",
             "navLinks": [
-              { "label": "Legal and Regulatory", "url": "/" },
-              { "label": "Terms and Conditions", "url": "/" },
-              { "label": "Privacy Notice", "url": "/" },
-              { "label": "Candidate Privacy Notice", "url": "/" },
-              { "label": "Cookies Policy", "url": "/" },
-              { "label": "Manage Cookies", "url": "/" },
-              { "label": "Modern Slavery Act Statement", "url": "/" }
+              { "label": "Legal and Regulatory", "url": "/legal-and-regulatory.php" },
+              { "label": "Terms and Conditions", "url": "/terms_and_conditions.php" },
+              { "label": "Privacy Notice", "url": "/privacy-notice.php" },
+              { "label": "Candidate Privacy Notice", "url": "/candidate-privacy-notice.php" },
+              { "label": "Cookies Policy", "url": "/cookies_policy.php" },
+              { "label": "Manage Cookies", "url": "/managecookies.php#" },
+              { "label": "Modern Slavery Act Statement", "url": "https://d37evuhq9ypzia.cloudfront.net/BLC%20Modern%20Slavery%20Statement%20JAN%2023%20FINAL.pdf" }
             ]
           }
         ],
@@ -49,19 +50,19 @@
       "socialLinks": [
           {
               "iconName": "facebook",
-              "link": "https://facebook.com",
+              "link": "https://www.facebook.com/bluelightcarddiscounts",
               "helpText": "Blue light card on Facebook"
           },
           {
               "iconName": "twitter",
-              "link": "https://twitter.com",
+              "link": "https://twitter.com/bluelightcard",
               "helpText": "Blue light card on Twitter"
           },
 
           {
               "iconName": "instagram",
-              "link": "https://instagram.com",
-              "helpText": "Blue light card on instagram"
+              "link": "https://www.instagram.com/bluelightcard/",
+              "helpText": "Blue light card on Instagram"
           }
       ],
       "downloadLinks": [

@@ -7,10 +7,10 @@ import { HeaderProps } from './types';
 import Navigation from './Navigation';
 import Search from './Search';
 import SelectCountry from './SelectCountry';
+import StandardPadding from '../StandardPadding/StandardPadding';
 
 const Header: FC<HeaderProps> = ({
   loggedIn = false,
-  logoUrl,
   navItems,
   onSearchCompanyChange,
   onSearchCategoryChange,
@@ -18,18 +18,20 @@ const Header: FC<HeaderProps> = ({
 }) => {
   const [displaySearch, setDisplaySearch] = useState(false);
 
+  const { links } = navItems;
+
   return (
     <div>
       <div
         className="bg-palette-primary-base dark:bg-palette-primary-dark p-4 relative dark:"
         data-testid="app-header"
       >
-        <div className="mx-auto flex justify-between items-center tablet:px-[9%]">
+        <StandardPadding className="mx-auto flex justify-between items-center">
           <div className="flex-1">
-            <Logo logoUrl={logoUrl} />
+            <Logo url={links.homeUrl} />
           </div>
-          {loggedIn ? <BellIcon /> : <SelectCountry />}
-        </div>
+          {loggedIn ? <BellIcon url={links.notificationsUrl} /> : <SelectCountry />}
+        </StandardPadding>
       </div>
       <Navigation
         authenticated={loggedIn}

@@ -15,6 +15,7 @@ export type CarouselProps = {
   // Control
   clickToScroll?: boolean;
   showControls?: boolean;
+  swipeToScroll?: boolean;
 
   // Auto play
   autoPlay?: boolean;

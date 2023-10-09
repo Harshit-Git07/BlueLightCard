@@ -2,7 +2,7 @@
 
 exports[`Promo Banner should render with the correct link and image url 1`] = `
 <div
-  className="w-full relative"
+  className="w-full relative mb-2"
 >
   <a
     data-testid="anchor-link"
@@ -18,8 +18,8 @@ exports[`Promo Banner should render with the correct link and image url 1`] = `
       onError={[Function]}
       onLoad={[Function]}
       sizes="100vw"
-      src="_next/static/test.com?width=3840&quality=50"
-      srcSet="_next/static/test.com?width=640&quality=50 640w, _next/static/test.com?width=750&quality=50 750w, _next/static/test.com?width=828&quality=50 828w, _next/static/test.com?width=1080&quality=50 1080w, _next/static/test.com?width=1200&quality=50 1200w, _next/static/test.com?width=1920&quality=50 1920w, _next/static/test.com?width=2048&quality=50 2048w, _next/static/test.com?width=3840&quality=50 3840w"
+      src="_next/static/test.com?width=3840&quality=75"
+      srcSet="_next/static/test.com?width=640&quality=75 640w, _next/static/test.com?width=750&quality=75 750w, _next/static/test.com?width=828&quality=75 828w, _next/static/test.com?width=1080&quality=75 1080w, _next/static/test.com?width=1200&quality=75 1200w, _next/static/test.com?width=1920&quality=75 1920w, _next/static/test.com?width=2048&quality=75 2048w, _next/static/test.com?width=3840&quality=75 3840w"
       style={
         {
           "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",

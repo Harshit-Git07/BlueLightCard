@@ -1,5 +1,4 @@
 import Carousel from '@/components/Carousel/Carousel';
-import { CarouselProps } from '@/components/Carousel/types';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 describe('Carousel component', () => {

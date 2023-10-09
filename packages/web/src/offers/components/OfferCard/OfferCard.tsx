@@ -15,7 +15,7 @@ const OfferCard: FC<OfferCardProps> = ({
 }) => {
   return (
     <div
-      className="w-full h-full rounded-lg relative shadow-lg dark:bg-surface-secondary-dark pb-5 mb-5"
+      className="w-full h-full rounded-lg relative shadow-md dark:bg-surface-secondary-dark pb-5 mb-2"
       data-testid={id}
     >
       <Link href={offerLink} useLegacyRouting>
@@ -28,7 +28,7 @@ const OfferCard: FC<OfferCardProps> = ({
             height={0}
             sizes="100vw"
             className={'rounded-t-lg h-auto w-full'}
-            quality={50}
+            quality={75}
           />
         </div>
         <OfferCardDetails offerName={offerName} companyName={companyName} variant={variant} />

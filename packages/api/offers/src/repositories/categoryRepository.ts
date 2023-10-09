@@ -7,7 +7,7 @@ export class CategoryRepository {
     }
     async batchGetByIds(categoryIds: any[]) {
       const params = {
-        RequestItems: {
+      RequestItems: {
           [this.tableName]: {
             Keys: categoryIds.map((id) => ({ id })),
           },

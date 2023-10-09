@@ -31,7 +31,10 @@ export class QueryResolver implements IResolver {
   }
 
   private createQueryLambdaResolver() {
-    const fields = [{ typeName: 'Query', fieldName: 'getOfferMenusByBrandId' }];
+    const fields = [
+      { typeName: 'Query', fieldName: 'getOfferMenusByBrandId' },
+      { typeName: 'Query', fieldName: 'getCategoriesAndCompaniesByBrandId' }
+    ];
     fields.forEach(({ typeName, fieldName }) =>
       this.dataSources.queryLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
         typeName,

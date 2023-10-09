@@ -191,12 +191,27 @@ type Tag {
   updatedAt: String!
 }
 
+# TODO: Temporary until we migrate categories and companies to DynamoDB
+type CategoryMenu {
+  id: ID!
+  name: String!
+}
+
+type CompanyMenu {
+  id: ID!
+  name: String!
+}
+
+type CompaniesCategoriesMenuList {
+  categories: [CategoryMenu]
+  companies: [CompanyMenu]
+}
 
 type Query {
   getOfferMenusByBrandId(brandId: ID!): OfferMenuList
-  getBannersByBrandAndType(type: String!, brand: String!, limit: Int): [Banner!]!
+  getBannersByBrandAndType(type: String!, brandId: ID!, limit: Int): [Banner!]!
+  getCategoriesAndCompaniesByBrandId(brandId: ID!): CompaniesCategoriesMenuList!
   getOffersByType(offerType: ID!): [Offer!]!
   getOfferById(id: ID!): Offer!
   getCompanyById(id: ID!): Company!
 }
-

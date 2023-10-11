@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AlertBox component should render danger alert 1`] = `
+<div
+  className="bg-[#f1b0b7] text-palette-danger w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+>
+  <div
+    className="flex"
+  >
+    <p>
+      <strong>
+        Error Alert
+      </strong>
+    </p>
+    <p
+      className="pl-1"
+    >
+      This is an error message.
+    </p>
+  </div>
+  <button
+    onClick={[Function]}
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-xmark "
+      data-icon="xmark"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 384 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`AlertBox component should render info alert 1`] = `
+<div
+  className="bg-[#3cf] text-palette-info w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+>
+  <div
+    className="flex"
+  >
+    <p>
+      <strong>
+        Info Alert
+      </strong>
+    </p>
+    <p
+      className="pl-1"
+    >
+      This is an info message.
+    </p>
+  </div>
+  <button
+    onClick={[Function]}
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-xmark "
+      data-icon="xmark"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 384 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`AlertBox component should render success alert 1`] = `
+<div
+  className="bg-[#d4edda] text-palette-success w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+>
+  <div
+    className="flex"
+  >
+    <p>
+      <strong>
+        Success Alert
+      </strong>
+    </p>
+    <p
+      className="pl-1"
+    >
+      This is a success message.
+    </p>
+  </div>
+  <button
+    onClick={[Function]}
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-xmark "
+      data-icon="xmark"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 384 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`AlertBox component should render warning alert 1`] = `
+<div
+  className="bg-[#eb9316] text-palette-warning w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+>
+  <div
+    className="flex"
+  >
+    <p>
+      <strong>
+        Warning Alert
+      </strong>
+    </p>
+    <p
+      className="pl-1"
+    >
+      This is a warning message.
+    </p>
+  </div>
+  <button
+    onClick={[Function]}
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-xmark "
+      data-icon="xmark"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 384 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </button>
+</div>
+`;

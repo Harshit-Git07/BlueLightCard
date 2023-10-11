@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import Button from '../identity/components/Button/Button';
@@ -5,6 +6,8 @@ import useBrandTranslation from '@/hooks/useBrandTranslation';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Heading from '@/components/Heading/Heading';
+import AlertBox from '@/components/AlertBox/AlertBox';
+import Link from 'next/link';
 
 export const getStaticProps = getI18nStaticProps;
 
@@ -27,6 +30,7 @@ const Home: NextPage<any> = (props) => {
           {t('heading')}
         </Heading>
         <hr />
+
         <p className="text-palette-body-text">{t('page.description', { ns: 'description' })}</p>
         <Button
           id="start_button"
@@ -38,6 +42,19 @@ const Home: NextPage<any> = (props) => {
           {t('button.text')}
         </Button>
       </main>
+
+      <AlertBox
+        alertType={'success'}
+        title={'Success:'}
+        description={
+          <>
+            This is success, with a <Link href="#">Link</Link>
+          </>
+        }
+      />
+      <AlertBox alertType={'danger'} title={'Danger:'} description={'This a danger test'} />
+      <AlertBox alertType={'warning'} title={'Warning:'} description={'This a warning test'} />
+      <AlertBox alertType={'info'} title={'Info:'} description={'This a info test'} />
     </>
   );
 };

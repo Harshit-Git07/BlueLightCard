@@ -32,6 +32,7 @@ import {
 } from '@/utils/amplitude';
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
 import StandardPadding from '@/components/StandardPadding/StandardPadding';
+import AlertBox from '@/components/AlertBox/AlertBox';
 
 interface ContainerProps {
   children: React.ReactNode;
@@ -147,14 +148,11 @@ const HomePage: NextPage<any> = (props) => {
       />
 
       {loadingError && (
-        <div className="w-full h-[400px] flex justify-center">
-          <div className="m-auto">
-            <Heading headingLevel={'h1'}>An error has occured when loading the page</Heading>
-            <Link href={LOGOUT_ROUTE} useLegacyRouting={process.env.NODE_ENV === 'production'}>
-              <Button>Please login again</Button>
-            </Link>
-          </div>
-        </div>
+        <AlertBox
+          alertType="danger"
+          title="Error:"
+          description="An error has occured when loading the page. Please try again."
+        />
       )}
 
       {/* Promo banner carousel */}

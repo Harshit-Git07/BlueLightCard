@@ -1,13 +1,14 @@
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
-import { isValid } from 'date-fns';
 import { promises as fs } from 'fs';
 import { v4 } from 'uuid';
 import * as dotenv from 'dotenv';
 import mysql from 'mysql2/promise';
 
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
+import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
+import { setDate } from './../../../core/src/utils/setDate';
 
 interface RowData {
     id: number;
@@ -49,12 +50,6 @@ function validateData(rowData: RowData): { valid: boolean; reason?: string } {
   if (rowData.cardStatus === null || rowData.cardStatus === undefined)
     return { valid: false, reason: 'card status is null or undefined' };
   return { valid: true };
-}
-
-function setDate(date: any) {
-  if (!isValid(date) || date === null || date === undefined  || date === '' || date === '0000-00-00 00:00:00' || date === 'undefined') 
-    return '0000000000000000';
-  return new Date(date.toString()).getTime();
 }
 
 dotenv.config({ path: './src/cognito/.env' , debug: true});
@@ -157,9 +152,9 @@ export async function migrate(): Promise<{status: string, message: string}> {
       }
 
       const profileUuid: string = v4();
-      let dob = '00/00/0000';
+      let dob = '0000-00-00';
       if(!isNaN(Date.parse(row.dob))){
-          dob = new Date(row.dob).toLocaleDateString();
+        dob = transformDateToFormatYYYYMMDD(row.dob);
       }
       //profile
       const profileParams = {

@@ -8,6 +8,7 @@ import { UserProfileModel, UserProfile } from '../../src/models/userprofile';
 import { sendToDLQ } from '../../src/helpers/DLQ';
 import { ZodError } from 'zod';
 import { v4 } from 'uuid';
+import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
 
 
 const service: string = process.env.SERVICE as string
@@ -96,7 +97,7 @@ export const handler = async (event: any, context: any) => {
     let expAttrValues: Record<string,any> = {};
     (Object.keys(detail) as (keyof typeof detail)[]).find((key) => {
       if(key === 'dob'){
-        detail[key] = detail[key] ? new Date(String(detail[key])).toLocaleDateString() : '00/00/0000';
+        detail[key] = detail[key] ? transformDateToFormatYYYYMMDD(String(detail[key])) : '0000-00-00';
       }
         updateExp += ` ${key} = :${key},`;
         expAttrValues[`:${key}`] = detail[key];

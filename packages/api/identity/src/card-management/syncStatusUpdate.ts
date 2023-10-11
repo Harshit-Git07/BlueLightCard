@@ -29,25 +29,25 @@ export const handler = async (event: any, context: any) => {
   const brand = (event.detail !== undefined || event.detail !== null) ? event.detail.brand?.toUpperCase() : null;
 
   if (brand == null) {
-    logger.info('brand details missing', event);
+    logger.debug('brand details missing', brand);
     return Response.BadRequest({ message: 'Please provide brand details' });
   }
 
   if (!(brand in BRANDS)) {
-    logger.info('invalid brand', event);
+    logger.debug('invalid brand', brand);
     return Response.BadRequest({ message: 'Please provide a valid brand' });
   }
 
   if(event.detail.uuid === undefined || event.detail.uuid === ''
   || event.detail.cardNumber === undefined || event.detail.cardNumber === ''
   || event.detail.cardStatus === undefined ){
-    logger.info('required parameters are missing', event);
+    logger.debug('required parameters are missing', event);
     return Response.BadRequest({ message: 'Required parameters are missing' });
   }
   const uuid = event.detail.uuid;
   const legacyCardId = event.detail.cardNumber;
-  const newExpiry = (event.detail.expires && (event.detail.expires !== undefined || event.detail.expires !== '')) ? new Date(event.detail.expires) : '0000-00-00 00:00:00';
-  const newPosted = (event.detail.posted && (event.detail.posted !== undefined || event.detail.posted !== '')) ? new Date(event.detail.posted) : '0000-00-00 00:00:00';
+  const newExpiry = event.detail.expires;
+  const newPosted = event.detail.posted;
   const queryParams = {
     TableName: tableName,
     KeyConditionExpression: '#pk= :pk And #sk = :sk',
@@ -71,8 +71,8 @@ export const handler = async (event: any, context: any) => {
     const results = await dynamodb.send(new QueryCommand(queryParams));
     if(results.Items !== null && results.Count !== 0) { 
         const card = results.Items?.at(0) as Record<string, string>;
-        Item['expires'] = (card.expires == '0000000000000000' || card.expires == null)  ? `${setDate(newExpiry)}` : card.expires;
-        Item['posted'] = (card.posted == '0000000000000000' || card.posted == null) ? `${setDate(newPosted)}` : card.posted;
+        Item['expires'] = card.expires  === '0000000000000000' ? `${setDate(newExpiry)}` : card.expires;
+        Item['posted'] = card.posted === '0000000000000000' ? `${setDate(newPosted)}` : card.posted;
     }else {
         Item['expires'] = `${setDate(newExpiry)}`;
         Item['posted'] = `${setDate(newPosted)}`;
@@ -84,6 +84,7 @@ export const handler = async (event: any, context: any) => {
     try {
     const results = await dynamodb.send(new PutCommand(cardParams));
     logger.debug('results', { results });
+    return Response.OK({ message: `user card data updated` });
     } catch (err: any) {
     logger.error("error syncing user card data", { uuid, err });
     await sendToDLQ(event);

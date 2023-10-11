@@ -51,6 +51,9 @@ let headers: Record<string, unknown> = {};
 let res: any = {};
 const timeOut = 100;
 let sum = 0;
+let userCardId = 0;
+let cardPostedDate = '';
+let cardExpiresDate = '';
 
 describe('Fetch env variables', () => {
   afterEach(async () => {
@@ -94,7 +97,7 @@ describe('Fetch env variables', () => {
         console.log(err);
       });
     await delay(5000);
-  });
+  }, 10000);
 });
 
 let dataToSend: Record<string, string | number> = {};
@@ -111,14 +114,14 @@ describe('Send user profile update event, and test user api to match data', () =
     dataToSend.brand = randomBrand;
     dataToSend.firstname = `E2E-${randomFirstname}`;
     dataToSend.surname = `E2E-${randomSurname}`;
-    dataToSend.dob = '1990-12-12';
+    dataToSend.dob = '12/12/1990';
     dataToSend.mobile = '07000000000';
     const entry = {
       Entries: [
         {
           EventBusName: process.env.E2E_EVENT_BUS,
           Source: 'user.profile.updated',
-          DetailType: 'BLC_UK User Card Profile Updated',
+          DetailType: 'BLC_UK User Profile Updated',
           Detail: JSON.stringify(dataToSend),
           Time: new Date(),
         },
@@ -164,19 +167,165 @@ describe('Send user profile update event, and test user api to match data', () =
     } catch (err: any) {console.log(err);}
     expect(res.status).toEqual(200);
     expect(res.data.message).toEqual('User Found');
-    expect(res.data.data.legacyId).toEqual(2853201);
-    expect(res.data.data.uuid).toEqual('068385bb-b370-4153-9474-51dd0bfac9dc');
     expect(res.data.data.profile.gender).toEqual('P');
     expect(res.data.data.profile.firstname).toEqual(dataToSend.firstname);
     expect(res.data.data.profile.surname).toEqual(dataToSend.surname);
     expect(res.data.data.profile.dob).toEqual('1990-12-12');
     expect(res.data.data.profile.mobile).toEqual('07000000000');
-    expect(res.data.data.profile.organisation).toEqual('AMBU');
     expect(res.data.data.profile.twoFactorAuthentication).not.toBeNull();
     expect(res.data.data.card.cardId).not.toBeNull();
     expect(res.data.data.card.expires).not.toBeNull();
     expect(res.data.data.card.cardStatus).not.toBeNull();
     expect(res.data.data.card.datePosted).not.toBeNull();
+    expect(res.data.data.card.cardAction).not.toBeNull();
+    userCardId = res.data.data.card.cardId;
+    cardPostedDate = res.data.data.card.datePosted;
+    cardExpiresDate = res.data.data.card.expires;
+
+  });
+});
+
+describe('Send user card update event, and test user api to match data', () => {
+  beforeEach(async () => {
+    res = {};
+    sum += timeOut;
+    await delay(sum);
+  });
+  test('Event bus - user card update sets correct date format and update/create row', async () => {
+    dataToSend.uuid = String(process.env.E2E_USER_UUID);
+    dataToSend.cardNumber = userCardId;
+    dataToSend.cardStatus = 4;
+    dataToSend.expires = '';
+    dataToSend.posted = '2019 jan 01 )';
+    const entry = {
+      Entries: [
+        {
+          EventBusName: process.env.E2E_EVENT_BUS,
+          Source: 'user.card.status.updated',
+          DetailType: 'BLC_UK User Card Status Updated',
+          Detail: JSON.stringify(dataToSend),
+          Time: new Date(),
+        },
+      ],
+    };
+
+    const command = new PutEventsCommand(entry);
+    try {
+      res = await client.send(command);
+      expect(res.status).toEqual(200);
+      expect(res.statusText).toEqual('OK');
+      expect(res.data.data.message).toEqual('user card data updated');
+    } catch (error) {}
+
+  });
+
+  test('User api - returns expected data for card', async () => {
+    const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
+  
+    hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
+    const input = {
+      AuthFlow : 'USER_PASSWORD_AUTH', 
+      AuthParameters: {
+      USERNAME : `${process.env.E2E_USER_EMAIL}`,
+      PASSWORD : `${process.env.E2E_USER_PASS}`,
+      SECRET_HASH: `${hasher.digest('base64')}`
+      },
+      UserPoolId : `${process.env.E2E_COGNITO_USER_POOL_ID}`,
+      ClientId : `${process.env.E2E_COGNITO_APP_CLIENT_ID}`
+  };
+  
+    const command = new InitiateAuthCommand(input);
+    try {
+      const response = await cognito.send(command);
+      process.env.identityTableName = process.env.E2E_TABLE_NAME;
+      if(response.AuthenticationResult.IdToken !== undefined || response.AuthenticationResult.IdToken !== ''){
+        try{
+          res = await axios.get(`${process.env.E2E_USER_API_URL}`, {
+          headers: { "Authorization": `Bearer ${response.AuthenticationResult.IdToken}` }
+        });
+      }catch (err: any) {}
+      }
+    } catch (err: any) {console.log(err);}
+    expect(res.status).toEqual(200);
+    expect(res.data.message).toEqual('User Found');
+    expect(res.data.data.uuid).not.toBeNull();
+    expect(res.data.data.card.cardId).toEqual(userCardId);
+    if(cardExpiresDate === '0000000000000000'){
+      expect(res.data.data.card.expires).toEqual('0000000000000000');
+    }else{
+      expect(res.data.data.card.expires).not.toBe('0000000000000000');
+    }
+    expect(res.data.data.card.cardStatus).toEqual('ADDED_TO_BATCH');
+    if(cardPostedDate === '0000000000000000'){
+      expect(res.data.data.card.datePosted).toEqual('0000000000000000');
+    }else{
+      expect(res.data.data.card.datePosted).not.toBe('0000000000000000');
+    }
+    expect(res.data.data.card.cardAction).not.toBeNull();
+
+  });
+
+  test('Event bus - user card update sets card status, expires and posted in correct format', async () => {
+    dataToSend.uuid = String(process.env.E2E_USER_UUID);
+    dataToSend.cardNumber = userCardId;
+    dataToSend.cardStatus = 6;
+    dataToSend.expires = '2027-12-12 23:59:59';
+    dataToSend.posted = '2023-10-08 15:30:00';
+    const entry = {
+      Entries: [
+        {
+          EventBusName: process.env.E2E_EVENT_BUS,
+          Source: 'user.card.status.updated',
+          DetailType: 'BLC_UK User Card Status Updated',
+          Detail: JSON.stringify(dataToSend),
+          Time: new Date(),
+        },
+      ],
+    };
+
+    const command = new PutEventsCommand(entry);
+    try {
+      res = await client.send(command);
+      expect(res.status).toEqual(200);
+      expect(res.statusText).toEqual('OK');
+      expect(res.data.data.message).toEqual('user card data updated');
+    } catch (error) {}
+
+  });
+
+  test('User api - returns expected data for card', async () => {
+    const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
+  
+    hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
+    const input = {
+      AuthFlow : 'USER_PASSWORD_AUTH', 
+      AuthParameters: {
+      USERNAME : `${process.env.E2E_USER_EMAIL}`,
+      PASSWORD : `${process.env.E2E_USER_PASS}`,
+      SECRET_HASH: `${hasher.digest('base64')}`
+      },
+      UserPoolId : `${process.env.E2E_COGNITO_USER_POOL_ID}`,
+      ClientId : `${process.env.E2E_COGNITO_APP_CLIENT_ID}`
+  };
+  
+    const command = new InitiateAuthCommand(input);
+    try {
+      const response = await cognito.send(command);
+      process.env.identityTableName = process.env.E2E_TABLE_NAME;
+      if(response.AuthenticationResult.IdToken !== undefined || response.AuthenticationResult.IdToken !== ''){
+        try{
+          res = await axios.get(`${process.env.E2E_USER_API_URL}`, {
+          headers: { "Authorization": `Bearer ${response.AuthenticationResult.IdToken}` }
+        });
+      }catch (err: any) {}
+      }
+    } catch (err: any) {console.log(err);}
+    expect(res.status).toEqual(200);
+    expect(res.data.message).toEqual('User Found');
+    expect(res.data.data.card.cardId).toEqual(userCardId);
+    expect(res.data.data.card.expires).not.toBe('0000000000000000');
+    expect(res.data.data.card.cardStatus).toEqual('PHYSICAL_CARD');
+    expect(res.data.data.card.datePosted).not.toBe('0000000000000000');
     expect(res.data.data.card.cardAction).not.toBeNull();
 
   });

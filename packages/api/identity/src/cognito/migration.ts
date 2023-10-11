@@ -4,7 +4,8 @@ import { v4 } from 'uuid';
 import { SQS } from 'aws-sdk';
 import axios from 'axios';
 import parsePhoneNumber from 'libphonenumber-js';
-import { isValid } from 'date-fns';
+import { transformDateToFormatYYYYMMDD } from './../../../core/src/utils/date';
+import { setDate } from './../../../core/src/utils/setDate';
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
@@ -77,12 +78,6 @@ const formatPhoneNumber = (unparsedPhoneNumber: string) => {
     }
 };
 
-function setDate(date: any) {
-    if (!isValid(date) || date === null || date === undefined  || date === '' || date === '0000-00-00 00:00:00' || date === 'undefined') 
-      return '0000000000000000';
-    return new Date(date.toString()).getTime();
-  }
-
 const addUserSignInMigratedEvent = async (data: any) => {
     const profileUuid: string = v4();
     const uuid = data.uuid;
@@ -95,9 +90,9 @@ const addUserSignInMigratedEvent = async (data: any) => {
     if(data.carddata !== undefined && data.carddata.dateposted !== undefined){
         dateposted = data.carddata.dateposted;
     }
-    let dob = '00/00/0000';
+    let dob = '0000-00-00';
     if(!isNaN(Date.parse(data.dob))){
-        dob = new Date(data.dob).toLocaleDateString();
+        dob = transformDateToFormatYYYYMMDD(data.dob);
     }
     const input = {
         Entries: [

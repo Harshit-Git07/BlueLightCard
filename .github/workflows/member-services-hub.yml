@@ -59,7 +59,6 @@ jobs:
         run: npm run lint:style -w packages/${{ env.PKG_NAME }}
   
   storybook:
-    if: github.event_name == 'push'
     name: Storybook Preview
     runs-on: ubuntu-latest
     steps:

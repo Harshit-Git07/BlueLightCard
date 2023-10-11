@@ -1,10 +1,18 @@
 'use client';
-import GlobalNavigation from './member-services-hub/components/GlobalNavigation/GlobalNavigation';
+import TabBar from '../components/TabBar/TabBar';
+import GlobalNavigation from '../components/GlobalNavigation/GlobalNavigation';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import React from 'react';
+import React, { FC, useState } from 'react';
+import { faUserLarge, faCog } from '@fortawesome/pro-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TabItemProps } from '@/components/TabBar/types';
 
 const Home: NextPage<any> = (props) => {
+  let [open, setOpen] = useState('profile');
+  function handleTabOpen(category: any) {
+    setOpen(category);
+  }
   return (
     <main className="">
       <GlobalNavigation />
@@ -18,6 +26,28 @@ const Home: NextPage<any> = (props) => {
           priority
         />
       </div> */}
+
+      <TabBar
+        items={[
+          {
+            icon: <FontAwesomeIcon data-testid="profile-icon" icon={faUserLarge} />,
+            category: 'profile',
+            title: 'Profile',
+            details: 'profile card page ',
+            open: 'profile',
+          },
+          {
+            icon: <FontAwesomeIcon data-testid="settings-icon" icon={faCog} />,
+            category: 'settings',
+            title: 'Settings',
+            details: 'settings card page ',
+            open: 'settings',
+          },
+        ]}
+        defaultOpen="profile"
+        onTabClick={handleTabOpen}
+        selected={open}
+      />
     </main>
   );
 };

@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 import MshLogo from '@assets/logo-small.svg';
 import { DropdownItemProps, NavItemProps } from './types';
-import { cssUtil } from '../../../utils/cssUtil';
+import { cssUtil } from '../../app/utils/cssUtil';
 import Link from 'next/link';
 
 const GlobalNavigation = () => {

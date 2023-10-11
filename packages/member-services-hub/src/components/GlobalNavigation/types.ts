@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 export type NavItemProps = PropsWithChildren & {
   menu: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   link: string;
   submenu: boolean;
 };

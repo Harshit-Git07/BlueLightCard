@@ -84,3 +84,145 @@ jobs:
           directory: packages/${{ env.PKG_NAME }}/${{ env.STORYBOOK_BUILD_OUTPUT }}
           branch: ${{ github.ref_name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  pr-frontend:
+    if: github.event_name == 'pull_request'
+    name: Deploy member services hub Frontend for PR
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.cloudflare-publish.outputs.url }}
+    needs:
+      - test
+      - lint
+      - changelog
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - name: Build
+        run: npm run build -w packages/member-services-hub
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: member-services-hub
+          directory: packages/member-services-hub/dist
+          branch: ${{ github.ref_name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    # Put comment on PR
+  comment:
+    name: Comment on PR
+    if: github.actor!= 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - pr-frontend
+    steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully deployed preview environment of member services hub'
+
+      - name: Create Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully deployed preview environment of member services hub
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
+            </td></tr>
+            <tr><td><strong>Member Services Hub URL:</strong></td><td>
+            <a href='${{ needs.pr-frontend.outputs.url }}'>${{ needs.backend.outputs.redemptions-api-endpoint }}</a>
+            </td></tr>
+            </table>
+
+  staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deploy Staging
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - lint
+      - changelog
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - name: Build
+        run: npm run build -w packages/member-services-hub
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: member-services-hub
+          directory: packages/member-services-hub/dist
+          branch: 'staging'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Deploy Production
+    environment: Production
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - changelog
+      - staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - run: npm install
+      - name: Build
+        run: npm run build -w packages/member-services-hub
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{matrix.brand}}
+          branch: 'main'
+          directory: packages/member-services-hub/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Record deployment with Oobeya
+        run: |
+          curl -XPOST -H 'Oobeya-API-Key: ${{ secrets.OOBEYA_API_KEY }}' -H "Content-type: application/json" -d '{
+            "analysisId": "${{ secrets.OOBEYA_ANALYSIS_ID }}",
+            "pipelineStartAt": "${{ github.event.push.pusher.date }}",
+            "lastCommitSha": "${{ github.sha }}",
+            "deploymentType": "RELEASE",
+            "deployedAt": "${{ github.event.push.pusher.date }}",
+            "author": "${{ github.actor }}",
+            "name": "${{ needs.changelog.outputs.tag_name }}",
+            "title": "${{ github.workflow }} ${{ needs.changelog.outputs.tag_name }}"
+          }' 'https://bluelightcard.oobeya.io/apis/v1/deployments'

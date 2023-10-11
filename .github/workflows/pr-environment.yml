@@ -134,7 +134,6 @@ jobs:
           projectName: ${{matrix.brand}}
           directory: packages/web/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-
   # Put comment on PR
   comment:
     name: Comment on PR

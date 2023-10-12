@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.1.0...bluelightcard/member-services-hub-v1.2.0) (2023-10-12)
+
+
+### Features
+
+* update link for dropdown ([#476](https://github.com/bluelightcard/BlueLightCard-2.0/issues/476)) ([9f0af51](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9f0af518aff43b335fc1e53414235767d8d1762f))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.0.0...bluelightcard/member-services-hub-v1.1.0) (2023-10-12)
 
 

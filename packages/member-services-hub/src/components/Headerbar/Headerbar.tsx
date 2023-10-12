@@ -80,7 +80,7 @@ const Headerbar: FC<HeaderbarProps> = ({
                 />
               </button>
               <div className="invisible absolute right-0 top-[120%] mt-3 w-[200px] space-y-2 rounded bg-white p-3 opacity-0 shadow-card-2 duration-200 group-hover:visible group-hover:top-full group-hover:opacity-100">
-                <DropdownItem id="dropdownList" link="/#" name="My Account" />
+                <DropdownItem id="dropdownList" link="/my-account" name="My Account" />
               </div>
             </div>
           </div>

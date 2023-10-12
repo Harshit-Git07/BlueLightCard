@@ -2,9 +2,10 @@
 
 exports[`Promo Banner should render with the correct link and image url 1`] = `
 <div
-  className="w-full relative mb-2"
+  className="w-full relative"
 >
   <a
+    className="dark:text-palette-secondary"
     data-testid="anchor-link"
     href="test.com"
   >

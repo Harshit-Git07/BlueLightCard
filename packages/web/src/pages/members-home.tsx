@@ -1,18 +1,10 @@
-import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import headerConfig from '@/data/header.json';
-import footerConfig from '@/data/footer.json';
-import Header from '@/components/Header/Header';
-import Heading from '@/components/Heading/Heading';
 import Carousel from '@/components/Carousel/Carousel';
-import Footer from '@/components/Footer/Footer';
 import withAuth from '@/hoc/withAuth';
 import { homePageQuery } from '../graphql/homePageQueries';
 import makeQuery from '../graphql/makeQuery';
-import Link from '@/components/Link/Link';
-import Button from '@/components/Button/Button';
 import getCDNUrl from '@/utils/getCDNUrl';
-import { BRAND, LOGOUT_ROUTE } from '@/global-vars';
+import { BRAND } from '@/global-vars';
 import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
 import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
 import {
@@ -23,32 +15,12 @@ import {
   FlexibleMenuType,
   FeaturedOffersType,
 } from '@/page-types/members-home';
-
-import {
-  logMembersHomePage,
-  logSearchCompanyEvent,
-  logSearchCategoryEvent,
-  logSearchTermEvent,
-} from '@/utils/amplitude';
+import { logMembersHomePage } from '@/utils/amplitude';
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
-import StandardPadding from '@/components/StandardPadding/StandardPadding';
 import AlertBox from '@/components/AlertBox/AlertBox';
-
-interface ContainerProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-const Container = ({ children, className = '', ...props }: ContainerProps) => {
-  return (
-    <>
-      <StandardPadding className={`py-10 ${className}`} {...props}>
-        {children}
-      </StandardPadding>
-      <hr className="" />
-    </>
-  );
-};
+import { NextPage } from 'next';
+import Container from '@/components/Container/Container';
+import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
 
 function cleanText(text: string) {
   return text
@@ -57,24 +29,7 @@ function cleanText(text: string) {
     .replace(/&pound;/g, '£');
 }
 
-const onSearchCompanyChange = (companyId: string, company: string) => {
-  logSearchCompanyEvent(companyId, company);
-  window.location.href = `/offerdetails.php?cid=${companyId}`;
-};
-
-const onSearchCategoryChange = (categoryId: string, categoryName: string) => {
-  logSearchCategoryEvent(categoryId, categoryName);
-  window.location.href = `/offers.php?cat=true&type=${categoryId}`;
-};
-
-const onSearchTerm = (searchTerm: string) => {
-  logSearchTermEvent(searchTerm);
-  window.location.href = `/offers.php?type=1&opensearch=1&search=${searchTerm}`;
-};
-
-const HomePage: NextPage<any> = (props) => {
-  const { header, footer } = props;
-
+const HomePage: NextPage<any> = () => {
   // Store data states
   const [banners, setBanners] = useState<BannerType[]>([]);
   const [dealsOfTheWeek, setDealsOfTheWeek] = useState<DealsOfTheWeekType[]>([]);
@@ -139,31 +94,25 @@ const HomePage: NextPage<any> = (props) => {
 
   return (
     <>
-      <Header
-        navItems={header.navItems}
-        loggedIn={true}
-        onSearchCompanyChange={onSearchCompanyChange}
-        onSearchCategoryChange={onSearchCategoryChange}
-        onSearchTerm={onSearchTerm}
-      />
-
       {loadingError && (
-        <AlertBox
-          alertType="danger"
-          title="Error:"
-          description="An error has occured when loading the page. Please try again."
-        />
+        <Container className="pt-5" addBottomHorizontalLine={false}>
+          <AlertBox
+            alertType="danger"
+            title="Error:"
+            description="An error has occurred. Try again."
+          />
+        </Container>
       )}
 
       {/* Promo banner carousel */}
-      <Container data-testid="takeover-banners">
-        <Carousel
+      <Container className="py-5" data-testid="takeover-banners" addBottomHorizontalLine>
+        <SwiperCarousel
           autoPlay
-          showControls
           elementsPerPageLaptop={1}
           elementsPerPageDesktop={1}
           elementsPerPageTablet={1}
           elementsPerPageMobile={1}
+          hidePillButtons
         >
           {banners.length > 0 ? (
             banners.map((banner: any, index: number) => (
@@ -177,13 +126,14 @@ const HomePage: NextPage<any> = (props) => {
           ) : (
             <PromoBannerPlaceholder />
           )}
-        </Carousel>
+        </SwiperCarousel>
       </Container>
 
       {/* Deals of the week carousel */}
 
       <Container
-        className="flex flex-col bg-surface-secondary-light dark:bg-surface-secondary-dark"
+        className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+        addBottomHorizontalLine
         data-testid="deals-carousel"
       >
         <CardCarousel title="Deals of the week" itemsToShow={2} offers={dealsOfTheWeekOffersData} />
@@ -191,7 +141,8 @@ const HomePage: NextPage<any> = (props) => {
 
       {/* Flexible offers carousel */}
       <Container
-        className="flex flex-col bg-surface-secondary-light dark:bg-surface-secondary-dark"
+        className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+        addBottomHorizontalLine
         data-testid="flexi-menu-carousel"
       >
         <CardCarousel
@@ -206,7 +157,8 @@ const HomePage: NextPage<any> = (props) => {
       {marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
         return (
           <Container
-            className="bg-surface-secondary-light dark:bg-surface-secondary-dark"
+            className="py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+            addBottomHorizontalLine
             key={index}
             data-testid="marketplace-menu-carousel"
           >
@@ -228,25 +180,14 @@ const HomePage: NextPage<any> = (props) => {
 
       {/* Featured offers carousel */}
       <Container
-        className="flex flex-col bg-surface-secondary-light dark:bg-surface-secondary-dark"
+        className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+        addBottomHorizontalLine
         data-testid="featured-menu-carousel"
       >
         <CardCarousel title="Featured Offers" itemsToShow={3} offers={featuredOffersData} />
       </Container>
-
-      <Footer {...footer} />
     </>
   );
 };
-
-export async function getStaticProps(context: any) {
-  // Pull in the dummy data for footer and header
-  return {
-    props: {
-      header: headerConfig,
-      footer: footerConfig.footer,
-    },
-  };
-}
 
 export default withAuth(HomePage);

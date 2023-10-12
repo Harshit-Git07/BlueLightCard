@@ -11,7 +11,7 @@ const AlertBox: FC<AlertBoxProps> = ({ alertType, title, description }) => {
 
   return (
     <div
-      className={`${backgroundColor} ${textColor} w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 ${
+      className={`${backgroundColor} ${textColor} w-full py-[0.75rem] px-[1.5rem] flex justify-between rounded-4 ${
         !show && 'hidden'
       }`}
     >

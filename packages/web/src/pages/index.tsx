@@ -42,19 +42,6 @@ const Home: NextPage<any> = (props) => {
           {t('button.text')}
         </Button>
       </main>
-
-      <AlertBox
-        alertType={'success'}
-        title={'Success:'}
-        description={
-          <>
-            This is success, with a <Link href="#">Link</Link>
-          </>
-        }
-      />
-      <AlertBox alertType={'danger'} title={'Danger:'} description={'This a danger test'} />
-      <AlertBox alertType={'warning'} title={'Warning:'} description={'This a warning test'} />
-      <AlertBox alertType={'info'} title={'Info:'} description={'This a info test'} />
     </>
   );
 };

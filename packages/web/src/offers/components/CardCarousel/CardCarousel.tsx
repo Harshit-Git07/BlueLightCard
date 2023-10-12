@@ -1,10 +1,10 @@
-import Carousel from '@/components/Carousel/Carousel';
 import useIsVisible from '@/hooks/useIsVisible';
 import Heading from '@/components/Heading/Heading';
 import { useRef, useState, useEffect } from 'react';
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { CardCarouselProps } from './types';
 import OfferCardPlaceholder from '../OfferCard/OfferCardPlaceholder';
+import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
 
 const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -27,13 +27,12 @@ const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouse
               {title}
             </Heading>
           )}
-          <Carousel
-            showControls
-            autoPlay
+          <SwiperCarousel
             elementsPerPageDesktop={itemsToShow}
             elementsPerPageLaptop={itemsToShow}
             elementsPerPageTablet={2}
             elementsPerPageMobile={1}
+            autoPlay
             autoPlayIntervalMs={5000}
           >
             {offers.length > 0
@@ -50,7 +49,7 @@ const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouse
                   />
                 ))
               : [...Array(itemsToShow)].map((_, index) => <OfferCardPlaceholder key={index} />)}
-          </Carousel>
+          </SwiperCarousel>
         </>
       )}
     </div>

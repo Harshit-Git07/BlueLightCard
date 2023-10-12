@@ -26,13 +26,13 @@ export interface NavItem {
   };
   loggedIn: {
     text: string;
-    link: string;
-    dropdown: { text: string; link: string }[];
+    link?: string;
+    dropdown?: { text: string; link: string }[];
   }[];
   loggedOut: {
     text: string;
-    link: string;
-    dropdown: { text: string; link: string }[];
+    link?: string;
+    dropdown?: { text: string; link: string }[];
   }[];
 }
 
@@ -56,7 +56,7 @@ export interface CountrySelectorProps {
 export interface MenuNavProps {
   menu: {
     text: string;
-    link: string;
+    link?: string;
     dropdown?: {
       text: string;
       link: string;

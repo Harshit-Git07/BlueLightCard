@@ -44,9 +44,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
       return false;
     }
 
-    const { exp } = unpackJWT(authState.idToken);
+    const { exp: tokenExpiryTimeStamp } = unpackJWT(authState.idToken);
 
-    if (new Date().getSeconds() >= exp) {
+    const currentTimeStamp = Math.ceil(Date.now() / 1000);
+
+    if (currentTimeStamp >= tokenExpiryTimeStamp) {
       return false;
     }
 

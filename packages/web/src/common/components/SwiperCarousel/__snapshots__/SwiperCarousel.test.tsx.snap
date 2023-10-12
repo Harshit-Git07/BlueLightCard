@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SwiperCarousel component matches snapshot 1`] = `
+<div
+  data-testid="swiper-testid"
+>
+  <div
+    data-testid="swiper-slide-testid"
+  >
+    <div>
+      Item
+    </div>
+  </div>
+  <div
+    data-testid="swiper-slide-testid"
+  >
+    <div>
+      Item
+    </div>
+  </div>
+  <div
+    data-testid="swiper-slide-testid"
+  >
+    <div>
+      Item
+    </div>
+  </div>
+</div>
+`;

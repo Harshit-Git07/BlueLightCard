@@ -1,7 +1,5 @@
-import { GetServerSideProps, GetStaticProps } from 'next';
-import offersData from '@/data/offersData.json';
-import footerConfig from '@/data/footer.json';
-import headerConfig from '@/data/header.json';
+import { GetStaticProps } from 'next';
+import offersData from '@/data/offersData';
 /**
  * Loads in offer data based off query params.
  * @TODO Pull data from dynamo via gql
@@ -48,8 +46,6 @@ const getOffersStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       ...offer,
-      header: headerConfig,
-      footer: footerConfig.footer,
     },
   };
 };

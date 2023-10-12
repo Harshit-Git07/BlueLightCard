@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next';
-import offersData from '../../../../data/offersData.json';
+import offersData from '../../../../data/offersData';
 
 const getMobileSearchStaticProps: GetStaticProps = async (context) => {
   return {

@@ -6,11 +6,14 @@ export interface OfferCardProps {
   offerLink: string;
   variant?: string;
   id?: string;
+  addBackground?: boolean;
 }
 
 export interface OfferCardDetailsProps {
   offerName: string;
+  offerLink?: string;
   companyName: string;
   variant?: string;
   id?: string;
+  xPaddingClassName?: string;
 }

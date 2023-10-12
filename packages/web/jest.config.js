@@ -5,6 +5,7 @@ const createJestConfig = nextJest({
   testPathIgnorePatterns: ['./e2e', 'e2e'],
   setupFiles: ['dotenv/config'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  transformIgnorePatterns: ['/node_modules/(?!swiper|ssr-window|dom7)'],
 });
 
 const customJestConfig = {
@@ -17,8 +18,15 @@ const customJestConfig = {
     '^@/types/(.*)$': '<rootDir>/src/common/types/$1',
     'src/services/EligibilityApi': '<rootDir>/src/services/EligibilityApi',
     '^.+\\.(svg)$': '<rootDir>/src/__mocks__/SvgrMock.js',
+    '\\.(scss|sass|css)$': 'identity-obj-proxy',
+  },
+  transform: {
+    '^.+\\.css$': 'jest-transform-css',
   },
   testEnvironment: 'jest-environment-jsdom',
 };
 
-module.exports = createJestConfig(customJestConfig);
+module.exports = async () => ({
+  ...(await createJestConfig(customJestConfig)()),
+  transformIgnorePatterns: ['node_modules/(?!(swiper|ssr-window|dom7)/)'],
+});

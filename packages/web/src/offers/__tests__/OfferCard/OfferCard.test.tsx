@@ -27,9 +27,13 @@ describe('OfferCard component', () => {
   describe('Offer card contains a link', () => {
     it('should render component with a link without error', () => {
       render(<OfferCard {...args} />);
-      const offerCard = screen.getByRole('link');
-      expect(offerCard).toBeTruthy();
-      expect(offerCard).toHaveAttribute('href');
+      const offerCardLinks = screen.getAllByRole('link');
+
+      expect(offerCardLinks[0]).toBeTruthy();
+      expect(offerCardLinks[1]).toBeTruthy();
+
+      expect(offerCardLinks[0]).toHaveAttribute('href');
+      expect(offerCardLinks[1]).toHaveAttribute('href');
     });
   });
 });

@@ -7,6 +7,8 @@ import AuthContext from '@/context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { LOGOUT_ROUTE } from '@/global-vars';
+import { NextPageWithLayout } from '@/page-types/layout';
+import getBaseLayout from '@/layouts/BaseLayout/getBaseLayout';
 
 export function redirectToLogin(router: any) {
   if (process.env.NODE_ENV == 'production') {
@@ -16,8 +18,8 @@ export function redirectToLogin(router: any) {
   }
 }
 
-const withAuth = (AuthComponent: NextPage<any>) => {
-  const PageComponent: NextPage<any> = (props: any) => {
+const withAuth = function (AuthComponent: NextPage<any>) {
+  const PageComponent: NextPageWithLayout<any> = (props: any) => {
     const authContext = useContext(AuthContext);
     const router = useRouter();
 
@@ -42,6 +44,8 @@ const withAuth = (AuthComponent: NextPage<any>) => {
       </>
     );
   };
+
+  PageComponent.getLayout = getBaseLayout;
 
   return PageComponent;
 };

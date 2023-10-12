@@ -4,7 +4,7 @@ import { PromoBannerProps } from './types';
 
 const PromoBanner = ({ image, href, id }: PromoBannerProps) => {
   return (
-    <div className="w-full relative mb-2">
+    <div className="w-full relative">
       <Link href={href} useLegacyRouting data-testid={id}>
         <Image
           src={image}

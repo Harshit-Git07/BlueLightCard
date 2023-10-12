@@ -2,7 +2,7 @@
 
 exports[`AlertBox component should render danger alert 1`] = `
 <div
-  className="bg-[#f1b0b7] text-palette-danger w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+  className="bg-[#f1b0b7] text-palette-danger w-full py-[0.75rem] px-[1.5rem] flex justify-between rounded-4 false"
 >
   <div
     className="flex"
@@ -44,7 +44,7 @@ exports[`AlertBox component should render danger alert 1`] = `
 
 exports[`AlertBox component should render info alert 1`] = `
 <div
-  className="bg-[#3cf] text-palette-info w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+  className="bg-[#3cf] text-palette-info w-full py-[0.75rem] px-[1.5rem] flex justify-between rounded-4 false"
 >
   <div
     className="flex"
@@ -86,7 +86,7 @@ exports[`AlertBox component should render info alert 1`] = `
 
 exports[`AlertBox component should render success alert 1`] = `
 <div
-  className="bg-[#d4edda] text-palette-success w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+  className="bg-[#d4edda] text-palette-success w-full py-[0.75rem] px-[1.5rem] flex justify-between rounded-4 false"
 >
   <div
     className="flex"
@@ -128,7 +128,7 @@ exports[`AlertBox component should render success alert 1`] = `
 
 exports[`AlertBox component should render warning alert 1`] = `
 <div
-  className="bg-[#eb9316] text-palette-warning w-full py-[0.75rem] px-[2rem] flex justify-between m-2 rounded-4 false"
+  className="bg-[#eb9316] text-palette-warning w-full py-[0.75rem] px-[1.5rem] flex justify-between rounded-4 false"
 >
   <div
     className="flex"

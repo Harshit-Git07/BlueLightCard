@@ -1,15 +1,18 @@
 import React, { FC } from 'react';
 import { OfferCardDetailsProps } from './types';
+import Link from '@/components/Link/Link';
 
 const OfferCardDetails: FC<OfferCardDetailsProps> = ({
   offerName,
   companyName,
+  offerLink,
   variant = 'standard',
+  xPaddingClassName = 'px-5',
 }) => {
   const small = (
     <>
-      <div className="px-5 desktop:pt-4 laptop:pt-4 tablet:pt-2.5 mobile:pt-3">
-        <p className='text-shade-greyscale-black dark:text-shade-greyscale-white text-base font-normal font-["MuseoSans"] truncate'>
+      <div className={`${xPaddingClassName} desktop:pt-4 laptop:pt-4 tablet:pt-2.5 mobile:pt-3`}>
+        <p className='text-shade-greyscale-black dark:text-shade-greyscale-white text-base font-light font-["MuseoSans"] text-center truncate'>
           {offerName}
         </p>
       </div>
@@ -18,15 +21,18 @@ const OfferCardDetails: FC<OfferCardDetailsProps> = ({
 
   const standard = (
     <>
-      <div className="pl-5 desktop:pt-4 laptop:pt-4 tablet:pt-2.5 mobile:pt-3">
-        <p className='text-shade-greyscale-black font-light desktop:text-lg laptop:text-lg tablet:text-md mobile:text-sm font-["MuseoSans"] dark:text-shade-greyscale-white'>
-          {companyName}
+      <div className={`${xPaddingClassName} desktop:pt-4 laptop:pt-4 tablet:pt-2.5 mobile:pt-3`}>
+        <p className='text-shade-greyscale-black font-bold desktop:text-lg laptop:text-lg tablet:text-md mobile:text-sm font-["MuseoSans"] dark:text-shade-greyscale-white'>
+          {companyName.toUpperCase()}
         </p>
       </div>
-      <div className="px-5">
-        <p className='text-shade-greyscale-black dark:text-shade-greyscale-white desktop:text-xl laptop:text-xl mobile:text-md tablet:text-lg font-bold font-["MuseoSans"] truncate'>
+      <div className={xPaddingClassName}>
+        <p className='text-shade-greyscale-grey-600 dark:text-shade-greyscale-white desktop:text-md laptop:text-ms mobile:text-sm tablet:text-md font-light font-["MuseoSans"] truncate'>
           {offerName}
         </p>
+      </div>
+      <div className={`${xPaddingClassName} pt-2`}>
+        {offerLink && <Link href={offerLink}>Find out more...</Link>}
       </div>
     </>
   );

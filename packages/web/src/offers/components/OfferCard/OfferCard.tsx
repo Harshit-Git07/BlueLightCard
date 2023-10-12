@@ -11,13 +11,17 @@ const OfferCard: FC<OfferCardProps> = ({
   alt,
   offerLink,
   variant = 'standard',
+  addBackground = false,
   id,
 }) => {
+  const backgroundRootClasses = addBackground
+    ? 'rounded-lg shadow-md dark:bg-surface-secondary-dark'
+    : '';
+
+  const backgroundSecondaryClasses = addBackground ? 'rounded-t-lg' : '';
+
   return (
-    <div
-      className="w-full h-full rounded-lg relative shadow-md dark:bg-surface-secondary-dark pb-5 mb-2"
-      data-testid={id}
-    >
+    <div className={`w-full h-full relative pb-5 mb-2 ${backgroundRootClasses}`} data-testid={id}>
       <Link href={offerLink} useLegacyRouting>
         <div>
           <Image
@@ -27,11 +31,17 @@ const OfferCard: FC<OfferCardProps> = ({
             width={0}
             height={0}
             sizes="100vw"
-            className={'rounded-t-lg h-auto w-full'}
+            className={`h-auto w-full ${backgroundSecondaryClasses}`}
             quality={75}
           />
         </div>
-        <OfferCardDetails offerName={offerName} companyName={companyName} variant={variant} />
+        <OfferCardDetails
+          offerName={offerName}
+          companyName={companyName}
+          offerLink={offerLink}
+          variant={variant}
+          xPaddingClassName={addBackground ? 'px-5' : 'px-2'}
+        />
       </Link>
     </div>
   );

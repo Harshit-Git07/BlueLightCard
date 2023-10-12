@@ -5,13 +5,18 @@ import { LinkProps } from './types';
 function Link({ useLegacyRouting = true, href, children, ...props }: LinkProps) {
   if (useLegacyRouting) {
     return (
-      <a data-testid="anchor-link" href={href} {...props}>
+      <a className="dark:text-palette-secondary" data-testid="anchor-link" href={href} {...props}>
         {children}
       </a>
     );
   } else {
     return (
-      <NextLink data-testid="next-link" href={href} {...props}>
+      <NextLink
+        className="dark:text-palette-secondary"
+        data-testid="next-link"
+        href={href}
+        {...props}
+      >
         {children}
       </NextLink>
     );

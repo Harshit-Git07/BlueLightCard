@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react';
+import { ProfileCardProps } from '../ProfileCard/types';
 
 export type TabBarProps = PropsWithChildren & {
   items: TabItemProps[];
@@ -17,6 +18,6 @@ export type TabItemProps = PropsWithChildren & {
   title: string;
   icon: React.ReactNode;
   category: string;
-  details: string;
+  details: React.FC | string;
   open: string;
 };

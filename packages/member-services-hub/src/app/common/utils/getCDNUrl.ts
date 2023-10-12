@@ -1,4 +1,4 @@
-import { CDN_URL } from '../../../global-vars';
+import { CDN_URL } from '../../../../global-vars';
 
 /**
  * Get CDN url - Converts a relative path to a CDN url into an absolute path

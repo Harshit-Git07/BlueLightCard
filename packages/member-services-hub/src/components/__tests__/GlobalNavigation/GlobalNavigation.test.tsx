@@ -1,10 +1,10 @@
-import { render, screen, act, queryByAttribute } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GlobalNavigation, {
   NavItem,
   DropdownItem,
   Divider,
-} from '../GlobalNavigation/GlobalNavigation';
+} from '../../GlobalNavigation/GlobalNavigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGrid2 } from '@fortawesome/pro-regular-svg-icons';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';

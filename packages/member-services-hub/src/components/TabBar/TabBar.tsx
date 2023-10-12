@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { TabBarProps, TabContentProps, TabItemProps } from './types';
+import { string } from 'zod';
 
 const TabBar: FC<TabBarProps> = ({ items, defaultOpen, onTabClick, selected }) => {
   let [open, setOpen] = useState(defaultOpen);
@@ -19,7 +20,7 @@ const TabBar: FC<TabBarProps> = ({ items, defaultOpen, onTabClick, selected }) =
     );
   };
   return (
-    <section className="py-20 lg:py-[120px]">
+    <section className="">
       <div className="container">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full px-4">
@@ -60,7 +61,7 @@ const TabContent: FC<TabContentProps> = ({ open, tabCategory, details }) => {
           open === tabCategory ? 'block' : 'hidden'
         } `}
       >
-        {details}
+        {typeof details === 'string' ? details : details({})}
       </div>
     </div>
   );

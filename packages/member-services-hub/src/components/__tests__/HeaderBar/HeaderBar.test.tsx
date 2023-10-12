@@ -1,10 +1,10 @@
-import Headerbar from '../../../components/Headerbar/Headerbar';
-import { HeaderbarProps } from '../../../components/Headerbar/types';
+import HeaderBar from '../../HeaderBar/HeaderBar';
+import { HeaderBarProps } from '../../HeaderBar/types';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-describe('Headerbar component', () => {
-  let props: HeaderbarProps;
+describe('HeaderBar component', () => {
+  let props: HeaderBarProps;
 
   beforeEach(() => {
     props = {
@@ -16,9 +16,9 @@ describe('Headerbar component', () => {
 
   describe('smoke test', () => {
     it('should render component without error', () => {
-      render(<Headerbar {...props} />);
-      const headerbar = screen.getAllByRole('banner')[0];
-      expect(headerbar).toBeTruthy();
+      render(<HeaderBar {...props} />);
+      const header_bar = screen.getAllByRole('banner')[0];
+      expect(header_bar).toBeTruthy();
     });
   });
 
@@ -29,11 +29,11 @@ describe('Headerbar component', () => {
       email: 'danielcook@bluelightcard.co.uk',
     };
     it('html contains correct passed name default', () => {
-      render(<Headerbar {...props} />);
+      render(<HeaderBar {...props} />);
       expect(screen.getAllByText(props.firstname + ' ' + props.surname)).toBeTruthy();
     });
     it('html contains correct passed email default', () => {
-      render(<Headerbar {...props} />);
+      render(<HeaderBar {...props} />);
       expect(screen.getAllByText(props.email)).toBeTruthy();
     });
   });
@@ -55,27 +55,27 @@ describe('Headerbar component', () => {
       search: true,
     };
     it('html contains correct passed name => all on', () => {
-      render(<Headerbar {...props} />);
+      render(<HeaderBar {...props} />);
       expect(screen.getAllByText(props.firstname + ' ' + props.surname)).toBeTruthy();
     });
     it('html contains correct passed email all on', () => {
-      render(<Headerbar {...props} />);
+      render(<HeaderBar {...props} />);
       expect(screen.getAllByText(props.email)).toBeTruthy();
     });
     it('html contains correct passed welcome header all on', () => {
-      render(<Headerbar {...props} />);
+      render(<HeaderBar {...props} />);
       expect(screen.getAllByText(props.welcomeHeader ?? '')).toBeTruthy();
     });
     it('html contains correct passed welcome text all on', () => {
-      render(<Headerbar {...props} />);
+      render(<HeaderBar {...props} />);
       expect(screen.getAllByText(props.welcomeText ?? '')).toBeTruthy();
     });
     it('html contains correct passed profile picture all on', () => {
-      render(<Headerbar {...props} />);
+      render(<HeaderBar {...props} />);
       expect(screen.getAllByText(props.profilePicture ?? '')).toBeTruthy();
     });
     it('html defaults when not passed all on', () => {
-      render(<Headerbar {...props} profilePicture={undefined} />);
+      render(<HeaderBar {...props} profilePicture={undefined} />);
       expect(screen.getAllByText(props.firstname[0] + props.surname[0])).toBeTruthy();
     });
   });

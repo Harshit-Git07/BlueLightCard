@@ -1,8 +1,8 @@
 import React from 'react';
 import { FC } from 'react';
-import { ButtonHeaderbarProps } from './types';
+import { ButtonHeaderBarProps } from './types';
 
-export const ButtonHeaderbar: FC<ButtonHeaderbarProps> = ({ id, show, buttonText }) => {
+export const ButtonHeaderBar: FC<ButtonHeaderBarProps> = ({ id, show, buttonText }) => {
   if (show) {
     return (
       <button className="bg-background-button-standard-primary-enabled-base inline-flex items-center justify-center rounded-md py-4 px-10 text-center text-base font-normal text-white hover:bg-opacity-90 lg:px-8 xl:px-10 font-museosans mr-3">
@@ -14,4 +14,4 @@ export const ButtonHeaderbar: FC<ButtonHeaderbarProps> = ({ id, show, buttonText
   }
 };
 
-export default ButtonHeaderbar;
+export default ButtonHeaderBar;

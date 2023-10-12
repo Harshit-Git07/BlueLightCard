@@ -1,10 +1,10 @@
 import React from 'react';
 import { FC } from 'react';
-import { HeaderbarProps } from './types';
+import { HeaderBarProps } from './types';
 
 import { DropdownItem } from '../DropdownItem/DropdownItem';
 import { WelcomeHeader } from '../WelcomeHeader/WelcomeHeader';
-import { ButtonHeaderbar } from '../ButtonHeaderbar/ButtonHeaderbar';
+import ButtonHeaderBar from '../ButtonHeaderBar/ButtonHeaderBar';
 import { CalenderIcon } from '../CalenderIcon/CalenderIcon';
 import { MessagesIcon } from '../MessagesIcon/MessagesIcon';
 import { NotificationsIcon } from '../NotificationsIcon/NotificationsIcon';
@@ -12,7 +12,7 @@ import { ProfilePicture } from '../ProfilePicture/ProfilePicture';
 import { Chevron } from '../Chevron/Chevron';
 import { Search } from '../Search/Search';
 
-const Headerbar: FC<HeaderbarProps> = ({
+const HeaderBar: FC<HeaderBarProps> = ({
   firstname,
   surname,
   email,
@@ -46,7 +46,7 @@ const Headerbar: FC<HeaderbarProps> = ({
           </div>
 
           <div className="flex items-center">
-            <ButtonHeaderbar
+            <ButtonHeaderBar
               id="button"
               show={button}
               buttonText={buttonText != undefined ? buttonText : ''}
@@ -79,7 +79,7 @@ const Headerbar: FC<HeaderbarProps> = ({
                   show={rightChevron === undefined ? true : rightChevron}
                 />
               </button>
-              <div className="invisible absolute right-0 top-[120%] mt-3 w-[200px] space-y-2 rounded bg-white p-3 opacity-0 shadow-card-2 duration-200 group-hover:visible group-hover:top-full group-hover:opacity-100">
+              <div className="z-10 invisible absolute right-0 top-[120%] mt-3 w-[200px] space-y-2 rounded bg-white p-3 opacity-0 shadow-card-2 duration-200 group-hover:visible group-hover:top-full group-hover:opacity-100">
                 <DropdownItem id="dropdownList" link="/my-account" name="My Account" />
               </div>
             </div>
@@ -90,4 +90,4 @@ const Headerbar: FC<HeaderbarProps> = ({
   );
 };
 
-export default Headerbar;
+export default HeaderBar;

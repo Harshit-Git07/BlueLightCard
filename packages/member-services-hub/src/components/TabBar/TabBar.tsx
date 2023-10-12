@@ -20,30 +20,28 @@ const TabBar: FC<TabBarProps> = ({ items, defaultOpen, onTabClick, selected }) =
     );
   };
   return (
-    <section className="">
-      <div className="container">
-        <div className="flex flex-wrap -mx-4">
-          <div className="w-full px-4">
-            <div className="w-full mb-14">
-              <div className="flex flex-wrap bg-[#FFFFFF] drop-shadow">
-                {items.map((item, index) => (
-                  <div key={`item-` + index.toString()}>
-                    <TabItem
-                      icon={item.icon}
-                      category={item.category}
-                      title={item.title}
-                      open={selected}
-                      details={item.details}
-                    />
-                  </div>
-                ))}
-              </div>
+    <section className="container z-9">
+      <div className="flex flex-wrap -mx-4">
+        <div className="w-full px-4">
+          <div className="w-full mb-14">
+            <div className="flex flex-wrap bg-[#FFFFFF] drop-shadow">
               {items.map((item, index) => (
-                <div key={`item-detail-` + index.toString()}>
-                  <TabContent details={item.details} open={selected} tabCategory={item.category} />
+                <div key={`item-` + index.toString()}>
+                  <TabItem
+                    icon={item.icon}
+                    category={item.category}
+                    title={item.title}
+                    open={selected}
+                    details={item.details}
+                  />
                 </div>
               ))}
             </div>
+            {items.map((item, index) => (
+              <div key={`item-detail-` + index.toString()}>
+                <TabContent details={item.details} open={selected} tabCategory={item.category} />
+              </div>
+            ))}
           </div>
         </div>
       </div>

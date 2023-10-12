@@ -5,10 +5,8 @@ import { NextPage } from 'next';
 import React, { FC, useState } from 'react';
 import { faUserLarge, faCog } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TabItemProps } from '@/components/TabBar/types';
-import OnlineAnalyticsImage from '@assets/online-analytics-1.svg';
 import ProfileCard from '@/components/ProfileCard/ProfileCard';
-import Headerbar from '@/components/Headerbar/Headerbar';
+import HeaderBar from '@/components/HeaderBar/HeaderBar';
 
 const MyAccount: NextPage<any> = (props) => {
   let [open, setOpen] = useState('profile');
@@ -19,7 +17,7 @@ const MyAccount: NextPage<any> = (props) => {
     <main className="flex flex-row">
       <GlobalNavigation />
       <div className="container flex flex-col">
-        <Headerbar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
+        <HeaderBar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
         <TabBar
           items={[
             {

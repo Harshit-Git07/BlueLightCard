@@ -1,4 +1,4 @@
-export interface HeaderbarProps {
+export type HeaderBarProps = {
   firstname: string;
   surname: string;
   email: string;
@@ -14,4 +14,4 @@ export interface HeaderbarProps {
   search?: boolean;
   profilePicture?: string;
   buttonText?: string;
-}
+};

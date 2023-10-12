@@ -1,10 +1,10 @@
 import type { Meta, StoryFn } from '@storybook/react';
 
-import Headerbar from './Headerbar';
+import HeaderBar from './HeaderBar';
 
-const meta: Meta<typeof Headerbar> = {
-  title: 'member-services-hub/Headerbar',
-  component: Headerbar,
+const meta: Meta<typeof HeaderBar> = {
+  title: 'member-services-hub/HeaderBar',
+  component: HeaderBar,
   argTypes: {
     firstname: { description: 'First name of the person' },
     surname: { description: 'Second Name of the person' },
@@ -26,9 +26,9 @@ const meta: Meta<typeof Headerbar> = {
   },
 };
 
-const HeaderbarTemplate: StoryFn<typeof Headerbar> = (args) => <Headerbar {...args} />;
+const HeaderBarTemplate: StoryFn<typeof HeaderBar> = (args) => <HeaderBar {...args} />;
 
-export const Default = HeaderbarTemplate.bind({});
+export const Default = HeaderBarTemplate.bind({});
 
 Default.args = {
   firstname: 'Daniel',
@@ -37,7 +37,7 @@ Default.args = {
   profilePicture: 'https://cdn.tailgrids.com/2.0/image/assets/images/avatar/image-02.jpg',
 };
 
-export const EverythingOn = HeaderbarTemplate.bind({});
+export const EverythingOn = HeaderBarTemplate.bind({});
 
 EverythingOn.args = {
   firstname: 'Daniel',
@@ -57,7 +57,7 @@ EverythingOn.args = {
   search: true,
 };
 
-export const WelcomeSearch = HeaderbarTemplate.bind({});
+export const WelcomeSearch = HeaderBarTemplate.bind({});
 
 WelcomeSearch.args = {
   firstname: 'Daniel',
@@ -70,7 +70,7 @@ WelcomeSearch.args = {
   search: true,
 };
 
-export const Icons = HeaderbarTemplate.bind({});
+export const Icons = HeaderBarTemplate.bind({});
 
 Icons.args = {
   firstname: 'Daniel',
@@ -82,7 +82,7 @@ Icons.args = {
   calender: true,
 };
 
-export const AvatarSet = HeaderbarTemplate.bind({});
+export const AvatarSet = HeaderBarTemplate.bind({});
 
 AvatarSet.args = {
   firstname: 'Daniel',
@@ -91,7 +91,7 @@ AvatarSet.args = {
   profilePicture: 'https://cdn.tailgrids.com/2.0/image/assets/images/avatar/image-02.jpg',
 };
 
-export const AvatarNotSet = HeaderbarTemplate.bind({});
+export const AvatarNotSet = HeaderBarTemplate.bind({});
 
 AvatarNotSet.args = {
   firstname: 'Daniel',

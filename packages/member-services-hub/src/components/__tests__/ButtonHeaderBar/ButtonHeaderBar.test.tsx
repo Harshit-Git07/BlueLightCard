@@ -1,10 +1,10 @@
-import ButtonHeaderbar from '../../ButtonHeaderbar/ButtonHeaderbar';
-import { ButtonHeaderbarProps } from '../../ButtonHeaderbar/types';
+import ButtonHeaderBar from '../../ButtonHeaderBar/ButtonHeaderBar';
+import { ButtonHeaderBarProps } from '../../ButtonHeaderBar/types';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('button header bar component', () => {
-  let props: ButtonHeaderbarProps;
+  let props: ButtonHeaderBarProps;
 
   beforeEach(() => {
     props = {
@@ -16,7 +16,7 @@ describe('button header bar component', () => {
 
   describe('smoke test', () => {
     it('should render component without error', () => {
-      render(<ButtonHeaderbar {...props} />);
+      render(<ButtonHeaderBar {...props} />);
       const Button = screen.getAllByRole('button')[0];
       expect(Button).toBeTruthy();
     });

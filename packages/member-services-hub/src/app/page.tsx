@@ -1,13 +1,9 @@
 'use client';
-import TabBar from '../components/TabBar/TabBar';
 import GlobalNavigation from '../components/GlobalNavigation/GlobalNavigation';
-import Headerbar from '../components/Headerbar/Headerbar';
 import { NextPage } from 'next';
 import React, { useState } from 'react';
-import ProfileCard from '../components/ProfileCard/ProfileCard';
-import { faUserLarge, faCog } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OnlineAnalyticsImage from '@assets/online-analytics-1.svg';
+import HeaderBar from '@/components/HeaderBar/HeaderBar';
 
 const Home: NextPage<any> = (props) => {
   let [open, setOpen] = useState('profile');
@@ -18,7 +14,7 @@ const Home: NextPage<any> = (props) => {
     <main className="flex flex-row">
       <GlobalNavigation />
       <div className="container flex flex-col">
-        <Headerbar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
+        <HeaderBar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
         <div className="container flex flex-col justify-center items-center pt-[150px]">
           <OnlineAnalyticsImage height={340} width={340} />
           <div className="flex-col items-center gap-4 flex">

@@ -2,11 +2,11 @@
 import TabBar from '../components/TabBar/TabBar';
 import GlobalNavigation from '../components/GlobalNavigation/GlobalNavigation';
 import { NextPage } from 'next';
-import Image from 'next/image';
 import React, { FC, useState } from 'react';
 import { faUserLarge, faCog } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TabItemProps } from '@/components/TabBar/types';
+import OnlineAnalyticsImage from '@assets/online-analytics-1.svg';
 
 const Home: NextPage<any> = (props) => {
   let [open, setOpen] = useState('profile');
@@ -14,18 +14,19 @@ const Home: NextPage<any> = (props) => {
     setOpen(category);
   }
   return (
-    <main className="">
+    <main className="flex flex-row">
       <GlobalNavigation />
-      {/* <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/member-services-hub.svg"
-          alt="Member Services Hub Logo"
-          width={380}
-          height={77}
-          priority
-        />
-      </div> */}
+      <div className="container flex flex-col justify-center items-center">
+        <OnlineAnalyticsImage height={340} width={340} />
+        <div className="flex-col items-center gap-4 flex">
+          <div className="text-black text-[32px] font-semibold font-['Museo Sans'] leading-10 tracking-tight">
+            Your New Dashboard Coming Soon!
+          </div>
+          <div className="text-black text-xl font-light font-['Museo Sans'] leading-normal tracking-tight">
+            We are working hard to get some exciting new features to you
+          </div>
+        </div>
+      </div>
 
       <TabBar
         items={[

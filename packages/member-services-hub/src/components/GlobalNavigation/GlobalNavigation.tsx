@@ -31,19 +31,19 @@ const GlobalNavigation = () => {
               submenu={false}
             />
             <NavItem
-              link="/"
+              link="/eligibility"
               icon={<FontAwesomeIcon icon={faIdCardClip} />}
               menu="Eligibility"
               submenu={false}
             />
             <NavItem
-              link="/"
+              link="/members"
               icon={<FontAwesomeIcon icon={faUsersRectangle} />}
               menu="Members"
               submenu={false}
             />
             <NavItem
-              link="/"
+              link="/card-print"
               icon={<FontAwesomeIcon icon={faPrint} />}
               menu="Card Printing"
               submenu={false}

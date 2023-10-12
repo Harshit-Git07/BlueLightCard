@@ -50,7 +50,7 @@ const GlobalNavigation = () => {
             />
             <Divider />
             <NavItem
-              link="/"
+              link="/my-account"
               icon={<FontAwesomeIcon icon={faUserLarge} />}
               menu="My Account"
               submenu={false}

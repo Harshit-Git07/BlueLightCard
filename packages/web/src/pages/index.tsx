@@ -6,8 +6,6 @@ import useBrandTranslation from '@/hooks/useBrandTranslation';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Heading from '@/components/Heading/Heading';
-import AlertBox from '@/components/AlertBox/AlertBox';
-import Link from 'next/link';
 
 export const getStaticProps = getI18nStaticProps;
 

@@ -17,14 +17,14 @@ const Footer: FC<FooterProps> = ({
   socialLinks,
   downloadLinks,
 }) => {
-  const horizPadding = 'mobile:px-8 tablet:px-32 laptop:px-64';
+  const horizPadding = 'mobile:px-4 laptop:px-0 laptop:container laptop:mx-auto';
 
   return (
-    <div className="w-full text-white" data-testid="app-footer">
+    <div className="bg-components-footer-primary w-full text-white" data-testid="app-footer">
       {/* Main body */}
       {((navigationItems && navigationItems.length > 0) || loginForm) && (
         <div
-          className={`${horizPadding} py-8 bg-components-footer-primary grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4`}
+          className={`${horizPadding} py-8 grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4`}
         >
           {loginForm}
           {((navigationItems && navigationItems.length > 0) || loginForm) &&
@@ -51,50 +51,52 @@ const Footer: FC<FooterProps> = ({
       )}
       {/* Socials and mobile download section */}
       {(socialLinks || downloadLinks) && (
-        <div
-          className={`${horizPadding} py-6 w-full bg-components-footer-secondary grid grid-cols-1 tablet:grid-cols-2 space-y-2 tablet:space-y-0`}
-        >
-          {socialLinks && (
-            <div className="flex flex-row m-auto tablet:mx-0 space-x-2">
-              <p className="tablet:block hidden h-fit my-auto">Follow us:</p>
-              {socialLinks.map((link: SocialMediaIconProps, index) => {
-                return (
-                  <SocialMediaIcon
-                    key={index}
-                    iconName={link.iconName}
-                    link={link.link}
-                    helpText={link.helpText}
-                    id={link.iconName + '-link'}
-                  />
-                );
-              })}
-            </div>
-          )}
+        <div className="bg-components-footer-secondary">
+          <div
+            className={`${horizPadding} py-6 w-full grid grid-cols-1 tablet:grid-cols-2 space-y-2 tablet:space-y-0`}
+          >
+            {socialLinks && (
+              <div className="flex flex-row m-auto tablet:mx-0 space-x-2">
+                <p className="tablet:block hidden h-fit my-auto">Follow us:</p>
+                {socialLinks.map((link: SocialMediaIconProps, index) => {
+                  return (
+                    <SocialMediaIcon
+                      key={index}
+                      iconName={link.iconName}
+                      link={link.link}
+                      helpText={link.helpText}
+                      id={link.iconName + '-link'}
+                    />
+                  );
+                })}
+              </div>
+            )}
 
-          {downloadLinks && (
-            <div className="m-auto tablet:mx-0 flex flex-row justify-center space-x-2 flex-wrap">
-              <p className="tablet:inline-block hidden h-fit my-auto">Download our apps:</p>
-              {downloadLinks.map((link: downloadLink, index) => {
-                return (
-                  <div key={index} className="relative w-[160px] h-[50px] my-2">
-                    <Link
-                      className="flex object-contain absolute top-0 left-0 w-full h-full"
-                      href={link.downloadUrl}
-                      title={link.linkTitle}
-                      data-testid={link.linkTitle + '-link'}
-                    >
-                      <Image
-                        alt={link.linkTitle || ''}
-                        src={link.imageUrl}
-                        responsive={true}
-                        className="object-contain object-center"
-                      />
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+            {downloadLinks && (
+              <div className="m-auto tablet:mx-0 flex flex-row justify-center space-x-2">
+                <p className="tablet:inline-block hidden h-fit my-auto">Download our apps:</p>
+                {downloadLinks.map((link: downloadLink, index) => {
+                  return (
+                    <div key={index} className="relative w-[160px] h-[50px] my-2">
+                      <Link
+                        className="flex object-contain absolute top-0 left-0 w-full h-full"
+                        href={link.downloadUrl}
+                        title={link.linkTitle}
+                        data-testid={link.linkTitle + '-link'}
+                      >
+                        <Image
+                          alt={link.linkTitle || ''}
+                          src={link.imageUrl}
+                          responsive={true}
+                          className="object-contain object-center"
+                        />
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       )}
       {/* Copyright */}

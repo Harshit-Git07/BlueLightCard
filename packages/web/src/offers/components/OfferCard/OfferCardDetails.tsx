@@ -12,7 +12,7 @@ const OfferCardDetails: FC<OfferCardDetailsProps> = ({
   const small = (
     <>
       <div className={`${xPaddingClassName} desktop:pt-4 laptop:pt-4 tablet:pt-2.5 mobile:pt-3`}>
-        <p className='text-shade-greyscale-black dark:text-shade-greyscale-white text-base font-light font-["MuseoSans"] text-center truncate'>
+        <p className='text-shade-greyscale-black dark:text-shade-greyscale-white text-base font-light font-["SourceSansPro"] text-center truncate'>
           {offerName}
         </p>
       </div>
@@ -27,7 +27,7 @@ const OfferCardDetails: FC<OfferCardDetailsProps> = ({
         </p>
       </div>
       <div className={xPaddingClassName}>
-        <p className='text-shade-greyscale-grey-600 dark:text-shade-greyscale-white desktop:text-md laptop:text-ms mobile:text-sm tablet:text-md font-light font-["MuseoSans"] truncate'>
+        <p className='text-shade-greyscale-grey-600 dark:text-shade-greyscale-white desktop:text-md laptop:text-ms mobile:text-sm tablet:text-md font-light font-["SourceSansPro"] truncate'>
           {offerName}
         </p>
       </div>

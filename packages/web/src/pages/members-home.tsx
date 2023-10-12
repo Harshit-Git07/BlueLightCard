@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Carousel from '@/components/Carousel/Carousel';
 import withAuth from '@/hoc/withAuth';
 import { homePageQuery } from '../graphql/homePageQueries';
 import makeQuery from '../graphql/makeQuery';

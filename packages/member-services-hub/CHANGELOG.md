@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.0.0...bluelightcard/member-services-hub-v1.1.0) (2023-10-12)
+
+
+### Features
+
+* Ti500 headerbar ([#449](https://github.com/bluelightcard/BlueLightCard-2.0/issues/449)) ([8cec92f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8cec92f8d6272c6d888180cdda9ef1fda4c6e381))
+
+
+### Bug Fixes
+
+* **member-services-hub:** fixed mistaken move of placeholder ([#474](https://github.com/bluelightcard/BlueLightCard-2.0/issues/474)) ([8231188](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8231188378534bd971e3bd1b7d420783d4815cc2))
+
 ## 1.0.0 (2023-10-12)
 
 

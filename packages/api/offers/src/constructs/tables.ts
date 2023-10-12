@@ -22,6 +22,7 @@ export class Tables {
   companyCategoryConnectionTable: Table;
   companyBrandConnectionTable: Table;
 
+
   constructor (private stack: Stack) {
     this.offerHomepageTable = this.createOfferHomepageTable();
     this.brandTable = this.createBrandTable();

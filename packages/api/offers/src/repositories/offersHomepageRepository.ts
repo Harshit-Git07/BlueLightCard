@@ -18,4 +18,23 @@ export class OfferHomepageRepository {
   
     return DbHelper.batchGet(params);
   }
+
+  async getByIdAndType(offerHomepageKeys: OfferHomepageKeys) {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        id:offerHomepageKeys.id,
+        type:offerHomepageKeys.type
+      }
+    };
+    return DbHelper.get(params);
+  }
+
+  async save(item: any) {
+    const dbParams = {
+      TableName: this.tableName,
+      Item: item
+    };
+    return DbHelper.save(dbParams);
+  }
 }

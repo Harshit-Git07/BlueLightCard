@@ -1,16 +1,25 @@
 import { Stack } from 'aws-cdk-lib';
 import { Bucket } from 'sst/constructs';
-import { BlockPublicAccess } from 'aws-cdk-lib/aws-s3';
+import { BlockPublicAccess, EventType } from "aws-cdk-lib/aws-s3";
+import { SqsDestination } from "aws-cdk-lib/aws-s3-notifications";
+import { Queues } from "./queues";
 
 export class Buckets {
   blcUKBucket: Bucket;
   blcAUSBucket: Bucket;
   ddsUKBucket: Bucket;
 
-  constructor(private stack: Stack, private stage: string) {
+  constructor(private stack: Stack, private stage: string, private queues: Queues) {
     this.blcUKBucket = this.createBlcUKBucket();
     this.blcAUSBucket = this.createBlcAUSBucket();
     this.ddsUKBucket = this.createDdsUKBucket();
+    this.initialiseNotification();
+  }
+
+  private initialiseNotification(): void {
+    this.addNotification(this.blcUKBucket);
+    this.addNotification(this.blcAUSBucket);
+    this.addNotification(this.ddsUKBucket);
   }
 
   private createBlcUKBucket(): Bucket {
@@ -44,5 +53,12 @@ export class Buckets {
         },
       },
     });
+  }
+
+  private addNotification(bucket: Bucket): void {
+    bucket.cdk.bucket.addEventNotification(
+      EventType.OBJECT_CREATED,
+      new SqsDestination(this.queues.s3MenusBucketEventQueue.cdk.queue)
+    );
   }
 }

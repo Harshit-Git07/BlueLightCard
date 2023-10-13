@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.22.0...bluelightcard/identity-v1.23.0) (2023-10-13)
+
+
+### Features
+
+* log errors ([#468](https://github.com/bluelightcard/BlueLightCard-2.0/issues/468)) ([26339c2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/26339c2e5bd7504080c8023bba3f4e457f1b5b19))
+
 ## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.21.0...bluelightcard/identity-v1.22.0) (2023-10-11)
 
 

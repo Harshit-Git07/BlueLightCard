@@ -16,7 +16,7 @@ const MobileNavigation: FC<MenuNavProps> = ({ menu }) => (
         return (
           <li className="block w-full border-b-[#eee] border-b border-solid group" key={index}>
             <Link
-              href={navItem.link || ''}
+              href={navItem.link || '#'}
               className="block w-full border-b-[#eee] border-b border-solid pt-4 pb-4 pl-5 text-base text-palette-body-text hover:text-[#36c]"
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
             >

@@ -80,7 +80,6 @@ export const navItems: NavItem = {
     },
     {
       text: 'Browse categories',
-      link: '/browse',
       dropdown: [
         {
           text: 'Holiday Discounts',

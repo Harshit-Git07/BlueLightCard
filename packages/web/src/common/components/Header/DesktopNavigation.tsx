@@ -21,7 +21,7 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
         return (
           <li className="px-3 group flex flex-col" key={index}>
             <Link
-              href={navItem.link || ''}
+              href={navItem.link || '#'}
               className="group-hover:underline group-hover:text-[#36c] text-palette-body-text group flex align-middle justify-start"
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
               data-testid={navItem.text + '-link'}

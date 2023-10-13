@@ -39,7 +39,7 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
                     >
                       <Link
                         href={link.link}
-                        data-testid={link.text + '-link'}
+                        data-testid={link.text + '-header-link'}
                         className="text-base text-palette-body-text hover:text-[#36c] block whitespace-nowrap no-underline px-5 py-2.5 border-b-[rgba(0,0,0,0.05)] border-b border-solid bg-shade-greyscale-white"
                         useLegacyRouting={link.link ? link.link.includes('.php') : true}
                       >

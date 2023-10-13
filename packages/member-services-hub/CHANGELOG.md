@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.0...bluelightcard/member-services-hub-v1.2.1) (2023-10-13)
+
+
+### Bug Fixes
+
+* **member-services-hub:** z index tab bar ([#478](https://github.com/bluelightcard/BlueLightCard-2.0/issues/478)) ([fb0cfc9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fb0cfc9e57ce25deaede956aff94531e6bd0ef49))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.1.0...bluelightcard/member-services-hub-v1.2.0) (2023-10-12)
 
 

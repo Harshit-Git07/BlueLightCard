@@ -37,18 +37,18 @@ export const handler = async (event: any, context: any) => {
   const brand = (event.detail !== undefined || event.detail !== null) ? event.detail.brand?.toUpperCase() : null;
 
   if (brand == null) {
-    logger.debug('brand details missing', brand);
+    logger.error('brand details missing', brand);
     return Response.BadRequest({ message: 'Please provide brand details' });
   }
 
   if (!(brand in BRANDS)) {
-    logger.debug('invalid brand', brand);
+    logger.error('invalid brand', brand);
     return Response.BadRequest({ message: 'Please provide a valid brand' });
   }
 
   if(event.detail.uuid === undefined || event.detail.uuid === ''
   ){
-    logger.info('required parameters are missing', event);
+    logger.error('required parameters are missing');
     return Response.BadRequest({ message: 'Required parameters are missing' });
   }
   const uuid = event.detail.uuid;
@@ -59,7 +59,7 @@ export const handler = async (event: any, context: any) => {
    detail = UserProfileModel.parse(event.detail);
    const isValid = validateFormData(detail);
   if(!isValid){
-    logger.info('Required parameters are missing', event);
+    logger.error('Required parameters are missing');
     return Response.BadRequest({ message: 'Required parameters are missing' });
   }
   }catch(err:any ){

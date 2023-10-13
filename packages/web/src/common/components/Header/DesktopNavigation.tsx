@@ -24,7 +24,7 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
               href={navItem.link || '#'}
               className="group-hover:underline group-hover:text-[#36c] text-palette-body-text group flex align-middle justify-start"
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
-              data-testid={navItem.text + '-link'}
+              data-testid={navItem.text + '-header-link'}
             >
               {navItem.text} {hasDropdown && downArrow}
             </Link>

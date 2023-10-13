@@ -1,0 +1,40 @@
+Feature: Index Page 
+Background: user logs in successfully 
+Given I am on the BLC website
+And agree to all the cookies
+When I log in successfully
+
+@index
+Scenario: Check relevant carasouls are visible
+Then I should be able to view the takeover banner
+And Deal of the week carousel
+And Flexi menus carousel
+And Market place offers carousel
+And Featured offers carousel
+
+@index 
+Scenario: User is able to click on offers that are on takeover banner
+When I click on a takeover banner
+# Then I should successfully navigate to the offer detail page
+
+@index 
+Scenario: User is able to click on offers that are on deal of the week
+When I click on a Deal of the week card 
+Then I should successfully navigate to the offer detail page
+
+@index
+Scenario: User is able to click on offers that are on flexible menu
+When I click on a Ways to save card 
+Then I should successfully navigate to the flexible offers detail page
+
+@index 
+Scenario: User is able to click on offers that are on market place
+And I scroll to the bottom to view market place menu carousel
+When I click on a Market place menu card
+Then I should successfully navigate to the offer detail page
+
+@index 
+Scenario: User is able to click on offers that are on feature offer
+And I scroll to the bottom to view feature offer carousel
+When I click on a featured offers card 
+Then I should successfully navigate to the offer detail page

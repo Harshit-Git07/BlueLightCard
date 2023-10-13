@@ -159,7 +159,7 @@ const HomePage: NextPage<any> = () => {
             className="py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
             addBottomHorizontalLine
             key={index}
-            data-testid="marketplace-menu-carousel"
+            data-testid={`marketplace-menu-carousel-${index}`}
           >
             <CardCarousel
               title={menu.name}

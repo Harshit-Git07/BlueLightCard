@@ -41,5 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # cucumber report
-e2e/test-resulsts/cucumber-report.json
-cucumber-report.json
+e2e/test-resulsts/

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { unpackJWT } from '@/utils/unpackJWT';
+import { unpackJWT } from '@core/utils/unpackJWT';
 import AuthContext from './AuthContext';
 
 type AuthProviderProps = {

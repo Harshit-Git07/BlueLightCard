@@ -47,6 +47,7 @@ const nextConfig = {
     );
     return config;
   },
+  transpilePackages: ['../api/core/'],
 };
 
 module.exports = nextConfig;

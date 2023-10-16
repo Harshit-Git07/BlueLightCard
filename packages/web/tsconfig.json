@@ -54,6 +54,10 @@
       "@/page-types/*": [
         "src/common/page-types/*"
       ],
+      "@core/*": [
+        "../api/core/src/*"
+      ],
+
       // TODO: Remove once data is pulled in via GQL and data folder is no longer needed.
       "@/data/*": [
         "data/*"

@@ -6,7 +6,8 @@ type JWT = {
   iat: number;
   email: string;
   'custom:blc_old_uuid': string;
-};
+  'custom:blc_old_id': string;
+}
 
 export function unpackJWT(jwt: string) {
   return jwt_decode(jwt) as JWT;

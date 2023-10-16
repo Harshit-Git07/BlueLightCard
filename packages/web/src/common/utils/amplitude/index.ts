@@ -1,5 +1,5 @@
 import * as amplitude from '@amplitude/analytics-browser';
-import { unpackJWT } from '../unpackJWT';
+import { unpackJWT } from '@core/utils/unpackJWT';
 
 import { AMPLITUDE_API_KEY } from '@/global-vars';
 import EVENTS from './events';

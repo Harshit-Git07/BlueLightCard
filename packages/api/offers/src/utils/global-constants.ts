@@ -21,3 +21,12 @@ export const enum OFFER_MENUS_FILE_NAMES {
     POPULAR = 'popularoffersPDO.txt',
     MARKETPLACE = 'sliders',
 }
+
+export enum ENDPOINTS {
+  PRODUCTION_COMPANY_FOLLOWS = 'https://st1vstksxd.execute-api.eu-west-2.amazonaws.com/production/companyfollows/viewCompanyLikes',
+  DEVELOP_COMPANY_FOLLOWS = 'https://tvu2d81ho8.execute-api.eu-west-2.amazonaws.com/develop/companyfollows/viewCompanyLikes',
+  PRODUCTION_USER_PROFILE = 'https://identity.blcshine.io/user',
+  DEVELOP_USER_PROFILE = 'https://staging-identity.blcshine.io/user',
+}
+
+export const COMPANY_FOLLOWS_SECRET: string = 'pHwaoxataaRpnliYFDIL0HIvMbwkvNVu1L48z4m2lvz6p/IT1f5JmVRHpJPFPXxK';

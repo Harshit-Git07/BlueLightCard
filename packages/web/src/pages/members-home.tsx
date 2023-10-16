@@ -9,10 +9,10 @@ import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
 import {
   BannerType,
   DealsOfTheWeekType,
-  MarketPlaceMenuType,
-  MarketPlaceItemType,
-  FlexibleMenuType,
   FeaturedOffersType,
+  FlexibleMenuType,
+  MarketPlaceItemType,
+  MarketPlaceMenuType,
 } from '@/page-types/members-home';
 import { logMembersHomePage } from '@/utils/amplitude';
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';

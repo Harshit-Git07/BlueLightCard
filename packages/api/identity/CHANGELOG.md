@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.23.0...bluelightcard/identity-v1.23.1) (2023-10-16)
+
+
+### Other Changes
+
+* date comp as default exxpires now ([#490](https://github.com/bluelightcard/BlueLightCard-2.0/issues/490)) ([227d1bd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/227d1bd266feeff34ddaabbf6b525364c1209730))
+
 ## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.22.0...bluelightcard/identity-v1.23.0) (2023-10-13)
 
 

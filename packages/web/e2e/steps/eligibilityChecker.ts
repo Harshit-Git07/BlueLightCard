@@ -4,7 +4,6 @@ import { page } from '../support/world';
 
 //Given
 Given('I navigate to Eligibility Checker', async function () {
-  // await page.goto(process.env.BASE_URL + '/eligibility');
   await page.goto(process.env.BASE_URL + '/eligibility');
   await page.title();
 });

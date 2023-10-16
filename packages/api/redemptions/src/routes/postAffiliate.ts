@@ -9,11 +9,11 @@ import {
 
 export class PostAffiliate {
   constructor(
-    private apiGatewayModelGenerator: ApiGatewayModelGenerator, 
-    private model: Model, 
-    private stack: Stack, 
-    private api: IRestApi
-  ) { }
+    private apiGatewayModelGenerator: ApiGatewayModelGenerator,
+    private model: Model,
+    private stack: Stack,
+    private api: IRestApi,
+  ) {}
 
   postAffiliate() {
     return {
@@ -28,10 +28,10 @@ export class PostAffiliate {
             this.apiGatewayModelGenerator.getError404(),
             this.apiGatewayModelGenerator.getError500(),
           ]),
-          requestValidator: new RequestValidator(this.stack, "PostAffiliateValidator", {
+          requestValidator: new RequestValidator(this.stack, 'PostAffiliateValidator', {
             restApi: this.api,
             validateRequestBody: true,
-            validateRequestParameters: true
+            validateRequestParameters: true,
           }),
         },
       },

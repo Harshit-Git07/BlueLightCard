@@ -1,15 +1,27 @@
 import { Logger } from '@aws-lambda-powertools/logger';
-import { APIGatewayEvent, APIGatewayProxyStructuredResultV2, Context } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { Response } from '../../../../core/src/utils/restResponse/response';
-import { PostAffiliateResponse } from '../../models/postAffiliateResponse';
+import { AffiliateConfiguration } from '../../helpers/affiliateConfiguration';
+import { PostAffiliateModel } from '../../models/postAffiliate';
+
+interface IAPIGatewayEvent extends APIGatewayEvent {
+  body: string;
+}
 
 const service: string = process.env.service as string;
-const logger = new Logger({ serviceName: `${service}-get` });
+const logger = new Logger({ serviceName: `${service}-post` });
 
-export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
-  logger.info('input', { event });
+export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyStructuredResultV2> => {
+  logger.info('POST Affiliate Input', { event });
 
-  let model: PostAffiliateResponse = { memberId: '1', affiliateUrl: 'J' };
+  try {
+    const { affiliateUrl, memberId }: PostAffiliateModel = JSON.parse(event.body);
+    const trackingUrl: string = new AffiliateConfiguration(affiliateUrl, memberId).trackingUrl;
 
-  return Response.OK({ message: 'Success', data: model });
+    return Response.OK({ message: 'Success', data: { trackingUrl } });
+  } catch (error) {
+    logger.error('Error while creating tracking URL ', { error });
+
+    return Response.Error({ message: 'Error while creating tracking URL' } as Error);
+  }
 };

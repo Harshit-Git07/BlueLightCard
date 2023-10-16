@@ -116,6 +116,10 @@ c. World hooks contain
 6. Run tests by following command:
 - npm run test:e2e OR npm run test:e2e -w packages/web
 
+**NOTE**
+
+Ensure that you have created a `.env` in the `packages/web/e2e` folder based on the `.env.example`
+
 For further information please see https://bluelightcard.atlassian.net/wiki/spaces/BTB/pages/2095611905/Guide+for+Playwright+and+Cucumber
 
 

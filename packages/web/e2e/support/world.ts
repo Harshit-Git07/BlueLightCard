@@ -1,16 +1,17 @@
-import { After, AfterAll, Before, BeforeAll, Status } from '@cucumber/cucumber';
+import { After, AfterAll, Before, BeforeAll, Status, setDefaultTimeout } from '@cucumber/cucumber';
 import { Browser, BrowserContext, Page } from '@playwright/test';
 import { invokeBrowser } from '../helpers/browsers/browserManager';
 import * as dotenv from 'dotenv';
 
 dotenv.config({
-  path: `e2e/helpers/env/.env.${process.env.ENV}`,
+  path: `e2e/.env`,
 });
 
 let page: Page;
 let browser: Browser;
 let context: BrowserContext;
 
+setDefaultTimeout(2 * 60000);
 BeforeAll(async function () {
   browser = await invokeBrowser();
 });

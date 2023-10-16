@@ -267,6 +267,8 @@ jobs:
       - frontend
     env:
       BASE_URL: https://www.staging.bluelightcard.co.uk
+      USERNAME: ${{ secrets.E2E_TESTS_USERNAME }}
+      PASSWORD: ${{ secrets.E2E_TESTS_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3

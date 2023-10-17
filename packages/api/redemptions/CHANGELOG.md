@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.1.0...bluelightcard/redemptions-v1.2.0) (2023-10-17)
+
+
+### Features
+
+* TR-2, Created affiliate link generator ([#460](https://github.com/bluelightcard/BlueLightCard-2.0/issues/460)) ([f23db80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f23db80b36929b25fb26274d226440a6e1595545))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.0.0...bluelightcard/redemptions-v1.1.0) (2023-10-02)
 
 

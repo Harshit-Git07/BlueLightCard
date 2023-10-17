@@ -5,16 +5,16 @@ And agree to all the cookies
 When I log in successfully
 
 @membersHome
-Scenario: Check relevant carasouls are visible
-Then I should be able to view the takeover banner
+Scenario: Check relevant carousels are visible
+Then I should be able to view the sponsor banners
 And Deal of the week carousel
 And Flexi menus carousel
 And Market place offers carousel
 And Featured offers carousel
 
 @membersHome 
-Scenario: User is able to click on offers that are on takeover banner
-When I click on a takeover banner
+Scenario: User is able to click on the offers that are displayed on the sponsor banners
+When I click on a sponsor banner
 
 @membersHome 
 Scenario: User is able to click on offers that are on deal of the week

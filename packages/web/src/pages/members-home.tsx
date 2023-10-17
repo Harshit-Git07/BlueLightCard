@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { shuffle } from 'lodash';
 import withAuth from '@/hoc/withAuth';
 import { homePageQuery } from '../graphql/homePageQueries';
 import makeQuery from '../graphql/makeQuery';
@@ -47,7 +48,9 @@ const HomePage: NextPage<any> = () => {
         const homePageQueryPromise = makeQuery(homePageQuery(BRAND));
         const homePageQueryResponse = await homePageQueryPromise;
 
-        setBanners(homePageQueryResponse.data.banners as BannerType[]);
+        const slicedBanners = shuffle(homePageQueryResponse.data.banners).slice(0, 3);
+
+        setBanners(slicedBanners as BannerType[]);
         setDealsOfTheWeek(homePageQueryResponse.data.offerMenus.deals as DealsOfTheWeekType[]);
         setMarketplaceMenus(
           homePageQueryResponse.data.offerMenus.marketPlace as MarketPlaceMenuType[]
@@ -104,7 +107,7 @@ const HomePage: NextPage<any> = () => {
       )}
 
       {/* Promo banner carousel */}
-      <Container className="py-5" data-testid="takeover-banners" addBottomHorizontalLine>
+      <Container className="py-5" data-testid="homepage-sponsor-banners" addBottomHorizontalLine>
         <SwiperCarousel
           autoPlay
           elementsPerPageLaptop={1}

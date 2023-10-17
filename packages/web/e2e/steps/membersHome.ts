@@ -6,7 +6,7 @@ dotenv.config();
 
 const ASSERTION_TIMEOUT = 2 * 60000;
 
-When('I click on a takeover banner', async function () {
+When('I click on a sponsor banner', async function () {
   await page.getByTestId('promoBanner0').click({ timeout: ASSERTION_TIMEOUT });
 });
 
@@ -48,8 +48,8 @@ When('I click on a featured offers card', async function () {
     .click({ timeout: ASSERTION_TIMEOUT });
 });
 
-Then('I should be able to view the takeover banner', async function () {
-  await expect(page.getByTestId('takeover-banners')).toBeVisible();
+Then('I should be able to view the sponsor banners', async function () {
+  await expect(page.getByTestId('homepage-sponsor-banners')).toBeVisible();
 });
 
 Then('Deal of the week carousel', async function () {

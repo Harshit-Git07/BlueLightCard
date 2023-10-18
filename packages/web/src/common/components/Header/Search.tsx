@@ -17,9 +17,6 @@ const sortByAlphabeticalOrder = (a: CategoryType | CompanyType, b: CategoryType 
   return 0;
 };
 
-const companyPlaceholder = { id: '0', name: 'by company' };
-const categoryPlaceholder = { id: '0', name: 'by category' };
-
 const Search: FC<SearchProps> = ({
   onSearchCompanyChange,
   onSearchCategoryChange,
@@ -28,17 +25,20 @@ const Search: FC<SearchProps> = ({
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const [categories, setCategories] = useState<CategoryType[]>([categoryPlaceholder]);
-  const [companies, setCompanies] = useState<CompanyType[]>([companyPlaceholder]);
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [companies, setCompanies] = useState<CompanyType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const changeCompanyHandler = (event: any) => {
-    const company = companies && companies.find((comp) => comp.id == event?.target.value);
+    const company =
+      event?.target.value && companies && companies.find((comp) => comp.id == event?.target.value);
     if (!company) return;
     onSearchCompanyChange(company.id, company.name);
   };
 
   const changeCategoryHandler = (event: any) => {
-    const category = categories && categories.find((cat) => cat.id == event.target.value);
+    const category =
+      event?.target.value && categories && categories.find((cat) => cat.id == event?.target.value);
     if (!category) return;
     onSearchCategoryChange(category.id, category.name);
   };
@@ -52,6 +52,7 @@ const Search: FC<SearchProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const companiesCategoriesQueryPromise = makeQuery(companiesCategoriesQuery(BRAND));
 
         const companiesCategoriesQueryResponse = await companiesCategoriesQueryPromise;
@@ -64,13 +65,14 @@ const Search: FC<SearchProps> = ({
 
         if (categoriesData.length > 1) {
           const sortedCategories = [...categoriesData].sort(sortByAlphabeticalOrder);
-          setCategories([categoryPlaceholder, ...sortedCategories]);
+          setCategories(sortedCategories);
         }
 
         if (companiesData.length > 1) {
           const sortedCompanies = [...companiesData].sort(sortByAlphabeticalOrder);
-          setCompanies([companyPlaceholder, ...sortedCompanies]);
+          setCompanies(sortedCompanies);
         }
+        setIsLoading(false);
       } catch (error) {
         redirectToLogin(router);
       }
@@ -78,6 +80,10 @@ const Search: FC<SearchProps> = ({
 
     fetchData();
   }, []);
+
+  const loadingText = 'Loading...';
+  const companyDefaultOption = isLoading ? loadingText : 'by company';
+  const categoryDefaultOption = isLoading ? loadingText : 'by category';
 
   return (
     <div className="absolute px-[9%] w-full">
@@ -92,6 +98,8 @@ const Search: FC<SearchProps> = ({
               <label>By company</label>
               <form action={'/'} method="GET">
                 <InputSelectFieldWithRef
+                  disabled={isLoading}
+                  defaultOption={companyDefaultOption}
                   onChange={changeCompanyHandler}
                   options={companies.map((comp) => ({
                     value: comp.id,
@@ -109,6 +117,8 @@ const Search: FC<SearchProps> = ({
               </label>
               <form action={'/'} method="GET">
                 <InputSelectFieldWithRef
+                  disabled={isLoading}
+                  defaultOption={categoryDefaultOption}
                   onChange={changeCategoryHandler}
                   options={categories.map((cat) => ({
                     value: cat.id,

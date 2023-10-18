@@ -6,5 +6,12 @@
   },
   "button": {
     "text": "BLC Brand"
+  },
+  "offers": {
+    "seo": {
+      "title": "Blue Light Card Home",
+      "description": "The UK's largest Emergency Service discount and NHS discount service for UK public sector.  Free to register online and home of the Blue Light Card High Street Card",
+      "keywords": "NHS Discounts, Discounts, Fire, Police, Online Discounts, Highstreet Discounts, Emergency Services, Emergency Service Workers"
+    }
   }
 }

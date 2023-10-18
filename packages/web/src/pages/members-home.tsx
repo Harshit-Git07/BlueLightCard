@@ -18,9 +18,11 @@ import {
 import { logMembersHomePage } from '@/utils/amplitude';
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
 import AlertBox from '@/components/AlertBox/AlertBox';
-import { NextPage } from 'next';
 import Container from '@/components/Container/Container';
 import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
+import withLayout from '@/hoc/withLayout';
+import { NextPage } from 'next';
+import getI18nStaticProps from '@/utils/i18nStaticProps';
 
 function cleanText(text: string) {
   return text
@@ -192,4 +194,14 @@ const HomePage: NextPage<any> = () => {
   );
 };
 
-export default withAuth(HomePage);
+export const getStaticProps = getI18nStaticProps;
+
+const layoutProps = {
+  seo: {
+    title: 'offers.seo.title',
+    description: 'offers.seo.description',
+    keywords: 'offers.seo.keywords',
+  },
+};
+
+export default withLayout(withAuth(HomePage), layoutProps);

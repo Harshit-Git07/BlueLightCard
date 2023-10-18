@@ -9,7 +9,6 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ url = '/' }) => {
   return (
     <Link
-      legacyBehavior
       href={url}
       className="relative block h-[40px] max-w-[197px] tablet:max-w-[226px] hover:opacity-100"
       data-testid="blc-logo"

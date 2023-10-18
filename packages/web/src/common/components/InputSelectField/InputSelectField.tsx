@@ -12,6 +12,7 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
   defaultOption,
   onChange,
   tabIndex,
+  disabled = false,
 }) => {
   const selectClasses = cssUtil([
     error
@@ -28,6 +29,7 @@ const InputSelectField: FC<InputSelectFieldProps> = ({
         className={selectClasses}
         value={value}
         onChange={onChange}
+        disabled={disabled}
       >
         {defaultOption && <option>{defaultOption}</option>}
         {options?.map((option: KeyValue) => (

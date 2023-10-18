@@ -8,6 +8,7 @@ export type InputSelectFieldProps = InputFieldSharedProps<HTMLSelectElement> & {
   options: KeyValue[];
   tabIndex?: number;
   id?: string;
+  disabled?: boolean;
 };
 
 export type KeyValue = {

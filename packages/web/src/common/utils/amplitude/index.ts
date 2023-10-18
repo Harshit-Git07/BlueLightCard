@@ -58,27 +58,27 @@ export function logMembersHomePage() {
   });
 }
 
-export function logSearchCompanyEvent(companyId: string, companyName: string) {
+export async function logSearchCompanyEvent(companyId: string, companyName: string) {
   const eventProperties = {
     company_id: companyId,
     company_name: companyName,
   };
-  amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties);
+  await amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties).promise;
 }
 
-export function logSearchCategoryEvent(categoryId: string, categoryName: string) {
+export async function logSearchCategoryEvent(categoryId: string, categoryName: string) {
   const eventProperties = {
     category_id: categoryId,
     category_name: categoryName,
   };
-  amplitude.track(EVENTS.SEARCH_BY_CATEGORY_STARTED, eventProperties);
+  await amplitude.track(EVENTS.SEARCH_BY_CATEGORY_STARTED, eventProperties).promise;
 }
 
-export function logSearchTermEvent(searchTerm: string) {
+export async function logSearchTermEvent(searchTerm: string) {
   const eventProperties = {
     search_term: searchTerm,
   };
   if (searchTerm) {
-    amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties);
+    await amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties).promise;
   }
 }

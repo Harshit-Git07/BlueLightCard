@@ -7,6 +7,7 @@ import Link from '@/components/Link/Link';
 import withAuth from 'src/common/hoc/withAuth';
 import { NextPage } from 'next';
 import Container from '@/components/Container/Container';
+import withLayout from '@/hoc/withLayout';
 
 export const getStaticProps = getOffersStaticProps;
 
@@ -27,7 +28,11 @@ type OfferCardProp = {
 };
 
 const OffersPage: NextPage<OffersPageProps> = (props) => {
-  const { offers, offersHeading, featuredOffers, adverts, heroTitle } = props;
+  const offers: any[] = [];
+  const heroTitle = '';
+  const offersHeading = '';
+  const featuredOffers: any[] = [];
+  const adverts: any[] = [];
   return (
     <>
       {heroTitle && (
@@ -106,4 +111,4 @@ const OffersPage: NextPage<OffersPageProps> = (props) => {
   );
 };
 
-export default withAuth(OffersPage);
+export default withLayout(withAuth(OffersPage));

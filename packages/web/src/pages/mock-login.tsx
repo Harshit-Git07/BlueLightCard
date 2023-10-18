@@ -11,9 +11,8 @@ import AuthContext from '@/context/AuthContext';
 import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
 
 function MockLogin() {
-  // TODO: This should be a call to an external service with only the username/password combination (lambda?)
-  //        As this exposes client_secret which should not be exposed.
-  //        This is only a mock of the login, used to get a token for testing GraphQL queries it is NOT INTENDED FOR PRODUCTION.
+  // As this exposes client_secret which should not be exposed.
+  // This is only a mock of the login, used to get a token for testing GraphQL queries it is NOT INTENDED FOR PRODUCTION.
   async function getToken(username: string, password: string) {
     const secret = secretHash(username, COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET);
 

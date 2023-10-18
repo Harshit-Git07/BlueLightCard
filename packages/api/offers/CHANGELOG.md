@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.7.0...bluelightcard/offers-v1.8.0) (2023-10-18)
+
+
+### Features
+
+* TO-0: updated lambda listener ([#511](https://github.com/bluelightcard/BlueLightCard-2.0/issues/511)) ([2ce40ce](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ce40cef3ca483737b63793f5a65abf7142f1c05))
+
 ## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.6.0...bluelightcard/offers-v1.7.0) (2023-10-18)
 
 

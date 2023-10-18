@@ -15,7 +15,7 @@ export class QueryResolver implements IResolver {
   }
 
   initialise() {
-    // this.createQueryLambdaResolver();
+    this.createQueryLambdaResolver();
     this.getOfferByIdResolver();
     this.getCompanyByIdResolver();
   }

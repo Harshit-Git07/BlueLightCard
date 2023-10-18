@@ -38,7 +38,7 @@ export class ElasticCache {
     return new CfnCacheCluster(this.stack, `${this.stage}-OfferRedisCluster`, {
       cacheNodeType: isProduction(this.stage) ? "cache.m6g.large" : "cache.t4g.micro",
       engine: "redis",
-      numCacheNodes: isProduction(this.stage) ? 2 : 1,
+      numCacheNodes: 1,
       clusterName: `${this.stage}-OfferRedisCluster`,
       cacheSubnetGroupName: this.cacheSubnetGroup?.ref,
       vpcSecurityGroupIds: [this.securityGroup.securityGroupId],

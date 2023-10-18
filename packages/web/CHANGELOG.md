@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.14.0...bluelightcard/web-v1.15.0) (2023-10-18)
+
+
+### Features
+
+* Add restrictions to homepage offers ([#465](https://github.com/bluelightcard/BlueLightCard-2.0/issues/465)) ([482de17](https://github.com/bluelightcard/BlueLightCard-2.0/commit/482de17260b9967d0e36c7fe976b83675c3a2a52))
+* edited package.json file ([#481](https://github.com/bluelightcard/BlueLightCard-2.0/issues/481)) ([f14932e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f14932e20f4d2e6a7278a55d92d1823d23a48088))
+* TO-186 SEO and home page clean up ([#500](https://github.com/bluelightcard/BlueLightCard-2.0/issues/500)) ([a7b91b6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a7b91b6c8f5c25f502073806a6e6fd4e50052f89))
+* TO-186: Clean up members homepage design ([#472](https://github.com/bluelightcard/BlueLightCard-2.0/issues/472)) ([efbdd87](https://github.com/bluelightcard/BlueLightCard-2.0/commit/efbdd87523b9f834bd345a501995952862b557c6))
+* TO-186: fix mobile navigation for items with dropdown and no link ([#483](https://github.com/bluelightcard/BlueLightCard-2.0/issues/483)) ([6a47232](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6a47232b18d7447f2ae8e74ec7cc884a3b7b0750))
+* TO-186: fixed banners query ([#495](https://github.com/bluelightcard/BlueLightCard-2.0/issues/495)) ([d9e8f32](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9e8f32d052ea145d9966aede7a6e7f548902798))
+* TO-186: fixed container for header and footer and applied fonts to offer card ([#479](https://github.com/bluelightcard/BlueLightCard-2.0/issues/479)) ([917a8e3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/917a8e32b62bf93d9426ff1305bfb5b794d12bcd))
+* TO-237 added e2e test for header and footer ([#439](https://github.com/bluelightcard/BlueLightCard-2.0/issues/439)) ([6a30112](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6a301128ccc55c9530fe7007c217a05e94331b72))
+* TO-239 E2e tests for header footer ([#450](https://github.com/bluelightcard/BlueLightCard-2.0/issues/450)) ([4ae16b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4ae16b06908eb44c907da739d56f3e2faf72925d))
+* TO-66: create alert box ([#463](https://github.com/bluelightcard/BlueLightCard-2.0/issues/463)) ([b31b0c0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b31b0c082cdabbb149d71018cf138336a2ed31a8))
+* TO:237  E2E tests for members home elements ([#493](https://github.com/bluelightcard/BlueLightCard-2.0/issues/493)) ([d197024](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d197024198d74ed550da45a9a3102a550efa06e0))
+* TO:237 add index to marketplace carousel id  ([#482](https://github.com/bluelightcard/BlueLightCard-2.0/issues/482)) ([4dffa32](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4dffa32b99a134b6424091c54abc268c38f8d8a0))
+
+
+### Bug Fixes
+
+* **member-services-hub:** z index tab bar ([#478](https://github.com/bluelightcard/BlueLightCard-2.0/issues/478)) ([fb0cfc9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fb0cfc9e57ce25deaede956aff94531e6bd0ef49))
+
 ## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.13.1...bluelightcard/web-v1.14.0) (2023-10-09)
 
 

@@ -6,23 +6,45 @@ import { OfferHomepageRepository } from '../../../../../repositories/offersHomep
 import { unpackJWT } from '../../../../../../../core/src/utils/unpackJWT';
 import { MemberProfile } from "../../../../../services/MemberProfile";
 import { OfferRestriction } from "../../../../../services/OfferRestriction";
+import { FIFTEEN_MINUTES } from "../../../../../utils/duration"
+import { CacheService } from '../../../../../services/CacheService';
 
 export class OfferMenusByBrandIdResolver {
+
+  private readonly cacheKey = `${this.brandId}-offers-homepage`
   constructor(
     private brandId: string,
     private tableName: string,
     private offerHomepageRepository: OfferHomepageRepository,
     private logger: Logger,
+    private cacheService: CacheService
   ) {
     logger.info('OfferMenusByBrandIdResolver Started');
   }
 
   async handler(event: AppSyncResolverEvent<any>) {
-    const data = await getHomePageMenus(this.brandId, this.offerHomepageRepository);
+    this.logger.info('OfferMenusByBrandIdResolver handler', { event })
 
-    if (!data || !data.Responses || !data.Responses[this.tableName]) {
-      this.logger.error('No homepage menus found for brandId', { brandId: this.brandId });
-      throw new Error(`No homepage menus found for brandId ${this.brandId}`);
+    const cache = await this.cacheService.get(this.cacheKey);
+    let menus: ObjectDynamicKeys = {};
+
+    if (!cache) {
+      const data = await getHomePageMenus(this.brandId, this.offerHomepageRepository);
+      
+      if (!data || !data.Responses || !data.Responses[this.tableName]) {
+        this.logger.error('No homepage menus found for brandId', { brandId: this.brandId });
+        throw new Error(`No homepage menus found for brandId ${this.brandId}`);
+      }
+
+      const homePageItems = data.Responses[this.tableName];
+      
+      homePageItems.forEach(({ type, json }) => {
+        menus[type] = JSON.parse(json);
+      });
+
+      await this.cacheService.set(this.cacheKey, JSON.stringify(menus), FIFTEEN_MINUTES);
+    } else {
+      menus = JSON.parse(cache);
     }
 
     const authHeader: string = event.request.headers.authorization ?? '';
@@ -32,14 +54,6 @@ export class OfferMenusByBrandIdResolver {
     const { organisation, isUnder18, dislikedCompanyIds } = await memberProfileService.getProfile();
 
     const restrictOffers = new OfferRestriction(organisation, isUnder18, dislikedCompanyIds);
-
-    const menus: ObjectDynamicKeys = {};
-
-    const homePageItems = data.Responses[this.tableName];
-
-    homePageItems.forEach(({ type, json }) => {
-      menus[type] = JSON.parse(json);
-    });
 
     const marketPlaceMenus = menus[TYPE_KEYS.MARKETPLACE];
 

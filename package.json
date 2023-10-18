@@ -63,6 +63,7 @@
     "dotenv": "^16.3.1",
     "grapheme-splitter": "^1.0.4",
     "graphql": "^16.8.1",
+    "ioredis": "^5.3.2",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "node": "^20.5.1",

@@ -9,6 +9,8 @@ import { ObjectDynamicKeys } from '../types'
 
 const dynamoDbMock = mockClient(DynamoDBDocumentClient)
 
+jest.mock('ioredis');
+
 describe('Test resolveGetOfferMenusByBrandId', () => {
   const ORIGINAL_ENV = process.env
   const JWT_ID_TOKEN: string =

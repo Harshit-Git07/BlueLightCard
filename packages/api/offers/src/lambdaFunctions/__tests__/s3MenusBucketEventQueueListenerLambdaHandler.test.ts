@@ -15,9 +15,8 @@ process.env.OFFER_HOMEPAGE_TABLE = 'test-blc-mono-offersHomepage';
 const s3Mock = mockClient(S3Client)
 const dynamoDbMock = mockClient(DynamoDBDocumentClient);
 
-const tableName = process.env.OFFER_HOMEPAGE_TABLE;
-const goBackDir = '../../';
 const bucketName = 'test-blc-uk-offer-menus';
+
 describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
 
   beforeEach(() => {
@@ -152,10 +151,7 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
       Item: {
         id: BLC_UK,
         type: OFFER_MENUS_FILE_NAMES.MARKETPLACE,
-        json: {
-          '2.txt': 'file content',
-          '3.txt': 'file content',
-        }
+        json: '{"1.txt":{"test":"123"},"2.txt":{"test":"123"}}'
       }
     });
 
@@ -177,10 +173,7 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
       Item: {
         id: BLC_UK,
         type: OFFER_MENUS_FILE_NAMES.MARKETPLACE,
-        json: {
-          '1.txt': 'file content',
-          '2.txt': 'file content',
-        }
+        json: '{"1.txt":{"test":"123"},"2.txt":{"test":"123"}}'
       }
     });
 

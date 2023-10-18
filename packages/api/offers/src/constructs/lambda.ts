@@ -6,6 +6,7 @@ import {Buckets} from './buckets';
 import {QueryLambda} from './lambdas/queryLamda';
 import {S3MenusBucketEventQueueListenerLambda} from "./lambdas/s3MenusBucketEventQueueListenerLambda";
 import {Queues} from "./queues";
+import { ElasticCache } from "./elasticCache";
 
 /**
  * This class centralises the creation of the lambdas.
@@ -17,9 +18,14 @@ export class Lambda {
     queryLambda: NodejsFunction;
     s3MenusBucketEventQueueListenerLambda: NodejsFunction;
 
-    constructor(private stack: Stack, private tables: Tables, private buckets: Buckets, private queues: Queues, private stage: string) {
+    constructor(private stack: Stack,
+                private tables: Tables,
+                private buckets: Buckets,
+                private queues: Queues,
+                private stage: string,
+                private elasticCache: ElasticCache) {
         this.typeLambda = new TypeLambda(this.stack, this.tables).create();
-        this.queryLambda = new QueryLambda(this.stack, this.tables, this.stage).create();
+        this.queryLambda = new QueryLambda(this.stack, this.tables, this.stage, this.elasticCache).create();
         this.s3MenusBucketEventQueueListenerLambda = new S3MenusBucketEventQueueListenerLambda(this.stack, this.tables, this.buckets, this.queues).create();
     }
 }

@@ -5,6 +5,7 @@ import { OfferMenusByBrandIdResolver } from './homepage/resolveGetOfferMenusByBr
 import { BannersByBrandIdAndTypeResolver } from './homepage/resolveGetBannersByBrandIdAndType';
 import { OfferHomepageRepository } from '../../../../repositories/offersHomepageRepository';
 import { BannerRepository } from '../../../../repositories/bannerRepository';
+import { CacheService } from '../../../../services/CacheService';
 
 class ResolverHandler {
   private resolvers: Map<string, (event: AppSyncResolverEvent<any>) => Promise<any>>;
@@ -15,6 +16,8 @@ class ResolverHandler {
     this.logger.info('ResolverHandler Started');
     const brandId = getBrandId(event, this.logger);
 
+    const cacheService = new CacheService(process.env.STAGE as string);
+
     const bannerTableName = process.env.BANNER_TABLE as string;
     const offerHomePageTableName = process.env.OFFER_HOMEPAGE_TABLE as string;
 
@@ -23,11 +26,11 @@ class ResolverHandler {
     const bannerRepository = new BannerRepository(bannerTableName);
 
     // Add new resolvers here
-    const offerCategoriesAndCompaniesResolver = new OfferCategoriesAndCompaniesResolver(brandId, offerHomePageTableName, offerHomepageRepository, this.logger);
+    const offerCategoriesAndCompaniesResolver = new OfferCategoriesAndCompaniesResolver(brandId, offerHomePageTableName, offerHomepageRepository, this.logger, cacheService);
 
-    const getOfferMenusByBrandIdResolver = new OfferMenusByBrandIdResolver(brandId, offerHomePageTableName, offerHomepageRepository, this.logger);
+    const getOfferMenusByBrandIdResolver = new OfferMenusByBrandIdResolver(brandId, offerHomePageTableName, offerHomepageRepository, this.logger, cacheService);
 
-    const getBannersByBrandAndTypeResolver = new BannersByBrandIdAndTypeResolver(brandId, bannerRepository, this.logger)
+    const getBannersByBrandAndTypeResolver = new BannersByBrandIdAndTypeResolver(brandId, bannerRepository, this.logger, cacheService)
 
     // Add entry for new resolver here
     this.resolvers = new Map<string, (event: AppSyncResolverEvent<any>) => Promise<any>>([

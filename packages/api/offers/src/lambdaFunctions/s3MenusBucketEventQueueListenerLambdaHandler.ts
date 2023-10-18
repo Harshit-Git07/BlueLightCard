@@ -75,10 +75,14 @@ export const handler = async (event: any) => {
       const currentData = await offerHomePageRepository.getByIdAndType({ id, type: type.value });
 
       if (currentData && currentData.Item) {
-        currentData.Item.json[jsonKey] = fileData;
-        await offerHomePageRepository.save(currentData.Item);
+        const currentItem = currentData.Item;
+        currentItem.json = JSON.parse(currentItem.json);
+        currentItem.json[jsonKey] = JSON.parse(fileData);
+        currentItem.json = JSON.stringify(currentItem.json);
+        await offerHomePageRepository.save(currentItem);
       } else {
-        item.json[jsonKey] = fileData;
+        item.json[jsonKey] = JSON.parse(fileData);
+        item.json = JSON.stringify(item.json);
         await offerHomePageRepository.save(item);
       }
     } else {

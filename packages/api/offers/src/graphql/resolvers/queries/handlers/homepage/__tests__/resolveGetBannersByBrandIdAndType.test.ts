@@ -5,6 +5,8 @@ import { QueryCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import { promises as fs } from 'fs';
 import path from 'path';
 
+jest.mock('ioredis');
+
 const dynamoDbMock = mockClient(DynamoDBDocumentClient);
 
 describe('Test resolveGetBannersByBrandIdAndType', () => {

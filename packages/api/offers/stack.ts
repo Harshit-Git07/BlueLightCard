@@ -8,14 +8,16 @@ import { Resolver } from './src/graphql/resolvers/resolver'
 import { Buckets } from './src/constructs/buckets'
 import { EventBridge } from './src/constructs/eventBridge'
 import { Queues } from './src/constructs/queues'
+import { ElasticCache } from "./src/constructs/elasticCache";
 
 export function Offers ({ stack }: StackContext) {
   const { cognito } = use(Identity)
   const offersApi = OffersApi.create(stack, stack.stage, cognito.cdk.userPool, './packages/api/offers/schema.graphql')
+  const elasticCache = new ElasticCache(stack, stack.stage)
   const queues = new Queues(stack)
   const tables = new Tables(stack)
   const buckets = new Buckets(stack, stack.stage, queues)
-  const lambdas = new Lambda(stack, tables, buckets, queues, stack.stage)
+  const lambdas = new Lambda(stack, tables, buckets, queues, stack.stage, elasticCache)
   const dataSources = new DataSource(offersApi, tables, lambdas)
   const resolvers = new Resolver(dataSources)
   resolvers.initialise()

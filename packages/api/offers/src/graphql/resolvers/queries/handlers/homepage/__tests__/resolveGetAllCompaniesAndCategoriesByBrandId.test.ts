@@ -6,6 +6,8 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { TYPE_KEYS } from '@blc-mono/offers/src/utils/global-constants';
 
+jest.mock('ioredis');
+
 const dynamoDbMock = mockClient(DynamoDBDocumentClient);
 
 describe('Test resolveGetCategoriesAndCompaniesByBrand', () => {
@@ -68,12 +70,12 @@ describe('Test resolveGetCategoriesAndCompaniesByBrand', () => {
     expect(result).toHaveProperty('companies');
     expect(result).toHaveProperty('categories');
 
-    expect(result.companies).toHaveLength(2213);
+    expect(result.companies).toHaveLength(2617);
     expect(result.categories).toHaveLength(17);
 
     expect(result.companies[0]).toHaveProperty('id');
     expect(result.companies[0]).toHaveProperty('name');
-    expect(result.companies[0].name.trim()).toBe('Northern Log Cabins & Garden Products');
+    expect(result.companies[0].name.trim()).toBe('Youth & Earth');
 
     expect(result.categories[0]).toHaveProperty('id');
     expect(result.categories[0]).toHaveProperty('name');

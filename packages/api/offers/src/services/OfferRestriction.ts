@@ -3,6 +3,8 @@ export class OfferRestriction {
   private readonly isUnder18: boolean;
   private dislikedCompanyIds: number[];
 
+  isBannerRestricted: any;
+  isCompanyRestricted: any;
   isDealOfTheWeekRestricted: any;
   isFeaturedOfferRestricted: any;
   isFlexibleMenuItemRestricted: any;
@@ -15,6 +17,17 @@ export class OfferRestriction {
     this.dislikedCompanyIds = dislikedCompanyIds;
 
     this.restrictOffers = this.createOfferRestrictionFactory();
+
+    this.isBannerRestricted = this.restrictOffers({
+      ageGateKey: 'isAgeGated',
+      legacyCompanyIdKey: 'legacyCompanyId',
+    });
+
+    this.isCompanyRestricted = this.restrictOffers({
+      ageGateKey: 'isAgeGated',
+      legacyCompanyIdKey: 'id',
+    });
+
     this.isDealOfTheWeekRestricted = this.restrictOffers({
       ageGateKey: 'agegate',
       legacyCompanyIdKey: 'compid',

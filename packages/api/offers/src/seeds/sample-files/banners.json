@@ -1,0 +1,72 @@
+[
+    {
+        "id": "94490f59-7a02-48a8-8811-c0131c8c6061",
+        "brand": "blc-uk",
+        "expiresAt": 1698763971,
+        "imageSource": "https://blcimg-dev.img.bluelightcard.co.uk/img/promotion/sponsor/11499-5255-dev.jpeg",
+        "legacyCompanyId": 11499,
+        "legacyId": 1582,
+        "link": "https://www.bluelightcard.co.uk/offerdetails.php?cid=423&oid=10700",
+        "name": "sposor banner",
+        "startsAt": 1664449378,
+        "status": true,
+        "type": "sponsor",
+        "isAgeGated": false
+    },
+    {
+        "id": "46400b6e-c9ea-40ba-b94e-075e43adc6b8",
+        "brand": "blc-uk",
+        "expiresAt": 1704117660,
+        "imageSource": "https://blcimg-dev.img.bluelightcard.co.uk/complarge/cover/1-3752-dev.jpeg",
+        "legacyCompanyId": 1,
+        "legacyId": 1583,
+        "link": "https://www.staging.bluelightcard.co.uk/p-out.php?lid=1582",
+        "name": "Test2 Takeover",
+        "startsAt": 1696178959,
+        "status": true,
+        "type": "sponsor",
+        "isAgeGated": true
+    },
+    {
+        "id": "17d1dcf2-1948-459b-9407-56967e59b058",
+        "brand": "blc-uk",
+        "expiresAt": 1704117660,
+        "imageSource": "https://blcimg-dev.img.bluelightcard.co.uk/complarge/cover/16519-6847-dev.jpeg",
+        "legacyCompanyId": 16519,
+        "legacyId": 1579,
+        "link": "https://www.staging.bluelightcard.co.uk/p-out.php?lid=1582",
+        "name": "Luke",
+        "startsAt": 1696171637,
+        "status": true,
+        "type": "sponsor",
+        "isAgeGated": false
+    },
+    {
+        "id": "17d1dcf2-1948-459b-9407-56967e59b058",
+        "brand": "blc-uk",
+        "expiresAt": 1704117660,
+        "imageSource": "https://blcimg-dev.img.bluelightcard.co.uk/complarge/cover/16519-6847-dev.jpeg",
+        "legacyCompanyId": 16519,
+        "legacyId": 1579,
+        "link": "https://www.staging.bluelightcard.co.uk/p-out.php?lid=1582",
+        "name": "Luke",
+        "startsAt": 1696171637,
+        "status": false,
+        "type": "takeover",
+        "isAgeGated": false
+    },
+    {
+        "id": "17d1dcf2-1948-459b-9407-56967e59b058",
+        "brand": "blc-au",
+        "expiresAt": 1704117660,
+        "imageSource": "https://blcimg-dev.img.bluelightcard.co.uk/complarge/cover/16519-6847-dev.jpeg",
+        "legacyCompanyId": 16519,
+        "legacyId": 1579,
+        "link": "https://www.staging.bluelightcard.co.uk/p-out.php?lid=1582",
+        "name": "Luke",
+        "startsAt": 1696171637,
+        "status": false,
+        "type": "sponsor",
+        "isAgeGated": false
+    }
+]

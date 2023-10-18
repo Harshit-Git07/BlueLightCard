@@ -4,10 +4,8 @@ import { ObjectDynamicKeys } from './types';
 import { TYPE_KEYS } from '@blc-mono/offers/src/utils/global-constants';
 import { OfferHomepageRepository } from '../../../../../repositories/offersHomepageRepository';
 import { unpackJWT } from '../../../../../../../core/src/utils/unpackJWT';
-import { getAge } from '../../../../../../../core/src/utils/getAge';
-import { CompanyDislikes } from '../../../../../services/CompanyDislikes';
-import { UserProfile } from '../../../../../services/UserProfile';
-import { OfferRestriction } from '../../../../../services/OfferRestriction';
+import { MemberProfile } from "../../../../../services/MemberProfile";
+import { OfferRestriction } from "../../../../../services/OfferRestriction";
 
 export class OfferMenusByBrandIdResolver {
   constructor(
@@ -29,28 +27,10 @@ export class OfferMenusByBrandIdResolver {
 
     const authHeader: string = event.request.headers.authorization ?? '';
     const { 'custom:blc_old_id': legacyUserId } = unpackJWT(authHeader);
-    //dislike data from microservice
-    let dislikedCompanyIds: number[] = [];
-    const dislikes = new CompanyDislikes(Number(legacyUserId));
-    const userDislikesRequest = dislikes.getDislikesRequest();
 
-    const profile = new UserProfile(authHeader);
-    const userProfileRequest = profile.getUserProfileRequest();
+    const memberProfileService = new MemberProfile(legacyUserId, authHeader, this.logger);
+    const { organisation, isUnder18, dislikedCompanyIds } = await memberProfileService.getProfile();
 
-    //user profile data for organisation and dob
-    let organisation: string = '';
-    let dob: string = '';
-
-    try {
-      const [dislikeResponse, userProfileResponse] = await Promise.all([userDislikesRequest, userProfileRequest]);
-      dislikedCompanyIds = dislikeResponse.data.data;
-      organisation = userProfileResponse.data.data.profile.organisation;
-      dob = userProfileResponse.data.data.profile.dob;
-    } catch (e) {
-      console.log(e);
-    }
-
-    const isUnder18 = getAge(dob); // calculate from dob
     const restrictOffers = new OfferRestriction(organisation, isUnder18, dislikedCompanyIds);
 
     const menus: ObjectDynamicKeys = {};

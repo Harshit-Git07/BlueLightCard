@@ -15,25 +15,16 @@ export class QueryResolver implements IResolver {
   }
 
   initialise() {
-    this.getBannersByBrandAndTypeResolver();
     this.createQueryLambdaResolver();
     this.getOfferByIdResolver();
     this.getCompanyByIdResolver();
   }
 
-  private getBannersByBrandAndTypeResolver() {
-    this.dataSources.bannersDS.createResolver('GetBannersByBrandAndType', {
-      typeName: 'Query',
-      fieldName: 'getBannersByBrandAndType',
-      requestMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getBannersByBrandAndTypeRequest.vtl`),
-      responseMappingTemplate: MappingTemplate.fromFile(`${this.TEMPLATE_BASE_PATH}/getBannersByBrandAndTypeResponse.vtl`),
-    })
-  }
-
   private createQueryLambdaResolver() {
     const fields = [
       { typeName: 'Query', fieldName: 'getOfferMenusByBrandId' },
-      { typeName: 'Query', fieldName: 'getCategoriesAndCompaniesByBrandId' }
+      { typeName: 'Query', fieldName: 'getCategoriesAndCompaniesByBrandId' },
+      { typeName: 'Query', fieldName: 'getBannersByBrandAndType'}
     ];
     fields.forEach(({ typeName, fieldName }) =>
       this.dataSources.queryLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {

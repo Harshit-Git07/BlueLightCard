@@ -43,6 +43,11 @@ export const handler = async (event: any) => {
     const bucket = s3Record.s3.bucket.name;
     const key = s3Record.s3.object.key;
 
+    if (key === OFFER_MENUS_FILE_NAMES.MARKETPLACE) {
+      logger.warn("slider folder encountered. doing nothing.");
+      return;
+    }
+    
     let id;
     if (bucket.includes(BLC_UK)) {
       id = BLC_UK;

@@ -140,6 +140,6 @@ When('I scroll to the end of the page', async function () {
   await page.locator('#footer_nav').textContent();
 });
 
-Then('I should see copyright footer', async function () {
-  await page.locator('#footer_nav').isVisible();
-});
+ Then('I should see copyright footer', async function () {
+   await page.locator('#footer_nav').isVisible();
+ });

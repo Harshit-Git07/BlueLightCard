@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.6.0...bluelightcard/offers-v1.7.0) (2023-10-18)
+
+
+### Features
+
+* TO-271 add caching to resolvers ([#504](https://github.com/bluelightcard/BlueLightCard-2.0/issues/504)) ([6d2cc2b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6d2cc2b56503451718d13404392f9194e9629b6f))
+* TO-292: updated all the resolvers to apply restrictions ([#501](https://github.com/bluelightcard/BlueLightCard-2.0/issues/501)) ([98854ab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/98854aba063e212ad81e6d62549daa1dbec1fb25))
+
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.5.0...bluelightcard/offers-v1.6.0) (2023-10-18)
 
 

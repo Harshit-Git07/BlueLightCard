@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.5.0...bluelightcard/offers-v1.6.0) (2023-10-18)
+
+
+### Features
+
+* add event notification for buckets to add them in Queue ([#455](https://github.com/bluelightcard/BlueLightCard-2.0/issues/455)) ([7270d37](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7270d37980c4d1249bfad2e79c2239e23024e51b))
+* Add restrictions to homepage offers ([#465](https://github.com/bluelightcard/BlueLightCard-2.0/issues/465)) ([482de17](https://github.com/bluelightcard/BlueLightCard-2.0/commit/482de17260b9967d0e36c7fe976b83675c3a2a52))
+* TO 51 add offers artillery load test ([#398](https://github.com/bluelightcard/BlueLightCard-2.0/issues/398)) ([215bf57](https://github.com/bluelightcard/BlueLightCard-2.0/commit/215bf57a5f8af98469d44ccc5bfa82ca2e3a0b7b))
+* TO-186: fixed banners query ([#495](https://github.com/bluelightcard/BlueLightCard-2.0/issues/495)) ([d9e8f32](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9e8f32d052ea145d9966aede7a6e7f548902798))
+* TO-289: add isAgeGated to banners event bridge handler ([#499](https://github.com/bluelightcard/BlueLightCard-2.0/issues/499)) ([72e7a0c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/72e7a0c4441da1d685e5bfc812ace88ad50d9867))
+
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.4.1...bluelightcard/offers-v1.5.0) (2023-10-06)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.8.0...bluelightcard/offers-v1.9.0) (2023-10-18)
+
+
+### Features
+
+* TO-0: bring back offers lambda queries ([#510](https://github.com/bluelightcard/BlueLightCard-2.0/issues/510)) ([9f910e9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9f910e943684c1e42f66204df149be1f96fb8533))
+
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.7.0...bluelightcard/offers-v1.8.0) (2023-10-18)
 
 

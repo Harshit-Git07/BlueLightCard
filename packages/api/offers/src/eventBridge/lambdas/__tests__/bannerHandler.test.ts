@@ -15,6 +15,7 @@ const mockEvent = {
     end: '2023-08-28 00:00:00',
     status: 1,
     bannername: 'testingimage.jpg',
+    isAgeGated: true,
     link: 'https://www.bluelightcard.co.uk',
     cid: 1234,
   },

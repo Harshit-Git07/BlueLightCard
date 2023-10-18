@@ -181,6 +181,7 @@ type Banner {
   imageSource: String!
   type: String!
   legacyCompanyId: Int!
+  isAgeGated: Boolean!
   brand: String!
 }
 

@@ -137,6 +137,7 @@ export class BannerHandler {
       imageSource: `${bannerDetails.imageLocationPrefix}${this.event.detail.bannername}`,
       type: bannerDetails.bannerType,
       legacyCompanyId: bannerDetails.companyId,
+      isAgeGated: this.event.detail.isAgeGated,
       brand: this.event.detail.brand
     };
   }
@@ -169,6 +170,7 @@ export class BannerHandler {
        imageSource: data.imageSource,
        legacyCompanyId: data.legacyCompanyId,
        legacyId: data.legacyId,
+       isAgeGated: data.isAgeGated,
        link: data.link,
        name: data.name,
        startsAt: data.startsAt,

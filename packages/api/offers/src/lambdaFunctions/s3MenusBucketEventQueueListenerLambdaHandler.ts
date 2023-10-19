@@ -14,12 +14,6 @@ interface DataType {
   value: string;
 }
 
-interface Item {
-  id: string,
-  type: string | undefined
-  json?: { [key: string]: string } | any
-}
-
 const dataType: DataType[] = [
   { key: OFFER_MENUS_FILE_NAMES.CATEGORIES, value: TYPE_KEYS.CATEGORIES },
   { key: OFFER_MENUS_FILE_NAMES.COMPANIES, value: TYPE_KEYS.COMPANIES },
@@ -36,18 +30,13 @@ export const handler = async (event: any) => {
   for (const record of event.Records) {
     const s3Event = JSON.parse(record.body);
     if (!s3Event.Records) {
-      logger.warn("no records found in S3 event");
+      logger.warn("no records found in S3 event", { s3Event });
       return;
     }
     const s3Record = s3Event.Records[0];
     const bucket = s3Record.s3.bucket.name;
     const key = s3Record.s3.object.key;
 
-    if (key === OFFER_MENUS_FILE_NAMES.MARKETPLACE) {
-      logger.warn("slider folder encountered. doing nothing.");
-      return;
-    }
-    
     let id;
     if (bucket.includes(BLC_UK)) {
       id = BLC_UK;
@@ -56,47 +45,35 @@ export const handler = async (event: any) => {
     } else if (bucket.includes(DDS_UK)) {
       id = DDS_UK;
     } else {
-      logger.error("error getting valid bucket name");
-      throw new Error("error getting valid bucket name");
+      logger.warn("error getting valid bucket name", { bucket });
+      return;
     }
 
     let type = dataType.find((data) => key.includes(data.key));
 
     if (!type) {
-      logger.error("error getting valid key");
-      throw new Error("error getting valid key");
+      logger.warn("error getting valid key", { key });
+      return;
     }
 
     const fileData = await getFileData(bucket, key);
 
-    let item: Item = {
+    const item = {
       id,
       type: type?.value,
-      json: {}
+      json: fileData
     };
-
-    if (type?.value === TYPE_KEYS.MARKETPLACE) {
-      const jsonKey = key.replace("sliders/", "");
-      const currentData = await offerHomePageRepository.getByIdAndType({ id, type: type.value });
-
-      if (currentData && currentData.Item) {
-        const currentItem = currentData.Item;
-        currentItem.json = JSON.parse(currentItem.json);
-        currentItem.json[jsonKey] = JSON.parse(fileData);
-        currentItem.json = JSON.stringify(currentItem.json);
-        await offerHomePageRepository.save(currentItem);
-      } else {
-        item.json[jsonKey] = JSON.parse(fileData);
-        item.json = JSON.stringify(item.json);
-        await offerHomePageRepository.save(item);
-      }
-    } else {
-      item.json = fileData;
-      await offerHomePageRepository.save(item);
-    }
+    await offerHomePageRepository.save(item);
   }
 };
 
+/**
+ * Retrieves data from an S3 bucket with the specified bucket and key.
+ *
+ * @param {string} bucket - The name of the S3 bucket.
+ * @param {string} key - The key of the file in the S3 bucket.
+ * @return {Promise<string>} The data fetched from the S3 bucket and converted to a string.
+ */
 async function getFileData(bucket: string, key: string) {
   let s3FileData;
   try {

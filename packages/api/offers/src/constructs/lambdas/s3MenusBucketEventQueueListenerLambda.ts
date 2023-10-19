@@ -37,7 +37,6 @@ export class S3MenusBucketEventQueueListenerLambda extends LambdaAbstract {
   private addEventSource(lambdaFunction: NodejsFunction): void {
     lambdaFunction.addEventSource(new SqsEventSource(this.queues.s3MenusBucketEventQueue.cdk.queue, {
       enabled: true,
-      batchSize: 10,
     }))
   }
 }

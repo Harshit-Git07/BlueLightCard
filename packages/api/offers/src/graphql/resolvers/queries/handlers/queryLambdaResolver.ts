@@ -16,7 +16,7 @@ class ResolverHandler {
     this.logger.info('ResolverHandler Started');
     const brandId = getBrandId(event, this.logger);
 
-    const cacheService = new CacheService(process.env.STAGE as string);
+    const cacheService = new CacheService(process.env.STAGE as string, this.logger);
 
     const bannerTableName = process.env.BANNER_TABLE as string;
     const offerHomePageTableName = process.env.OFFER_HOMEPAGE_TABLE as string;

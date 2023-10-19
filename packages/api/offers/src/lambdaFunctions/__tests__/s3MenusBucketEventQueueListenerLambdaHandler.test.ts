@@ -122,75 +122,30 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
 
   });
 
-  it('should process an SQS S3 event for MARKETPLACE type and save data to DynamoDB for first Item', async () => {
-    const key = `${OFFER_MENUS_FILE_NAMES.MARKETPLACE}/1.txt`;
-    const event = createEvent(key, bucketName);
-    const slider = await getFileData(key);
-    s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: key }).resolves({
-      Body: toReadableStream(slider) as any
+  it('should process an SQS S3 event for MARKETPLACE type and save data to DynamoDB', async () => {
+    const event = createEvent(OFFER_MENUS_FILE_NAMES.MARKETPLACE, bucketName);
+    const marketPlaces = await getFileData(OFFER_MENUS_FILE_NAMES.MARKETPLACE);
+    s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.MARKETPLACE }).resolves({
+      Body: toReadableStream(marketPlaces) as any
     })
 
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.MARKETPLACE, slider.toString()));
-    dynamoDbMock.on(GetCommand).resolves({});
+    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.MARKETPLACE, marketPlaces.toString()));
 
     await handler(event);
 
-    expect(dynamoDbMock.calls()).toHaveLength(2);
+    expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
+
   });
 
-  it('should process an SQS S3 event for MARKETPLACE type and save data to DynamoDB for existing Item', async () => {
-    const key = `${OFFER_MENUS_FILE_NAMES.MARKETPLACE}/1.txt`;
-    const event = createEvent(key, bucketName);
-    const slider = await getFileData(key);
-    s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: key }).resolves({
-      Body: toReadableStream(slider) as any
-    })
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.MARKETPLACE, slider.toString()));
-    dynamoDbMock.on(GetCommand).resolves({
-      Item: {
-        id: BLC_UK,
-        type: OFFER_MENUS_FILE_NAMES.MARKETPLACE,
-        json: '{"1.txt":{"test":"123"},"2.txt":{"test":"123"}}'
-      }
-    });
-
-    await handler(event);
-
-    expect(dynamoDbMock.calls()).toHaveLength(2);
-    expect(s3Mock.calls()).toHaveLength(1);
-  });
-
-  it('should process an SQS S3 event for MARKETPLACE type and save data to DynamoDB for add to existing field', async () => {
-    const key = `${OFFER_MENUS_FILE_NAMES.MARKETPLACE}/1.txt`;
-    const event = createEvent(key, bucketName);
-    const slider = await getFileData(key);
-    s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: key }).resolves({
-      Body: toReadableStream(slider) as any
-    })
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.MARKETPLACE, slider.toString()));
-    dynamoDbMock.on(GetCommand).resolves({
-      Item: {
-        id: BLC_UK,
-        type: OFFER_MENUS_FILE_NAMES.MARKETPLACE,
-        json: '{"1.txt":{"test":"123"},"2.txt":{"test":"123"}}'
-      }
-    });
-
-    await handler(event);
-
-    expect(dynamoDbMock.calls()).toHaveLength(2);
-    expect(s3Mock.calls()).toHaveLength(1);
-  });
-
-  it('should throw error if id is not found in bucket name', async () => {
+  it('should be undefined if id is not found in bucket name', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.FEATURED, 'invalid-bucket-name');
-    await expect(handler(event)).rejects.toThrowError('error getting valid bucket name');
+    await expect(handler(event)).resolves.toBeUndefined();
   });
 
-  it('should throw error if key is not found in valid types', async () => {
+  it('should be undefined if key is not found in valid types', async () => {
     const event = createEvent('INVALID_KEY', bucketName);
-    await expect(handler(event)).rejects.toThrowError('error getting valid key');
+    await expect(handler(event)).resolves.toBeUndefined();
   });
 
   it('it should return nothing if no records found in S3 event', async () => {

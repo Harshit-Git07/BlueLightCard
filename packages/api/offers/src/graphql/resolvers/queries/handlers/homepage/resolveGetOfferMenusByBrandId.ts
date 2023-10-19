@@ -60,22 +60,24 @@ export class OfferMenusByBrandIdResolver {
     const numberOfSliders = Object.keys(marketPlaceMenus).length;
     const slidersFileArray = Array.from({ length: numberOfSliders }, (value, index) => `${index + 1}.txt`);
 
-    const formattedMarketPlaceMenus = slidersFileArray.map((key: string) => {
+    const formattedMarketPlaceMenus = slidersFileArray.reduce((accumulator: any [], key: string) => {
       const slider = marketPlaceMenus[key];
-
-      if (slider.items) {
-        slider.items = Object.entries(slider.items).reduce((accumulator: { id: String; item: any }[], [id, item]) => {
-          if (!restrictOffers.isMarketPlaceMenuItemRestricted(item)) {
-            accumulator.push({
-              id,
-              item,
-            });
-          }
-          return accumulator;
-        }, []);
+      if (!slider.hidden) {
+        if (slider.items) {
+          slider.items = Object.entries(slider.items).reduce((accumulator: { id: String; item: any }[], [id, item]) => {
+            if (!restrictOffers.isMarketPlaceMenuItemRestricted(item)) {
+              accumulator.push({
+                id,
+                item,
+              });
+            }
+            return accumulator;
+          }, []);
+        }
+        accumulator.push(slider);
       }
-      return slider;
-    });
+      return accumulator;
+    }, []);
 
     const flexibleMenus = menus[TYPE_KEYS.FLEXIBLE];
 

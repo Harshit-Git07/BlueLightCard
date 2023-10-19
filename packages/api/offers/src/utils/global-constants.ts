@@ -19,7 +19,7 @@ export const enum OFFER_MENUS_FILE_NAMES {
     CATEGORIES = 'categories.txt',
     COMPANIES = 'compListData.txt',
     POPULAR = 'popularoffersPDO.txt',
-    MARKETPLACE = 'sliders',
+    MARKETPLACE = 'marketplace.txt',
 }
 
 export enum ENDPOINTS {

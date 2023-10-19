@@ -1,24 +1,38 @@
 import Redis from "ioredis";
 import { isDev } from '../../../core/src/utils/checkEnvironment';
+import { Logger } from '@aws-lambda-powertools/logger';
 
 export class CacheService {
 
-  private readonly redisClient = new Redis({
-    host: process.env.REDIS_ENDPOINT!,
-    port: parseInt(process.env.REDIS_PORT! as string),
-  });
+  private redisClient: Redis | any;
 
-  constructor(private readonly stage: string) {}
+  constructor(private readonly stage: string, private logger: Logger) {
+    if (!isDev(this.stage)) {
+      this.redisClient = new Redis({
+        host: process.env.REDIS_ENDPOINT!,
+        port: parseInt(process.env.REDIS_PORT! as string),
+      });
+    }
+  }
 
   async set(key: string, value: any, ttl: number) {
     if (!isDev(this.stage)) {
-      this.redisClient.set(key, value, 'EX', ttl);
+      try {
+        this.redisClient.set(key, value, 'EX', ttl);
+      }catch (error) {
+        this.logger.error('Error setting cache', { error, key });
+      }
     }
   }
 
   async get(key: string) {
     if (isDev(this.stage)) return null;
-
-    return this.redisClient.get(key);
+    try {
+      const data = await this.redisClient.get(key);
+      return data
+    }catch (error) {
+      this.logger.error('Error getting cache', { error, key });
+      return null;
+    }
   }
 }

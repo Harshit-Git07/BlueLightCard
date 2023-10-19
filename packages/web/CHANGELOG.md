@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.15.0...bluelightcard/web-v1.15.1) (2023-10-19)
+
+
+### Bug Fixes
+
+* home page visuals ([#515](https://github.com/bluelightcard/BlueLightCard-2.0/issues/515)) ([b58d89a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b58d89a055abb87355de36f24f3cef158516fbe6))
+
 ## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.14.0...bluelightcard/web-v1.15.0) (2023-10-18)
 
 

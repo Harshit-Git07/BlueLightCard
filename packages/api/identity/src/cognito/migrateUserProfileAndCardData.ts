@@ -25,7 +25,7 @@ const client = new DynamoDBClient({});
 const dynamodb = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event: any, context: any) => {
-  logger.info('event received', event);
+  logger.debug('event received', event);
   const brand = (event.detail !== undefined || event.detail !== null) ? event.detail.brand?.toUpperCase() : null;
 
   if (brand == null) {

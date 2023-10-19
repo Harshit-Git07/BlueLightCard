@@ -10,6 +10,9 @@ import { companiesCategoriesQuery } from '../../../graphql/homePageQueries';
 import makeQuery from '../../../graphql/makeQuery';
 import { redirectToLogin } from '@/hoc/withAuth';
 import { useRouter } from 'next/router';
+import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/pro-solid-svg-icons';
 
 const sortByAlphabeticalOrder = (a: CategoryType | CompanyType, b: CategoryType | CompanyType) => {
   if (a.name < b.name) return -1;
@@ -28,11 +31,13 @@ const Search: FC<SearchProps> = ({
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [companies, setCompanies] = useState<CompanyType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const changeCompanyHandler = (event: any) => {
     const company =
       event?.target.value && companies && companies.find((comp) => comp.id == event?.target.value);
     if (!company) return;
+    setIsSearching(true);
     onSearchCompanyChange(company.id, company.name);
   };
 
@@ -40,11 +45,13 @@ const Search: FC<SearchProps> = ({
     const category =
       event?.target.value && categories && categories.find((cat) => cat.id == event?.target.value);
     if (!category) return;
+    setIsSearching(true);
     onSearchCategoryChange(category.id, category.name);
   };
 
   const searchTermHandler = () => {
     if (!searchTerm) return;
+    setIsSearching(true);
     onSearchTerm(searchTerm);
   };
 
@@ -79,7 +86,7 @@ const Search: FC<SearchProps> = ({
     };
 
     fetchData();
-  }, []);
+  }, [router]);
 
   const loadingText = 'Loading...';
   const companyDefaultOption = isLoading ? loadingText : 'by company';
@@ -141,8 +148,19 @@ const Search: FC<SearchProps> = ({
                 />
               </div>
               <div data-testid="searchNowBtn">
-                <Button className="w-full text" onClick={searchTermHandler}>
-                  Search now
+                <Button
+                  className="w-full text"
+                  onClick={searchTermHandler}
+                  disabled={isSearching || isLoading}
+                >
+                  {isLoading || isSearching ? (
+                    <LoadingPlaceholder
+                      containerClassName="text-palette-white"
+                      spinnerClassName="text-[1.5em]"
+                    />
+                  ) : (
+                    <>Search now</>
+                  )}
                 </Button>
               </div>
             </form>

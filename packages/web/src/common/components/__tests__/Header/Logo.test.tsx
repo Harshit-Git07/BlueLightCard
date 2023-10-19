@@ -16,7 +16,7 @@ describe('Logo component', () => {
   describe('Logo contains an image', () => {
     it('Should render the logo correctly', () => {
       render(<Logo url={navItems.links.homeUrl} />);
-      const logo = screen.getByAltText(/Blue Light Card Logo/i);
+      const logo = screen.getByAltText(/Navigate Home/i);
       expect(logo).toBeTruthy();
     });
   });

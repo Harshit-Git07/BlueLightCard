@@ -11,9 +11,10 @@ const Logo: React.FC<LogoProps> = ({ url = '/' }) => {
     <Link
       href={url}
       className="relative block h-[40px] max-w-[197px] tablet:max-w-[226px] hover:opacity-100"
-      data-testid="blc-logo"
+      data-testid="brandLogo"
+      aria-label="Navigate Home"
     >
-      <BrandLogo alt="Blue Light Card Logo" />
+      <BrandLogo alt="Navigate Home" />
     </Link>
   );
 };

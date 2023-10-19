@@ -1,5 +1,4 @@
 import React from 'react';
-import useIsDarkMode from '@/hooks/useIsDarkMode';
 
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,8 +21,6 @@ const SwiperCarousel: React.FC<CarouselProps> = ({
   hideArrows = false,
   hidePillButtons = false,
 }) => {
-  const isDarkMode = useIsDarkMode();
-
   const autoPlayConfig = autoPlay
     ? { delay: autoPlayIntervalMs, disableOnInteraction: false }
     : false;
@@ -32,9 +29,7 @@ const SwiperCarousel: React.FC<CarouselProps> = ({
 
   const navigation = !hideArrows ? true : false;
 
-  const swiperModeClass = isDarkMode ? `swiper-dark` : 'swiper-light';
-  const swiperPaginationEnabledClass = paginationConfig ? `swiper-pagination-enabled` : '';
-  const className = `${swiperModeClass} ${swiperPaginationEnabledClass}`;
+  const className = paginationConfig ? `swiper-pagination-enabled` : '';
 
   return (
     <Swiper

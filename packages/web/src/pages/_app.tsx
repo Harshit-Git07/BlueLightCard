@@ -26,6 +26,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
+        {/* TODO: Remove this meta tag when dark mode is enabled */}
+        <meta name="color-scheme" content="light only" />
+
         {/* Cache control - Cache for 1 day, could be more? 30days? 1yr? */}
         <meta httpEquiv="cache-control" content="max-age=86400" />
 

@@ -6,6 +6,8 @@
 
 .swiper {
   --swiper-navigation-size: 12px;
+  --swiper-theme-color: var(--primary-color);
+  --swiper-pagination-color: var(--swiper-theme-color); 
 }
 
 .swiper-pagination-enabled {
@@ -13,17 +15,13 @@
   padding-bottom: 2rem !important;
 }
 
-/* Light mode branding */
-.swiper-light {
-    --swiper-theme-color: var(--primary-color);
-    --swiper-pagination-color: var(--swiper-theme-color); 
-}
-
-/* Dark mode branding */
-.swiper-dark {
-    --swiper-theme-color: var(--secondary-color);
-    --swiper-pagination-color: var(--swiper-theme-color); 
-}
+/* TODO: Reenable in part 2: When dark mode returns. */
+/* @media(prefers-color-scheme: dark) {
+    .swiper {
+        --swiper-theme-color: var(--secondary-color);
+        --swiper-pagination-color: var(--swiper-theme-color); 
+    }
+} */
 
 .swiper-button-prev, .swiper-button-next {
   background: #000000cc;

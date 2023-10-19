@@ -7,6 +7,7 @@ import AuthContext from '@/context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { LOGOUT_ROUTE } from '@/global-vars';
+import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 
 export function redirectToLogin(router: any) {
   if (process.env.NODE_ENV == 'production') {
@@ -32,12 +33,10 @@ const withAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
         {authContext.isUserAuthenticated() ? (
           <AuthComponent {...props} />
         ) : (
-          <div className="w-full h-[100vh] flex justify-center">
-            <FontAwesomeIcon
-              icon={faSpinner}
-              className="animate-spin m-auto text-[5em] text-palette-primary dark:text-palette-secondary"
-            />
-          </div>
+          <LoadingPlaceholder
+            containerClassName="w-full h-[100vh]"
+            spinnerClassName="text-[5em] text-palette-primary dark:text-palette-secondary"
+          />
         )}
       </>
     );

@@ -8,7 +8,7 @@ interface BellIconProps {
 }
 
 const BellIcon: React.FC<BellIconProps> = ({ url }) => (
-  <Link href={url}>
+  <Link href={url} aria-label="Notification's">
     <FontAwesomeIcon
       icon={faBell}
       className="text-palette-white h-[20px] cursor-pointer hover:text-palette-secondary ease-in duration-100"

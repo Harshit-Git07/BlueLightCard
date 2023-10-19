@@ -31,6 +31,20 @@ function cleanText(text: string) {
     .replace(/&pound;/g, '£');
 }
 
+const finalFallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
+
+function handleImageFallbacks(
+  primaryImage: string | undefined,
+  secondaryImage: string | undefined
+) {
+  if (primaryImage && primaryImage !== '') return primaryImage;
+
+  if (secondaryImage && secondaryImage !== '')
+    return getCDNUrl(`/companyimages/complarge/retina/${secondaryImage}`);
+
+  return finalFallbackImage;
+}
+
 const HomePage: NextPage<any> = () => {
   // Store data states
   const [banners, setBanners] = useState<BannerType[]>([]);
@@ -38,6 +52,7 @@ const HomePage: NextPage<any> = () => {
   const [marketplaceMenus, setMarketplaceMenus] = useState<MarketPlaceMenuType[]>([]);
   const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
   const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   // Handle loading states
   const [loadingError, setLoadingError] = useState(false);
@@ -63,6 +78,8 @@ const HomePage: NextPage<any> = () => {
       } catch (error) {
         setLoadingError(true);
       }
+
+      setHasLoaded(true);
     };
 
     fetchData();
@@ -72,9 +89,7 @@ const HomePage: NextPage<any> = () => {
   const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({
     offername: cleanText(offer.offername),
     companyname: cleanText(offer.companyname),
-    imageUrl: offer.image
-      ? offer.image
-      : getCDNUrl(`/companyimages/complarge/retina/${offer.logos}`),
+    imageUrl: handleImageFallbacks(offer.image, offer.logos),
     href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
   }));
 
@@ -82,7 +97,7 @@ const HomePage: NextPage<any> = () => {
     .map((offer: FlexibleMenuType, index: number) => ({
       hide: offer.hide,
       offername: cleanText(offer.title),
-      imageUrl: cleanText(offer.imagehome),
+      imageUrl: offer.imagehome ? offer.imagehome : finalFallbackImage,
       href: `/flexibleOffers.php?id=${index}`,
     }))
     .filter((offer) => !offer.hide);
@@ -91,9 +106,7 @@ const HomePage: NextPage<any> = () => {
     companyname: cleanText(offer.companyname),
     offername: cleanText(offer.offername),
     href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
-    imageUrl: offer.image
-      ? offer.image
-      : getCDNUrl(`/companyimages/complarge/retina/${offer.logos}`),
+    imageUrl: handleImageFallbacks(offer.image, offer.logos),
   }));
 
   return (
@@ -109,56 +122,66 @@ const HomePage: NextPage<any> = () => {
       )}
 
       {/* Promo banner carousel */}
-      <Container className="py-5" data-testid="homepage-sponsor-banners" addBottomHorizontalLine>
-        <SwiperCarousel
-          autoPlay
-          elementsPerPageLaptop={1}
-          elementsPerPageDesktop={1}
-          elementsPerPageTablet={1}
-          elementsPerPageMobile={1}
-          hidePillButtons
-        >
-          {banners.length > 0 ? (
-            banners.map((banner: any, index: number) => (
-              <PromoBanner
-                key={index}
-                image={banner.imageSource}
-                href={banner.link}
-                id={'promoBanner' + index}
-              />
-            ))
-          ) : (
-            <PromoBannerPlaceholder />
-          )}
-        </SwiperCarousel>
-      </Container>
+      {(banners.length > 0 || !hasLoaded) && (
+        <Container className="py-5" data-testid="homepage-sponsor-banners" addBottomHorizontalLine>
+          <SwiperCarousel
+            autoPlay
+            elementsPerPageLaptop={1}
+            elementsPerPageDesktop={1}
+            elementsPerPageTablet={1}
+            elementsPerPageMobile={1}
+            hidePillButtons
+          >
+            {banners.length > 0 ? (
+              banners.map((banner: any, index: number) => (
+                <PromoBanner
+                  key={index}
+                  image={banner.imageSource}
+                  href={banner.link}
+                  id={'promoBanner' + index}
+                />
+              ))
+            ) : (
+              <PromoBannerPlaceholder />
+            )}
+          </SwiperCarousel>
+        </Container>
+      )}
 
       {/* Deals of the week carousel */}
-
-      <Container
-        className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
-        addBottomHorizontalLine
-        data-testid="deals-carousel"
-      >
-        <CardCarousel title="Deals of the week" itemsToShow={2} offers={dealsOfTheWeekOffersData} />
-      </Container>
+      {(dealsOfTheWeekOffersData.length > 0 || !hasLoaded) && (
+        <Container
+          className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+          addBottomHorizontalLine
+          data-testid="deals-carousel"
+        >
+          <CardCarousel
+            title="Deals of the week"
+            itemsToShow={2}
+            offers={dealsOfTheWeekOffersData}
+          />
+        </Container>
+      )}
 
       {/* Flexible offers carousel */}
-      <Container
-        className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
-        addBottomHorizontalLine
-        data-testid="flexi-menu-carousel"
-      >
-        <CardCarousel
-          title={'Ways to Save'}
-          itemsToShow={3}
-          useSmallCards
-          offers={flexibleOffersData}
-        />
-      </Container>
+      {(flexibleOffersData.length > 0 || !hasLoaded) && (
+        <Container
+          className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+          addBottomHorizontalLine
+          data-testid="flexi-menu-carousel"
+        >
+          <CardCarousel
+            title={'Ways to Save'}
+            itemsToShow={3}
+            useSmallCards
+            offers={flexibleOffersData}
+          />
+        </Container>
+      )}
 
       {/* Marketplace carousels */}
       {marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
+        if (menu.items.length === 0 || menu.hidden) return <></>;
         return (
           <Container
             className="py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
@@ -173,7 +196,7 @@ const HomePage: NextPage<any> = () => {
                 return {
                   offername: cleanText(item.offername),
                   companyname: cleanText(item.companyname),
-                  imageUrl: item.image,
+                  imageUrl: handleImageFallbacks(item.image, item.logos),
                   href: `/offerdetails.php?cid=${item.compid}&oid=${item.id}`,
                 };
               })}
@@ -183,13 +206,15 @@ const HomePage: NextPage<any> = () => {
       })}
 
       {/* Featured offers carousel */}
-      <Container
-        className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
-        addBottomHorizontalLine
-        data-testid="featured-menu-carousel"
-      >
-        <CardCarousel title="Featured Offers" itemsToShow={3} offers={featuredOffersData} />
-      </Container>
+      {(featuredOffersData.length > 0 || !hasLoaded) && (
+        <Container
+          className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+          addBottomHorizontalLine
+          data-testid="featured-menu-carousel"
+        >
+          <CardCarousel title="Featured Offers" itemsToShow={3} offers={featuredOffersData} />
+        </Container>
+      )}
     </>
   );
 };

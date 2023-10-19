@@ -30,11 +30,13 @@ export const homePageQuery = (brand: string) => gql`
             companyname
             offername
             image
+            logos
             compid
             id
           }
         }
         name
+        hidden
       }
       # Featured offers
       features {

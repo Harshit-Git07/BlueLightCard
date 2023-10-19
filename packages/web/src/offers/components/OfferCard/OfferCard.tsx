@@ -23,7 +23,7 @@ const OfferCard: FC<OfferCardProps> = ({
   return (
     <div className={`w-full h-full relative pb-5 mb-2 ${backgroundRootClasses}`} data-testid={id}>
       <Link href={offerLink} useLegacyRouting>
-        <div>
+        <div className="w-full h-auto aspect-[2/1] bg-gray-200">
           <Image
             src={imageSrc}
             alt={alt}

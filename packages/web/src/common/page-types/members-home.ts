@@ -20,11 +20,13 @@ export type MarketPlaceItemType = {
     image: string;
     compid: string;
     id: string;
+    logos: string;
   };
 };
 
 export type MarketPlaceMenuType = {
   name: string;
+  hidden: boolean;
   items: MarketPlaceItemType[];
 };
 

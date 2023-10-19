@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.23.1...bluelightcard/identity-v1.24.0) (2023-10-19)
+
+
+### Features
+
+* Feat/add companies ([#505](https://github.com/bluelightcard/BlueLightCard-2.0/issues/505)) ([b11ab1a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b11ab1a32542596d6861f7b7b4c76b7c7ae92ed2))
+* Ti 547 cognito user pool for dds ([#506](https://github.com/bluelightcard/BlueLightCard-2.0/issues/506)) ([86fe284](https://github.com/bluelightcard/BlueLightCard-2.0/commit/86fe2840c7eb29457b47ae17b41c041f68ee7782))
+
 ## [1.23.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.23.0...bluelightcard/identity-v1.23.1) (2023-10-16)
 
 

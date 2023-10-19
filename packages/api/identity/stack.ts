@@ -28,7 +28,8 @@ export function Identity({stack}: StackContext) {
     regionEnv = region;
   }
 
-  const appSecret = Secret.fromSecretNameV2(stack,'app-secret',"blc-mono-identity/staging/cognito");
+  const stageSecret = stack.stage === 'production' || stack.stage === 'staging' ? stack.stage : 'staging';
+  const appSecret = Secret.fromSecretNameV2(stack,'app-secret',`blc-mono-identity/${stageSecret}/cognito`);
 
   //db - identityTable
   const identityTable = new Table(stack, 'identityTable', {

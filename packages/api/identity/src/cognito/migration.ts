@@ -9,9 +9,9 @@ import { setDate } from './../../../core/src/utils/setDate';
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
-const blcApiUrl = process.env.BLC_API_URL
-const blcApiAuth = process.env.BLC_API_AUTH
-const logger = new Logger({ serviceName: `${service}-verify` })
+const apiUrl = process.env.API_URL
+const apiAuth = process.env.API_AUTH
+const logger = new Logger({ serviceName: `${service}-migration` });
 const sqs = new SQS();
 async function sendToDLQ(event: any) {
     const dlqUrl = process.env.DLQ_URL || '';
@@ -40,11 +40,11 @@ const authenticateUser = async (username: string, password: string) => {
     try {
         const response = await axios({
             method: 'get',
-            url: `${blcApiUrl}/api/4/user/login.php?mode=1&audit=false`,
+            url: `${apiUrl}/api/4/user/login.php?mode=1&audit=false`,
             headers: {
                 "x-duo-user": base64.encode(username),
                 "x-duo-password": base64.encode(password),
-                "Authorization": `Basic ${blcApiAuth}`
+                "Authorization": `Basic ${apiAuth}`
             }
         })
         logger.debug("old login response", { response })

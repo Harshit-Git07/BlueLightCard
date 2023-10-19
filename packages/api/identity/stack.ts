@@ -1,6 +1,6 @@
 import {ApiGatewayV1Api, Cognito, Queue, StackContext, Table, use} from 'sst/constructs';
 import {CfnUserPoolClient, StringAttribute} from 'aws-cdk-lib/aws-cognito';
-import {StringParameter} from 'aws-cdk-lib/aws-ssm';
+import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
 import {Shared} from '../../../stacks/stack';
 import {passwordResetRule} from './src/eventRules/passwordResetRule';
 import {userStatusUpdatedRule} from './src/eventRules/userStatusUpdated';
@@ -21,21 +21,14 @@ export function Identity({stack}: StackContext) {
   stack.tags.setTag('service', 'identity');
   stack.tags.setTag('map-migrated', 'd-server-017zxazumgiycz');
 
-  //ssm parameters
-  const stage = stack.stage;
-  let ssmEnv = 'staging';
-  switch (stage) {
-    case 'staging':
-      ssmEnv = 'staging';
-      break;
-    case 'production':
-      ssmEnv = 'production';
-      break;
-    default:
-      ssmEnv = 'staging';
+  //Region
+  const region = stack.region;
+  let regionEnv = 'eu-west-2';
+  if (region !== undefined || region !== null){
+    regionEnv = region;
   }
-  const blcApiUrl = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/url`);
-  const blcApiAuth = StringParameter.valueFromLookup(stack, `/identity/${ssmEnv}/blc-old/api/auth`);
+
+  const appSecret = Secret.fromSecretNameV2(stack,'app-secret',"blc-mono-identity/staging/cognito");
 
   //db - identityTable
   const identityTable = new Table(stack, 'identityTable', {
@@ -69,6 +62,7 @@ export function Identity({stack}: StackContext) {
   const { bus } = use(Shared);
   //add dead letter queue
   const dlq = new Queue(stack, 'DLQ');
+  
 
   //auth
   const cognito = new Cognito(stack, 'cognito', {
@@ -78,12 +72,12 @@ export function Identity({stack}: StackContext) {
         handler: 'packages/api/identity/src/cognito/migration.handler',
         environment: {
           SERVICE: 'identity',
-          BLC_API_URL: blcApiUrl,
-          BLC_API_AUTH: blcApiAuth,
+          API_URL: appSecret.secretValueFromJson('blc_url').toString(),
+          API_AUTH: appSecret.secretValueFromJson('blc_auth').toString(),
           EVENT_BUS: bus.eventBusName,
           EVENT_SOURCE: 'user.signin.migrated',
           DLQ_URL: dlq.queueUrl,
-          REGION: 'eu-west-2'
+          REGION: region
         },
         permissions: [bus]
       }
@@ -96,7 +90,39 @@ export function Identity({stack}: StackContext) {
         },
         customAttributes: {
           blc_old_id: new StringAttribute({ mutable: true }),
-          blc_old_uuid: new StringAttribute({ mutable: true })
+          blc_old_uuid: new StringAttribute({ mutable: true }),
+        },
+      },
+    },
+  });
+
+  //auth - DDS
+  const cognito_dds = new Cognito(stack, 'cognito_dds', {
+    login: ['email'],
+    triggers: {
+      userMigration: {
+        handler: 'packages/api/identity/src/cognito/migration.handler',
+        environment: {
+          SERVICE: 'identity',
+          API_URL: appSecret.secretValueFromJson('dds_url').toString(),
+          API_AUTH: appSecret.secretValueFromJson('dds_auth').toString(),
+          EVENT_BUS: bus.eventBusName,
+          EVENT_SOURCE: 'user.signin.migrated',
+          DLQ_URL: dlq.queueUrl,
+          REGION: region
+        },
+        permissions: [bus]
+      }
+    },
+    cdk: {
+      userPool: {
+        standardAttributes: {
+          email: { required: true, mutable: true },
+          phoneNumber: { required: true, mutable: true },
+        },
+        customAttributes: {
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
       },
     },
@@ -155,6 +181,7 @@ export function Identity({stack}: StackContext) {
     });
     stack.addOutputs({
       CognitoUserPooMembersClient: cognito.userPoolId,
+      CognitoDdsUserPooMembersClient: cognito_dds.userPoolId,
       Table: identityTable.tableName,
       IdentityApiEndpoint: identityApi.url,
     });
@@ -168,6 +195,7 @@ export function Identity({stack}: StackContext) {
     
     stack.addOutputs({
       CognitoUserPoolWebClient: cognito.userPoolId,
+      CognitoDdsUserPoolWebClient: cognito_dds.userPoolId,
     });
 
     const cfnUserPoolClient = webClient.node.defaultChild as CfnUserPoolClient;

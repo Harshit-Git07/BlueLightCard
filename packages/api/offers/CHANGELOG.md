@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.9.0...bluelightcard/offers-v1.10.0) (2023-10-19)
+
+
+### Features
+
+* updated event listener to accept MarketPlace file ([#516](https://github.com/bluelightcard/BlueLightCard-2.0/issues/516)) ([0281af5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0281af5f078ff3950780d8375b68d458971f953a))
+
 ## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.8.0...bluelightcard/offers-v1.9.0) (2023-10-18)
 
 

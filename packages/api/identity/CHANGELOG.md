@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.24.0...bluelightcard/identity-v1.25.0) (2023-10-19)
+
+
+### Features
+
+* change to debug ([#518](https://github.com/bluelightcard/BlueLightCard-2.0/issues/518)) ([4f4c10b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4f4c10b461887c4dde52161f5f45c3fd88f0b735))
+
 ## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.23.1...bluelightcard/identity-v1.24.0) (2023-10-19)
 
 

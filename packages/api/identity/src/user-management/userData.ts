@@ -8,6 +8,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { isEmpty } from 'lodash';
 import { unpackJWT } from './unpackJWT';
+import {CompanyFollowsModel} from "../models/companyFollows";
 
 const service: string = process.env.service as string;
 
@@ -49,6 +50,7 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     logger.debug('Member Query Results ', results);
 
     let userDetails = {};
+    let companyFollowsDetails:CompanyFollows[]  = [];
     let cardDetails = {};
     let brandDetails = {};
 
@@ -59,13 +61,16 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
         cardDetails = CardModel.parse(i)
       } else if (i.sk.includes('BRAND')) {
         brandDetails = BrandModel.parse(i)
-      } 
+      } else if (i.sk.includes('COMPANYFOLLOWS')) {
+        companyFollowsDetails.push(CompanyFollowsModel.parse(i))
+      }
     })
 
     if(!isEmpty(userDetails)) {
       let responseModel = {
         profile: userDetails,
         card: cardDetails,
+        companies_follows: companyFollowsDetails,
         ...brandDetails,
       }
       logger.info("User Found", responseModel);
@@ -78,3 +83,8 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     return Response.Error(error as Error);
   }
 };
+
+type CompanyFollows = {
+    companyId: string,
+    likeType: string
+}

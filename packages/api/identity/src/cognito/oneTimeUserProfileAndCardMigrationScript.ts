@@ -62,7 +62,8 @@ const database = process.env.DATABASE;
 const region = process.env.REGION ?? 'eu-west-2';
 const userPoolId = process.env.USER_POOL_ID; 
 const tableName = process.env.DYNAMO_TABLE
- 
+const idMappingTableName = process.env.DYNAMO_ID_MAPPING_TABLE
+
 
 export async function migrate(): Promise<{status: string, message: string}> {
   if (host === '' || brand === '' || password === '' || user === '' || userPoolId === '' || tableName === ''){
@@ -143,8 +144,16 @@ export async function migrate(): Promise<{status: string, message: string}> {
           },
           TableName: tableName
       };
+      const idMappingParams = {
+          Item: {
+            legacy_id: `BRAND#${brand}#${row.id}`,
+            uuid: row.uuid,
+          },
+          TableName: idMappingTableName
+      };
       try {
         promises.push(dynamodb.send(new PutCommand(userParams)));
+        promises.push(dynamodb.send(new PutCommand(idMappingParams)));
         await fs.writeFile(successfullCardMigrationsFile, `${row.uuid}\n`, { flag: 'a' });
       } catch (err: any) {
         await fs.writeFile(failedCardMigrationsFile, `Failed to add user data item to dynamo ${row.uuid} - ${reason ?? (err as Error).message}}\n`, { flag: 'a' });

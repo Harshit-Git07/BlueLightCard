@@ -12,6 +12,7 @@ import {userSignInMigratedRule} from './src/eventRules/userSignInMigratedRule';
 import {cardStatusUpdatedRule} from './src/eventRules/cardStatusUpdatedRule';
 import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
+import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedRule";
 
 export function Identity({stack}: StackContext) {
   const {certificateArn} = use(Shared);
@@ -46,6 +47,14 @@ export function Identity({stack}: StackContext) {
     globalIndexes: {
       gsi1: { partitionKey: 'sk', sortKey: 'pk' },
     }
+  });
+
+  const idMappingTable = new Table(stack, 'identityIdMappingTable', {
+    fields: {
+      uuid: 'string',
+      legacy_id: 'string',
+    },
+    primaryIndex: { partitionKey: 'legacy_id', sortKey: 'uuid' },
   });
 
   //db - trackingDataTable
@@ -169,9 +178,10 @@ export function Identity({stack}: StackContext) {
   bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl));
   bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl));
-  bus.addRules(stack, userSignInMigratedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
+  bus.addRules(stack, userSignInMigratedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
   bus.addRules(stack, cardStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
-  bus.addRules(stack, userProfileUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
+  bus.addRules(stack, userProfileUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+  bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
   return {
     identityApi,
     cognito

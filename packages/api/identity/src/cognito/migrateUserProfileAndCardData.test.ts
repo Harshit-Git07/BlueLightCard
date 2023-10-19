@@ -66,25 +66,6 @@ describe('Migrate User Profile And Card Data', () => {
         });
     });
 
-    test('Returns 400 with message when cardId is missing', async () => {
-        
-        const res = await handler(
-            {
-                headers: {},
-                body: { },
-                detail: { brand: 'blc_uk', uuid: 'pk-6y3yjd6-bysh22-kdhfo', legacyUserId: '20',profileUuid: 'tyu637g-zbc32-bxvm48hg-kjdy'}
-            },
-            {},
-        );
-        expect(res).toEqual({
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
-            },
-            statusCode: 400, body: JSON.stringify({ message: 'Required parameters are missing' })
-        });
-    });
-
     test('Returns 400 with message when legacyUserId is empty', async () => {
         
         const res = await handler(

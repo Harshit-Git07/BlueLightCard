@@ -7,6 +7,7 @@ import { BRANDS } from './../../../core/src/types/brands.enum';
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
 const service: string = process.env.SERVICE as string
 const tableName = process.env.TABLE_NAME;
+const idMappingtableName = process.env.ID_MAPPING_TABLE_NAME;
 const logger = new Logger({ serviceName: `${service}-migrateUserProfileAndCardData` })
 const sqs = new SQS();
 
@@ -36,8 +37,7 @@ export const handler = async (event: any, context: any) => {
   }
 
   if(event.detail.uuid === undefined || event.detail.uuid === '' || event.detail.legacyUserId === undefined 
-  || event.detail.legacyUserId === '' || event.detail.profileUuid === undefined || event.detail.profileUuid === '' 
-  || event.detail.cardId === undefined || event.detail.cardId === ''){
+  || event.detail.legacyUserId === '' || event.detail.profileUuid === undefined || event.detail.profileUuid === ''){
     return Response.BadRequest({ message: 'Required parameters are missing' });
   }
 
@@ -61,7 +61,23 @@ export const handler = async (event: any, context: any) => {
     logger.error("error migrating user data ", { uuid, err });
     await sendToDLQ(event);
   }
-  
+
+  //save id mapping
+  const idMappingParams = {
+    Item: {
+      legacy_id: `BRAND#${brand}#${legacyId}`,
+      uuid: uuid,
+    },
+    TableName: idMappingtableName
+  }
+  try {
+    const results = await dynamodb.send(new PutCommand(idMappingParams));
+    logger.debug('results', { results });
+  } catch (err: any) {
+    logger.error("error saving id mapping data", { uuid, err });
+    await sendToDLQ(event);
+  }
+
   const queryParams = {
     TableName: tableName,
     KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)',
@@ -115,23 +131,25 @@ export const handler = async (event: any, context: any) => {
     await sendToDLQ(event);
   }
 
-  const cardParams = {
-    Item: {
-      pk: `MEMBER#${uuid}`,
-      sk: `CARD#${legacyCardId}`,
-      status: getCardStatus(Number(event.detail.cardStatus)),
-      expires: event.detail.cardExpires,
-      posted: event.detail.cardPosted
-    },
-    TableName: tableName
-  }
-  
-  try {
-    const results = await dynamodb.send(new PutCommand(cardParams));
-    logger.debug('results', { results });
-  } catch (err: any) {
-    logger.error("error migrating user card data", { uuid, err });
-    await sendToDLQ(event);
+  if (event.detail.cardId != undefined && event.detail.cardId != '') {
+    const cardParams = {
+      Item: {
+        pk: `MEMBER#${uuid}`,
+        sk: `CARD#${legacyCardId}`,
+        status: getCardStatus(Number(event.detail.cardStatus)),
+        expires: event.detail.cardExpires,
+        posted: event.detail.cardPosted
+      },
+      TableName: tableName
+    }
+
+    try {
+      const results = await dynamodb.send(new PutCommand(cardParams));
+      logger.debug('results', {results});
+    } catch (err: any) {
+      logger.error("error migrating user card data", {uuid, err});
+      await sendToDLQ(event);
+    }
   }
 };
 

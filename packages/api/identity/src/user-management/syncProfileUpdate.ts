@@ -127,8 +127,4 @@ export const handler = async (event: any, context: any) => {
     logger.error("error syncing user profile data", { uuid, err });
     await sendToDLQ(event);
   }
-
-   
 };
-
-

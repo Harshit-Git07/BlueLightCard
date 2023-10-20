@@ -92,7 +92,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
   const dynamodb = DynamoDBDocumentClient.from(dynamoclient); 
 
   while(true){
-    const query = `SELECT u.id, u.spareemail, u.name, u.confirmed, u.surname, u.Service, u.county, u.GA_Key, u.TrustMember,
+    const query = `SELECT u.id, u.spareemail, u.name, u.confirmed, u.surname, u.service, u.county, u.GA_Key, u.TrustMember,
     u.uuid, p.uid as profileuid, p.spareemailvalidated, p.dob, p.gender, p.mobile, p.merged_uid, 
     p.merged_time, c.cardid as cardId, c.carduid as cardUid, c.cardstatus as cardStatus, c.expires as cardExpires, c.timePosted as cardPosted,
     t.trustId, t.trustName, t.trustPrimary

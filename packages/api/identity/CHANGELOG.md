@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.25.0...bluelightcard/identity-v1.25.1) (2023-10-20)
+
+
+### Other Changes
+
+* change type ([#525](https://github.com/bluelightcard/BlueLightCard-2.0/issues/525)) ([6e91c31](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6e91c31069599e95004980ff93d9a8478082e2b4))
+* check in migration ([#524](https://github.com/bluelightcard/BlueLightCard-2.0/issues/524)) ([2c3697e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c3697eef4cd76f956f86d279613ca4f07b5fde4))
+* remove cardaction; check if profile exists ([#522](https://github.com/bluelightcard/BlueLightCard-2.0/issues/522)) ([36ff337](https://github.com/bluelightcard/BlueLightCard-2.0/commit/36ff3374cdd3fbf4367fe90b612bbb385c1a64ee))
+
 ## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.24.0...bluelightcard/identity-v1.25.0) (2023-10-19)
 
 

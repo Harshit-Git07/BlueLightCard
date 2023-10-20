@@ -1,5 +1,4 @@
 import { CardStatus } from '../../../core/src/types/cardStatus.enum';
-import { getCardAction, getCardStatusNumeric, getPCardStatus } from '../../../core/src/utils/getCardStatus';
 import {z} from 'zod';
 
 const keys = Object.keys(CardStatus) as [keyof typeof CardStatus]
@@ -16,8 +15,7 @@ export const CardModel = z.object({
     expires: card.expires,
     cardPrefix: card.cardPrefix,
     cardStatus: card.status,
-    datePosted: card.posted,
-    cardAction: getCardAction(card.status, card.posted)
+    datePosted: card.posted
 }));
 
 (CardModel as any)._ModelName = 'CardModel'

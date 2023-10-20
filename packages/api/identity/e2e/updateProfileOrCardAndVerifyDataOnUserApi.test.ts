@@ -177,7 +177,6 @@ describe('Send user profile update event, and test user api to match data', () =
     expect(res.data.data.card.expires).not.toBeNull();
     expect(res.data.data.card.cardStatus).not.toBeNull();
     expect(res.data.data.card.datePosted).not.toBeNull();
-    expect(res.data.data.card.cardAction).not.toBeNull();
     userCardId = res.data.data.card.cardId;
     cardPostedDate = res.data.data.card.datePosted;
     cardExpiresDate = res.data.data.card.expires;
@@ -261,7 +260,6 @@ describe('Send user card update event, and test user api to match data', () => {
     }else{
       expect(res.data.data.card.datePosted).not.toBe('0000000000000000');
     }
-    expect(res.data.data.card.cardAction).not.toBeNull();
 
   });
 
@@ -326,7 +324,6 @@ describe('Send user card update event, and test user api to match data', () => {
     expect(res.data.data.card.expires).not.toBe('0000000000000000');
     expect(res.data.data.card.cardStatus).toEqual('PHYSICAL_CARD');
     expect(res.data.data.card.datePosted).not.toBe('0000000000000000');
-    expect(res.data.data.card.cardAction).not.toBeNull();
 
   });
 });

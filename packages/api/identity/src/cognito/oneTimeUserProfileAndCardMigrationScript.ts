@@ -1,6 +1,6 @@
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { promises as fs } from 'fs';
 import { v4 } from 'uuid';
 import * as dotenv from 'dotenv';
@@ -55,6 +55,7 @@ function validateData(rowData: RowData): { valid: boolean; reason?: string } {
 dotenv.config({ path: './src/cognito/.env' , debug: true});
 const brand = process.env.BRAND;
 const host = process.env.DB_HOST;
+const legacyTable = process.env.LEGACY_TABLE_NAME;
 const port = parseInt(process.env.DB_PORT ?? '3306');
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
@@ -95,7 +96,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
     u.uuid, p.uid as profileuid, p.spareemailvalidated, p.dob, p.gender, p.mobile, p.merged_uid, 
     p.merged_time, c.cardid as cardId, c.carduid as cardUid, c.cardstatus as cardStatus, c.expires as cardExpires, c.timePosted as cardPosted,
     t.trustId, t.trustName, t.trustPrimary
-    FROM tblusers u 
+    FROM ${legacyTable} u 
     LEFT JOIN tbluserprofiles p 
     ON u.id = p.uid
     LEFT JOIN  (
@@ -160,6 +161,24 @@ export async function migrate(): Promise<{status: string, message: string}> {
         failed++;
       }
 
+      const queryParams = {
+        TableName: tableName,
+        KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)',
+        ExpressionAttributeValues: {
+          ':pk': `MEMBER#${row.uuid}`,
+          ':sk': `PROFILE#`,
+        },
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+          '#sk': 'sk',
+        },
+      };
+      let oldProfileUuid = null;
+      const result = await dynamodb.send(new QueryCommand(queryParams));
+      if(result.Items !== null && result.Count !== 0){
+        const user = result.Items?.at(0) as Record<string, string>;
+        oldProfileUuid = user.sk;
+      }
       const profileUuid: string = v4();
       let dob = '0000-00-00';
       if(!isNaN(Date.parse(row.dob))){
@@ -169,7 +188,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
       const profileParams = {
         Item: {
           pk: `MEMBER#${row.uuid}`,
-          sk: `PROFILE#${profileUuid}`,
+          sk: oldProfileUuid !== null ? oldProfileUuid : `PROFILE#${profileUuid}`,
           name: row.name,
           surname: row.surname,
           spare_email: row.spareemail ?? ' ',

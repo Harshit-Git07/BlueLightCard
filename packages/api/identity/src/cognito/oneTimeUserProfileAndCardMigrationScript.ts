@@ -141,7 +141,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
           Item: {
             pk: `MEMBER#${row.uuid}`,
             sk: `BRAND#${brand}`,
-            legacy_id: `${row.id}`
+            legacy_id: row.id
           },
           TableName: tableName
       };

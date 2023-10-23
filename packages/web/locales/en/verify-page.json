@@ -1,0 +1,23 @@
+{
+  "intro": "Verify Page",
+  "seo": {
+    "title": "Blue Light Card Verify | Instant verification, instant impact",
+    "description": "Unlock your Blue Light Card discount scheme with confidence using the latest API technology.",
+    "og": {
+      "title": "Blue Light Card Verify",
+      "type": "Blue Light Card Verify",
+      "sitename": "Blue Light Card Verify",
+      "url": "https://www.bluelightcard.co.uk/verify",
+      "image": ""
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "title": "Blue Light Card Verify",
+      "description": "API integration – instant verification, instant impact",
+      "site": "@bluelightcard",
+      "image": "",
+      "imageAlt": "Blue Light Card Verify",
+      "creator": "@bluelightcard"
+    }
+  }
+}

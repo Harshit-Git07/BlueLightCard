@@ -1,5 +1,4 @@
 // components/Layout.tsx
-import { ReactNode } from 'react';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import {
@@ -17,32 +16,21 @@ import { navItems } from '@/data/headerConfig';
 import footerConfig from '@/data/footerConfig';
 import Head from 'next/head';
 import useBrandTranslation from '@/hooks/useBrandTranslation';
+import { LayoutProps } from './types';
+import { useContext } from 'react';
+import AuthContext from '@/context/AuthContext';
 
-interface LayoutProps {
-  seo?: {
-    title?: string;
-    description?: string;
-    keywords?: string;
-    ogTitle?: string;
-    ogType?: string;
-    sitename?: string;
-    ogUrl?: string;
-    ogImage?: string;
-    twitterCard?: string;
-    twitterTitle?: string;
-    twitterDescription?: string;
-    twitterImage?: string;
-    twitterImageAlt?: string;
-    twitterSite?: string;
-    twitterCreator?: string;
-  };
-  children: ReactNode;
-}
-
-const BaseLayout: React.FC<LayoutProps> = ({ seo, children }) => {
+const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace }) => {
   // Converts brand codes to text using the brand translation file
   // Uses data from locales folder as data source
-  const { t: brandTranslator } = useBrandTranslation(['common', 'description']);
+  const authContext = useContext(AuthContext);
+  const loggedIn = authContext.isUserAuthenticated();
+
+  const { t: brandTranslator } = useBrandTranslation(
+    translationNamespace
+      ? ['common', 'description', translationNamespace]
+      : ['common', 'description']
+  );
 
   const onSearchCompanyChange = async (companyId: string, company: string) => {
     await logSearchCompanyEvent(companyId, company);
@@ -99,13 +87,13 @@ const BaseLayout: React.FC<LayoutProps> = ({ seo, children }) => {
       )}
       <Header
         navItems={navItems}
-        loggedIn={true}
+        loggedIn={loggedIn}
         onSearchCompanyChange={onSearchCompanyChange}
         onSearchCategoryChange={onSearchCategoryChange}
         onSearchTerm={onSearchTerm}
       />
       <div>{children}</div>
-      <Footer {...footerConfig} />
+      <Footer {...footerConfig} loggedIn={loggedIn} />
     </div>
   );
 };

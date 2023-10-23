@@ -6,11 +6,13 @@ export type FooterProps = {
   navigationItems: FooterNavigationSection[];
   socialLinks?: SocialMediaIconProps[];
   downloadLinks?: downloadLink[];
+  loggedIn?: boolean;
 };
 
 export type FooterNavigationSection = {
   title: string;
   navLinks: FooterNavigationLink[];
+  requiresLogin?: boolean;
 };
 
 export type FooterNavigationLink = {

@@ -1,3 +1,5 @@
+import { cssUtil } from '@/utils/cssUtil';
+
 interface ContainerProps {
   children: React.ReactNode;
   className?: string;
@@ -15,10 +17,11 @@ const Container = ({
   const borderBottomClassNames = addBottomHorizontalLine
     ? `border-b-[0.95px] border-shade-greyscale-grey-100`
     : '';
+  const containerRootClassNames = cssUtil([className ?? '', borderBottomClassNames]);
 
   return (
     <>
-      <div className={`${className} ${borderBottomClassNames}`} {...props}>
+      <div className={containerRootClassNames} {...props}>
         <div className={`mobile:mx-5 laptop:container laptop:mx-auto ${nestedClassName}`}>
           {children}
         </div>

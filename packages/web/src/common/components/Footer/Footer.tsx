@@ -16,6 +16,7 @@ const Footer: FC<FooterProps> = ({
   navigationItems,
   socialLinks,
   downloadLinks,
+  loggedIn,
 }) => {
   const horizPadding = 'mobile:px-4 laptop:px-0 laptop:container laptop:mx-auto';
 
@@ -28,25 +29,27 @@ const Footer: FC<FooterProps> = ({
         >
           {loginForm}
           {((navigationItems && navigationItems.length > 0) || loginForm) &&
-            navigationItems.map((section: FooterNavigationSection, index) => {
-              return (
-                <div key={index} className="p-2 flex flex-col space-y-2 grow">
-                  <h1 className="text-3xl font-semibold">{section.title}</h1>
-                  {section.navLinks.map((navLink: FooterNavigationLink, navLinkIndex) => {
-                    return (
-                      <Link
-                        key={navLinkIndex}
-                        href={navLink.url}
-                        data-testid={navLink.label + '-link'}
-                        className="text-components-footer-text hover:opacity-100 hover:underline"
-                      >
-                        {navLink.label}
-                      </Link>
-                    );
-                  })}
-                </div>
-              );
-            })}
+            navigationItems
+              .filter((navItem) => navItem.requiresLogin === loggedIn || !navItem.requiresLogin)
+              .map((section: FooterNavigationSection, index) => {
+                return (
+                  <div key={index} className="p-2 flex flex-col space-y-2 grow">
+                    <h1 className="text-3xl font-semibold">{section.title}</h1>
+                    {section.navLinks.map((navLink: FooterNavigationLink, navLinkIndex) => {
+                      return (
+                        <Link
+                          key={navLinkIndex}
+                          href={navLink.url}
+                          data-testid={navLink.label + '-link'}
+                          className="text-components-footer-text hover:opacity-100 hover:underline"
+                        >
+                          {navLink.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                );
+              })}
         </div>
       )}
       {/* Socials and mobile download section */}

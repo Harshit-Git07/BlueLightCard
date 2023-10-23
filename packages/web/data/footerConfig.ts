@@ -12,6 +12,7 @@ const footerConfig: FooterProps = {
         { label: 'Offers Near You', url: '/nearme.php' },
         { label: 'Deals of the Week', url: '/members-home' },
       ],
+      requiresLogin: true,
     },
     {
       title: 'Company Info',

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.10.0...bluelightcard/offers-v1.11.0) (2023-10-24)
+
+
+### Features
+
+* add elastic replication group. update cache service ([#529](https://github.com/bluelightcard/BlueLightCard-2.0/issues/529)) ([0b1b274](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0b1b274528429919301282a60552cd3b8190e2aa))
+
 ## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.9.0...bluelightcard/offers-v1.10.0) (2023-10-19)
 
 

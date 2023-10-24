@@ -37,7 +37,9 @@ const nextConfig = {
     fileLoaderRule.exclude = /\.svg$/i;
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@brandasset': !existsSync(brandAssetFolder) ? resolve(__dirname, './assets') : brandAssetFolder,
+      '@brandasset': !existsSync(brandAssetFolder)
+        ? resolve(__dirname, './assets')
+        : brandAssetFolder,
       '@assets': !existsSync(assetsFolder) ? resolve(__dirname, './assets') : assetsFolder,
     };
     config.plugins.push(

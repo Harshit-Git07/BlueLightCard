@@ -7,11 +7,13 @@ export class CacheService {
   private redisClient: Redis | any;
 
   constructor(private readonly stage: string, private logger: Logger) {
+    logger.info('CacheService Started');
     if (!isDev(this.stage)) {
-      this.redisClient = new Redis({
-        host: process.env.REDIS_ENDPOINT!,
-        port: parseInt(process.env.REDIS_PORT! as string),
-      });
+      logger.info('Creating Redis Client')
+      this.redisClient = new Redis.Cluster([{
+        host: process.env.REDIS_ENDPOINT,
+        port: parseInt(process.env.REDIS_PORT as string),
+      }]);
     }
   }
 

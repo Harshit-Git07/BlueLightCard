@@ -61,8 +61,8 @@ export class QueryLambda extends LambdaAbstract {
       STAGE: this.stage,
       BANNER_TABLE: this.tables.bannersTable.tableName,
       OFFER_HOMEPAGE_TABLE: this.tables.offerHomepageTable.tableName,
-      REDIS_ENDPOINT: this.elasticCache.redisCluster && this.elasticCache.redisCluster.attrRedisEndpointAddress,
-      REDIS_PORT: this.elasticCache.redisCluster && this.elasticCache.redisCluster.attrRedisEndpointPort,
+      REDIS_ENDPOINT: this.elasticCache.redisReplicationGroup && this.elasticCache.redisReplicationGroup.attrConfigurationEndPointAddress,
+      REDIS_PORT: this.elasticCache.redisReplicationGroup && this.elasticCache.redisReplicationGroup.attrConfigurationEndPointPort,
       COMPANY_FOLLOWS_ENDPOINT:
         this.stage == 'production' ? ENDPOINTS.PRODUCTION_COMPANY_FOLLOWS : ENDPOINTS.DEVELOP_COMPANY_FOLLOWS,
       COMPANY_FOLLOWS_SECRET: COMPANY_FOLLOWS_SECRET,

@@ -25,8 +25,7 @@ export class OfferMenusByBrandIdResolver {
   async handler(event: AppSyncResolverEvent<any>) {
     this.logger.info('OfferMenusByBrandIdResolver handler', { event })
 
-    //const cache = await this.cacheService.get(this.cacheKey);
-    const cache = undefined;
+    const cache = await this.cacheService.get(this.cacheKey);
     let menus: ObjectDynamicKeys = {};
 
     if (!cache) {
@@ -43,7 +42,7 @@ export class OfferMenusByBrandIdResolver {
         menus[type] = JSON.parse(json);
       });
 
-   //   await this.cacheService.set(this.cacheKey, JSON.stringify(menus), FIFTEEN_MINUTES);
+      await this.cacheService.set(this.cacheKey, JSON.stringify(menus), FIFTEEN_MINUTES);
     } else {
       menus = JSON.parse(cache);
     }

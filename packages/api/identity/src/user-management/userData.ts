@@ -50,15 +50,15 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     logger.debug('Member Query Results ', results);
 
     let userDetails = {};
-    let companyFollowsDetails:CompanyFollows[]  = [];
-    let cardDetails = {};
+    let companyFollowsDetails:CompanyFollows[] = [];
+    let cardDetails:CardModel[] = [];
     let brandDetails = {};
 
     results.Items?.map(i => {
       if(i.sk.includes('PROFILE')) {
         userDetails = UserModel.parse(i)
       } else if (i.sk.includes('CARD')) {
-        cardDetails = CardModel.parse(i)
+        cardDetails.push(CardModel.parse(i))
       } else if (i.sk.includes('BRAND')) {
         brandDetails = BrandModel.parse(i)
       } else if (i.sk.includes('COMPANYFOLLOWS')) {
@@ -69,14 +69,14 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     if(!isEmpty(userDetails)) {
       let responseModel = {
         profile: userDetails,
-        card: cardDetails,
+        cards: cardDetails,
         companies_follows: companyFollowsDetails,
         ...brandDetails,
       }
       logger.info("User Found", responseModel);
       return Response.OK({ message: 'User Found', data: responseModel });
     }
-    return Response.NoContent({ message: 'User not found' });
+    return Response.NotFound({ message: 'User not found' });
 
   } catch (error) {
     logger.error('error while fetching user details ',{error});

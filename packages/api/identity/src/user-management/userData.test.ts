@@ -65,7 +65,7 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
       expect(dynamoMock.calls()).toHaveLength(1);
       expect(res).toEqual({
         statusCode: 200,
-        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":\"1987-12-27\",\"gender\":\"F\",\"mobile\":\"+447915507274\",\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"card\":{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":\"1695220641\"},\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\"}}",
+        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":\"1987-12-27\",\"gender\":\"F\",\"mobile\":\"+447915507274\",\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":\"1695220641\"}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\"}}",
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
@@ -73,7 +73,7 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
       });
     });
 
-    test('Returns 204 with user not found message when user is not found', async () => {
+    test('Returns 404 with user not found message when user is not found', async () => {
       dynamoMock.on(QueryCommand).resolves({
         Items: [],
       });
@@ -86,14 +86,13 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
       );
 
       expect(res).toEqual({
-        statusCode: 204,
+        statusCode: 404,
         body: JSON.stringify({
-          message: 'No Content'
+          message: 'User not found'
         }),
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          'message': 'User not found'
         },
       });
     });

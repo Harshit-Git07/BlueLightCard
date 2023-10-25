@@ -111,9 +111,9 @@ export async function migrate(): Promise<{status: string, message: string}> {
         INNER JOIN tbltrustprimaries 
         ON tbltrusts.LinkID=tbltrustprimaries.LinkCode
     ) t 
-    ON t.trustId = u.TrustMember 
+    ON t.trustId = u.TrustMember
+    ORDER BY u.id 
     LIMIT ${batchSize} OFFSET ${offset}`;
-  
     const queryTimeStart = new Date().getTime();
     const [result] = await connection.query(query);
     

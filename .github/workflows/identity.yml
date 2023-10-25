@@ -168,15 +168,3 @@ jobs:
       - run: npm run build
       - name: Deploy
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy identity --stage production --region ${{matrix.region}}
-      - name: Record deployment with Oobeya
-        run: |
-          curl -XPOST -H 'Oobeya-API-Key: ${{ secrets.OOBEYA_API_KEY }}' -H "Content-type: application/json" -d '{
-            "analysisId": "${{ secrets.OOBEYA_ANALYSIS_ID }}",
-            "pipelineStartAt": "${{ github.event.push.pusher.date }}",
-            "lastCommitSha": "${{ github.sha }}",
-            "deploymentType": "RELEASE",
-            "deployedAt": "${{ github.event.push.pusher.date }}",
-            "author": "${{ github.actor }}",
-            "name": "${{ needs.changelog.outputs.tag_name }}",
-            "title": "${{ github.workflow }} ${{ needs.changelog.outputs.tag_name }}"
-          }' 'https://bluelightcard.oobeya.io/apis/v1/deployments'

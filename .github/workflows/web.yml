@@ -263,15 +263,3 @@ jobs:
           branch: 'main'
           directory: packages/web/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Record deployment with Oobeya
-        run: |
-          curl -XPOST -H 'Oobeya-API-Key: ${{ secrets.OOBEYA_API_KEY }}' -H "Content-type: application/json" -d '{
-            "analysisId": "${{ secrets.OOBEYA_ANALYSIS_ID }}",
-            "pipelineStartAt": "${{ github.event.push.pusher.date }}",
-            "lastCommitSha": "${{ github.sha }}",
-            "deploymentType": "RELEASE",
-            "deployedAt": "${{ github.event.push.pusher.date }}",
-            "author": "${{ github.actor }}",
-            "name": "${{ needs.changelog.outputs.tag_name }}",
-            "title": "${{ github.workflow }} ${{ needs.changelog.outputs.tag_name }}"
-          }' 'https://bluelightcard.oobeya.io/apis/v1/deployments'

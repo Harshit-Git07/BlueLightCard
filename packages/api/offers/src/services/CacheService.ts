@@ -8,13 +8,13 @@ export class CacheService {
 
   constructor(private readonly stage: string, private logger: Logger) {
     logger.info('CacheService Started');
-    if (!isDev(this.stage)) {
-      logger.info('Creating Redis Client')
-      this.redisClient = new Redis.Cluster([{
-        host: process.env.REDIS_ENDPOINT,
-        port: parseInt(process.env.REDIS_PORT as string),
-      }]);
-    }
+    // if (!isDev(this.stage)) {
+    //   logger.info('Creating Redis Client')
+    //   this.redisClient = new Redis.Cluster([{
+    //     host: process.env.REDIS_ENDPOINT,
+    //     port: parseInt(process.env.REDIS_PORT as string),
+    //   }]);
+    // }
   }
 
   async set(key: string, value: any, ttl: number) {

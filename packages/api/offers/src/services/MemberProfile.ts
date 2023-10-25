@@ -14,11 +14,8 @@ export class MemberProfile {
     private userProfileService: UserProfile;
 
     constructor(private readonly legacyUserId: string, private readonly authHeader: string, private logger: Logger) {
-        this.logger.info('Fetching Member Profile')
-        this.logger.info('legacyUserId inside profile service', { legacyUserId });
-        this.logger.info('authHeader inside profile service', { authHeader });
-        this.companyDislikesService = new CompanyDislikes(Number(legacyUserId), logger);
-        this.userProfileService = new UserProfile(authHeader, logger);
+        this.companyDislikesService = new CompanyDislikes(Number(legacyUserId));
+        this.userProfileService = new UserProfile(authHeader);
     }
 
     async getProfile(): Promise<UserProfileData> {

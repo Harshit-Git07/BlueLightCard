@@ -25,7 +25,8 @@ export class OfferMenusByBrandIdResolver {
   async handler(event: AppSyncResolverEvent<any>) {
     this.logger.info('OfferMenusByBrandIdResolver handler', { event })
 
-    const cache = await this.cacheService.get(this.cacheKey);
+    //const cache = await this.cacheService.get(this.cacheKey);
+    const cache = undefined;
     let menus: ObjectDynamicKeys = {};
 
     if (!cache) {
@@ -42,7 +43,7 @@ export class OfferMenusByBrandIdResolver {
         menus[type] = JSON.parse(json);
       });
 
-      await this.cacheService.set(this.cacheKey, JSON.stringify(menus), FIFTEEN_MINUTES);
+   //   await this.cacheService.set(this.cacheKey, JSON.stringify(menus), FIFTEEN_MINUTES);
     } else {
       menus = JSON.parse(cache);
     }
@@ -50,9 +51,7 @@ export class OfferMenusByBrandIdResolver {
     const authHeader: string = event.request.headers.authorization ?? '';
     let  legacyUserId: string = '';
     try {
-      this.logger.info('authHeader before UnpackJwt', { authHeader })
       legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
-      this.logger.info('legacyUserId after UnpackJwt', { legacyUserId })
     }catch (error) {
       this.logger.info('authHeader', { authHeader });
       this.logger.error('Error unpacking JWT', { error });

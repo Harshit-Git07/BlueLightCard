@@ -173,13 +173,13 @@ describe('Send user profile update event, and test user api to match data', () =
     expect(res.data.data.profile.dob).toEqual('1990-12-12');
     expect(res.data.data.profile.mobile).toEqual('07000000000');
     expect(res.data.data.profile.twoFactorAuthentication).not.toBeNull();
-    expect(res.data.data.card.cardId).not.toBeNull();
-    expect(res.data.data.card.expires).not.toBeNull();
-    expect(res.data.data.card.cardStatus).not.toBeNull();
-    expect(res.data.data.card.datePosted).not.toBeNull();
-    userCardId = res.data.data.card.cardId;
-    cardPostedDate = res.data.data.card.datePosted;
-    cardExpiresDate = res.data.data.card.expires;
+    expect(res.data.data.cards[0].cardId).not.toBeNull();
+    expect(res.data.data.cards[0].expires).not.toBeNull();
+    expect(res.data.data.cards[0].cardStatus).not.toBeNull();
+    expect(res.data.data.cards[0].datePosted).not.toBeNull();
+    userCardId = res.data.data.cards[0].cardId;
+    cardPostedDate = res.data.data.cards[0].datePosted;
+    cardExpiresDate = res.data.data.cards[0].expires;
 
   });
 });
@@ -248,17 +248,18 @@ describe('Send user card update event, and test user api to match data', () => {
     expect(res.status).toEqual(200);
     expect(res.data.message).toEqual('User Found');
     expect(res.data.data.uuid).not.toBeNull();
-    expect(res.data.data.card.cardId).toEqual(userCardId);
+    expect(res.data.data.cards).toHaveLength(2);
+    expect(res.data.data.cards[0].cardId).toEqual(userCardId);
     if(cardExpiresDate === '0000000000000000'){
-      expect(res.data.data.card.expires).toEqual('0000000000000000');
+      expect(res.data.data.cards[0].expires).toEqual('0000000000000000');
     }else{
-      expect(res.data.data.card.expires).not.toBe('0000000000000000');
+      expect(res.data.data.cards[0].expires).not.toBe('0000000000000000');
     }
-    expect(res.data.data.card.cardStatus).toEqual('ADDED_TO_BATCH');
+    expect(res.data.data.cards[0].cardStatus).toEqual('ADDED_TO_BATCH');
     if(cardPostedDate === '0000000000000000'){
-      expect(res.data.data.card.datePosted).toEqual('0000000000000000');
+      expect(res.data.data.cards[0].datePosted).toEqual('0000000000000000');
     }else{
-      expect(res.data.data.card.datePosted).not.toBe('0000000000000000');
+      expect(res.data.data.cards[0].datePosted).not.toBe('0000000000000000');
     }
 
   });
@@ -320,10 +321,10 @@ describe('Send user card update event, and test user api to match data', () => {
     } catch (err: any) {console.log(err);}
     expect(res.status).toEqual(200);
     expect(res.data.message).toEqual('User Found');
-    expect(res.data.data.card.cardId).toEqual(userCardId);
-    expect(res.data.data.card.expires).not.toBe('0000000000000000');
-    expect(res.data.data.card.cardStatus).toEqual('PHYSICAL_CARD');
-    expect(res.data.data.card.datePosted).not.toBe('0000000000000000');
+    expect(res.data.data.cards[0].cardId).toEqual(userCardId);
+    expect(res.data.data.cards[0].expires).not.toBe('0000000000000000');
+    expect(res.data.data.cards[0].cardStatus).toEqual('PHYSICAL_CARD');
+    expect(res.data.data.cards[0].datePosted).not.toBe('0000000000000000');
 
   });
 });

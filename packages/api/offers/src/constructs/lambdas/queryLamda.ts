@@ -37,6 +37,7 @@ export class QueryLambda extends LambdaAbstract {
       entry: './packages/api/offers/src/graphql/resolvers/queries/handlers/queryLambdaResolver.ts',
       handler: 'handler',
       environment: this.getEnvironmentConfig(),
+      memorySize: 1024,
     }
 
     if (!isDev(this.stage)) {

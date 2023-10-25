@@ -1,4 +1,4 @@
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 
 type JWT = {
   phone_number: string;
@@ -10,5 +10,9 @@ type JWT = {
 }
 
 export function unpackJWT(jwt: string) {
-  return jwt_decode(jwt) as JWT;
+  try {
+    return jwt_decode(jwt) as JWT;
+  } catch (error) {
+    throw error;
+  }
 }

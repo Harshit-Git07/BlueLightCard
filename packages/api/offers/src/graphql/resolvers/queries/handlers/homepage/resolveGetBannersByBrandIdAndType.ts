@@ -31,7 +31,12 @@ export class BannersByBrandIdAndTypeResolver {
     const cacheData = await this.cacheService.get(cacheKey);
 
     const authHeader: string = event.request.headers.authorization ?? '';
-    const { 'custom:blc_old_id': legacyUserId } = unpackJWT(authHeader);
+    let  legacyUserId: string = '';
+    try {
+      legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
+    }catch (error) {
+      this.logger.error('Error unpacking JWT', { error });
+    }
 
     let data;
     if(!cacheData) {

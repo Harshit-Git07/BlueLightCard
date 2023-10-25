@@ -33,7 +33,12 @@ export class OfferCategoriesAndCompaniesResolver {
   async handler(event: AppSyncResolverEvent<any>) {
 
     const authHeader: string = event.request.headers.authorization ?? '';
-    const { 'custom:blc_old_id': legacyUserId } = unpackJWT(authHeader);
+    let  legacyUserId: string = '';
+    try {
+      legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
+    }catch (error) {
+      this.logger.error('Error unpacking JWT', { error });
+    }
 
     const selections = event.info.selectionSetList;
 

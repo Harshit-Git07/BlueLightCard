@@ -48,7 +48,13 @@ export class OfferMenusByBrandIdResolver {
     }
 
     const authHeader: string = event.request.headers.authorization ?? '';
-    const { 'custom:blc_old_id': legacyUserId } = unpackJWT(authHeader);
+    let  legacyUserId: string = '';
+    try {
+      legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
+    }catch (error) {
+      this.logger.info('authHeader', { authHeader });
+      this.logger.error('Error unpacking JWT', { error });
+    }
 
     const memberProfileService = new MemberProfile(legacyUserId, authHeader, this.logger);
     const { organisation, isUnder18, dislikedCompanyIds } = await memberProfileService.getProfile();

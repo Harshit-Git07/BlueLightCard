@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.11.0...bluelightcard/offers-v1.12.0) (2023-10-25)
+
+
+### Features
+
+* add logs to track the data and some improvment ([#541](https://github.com/bluelightcard/BlueLightCard-2.0/issues/541)) ([e415b9b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e415b9bbedf93dae0c2958f4d7a172cc1a851b41))
+* bring back the CacheService.ts ([#550](https://github.com/bluelightcard/BlueLightCard-2.0/issues/550)) ([6ecbf04](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6ecbf04b0b684aafd2b018e805bb0e66cef0b1c0))
+* remove logs and cache from menus ([#549](https://github.com/bluelightcard/BlueLightCard-2.0/issues/549)) ([7355f0e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7355f0e175c571b5a894c0904663354bd33f91b2))
+
+
+### Bug Fixes
+
+* add exception handling for unpackJWT.ts and increase Lambda memory ([#539](https://github.com/bluelightcard/BlueLightCard-2.0/issues/539)) ([6578251](https://github.com/bluelightcard/BlueLightCard-2.0/commit/65782517b5fbc497677047d2e4e7bb44cc29edd9))
+
 ## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.10.0...bluelightcard/offers-v1.11.0) (2023-10-24)
 
 

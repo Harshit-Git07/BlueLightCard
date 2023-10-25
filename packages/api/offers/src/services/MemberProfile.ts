@@ -10,12 +10,15 @@ interface UserProfileData {
 }
 
 export class MemberProfile {
-    private readonly companyDislikesService: CompanyDislikes;
-    private readonly userProfileService: UserProfile;
+    private companyDislikesService: CompanyDislikes;
+    private userProfileService: UserProfile;
 
-    constructor(legacyUserId: string, authHeader: string, private logger: Logger) {
-        this.companyDislikesService = new CompanyDislikes(Number(legacyUserId));
-        this.userProfileService = new UserProfile(authHeader);
+    constructor(private readonly legacyUserId: string, private readonly authHeader: string, private logger: Logger) {
+        this.logger.info('Fetching Member Profile')
+        this.logger.info('legacyUserId inside profile service', { legacyUserId });
+        this.logger.info('authHeader inside profile service', { authHeader });
+        this.companyDislikesService = new CompanyDislikes(Number(legacyUserId), logger);
+        this.userProfileService = new UserProfile(authHeader, logger);
     }
 
     async getProfile(): Promise<UserProfileData> {
@@ -23,7 +26,7 @@ export class MemberProfile {
         let organisation: string = '';
         let dislikedCompanyIds: number[] = [];
         let isUnder18: boolean = false;
-    
+
         try {
           const [dislikeResponse, userProfileResponse] = await Promise.all([this.companyDislikesService.getDislikesRequest(), this.userProfileService.getUserProfileRequest()]);
 

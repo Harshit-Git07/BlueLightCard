@@ -50,12 +50,14 @@ export class OfferMenusByBrandIdResolver {
     const authHeader: string = event.request.headers.authorization ?? '';
     let  legacyUserId: string = '';
     try {
+      this.logger.info('authHeader before UnpackJwt', { authHeader })
       legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
+      this.logger.info('legacyUserId after UnpackJwt', { legacyUserId })
     }catch (error) {
       this.logger.info('authHeader', { authHeader });
       this.logger.error('Error unpacking JWT', { error });
     }
-
+    this.logger.info('legacyUserId before passing to memberprofile', { legacyUserId });
     const memberProfileService = new MemberProfile(legacyUserId, authHeader, this.logger);
     const { organisation, isUnder18, dislikedCompanyIds } = await memberProfileService.getProfile();
 

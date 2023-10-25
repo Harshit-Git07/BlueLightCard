@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { Logger } from "@aws-lambda-powertools/logger";
 
 export class UserProfile {
-  private readonly authHeader: string;
 
-  constructor(authHeader: string) {
-    this.authHeader = authHeader;
+  constructor(private readonly authHeader: string, private logger: Logger) {
+    this.logger.info('Fetching User Profile');
+    this.logger.info('authHeader inside user profile service', { authHeader: this.authHeader });
   }
 
   async getUserProfileRequest() {
@@ -14,6 +15,7 @@ export class UserProfile {
       },
     };
     const userProfileEndpoint = (process.env.USER_PROFILE_ENDPOINT as string) ?? '';
+    this.logger.info('authHeader inside user profile service before running axios', { authHeader: this.authHeader });
     return axios.get(userProfileEndpoint, userDataConfig);
   }
 }

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.25.1...bluelightcard/identity-v1.26.0) (2023-10-25)
+
+
+### Features
+
+* **web:** Handle multiple cards ([#537](https://github.com/bluelightcard/BlueLightCard-2.0/issues/537)) ([0147aba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0147abae8f934e87ed8f9fcf8f1acabcc3111d78))
+* **web:** Ti 583 handle multiple payment cards ([#548](https://github.com/bluelightcard/BlueLightCard-2.0/issues/548)) ([1a36b56](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1a36b5623b6c6e20bd363e9f3d75656e8a6e2d21))
+
 ## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.25.0...bluelightcard/identity-v1.25.1) (2023-10-20)
 
 

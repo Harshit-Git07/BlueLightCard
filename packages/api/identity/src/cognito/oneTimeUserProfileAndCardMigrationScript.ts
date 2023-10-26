@@ -189,7 +189,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
         Item: {
           pk: `MEMBER#${row.uuid}`,
           sk: oldProfileUuid !== null ? oldProfileUuid : `PROFILE#${profileUuid}`,
-          name: row.name,
+          firstname: row.name,
           surname: row.surname,
           spare_email: row.spareemail ?? ' ',
           spare_email_validated: row.spareemailvalidated ?? '0',

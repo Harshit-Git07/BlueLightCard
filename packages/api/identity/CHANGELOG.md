@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.26.0...bluelightcard/identity-v1.26.1) (2023-10-26)
+
+
+### Other Changes
+
+* change field name ([#552](https://github.com/bluelightcard/BlueLightCard-2.0/issues/552)) ([474e081](https://github.com/bluelightcard/BlueLightCard-2.0/commit/474e081998f71cbbebc25d3a518c480ce26b0984))
+
 ## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.25.1...bluelightcard/identity-v1.26.0) (2023-10-25)
 
 

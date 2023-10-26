@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.15.1...bluelightcard/web-v1.16.0) (2023-10-26)
+
+
+### Features
+
+* add headers file ([#551](https://github.com/bluelightcard/BlueLightCard-2.0/issues/551)) ([c05b035](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c05b03589a6d207052bd8cd7c05b52924ffd589c))
+* tr 77 build card components ([#535](https://github.com/bluelightcard/BlueLightCard-2.0/issues/535)) ([dc710fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dc710fb8a277a6fd24295bb1fe6f4c5fcb413883))
+* verify page ([#526](https://github.com/bluelightcard/BlueLightCard-2.0/issues/526)) ([cd3a41f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd3a41fe108a134ff2794d94506ce680115d1b7b))
+
 ## [1.15.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.15.0...bluelightcard/web-v1.15.1) (2023-10-19)
 
 

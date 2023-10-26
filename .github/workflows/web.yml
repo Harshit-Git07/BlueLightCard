@@ -254,6 +254,8 @@ jobs:
         run: rm -rf packages/web/src/pages/mock-login.tsx
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
+      - name: Configure Headers
+        run: cp packages/web/_headers packages/web/dist
       - name: Publish
         uses: cloudflare/pages-action@1
         with:

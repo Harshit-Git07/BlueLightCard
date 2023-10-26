@@ -4,7 +4,7 @@ import { page } from '../support/world';
 
 //Given
 Given('I navigate to Eligibility Checker', async function () {
-  await page.goto(process.env.BASE_URL + '/eligibility');
+  await page.goto(process.env.BASE_URL + '/eligibility', { waitUntil:'load'});
   await page.title();
 });
 
@@ -66,8 +66,8 @@ When('I choose {string} as employer', async function (Other) {
 
 When('I click next button', async function () {
   await page.locator('#next_button').scrollIntoViewIfNeeded();
-  await page.waitForSelector('button#next_button:not([disabled])', { timeout: 16000 });
-  await page.locator('#next_button').click({ timeout: 10000 });
+  await page.waitForSelector('button#next_button:not([disabled])');
+  await page.locator('#next_button').click();
 });
 
 //Then

@@ -1,11 +1,11 @@
 Feature: Eligibility Checker
 
-Background: Testing various scenarios of eligibility checker
+Background: Testing critical paths of eligibility checker
 Given I navigate to Eligibility Checker
 
 ############## EMPLOYED ############## 
    @eligibilityChecker
-   Scenario: Employed status - no employer section - AC2,AC6 ,AC9, AC10, AC11, AC12, AC17, AC19 AC27, AC28
+   Scenario: User is employed but does not have an employer  
       When I check Employed
       And I choose "<organisation>"
       And I enter "<jobRole>"
@@ -31,7 +31,7 @@ Given I navigate to Eligibility Checker
 
 
    @eligibilityChecker
-   Scenario: When User is employed and other is selected as organisation, user should see 'not eligible' message 
+   Scenario: User is employed and other is selected as organisation, user should see 'not eligible' message 
       When I check Employed
       And I choose 'Other' as organisation
       And I should see an information message
@@ -40,7 +40,7 @@ Given I navigate to Eligibility Checker
       And I click finish
 
    @eligibilityChecker
-   Scenario: When User is employed and other is selected as employer, user should see 'not eligible' message 
+   Scenario: When User is employed and other is selected as Employer, user should see 'not eligible' message 
       When I check Employed
       And I choose "<organisation>"
       And I choose 'Other' as employer 
@@ -70,7 +70,7 @@ Given I navigate to Eligibility Checker
     |Ambulance Service   |London Ambulance Service NHS Trust |staff        |
 
    @eligibilityChecker
-   Scenario: Given user is employed and selects an organisation that does not have employers options, user should be able to see sign up button
+   Scenario: User is employed and selects an organisation that does not have employers options, user should be able to see sign up button
       When I check Employed
       And I choose "<organisation>"
       And I enter "<jobRole>"
@@ -85,7 +85,7 @@ Given I navigate to Eligibility Checker
 
 ############## VOLUNTEER ############## 
     @eligibilityChecker
-    Scenario: Volunteer status - AC35, AC36, AC37, AC38
+    Scenario: User is Volunteer
       When I check Volunteer
       And I choose "<organisation>"
       And I choose an "<employer>"
@@ -169,7 +169,7 @@ Given I navigate to Eligibility Checker
 
 ############## RETIRED ############## 
    @eligibilityChecker
-   Scenario: Retired status - no employer section -AC1, AC2, AC4, AC5
+   Scenario: User is Retired but does not have an employer
       When I check Retired
       And I choose "<organisation>"
       And I enter "<jobRole>"
@@ -187,7 +187,7 @@ Given I navigate to Eligibility Checker
       |HM Armed Forces Veterans |any              |Pension document, Certificate of service, Certificate of Discharge,I don't have any of the above      |
 
    @eligibilityChecker
-   Scenario: Retired status with employer - AC3, AC6
+   Scenario: User is Retired
       When I check Retired
       And I choose "<organisation>"
       And I choose an "<employer>"

@@ -1,6 +1,5 @@
 module.exports = {
   default: {
-    parallel: 1,
     tags: process.env.npm_config_tags || '',
     formatOptions: {
       snippetInterface: 'async-await',
@@ -8,8 +7,8 @@ module.exports = {
     paths: ['e2e/features/**/*.feature'],
     publishQuiet: true,
     dryRun: false,
-    requireModule: ['ts-node/register'],
     require: ['e2e/steps/*.ts', 'e2e/support/*.ts'],
+    requireModule: ['ts-node/register'],
     format: [
       'progress-bar',
       'html:e2e/test-results/cucumber-report.html',

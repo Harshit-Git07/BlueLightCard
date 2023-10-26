@@ -11,7 +11,7 @@ let page: Page;
 let browser: Browser;
 let context: BrowserContext;
 
-setDefaultTimeout(2 * 60000);
+setDefaultTimeout(60000)
 BeforeAll(async function () {
   browser = await invokeBrowser();
 });

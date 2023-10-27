@@ -16,7 +16,7 @@ const MyAccount: NextPage<any> = (props) => {
   return (
     <main className="flex flex-row">
       <GlobalNavigation />
-      <div className="container flex flex-col">
+      <div className="w-full flex flex-col">
         <HeaderBar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
         <TabBar
           items={[

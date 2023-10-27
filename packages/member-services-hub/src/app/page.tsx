@@ -6,16 +6,12 @@ import OnlineAnalyticsImage from '@assets/online-analytics-1.svg';
 import HeaderBar from '@/components/HeaderBar/HeaderBar';
 
 const Home: NextPage<any> = (props) => {
-  let [open, setOpen] = useState('profile');
-  function handleTabOpen(category: any) {
-    setOpen(category);
-  }
   return (
     <main className="flex flex-row">
       <GlobalNavigation />
-      <div className="container flex flex-col">
+      <div className="w-full flex flex-col flex-grow-1">
         <HeaderBar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
-        <div className="container flex flex-col justify-center items-center pt-[150px]">
+        <div className="flex flex-col justify-center items-center pt-[150px]">
           <OnlineAnalyticsImage height={340} width={340} />
           <div className="flex-col items-center gap-4 flex">
             <div className="text-black text-[32px] font-semibold font-['Museo Sans'] leading-10 tracking-tight">

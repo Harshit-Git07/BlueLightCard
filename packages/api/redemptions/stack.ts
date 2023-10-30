@@ -5,6 +5,8 @@ import { Shared } from '../../../stacks/stack';
 import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
 import { PostAffiliateModel } from './src/models/postAffiliate';
 import { PostAffiliate } from './src/routes/postAffiliate';
+import { PostSpotifyModel } from './src/models/postSpotify';
+import { PostSpotify } from './src/routes/postSpotify';
 
 export function Redemptions({ stack }: StackContext) {
   const { certificateArn } = use(Shared);
@@ -47,8 +49,9 @@ export function Redemptions({ stack }: StackContext) {
 
   // Create API Models
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
+  
+  const postSpotifyModel = apiGatewayModelGenerator.generateModel(PostSpotifyModel);
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
-
   // Create Lambda Based API Routes
   api.addRoutes(stack, {
     ['POST /member/connection/affiliate']: new PostAffiliate(
@@ -57,6 +60,13 @@ export function Redemptions({ stack }: StackContext) {
       stack,
       api.cdk.restApi,
     ).postAffiliate(),
+
+    ['POST /member/online/single-use/custom/spotify']: new PostSpotify(
+      apiGatewayModelGenerator,
+      postSpotifyModel,
+      stack,
+      api.cdk.restApi,
+    ).postSpotify(),
   });
 
   stack.addOutputs({

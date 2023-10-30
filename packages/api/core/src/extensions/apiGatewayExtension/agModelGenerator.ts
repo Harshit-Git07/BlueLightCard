@@ -1,6 +1,5 @@
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Model, BadRequestModelSchema, GenericResponseSchema, ResponseModel } from './';
-
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema'
 
@@ -18,9 +17,7 @@ export class ApiGatewayModelGenerator {
     const _modelName = (model as any)._ModelName;
     const modelSchema = zodToJsonSchema(model, _modelName);
     const modelDefinition = modelSchema.definitions?.[_modelName];
-    if (!this.model) {
       this.model = new Model(this.api, _modelName, modelDefinition);
-    }
     return this.model;
   }
 

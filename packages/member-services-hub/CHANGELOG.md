@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.1...bluelightcard/member-services-hub-v1.2.2) (2023-10-30)
+
+
+### Bug Fixes
+
+* tab bar ti 572 ([#557](https://github.com/bluelightcard/BlueLightCard-2.0/issues/557)) ([de8d70a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/de8d70a5422c4a8c8ce04761d8b06809d9a5355c))
+
 ## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.0...bluelightcard/member-services-hub-v1.2.1) (2023-10-13)
 
 

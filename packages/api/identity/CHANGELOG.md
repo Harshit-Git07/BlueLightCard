@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.26.1...bluelightcard/identity-v1.27.0) (2023-10-30)
+
+
+### Features
+
+* include delete company follows ([#555](https://github.com/bluelightcard/BlueLightCard-2.0/issues/555)) ([35c6266](https://github.com/bluelightcard/BlueLightCard-2.0/commit/35c6266fa80860bcb63e53fb1b1622ee9df1a6be))
+
 ## [1.26.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.26.0...bluelightcard/identity-v1.26.1) (2023-10-26)
 
 

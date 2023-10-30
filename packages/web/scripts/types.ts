@@ -20,3 +20,10 @@ export interface FontFacesPlugin {
   baseSrcUrl: string;
   addBase: PluginAPI['addBase'];
 }
+
+export interface FontToken {
+  path: string;
+  style: 'normal' | 'italic';
+}
+
+export type FontTokenMap = Record<string, FontToken[]>;

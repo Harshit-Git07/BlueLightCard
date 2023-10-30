@@ -1,10 +1,20 @@
 import { Head, Html, Main, NextScript } from 'next/document';
 import { FC } from 'react';
 import NewRelicTag from '@/components/NewRelicTag/NewRelicTag';
-import { DEFAULT_LANG } from '@/global-vars';
+import { BRAND, DEFAULT_LANG, IS_SSR } from '@/global-vars';
 import Script from 'next/script';
+import { buildTokens } from '@/scripts/dict';
+import { getFonts } from '@/scripts/font';
+import { FontTokenMap } from '@/scripts/types';
 const newRelicLicenseKey = process.env.NEXT_PUBLIC_NEWRELIC_LICENSE_KEY as string;
 const newRelicApplicationId = process.env.NEXT_PUBLIC_NEWRELIC_APPLICATION_ID as string;
+
+let fonts: FontTokenMap = {};
+
+if (IS_SSR) {
+  const tokens = buildTokens([BRAND]);
+  fonts = getFonts(tokens.asset.font);
+}
 
 const AppDocument: FC = () => {
   return (
@@ -21,6 +31,20 @@ const AppDocument: FC = () => {
         </Script>
         {!!(newRelicLicenseKey && newRelicApplicationId) && (
           <NewRelicTag licenseKey={newRelicLicenseKey} applicationID={newRelicApplicationId} />
+        )}
+
+        {/* Preload font files */}
+        {Object.keys(fonts).map((fontType) =>
+          fonts[fontType].map((font) => (
+            <link
+              key={font.path}
+              rel="preload"
+              href={`_next/static/${font.path}`}
+              as="font"
+              type={`font/${fontType}`}
+              crossOrigin="anonymous"
+            ></link>
+          ))
         )}
 
         {/* Prefetch dns for cdn */}

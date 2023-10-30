@@ -10,6 +10,7 @@ const COGNITO_CLIENT_SECRET = process.env.NEXT_PUBLIC_COGNITO_CLIENT_SECRET ?? '
 const COGNITO_IDP_ID = process.env.NEXT_PUBLIC_COGNITO_IDP_ID ?? '';
 const LOGOUT_ROUTE = process.env.NEXT_PUBLIC_LOGOUT_ROUTE ?? '/logout.php';
 const AMPLITUDE_API_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY ?? '';
+const IS_SSR = typeof window === 'undefined';
 
 /*
  * Language is made up of the lng and region
@@ -39,4 +40,5 @@ module.exports = {
   COGNITO_IDP_ID,
   LOGOUT_ROUTE,
   AMPLITUDE_API_KEY,
+  IS_SSR,
 };

@@ -38,7 +38,7 @@ const registerColorPropertiesTransform = () => {
  * @returns {Object}
  */
 export const buildTokens = (brands: string[]): TransformedTokensResponse => {
-  const packageRoot = path.resolve(__dirname, '../');
+  const packageRoot = process.cwd();
   const baseTokens = `${packageRoot}/tokens/**/*.json`;
   const brandedTokens = brands.map((brand) => `${packageRoot}/brands/${brand}/tokens/**/*.json`);
 

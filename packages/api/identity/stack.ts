@@ -7,12 +7,14 @@ import {userStatusUpdatedRule} from './src/eventRules/userStatusUpdated';
 import {emailUpdateRule} from './src/eventRules/emailUpdateRule';
 import {ApiGatewayModelGenerator} from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
 import {UserModel} from './src/models/user';
+import {EcFormOutputDataModel} from './src/models/ecFormOutputDataModel';
 import {GetUserByIdRoute} from './src/routes/getUserByIdRoute';
 import {userSignInMigratedRule} from './src/eventRules/userSignInMigratedRule';
 import {cardStatusUpdatedRule} from './src/eventRules/cardStatusUpdatedRule';
 import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedRule";
+import { AddEcFormOutputDataRoute } from './src/routes/addEcFormOutputDataRoute';
 
 export function Identity({stack}: StackContext) {
   const {certificateArn} = use(Shared);
@@ -152,7 +154,6 @@ export function Identity({stack}: StackContext) {
         'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
         'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
         'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
-        // 'POST /{brand}/formOutputData': 'packages/api/identity/src/eligibility/ecFormOutputData.handler',
       },
       cdk: {
         restApi: {
@@ -166,12 +167,14 @@ export function Identity({stack}: StackContext) {
       }
     });
     
-  
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(identityApi.cdk.restApi);
     const agUserModel = apiGatewayModelGenerator.generateModelFromZodEffect(UserModel);
+    const agEcFormOutputDataModel = apiGatewayModelGenerator.generateModel(EcFormOutputDataModel);
+
 
     identityApi.addRoutes(stack, {
       'GET /user': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
+      'POST /{brand}/formOutputData': new AddEcFormOutputDataRoute(apiGatewayModelGenerator, agEcFormOutputDataModel).getRouteDetails(),
     });
 
     cognito.cdk.userPool.addClient('membersClient', {
@@ -193,6 +196,24 @@ export function Identity({stack}: StackContext) {
       },
       generateSecret: true,
     });
+
+    //API Key and Usage Plan
+    const apikey = identityApi.cdk.restApi.addApiKey("identity-api-key");
+
+    const usagePlan = identityApi.cdk.restApi.addUsagePlan("identity-api-usage-plan", {
+      throttle: {
+        rateLimit: 10,
+        burstLimit: 2,
+      },
+      apiStages: [
+        { api: identityApi.cdk.restApi,
+          stage: identityApi.cdk.restApi.deploymentStage
+        },
+      ],
+    });
+    usagePlan.addApiKey(apikey);
+
+
     
     stack.addOutputs({
       CognitoUserPoolWebClient: cognito.userPoolId,

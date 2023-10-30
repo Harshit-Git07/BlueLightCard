@@ -47,7 +47,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return Response.OK( {message: 'Success', data: data});
     
   } catch (error) {
-    logger.error('error while adding data organisation ',{error});
+    logger.error('error adding EC form output data',{error});
     return Response.Error(error as Error);
   }
 };

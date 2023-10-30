@@ -4,7 +4,7 @@ export const companyFollowsUpdatedRule = (dlqUrl: string, table: string, idMappi
         targets: {
             companyFollowsUpdatedFunction : {
               function: {
-                  permissions: ["sqs:SendMessage", "dynamodb:PutItem", "dynamodb:Query"],
+                  permissions: ["sqs:SendMessage", "dynamodb:PutItem", "dynamodb:Query", "dynamodb:DeleteItem"],
                   handler: "packages/api/identity/src/user-management/companyFollowsUpdate.handler",
                   environment: {
                       SERVICE: 'identity',

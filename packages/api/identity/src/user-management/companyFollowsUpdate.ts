@@ -1,6 +1,6 @@
 import {Logger} from "@aws-lambda-powertools/logger";
 import {EventBridgeEvent} from "aws-lambda";
-import {DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
+import {DeleteCommand, DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
 import {SendMessageCommand, SQSClient} from "@aws-sdk/client-sqs";
 const sqs = new SQSClient({ region: process.env.REGION ?? 'eu-west-2'});
@@ -21,6 +21,41 @@ const idMappingTableName = process.env.ID_MAPPING_TABLE_NAME as string;
 const logger = new Logger({serviceName: `${service}-companyFollowsUpdate`})
 const client = new DynamoDBClient({region: process.env.REGION ?? 'eu-west-2'});
 const dynamodb = DynamoDBDocumentClient.from(client);
+
+async function updateCompanyFollows(user: Record<string, string>, input: Input, event: EventBridgeEvent<any, any>) {
+    const putParams = {
+        Item: {
+            pk: `MEMBER#${user.uuid}`,
+            sk: `COMPANYFOLLOWS#${input.company_id}`,
+            likeType: input.likeType,
+        },
+        TableName: tableName
+    };
+    try {
+        const results = await dynamodb.send(new PutCommand(putParams));
+        logger.debug('results', {results});
+    } catch (err: any) {
+        logger.error("error syncing company follows", {err});
+        await sendToDLQ(event);
+    }
+}
+
+async function deleteCompanyFollows(user: Record<string, string>, input: Input, event: EventBridgeEvent<any, any>) {
+    const deleteParams = {
+        Key: {
+            pk: `MEMBER#${user.uuid}`,
+            sk: `COMPANYFOLLOWS#${input.company_id}`
+        },
+        TableName: tableName
+    };
+    try {
+        const results = await dynamodb.send(new DeleteCommand(deleteParams));
+        logger.debug('deleted', {results});
+    } catch (err: any) {
+        logger.error("error deleting company follows", {err});
+        await sendToDLQ(event);
+    }
+}
 
 export const handler = async (event: EventBridgeEvent<any, any>) => {
     logger.info('event received', {event});
@@ -46,20 +81,10 @@ export const handler = async (event: EventBridgeEvent<any, any>) => {
     }
     const user = result.Items?.at(0) as Record<string, string>;
     logger.info('user uuid found', {user});
-    const putParams = {
-        Item: {
-            pk: `MEMBER#${user.uuid}`,
-            sk: `COMPANYFOLLOWS#${input.company_id}`,
-            likeType: input.likeType,
-        },
-        TableName: tableName
-    };
-    try {
-        const results = await dynamodb.send(new PutCommand(putParams));
-        logger.debug('results', { results });
-    } catch (err: any) {
-        logger.error("error syncing company follows", { err });
-        await sendToDLQ(event);
+    if (input.action === 'update') {
+        await updateCompanyFollows(user, input, event);
+    } else if (input.action === 'delete') {
+        await deleteCompanyFollows(user, input, event);
     }
 };
 
@@ -68,4 +93,5 @@ type Input = {
     likeType: string;
     brand: string;
     legacy_id: string;
+    action: string;
 }

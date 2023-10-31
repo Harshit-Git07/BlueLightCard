@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.16.0...bluelightcard/web-v1.17.0) (2023-10-31)
+
+
+### Features
+
+* preload font files ([#558](https://github.com/bluelightcard/BlueLightCard-2.0/issues/558)) ([9938227](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99382278535c46805922d5cedbdea892a3b00aa9))
+* to 306 failed tests ([#547](https://github.com/bluelightcard/BlueLightCard-2.0/issues/547)) ([fb62e10](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fb62e1085904fe58148751aa0d0abd9b23d6494a))
+
+
+### Bug Fixes
+
+* Menu items to display correct data ([#570](https://github.com/bluelightcard/BlueLightCard-2.0/issues/570)) ([b47965b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b47965b4ee63ccf525983c7e8d0c9cb355646f5b))
+* search miss direction ([#573](https://github.com/bluelightcard/BlueLightCard-2.0/issues/573)) ([553f55f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/553f55f09210218e4c7fda5977a614a3243abfd8))
+
 ## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.15.1...bluelightcard/web-v1.16.0) (2023-10-26)
 
 

@@ -197,7 +197,7 @@ const HomePage: NextPage<any> = () => {
                   offername: cleanText(item.offername),
                   companyname: cleanText(item.companyname),
                   imageUrl: handleImageFallbacks(item.image, item.logos),
-                  href: `/offerdetails.php?cid=${item.compid}&oid=${item.id}`,
+                  href: `/offerdetails.php?cid=${item.compid}&oid=${item.offerId}`,
                 };
               })}
             />

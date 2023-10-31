@@ -56,7 +56,12 @@ export const handler = async (event: any) => {
       return;
     }
 
-    const fileData = await getFileData(bucket, key);
+    let fileData = await getFileData(bucket, key);
+
+    if (type.key === OFFER_MENUS_FILE_NAMES.MARKETPLACE) {
+      const regex = new RegExp('"id"', 'g');
+      fileData = fileData.replace(regex, '"offerId"');
+    }
 
     const item = {
       id,

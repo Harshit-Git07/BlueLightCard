@@ -32,7 +32,7 @@ export const homePageQuery = (brand: string) => gql`
             image
             logos
             compid
-            id
+            offerId
           }
         }
         name

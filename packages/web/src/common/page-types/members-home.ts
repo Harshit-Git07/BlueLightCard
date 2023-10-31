@@ -19,7 +19,7 @@ export type MarketPlaceItemType = {
     companyname: string;
     image: string;
     compid: string;
-    id: string;
+    offerId: string;
     logos: string;
   };
 };

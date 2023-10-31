@@ -54,7 +54,7 @@ type Company {
   country: String
   eagleEyeId: Int
   affiliateNetworkId: String
-  affiliateMerchantId: String 
+  affiliateMerchantId: String
   isAgeGated: Boolean
   brands: [Brand]!
   categories: [Category]!
@@ -94,7 +94,7 @@ type MarketPlaceItemEntry {
 
 # This type is temporary and related to Menu Items in S3
 type MarketPlaceMenusItem {
-  id: Int
+  offerId: Int
   compid: Int
   typeid: Int
   offername: String

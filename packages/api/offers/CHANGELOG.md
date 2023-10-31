@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.12.0...bluelightcard/offers-v1.12.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* Menu items to display correct data ([#570](https://github.com/bluelightcard/BlueLightCard-2.0/issues/570)) ([b47965b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b47965b4ee63ccf525983c7e8d0c9cb355646f5b))
+
 ## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.11.0...bluelightcard/offers-v1.12.0) (2023-10-25)
 
 

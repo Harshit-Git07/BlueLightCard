@@ -103,17 +103,15 @@ const Search: FC<SearchProps> = ({
               data-testid="byCompany"
             >
               <label>By company</label>
-              <form action={'/'} method="GET">
-                <InputSelectFieldWithRef
-                  disabled={isLoading}
-                  defaultOption={companyDefaultOption}
-                  onChange={changeCompanyHandler}
-                  options={companies.map((comp) => ({
-                    value: comp.id,
-                    text: comp.name,
-                  }))}
-                />
-              </form>
+              <InputSelectFieldWithRef
+                disabled={isLoading}
+                defaultOption={companyDefaultOption}
+                onChange={changeCompanyHandler}
+                options={companies.map((comp) => ({
+                  value: comp.id,
+                  text: comp.name,
+                }))}
+              />
             </div>
             <div
               className="w-[100%] pb-5 desktop:w-[50%] tablet:w-[90%] tablet:pr-8"
@@ -122,48 +120,49 @@ const Search: FC<SearchProps> = ({
               <label>
                 <i>or</i> by category
               </label>
-              <form action={'/'} method="GET">
-                <InputSelectFieldWithRef
-                  disabled={isLoading}
-                  defaultOption={categoryDefaultOption}
-                  onChange={changeCategoryHandler}
-                  options={categories.map((cat) => ({
-                    value: cat.id,
-                    text: cat.name,
-                  }))}
-                />
-              </form>
+              <InputSelectFieldWithRef
+                disabled={isLoading}
+                defaultOption={categoryDefaultOption}
+                onChange={changeCategoryHandler}
+                options={categories.map((cat) => ({
+                  value: cat.id,
+                  text: cat.name,
+                }))}
+              />
             </div>
           </div>
           <div className="tablet:w-[40%]">
-            <form action={'/'} method="GET">
-              <div className="w-full pb-5 desktop:w-[50%]" data-testid="byPhrase">
-                <label>
-                  <i>or </i> by phrase
-                </label>
-                <InputTextFieldWithRef
-                  onChange={(event) => {
-                    setSearchTerm(event.target.value);
-                  }}
-                />
-              </div>
-              <div data-testid="searchNowBtn">
-                <Button
-                  className="w-full text"
-                  onClick={searchTermHandler}
-                  disabled={isSearching || isLoading}
-                >
-                  {isLoading || isSearching ? (
-                    <LoadingPlaceholder
-                      containerClassName="text-palette-white"
-                      spinnerClassName="text-[1.5em]"
-                    />
-                  ) : (
-                    <>Search now</>
-                  )}
-                </Button>
-              </div>
-            </form>
+            <div className="w-full pb-5 desktop:w-[50%]" data-testid="byPhrase">
+              <label>
+                <i>or </i> by phrase
+              </label>
+              <InputTextFieldWithRef
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    searchTermHandler();
+                  }
+                }}
+              />
+            </div>
+            <div data-testid="searchNowBtn">
+              <Button
+                className="w-full text"
+                onClick={searchTermHandler}
+                disabled={isSearching || isLoading}
+              >
+                {isLoading || isSearching ? (
+                  <LoadingPlaceholder
+                    containerClassName="text-palette-white"
+                    spinnerClassName="text-[1.5em]"
+                  />
+                ) : (
+                  <>Search now</>
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </div>

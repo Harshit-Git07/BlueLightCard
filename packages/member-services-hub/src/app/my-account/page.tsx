@@ -26,17 +26,17 @@ const MyAccount: NextPage<any> = (props) => {
               title: 'Profile',
               details: () => (
                 <ProfileCard
-                  user_name="Lucy Wolfe"
+                  user_name="Full Name"
                   user_image="https://via.placeholder.com/106x106"
-                  user_ms_role="Manager"
+                  user_ms_role="Role"
                   data_pairs={[
                     {
-                      label: 'Email',
-                      value: 'lucywolfe@bluelightcard.co.uk',
+                      label: 'Email Address',
+                      value: 'fullname@bluelightcard.co.uk',
                     },
                     {
-                      label: 'password',
-                      value: '***********',
+                      label: 'Title',
+                      value: 'Some information',
                     },
                   ]}
                 />

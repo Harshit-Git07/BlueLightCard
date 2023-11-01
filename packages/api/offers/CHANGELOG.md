@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.12.1...bluelightcard/offers-v1.13.0) (2023-11-01)
+
+
+### Features
+
+* Deploy API to blcshine.io ([#561](https://github.com/bluelightcard/BlueLightCard-2.0/issues/561)) ([6b97195](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6b97195014b59d79b1ae65492ca2f88799ff1e00))
+
 ## [1.12.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.12.0...bluelightcard/offers-v1.12.1) (2023-10-31)
 
 

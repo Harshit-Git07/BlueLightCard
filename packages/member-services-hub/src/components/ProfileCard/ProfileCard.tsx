@@ -12,6 +12,7 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cssUtil } from '@/app/common/utils/cssUtil';
 import Link from 'next/link';
+import CantEditButton from '../CantEditButton/CantEditButton';
 
 const ProfileCard: FC<ProfileCardProps> = ({
   user_name,
@@ -21,6 +22,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
   data_pairs,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  let icon = modalOpen ? faChevronUp : faChevronDown;
   return (
     <article className=" w-[566px] min-h-auto p-10 bg-white rounded-lg border border-zinc-200 flex-col justify-start items-start gap-5 inline-flex">
       {modalOpen && <EditModal className=" fixed left-[695px] top-[250px]" />}
@@ -28,26 +30,8 @@ const ProfileCard: FC<ProfileCardProps> = ({
         <h1 className="text-shade-greyscale-grey-800 text-2xl font-semibold font-['Museo Sans'] leading-8 tracking-[.24px]">
           Personal Information
         </h1>
-        {modal_button && modalOpen ? (
-          <Button
-            variant={ThemeVariant.Tertiary}
-            id="edit_modal_button"
-            className="h-9 text-center text-shade-greyscale-grey-500 text-sm font-normal font-['Museo Sans'] leading-[20px] tracking-[.07px] py-2 rounded-[5px] justify-end items-center gap-2.5 flex"
-            iconRight={faChevronUp}
-            onClick={() => setModalOpen(!modalOpen)}
-          >
-            Why can&apos;t I edit?
-          </Button>
-        ) : (
-          <Button
-            variant={ThemeVariant.Tertiary}
-            id="edit_modal_button"
-            className="h-9 text-center text-shade-greyscale-grey-500 text-sm font-normal font-['Museo Sans'] leading-5 tracking-[.07px] py-2 rounded-[5px] justify-end items-center gap-2.5 flex"
-            iconRight={faChevronDown}
-            onClick={() => setModalOpen(!modalOpen)}
-          >
-            Why can&apos;t I edit?
-          </Button>
+        {modal_button && (
+          <CantEditButton icon={icon} onClick={() => setModalOpen(!modalOpen)} open={modalOpen} />
         )}
       </div>
       <hr className="self-stretch border-[0.5px] border-neutral-200" />

@@ -1,5 +1,57 @@
 {
-  "intro": "Verify Page",
+  "pageHeading": {
+    "first": {
+      "title": "Instant verification, instant impact",
+      "text": "Unlock your Blue Light Card discount scheme with confidence using the latest API technology"
+    },
+    "second": {
+      "title": "Why use Verify?",
+      "text": "Protect your business, forge genuine connection, and unlock a world of benefits with total confidence - all in an instant."
+    },
+    "third": {
+      "title": "How does Verify work?",
+      "text": "Verify has been created to allow our brand partners to authenticate transactions in an instant so that only eligible Blue Light Card members redeem your discount."
+    }
+  },
+  "contentBox": {
+    "first": {
+      "title": "3 ways to verify",
+      "text": "Not got an app.....don’t worry, Blue Light Card Verify can also be deployed on your till point or website",
+      "subtext":"Enquire about our Verify API to find out more"
+    },
+    "second": {
+      "title": "Harnesses the power of insights",
+      "text": "Using insights to understand the behaviour of members allows you to maximise the performance of your offer.",
+      "lists": {
+        "first": {
+          "title": "With data and insights you can:",
+          "items": [
+            "Identify the success of your offer",
+            "Understand the impact of marketing exposure in granular detail",
+            "Pinpoint member engagement",
+            "Provide category and industry insights to share the future of our partnership"
+          ]
+        },
+        "second": {
+          "title": "Create tailored marketing plans",
+          "items": [
+            "Action both proactively and reactively to any changes in spend or engagement",
+            "Shape a joint marketing plan to push your offer at peaks / new menu launches",
+            "Drive member engagement & member spend",
+            "React to changes within the wider category, mitigating effect on member spend."
+          ]
+        }
+      }
+    }
+  },
+  "pageFooter": {
+    "first": {
+      "text": "Say goodbye to uncertainties and hello to happy customers."
+    }
+  },
+  "button": {
+    "enquire": "Enquire about Verify API"
+  },
   "seo": {
     "title": "Blue Light Card Verify | Instant verification, instant impact",
     "description": "Unlock your Blue Light Card discount scheme with confidence using the latest API technology.",
@@ -8,14 +60,14 @@
       "type": "Blue Light Card Verify",
       "sitename": "Blue Light Card Verify",
       "url": "https://www.bluelightcard.co.uk/verify",
-      "image": ""
+      "image": "https://cdn.bluelightcard.co.uk/web/landing-pages/verify/verify-pos.webp"
     },
     "twitter": {
       "card": "summary_large_image",
       "title": "Blue Light Card Verify",
       "description": "API integration – instant verification, instant impact",
       "site": "@bluelightcard",
-      "image": "",
+      "image": "https://cdn.bluelightcard.co.uk/web/landing-pages/verify/verify-pos.webp",
       "imageAlt": "Blue Light Card Verify",
       "creator": "@bluelightcard"
     }

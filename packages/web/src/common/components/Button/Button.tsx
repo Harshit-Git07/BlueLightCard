@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { ButtonProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ThemeVariant } from '@/types/theme';
@@ -13,6 +13,7 @@ const Button: FC<ButtonProps> = ({
   slim,
   className,
   invertColor,
+  href,
   type = 'button',
   variant = ThemeVariant.Primary,
   onClick,
@@ -20,6 +21,7 @@ const Button: FC<ButtonProps> = ({
   const colorToken: any =
     invertColor && color[variant].invert ? color[variant].invert : color[variant].base;
   const classes = cssUtil([
+    type === 'link' ? 'inline-block' : '',
     slim ? 'py-1' : 'py-1.5',
     'px-5 rounded-md transition border-2',
     'focus:outline outline-2 outline-offset-2',
@@ -31,12 +33,19 @@ const Button: FC<ButtonProps> = ({
     colorToken.border ?? '',
     className ?? '',
   ]);
+  const ButtonTag = type === 'link' ? 'a' : 'button';
   return (
-    <button type={type} disabled={disabled} className={classes} onClick={onClick}>
+    <ButtonTag
+      href={href}
+      type={type !== 'link' ? type : undefined}
+      disabled={type !== 'link' ? disabled : undefined}
+      className={classes}
+      onClick={type !== 'link' ? onClick : undefined}
+    >
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}
       {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}
-    </button>
+    </ButtonTag>
   );
 };
 

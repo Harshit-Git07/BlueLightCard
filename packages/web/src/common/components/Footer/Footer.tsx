@@ -80,7 +80,10 @@ const Footer: FC<FooterProps> = ({
                 <p className="tablet:inline-block hidden h-fit my-auto">Download our apps:</p>
                 {downloadLinks.map((link: downloadLink, index) => {
                   return (
-                    <div key={index} className="relative w-[160px] h-[50px] my-2">
+                    <div
+                      key={index}
+                      className="relative w-[80px] mobile:w-[100px] mobile-xl:w-[150px] h-[50px] my-2"
+                    >
                       <Link
                         className="flex object-contain absolute top-0 left-0 w-full h-full"
                         href={link.downloadUrl}

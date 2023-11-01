@@ -67,13 +67,13 @@ const socialLinks = [
 
 const downloadLinks = [
   {
-    imageUrl: '/web/assets/google-play-badge.png',
+    imageUrl: '/assets/google-play-badge.png',
     downloadUrl:
       'https://play.google.com/store/apps/details?id=com.bluelightcard.user&amp;hl=en_GB',
     linkTitle: 'Get the Blue Light Card app on Google Play',
   },
   {
-    imageUrl: '/web/assets/app-store-badge.png',
+    imageUrl: '/assets/app-store-badge.png',
     downloadUrl: 'https://apps.apple.com/gb/app/blue-light-card/id689970073',
     linkTitle: 'Get the Blue Light Card app on Google Play',
   },

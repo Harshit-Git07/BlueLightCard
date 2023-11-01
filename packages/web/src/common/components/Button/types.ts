@@ -3,7 +3,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { MouseEventHandler, PropsWithChildren } from 'react';
 
 export type ButtonProps = PropsWithChildren & {
-  type?: 'button' | 'submit';
+  type?: 'button' | 'submit' | 'link';
   disabled?: boolean;
   slim?: boolean;
   className?: string;
@@ -11,5 +11,6 @@ export type ButtonProps = PropsWithChildren & {
   invertColor?: boolean;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;
+  href?: string;
   onClick?: MouseEventHandler;
 };

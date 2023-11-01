@@ -78,6 +78,13 @@ Tertiary.args = {
   onClick: () => {},
 };
 
+export const Link = DefaultTemplate.bind({});
+
+Link.args = {
+  type: 'link',
+  href: '/',
+};
+
 const InvertedTemplate: StoryFn<typeof Button> = (args) => (
   <div className="p-5 bg-palette-primary-base">
     <Button {...args}>Button</Button>

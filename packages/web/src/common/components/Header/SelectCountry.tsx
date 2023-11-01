@@ -36,7 +36,7 @@ const SelectCountry: FC<CountrySelectorProps> = ({
             className="flex gap-3 w-full items-center dark:bg-palette-tertiary-dark bg-palette-tertiary-base p-2.5 rounded-lg text-palette-tertiary-on-base"
             onClick={handleSelectorClick}
           >
-            <div className="tablet:w-[35px] tablet:h-[20px]">
+            <div className="tablet:w-[35px] w-[25px]">
               <Icon iconKey={selectedCountry.key} />
             </div>
             <div className="mobile:hidden desktop:block mr-5">

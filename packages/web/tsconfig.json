@@ -54,6 +54,9 @@
       "@/page-types/*": [
         "src/common/page-types/*"
       ],
+      "@/page-components/*": [
+        "src/page-components/*"
+      ],
       "@/scripts/*": [
         "./scripts/*"
       ],

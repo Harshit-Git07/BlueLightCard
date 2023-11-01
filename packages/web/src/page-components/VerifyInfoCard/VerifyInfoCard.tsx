@@ -4,7 +4,7 @@ import Image from '@/components/Image/Image';
 
 const VerifyInfoCard: FC<VerifyInfoCardProps> = ({ title, imageSrc, imageAlt, children }) => {
   return (
-    <div className="max-w-[340px] w-full text-center mx-auto px-4 py-4">
+    <div className="max-w-[340px] w-full text-center mx-auto py-2 tablet:py-4 mobile-xl:px-4">
       <Image
         width={200}
         height={200}
@@ -16,7 +16,7 @@ const VerifyInfoCard: FC<VerifyInfoCardProps> = ({ title, imageSrc, imageAlt, ch
       <h2 className="font-semibold text-2xl text-palette-body-text font-[MuseoSans] mb-2">
         {title}
       </h2>
-      <p className="font-[MuseoSans] text-surface-50-dark/60 text-sm text-center leading-4">
+      <p className="font-[MuseoSans] text-surface-50-dark/60 text-md text-center leading-5">
         {children}
       </p>
     </div>

@@ -11,8 +11,6 @@ import makeQuery from '../../../graphql/makeQuery';
 import { redirectToLogin } from '@/hoc/withAuth';
 import { useRouter } from 'next/router';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/pro-solid-svg-icons';
 
 const sortByAlphabeticalOrder = (a: CategoryType | CompanyType, b: CategoryType | CompanyType) => {
   if (a.name < b.name) return -1;
@@ -54,6 +52,20 @@ const Search: FC<SearchProps> = ({
     setIsSearching(true);
     onSearchTerm(searchTerm);
   };
+
+  useEffect(() => {
+    // This sets the isSearching flag to false when the user navigates away from the page and then comes back
+    // on safari useEffect and useLayoutEffect don't retrigger when you navigate back to the page and states persist between these navigations
+    window.addEventListener(
+      'pageshow',
+      function (event) {
+        if (event.persisted) {
+          setIsSearching(false);
+        }
+      },
+      false
+    );
+  }, []);
 
   // Fetch Data on first load
   useEffect(() => {

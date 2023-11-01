@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.17.0...bluelightcard/web-v1.18.0) (2023-11-01)
+
+
+### Features
+
+* tr 78 compose page template ([#536](https://github.com/bluelightcard/BlueLightCard-2.0/issues/536)) ([8fe919c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8fe919c00fdd0052ec2dfba5de298e8a0990a670))
+
+
+### Bug Fixes
+
+* fixed issue with brandasset logo ([#581](https://github.com/bluelightcard/BlueLightCard-2.0/issues/581)) ([31dcc39](https://github.com/bluelightcard/BlueLightCard-2.0/commit/31dcc3954326049fbda482f6ef10e2bb0214b309))
+* search loading and text ([dc8664f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dc8664ff76a8efa25bf05de1abf83f58d634e7a8))
+
 ## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.16.0...bluelightcard/web-v1.17.0) (2023-10-31)
 
 

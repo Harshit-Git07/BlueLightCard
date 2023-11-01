@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.2...bluelightcard/member-services-hub-v1.2.3) (2023-11-01)
+
+
+### Bug Fixes
+
+* cosmetic issues on profile card ti 575 ([#566](https://github.com/bluelightcard/BlueLightCard-2.0/issues/566)) ([8205e86](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8205e861a308700ec30c2ef2bcefa49310b43761))
+
+
+### Other Changes
+
+* cr reviews ([#579](https://github.com/bluelightcard/BlueLightCard-2.0/issues/579)) ([c21ac98](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c21ac98d86edf41468d381912d3781544c5dc9f8))
+
 ## [1.2.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.1...bluelightcard/member-services-hub-v1.2.2) (2023-10-30)
 
 

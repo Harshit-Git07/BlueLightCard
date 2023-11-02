@@ -11,7 +11,7 @@ export type headers = {
   [header: string]: string
 }
 
-type RequestResponse = {data?: any, status?: number, message?: string | undefined}
+export type RequestResponse = {data?: any, status?: number, message?: string | undefined}
 type RequestMethods = keyof typeof HTTPRequestMethods
 
 

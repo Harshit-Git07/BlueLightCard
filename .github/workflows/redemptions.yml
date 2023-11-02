@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - packages/api/redemptions/**      
+      - packages/api/redemptions/**
       - stacks/**
       - .github/workflows/redemptions.yml
       - package-lock.json
@@ -12,7 +12,7 @@ on:
       - package.json
   pull_request:
     paths:
-      - packages/api/redemptions/**      
+      - packages/api/redemptions/**
       - stacks/**
       - .github/workflows/redemptions.yml
       - package-lock.json
@@ -37,8 +37,8 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install
-      - run: npm run test -w packages/api/redemptions      
-      
+      - run: npm run test -w packages/api/redemptions
+
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Changelog
@@ -93,6 +93,34 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
+      - name: Get secret
+        run: |
+          SECRET_NAME=$(aws secretsmanager describe-secret --secret-id blc-mono-redemptions/NewVaultSecrets --query Name --output text)
+          echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
+        continue-on-error: true
+        id: vault-secret
+      - name: Update Secret
+        if: ${{ env.SECRET_NAME == 'blc-mono-redemptions/NewVaultSecrets' }}
+        run: |
+          aws secretsmanager put-secret-value \
+            --secret-id blc-mono-redemptions/NewVaultSecrets \
+            --secret-string '{
+              "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
+              "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
+              "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
+            }'
+      - name: Create Secret
+        if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
+        run: |
+          aws secretsmanager create-secret \
+            --name blc-mono-redemptions/NewVaultSecrets \
+            --secret-string '{
+              "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
+              "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
+              "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
+            }'
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -106,10 +134,15 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: Deploy
+        env:
+          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
+          ENVIRONMENT: staging
+          CODE_REDEEMED_PATH: NewVault/codesRedeemed
+          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging
       - name: Deploy Spec
         env:
-          REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}        
+          REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
         run: npm run -s oas --region=eu-west-2 --stage=staging --api-version=v1
 
   release:
@@ -133,6 +166,34 @@ jobs:
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+      - name: Get secret
+        run: |
+          SECRET_NAME=$(aws secretsmanager describe-secret --secret-id blc-mono-redemptions/NewVaultSecrets --query Name --output text)
+          echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
+        continue-on-error: true
+        id: vault-secret
+      - name: Update Secret
+        if: ${{ env.SECRET_NAME == 'blc-mono-redemptions/NewVaultSecrets' }}
+        run: |
+          aws secretsmanager put-secret-value \
+            --secret-id blc-mono-redemptions/NewVaultSecrets \
+            --secret-string '{
+              "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
+              "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
+              "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
+            }'
+      - name: Create Secret
+        if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
+        run: |
+          aws secretsmanager create-secret \
+            --name blc-mono-redemptions/NewVaultSecrets \
+            --secret-string '{
+              "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
+              "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
+              "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
+            }'
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -149,5 +210,5 @@ jobs:
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy redemptions --stage production --region ${{matrix.region}}
       - name: Deploy Spec
         env:
-          REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}        
+          REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
         run: npm run -s oas --region=${{matrix.region}} --stage=production --api-version=v1

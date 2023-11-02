@@ -1,4 +1,4 @@
-import { Stack } from 'aws-cdk-lib';
+
 import { IRestApi, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import {
   ApiGatewayModelGenerator,
@@ -6,6 +6,8 @@ import {
   Model,
   ResponseModel,
 } from '../../../core/src/extensions/apiGatewayExtension';
+import { Stack } from "sst/constructs";
+
 
 export class PostSpotify {
   constructor(
@@ -19,6 +21,12 @@ export class PostSpotify {
     return {
       function: {
         handler: 'packages/api/redemptions/src/handlers/proxy/postSpotify.handler',
+        environment: {
+          CODES_REDEEMED_HOST: process.env.CODES_REDEEMED_HOST,
+          ENVIRONMENT: process.env.ENVIRONMENT,
+          CODE_REDEEMED_PATH: process.env.CODE_REDEEMED_PATH,
+          CODE_ASSIGNED_REDEEMED_PATH: process.env.CODE_ASSIGNED_REDEEMED_PATH,
+        }
       },
       cdk: {
         method: {

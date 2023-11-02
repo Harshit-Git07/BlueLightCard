@@ -8,13 +8,16 @@ import { PostAffiliate } from './src/routes/postAffiliate';
 import { PostSpotifyModel } from './src/models/postSpotify';
 import { PostSpotify } from './src/routes/postSpotify';
 
+
 export function Redemptions({ stack }: StackContext) {
   const { certificateArn } = use(Shared);
   const { cognito } = use(Identity);
 
+
   //set tag service identity to all resources
   stack.tags.setTag('service', 'redemptions');
   stack.tags.setTag('map-migrated', 'd-server-017zxazumgiycz');
+
 
   const api = new ApiGatewayV1Api(stack, 'redemptions', {
     authorizers: {
@@ -24,7 +27,7 @@ export function Redemptions({ stack }: StackContext) {
       },
     },
     defaults: {
-      authorizer: 'Authorizer',
+       authorizer: 'Authorizer',
       function: {
         timeout: 20,
         environment: { service: 'redemptions' },
@@ -34,12 +37,12 @@ export function Redemptions({ stack }: StackContext) {
       restApi: {
         ...(['production', 'staging'].includes(stack.stage) &&
           certificateArn && {
-            domainName: {
-              domainName:
-                stack.stage === 'production' ? 'redemptions.blcshine.io' : `${stack.stage}-redemptions.blcshine.io`,
-              certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
-            },
-          }),
+          domainName: {
+            domainName:
+              stack.stage === 'production' ? 'redemptions.blcshine.io' : `${stack.stage}-redemptions.blcshine.io`,
+            certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
+          },
+        }),
         deployOptions: {
           stageName: 'v1',
         },
@@ -49,7 +52,6 @@ export function Redemptions({ stack }: StackContext) {
 
   // Create API Models
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
-  
   const postSpotifyModel = apiGatewayModelGenerator.generateModel(PostSpotifyModel);
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
   // Create Lambda Based API Routes

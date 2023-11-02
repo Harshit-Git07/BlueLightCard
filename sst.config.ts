@@ -15,7 +15,7 @@ export default {
     };
   },
 
-  stacks(app) {
+  stacks (app) {
     app.setDefaultFunctionProps({
       runtime: 'nodejs18.x',
       environment: {
@@ -32,8 +32,9 @@ export default {
       .stack(Offers, { id: 'offers' })
       .stack(Web, { id: 'web' })
       .stack(CMS, { id: 'cms' })
-      .stack(Redemptions, { id: 'redemptions'})
-      .stack(MemberServicesHub, { id: 'member-services-hub' });
+      .stack(MemberServicesHub, { id: 'member-services-hub' })
+      .stack(Redemptions, { id: 'redemptions' })
+
   },
 } satisfies SSTConfig;
 

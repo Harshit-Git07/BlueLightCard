@@ -3,8 +3,7 @@ export type HeaderBarProps = {
   surname: string;
   email: string;
   button?: boolean;
-  rightChevron?: boolean;
-  leftChevron?: boolean;
+  chevronPosition?: 'left' | 'right';
   notifications?: boolean;
   messages?: boolean;
   calender?: boolean;

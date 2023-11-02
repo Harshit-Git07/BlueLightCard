@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FC } from 'react';
 import { ChevronProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/pro-regular-svg-icons';
+import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';
 
-export const Chevron: FC<ChevronProps> = ({ id, show }) => {
-  if (show) {
-    return (
-      <span id={id} className="ml-[10px] mr-[10px]">
-        <FontAwesomeIcon icon={faChevronDown} size="lg" />
-      </span>
-    );
-  } else {
-    return <div></div>;
-  }
+export const Chevron: FC<ChevronProps> = ({ id, dropdownClicked, setDropdownClicked }) => {
+  return (
+    <button
+      id={id}
+      className="ml-[10px] mr-[10px] text-zinc-500"
+      onClick={() => {
+        setDropdownClicked(!dropdownClicked);
+      }}
+    >
+      {dropdownClicked ? (
+        <FontAwesomeIcon icon={faChevronDown} />
+      ) : (
+        <FontAwesomeIcon icon={faChevronUp} />
+      )}
+    </button>
+  );
 };
 export default Chevron;

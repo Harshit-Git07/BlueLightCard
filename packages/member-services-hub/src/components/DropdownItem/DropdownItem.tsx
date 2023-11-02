@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FC } from 'react';
 import { DropdownProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/pro-regular-svg-icons';
-
+import { cssUtil } from '@/app/common/utils/cssUtil';
+import Link from 'next/link';
 export const DropdownItem: FC<DropdownProps> = ({ name, link, id }) => {
+  const [itemClicked, setItemClicked] = useState(false);
   return (
-    <a
+    <Link
       id={id}
       href={link}
-      className="block rounded pl-2 pr-6 py-2 text-sm font-medium font-museosans text-background-button-standard-primary-enabled-base hover:text-primary hover:bg-background-button-standard-primary-enabled-base hover:bg-opacity-30 inline-flex"
+      className={cssUtil([
+        ' w-full px-[20px] py-2 text-sm font-normal font-museosans  inline-flex',
+        itemClicked
+          ? 'text-background-button-standard-primary-enabled-base text-primary bg-background-button-standard-primary-enabled-base bg-opacity-10'
+          : 'text-body-color',
+      ])}
+      onClick={() => setItemClicked(!itemClicked)}
     >
       {' '}
       <FontAwesomeIcon
@@ -18,7 +26,7 @@ export const DropdownItem: FC<DropdownProps> = ({ name, link, id }) => {
         size="lg"
       />
       <div className="ml-3">{name}</div>
-    </a>
+    </Link>
   );
 };
 

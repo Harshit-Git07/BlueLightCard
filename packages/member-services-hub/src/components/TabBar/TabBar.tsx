@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { TabBarProps, TabContentProps, TabItemProps } from './types';
 import { string } from 'zod';
+import { cssUtil } from '@/app/common/utils/cssUtil';
 
 const TabBar: FC<TabBarProps> = ({ items, defaultOpen, onTabClick, selected }) => {
   let [open, setOpen] = useState(defaultOpen);
@@ -10,11 +11,12 @@ const TabBar: FC<TabBarProps> = ({ items, defaultOpen, onTabClick, selected }) =
         <div className="relative flex-col justify-start items-start flex">
           <button
             onClick={() => onTabClick(category)}
-            className={`flex border-b-2 py-3 px-6 text-sm font-medium md:text-base lg:py-4 lg:px-10 ${
+            className={cssUtil([
+              'flex border-b-2 py-3 px-6 text-sm font-medium md:text-base lg:py-4 lg:px-10',
               selected === category
                 ? 'px-47 py-18 border-primary bg-opacity-10 text-palette-primary border-blue-900'
-                : 'text-shade-greyscale-grey-500 border-[#FFFFFF] hover:border-primary hover:text-palette-primary'
-            }`}
+                : 'text-shade-greyscale-grey-500 border-[#FFFFFF] hover:border-primary hover:text-palette-primary',
+            ])}
           >
             <div className="mr-2">{icon}</div>
             {title}
@@ -24,7 +26,7 @@ const TabBar: FC<TabBarProps> = ({ items, defaultOpen, onTabClick, selected }) =
     );
   };
   return (
-    <section className="h-60">
+    <section className="h-[60px]">
       <div className="flex flex-wrap bg-[#FFFFFF] drop-shadow-[1px_1px_1px_rgba(0,0,0,0.12)]">
         {items.map((item, index) => (
           <div

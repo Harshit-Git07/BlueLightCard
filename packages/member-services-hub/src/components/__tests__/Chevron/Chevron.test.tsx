@@ -9,7 +9,8 @@ describe('Chevron component', () => {
   beforeEach(() => {
     props = {
       id: 'almightyChevron',
-      show: true,
+      dropdownClicked: false,
+      setDropdownClicked: jest.fn(),
     };
   });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FC } from 'react';
 import { HeaderBarProps } from './types';
 
@@ -11,14 +11,14 @@ import { NotificationsIcon } from '../NotificationsIcon/NotificationsIcon';
 import { ProfilePicture } from '../ProfilePicture/ProfilePicture';
 import { Chevron } from '../Chevron/Chevron';
 import { Search } from '../Search/Search';
+import { cssUtil } from '@/app/common/utils/cssUtil';
 
 const HeaderBar: FC<HeaderBarProps> = ({
   firstname,
   surname,
   email,
   button,
-  rightChevron,
-  leftChevron,
+  chevronPosition = 'right',
   messages,
   notifications,
   calender,
@@ -29,60 +29,71 @@ const HeaderBar: FC<HeaderBarProps> = ({
   welcomeText,
   buttonText,
 }) => {
+  const [dropdownClicked, setDropdownClicked] = useState(false);
   return (
-    <header>
-      <div className="mx-auto w-full px-4 lg:container">
-        <div className="flex items-center justify-end bg-white py-3 px-3 sm:justify-between md:px-8">
-          <div className="items-center sm:flex">
-            <WelcomeHeader
-              id="welcomeBoxId"
-              show={welcome}
-              welcomeHeader={welcomeHeader != undefined ? welcomeHeader : ''}
-              welcomeText={welcomeText != undefined ? welcomeText : ''}
-            />
+    <header className="mx-auto w-full h-[86px] border-s-white border-s-2 border-b border-b-gray-100 px-6 lg:container">
+      <div className="flex items-center justify-end bg-white py-3 px-3 sm:justify-between md:px-8">
+        <div className="items-center sm:flex">
+          <WelcomeHeader
+            id="welcomeBoxId"
+            show={welcome}
+            welcomeHeader={welcomeHeader != undefined ? welcomeHeader : ''}
+            welcomeText={welcomeText != undefined ? welcomeText : ''}
+          />
+        </div>
+        <div>
+          <Search id="searchBoxId" show={search} />
+        </div>
+
+        <div className="flex items-center">
+          <ButtonHeaderBar
+            id="button"
+            show={button}
+            buttonText={buttonText != undefined ? buttonText : ''}
+          />
+          <div className="mr-5 md:block">
+            <CalenderIcon id="calenderIcon" show={calender} />
           </div>
-          <div>
-            <Search id="searchBoxId" show={search} />
+          <div className="relative mr-5 md:block">
+            <NotificationsIcon id="notificationIcon" show={notifications} />
+          </div>
+          <div className="relative mr-5 md:block">
+            <MessagesIcon id="messagesIcon" show={messages} />
           </div>
 
-          <div className="flex items-center">
-            <ButtonHeaderBar
-              id="button"
-              show={button}
-              buttonText={buttonText != undefined ? buttonText : ''}
-            />
-            <div className="mr-5 md:block">
-              <CalenderIcon id="calenderIcon" show={calender} />
-            </div>
-            <div className="relative mr-5 md:block">
-              <NotificationsIcon id="notificationIcon" show={notifications} />
-            </div>
-            <div className="relative mr-5 md:block">
-              <MessagesIcon id="messagesIcon" show={messages} />
-            </div>
+          <div className="group relative">
+            <div className="flex items-center">
+              <p className="flex flex-col text-end text-[#32363C] text-base font-normal font-museosans leading-normal tracking-tight">
+                {firstname + ' ' + surname}
+                <span className="text-zinc-500 text-sm font-normal font-['Museo Sans'] leading-tight tracking-tight">
+                  {email}
+                </span>
+              </p>
 
-            <div className="group relative">
-              <button className="flex items-center">
-                <p className="mr-4 text-right text-sm font-medium text-black font-museosans">
-                  {firstname + ' ' + surname}
-                  <span className="block text-xs font-normal text-body-color">{email}</span>
-                </p>
-                <Chevron id="leftChevron" show={leftChevron} />
+              <div
+                className={cssUtil([
+                  'flex ps-3 gap-2',
+                  chevronPosition === 'left' ? ' flex-row-reverse' : 'flex-row',
+                ])}
+              >
                 <ProfilePicture
                   id={profilePicture === undefined ? 'initials' : 'profilePicture'}
-                  profilePicture={profilePicture === undefined ? 'notset' : profilePicture}
+                  profilePicture={profilePicture}
                   firstname={firstname}
                   surname={surname}
                 />
                 <Chevron
-                  id="rightChevron"
-                  show={rightChevron === undefined ? true : rightChevron}
+                  id="chevron"
+                  dropdownClicked={dropdownClicked}
+                  setDropdownClicked={setDropdownClicked}
                 />
-              </button>
-              <div className="z-10 invisible absolute right-0 top-[120%] mt-3 w-[200px] space-y-2 rounded bg-white p-3 opacity-0 shadow-card-2 duration-200 group-hover:visible group-hover:top-full group-hover:opacity-100">
-                <DropdownItem id="dropdownList" link="/my-account" name="My Account" />
               </div>
             </div>
+            {dropdownClicked && (
+              <div className="w-[202px] right-3 top-[75px] absolute z-20 h-14 py-2.5 bg-white rounded border border-zinc-200 flex-col justify-start items-start inline-flex">
+                <DropdownItem id="dropdownList" link="/my-account" name="My Account" />
+              </div>
+            )}
           </div>
         </div>
       </div>

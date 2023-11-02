@@ -9,7 +9,7 @@ describe('profile picture component', () => {
   beforeEach(() => {
     props = {
       id: 'profilePicture',
-      profilePicture: 'random',
+      profilePicture: '/random.png',
       firstname: 'Daniel',
       surname: 'Cook',
     };

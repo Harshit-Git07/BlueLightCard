@@ -1,4 +1,5 @@
 export interface ChevronProps {
   id?: string;
-  show?: boolean;
+  dropdownClicked: boolean;
+  setDropdownClicked: (dropdownClicked: boolean) => void;
 }

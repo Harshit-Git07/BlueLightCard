@@ -1,6 +1,7 @@
 export interface ProfilePictureProps {
-  id?: string;
+  id: string;
   profilePicture?: string;
+  alt?: string;
   firstname: string;
   surname: string;
 }

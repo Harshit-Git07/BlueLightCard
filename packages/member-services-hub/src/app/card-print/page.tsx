@@ -9,9 +9,9 @@ const Card: NextPage<any> = (props) => {
   return (
     <main className="flex flex-row">
       <GlobalNavigation />
-      <div className="container flex flex-col">
+      <div className="w-full flex flex-col flex-grow-1">
         <HeaderBar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
-        <div className="container flex flex-col justify-center items-center pt-[150px]">
+        <div className="flex flex-col justify-center items-center pt-[150px]">
           <FileShelfImage height={340} width={340} />
           <div className="flex-col items-center gap-4 flex">
             <div className="text-black text-[32px] font-semibold font-['Museo Sans'] leading-10 tracking-tight">

@@ -1,8 +1,7 @@
-import { DbHelper } from '../../../core/src/aws/dynamodb/dbhelper'
+import { DbHelper } from '../../../core/src/aws/dynamodb/dbhelper';
 
 export class CompanyCategoryConnectionRepository {
-
-  constructor (private readonly tableName: string) {
+  constructor(private readonly tableName: string) {
     this.tableName = tableName;
   }
 
@@ -18,8 +17,4 @@ export class CompanyCategoryConnectionRepository {
 
     return await DbHelper.query(params);
   }
-
-
-
-
 }

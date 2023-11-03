@@ -188,8 +188,8 @@ type Banner {
 type Tag {
   id: ID!
   name: String!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Int!
+  updatedAt: Int!
 }
 
 # TODO: Temporary until we migrate categories and companies to DynamoDB

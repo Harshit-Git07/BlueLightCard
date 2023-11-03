@@ -86,7 +86,7 @@ export class Tables {
   private createCompanyTable (): Table {
     return new Table(this.stack, 'companies', {
       fields: {
-        legacyId: 'string',
+        legacyId: 'string', // Value: Brand#legacyID - ex: blc-uk#1209
         id: 'string',
       },
       primaryIndex: {

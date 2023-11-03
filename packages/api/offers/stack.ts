@@ -21,7 +21,7 @@ export function Offers ({ stack }: StackContext) {
   const dataSources = new DataSource(offersApi, tables, lambdas)
   const resolvers = new Resolver(dataSources)
   resolvers.initialise()
-  new EventBridge(stack, stack.stage, tables)
+  new EventBridge(stack, stack.stage, tables, queues)
 
   stack.addOutputs({
     OffersApiEndpoint: offersApi.graphqlUrl,

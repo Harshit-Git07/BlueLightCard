@@ -1,5 +1,14 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { BatchGetCommand, DynamoDBDocumentClient, QueryCommand, UpdateCommand, PutCommand, GetCommand, TransactWriteCommand} from '@aws-sdk/lib-dynamodb'
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+  BatchGetCommand,
+  BatchWriteCommand,
+  DynamoDBDocumentClient,
+  QueryCommand,
+  UpdateCommand,
+  PutCommand,
+  GetCommand,
+  TransactWriteCommand,
+} from '@aws-sdk/lib-dynamodb';
 
 export class DbHelper {
   private static client = new DynamoDBClient({});
@@ -28,5 +37,7 @@ export class DbHelper {
     return await this.dynamodb.send(new UpdateCommand(params));
   }
 
-
+  static async batchWrite(params: any) {
+    return await this.dynamodb.send(new BatchWriteCommand(params));
+  }
 }

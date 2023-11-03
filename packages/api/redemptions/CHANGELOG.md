@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.2.0...bluelightcard/redemptions-v1.3.0) (2023-11-03)
+
+
+### Features
+
+* added infrastructure code for Spotify proxy ([b92307c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b92307c608b682d773cea74e208684b91cbe1595))
+* TR-57, Spotify proxy lambda infrastructure ([#534](https://github.com/bluelightcard/BlueLightCard-2.0/issues/534)) ([b92307c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b92307c608b682d773cea74e208684b91cbe1595))
+* TR-70, Spotify Lambda ([#565](https://github.com/bluelightcard/BlueLightCard-2.0/issues/565)) ([db28eba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/db28ebad9823d23065e142b784bff5a6c7e9cb9a))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.1.0...bluelightcard/redemptions-v1.2.0) (2023-10-17)
 
 

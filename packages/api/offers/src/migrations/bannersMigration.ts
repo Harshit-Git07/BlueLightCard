@@ -98,7 +98,7 @@ const user = process.env.DB_USER
 const password = process.env.DB_PASSWORD
 const database = process.env.DATABASE
 const region = process.env.REGION ?? 'eu-west-2'
-const tableName = process.env.DYNAMO_TABLE
+const tableName = process.env.BANNERS_TABLE_NAME
 const stage = process.env.STAGE
 
 export async function migrate (): Promise<{ status: string; message: string }> {

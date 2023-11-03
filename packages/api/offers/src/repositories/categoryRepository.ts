@@ -54,4 +54,13 @@ export class CategoryRepository {
     };
     return await DbHelper.query(params);
   }
+
+  async save(item: any) {
+    const params = {
+      TableName: this.tableName,
+      Item: item
+    };
+  
+    return DbHelper.save(params);
+  }
 }

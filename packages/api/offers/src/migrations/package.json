@@ -1,0 +1,14 @@
+{
+  "name": "migrations",
+  "version": "1.0.0",
+  "description": "One time migration scripts for Offers",
+  "scripts": {
+    "migrate:banners": "tsx ./bannersMigration.ts",
+    "migrate:categories": "tsx ./categoriesMigration.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsx": "^3.14.0"
+  }
+}

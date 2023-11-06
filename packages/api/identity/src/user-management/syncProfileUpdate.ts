@@ -54,7 +54,7 @@ export const handler = async (event: any, context: any) => {
   const uuid = event.detail.uuid;
   delete event.detail.uuid;
   delete event.detail.brand;
-  let detail: UserProfile = {};
+  let detail: UserProfile;
   try{
    detail = UserProfileModel.parse(event.detail);
    const isValid = validateFormData(detail);
@@ -97,7 +97,7 @@ export const handler = async (event: any, context: any) => {
     let expAttrValues: Record<string,any> = {};
     (Object.keys(detail) as (keyof typeof detail)[]).find((key) => {
       if(key === 'dob'){
-        detail[key]?? transformDateToFormatYYYYMMDD(String(detail[key]));
+        detail[key]= typeof detail[key] === "string" ? transformDateToFormatYYYYMMDD(String(detail[key])) : null;
       }
         updateExp += ` ${key} = :${key},`;
         expAttrValues[`:${key}`] = detail[key];

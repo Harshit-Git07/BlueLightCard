@@ -1,7 +1,7 @@
 export const userSignInMigratedRule = (userPoolId: string, dlqUrl: string, table: string, idMappingTable: string) => ({
     userSignInMigratedRule: {
         pattern: { 
-            source: ['user.signin.migrated']
+            source: ['user.signin.migrated','user.signup']
         },
         targets: {
             userSignInMigrationFunction: {

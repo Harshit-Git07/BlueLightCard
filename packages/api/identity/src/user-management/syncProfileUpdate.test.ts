@@ -154,4 +154,39 @@ describe('Sync User Profile Data', () => {
         });
     });
 
+    test('Returns 200 for successful create - null fields', async () => {
+        ddbMock.on(QueryCommand).resolves({
+            Items: [
+            ],
+          });
+          ddbMock.on(UpdateCommand).resolves({
+            $metadata: {
+              httpStatusCode: 200,
+            },
+          });
+        const res = await handler(
+            {
+                headers: {},
+                body: { },
+                detail: { brand: 'BLC_UK', 
+                dob: null,
+                gender: null,
+                mobile: null,
+                firstname: "Jane",
+                surname: "D0e",
+                employer: "740",
+                organisation: "Blood Bikes",
+                uuid: 'f9920a58-5eec-410a-a338-b67aefd94b50'}
+            },
+            {},
+        );
+        expect(res).toEqual({
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*' 
+            },
+            statusCode: 200, body: JSON.stringify({ message: 'user profile data created' })
+        });
+    });
+
 });

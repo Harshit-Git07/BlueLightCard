@@ -125,4 +125,61 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
         },
       });
     });
+
+    test('provided data with null for nullable fields, zod processes it correctly and 200 is returned with correct response body', async () => {
+      dynamoMock.on(QueryCommand).resolves({
+        Items: [
+          {
+              "sk": "BRAND#BLC_UK",
+              "legacy_id": 2853201,
+              "pk": "MEMBER#068385bb-b370-4153-9474-51dd0bfac9dc"
+          },
+          {
+              "sk": "CARD#3470584",
+              "expires": "1758365897",
+              "pk": "MEMBER#068385bb-b370-4153-9474-51dd0bfac9dc",
+              "posted": null,
+              "status": "PHYSICAL_CARD"
+          },
+          {
+                "sk": "COMPANYFOLLOWS#123",
+                "pk": "MEMBER#068385bb-b370-4153-9474-51dd0bfac9dc",
+                "likeType": "Like",
+          },
+          {
+              "spare_email": "rlimbu+work1@bluelightcard.co.uk",
+              "merged_uid": null,
+              "organisation": "AMBU",
+              "employer_id": "0",
+              "gender": null,
+              "spare_email_validated": 1,
+              "mobile": null,
+              "surname": "limbu",
+              "ga_key": " ",
+              "dob": null,
+              "merged_time": null,
+              "firstname": "rubi",
+              "sk": "PROFILE#52864f27-082e-41eb-89cb-b9f5e0b218ec",
+              "employer": " ",
+              "pk": "MEMBER#068385bb-b370-4153-9474-51dd0bfac9dc"
+          }
+        ],
+      });
+      const res = await get(
+        // @ts-expect-error - We're not testing the event object
+        {
+          headers: { Authorization: 'test' }
+        },
+        {},
+      );
+
+      expect(res).toEqual({
+        statusCode: 200,
+        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":null,\"gender\":null,\"mobile\":null,\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":null}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\"}}",
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+      });
+    });
 });

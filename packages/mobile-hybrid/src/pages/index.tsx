@@ -23,7 +23,6 @@ import Search from '@/components/Search/Search';
 import InvokeNativeExperiment from '@/invoke/experiment';
 import { AppContext } from '@/store';
 import PopularBrandsSlider from '@/modules/popularbrands';
-import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -31,7 +30,6 @@ const analytics = new InvokeNativeAnalytics();
 const experiments = new InvokeNativeExperiment();
 
 const Home: NextPage<any> = () => {
-  const brands = useFavouritedBrands();
   const { seeAllNews, setSeeAllNews } = useContext(NewsModuleStore);
   const { experiments: expr } = useContext(AppContext);
 
@@ -105,9 +103,6 @@ const Home: NextPage<any> = () => {
           onClick={() => navigation.navigate('/offers.php?type=6')}
         />
       </div>
-      {brands.map((favourite, index) => (
-        <div key={index}>Title:{favourite.companyname}</div>
-      ))}
       <ListPanel visible={seeAllNews} onClose={seeAllClick}>
         {seeAllNews && <NewsList />}
       </ListPanel>

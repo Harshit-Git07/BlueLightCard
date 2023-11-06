@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.18.0...bluelightcard/web-v1.18.1) (2023-11-06)
+
+
+### Bug Fixes
+
+* test hello world page ([8f22669](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8f2266995152df67b46c68cd908a9cc7d5d857dd))
+
 ## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.17.0...bluelightcard/web-v1.18.0) (2023-11-01)
 
 

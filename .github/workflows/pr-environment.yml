@@ -281,10 +281,9 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install
-      - name: Install Playwright Browsers
+      - name: Install Playwright
         run: npx playwright install --with-deps
       - run: npm run test:e2e -w packages/web
-      - run: npm run report:e2e -w packages/web
       - uses: actions/upload-artifact@v3
         if: always()
         with:

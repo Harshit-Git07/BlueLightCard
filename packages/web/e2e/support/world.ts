@@ -20,7 +20,7 @@ Before(async function () {
   const context = await browser.newContext();
   page = await context.newPage();
   await page.title();
-  console.info('Spinning up browser using playwright.');
+  console.info('Test started');
 });
 
 After(async function ({ pickle, result }) {
@@ -31,12 +31,12 @@ After(async function ({ pickle, result }) {
     });
     await this.attach(img, 'image/png');
   }
+  console.log('Test complete');
 });
 
 AfterAll(async function () {
   browser.close();
   page.close();
-  console.log('Test complete');
 });
 
 export { page, browser };

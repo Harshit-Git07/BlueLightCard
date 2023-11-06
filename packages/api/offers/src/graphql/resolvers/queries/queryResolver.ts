@@ -18,20 +18,7 @@ export class QueryResolver implements IResolver {
     this.createQueryLambdaResolver();
     this.getOfferByIdResolver();
     this.getCompanyByIdResolver();
-  }
-
-  private createQueryLambdaResolver() {
-    const fields = [
-      { typeName: 'Query', fieldName: 'getOfferMenusByBrandId' },
-      { typeName: 'Query', fieldName: 'getCategoriesAndCompaniesByBrandId' },
-      { typeName: 'Query', fieldName: 'getBannersByBrandAndType'}
-    ];
-    fields.forEach(({ typeName, fieldName }) =>
-      this.dataSources.queryLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
-        typeName,
-        fieldName,
-      }),
-    );
+    this.getAllCompaniesByBrandIdResolver();
   }
 
   private getOfferByIdResolver() {
@@ -49,6 +36,28 @@ export class QueryResolver implements IResolver {
       fieldName: 'getCompanyById',
       requestMappingTemplate: MappingTemplate.dynamoDbGetItem('id', 'id'),
       responseMappingTemplate: MappingTemplate.dynamoDbResultItem(),
+    });
+  }
+
+  // Lambdas
+  private createQueryLambdaResolver() {
+    const fields = [
+      { typeName: 'Query', fieldName: 'getOfferMenusByBrandId' },
+      { typeName: 'Query', fieldName: 'getCategoriesAndCompaniesByBrandId' },
+      { typeName: 'Query', fieldName: 'getBannersByBrandAndType'}
+    ];
+    fields.forEach(({ typeName, fieldName }) =>
+      this.dataSources.queryLambdaDS.createResolver(`${typeName}${fieldName}Resolver`, {
+        typeName,
+        fieldName,
+      }),
+    );
+  }
+
+  private getAllCompaniesByBrandIdResolver() {
+    this.dataSources.queryLambdaDS.createResolver('GetAllCompaniesByBrandId', {
+      typeName: 'Query',
+      fieldName: 'getAllCompaniesByBrandId',
     });
   }
 }

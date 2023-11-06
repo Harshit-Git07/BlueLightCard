@@ -1,0 +1,23 @@
+{
+  "id": {
+    "S": "1"
+  },
+  "description": {
+    "S": "Testing"
+  },
+  "imageThumb": {
+    "S": "https://placeholder.com/300x400"
+  },
+  "legacyId": {
+    "S": "1"
+  },
+  "name": {
+    "S": "TEST CATEGORY"
+  },
+  "parentCategoryId": {
+    "S": "0"
+  },
+  "type": {
+    "S": "company"
+  }
+}

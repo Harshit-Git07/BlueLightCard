@@ -15,6 +15,7 @@ describe('CompanyBrandConnectionRepository', () => {
   test('should throw error if DynamoDb call fails', async () => {
     const companyId = 'companyId1';
     mockDynamoDB.on((QueryCommand)).rejects(new Error('DynamoDB error'));
+    mockDynamoDB.on((BatchGetCommand)).rejects(new Error('DynamoDB error'));
 
     const repo = new CompanyBrandConnectionRepository(tableName);
     await expect(repo.getByCompanyId(companyId)).rejects.toThrow('DynamoDB error');

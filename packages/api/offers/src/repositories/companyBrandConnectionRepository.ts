@@ -17,4 +17,15 @@ export class CompanyBrandConnectionRepository{
     };
     return await DbHelper.query(params);
   }
+
+  async getByBrandId(brandId: string) {
+    const params = {
+      TableName: this.tableName,
+      KeyConditionExpression: 'brandId = :brandId',
+      ExpressionAttributeValues: {
+        ':brandId': brandId,
+      },
+    };
+    return await DbHelper.query(params);
+  }
 }

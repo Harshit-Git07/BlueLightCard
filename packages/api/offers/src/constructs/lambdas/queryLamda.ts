@@ -11,6 +11,8 @@ type environmentConfig = {
   STAGE: string;
   BANNER_TABLE: string;
   OFFER_HOMEPAGE_TABLE: string;
+  COMPANY_TABLE: string;
+  COMPANY_BRAND_CONNECTION_TABLE: string;
   COMPANY_FOLLOWS_ENDPOINT: string;
   USER_PROFILE_ENDPOINT: string;
   COMPANY_FOLLOWS_SECRET: string;
@@ -54,6 +56,8 @@ export class QueryLambda extends LambdaAbstract {
   protected grantPermissions(lambdaFunction: NodejsFunction) {
     this.tables.offerHomepageTable.cdk.table.grantReadData(lambdaFunction);
     this.tables.bannersTable.cdk.table.grantReadData(lambdaFunction);
+    this.tables.companyTable.cdk.table.grantReadData(lambdaFunction);
+    this.tables.companyBrandConnectionTable.cdk.table.grantReadData(lambdaFunction);
   }
 
   private getEnvironmentConfig(
@@ -62,6 +66,8 @@ export class QueryLambda extends LambdaAbstract {
       STAGE: this.stage,
       BANNER_TABLE: this.tables.bannersTable.tableName,
       OFFER_HOMEPAGE_TABLE: this.tables.offerHomepageTable.tableName,
+      COMPANY_TABLE: this.tables.companyTable.tableName,
+      COMPANY_BRAND_CONNECTION_TABLE: this.tables.companyBrandConnectionTable.tableName,
       REDIS_ENDPOINT: this.elasticCache.redisReplicationGroup && this.elasticCache.redisReplicationGroup.attrConfigurationEndPointAddress,
       REDIS_PORT: this.elasticCache.redisReplicationGroup && this.elasticCache.redisReplicationGroup.attrConfigurationEndPointPort,
       COMPANY_FOLLOWS_ENDPOINT:

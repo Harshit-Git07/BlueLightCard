@@ -1,0 +1,26 @@
+[
+  {
+    "categoryId": {
+      "S": "1"
+    },
+    "companyId": {
+      "S": "1"
+    }
+  },
+  {
+    "categoryId": {
+      "S": "1"
+    },
+    "companyId": {
+      "S": "2"
+    }
+  },
+  {
+    "categoryId": {
+      "S": "1"
+    },
+    "companyId": {
+      "S": "3"
+    }
+  }
+]

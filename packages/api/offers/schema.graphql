@@ -215,4 +215,5 @@ type Query {
   getOffersByType(offerType: ID!): [Offer!]!
   getOfferById(id: ID!): Offer!
   getCompanyById(id: ID!): Company!
+  getAllCompaniesByBrandId(brandId: ID!): [Company!]!
 }

@@ -23,6 +23,7 @@ export default class InvokeNativeAPICall extends Facade implements NativeAPICall
       path: url,
       method: 'GET',
       parameters: queryParams ?? {},
+      queries: queryParams ?? {},
     });
   }
 }

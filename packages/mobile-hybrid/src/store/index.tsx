@@ -8,6 +8,7 @@ const initialState: AppStore = {
   loading: {
     [APIUrl.News]: true,
     [APIUrl.OfferPromos]: true,
+    [APIUrl.FavouritedBrands]: true,
   },
   apiData: {},
   experiments: '',

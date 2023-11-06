@@ -22,7 +22,9 @@ declare namespace NativeAPICall {
   export interface Parameters {
     path: string;
     method: string;
-    parameters: Record<string, any>;
+    parameters?: Record<string, any>;
+    queries?: Record<string, any>;
+    fields?: Record<string, any>;
   }
 }
 

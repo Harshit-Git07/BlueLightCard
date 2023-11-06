@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.13.0...bluelightcard/offers-v1.14.0) (2023-11-06)
+
+
+### Features
+
+* All companies resolver  ([1319580](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1319580e4bc8869bf0fd8017f917d2554f19a967))
+* TO-307 Create Company Event Handler ([#587](https://github.com/bluelightcard/BlueLightCard-2.0/issues/587)) ([753c92c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/753c92c46fc01d89bc754deafc3dcb2b4df6557d))
+* TO-327: created the one time data migration script for the modernised dynamodb categories table ([#584](https://github.com/bluelightcard/BlueLightCard-2.0/issues/584)) ([db5c0de](https://github.com/bluelightcard/BlueLightCard-2.0/commit/db5c0de8a6c60bef3521777458b184bf40ded46c))
+
 ## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.12.1...bluelightcard/offers-v1.13.0) (2023-11-01)
 
 

@@ -3,5 +3,5 @@ export function convertDateUnix(date: string) {
 }
 
 export function transformDateToFormatYYYYMMDD(date: string | null) {
-    return date !== null ? new Date(date).toISOString().substring(0,10) : null;
+    return (date !== null && date.trim().length > 0) ? new Date(date).toISOString().substring(0,10) : null;
 }

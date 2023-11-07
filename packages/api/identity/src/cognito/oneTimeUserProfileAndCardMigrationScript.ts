@@ -180,7 +180,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
         oldProfileUuid = user.sk;
       }
       const profileUuid: string = v4();
-      let dob = '0000-00-00';
+      let dob = null;
       if(!isNaN(Date.parse(row.dob))){
         dob = transformDateToFormatYYYYMMDD(row.dob);
       }

@@ -90,7 +90,7 @@ const addUserSignInMigratedEvent = async (data: any) => {
     if(data.carddata !== undefined && data.carddata.dateposted !== undefined){
         dateposted = data.carddata.dateposted;
     }
-    let dob = '0000-00-00';
+    let dob = null;
     if(!isNaN(Date.parse(data.dob))){
         dob = transformDateToFormatYYYYMMDD(data.dob);
     }

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.3...bluelightcard/member-services-hub-v1.3.0) (2023-11-07)
+
+
+### Features
+
+* **member-services-hub:** horizontal menu width and drop down styling ([#577](https://github.com/bluelightcard/BlueLightCard-2.0/issues/577)) ([e3c387e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e3c387e66088bbcb5c8d27339d4620ae789376a9))
+
 ## [1.2.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.2...bluelightcard/member-services-hub-v1.2.3) (2023-11-01)
 
 

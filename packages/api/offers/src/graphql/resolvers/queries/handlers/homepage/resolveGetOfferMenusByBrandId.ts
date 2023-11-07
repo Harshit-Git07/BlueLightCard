@@ -4,6 +4,7 @@ import { ObjectDynamicKeys } from './types';
 import { TYPE_KEYS } from '@blc-mono/offers/src/utils/global-constants';
 import { OfferHomepageRepository } from '../../../../../repositories/offersHomepageRepository';
 import { unpackJWT } from '../../../../../../../core/src/utils/unpackJWT';
+import sortNumbers from '../../../../../../../core/src/utils/sortNumbers';
 import { MemberProfile } from "../../../../../services/MemberProfile";
 import { OfferRestriction } from "../../../../../services/OfferRestriction";
 import { FIFTEEN_MINUTES } from "../../../../../utils/duration"
@@ -63,12 +64,14 @@ export class OfferMenusByBrandIdResolver {
 
     const marketPlaceMenus = menus[TYPE_KEYS.MARKETPLACE];
 
-    const numberOfSliders = Object.keys(marketPlaceMenus).length;
-    const slidersFileArray = Array.from({ length: numberOfSliders }, (value, index) => `${index + 1}.txt`);
+    const slidersFileArray = Object
+      .keys(marketPlaceMenus)
+      .map((sliderFileName) => parseInt(sliderFileName.split('.')[0]))
+      .sort(sortNumbers)
 
-    const formattedMarketPlaceMenus = slidersFileArray.reduce((accumulator: any [], key: string) => {
-      const slider = marketPlaceMenus[key];
-      if (!slider.hidden) {
+    const formattedMarketPlaceMenus = slidersFileArray.reduce((accumulator: any [], key: number) => {
+      const slider = marketPlaceMenus[`${key}.txt`];
+      if (slider && !slider.hidden) {
         if (slider.items) {
           slider.items = Object.entries(slider.items).reduce((accumulator: { id: String; item: any }[], [id, item]) => {
             if (!restrictOffers.isMarketPlaceMenuItemRestricted(item)) {

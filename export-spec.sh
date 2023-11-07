@@ -11,9 +11,7 @@ while [[ "$#" -gt 0 ]]
     shift
 done
 
-API_ID=$(aws apigateway get-rest-apis --region $Region --query 'items[?name==`'$Stage'-blc-mono-'$Domain'`].[id]' --output text)
-
-aws apigateway get-export --parameters extensions='apigateway' --rest-api-id $API_ID --stage-name $APIVersion --export-type swagger swagger.json --region $Region
+node ./swagger.mjs $Stage
 
 REDOCLY_AUTHORIZATION=$REDOCLY_AUTHORIZATION npx @redocly/cli@latest push swagger.json --destination="$Stage.$Domain@$APIVersion" --organization="blc-jgk"
 

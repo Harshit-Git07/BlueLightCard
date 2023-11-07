@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.27.0...bluelightcard/identity-v1.28.0) (2023-11-07)
+
+
+### Features
+
+* add additional source, make nullable ([#594](https://github.com/bluelightcard/BlueLightCard-2.0/issues/594)) ([a8d5337](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a8d5337c3448bf3347e762eea649a2d458b2f3c5))
+* **web:** Handle null for dob, gender and card posted ([#591](https://github.com/bluelightcard/BlueLightCard-2.0/issues/591)) ([78ea585](https://github.com/bluelightcard/BlueLightCard-2.0/commit/78ea5854b690fde5a32c8b42ee2fd56ebf4c9889))
+* **web:** Ti 531 Secure API endpoint for EC form output data ([#556](https://github.com/bluelightcard/BlueLightCard-2.0/issues/556)) ([c38a6fa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c38a6fae368f8e1549c6c4bed94561033102b3af))
+* **web:** Ti 593 turn unsupported fields to null ([#598](https://github.com/bluelightcard/BlueLightCard-2.0/issues/598)) ([85315ef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85315efa2add7c42169bdac64bf5b5e4d0d77c84))
+
+
+### Other Changes
+
+* set default null for dob ([#603](https://github.com/bluelightcard/BlueLightCard-2.0/issues/603)) ([921fba9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/921fba93276975e56ed3446dd988a339aec00058))
+
 ## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.26.1...bluelightcard/identity-v1.27.0) (2023-10-30)
 
 

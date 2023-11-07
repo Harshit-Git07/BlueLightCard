@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.14.0...bluelightcard/offers-v1.14.1) (2023-11-07)
+
+
+### Bug Fixes
+
+* TO-351: fixed homepage rendering undefined sliders ([#604](https://github.com/bluelightcard/BlueLightCard-2.0/issues/604)) ([e691616](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e6916162182c4afc234538644b32ca352620830c))
+
 ## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.13.0...bluelightcard/offers-v1.14.0) (2023-11-06)
 
 

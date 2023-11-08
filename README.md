@@ -21,7 +21,7 @@ aws configure
 
 Alternatively, use Leapp - this tool can help you to assume roles.
 
-To start the backend run the following (this will deploy the backend to your aws account):
+To start the backend run the following (this will deploy the backend to your aws account)
 ```
 npm run dev
 ```

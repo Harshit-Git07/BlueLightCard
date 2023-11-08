@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.28.0...bluelightcard/identity-v1.29.0) (2023-11-08)
+
+
+### Features
+
+* Ti 593 dummy commit to create chore ([#616](https://github.com/bluelightcard/BlueLightCard-2.0/issues/616)) ([13f2915](https://github.com/bluelightcard/BlueLightCard-2.0/commit/13f29156ee6c38c2f34ec56d1c336eb5072130f0))
+
 ## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.27.0...bluelightcard/identity-v1.28.0) (2023-11-07)
 
 

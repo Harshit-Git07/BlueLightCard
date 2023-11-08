@@ -183,6 +183,15 @@ export function Identity({stack}: StackContext) {
       },
       generateSecret: true,
     });
+
+
+    cognito_dds.cdk.userPool.addClient('membersClient', {
+      authFlows: {
+        userPassword: true,
+      },
+      generateSecret: true,
+    });
+
     stack.addOutputs({
       CognitoUserPooMembersClient: cognito.userPoolId,
       CognitoDdsUserPooMembersClient: cognito_dds.userPoolId,
@@ -191,6 +200,13 @@ export function Identity({stack}: StackContext) {
     });
 
     const webClient = cognito.cdk.userPool.addClient('webClient', {
+      authFlows: {
+        userPassword: true,
+      },
+      generateSecret: true,
+    });
+
+    const webClient_dds = cognito_dds.cdk.userPool.addClient('webClient', {
       authFlows: {
         userPassword: true,
       },

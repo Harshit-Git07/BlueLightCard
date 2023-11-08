@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.14.1...bluelightcard/offers-v1.14.2) (2023-11-08)
+
+
+### Bug Fixes
+
+* update tags to create chore ([#612](https://github.com/bluelightcard/BlueLightCard-2.0/issues/612)) ([cd234af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd234af6b3d9ac77b10e587db9ea0a766f7c4ff8))
+
 ## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.14.0...bluelightcard/offers-v1.14.1) (2023-11-07)
 
 

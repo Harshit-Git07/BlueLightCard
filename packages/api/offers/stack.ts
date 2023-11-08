@@ -8,10 +8,12 @@ import { Resolver } from './src/graphql/resolvers/resolver'
 import { Buckets } from './src/constructs/buckets'
 import { EventBridge } from './src/constructs/eventBridge'
 import { Queues } from './src/constructs/queues'
-import { ElasticCache } from "./src/constructs/elasticCache";
+import { ElasticCache } from "./src/constructs/elasticCache"
+import { Tags } from "./src/constructs/tags"
 
 export function Offers ({ stack }: StackContext) {
   const { cognito } = use(Identity)
+  new Tags(stack);
   const offersApi = OffersApi.create(stack, stack.stage, cognito.cdk.userPool, './packages/api/offers/schema.graphql')
   const elasticCache = new ElasticCache(stack, stack.stage)
   const queues = new Queues(stack)

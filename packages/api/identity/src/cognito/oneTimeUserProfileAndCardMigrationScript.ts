@@ -35,7 +35,39 @@ interface RowData {
     cardUid: string;
     cardPosted: string;
 }
-
+function checkBrand(brand: string, batchSize: number, offset: number, legacyTable: string): string {
+  //takes the brand from the env, depending on the value, it will return a different query
+  let mergedFields: string = '';
+  switch (brand) {
+    case 'DDS_UK':
+      mergedFields = '';
+      break;
+    case 'BLC_UK':
+    default:
+      mergedFields = ' p.merged_uid, p.merged_time,';
+}
+ return(`SELECT u.id, u.spareemail, u.name, u.confirmed, u.surname, u.service, u.county, u.GA_Key, u.TrustMember,
+    u.uuid, p.uid as profileuid, p.spareemailvalidated, p.dob, p.gender, p.mobile,${mergedFields} c.cardid as cardId, c.carduid as cardUid, c.cardstatus as cardStatus, c.expires as cardExpires, c.timePosted as cardPosted,
+    t.trustId, t.trustName, t.trustPrimary
+    FROM ${legacyTable} u 
+    LEFT JOIN tbluserprofiles p 
+    ON u.id = p.uid
+    LEFT JOIN  (
+        SELECT id as cardid, uid as carduid, cardstatus, expires, timePosted 
+        FROM tblprivcards
+        ORDER BY id DESC 
+    ) c
+    ON c.carduid = u.id 
+    LEFT JOIN (
+        SELECT tbltrusts.ID as trustId, tbltrusts.TrustName as trustName,tbltrustprimaries.TrustName as trustPrimary 
+        FROM tbltrusts
+        INNER JOIN tbltrustprimaries 
+        ON tbltrusts.LinkID=tbltrustprimaries.LinkCode
+    ) t 
+    ON t.trustId = u.TrustMember
+    ORDER BY u.id 
+    LIMIT ${batchSize} OFFSET ${offset}`);
+}
 function validateData(rowData: RowData): { valid: boolean; reason?: string } {
   if (rowData.id === null || rowData.id === undefined)
     return { valid: false, reason: 'legacy user id is null or undefined' };
@@ -65,7 +97,6 @@ const userPoolId = process.env.USER_POOL_ID;
 const tableName = process.env.DYNAMO_TABLE
 const idMappingTableName = process.env.DYNAMO_ID_MAPPING_TABLE
 
-
 export async function migrate(): Promise<{status: string, message: string}> {
   if (host === '' || brand === '' || password === '' || user === '' || userPoolId === '' || tableName === ''){
     return { status: 'error ', message:  'env variables missing'};
@@ -92,28 +123,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
   const dynamodb = DynamoDBDocumentClient.from(dynamoclient); 
 
   while(true){
-    const query = `SELECT u.id, u.spareemail, u.name, u.confirmed, u.surname, u.service, u.county, u.GA_Key, u.TrustMember,
-    u.uuid, p.uid as profileuid, p.spareemailvalidated, p.dob, p.gender, p.mobile, p.merged_uid, 
-    p.merged_time, c.cardid as cardId, c.carduid as cardUid, c.cardstatus as cardStatus, c.expires as cardExpires, c.timePosted as cardPosted,
-    t.trustId, t.trustName, t.trustPrimary
-    FROM ${legacyTable} u 
-    LEFT JOIN tbluserprofiles p 
-    ON u.id = p.uid
-    LEFT JOIN  (
-        SELECT id as cardid, uid as carduid, cardstatus, expires, timePosted 
-        FROM tblprivcards
-        ORDER BY id DESC 
-    ) c
-    ON c.carduid = u.id 
-    LEFT JOIN (
-        SELECT tbltrusts.ID as trustId, tbltrusts.TrustName as trustName,tbltrustprimaries.TrustName as trustPrimary 
-        FROM tbltrusts
-        INNER JOIN tbltrustprimaries 
-        ON tbltrusts.LinkID=tbltrustprimaries.LinkCode
-    ) t 
-    ON t.trustId = u.TrustMember
-    ORDER BY u.id 
-    LIMIT ${batchSize} OFFSET ${offset}`;
+    const query = checkBrand(brand || '', batchSize, offset, legacyTable || '');
     const queryTimeStart = new Date().getTime();
     const [result] = await connection.query(query);
     

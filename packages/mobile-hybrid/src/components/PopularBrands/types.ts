@@ -1,4 +1,6 @@
 export interface PopularBrandsProps {
+  rounded?: boolean;
+  title: string;
   brands: Brand[];
   text?: string;
   onBrandItemClick?: (data: any) => void;

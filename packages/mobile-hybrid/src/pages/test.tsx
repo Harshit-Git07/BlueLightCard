@@ -4,6 +4,7 @@ import Search from '@/components/Search/Search';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import BannerCarousel from '@/components/Banner/BannerCarousel';
+import FavouritedBrandsSlider from '@/modules/favouritedbrands';
 
 const navigation = new InvokeNativeNavigation();
 const TestPage: NextPage<any> = () => {
@@ -65,6 +66,7 @@ const TestPage: NextPage<any> = () => {
         ]}
       /> */}
       <PopularBrandsSlider />
+      <FavouritedBrandsSlider />
     </>
   );
 };

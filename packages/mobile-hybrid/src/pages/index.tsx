@@ -23,6 +23,8 @@ import Search from '@/components/Search/Search';
 import InvokeNativeExperiment from '@/invoke/experiment';
 import { AppContext } from '@/store';
 import PopularBrandsSlider from '@/modules/popularbrands';
+import FavouritedBrandsSlider from '@/modules/favouritedbrands';
+import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -30,9 +32,10 @@ const analytics = new InvokeNativeAnalytics();
 const experiments = new InvokeNativeExperiment();
 
 const Home: NextPage<any> = () => {
+  const brands = useFavouritedBrands();
   const { seeAllNews, setSeeAllNews } = useContext(NewsModuleStore);
   const { experiments: expr } = useContext(AppContext);
-
+  const showFavouritedBrands = brands.length > 0 && expr['favourited-brands'] === 'on';
   const bodyHeight = useRef<HTMLElement>(null);
 
   const seeAllClick = () => {
@@ -53,7 +56,12 @@ const Home: NextPage<any> = () => {
     apiCall.requestData('/api/4/offer/promos_new.php');
     apiCall.requestData('/api/4/news/list.php');
     apiCall.requestData('/api/4//user/bookmark/retrieve.php');
-    experiments.experiment(['homepage-searchbar', 'non-exclusive-offers', 'popular-offers']);
+    experiments.experiment([
+      'homepage-searchbar',
+      'non-exclusive-offers',
+      'popular-offers',
+      'favourited-brands',
+    ]);
   }, []);
 
   return (
@@ -69,7 +77,8 @@ const Home: NextPage<any> = () => {
           />
         )}
         <PromoBanner />
-        {expr['popular-offers'] === 'treatment' && <PopularBrandsSlider />}
+        {showFavouritedBrands && <FavouritedBrandsSlider />}
+        {expr['popular-offers'] === 'treatment' && !showFavouritedBrands && <PopularBrandsSlider />}
         <Offers />
         <Heading title="Explore" size="small" />
         <ExploreLink

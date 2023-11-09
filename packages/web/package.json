@@ -13,7 +13,6 @@
     "test:coverage": "jest --coverage --coverageReporters json-summary",
     "test": "jest --testPathIgnorePatterns=e2e/",
     "test:e2e": "cross-env ENV=local npx cucumber-js --config=config/cucumber.js",
-    
     "storybook": "STORYBOOK_ENV=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK_ENV=true storybook build",
     "chromatic": "npx chromatic --project-token=0b8218f55902",

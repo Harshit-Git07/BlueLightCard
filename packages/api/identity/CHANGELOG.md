@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.29.0...bluelightcard/identity-v1.30.0) (2023-11-08)
+
+
+### Features
+
+* **api:** migration script altered to ensure compatibility with DDS ([#614](https://github.com/bluelightcard/BlueLightCard-2.0/issues/614)) ([e65e85a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e65e85a014416ae406bca396a89de5bf703a56bf))
+
+
+### Bug Fixes
+
+* **web:** add missing Cognito app client for DDS ([#620](https://github.com/bluelightcard/BlueLightCard-2.0/issues/620)) ([3824094](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3824094391acaa229ce0b766381fa80bf55c9334))
+
 ## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.28.0...bluelightcard/identity-v1.29.0) (2023-11-08)
 
 

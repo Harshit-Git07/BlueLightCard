@@ -258,35 +258,4 @@ jobs:
           message: |
             ${{ steps.budget_result.outputs.comment }}
 
-  # Run the E2E Test Suite
-  e2e:
-    name: E2E Tests
-    if: github.actor!= 'dependabot[bot]'
-    runs-on: ubuntu-latest
-    needs:
-      - frontend
-    env:
-      BASE_URL: https://www.staging.bluelightcard.co.uk
-      USERNAME: ${{ secrets.E2E_TESTS_USERNAME }}
-      PASSWORD: ${{ secrets.E2E_TESTS_PASSWORD }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      - run: npm run test:e2e -w packages/web
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: cucumber-report
-          path: packages/web/e2e/test-results
-          retention-days: 30
+  

@@ -1,4 +1,4 @@
-export const passwordResetRule = (userPoolId: string, dlqUrl: string) => ({
+export const passwordResetRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string) => ({
     passwordResetRule: {
         pattern: {source: ["user.password.change.requested"]},
         targets: {
@@ -8,6 +8,7 @@ export const passwordResetRule = (userPoolId: string, dlqUrl: string) => ({
                   handler: "packages/api/identity/src/cognito/deleteCognitoUser.handler",
                   environment: {
                       USER_POOL_ID: userPoolId,
+                      USER_POOL_ID_DDS: ddsUserPoolId,
                       SERVICE: 'identity',
                       DLQ_URL: dlqUrl 
                     },

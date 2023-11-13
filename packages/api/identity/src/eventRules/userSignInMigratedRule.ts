@@ -1,4 +1,4 @@
-export const userSignInMigratedRule = (userPoolId: string, dlqUrl: string, table: string, idMappingTable: string) => ({
+export const userSignInMigratedRule = (dlqUrl: string, table: string, idMappingTable: string) => ({
     userSignInMigratedRule: {
         pattern: { 
             source: ['user.signin.migrated','user.signup']
@@ -9,7 +9,6 @@ export const userSignInMigratedRule = (userPoolId: string, dlqUrl: string, table
                     permissions: ["sqs:SendMessage", "dynamodb:PutItem", "dynamodb:Query"],
                     handler: 'packages/api/identity/src/cognito/migrateUserProfileAndCardData.handler',
                     environment: { 
-                        USER_POOL_ID: userPoolId, 
                         SERVICE: 'identity',
                         DLQ_URL: dlqUrl,
                         TABLE_NAME: table,

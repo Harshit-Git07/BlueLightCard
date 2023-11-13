@@ -15,6 +15,7 @@ import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedRule";
 import { AddEcFormOutputDataRoute } from './src/routes/addEcFormOutputDataRoute';
+import { userGdprRule } from './src/eventRules/userGdprRule';
 
 export function Identity({stack}: StackContext) {
   const {certificateArn} = use(Shared);
@@ -241,13 +242,14 @@ export function Identity({stack}: StackContext) {
 
   
   //add event bridge rules
-  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl));
-  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl));
-  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl));
-  bus.addRules(stack, userSignInMigratedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
-  bus.addRules(stack, cardStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName));
-  bus.addRules(stack, userProfileUpdatedRule(cognito.userPoolId, dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
+  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
+  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
+  bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+  bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName));
+  bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
   bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
   return {
     identityApi,
     cognito

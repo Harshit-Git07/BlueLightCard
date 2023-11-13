@@ -18,16 +18,19 @@ async function sendToDLQ(event: any) {
 export const handler = async (event: any, context: any) => {
   logger.info('event received', event);
   const cognito = new CognitoIdentityServiceProvider();
+  const userPoolIdDds = process.env.USER_POOL_ID_DDS || '';
   const userPoolId = process.env.USER_POOL_ID || '';
+  const poolId =(!/DDS/i.test(event.detail.brand)) ? userPoolId : userPoolIdDds;
   const username = event.detail.user_email;
   try {
     try {
         await cognito.adminGetUser({
-        UserPoolId: userPoolId,
+        UserPoolId: poolId,
         Username: username
       }).promise();
     } catch (e: any) {
       logger.info("user not found: ", { username });
+      
       return {
         statusCode: 200,
         body: JSON.stringify({
@@ -37,7 +40,7 @@ export const handler = async (event: any, context: any) => {
     }
     logger.info("user found: ", { username });
     await cognito.adminDeleteUser({
-        UserPoolId: userPoolId,
+        UserPoolId: poolId,
         Username: username
     }).promise();
     logger.info("user successfully deleted: ", { username });

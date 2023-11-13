@@ -5,8 +5,8 @@ import CardCarousel from '@/components/Carousel/CardCarousel';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
-import { NewsPreview } from '../news';
 import { AppContext } from '@/store';
+import { NewsPreview } from '../news';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -66,7 +66,7 @@ const Offers: FC = () => {
       {flexible && (
         <div className="mb-4">
           <Heading title={flexible.title} />
-          {flexible.subtitle.length && (
+          {expr['streamlined-homepage'] !== 'on' && flexible.subtitle.length && (
             <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
           )}
           <CardCarousel
@@ -108,7 +108,7 @@ const Offers: FC = () => {
           />
         </section>
       )}
-      <NewsPreview />
+      {expr['streamlined-homepage'] !== 'on' && <NewsPreview />}
       <div className="my-2">
         {offers.map((group, index) => (
           <section key={`${group.title}_${index}`} className="mb-6">

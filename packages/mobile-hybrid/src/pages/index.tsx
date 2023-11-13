@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useEffect, useRef, useContext } from 'react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import ListPanel from '@/components/ListPanel/ListPanel';
-import { NewsList } from '@/modules/news';
+import { NewsList, NewsPreview } from '@/modules/news';
 import { NewsModuleStore } from '@/modules/news/store';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import trackScrollDepth from '@/utils/scrollDepth';
@@ -61,6 +61,7 @@ const Home: NextPage<any> = () => {
       'non-exclusive-offers',
       'popular-offers',
       'favourited-brands',
+      'streamlined-homepage',
     ]);
   }, []);
 
@@ -77,9 +78,13 @@ const Home: NextPage<any> = () => {
           />
         )}
         <PromoBanner />
-        {showFavouritedBrands && <FavouritedBrandsSlider />}
-        {expr['popular-offers'] === 'treatment' && !showFavouritedBrands && <PopularBrandsSlider />}
+        {showFavouritedBrands ? (
+          <FavouritedBrandsSlider />
+        ) : (
+          expr['popular-offers'] === 'treatment' && <PopularBrandsSlider />
+        )}
         <Offers />
+        {expr['streamlined-homepage'] === 'on' && <NewsPreview />}
         <Heading title="Explore" size="small" />
         <ExploreLink
           icon={faTag}

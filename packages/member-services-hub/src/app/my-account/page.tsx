@@ -14,7 +14,7 @@ const MyAccount: NextPage<any> = (props) => {
     setOpen(category);
   }
   return (
-    <main className="flex flex-row">
+    <main className="flex flex-row bg-[#FAFAFA]">
       <GlobalNavigation />
       <div className="w-full flex flex-col flex-grow-1">
         <HeaderBar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />

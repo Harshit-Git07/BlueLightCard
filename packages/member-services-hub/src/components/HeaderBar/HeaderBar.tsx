@@ -31,8 +31,8 @@ const HeaderBar: FC<HeaderBarProps> = ({
 }) => {
   const [dropdownClicked, setDropdownClicked] = useState(false);
   return (
-    <header className="mx-auto w-full h-[86px] border-s-white border-s-2 border-b border-b-gray-100 px-6 lg:container">
-      <div className="flex items-center justify-end bg-white py-3 px-3 sm:justify-between md:px-8">
+    <header className="w-full h-[86px] border-s-white border-s-2 border-b border-b-gray-100 px-6 lg:container bg-white">
+      <div className="flex items-center justify-end py-3 px-3 sm:justify-between md:px-8">
         <div className="items-center sm:flex">
           <WelcomeHeader
             id="welcomeBoxId"

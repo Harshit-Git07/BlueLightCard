@@ -24,7 +24,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
   const [modalOpen, setModalOpen] = useState(false);
   let icon = modalOpen ? faChevronUp : faChevronDown;
   return (
-    <article className=" w-[566px] min-h-auto p-10 bg-white rounded-lg border border-zinc-200 flex-col justify-start items-start gap-5 inline-flex">
+    <article className="w-[566px] min-h-auto p-10 bg-white rounded-lg border border-zinc-200 flex-col justify-start items-start gap-5 inline-flex">
       {modalOpen && <EditModal className=" fixed left-[695px] top-[250px]" />}
       <div className="self-stretch justify-between items-start inline-flex">
         <h1 className="text-shade-greyscale-grey-800 text-2xl font-semibold font-['Museo Sans'] leading-8 tracking-[.24px]">

@@ -29,7 +29,7 @@ export class DbHelper {
     return await this.dynamodb.send(new PutCommand(params));
   }
 
-  static async transactionalSave(params: any) {
+  static async transactionalWrite(params: any) {
     return await this.dynamodb.send(new TransactWriteCommand(params));
   }
 

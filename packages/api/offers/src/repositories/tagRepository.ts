@@ -1,4 +1,4 @@
-import { DbHelper } from "@blc-mono/core/aws/dynamodb/dbhelper";
+import { DbHelper } from '../../../core/src/aws/dynamodb/dbhelper';
 
 export class TagRepository {
 

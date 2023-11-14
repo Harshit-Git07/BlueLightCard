@@ -12,6 +12,8 @@ export const companyRule = (tables: Tables, queue: IQueue) => ({
             'dynamodb:PutItem',
             'dynamodb:DeleteItem',
             'dynamodb:Query',
+            'dynamodb:UpdateItem',
+            'dynamodb:GetItem',
             'dynamodb:TransactWriteItems',
           ],
           handler: 'packages/api/offers/src/eventBridge/lambdas/company.handler',

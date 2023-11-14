@@ -1,6 +1,4 @@
-
 export class Convertor {
-
   public static streamToString(stream: any): Promise<string> {
     return new Promise((resolve, reject) => {
       const chunks: any[] = [];
@@ -10,4 +8,7 @@ export class Convertor {
     });
   }
 
+  public static legacyIdToString(brand: string, legacyId: number | string): string {
+    return `${brand}#${legacyId}`;
+  }
 }

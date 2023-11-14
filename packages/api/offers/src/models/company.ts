@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const CompanyModel = z.object({
   id: z.string().optional(),
-  legacyId: z.number().optional(),
+  legacyId: z.string().optional(),
   name: z.string({
     required_error: 'Name is required',
     invalid_type_error: 'Name must be a string',

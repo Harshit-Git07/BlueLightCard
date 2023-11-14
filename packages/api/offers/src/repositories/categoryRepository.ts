@@ -60,7 +60,7 @@ export class CategoryRepository {
       TableName: this.tableName,
       Item: item
     };
-  
+
     return DbHelper.save(params);
   }
 }

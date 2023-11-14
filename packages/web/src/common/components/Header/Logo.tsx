@@ -4,13 +4,14 @@ import Link from '@/components/Link/Link';
 
 interface LogoProps {
   url: string;
+  className?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({ url = '/' }) => {
+const Logo: React.FC<LogoProps> = ({ url = '/', className }) => {
   return (
     <Link
       href={url}
-      className="relative block h-[40px] max-w-[197px] tablet:max-w-[226px] hover:opacity-100"
+      className={`relative block h-[40px] max-w-[197px] tablet:max-w-[226px] hover:opacity-100 ${className}`}
       data-testid="brandLogo"
       aria-label="Navigate Home"
     >

@@ -18,7 +18,7 @@ if (IS_SSR) {
 
 const AppDocument: FC = () => {
   return (
-    <Html lang={DEFAULT_LANG}>
+    <Html lang={DEFAULT_LANG} className="scroll-smooth">
       <Head>
         <Script id="google-analytics-script" strategy="beforeInteractive">
           {`
@@ -53,7 +53,7 @@ const AppDocument: FC = () => {
         {/* Preconnect to cdn */}
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_APP_CDN_URL} />
       </Head>
-      <body className="dark:bg-surface-primary-dark">
+      <body className="dark:bg-surface-primary-dark scroll-smooth">
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-WW7M2P5"

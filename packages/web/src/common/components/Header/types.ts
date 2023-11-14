@@ -1,6 +1,6 @@
 export type HeaderProps = {
   loggedIn?: boolean;
-  navItems: NavItem;
+  navItems: NavItems;
   onSearchCompanyChange: (companyId: string, company: string) => void;
   onSearchCategoryChange: (categoryId: string, company: string) => void;
   onSearchTerm: (searchTerm: string) => void;
@@ -16,24 +16,24 @@ export interface NavProp {
   authenticated: boolean;
   displaySearch: boolean;
   setDisplaySearch: any;
-  navItems: NavItem;
+  navItems: NavItems;
 }
 
-export interface NavItem {
+export interface NavItems {
   links: {
     homeUrl: string;
     notificationsUrl: string;
   };
-  loggedIn: {
-    text: string;
-    link?: string;
-    dropdown?: { text: string; link: string }[];
-  }[];
-  loggedOut: {
-    text: string;
-    link?: string;
-    dropdown?: { text: string; link: string }[];
-  }[];
+  loggedIn: NavItem[];
+  loggedOut: NavItem[];
+}
+
+export interface NavItem {
+  text: string;
+  link?: string;
+  startTime?: string;
+  endTime?: string;
+  dropdown?: { text: string; link: string }[];
 }
 
 export interface NavigationProps {
@@ -57,6 +57,8 @@ export interface MenuNavProps {
   menu: {
     text: string;
     link?: string;
+    startTime?: string;
+    endTime?: string;
     dropdown?: {
       text: string;
       link: string;

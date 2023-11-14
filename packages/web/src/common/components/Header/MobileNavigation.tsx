@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/pro-regular-svg-icons';
 import { FC } from 'react';
 import { MenuNavProps } from './types';
+import isTimeLockRouteUnlocked from '@/utils/isTimeLockRouteUnlocked';
 
 const downArrow = (
   <FontAwesomeIcon icon={faAngleDown} size="sm" className="relative pl-1 top-[2px]" />
@@ -13,6 +14,12 @@ const MobileNavigation: FC<MenuNavProps> = ({ menu }) => (
     <ul className="bg-[#f8f8f8]">
       {menu.map((navItem, index) => {
         const hasDropdown = navItem.dropdown?.length && navItem.dropdown.length > 0;
+        const hasTimeLock = navItem?.startTime || navItem?.endTime;
+
+        if (hasTimeLock && !isTimeLockRouteUnlocked(navItem)) {
+          return null;
+        }
+
         return (
           <li className="block w-full border-b-[#eee] border-b border-solid group" key={index}>
             <Link

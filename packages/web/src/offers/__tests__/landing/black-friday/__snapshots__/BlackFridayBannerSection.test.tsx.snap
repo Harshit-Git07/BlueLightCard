@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BlackFridayHeroSection should match snapshot 1`] = `
+<section
+  className="w-100vw font-[MuseoSans] text-center text-[#1C1C1C] bg-[#FFFF00] h-[calc(100vh-56px)]"
+>
+  <div
+    className=" "
+  >
+    <div
+      className="mobile:mx-5 laptop:container laptop:mx-auto justify-between flex flex-col h-[calc(100vh-56px)]"
+    >
+      <div
+        className="mx-auto flex flex-col justify-center h-[calc(100vh-112px)]"
+      >
+        <div
+          className="landscapebfsm:mt-10 landscapebf:mt-10 landscapebfsm:mb-2 mt-5 mb-10 flex justify-center align-center"
+        >
+          <img
+            alt="Black Friday logo"
+            className="h-auto landscapebfsm:w-[150px] landscapebf:w-[250px] w-full"
+            data-nimg="1"
+            decoding="async"
+            height={0}
+            loading="lazy"
+            onError={[Function]}
+            onLoad={[Function]}
+            sizes="100vw"
+            src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png"
+            srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png 3840w"
+            style={
+              {
+                "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                "backgroundPosition": "50% 50%",
+                "backgroundRepeat": "no-repeat",
+                "backgroundSize": "cover",
+                "color": "transparent",
+              }
+            }
+            width={0}
+          />
+        </div>
+        <div>
+          <h1
+            className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] !text-[#1C1C1C] landscapebfsm:text-xl landscapebf:text-4xl text-8xl mobile:text-5xl tablet:text-6xl laptop:text-8xl desktop:text-8xl font-bold "
+          >
+            SAVE UP TO 40%
+          </h1>
+          <h1
+            className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] landscapebf:text-sm !text-[#1C1C1C] text-4xl mobile:text-2xl tablet:text-3xl laptop:text-3xl desktop:text-4xl "
+          >
+            ON BRANDS YOU LOVE
+          </h1>
+        </div>
+      </div>
+      <div>
+        <a
+          className="!text-[#1C1C1C] hover:text-white"
+          href="#hero"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <p
+            className="landscapebfsm:hidden landscapebf:text-xs"
+          >
+            Shop now
+          </p>
+          <p
+            className="text-2xl"
+          >
+            <span>
+              <svg
+                aria-hidden="true"
+                className="svg-inline--fa fa-angle-down text-palette-black cursor-pointer hover:text-[#1C1C1C] ease-in duration-100"
+                data-icon="angle-down"
+                data-prefix="fas"
+                data-testid="angle-down-icon"
+                focusable="false"
+                role="img"
+                style={{}}
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+                  fill="currentColor"
+                  style={{}}
+                />
+              </svg>
+            </span>
+          </p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+`;

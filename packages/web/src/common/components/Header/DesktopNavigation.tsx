@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/pro-regular-svg-icons';
 import { FC } from 'react';
 import { MenuNavProps } from './types';
+import isTimeLockRouteUnlocked from '@/utils/isTimeLockRouteUnlocked';
 
 const downArrow = (
   <FontAwesomeIcon
@@ -17,6 +18,11 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
     <ul className="hidden desktop:flex py-3" data-testid="desktopNav">
       {menu.map((navItem, index) => {
         const hasDropdown = navItem.dropdown?.length && navItem.dropdown.length > 0;
+        const hasTimeLock = navItem?.startTime || navItem?.endTime;
+
+        if (hasTimeLock && !isTimeLockRouteUnlocked(navItem)) {
+          return null;
+        }
 
         return (
           <li className="px-3 group flex flex-col" key={index}>

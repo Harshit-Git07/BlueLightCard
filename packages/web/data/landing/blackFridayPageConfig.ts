@@ -1,719 +1,533 @@
 import { BlackFridayLandingPageConfigProps } from '@/page-types/landing/black-friday';
 
+const offerSections = [
+  {
+    id: 'fashion',
+    title: 'Fashion & Clothing',
+    subtitle:
+      'Get the latest looks for less with our range of discounts on fashion essentials, outdoor clothing and more…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/811.jpg',
+        title: 'Debenhams',
+        link: '/offerdetails.php?cid=811',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20954.jpg',
+        title: 'Lounge',
+        link: '/offerdetails.php?cid=20954',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16841.jpg',
+        title: 'Ted Baker',
+        link: '/offerdetails.php?cid=16841',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/12657.jpg',
+        title: 'Boohoo',
+        link: '/offerdetails.php?cid=12657',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg',
+        title: 'Boux Avenue',
+        link: '/offerdetails.php?cid=9376',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24140.jpg',
+        title: 'Flannels',
+        link: '/offerdetails.php?cid=24140',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/34658.jpg',
+        title: 'TU Clothing',
+        link: '/offerdetails.php?cid=34658',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10735.jpg',
+        title: 'BoohooMan',
+        link: '/offerdetails.php?cid=10735',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6765.jpg',
+        title: 'Ray-Ban',
+        link: '/offerdetails.php?cid=6765',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/32538.jpg',
+        title: 'Fenwicks',
+        link: '/offerdetails.php?cid=32538',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/21613.jpg',
+        title: 'Harvey Nichols',
+        link: '/offerdetails.php?cid=21613',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/790.jpg',
+        title: 'Coast',
+        link: '/offerdetails.php?cid=790',
+      },
+    ],
+  },
+  {
+    id: 'footwear',
+    title: 'Footwear & streetwear',
+    subtitle:
+      'Put your best foot forward and keep your feet on-trend with savings on the latest trainers and shoes…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/423.jpg',
+        title: 'JD Sports',
+        link: '/offerdetails.php?cid=423',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1473.jpg',
+        title: 'Footasylum',
+        link: '/offerdetails.php?cid=1473',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/384.jpg',
+        title: 'Office Shoes',
+        link: '/offerdetails.php?cid=384',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16397.jpg',
+        title: 'UGG',
+        link: '/offerdetails.php?cid=16397',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/21684.jpg',
+        title: 'Foot Locker',
+        link: '/offerdetails.php?cid=21684',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16010.jpg',
+        title: 'Fitflop',
+        link: '/offerdetails.php?cid=16010',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1455.jpg',
+        title: 'Crocs',
+        link: '/offerdetails.php?cid=1455',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15607.jpg',
+        title: 'Kickers',
+        link: '/offerdetails.php?cid=15607',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15923.jpg',
+        title: 'Kurt Geiger',
+        link: '/offerdetails.php?cid=15923',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16571.jpg',
+        title: 'Hoka',
+        link: '/offerdetails.php?cid=16571',
+      },
+    ],
+  },
+  {
+    id: 'beauty',
+    title: 'Health & beauty',
+    subtitle:
+      'Get the latest makeup and skincare must-haves and feel fantastic with these savings…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/12566.jpg',
+        title: 'Lookfantastic',
+        link: '/offerdetails.php?cid=12566',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/13271.jpg',
+        title: 'Sephora',
+        link: '/offerdetails.php?cid=13271',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/5319.jpg',
+        title: 'Lovehoney',
+        link: '/offerdetails.php?cid=5319',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15090.jpg',
+        title: 'Charlotte Tilbury',
+        link: '/offerdetails.php?cid=15090',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8137.jpg',
+        title: 'GHD',
+        link: '/offerdetails.php?cid=8137',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15704.jpg',
+        title: 'ESPA',
+        link: '/offerdetails.php?cid=15704',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16161.jpg',
+        title: 'Cult Beauty',
+        link: '/offerdetails.php?cid=16161',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17873.jpg',
+        title: 'Liz Earle',
+        link: '/offerdetails.php?cid=17873',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16455.jpg',
+        title: 'Elemis',
+        link: '/offerdetails.php?cid=16455',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/231.jpg',
+        title: 'Benefit Cosmetics',
+        link: '/offerdetails.php?cid=231',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/270.jpg',
+        title: 'Ann Summers',
+        link: '/offerdetails.php?cid=270',
+      },
+    ],
+  },
+  {
+    id: 'tech',
+    title: 'Tech & mobile',
+    subtitle:
+      'Upgrade your gadgets and get the latest technology including mobiles and broadband for less…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6306.jpg',
+        title: 'Samsung',
+        link: '/offerdetails.php?cid=6306',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/33928.jpg',
+        title: 'LG',
+        link: '/offerdetails.php?cid=33928',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6899.jpg',
+        title: 'EE',
+        link: '/offerdetails.php?cid=6899',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4229.jpg',
+        title: 'Sky',
+        link: '/offerdetails.php?cid=4229',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8927.jpg',
+        title: 'Plusnet',
+        link: '/offerdetails.php?cid=8927',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3462.jpg',
+        title: 'Virgin Media',
+        link: '/offerdetails.php?cid=3462',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10725.jpg',
+        title: 'Reward Mobile',
+        link: '/offerdetails.php?cid=10725',
+      },
+    ],
+  },
+  {
+    id: 'home',
+    title: 'Home & electricals',
+    subtitle:
+      'From air fryers to hoovers and beds to cushions, shop the latest in home upgrades with these discounts…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16290.jpg',
+        title: 'Ninja Kitchen',
+        link: '/offerdetails.php?cid=16290',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16289.jpg',
+        title: 'Shark',
+        link: '/offerdetails.php?cid=16289',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg',
+        title: "Curry's",
+        link: '/offerdetails.php?cid=211',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg',
+        title: 'Silent Night',
+        link: '/offerdetails.php?cid=22058',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg',
+        title: 'Dreamcloud',
+        link: '/offerdetails.php?cid=27486',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/228.jpg',
+        title: 'Homebase',
+        link: '/offerdetails.php?cid=228',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3826.jpg',
+        title: 'Hotpoint',
+        link: '/offerdetails.php?cid=3826',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26281.jpg',
+        title: 'Lakeland',
+        link: '/offerdetails.php?cid=26281',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg',
+        title: 'JBL',
+        link: '/offerdetails.php?cid=25867',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15462.jpg',
+        title: 'Hoover',
+        link: '/offerdetails.php?cid=15462',
+      },
+    ],
+  },
+  {
+    id: 'sports',
+    title: 'Sports & Fitness',
+    subtitle: 'Shop and save on trending sportswear and fitness brands to help you stay active…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16990.jpg',
+        title: 'Sports Direct',
+        link: '/offerdetails.php?cid=16990',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg',
+        title: 'Myprotein',
+        link: '/offerdetails.php?cid=1521',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16917.jpg',
+        title: 'Garmin',
+        link: '/offerdetails.php?cid=16917',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/141.jpg',
+        title: 'Halfords',
+        link: '/offerdetails.php?cid=141',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/150.jpg',
+        title: 'Blacks',
+        link: '/offerdetails.php?cid=150',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/149.jpg',
+        title: 'Millets',
+        link: '/offerdetails.php?cid=149',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4254.jpg',
+        title: 'Go Outdoors',
+        link: '/offerdetails.php?cid=4254',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/5974.jpg',
+        title: 'Craghoppers',
+        link: '/offerdetails.php?cid=5974',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29230.jpg',
+        title: 'Columbia',
+        link: '/offerdetails.php?cid=29230',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg',
+        title: 'Berghaus',
+        link: '/offerdetails.php?cid=7402',
+      },
+    ],
+  },
+  {
+    id: 'gift',
+    title: 'Gifting & toys',
+    subtitle:
+      "Grab the toys and products everyone's talking about with a range of savings on big toy brands and gifts for the whole family...",
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/471.jpg',
+        title: 'Virgin Experience Days',
+        link: '/offerdetails.php?cid=471',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15.jpg',
+        title: 'BuyaGift',
+        link: '/offerdetails.php?cid=15',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24788.jpg',
+        title: 'Not on the High Street',
+        link: '/offerdetails.php?cid=24788',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9228.jpg',
+        title: 'Shopdisney',
+        link: '/offerdetails.php?cid=9228',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9652.jpg',
+        title: 'Yankee Candle',
+        link: '/offerdetails.php?cid=9652',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/39.jpg',
+        title: 'Goldsmiths',
+        link: '/offerdetails.php?cid=39',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/13857.jpg',
+        title: 'Abbott Lyon',
+        link: '/offerdetails.php?cid=13857',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27809.jpg',
+        title: 'Card Factory',
+        link: '/offerdetails.php?cid=27809',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26709.jpg',
+        title: 'Hornby',
+        link: '/offerdetails.php?cid=26709',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26712.jpg',
+        title: 'Scaletrix',
+        link: '/offerdetails.php?cid=26712',
+      },
+    ],
+  },
+  {
+    id: 'holidays',
+    title: 'Holidays & days Out',
+    subtitle:
+      'Jet away on your next city break or get some winter sun, and save with our holiday discounts…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22960.jpg',
+        title: 'Booking.com',
+        link: '/offerdetails.php?cid=22960',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26008.jpg',
+        title: 'Loveholidays',
+        link: '/offerdetails.php?cid=26008',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/5315.jpg',
+        title: 'Hotels.com',
+        link: '/offerdetails.php?cid=5315',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/387.jpg',
+        title: 'Expedia',
+        link: '/offerdetails.php?cid=387',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/239.jpg',
+        title: 'Jet2 Holidays',
+        link: '/offerdetails.php?cid=239',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg',
+        title: 'Cineworld',
+        link: '/offerdetails.php?cid=809',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/249.jpg',
+        title: 'Alton Towers Resort',
+        link: '/offerdetails.php?cid=249',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3285.jpg',
+        title: 'Parkdean Resorts',
+        link: '/offerdetails.php?cid=3285',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4544.jpg',
+        title: 'Butlins',
+        link: '/offerdetails.php?cid=4544',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/120.jpg',
+        title: 'Holiday Extras',
+        link: '/offerdetails.php?cid=120',
+      },
+    ],
+  },
+  {
+    id: 'food',
+    title: 'Food & drink',
+    subtitle:
+      'Find delicious discounts at your favourite restaurants and eat out for less this holiday season…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24239.jpg',
+        title: 'Bills',
+        link: '/offerdetails.php?cid=24239',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3351.jpg',
+        title: 'Virgin Wines',
+        link: '/offerdetails.php?cid=3351',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19088.jpg',
+        title: 'Skinny Foods',
+        link: '/offerdetails.php?cid=19088',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg',
+        title: 'Muscle Food',
+        link: '/offerdetails.php?cid=3544',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9464.jpg',
+        title: 'Iceland',
+        link: '/offerdetails.php?cid=9464',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4297.jpg',
+        title: 'Grenade',
+        link: '/offerdetails.php?cid=4297',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg',
+        title: 'Whittards of Chelsea',
+        link: '/offerdetails.php?cid=1570',
+      },
+    ],
+  },
+];
+
 const blackFridayLandingPageConfig: BlackFridayLandingPageConfigProps = {
-  offerSections: [
-    {
-      title: 'Fashion & Clothing',
-      subtitle:
-        'Get the latest looks for less with our range of discounts on fashion essentials, outdoor clothing and more…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Footwear & streetwear',
-      subtitle:
-        'Put your best foot forward and keep your feet on-trend with savings on the latest trainers and shoes…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Health & beauty',
-      subtitle:
-        'Get the latest makeup and skincare must-haves and feel fantastic with these savings…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Tech & mobile',
-      subtitle:
-        'Upgrade your gadgets and get the latest technology including mobiles and broadband for less…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Home & electricals',
-      subtitle:
-        'From air fryers to hoovers and beds to cushions, shop the latest in home upgrades with these discounts…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Gifting & toys',
-      subtitle:
-        "Grab the toys and products everyone's talking about with a range of savings on big toy brands and gifts for the whole family...",
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Holidays & days Out',
-      subtitle:
-        'Jet away on your next city break or get some winter sun, and save with our holiday discounts…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Food & drink',
-      subtitle:
-        'Find delicious discounts at your favourite restaurants and eat out for less this holiday season…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-    {
-      title: 'Fashion & Clothing',
-      subtitle:
-        'Get the latest looks for less with our range of discounts on fashion essentials, outdoor clothing and more…',
-      offers: [
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Abercrombie & Fitch',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Boohoo',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Boohoo MAN',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Burton',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Coast',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'Crocs - TBC',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Debenhams',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Dorothy Perkins',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-01.jpg',
-          title: 'Ego',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-02.jpg',
-          title: 'FitFlop',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-03.jpg',
-          title: 'Garmin',
-          link: '/#',
-        },
-        {
-          imgSrc:
-            'https://cdn.tailgrids.com/1.0/assets/images/ecommerce/products/products-grids-04/image-04.jpg',
-          title: 'Hollister',
-          link: '/#',
-        },
-      ],
-    },
-  ],
+  bannerSection: {
+    bannerSrc:
+      'https://cdn.bluelightcard.co.uk/web/landing-pages/black-friday-2023/black_friday_logo.png',
+    title: 'SAVE UP TO 40%',
+    subtitle: 'ON BRANDS YOU LOVE',
+    ctaText: 'Shop now',
+  },
+  heroSection: {
+    title: 'Bigger discounts'.toUpperCase(),
+    subtitle: 'IN OUR BLACK FRIDAY SALE'.toUpperCase(),
+    paragraphs: [
+      'Are you a member of the emergency services, NHS, social care sector, or armed forces? It’s time to get your Blue Light Card ready and prepare to save with unmissable discounts on hundreds of brands this Black Friday.',
+      'We’ve partnered with the likes of Hotpoint, Curry’s, Debenhams and LOOKFANTASTIC to offer you exclusive discounts on your favourite items including fashion, electricals, beauty, accessories and more…',
+      'Don’t miss out!',
+    ],
+    categoriesAndIds: offerSections.map(({ id, title }) => ({ id, title })),
+  },
+  offerSections,
 };
 
 export default blackFridayLandingPageConfig;

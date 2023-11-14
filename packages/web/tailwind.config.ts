@@ -37,6 +37,12 @@ const config: Config = {
       tablet: '768px',
       laptop: '1024px',
       desktop: '1200px',
+      landscapebf: {
+        raw: '((min-device-width: 650px) and (max-height: 750px))',
+      },
+      landscapebfsm: {
+        raw: '((min-device-width: 650px) and (max-height: 380px))',
+      },
     },
     fontFamily: fonts,
   },

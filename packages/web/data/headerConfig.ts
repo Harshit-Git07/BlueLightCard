@@ -1,6 +1,14 @@
-import { NavItem } from '@/components/Header/types';
+import { NavItems } from '@/components/Header/types';
+import { BLACK_FRIDAY_TIME_LOCK_END_DATE, BLACK_FRIDAY_TIME_LOCK_START_DATE } from '@/global-vars';
 
-export const navItems: NavItem = {
+const blackFridayLink = {
+  text: 'Black Friday',
+  link: '/black-friday',
+  startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
+  endTime: BLACK_FRIDAY_TIME_LOCK_END_DATE,
+};
+
+export const navItems: NavItems = {
   links: {
     homeUrl: '/',
     notificationsUrl: '/notifications.php',
@@ -9,6 +17,9 @@ export const navItems: NavItem = {
     {
       text: 'Home',
       link: '/',
+    },
+    {
+      ...blackFridayLink,
     },
     {
       text: 'About us',
@@ -48,6 +59,9 @@ export const navItems: NavItem = {
     {
       text: 'Home',
       link: '/members-home',
+    },
+    {
+      ...blackFridayLink,
     },
     {
       text: 'Offers',

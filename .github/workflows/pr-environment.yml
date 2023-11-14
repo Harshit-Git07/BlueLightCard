@@ -96,7 +96,9 @@ jobs:
       NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
       NEXT_PUBLIC_COGNITO_IDP_ID: ${{ secrets.COGNITO_IDP_ID }}
       NEXT_PUBLIC_LOGOUT_ROUTE: /mock-login
-      NEXT_PUBLIC_OFFERS_ENDPOINT: https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql
+      NEXT_PUBLIC_OFFERS_ENDPOINT: https://staging-offers.blcshine.io/graphql
+      NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
+      NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3

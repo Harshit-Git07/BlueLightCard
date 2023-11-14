@@ -1,8 +1,8 @@
 import React from 'react';
-import Image from 'next/image';
 import { BlackFridayOfferProps, BlackFridayOfferSectionProps } from './types';
 import { ThemeVariant } from '@/types/theme';
 import Button from '@/components/Button/Button';
+import Image from '@/components/Image/Image';
 import Container from '@/components/Container/Container';
 import Heading from '@/components/Heading/Heading';
 
@@ -34,6 +34,7 @@ const themeVariants = {
 };
 
 const BlackFridayOfferSection = ({
+  id,
   title,
   subtitle,
   offers,
@@ -42,7 +43,10 @@ const BlackFridayOfferSection = ({
   const chosenVariant = themeVariants[variant];
 
   return (
-    <section className={`${chosenVariant['backgroundColor']} py-20 dark:bg-dark lg:py-[120px]`}>
+    <section
+      id={id}
+      className={`${chosenVariant['backgroundColor']} py-20 dark:bg-dark lg:py-[120px]`}
+    >
       <Container>
         <Heading
           className={`font-bold ${chosenVariant['headingTextColor']} text-center mb-5`}
@@ -92,8 +96,9 @@ const BlackFridayOffer = ({
             src={imgSrc}
             alt="Black friday offer"
             fill={false}
-            width={286}
-            height={174}
+            width={0}
+            height={0}
+            sizes="100vw"
             className={`h-auto w-full rounded-md border-[1px] ${chosenVariant['offerImageBorderColor']}`}
             quality={100}
           />

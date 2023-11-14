@@ -1,5 +1,11 @@
-import { BlackFridayOfferSectionProps } from '@/offers/components/landing/black-friday/BlackFridayOfferSection/types';
+import {
+  BlackFridayBannerSectionProps,
+  BlackFridayHeroSectionProps,
+  BlackFridayOfferSectionProps,
+} from '@/offers/components/landing/black-friday/types';
 
 export type BlackFridayLandingPageConfigProps = {
+  bannerSection: BlackFridayBannerSectionProps;
+  heroSection: BlackFridayHeroSectionProps;
   offerSections: BlackFridayOfferSectionProps[];
 };

@@ -196,7 +196,9 @@ jobs:
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_IDENTITY_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://tr1afrar24.execute-api.eu-west-2.amazonaws.com/staging/blc_uk/formOutputData
-      NEXT_PUBLIC_OFFERS_ENDPOINT: https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql
+      NEXT_PUBLIC_OFFERS_ENDPOINT: https://staging-offers.blcshine.io/graphql
+      NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
+      NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
@@ -239,7 +241,9 @@ jobs:
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_IDENTITY_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL: https://ue8dcieh75.execute-api.eu-west-2.amazonaws.com/production/blc_uk/formOutputData
-      NEXT_PUBLIC_OFFERS_ENDPOINT: https://27d2m22mtvac5cvilrvb7kviyi.appsync-api.eu-west-2.amazonaws.com/graphql
+      NEXT_PUBLIC_OFFERS_ENPDPOINT: https://offers.blcshine.io/graphql
+      NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-24T01:00:00'
+      NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
     steps:
       - uses: actions/checkout@v4
       - name: Cache node modules

@@ -1,7 +1,7 @@
-import BlackFridayOfferSection from '@/offers/components/landing/black-friday/BlackFridayOfferSection/BlackFridayOfferSection';
+import BlackFridayOfferSection from '@/offers/components/landing/black-friday/BlackFridayOfferSection';
 import blackFridayLandingPageConfig from '@/data/landing/blackFridayPageConfig';
 import renderer from 'react-test-renderer';
-import { BlackFridayOfferSectionProps } from '@/offers/components/landing/black-friday/BlackFridayOfferSection/types';
+import { BlackFridayOfferSectionProps } from '@/offers/components/landing/black-friday/types';
 import { ThemeVariant } from '@/types/theme';
 
 describe('BlackFridayOfferSection', () => {
@@ -9,9 +9,10 @@ describe('BlackFridayOfferSection', () => {
     const { offerSections } = blackFridayLandingPageConfig;
 
     const blackFridayOfferSections = offerSections.map(
-      ({ title, subtitle, offers }: BlackFridayOfferSectionProps, index: number) => (
+      ({ id, title, subtitle, offers }: BlackFridayOfferSectionProps, index: number) => (
         <BlackFridayOfferSection
           key={index}
+          id={id}
           title={title}
           subtitle={subtitle}
           offers={offers}

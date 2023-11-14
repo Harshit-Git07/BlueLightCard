@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BlackFridayHeroSection should match snapshot 1`] = `
+<section
+  className="bg-black flex flex-col items-center justify-center text-white font-[MuseoSans]"
+  id="hero"
+>
+  <div
+    className=" "
+  >
+    <div
+      className="mobile:mx-5 laptop:container laptop:mx-auto "
+    >
+      <h1
+        className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] !text-[#FFFF00] mt-20 mb-4 font-bold text-6xl text-center "
+      >
+        BIGGER DISCOUNTS
+      </h1>
+      <h1
+        className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] text-white text-center "
+      >
+        IN OUR BLACK FRIDAY SALE
+      </h1>
+      <div
+        className="text-white my-10"
+      >
+        <p
+          className="text-center mb-5"
+        >
+          Are you a member of the emergency services, NHS, social care sector, or armed forces? It’s time to get your Blue Light Card ready and prepare to save with unmissable discounts on hundreds of brands this Black Friday.
+        </p>
+        <p
+          className="text-center mb-5"
+        >
+          We’ve partnered with the likes of Hotpoint, Curry’s, Debenhams and LOOKFANTASTIC to offer you exclusive discounts on your favourite items including fashion, electricals, beauty, accessories and more…
+        </p>
+        <p
+          className="text-center false"
+        >
+          Don’t miss out!
+        </p>
+      </div>
+      <div
+        className="grid grid-cols-4 mobile:grid-cols-2 tablet:grid-cols-3 laptop:grid-cols-3 desktop:grid-cols-3 mb-10"
+      >
+        <a
+          className="m-4 !p-0"
+          href="#fashion"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Fashion & Clothing
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#footwear"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Footwear & streetwear
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#beauty"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Health & beauty
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#tech"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Tech & mobile
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#home"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Home & electricals
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#sports"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Sports & Fitness
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#gift"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Gifting & toys
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#holidays"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Holidays & days Out
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#food"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Food & drink
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+`;

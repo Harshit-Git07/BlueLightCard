@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.3.0...bluelightcard/member-services-hub-v1.3.1) (2023-11-15)
+
+
+### Bug Fixes
+
+* **member-services-hub:** empty state image and text ([#627](https://github.com/bluelightcard/BlueLightCard-2.0/issues/627)) ([ac10493](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ac1049342525e8cda9266d754e74bbaf6f241170))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.2.3...bluelightcard/member-services-hub-v1.3.0) (2023-11-07)
 
 

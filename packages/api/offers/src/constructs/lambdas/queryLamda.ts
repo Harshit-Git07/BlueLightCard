@@ -1,6 +1,6 @@
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaAbstract } from './lambdaAbstract';
-import { Stack } from "aws-cdk-lib";
+import { Duration, Stack } from "aws-cdk-lib";
 import { Tables } from '../tables';
 import { COMPANY_FOLLOWS_SECRET, ENDPOINTS } from '../../utils/global-constants';
 import { ElasticCache } from "../elasticCache";
@@ -40,6 +40,7 @@ export class QueryLambda extends LambdaAbstract {
       handler: 'handler',
       environment: this.getEnvironmentConfig(),
       memorySize: 1024,
+      timeout: Duration.seconds(5),
     }
 
     if (!isDev(this.stage)) {

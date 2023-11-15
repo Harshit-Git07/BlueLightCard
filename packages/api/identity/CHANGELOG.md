@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.30.0...bluelightcard/identity-v1.31.0) (2023-11-15)
+
+
+### Features
+
+* audit sign in ([#625](https://github.com/bluelightcard/BlueLightCard-2.0/issues/625)) ([336b149](https://github.com/bluelightcard/BlueLightCard-2.0/commit/336b1498286bdcf8a9b8b6aa704db83587300c62))
+* ti 580 add rule ([#628](https://github.com/bluelightcard/BlueLightCard-2.0/issues/628)) ([610da05](https://github.com/bluelightcard/BlueLightCard-2.0/commit/610da05eeef510081a90c358b142b855e78928ee))
+
 ## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.29.0...bluelightcard/identity-v1.30.0) (2023-11-08)
 
 

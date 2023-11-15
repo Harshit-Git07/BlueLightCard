@@ -11,6 +11,7 @@
     "@aws-sdk/client-dynamodb": "3.332.0",
     "@aws-sdk/lib-dynamodb": "3.335.0",
     "@aws-sdk/client-sqs": "3.425.0",
+    "@aws-sdk/client-firehose": "3.425.0",
     "@jest/globals": "29.5.0",
     "@types/aws-lambda": "8.10.119",
     "@types/node": "20.2.3",

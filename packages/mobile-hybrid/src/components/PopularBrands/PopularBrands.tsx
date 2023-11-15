@@ -4,15 +4,22 @@ import Image from '@/components/Image/Image';
 import Heading from '../Heading/Heading';
 import { cssUtil } from '@/utils/cssUtil';
 import { AppContext } from '@/store';
+import useDebounce from '@/hooks/useDebounce';
 
 const PopularBrands: FC<PopularBrandsProps> = ({
   rounded = true,
   title,
   brands,
   onBrandItemClick,
+  onInteracted,
   text,
 }) => {
   const { experiments: expr } = useContext(AppContext);
+  const throttle = useDebounce(() => {
+    if (onInteracted) {
+      onInteracted();
+    }
+  }, 750);
   const imageWrapperClass = cssUtil([
     'mx-2 inline-block relative h-[74px] overflow-hidden shadow-md',
     rounded ? 'rounded-full w-[74px]' : 'rounded-3xl w-[120px]',
@@ -28,7 +35,7 @@ const PopularBrands: FC<PopularBrandsProps> = ({
       {expr['streamlined-homepage'] !== 'on' && (
         <p className="px-4 mb-3 font-museo dark:text-neutral-white">{text}</p>
       )}
-      <div className="ml-2 flex overflow-x-auto items-center h-[100px]">
+      <div className="ml-2 flex overflow-x-auto items-center h-[100px]" onScroll={throttle}>
         <div className="flex">
           {brands.map((brand) => (
             <div

@@ -14,8 +14,17 @@ const FavouritedBrandsSlider: FC = () => {
     analytics.logAnalyticsEvent({
       event: 'homepage_carousel_card_clicked',
       parameters: {
-        carousel_name: 'favourited_brands',
+        carousel_name: 'Favourite brands',
         brand_name: brands.find((brand) => brand.id === compid)?.brandName,
+        company_id: compid,
+      },
+    });
+  };
+  const onCarouselInteracted = () => {
+    analytics.logAnalyticsEvent({
+      event: 'homepage_carousel_interacted',
+      parameters: {
+        carousel_name: 'Favourite brands',
       },
     });
   };
@@ -23,8 +32,9 @@ const FavouritedBrandsSlider: FC = () => {
     <PopularBrands
       rounded={false}
       onBrandItemClick={onBrandItemClick}
+      onInteracted={onCarouselInteracted}
       brands={brands}
-      title="Favourited brands"
+      title="Your favourite brands"
     />
   );
 };

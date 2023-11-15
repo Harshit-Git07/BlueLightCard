@@ -13,8 +13,16 @@ const PopularBrandsSlider: FC = () => {
     analytics.logAnalyticsEvent({
       event: 'homepage_carousel_card_clicked',
       parameters: {
-        carousel_name: 'popular_brands',
+        carousel_name: 'Popular brands',
         brand_name: brands.find((brand) => brand.id === compid)?.brandName,
+      },
+    });
+  };
+  const onCarouselInteracted = () => {
+    analytics.logAnalyticsEvent({
+      event: 'homepage_carousel_interacted',
+      parameters: {
+        carousel_name: 'Popular brands',
       },
     });
   };
@@ -23,6 +31,7 @@ const PopularBrandsSlider: FC = () => {
       text="Explore popular brands with a swipe!"
       onBrandItemClick={onBrandItemClick}
       brands={brands}
+      onInteracted={onCarouselInteracted}
       title="Popular brands"
     />
   );

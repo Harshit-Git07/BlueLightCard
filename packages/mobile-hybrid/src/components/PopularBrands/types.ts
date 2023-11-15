@@ -4,6 +4,7 @@ export interface PopularBrandsProps {
   brands: Brand[];
   text?: string;
   onBrandItemClick?: (data: any) => void;
+  onInteracted?: () => void;
 }
 
 export interface Brand {

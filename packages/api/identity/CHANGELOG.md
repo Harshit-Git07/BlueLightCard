@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.32.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.31.0...bluelightcard/identity-v1.32.0) (2023-11-15)
+
+
+### Features
+
+* add firehose ([#648](https://github.com/bluelightcard/BlueLightCard-2.0/issues/648)) ([d95924c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d95924cd5031151a692803c4db8e4a997b98e857))
+
 ## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.30.0...bluelightcard/identity-v1.31.0) (2023-11-15)
 
 

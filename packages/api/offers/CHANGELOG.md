@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.14.2...bluelightcard/offers-v1.15.0) (2023-11-15)
+
+
+### Features
+
+* TO-174 event handler update company ([#626](https://github.com/bluelightcard/BlueLightCard-2.0/issues/626)) ([34e4aa8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/34e4aa877e8abd781f6cfdfbecd7b6d6d2cc8bf7))
+
+
+### Bug Fixes
+
+* increase lambda timeout ([#645](https://github.com/bluelightcard/BlueLightCard-2.0/issues/645)) ([0ac9c2d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0ac9c2d5f050b125f49f60b94f2220f3dd63d2f9))
+
 ## [1.14.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.14.1...bluelightcard/offers-v1.14.2) (2023-11-08)
 
 

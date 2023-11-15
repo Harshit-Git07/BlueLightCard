@@ -41,7 +41,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm test -w packages/${{ env.PKG_NAME }}
 
   lint:
@@ -58,7 +58,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: JavaScript and Typescript
         run: npm run lint -w packages/${{ env.PKG_NAME }}
       - name: Styles
@@ -78,7 +78,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: Build
         run: npm run build-storybook -w packages/${{ env.PKG_NAME }}
       - name: Publish
@@ -128,7 +128,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: Build
         run: npm run build -w packages/member-services-hub
       - name: Publish
@@ -160,7 +160,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: Build
         run: npm run build -w packages/${{ env.PKG_NAME }}
       - name: Publish
@@ -190,7 +190,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: Build
         run: npm run build -w packages/${{ env.PKG_NAME }}
       - name: Publish

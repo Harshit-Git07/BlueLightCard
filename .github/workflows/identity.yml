@@ -38,7 +38,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm run test -w packages/api/identity
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -74,7 +74,7 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm install
+      - run: npm ci
       - run: npm run build
   staging:
     name: Staging Deployment
@@ -102,7 +102,7 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm install
+      - run: npm ci
       - run: npm run build
       - name: Deploy
         run: npx sst deploy global --stage staging && npx sst deploy identity --stage staging
@@ -130,7 +130,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm run e2e:identity -w packages/api/identity
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -164,7 +164,7 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm install
+      - run: npm ci
       - run: npm run build
       - name: Deploy
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy identity --stage production --region ${{matrix.region}}

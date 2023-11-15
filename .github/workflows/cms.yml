@@ -36,7 +36,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm test -w packages/cms
 
   e2e:
@@ -53,7 +53,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - run: npm run test:e2e -w packages/cms
@@ -78,7 +78,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: JavaScript and Typescript
         run: npm run lint -w packages/cms
       - name: Styles
@@ -123,7 +123,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: Build
         run: npm run build -w packages/cms
       - name: Publish
@@ -156,7 +156,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - name: Build
         run: npm run build -w packages/cms
       - name: Publish

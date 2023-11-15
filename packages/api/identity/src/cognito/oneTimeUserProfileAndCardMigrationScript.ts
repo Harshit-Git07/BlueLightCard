@@ -192,7 +192,7 @@ export async function migrate(): Promise<{status: string, message: string}> {
       const profileUuid: string = v4();
       let dob = null;
       if(!isNaN(Date.parse(row.dob))){
-        dob = transformDateToFormatYYYYMMDD(row.dob);
+        dob = row.dob !== null || row.dob !== '0000-00-00' ? new Date(row.dob).toISOString().substring(0,10) : null;
       }
       //profile
       const profileParams = {

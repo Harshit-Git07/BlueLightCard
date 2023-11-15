@@ -41,7 +41,7 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm install
+      - run: npm ci
       - run: npm run build
       - name: Deploy Global
         run: npx sst deploy global --stage $PR_PREFIX
@@ -121,7 +121,7 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-      - run: npm install
+      - run: npm ci
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
         env:
@@ -201,7 +201,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
 
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v10

@@ -40,7 +40,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm run test -w packages/api/offers
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -75,7 +75,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm run build
   staging:
     name: Staging Deployment
@@ -102,7 +102,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm run build
       - name: Deploy Stack
         run: npx sst deploy global --stage staging && npx sst deploy offers --stage staging
@@ -133,7 +133,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - run: npm ci
       - run: npm run build
       - name: Deploy Stack
         run: npx sst deploy global --stage production && npx sst deploy offers --stage production

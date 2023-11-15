@@ -1,19 +1,21 @@
-import { Identity } from '@blc-mono/identity/stack';
+import { Identity } from '../identity/stack';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
 import { Shared } from '../../../stacks/stack';
-import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
+import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension';
 import { PostAffiliateModel } from './src/models/postAffiliate';
 import { PostSpotifyModel } from './src/models/postSpotify';
 import { PostAffiliate } from './src/routes/postAffiliate';
 import { PostSpotify } from './src/routes/postSpotify';
 
-export function Redemptions({ stack }: StackContext) {
+export function Redemptions({ stack }: StackContext): {
+  api: ApiGatewayV1Api<any>;
+} {
   const { certificateArn } = use(Shared);
   const { cognito } = use(Identity);
 
-  //set tag service identity to all resources
+  // set tag service identity to all resources
   stack.tags.setTag('service', 'redemptions');
   stack.tags.setTag('map-migrated', 'd-server-017zxazumgiycz');
 
@@ -55,14 +57,14 @@ export function Redemptions({ stack }: StackContext) {
 
   // Create Lambda Based API Routes
   api.addRoutes(stack, {
-    ['POST /member/connection/affiliate']: new PostAffiliate(
+    'POST /member/connection/affiliate': new PostAffiliate(
       apiGatewayModelGenerator,
       postAffiliateModel,
       stack,
       api.cdk.restApi,
     ).postAffiliate(),
 
-    ['POST /member/online/single-use/custom/spotify']: new PostSpotify(
+    'POST /member/online/single-use/custom/spotify': new PostSpotify(
       apiGatewayModelGenerator,
       postSpotifyModel,
       stack,

@@ -1,23 +1,40 @@
-
-import { IRestApi, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
+import { IRestApi, MethodResponse, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import {
   ApiGatewayModelGenerator,
   MethodResponses,
   Model,
   ResponseModel,
 } from '../../../core/src/extensions/apiGatewayExtension';
-import { Stack } from "sst/constructs";
+import { Stack } from 'sst/constructs';
 
+interface PostSpotifyHandler {
+  function: {
+    handler: string;
+    environment: {
+      CODES_REDEEMED_HOST?: string;
+      ENVIRONMENT?: string;
+      CODE_REDEEMED_PATH?: string;
+      CODE_ASSIGNED_REDEEMED_PATH?: string;
+    };
+  };
+  cdk: {
+    method: {
+      requestModels: Record<string, any>;
+      methodResponses: MethodResponse[];
+      requestValidator: RequestValidator;
+    };
+  };
+}
 
 export class PostSpotify {
   constructor(
-    private apiGatewayModelGenerator: ApiGatewayModelGenerator,
-    private model: Model,
-    private stack: Stack,
-    private api: IRestApi,
+    private readonly apiGatewayModelGenerator: ApiGatewayModelGenerator,
+    private readonly model: Model,
+    private readonly stack: Stack,
+    private readonly api: IRestApi,
   ) {}
 
-  postSpotify() {
+  postSpotify(): PostSpotifyHandler {
     return {
       function: {
         handler: 'packages/api/redemptions/src/handlers/proxy/postSpotify.handler',
@@ -26,7 +43,7 @@ export class PostSpotify {
           ENVIRONMENT: process.env.ENVIRONMENT,
           CODE_REDEEMED_PATH: process.env.CODE_REDEEMED_PATH,
           CODE_ASSIGNED_REDEEMED_PATH: process.env.CODE_ASSIGNED_REDEEMED_PATH,
-        }
+        },
       },
       cdk: {
         method: {

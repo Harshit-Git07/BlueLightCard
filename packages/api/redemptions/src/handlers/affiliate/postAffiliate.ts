@@ -22,6 +22,6 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
   } catch (error) {
     logger.error('Error while creating tracking URL ', { error });
 
-    return Response.Error({ message: 'Error while creating tracking URL' } as Error);
+    return Response.Error(new Error( 'Error while creating tracking URL'));
   }
 };

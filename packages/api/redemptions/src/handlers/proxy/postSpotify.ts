@@ -1,7 +1,7 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
-import { RequestResponse, httpRequest } from '@blc-mono/core/src/utils/fetch/httpRequest';
-import { Response } from '@blc-mono/core/src/utils/restResponse/response';
+import { RequestResponse, httpRequest } from '../../../../core/src/utils/fetch/httpRequest';
+import { Response } from '../../../../core/src/utils/restResponse/response';
 import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { generateKey } from '../../helpers/newVaultAuth';
 
@@ -14,19 +14,25 @@ enum ErrorMessages {
   MissingEndpoint = 'empty environment variables - missing endpoint',
 }
 
-type ValidationParams = {
+interface ResponseData {
+  codes: Array<{ code: number }>;
+  code: number;
+  trackingUrl: string;
+}
+
+interface ValidationParams {
   codeRedeemedHost: string;
   codeRedeemedEnvironment: string;
   codeRedeemedPath: string;
   assignUserCodesPath: string;
-};
+}
 
 function validateEnvironmentVariables({
   codeRedeemedHost,
   codeRedeemedPath,
   assignUserCodesPath,
   codeRedeemedEnvironment,
-}: ValidationParams) {
+}: ValidationParams): string | undefined {
   if (!codeRedeemedHost) {
     return ErrorMessages.MissingEndpoint;
   } else if (!codeRedeemedPath) {
@@ -38,7 +44,7 @@ function validateEnvironmentVariables({
   }
 }
 
-function getResponseData(response: RequestResponse, url: string) {
+function getResponseData(response: RequestResponse, url: string): ResponseData | undefined {
   if (response.data && Object.keys(response.data).length >= 1) {
     const responseData = response.data;
     const codes = responseData.data;
@@ -59,17 +65,17 @@ function getResponseData(response: RequestResponse, url: string) {
 /**
  *  environment values for code redeemed for setting urls
  */
-const codeRedeemedHost = process.env.CODES_REDEEMED_HOST || '';
-const codeRedeemedEnvironment = process.env.ENVIRONMENT || '';
-const codeRedeemedPath = process.env.CODE_REDEEMED_PATH || '';
-const assignUserCodesPath = process.env.CODE_ASSIGNED_REDEEMED_PATH || '';
+const codeRedeemedHost = process.env.CODES_REDEEMED_HOST ?? '';
+const codeRedeemedEnvironment = process.env.ENVIRONMENT ?? '';
+const codeRedeemedPath = process.env.CODE_REDEEMED_PATH ?? '';
+const assignUserCodesPath = process.env.CODE_ASSIGNED_REDEEMED_PATH ?? '';
 
-type Secrets = {
+interface Secrets {
   codeRedeemedData: string;
   codeRedeemedPassword: string;
   assignUserCodesData: string;
   assignUserCodesPassword: string;
-};
+}
 
 export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyStructuredResultV2> => {
   logger.info('POST Spotify Proxy Input', { event });

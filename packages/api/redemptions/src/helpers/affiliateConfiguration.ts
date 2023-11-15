@@ -20,10 +20,10 @@ export class AffiliateConfiguration {
   url: URL;
   trackingUrl: string;
 
-  constructor(private affiliateUrl: string, private memberId: string) {
+  constructor(private readonly affiliateUrl: string, private readonly memberId: string) {
     this.url = new URL(this.affiliateUrl);
 
-    const affiliates: { [key: string]: Affiliate } = {
+    const affiliates: Record<string, Affiliate> = {
       awin: this.awin(),
       affiliateFuture: this.affiliateFuture(),
       rakuten: this.rakuten(),

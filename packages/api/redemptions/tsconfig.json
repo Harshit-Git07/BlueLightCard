@@ -1,0 +1,14 @@
+{
+
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "strictNullChecks": true,
+    "module": "ESNext",
+    "target": "es6",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "noEmit": true
+  }
+}

@@ -14,23 +14,16 @@ import {
 
 import { navItems } from '@/data/headerConfig';
 import footerConfig from '@/data/footerConfig';
-import Head from 'next/head';
-import useBrandTranslation from '@/hooks/useBrandTranslation';
 import { LayoutProps } from './types';
 import { useContext } from 'react';
 import AuthContext from '@/context/AuthContext';
+import MetaData from '@/components/MetaData/MetaData';
 
 const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace }) => {
   // Converts brand codes to text using the brand translation file
   // Uses data from locales folder as data source
   const authContext = useContext(AuthContext);
   const loggedIn = authContext.isUserAuthenticated();
-
-  const { t: brandTranslator } = useBrandTranslation(
-    translationNamespace
-      ? ['common', 'description', translationNamespace]
-      : ['common', 'description']
-  );
 
   const onSearchCompanyChange = async (companyId: string, company: string) => {
     await logSearchCompanyEvent(companyId, company);
@@ -49,96 +42,8 @@ const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace
 
   return (
     <div>
-      {seo && (
-        <Head>
-          {seo.title && <title>{brandTranslator(seo.title, { ns: translationNamespace })}</title>}
-          {seo.description && (
-            <meta
-              name="description"
-              content={brandTranslator(seo.description, { ns: translationNamespace })}
-            />
-          )}
-          {seo.keywords && (
-            <meta
-              name="keywords"
-              content={brandTranslator(seo.keywords, { ns: translationNamespace })}
-            />
-          )}
-          {seo.ogTitle && (
-            <meta
-              property="og:title"
-              content={brandTranslator(seo.ogTitle, { ns: translationNamespace })}
-            />
-          )}
-          {seo.ogType && (
-            <meta
-              property="og:title"
-              content={brandTranslator(seo.ogType, { ns: translationNamespace })}
-            />
-          )}
-          {seo.sitename && (
-            <meta
-              property="og:site_name"
-              content={brandTranslator(seo.sitename, { ns: translationNamespace })}
-            />
-          )}
-          {seo.ogUrl && (
-            <meta
-              property="og:url"
-              content={brandTranslator(seo.ogUrl, { ns: translationNamespace })}
-            />
-          )}
-          {seo.ogImage && (
-            <meta
-              property="og:image"
-              content={brandTranslator(seo.ogImage, { ns: translationNamespace })}
-            />
-          )}
+      <MetaData seo={seo} translationNamespace={translationNamespace} />
 
-          {seo.twitterCard && (
-            <meta
-              name="twitter:card"
-              content={brandTranslator(seo.twitterCard, { ns: translationNamespace })}
-            />
-          )}
-          {seo.twitterTitle && (
-            <meta
-              name="twitter:title"
-              content={brandTranslator(seo.twitterTitle, { ns: translationNamespace })}
-            />
-          )}
-          {seo.twitterDescription && (
-            <meta
-              name="twitter:description"
-              content={brandTranslator(seo.twitterDescription, { ns: translationNamespace })}
-            />
-          )}
-          {seo.twitterImage && (
-            <meta
-              name="twitter:image"
-              content={brandTranslator(seo.twitterImage, { ns: translationNamespace })}
-            />
-          )}
-          {seo.twitterImageAlt && (
-            <meta
-              name="twitter:image:alt"
-              content={brandTranslator(seo.twitterImageAlt, { ns: translationNamespace })}
-            />
-          )}
-          {seo.twitterSite && (
-            <meta
-              name="twitter:site"
-              content={brandTranslator(seo.twitterSite, { ns: translationNamespace })}
-            />
-          )}
-          {seo.twitterCreator && (
-            <meta
-              name="twitter:creator"
-              content={brandTranslator(seo.twitterCreator, { ns: translationNamespace })}
-            />
-          )}
-        </Head>
-      )}
       <Header
         navItems={navItems}
         loggedIn={loggedIn}

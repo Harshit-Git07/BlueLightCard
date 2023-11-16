@@ -6,7 +6,7 @@ exports[`BlackFridayHeaderSection should match snapshot 1`] = `
 >
   <a
     aria-label="Navigate Home"
-    className="relative block h-[40px] max-w-[197px] tablet:max-w-[226px] hover:opacity-100 mx-auto"
+    className="flex relative block h-11 max-w-[197px] tablet:max-w-[226px] hover:opacity-100 mx-auto text-black"
     data-testid="brandLogo"
     href="https://www.bluelightcard.co.uk/"
   >

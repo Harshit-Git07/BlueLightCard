@@ -73,20 +73,6 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
         </a>
         <a
           className="m-4 !p-0"
-          href="#beauty"
-          onClick={[Function]}
-          onMouseEnter={[Function]}
-          onTouchStart={[Function]}
-        >
-          <button
-            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
-            type="button"
-          >
-            Health & beauty
-          </button>
-        </a>
-        <a
-          className="m-4 !p-0"
           href="#tech"
           onClick={[Function]}
           onMouseEnter={[Function]}
@@ -111,6 +97,20 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
             type="button"
           >
             Home & electricals
+          </button>
+        </a>
+        <a
+          className="m-4 !p-0"
+          href="#beauty"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          <button
+            className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
+            type="button"
+          >
+            Health & beauty
           </button>
         </a>
         <a

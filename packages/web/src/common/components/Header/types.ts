@@ -31,6 +31,8 @@ export interface NavItems {
 export interface NavItem {
   text: string;
   link?: string;
+  backgroundColor?: string;
+  textColor?: string;
   startTime?: string;
   endTime?: string;
   dropdown?: { text: string; link: string }[];
@@ -57,6 +59,8 @@ export interface MenuNavProps {
   menu: {
     text: string;
     link?: string;
+    backgroundColor?: string;
+    textColor?: string;
     startTime?: string;
     endTime?: string;
     dropdown?: {

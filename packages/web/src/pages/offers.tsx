@@ -9,8 +9,6 @@ import { NextPage } from 'next';
 import Container from '@/components/Container/Container';
 import withLayout from '@/hoc/withLayout';
 
-export const getStaticProps = getOffersStaticProps;
-
 type OffersPageProps = {
   offers: OfferCardProp[];
   featuredOffers?: OfferCardProp[];
@@ -27,12 +25,13 @@ type OfferCardProp = {
   linkUrl: string;
 };
 
-const OffersPage: NextPage<OffersPageProps> = (props) => {
+const OffersPage: NextPage<OffersPageProps> = () => {
   const offers: any[] = [];
   const heroTitle = '';
   const offersHeading = '';
   const featuredOffers: any[] = [];
   const adverts: any[] = [];
+
   return (
     <>
       {heroTitle && (
@@ -111,4 +110,14 @@ const OffersPage: NextPage<OffersPageProps> = (props) => {
   );
 };
 
-export default withLayout(withAuth(OffersPage));
+export const getStaticProps = getOffersStaticProps;
+
+const layoutProps = {
+  seo: {
+    title: 'offers.seo.title',
+    description: 'offers.seo.description',
+    keywords: 'offers.seo.keywords',
+  },
+};
+
+export default withLayout(withAuth(OffersPage), layoutProps);

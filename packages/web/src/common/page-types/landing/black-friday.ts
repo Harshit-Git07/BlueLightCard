@@ -8,4 +8,5 @@ export type BlackFridayLandingPageConfigProps = {
   bannerSection: BlackFridayBannerSectionProps;
   heroSection: BlackFridayHeroSectionProps;
   offerSections: BlackFridayOfferSectionProps[];
+  translationNamespace?: string;
 };

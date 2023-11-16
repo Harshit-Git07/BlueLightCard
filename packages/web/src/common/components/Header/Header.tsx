@@ -22,7 +22,7 @@ const Header: FC<HeaderProps> = ({
   return (
     <div>
       <div
-        className="bg-palette-primary-base dark:bg-palette-primary-dark p-4 relative dark:"
+        className="h-[72px] bg-palette-primary-base dark:bg-palette-primary-dark p-4 relative dark:"
         data-testid="app-header"
       >
         <div className="laptop:container laptop:mx-auto flex justify-between items-center">

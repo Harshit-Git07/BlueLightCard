@@ -4,7 +4,11 @@ import withAuth from '@/hoc/withAuth';
 import { homePageQuery } from '../graphql/homePageQueries';
 import makeQuery from '../graphql/makeQuery';
 import getCDNUrl from '@/utils/getCDNUrl';
-import { BRAND } from '@/global-vars';
+import {
+  BLACK_FRIDAY_TIME_LOCK_START_DATE,
+  BLACK_FRIDAY_TIME_LOCK_END_DATE,
+  BRAND,
+} from '@/global-vars';
 import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
 import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
 import {
@@ -23,6 +27,12 @@ import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
 import withLayout from '@/hoc/withLayout';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
+import inTimePeriod from '@/utils/inTimePeriod';
+
+const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
+  startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
+  endTime: BLACK_FRIDAY_TIME_LOCK_END_DATE,
+};
 
 function cleanText(text: string) {
   return text
@@ -109,6 +119,9 @@ const HomePage: NextPage<any> = () => {
     imageUrl: handleImageFallbacks(offer.image, offer.logos),
   }));
 
+  const isBlackFriday = inTimePeriod(BLACK_FRIDAY_TIMELOCK_SETTINGS);
+  const flexibleMenuTitle = isBlackFriday ? 'Shop Black Friday' : 'Ways to Save';
+
   return (
     <>
       {loadingError && (
@@ -171,7 +184,7 @@ const HomePage: NextPage<any> = () => {
           data-testid="flexi-menu-carousel"
         >
           <CardCarousel
-            title={'Ways to Save'}
+            title={flexibleMenuTitle}
             itemsToShow={3}
             useSmallCards
             offers={flexibleOffersData}

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/pro-regular-svg-icons';
 import { FC } from 'react';
 import { MenuNavProps } from './types';
-import isTimeLockRouteUnlocked from '@/utils/isTimeLockRouteUnlocked';
+import inTimePeriod from '@/utils/inTimePeriod';
 
 const downArrow = (
   <FontAwesomeIcon icon={faAngleDown} size="sm" className="relative pl-1 top-[2px]" />
@@ -16,22 +16,27 @@ const MobileNavigation: FC<MenuNavProps> = ({ menu }) => (
         const hasDropdown = navItem.dropdown?.length && navItem.dropdown.length > 0;
         const hasTimeLock = navItem?.startTime || navItem?.endTime;
 
-        if (hasTimeLock && !isTimeLockRouteUnlocked(navItem)) {
+        if (hasTimeLock && !inTimePeriod(navItem)) {
           return null;
         }
 
         return (
-          <li className="block w-full border-b-[#eee] border-b border-solid group" key={index}>
+          <li
+            className={`block w-full border-b-[#eee] border-b border-solid group ${navItem.backgroundColor}`}
+            key={index}
+          >
             <Link
               href={navItem.link || '#'}
-              className="block w-full border-b-[#eee] border-b border-solid pt-4 pb-4 pl-5 text-base text-palette-body-text hover:text-[#36c]"
+              className={`block w-full border-b-[#eee] border-b border-solid pt-4 pb-4 pl-5 text-base text-palette-body-text group-hover:underline ${
+                navItem.textColor ? navItem.textColor : 'group-hover:text-[#36c]'
+              }`}
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
             >
               {navItem.text}
               {hasDropdown && downArrow}
             </Link>
             {hasDropdown && (
-              <ul className="list-none relative z-[999] hidden min-w-[180px] border-t-2 border-solid group-hover:block bg-shade-greyscale-white w-full">
+              <ul className="list-none relative z-[999] hidden min-w-[180px] border-t-2 border-solid group-hover:block group-hover:underline bg-shade-greyscale-white w-full">
                 {navItem.dropdown?.map((link, index) => (
                   <li
                     className="block w-full border-b-[#eee] border-b border-solid relative"

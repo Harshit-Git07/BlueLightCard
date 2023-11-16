@@ -20,6 +20,7 @@ export interface BlackFridayOfferSectionProps {
   title: string;
   subtitle: string;
   offers: BlackFridayOfferProps[];
+  shopAllCtaLink: string;
   variant?: ThemeVariant.Primary | ThemeVariant.Secondary;
 }
 

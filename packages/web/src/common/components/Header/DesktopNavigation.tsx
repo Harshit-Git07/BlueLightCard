@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/pro-regular-svg-icons';
 import { FC } from 'react';
 import { MenuNavProps } from './types';
-import isTimeLockRouteUnlocked from '@/utils/isTimeLockRouteUnlocked';
+import inTimePeriod from '@/utils/inTimePeriod';
 
 const downArrow = (
   <FontAwesomeIcon
@@ -15,20 +15,25 @@ const downArrow = (
 
 const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
   return (
-    <ul className="hidden desktop:flex py-3" data-testid="desktopNav">
+    <ul className="h-[52px] hidden desktop:flex" data-testid="desktopNav">
       {menu.map((navItem, index) => {
         const hasDropdown = navItem.dropdown?.length && navItem.dropdown.length > 0;
         const hasTimeLock = navItem?.startTime || navItem?.endTime;
 
-        if (hasTimeLock && !isTimeLockRouteUnlocked(navItem)) {
+        if (hasTimeLock && !inTimePeriod(navItem)) {
           return null;
         }
 
         return (
-          <li className="px-3 group flex flex-col" key={index}>
+          <li
+            className={`px-3 group flex flex-col justify-center ${navItem.backgroundColor}`}
+            key={index}
+          >
             <Link
               href={navItem.link || '#'}
-              className="group-hover:underline group-hover:text-[#36c] text-palette-body-text group flex align-middle justify-start"
+              className={`group-hover:underline text-palette-body-text group flex align-middle justify-start ${
+                navItem.textColor ? navItem.textColor : 'group-hover:text-[#36c]'
+              }`}
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
               data-testid={navItem.text + '-header-link'}
             >

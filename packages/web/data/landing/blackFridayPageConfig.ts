@@ -68,6 +68,7 @@ const offerSections = [
         link: '/offerdetails.php?cid=790',
       },
     ],
+    shopAllCtaLink: '/flexibleOffers.php?id=2',
   },
   {
     id: 'footwear',
@@ -126,6 +127,110 @@ const offerSections = [
         link: '/offerdetails.php?cid=16571',
       },
     ],
+    shopAllCtaLink: '/flexibleOffers.php?id=3',
+  },
+  {
+    id: 'tech',
+    title: 'Tech & mobile',
+    subtitle:
+      'Upgrade your gadgets and get the latest technology including mobiles and broadband for less…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6306.jpg',
+        title: 'Samsung',
+        link: '/offerdetails.php?cid=6306',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/33928.jpg',
+        title: 'LG',
+        link: '/offerdetails.php?cid=33928',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6899.jpg',
+        title: 'EE',
+        link: '/offerdetails.php?cid=6899',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4229.jpg',
+        title: 'Sky',
+        link: '/offerdetails.php?cid=4229',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8927.jpg',
+        title: 'Plusnet',
+        link: '/offerdetails.php?cid=8927',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3462.jpg',
+        title: 'Virgin Media',
+        link: '/offerdetails.php?cid=3462',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10725.jpg',
+        title: 'Reward Mobile',
+        link: '/offerdetails.php?cid=10725',
+      },
+    ],
+    shopAllCtaLink: '/flexibleOffers.php?id=4',
+  },
+  {
+    id: 'home',
+    title: 'Home & electricals',
+    subtitle:
+      'From air fryers to hoovers and beds to cushions, shop the latest in home upgrades with these discounts…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16290.jpg',
+        title: 'Ninja Kitchen',
+        link: '/offerdetails.php?cid=16290',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16289.jpg',
+        title: 'Shark',
+        link: '/offerdetails.php?cid=16289',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg',
+        title: "Curry's",
+        link: '/offerdetails.php?cid=211',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg',
+        title: 'Silent Night',
+        link: '/offerdetails.php?cid=22058',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg',
+        title: 'Dreamcloud',
+        link: '/offerdetails.php?cid=27486',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/228.jpg',
+        title: 'Homebase',
+        link: '/offerdetails.php?cid=228',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3826.jpg',
+        title: 'Hotpoint',
+        link: '/offerdetails.php?cid=3826',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26281.jpg',
+        title: 'Lakeland',
+        link: '/offerdetails.php?cid=26281',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg',
+        title: 'JBL',
+        link: '/offerdetails.php?cid=25867',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15462.jpg',
+        title: 'Hoover',
+        link: '/offerdetails.php?cid=15462',
+      },
+    ],
+    shopAllCtaLink: '/flexibleOffers.php?id=5',
   },
   {
     id: 'beauty',
@@ -189,107 +294,7 @@ const offerSections = [
         link: '/offerdetails.php?cid=270',
       },
     ],
-  },
-  {
-    id: 'tech',
-    title: 'Tech & mobile',
-    subtitle:
-      'Upgrade your gadgets and get the latest technology including mobiles and broadband for less…',
-    offers: [
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6306.jpg',
-        title: 'Samsung',
-        link: '/offerdetails.php?cid=6306',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/33928.jpg',
-        title: 'LG',
-        link: '/offerdetails.php?cid=33928',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6899.jpg',
-        title: 'EE',
-        link: '/offerdetails.php?cid=6899',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4229.jpg',
-        title: 'Sky',
-        link: '/offerdetails.php?cid=4229',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8927.jpg',
-        title: 'Plusnet',
-        link: '/offerdetails.php?cid=8927',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3462.jpg',
-        title: 'Virgin Media',
-        link: '/offerdetails.php?cid=3462',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10725.jpg',
-        title: 'Reward Mobile',
-        link: '/offerdetails.php?cid=10725',
-      },
-    ],
-  },
-  {
-    id: 'home',
-    title: 'Home & electricals',
-    subtitle:
-      'From air fryers to hoovers and beds to cushions, shop the latest in home upgrades with these discounts…',
-    offers: [
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16290.jpg',
-        title: 'Ninja Kitchen',
-        link: '/offerdetails.php?cid=16290',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16289.jpg',
-        title: 'Shark',
-        link: '/offerdetails.php?cid=16289',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg',
-        title: "Curry's",
-        link: '/offerdetails.php?cid=211',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg',
-        title: 'Silent Night',
-        link: '/offerdetails.php?cid=22058',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg',
-        title: 'Dreamcloud',
-        link: '/offerdetails.php?cid=27486',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/228.jpg',
-        title: 'Homebase',
-        link: '/offerdetails.php?cid=228',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3826.jpg',
-        title: 'Hotpoint',
-        link: '/offerdetails.php?cid=3826',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26281.jpg',
-        title: 'Lakeland',
-        link: '/offerdetails.php?cid=26281',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg',
-        title: 'JBL',
-        link: '/offerdetails.php?cid=25867',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15462.jpg',
-        title: 'Hoover',
-        link: '/offerdetails.php?cid=15462',
-      },
-    ],
+    shopAllCtaLink: '/flexibleOffers.php?id=6',
   },
   {
     id: 'sports',
@@ -347,6 +352,7 @@ const offerSections = [
         link: '/offerdetails.php?cid=7402',
       },
     ],
+    shopAllCtaLink: '/flexibleOffers.php?id=7',
   },
   {
     id: 'gift',
@@ -405,6 +411,7 @@ const offerSections = [
         link: '/offerdetails.php?cid=26712',
       },
     ],
+    shopAllCtaLink: '/flexibleOffers.php?id=8',
   },
   {
     id: 'holidays',
@@ -463,6 +470,7 @@ const offerSections = [
         link: '/offerdetails.php?cid=120',
       },
     ],
+    shopAllCtaLink: '/flexibleOffers.php?id=9',
   },
   {
     id: 'food',
@@ -506,6 +514,7 @@ const offerSections = [
         link: '/offerdetails.php?cid=1570',
       },
     ],
+    shopAllCtaLink: '/flexibleOffers.php?id=10',
   },
 ];
 

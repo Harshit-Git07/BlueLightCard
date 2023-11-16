@@ -17,6 +17,7 @@ describe('BlackFridayOfferSection', () => {
           subtitle={subtitle}
           offers={offers}
           variant={index % 2 ? ThemeVariant.Secondary : undefined}
+          shopAllCtaLink="/shop-all"
         />
       )
     );

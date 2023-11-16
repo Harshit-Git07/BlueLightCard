@@ -1,6 +1,11 @@
 import { NavItem } from '@/components/Header/types';
 
-const isTimeLockRouteUnlocked = (navItem: NavItem) => {
+interface TimePeriod {
+  startTime?: string;
+  endTime?: string;
+}
+
+const inTimePeriod = (navItem: TimePeriod) => {
   const now = new Date();
   const startTime = navItem.startTime && new Date(navItem.startTime);
   const endTime = navItem.endTime && new Date(navItem.endTime);
@@ -17,4 +22,4 @@ const isTimeLockRouteUnlocked = (navItem: NavItem) => {
   }
 };
 
-export default isTimeLockRouteUnlocked;
+export default inTimePeriod;

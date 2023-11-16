@@ -38,6 +38,7 @@ const BlackFridayOfferSection = ({
   title,
   subtitle,
   offers,
+  shopAllCtaLink,
   variant = ThemeVariant.Primary,
 }: BlackFridayOfferSectionProps) => {
   const chosenVariant = themeVariants[variant];
@@ -69,8 +70,8 @@ const BlackFridayOfferSection = ({
         <div className="flex justify-center">
           <Button
             type="link"
-            href={'/#'}
-            className={`px-20 py-4 font-semibold font-[MuseoSans] ${chosenVariant['offerCtaTextColor']} ${chosenVariant['offerCtaBackgroundColor']} focus:outline-0 ${chosenVariant['hoverOfferCtaBackgroundColor']}`}
+            href={shopAllCtaLink}
+            className={`!px-24 !py-2 font-semibold font-[MuseoSans] ${chosenVariant['offerCtaTextColor']} ${chosenVariant['offerCtaBackgroundColor']} focus:outline-0 ${chosenVariant['hoverOfferCtaBackgroundColor']}`}
           >
             Shop all
           </Button>

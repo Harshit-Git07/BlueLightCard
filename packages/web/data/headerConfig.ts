@@ -4,6 +4,8 @@ import { BLACK_FRIDAY_TIME_LOCK_END_DATE, BLACK_FRIDAY_TIME_LOCK_START_DATE } fr
 const blackFridayLink = {
   text: 'Black Friday',
   link: '/black-friday',
+  backgroundColor: 'bg-black',
+  textColor: 'text-white !group-hover:text-[red]',
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
   endTime: BLACK_FRIDAY_TIME_LOCK_END_DATE,
 };

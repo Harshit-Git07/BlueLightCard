@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.2...bluelightcard/mobile-hybrid-v1.0.3) (2023-11-16)
+
+
+### Other Changes
+
+* **mobile:** bt 3395 favourite brands subtitle ([#651](https://github.com/bluelightcard/BlueLightCard-2.0/issues/651)) ([5a8176e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5a8176e585539ed49f2dcf54322f8f3440b2d50d))
+
 ## [1.0.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.1...bluelightcard/mobile-hybrid-v1.0.2) (2023-11-15)
 
 

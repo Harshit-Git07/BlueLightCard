@@ -1,13 +1,25 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import PopularBrands from '@/components/PopularBrands/PopularBrands';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import useFavouritedBrands from '@/hooks/useFavouritedBrands';
+import { AppContext } from '@/store';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const FavouritedBrandsSlider: FC = () => {
+  const { experiments: expr } = useContext(AppContext);
+
+  /**
+   * @featureFlag favourite-subtitle
+   * @description Render the subtitle for the favourite brands carousel if the feature flag is on
+   * */
+  const controlSubtitle =
+    expr['favourite-subtitle'] === 'on'
+      ? 'Star brands you love or plan to revisit so they show up here'
+      : undefined;
+
   const brands = useFavouritedBrands();
   const onBrandItemClick = (compid: number) => {
     navigation.navigate(`/offerdetails.php?cid=${compid}`);
@@ -30,6 +42,7 @@ const FavouritedBrandsSlider: FC = () => {
   };
   return (
     <PopularBrands
+      text={controlSubtitle}
       rounded={false}
       onBrandItemClick={onBrandItemClick}
       onInteracted={onCarouselInteracted}

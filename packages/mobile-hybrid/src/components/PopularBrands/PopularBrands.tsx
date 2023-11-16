@@ -1,9 +1,8 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { PopularBrandsProps } from './types';
 import Image from '@/components/Image/Image';
 import Heading from '../Heading/Heading';
 import { cssUtil } from '@/utils/cssUtil';
-import { AppContext } from '@/store';
 import useDebounce from '@/hooks/useDebounce';
 
 const PopularBrands: FC<PopularBrandsProps> = ({
@@ -14,7 +13,6 @@ const PopularBrands: FC<PopularBrandsProps> = ({
   onInteracted,
   text,
 }) => {
-  const { experiments: expr } = useContext(AppContext);
   const throttle = useDebounce(() => {
     if (onInteracted) {
       onInteracted();
@@ -32,9 +30,7 @@ const PopularBrands: FC<PopularBrandsProps> = ({
   return (
     <>
       <Heading title={title} />
-      {expr['streamlined-homepage'] !== 'on' && (
-        <p className="px-4 mb-3 font-museo dark:text-neutral-white">{text}</p>
-      )}
+      <p className="px-4 mb-3 font-museo dark:text-neutral-white">{text}</p>
       <div className="ml-2 flex overflow-x-auto items-center h-[100px]" onScroll={throttle}>
         <div className="flex">
           {brands.map((brand) => (

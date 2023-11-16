@@ -1,13 +1,22 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import brands from './brands';
 import PopularBrands from '@/components/PopularBrands/PopularBrands';
 import InvokeNativeAnalytics from '@/invoke/analytics';
+import { AppContext } from '@/store';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const PopularBrandsSlider: FC = () => {
+  const { experiments: expr } = useContext(AppContext);
+
+  /**
+   * @featureFlag streamlined-homepage
+   * @description Render the subtitle for popular brands if the feature flag is not on
+   * */
+  const controlSubtitle =
+    expr['streamlined-homepage'] === 'on' ? undefined : 'Explore popular brands with a swipe!';
   const onBrandItemClick = (compid: number) => {
     navigation.navigate(`/offerdetails.php?cid=${compid}`);
     analytics.logAnalyticsEvent({
@@ -28,7 +37,7 @@ const PopularBrandsSlider: FC = () => {
   };
   return (
     <PopularBrands
-      text="Explore popular brands with a swipe!"
+      text={controlSubtitle}
       onBrandItemClick={onBrandItemClick}
       brands={brands}
       onInteracted={onCarouselInteracted}

@@ -62,6 +62,7 @@ const Home: NextPage<any> = () => {
       'popular-offers',
       'favourited-brands',
       'streamlined-homepage',
+      'favourite-subtitle',
     ]);
   }, []);
 
@@ -78,11 +79,8 @@ const Home: NextPage<any> = () => {
           />
         )}
         <PromoBanner />
-        {showFavouritedBrands ? (
-          <FavouritedBrandsSlider />
-        ) : (
-          expr['popular-offers'] === 'treatment' && <PopularBrandsSlider />
-        )}
+        {showFavouritedBrands && <FavouritedBrandsSlider />}
+        {expr['popular-offers'] === 'treatment' && !showFavouritedBrands && <PopularBrandsSlider />}
         <Offers />
         {expr['streamlined-homepage'] === 'on' && <NewsPreview />}
         <Heading title="Explore" size="small" />

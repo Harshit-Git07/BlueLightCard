@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.3...bluelightcard/mobile-hybrid-v1.0.4) (2023-11-17)
+
+
+### Other Changes
+
+* **mobile:** bt 3394 change section title ([#654](https://github.com/bluelightcard/BlueLightCard-2.0/issues/654)) ([ff34559](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ff345595ccb1d36b94bd6d4e45d1d94f8dd07058))
+
 ## [1.0.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.2...bluelightcard/mobile-hybrid-v1.0.3) (2023-11-16)
 
 

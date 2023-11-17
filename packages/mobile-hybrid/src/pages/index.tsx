@@ -63,6 +63,7 @@ const Home: NextPage<any> = () => {
       'favourited-brands',
       'streamlined-homepage',
       'favourite-subtitle',
+      'bf-flexi',
     ]);
   }, []);
 

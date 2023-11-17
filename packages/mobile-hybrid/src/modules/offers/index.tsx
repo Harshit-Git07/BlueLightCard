@@ -29,6 +29,11 @@ const Offers: FC = () => {
     );
   }, [groups]);
 
+  /**
+   * @featureFlag bf-flexi
+   * @description Conditionally render different headings depending on the feature flag
+   * */
+  const headingFeatureFlag = expr['bf-flexi'] === 'on';
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
     navigation.navigate(`/flexibleOffers.php?id=${id}`);
     analytics.logAnalyticsEvent({
@@ -65,7 +70,7 @@ const Offers: FC = () => {
     <>
       {flexible && (
         <div className="mb-4">
-          <Heading title={flexible.title} />
+          <Heading title={headingFeatureFlag ? 'Shop Black Friday' : flexible.title} />
           {expr['streamlined-homepage'] !== 'on' && flexible.subtitle.length && (
             <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
           )}

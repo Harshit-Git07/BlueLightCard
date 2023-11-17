@@ -19,7 +19,7 @@ const BlackFridayHeroSection = ({
     >
       <Container>
         <Heading
-          className="!text-[#FFFF00] mt-20 mb-4 font-bold text-6xl text-center"
+          className="!text-[#FFFF00] mt-20 mb-4 !font-black text-6xl text-center"
           headingLevel={'h1'}
         >
           {title}

@@ -2,16 +2,31 @@
 
 exports[`BlackFridayHeaderSection should match snapshot 1`] = `
 <div
-  className="bg-black p-2"
+  className="bg-black"
 >
   <a
-    aria-label="Navigate Home"
-    className="flex relative block h-11 max-w-[197px] tablet:max-w-[226px] hover:opacity-100 mx-auto text-black"
-    data-testid="brandLogo"
-    href="https://www.bluelightcard.co.uk/"
+    href="/"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onTouchStart={[Function]}
   >
     <img
-      alt="Navigate Home"
+      alt="logo"
+      className="mx-auto"
+      data-nimg="1"
+      decoding="async"
+      height={66}
+      loading="lazy"
+      onError={[Function]}
+      onLoad={[Function]}
+      src="/_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=750&q=75"
+      srcSet="/_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=384&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=750&q=75 2x"
+      style={
+        {
+          "color": "transparent",
+        }
+      }
+      width={323}
     />
   </a>
 </div>

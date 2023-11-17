@@ -50,7 +50,7 @@ const BlackFridayOfferSection = ({
     >
       <Container>
         <Heading
-          className={`font-bold ${chosenVariant['headingTextColor']} text-center mb-5`}
+          className={`font-bold ${chosenVariant['headingTextColor']} !font-black text-center mb-5`}
           headingLevel={'h1'}
         >
           {title}
@@ -121,7 +121,7 @@ const BlackFridayOffer = ({
               href={link}
               className={`font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base ${chosenVariant['offerCtaTextColor']} ${chosenVariant['offerCtaBackgroundColor']} focus:outline-0 ${chosenVariant['hoverOfferCtaBackgroundColor']}`}
             >
-              Get Offer
+              Get offer
             </Button>
           </div>
         </div>

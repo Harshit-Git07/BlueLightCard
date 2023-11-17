@@ -71,6 +71,50 @@ const offerSections = [
     shopAllCtaLink: '/flexibleOffers.php?id=2',
   },
   {
+    id: 'food',
+    title: 'Food & drink',
+    subtitle:
+      'Find delicious discounts at your favourite restaurants and eat out for less this holiday season…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24239.jpg',
+        title: 'Bills',
+        link: '/offerdetails.php?cid=24239',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3351.jpg',
+        title: 'Virgin Wines',
+        link: '/offerdetails.php?cid=3351',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19088.jpg',
+        title: 'Skinny Foods',
+        link: '/offerdetails.php?cid=19088',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg',
+        title: 'Muscle Food',
+        link: '/offerdetails.php?cid=3544',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9464.jpg',
+        title: 'Iceland',
+        link: '/offerdetails.php?cid=9464',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4297.jpg',
+        title: 'Grenade',
+        link: '/offerdetails.php?cid=4297',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg',
+        title: 'Whittards of Chelsea',
+        link: '/offerdetails.php?cid=1570',
+      },
+    ],
+    shopAllCtaLink: '/flexibleOffers.php?id=10',
+  },
+  {
     id: 'footwear',
     title: 'Footwear & streetwear',
     subtitle:
@@ -130,107 +174,63 @@ const offerSections = [
     shopAllCtaLink: '/flexibleOffers.php?id=3',
   },
   {
-    id: 'tech',
-    title: 'Tech & mobile',
+    id: 'gift',
+    title: 'Gifting & toys',
     subtitle:
-      'Upgrade your gadgets and get the latest technology including mobiles and broadband for less…',
+      "Grab the toys and products everyone's talking about with a range of savings on big toy brands and gifts for the whole family...",
     offers: [
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6306.jpg',
-        title: 'Samsung',
-        link: '/offerdetails.php?cid=6306',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/471.jpg',
+        title: 'Virgin Experience Days',
+        link: '/offerdetails.php?cid=471',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/33928.jpg',
-        title: 'LG',
-        link: '/offerdetails.php?cid=33928',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15.jpg',
+        title: 'BuyaGift',
+        link: '/offerdetails.php?cid=15',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6899.jpg',
-        title: 'EE',
-        link: '/offerdetails.php?cid=6899',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24788.jpg',
+        title: 'Not on the High Street',
+        link: '/offerdetails.php?cid=24788',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4229.jpg',
-        title: 'Sky',
-        link: '/offerdetails.php?cid=4229',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9228.jpg',
+        title: 'Shopdisney',
+        link: '/offerdetails.php?cid=9228',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8927.jpg',
-        title: 'Plusnet',
-        link: '/offerdetails.php?cid=8927',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9652.jpg',
+        title: 'Yankee Candle',
+        link: '/offerdetails.php?cid=9652',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3462.jpg',
-        title: 'Virgin Media',
-        link: '/offerdetails.php?cid=3462',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/39.jpg',
+        title: 'Goldsmiths',
+        link: '/offerdetails.php?cid=39',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10725.jpg',
-        title: 'Reward Mobile',
-        link: '/offerdetails.php?cid=10725',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/13857.jpg',
+        title: 'Abbott Lyon',
+        link: '/offerdetails.php?cid=13857',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27809.jpg',
+        title: 'Card Factory',
+        link: '/offerdetails.php?cid=27809',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26709.jpg',
+        title: 'Hornby',
+        link: '/offerdetails.php?cid=26709',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26712.jpg',
+        title: 'Scaletrix',
+        link: '/offerdetails.php?cid=26712',
       },
     ],
-    shopAllCtaLink: '/flexibleOffers.php?id=4',
-  },
-  {
-    id: 'home',
-    title: 'Home & electricals',
-    subtitle:
-      'From air fryers to hoovers and beds to cushions, shop the latest in home upgrades with these discounts…',
-    offers: [
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16290.jpg',
-        title: 'Ninja Kitchen',
-        link: '/offerdetails.php?cid=16290',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16289.jpg',
-        title: 'Shark',
-        link: '/offerdetails.php?cid=16289',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg',
-        title: "Curry's",
-        link: '/offerdetails.php?cid=211',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg',
-        title: 'Silent Night',
-        link: '/offerdetails.php?cid=22058',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg',
-        title: 'Dreamcloud',
-        link: '/offerdetails.php?cid=27486',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/228.jpg',
-        title: 'Homebase',
-        link: '/offerdetails.php?cid=228',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3826.jpg',
-        title: 'Hotpoint',
-        link: '/offerdetails.php?cid=3826',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26281.jpg',
-        title: 'Lakeland',
-        link: '/offerdetails.php?cid=26281',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg',
-        title: 'JBL',
-        link: '/offerdetails.php?cid=25867',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15462.jpg',
-        title: 'Hoover',
-        link: '/offerdetails.php?cid=15462',
-      },
-    ],
-    shopAllCtaLink: '/flexibleOffers.php?id=5',
+    shopAllCtaLink: '/flexibleOffers.php?id=8',
   },
   {
     id: 'beauty',
@@ -297,123 +297,6 @@ const offerSections = [
     shopAllCtaLink: '/flexibleOffers.php?id=6',
   },
   {
-    id: 'sports',
-    title: 'Sports & Fitness',
-    subtitle: 'Shop and save on trending sportswear and fitness brands to help you stay active…',
-    offers: [
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16990.jpg',
-        title: 'Sports Direct',
-        link: '/offerdetails.php?cid=16990',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg',
-        title: 'Myprotein',
-        link: '/offerdetails.php?cid=1521',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16917.jpg',
-        title: 'Garmin',
-        link: '/offerdetails.php?cid=16917',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/141.jpg',
-        title: 'Halfords',
-        link: '/offerdetails.php?cid=141',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/150.jpg',
-        title: 'Blacks',
-        link: '/offerdetails.php?cid=150',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/149.jpg',
-        title: 'Millets',
-        link: '/offerdetails.php?cid=149',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4254.jpg',
-        title: 'Go Outdoors',
-        link: '/offerdetails.php?cid=4254',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/5974.jpg',
-        title: 'Craghoppers',
-        link: '/offerdetails.php?cid=5974',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29230.jpg',
-        title: 'Columbia',
-        link: '/offerdetails.php?cid=29230',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg',
-        title: 'Berghaus',
-        link: '/offerdetails.php?cid=7402',
-      },
-    ],
-    shopAllCtaLink: '/flexibleOffers.php?id=7',
-  },
-  {
-    id: 'gift',
-    title: 'Gifting & toys',
-    subtitle:
-      "Grab the toys and products everyone's talking about with a range of savings on big toy brands and gifts for the whole family...",
-    offers: [
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/471.jpg',
-        title: 'Virgin Experience Days',
-        link: '/offerdetails.php?cid=471',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15.jpg',
-        title: 'BuyaGift',
-        link: '/offerdetails.php?cid=15',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24788.jpg',
-        title: 'Not on the High Street',
-        link: '/offerdetails.php?cid=24788',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9228.jpg',
-        title: 'Shopdisney',
-        link: '/offerdetails.php?cid=9228',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9652.jpg',
-        title: 'Yankee Candle',
-        link: '/offerdetails.php?cid=9652',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/39.jpg',
-        title: 'Goldsmiths',
-        link: '/offerdetails.php?cid=39',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/13857.jpg',
-        title: 'Abbott Lyon',
-        link: '/offerdetails.php?cid=13857',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27809.jpg',
-        title: 'Card Factory',
-        link: '/offerdetails.php?cid=27809',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26709.jpg',
-        title: 'Hornby',
-        link: '/offerdetails.php?cid=26709',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26712.jpg',
-        title: 'Scaletrix',
-        link: '/offerdetails.php?cid=26712',
-      },
-    ],
-    shopAllCtaLink: '/flexibleOffers.php?id=8',
-  },
-  {
     id: 'holidays',
     title: 'Holidays & days Out',
     subtitle:
@@ -473,48 +356,165 @@ const offerSections = [
     shopAllCtaLink: '/flexibleOffers.php?id=9',
   },
   {
-    id: 'food',
-    title: 'Food & drink',
+    id: 'home',
+    title: 'Home & electricals',
     subtitle:
-      'Find delicious discounts at your favourite restaurants and eat out for less this holiday season…',
+      'From air fryers to hoovers and beds to cushions, shop the latest in home upgrades with these discounts…',
     offers: [
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24239.jpg',
-        title: 'Bills',
-        link: '/offerdetails.php?cid=24239',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16290.jpg',
+        title: 'Ninja Kitchen',
+        link: '/offerdetails.php?cid=16290',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3351.jpg',
-        title: 'Virgin Wines',
-        link: '/offerdetails.php?cid=3351',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16289.jpg',
+        title: 'Shark',
+        link: '/offerdetails.php?cid=16289',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19088.jpg',
-        title: 'Skinny Foods',
-        link: '/offerdetails.php?cid=19088',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg',
+        title: "Curry's",
+        link: '/offerdetails.php?cid=211',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg',
-        title: 'Muscle Food',
-        link: '/offerdetails.php?cid=3544',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg',
+        title: 'Silent Night',
+        link: '/offerdetails.php?cid=22058',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9464.jpg',
-        title: 'Iceland',
-        link: '/offerdetails.php?cid=9464',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg',
+        title: 'Dreamcloud',
+        link: '/offerdetails.php?cid=27486',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4297.jpg',
-        title: 'Grenade',
-        link: '/offerdetails.php?cid=4297',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/228.jpg',
+        title: 'Homebase',
+        link: '/offerdetails.php?cid=228',
       },
       {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg',
-        title: 'Whittards of Chelsea',
-        link: '/offerdetails.php?cid=1570',
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3826.jpg',
+        title: 'Hotpoint',
+        link: '/offerdetails.php?cid=3826',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/26281.jpg',
+        title: 'Lakeland',
+        link: '/offerdetails.php?cid=26281',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg',
+        title: 'JBL',
+        link: '/offerdetails.php?cid=25867',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15462.jpg',
+        title: 'Hoover',
+        link: '/offerdetails.php?cid=15462',
       },
     ],
-    shopAllCtaLink: '/flexibleOffers.php?id=10',
+    shopAllCtaLink: '/flexibleOffers.php?id=5',
+  },
+  {
+    id: 'sports',
+    title: 'Sports & Fitness',
+    subtitle: 'Shop and save on trending sportswear and fitness brands to help you stay active…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16990.jpg',
+        title: 'Sports Direct',
+        link: '/offerdetails.php?cid=16990',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg',
+        title: 'Myprotein',
+        link: '/offerdetails.php?cid=1521',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16917.jpg',
+        title: 'Garmin',
+        link: '/offerdetails.php?cid=16917',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/141.jpg',
+        title: 'Halfords',
+        link: '/offerdetails.php?cid=141',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/150.jpg',
+        title: 'Blacks',
+        link: '/offerdetails.php?cid=150',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/149.jpg',
+        title: 'Millets',
+        link: '/offerdetails.php?cid=149',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4254.jpg',
+        title: 'Go Outdoors',
+        link: '/offerdetails.php?cid=4254',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/5974.jpg',
+        title: 'Craghoppers',
+        link: '/offerdetails.php?cid=5974',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29230.jpg',
+        title: 'Columbia',
+        link: '/offerdetails.php?cid=29230',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg',
+        title: 'Berghaus',
+        link: '/offerdetails.php?cid=7402',
+      },
+    ],
+    shopAllCtaLink: '/flexibleOffers.php?id=7',
+  },
+  {
+    id: 'tech',
+    title: 'Tech & mobile',
+    subtitle:
+      'Upgrade your gadgets and get the latest technology including mobiles and broadband for less…',
+    offers: [
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6306.jpg',
+        title: 'Samsung',
+        link: '/offerdetails.php?cid=6306',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/33928.jpg',
+        title: 'LG',
+        link: '/offerdetails.php?cid=33928',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6899.jpg',
+        title: 'EE',
+        link: '/offerdetails.php?cid=6899',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4229.jpg',
+        title: 'Sky',
+        link: '/offerdetails.php?cid=4229',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8927.jpg',
+        title: 'Plusnet',
+        link: '/offerdetails.php?cid=8927',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3462.jpg',
+        title: 'Virgin Media',
+        link: '/offerdetails.php?cid=3462',
+      },
+      {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10725.jpg',
+        title: 'Reward Mobile',
+        link: '/offerdetails.php?cid=10725',
+      },
+    ],
+    shopAllCtaLink: '/flexibleOffers.php?id=4',
   },
 ];
 

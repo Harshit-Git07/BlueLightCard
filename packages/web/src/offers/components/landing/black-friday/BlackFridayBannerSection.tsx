@@ -32,7 +32,7 @@ const BlackFridayBannerSection = ({
           <div>
             <Heading
               headingLevel={'h1'}
-              className="!text-[#1C1C1C] landscapebfsm:text-xl landscapebf:text-4xl text-8xl mobile:text-5xl tablet:text-6xl laptop:text-8xl desktop:text-8xl font-bold"
+              className="!text-[#1C1C1C] !font-black landscapebfsm:text-xl landscapebf:text-4xl text-8xl mobile:text-5xl tablet:text-6xl laptop:text-8xl desktop:text-8xl font-bold"
             >
               {title}
             </Heading>
@@ -46,7 +46,7 @@ const BlackFridayBannerSection = ({
         </div>
         <div>
           <Link href={'#hero'} className="!text-[#1C1C1C] hover:text-white">
-            <p className="landscapebfsm:hidden landscapebf:text-xs">{ctaText}</p>
+            <p className="landscapebfsm:hidden landscapebf:text-xs font-bold">{ctaText}</p>
             <p className="text-2xl">
               <span>
                 <FontAwesomeIcon

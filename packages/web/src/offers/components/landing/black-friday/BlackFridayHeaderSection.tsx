@@ -1,8 +1,17 @@
-import Logo from '@/components/Header/Logo';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const BlackFridayHeaderSection = () => (
-  <div className="bg-black p-2">
-    <Logo className="mx-auto text-black" url={'https://www.bluelightcard.co.uk/'} />
+  <div className="bg-black">
+    <Link href="/">
+      <Image
+        className="mx-auto"
+        src="https://cdn.bluelightcard.co.uk/web/logos/blc-logo-black-friday-2023.png"
+        alt="logo"
+        width={323}
+        height={66}
+      />
+    </Link>
   </div>
 );
 

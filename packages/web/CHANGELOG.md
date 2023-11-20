@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.18.1...bluelightcard/web-v1.19.0) (2023-11-20)
+
+
+### Features
+
+* removed index reporting ([#586](https://github.com/bluelightcard/BlueLightCard-2.0/issues/586)) ([b2643d5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b2643d539973775f4168944c12fd230c8af245c3))
+* TO-352 restriction relocation ([#657](https://github.com/bluelightcard/BlueLightCard-2.0/issues/657)) ([4aefe63](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4aefe63db752ed2646c839dc40a1313aa970f7fb))
+* TO-357: Black Friday page design implemented + timelock ([#638](https://github.com/bluelightcard/BlueLightCard-2.0/issues/638)) ([9e8f4ef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9e8f4efa831abb02cdd67895e7d7009b9676931a))
+* TO-357: Black Friday Page, updates from Marketing ([#653](https://github.com/bluelightcard/BlueLightCard-2.0/issues/653)) ([568f338](https://github.com/bluelightcard/BlueLightCard-2.0/commit/568f338600a66e78b87c88ac6eb858cf9f6d08fe))
+* TO-357: created black friday landing page and added multiple offer sections to the page ([#623](https://github.com/bluelightcard/BlueLightCard-2.0/issues/623)) ([6ab73ce](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6ab73ce26af050a8a950082eac1f9aadf52d3f52))
+* TO-363: added seo properties to black friday page ([#650](https://github.com/bluelightcard/BlueLightCard-2.0/issues/650)) ([d6e1f08](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d6e1f08ef3efc9bbfa417cbf9656b722b9584720))
+
 ## [1.18.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.18.0...bluelightcard/web-v1.18.1) (2023-11-06)
 
 

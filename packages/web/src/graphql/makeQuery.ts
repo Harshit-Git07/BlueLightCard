@@ -8,12 +8,13 @@ import {
 } from '@apollo/client';
 import { DocumentNode } from 'graphql';
 import { OfferRestriction } from '@core/offers/offerRestriction';
+import { OFFERS_ENDPOINT } from '@/global-vars';
 
 export const gqlLinkWithAuthHeaders = () => {
   const authorization = localStorage.getItem('idToken') || '';
 
   return createHttpLink({
-    uri: process.env.NEXT_PUBLIC_OFFERS_ENDPOINT || '',
+    uri: OFFERS_ENDPOINT || '',
     headers: {
       authorization,
     },

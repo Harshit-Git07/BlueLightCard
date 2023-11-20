@@ -171,6 +171,7 @@ jobs:
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://staging-offers.blcshine.io/graphql
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
+      NEXT_PUBLIC_USER_PROFILE_ENDPOINT: https://staging-identity.blcshine.io/user
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
@@ -216,6 +217,7 @@ jobs:
       NEXT_PUBLIC_OFFERS_ENPDPOINT: https://offers.blcshine.io/graphql
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-24T01:00:00'
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
+      NEXT_PUBLIC_USER_PROFILE_ENDPOINT: https://identity.blcshine.io/user
     steps:
       - uses: actions/checkout@v4
       - name: Cache node modules

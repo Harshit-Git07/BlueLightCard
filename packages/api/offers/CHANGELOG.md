@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.15.0...bluelightcard/offers-v1.16.0) (2023-11-20)
+
+
+### Features
+
+* TO-352 restriction relocation ([#657](https://github.com/bluelightcard/BlueLightCard-2.0/issues/657)) ([4aefe63](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4aefe63db752ed2646c839dc40a1313aa970f7fb))
+
 ## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.14.2...bluelightcard/offers-v1.15.0) (2023-11-15)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.19.0...bluelightcard/web-v1.19.1) (2023-11-20)
+
+
+### Bug Fixes
+
+* typo in env variable declaration for release ([#662](https://github.com/bluelightcard/BlueLightCard-2.0/issues/662)) ([d85102b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d85102b928b4dd4038950984261090b8eabaafe1))
+
 ## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.18.1...bluelightcard/web-v1.19.0) (2023-11-20)
 
 

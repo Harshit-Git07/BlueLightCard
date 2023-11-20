@@ -1,13 +1,13 @@
-import { AppSyncResolverEvent } from "aws-lambda";
+import { AppSyncResolverEvent } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { TYPE_KEYS } from '@blc-mono/offers/src/utils/global-constants';
-import { OfferHomepageRepository } from "../../../../../repositories/offersHomepageRepository";
-import { ObjectDynamicKeys } from "./types";
-import { unpackJWT } from '../../../../../../../core/src/utils/unpackJWT';
-import { MemberProfile } from "../../../../../services/MemberProfile";
-import { OfferRestriction } from "../../../../../services/OfferRestriction";
-import { FIFTEEN_MINUTES, ONE_DAY } from "../../../../../utils/duration"
+import { OfferHomepageRepository } from '../../../../../repositories/offersHomepageRepository';
+import { ObjectDynamicKeys } from './types';
+import { OfferRestriction } from '../../../../../../../core/src/offers/offerRestriction';
+import { FIFTEEN_MINUTES, ONE_DAY } from '../../../../../utils/duration';
 import { CacheService } from '../../../../../services/CacheService';
+import { validateBrand, validateOfferRestrictionInput } from '../../../../../utils/validation';
+import { OfferRestrictionQueryInput } from '../../../../../models/queries-input/offerRestrictionQueryInput';
 
 interface Company {
   id: string;
@@ -16,29 +16,27 @@ interface Company {
 }
 
 export class OfferCategoriesAndCompaniesResolver {
-
-  private readonly categoriesCacheKey = `${this.brandId}-offers-categories`;
-  private readonly companiesCacheKey = `${this.brandId}-offers-companies`;
-
   constructor(
-    private brandId: string, 
-    private tableName: string, 
+    private tableName: string,
     private offerHomepageRepository: OfferHomepageRepository,
     private logger: Logger,
-    private cacheService: CacheService
+    private cacheService: CacheService,
   ) {
     logger.info('OfferCategoriesAndCompaniesResolver Started');
   }
 
   async handler(event: AppSyncResolverEvent<any>) {
-
-    const authHeader: string = event.request.headers.authorization ?? '';
-    let  legacyUserId: string = '';
-    try {
-      legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
-    }catch (error) {
-      this.logger.error('Error unpacking JWT', { error });
+    const brandId = event.arguments.brandId;
+    if (!validateBrand(brandId)) {
+      this.logger.error('Invalid brandId', { brandId });
+      throw new Error(`Invalid brandId ${brandId}`);
     }
+    const { isUnder18, organisation }: OfferRestrictionQueryInput = validateOfferRestrictionInput(
+      event.arguments.input,
+      this.logger,
+    );
+    const categoriesCacheKey = `${brandId}-offers-categories`;
+    const companiesCacheKey = `${brandId}-offers-companies`;
 
     const selections = event.info.selectionSetList;
 
@@ -48,80 +46,90 @@ export class OfferCategoriesAndCompaniesResolver {
     let companiesCache;
 
     // !selection as if it is empty, we want to return both categories and companies
-    if(selections.find((val) => val == 'categories')) {
+    if (selections.find((val) => val == 'categories')) {
       this.logger.info('Fetching categories');
-      categoriesCache = await this.cacheService.get(this.categoriesCacheKey);
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - Before get categories cache', { categoriesCacheKey })
+      categoriesCache = await this.cacheService.get(categoriesCacheKey);
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - After get categories cache', { categoriesCacheKey, categoriesCache })
       fetchCategories = !categoriesCache;
-
     }
 
     const companySelection = selections.find((val) => val == 'companies');
-    if(companySelection) {
+    if (companySelection) {
       this.logger.info('Fetching Companies');
-      companiesCache = await this.cacheService.get(this.companiesCacheKey);
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - Before get companies cache', { companiesCacheKey })
+      companiesCache = await this.cacheService.get(companiesCacheKey);
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - After get companies cache', { companiesCacheKey, companiesCache })
       fetchCompanies = !companiesCache;
     }
 
-    let dbResultsMap : ObjectDynamicKeys = {};
+    let dbResultsMap: ObjectDynamicKeys = {};
 
-    if((fetchCompanies && !companiesCache) || (fetchCategories && !categoriesCache)) {
+    if ((fetchCompanies && !companiesCache) || (fetchCategories && !categoriesCache)) {
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - Cache Does not exist. retrieve data from Dynamo', { brandId });
       const data = await getCategoriesOrCompanies(
-        this.brandId,
+        brandId,
         this.offerHomepageRepository,
         fetchCategories,
-        fetchCompanies
-      )
+        fetchCompanies,
+      );
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - Data from Dynamo', { data });
 
       if (!data || !data.Responses || !data.Responses[this.tableName]) {
-        this.logger.error('No categories or companies found for brandId', { brandId: this.brandId });
-        throw new Error(`No categories or companies found for brandId ${this.brandId}`);
+        this.logger.error('No categories or companies found for brandId', { brandId });
+        throw new Error(`No categories or companies found for brandId ${brandId}`);
       }
 
-      const dbResults = data.Responses[this.tableName]
+      const dbResults = data.Responses[this.tableName];
 
       dbResults.forEach(({ type, json }) => {
         dbResultsMap[type] = JSON.parse(json);
-      })
+      });
 
-      fetchCategories && await this.cacheService.set(this.categoriesCacheKey, JSON.stringify(dbResultsMap[TYPE_KEYS.CATEGORIES]), ONE_DAY);
-      fetchCompanies && await this.cacheService.set(this.companiesCacheKey, JSON.stringify(dbResultsMap[TYPE_KEYS.COMPANIES]), FIFTEEN_MINUTES);
-
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - Set cache', { categoriesCacheKey, companiesCacheKey, dbResultsMap })
+      fetchCategories &&
+        (await this.cacheService.set(categoriesCacheKey, JSON.stringify(dbResultsMap[TYPE_KEYS.CATEGORIES]), ONE_DAY));
+      fetchCompanies &&
+        (await this.cacheService.set(
+          companiesCacheKey,
+          JSON.stringify(dbResultsMap[TYPE_KEYS.COMPANIES]),
+          FIFTEEN_MINUTES,
+        ));
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - Cache set', { categoriesCacheKey, companiesCacheKey })
     }
 
-    if(categoriesCache) {
-       dbResultsMap[TYPE_KEYS.CATEGORIES] = JSON.parse(categoriesCache);
+    if (categoriesCache) {
+      dbResultsMap[TYPE_KEYS.CATEGORIES] = JSON.parse(categoriesCache);
     }
 
-    if(companiesCache) {
+    if (companiesCache) {
       dbResultsMap[TYPE_KEYS.COMPANIES] = JSON.parse(companiesCache);
     }
 
-
     if (companySelection) {
-      const memberProfileService = new MemberProfile(legacyUserId, authHeader, this.logger);
-      const { organisation, isUnder18, dislikedCompanyIds } = await memberProfileService.getProfile();
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - Apply OfferRestriction for Company', { organisation, isUnder18 });
+      const restrictOffers = new OfferRestriction({ organisation, isUnder18 });
+      this.logger.debug('OfferCategoriesAndCompaniesResolver - OfferRestriction applied for Company', { organisation, isUnder18, restrictOffers });
 
-      const restrictOffers = new OfferRestriction(organisation, isUnder18, dislikedCompanyIds);
-
-      dbResultsMap[TYPE_KEYS.COMPANIES] = dbResultsMap[TYPE_KEYS.COMPANIES].filter((company: Company) => !restrictOffers.isCompanyRestricted(company))
+      dbResultsMap[TYPE_KEYS.COMPANIES] = dbResultsMap[TYPE_KEYS.COMPANIES].filter(
+        (company: Company) => !restrictOffers.isCompanyRestricted(company),
+      );
     }
 
     return {
       companies: dbResultsMap[TYPE_KEYS.COMPANIES],
-      categories: dbResultsMap[TYPE_KEYS.CATEGORIES]
+      categories: dbResultsMap[TYPE_KEYS.CATEGORIES],
     };
   }
 }
 
 const getCategoriesOrCompanies = async (
-  brandId: string, 
+  brandId: string,
   offerHomepageRepository: OfferHomepageRepository,
-  fetchCategories = false, 
-  fetchCompanies = false
-) => 
-  offerHomepageRepository.batchGetByIds(
-    [
-      ...(fetchCategories ? [{ id: brandId, type: TYPE_KEYS.CATEGORIES }] : []), 
-      ...(fetchCompanies ? [{ id: brandId, type: TYPE_KEYS.COMPANIES }] : []),
-    ]
-  )
+  fetchCategories = false,
+  fetchCompanies = false,
+) =>
+  offerHomepageRepository.batchGetByIds([
+    ...(fetchCategories ? [{ id: brandId, type: TYPE_KEYS.CATEGORIES }] : []),
+    ...(fetchCompanies ? [{ id: brandId, type: TYPE_KEYS.COMPANIES }] : []),
+  ]);

@@ -1,7 +1,9 @@
+import { OfferRestrictionParams } from "./offerRestrictionParams";
+
 export class OfferRestriction {
-  private readonly organisation: string;
-  private readonly isUnder18: boolean;
-  private dislikedCompanyIds: number[];
+  private readonly organisation: string | undefined;
+  private readonly isUnder18: boolean | undefined;
+  private dislikedCompanyIds: number[] | undefined;
 
   isBannerRestricted: any;
   isCompanyRestricted: any;
@@ -11,10 +13,12 @@ export class OfferRestriction {
   isMarketPlaceMenuItemRestricted: any;
   restrictOffers: any;
 
-  constructor(organisation: string, isUnder18: boolean, dislikedCompanyIds: number[]) {
-    this.organisation = organisation;
-    this.isUnder18 = isUnder18;
-    this.dislikedCompanyIds = dislikedCompanyIds;
+  public constructor(private params: OfferRestrictionParams) {
+    ({
+      organisation: this.organisation,
+      isUnder18: this.isUnder18,
+      dislikedCompanyIds: this.dislikedCompanyIds,
+    } = this.params);
 
     this.restrictOffers = this.createOfferRestrictionFactory();
 

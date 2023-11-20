@@ -6,6 +6,7 @@ import { COMPANY_FOLLOWS_SECRET, ENDPOINTS } from '../../utils/global-constants'
 import { ElasticCache } from "../elasticCache";
 import { SubnetType } from "aws-cdk-lib/aws-ec2";
 import { isDev } from '../../../../core/src/utils/checkEnvironment';
+import { Tracing } from "aws-cdk-lib/aws-lambda";
 
 type environmentConfig = {
   STAGE: string;
@@ -41,6 +42,7 @@ export class QueryLambda extends LambdaAbstract {
       environment: this.getEnvironmentConfig(),
       memorySize: 1024,
       timeout: Duration.seconds(5),
+      tracing: Tracing.ACTIVE,
     }
 
     if (!isDev(this.stage)) {

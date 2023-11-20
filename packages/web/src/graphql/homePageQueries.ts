@@ -1,14 +1,15 @@
 import { gql } from '@apollo/client';
 
-export const homePageQuery = (brand: string) => gql`
+export const homePageQuery = (brand: string, isUnder18: boolean, organisation: string) => gql`
   query HomePageQuery {
-    # Banners
-    banners: getBannersByBrandAndType(type: "sponsor", brandId: "${brand}", limit: 10) {
+    banners: getBanners(
+      input: {brandId: "${brand}", limit: 10, type: "sponsor", restriction: {isUnder18: ${isUnder18}}}
+    ) {
       link
       imageSource
+      legacyCompanyId
     }
-    offerMenus: getOfferMenusByBrandId(brandId: "${brand}") {
-      # Deals of the week
+    offerMenus: getOfferMenusByBrandId(brandId: "${brand}", input: {isUnder18: ${isUnder18}, organisation: "${organisation}"}) {
       deals {
         compid
         image
@@ -17,13 +18,11 @@ export const homePageQuery = (brand: string) => gql`
         offername
         companyname
       }
-      # Flexible menus
       flexible {
         imagehome
         title
         hide
       }
-      # Market place menus
       marketPlace {
         items {
           item {
@@ -38,7 +37,6 @@ export const homePageQuery = (brand: string) => gql`
         name
         hidden
       }
-      # Featured offers
       features {
         companyname
         offername
@@ -51,9 +49,9 @@ export const homePageQuery = (brand: string) => gql`
   }
 `;
 
-export const companiesCategoriesQuery = (brand: string) => gql`
+export const companiesCategoriesQuery = (brand: string, isUnder18: boolean) => gql`
   query CompaniesCategoriesQuery {
-    response: getCategoriesAndCompaniesByBrandId(brandId: "${brand}") {
+    response: getCategoriesAndCompaniesByBrandId(brandId: "${brand}", input: { isUnder18: ${isUnder18} }) {
       categories {
         id
         name

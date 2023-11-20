@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import AuthProvider from '@/context/AuthProvider';
-import AuthContext from '@/context/AuthContext';
+import AuthProvider from '@/context/Auth/AuthProvider';
+import AuthContext from '@/context/Auth/AuthContext';
 import withAuth from '@/hoc/withAuth';
 import { NextPage } from 'next';
 import React, { FC, useContext, useEffect } from 'react';

@@ -3,73 +3,78 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { ObjectDynamicKeys } from './types';
 import { TYPE_KEYS } from '@blc-mono/offers/src/utils/global-constants';
 import { OfferHomepageRepository } from '../../../../../repositories/offersHomepageRepository';
-import { unpackJWT } from '../../../../../../../core/src/utils/unpackJWT';
 import sortNumbers from '../../../../../../../core/src/utils/sortNumbers';
-import { MemberProfile } from "../../../../../services/MemberProfile";
-import { OfferRestriction } from "../../../../../services/OfferRestriction";
-import { FIFTEEN_MINUTES } from "../../../../../utils/duration"
+import { OfferRestriction } from '../../../../../../../core/src/offers/offerRestriction';
+import { FIFTEEN_MINUTES } from '../../../../../utils/duration';
 import { CacheService } from '../../../../../services/CacheService';
+import { OfferRestrictionQueryInput } from '../../../../../models/queries-input/offerRestrictionQueryInput';
+import { validateBrand, validateOfferRestrictionInput } from "../../../../../utils/validation";
 
 export class OfferMenusByBrandIdResolver {
-
-  private readonly cacheKey = `${this.brandId}-offers-homepage`
   constructor(
-    private brandId: string,
     private tableName: string,
     private offerHomepageRepository: OfferHomepageRepository,
     private logger: Logger,
-    private cacheService: CacheService
+    private cacheService: CacheService,
   ) {
     logger.info('OfferMenusByBrandIdResolver Started');
   }
 
   async handler(event: AppSyncResolverEvent<any>) {
-    this.logger.info('OfferMenusByBrandIdResolver handler', { event })
+    this.logger.info('OfferMenusByBrandIdResolver handler', { event });
+    const brandId = event.arguments.brandId;
+    if (!validateBrand(brandId)) {
+      this.logger.error('Invalid brandId', { brandId });
+      throw new Error(`Invalid brandId ${brandId}`);
+    }
+    const { isUnder18, organisation }: OfferRestrictionQueryInput = validateOfferRestrictionInput(
+      event.arguments.input,
+      this.logger,
+    );
+    const cacheKey = `${brandId}-offers-homepage`;
 
-    const cache = await this.cacheService.get(this.cacheKey);
+    this.logger.debug('OfferMenusByBrandIdResolver Before get cache', { cacheKey });
+    const cache = await this.cacheService.get(cacheKey);
+    this.logger.debug('OfferMenusByBrandIdResolver After get cache', { cacheKey, cache });
     let menus: ObjectDynamicKeys = {};
 
     if (!cache) {
-      const data = await getHomePageMenus(this.brandId, this.offerHomepageRepository);
-      
+      this.logger.debug('OfferMenusByBrandIdResolver - Cache Does not exist. retrieve data from Dynamo', { brandId });
+      const data = await getHomePageMenus(brandId, this.offerHomepageRepository);
+      this.logger.debug('OfferMenusByBrandIdResolver - Data from Dynamo', { data });
+
       if (!data || !data.Responses || !data.Responses[this.tableName]) {
-        this.logger.error('No homepage menus found for brandId', { brandId: this.brandId });
-        throw new Error(`No homepage menus found for brandId ${this.brandId}`);
+        this.logger.error('No homepage menus found for brandId', { brandId });
+        throw new Error(`No homepage menus found for brandId ${brandId}`);
       }
 
       const homePageItems = data.Responses[this.tableName];
-      
+
       homePageItems.forEach(({ type, json }) => {
         menus[type] = JSON.parse(json);
       });
 
-      await this.cacheService.set(this.cacheKey, JSON.stringify(menus), FIFTEEN_MINUTES);
+      this.logger.debug('OfferMenusByBrandIdResolver - Set cache', { cacheKey, menus })
+      await this.cacheService.set(cacheKey, JSON.stringify(menus), FIFTEEN_MINUTES);
+      this.logger.debug('OfferMenusByBrandIdResolver - Cache set', { cacheKey })
     } else {
+      this.logger.debug('OfferMenusByBrandIdResolver - Cache exists. parse data from cache', { cacheKey, cache });
       menus = JSON.parse(cache);
+      this.logger.debug('OfferMenusByBrandIdResolver - Cache parsed', { cacheKey, menus });
     }
 
-    const authHeader: string = event.request.headers.authorization ?? '';
-    let  legacyUserId: string = '';
-    try {
-      legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
-    }catch (error) {
-      this.logger.info('authHeader', { authHeader });
-      this.logger.error('Error unpacking JWT', { error });
-    }
-    this.logger.info('legacyUserId before passing to memberprofile', { legacyUserId });
-    const memberProfileService = new MemberProfile(legacyUserId, authHeader, this.logger);
-    const { organisation, isUnder18, dislikedCompanyIds } = await memberProfileService.getProfile();
-
-    const restrictOffers = new OfferRestriction(organisation, isUnder18, dislikedCompanyIds);
+    this.logger.debug('OfferMenusByBrandIdResolver - Apply OfferRestriction', { brandId, isUnder18, organisation });
+    const restrictOffers = new OfferRestriction({ organisation, isUnder18 });
+    this.logger.debug('OfferMenusByBrandIdResolver - OfferRestriction applied', { brandId, isUnder18, organisation });
 
     const marketPlaceMenus = menus[TYPE_KEYS.MARKETPLACE];
 
-    const slidersFileArray = Object
-      .keys(marketPlaceMenus)
+    const slidersFileArray = Object.keys(marketPlaceMenus)
       .map((sliderFileName) => parseInt(sliderFileName.split('.')[0]))
-      .sort(sortNumbers)
+      .sort(sortNumbers);
 
-    const formattedMarketPlaceMenus = slidersFileArray.reduce((accumulator: any [], key: number) => {
+    this.logger.debug('OfferMenusByBrandIdResolver - slidersFileArray before reduce', { slidersFileArray });
+    const formattedMarketPlaceMenus = slidersFileArray.reduce((accumulator: any[], key: number) => {
       const slider = marketPlaceMenus[`${key}.txt`];
       if (slider && !slider.hidden) {
         if (slider.items) {
@@ -87,6 +92,7 @@ export class OfferMenusByBrandIdResolver {
       }
       return accumulator;
     }, []);
+    this.logger.debug('OfferMenusByBrandIdResolver - formattedMarketPlaceMenus after reduce', { formattedMarketPlaceMenus });
 
     const flexibleMenus = menus[TYPE_KEYS.FLEXIBLE];
 

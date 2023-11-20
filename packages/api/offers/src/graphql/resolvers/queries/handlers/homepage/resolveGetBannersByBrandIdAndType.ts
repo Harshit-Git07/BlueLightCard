@@ -1,76 +1,67 @@
-import { AppSyncResolverEvent } from "aws-lambda";
+import { AppSyncResolverEvent } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { unpackJWT } from '../../../../../../../core/src/utils/unpackJWT';
-import { MemberProfile } from "../../../../../services/MemberProfile";
-import { OfferRestriction } from "../../../../../services/OfferRestriction";
-import { BannerRepository } from "../../../../../repositories/bannerRepository";
-import { ONE_HOUR } from "../../../../../utils/duration";
+import { OfferRestriction } from '../../../../../../../core/src/offers/offerRestriction';
+import { BannerRepository } from '../../../../../repositories/bannerRepository';
+import { ONE_HOUR } from '../../../../../utils/duration';
 import { CacheService } from '../../../../../services/CacheService';
+import { BannersQueryInput, BannersQueryInputModel } from '../../../../../models/queries-input/bannersQueryInput';
 
 export class BannersByBrandIdAndTypeResolver {
-
-  constructor(
-    private brandId: string, 
-    private bannerRepository: BannerRepository,
-    private logger: Logger,
-    private cacheService: CacheService
-  ) {
-    logger.info('BannersByBrandIdAndTypeResolver Started');
+  constructor(private bannerRepository: BannerRepository, private logger: Logger, private cacheService: CacheService) {
+    logger.info('getBanners Started');
   }
 
   async handler(event: AppSyncResolverEvent<any>) {
-    const type = event.arguments?.type;
-    const limit = event.arguments?.limit;
+    const {
+      brandId,
+      type,
+      limit,
+      restriction: { organisation, isUnder18 },
+    }: BannersQueryInput = this.validateBannersQueryInput(event.arguments.input);
 
-    if (!type) {
-      this.logger.error('type is required', { type });
-      throw new Error('type is required');
-    }
-
-    const cacheKey = `${this.brandId}-${type}-banners`;
+    const cacheKey = `${brandId}-${type}-banners`;
+    this.logger.debug('BannersByBrandIdAndTypeResolver - Before get cache', { cacheKey });
     const cacheData = await this.cacheService.get(cacheKey);
-
-    const authHeader: string = event.request.headers.authorization ?? '';
-    let  legacyUserId: string = '';
-    try {
-      legacyUserId = unpackJWT(authHeader)['custom:blc_old_id'];
-    }catch (error) {
-      this.logger.error('Error unpacking JWT', { error });
-    }
+    this.logger.debug('BannersByBrandIdAndTypeResolver - After get cache', { cacheKey, cacheData })
 
     let data;
-    if(!cacheData) {
-      data = await getBanners(
-        this.brandId,
-        type,
-        limit,
-        this.bannerRepository
-      )
-
+    if (!cacheData) {
+      this.logger.debug('BannersByBrandIdAndTypeResolver -  Cache Does not exist. retrieve data from Dynamo', { brandId });
+      data = await getBanners(brandId, type, limit, this.bannerRepository);
+      this.logger.debug('BannersByBrandIdAndTypeResolver - Data from Dynamo', { data });
       if (!data || !data.Items) {
-        this.logger.error(`No ${type} banners found for brandId`, { brandId: this.brandId });
-        throw new Error(`No ${type} banners found for brandId ${this.brandId}`);
+        this.logger.error(`No ${type} banners found for brandId`, { brandId });
+        throw new Error(`No ${type} banners found for brandId ${brandId}`);
       }
 
+      this.logger.debug('BannersByBrandIdAndTypeResolver - Set cache', { cacheKey, data })
       await this.cacheService.set(cacheKey, JSON.stringify(data), ONE_HOUR);
+      this.logger.debug('BannersByBrandIdAndTypeResolver - Cache set', { cacheKey })
     } else {
+      this.logger.debug('BannersByBrandIdAndTypeResolver - Cache exists. Retrieve data from cache', { cacheKey });
       data = JSON.parse(cacheData);
+      this.logger.debug('BannersByBrandIdAndTypeResolver - Cache parsed', { cacheKey, data });
     }
 
-    const memberProfileService = new MemberProfile(legacyUserId, authHeader, this.logger);
-    const { organisation, isUnder18, dislikedCompanyIds } = await memberProfileService.getProfile();
+    this.logger.debug('BannersByBrandIdAndTypeResolver - Apply OfferRestriction', { cacheKey, data });
+    const restrictOffers = new OfferRestriction({ isUnder18 });
+    this.logger.debug('BannersByBrandIdAndTypeResolver - OfferRestriction applied', { cacheKey, data, restrictOffers });
 
-    const restrictOffers = new OfferRestriction(organisation, isUnder18, dislikedCompanyIds);
-
-    const banners = data.Items.filter((banner: any) => !restrictOffers.isBannerRestricted(banner))
+    const banners = data.Items.filter((banner: any) => !restrictOffers.isBannerRestricted(banner));
 
     return banners;
   }
+
+  private validateBannersQueryInput(payload: any) {
+    const result = BannersQueryInputModel.safeParse(payload);
+    if (result.success) {
+      return payload as BannersQueryInput;
+    } else {
+      this.logger.error(`Error validating banners query input ${result.error}`);
+      throw new Error(`Error validating banners query input ${result.error}`);
+    }
+  }
 }
 
-const getBanners = async (
-  brandId: string, 
-  type: string,
-  limit: number,
-  bannerRepository: BannerRepository,
-) => bannerRepository.getBannersByBrandIdAndType(brandId, type, limit)
+const getBanners = async (brandId: string, type: string, limit: number, bannerRepository: BannerRepository) =>
+  bannerRepository.getBannersByBrandIdAndType(brandId, type, limit);

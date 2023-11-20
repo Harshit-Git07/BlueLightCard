@@ -1,3 +1,9 @@
+const COMPANY_BRAND_CONNECTION_TABLE = 'test-blc-mono-companyBrandConnection';
+process.env.COMPANY_BRAND_CONNECTION_TABLE = COMPANY_BRAND_CONNECTION_TABLE;
+
+const COMPANY_TABLE = 'test-blc-mono-company';
+process.env.COMPANY_TABLE = COMPANY_TABLE;
+
 import { BatchGetCommand, DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb'
 import { mockClient } from 'aws-sdk-client-mock'
 import { promises as fs } from 'fs'
@@ -9,23 +15,16 @@ const dynamoDbMock = mockClient(DynamoDBDocumentClient);
 jest.mock('ioredis');
 
 describe('Test resolveGetAllCompaniesByBrandId', () => {
-  const ORIGINAL_ENV = process.env;
 
   beforeEach(() => {
     dynamoDbMock.reset();
-    process.env = { ...ORIGINAL_ENV }; // Make a copy
+
   });
 
-  afterAll(() => {
-    process.env = ORIGINAL_ENV; // Restore original environment
-  });
 
   it('should fetch the data from DynamoDB', async () => {
-    process.env.COMPANY_TABLE = 'test-blc-mono-company';
-    process.env.COMPANY_BRAND_CONNECTION_TABLE = 'test-blc-mono-companyBrandConnection';
-
+    
     const brandId = 'blc-uk';
-    const tableName = process.env.COMPANY_TABLE;
 
     const companiesRaw = await fs.readFile(path.join(__dirname, '../../../../../../', 'seeds', 'offers', 'companies.json'))
     const companies = JSON.parse(companiesRaw.toString());
@@ -40,7 +39,7 @@ describe('Test resolveGetAllCompaniesByBrandId', () => {
       .on(BatchGetCommand)
       .resolves({
         Responses: {
-          [tableName]: companies
+          [COMPANY_TABLE]: companies
         }
       })
 
@@ -54,11 +53,14 @@ describe('Test resolveGetAllCompaniesByBrandId', () => {
       },
       arguments: {
         brandId,
-      }
+        input: {
+          isUnder18: false,
+        }
+      },
     }
 
     const result = await handler(event as any)
-
+    
     expect(result.length).toBe(3);
     expect(result[0]).toHaveProperty('id');
     expect(result[0]).toHaveProperty('legacyId');
@@ -78,6 +80,6 @@ describe('Test resolveGetAllCompaniesByBrandId', () => {
       arguments: {},
     }
 
-    await expect(handler(event as any)).rejects.toThrow('brandId is required')
+    await expect(handler(event as any)).rejects.toThrow('Invalid brandId undefined')
   })
 });

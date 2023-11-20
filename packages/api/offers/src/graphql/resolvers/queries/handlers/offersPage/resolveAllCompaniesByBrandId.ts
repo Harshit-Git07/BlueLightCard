@@ -3,33 +3,39 @@ import { CacheService } from "src/services/CacheService";
 import { CompanyRepository } from "src/repositories/companyRepository";
 import { CompanyBrandConnectionRepository } from "src/repositories/companyBrandConnectionRepository";
 import { ONE_DAY } from "../../../../../utils/duration";
+import { AppSyncResolverEvent } from "aws-lambda";
+import { validateBrand } from "../../../../../utils/validation";
 
 export class AllCompaniesByBrandIdResolver {
 
-  private readonly companiesCacheKey = `${this.brandId}-offers-all-companies`;
-
-  constructor(private brandId: string, 
+  constructor(
     private companyTableName: string,
     private companiesRepository: CompanyRepository,
     private companyBrandConnectionRepository: CompanyBrandConnectionRepository,
     private logger: Logger, 
     private cacheService: CacheService) 
   {
-    this.brandId = brandId;
-    this.companyTableName = companyTableName;;
+    this.companyTableName = companyTableName;
     this.companiesRepository = companiesRepository;
     this.companyBrandConnectionRepository = companyBrandConnectionRepository;
     this.logger = logger;
     this.cacheService = cacheService;
   }
 
-  async handler() {
+  async handler(event: AppSyncResolverEvent<any>) {
     this.logger.info("All companies resolver started");
+    const brandId = event.arguments?.brandId;
+
+    if (!validateBrand(brandId)) {
+      this.logger.error('brandId is required', { brandId });
+      throw new Error('brandId is required');
+    }
+    const companiesCacheKey = `${brandId}-offers-all-companies`;
 
     let data: any;
 
     // Cache check
-    const cache = await this.cacheService.get(this.companiesCacheKey);
+    const cache = await this.cacheService.get(companiesCacheKey);
     if(cache) {
       this.logger.info('Cache hit for all companies');
       // Map the results from the cache to the expected format
@@ -38,12 +44,12 @@ export class AllCompaniesByBrandIdResolver {
       this.logger.info('Cache miss for all companies');
 
       // Pull in all id's for companies via the brandId from the companiesBrandConnection
-      const companyIdsQuery = await this.companyBrandConnectionRepository.getByBrandId(this.brandId);
+      const companyIdsQuery = await this.companyBrandConnectionRepository.getByBrandId(brandId);
       
       this.logger.info('companyIdsQuery', { companyIdsQuery });
       if (!companyIdsQuery || !companyIdsQuery.Items) {
-        this.logger.error('No categories or companies found for brandId', { brandId: this.brandId });
-        throw new Error(`No categories or companies found for brandId ${this.brandId}`);
+        this.logger.error('No categories or companies found for brandId', { brandId: brandId });
+        throw new Error(`No categories or companies found for brandId ${brandId}`);
       }
 
       const companyIds = companyIdsQuery.Items.map((item) => item.companyId);
@@ -57,12 +63,12 @@ export class AllCompaniesByBrandIdResolver {
       this.logger.info('companies', { companies });
 
       if(!(companies.Responses && companies.Responses[this.companyTableName])) {
-        this.logger.error('No companies found for brandId', { brandId: this.brandId });
-        throw new Error(`No companies found for brandId ${this.brandId}`);
+        this.logger.error('No companies found for brandId', { brandId: brandId });
+        throw new Error(`No companies found for brandId ${brandId}`);
       }
 
       data = companies.Responses[this.companyTableName];
-      await this.cacheService.set(this.companiesCacheKey, JSON.stringify(data), ONE_DAY);
+      await this.cacheService.set(companiesCacheKey, JSON.stringify(data), ONE_DAY);
     }
     
     this.logger.info('data', { data });

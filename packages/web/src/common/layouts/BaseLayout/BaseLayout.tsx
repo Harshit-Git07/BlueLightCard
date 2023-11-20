@@ -16,7 +16,7 @@ import { navItems } from '@/data/headerConfig';
 import footerConfig from '@/data/footerConfig';
 import { LayoutProps } from './types';
 import { useContext } from 'react';
-import AuthContext from '@/context/AuthContext';
+import AuthContext from '@/context/Auth/AuthContext';
 import MetaData from '@/components/MetaData/MetaData';
 
 const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace }) => {

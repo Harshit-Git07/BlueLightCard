@@ -209,11 +209,23 @@ type CompaniesCategoriesMenuList {
 }
 
 type Query {
-  getOfferMenusByBrandId(brandId: ID!): OfferMenuList
-  getBannersByBrandAndType(type: String!, brandId: ID!, limit: Int): [Banner!]!
-  getCategoriesAndCompaniesByBrandId(brandId: ID!): CompaniesCategoriesMenuList!
+  getOfferMenusByBrandId(brandId: ID!, input: OfferRestrictionInput): OfferMenuList
+  getBanners(input: BannersQueryInput): [Banner!]!
+  getCategoriesAndCompaniesByBrandId(brandId: ID!, input: OfferRestrictionInput): CompaniesCategoriesMenuList!
   getOffersByType(offerType: ID!): [Offer!]!
   getOfferById(id: ID!): Offer!
   getCompanyById(id: ID!): Company!
   getAllCompaniesByBrandId(brandId: ID!): [Company!]!
+}
+
+input OfferRestrictionInput {
+  organisation: String
+  isUnder18: Boolean!
+}
+
+input BannersQueryInput {
+  brandId: ID!
+  type: String!
+  limit: Int
+  restriction: OfferRestrictionInput
 }

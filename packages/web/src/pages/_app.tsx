@@ -6,7 +6,7 @@ import flagsmith from 'flagsmith/isomorphic';
 
 import '../styles/globals.css';
 import { FEATURE_FLAG_ENVIRONMENT_ID } from '@/global-vars';
-import AuthProvider from '@/context/AuthProvider';
+import AuthProvider from '@/context/Auth/AuthProvider';
 
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -15,6 +15,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { NextPageWithLayout } from '@/page-types/layout';
 import Head from 'next/head';
+import UserProvider from '@/context/User/UserProvider';
 config.autoAddCss = false;
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
@@ -60,7 +61,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
         options={{ environmentID: FEATURE_FLAG_ENVIRONMENT_ID }}
         flagsmith={flagsmith}
       >
-        <AuthProvider>{renderedPageWithLayout}</AuthProvider>
+        <AuthProvider>
+          <UserProvider>{renderedPageWithLayout}</UserProvider>
+        </AuthProvider>
       </FlagsmithProvider>
     </>
   );

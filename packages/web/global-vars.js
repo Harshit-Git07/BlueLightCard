@@ -18,6 +18,8 @@ const BLACK_FRIDAY_TIME_LOCK_END_DATE =
 
 const IS_SSR = typeof window === 'undefined';
 
+const USER_PROFILE_ENDPOINT = process.env.NEXT_PUBLIC_USER_PROFILE_ENDPOINT ?? '';
+
 /*
  * Language is made up of the lng and region
  * Example: [lng]-[region]
@@ -49,4 +51,5 @@ module.exports = {
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
   BLACK_FRIDAY_TIME_LOCK_END_DATE,
   IS_SSR,
+  USER_PROFILE_ENDPOINT,
 };

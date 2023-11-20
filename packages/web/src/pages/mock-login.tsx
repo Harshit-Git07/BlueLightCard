@@ -6,8 +6,8 @@ import InputTextFieldWithRef from '@/components/InputTextField/InputTextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { useRouter } from 'next/router';
-import AuthProvider from '@/context/AuthProvider';
-import AuthContext from '@/context/AuthContext';
+import AuthProvider from '@/context/Auth/AuthProvider';
+import AuthContext from '@/context/Auth/AuthContext';
 import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
 
 function MockLogin() {

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { shuffle } from 'lodash';
+import React, { useContext, useEffect, useState } from 'react';
 import withAuth from '@/hoc/withAuth';
 import { homePageQuery } from '../graphql/homePageQueries';
-import makeQuery from '../graphql/makeQuery';
+import { makeHomePageQueryWithDislikeRestrictions } from '../graphql/makeQuery';
 import getCDNUrl from '@/utils/getCDNUrl';
+
 import {
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
   BLACK_FRIDAY_TIME_LOCK_END_DATE,
@@ -27,7 +27,11 @@ import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
 import withLayout from '@/hoc/withLayout';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
+
 import inTimePeriod from '@/utils/inTimePeriod';
+import { shuffle } from 'lodash';
+import AuthContext from '@/context/Auth/AuthContext';
+import UserContext from '@/context/User/UserContext';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -67,33 +71,53 @@ const HomePage: NextPage<any> = () => {
   // Handle loading states
   const [loadingError, setLoadingError] = useState(false);
 
+  // Auth context
+  const authCtx = useContext(AuthContext);
+  const userCtx = useContext(UserContext);
+
   // Fetch Data on first load
   useEffect(() => {
     logMembersHomePage();
     const fetchData = async () => {
+      let user = userCtx.user;
+
+      // Fetch home page data
+      let homePage;
+
       try {
-        const homePageQueryPromise = makeQuery(homePageQuery(BRAND));
-        const homePageQueryResponse = await homePageQueryPromise;
-
-        const slicedBanners = shuffle(homePageQueryResponse.data.banners).slice(0, 3);
-
-        setBanners(slicedBanners as BannerType[]);
-        setDealsOfTheWeek(homePageQueryResponse.data.offerMenus.deals as DealsOfTheWeekType[]);
-        setMarketplaceMenus(
-          homePageQueryResponse.data.offerMenus.marketPlace as MarketPlaceMenuType[]
+        const homePageData = await makeHomePageQueryWithDislikeRestrictions(
+          homePageQuery(BRAND, userCtx.isAgeGated ?? true, user?.organisation ?? 'NHS'),
+          userCtx.dislikes
         );
-        setFlexibleMenu(homePageQueryResponse.data.offerMenus.flexible as FlexibleMenuType[]);
-        setFeaturedOffers(homePageQueryResponse.data.offerMenus.features as FeaturedOffersType[]);
-        setLoadingError(false);
-      } catch (error) {
+        homePage = homePageData.data;
+      } catch (e) {
         setLoadingError(true);
+        return;
       }
+      const slicedBanners = shuffle(homePage.banners).slice(0, 3);
+
+      setBanners(slicedBanners as BannerType[]);
+
+      setDealsOfTheWeek(homePage.offerMenus?.deals as DealsOfTheWeekType[]);
+      setMarketplaceMenus(homePage.offerMenus?.marketPlace as MarketPlaceMenuType[]);
+      setFlexibleMenu(homePage.offerMenus?.flexible as FlexibleMenuType[]);
+      setFeaturedOffers(homePage.offerMenus.features as FeaturedOffersType[]);
+      setLoadingError(false);
 
       setHasLoaded(true);
     };
 
-    fetchData();
-  }, []);
+    if (userCtx.user || userCtx.error) {
+      fetchData();
+    }
+  }, [
+    authCtx.isReady,
+    authCtx.authState.idToken,
+    userCtx.user,
+    userCtx.isAgeGated,
+    userCtx.dislikes,
+    userCtx.error,
+  ]);
 
   // Format carousel data
   const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({

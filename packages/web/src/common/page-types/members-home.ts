@@ -1,6 +1,7 @@
 export type BannerType = {
   image: string;
   href: string;
+  legacyCompanyId: string;
 };
 
 export type DealsOfTheWeekType = {

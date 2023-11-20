@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 
-import AuthContext from '@/context/AuthContext';
+import AuthContext from '@/context/Auth/AuthContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';

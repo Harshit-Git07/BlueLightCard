@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useContext } from 'react';
 import Button from '../Button/Button';
 import Heading from '../Heading/Heading';
 import InputSelectFieldWithRef from '../InputSelectField/InputSelectField';
@@ -7,10 +7,11 @@ import { SearchProps } from './types';
 import { CategoryType, CompanyType } from '@/page-types/members-home';
 import { BRAND } from '@/global-vars';
 import { companiesCategoriesQuery } from '../../../graphql/homePageQueries';
-import makeQuery from '../../../graphql/makeQuery';
+import { makeNavbarQueryWithDislikeRestrictions, makeQuery } from '../../../graphql/makeQuery';
 import { redirectToLogin } from '@/hoc/withAuth';
 import { useRouter } from 'next/router';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
+import UserContext from '@/context/User/UserContext';
 
 const sortByAlphabeticalOrder = (a: CategoryType | CompanyType, b: CategoryType | CompanyType) => {
   if (a.name < b.name) return -1;
@@ -30,6 +31,8 @@ const Search: FC<SearchProps> = ({
   const [companies, setCompanies] = useState<CompanyType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const userCtx = useContext(UserContext);
 
   const changeCompanyHandler = (event: any) => {
     const company =
@@ -70,9 +73,14 @@ const Search: FC<SearchProps> = ({
   // Fetch Data on first load
   useEffect(() => {
     const fetchData = async () => {
+      if (!userCtx.user || userCtx.error) return;
+
       try {
         setIsLoading(true);
-        const companiesCategoriesQueryPromise = makeQuery(companiesCategoriesQuery(BRAND));
+        const companiesCategoriesQueryPromise = makeNavbarQueryWithDislikeRestrictions(
+          companiesCategoriesQuery(BRAND, userCtx.isAgeGated),
+          userCtx.dislikes
+        );
 
         const companiesCategoriesQueryResponse = await companiesCategoriesQueryPromise;
 
@@ -98,7 +106,7 @@ const Search: FC<SearchProps> = ({
     };
 
     fetchData();
-  }, [router]);
+  }, [router, userCtx.user, userCtx.error, userCtx.dislikes, userCtx.isAgeGated]);
 
   const loadingText = 'Loading...';
   const companyDefaultOption = isLoading ? loadingText : 'by company';

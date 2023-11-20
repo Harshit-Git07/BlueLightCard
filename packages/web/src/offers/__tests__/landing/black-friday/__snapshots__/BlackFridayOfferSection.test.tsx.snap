@@ -15,7 +15,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
         >
-          Fashion & Clothing
+          Fashion & clothing
         </h1>
         <p
           className="text-[#000033] text-center mb-12"
@@ -248,7 +248,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=12657"
                     >
-                      Boohoo
+                      boohoo
                     </a>
                   </h3>
                 </div>
@@ -258,66 +258,6 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
                     href="/offerdetails.php?cid=12657"
-                  >
-                    Get offer
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
-          >
-            <div
-              className="p-[10px]"
-            >
-              <a
-                className="block"
-                href="/offerdetails.php?cid=9376"
-              >
-                <img
-                  alt="Black friday offer"
-                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
-                  data-nimg="1"
-                  decoding="async"
-                  height={0}
-                  loading="lazy"
-                  onError={[Function]}
-                  onLoad={[Function]}
-                  sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 3840w"
-                  style={
-                    {
-                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
-                      "backgroundPosition": "50% 50%",
-                      "backgroundRepeat": "no-repeat",
-                      "backgroundSize": "cover",
-                      "color": "transparent",
-                    }
-                  }
-                  width={0}
-                />
-              </a>
-              <div
-                className="pb-4 pt-5 text-center"
-              >
-                <div>
-                  <h3>
-                    <a
-                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
-                      href="/offerdetails.php?cid=9376"
-                    >
-                      Boux Avenue
-                    </a>
-                  </h3>
-                </div>
-                <div
-                  className="flex items-center justify-center space-x-2"
-                >
-                  <a
-                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
-                    href="/offerdetails.php?cid=9376"
                   >
                     Get offer
                   </a>
@@ -488,7 +428,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=10735"
                     >
-                      BoohooMan
+                      boohooMAN
                     </a>
                   </h3>
                 </div>
@@ -608,7 +548,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=32538"
                     >
-                      Fenwicks
+                      Fenwick
                     </a>
                   </h3>
                 </div>
@@ -777,7 +717,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         <p
           className="text-[#FFFFFF] text-center mb-12"
         >
-          Find delicious discounts at your favourite restaurants and eat out for less this holiday season…
+          Find delicious discounts on your favourite food and drink this holiday season…
         </p>
         <div
           className="mobile:mx-auto -mx-4 mb-10 flex flex-wrap"
@@ -825,7 +765,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=24239"
                     >
-                      Bills
+                      Bill's
                     </a>
                   </h3>
                 </div>
@@ -945,7 +885,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=19088"
                     >
-                      Skinny Foods
+                      The Skinny Foods Co
                     </a>
                   </h3>
                 </div>
@@ -955,66 +895,6 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
                     href="/offerdetails.php?cid=19088"
-                  >
-                    Get offer
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
-          >
-            <div
-              className="p-[10px]"
-            >
-              <a
-                className="block"
-                href="/offerdetails.php?cid=3544"
-              >
-                <img
-                  alt="Black friday offer"
-                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
-                  data-nimg="1"
-                  decoding="async"
-                  height={0}
-                  loading="lazy"
-                  onError={[Function]}
-                  onLoad={[Function]}
-                  sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/3544.jpg 3840w"
-                  style={
-                    {
-                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
-                      "backgroundPosition": "50% 50%",
-                      "backgroundRepeat": "no-repeat",
-                      "backgroundSize": "cover",
-                      "color": "transparent",
-                    }
-                  }
-                  width={0}
-                />
-              </a>
-              <div
-                className="pb-4 pt-5 text-center"
-              >
-                <div>
-                  <h3>
-                    <a
-                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
-                      href="/offerdetails.php?cid=3544"
-                    >
-                      Muscle Food
-                    </a>
-                  </h3>
-                </div>
-                <div
-                  className="flex items-center justify-center space-x-2"
-                >
-                  <a
-                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
-                    href="/offerdetails.php?cid=3544"
                   >
                     Get offer
                   </a>
@@ -1150,7 +1030,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
             >
               <a
                 className="block"
-                href="/offerdetails.php?cid=1570"
+                href="/offerdetails.php?cid=7772"
               >
                 <img
                   alt="Black friday offer"
@@ -1162,8 +1042,8 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   onError={[Function]}
                   onLoad={[Function]}
                   sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1570.jpg 3840w"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7772.jpg 3840w"
                   style={
                     {
                       "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
@@ -1183,9 +1063,9 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <h3>
                     <a
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
-                      href="/offerdetails.php?cid=1570"
+                      href="/offerdetails.php?cid=7772"
                     >
-                      Whittards of Chelsea
+                      Prezzo
                     </a>
                   </h3>
                 </div>
@@ -1194,7 +1074,367 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                 >
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
-                    href="/offerdetails.php?cid=1570"
+                    href="/offerdetails.php?cid=7772"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=1521"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/1521.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=1521"
+                    >
+                      MyProtein
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=1521"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=25841"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25841.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=25841"
+                    >
+                      Toblerone
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=25841"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=25457"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25457.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=25457"
+                    >
+                      De'longhi
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=25457"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=17546"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17546.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=17546"
+                    >
+                      KitchenAid
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=17546"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=29497"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=29497"
+                    >
+                      Sage Appliances
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=29497"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=20081"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20081.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=20081"
+                    >
+                      Co-Op Food
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=20081"
                   >
                     Get offer
                   </a>
@@ -1582,7 +1822,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=16010"
                     >
-                      Fitflop
+                      FitFlop
                     </a>
                   </h3>
                 </div>
@@ -1642,7 +1882,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=1455"
                     >
-                      Crocs
+                      crocs
                     </a>
                   </h3>
                 </div>
@@ -1822,7 +2062,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=16571"
                     >
-                      Hoka
+                      HOKA
                     </a>
                   </h3>
                 </div>
@@ -1832,6 +2072,126 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
                     href="/offerdetails.php?cid=16571"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=11752"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=11752"
+                    >
+                      Dune London
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=11752"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=11207"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=11207"
+                    >
+                      Size
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=11207"
                   >
                     Get offer
                   </a>
@@ -1979,7 +2339,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=15"
                     >
-                      BuyaGift
+                      Buyagift
                     </a>
                   </h3>
                 </div>
@@ -2099,7 +2459,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=9228"
                     >
-                      Shopdisney
+                      shopDisney
                     </a>
                   </h3>
                 </div>
@@ -2459,7 +2819,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=26712"
                     >
-                      Scaletrix
+                      Scalextric
                     </a>
                   </h3>
                 </div>
@@ -2469,6 +2829,66 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
                     href="/offerdetails.php?cid=26712"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=80"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/80.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=80"
+                    >
+                      Red Letter Days
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=80"
                   >
                     Get offer
                   </a>
@@ -2556,7 +2976,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=12566"
                     >
-                      Lookfantastic
+                      LOOKFANTASTIC
                     </a>
                   </h3>
                 </div>
@@ -2796,7 +3216,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=8137"
                     >
-                      GHD
+                      ghd
                     </a>
                   </h3>
                 </div>
@@ -3200,7 +3620,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
         >
-          Holidays & days Out
+          Holidays & days out
         </h1>
         <p
           className="text-[#FFFFFF] text-center mb-12"
@@ -3313,7 +3733,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=26008"
                     >
-                      Loveholidays
+                      loveholidays
                     </a>
                   </h3>
                 </div>
@@ -3493,7 +3913,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=239"
                     >
-                      Jet2 Holidays
+                      Jet2holidays
                     </a>
                   </h3>
                 </div>
@@ -3503,66 +3923,6 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
                     href="/offerdetails.php?cid=239"
-                  >
-                    Get offer
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
-          >
-            <div
-              className="p-[10px]"
-            >
-              <a
-                className="block"
-                href="/offerdetails.php?cid=809"
-              >
-                <img
-                  alt="Black friday offer"
-                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
-                  data-nimg="1"
-                  decoding="async"
-                  height={0}
-                  loading="lazy"
-                  onError={[Function]}
-                  onLoad={[Function]}
-                  sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/809.jpg 3840w"
-                  style={
-                    {
-                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
-                      "backgroundPosition": "50% 50%",
-                      "backgroundRepeat": "no-repeat",
-                      "backgroundSize": "cover",
-                      "color": "transparent",
-                    }
-                  }
-                  width={0}
-                />
-              </a>
-              <div
-                className="pb-4 pt-5 text-center"
-              >
-                <div>
-                  <h3>
-                    <a
-                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
-                      href="/offerdetails.php?cid=809"
-                    >
-                      Cineworld
-                    </a>
-                  </h3>
-                </div>
-                <div
-                  className="flex items-center justify-center space-x-2"
-                >
-                  <a
-                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
-                    href="/offerdetails.php?cid=809"
                   >
                     Get offer
                   </a>
@@ -3733,7 +4093,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=4544"
                     >
-                      Butlins
+                      Butlin's
                     </a>
                   </h3>
                 </div>
@@ -3803,6 +4163,186 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
                     href="/offerdetails.php?cid=120"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=23359"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/23359.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=23359"
+                    >
+                      Lastminute.com
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=23359"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=383"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/383.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=383"
+                    >
+                      Eurocamp
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=383"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=44"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/44.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=44"
+                    >
+                      Hoseasons
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=44"
                   >
                     Get offer
                   </a>
@@ -3890,7 +4430,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=16290"
                     >
-                      Ninja Kitchen
+                      Ninja
                     </a>
                   </h3>
                 </div>
@@ -4010,7 +4550,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
                       href="/offerdetails.php?cid=211"
                     >
-                      Curry's
+                      Currys
                     </a>
                   </h3>
                 </div>
@@ -4035,7 +4575,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
             >
               <a
                 className="block"
-                href="/offerdetails.php?cid=22058"
+                href="/offerdetails.php?cid=22225"
               >
                 <img
                   alt="Black friday offer"
@@ -4047,8 +4587,8 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   onError={[Function]}
                   onLoad={[Function]}
                   sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22058.jpg 3840w"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/22225.jpg 3840w"
                   style={
                     {
                       "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
@@ -4068,9 +4608,9 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <h3>
                     <a
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
-                      href="/offerdetails.php?cid=22058"
+                      href="/offerdetails.php?cid=22225"
                     >
-                      Silent Night
+                      Nectar Sleep
                     </a>
                   </h3>
                 </div>
@@ -4079,7 +4619,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                 >
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
-                    href="/offerdetails.php?cid=22058"
+                    href="/offerdetails.php?cid=22225"
                   >
                     Get offer
                   </a>
@@ -4095,7 +4635,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
             >
               <a
                 className="block"
-                href="/offerdetails.php?cid=27486"
+                href="/offerdetails.php?cid=6906"
               >
                 <img
                   alt="Black friday offer"
@@ -4107,8 +4647,8 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   onError={[Function]}
                   onLoad={[Function]}
                   sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/27486.jpg 3840w"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/6906.jpg 3840w"
                   style={
                     {
                       "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
@@ -4128,9 +4668,9 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <h3>
                     <a
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
-                      href="/offerdetails.php?cid=27486"
+                      href="/offerdetails.php?cid=6906"
                     >
-                      Dreamcloud
+                      Simba
                     </a>
                   </h3>
                 </div>
@@ -4139,7 +4679,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                 >
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
-                    href="/offerdetails.php?cid=27486"
+                    href="/offerdetails.php?cid=6906"
                   >
                     Get offer
                   </a>
@@ -4335,7 +4875,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
             >
               <a
                 className="block"
-                href="/offerdetails.php?cid=25867"
+                href="/offerdetails.php?cid=29497"
               >
                 <img
                   alt="Black friday offer"
@@ -4347,8 +4887,8 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   onError={[Function]}
                   onLoad={[Function]}
                   sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 3840w"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/29497.jpg 3840w"
                   style={
                     {
                       "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
@@ -4368,9 +4908,9 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <h3>
                     <a
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
-                      href="/offerdetails.php?cid=25867"
+                      href="/offerdetails.php?cid=29497"
                     >
-                      JBL
+                      Sage Appliances
                     </a>
                   </h3>
                 </div>
@@ -4379,7 +4919,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                 >
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
-                    href="/offerdetails.php?cid=25867"
+                    href="/offerdetails.php?cid=29497"
                   >
                     Get offer
                   </a>
@@ -4447,6 +4987,126 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
               </div>
             </div>
           </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=15462"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=15462"
+                    >
+                      Bosch Home Appliances
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=15462"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=15756"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=15756"
+                    >
+                      Emma Bridgewater
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=15756"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div
           className="flex justify-center"
@@ -4474,7 +5134,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
         >
-          Sports & Fitness
+          Sports & fitness
         </h1>
         <p
           className="text-[#FFFFFF] text-center mb-12"
@@ -4587,7 +5247,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
                       href="/offerdetails.php?cid=1521"
                     >
-                      Myprotein
+                      MyProtein
                     </a>
                   </h3>
                 </div>
@@ -5032,7 +5692,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
             >
               <a
                 className="block"
-                href="/offerdetails.php?cid=7402"
+                href="/offerdetails.php?cid=10088"
               >
                 <img
                   alt="Black friday offer"
@@ -5044,8 +5704,8 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   onError={[Function]}
                   onLoad={[Function]}
                   sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/7402.jpg 3840w"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/10088.jpg 3840w"
                   style={
                     {
                       "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
@@ -5065,9 +5725,9 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <h3>
                     <a
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
-                      href="/offerdetails.php?cid=7402"
+                      href="/offerdetails.php?cid=10088"
                     >
-                      Berghaus
+                      Mountain Warehouse
                     </a>
                   </h3>
                 </div>
@@ -5076,7 +5736,127 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                 >
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
-                    href="/offerdetails.php?cid=7402"
+                    href="/offerdetails.php?cid=10088"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=20811"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/20811.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=20811"
+                    >
+                      Montirex
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=20811"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=8876"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#FFFFFF]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8876.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#FFFFFF]"
+                      href="/offerdetails.php?cid=8876"
+                    >
+                      Gymshark
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00]"
+                    href="/offerdetails.php?cid=8876"
                   >
                     Get offer
                   </a>
@@ -5534,6 +6314,246 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
                     href="/offerdetails.php?cid=10725"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=4047"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4047.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=4047"
+                    >
+                      Sony
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=4047"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=211"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/211.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=211"
+                    >
+                      Currys
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=211"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=19541"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/19541.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=19541"
+                    >
+                      ring
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=19541"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
+                href="/offerdetails.php?cid=25867"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/25867.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=25867"
+                    >
+                      JBL
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=25867"
                   >
                     Get offer
                   </a>

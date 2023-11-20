@@ -32,7 +32,7 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
         <p
           className="text-center mb-5"
         >
-          We’ve partnered with the likes of Hotpoint, Curry’s, Debenhams and LOOKFANTASTIC to offer you exclusive discounts on your favourite items including fashion, electricals, beauty, accessories and more…
+          We are proud to partner with top named brands like Samsung, Hotpoint, Currys, Debenhams and LOOKFANTASTIC to offer you exclusive discounts on your favourite items including fashion, electricals, beauty, accessories and more…
         </p>
         <p
           className="text-center false"
@@ -54,7 +54,7 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
             className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
             type="button"
           >
-            Fashion & Clothing
+            Fashion & clothing
           </button>
         </a>
         <a
@@ -124,7 +124,7 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
             className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
             type="button"
           >
-            Holidays & days Out
+            Holidays & days out
           </button>
         </a>
         <a
@@ -152,7 +152,7 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
             className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent m-1 text-center font-bold font-[MuseoSans] !text-[#1C1C1C] !bg-[#FFFF00] focus:outline-0 hover:bg-[#FFFF00] cursor-pointer w-full !p-3 truncate"
             type="button"
           >
-            Sports & Fitness
+            Sports & fitness
           </button>
         </a>
         <a

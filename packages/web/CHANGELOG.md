@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.19.1...bluelightcard/web-v1.20.0) (2023-11-21)
+
+
+### Features
+
+* TO-357: black friday page final partners update ([#666](https://github.com/bluelightcard/BlueLightCard-2.0/issues/666)) ([e9c90cd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e9c90cd5f4fe866878b3a85371a212bb61543b98))
+
 ## [1.19.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.19.0...bluelightcard/web-v1.19.1) (2023-11-20)
 
 

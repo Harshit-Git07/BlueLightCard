@@ -20,11 +20,11 @@ const PopularBrands: FC<PopularBrandsProps> = ({
   }, 750);
   const imageWrapperClass = cssUtil([
     'mx-2 inline-block relative h-[74px] overflow-hidden shadow-md',
-    rounded ? 'rounded-full w-[74px]' : 'rounded-3xl w-[120px]',
+    rounded ? 'rounded-full w-[74px]' : 'rounded w-[144px]',
   ]);
   const imageClass = cssUtil([
     'object-contain dark:border',
-    rounded ? 'rounded-full' : 'rounded-3xl',
+    rounded ? 'rounded-full' : 'object-cover rounded',
   ]);
 
   return (

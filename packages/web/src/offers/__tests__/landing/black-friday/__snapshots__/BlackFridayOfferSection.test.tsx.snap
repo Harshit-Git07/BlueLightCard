@@ -273,6 +273,66 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
             >
               <a
                 className="block"
+                href="/offerdetails.php?cid=9376"
+              >
+                <img
+                  alt="Black friday offer"
+                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
+                  data-nimg="1"
+                  decoding="async"
+                  height={0}
+                  loading="lazy"
+                  onError={[Function]}
+                  onLoad={[Function]}
+                  sizes="100vw"
+                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg"
+                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg 3840w"
+                  style={
+                    {
+                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+                      "backgroundPosition": "50% 50%",
+                      "backgroundRepeat": "no-repeat",
+                      "backgroundSize": "cover",
+                      "color": "transparent",
+                    }
+                  }
+                  width={0}
+                />
+              </a>
+              <div
+                className="pb-4 pt-5 text-center"
+              >
+                <div>
+                  <h3>
+                    <a
+                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
+                      href="/offerdetails.php?cid=9376"
+                    >
+                      Boux Avenue
+                    </a>
+                  </h3>
+                </div>
+                <div
+                  className="flex items-center justify-center space-x-2"
+                >
+                  <a
+                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
+                    href="/offerdetails.php?cid=9376"
+                  >
+                    Get offer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
+          >
+            <div
+              className="p-[10px]"
+            >
+              <a
+                className="block"
                 href="/offerdetails.php?cid=24140"
               >
                 <img
@@ -2072,66 +2132,6 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
                     href="/offerdetails.php?cid=16571"
-                  >
-                    Get offer
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="w-full px-4 mobile:w-1/2 tablet:w-1/3 laptop:w-1/4"
-          >
-            <div
-              className="p-[10px]"
-            >
-              <a
-                className="block"
-                href="/offerdetails.php?cid=11752"
-              >
-                <img
-                  alt="Black friday offer"
-                  className="h-auto w-full rounded-md border-[1px] border-[#1C1C1C]"
-                  data-nimg="1"
-                  decoding="async"
-                  height={0}
-                  loading="lazy"
-                  onError={[Function]}
-                  onLoad={[Function]}
-                  sizes="100vw"
-                  src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg"
-                  srcSet="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=100,format=auto/https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg 3840w"
-                  style={
-                    {
-                      "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg'%3E%3Cimage style='filter:blur(20px)' preserveAspectRatio='none' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
-                      "backgroundPosition": "50% 50%",
-                      "backgroundRepeat": "no-repeat",
-                      "backgroundSize": "cover",
-                      "color": "transparent",
-                    }
-                  }
-                  width={0}
-                />
-              </a>
-              <div
-                className="pb-4 pt-5 text-center"
-              >
-                <div>
-                  <h3>
-                    <a
-                      className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
-                      href="/offerdetails.php?cid=11752"
-                    >
-                      Dune London
-                    </a>
-                  </h3>
-                </div>
-                <div
-                  className="flex items-center justify-center space-x-2"
-                >
-                  <a
-                    className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
-                    href="/offerdetails.php?cid=11752"
                   >
                     Get offer
                   </a>

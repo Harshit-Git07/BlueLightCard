@@ -28,6 +28,11 @@ const offerSections = [
         link: '/offerdetails.php?cid=12657',
       },
       {
+        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/9376.jpg',
+        title: 'Boux Avenue',
+        link: '/offerdetails.php?cid=9376',
+      },
+      {
         imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24140.jpg',
         title: 'Flannels',
         link: '/offerdetails.php?cid=24140',
@@ -188,11 +193,6 @@ const offerSections = [
         imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16571.jpg',
         title: 'HOKA',
         link: '/offerdetails.php?cid=16571',
-      },
-      {
-        imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11752.jpg',
-        title: 'Dune London',
-        link: '/offerdetails.php?cid=11752',
       },
       {
         imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11207.jpg',

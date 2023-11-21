@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.4...bluelightcard/mobile-hybrid-v1.0.5) (2023-11-21)
+
+
+### Other Changes
+
+* **mobile:** bt 3407 update fav brands image sizing ([#668](https://github.com/bluelightcard/BlueLightCard-2.0/issues/668)) ([db22d2f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/db22d2fc7cd683fcd5ac552d7b0a7ed4c3b32824))
+
 ## [1.0.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.3...bluelightcard/mobile-hybrid-v1.0.4) (2023-11-17)
 
 

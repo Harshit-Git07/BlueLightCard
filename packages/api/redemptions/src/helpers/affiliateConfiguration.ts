@@ -82,8 +82,9 @@ export class AffiliateConfiguration {
       url: () => {
         this.url.pathname = this.url.pathname.includes('MEMID')
           ? this.url.pathname.replace('MEMID', this.memberId)
-          : this.url.pathname.replace('/destination:', `/pubref:${this.memberId}/destination:`);
-
+          : this.url.pathname.includes('/destination:')
+          ? this.url.pathname.replace('/destination:', `/pubref:${this.memberId}/destination:`)
+          : this.url.pathname.replace('/camref:', `/pubref:${this.memberId}/camref:`);
         return this.url.href;
       },
     };

@@ -1,9 +1,14 @@
-import { describe, expect, test } from '@jest/globals';
+import { afterAll, describe, expect, jest, test } from '@jest/globals';
 import { Response } from '../../../../core/src/utils/restResponse/response';
 import { handler } from './postAffiliate';
+import { Logger } from '@blc-mono/core/src/utils/logger/logger';
 
 describe('Create Affiliate Tracking URL', () => {
   const memberId = '1234';
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
 
   test('should correctly configure Awin tracking URL', async () => {
     const url = 'https://www.awin1.com/';
@@ -216,6 +221,28 @@ describe('Create Affiliate Tracking URL', () => {
         affiliateUrl: url,
         memberId,
       }),
+    });
+
+    expect(res).toEqual(Response.OK({ message: 'Success', data: { trackingUrl: `${url}?epi=${memberId}` } }));
+  });
+
+  test('logger should log available information', async () => {
+    const loggerSpy = jest.spyOn(Logger.prototype, 'info');
+    jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2023-11-20T16:56:44.417Z');
+
+    const url = 'https://tradedoubler.com/';
+    const affiliateUrl = url;
+
+    // @ts-expect-error - We're not testing the event object
+    const res = await handler({
+      body: JSON.stringify({
+        affiliateUrl,
+        memberId,
+      }),
+    });
+
+    expect(loggerSpy).toBeCalledWith({
+      message: 'POST Affiliate Input',
     });
 
     expect(res).toEqual(Response.OK({ message: 'Success', data: { trackingUrl: `${url}?epi=${memberId}` } }));

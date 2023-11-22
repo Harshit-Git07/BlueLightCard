@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.33.0...bluelightcard/identity-v1.34.0) (2023-11-22)
+
+
+### Features
+
+* Feat/ti 376 ([#675](https://github.com/bluelightcard/BlueLightCard-2.0/issues/675)) ([cecfb5f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cecfb5feaf5ccb71dd1dcd2b4aebbddcdf5764b6))
+
 ## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.32.0...bluelightcard/identity-v1.33.0) (2023-11-22)
 
 

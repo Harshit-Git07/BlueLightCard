@@ -1,5 +1,5 @@
 import {ApiGatewayV1Api, Cognito, Function, Queue, StackContext, Table, use} from 'sst/constructs';
-import {CfnUserPoolClient, StringAttribute} from 'aws-cdk-lib/aws-cognito';
+import {AdvancedSecurityMode, CfnUserPoolClient, Mfa, StringAttribute} from 'aws-cdk-lib/aws-cognito';
 import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
 import {Shared} from '../../../stacks/stack';
 import {passwordResetRule} from './src/eventRules/passwordResetRule';
@@ -15,7 +15,7 @@ import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedRule";
 import {AddEcFormOutputDataRoute} from './src/routes/addEcFormOutputDataRoute';
-import {FilterPattern, ILogGroup, LogGroup} from "aws-cdk-lib/aws-logs";
+import {FilterPattern, ILogGroup} from "aws-cdk-lib/aws-logs";
 import {LambdaDestination} from "aws-cdk-lib/aws-logs-destinations";
 import {userGdprRule} from './src/eventRules/userGdprRule';
 
@@ -96,6 +96,12 @@ export function Identity({stack}: StackContext) {
         },
         cdk: {
             userPool: {
+                mfa: Mfa.OPTIONAL,
+                mfaSecondFactor: {
+                    sms: true,
+                    otp: true,
+                },
+                advancedSecurityMode: AdvancedSecurityMode.AUDIT,
                 standardAttributes: {
                     email: {required: true, mutable: true},
                     phoneNumber: {required: true, mutable: true},
@@ -106,6 +112,18 @@ export function Identity({stack}: StackContext) {
                 },
             },
         },
+    });
+    const mobileClient = cognito.cdk.userPool.addClient('membersClient', {
+        authFlows: {
+            userPassword: true,
+        },
+        generateSecret: true,
+    });
+    const webClient = cognito.cdk.userPool.addClient('webClient', {
+        authFlows: {
+            userPassword: true,
+        },
+        generateSecret: true,
     });
 
     //auth - DDS
@@ -134,6 +152,12 @@ export function Identity({stack}: StackContext) {
         },
         cdk: {
             userPool: {
+                mfa: Mfa.OPTIONAL,
+                mfaSecondFactor: {
+                    sms: true,
+                    otp: true,
+                },
+                advancedSecurityMode: AdvancedSecurityMode.AUDIT,
                 standardAttributes: {
                     email: {required: true, mutable: true},
                     phoneNumber: {required: true, mutable: true},
@@ -145,7 +169,18 @@ export function Identity({stack}: StackContext) {
             },
         },
     });
-
+    const mobileClientDds = cognito_dds.cdk.userPool.addClient('membersClient', {
+        authFlows: {
+            userPassword: true,
+        },
+        generateSecret: true,
+    });
+    const webClientDds = cognito_dds.cdk.userPool.addClient('webClient', {
+        authFlows: {
+            userPassword: true,
+        },
+        generateSecret: true,
+    });
     //apis
     const identityApi = new ApiGatewayV1Api(stack, 'identity', {
         authorizers: {
@@ -192,21 +227,6 @@ export function Identity({stack}: StackContext) {
         'POST /{brand}/formOutputData': new AddEcFormOutputDataRoute(apiGatewayModelGenerator, agEcFormOutputDataModel).getRouteDetails(),
     });
 
-    cognito.cdk.userPool.addClient('membersClient', {
-        authFlows: {
-            userPassword: true,
-        },
-        generateSecret: true,
-    });
-
-
-    cognito_dds.cdk.userPool.addClient('membersClient', {
-        authFlows: {
-            userPassword: true,
-        },
-        generateSecret: true,
-    });
-
     stack.addOutputs({
         CognitoUserPooMembersClient: cognito.userPoolId,
         CognitoDdsUserPooMembersClient: cognito_dds.userPoolId,
@@ -214,21 +234,26 @@ export function Identity({stack}: StackContext) {
         IdentityApiEndpoint: identityApi.url,
     });
 
-    const webClient = cognito.cdk.userPool.addClient('webClient', {
-        authFlows: {
-            userPassword: true,
-        },
-        generateSecret: true,
-    });
-
     //we audit dwh only in production
     if (stack.stage === 'production') {
         //audit log
-        const auditLogFunction = new Function(stack, 'auditLog', {
+        const blcAuditLogFunction = new Function(stack, 'blcAuditLog', {
             handler: 'packages/api/identity/src/audit/audit.handler',
             environment: {
                 SERVICE: 'identity',
-                DATA_STREAM: 'dwh-blc-production-login'
+                DATA_STREAM: 'dwh-blc-production-login',
+                WEB_CLIENT_ID: webClient.userPoolClientId,
+                MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
+            },
+            permissions: ['firehose:PutRecord']
+        });
+        const ddsAuditLogFunction = new Function(stack, 'ddsAuditLog', {
+            handler: 'packages/api/identity/src/audit/audit.handler',
+            environment: {
+                SERVICE: 'identity',
+                DATA_STREAM: 'dwh-dds-production-login',
+                WEB_CLIENT_ID: webClientDds.userPoolClientId,
+                MOBILE_CLIENT_ID: mobileClientDds.userPoolClientId,
             },
             permissions: ['firehose:PutRecord']
         });
@@ -236,20 +261,14 @@ export function Identity({stack}: StackContext) {
         const postAuthenticationLogGroupDds: ILogGroup | undefined = cognito_dds.getFunction('postAuthentication')?.logGroup;
 
         postAuthenticationLogGroup?.addSubscriptionFilter('auditLog', {
-            destination: new LambdaDestination(auditLogFunction),
+            destination: new LambdaDestination(blcAuditLogFunction),
             filterPattern: FilterPattern.booleanValue('$.audit', true),
         });
         postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDds', {
-            destination: new LambdaDestination(auditLogFunction),
+            destination: new LambdaDestination(ddsAuditLogFunction),
             filterPattern: FilterPattern.booleanValue('$.audit', true),
         });
     }
-    const webClient_dds = cognito_dds.cdk.userPool.addClient('webClient', {
-        authFlows: {
-            userPassword: true,
-        },
-        generateSecret: true,
-    });
 
     //API Key and Usage Plan
     const apikey = identityApi.cdk.restApi.addApiKey("identity-api-key");

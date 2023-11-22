@@ -237,7 +237,7 @@ export function Identity({stack}: StackContext) {
     //we audit dwh only in production
     if (stack.stage === 'production') {
         //audit log
-        const blcAuditLogFunction = new Function(stack, 'blcAuditLog', {
+        const blcAuditLogFunction = new Function(stack, 'blcAuditLogSignIn', {
             handler: 'packages/api/identity/src/audit/audit.handler',
             environment: {
                 SERVICE: 'identity',
@@ -247,7 +247,7 @@ export function Identity({stack}: StackContext) {
             },
             permissions: ['firehose:PutRecord']
         });
-        const ddsAuditLogFunction = new Function(stack, 'ddsAuditLog', {
+        const ddsAuditLogFunction = new Function(stack, 'ddsAuditLogSignIn', {
             handler: 'packages/api/identity/src/audit/audit.handler',
             environment: {
                 SERVICE: 'identity',
@@ -259,12 +259,11 @@ export function Identity({stack}: StackContext) {
         });
         const postAuthenticationLogGroup: ILogGroup | undefined = cognito.getFunction('postAuthentication')?.logGroup;
         const postAuthenticationLogGroupDds: ILogGroup | undefined = cognito_dds.getFunction('postAuthentication')?.logGroup;
-
-        postAuthenticationLogGroup?.addSubscriptionFilter('auditLog', {
+        postAuthenticationLogGroup?.addSubscriptionFilter('auditLogSignIn', {
             destination: new LambdaDestination(blcAuditLogFunction),
             filterPattern: FilterPattern.booleanValue('$.audit', true),
         });
-        postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDds', {
+        postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignIn', {
             destination: new LambdaDestination(ddsAuditLogFunction),
             filterPattern: FilterPattern.booleanValue('$.audit', true),
         });

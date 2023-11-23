@@ -1,5 +1,7 @@
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { EventBus, StackContext } from "sst/constructs";
+import {CfnLoggingConfiguration, CfnWebACL} from 'aws-cdk-lib/aws-wafv2';
+import { LogGroup }  from 'aws-cdk-lib/aws-logs';
 
 interface ICertificate {
   certificateArn?: string
@@ -21,13 +23,35 @@ export function Shared({ stack }: StackContext) {
 
   //common event bus
   const bus = new EventBus(stack, 'eventBus');
-  
-  stack.addOutputs({
-    EventBusName: bus.eventBusName
-  });
 
+  //waf
+  const webACL = new CfnWebACL(stack, 'WebACL', {
+    defaultAction: {
+        allow: {}
+    },
+    scope: 'REGIONAL',
+    visibilityConfig: {
+      cloudWatchMetricsEnabled: true,
+      metricName: 'waf',
+      sampledRequestsEnabled: true,
+    },
+  });
+  //logging configuration
+  const logGroup = new LogGroup(stack, 'AWSWafLogs', {
+    logGroupName: `aws-waf-logs-${stack.stage}`,
+  });
+  const wafLogging = new CfnLoggingConfiguration(stack, 'WafLoggingConfig', {
+    resourceArn: webACL.attrArn,
+    logDestinationConfigs: [logGroup.logGroupArn]
+  });
+  stack.addOutputs({
+    EventBusName: bus.eventBusName,
+    webACL: webACL.name,
+    logGroupArn: logGroup.logGroupArn
+  });
   return { 
     bus,
-    certificateArn
+    certificateArn,
+    webACL
   }
 }

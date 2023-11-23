@@ -18,6 +18,7 @@ import {AddEcFormOutputDataRoute} from './src/routes/addEcFormOutputDataRoute';
 import {FilterPattern, ILogGroup} from "aws-cdk-lib/aws-logs";
 import {LambdaDestination} from "aws-cdk-lib/aws-logs-destinations";
 import {userGdprRule} from './src/eventRules/userGdprRule';
+import {CfnWebACLAssociation} from 'aws-cdk-lib/aws-wafv2';
 
 export function Identity({stack}: StackContext) {
     const {certificateArn} = use(Shared);
@@ -70,6 +71,8 @@ export function Identity({stack}: StackContext) {
     const dlq = new Queue(stack, 'DLQ');
 
 
+    //import webACL
+    const {webACL} = use(Shared);
     //auth
     const cognito = new Cognito(stack, 'cognito', {
         login: ['email'],
@@ -124,6 +127,11 @@ export function Identity({stack}: StackContext) {
             userPassword: true,
         },
         generateSecret: true,
+    });
+    // Associate WAF WebACL with cognito
+    new CfnWebACLAssociation(stack, 'BlcWebAclAssociation', {
+        resourceArn: cognito.cdk.userPool.userPoolArn,
+        webAclArn: webACL.attrArn
     });
 
     //auth - DDS
@@ -180,6 +188,11 @@ export function Identity({stack}: StackContext) {
             userPassword: true,
         },
         generateSecret: true,
+    });
+    // Associate WAF WebACL with cognito
+    new CfnWebACLAssociation(stack, 'DdsWebAclAssociation', {
+        resourceArn: cognito_dds.cdk.userPool.userPoolArn,
+        webAclArn: webACL.attrArn
     });
     //apis
     const identityApi = new ApiGatewayV1Api(stack, 'identity', {

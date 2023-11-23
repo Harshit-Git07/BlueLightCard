@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.34.0...bluelightcard/identity-v1.35.0) (2023-11-23)
+
+
+### Features
+
+* attach WAF to Cognito pools ([#677](https://github.com/bluelightcard/BlueLightCard-2.0/issues/677)) ([910bcb3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/910bcb3de0926b26e48f3c6122da418a7292aa4e))
+
 ## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.33.0...bluelightcard/identity-v1.34.0) (2023-11-22)
 
 

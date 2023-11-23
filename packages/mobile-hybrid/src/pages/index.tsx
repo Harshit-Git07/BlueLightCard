@@ -58,12 +58,12 @@ const Home: NextPage<any> = () => {
     apiCall.requestData('/api/4//user/bookmark/retrieve.php');
     experiments.experiment([
       'homepage-searchbar',
-      'non-exclusive-offers',
       'popular-offers',
       'favourited-brands',
       'streamlined-homepage',
       'favourite-subtitle',
       'bf-flexi',
+      'homepage-positioning',
     ]);
   }, []);
 

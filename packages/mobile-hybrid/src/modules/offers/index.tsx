@@ -19,15 +19,26 @@ const Offers: FC = () => {
    * @experiment
    * Locate specific offers
    */
-  const generalOffersExperiment = useMemo(() => {
-    return groups.find((group) => group.title.toLowerCase() === `general offers - don't miss out`);
-  }, [groups]);
+  const homepagePositionOffersExpr = useMemo(() => {
+    if (expr['homepage-positioning'] === 'treatment-a') {
+      return groups.find(
+        (group) => group.title.toLowerCase() === `general offers - don't miss out`,
+      );
+    } else if (expr['homepage-positioning'] === 'treatment-b') {
+      return groups.find((group) => group.title.toLowerCase() === 'top offers');
+    }
+  }, [expr, groups]);
 
   const offers = useMemo(() => {
-    return groups.filter(
-      (group) => group.title.toLowerCase() !== `general offers - don't miss out`,
-    );
-  }, [groups]);
+    if (expr['homepage-positioning'] === 'treatment-a') {
+      return groups.filter(
+        (group) => group.title.toLowerCase() !== `general offers - don't miss out`,
+      );
+    } else if (expr['homepage-positioning'] === 'treatment-b') {
+      return groups.filter((group) => group.title.toLowerCase() !== 'top offers');
+    }
+    return groups;
+  }, [expr, groups]);
 
   /**
    * @featureFlag bf-flexi
@@ -91,11 +102,11 @@ const Offers: FC = () => {
           />
         </div>
       )}
-      {expr['non-exclusive-offers'] === 'treatment' && generalOffersExperiment && (
+      {homepagePositionOffersExpr && (
         <section className="mb-6">
-          <Heading title={generalOffersExperiment.title} />
+          <Heading title={homepagePositionOffersExpr.title} />
           <CardCarousel
-            slides={generalOffersExperiment.items.map((offer) => ({
+            slides={homepagePositionOffersExpr.items.map((offer) => ({
               id: offer.compid,
               title: offer.companyname,
               text: offer.offername,
@@ -103,13 +114,13 @@ const Offers: FC = () => {
             }))}
             onSlideItemClick={(id) =>
               onCompanyOfferClick(
-                generalOffersExperiment.title,
-                generalOffersExperiment.items.find(
+                homepagePositionOffersExpr.title,
+                homepagePositionOffersExpr.items.find(
                   (offer) => offer.compid === id,
                 ) as OfferPromosModel,
               )
             }
-            onSlideChanged={() => onSlideChange(generalOffersExperiment.title)}
+            onSlideChanged={() => onSlideChange(homepagePositionOffersExpr.title)}
           />
         </section>
       )}

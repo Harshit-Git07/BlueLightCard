@@ -41,7 +41,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
+      - run: npm install
       - run: npm test -w packages/mobile-hybrid
 
   lint:
@@ -58,7 +58,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
+      - run: npm install
       - name: JavaScript and Typescript
         run: npm run lint -w packages/mobile-hybrid
 
@@ -95,7 +95,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
+      - run: npm install
       - name: Build
         run: npm run build -w packages/mobile-hybrid
       - name: Publishing env ${{ needs.dev-env-mapping.outputs.devEnv }}
@@ -126,7 +126,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
+      - run: npm install
       - name: Build
         run: npm run build -w packages/mobile-hybrid
       - name: Publish
@@ -156,7 +156,7 @@ jobs:
           path: node_modules
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
+      - run: npm install
       - name: Build
         run: npm run build -w packages/mobile-hybrid
       - name: Publish

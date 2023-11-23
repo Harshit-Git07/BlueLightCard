@@ -36,18 +36,17 @@ export function Shared({ stack }: StackContext) {
       sampledRequestsEnabled: true,
     },
   });
-  //logging configuration
-  const logGroup = new LogGroup(stack, 'AWSWafLogs', {
-    logGroupName: `aws-waf-logs-${stack.stage}`,
-  });
-  const wafLogging = new CfnLoggingConfiguration(stack, 'WafLoggingConfig', {
-    resourceArn: webACL.attrArn,
-    logDestinationConfigs: [logGroup.logGroupArn]
-  });
+  // //logging configuration
+  // const logGroup = new LogGroup(stack, 'AWSWafLog', {
+  //   logGroupName: `aws-waf-logs-${webACL.attrId}`
+  // });
+  // // const wafLogging = new CfnLoggingConfiguration(stack, 'WafLoggingConfig', {
+  // //   resourceArn: webACL.attrArn,
+  // //   logDestinationConfigs: [logGroup.logGroupArn]
+  // // });
   stack.addOutputs({
     EventBusName: bus.eventBusName,
     webACL: webACL.name,
-    logGroupArn: logGroup.logGroupArn
   });
   return { 
     bus,

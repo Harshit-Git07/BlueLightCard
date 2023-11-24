@@ -61,9 +61,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
         options={{ environmentID: FEATURE_FLAG_ENVIRONMENT_ID }}
         flagsmith={flagsmith}
       >
-        <AuthProvider>
-          <UserProvider>{renderedPageWithLayout}</UserProvider>
-        </AuthProvider>
+        {renderedPageWithLayout}
       </FlagsmithProvider>
     </>
   );

@@ -53,7 +53,9 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
           </h1>
         </div>
       </div>
-      <div>
+      <div
+        className="pb-2"
+      >
         <a
           className="!text-[#1C1C1C] hover:text-white"
           href="#hero"

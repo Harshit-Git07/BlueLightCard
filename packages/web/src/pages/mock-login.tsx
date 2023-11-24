@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import AuthProvider from '@/context/Auth/AuthProvider';
 import AuthContext from '@/context/Auth/AuthContext';
 import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
+import withLayout from '@/hoc/withLayout';
 
 function MockLogin() {
   // As this exposes client_secret which should not be exposed.
@@ -110,4 +111,4 @@ function MockLogin() {
   );
 }
 
-export default MockLogin;
+export default withLayout(MockLogin, { seo: { title: 'Dev Env login' } });

@@ -11,15 +11,15 @@ exports[`BlackFridayHeaderSection should match snapshot 1`] = `
   >
     <img
       alt="logo"
-      className="mx-auto"
+      className="mx-auto w-[323px] h-[66px]"
       data-nimg="1"
       decoding="async"
       height={66}
       loading="lazy"
       onError={[Function]}
       onLoad={[Function]}
-      src="/_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=750&q=75"
-      srcSet="/_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=384&q=75 1x, /_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=750&q=75 2x"
+      src="/_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=750&q=100"
+      srcSet="/_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=384&q=100 1x, /_next/image?url=https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fweb%2Flogos%2Fblc-logo-black-friday-2023.png&w=750&q=100 2x"
       style={
         {
           "color": "transparent",

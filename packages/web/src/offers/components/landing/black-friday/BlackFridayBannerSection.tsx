@@ -44,7 +44,7 @@ const BlackFridayBannerSection = ({
             </Heading>
           </div>
         </div>
-        <div>
+        <div className="pb-2">
           <Link href={'#hero'} className="!text-[#1C1C1C] hover:text-white">
             <p className="landscapebfsm:hidden landscapebf:text-xs font-bold">{ctaText}</p>
             <p className="text-2xl">

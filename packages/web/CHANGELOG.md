@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.20.0...bluelightcard/web-v1.20.1) (2023-11-24)
+
+
+### Bug Fixes
+
+* black friday banner link ([#683](https://github.com/bluelightcard/BlueLightCard-2.0/issues/683)) ([cb4803d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cb4803dc46c2f2f599463e6dae90b8b976e281be))
+
 ## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.19.1...bluelightcard/web-v1.20.0) (2023-11-21)
 
 

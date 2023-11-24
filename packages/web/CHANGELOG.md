@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.20.1...bluelightcard/web-v1.20.2) (2023-11-24)
+
+
+### Bug Fixes
+
+* Stopped non authorised routed triggering identity ([#685](https://github.com/bluelightcard/BlueLightCard-2.0/issues/685)) ([bff8696](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bff86965c53394528139266e8d56051ae3beb847))
+
 ## [1.20.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.20.0...bluelightcard/web-v1.20.1) (2023-11-24)
 
 

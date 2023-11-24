@@ -4995,7 +4995,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
             >
               <a
                 className="block"
-                href="/offerdetails.php?cid=15462"
+                href="/offerdetails.php?cid=30233"
               >
                 <img
                   alt="Black friday offer"
@@ -5028,7 +5028,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                   <h3>
                     <a
                       className="mb-4 block text-l font-semibold font-[MuseoSans] mobile:text-lg tablet:text-xl truncate text-[#1C1C1C]"
-                      href="/offerdetails.php?cid=15462"
+                      href="/offerdetails.php?cid=30233"
                     >
                       Bosch Home Appliances
                     </a>
@@ -5039,7 +5039,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
                 >
                   <a
                     className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-primary-base dark:text-font-cta-standard-primary-dark hover:bg-background-cta-standard-primary-hover-base dark:hover:bg-background-cta-standard-primary-hover-dark focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark bg-background-cta-standard-primary-enabled-base dark:bg-background-cta-standard-primary-enabled-dark border-transparent font-semibold font-[MuseoSans] mobile:text-sm mobile:py-2 mobile:px-4 tablet:px-6 tablet:text-base desktop:text-base !text-[#FFFF00] !bg-[#1C1C1C] focus:outline-0 hover:bg-[#1C1C1C]"
-                    href="/offerdetails.php?cid=15462"
+                    href="/offerdetails.php?cid=30233"
                   >
                     Get offer
                   </a>

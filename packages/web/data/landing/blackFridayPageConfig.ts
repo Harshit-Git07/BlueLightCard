@@ -458,7 +458,7 @@ const offerSections = [
       {
         imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/30233.jpg',
         title: 'Bosch Home Appliances',
-        link: '/offerdetails.php?cid=15462',
+        link: '/offerdetails.php?cid=30233',
       },
       {
         imgSrc: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15756.jpg',

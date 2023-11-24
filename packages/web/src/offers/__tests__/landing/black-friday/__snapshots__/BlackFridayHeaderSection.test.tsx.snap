@@ -5,10 +5,9 @@ exports[`BlackFridayHeaderSection should match snapshot 1`] = `
   className="bg-black"
 >
   <a
-    href="/"
-    onClick={[Function]}
-    onMouseEnter={[Function]}
-    onTouchStart={[Function]}
+    className="dark:text-palette-secondary"
+    data-testid="anchor-link"
+    href="/index.php"
   >
     <img
       alt="logo"

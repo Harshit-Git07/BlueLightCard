@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from '@/components/Link/Link';
 
 const BlackFridayHeaderSection = () => (
   <div className="bg-black">
-    <Link href="/">
+    <Link href="/index.php" useLegacyRouting>
       <Image
         className="mx-auto"
         src="https://cdn.bluelightcard.co.uk/web/logos/blc-logo-black-friday-2023.png"

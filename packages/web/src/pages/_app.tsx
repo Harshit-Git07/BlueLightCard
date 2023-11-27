@@ -16,6 +16,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import { NextPageWithLayout } from '@/page-types/layout';
 import Head from 'next/head';
 import UserProvider from '@/context/User/UserProvider';
+import AmplitudeProvider from '@/utils/amplitude/provider';
 config.autoAddCss = false;
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
@@ -61,7 +62,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
         options={{ environmentID: FEATURE_FLAG_ENVIRONMENT_ID }}
         flagsmith={flagsmith}
       >
-        {renderedPageWithLayout}
+        <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
       </FlagsmithProvider>
     </>
   );

@@ -39,6 +39,16 @@ const Home: NextPage<any> = (props) => {
         >
           {t('button.text')}
         </Button>
+
+        <Button
+          id="start_button"
+          type="button"
+          onClick={() => {
+            router.push('/copy-code');
+          }}
+        >
+          Copy Code
+        </Button>
       </main>
     </>
   );

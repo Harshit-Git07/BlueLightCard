@@ -1,13 +1,11 @@
-import { Stack } from "aws-cdk-lib";
-import { Port, SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
-import {  CfnReplicationGroup, CfnSubnetGroup } from "aws-cdk-lib/aws-elasticache";
-import { ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { Stack } from 'aws-cdk-lib';
+import { Port, SecurityGroup, Vpc } from 'aws-cdk-lib/aws-ec2';
+import { CfnReplicationGroup, CfnSubnetGroup } from 'aws-cdk-lib/aws-elasticache';
+import { ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { isDev, isProduction } from '../../../core/src/utils/checkEnvironment';
-import { CfnScalableTarget, CfnScalingPolicy, PredefinedMetric } from "aws-cdk-lib/aws-applicationautoscaling";
+import { CfnScalableTarget, CfnScalingPolicy, PredefinedMetric } from 'aws-cdk-lib/aws-applicationautoscaling';
 
 export class ElasticCache {
-
-
   redisReplicationGroup!: CfnReplicationGroup;
   securityGroup!: SecurityGroup;
   cacheSubnetGroup!: CfnSubnetGroup;
@@ -15,8 +13,6 @@ export class ElasticCache {
   lambdaRole!: Role;
   private autoScalingRole!: Role;
   private scalableTarget!: CfnScalableTarget;
-
-
 
   constructor(private readonly stack: Stack, private readonly stage: string) {
     if (!isDev(stage)) {
@@ -29,15 +25,13 @@ export class ElasticCache {
       this.scalableTarget = this.createScalableTarget();
       this.createScalingPolicy();
     }
-
   }
 
   private createRedisReplicationGroup() {
-
     return new CfnReplicationGroup(this.stack, `${this.stage}-offers-redis-rg`, {
-      cacheNodeType: isProduction(this.stage) ? "cache.m6g.xlarge" : "cache.m6g.large",
+      cacheNodeType: isProduction(this.stage) ? 'cache.m6g.xlarge' : 'cache.m6g.large',
       replicationGroupId: `${this.stage}-offers-redis-rg`,
-      engine: "redis",
+      engine: 'redis',
       autoMinorVersionUpgrade: true,
       numNodeGroups: 1,
       replicasPerNodeGroup: 2,
@@ -45,7 +39,7 @@ export class ElasticCache {
       cacheSubnetGroupName: this.cacheSubnetGroup.ref,
       securityGroupIds: [this.securityGroup.securityGroupId],
       replicationGroupDescription: `${this.stage}-Offers-Redis-Replication-Group`,
-      cacheParameterGroupName: "default.redis7.cluster.on",
+      cacheParameterGroupName: 'default.redis7.cluster.on',
     });
   }
 
@@ -59,7 +53,7 @@ export class ElasticCache {
   private createSecurityGroup() {
     const sg = new SecurityGroup(this.stack, `${this.stage}-OfferCacheSecurityGroup`, {
       vpc: this.vpc,
-      description: "Allow Redis Traffic",
+      description: 'Allow Redis Traffic',
       allowAllOutbound: true,
     });
     sg.addIngressRule(sg, Port.tcp(6379));
@@ -68,8 +62,8 @@ export class ElasticCache {
 
   private createSubnets() {
     this.cacheSubnetGroup = new CfnSubnetGroup(this.stack, `${this.stage}-OfferCacheSubnetGroup`, {
-      description: "Subnet group for Redis Cluster",
-      subnetIds: this.vpc.privateSubnets.map(subnet => subnet.subnetId),
+      description: 'Subnet group for Redis Cluster',
+      subnetIds: this.vpc.privateSubnets.map((subnet) => subnet.subnetId),
     });
   }
 
@@ -79,7 +73,7 @@ export class ElasticCache {
       managedPolicies: [
         ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
         ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
-      ]
+      ],
     });
   }
 
@@ -87,13 +81,14 @@ export class ElasticCache {
     const role = new Role(this.stack, `${this.stage}-AutoScalingRole`, {
       assumedBy: new ServicePrincipal('application-autoscaling.amazonaws.com'),
     });
-    role.addToPolicy(new PolicyStatement({
-      actions: [
-        'elasticache:DescribeCacheClusters',
-        'elasticache:ModifyReplicationGroup',
-      ],
-      resources: [`arn:aws:elasticache:${this.stack.region}:${this.stack.account}:cluster:${this.redisReplicationGroup.ref}`],
-    }));
+    role.addToPolicy(
+      new PolicyStatement({
+        actions: ['elasticache:DescribeCacheClusters', 'elasticache:ModifyReplicationGroup'],
+        resources: [
+          `arn:aws:elasticache:${this.stack.region}:${this.stack.account}:cluster:${this.redisReplicationGroup.ref}`,
+        ],
+      }),
+    );
 
     return role;
   }
@@ -117,10 +112,9 @@ export class ElasticCache {
       targetTrackingScalingPolicyConfiguration: {
         targetValue: 70,
         predefinedMetricSpecification: {
-          predefinedMetricType: PredefinedMetric.ELASTICACHE_PRIMARY_ENGINE_CPU_UTILIZATION
-        }
-      }
+          predefinedMetricType: PredefinedMetric.ELASTICACHE_PRIMARY_ENGINE_CPU_UTILIZATION,
+        },
+      },
     });
   }
-
 }

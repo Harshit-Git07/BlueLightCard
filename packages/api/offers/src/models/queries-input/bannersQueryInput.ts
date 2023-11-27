@@ -24,7 +24,7 @@ export const BannersQueryInputModel = z.object({
     .number({
       required_error: 'limit is required',
       invalid_type_error: 'limit must be a number',
-    }),
+    }).optional(),
 
   restriction: OfferRestrictionQueryInputModel,
 });

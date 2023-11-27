@@ -27,7 +27,7 @@ export class BannersByBrandIdAndTypeResolver {
     let data;
     if (!cacheData) {
       this.logger.debug('BannersByBrandIdAndTypeResolver -  Cache Does not exist. retrieve data from Dynamo', { brandId });
-      data = await getBanners(brandId, type, limit, this.bannerRepository);
+      data = await getBanners(brandId, type, this.bannerRepository, limit);
       this.logger.debug('BannersByBrandIdAndTypeResolver - Data from Dynamo', { data });
       if (!data || !data.Items) {
         this.logger.error(`No ${type} banners found for brandId`, { brandId });
@@ -63,5 +63,5 @@ export class BannersByBrandIdAndTypeResolver {
   }
 }
 
-const getBanners = async (brandId: string, type: string, limit: number, bannerRepository: BannerRepository) =>
+const getBanners = async (brandId: string, type: string, bannerRepository: BannerRepository, limit?: number) =>
   bannerRepository.getBannersByBrandIdAndType(brandId, type, limit);

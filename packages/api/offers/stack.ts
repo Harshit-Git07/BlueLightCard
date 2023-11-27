@@ -10,12 +10,14 @@ import { EventBridge } from './src/constructs/eventBridge'
 import { Queues } from './src/constructs/queues'
 import { ElasticCache } from "./src/constructs/elasticCache"
 import { Tags } from "./src/constructs/tags"
+import { AppsyncCache } from "./src/constructs/appsyncCache";
 
 export function Offers ({ stack }: StackContext) {
   const { cognito } = use(Identity)
   new Tags(stack);
   const offersApi = OffersApi.create(stack, stack.stage, cognito.cdk.userPool, './packages/api/offers/schema.graphql')
   const elasticCache = new ElasticCache(stack, stack.stage)
+  new AppsyncCache(stack, stack.stage, offersApi);
   const queues = new Queues(stack)
   const tables = new Tables(stack)
   const buckets = new Buckets(stack, stack.stage, queues)

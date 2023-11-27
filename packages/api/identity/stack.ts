@@ -19,6 +19,7 @@ import {FilterPattern, ILogGroup} from "aws-cdk-lib/aws-logs";
 import {LambdaDestination} from "aws-cdk-lib/aws-logs-destinations";
 import {userGdprRule} from './src/eventRules/userGdprRule';
 import {CfnWebACLAssociation} from 'aws-cdk-lib/aws-wafv2';
+import {Duration} from "aws-cdk-lib";
 
 export function Identity({stack}: StackContext) {
     const {certificateArn} = use(Shared);
@@ -104,7 +105,6 @@ export function Identity({stack}: StackContext) {
                     sms: true,
                     otp: true,
                 },
-                advancedSecurityMode: AdvancedSecurityMode.AUDIT,
                 standardAttributes: {
                     email: {required: true, mutable: true},
                     phoneNumber: {required: true, mutable: true},
@@ -121,6 +121,7 @@ export function Identity({stack}: StackContext) {
             userPassword: true,
         },
         generateSecret: true,
+        refreshTokenValidity: Duration.hours(1),
     });
     const webClient = cognito.cdk.userPool.addClient('webClient', {
         authFlows: {
@@ -165,7 +166,6 @@ export function Identity({stack}: StackContext) {
                     sms: true,
                     otp: true,
                 },
-                advancedSecurityMode: AdvancedSecurityMode.AUDIT,
                 standardAttributes: {
                     email: {required: true, mutable: true},
                     phoneNumber: {required: true, mutable: true},
@@ -182,6 +182,7 @@ export function Identity({stack}: StackContext) {
             userPassword: true,
         },
         generateSecret: true,
+        refreshTokenValidity: Duration.hours(1),
     });
     const webClientDds = cognito_dds.cdk.userPool.addClient('webClient', {
         authFlows: {

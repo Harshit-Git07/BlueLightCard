@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.5...bluelightcard/mobile-hybrid-v1.1.0) (2023-11-27)
+
+
+### Features
+
+* **mobile:** bt 3209 homepage carousel positioning ([#681](https://github.com/bluelightcard/BlueLightCard-2.0/issues/681)) ([e8ec94d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8ec94d82f5ffd781843f75c682adeb56156a02a))
+
 ## [1.0.5](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.4...bluelightcard/mobile-hybrid-v1.0.5) (2023-11-21)
 
 

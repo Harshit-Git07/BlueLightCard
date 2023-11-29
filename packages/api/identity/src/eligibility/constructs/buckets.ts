@@ -11,7 +11,7 @@ export class Buckets {
 
   private createEcFormOutputBucket(): Bucket {
     return new Bucket(this.stack, 'ecFormOutputBucket', {
-      name: `${this.stage}-ec-form-output-data-bucket`,
+      name: `${this.stage}-ec-form-output-data-bucket-${this.stack.region}`,
       cdk: {
         bucket: {
           blockPublicAccess: BlockPublicAccess.BLOCK_ALL,

@@ -26,7 +26,8 @@ export class EcFormOutrputDataLambda extends LambdaAbstract {
       environment: {
         EC_FORM_OUTPUT_DATA_TABLE: this.tables.ecFormOutputDataTable.tableName,
         S3_BUCKET_NAME: this.buckets.ecFormOutputBucket.bucketName,
-		EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS: this.getEmailRecipients()
+		    EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS: this.getEmailRecipients(),
+        REGION: this.stack.region,
       },
     });
     this.grantPermissions(ecFormOutputData);

@@ -314,20 +314,20 @@ export function Identity({stack}: StackContext) {
     const cfnUserPoolClient = webClient.node.defaultChild as CfnUserPoolClient;
     cfnUserPoolClient.callbackUrLs = ['https://oauth.pstmn.io/v1/callback'];
 
-    //Eligiblity checker Form output lambda
-    const eligibilityCheckerTables = new Tables(stack)
-    const eligibilityCheckerBuckets = new Buckets(stack, stack.stage)
-    const eligibilityCheckerLambda = new Lambda(stack, eligibilityCheckerTables, eligibilityCheckerBuckets, stack.stage)
+    const tables = new Tables(stack)
+    const buckets = new Buckets(stack, stack.stage)
+    const lambdas = new Lambda(stack, tables, buckets, stack.stage)
 
+    //Eligiblity checker Form output lambda rule schedule
     const eligibilityCheckerScheduleRule = new Rule(stack, 'ecOutputLambdaScheduleRule', {
       schedule: Schedule.cron({
         day: '28',
-      hour: '00',
-      minute: '00',
+        hour: '00',
+        minute: '00',
       }),
     });
 
-    eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(eligibilityCheckerLambda.ecFormOutrputDataLambda));
+    eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
 
     //add event bridge rules
     bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));

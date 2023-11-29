@@ -4,7 +4,7 @@ import { page } from '../support/world';
 
 //Given
 Given('I navigate to Eligibility Checker', async function () {
-  await page.goto(process.env.BASE_URL + '/eligibility', { waitUntil:'load'});
+  await page.goto(process.env.BASE_URL + '/eligibility', { waitUntil: 'load' });
   await page.title();
 });
 
@@ -140,6 +140,6 @@ When('I scroll to the end of the page', async function () {
   await page.locator('#footer_nav').textContent();
 });
 
- Then('I should see copyright footer', async function () {
-   await page.locator('#footer_nav').isVisible();
- });
+Then('I should see copyright footer', async function () {
+  await page.locator('#footer_nav').isVisible();
+});

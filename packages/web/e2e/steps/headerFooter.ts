@@ -11,7 +11,7 @@ const PASSWORD = process.env.PASSWORD || '';
 
 //GIVEN//
 Given('I am on the BLC website', async function () {
-  await page.goto(BASE_URL, { waitUntil:'load'});
+  await page.goto(BASE_URL, { waitUntil: 'load' });
 });
 
 Given('agree to all the cookies', async function () {
@@ -36,12 +36,12 @@ When('I log in successfully', async function () {
   await page.locator("input[data-qa='input-submit-login']").scrollIntoViewIfNeeded();
   await expect(page.locator("input[data-qa='input-submit-login']")).toBeEnabled();
   await page.locator("input[data-qa='input-submit-login']").click();
-  console.log('logging in')
-  await page.waitForURL(`**/memhome.php`, { waitUntil:'load' });
+  console.log('logging in');
+  await page.waitForURL(`**/memhome.php`, { waitUntil: 'load' });
   console.log('waiting for memhome to finish loading');
   expect(page.url()).toContain('memhome.php');
   console.log('doing the expect to check its memhome');
-  await page.goto(BASE_URL + '/members-home', { waitUntil:'load'});
+  await page.goto(BASE_URL + '/members-home', { waitUntil: 'load' });
   console.log('goto members home');
   expect(page.url()).toContain('members-home');
   console.log('check url');
@@ -100,7 +100,7 @@ When('I click on search button', async function () {
 
 ///THEN//
 Then('I should navigate to {string}', async function (url) {
-  await page.waitForURL(`**${url}`, { waitUntil:'commit' });
+  await page.waitForURL(`**${url}`, { waitUntil: 'commit' });
   await expect(page.url()).toContain(url);
 });
 
@@ -122,7 +122,7 @@ Then('I click on Search now button', async function () {
 });
 
 Then('I return to membersHome', async function () {
-  await page.goto(BASE_URL + '/members-home', { waitUntil:'load'});
+  await page.goto(BASE_URL + '/members-home', { waitUntil: 'load' });
   console.log('goto members home');
   expect(page.url()).toContain('members-home');
   await expect(page.getByTestId('homepage-sponsor-banners')).toBeVisible();

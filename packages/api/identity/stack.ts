@@ -1,4 +1,4 @@
-import {ApiGatewayV1Api, Cognito, Function, Queue, StackContext, Table, use} from 'sst/constructs';
+import {ApiGatewayV1Api, Cognito, Cron, Function, Queue, StackContext, Table, use} from 'sst/constructs';
 import {AdvancedSecurityMode, CfnUserPoolClient, Mfa, StringAttribute} from 'aws-cdk-lib/aws-cognito';
 import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
 import {Shared} from '../../../stacks/stack';
@@ -15,9 +15,14 @@ import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedRule";
 import {AddEcFormOutputDataRoute} from './src/routes/addEcFormOutputDataRoute';
+import { Tables } from './src/eligibility/constructs/tables';
+import { Buckets } from './src/eligibility/constructs/buckets';
+import { Lambda } from './src/eligibility/constructs/lambda';
 import {FilterPattern, ILogGroup} from "aws-cdk-lib/aws-logs";
 import {LambdaDestination} from "aws-cdk-lib/aws-logs-destinations";
 import {userGdprRule} from './src/eventRules/userGdprRule';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import {CfnWebACLAssociation} from 'aws-cdk-lib/aws-wafv2';
 import {Duration} from "aws-cdk-lib";
 
@@ -300,6 +305,7 @@ export function Identity({stack}: StackContext) {
     });
     usagePlan.addApiKey(apikey);
 
+
     stack.addOutputs({
         CognitoUserPoolWebClient: cognito.userPoolId,
         CognitoDdsUserPoolWebClient: cognito_dds.userPoolId,
@@ -308,18 +314,37 @@ export function Identity({stack}: StackContext) {
     const cfnUserPoolClient = webClient.node.defaultChild as CfnUserPoolClient;
     cfnUserPoolClient.callbackUrLs = ['https://oauth.pstmn.io/v1/callback'];
 
-    //add event bridge rules
-    bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-    bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-    bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-    bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
-    bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName));
-    bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
-    bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
-    bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-    return {
-        identityApi,
-        cognito
-    };
+  
+  //add event bridge rules
+  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
+  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
+  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
+  bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+  bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName));
+  bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+  bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+
+  //Eligiblity checker Form output lambda
+  const tables = new Tables(stack)
+  const buckets = new Buckets(stack, stack.stage)
+  const lambdas = new Lambda(stack, tables, buckets, stack.stage)
+
+  const rule = new Rule(stack, 'ecOutputLambdaScheduleRule', {
+    schedule: Schedule.cron({
+      day: '28',
+	  hour: '00',
+	  minute: '00',
+    }),
+  });
+
+  rule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
+
+  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
+
+  return {
+    identityApi,
+    cognito
+  };
+
 }
 

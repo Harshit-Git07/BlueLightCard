@@ -1,13 +1,18 @@
 import useSWR, { mutate } from 'swr';
-import axios from 'axios';
+import axios, { GenericFormData } from 'axios';
 
 const IDENTITY_API_URL = process.env.NEXT_PUBLIC_IDENTITY_API_URL;
-const ELIGIBILITY_FORM_DATA_API_URL = process.env.NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL;
+const ELIGIBILITY_FORM_DATA_API_URL = process.env.NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL ?? '';
 
 const fetcher = async (key: string) => {
   const [url, body] = key.split(', ');
   return await axios.post(url, body).then((res) => res.data);
 };
+
+const fetcherWithFormData = async (url: string, formData: GenericFormData) => {
+  return await axios.post(url, formData).then((res) => res.data);
+};
+
 const createBody = (employment: string) => {
   let retired = 0;
   let employed = 0;
@@ -92,6 +97,5 @@ export async function fetchEmployerData(organisationId: string, employment: stri
 
 export async function addECFormOutputData(trackingData: Object) {
   // Make the request manually
-  const key = `${ELIGIBILITY_FORM_DATA_API_URL}, ${JSON.stringify(trackingData)}`;
-  return await fetcher(key);
+  return await fetcherWithFormData(ELIGIBILITY_FORM_DATA_API_URL, axios.toFormData(trackingData));
 }

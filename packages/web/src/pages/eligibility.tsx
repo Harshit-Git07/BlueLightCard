@@ -41,18 +41,24 @@ const TestPage: NextPage = () => {
       setEligible('No ID');
     } else {
       setEligible('No');
-      // storeFormOutput();
+      storeFormOutput();
     }
   };
 
   const storeFormOutput = async () => {
+    let tempOrg: string | undefined;
+    let tempEmp: string | undefined;
+    tempOrg =
+      organisation === 'Other' ? otherOrg : orgOptions.find((v) => v.key === organisation)?.value;
+    tempEmp = employer !== 'Other' ? employer : otherEmp;
+
     const data = {
-      organisation: otherOrg,
+      organisation: tempOrg,
       jobRole: jobRole,
-      employer: otherEmp,
+      employer: tempEmp,
       employmentStatus: employment,
     };
-    const result = await addECFormOutputData(data);
+    await addECFormOutputData(data);
   };
 
   return (

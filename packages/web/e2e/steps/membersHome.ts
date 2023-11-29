@@ -9,37 +9,25 @@ When('I click on a sponsor banner', async function () {
 });
 
 When('I click on a Deal of the week card', async function () {
-  await page
-    .getByTestId('deals-carousel')
-    .getByTestId('_offer_card_2')
-    .click();
+  await page.getByTestId('deals-carousel').getByTestId('_offer_card_2').click();
 });
 
 When('I click on a Ways to save card', async function () {
-  await page
-  .locator(`[data-testid="flexi-menu-carousel"]`)
-  .scrollIntoViewIfNeeded();
-  await page
-    .getByTestId('flexi-menu-carousel')
-    .getByTestId('_offer_card_3')
-    .click();
+  await page.locator(`[data-testid="flexi-menu-carousel"]`).scrollIntoViewIfNeeded();
+  await page.getByTestId('flexi-menu-carousel').getByTestId('_offer_card_3').click();
 });
 
 When('I scroll to the bottom to view market place menu carousel', async function () {
-  await page
-    .locator(`[data-testid="marketplace-menu-carousel-0"]`)
-    .scrollIntoViewIfNeeded();
+  await page.locator(`[data-testid="marketplace-menu-carousel-0"]`).scrollIntoViewIfNeeded();
 });
 
 When('I click on a Market place menu card', async function () {
-    await page
+  await page
     .locator(`[data-testid="marketplace-menu-carousel-0"] [data-testid="_offer_card_3"]`)
     .click();
 });
 When('I scroll to the bottom to view feature offer carousel', async function () {
-  await page
-    .locator(`[data-testid="featured-menu-carousel"]`)
-    .scrollIntoViewIfNeeded();
+  await page.locator(`[data-testid="featured-menu-carousel"]`).scrollIntoViewIfNeeded();
 });
 
 When('I click on a featured offers card', async function () {

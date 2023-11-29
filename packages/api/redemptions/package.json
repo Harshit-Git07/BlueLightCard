@@ -1,6 +1,6 @@
 {
   "name": "@blc-mono/redemptions",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "scripts": {
     "test": "jest",
     "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain redemptions"

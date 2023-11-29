@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.3.0...bluelightcard/redemptions-v1.4.0) (2023-11-29)
+
+
+### Features
+
+* 96 add extra details logging ( ([2c3729c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c3729cb619f0e6b259241a3d90aeba30f68af09))
+* 96 add extra details logging ([#642](https://github.com/bluelightcard/BlueLightCard-2.0/issues/642)) ([2c3729c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c3729cb619f0e6b259241a3d90aeba30f68af09))
+* added catch all for camref ([#639](https://github.com/bluelightcard/BlueLightCard-2.0/issues/639)) ([a441bd9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a441bd914857fc65f6dc18d2542acec057506ce8))
+* TR-69, Swagger Autogen API Documentation ([#527](https://github.com/bluelightcard/BlueLightCard-2.0/issues/527)) ([3011241](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3011241d99057e8e244fa0170721f438dc134ea3))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.2.0...bluelightcard/redemptions-v1.3.0) (2023-11-03)
 
 

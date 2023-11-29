@@ -314,37 +314,34 @@ export function Identity({stack}: StackContext) {
     const cfnUserPoolClient = webClient.node.defaultChild as CfnUserPoolClient;
     cfnUserPoolClient.callbackUrLs = ['https://oauth.pstmn.io/v1/callback'];
 
-  
-  //add event bridge rules
-  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-  bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
-  bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName));
-  bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
-  bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName));
+    //Eligiblity checker Form output lambda
+    const eligibilityCheckerTables = new Tables(stack)
+    const eligibilityCheckerBuckets = new Buckets(stack, stack.stage)
+    const eligibilityCheckerLambda = new Lambda(stack, eligibilityCheckerTables, eligibilityCheckerBuckets, stack.stage)
 
-  //Eligiblity checker Form output lambda
-  const tables = new Tables(stack)
-  const buckets = new Buckets(stack, stack.stage)
-  const lambdas = new Lambda(stack, tables, buckets, stack.stage)
+    const eligibilityCheckerScheduleRule = new Rule(stack, 'ecOutputLambdaScheduleRule', {
+      schedule: Schedule.cron({
+        day: '28',
+      hour: '00',
+      minute: '00',
+      }),
+    });
 
-  const rule = new Rule(stack, 'ecOutputLambdaScheduleRule', {
-    schedule: Schedule.cron({
-      day: '28',
-	  hour: '00',
-	  minute: '00',
-    }),
-  });
+    eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(eligibilityCheckerLambda.ecFormOutrputDataLambda));
 
-  rule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
-
-  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId));
-
-  return {
-    identityApi,
-    cognito
-  };
-
+    //add event bridge rules
+    bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
+    bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
+    bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
+    bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
+    bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName, region));
+    bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
+    bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
+    bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
+    
+    return {
+        identityApi,
+        cognito
+    };
 }
 

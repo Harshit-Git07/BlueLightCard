@@ -1,4 +1,4 @@
-export const userProfileCreatedRule = (userPoolId: string, dlqUrl: string, table: string) => ({
+export const userProfileCreatedRule = (userPoolId: string, dlqUrl: string, table: string, region: string) => ({
     userProfileCreatedRule: {
         pattern: { 
             source: ['user.profile.created']
@@ -12,7 +12,8 @@ export const userProfileCreatedRule = (userPoolId: string, dlqUrl: string, table
                         USER_POOL_ID: userPoolId, 
                         SERVICE: 'identity',
                         DLQ_URL: dlqUrl,
-                        TABLE_NAME: table 
+                        TABLE_NAME: table,
+                        REGION: region
                     },
                     retryAttepmts: 0
                 }

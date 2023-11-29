@@ -1,4 +1,4 @@
-export const emailUpdateRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string) => ({
+export const emailUpdateRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string) => ({
     emailUpdateRule: {
         pattern: {source: ["user.email.change.requested"]},
         targets: {
@@ -10,7 +10,8 @@ export const emailUpdateRule = (userPoolId: string, dlqUrl: string, ddsUserPoolI
                       USER_POOL_ID: userPoolId,
                       USER_POOL_ID_DDS: ddsUserPoolId,
                       SERVICE: 'identity',  
-                      DLQ_URL: dlqUrl 
+                      DLQ_URL: dlqUrl,
+                      REGION: region 
                    },
                   retryAttepmts: 0
               }

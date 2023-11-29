@@ -1,4 +1,4 @@
-export const userGdprRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string) => ({
+export const userGdprRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string) => ({
     userGdprRule: {
         pattern: {
             source: ["user.gdpr.requested"]
@@ -12,7 +12,8 @@ export const userGdprRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: 
                       USER_POOL_ID: userPoolId,
                       USER_POOL_ID_DDS: ddsUserPoolId,
                       SERVICE: 'identity',
-                      DLQ_URL: dlqUrl 
+                      DLQ_URL: dlqUrl,
+                      REGION: region
                     },
                     retryAttepmts: 0
               }

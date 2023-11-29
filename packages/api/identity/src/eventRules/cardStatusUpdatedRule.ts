@@ -1,4 +1,4 @@
-export const cardStatusUpdatedRule = (dlqUrl: string, table: string) => ({
+export const cardStatusUpdatedRule = (dlqUrl: string, table: string, region: string) => ({
     cardStatusUpdatedRule: {
         pattern: {source: ["user.card.status.updated"]},
         targets: {
@@ -9,7 +9,8 @@ export const cardStatusUpdatedRule = (dlqUrl: string, table: string) => ({
                   environment: {
                       SERVICE: 'identity',  
                       DLQ_URL: dlqUrl,
-                      TABLE_NAME: table 
+                      TABLE_NAME: table,
+                      REGION: region
                    },
                   retryAttepmts: 0
               }

@@ -1,4 +1,4 @@
-export const userProfileUpdatedRule = (dlqUrl: string, table: string, idMappingTable: string) => ({
+export const userProfileUpdatedRule = (dlqUrl: string, table: string, idMappingTable: string, region: string) => ({
     userProfileUpdatedRule: {
         pattern: { 
             source: ['user.profile.updated']
@@ -12,7 +12,8 @@ export const userProfileUpdatedRule = (dlqUrl: string, table: string, idMappingT
                         SERVICE: 'identity',
                         DLQ_URL: dlqUrl,
                         TABLE_NAME: table,
-                        ID_MAPPING_TABLE_NAME: idMappingTable
+                        ID_MAPPING_TABLE_NAME: idMappingTable,
+                        REGION: region
                     },
                     retryAttepmts: 0
                 }

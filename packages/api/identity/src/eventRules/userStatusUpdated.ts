@@ -1,4 +1,4 @@
-export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string) => ({
+export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string) => ({
     userStatusUpdatedRule: {
         pattern: { 
             source: ['user.status.updated'],
@@ -15,7 +15,8 @@ export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUse
                         USER_POOL_ID: userPoolId, 
                         USER_POOL_ID_DDS: ddsUserPoolId,
                         SERVICE: 'identity',
-                        DLQ_URL: dlqUrl 
+                        DLQ_URL: dlqUrl,
+                        REGION: region
                     },
                     retryAttepmts: 0
                 }

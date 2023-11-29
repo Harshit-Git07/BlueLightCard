@@ -58,7 +58,9 @@ const TestPage: NextPage = () => {
       employer: tempEmp,
       employmentStatus: employment,
     };
-    await addECFormOutputData(data);
+
+    // TODO: Reinstate API call EC form output
+    // await addECFormOutputData(data);
   };
 
   return (

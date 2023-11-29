@@ -1,4 +1,4 @@
-export const companyFollowsUpdatedRule = (dlqUrl: string, table: string, idMappingTable: string)=> ({
+export const companyFollowsUpdatedRule = (dlqUrl: string, table: string, idMappingTable: string, region: string)=> ({
     companyFollowsUpdatedRule: {
         pattern: {source: ["user.company.follows.updated"]},
         targets: {
@@ -10,7 +10,8 @@ export const companyFollowsUpdatedRule = (dlqUrl: string, table: string, idMappi
                       SERVICE: 'identity',
                       DLQ_URL: dlqUrl,
                       TABLE_NAME: table,
-                      ID_MAPPING_TABLE_NAME: idMappingTable
+                      ID_MAPPING_TABLE_NAME: idMappingTable,
+                      REGION: region
                    },
                   retryAttepmts: 0
               }

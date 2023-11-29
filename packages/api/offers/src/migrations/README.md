@@ -5,7 +5,10 @@
 2. Running one of the migrations
 
 `npm run migrate:categories`
-
+`npm run migrate:offerTags`
+`npm run migrate:companyTags`
 OR
 
 `npx tsx ./categoriesMigration.ts`
+`npx tsx ./offerTagsMigration.ts`
+`npx tsx ./companyTagsMigration.ts`

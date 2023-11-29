@@ -4,7 +4,9 @@
   "description": "One time migration scripts for Offers",
   "scripts": {
     "migrate:banners": "tsx ./bannersMigration.ts",
-    "migrate:categories": "tsx ./categoriesMigration.ts"
+    "migrate:categories": "tsx ./categoriesMigration.ts",
+    "migrate:offerTags": "tsx ./tagsMigration.ts --sqlTableName=tbloffertags",
+    "migrate:companyTags": "tsx ./tagsMigration.ts --sqlTableName=tblcompanytags"
   },
   "author": "",
   "license": "ISC",

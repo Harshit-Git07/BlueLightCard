@@ -1,4 +1,5 @@
 import { DbHelper } from '../../../core/src/aws/dynamodb/dbhelper';
+import { Tag } from '../models/tag';
 
 export class TagRepository {
 
@@ -37,4 +38,18 @@ export class TagRepository {
     return DbHelper.save(params);
   }
 
+  async batchWrite(tags: Tag[]) {
+    const params = {
+      RequestItems: {
+        [this.tableName]: [
+          ...tags.map((tag) => ({
+            PutRequest: {
+              Item: tag
+            }
+          }))
+        ],
+      }
+    };
+    return DbHelper.batchWrite(params);
+  }
 }

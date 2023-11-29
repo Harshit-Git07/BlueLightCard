@@ -15,4 +15,13 @@ export class BrandRepository {
     return await DbHelper.batchGet(params);
   }
 
+  async batchWrite(putRequests: any[]) {
+    const params = {
+      RequestItems: {
+        [this.tableName]: putRequests,
+      },
+    };
+    return DbHelper.batchWrite(params);
+  }
+
 }

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.20.2...bluelightcard/web-v1.21.0) (2023-11-29)
+
+
+### Features
+
+* adding interstitial page for email link ([eea353d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eea353d16be4320ccdee5ab9c56980473b3cc126))
+* TR-98 Add interstitial page ([#593](https://github.com/bluelightcard/BlueLightCard-2.0/issues/593)) ([eea353d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eea353d16be4320ccdee5ab9c56980473b3cc126))
+* **web:** Ti 480 deply ec form output lambda via sst ([#643](https://github.com/bluelightcard/BlueLightCard-2.0/issues/643)) ([4fb5aa4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4fb5aa40cbe2dd25fcc95aedb28845eb20e806f5))
+
+
+### Bug Fixes
+
+* TO-00: pass region event to event bus handlers ([#698](https://github.com/bluelightcard/BlueLightCard-2.0/issues/698)) ([80df418](https://github.com/bluelightcard/BlueLightCard-2.0/commit/80df4186520f064381a00a89f78835c2ca6d473e))
+
 ## [1.20.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.20.1...bluelightcard/web-v1.20.2) (2023-11-24)
 
 

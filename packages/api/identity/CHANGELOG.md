@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.35.0...bluelightcard/identity-v1.36.0) (2023-11-29)
+
+
+### Features
+
+* **web:** Ti 480 deply ec form output lambda via sst ([#643](https://github.com/bluelightcard/BlueLightCard-2.0/issues/643)) ([4fb5aa4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4fb5aa40cbe2dd25fcc95aedb28845eb20e806f5))
+
+
+### Bug Fixes
+
+* TO-00: pass region event to event bus handlers ([#698](https://github.com/bluelightcard/BlueLightCard-2.0/issues/698)) ([80df418](https://github.com/bluelightcard/BlueLightCard-2.0/commit/80df4186520f064381a00a89f78835c2ca6d473e))
+* TO-00: update bucket name ec output form unique per region ([#700](https://github.com/bluelightcard/BlueLightCard-2.0/issues/700)) ([2c8b7c2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c8b7c258be22408daa44f4b6c58f7f9419cf678))
+
 ## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.34.0...bluelightcard/identity-v1.35.0) (2023-11-23)
 
 

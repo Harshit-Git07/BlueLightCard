@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.21.0...bluelightcard/web-v1.21.1) (2023-11-30)
+
+
+### Bug Fixes
+
+* added blc logo blue svg to assets folder root for dds and aus ([#701](https://github.com/bluelightcard/BlueLightCard-2.0/issues/701)) ([b07661e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b07661e931a5d94018064af91f209c1ee7b1af37))
+
 ## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.20.2...bluelightcard/web-v1.21.0) (2023-11-29)
 
 

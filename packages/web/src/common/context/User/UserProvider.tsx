@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import UserContext, { User } from './UserContext';
-import { USER_PROFILE_ENDPOINT } from '@/global-vars';
+import { IDENTITY_USER_PROFILE_ENDPOINT } from '@/global-vars';
 import AuthContext from '../Auth/AuthContext';
 import axios, { AxiosError } from 'axios';
 
@@ -52,7 +52,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
       await axios
         .request({
-          url: USER_PROFILE_ENDPOINT,
+          url: IDENTITY_USER_PROFILE_ENDPOINT,
           headers: {
             Authorization: `Bearer ${authCtx.authState.idToken}`,
           },

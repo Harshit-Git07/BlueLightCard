@@ -1,16 +1,18 @@
 import useSWR, { mutate } from 'swr';
-import axios, { GenericFormData } from 'axios';
-
-const IDENTITY_API_URL = process.env.NEXT_PUBLIC_IDENTITY_API_URL;
-const ELIGIBILITY_FORM_DATA_API_URL = process.env.NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_API_URL ?? '';
+import axios from 'axios';
+import {
+  IDENTITY_API_KEY,
+  IDENTITY_ELIGIBILITY_FORM_OUTPUT_ENDPOINT,
+  IDENTITY_ORGANISATION_ENDPOINT,
+} from '@/global-vars';
 
 const fetcher = async (key: string) => {
   const [url, body] = key.split(', ');
   return await axios.post(url, body).then((res) => res.data);
 };
 
-const fetcherWithFormData = async (url: string, formData: GenericFormData) => {
-  return await axios.post(url, formData).then((res) => res.data);
+const fetcherWithHeaders = async (url: string, data: any, headers: any) => {
+  return await axios.post(url, data, { headers }).then((res) => res.data);
 };
 
 const createBody = (employment: string) => {
@@ -35,7 +37,7 @@ const createBody = (employment: string) => {
 export function useOrganisation(employment: string) {
   const body = createBody(employment);
   // Join the URL and the body into a single string with ', ' as the separator
-  const key = employment ? `${IDENTITY_API_URL}, ${JSON.stringify(body)}` : null;
+  const key = employment ? `${IDENTITY_ORGANISATION_ENDPOINT}, ${JSON.stringify(body)}` : null;
 
   const { data, error } = useSWR(key, fetcher);
   return {
@@ -49,7 +51,7 @@ export function useOrganisation(employment: string) {
 export async function fetchOrganisationData(employment: string) {
   const body = createBody(employment);
   // Make the request manually
-  const key = `${IDENTITY_API_URL}, ${JSON.stringify(body)}`;
+  const key = `${IDENTITY_ORGANISATION_ENDPOINT}, ${JSON.stringify(body)}`;
   const data = await fetcher(key);
   // This will update the cache with the new data and trigger a revalidation
   mutate(key, data, false);
@@ -57,7 +59,7 @@ export async function fetchOrganisationData(employment: string) {
 }
 
 export function useEmployer(organisationId: string) {
-  const key = organisationId ? `${IDENTITY_API_URL}/${organisationId}` : null;
+  const key = organisationId ? `${IDENTITY_ORGANISATION_ENDPOINT}/${organisationId}` : null;
 
   const { data, error } = useSWR(key, fetcher);
 
@@ -87,7 +89,7 @@ export async function fetchEmployerData(organisationId: string, employment: stri
   }
   const body = temp;
   // Make the request manually
-  const key = `${IDENTITY_API_URL}/${organisationId}, ${JSON.stringify(body)}`;
+  const key = `${IDENTITY_ORGANISATION_ENDPOINT}/${organisationId}, ${JSON.stringify(body)}`;
   const data = await fetcher(key);
 
   // This will update the cache with the new data and trigger a revalidation
@@ -97,5 +99,7 @@ export async function fetchEmployerData(organisationId: string, employment: stri
 
 export async function addECFormOutputData(trackingData: Object) {
   // Make the request manually
-  return await fetcherWithFormData(ELIGIBILITY_FORM_DATA_API_URL, axios.toFormData(trackingData));
+  return fetcherWithHeaders(IDENTITY_ELIGIBILITY_FORM_OUTPUT_ENDPOINT, trackingData, {
+    ['x-api-key']: IDENTITY_API_KEY,
+  });
 }

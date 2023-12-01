@@ -1,3 +1,7 @@
+import getAllowedDomains from '../utils/getAllowedDomains';
+
+process.env.allowedDomains = getAllowedDomains('staging');
+
 import { describe, expect, test } from '@jest/globals';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -21,7 +25,7 @@ describe('Add EC form Output data', () => {
         const res = await handler(
             // @ts-expect-error - We're not testing the event object
             {
-                headers: {},
+                headers: { origin: "https://www.staging.bluelightcard.co.uk"},
                 pathParameters: { brand: 'test_brand_name' },
                 body: ''
             },
@@ -30,7 +34,7 @@ describe('Add EC form Output data', () => {
         expect(res).toEqual({
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
+                'Access-Control-Allow-Origin': "https://www.staging.bluelightcard.co.uk"
             },
             statusCode: 400, body: JSON.stringify({ message: 'Please provide a valid brand' })
         });
@@ -41,7 +45,7 @@ describe('Add EC form Output data', () => {
         const res = await handler(
             // @ts-expect-error - We're not testing the event object
             {
-                headers: {},
+                headers: { origin: "https://www.staging.bluelightcard.co.uk"},
                 pathParameters: { brand: 'blc_uk' },
                 body: null
             },
@@ -50,7 +54,7 @@ describe('Add EC form Output data', () => {
         expect(res).toEqual({
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
+                'Access-Control-Allow-Origin': "https://www.staging.bluelightcard.co.uk"
             },
             statusCode: 400, body: JSON.stringify({ message: 'Please provide a valid request body' })
         });
@@ -66,7 +70,7 @@ describe('Add EC form Output data', () => {
         const res = await handler(
             // @ts-expect-error - We're not testing the event object
             {
-                headers: {},
+                headers: { origin: "https://www.staging.bluelightcard.co.uk"},
                 pathParameters: { brand: 'blc_uk' },
                 body: JSON.stringify(item)
             },
@@ -81,7 +85,7 @@ describe('Add EC form Output data', () => {
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
+                'Access-Control-Allow-Origin': "https://www.staging.bluelightcard.co.uk"
             },
         });
     });
@@ -96,7 +100,7 @@ describe('Add EC form Output data', () => {
         const res = await handler(
             // @ts-expect-error - We're not testing the event object
             {
-                headers: {},
+                headers: { origin: "https://www.staging.bluelightcard.co.uk"},
                 pathParameters: { brand: 'blc_uk' },
                 body: JSON.stringify(item)
             },
@@ -111,7 +115,7 @@ describe('Add EC form Output data', () => {
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
+                'Access-Control-Allow-Origin': "https://www.staging.bluelightcard.co.uk"
             },
         });
     });

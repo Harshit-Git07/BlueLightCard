@@ -25,6 +25,7 @@ import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import {CfnWebACLAssociation} from 'aws-cdk-lib/aws-wafv2';
 import {Duration} from "aws-cdk-lib";
+import getAllowedDomains from './src/utils/getAllowedDomains';
 
 export function Identity({stack}: StackContext) {
     const {certificateArn} = use(Shared);
@@ -39,6 +40,10 @@ export function Identity({stack}: StackContext) {
     if (region !== undefined || region !== null) {
         regionEnv = region;
     }
+
+	const tables = new Tables(stack)
+    const buckets = new Buckets(stack, stack.stage)
+    const lambdas = new Lambda(stack, tables, buckets, stack.stage)
 
     const stageSecret = stack.stage === 'production' || stack.stage === 'staging' ? stack.stage : 'staging';
     const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
@@ -61,15 +66,6 @@ export function Identity({stack}: StackContext) {
             legacy_id: 'string',
         },
         primaryIndex: {partitionKey: 'legacy_id', sortKey: 'uuid'},
-    });
-
-    //db - trackingDataTable
-    const ecFormOutputData = new Table(stack, 'ecFormOutputDataTable', {
-        fields: {
-            pk: 'string',
-            sk: 'string',
-        },
-        primaryIndex: {partitionKey: 'pk', sortKey: 'sk'},
     });
 
     const {bus} = use(Shared);
@@ -200,6 +196,7 @@ export function Identity({stack}: StackContext) {
         resourceArn: cognito_dds.cdk.userPool.userPoolArn,
         webAclArn: webACL.attrArn
     });
+
     //apis
     const identityApi = new ApiGatewayV1Api(stack, 'identity', {
         authorizers: {
@@ -213,10 +210,11 @@ export function Identity({stack}: StackContext) {
                 timeout: 20,
                 environment: {
                     identityTableName: identityTable.tableName,
-                    ecFormOutputDataTableName: ecFormOutputData.tableName,
-                    service: 'identity'
+                    ecFormOutputDataTableName: tables.ecFormOutputDataTable.tableName,
+                    service: 'identity',
+                    allowedDomains: getAllowedDomains(stack.stage)
                 },
-                permissions: [identityTable, ecFormOutputData],
+                permissions: [identityTable, tables.ecFormOutputDataTable],
             },
         },
         routes: {
@@ -293,7 +291,7 @@ export function Identity({stack}: StackContext) {
 
     const usagePlan = identityApi.cdk.restApi.addUsagePlan("identity-api-usage-plan", {
         throttle: {
-            rateLimit: 10,
+            rateLimit: 1,
             burstLimit: 2,
         },
         apiStages: [
@@ -314,9 +312,6 @@ export function Identity({stack}: StackContext) {
     const cfnUserPoolClient = webClient.node.defaultChild as CfnUserPoolClient;
     cfnUserPoolClient.callbackUrLs = ['https://oauth.pstmn.io/v1/callback'];
 
-    const tables = new Tables(stack)
-    const buckets = new Buckets(stack, stack.stage)
-    const lambdas = new Lambda(stack, tables, buckets, stack.stage)
 
     //Eligiblity checker Form output lambda rule schedule
     const eligibilityCheckerScheduleRule = new Rule(stack, 'ecOutputLambdaScheduleRule', {

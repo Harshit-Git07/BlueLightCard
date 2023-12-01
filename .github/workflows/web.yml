@@ -158,17 +158,16 @@ jobs:
     environment: Staging
     strategy:
       matrix:
-        org: [blc-uk, blc-au, dds-uk]
         include:
-          - org: blc-uk
-            brand: blc-uk
-            identity_api_key: IDENTITY_EU_WEST_2_API_KEY
-          - org: blc-au
-            brand: blc-au
-            identity_api_key: IDENTITY_AP_SOUTHEAST_2_API_KEY
-          - org: blc-uk
-            brand: blc-au
-            identity_api_key: IDENTITY_EU_WEST_2_API_KEY
+          - brand: 'blc-uk'
+            identity_brand: 'blc_uk'
+            identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
+          - brand: 'blc-au'
+            identity_brand: 'blc_au'
+            identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
+          - brand: 'dds-uk'
+            identity_brand: 'dds_uk'
+            identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
     runs-on: ubuntu-latest
     needs:
       - test
@@ -182,8 +181,8 @@ jobs:
       NEXT_PUBLIC_IDENTITY_API_URL: https://staging-identity.blcshine.io
       NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
       NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
-      NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.brand}}/organisation
-      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.brand}}/formOutputData
+      NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
+      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
@@ -215,17 +214,16 @@ jobs:
     name: Deploy Production
     strategy:
       matrix:
-        org: [blc-uk, blc-au, dds-uk]
         include:
-          - org: blc-uk
-            brand: blc-uk
-            identity_api_key: IDENTITY_EU_WEST_2_API_KEY
-          - org: blc-au
-            brand: blc-au
-            identity_api_key: IDENTITY_AP_SOUTHEAST_2_API_KEY
-          - org: blc-uk
-            brand: blc-au
-            identity_api_key: IDENTITY_EU_WEST_2_API_KEY
+          - brand: 'blc-uk'
+            identity_brand: 'blc_uk'
+            identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
+          - brand: 'blc-au'
+            identity_brand: 'blc_au'
+            identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
+          - brand: 'dds-uk'
+            identity_brand: 'dds_uk'
+            identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
     environment: Production
     runs-on: ubuntu-latest
     needs:
@@ -240,8 +238,8 @@ jobs:
       NEXT_PUBLIC_IDENTITY_API_URL: https://identity.blcshine.io
       NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
       NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
-      NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.brand}}/organisation
-      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.brand}}/formOutputData
+      NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
+      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
     steps:
       - uses: actions/checkout@v4
       - name: Cache node modules

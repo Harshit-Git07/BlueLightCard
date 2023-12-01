@@ -15,6 +15,8 @@ const TestPage: NextPage<any> = () => {
         <meta name="description" />
       </Head>
       <Search
+        placeholderText="Search"
+        onBackButtonClick={() => console.log('Gone back')}
         onSearch={(searchTerm) =>
           navigation.navigate(
             `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,

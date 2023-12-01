@@ -80,6 +80,9 @@ jobs:
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region: ['eu-west-2', 'ap-southeast-2']
     needs:
       - test
       - build
@@ -105,7 +108,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Deploy
-        run: npx sst deploy global --stage staging && npx sst deploy identity --stage staging
+        run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy identity --stage staging --region ${{matrix.region}}
   e2e-test:
     name: End to End Test
     runs-on: ubuntu-latest

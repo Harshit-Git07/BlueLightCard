@@ -82,8 +82,11 @@ jobs:
     if: github.actor!= 'dependabot[bot]'
     strategy:
       matrix:
-        brand: ['blc-uk']
-        identity_api_key: [${{ secrets.IDENTITY_EU_WEST_2_API_KEY }}]
+        org: [blc-uk]
+        include:
+          - org: blc-uk
+            brand: blc-uk
+            identity_api_key: IDENTITY_EU_WEST_2_API_KEY
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.cloudflare-publish.outputs.url }}
@@ -99,7 +102,7 @@ jobs:
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
       NEXT_PUBLIC_IDENTITY_API_URL: https://staging-identity.blcshine.io
-      NEXT_PUBLIC_IDENTITY_API_KEY: ${{matrix.identity_api_key}}
+      NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
       NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
       NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.brand}}/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.brand}}/formOutputData
@@ -130,7 +133,7 @@ jobs:
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
         env:
           NEXT_PUBLIC_IDENTITY_API_URL: https://staging-identity.blcshine.io
-          NEXT_PUBLIC_IDENTITY_API_KEY: ${{matrix.identity_api_key}}
+          NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
           NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
           NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.brand}}/organisation
           NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.brand}}/formOutputData

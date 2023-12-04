@@ -7,7 +7,8 @@
     "migrate:categories": "tsx ./categoriesMigration.ts",
     "migrate:offerTags": "tsx ./tagsMigration.ts --sqlTableName=tbloffertags",
     "migrate:companyTags": "tsx ./tagsMigration.ts --sqlTableName=tblcompanytags",
-    "migrate:brands": "tsx ./brandMigration.ts"
+    "migrate:brands": "tsx ./brandMigration.ts",
+    "migrate:offerTypes": "tsx ./offerTypeMigration.ts"
   },
   "author": "",
   "license": "ISC",

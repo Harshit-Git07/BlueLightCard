@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.16.0...bluelightcard/offers-v1.17.0) (2023-12-04)
+
+
+### Features
+
+* add brand migration ([#695](https://github.com/bluelightcard/BlueLightCard-2.0/issues/695)) ([81330ba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/81330ba5ba896c7e8b48eb13b1fd2a9e47b57fa6))
+* add offerType migration ([#714](https://github.com/bluelightcard/BlueLightCard-2.0/issues/714)) ([d1983cc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d1983ccddfc739e6b14e7baee742047ddeba0171))
+* TO-224 add Appsync cache ([#690](https://github.com/bluelightcard/BlueLightCard-2.0/issues/690)) ([0229420](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0229420c655eeba4d2e16cf4c42129eac1c8c4e4))
+* TO-339: Create one time script for modernised dynamodb tags ([#694](https://github.com/bluelightcard/BlueLightCard-2.0/issues/694)) ([117ae20](https://github.com/bluelightcard/BlueLightCard-2.0/commit/117ae201985aec2b23c88d99125875a0418947d1))
+
 ## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.15.0...bluelightcard/offers-v1.16.0) (2023-11-20)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.21.1...bluelightcard/web-v1.22.0) (2023-12-01)
+
+
+### Features
+
+* TI-480: updated eligibility output form lambda with cors and updated frontend to forward through cloudflare ([#704](https://github.com/bluelightcard/BlueLightCard-2.0/issues/704)) ([defd64b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/defd64b649f05577b40e825041bb25ffe06e3686))
+
 ## [1.21.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.21.0...bluelightcard/web-v1.21.1) (2023-11-30)
 
 

@@ -12,6 +12,7 @@ module.exports = {
             100: '#ECEFF2',
             200: '#DCDFE3',
             400: '#9FA2A9',
+            600: '#616266',
             800: '#1C1D22',
           },
           oxfordblue: {

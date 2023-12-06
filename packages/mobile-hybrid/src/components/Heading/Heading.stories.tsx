@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import Heading from './Heading';
 
 const componentMeta: Meta<typeof Heading> = {
-  title: 'Component System/Heading',
+  title: 'Heading',
   component: Heading,
   argTypes: { title: { control: 'text' }, size: { control: 'radio' } },
 };

@@ -1,4 +1,6 @@
-const Spinner = () => {
+import { FC } from 'react';
+
+const Spinner: FC = () => {
   return (
     <div className="p-3 rounded bg-white dark:bg-gray-700 shadow-lg">
       <svg

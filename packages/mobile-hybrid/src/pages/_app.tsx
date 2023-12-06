@@ -5,10 +5,16 @@ import { useContext, FC } from 'react';
 import dayjs from 'dayjs';
 import CustomParseFormat from 'dayjs/plugin/customParseFormat';
 import { AppContext, AppStoreProvider } from '@/store';
+
+// initialise event bus instance
+eventBus();
+
 import '@/nativeReceive';
+
 import { museoFont, sourceSansPro } from '@/font';
 import { NewsStoreProvider } from '@/modules/news/store';
 import Spinner from '@/components/Spinner/Spinner';
+import eventBus from '@/eventBus';
 
 dayjs.extend(CustomParseFormat);
 

@@ -2,7 +2,7 @@ import { createContext, FC, useEffect, Reducer, useReducer, PropsWithChildren } 
 import Observable from '@/observable';
 import { AppContextStructure, AppStore, DispatchActionData } from './types';
 import { APIUrl } from '@/hooks/useAPIData';
-import { th } from 'date-fns/locale';
+import { Channels, eventBus } from '@/globals';
 
 const initialState: AppStore = {
   loading: {
@@ -50,26 +50,30 @@ const storeReducer: Reducer<AppContextStructure, DispatchActionData> = (state, a
 export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(storeReducer, initialState);
   useEffect(() => {
-    Observable.getInstance().subscribe('nativeAPIResponse', (data: any) => {
+    eventBus.on(Channels.API_RESPONSE, () => {
+      const latest = eventBus.getLatestMessage(Channels.API_RESPONSE);
+      const message = latest!.message;
       dispatch({
         type: 'setAPIData',
         state: {
-          url: data.url,
-          data: data.response,
+          url: message.url,
+          data: message.response,
         },
       });
       dispatch({
         type: 'setLoading',
         state: {
-          key: data.url,
+          key: message.url,
           loading: false,
         },
       });
     });
-    Observable.getInstance().subscribe('nativeExperiments', (data: any) => {
+    eventBus.on(Channels.EXPERIMENTS, () => {
+      const latest = eventBus.getLatestMessage(Channels.EXPERIMENTS);
+      const message = latest!.message;
       dispatch({
         type: 'setExperiment',
-        state: data,
+        state: message,
       });
     });
   }, []);

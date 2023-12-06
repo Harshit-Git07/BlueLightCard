@@ -1,5 +1,5 @@
+import { Channels, eventBus } from '@/globals';
 import { Logger } from '@/logger';
-import Observable from '@/observable';
 
 /**
  * @description Used to receive experiments from the native app
@@ -22,6 +22,6 @@ export default class NativeReceiveExperiment implements NativeReceive.WebViewExp
       experiments,
     );
     const experimentData = JSON.parse(experiments);
-    Observable.getInstance().notify('nativeExperiments', experimentData);
+    eventBus.broadcast(Channels.EXPERIMENTS, experimentData);
   }
 }

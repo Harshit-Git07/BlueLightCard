@@ -1,3 +1,4 @@
+import { Channels, eventBus } from '@/globals';
 import { Logger } from '@/logger';
 
 /**
@@ -17,5 +18,6 @@ export default class NativeReceiveLifecycle implements NativeReceive.WebViewLife
    */
   public onLifecycle(lifecycleEvent: string): void {
     this.logger.debug(`app lifecycle received '${lifecycleEvent}'`, NativeReceiveLifecycle.TAG);
+    eventBus.broadcast(Channels.APP_LIFECYCLE, lifecycleEvent);
   }
 }

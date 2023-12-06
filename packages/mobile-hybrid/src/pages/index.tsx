@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useRef, useContext, useCallback } from 'react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import ListPanel from '@/components/ListPanel/ListPanel';
 import { NewsList, NewsPreview } from '@/modules/news';
@@ -25,6 +25,8 @@ import { AppContext } from '@/store';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import FavouritedBrandsSlider from '@/modules/favouritedbrands';
 import useFavouritedBrands from '@/hooks/useFavouritedBrands';
+import { useOnResume } from '@/hooks/useAppLifecycle';
+import { APIUrl } from '@/hooks/useAPIData';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -34,14 +36,31 @@ const experiments = new InvokeNativeExperiment();
 const Home: NextPage<any> = () => {
   const brands = useFavouritedBrands();
   const { seeAllNews, setSeeAllNews } = useContext(NewsModuleStore);
-  const { experiments: expr } = useContext(AppContext);
+  const { experiments: expr, apiData } = useContext(AppContext);
   const showFavouritedBrands = brands.length > 0 && expr['favourited-brands'] === 'on';
   const bodyHeight = useRef<HTMLElement>(null);
+
+  const request = useCallback(() => {
+    Object.values(APIUrl).forEach((url) => {
+      if (!apiData[url]) {
+        apiCall.requestData(url);
+      }
+    });
+    experiments.experiment([
+      'homepage-searchbar',
+      'non-exclusive-offers',
+      'popular-offers',
+      'favourited-brands',
+      'streamlined-homepage',
+      'favourite-subtitle',
+    ]);
+  }, [apiData]);
 
   const seeAllClick = () => {
     document.getElementById('app-body')?.classList.remove('noscroll');
     setSeeAllNews(false);
   };
+
   useEffect(() => {
     if (bodyHeight.current) {
       trackScrollDepth(bodyHeight.current, (depth) => {
@@ -53,19 +72,11 @@ const Home: NextPage<any> = () => {
         });
       });
     }
-    apiCall.requestData('/api/4/offer/promos_new.php');
-    apiCall.requestData('/api/4/news/list.php');
-    apiCall.requestData('/api/4//user/bookmark/retrieve.php');
-    experiments.experiment([
-      'homepage-searchbar',
-      'popular-offers',
-      'favourited-brands',
-      'streamlined-homepage',
-      'favourite-subtitle',
-      'bf-flexi',
-      'homepage-positioning',
-    ]);
+
+    request();
   }, []);
+
+  useOnResume(request);
 
   return (
     <main ref={bodyHeight}>

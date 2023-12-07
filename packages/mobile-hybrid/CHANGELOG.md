@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.1.0...bluelightcard/mobile-hybrid-v1.2.0) (2023-12-07)
+
+
+### Features
+
+* mobile/bt 3455 app resume ([#712](https://github.com/bluelightcard/BlueLightCard-2.0/issues/712)) ([287ee3b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/287ee3b2ae6b065d5477042a02a40a30d0fd8b6d))
+* **mobile:** bt 3459 filter button ([#716](https://github.com/bluelightcard/BlueLightCard-2.0/issues/716)) ([35569db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/35569db8305ecfcd5bfc433b9516f9c3f4105836))
+* **mobile:** bt 3461 filter pill button ([#710](https://github.com/bluelightcard/BlueLightCard-2.0/issues/710)) ([474466f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/474466f936e2c2be61da10f68e951b67a1605edb))
+* **mobile:** bt 3462 filter sheet header ([#718](https://github.com/bluelightcard/BlueLightCard-2.0/issues/718)) ([ed333dd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed333ddeb6fa95f428bc60f7410cbd57601166cf))
+* **mobile:** bt 3463 recent search button ([#721](https://github.com/bluelightcard/BlueLightCard-2.0/issues/721)) ([17b2c35](https://github.com/bluelightcard/BlueLightCard-2.0/commit/17b2c35cf10ced5290c4e6ba094b0ff0fb659eeb))
+
+
+### Other Changes
+
+* added stories to existing components ([#717](https://github.com/bluelightcard/BlueLightCard-2.0/issues/717)) ([89afdda](https://github.com/bluelightcard/BlueLightCard-2.0/commit/89afddadbd07a53063b4543ea0eb09e91f8d8cb5))
+* **mobile:** bt 3457 modify search component ([#699](https://github.com/bluelightcard/BlueLightCard-2.0/issues/699)) ([dc36183](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dc36183c8f44e60ca2de4bb3a35fc38ddf7f9744))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.0.5...bluelightcard/mobile-hybrid-v1.1.0) (2023-11-27)
 
 

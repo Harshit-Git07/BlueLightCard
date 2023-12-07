@@ -2,18 +2,20 @@ import Head from 'next/head';
 import { NextPage } from 'next';
 import Search from '@/components/Search/Search';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import PopularBrandsSlider from '@/modules/popularbrands';
-import BannerCarousel from '@/components/Banner/BannerCarousel';
-import FavouritedBrandsSlider from '@/modules/favouritedbrands';
+import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButton';
+import Filter from '@/components/Filter/Filter';
+import ListItem from '@/components/ListItem/ListItem';
+import FilterPillButton from '@/components/FilterPillButton/FilterPillButton';
 
 const navigation = new InvokeNativeNavigation();
 const TestPage: NextPage<any> = () => {
   return (
-    <>
+    <div className="m-2">
       <Head>
         <title>Mobile Hybrid</title>
         <meta name="description" />
       </Head>
+
       <Search
         placeholderText="Search"
         onBackButtonClick={() => console.log('Gone back')}
@@ -23,53 +25,45 @@ const TestPage: NextPage<any> = () => {
           )
         }
       />
-      {/* <BannerCarousel
-        slides={[
+      <Filter
+        filterCount={0}
+        onPress={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+      <Filter
+        filterCount={2}
+        onPress={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+      <RecentSearchButton text="nike" onPress={() => console.log('Pressed')} />
+      <RecentSearchButton text="new look" onPress={() => console.log('Pressed')} />
+      <RecentSearchButton text="jd sports" onPress={() => console.log('Pressed')} />
+      <RecentSearchButton text="jd sports" onPress={() => console.log('Pressed')} />
+      <ListItem title="Offer Description" text="Supporting Info" imageSrc="card_test_img.jpg" />
+
+      <FilterPillButton
+        pills={[
           {
-            id: 1,
-            text: 'Test',
-            imageSrc: 'emma.png',
+            text: 'Filter Item 1',
+            value: '1',
           },
           {
-            id: 1,
-            text: 'this is a long tile that should be truncated if it gets too long for the screen',
-            imageSrc: 'iceland.png',
+            text: 'Filter 2',
+            value: '2',
           },
           {
-            id: 1,
-            text: 'Test',
-            imageSrc: 'emma.png',
+            text: 'Filter Item 2',
+            value: '3',
           },
           {
-            id: 1,
-            text: 'Test',
-            imageSrc: 'emma.png',
-          },
-          {
-            id: 1,
-            text: 'Test',
-            imageSrc: 'emma.png',
-          },
-          {
-            id: 1,
-            text: 'Test',
-            imageSrc: 'emma.png',
-          },
-          {
-            id: 1,
-            text: 'Test',
-            imageSrc: 'emma.png',
-          },
-          {
-            id: 1,
-            text: 'Test',
-            imageSrc: 'emma.png',
+            text: 'Filter Item 4',
+            value: '4',
           },
         ]}
-      /> */}
-      <PopularBrandsSlider />
-      <FavouritedBrandsSlider />
-    </>
+      />
+    </div>
   );
 };
 

@@ -38,7 +38,7 @@ describe('Image component', () => {
     it('should resolve image src to absolute url', () => {
       props.src = `${CDN_URL}/assets/card_test_img.jpg`;
 
-      const GENERATED_CDN_IMAGE_OPTIMISED_URL = `${CDN_URL}/cdn-cgi/image/width=3840,quality=75,format=auto/${props.src}`;
+      const GENERATED_CDN_IMAGE_OPTIMISED_URL = `${CDN_URL}/cdn-cgi/image/width=3840,quality=75,format=webp/${props.src}`;
 
       const { baseElement } = render(<Image {...props} alt={props.alt} />);
       const imageSrc = baseElement.querySelector(

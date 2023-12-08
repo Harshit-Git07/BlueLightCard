@@ -9,7 +9,8 @@ import { ImageLoader } from 'next/image';
 const loader: ImageLoader = ({ src, width, quality = 75 }) => {
   if (src.startsWith(CDN_URL)) {
     const IMAGE_OPTIMISATION_URL = `${CDN_URL}/cdn-cgi/image`;
-    return `${IMAGE_OPTIMISATION_URL}/width=${width},quality=${quality},format=auto/${src}`;
+    const fullUrl = `${IMAGE_OPTIMISATION_URL}/width=${width},quality=${quality},format=webp/${src}`;
+    return fullUrl;
   }
 
   const optimiseParams = `?width=${width}&quality=${quality}`;

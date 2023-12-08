@@ -26,7 +26,8 @@ const BlackFridayBannerSection = ({
               fill={false}
               sizes="100vw"
               className="h-auto landscapebfsm:w-[150px] landscapebf:w-[250px] w-full"
-              quality={100}
+              quality={75}
+              priority
             />
           </div>
           <div>

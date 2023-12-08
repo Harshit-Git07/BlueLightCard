@@ -8,7 +8,7 @@ import { CategoryType, CompanyType } from '@/page-types/members-home';
 import { BRAND } from '@/global-vars';
 import { companiesCategoriesQuery } from '../../../graphql/homePageQueries';
 import { makeNavbarQueryWithDislikeRestrictions, makeQuery } from '../../../graphql/makeQuery';
-import { redirectToLogin } from '@/hoc/withAuth';
+import { redirectToLogin } from '@/hoc/requireAuth';
 import { useRouter } from 'next/router';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import UserContext from '@/context/User/UserContext';

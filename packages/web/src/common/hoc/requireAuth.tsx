@@ -15,7 +15,7 @@ export function redirectToLogin(router: any) {
   }
 }
 
-const withAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
+const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
   const Component: React.FC<any> = (props: any) => {
     const authContext = useContext(AuthContext);
     const router = useRouter();
@@ -42,4 +42,4 @@ const withAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
   return Component;
 };
 
-export default withAuth;
+export default requireAuth;

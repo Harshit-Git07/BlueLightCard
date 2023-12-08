@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import AuthProvider from '@/context/Auth/AuthProvider';
 import AuthContext from '@/context/Auth/AuthContext';
-import withAuth from '@/hoc/withAuth';
+import requireAuth from '@/hoc/requireAuth';
 import { NextPage } from 'next';
 import React, { FC, useContext, useEffect } from 'react';
 
@@ -55,7 +55,7 @@ describe('withAuth HOC', () => {
       return <h1>{text}</h1>;
     };
 
-    const PageWithAuth = withAuth(Comp);
+    const PageWithAuth = requireAuth(Comp);
 
     render(
       <AuthProvider>
@@ -73,7 +73,7 @@ describe('withAuth HOC', () => {
       return <h1>{text}</h1>;
     };
 
-    const PageWithAuth = withAuth(Comp);
+    const PageWithAuth = requireAuth(Comp);
     const pastJWT =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjF9.5o2DmuhVcwInco2_YNzqMKLk-NGH44HoSQqX0CSzoaA';
 
@@ -97,7 +97,7 @@ describe('withAuth HOC', () => {
       return <h1>{text}</h1>;
     };
 
-    const PageWithAuth = withAuth(Comp);
+    const PageWithAuth = requireAuth(Comp);
     localStorage.setItem('accessToken', futureJWT);
     localStorage.setItem('idToken', futureJWT);
 
@@ -116,6 +116,8 @@ describe('withAuth HOC', () => {
 
       useEffect(() => {
         ctx.updateAuthTokens({ accessToken: 'test', idToken: 'test' });
+        // Linting disabled because it causes an infinite loop
+        // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
       return <div>Test</div>;
@@ -153,7 +155,7 @@ describe('withAuth HOC', () => {
       return <h1>{text}</h1>;
     };
 
-    const PageWithAuth = withAuth(Comp);
+    const PageWithAuth = requireAuth(Comp);
     localStorage.setItem('accessToken', futureJWT);
     localStorage.setItem('idToken', futureJWT);
 

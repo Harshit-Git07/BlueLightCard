@@ -3,8 +3,6 @@ import type { ReactNode } from 'react';
 
 export interface LayoutProps {
   seo?: SEOProps;
+  props: any;
   children: ReactNode;
-  translationNamespace?: string;
 }
-
-export type PartialLayoutProps = Partial<LayoutProps>;

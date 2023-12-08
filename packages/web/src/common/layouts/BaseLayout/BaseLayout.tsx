@@ -42,7 +42,7 @@ const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace
 
   return (
     <div>
-      <MetaData seo={seo} translationNamespace={translationNamespace} />
+      {seo && <MetaData seo={seo} translationNamespace={translationNamespace} />}
 
       <Header
         navItems={navItems}

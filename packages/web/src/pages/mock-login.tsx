@@ -10,6 +10,7 @@ import AuthProvider from '@/context/Auth/AuthProvider';
 import AuthContext from '@/context/Auth/AuthContext';
 import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
 import withLayout from '@/hoc/withLayout';
+import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 
 function MockLogin() {
   // As this exposes client_secret which should not be exposed.
@@ -70,45 +71,43 @@ function MockLogin() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
-    <AuthProvider>
-      <div className="flex justify-center">
-        <div className="px-auto py-16 min-w-[600px] flex flex-col gap-4">
-          <Heading headingLevel={'h1'}>Login</Heading>
+    <div className="flex justify-center">
+      <div className="px-auto py-16 min-w-[600px] flex flex-col gap-4">
+        <Heading headingLevel={'h1'}>Login</Heading>
 
-          <hr />
+        <hr />
 
-          <Heading headingLevel={'h3'}>Username</Heading>
-          <InputTextFieldWithRef
-            placeholder="Username"
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
-          />
-          <Heading headingLevel={'h3'}>Password</Heading>
-          <InputTextFieldWithRef
-            placeholder="Password"
-            type="password"
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          <Button
-            onClick={() => {
-              getToken(username, password);
-            }}
-            disabled={isLoading}
-          >
-            {isLoading ? <FontAwesomeIcon icon={faSpinner} className="animate-spin" /> : 'Login'}
-          </Button>
-          {errorMessage && (
-            <div className="border border-red-600 bg-red-300 rounded text-red-950 w-full p-3">
-              {errorMessage}
-            </div>
-          )}
-        </div>
+        <Heading headingLevel={'h3'}>Username</Heading>
+        <InputTextFieldWithRef
+          placeholder="Username"
+          onChange={(event) => {
+            setUsername(event.target.value);
+          }}
+        />
+        <Heading headingLevel={'h3'}>Password</Heading>
+        <InputTextFieldWithRef
+          placeholder="Password"
+          type="password"
+          onChange={(event) => {
+            setPassword(event.target.value);
+          }}
+        />
+        <Button
+          onClick={() => {
+            getToken(username, password);
+          }}
+          disabled={isLoading}
+        >
+          {isLoading ? <FontAwesomeIcon icon={faSpinner} className="animate-spin" /> : 'Login'}
+        </Button>
+        {errorMessage && (
+          <div className="border border-red-600 bg-red-300 rounded text-red-950 w-full p-3">
+            {errorMessage}
+          </div>
+        )}
       </div>
-    </AuthProvider>
+    </div>
   );
 }
 
-export default withLayout(MockLogin, { seo: { title: 'Dev Env login' } });
+export default withAuthProviderLayout(MockLogin, { seo: { title: 'Dev Env login' } });

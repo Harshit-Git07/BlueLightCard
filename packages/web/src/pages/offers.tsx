@@ -4,10 +4,10 @@ import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import Image from '@/components/Image/Image';
 import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
 import Link from '@/components/Link/Link';
-import withAuth from 'src/common/hoc/withAuth';
+import requireAuth from '@/hoc/requireAuth';
 import { NextPage } from 'next';
 import Container from '@/components/Container/Container';
-import withLayout from '@/hoc/withLayout';
+import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 
 type OffersPageProps = {
   offers: OfferCardProp[];
@@ -120,4 +120,4 @@ const layoutProps = {
   },
 };
 
-export default withLayout(withAuth(OffersPage), layoutProps);
+export default withAuthProviderLayout(requireAuth(OffersPage), layoutProps);

@@ -10,7 +10,7 @@ const PillButtons: FC<PillButtonProps> = ({ pills, onSelected }) => {
     if (onSelected) {
       onSelected(isSelected);
     }
-  }, [isSelected]);
+  }, [isSelected, onSelected]);
 
   const toggleSelection = (pillKey: string) => {
     if (!isSelected.includes(pillKey)) {

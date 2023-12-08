@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import withAuth from '@/hoc/withAuth';
+import requireAuth from '@/hoc/requireAuth';
 import { homePageQuery } from '../graphql/homePageQueries';
 import { makeHomePageQueryWithDislikeRestrictions } from '../graphql/makeQuery';
 import getCDNUrl from '@/utils/getCDNUrl';
@@ -32,6 +32,7 @@ import inTimePeriod from '@/utils/inTimePeriod';
 import { shuffle } from 'lodash';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
+import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -266,4 +267,4 @@ const layoutProps = {
   },
 };
 
-export default withLayout(withAuth(HomePage), layoutProps);
+export default withAuthProviderLayout(requireAuth(HomePage), layoutProps);

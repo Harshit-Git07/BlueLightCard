@@ -1,6 +1,6 @@
 export const emailUpdateRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string) => ({
     emailUpdateRule: {
-        pattern: {source: ["user.email.change.requested"]},
+        pattern: {source: ["user.email.updated"]},
         targets: {
           emailUpdateFunction : {
               function: {

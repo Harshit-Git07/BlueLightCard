@@ -3,10 +3,17 @@ import { FC, ReactElement } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { FlagsmithProvider } from 'flagsmith/react';
 import flagsmith from 'flagsmith/isomorphic';
+import { datadogRum } from '@datadog/browser-rum';
 
 import '../styles/globals.css';
-import { FEATURE_FLAG_ENVIRONMENT_ID } from '@/global-vars';
-import AuthProvider from '@/context/Auth/AuthProvider';
+import {
+  DATADOG_APP_ID,
+  DATADOG_CLIENT_TOKEN,
+  DATADOG_ENV,
+  DATADOG_DEFAULT_SERVICE,
+  DATADOG_SITE,
+  FEATURE_FLAG_ENVIRONMENT_ID,
+} from '@/global-vars';
 
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -15,9 +22,26 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { NextPageWithLayout } from '@/page-types/layout';
 import Head from 'next/head';
-import UserProvider from '@/context/User/UserProvider';
 import AmplitudeProvider from '@/utils/amplitude/provider';
 config.autoAddCss = false;
+
+if (DATADOG_APP_ID && DATADOG_CLIENT_TOKEN) {
+  datadogRum.init({
+    applicationId: DATADOG_APP_ID,
+    clientToken: DATADOG_CLIENT_TOKEN,
+    site: DATADOG_SITE,
+    service: DATADOG_DEFAULT_SERVICE,
+    env: DATADOG_ENV,
+    sessionSampleRate: 100,
+    sessionReplaySampleRate: 20,
+    trackUserInteractions: true,
+    trackResources: true,
+    trackLongTasks: true,
+    defaultPrivacyLevel: 'mask-user-input',
+  });
+} else {
+  console.warn('Datadog auth keys are missing.');
+}
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   // Use the layout defined at the page level, if available

@@ -28,14 +28,14 @@ Currently there are the following alias paths setup for importing:
  - `@/hooks`
  - `@/utils`
 
-### Custom CSS variables
-Coming soon...
-
-### New Relic
-To configure New Relic for distribution, set the following env vars
-```
-NEXT_PUBLIC_NEWRELIC_LICENSE_KEY
-NEXT_PUBLIC_NEWRELIC_APPLICATION_ID
+### Datadog
+We use Datadog to report on user metrics and client errors. The following environment variables are used to help configure the Datadog client.
+```sh
+NEXT_PUBLIC_DATADOG_APP_ID
+NEXT_PUBLIC_DATADOG_CLIENT_TOKEN
+NEXT_PUBLIC_DATADOG_DEFAULT_SERVICE
+NEXT_PUBLIC_DATADOG_SITE (default='datadoghq.eu')
+NEXT_PUBLIC_DATADOG_ENV
 ```
 
 ### Components
@@ -50,6 +50,7 @@ So the structure will look like:
 │   ├── [ComponentName]
 │   │   ├── [ComponentName].tsx
 │   │   ├── [ComponentName].stories.tsx
+│   │   ├── Docs.md
 │   │   ├── types.ts
 ```
 

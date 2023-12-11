@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.37.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.37.0...bluelightcard/identity-v1.37.1) (2023-12-08)
+
+
+### Bug Fixes
+
+* rename source ([#724](https://github.com/bluelightcard/BlueLightCard-2.0/issues/724)) ([7ba14c5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7ba14c5fa7e868070ebd900d912bbf3e4e7e3d0e))
+
 ## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.36.0...bluelightcard/identity-v1.37.0) (2023-12-01)
 
 

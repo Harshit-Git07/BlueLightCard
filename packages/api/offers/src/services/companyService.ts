@@ -3,6 +3,7 @@ import { Company } from '../models/company';
 import { filterUndefinedValues } from '../utils/filters';
 import { CompanyRepository } from '../repositories/companyRepository';
 import { UpdateCompanyDetails } from '../eventBridge/lambdas/company/companyEventDetail';
+import { forEach } from 'lodash';
 
 export class CompanyService {
   private companyRepository: CompanyRepository;
@@ -102,5 +103,21 @@ export class CompanyService {
     } else {
       return { ...company, ...filterUndefinedValues(companyDetails), legacyId: company.legacyId };
     }
+  }
+
+  async batchQueryByLegacyIds(legacyIds: string[]) {
+    const params = legacyIds.map((legacyId) => this.companyRepository.getByLegacyId(legacyId));
+    return Promise.all(params);
+  }
+
+  public async batchWrite(companies: Company[]) {
+    const putRequests = companies.map((company: Company) => {
+      return {
+        PutRequest: {
+          Item: company,
+        },
+      };
+    })
+    return this.companyRepository.batchWrite(putRequests);
   }
 }

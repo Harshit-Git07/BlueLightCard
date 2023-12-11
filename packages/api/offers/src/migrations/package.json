@@ -5,6 +5,7 @@
   "scripts": {
     "migrate:banners": "tsx ./bannersMigration.ts",
     "migrate:categories": "tsx ./categoriesMigration.ts",
+    "migrate:companies": "tsx ./companiesMigration.ts",
     "migrate:offerTags": "tsx ./tagsMigration.ts --sqlTableName=tbloffertags",
     "migrate:companyTags": "tsx ./tagsMigration.ts --sqlTableName=tblcompanytags",
     "migrate:brands": "tsx ./brandMigration.ts",

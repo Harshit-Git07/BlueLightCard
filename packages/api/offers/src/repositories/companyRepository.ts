@@ -94,4 +94,13 @@ export class CompanyRepository {
     };
     return await DbHelper.update(param);
   }
+
+  async batchWrite(putRequests: any[]) {
+    const params = {
+      RequestItems: {
+        [this.tableName]: putRequests,
+      },
+    }
+    return await DbHelper.batchWrite(params);
+  }
 }

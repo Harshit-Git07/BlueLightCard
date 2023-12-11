@@ -50,7 +50,7 @@ export class TagService {
       if(tagName){
         const result = await this.tagRepository.getByName(tagName); 
         if (!(result && result.Items && result.Items.length > 0)) {
-          newTags.push(await this.createNewTag(tagName));
+          newTags.push(await this.createTagObject(tagName));
         } else {
           existingTags.push(result.Items[0] as Tag);
         }

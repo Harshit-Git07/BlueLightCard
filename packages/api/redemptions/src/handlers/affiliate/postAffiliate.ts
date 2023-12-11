@@ -17,15 +17,14 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
   logger.info({
     message: 'POST Affiliate Input',
   });
-
+  const { affiliateUrl, memberId, platform }: PostAffiliateModel = JSON.parse(event.body);
   try {
-    const { affiliateUrl, memberId }: PostAffiliateModel = JSON.parse(event.body);
     const trackingUrl: string = new AffiliateConfiguration(affiliateUrl, memberId).trackingUrl;
     const response = Response.OK({ message: 'Success', data: { trackingUrl } });
 
     logger.info({
       message: 'Successful affiliate url request',
-      body: JSON.stringify({ affiliateUrl, trackingUrl }),
+      body: { affiliateUrl, trackingUrl, platform },
       status: response.statusCode,
     });
 
@@ -33,6 +32,7 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
   } catch (error) {
     logger.error({
       message: 'Error while creating tracking URL',
+      body: { affiliateUrl, platform },
     });
 
     return Response.Error(new Error('Error while creating tracking URL'));

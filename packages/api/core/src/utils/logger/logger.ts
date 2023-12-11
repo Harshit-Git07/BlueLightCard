@@ -3,7 +3,7 @@ interface loggerBody {
   message: string;
   timestamp?: string;
   status?: number;
-  body?: string | null;
+  body?: any | null;
   error?: string | null;
 }
 

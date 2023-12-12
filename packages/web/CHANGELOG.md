@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.22.0...bluelightcard/web-v1.23.0) (2023-12-12)
+
+
+### Features
+
+* add datadog reporting to web (staging) ([#720](https://github.com/bluelightcard/BlueLightCard-2.0/issues/720)) ([e4d903c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4d903c6c9bf4ecc6f55d612bb41526ce8366d14))
+* Added useAmplitudeExperiment hook and testing. ([#715](https://github.com/bluelightcard/BlueLightCard-2.0/issues/715)) ([10aa6e5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/10aa6e50c362bba928a6b876aa35dd1f29b88ef4))
+* Reworked bf hotfix which reorders how user profile end point is hit ([#688](https://github.com/bluelightcard/BlueLightCard-2.0/issues/688)) ([d82ca13](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d82ca13b031b8d0c2e9c608413e572eb958f8624))
+
+
+### Bug Fixes
+
+* image's to use webp only ([#672](https://github.com/bluelightcard/BlueLightCard-2.0/issues/672)) ([1c5733d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1c5733d1d941656d5750e7a01b19922b4c7e8dbd))
+
 ## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.21.1...bluelightcard/web-v1.22.0) (2023-12-01)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.17.0...bluelightcard/offers-v1.18.0) (2023-12-12)
+
+
+### Features
+
+* TO-172 one time migration tblcompanies to dynamodb ([#728](https://github.com/bluelightcard/BlueLightCard-2.0/issues/728)) ([a8ef7b9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a8ef7b987406b6d446f23a25d48aaf951b5c502e))
+
 ## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.16.0...bluelightcard/offers-v1.17.0) (2023-12-04)
 
 

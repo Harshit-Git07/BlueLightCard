@@ -58,6 +58,7 @@
     "node": ">=18.0.0 <= 20.6.0"
   },
   "dependencies": {
+    "@amplitude/experiment-js-client": "^1.9.7",
     "@apollo/client": "^3.8.3",
     "@storybook/preset-scss": "^1.0.3",
     "aes-js": "^3.1.2",

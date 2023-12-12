@@ -63,7 +63,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           <meta name="robots" content="noindex" />
         )}
 
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta property="og:site_name" content="Blue Light Card" />
         <meta name="twitter:creator" content="@bluelightcard" />
         <meta name="twitter:site" content="@bluelightcard" />

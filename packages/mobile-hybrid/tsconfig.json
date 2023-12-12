@@ -17,9 +17,10 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@storybook/*": ["./.storybook/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx", ".storybook/**/*.ts"],
   "exclude": ["node_modules"]
 }

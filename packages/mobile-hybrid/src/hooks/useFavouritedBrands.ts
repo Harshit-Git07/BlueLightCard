@@ -1,6 +1,7 @@
 import { FavouritedBrandsModel } from '@/models/favouritedBrand';
-import useAPIData, { APIUrl } from './useAPIData';
+import useAPIData from './useAPIData';
 import { Brand } from '@/components/PopularBrands/types';
+import { APIUrl } from '@/globals';
 
 const useFavouritedBrands = (): Brand[] => {
   const favouritedBrands: FavouritedBrandsModel[] = useAPIData(APIUrl.FavouritedBrands) ?? [];

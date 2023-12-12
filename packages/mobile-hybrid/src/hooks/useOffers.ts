@@ -1,5 +1,6 @@
 import { OfferDataModel } from '@/models/offer';
-import useAPIData, { APIUrl } from './useAPIData';
+import useAPIData from './useAPIData';
+import { APIUrl } from '@/globals';
 
 const useOffers = (): OfferDataModel => {
   const data = useAPIData(APIUrl.OfferPromos) ?? {};

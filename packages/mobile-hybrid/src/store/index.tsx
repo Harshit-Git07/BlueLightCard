@@ -1,8 +1,6 @@
 import { createContext, FC, useEffect, Reducer, useReducer, PropsWithChildren } from 'react';
-import Observable from '@/observable';
 import { AppContextStructure, AppStore, DispatchActionData } from './types';
-import { APIUrl } from '@/hooks/useAPIData';
-import { Channels, eventBus } from '@/globals';
+import { APIUrl, Channels, eventBus } from '@/globals';
 
 const initialState: AppStore = {
   loading: {

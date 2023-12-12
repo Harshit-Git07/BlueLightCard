@@ -1,5 +1,6 @@
-/** @type { import('@storybook/nextjs').StorybookConfig } */
-const config = {
+import { StorybookConfig } from '@storybook/nextjs';
+
+const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     '@storybook/addon-links',
@@ -8,7 +9,17 @@ const config = {
     '@storybook/addon-interactions',
     '@storybook/addon-a11y',
   ],
-  staticDirs: ['../public'],
+  staticDirs: [
+    '../public',
+    {
+      from: '../fonts',
+      to: '/fonts',
+    },
+    {
+      from: './mocks',
+      to: '/mocks',
+    }
+  ],
   framework: {
     name: '@storybook/nextjs',
     options: {},

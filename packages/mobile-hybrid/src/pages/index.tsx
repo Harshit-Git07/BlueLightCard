@@ -26,7 +26,7 @@ import PopularBrandsSlider from '@/modules/popularbrands';
 import FavouritedBrandsSlider from '@/modules/favouritedbrands';
 import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
-import { APIUrl } from '@/hooks/useAPIData';
+import { APIUrl } from '@/globals';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();

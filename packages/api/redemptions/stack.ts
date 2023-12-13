@@ -8,6 +8,11 @@ import { PostAffiliateModel } from './src/models/postAffiliate';
 import { PostSpotifyModel } from './src/models/postSpotify';
 import { PostAffiliate } from './src/routes/postAffiliate';
 import { PostSpotify } from './src/routes/postSpotify';
+import { EventBridge } from './eventBridge/eventBridge';
+import { createLinkRule, createVaultRule, createPromotionRule, createOfferRule } from './eventBridge/rules';
+import { LinkEvents, VaultEvents, PromotionEvents, OfferEvents } from './eventBridge/events/';
+
+import { Tables } from './databases/tables';
 
 export function Redemptions({ stack }: StackContext): {
   api: ApiGatewayV1Api<any>;
@@ -54,7 +59,39 @@ export function Redemptions({ stack }: StackContext): {
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
   const postSpotifyModel = apiGatewayModelGenerator.generateModel(PostSpotifyModel);
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
+  const tables = new Tables(stack);
 
+  // eslint-disable-next-line no-new
+  new EventBridge(stack, [
+    createLinkRule({
+      ruleName: 'linkRule',
+      events: [LinkEvents.LINK_CREATED, LinkEvents.LINK_UPDATED],
+      permissions: [],
+      stack,
+      table: tables.redemptionConfig,
+    }),
+    createVaultRule({
+      ruleName: 'vaultRule',
+      events: [VaultEvents.VAULT_CREATED, VaultEvents.VAULT_UPDATED],
+      permissions: [],
+      stack,
+      table: tables.redemptionConfig,
+    }),
+    createPromotionRule({
+      ruleName: 'promotionRule',
+      events: [PromotionEvents.PROMOTION_UPDATED],
+      permissions: [],
+      stack,
+      table: tables.redemptionConfig,
+    }),
+    createOfferRule({
+      ruleName: 'offerRule',
+      events: [OfferEvents.OFFER_CREATED, OfferEvents.OFFER_UPDATED],
+      permissions: [],
+      stack,
+      table: tables.redemptionConfig,
+    }),
+  ]);
   // Create Lambda Based API Routes
   api.addRoutes(stack, {
     'POST /member/connection/affiliate': new PostAffiliate(

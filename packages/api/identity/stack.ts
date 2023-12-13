@@ -197,12 +197,17 @@ export function Identity({stack}: StackContext) {
         webAclArn: webACL.attrArn
     });
 
+    const customDomainNameLookUp: Record<string, string> = {
+        'eu-west-2': 'identity.blcshine.io',
+        'ap-southeast-2': 'identity-au.blcshine.io'
+    }
+
     //apis
     const identityApi = new ApiGatewayV1Api(stack, 'identity', {
         authorizers: {
             identityAuthorizer: {
                 type: "user_pools",
-                userPoolIds: [cognito.userPoolId],
+                userPoolIds: [cognito.userPoolId, cognito_dds.userPoolId],
             },
         },
         defaults: {
@@ -212,7 +217,8 @@ export function Identity({stack}: StackContext) {
                     identityTableName: identityTable.tableName,
                     ecFormOutputDataTableName: tables.ecFormOutputDataTable.tableName,
                     service: 'identity',
-                    allowedDomains: getAllowedDomains(stack.stage)
+                    allowedDomains: getAllowedDomains(stack.stage),
+                    REGION: stack.region
                 },
                 permissions: [identityTable, tables.ecFormOutputDataTable],
             },
@@ -226,7 +232,9 @@ export function Identity({stack}: StackContext) {
             restApi: {
                 ...(['production', 'staging'].includes(stack.stage) && certificateArn && {
                     domainName: {
-                        domainName: stack.stage === 'production' ? 'identity.blcshine.io' : `${stack.stage}-identity.blcshine.io`,
+                        domainName: stack.stage === 'production' 
+                            ? customDomainNameLookUp[stack.region] 
+                            : `${stack.stage}-${customDomainNameLookUp[stack.region]}`,
                         certificate: Certificate.fromCertificateArn(stack, "DomainCertificate", certificateArn),
                     },
                 })

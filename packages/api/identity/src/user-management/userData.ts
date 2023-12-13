@@ -14,7 +14,7 @@ const service: string = process.env.service as string;
 
 const logger = new Logger({ serviceName: `${service}-user-crud` });
 
-const client = new DynamoDBClient({});
+const client = new DynamoDBClient({region: process.env.REGION ?? 'eu-west-2'});
 const dynamodb = DynamoDBDocumentClient.from(client);
 const tableName = process.env.identityTableName;
 

@@ -9,11 +9,13 @@
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "3.332.0",
-    "@aws-sdk/lib-dynamodb": "3.335.0",
-    "@aws-sdk/client-sqs": "3.425.0",
     "@aws-sdk/client-firehose": "3.425.0",
+    "@aws-sdk/client-sqs": "3.425.0",
+    "@aws-sdk/lib-dynamodb": "3.335.0",
     "@jest/globals": "29.5.0",
     "@types/aws-lambda": "8.10.119",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/jwk-to-pem": "^2.0.3",
     "@types/node": "20.2.3",
     "@types/nodemailer": "^6.4.13",
     "@types/uuid": "9.0.4",
@@ -33,6 +35,7 @@
     "axios": "1.4.0",
     "base-64": "1.0.0",
     "date-fns": "2.30.0",
+    "aws-jwt-verify": "4.0.0",
     "libphonenumber-js": "1.10.37",
     "ts-node": "^10.9.1",
     "uuid": "9.0.1"

@@ -1,4 +1,4 @@
-import { LambdaAbstract } from "./lambdaAbstract";
+import { LambdaAbstract } from "../../../common/lambdaAbstract";
 import { Stack } from "aws-cdk-lib";
 import { Tables } from "../tables";
 import { Buckets } from "../buckets";

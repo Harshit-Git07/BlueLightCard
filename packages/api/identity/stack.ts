@@ -17,7 +17,7 @@ import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedR
 import {AddEcFormOutputDataRoute} from './src/routes/addEcFormOutputDataRoute';
 import { Tables } from './src/eligibility/constructs/tables';
 import { Buckets } from './src/eligibility/constructs/buckets';
-import { Lambda } from './src/eligibility/constructs/lambda';
+import { Lambda } from './src/common/lambda';
 import {FilterPattern, ILogGroup} from "aws-cdk-lib/aws-logs";
 import {LambdaDestination} from "aws-cdk-lib/aws-logs-destinations";
 import {userGdprRule} from './src/eventRules/userGdprRule';
@@ -26,6 +26,7 @@ import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import {CfnWebACLAssociation} from 'aws-cdk-lib/aws-wafv2';
 import {Duration} from "aws-cdk-lib";
 import getAllowedDomains from './src/utils/getAllowedDomains';
+import * as apigateway from "aws-cdk-lib/aws-apigateway";
 
 export function Identity({stack}: StackContext) {
     const {certificateArn} = use(Shared);
@@ -204,42 +205,48 @@ export function Identity({stack}: StackContext) {
 
     //apis
     const identityApi = new ApiGatewayV1Api(stack, 'identity', {
-        authorizers: {
-            identityAuthorizer: {
-                type: "user_pools",
-                userPoolIds: [cognito.userPoolId, cognito_dds.userPoolId],
-            },
+      authorizers: {
+        identityAuthorizer: {
+          type: 'lambda_request',
+          function: new Function(stack, 'Authorizer', {
+            handler:
+              './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
+          }),
+          identitySources: [apigateway.IdentitySource.header('Authorization')],
         },
-        defaults: {
-            function: {
-                timeout: 20,
-                environment: {
-                    identityTableName: identityTable.tableName,
-                    ecFormOutputDataTableName: tables.ecFormOutputDataTable.tableName,
-                    service: 'identity',
-                    allowedDomains: getAllowedDomains(stack.stage),
-                    REGION: stack.region
-                },
-                permissions: [identityTable, tables.ecFormOutputDataTable],
-            },
+      },
+      defaults: {
+        function: {
+          timeout: 20,
+          environment: {
+            identityTableName: identityTable.tableName,
+            ecFormOutputDataTableName: tables.ecFormOutputDataTable.tableName,
+            service: 'identity',
+            allowedDomains: getAllowedDomains(stack.stage),
+            REGION: stack.region,
+          },
+          permissions: [identityTable, tables.ecFormOutputDataTable],
         },
-        routes: {
-            'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
-            'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
-            'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
+      },
+      routes: {
+        'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
+        'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
+        'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
+      },
+      cdk: {
+        restApi: {
+          ...(['production', 'staging'].includes(stack.stage) &&
+            certificateArn && {
+              domainName: {
+                domainName:
+                  stack.stage === 'production'
+                    ? customDomainNameLookUp[stack.region]
+                    : `${stack.stage}-${customDomainNameLookUp[stack.region]}`,
+                certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
+              },
+            }),
         },
-        cdk: {
-            restApi: {
-                ...(['production', 'staging'].includes(stack.stage) && certificateArn && {
-                    domainName: {
-                        domainName: stack.stage === 'production' 
-                            ? customDomainNameLookUp[stack.region] 
-                            : `${stack.stage}-${customDomainNameLookUp[stack.region]}`,
-                        certificate: Certificate.fromCertificateArn(stack, "DomainCertificate", certificateArn),
-                    },
-                })
-            }
-        }
+      },
     });
 
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(identityApi.cdk.restApi);

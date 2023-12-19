@@ -19,7 +19,7 @@ import {
 import PromoBanner from '@/modules/promobanner';
 import Heading from '@/components/Heading/Heading';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import Search from '@/components/Search/Search';
+import LegacySearch from '@/components/LegacySearch/LegacySearch';
 import InvokeNativeExperiment from '@/invoke/experiment';
 import { AppContext } from '@/store';
 import PopularBrandsSlider from '@/modules/popularbrands';
@@ -82,8 +82,7 @@ const Home: NextPage<any> = () => {
     <main ref={bodyHeight}>
       <div className="mb-9">
         {expr['homepage-searchbar'] === 'treatment' && (
-          <Search
-            placeholderText="Search"
+          <LegacySearch
             onSearch={(searchTerm) =>
               navigation.navigate(
                 `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,

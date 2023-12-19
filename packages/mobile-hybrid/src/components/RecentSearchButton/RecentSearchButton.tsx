@@ -12,7 +12,7 @@ const RecentSearchButton: FC<RecentSearchButtonProps> = ({ text, onPress }) => {
       >
         <FontAwesomeIcon
           icon={faClockRotateLeft}
-          className="absolute left-1 px-2 top-1/2 text-neutral-black dark:text-primary-vividskyblue-700 transform -translate-y-1/2"
+          className="absolute left-1 px-2 top-1/2 text-neutral-black dark:text-neutral-white transform -translate-y-1/2"
         />
         {text}
       </button>

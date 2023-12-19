@@ -16,8 +16,8 @@ const FilterPillButton: FC<FilterPillButtonProps> = ({ onSelected, pills }) => {
     const baseClasses = cssUtil([
       'transition rounded-full m-2 h-[36px] px-2 min-w-btn focus:outline-none font-museo',
       isSelected
-        ? 'bg-primary-dukeblue-400/30 text-primary-dukeblue-600 dark:bg-primary-vividskyblue-400/30 dark:text-primary-vividskyblue-700'
-        : 'bg-neutral-grey-100/50 text-neutral-grey-600 dark:bg-neutral-800 dark:text-neutral-50',
+        ? 'bg-primary-dukeblue-400/30 text-primary-dukeblue-600 dark:text-primary-vividskyblue-700'
+        : 'bg-neutral-grey-100/50 text-neutral-grey-600 dark:bg-neutral-800 dark:text-neutral-white',
     ]);
 
     return baseClasses;

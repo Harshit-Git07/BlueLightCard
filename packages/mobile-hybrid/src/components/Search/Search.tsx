@@ -2,6 +2,7 @@ import React, { FC, FormEventHandler, useRef, useState, ChangeEventHandler } fro
 import { SearchProps } from './types';
 import { faSearch, faCircleXmark, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isCustomErrorPage } from 'next/dist/build/utils';
 
 const Search: FC<SearchProps> = ({
   onSearch,
@@ -43,6 +44,7 @@ const Search: FC<SearchProps> = ({
     onBackButtonClick && onBackButtonClick();
     setIsFocused(false);
     setSearchTerm('');
+    setErrorMessage('');
   };
 
   const onInputFocus = () => {
@@ -56,7 +58,7 @@ const Search: FC<SearchProps> = ({
       role="button"
       size="xl"
       onClick={_onBackButtonClick}
-      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-gray-800 dark:text-primary-vividskyblue-700"
+      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-neutral-grey-800 dark:text-neutral-white"
       aria-hidden="true"
     />
   );
@@ -65,7 +67,7 @@ const Search: FC<SearchProps> = ({
     <FontAwesomeIcon
       icon={faSearch}
       size="xl"
-      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-primary-vividskyblue-700"
+      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-neutral-grey-600 dark:text-neutral-white"
       aria-hidden="true"
     />
   );
@@ -75,7 +77,7 @@ const Search: FC<SearchProps> = ({
       size="xl"
       role="button"
       onClick={clearSearch}
-      className="absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600 dark:text-primary-vividskyblue-700"
+      className="absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-neutral-grey-600 dark:text-neutral-white"
       aria-hidden="true"
     />
   );
@@ -92,11 +94,11 @@ const Search: FC<SearchProps> = ({
           value={searchTerm}
           placeholder={placeholderText}
           type="search"
-          className="new-search pl-14 pr-4 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-neutral-grey-100 border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
+          className="new-search pl-14 pr-4 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-neutral-white border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
         />
         {searchTerm && clearIcon}
       </div>
-      {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+      {errorMessage && <div className="font-museo text-red-500">{errorMessage}</div>}
     </form>
   );
 };

@@ -14,7 +14,7 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
             src={imageSrc}
             responsive={true}
             alt={imageAlt ?? imageSrc}
-            className="object-contain"
+            className="sm:object-cover object-contain rounded"
           />
         </div>
       )}
@@ -22,7 +22,11 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
         <h4 className="dark:text-neutral-white text-md mb-1 font-semibold font-museo leading-5 line-clamp-1 md:line-clamp-2">
           {decodeEntities(title)}
         </h4>
-        {text && <p className="text-gray-400 text-sm lg:text-lg">{text}</p>}
+        {text && (
+          <p className="text-neutral-grey-600 dark:text-neutral-grey-200 font-museo text-sm lg:text-lg">
+            {text}
+          </p>
+        )}
       </div>
     </div>
   );

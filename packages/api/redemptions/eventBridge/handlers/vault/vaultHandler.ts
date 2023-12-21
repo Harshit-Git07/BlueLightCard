@@ -1,6 +1,6 @@
 import { Logger } from '@blc-mono/core/src/utils/logger/logger';
 import { IEventBridge } from '../../types/event';
-import { OfferEvents } from '../../events/';
+import { VaultEvents } from '../../events/';
 
 import { vaultUpdatedHandler, vaultCreatedHandler } from './vualtEventHandlers';
 
@@ -12,10 +12,10 @@ export const handler = async (event: IEventBridge): Promise<void> => {
   const { source } = event;
 
   switch (source) {
-    case OfferEvents.OFFER_CREATED:
+    case VaultEvents.VAULT_CREATED:
       vaultCreatedHandler();
       break;
-    case OfferEvents.OFFER_UPDATED:
+    case VaultEvents.VAULT_UPDATED:
       vaultUpdatedHandler();
       break;
     default:

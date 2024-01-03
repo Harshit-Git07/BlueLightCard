@@ -4,6 +4,9 @@ import Filter from './Filter';
 const componentMeta: Meta<typeof Filter> = {
   title: 'Filter',
   component: Filter,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const DefaultTemplate: StoryFn<typeof Filter> = (args) => <Filter {...args} />;

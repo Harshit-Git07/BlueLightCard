@@ -11,6 +11,7 @@ const Search: FC<SearchProps> = ({
   onBackButtonClick,
   onFocus,
   placeholderText,
+  value,
 }) => {
   const initialValue = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -82,7 +83,7 @@ const Search: FC<SearchProps> = ({
     />
   );
   return (
-    <form onSubmit={onSubmit} className="mx-4 my-2">
+    <form onSubmit={onSubmit} className="px-2 z-10 w-full">
       <div className="relative">
         {isFocused ? leftArrow : searchIcon}
         <input
@@ -94,7 +95,7 @@ const Search: FC<SearchProps> = ({
           value={searchTerm}
           placeholder={placeholderText}
           type="search"
-          className="new-search pl-14 pr-4 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-neutral-white border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
+          className="new-search pl-14 pr-12 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-neutral-white border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
         />
         {searchTerm && clearIcon}
       </div>

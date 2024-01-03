@@ -7,3 +7,12 @@ export const CharacterEntities: Record<string, string> = {
   '€™': '\u{0000}', // Sonos - About
   â: "'", //Butlin's - Enjoy the best of Butlin's, plus an extra £20 off
 };
+
+export const recentSearchesData = [
+  'nike',
+  'jd sports',
+  'new',
+  'samsung',
+  'new look',
+  'british airways',
+];

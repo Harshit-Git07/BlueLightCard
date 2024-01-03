@@ -1,4 +1,4 @@
 export interface RecentSearchButtonProps {
-  onPress: () => void;
+  onClick: () => void;
   text: string;
 }

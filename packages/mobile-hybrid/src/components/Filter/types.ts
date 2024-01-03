@@ -1,4 +1,4 @@
 export interface FilterProps {
-  onPress: () => void;
+  onClick: () => void;
   filterCount: number;
 }

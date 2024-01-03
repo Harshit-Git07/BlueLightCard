@@ -3,9 +3,9 @@ import { faBarsFilter } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FilterProps } from './types';
 
-const Filter: FC<FilterProps> = ({ onPress, filterCount }) => {
-  const onPressHandler = () => {
-    onPress && onPress();
+const Filter: FC<FilterProps> = ({ onClick, filterCount }) => {
+  const onClickHandler = () => {
+    onClick && onClick();
   };
 
   const icons =
@@ -16,16 +16,17 @@ const Filter: FC<FilterProps> = ({ onPress, filterCount }) => {
     ) : (
       <FontAwesomeIcon
         icon={faBarsFilter}
+        size="lg"
         role="button"
-        className="absolute text-primary-dukeblue-600 left-14 top-[10px] dark:text-primary-vividskyblue-700"
+        className="absolute text-primary-dukeblue-600 right-2 top-[8px] dark:text-primary-vividskyblue-700"
         aria-hidden="true"
       />
     );
   return (
     <div>
       <button
-        onClick={onPressHandler}
-        className="relative w-[86px] h-[36px] font-museo dark:text-primary-vividskyblue-700 text-primary-dukeblue-600 rounded pr-10 pl-2 m-2"
+        onClick={onClickHandler}
+        className="relative w-[86px] h-[36px] z-10 font-museo dark:text-primary-vividskyblue-700 text-primary-dukeblue-600 rounded pr-8 pl-2"
       >
         Filter
         {icons}

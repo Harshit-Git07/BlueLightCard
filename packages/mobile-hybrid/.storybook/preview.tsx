@@ -3,8 +3,10 @@ import '../src/styles/carousel.css';
 
 import { INITIAL_VIEWPORTS } from "@storybook/addon-viewport";
 import { Preview } from '@storybook/react';
+import fontDecorator from './fontDecorator';
 
 const preview: Preview = {
+  decorators: [fontDecorator],
   parameters: {
     viewport: {
       defaultViewport: 'iphonexr',

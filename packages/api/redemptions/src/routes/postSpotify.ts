@@ -1,29 +1,19 @@
-import { IRestApi, MethodResponse, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
+import { IRestApi, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
+import { ApiGatewayV1ApiRouteProps, Stack } from 'sst/constructs';
+
 import {
   ApiGatewayModelGenerator,
   MethodResponses,
   Model,
   ResponseModel,
 } from '../../../core/src/extensions/apiGatewayExtension';
-import { Stack } from 'sst/constructs';
 
-interface PostSpotifyHandler {
-  function: {
-    handler: string;
-    environment: {
-      CODES_REDEEMED_HOST?: string;
-      ENVIRONMENT?: string;
-      CODE_REDEEMED_PATH?: string;
-      CODE_ASSIGNED_REDEEMED_PATH?: string;
-    };
-  };
-  cdk: {
-    method: {
-      requestModels: Record<string, any>;
-      methodResponses: MethodResponse[];
-      requestValidator: RequestValidator;
-    };
-  };
+function getRequiredEnv(key: string): string {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+  return value;
 }
 
 export class PostSpotify {
@@ -34,15 +24,15 @@ export class PostSpotify {
     private readonly api: IRestApi,
   ) {}
 
-  postSpotify(): PostSpotifyHandler {
+  postSpotify(): ApiGatewayV1ApiRouteProps<'Authorizer'> {
     return {
       function: {
         handler: 'packages/api/redemptions/src/handlers/proxy/postSpotify.handler',
         environment: {
-          CODES_REDEEMED_HOST: process.env.CODES_REDEEMED_HOST,
-          ENVIRONMENT: process.env.ENVIRONMENT,
-          CODE_REDEEMED_PATH: process.env.CODE_REDEEMED_PATH,
-          CODE_ASSIGNED_REDEEMED_PATH: process.env.CODE_ASSIGNED_REDEEMED_PATH,
+          CODES_REDEEMED_HOST: getRequiredEnv('CODES_REDEEMED_HOST'),
+          ENVIRONMENT: getRequiredEnv('ENVIRONMENT'),
+          CODE_REDEEMED_PATH: getRequiredEnv('CODE_REDEEMED_PATH'),
+          CODE_ASSIGNED_REDEEMED_PATH: getRequiredEnv('CODE_ASSIGNED_REDEEMED_PATH'),
         },
       },
       cdk: {

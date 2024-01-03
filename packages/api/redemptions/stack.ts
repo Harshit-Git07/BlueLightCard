@@ -1,20 +1,22 @@
-import { Identity } from '../identity/stack';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
+
 import { Shared } from '../../../stacks/stack';
 import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension';
+import { Identity } from '../identity/stack';
+
+import { Tables } from './databases/tables';
+import { EventBridge } from './eventBridge/eventBridge';
+import { LinkEvents, OfferEvents, PromotionEvents, VaultEvents } from './eventBridge/events/';
+import { createLinkRule, createOfferRule, createPromotionRule, createVaultRule } from './eventBridge/rules';
 import { PostAffiliateModel } from './src/models/postAffiliate';
 import { PostSpotifyModel } from './src/models/postSpotify';
 import { PostAffiliate } from './src/routes/postAffiliate';
 import { PostSpotify } from './src/routes/postSpotify';
-import { EventBridge } from './eventBridge/eventBridge';
-import { createLinkRule, createVaultRule, createPromotionRule, createOfferRule } from './eventBridge/rules';
-import { LinkEvents, VaultEvents, PromotionEvents, OfferEvents } from './eventBridge/events/';
-
-import { Tables } from './databases/tables';
 
 export function Redemptions({ stack }: StackContext): {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   api: ApiGatewayV1Api<any>;
 } {
   const { certificateArn } = use(Shared);

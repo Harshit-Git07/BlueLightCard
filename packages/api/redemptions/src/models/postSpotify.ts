@@ -1,12 +1,16 @@
 import { z } from 'zod';
 
-export const PostSpotifyModel = z.object({
-  platform: z.string(),
-  companyId: z.number(),
-  offerId: z.number(),
-  memberId: z.string(),
-  url: z.string(),
-});
+import { createZodNamedType } from '@blc-mono/core/src/extensions/apiGatewayExtension/agModelGenerator';
 
-(PostSpotifyModel as any)._ModelName = 'PostSpotifyModel';
+export const PostSpotifyModel = createZodNamedType(
+  'PostSpotifyModel',
+  z.object({
+    platform: z.string(),
+    companyId: z.number(),
+    offerId: z.number(),
+    memberId: z.string(),
+    url: z.string(),
+  }),
+);
+
 export type PostSpotifyModel = z.infer<typeof PostSpotifyModel>;

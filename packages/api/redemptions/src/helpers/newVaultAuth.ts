@@ -1,6 +1,5 @@
-import { randomBytes } from 'crypto';
 import aesjs from 'aes-js';
-// @ts-expect-error
+import { randomBytes } from 'crypto';
 import * as pkcs7 from 'pkcs7';
 
 export const generateKey = (data: string, password: string): string => {

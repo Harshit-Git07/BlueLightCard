@@ -1,4 +1,4 @@
 export interface IEventBridge {
   source: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }

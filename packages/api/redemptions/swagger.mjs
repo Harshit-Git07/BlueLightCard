@@ -1,11 +1,11 @@
-import fs from 'fs'
-import swaggerAutogen from 'swagger-autogen'
+import fs from 'fs';
+import swaggerAutogen from 'swagger-autogen';
 
 const doc = {
   info: {
     version: '1.0.0',
     title: 'Redemptions Member API',
-    description: 'Redemptions Member API to manage member redemptions'
+    description: 'Redemptions Member API to manage member redemptions',
   },
   host: process.argv[2] === 'production' ? 'redemptions.blcshine.io' : 'staging-redemptions.blcshine.io',
   basePath: '/member',
@@ -15,8 +15,8 @@ const doc = {
   tags: [
     {
       name: 'Member',
-      description: 'Member facing endpoints'
-    }
+      description: 'Member facing endpoints',
+    },
   ],
   components: {
     securitySchemes: {
@@ -26,15 +26,15 @@ const doc = {
           authorizationCode: {
             authorizationUrl: 'https://staging-blc-mono.auth.eu-west-2.amazoncognito.com/oauth2/authorize',
             tokenUrl: 'https://staging-blc-mono.auth.eu-west-2.amazoncognito.com/oauth2/token',
-            scopes: {}
-          }
-        }
-      }
-    }
-  }
-}
+            scopes: {},
+          },
+        },
+      },
+    },
+  },
+};
 
-const outputFile = './swagger.json'
-const routes = fs.readdirSync('./src/documentation/').map(file => `./src/documentation/${file}`)
+const outputFile = './swagger.json';
+const routes = fs.readdirSync('./src/documentation/').map((file) => `./src/documentation/${file}`);
 
-swaggerAutogen({ openapi: '3.0.0' })(outputFile, routes, doc)
+swaggerAutogen({ openapi: '3.0.0' })(outputFile, routes, doc);

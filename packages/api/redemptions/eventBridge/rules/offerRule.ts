@@ -1,6 +1,8 @@
-import { FunctionProps, Rule } from './rule';
 import { Queue, Stack, Table } from 'sst/constructs';
+
 import { EventBridgePermissions } from '../eventBridgePermissions';
+
+import { FunctionProps, Rule } from './rule';
 
 export const createOfferRule = ({
   ruleName,

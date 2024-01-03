@@ -1,7 +1,10 @@
 import {z} from 'zod';
 import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
+import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 
-export const UserModel = z.object({
+export const UserModel = createZodNamedType(
+  'UserModel',
+  z.object({
     firstname: z.string(),
     surname: z.string(),
     organisation: z.string(),
@@ -16,8 +19,7 @@ export const UserModel = z.object({
   }).transform(user => ({
     ...user,
     dob: transformDateToFormatYYYYMMDD(user.dob)
-  }));
-
-(UserModel as any)._ModelName = 'UserModel'
+  })),
+);
 
 export type UserModel = z.infer<typeof UserModel>;

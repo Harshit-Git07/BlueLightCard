@@ -1,13 +1,14 @@
+import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import {z} from 'zod';
-import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
 
-export const EcFormOutputDataModel = z.object({
+export const EcFormOutputDataModel = createZodNamedType(
+  'EcFormOutputDataModel',
+  z.object({
     employer: z.string(),
     organisation: z.string(),
     employmentStatus: z.string(),
     jobRole: z.string(),
-  });
-
-(EcFormOutputDataModel as any)._ModelName = 'EcFormOutputDataModel'
+  }),
+);
 
 export type EcFormOutputDataModel = z.infer<typeof EcFormOutputDataModel>;

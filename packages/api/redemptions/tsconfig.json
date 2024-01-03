@@ -1,5 +1,4 @@
 {
-
   "compilerOptions": {
     "strict": true,
     "allowJs": true,
@@ -9,6 +8,9 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@blc-mono/core/*": ["../core/src/*"]
+    }
   }
 }

@@ -1,8 +1,9 @@
 import { Logger } from '@blc-mono/core/src/utils/logger/logger';
-import { IEventBridge } from '../../types/event';
-import { VaultEvents } from '../../events/';
 
-import { vaultUpdatedHandler, vaultCreatedHandler } from './vualtEventHandlers';
+import { VaultEvents } from '../../events/';
+import { IEventBridge } from '../../types/event';
+
+import { vaultCreatedHandler, vaultUpdatedHandler } from './vaultEventHandlers';
 
 const service: string = process.env.service as string;
 const logger = new Logger();

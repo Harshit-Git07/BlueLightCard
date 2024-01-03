@@ -1,10 +1,14 @@
 import { z } from 'zod';
 
-export const PostAffiliateModel = z.object({
-  affiliateUrl: z.string(),
-  memberId: z.string(),
-  platform: z.string().optional(),
-});
+import { createZodNamedType } from '@blc-mono/core/src/extensions/apiGatewayExtension/agModelGenerator';
 
-(PostAffiliateModel as any)._ModelName = 'PostAffiliateModel';
+export const PostAffiliateModel = createZodNamedType(
+  'PostAffiliateModel',
+  z.object({
+    affiliateUrl: z.string(),
+    memberId: z.string(),
+    platform: z.string().optional(),
+  }),
+);
+
 export type PostAffiliateModel = z.infer<typeof PostAffiliateModel>;

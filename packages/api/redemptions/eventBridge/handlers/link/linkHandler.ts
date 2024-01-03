@@ -1,6 +1,7 @@
 import { Logger } from '@blc-mono/core/src/utils/logger/logger';
-import { IEventBridge } from '../../types/event';
+
 import { LinkEvents } from '../../events/';
+import { IEventBridge } from '../../types/event';
 
 import { linkCreatedHandler, linkUpdatedHandler } from './linkEventHandlers';
 

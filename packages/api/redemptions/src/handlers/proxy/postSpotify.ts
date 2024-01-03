@@ -1,8 +1,9 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
-import { RequestResponse, httpRequest } from '../../../../core/src/utils/fetch/httpRequest';
-import { Response } from '../../../../core/src/utils/restResponse/response';
 import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+
+import { httpRequest, RequestResponse } from '../../../../core/src/utils/fetch/httpRequest';
+import { Response } from '../../../../core/src/utils/restResponse/response';
 import { generateKey } from '../../helpers/newVaultAuth';
 
 export interface IAPIGatewayEvent extends APIGatewayEvent {

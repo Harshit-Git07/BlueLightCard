@@ -1,5 +1,5 @@
-import { Table } from 'sst/constructs';
 import { Stack } from 'aws-cdk-lib';
+import { Table } from 'sst/constructs';
 
 export const CreateRedemptionConfigTable = (stack: Stack): Table =>
   new Table(stack, 'RedemptionConfigTable', {

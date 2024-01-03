@@ -1,25 +1,13 @@
 import { Stack } from 'aws-cdk-lib';
-import { IRestApi, MethodResponse, RequestValidator } from "aws-cdk-lib/aws-apigateway";
+import { IRestApi, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
+import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
+
 import {
   ApiGatewayModelGenerator,
   MethodResponses,
   Model,
   ResponseModel,
 } from '../../../core/src/extensions/apiGatewayExtension';
-
-
-interface PostAffiliateHandler {
-  function: {
-    handler: string;
-  };
-  cdk: {
-    method: {
-      requestModels: Record<string, any>;
-      methodResponses: MethodResponse[];
-      requestValidator: RequestValidator;
-    };
-  };
-}
 
 export class PostAffiliate {
   constructor(
@@ -29,7 +17,7 @@ export class PostAffiliate {
     private readonly api: IRestApi,
   ) {}
 
-  postAffiliate(): PostAffiliateHandler {
+  postAffiliate(): ApiGatewayV1ApiRouteProps<'Authorizer'> {
     return {
       function: {
         handler: 'packages/api/redemptions/src/handlers/affiliate/postAffiliate.handler',

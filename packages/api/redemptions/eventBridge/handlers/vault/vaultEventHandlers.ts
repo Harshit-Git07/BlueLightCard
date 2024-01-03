@@ -1,4 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-empty-function -- TODO: Implementation
-export const linkCreatedHandler = (): void => {};
+export const vaultCreatedHandler = (): void => {};
 // eslint-disable-next-line @typescript-eslint/no-empty-function -- TODO: Implementation
-export const linkUpdatedHandler = (): void => {};
+export const vaultUpdatedHandler = (): void => {};

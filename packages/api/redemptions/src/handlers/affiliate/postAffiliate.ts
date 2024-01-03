@@ -1,8 +1,10 @@
 import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+
+import { Logger } from '@blc-mono/core/src/utils/logger/logger';
 import { Response } from '@blc-mono/core/src/utils/restResponse/response';
+
 import { AffiliateConfiguration } from '../../helpers/affiliateConfiguration';
 import { PostAffiliateModel } from '../../models/postAffiliate';
-import { Logger } from '@blc-mono/core/src/utils/logger/logger';
 
 interface IAPIGatewayEvent extends APIGatewayEvent {
   body: string;

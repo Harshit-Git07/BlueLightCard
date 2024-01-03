@@ -2,9 +2,23 @@ import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayModelGenerator, Model, BadRequestModelSchema, GenericResponseSchema, ResponseModel } from './..';
 import { Stack } from 'aws-cdk-lib';
 import { z } from 'zod';
+import { createZodNamedType } from '../agModelGenerator';
 
 jest.mock('aws-cdk-lib/aws-apigateway');
 jest.mock('../model');
+
+describe('createZodNamedType', () => {
+  test('returns a ZodObject with a _ModelName property', () => {
+    const name = 'TestModel';
+    const schema = createZodNamedType(name, z.object({
+      prop1: z.string(),
+      prop2: z.number(),
+    }));
+
+    expect(schema).toBeInstanceOf(z.ZodObject);
+    expect(schema._ModelName).toBe(name);
+  });
+});
 
 describe('ApiGatewayModelGenerator', () => {
   let api: RestApi;
@@ -24,11 +38,10 @@ describe('ApiGatewayModelGenerator', () => {
   });
 
   test('generateModel creates a new Model if it does not exist', () => {
-    const model = z.object({
+    const model = createZodNamedType('TestModel', z.object({
       prop1: z.string(),
       prop2: z.number(),
-    });
-    (model as any)._ModelName = 'TestModel';
+    }));
 
     const returnedModel = generator.generateModel(model);
 

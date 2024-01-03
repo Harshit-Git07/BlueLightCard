@@ -21,12 +21,12 @@ config:
   apdex:
     threshold: 100
   ensure:
-      thresholds:
-        - http.response_time.p99: 100
-        - http.response_time.p95: 75
+    thresholds:
+      - http.response_time.p99: 100
+      - http.response_time.p95: 75
 scenarios:
   - flow:
       - loop:
-        - get:
-            url: "/"
+          - get:
+              url: '/'
         count: 100

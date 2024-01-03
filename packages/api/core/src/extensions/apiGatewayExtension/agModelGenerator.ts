@@ -1,7 +1,15 @@
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Model, BadRequestModelSchema, GenericResponseSchema, ResponseModel } from './';
 import { z } from 'zod';
-import { zodToJsonSchema } from 'zod-to-json-schema'
+import { zodToJsonSchema } from 'zod-to-json-schema';
+
+export type NamedZodType<T extends z.ZodTypeAny> = T & { readonly _ModelName: string };
+export function createZodNamedType<T extends z.ZodTypeAny>(name: string, type: T): NamedZodType<T> {
+  const obj = type as NamedZodType<T>;
+  // @ts-expect-error
+  obj._ModelName = name;
+  return obj;
+}
 
 export class ApiGatewayModelGenerator {
   private model?: Model;
@@ -13,7 +21,7 @@ export class ApiGatewayModelGenerator {
      this.badRequestModel = new Model(this.api, "BadRequestModel", BadRequestModelSchema);
   }
 
-  generateModel(model: z.ZodObject<any>): Model {
+  generateModel<T extends z.AnyZodObject>(model: NamedZodType<T>): Model {
     const _modelName = (model as any)._ModelName;
     const modelSchema = zodToJsonSchema(model, _modelName);
     const modelDefinition = modelSchema.definitions?.[_modelName];
@@ -21,7 +29,7 @@ export class ApiGatewayModelGenerator {
     return this.model;
   }
 
-  generateModelFromZodEffect(model: z.ZodEffects<any>): Model {
+  generateModelFromZodEffect<T extends z.ZodEffects<any>>(model: NamedZodType<T>): Model {
     const _modelName = (model as any)._ModelName;
     const modelSchema = zodToJsonSchema(model, _modelName);
     const modelDefinition = modelSchema.definitions?.[_modelName];

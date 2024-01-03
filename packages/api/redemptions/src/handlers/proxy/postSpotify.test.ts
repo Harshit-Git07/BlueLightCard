@@ -1,8 +1,10 @@
-import { afterAll, afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { IAPIGatewayEvent } from './postSpotify';
-import { httpRequest } from '../../../../core/src/utils/fetch/httpRequest';
-import { mocked } from 'jest-mock';
 import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
+import { afterAll, afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { mocked } from 'jest-mock';
+
+import { httpRequest } from '../../../../core/src/utils/fetch/httpRequest';
+
+import { IAPIGatewayEvent } from './postSpotify';
 
 jest.mock('@blc-mono/core/src/utils/fetch/httpRequest');
 

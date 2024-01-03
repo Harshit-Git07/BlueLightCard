@@ -1,7 +1,10 @@
 import { afterAll, describe, expect, jest, test } from '@jest/globals';
-import { Response } from '../../../../core/src/utils/restResponse/response';
-import { handler } from './postAffiliate';
+
 import { Logger } from '@blc-mono/core/src/utils/logger/logger';
+
+import { Response } from '../../../../core/src/utils/restResponse/response';
+
+import { handler } from './postAffiliate';
 
 describe('Create Affiliate Tracking URL', () => {
   const memberId = '1234';

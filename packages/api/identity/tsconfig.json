@@ -7,7 +7,7 @@
       "@blc-mono/core/*": ["../core/src/*"]
     },
     "esModuleInterop": true,
-    "allowJs": true,
+    "allowJs": true
   },
   "ts-node": {
 		"target": "ES6",
@@ -17,5 +17,5 @@
             "ES5"
         ],
         "esModuleInterop": true
-	},
+	}
 }

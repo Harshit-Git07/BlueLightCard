@@ -1,5 +1,6 @@
-import { EventBusRuleProps } from 'sst/constructs';
 import { IQueue } from 'aws-cdk-lib/aws-sqs';
+import { EventBusRuleProps } from 'sst/constructs';
+
 import { EventBridgePermissions } from '../eventBridgePermissions';
 
 export interface FunctionProps {

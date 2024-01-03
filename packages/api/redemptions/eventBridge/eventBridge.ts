@@ -1,6 +1,8 @@
-import { EventBus, use } from 'sst/constructs';
-import { Shared } from '../../../../stacks/stack';
 import { Stack } from 'aws-cdk-lib';
+import { EventBus, use } from 'sst/constructs';
+
+import { Shared } from '../../../../stacks/stack';
+
 import { Rule } from './rules/rule';
 
 export class EventBridge {

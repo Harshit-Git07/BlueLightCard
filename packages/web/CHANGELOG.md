@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.23.0...bluelightcard/web-v1.24.0) (2024-01-04)
+
+
+### Features
+
+* TO-398: update Offer card component ([#753](https://github.com/bluelightcard/BlueLightCard-2.0/issues/753)) ([3947666](https://github.com/bluelightcard/BlueLightCard-2.0/commit/394766644af2c0dae108dcf1edee8f14d380ba8e))
+
+
+### Other Changes
+
+* **redemptions:** [TR-188]: Set up formatting, linting and type checking for redemptions ([#751](https://github.com/bluelightcard/BlueLightCard-2.0/issues/751)) ([3af97eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3af97eb947e18b9538486bed0d49119f8f9b6664))
+
 ## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.22.0...bluelightcard/web-v1.23.0) (2023-12-12)
 
 

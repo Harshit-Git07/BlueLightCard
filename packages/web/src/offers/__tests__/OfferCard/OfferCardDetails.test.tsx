@@ -6,6 +6,7 @@ describe('OfferCardDetails component', () => {
   const args = {
     offerName: '20% off OLED TVs',
     companyName: 'LG',
+    offerTag: 5,
   };
   describe('offer card details smoke test', () => {
     it('should render offer card details component without error', () => {

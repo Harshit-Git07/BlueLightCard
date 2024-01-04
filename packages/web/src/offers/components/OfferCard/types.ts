@@ -7,6 +7,7 @@ export interface OfferCardProps {
   variant?: string;
   id?: string;
   addBackground?: boolean;
+  offerTag?: 'local offer' | 'online offer' | 'high street' | 'gift card' | number | undefined;
 }
 
 export interface OfferCardDetailsProps {
@@ -16,4 +17,5 @@ export interface OfferCardDetailsProps {
   variant?: string;
   id?: string;
   xPaddingClassName?: string;
+  offerTag?: 'local offer' | 'online offer' | 'high street' | 'gift card' | number | undefined;
 }

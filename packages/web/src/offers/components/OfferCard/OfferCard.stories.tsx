@@ -17,6 +17,7 @@ Default.args = {
   offerName: '20% off OLED TVs',
   companyName: 'LG',
   offerLink: 'https://www.bluelightcard.co.uk',
+  offerTag: 5,
 };
 
 export const smallText = OfferCardTemplate.bind({});
@@ -28,6 +29,7 @@ smallText.args = {
   companyName: 'LG',
   offerLink: 'https://www.bluelightcard.co.uk',
   variant: 'small',
+  offerTag: 0,
 };
 
 export default componentMeta;

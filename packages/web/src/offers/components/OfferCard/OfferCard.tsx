@@ -13,6 +13,7 @@ const OfferCard: FC<OfferCardProps> = ({
   variant = 'standard',
   addBackground = false,
   id,
+  offerTag,
 }) => {
   const backgroundRootClasses = addBackground
     ? 'rounded-lg shadow-md dark:bg-surface-secondary-dark'
@@ -41,6 +42,7 @@ const OfferCard: FC<OfferCardProps> = ({
           offerLink={offerLink}
           variant={variant}
           xPaddingClassName={addBackground ? 'px-5' : 'px-2'}
+          offerTag={offerTag}
         />
       </Link>
     </div>

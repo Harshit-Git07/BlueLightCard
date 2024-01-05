@@ -44,7 +44,6 @@ export function Identity({stack}: StackContext) {
 
 	const tables = new Tables(stack)
     const buckets = new Buckets(stack, stack.stage)
-    const lambdas = new Lambda(stack, tables, buckets, stack.stage)
 
     const stageSecret = stack.stage === 'production' || stack.stage === 'staging' ? stack.stage : 'staging';
     const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
@@ -205,16 +204,20 @@ export function Identity({stack}: StackContext) {
 
     //apis
     const identityApi = new ApiGatewayV1Api(stack, 'identity', {
-      authorizers: {
-        identityAuthorizer: {
-          type: 'lambda_request',
-          function: new Function(stack, 'Authorizer', {
-            handler:
-              './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
-          }),
-          identitySources: [apigateway.IdentitySource.header('Authorization')],
+        authorizers: {
+          identityAuthorizer: {
+            type: 'lambda_request',
+            function: new Function(stack, 'Authorizer', {
+              handler:
+                './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
+              environment: {
+                USER_POOL_ID: cognito.userPoolId,
+                USER_POOL_ID_DDS: cognito_dds.userPoolId,
+              },
+            }),
+            identitySources: [apigateway.IdentitySource.header('Authorization')],
+          },
         },
-      },
       defaults: {
         function: {
           timeout: 20,
@@ -252,7 +255,6 @@ export function Identity({stack}: StackContext) {
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(identityApi.cdk.restApi);
     const agUserModel = apiGatewayModelGenerator.generateModelFromZodEffect(UserModel);
     const agEcFormOutputDataModel = apiGatewayModelGenerator.generateModel(EcFormOutputDataModel);
-
 
     identityApi.addRoutes(stack, {
         'GET /user': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
@@ -337,6 +339,8 @@ export function Identity({stack}: StackContext) {
       }),
     });
 
+    const lambdas = new Lambda(stack, tables, buckets, stack.stage);
+
     eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
 
     //add event bridge rules
@@ -349,6 +353,7 @@ export function Identity({stack}: StackContext) {
     bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
     bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
     
+
     return {
         identityApi,
         cognito

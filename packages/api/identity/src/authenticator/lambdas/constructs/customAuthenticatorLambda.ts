@@ -1,6 +1,7 @@
 import { LambdaAbstract } from '../../../common/lambdaAbstract';
 import { Stack } from 'aws-cdk-lib';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Cognito } from 'sst/constructs';
 
 export class CustomAuthenticatorLambda extends LambdaAbstract {
   constructor(private stack: Stack, private stage: String) {

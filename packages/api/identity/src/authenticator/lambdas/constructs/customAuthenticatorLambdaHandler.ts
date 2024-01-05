@@ -7,9 +7,11 @@ import { Logger } from '@aws-lambda-powertools/logger';
 const BEARER_PREFIX = 'Bearer ';
 
 const logger = new Logger({ serviceName: `customAuthenticatorLambdaHandler` });
-const AWS_REGION = process.env.REGION ?? "eu-west-2";
 
 export const handler = async function (event: any): Promise<APIGatewayAuthorizerResult> {
+  const USER_POOL_ID = process.env.USER_POOL_ID ?? "";
+  const USER_POOL_ID_DDS = process.env.USER_POOL_ID_DDS ?? "";
+
   logger.debug(`event => ${JSON.stringify(event)}`);
 
   const authToken = getAuthenticationToken(event);
@@ -17,19 +19,19 @@ export const handler = async function (event: any): Promise<APIGatewayAuthorizer
   try {
     const decodedToken: any = jwtDecode(authToken);
     logger.debug(decodedToken);
-
-    if(!decodedToken.iss.includes(AWS_REGION)) {
-      logger.error('Error: Region of API is different from Cognito region');
-      throw new Error('Unauthorized');
-    }
-
-    const matches: Array<string> = Array.from(decodedToken.iss.matchAll('(?<=amazonaws.com/).*$'));
     
-    const cognitoJwtVerifier = CognitoJwtVerifier.create({
-      userPoolId: matches[0].toString(),
-      clientId: decodedToken.aud,
-      tokenUse: 'id',
-    });
+    const cognitoJwtVerifier = CognitoJwtVerifier.create([
+      {
+        userPoolId: USER_POOL_ID,
+        clientId: decodedToken.aud,
+        tokenUse: 'id',
+      },
+      {
+        userPoolId: USER_POOL_ID_DDS,
+        clientId: decodedToken.aud,
+        tokenUse: 'id',
+      }
+    ]);
 
     const CognitoVerifyParameters: any = {};
     const decodedJWT = await cognitoJwtVerifier.verify(authToken, CognitoVerifyParameters);

@@ -108,6 +108,11 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Deploy
+        env:
+          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
+          ENVIRONMENT: develop
+          CODE_REDEEMED_PATH: NewVault/codesRedeemed
+          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy identity --stage staging --region ${{matrix.region}}
   e2e-test:
     name: End to End Test
@@ -170,4 +175,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Deploy
+        env:
+          CODES_REDEEMED_HOST: https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com
+          ENVIRONMENT: production
+          CODE_REDEEMED_PATH: NewVault/codesRedeemed
+          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy identity --stage production --region ${{matrix.region}}

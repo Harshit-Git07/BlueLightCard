@@ -36,6 +36,9 @@ const DATADOG_SITE = process.env.NEXT_PUBLIC_DATADOG_SITE ?? 'datadoghq.eu';
 const DATADOG_DEFAULT_SERVICE = process.env.NEXT_PUBLIC_DATADOG_DEFAULT_SERVICE ?? '';
 const DATADOG_ENV = process.env.NEXT_PUBLIC_DATADOG_ENV ?? '';
 
+// Search
+const SEARCH_ENDPOINT = process.env.NEXT_PUBLIC_SEARCH_ENDPOINT ?? '';
+
 /*
  * Language is made up of the lng and region
  * Example: [lng]-[region]
@@ -78,4 +81,5 @@ module.exports = {
   DATADOG_SITE,
   DATADOG_DEFAULT_SERVICE,
   DATADOG_ENV,
+  SEARCH_ENDPOINT,
 };

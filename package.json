@@ -82,6 +82,7 @@
     "fast-zlib": "^2.0.1",
     "grapheme-splitter": "^1.0.4",
     "graphql": "^16.8.1",
+    "he": "^1.2.0",
     "ioredis": "^5.3.2",
     "jotai": "^2.6.0",
     "jwt-decode": "^3.1.2",

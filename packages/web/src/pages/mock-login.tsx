@@ -54,7 +54,7 @@ function MockLogin() {
         setIsLoading(false);
       })
       .catch((error: any) => {
-        setErrorMessage('Failed to authenticate');
+        setErrorMessage(error.response.data.message);
         setIsLoading(false);
       });
   }

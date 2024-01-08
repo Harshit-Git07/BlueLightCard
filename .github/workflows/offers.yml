@@ -105,6 +105,11 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Deploy Stack
+        env:
+          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
+          ENVIRONMENT: develop
+          CODE_REDEEMED_PATH: NewVault/codesRedeemed
+          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy global --stage staging && npx sst deploy offers --stage staging
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -136,4 +141,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Deploy Stack
+        env:
+          CODES_REDEEMED_HOST: https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com
+          ENVIRONMENT: production
+          CODE_REDEEMED_PATH: NewVault/codesRedeemed
+          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy global --stage production && npx sst deploy offers --stage production

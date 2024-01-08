@@ -34,4 +34,10 @@ jobs:
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
       - run: npm ci
-      - run: npx sst remove --stage $PR_PREFIX
+      - name: Destroy Global
+        env:
+          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
+          ENVIRONMENT: develop
+          CODE_REDEEMED_PATH: NewVault/codesRedeemed
+          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
+        run: npx sst remove --stage $PR_PREFIX

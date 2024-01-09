@@ -49,7 +49,8 @@ const Search: NextPage = () => {
       const searchResults = await makeSearch(
         queryRaw as string,
         authCtx.authState.idToken ?? '',
-        userCtx.isAgeGated ?? true
+        // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
+        userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false
       );
 
       if (searchResults.results) {

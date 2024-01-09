@@ -20,15 +20,15 @@ export type SearchResultsType = {
  * Makes a search request to the Search API
  * @param queryRaw The raw query string for the search
  * @param idToken The id token for the user for authentication
- * @param isAgeGated Whether or not the search should be hide age gated content
+ * @param allowAgeGated Whether or not the search should allow age gated content
  * @returns SearchResultsType object with either an error or results
  */
-export async function makeSearch(queryRaw: string, idToken: string, isAgeGated: boolean = true) {
+export async function makeSearch(queryRaw: string, idToken: string, allowAgeGated: boolean = true) {
   const axios = require('axios');
   let data = {
     searchTerm: he.escape(queryRaw),
     siteId: getSiteIdFromBrandId(BRAND),
-    allowAgeGated: isAgeGated,
+    allowAgeGated,
   };
 
   let config = {

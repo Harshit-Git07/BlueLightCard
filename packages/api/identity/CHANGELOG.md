@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.37.1...bluelightcard/identity-v1.38.0) (2024-01-08)
+
+
+### Features
+
+* ti 712 use lambda custom auth with api gateway ([#742](https://github.com/bluelightcard/BlueLightCard-2.0/issues/742)) ([0505b4e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0505b4e99beb0af4a0de08dd962e5bbb69ca125f))
+* ti 712 use lambda custom auth with api gateway ([#757](https://github.com/bluelightcard/BlueLightCard-2.0/issues/757)) ([1b87c59](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1b87c593d330c357b75a32949f5f5bcfe0690cde))
+
+
+### Bug Fixes
+
+* For custom lambda auth - allow usage of 'lowercase authorizer header' ([#749](https://github.com/bluelightcard/BlueLightCard-2.0/issues/749)) ([522d393](https://github.com/bluelightcard/BlueLightCard-2.0/commit/522d393703cc7bf4b8f27f1a634f37526356f8e1))
+* TI-000: fixed user endpoint for dds and aus ([#738](https://github.com/bluelightcard/BlueLightCard-2.0/issues/738)) ([92e91ec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/92e91ec15cf31a1c1a082f9b757d5524ecc2006d))
+
+
+### Other Changes
+
+* **redemptions:** [TR-188]: Set up formatting, linting and type checking for redemptions ([#751](https://github.com/bluelightcard/BlueLightCard-2.0/issues/751)) ([3af97eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3af97eb947e18b9538486bed0d49119f8f9b6664))
+
 ## [1.37.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.37.0...bluelightcard/identity-v1.37.1) (2023-12-08)
 
 

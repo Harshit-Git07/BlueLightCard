@@ -8,6 +8,10 @@ export interface OfferCardProps {
   id?: string;
   addBackground?: boolean;
   offerTag?: 'local offer' | 'online offer' | 'high street' | 'gift card' | number | undefined;
+  withBorder?: boolean;
+  upperCaseTitle?: boolean;
+  showFindOutMore?: boolean;
+  fallbackImage?: string;
 }
 
 export interface OfferCardDetailsProps {
@@ -18,4 +22,5 @@ export interface OfferCardDetailsProps {
   id?: string;
   xPaddingClassName?: string;
   offerTag?: 'local offer' | 'online offer' | 'high street' | 'gift card' | number | undefined;
+  upperCaseTitle?: boolean;
 }

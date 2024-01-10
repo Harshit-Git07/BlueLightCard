@@ -9,6 +9,7 @@ export type SearchOfferType = {
   offerimg: string;
   CompID: number;
   CompanyName: string;
+  OfferType: number;
 };
 
 export type SearchResultsType = {

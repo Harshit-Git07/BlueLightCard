@@ -9,6 +9,7 @@ describe('OfferCard component', () => {
     offerName: '20% off OLED TVs',
     companyName: 'LG',
     offerLink: 'https://www.bluelightcard.co.uk/offerdetails.php',
+    showFindOutMore: true,
   };
   describe('offer card smoke test', () => {
     it('should render offer card component without error', () => {

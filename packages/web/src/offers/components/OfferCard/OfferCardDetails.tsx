@@ -10,6 +10,7 @@ const OfferCardDetails: FC<OfferCardDetailsProps> = ({
   variant = 'standard',
   xPaddingClassName = 'px-5',
   offerTag,
+  upperCaseTitle = false,
 }) => {
   const { offerTagIcon, offerTagText } = OfferCardDetailsConfig(
     typeof offerTag === 'string' ? offerTag : convertOfferTagIndexToString(offerTag)
@@ -35,7 +36,7 @@ const OfferCardDetails: FC<OfferCardDetailsProps> = ({
           {offerTagIcon} {offerTagText}
         </p>
         <p className='text-shade-greyscale-black font-bold desktop:text-lg laptop:text-lg tablet:text-md mobile:text-sm font-["MuseoSans"] dark:text-shade-greyscale-white'>
-          {companyName.toUpperCase()}
+          {upperCaseTitle ? companyName.toUpperCase() : companyName}
         </p>
       </div>
       <div className={xPaddingClassName}>

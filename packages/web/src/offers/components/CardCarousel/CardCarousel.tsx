@@ -46,6 +46,8 @@ const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouse
                     offerLink={offer.href}
                     variant={useSmallCards ? 'small' : ''}
                     id={'_offer_card_' + index}
+                    showFindOutMore
+                    upperCaseTitle
                   />
                 ))
               : [...Array(itemsToShow)].map((_, index) => <OfferCardPlaceholder key={index} />)}

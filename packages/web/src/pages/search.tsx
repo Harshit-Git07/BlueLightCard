@@ -104,6 +104,8 @@ const Search: NextPage = () => {
                     }
                     alt={''}
                     offerLink={`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`}
+                    offerTag={result.OfferType}
+                    withBorder
                   />
                 </div>
               );

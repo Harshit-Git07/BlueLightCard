@@ -15,20 +15,19 @@ export default function CopyCodePage() {
   const [error, setError] = useState(false);
   const params = useSearchParams();
   const amplitude = useContext(AmplitudeContext);
-  const [data, setData] = useState<OfferData>({});
+  const [data, setData] = useState<OfferData | null>();
   const router = useRouter();
   const sentPageView = useRef(false);
 
   useEffect(() => {
-    const userIdParam = params.get('userId');
-    const amplitudeData = params.get('amplitudeData');
+    const amplitudeData = params.get('metaData');
 
-    if (userIdParam && amplitudeData) {
+    if (amplitudeData) {
       const offerData: OfferData = JSON.parse(decodeBase64(amplitudeData));
       setData(offerData);
 
       if (amplitude && !sentPageView.current) {
-        amplitude.setUserId(userIdParam);
+        amplitude.setUserId(offerData.userUID);
         amplitude.trackEventAsync(amplitudeEvents.EMAIL_CODE_VIEWED, offerData);
         sentPageView.current = true;
       }

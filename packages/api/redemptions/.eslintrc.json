@@ -31,5 +31,13 @@
       }
     ],
     "simple-import-sort/exports": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.test.ts"],
+      "rules": {
+        "@typescript-eslint/no-non-null-assertion": "off"
+      }
+    }
+  ]
 }

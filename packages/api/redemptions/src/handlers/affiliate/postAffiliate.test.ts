@@ -262,6 +262,6 @@ describe('Create Affiliate Tracking URL', () => {
       }),
     });
 
-    expect(res).toEqual(Response.Error(new Error('Error while creating tracking URL')));
+    expect(res).toEqual(Response.Error(new Error('Error while creating tracking URL (affiliate not supported)')));
   });
 });

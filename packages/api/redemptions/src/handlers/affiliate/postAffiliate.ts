@@ -3,7 +3,7 @@ import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { Logger } from '@blc-mono/core/src/utils/logger/logger';
 import { Response } from '@blc-mono/core/src/utils/restResponse/response';
 
-import { AffiliateConfiguration } from '../../helpers/affiliateConfiguration';
+import { AffiliateConfigurationHelper } from '../../helpers/affiliateConfiguration';
 import { PostAffiliateModel } from '../../models/postAffiliate';
 
 interface IAPIGatewayEvent extends APIGatewayEvent {
@@ -20,23 +20,25 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
     message: 'POST Affiliate Input',
   });
   const { affiliateUrl, memberId, platform }: PostAffiliateModel = JSON.parse(event.body);
-  try {
-    const trackingUrl: string = new AffiliateConfiguration(affiliateUrl, memberId).trackingUrl;
-    const response = Response.OK({ message: 'Success', data: { trackingUrl } });
+  const affiliateConfig = new AffiliateConfigurationHelper(affiliateUrl).getConfig();
 
-    logger.info({
-      message: 'Successful affiliate url request',
-      body: { affiliateUrl, trackingUrl, platform },
-      status: response.statusCode,
-    });
-
-    return response;
-  } catch (error) {
+  if (!affiliateConfig) {
     logger.error({
-      message: 'Error while creating tracking URL',
+      message: 'Affiliate not supported',
       body: { affiliateUrl, platform },
     });
 
-    return Response.Error(new Error('Error while creating tracking URL'));
+    return Response.Error(new Error('Error while creating tracking URL (affiliate not supported)'));
   }
+
+  const trackingUrl: string = affiliateConfig.getTrackingUrl(memberId);
+  const response = Response.OK({ message: 'Success', data: { trackingUrl } });
+
+  logger.info({
+    message: 'Successful affiliate url request',
+    body: { affiliateUrl, trackingUrl, platform },
+    status: response.statusCode,
+  });
+
+  return response;
 };

@@ -6,24 +6,58 @@ declare module 'lodash' {
   }
 }
 
-interface Affiliate {
+export type AffiliateConfiguration = {
+  /**
+   * The identifier for the affiliate (e.g. `awin`).
+   */
+  affiliate: string;
+  /**
+   * Generates the tracking URL for the affiliate.
+   *
+   * @param memberId The member ID to add to the tracking URL.
+   * @returns The tracking URL for the affiliate.
+   */
+  getTrackingUrl(memberId: string): string;
+};
+
+type AffiliateConfigurationMatch = AffiliateConfiguration & {
+  /**
+   * `true` if the affiliate URL is a match for this affiliate config.
+   */
   match: boolean;
-  url: () => string;
-}
+};
 
 /**
  *  This class configures the tracking URLS for affiliates
+ *
  *  @param affiliateUrl - The default affilate URL string
- *  @param memberId - The members ID
+ *
+ *  @example
+ *  ```ts
+ *  const affiliateConfig = new AffiliateConfigurationHelper(affiliateUrl).getConfig();
+ *
+ *  if (affiliateConfig === null) {
+ *    throw new Error('Unrecognized affiliate URL');
+ *  }
+ *
+ *  const trackingUrl: string = affiliateConfig.getTrackingUrl(memberId);
+ *  const affiliate: string = affiliateConfig.affiliate;
+ *  ```
  */
-export class AffiliateConfiguration {
-  url: URL;
-  trackingUrl: string;
+export class AffiliateConfigurationHelper {
+  private affiliateConfig: AffiliateConfiguration | null;
 
-  constructor(private readonly affiliateUrl: string, private readonly memberId: string) {
-    this.url = new URL(this.affiliateUrl);
+  /**
+   * Gets the affiliate configuration object.
+   *
+   * @returns The affiliate configuration object or `null` if the affiliate URL provided to the constructor does not match any affiliate.
+   */
+  getConfig(): AffiliateConfiguration | null {
+    return this.affiliateConfig;
+  }
 
-    const affiliates: Record<string, Affiliate> = {
+  constructor(private readonly affiliateUrl: string) {
+    const affiliates: Record<string, AffiliateConfigurationMatch> = {
       awin: this.awin(),
       affiliateFuture: this.affiliateFuture(),
       rakuten: this.rakuten(),
@@ -38,101 +72,121 @@ export class AffiliateConfiguration {
       tradedoubler: this.tradedoubler(),
     };
 
-    this.trackingUrl = _.find(affiliates, (affiliate) => affiliate.match).url();
+    this.affiliateConfig = _.find(affiliates, (affiliate) => affiliate.match) || null;
   }
 
-  awin() {
+  // #region Affiliate Configuration - The methods below are used to generate the the affiliate configuration object for each affiliate.
+
+  private awin(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'awin',
       match: this.matchHostname('www.awin1.com'),
-      url: () => this.addParameter('clickref'),
+      getTrackingUrl: (memberId: string) => this.addParameter('clickref', memberId),
     };
   }
 
-  affiliateFuture() {
+  private affiliateFuture(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'affiliateFuture',
       match: this.matchHostname('scripts.affiliatefuture.com'),
-      url: () => this.addParameter('tracking'),
+      getTrackingUrl: (memberId: string) => this.addParameter('tracking', memberId),
     };
   }
 
-  rakuten() {
+  private rakuten(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'rakuten',
       match: this.matchHostname('click.linksynergy.com'),
-      url: () => this.addParameter('u1'),
+      getTrackingUrl: (memberId: string) => this.addParameter('u1', memberId),
     };
   }
 
-  affilinet() {
+  private affilinet(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'affilinet',
       match: this.matchHostname('being.successfultogether.co.uk'),
-      url: () => this.addParameter('subid'),
+      getTrackingUrl: (memberId: string) => this.addParameter('subid', memberId),
     };
   }
 
-  webgains() {
+  private webgains(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'webgains',
       match: this.matchHostname('track.webgains.com'),
-      url: () => this.addParameter('clickref'),
+      getTrackingUrl: (memberId: string) => this.addParameter('clickref', memberId),
     };
   }
 
-  partnerize() {
+  private partnerize(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'partnerize',
       match: this.matchHostname('prf.hn'),
-      url: () => {
-        this.url.pathname = this.url.pathname.includes('MEMID')
-          ? this.url.pathname.replace('MEMID', this.memberId)
-          : this.url.pathname.includes('/destination:')
-          ? this.url.pathname.replace('/destination:', `/pubref:${this.memberId}/destination:`)
-          : this.url.pathname.replace('/camref:', `/pubref:${this.memberId}/camref:`);
-        return this.url.href;
+      getTrackingUrl: (memberId: string) => {
+        const url = new URL(this.affiliateUrl);
+        url.pathname = url.pathname.includes('MEMID')
+          ? url.pathname.replace('MEMID', memberId)
+          : url.pathname.includes('/destination:')
+          ? url.pathname.replace('/destination:', `/pubref:${memberId}/destination:`)
+          : url.pathname.replace('/camref:', `/pubref:${memberId}/camref:`);
+        return url.href;
       },
     };
   }
 
-  impactRadius() {
+  private impactRadius(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'impactRadius',
       match: this.matchPathname('/c/'),
-      url: () => this.addParameter('subId1'),
+      getTrackingUrl: (memberId: string) => this.addParameter('subId1', memberId),
     };
   }
 
-  adtraction() {
+  private adtraction(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'adtraction',
       match: this.matchHostname('track.adtraction.com'),
-      url: () => this.addParameter('epi'),
+      getTrackingUrl: (memberId: string) => this.addParameter('epi', memberId),
     };
   }
 
-  affiliateGateway() {
+  private affiliateGateway(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'affiliateGateway',
       match: this.matchHostname('www.tagserve.com'),
-      url: () => this.addParameter('SUBID'),
+      getTrackingUrl: (memberId: string) => this.addParameter('SUBID', memberId),
     };
   }
 
-  optimiseMedia() {
+  private optimiseMedia(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'optimiseMedia',
       match: this.matchHostname('clk.omgt1.com'),
-      url: () => this.addParameter('UID'),
+      getTrackingUrl: (memberId: string) => this.addParameter('UID', memberId),
     };
   }
 
-  commissionJunction() {
+  private commissionJunction(): AffiliateConfigurationMatch {
     return {
-      match: (() => this.commissionJunctionDomains.includes(this.url.hostname))(),
-      url: () => this.addParameter('sid'),
+      affiliate: 'commissionJunction',
+      match: (() => this.commissionJunctionDomains.includes(new URL(this.affiliateUrl).hostname))(),
+      getTrackingUrl: (memberId: string) => this.addParameter('sid', memberId),
     };
   }
 
-  tradedoubler() {
+  private tradedoubler(): AffiliateConfigurationMatch {
     return {
+      affiliate: 'tradedoubler',
       match: this.matchHostname('tradedoubler.com'),
-      url: () => this.addParameter('epi'),
+      getTrackingUrl: (memberId: string) => this.addParameter('epi', memberId),
     };
   }
 
-  commissionJunctionDomains = [
+  // #endregion Affiliate Configuration
+
+  /**
+   * List of Commission Junction domains.
+   */
+  private commissionJunctionDomains = [
     'www.anrdoezrs.net',
     'www.apmebf.com',
     'www.awltovhc.com',
@@ -161,18 +215,38 @@ export class AffiliateConfiguration {
     'qksz.net',
     'tkqlhce.com',
     'tqlkg.com',
-  ].toString();
+  ];
 
-  matchHostname(identifier: string) {
-    return this.url.hostname.includes(identifier);
+  /**
+   * Checks if the hostname includes the identifier.
+   *
+   * @param identifier String to match against the hostname.
+   * @returns `true` if the hostname includes the identifier.
+   */
+  private matchHostname(identifier: string) {
+    return new URL(this.affiliateUrl).hostname.includes(identifier);
   }
 
-  matchPathname(identifier: string) {
-    return this.url.pathname.includes(identifier);
+  /**
+   * Checks if the pathname includes the identifier.
+   *
+   * @param identifier String to match against the pathname.
+   * @returns `true` if the pathname includes the identifier.
+   */
+  private matchPathname(identifier: string) {
+    return new URL(this.affiliateUrl).pathname.includes(identifier);
   }
 
-  addParameter(parameter: string) {
-    this.url.searchParams.append(parameter, this.memberId);
-    return this.url.href;
+  /**
+   * Adds a search parameter to the affiliate URL.
+   *
+   * @param parameter Name of the search parameter to add.
+   * @param value Value of the search parameter to add.
+   * @returns The affiliate URL with the search parameter added.
+   */
+  private addParameter(parameter: string, value: string) {
+    const url = new URL(this.affiliateUrl);
+    url.searchParams.append(parameter, value);
+    return url.href;
   }
 }

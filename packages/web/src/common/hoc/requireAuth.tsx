@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 
 import AuthContext from '@/context/Auth/AuthContext';
@@ -7,11 +7,11 @@ import AuthContext from '@/context/Auth/AuthContext';
 import { LOGOUT_ROUTE } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 
-export function redirectToLogin(router: any) {
+export function redirectToLogin(router: NextRouter) {
   if (process.env.NODE_ENV == 'production') {
-    window.location.replace(LOGOUT_ROUTE);
+    window.location.replace(`${LOGOUT_ROUTE}?redirect=${router.asPath}`);
   } else {
-    router.push(LOGOUT_ROUTE);
+    router.push(`${LOGOUT_ROUTE}?redirect=${router.asPath}`);
   }
 }
 

@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const homePageQuery = (brand: string, isUnder18: boolean, organisation: string) => gql`
   query HomePageQuery {
     banners: getBanners(
-      input: {brandId: "${brand}", limit: 10, type: "sponsor", restriction: {isUnder18: ${isUnder18}}}
+      input: {brandId: "${brand}", limit: 100, type: "sponsor", restriction: {isUnder18: ${isUnder18}}}
     ) {
       link
       imageSource

@@ -20,6 +20,7 @@ import getCDNUrl from '@/utils/getCDNUrl';
 import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceholder';
 import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
 import { logSearchPage, logSearchResultsViewed } from '@/utils/amplitude';
+import { shuffle } from 'lodash';
 
 const he = require('he');
 
@@ -63,7 +64,7 @@ const Search: NextPage = () => {
       // Banner Data
       try {
         let bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
-        setAdverts(bannerData.data.banners as BannerDataType[]);
+        setAdverts(shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[]);
       } catch (error) {
         setAdverts([]);
       }
@@ -118,8 +119,8 @@ const Search: NextPage = () => {
 
       {adverts.length > 0 && (
         <Container className="py-5" addBottomHorizontalLine={false}>
-          <div className="flex flex-col tablet:flex-row justify-center tablet:space-x-6 tablet:space-y-0 space-x-0 space-y-6 relative">
-            {adverts.slice(0, 2).map((advert, index) => {
+          <div className="grid grid-cols-1 tablet:grid-cols-2 tablet:space-x-6 tablet:space-y-0 space-x-0 space-y-6 relative">
+            {adverts.map((advert, index) => {
               return (
                 <div key={index}>
                   <Link href={advert.link}>

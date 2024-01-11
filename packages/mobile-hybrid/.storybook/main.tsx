@@ -1,4 +1,5 @@
 import { StorybookConfig } from '@storybook/nextjs';
+import { resolve } from 'path';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],

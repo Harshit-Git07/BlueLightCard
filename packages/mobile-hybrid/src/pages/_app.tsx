@@ -13,7 +13,7 @@ import '@/nativeReceive';
 import { museoFont, sourceSansPro } from '@/font';
 import { NewsStoreProvider } from '@/modules/news/store';
 import eventBus from '@/eventBus';
-import Loader from '@/modules/loader';
+import Spinner from '@/modules/Spinner';
 
 dayjs.extend(CustomParseFormat);
 
@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <NewsStoreProvider>
         <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
           <Component {...pageProps} />
-          <Loader />
+          <Spinner />
         </main>
       </NewsStoreProvider>
     </AppStoreProvider>

@@ -1,6 +1,8 @@
 import { createContext, FC, useEffect, Reducer, useReducer, PropsWithChildren } from 'react';
+import { useSetAtom } from 'jotai';
 import { AppContextStructure, AppStore, DispatchActionData } from './types';
 import { APIUrl, Channels, eventBus } from '@/globals';
+import { spinner } from '@/modules/Spinner/store';
 
 const initialState: AppStore = {
   loading: {
@@ -47,6 +49,8 @@ const storeReducer: Reducer<AppContextStructure, DispatchActionData> = (state, a
 
 export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(storeReducer, initialState);
+  const setSpinner = useSetAtom(spinner);
+
   useEffect(() => {
     eventBus.on(Channels.API_RESPONSE, () => {
       const latest = eventBus.getLatestMessage(Channels.API_RESPONSE);
@@ -65,6 +69,8 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
           loading: false,
         },
       });
+      // MIGRATION - migrating over to the use of atoms, by setting the loading state on the new spinner
+      setSpinner(!!Object.values(state.loading).filter((loading) => !loading).length);
     });
     eventBus.on(Channels.EXPERIMENTS, () => {
       const latest = eventBus.getLatestMessage(Channels.EXPERIMENTS);
@@ -74,6 +80,6 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
         state: message,
       });
     });
-  }, []);
+  }, [setSpinner]);
   return <AppContext.Provider value={{ ...state, dispatch }}>{children}</AppContext.Provider>;
 };

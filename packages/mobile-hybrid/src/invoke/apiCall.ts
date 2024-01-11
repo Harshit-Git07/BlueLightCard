@@ -17,7 +17,7 @@ export default class InvokeNativeAPICall extends Facade implements NativeAPICall
    * @description Makes api request call with the url, only supports GET method at the moment
    * @param url
    */
-  public requestData(url: string, queryParams?: NativeAPICall.Parameters): void {
+  public requestData(url: string, queryParams?: NativeAPICall.Parameters['parameters']): void {
     this.logger.debug(`requesting data from url ${url}`, this.TAG);
     this.callFunction('requestData', {
       path: url,

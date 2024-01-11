@@ -21,6 +21,6 @@
       "@storybook/*": ["./.storybook/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/**/*.tsx", ".storybook/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/*.tsx", ".storybook/*.ts"],
   "exclude": ["node_modules"]
 }

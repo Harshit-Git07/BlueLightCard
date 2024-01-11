@@ -18,7 +18,7 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
           />
         </div>
       )}
-      <div className="pl-3 w-full">
+      <div className="flex flex-col justify-center pl-3 w-full">
         <h4 className="dark:text-neutral-white text-md mb-1 font-semibold font-museo leading-5 line-clamp-1 md:line-clamp-2">
           {decodeEntities(title)}
         </h4>

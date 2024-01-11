@@ -1,0 +1,31 @@
+import { FC } from 'react';
+import { SearchResults } from '../types';
+import ListItem from '@/components/ListItem/ListItem';
+
+interface Props {
+  results: SearchResults;
+}
+
+/**
+ * Presenter renders the search results
+ * @param {Props} props.results - array of search results provided by it's container
+ */
+const SearchResultsPresenter: FC<Props> = ({ results }) => {
+  return (
+    <div role="list" className="px-4">
+      {!results.length && <p className="text-center py-4 dark:text-white">No results found.</p>}
+      {results.map((offer) => (
+        <div key={offer.id} role="listitem" className="mb-4">
+          <ListItem
+            title={offer.offername}
+            text={offer.companyname}
+            imageSrc={offer.s3logos}
+            imageAlt={offer.offername}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default SearchResultsPresenter;

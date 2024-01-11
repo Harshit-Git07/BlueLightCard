@@ -1,3 +1,12 @@
+const throttleFetch = async (promise: ReturnType<typeof fetch>): Promise<Response> => {
+  const response = await promise;
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(response);
+    }, 1200);
+  });
+};
+
 async function DataRequest(
   globalState: GlobalState & {
     onResponse: NativeReceive.WebViewAPIResponse['onResponse']
@@ -5,14 +14,15 @@ async function DataRequest(
   { parameters }: MessageArgument
 ) {
   const params = parameters as NativeAPICall.Parameters;
-  const encodedUrl = Buffer.from(params.path).toString('base64');
+  const queryParamsString = (params.parameters && Object.keys(params.parameters).length) ? `?${Object.keys(params.parameters).map((key) => `${key}=${params.parameters?.[key]}`).join('&')}` : '';
+  const encodedUrl = Buffer.from(`${params.path}${queryParamsString}`).toString('base64').replace(/\//g, '');
   const chunkSize = 10;
 
   const mockDataRequestUrl = `/mocks/DataRequest/${params.method.toLowerCase()}/${encodedUrl}.json`;
 
   try {
     console.info('Resolve(DataRequest) Requesting mock data for url %s', params.path);
-    const response = await fetch(mockDataRequestUrl);
+    const response = await throttleFetch(fetch(mockDataRequestUrl));
     const data = await response.text();
 
     const byteLength = data.length / 10;

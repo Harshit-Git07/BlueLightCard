@@ -1,3 +1,4 @@
+import { MessageAPIResponse } from '@/eventBus/types';
 import { Channels, eventBus } from '@/globals';
 import { Logger } from '@/logger';
 

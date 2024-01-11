@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.24.0...bluelightcard/web-v1.25.0) (2024-01-11)
+
+
+### Features
+
+* Added amplitude search_results_list_viewed event to search page ([#773](https://github.com/bluelightcard/BlueLightCard-2.0/issues/773)) ([7bb9353](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7bb9353752b43de6af6d6b980853b2a0747c25b1))
+* Redirect param added when redirecting when user is not logged in ([70194c9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/70194c9da05f78b3122f89617da7f65749095aa8))
+* TO-399 search page ([#758](https://github.com/bluelightcard/BlueLightCard-2.0/issues/758)) ([11ea0fc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11ea0fce1b91a3249ebfb3d7d17bd14c321c2e45))
+* Updated OfferCard design for search. ([#770](https://github.com/bluelightcard/BlueLightCard-2.0/issues/770)) ([deedead](https://github.com/bluelightcard/BlueLightCard-2.0/commit/deedeadb8b6e558280413ca2279b0e9e34d44704))
+
+
+### Bug Fixes
+
+* Updated search_results_list_viewed data ([#774](https://github.com/bluelightcard/BlueLightCard-2.0/issues/774)) ([aad9287](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aad928741b77a2c4d80a2250ca956611fb5de525))
+
 ## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.23.0...bluelightcard/web-v1.24.0) (2024-01-04)
 
 

@@ -19,6 +19,7 @@ import UserContext from '@/context/User/UserContext';
 import getCDNUrl from '@/utils/getCDNUrl';
 import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceholder';
 import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
+import { logSearchPage, logSearchResultsViewed } from '@/utils/amplitude';
 
 const he = require('he');
 
@@ -68,6 +69,8 @@ const Search: NextPage = () => {
       }
 
       setIsLoading(false);
+
+      logSearchPage(queryRaw as string, searchResults.results ? searchResults.results.length : 0);
     };
 
     if (authCtx.authState.idToken && router.isReady) {

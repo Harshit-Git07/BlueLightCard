@@ -82,3 +82,17 @@ export async function logSearchTermEvent(searchTerm: string) {
     await amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties).promise;
   }
 }
+
+export async function logSearchPage(searchTerm?: string, resultsCount?: number) {
+  initialiseAmplitude();
+
+  await logSearchResultsViewed(searchTerm, resultsCount);
+}
+
+export async function logSearchResultsViewed(searchTerm?: string, resultsCount?: number) {
+  const searchResultsEvent = {
+    search_term: searchTerm ?? '',
+    results_count: resultsCount ?? 0,
+  };
+  await amplitude.track(EVENTS.SEARCH_RESULTS_VIEWED, searchResultsEvent).promise;
+}

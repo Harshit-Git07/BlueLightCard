@@ -91,13 +91,13 @@ const Search: NextPage = () => {
       </Container>
 
       <Container className="py-5" addBottomHorizontalLine={false}>
-        <div className="grid laptop:grid-cols-3 tablet:grid-cols-2 grid-cols-1 space-x-2">
+        <div className="grid laptop:grid-cols-3 tablet:grid-cols-2 grid-cols-1">
           {isLoading && [...Array(6)].map((_, index) => <OfferCardPlaceholder key={index} />)}
           {!isLoading &&
             searchResults.map((result, index) => {
               const imageSrc = result.offerimg.replaceAll('\\/', '/');
               return (
-                <div className="p-2" key={index}>
+                <div className="p-2 m-2" key={index}>
                   <OfferCard
                     companyName={result.CompanyName}
                     offerName={he.decode(result.OfferName)}
@@ -119,10 +119,10 @@ const Search: NextPage = () => {
 
       {adverts.length > 0 && (
         <Container className="py-5" addBottomHorizontalLine={false}>
-          <div className="grid grid-cols-1 tablet:grid-cols-2 tablet:space-x-6 tablet:space-y-0 space-x-0 space-y-6 relative">
+          <div className="grid grid-cols-1 tablet:grid-cols-2 relative">
             {adverts.map((advert, index) => {
               return (
-                <div key={index}>
+                <div key={index} className="m-2">
                   <Link href={advert.link}>
                     <Image
                       key={index}

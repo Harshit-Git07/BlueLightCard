@@ -32,7 +32,7 @@ const OfferCard: FC<OfferCardProps> = ({
 
   return (
     <div
-      className={`w-full h-full relative pb-5 mb-2 ${backgroundRootClasses} ${borderClasses}`}
+      className={`w-full h-full relative pb-5 mb-2 ${backgroundRootClasses} ${borderClasses} overflow-hidden`}
       data-testid={id}
     >
       <Link href={offerLink} useLegacyRouting>
@@ -44,7 +44,7 @@ const OfferCard: FC<OfferCardProps> = ({
             width={0}
             height={0}
             sizes="100vw"
-            className={`h-auto w-full ${backgroundSecondaryClasses}`}
+            className={`h-auto w-full ${backgroundSecondaryClasses} !relative`}
             quality={75}
             onError={() => {
               setImageSource(fallbackImage);

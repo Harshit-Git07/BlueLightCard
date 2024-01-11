@@ -92,7 +92,7 @@ export async function logSearchPage(searchTerm?: string, resultsCount?: number) 
 export async function logSearchResultsViewed(searchTerm?: string, resultsCount?: number) {
   const searchResultsEvent = {
     search_term: searchTerm ?? '',
-    results_count: resultsCount ?? 0,
+    number_of_results: resultsCount ?? 0,
   };
   await amplitude.track(EVENTS.SEARCH_RESULTS_VIEWED, searchResultsEvent).promise;
 }

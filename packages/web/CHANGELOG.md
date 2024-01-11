@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.25.0...bluelightcard/web-v1.25.1) (2024-01-11)
+
+
+### Bug Fixes
+
+* Changed how adverts are presented to fix bug. Changed how banners are pulled/processed. ([08e876e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/08e876e5b2e7686cc659721bf7a616f35127a26e))
+
 ## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.24.0...bluelightcard/web-v1.25.0) (2024-01-11)
 
 

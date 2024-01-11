@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.25.1...bluelightcard/web-v1.25.2) (2024-01-11)
+
+
+### Bug Fixes
+
+* Updated image padding and overflow ([#778](https://github.com/bluelightcard/BlueLightCard-2.0/issues/778)) ([3943342](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3943342aaa11293ecc4ada0e508d6853268fc932))
+
 ## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.25.0...bluelightcard/web-v1.25.1) (2024-01-11)
 
 

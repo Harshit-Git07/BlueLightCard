@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.38.0...bluelightcard/identity-v1.39.0) (2024-01-12)
+
+
+### Features
+
+* update sst version to 2.38.7 ([#745](https://github.com/bluelightcard/BlueLightCard-2.0/issues/745)) ([547c1d7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/547c1d75f4f4eb9a0b630f1d09d0987f8bca76fd))
+
 ## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.37.1...bluelightcard/identity-v1.38.0) (2024-01-08)
 
 

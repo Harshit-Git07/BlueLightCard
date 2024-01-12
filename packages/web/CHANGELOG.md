@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.25.2...bluelightcard/web-v1.26.0) (2024-01-12)
+
+
+### Features
+
+* updated redirect on navbar search to new search page on modern stack ([#771](https://github.com/bluelightcard/BlueLightCard-2.0/issues/771)) ([27fed6a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/27fed6a4956f3d25be95e5e4ed7687867f893e60))
+
 ## [1.25.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.25.1...bluelightcard/web-v1.25.2) (2024-01-11)
 
 

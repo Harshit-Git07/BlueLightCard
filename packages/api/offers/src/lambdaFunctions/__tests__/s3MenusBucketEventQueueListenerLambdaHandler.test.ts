@@ -2,7 +2,7 @@ import { handler} from "../s3MenusBucketEventQueueListenerLambdaHandler";
 import { mockClient} from "aws-sdk-client-mock";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb'
-import { sdkStreamMixin } from '@aws-sdk/util-stream';
+import { sdkStreamMixin } from '@smithy/util-stream';
 import { Readable } from 'stream';
 import { beforeEach, describe, expect, jest } from "@jest/globals";
 import { promises as fs } from "fs";

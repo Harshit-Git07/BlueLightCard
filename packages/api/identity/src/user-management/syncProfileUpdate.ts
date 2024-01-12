@@ -1,7 +1,7 @@
 import { SQSClient } from '@aws-sdk/client-sqs';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, QueryCommand, UpdateCommand, UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
 import { Response } from '../../../core/src/utils/restResponse/response'
 import { BRANDS } from '../../../core/src/types/brands.enum';
 import { UserProfileModel, UserProfile } from '../../src/models/userprofile';
@@ -103,7 +103,8 @@ export const handler = async (event: any, context: any) => {
         expAttrValues[`:${key}`] = detail[key];
     });
     updateExp = updateExp.slice(0, -1);
-    const updateParams = {  
+
+    const updateParams: UpdateCommandInput = {  
         TableName: tableName,
         Key: {
             "pk"   : `MEMBER#${uuid}`,

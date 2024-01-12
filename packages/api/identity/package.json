@@ -8,10 +8,8 @@
     "e2e:identity": "jest e2e/"
   },
   "devDependencies": {
-    "@aws-sdk/client-dynamodb": "3.332.0",
     "@aws-sdk/client-firehose": "3.425.0",
     "@aws-sdk/client-sqs": "3.425.0",
-    "@aws-sdk/lib-dynamodb": "3.335.0",
     "@jest/globals": "29.5.0",
     "@types/aws-lambda": "8.10.119",
     "@types/jsonwebtoken": "^9.0.5",
@@ -19,9 +17,8 @@
     "@types/node": "20.2.3",
     "@types/nodemailer": "^6.4.13",
     "@types/uuid": "9.0.4",
-    "aws-sdk-client-mock": "2.1.1",
     "mysql2": "3.2.4",
-    "sst": "2.14.0"
+    "sst": "2.38.7"
   },
   "dependencies": {
     "@aws-lambda-powertools/commons": "1.8.0",

@@ -7,5 +7,5 @@ export const getOffersByCategoryUrl = (categoryId: string) => {
 };
 
 export const getOffersBySearchTermUrl = (searchTerm: string) => {
-  return `/offers.php?type=1&opensearch=1&search=${searchTerm}`;
+  return `/search?q=${searchTerm}`;
 };

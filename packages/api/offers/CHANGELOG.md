@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.18.0...bluelightcard/offers-v1.19.0) (2024-01-12)
+
+
+### Features
+
+* update sst version to 2.38.7 ([#745](https://github.com/bluelightcard/BlueLightCard-2.0/issues/745)) ([547c1d7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/547c1d75f4f4eb9a0b630f1d09d0987f8bca76fd))
+
 ## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.17.0...bluelightcard/offers-v1.18.0) (2023-12-12)
 
 

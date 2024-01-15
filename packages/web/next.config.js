@@ -1,5 +1,6 @@
 const { resolve } = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { BRAND } = require('./global-vars');
 const { existsSync } = require('fs');
 
@@ -45,6 +46,12 @@ const nextConfig = {
     config.plugins.push(
       new CopyPlugin({
         patterns: [{ from: assetsFolder, to: 'static/assets' }],
+      })
+    );
+    config.plugins.push(
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'json',
+        generateStatsFile: true,
       })
     );
     return config;

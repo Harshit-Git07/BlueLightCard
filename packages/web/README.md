@@ -42,7 +42,21 @@ NEXT_PUBLIC_DATADOG_ENV
 All components should be put in the components folder and consist of the following files for each component:
  - **[ComponentName]**.tsx - React component
  - **[ComponentName]**.stories.tsx - Storybook file
+ - **Docs.md** - Document component in storybook
  - **types.ts** - Types for the component
+
+### Bundle Analyser
+To analyse the overall bundle size and it's chunks, developers can use the bundle analysis tool to inspect chunk sizes and see how dependencies contribute to the size of these chunks.
+
+It's important to keep the overall size of the bundle small as possible to reduce load times for end users, thats also why we gzip the content for smaller network transfers.
+
+```sh
+# build bundle
+npm run build
+
+# run analyser on local server i.e http://127.0.0.1:8888
+npm run bundle-analyser
+```
 
 So the structure will look like:
 ```

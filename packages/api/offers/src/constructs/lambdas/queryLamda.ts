@@ -1,12 +1,9 @@
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaAbstract } from './lambdaAbstract';
-import { Duration, Stack } from "aws-cdk-lib";
+import { Duration, Stack } from 'aws-cdk-lib';
 import { Tables } from '../tables';
-import { COMPANY_FOLLOWS_SECRET, ENDPOINTS } from '../../utils/global-constants';
-import { ElasticCache } from "../elasticCache";
-import { SubnetType } from "aws-cdk-lib/aws-ec2";
 import { isDev } from '../../../../core/src/utils/checkEnvironment';
-import { Tracing } from "aws-cdk-lib/aws-lambda";
+import { Tracing } from 'aws-cdk-lib/aws-lambda';
 
 type environmentConfig = {
   STAGE: string;
@@ -14,28 +11,14 @@ type environmentConfig = {
   OFFER_HOMEPAGE_TABLE: string;
   COMPANY_TABLE: string;
   COMPANY_BRAND_CONNECTION_TABLE: string;
-  COMPANY_FOLLOWS_ENDPOINT: string;
-  USER_PROFILE_ENDPOINT: string;
-  COMPANY_FOLLOWS_SECRET: string;
-  REDIS_ENDPOINT: string;
-  REDIS_PORT: string;
 };
 
 export class QueryLambda extends LambdaAbstract {
-  constructor(private stack: Stack, private tables: Tables, private stage: string, private elasticCache: ElasticCache) {
+  constructor(private stack: Stack, private tables: Tables, private stage: string) {
     super();
   }
 
   create(): NodejsFunction {
-    const cacheProps = {
-      role: this.elasticCache.lambdaRole,
-      vpc: this.elasticCache.vpc,
-      securityGroups: [this.elasticCache.securityGroup],
-      vpcSubnets: {
-        subnetType: SubnetType.PRIVATE_WITH_EGRESS,
-      },
-    }
-
     let nodeJsFunctionProps = {
       entry: './packages/api/offers/src/graphql/resolvers/queries/handlers/queryLambdaResolver.ts',
       handler: 'handler',
@@ -43,10 +26,10 @@ export class QueryLambda extends LambdaAbstract {
       memorySize: 1024,
       timeout: Duration.seconds(5),
       tracing: Tracing.ACTIVE,
-    }
+    };
 
     if (!isDev(this.stage)) {
-      nodeJsFunctionProps = { ...cacheProps, ...nodeJsFunctionProps };
+      nodeJsFunctionProps = { ...nodeJsFunctionProps };
     }
 
     const queryLambdaResolver = new NodejsFunction(this.stack, 'queryResolverLambda', nodeJsFunctionProps);
@@ -63,21 +46,13 @@ export class QueryLambda extends LambdaAbstract {
     this.tables.companyBrandConnectionTable.cdk.table.grantReadData(lambdaFunction);
   }
 
-  private getEnvironmentConfig(
-  ): environmentConfig {
+  private getEnvironmentConfig(): environmentConfig {
     return {
       STAGE: this.stage,
       BANNER_TABLE: this.tables.bannersTable.tableName,
       OFFER_HOMEPAGE_TABLE: this.tables.offerHomepageTable.tableName,
       COMPANY_TABLE: this.tables.companyTable.tableName,
       COMPANY_BRAND_CONNECTION_TABLE: this.tables.companyBrandConnectionTable.tableName,
-      REDIS_ENDPOINT: this.elasticCache.redisReplicationGroup && this.elasticCache.redisReplicationGroup.attrConfigurationEndPointAddress,
-      REDIS_PORT: this.elasticCache.redisReplicationGroup && this.elasticCache.redisReplicationGroup.attrConfigurationEndPointPort,
-      COMPANY_FOLLOWS_ENDPOINT:
-        this.stage == 'production' ? ENDPOINTS.PRODUCTION_COMPANY_FOLLOWS : ENDPOINTS.DEVELOP_COMPANY_FOLLOWS,
-      COMPANY_FOLLOWS_SECRET: COMPANY_FOLLOWS_SECRET,
-      USER_PROFILE_ENDPOINT:
-        this.stage == 'production' ? ENDPOINTS.PRODUCTION_USER_PROFILE : ENDPOINTS.DEVELOP_USER_PROFILE,
     };
   }
 }

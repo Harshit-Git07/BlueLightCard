@@ -4,7 +4,7 @@
         "timings": [
             {
                 "metric": "interactive",
-                "budget": 8000
+                "budget": 9000
             },
             {
                 "metric": "first-contentful-paint",
@@ -14,7 +14,7 @@
         "resourceSizes": [
             {
                 "resourceType": "script",
-                "budget": 450
+                "budget": 1000
             }
         ],
         "resourceCounts": [

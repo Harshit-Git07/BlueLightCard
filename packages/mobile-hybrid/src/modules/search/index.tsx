@@ -5,10 +5,18 @@ import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButt
 import { recentSearchesData } from '@/constants';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import Filter from '@/components/Filter/Filter';
+import { useAtom, useAtomValue } from 'jotai';
+import { filters, isFilterPanelOpenAtom } from '@/modules/filterpanel/store/filters';
 
 const navigation = new InvokeNativeNavigation();
 const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeholder }) => {
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useAtom(isFilterPanelOpenAtom);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
+  const [_filters] = useAtomValue(filters);
+
+  const onFilterClick = useCallback(() => {
+    setIsFilterPanelOpen(!isFilterPanelOpen);
+  }, [isFilterPanelOpen, setIsFilterPanelOpen]);
 
   const onSearchInputFocus = useCallback(() => {
     setSearchOverlayOpen(true);
@@ -33,7 +41,7 @@ const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeh
         />
 
         {variant === SearchVariant.Primary && showFilterButton && (
-          <Filter onClick={() => console.log('Filter Clicked')} filterCount={0} />
+          <Filter onClick={onFilterClick} filterCount={_filters?.length} />
         )}
       </div>
       {searchOverlayOpen && (

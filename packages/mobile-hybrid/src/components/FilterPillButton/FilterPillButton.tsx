@@ -1,15 +1,22 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FilterPillButtonProps } from './types';
 import { cssUtil } from '@/utils/cssUtil';
 
-const FilterPillButton: FC<FilterPillButtonProps> = ({ onSelected, pills }) => {
+const FilterPillButton: FC<FilterPillButtonProps> = ({
+  onSelected,
+  onDeselected,
+  selected,
+  pills,
+}) => {
   const [selectedPills, setSelectedPills] = useState<string[]>([]);
 
   useEffect(() => {
-    if (onSelected) {
-      onSelected(selectedPills);
+    if (selected) {
+      setSelectedPills(
+        pills.filter((pill) => selected.includes(pill.value)).map((pill) => pill.value),
+      );
     }
-  }, [selectedPills, onSelected]);
+  }, [selected, setSelectedPills, pills]);
 
   const getButtonClasses = (value: string) => {
     const isSelected = selectedPills.includes(value);
@@ -24,13 +31,17 @@ const FilterPillButton: FC<FilterPillButtonProps> = ({ onSelected, pills }) => {
   };
 
   const togglePill = (value: string) => {
-    setSelectedPills((prevSelected) => {
-      if (prevSelected.includes(value)) {
-        return prevSelected.filter((item) => item !== value);
-      } else {
-        return [...prevSelected, value];
+    if (selectedPills.includes(value)) {
+      if (onDeselected) {
+        onDeselected(value);
       }
-    });
+      setSelectedPills(selectedPills.filter((filter) => filter !== value));
+    } else {
+      if (onSelected) {
+        onSelected(value);
+      }
+      setSelectedPills([value].concat(...selectedPills));
+    }
   };
 
   return (

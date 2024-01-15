@@ -1,7 +1,11 @@
+export type OnFiltersCallback = (selected: string) => void;
+
 export type FilterPillButtonProps = {
   pills: {
     value: string;
     text: string;
   }[];
-  onSelected?: (selected: string[]) => void;
+  selected: string[];
+  onSelected?: OnFiltersCallback;
+  onDeselected?: OnFiltersCallback;
 };

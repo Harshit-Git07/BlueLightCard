@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC } from 'react';
 import { cssUtil } from '@/utils/cssUtil';
 import { FilterHeaderProps } from './types';
 

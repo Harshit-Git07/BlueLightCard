@@ -1,6 +1,6 @@
 {
   "name": "@blc-mono/offers",
-  "version": "1.19.0",
+  "version": "1.20.0",
   "type": "module",
   "scripts": {
     "test": "jest --passWithNoTests",

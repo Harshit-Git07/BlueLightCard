@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.19.0...bluelightcard/offers-v1.20.0) (2024-01-15)
+
+
+### Features
+
+* TO-406 remove elastic cache ([#785](https://github.com/bluelightcard/BlueLightCard-2.0/issues/785)) ([0b99cd9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0b99cd94d6a2319b9346562a6d50310545077e6f))
+
 ## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.18.0...bluelightcard/offers-v1.19.0) (2024-01-12)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.20.0...bluelightcard/offers-v1.20.1) (2024-01-18)
+
+
+### Bug Fixes
+
+* comment out event bus for companies ([#792](https://github.com/bluelightcard/BlueLightCard-2.0/issues/792)) ([5433327](https://github.com/bluelightcard/BlueLightCard-2.0/commit/543332795cdaa1b122bb82dd4c496865a0558882))
+
 ## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.19.0...bluelightcard/offers-v1.20.0) (2024-01-15)
 
 

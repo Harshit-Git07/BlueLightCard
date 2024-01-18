@@ -45,7 +45,7 @@ const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeh
         )}
       </div>
       {searchOverlayOpen && (
-        <div className="h-screen w-full absolute left-0 top-0">
+        <div className="h-screen w-full absolute bg-neutral-white dark:bg-neutral-black left-0 top-0">
           <div className="mx-2 absolute top-24">
             <h3 className="mx-2 mb-2 text-2xl font-museo font-bold text-neutral-grey-900 dark:text-primary-vividskyblue-700">
               Your recent searches

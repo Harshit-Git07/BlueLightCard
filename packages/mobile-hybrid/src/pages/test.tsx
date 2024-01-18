@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import SearchModule from '@/modules/search';
 import { SearchVariant } from '@/modules/search/types';
 import FilterPanel from '@/modules/filterpanel';
+import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
 
 const TestPage: NextPage<any> = () => {
   return (
@@ -12,11 +13,11 @@ const TestPage: NextPage<any> = () => {
         <meta name="description" />
       </Head>
       <SearchModule
-        variant={SearchVariant.Primary}
+        variant={SearchVariant.Secondary}
         placeholder="Search for offers"
-        showFilterButton={true}
+        showFilterButton={false}
       />
-
+      {/* <BrowseCategories /> */}
       <FilterPanel />
     </div>
   );

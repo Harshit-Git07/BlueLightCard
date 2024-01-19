@@ -75,6 +75,7 @@
   "dependencies": {
     "@amplitude/experiment-js-client": "^1.9.7",
     "@apollo/client": "^3.8.3",
+    "@fast-csv/parse": "^4.3.6",
     "@aws-sdk/client-dynamodb": "^3.476.0",
     "@aws-sdk/lib-dynamodb": "^3.476.0",
     "@storybook/preset-scss": "^1.0.3",
@@ -85,6 +86,7 @@
     "dotenv": "^16.3.1",
     "eslint-config-prettier": "^9.0.0",
     "fast-zlib": "^2.0.1",
+    "fs": "^0.0.1-security",
     "grapheme-splitter": "^1.0.4",
     "graphql": "^16.8.1",
     "he": "^1.2.0",

@@ -21,6 +21,7 @@ import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceho
 import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
 import { logSearchPage, logSearchResultsViewed } from '@/utils/amplitude';
 import { shuffle } from 'lodash';
+import getI18nStaticProps from '@/utils/i18nStaticProps';
 
 const he = require('he');
 
@@ -142,4 +143,10 @@ const Search: NextPage = () => {
   );
 };
 
-export default withAuthProviderLayout(requireAuth(Search), {});
+export const getStaticProps = getI18nStaticProps;
+
+export default withAuthProviderLayout(requireAuth(Search), {
+  seo: {
+    title: 'offers.search.title',
+  },
+});

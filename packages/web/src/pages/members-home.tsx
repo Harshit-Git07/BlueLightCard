@@ -261,9 +261,9 @@ export const getStaticProps = getI18nStaticProps;
 
 const layoutProps = {
   seo: {
-    title: 'offers.seo.title',
-    description: 'offers.seo.description',
-    keywords: 'offers.seo.keywords',
+    title: 'offers.members-home.title',
+    description: 'offers.members-home.description',
+    keywords: 'offers.members-home.keywords',
   },
 };
 

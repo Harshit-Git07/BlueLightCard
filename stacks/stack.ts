@@ -1,10 +1,13 @@
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
-import { EventBus, StackContext } from "sst/constructs";
-import {CfnLoggingConfiguration, CfnWebACL} from 'aws-cdk-lib/aws-wafv2';
-import { LogGroup }  from 'aws-cdk-lib/aws-logs';
+import { EventBus, StackContext } from 'sst/constructs';
+import { CfnLoggingConfiguration, CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
+import { LogGroup } from 'aws-cdk-lib/aws-logs';
+import { Network } from './infra/network';
+import { IVpc } from 'aws-cdk-lib/aws-ec2';
+import { isDev } from '@blc-mono/core/src/utils/checkEnvironment';
 
 interface ICertificate {
-  certificateArn?: string
+  certificateArn?: string;
 }
 
 export function Shared({ stack }: StackContext) {
@@ -14,11 +17,11 @@ export function Shared({ stack }: StackContext) {
    * The CNAME name and value must match what is defined in AWS ACM.
    * This only needs to be done once.
    */
-  const { certificateArn }: ICertificate = ['production', 'staging'].includes(stack.stage) ?
-    new Certificate(stack, 'Certificate', {
-      domainName: '*.blcshine.io',
-      validation: CertificateValidation.fromDns(),
-    })
+  const { certificateArn }: ICertificate = ['production', 'staging'].includes(stack.stage)
+    ? new Certificate(stack, 'Certificate', {
+        domainName: '*.blcshine.io',
+        validation: CertificateValidation.fromDns(),
+      })
     : {};
 
   //common event bus
@@ -27,7 +30,7 @@ export function Shared({ stack }: StackContext) {
   //waf
   const webACL = new CfnWebACL(stack, 'WebACL', {
     defaultAction: {
-        allow: {}
+      allow: {},
     },
     scope: 'REGIONAL',
     visibilityConfig: {
@@ -36,21 +39,19 @@ export function Shared({ stack }: StackContext) {
       sampledRequestsEnabled: true,
     },
   });
-  // //logging configuration
-  // const logGroup = new LogGroup(stack, 'AWSWafLog', {
-  //   logGroupName: `aws-waf-logs-${webACL.attrId}`
-  // });
-  // // const wafLogging = new CfnLoggingConfiguration(stack, 'WafLoggingConfig', {
-  // //   resourceArn: webACL.attrArn,
-  // //   logDestinationConfigs: [logGroup.logGroupArn]
-  // // });
+
+  // Create VPC for production and staging
+  const network = new Network(stack);
+
   stack.addOutputs({
     EventBusName: bus.eventBusName,
     webACL: webACL.name,
+    vpcId: network.vpc.vpcId,
   });
-  return { 
+  return {
     bus,
     certificateArn,
-    webACL
-  }
+    webACL,
+    vpc: network.vpc,
+  };
 }

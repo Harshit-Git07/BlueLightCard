@@ -4,7 +4,7 @@ import { unmarshall } from '@aws-sdk/util-dynamodb';
 import AWS from "aws-sdk";
 import nodemailer from "nodemailer";
 
-const ecFormOutputDataRecipients = process.env.EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS !== undefined ? process.env.EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS : '';
+const ecFormOutputDataRecipients = process.env.EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS !== undefined ? process.env.EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS : '{}';
 
 const AWS_REGION = process.env.REGION ?? "eu-west-2";
 const LAMBDA_LOCAL_FILE_NAME = 'Eligibility_Report' + new Date().toString() + '.csv';
@@ -54,13 +54,12 @@ function JsonToCSV(data: Record<string, any>){
 
   var csvStr = JsonFields.join(",") + "\n";
 
-  data.forEach((data: ecFormData) => {
-    let organisation      = data.organisation;
-    let jobRole           = data.jobRole;
-    let employmentStatus  = data.employmentStatus
-    let employer          = data.employer
-    let dateTime          = convertTimeStampToDateTime(data.dateTime);
-
+  data.forEach((formData: ecFormData) => {
+    let organisation      = formData.organisation;
+    let jobRole           = formData.jobRole;
+    let employmentStatus  = formData.employmentStatus
+    let employer          = formData.employer
+    let dateTime          = convertTimeStampToDateTime(parseInt(formData.dateTime));
     csvStr += organisation + ',' + jobRole + ','  + employmentStatus + ',' + employer + ','  + dateTime + "\n";
   })
 
@@ -173,8 +172,16 @@ const deleteItem = (pk: string, sk: string) => {
   });
 };
 
-function convertTimeStampToDateTime(dateTime: number) {
-  return new Date(dateTime).toISOString().substring(0,19).replace('T', ' ');
+export function convertTimeStampToDateTime(timeStamp: number) {
+  let date = '';
+  try {
+    date = new Date(timeStamp).toISOString().substring(0,19).replace('T', ' ');
+
+  } catch (e) {
+    console.log("Error converting timestamp: " + timeStamp, e);
+  }
+
+  return date;
 }
 
 export type ecFormData = {
@@ -182,5 +189,5 @@ export type ecFormData = {
   jobRole: string;
   employmentStatus: boolean;
   employer: string;
-  dateTime: number;
+  dateTime: string;
 };

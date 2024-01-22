@@ -9,6 +9,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { filters, isFilterPanelOpenAtom } from '@/modules/filterpanel/store/filters';
 
 const navigation = new InvokeNativeNavigation();
+
 const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeholder }) => {
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useAtom(isFilterPanelOpenAtom);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
@@ -28,7 +29,7 @@ const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeh
 
   return (
     <>
-      <div className="flex items-center p-2 justify-between">
+      <div className="flex items-center px-2 pt-2 justify-between">
         <Search
           onFocus={onSearchInputFocus}
           onBackButtonClick={onBack}

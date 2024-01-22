@@ -89,7 +89,7 @@ async function deleteEmailsFromCognito() {
         await deleteSpareEmailFromCognito(email);
         timer = setTimeout(() => {
           clearTimeout(timer);
-        }, 5000);
+        }, 1000);
       }
       console.log(`Deleted ${deletedCount} from cognito`);
       console.log(`Missing ${missingCount} from cognito`);

@@ -1,6 +1,6 @@
 import { IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
-import { isDev } from '@blc-mono/core/src/utils/checkEnvironment';
+import { isDev, isStaging } from '@blc-mono/core/src/utils/checkEnvironment';
 import { SubnetConfiguration } from 'aws-cdk-lib/aws-ec2/lib/vpc';
 
 export class Network {
@@ -22,7 +22,6 @@ export class Network {
   private createVpc(): Vpc {
     return new Vpc(this.stack, 'vpc', {
       maxAzs: 3,
-      natGateways: 0,
       subnetConfiguration: this.subnetConfiguration(),
     });
   }

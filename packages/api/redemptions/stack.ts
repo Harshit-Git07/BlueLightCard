@@ -11,9 +11,10 @@ import { EventBridge } from './eventBridge/eventBridge';
 import { LinkEvents, OfferEvents, PromotionEvents, VaultEvents } from './eventBridge/events/';
 import { createLinkRule, createOfferRule, createPromotionRule, createVaultRule } from './eventBridge/rules';
 import { PostAffiliateModel } from './src/models/postAffiliate';
+import { PostRedeemModel } from './src/models/postRedeem';
 import { PostSpotifyModel } from './src/models/postSpotify';
-import { PostAffiliate } from './src/routes/postAffiliate';
-import { PostSpotify } from './src/routes/postSpotify';
+import { Route } from './src/routes/route';
+import { Routes } from './src/routes/routes';
 
 export function Redemptions({ stack }: StackContext): {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +62,7 @@ export function Redemptions({ stack }: StackContext): {
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
   const postSpotifyModel = apiGatewayModelGenerator.generateModel(PostSpotifyModel);
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
+  const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
   const tables = new Tables(stack);
 
   // eslint-disable-next-line no-new
@@ -94,21 +96,35 @@ export function Redemptions({ stack }: StackContext): {
       table: tables.redemptionConfig,
     }),
   ]);
-  // Create Lambda Based API Routes
-  api.addRoutes(stack, {
-    'POST /member/connection/affiliate': new PostAffiliate(
-      apiGatewayModelGenerator,
-      postAffiliateModel,
-      stack,
-      api.cdk.restApi,
-    ).postAffiliate(),
 
-    'POST /member/online/single-use/custom/spotify': new PostSpotify(
+  const allRoutes = new Routes();
+  const restApi = api.cdk.restApi;
+
+  allRoutes.addRoutes(api, stack, {
+    'POST /member/redeem': new Route().getRoute({
+      model: postRedeemModel,
       apiGatewayModelGenerator,
-      postSpotifyModel,
       stack,
-      api.cdk.restApi,
-    ).postSpotify(),
+      restApi,
+      handler: 'packages/api/redemptions/src/handlers/redeem/postRedeem.handler',
+      requestValidatorName: 'PostRedeemValidator',
+    }),
+    'POST /member/connection/affiliate': new Route().getRoute({
+      model: postAffiliateModel,
+      apiGatewayModelGenerator,
+      stack,
+      restApi,
+      handler: 'packages/api/redemptions/src/handlers/affiliate/postAffiliate.handler',
+      requestValidatorName: 'PostAffiliateValidator',
+    }),
+    'POST /member/online/single-use/custom/spotify': new Route().getRoute({
+      model: postSpotifyModel,
+      apiGatewayModelGenerator,
+      stack,
+      restApi,
+      handler: 'packages/api/redemptions/src/handlers/proxy/postSpotify.handler',
+      requestValidatorName: 'PostSpotifyValidator',
+    }),
   });
 
   // Attach Permissions to Lambda

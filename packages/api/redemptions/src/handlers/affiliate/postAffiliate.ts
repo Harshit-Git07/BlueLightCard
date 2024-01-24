@@ -19,7 +19,7 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
   logger.info({
     message: 'POST Affiliate Input',
   });
-  const { affiliateUrl, memberId, platform }: PostAffiliateModel = JSON.parse(event.body);
+  const { affiliateUrl, memberId, platform, offerId, companyId }: PostAffiliateModel = JSON.parse(event.body);
   const affiliateConfig = new AffiliateConfigurationHelper(affiliateUrl).getConfig();
 
   if (!affiliateConfig) {
@@ -36,7 +36,13 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
 
   logger.info({
     message: 'Successful affiliate url request',
-    body: { affiliateUrl, trackingUrl, platform },
+    body: {
+      affiliateUrl,
+      trackingUrl,
+      platform,
+      companyId,
+      offerId,
+    },
     status: response.statusCode,
   });
 

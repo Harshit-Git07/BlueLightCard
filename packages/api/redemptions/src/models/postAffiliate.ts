@@ -8,6 +8,8 @@ export const PostAffiliateModel = createZodNamedType(
     affiliateUrl: z.string(),
     memberId: z.string(),
     platform: z.string().optional(),
+    companyId: z.string().optional(),
+    offerId: z.string().optional(),
   }),
 );
 

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.26.0...bluelightcard/web-v1.27.0) (2024-01-24)
+
+
+### Features
+
+* bundle analysis ([#737](https://github.com/bluelightcard/BlueLightCard-2.0/issues/737)) ([4c58cfb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4c58cfbe459d997996e6a7140e9e238b8d85a399))
+* **web:** delete spare email list blc aus ([#802](https://github.com/bluelightcard/BlueLightCard-2.0/issues/802)) ([2a1fa17](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2a1fa17e159ef0e47a09821450af54290582ad74))
+* **web:** offlineEmailFinder removed as it is redundant now ([#804](https://github.com/bluelightcard/BlueLightCard-2.0/issues/804)) ([4d550fe](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4d550fe2565ddd8ed05ccbe369f34b73a987d863))
+* **web:** retrieve and delete spare email list blc uk ([#797](https://github.com/bluelightcard/BlueLightCard-2.0/issues/797)) ([85f0beb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85f0bebd3acc04147237eb1f23bbcb497ad5f69d))
+
+
+### Bug Fixes
+
+* added seo to search page([#786](https://github.com/bluelightcard/BlueLightCard-2.0/issues/786)) ([f6fb0f8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f6fb0f8eca47b8a30fa79ec977bf70bf9f186f72))
+
 ## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.25.2...bluelightcard/web-v1.26.0) (2024-01-12)
 
 

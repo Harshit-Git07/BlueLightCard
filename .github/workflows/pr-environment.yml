@@ -42,6 +42,11 @@ jobs:
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm run build
       - name: Deploy Global
         env:
@@ -148,6 +153,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
         env:
@@ -231,7 +241,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
-
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v10
         id: lighthouse_audit

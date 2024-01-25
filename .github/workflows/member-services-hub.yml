@@ -42,6 +42,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm test -w packages/${{ env.PKG_NAME }}
 
   lint:
@@ -59,6 +64,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: JavaScript and Typescript
         run: npm run lint -w packages/${{ env.PKG_NAME }}
       - name: Styles
@@ -79,6 +89,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Build
         run: npm run build-storybook -w packages/${{ env.PKG_NAME }}
       - name: Publish
@@ -129,6 +144,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Build
         run: npm run build -w packages/member-services-hub
       - name: Publish
@@ -161,6 +181,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Build
         run: npm run build -w packages/${{ env.PKG_NAME }}
       - name: Publish
@@ -191,6 +216,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Build
         run: npm run build -w packages/${{ env.PKG_NAME }}
       - name: Publish

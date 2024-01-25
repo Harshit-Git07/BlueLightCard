@@ -39,6 +39,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm run test -w packages/api/identity
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -75,6 +80,11 @@ jobs:
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm run build
   staging:
     name: Staging Deployment
@@ -106,6 +116,11 @@ jobs:
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm run build
       - name: Deploy
         env:
@@ -139,6 +154,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm run e2e:identity -w packages/api/identity
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -173,6 +193,11 @@ jobs:
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm run build
       - name: Deploy
         env:

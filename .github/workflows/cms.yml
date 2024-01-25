@@ -37,6 +37,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - run: npm test -w packages/cms
 
   e2e:
@@ -54,6 +59,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - run: npm run test:e2e -w packages/cms
@@ -79,6 +89,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: JavaScript and Typescript
         run: npm run lint -w packages/cms
       - name: Styles
@@ -124,6 +139,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Build
         run: npm run build -w packages/cms
       - name: Publish
@@ -157,6 +177,11 @@ jobs:
           key: node_modules-${{hashFiles('package-lock.json')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Build
         run: npm run build -w packages/cms
       - name: Publish

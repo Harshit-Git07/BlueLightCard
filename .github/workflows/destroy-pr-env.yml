@@ -34,6 +34,11 @@ jobs:
           restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
       - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
       - run: npm ci
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NPM Logs
+          path: /home/runner/.npm/_logs/
       - name: Destroy Global
         env:
           CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com

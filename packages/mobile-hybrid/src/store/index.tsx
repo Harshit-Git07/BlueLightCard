@@ -52,6 +52,13 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const setSpinner = useSetAtom(spinner);
 
   useEffect(() => {
+    // MIGRATION - migrating over to the use of atoms, by setting the loading state on the new spinner
+    if (Object.values(state.loading).filter((loading) => !loading).length === 3) {
+      setSpinner(false);
+    }
+  }, [setSpinner, state.loading]);
+
+  useEffect(() => {
     eventBus.on(Channels.API_RESPONSE, () => {
       const latest = eventBus.getLatestMessage(Channels.API_RESPONSE);
       const message = latest!.message;
@@ -69,8 +76,6 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
           loading: false,
         },
       });
-      // MIGRATION - migrating over to the use of atoms, by setting the loading state on the new spinner
-      setSpinner(!!Object.values(state.loading).filter((loading) => !loading).length);
     });
     eventBus.on(Channels.EXPERIMENTS, () => {
       const latest = eventBus.getLatestMessage(Channels.EXPERIMENTS);
@@ -80,6 +85,6 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
         state: message,
       });
     });
-  }, [setSpinner]);
+  }, []);
   return <AppContext.Provider value={{ ...state, dispatch }}>{children}</AppContext.Provider>;
 };

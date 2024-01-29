@@ -24,7 +24,7 @@ const NewsPreview: FC = () => {
       news={previewNews}
       onClickSeeAll={onSeeAllClick}
       onArticleClick={(articleId) =>
-        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`)
+        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`, 'home')
       }
     />
   );
@@ -41,7 +41,7 @@ const NewsList: FC = () => {
       news={news}
       showHeading={false}
       onArticleClick={(articleId) =>
-        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`)
+        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`, 'home')
       }
     />
   );

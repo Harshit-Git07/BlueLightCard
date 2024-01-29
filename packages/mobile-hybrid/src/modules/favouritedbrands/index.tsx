@@ -22,7 +22,7 @@ const FavouritedBrandsSlider: FC = () => {
 
   const brands = useFavouritedBrands();
   const onBrandItemClick = (compid: number) => {
-    navigation.navigate(`/offerdetails.php?cid=${compid}`);
+    navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
     analytics.logAnalyticsEvent({
       event: 'homepage_carousel_card_clicked',
       parameters: {

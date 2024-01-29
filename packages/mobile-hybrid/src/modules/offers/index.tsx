@@ -46,7 +46,7 @@ const Offers: FC = () => {
    * */
   const headingFeatureFlag = expr['bf-flexi'] === 'on';
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
-    navigation.navigate(`/flexibleOffers.php?id=${id}`);
+    navigation.navigate(`/flexibleOffers.php?id=${id}`, 'home');
     analytics.logAnalyticsEvent({
       event: 'homepage_carousel_card_clicked',
       parameters: {
@@ -59,7 +59,7 @@ const Offers: FC = () => {
     categoryTitle: string,
     { compid, offername, companyname }: OfferPromosModel,
   ) => {
-    navigation.navigate(`/offerdetails.php?cid=${compid}`);
+    navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
     analytics.logAnalyticsEvent({
       event: 'homepage_carousel_card_clicked',
       parameters: {

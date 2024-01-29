@@ -86,6 +86,7 @@ const Home: NextPage<any> = () => {
             onSearch={(searchTerm) =>
               navigation.navigate(
                 `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
+                'home',
               )
             }
           />
@@ -99,32 +100,32 @@ const Home: NextPage<any> = () => {
         <ExploreLink
           icon={faTag}
           title="High Street"
-          onClick={() => navigation.navigate('/offers.php?type=5')}
+          onClick={() => navigation.navigate('/offers.php?type=5', 'home')}
         />
         <ExploreLink
           icon={faCompass}
           title="Online"
-          onClick={() => navigation.navigate('/offers.php?type=0')}
+          onClick={() => navigation.navigate('/offers.php?type=0', 'home')}
         />
         <ExploreLink
           icon={faGiftCard}
           title="Giftcards"
-          onClick={() => navigation.navigate('/offers.php?type=2')}
+          onClick={() => navigation.navigate('/offers.php?type=2', 'home')}
         />
         <ExploreLink
           icon={faThumbsUp}
           title="Popular"
-          onClick={() => navigation.navigate('/offers.php?type=3')}
+          onClick={() => navigation.navigate('/offers.php?type=3', 'home')}
         />
         <ExploreLink
           icon={faAward}
           title="Featured"
-          onClick={() => navigation.navigate('/offers.php?type=9')}
+          onClick={() => navigation.navigate('/offers.php?type=9', 'home')}
         />
         <ExploreLink
           icon={faSignsPost}
           title="Local Services"
-          onClick={() => navigation.navigate('/offers.php?type=6')}
+          onClick={() => navigation.navigate('/offers.php?type=6', 'home')}
         />
       </div>
       <ListPanel visible={seeAllNews} onClose={seeAllClick}>

@@ -18,7 +18,7 @@ const PopularBrandsSlider: FC = () => {
   const controlSubtitle =
     expr['streamlined-homepage'] === 'on' ? undefined : 'Explore popular brands with a swipe!';
   const onBrandItemClick = (compid: number) => {
-    navigation.navigate(`/offerdetails.php?cid=${compid}`);
+    navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
     analytics.logAnalyticsEvent({
       event: 'homepage_carousel_card_clicked',
       parameters: {

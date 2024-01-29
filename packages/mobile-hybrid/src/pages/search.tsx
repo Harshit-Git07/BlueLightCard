@@ -1,32 +1,24 @@
 import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
-import { APIUrl } from '@/globals';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import BrowseCategoriesData from 'data/BrowseCategories';
-import { AppContext } from '@/store';
 import { NextPage } from 'next';
-import { useContext, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { faTag, faLocationDot } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import SearchModule from '@/modules/search';
 import { SearchVariant } from '@/modules/search/types';
+import { spinner } from '@/modules/Spinner/store';
+import { useSetAtom } from 'jotai';
 
 const navigation = new InvokeNativeNavigation();
 
 const SearchPage: NextPage = () => {
-  const { dispatch } = useContext(AppContext);
+  const setSpinner = useSetAtom(spinner);
 
   useEffect(() => {
-    (Object.keys(APIUrl) as Array<keyof typeof APIUrl>).forEach((key) => {
-      dispatch({
-        type: 'setLoading',
-        state: {
-          key: APIUrl[key],
-          loading: true,
-        },
-      });
-    });
-  }, [dispatch]);
+    setSpinner(false);
+  }, [setSpinner]);
 
   const browseCategories = useMemo(() => {
     return BrowseCategoriesData.map((category) => ({
@@ -36,7 +28,7 @@ const SearchPage: NextPage = () => {
   }, []);
 
   const onCategoryClick = (categoryId: number) => {
-    navigation.navigate(`/category=${categoryId}`);
+    navigation.navigate(`/category=${categoryId}`, 'search');
   };
 
   return (
@@ -45,11 +37,12 @@ const SearchPage: NextPage = () => {
         variant={SearchVariant.Secondary}
         placeholder="Search for an offer"
         showFilterButton={false}
+        searchDomain="search"
       />
       <div className="mt-4 mb-5 ml-2">
         <button
           className="font-museo pl-3 py-2 block text-primary-dukeblue-700 dark:text-primary-vividskyblue-700 text-md w-full h-full text-left"
-          onClick={() => navigation.navigate('/mapsearch.php')}
+          onClick={() => navigation.navigate('/mapsearch.php', 'search')}
         >
           <FontAwesomeIcon
             icon={faLocationDot}

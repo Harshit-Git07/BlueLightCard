@@ -9,8 +9,12 @@ import { useAtom, useAtomValue } from 'jotai';
 import { filters, isFilterPanelOpenAtom } from '@/modules/filterpanel/store/filters';
 
 const navigation = new InvokeNativeNavigation();
-
-const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeholder }) => {
+const SearchModule: FC<SearchModuleProps> = ({
+  variant,
+  showFilterButton,
+  placeholder,
+  searchDomain,
+}) => {
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useAtom(isFilterPanelOpenAtom);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
   const [_filters] = useAtomValue(filters);
@@ -37,6 +41,7 @@ const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeh
           onSearch={(searchTerm) =>
             navigation.navigate(
               `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
+              searchDomain,
             )
           }
         />

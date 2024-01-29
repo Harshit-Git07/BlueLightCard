@@ -5,6 +5,7 @@ export interface LayoutProps {
   seo?: SEOProps;
   children: ReactNode;
   translationNamespace?: string;
+  headerOverride?: ReactNode;
 }
 
 export type PartialLayoutProps = Partial<LayoutProps>;

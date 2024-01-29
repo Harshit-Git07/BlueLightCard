@@ -24,7 +24,7 @@ jest.mock('@amplitude/experiment-js-client', () => {
 });
 
 const PageWithExperiment = (props: {
-  hookData: [string, { variantName: string; component: any }[], string?];
+  hookData: [string, { variantName: string; component: any }[], string?, boolean?];
 }) => {
   const { component, error } = useAmplitudeExperiment(...props.hookData);
 
@@ -54,6 +54,8 @@ describe('useAmplitudeExperiment test', () => {
               { variantName: 'control', component: <h1 data-testid="control">component</h1> },
               { variantName: 'treatment', component: <h1 data-testid="treatment">component</h1> },
             ],
+            'control',
+            true,
           ]}
         />
       );
@@ -80,6 +82,7 @@ describe('useAmplitudeExperiment test', () => {
               // { variantName: 'treatment', component: <h1 data-testid="treatment">component</h1> },
             ],
             'control',
+            true,
           ]}
         />
       );
@@ -97,7 +100,7 @@ describe('useAmplitudeExperiment test', () => {
 
   it('An error should be thrown when no variant options are provided', async () => {
     const { getByTestId } = await act(async () => {
-      return render(<PageWithExperiment hookData={['test-deployment-key', [], 'control']} />);
+      return render(<PageWithExperiment hookData={['test-deployment-key', [], 'control', true]} />);
     });
 
     await waitFor(

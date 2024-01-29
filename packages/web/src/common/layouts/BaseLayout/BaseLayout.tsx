@@ -19,7 +19,12 @@ import { useContext } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
 import MetaData from '@/components/MetaData/MetaData';
 
-const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace }) => {
+const BaseLayout: React.FC<LayoutProps> = ({
+  seo,
+  children,
+  translationNamespace,
+  headerOverride = undefined,
+}) => {
   // Converts brand codes to text using the brand translation file
   // Uses data from locales folder as data source
   const authContext = useContext(AuthContext);
@@ -44,13 +49,17 @@ const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace
     <div>
       {seo && <MetaData seo={seo} translationNamespace={translationNamespace} />}
 
-      <Header
-        navItems={navItems}
-        loggedIn={loggedIn}
-        onSearchCompanyChange={onSearchCompanyChange}
-        onSearchCategoryChange={onSearchCategoryChange}
-        onSearchTerm={onSearchTerm}
-      />
+      {headerOverride ? (
+        headerOverride
+      ) : (
+        <Header
+          navItems={navItems}
+          loggedIn={loggedIn}
+          onSearchCompanyChange={onSearchCompanyChange}
+          onSearchCategoryChange={onSearchCategoryChange}
+          onSearchTerm={onSearchTerm}
+        />
+      )}
       <div>{children}</div>
       <Footer {...footerConfig} loggedIn={loggedIn} />
     </div>

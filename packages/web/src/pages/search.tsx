@@ -19,9 +19,25 @@ import UserContext from '@/context/User/UserContext';
 import getCDNUrl from '@/utils/getCDNUrl';
 import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceholder';
 import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
-import { logSearchPage, logSearchResultsViewed } from '@/utils/amplitude';
+import {
+  logSearchCategoryEvent,
+  logSearchCompanyEvent,
+  logSearchPage,
+  logSearchTermEvent,
+  logSerpSearchStarted,
+} from '@/utils/amplitude';
 import { shuffle } from 'lodash';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
+import { default as HeaderV2 } from '@/components/HeaderV2/Header';
+
+import { navItems } from '@/data/headerConfig';
+import useAmplitudeExperiment from '@/hooks/useAmplitudeExperiment';
+import Header from '@/components/Header/Header';
+import {
+  getCompanyOfferDetailsUrl,
+  getOffersByCategoryUrl,
+  getOffersBySearchTermUrl,
+} from '@/utils/externalPageUrls';
 
 const he = require('he');
 
@@ -30,10 +46,27 @@ type BannerDataType = {
   link: string;
 };
 
+// Header
+const onSearchCompanyChange = async (companyId: string, company: string) => {
+  await logSearchCompanyEvent(companyId, company);
+  window.location.href = getCompanyOfferDetailsUrl(companyId);
+};
+
+const onSearchCategoryChange = async (categoryId: string, categoryName: string) => {
+  await logSearchCategoryEvent(categoryId, categoryName);
+  window.location.href = getOffersByCategoryUrl(categoryId);
+};
+
+const onSearchTerm = async (searchTerm: string) => {
+  await logSearchTermEvent(searchTerm);
+  window.location.href = getOffersBySearchTermUrl(searchTerm);
+};
+
 const Search: NextPage = () => {
   const router = useRouter();
-  const queryRaw = router.query.q ?? '';
 
+  const [query, setQuery] = React.useState<string>((router.query.q as string) ?? '');
+  const [usedQuery, setUsedQuery] = React.useState<string>('');
   const [searchResults, setSearchResults] = React.useState<SearchOfferType[]>([]);
 
   const [adverts, setAdverts] = React.useState<any[]>([]);
@@ -50,7 +83,7 @@ const Search: NextPage = () => {
 
       // Search Query
       const searchResults = await makeSearch(
-        queryRaw as string,
+        query,
         authCtx.authState.idToken ?? '',
         // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
         userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false
@@ -58,6 +91,7 @@ const Search: NextPage = () => {
 
       if (searchResults.results) {
         setSearchResults(searchResults.results);
+        setUsedQuery(query);
       } else {
         setError('An unknown error occurred. Please try again later.');
       }
@@ -72,18 +106,61 @@ const Search: NextPage = () => {
 
       setIsLoading(false);
 
-      logSearchPage(queryRaw as string, searchResults.results ? searchResults.results.length : 0);
+      logSearchPage(query as string, searchResults.results ? searchResults.results.length : 0);
+      if (router.query.issuer === 'serp') {
+        logSerpSearchStarted(
+          query as string,
+          searchResults.results ? searchResults.results.length : 0
+        );
+      }
     };
 
     if (authCtx.authState.idToken && router.isReady) {
-      fetchData();
+      if (usedQuery !== query) {
+        fetchData();
+      }
     }
-  }, [queryRaw, authCtx.authState.idToken, userCtx.isAgeGated, router.isReady]);
+  }, [authCtx.authState.idToken, userCtx.isAgeGated, router.isReady, query]);
+
+  useEffect(() => {
+    setQuery((router.query.q as string) ?? '');
+  }, [router.query.q]);
+
+  // Serp Experiment
+  const control = (
+    <Header
+      navItems={navItems}
+      loggedIn={authCtx.isUserAuthenticated()}
+      onSearchCompanyChange={onSearchCompanyChange}
+      onSearchCategoryChange={onSearchCategoryChange}
+      onSearchTerm={onSearchTerm}
+    />
+  );
+  const treatment = <HeaderV2 navItems={navItems} loggedIn />;
+
+  const serpExperiment = useAmplitudeExperiment(
+    'serp-search-bar',
+    [
+      {
+        variantName: 'control',
+        component: control,
+      },
+      {
+        variantName: 'treatment',
+        component: treatment,
+      },
+    ],
+    'control'
+  );
 
   return (
     <>
+      {/* Header */}
+      {serpExperiment.component ?? control}
+
+      {/* Search Results */}
       <Container className="py-5" addBottomHorizontalLine={false}>
-        <Heading headingLevel="h1">Search results for: {queryRaw}</Heading>
+        <Heading headingLevel="h1">Search results for: {query}</Heading>
         {error && (
           <Heading headingLevel="h2" className="pt-5">
             {error}
@@ -118,6 +195,7 @@ const Search: NextPage = () => {
         </div>
       </Container>
 
+      {/* Adverts */}
       {adverts.length > 0 && (
         <Container className="py-5" addBottomHorizontalLine={false}>
           <div className="grid grid-cols-1 tablet:grid-cols-2 relative">
@@ -146,6 +224,7 @@ const Search: NextPage = () => {
 export const getStaticProps = getI18nStaticProps;
 
 export default withAuthProviderLayout(requireAuth(Search), {
+  headerOverride: <></>,
   seo: {
     title: 'offers.search.title',
   },

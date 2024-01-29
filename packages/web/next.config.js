@@ -48,12 +48,14 @@ const nextConfig = {
         patterns: [{ from: assetsFolder, to: 'static/assets' }],
       })
     );
-    config.plugins.push(
-      new BundleAnalyzerPlugin({
-        analyzerMode: 'json',
-        generateStatsFile: true,
-      })
-    );
+    if (process.env.NODE_ENV === 'production') {
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'json',
+          generateStatsFile: true,
+        })
+      );
+    }
     return config;
   },
   transpilePackages: ['../api/core/'],

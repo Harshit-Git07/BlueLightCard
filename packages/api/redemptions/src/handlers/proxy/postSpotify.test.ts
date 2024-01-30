@@ -1,14 +1,37 @@
 import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
-import { afterAll, afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { afterAll, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { mocked } from 'jest-mock';
 
-import { httpRequest } from '../../../../core/src/utils/fetch/httpRequest';
+import { httpRequest } from '@blc-mono/core/utils/fetch/httpRequest';
+import { getEnv } from '@blc-mono/core/utils/getEnv';
 
-import { IAPIGatewayEvent } from './postSpotify';
+import { EnvironmentKeys } from '../../constants/environment';
 
-jest.mock('@blc-mono/core/src/utils/fetch/httpRequest');
+import { handler, IAPIGatewayEvent } from './postSpotify';
+
+jest.mock('@blc-mono/core/utils/fetch/httpRequest');
+jest.mock('@blc-mono/core/utils/getEnv');
 
 const mockedHttpRequest = mocked(httpRequest);
+const mockedGetEnv = mocked(getEnv);
+
+function mockEnvVariables(overrides?: Partial<Record<string, string>>) {
+  return mockedGetEnv.mockImplementation((key: string) => {
+    const value = overrides?.[key];
+    if (value) return value;
+    switch (key) {
+      case EnvironmentKeys.CODES_REDEEMED_HOST:
+        return 'http://url-test.com';
+      case EnvironmentKeys.CODES_REDEEMED_ENVIRONMENT:
+        return 'test';
+      case EnvironmentKeys.CODE_REDEEMED_PATH:
+        return 'codeRedeemed';
+      case EnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH:
+        return 'assignedUserCode';
+    }
+    throw new Error('Invalid environment variable');
+  });
+}
 
 describe('Spotify Proxy Handler', () => {
   const platform = 'test-platform';
@@ -29,23 +52,6 @@ describe('Spotify Proxy Handler', () => {
     headers,
     statusCode,
   };
-  const oldEvns = { ...process.env };
-
-  beforeEach(() => {
-    process.env = { ...oldEvns };
-  });
-
-  afterEach(() => {
-    process.env = { ...oldEvns };
-    delete process.env.CODES_REDEEMED_DATA;
-    delete process.env.CODES_REDEEMED_PASSWORD;
-    delete process.env.ASSIGN_USER_CODES_DATA;
-    delete process.env.ASSIGN_USER_PASSWORD;
-    delete process.env.CODES_REDEEMED_HOST;
-    delete process.env.ENVIRONMENT;
-    delete process.env.CODE_REDEEMED_PATH;
-    delete process.env.CODE_ASSIGNED_REDEEMED_PATH;
-  });
 
   afterAll(() => {
     jest.resetAllMocks();
@@ -53,10 +59,7 @@ describe('Spotify Proxy Handler', () => {
 
   describe('200s', () => {
     test('should return 200 for a user who already code that exist', async () => {
-      process.env.CODES_REDEEMED_HOST = 'http://url-test.com';
-      process.env.ENVIRONMENT = 'test';
-      process.env.CODE_REDEEMED_PATH = 'codeRedeemed';
-      process.env.CODE_ASSIGNED_REDEEMED_PATH = 'assignedUserCode';
+      mockEnvVariables();
 
       jest.spyOn(SecretsManagerClient.prototype, 'send').mockImplementation(() => {
         return {
@@ -69,7 +72,6 @@ describe('Spotify Proxy Handler', () => {
         };
       });
 
-      const { handler } = await import('./postSpotify');
       const expectedBody = JSON.stringify({
         message: 'Success',
         data: {
@@ -104,10 +106,7 @@ describe('Spotify Proxy Handler', () => {
     });
 
     test('should return 200 for a user who already code does not exist', async () => {
-      process.env.CODES_REDEEMED_HOST = 'http://url-test.com';
-      process.env.ENVIRONMENT = 'test';
-      process.env.CODE_REDEEMED_PATH = 'codeRedeemed';
-      process.env.CODE_ASSIGNED_REDEEMED_PATH = 'assignedUserCode';
+      mockEnvVariables();
 
       jest.spyOn(SecretsManagerClient.prototype, 'send').mockImplementation(() => {
         return {
@@ -120,7 +119,6 @@ describe('Spotify Proxy Handler', () => {
         };
       });
 
-      const { handler } = await import('./postSpotify');
       const expectedBody = JSON.stringify({
         message: 'Success',
         data: {
@@ -166,26 +164,10 @@ describe('Spotify Proxy Handler', () => {
     });
   });
   describe('400s', () => {
-    afterEach(() => {
-      process.env = { ...oldEvns };
-      delete process.env.CODES_REDEEMED_DATA;
-      delete process.env.CODES_REDEEMED_PASSWORD;
-      delete process.env.ASSIGN_USER_CODES_DATA;
-      delete process.env.ASSIGN_USER_PASSWORD;
-      delete process.env.CODES_REDEEMED_HOST;
-      delete process.env.ENVIRONMENT;
-      delete process.env.CODE_REDEEMED_PATH;
-      delete process.env.CODE_ASSIGNED_REDEEMED_PATH;
-    });
-
     test('should return a 400 codee when the response return an empty object', async () => {
-      process.env.ENVIRONMENT = 'test';
-      process.env.CODE_REDEEMED_PATH = 'codeRedeemed';
-      process.env.CODE_ASSIGNED_REDEEMED_PATH = 'assignedUserCode';
-
-      process.env.CODES_REDEEMED_HOST = 'http://wrong-url';
-
-      const { handler } = await import('./postSpotify');
+      mockEnvVariables({
+        [EnvironmentKeys.CODES_REDEEMED_HOST]: 'http://wrong-url',
+      });
 
       const expectedBody = JSON.stringify({
         message: 'Not found',
@@ -217,12 +199,10 @@ describe('Spotify Proxy Handler', () => {
     });
 
     test('should return a 404 codee when the response returns undefined', async () => {
-      process.env.ENVIRONMENT = 'test';
-      process.env.CODE_REDEEMED_PATH = 'codeRedeemed';
-      process.env.CODE_ASSIGNED_REDEEMED_PATH = 'assignedUserCode';
+      mockEnvVariables({
+        [EnvironmentKeys.CODES_REDEEMED_HOST]: 'http://wrong-url',
+      });
 
-      process.env.CODES_REDEEMED_HOST = 'http://wrong-url';
-      const { handler } = await import('./postSpotify');
       const expectedBody = JSON.stringify({
         message: 'Not found',
       });
@@ -254,7 +234,8 @@ describe('Spotify Proxy Handler', () => {
   });
   describe('500s', () => {
     test('should return a 500 when an unexpected error happens', async () => {
-      const { handler } = await import('./postSpotify');
+      mockEnvVariables();
+
       const expectedResponse = {
         ...defaultExpectedResponse,
         body: JSON.stringify({ message: 'Error', error: 'Error while creating Spotify code.' }),
@@ -274,24 +255,16 @@ describe('Spotify Proxy Handler', () => {
 
   describe('environments variables', () => {
     beforeEach(() => {
-      process.env = {};
       jest.resetModules();
       jest.resetAllMocks();
       jest.clearAllMocks();
     });
 
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    };
-
-    const defaultExpectedResponse = {
-      body: {},
-      headers,
-      statusCode: 200,
-    };
-
     test('should validate environment variables', async () => {
+      mockedGetEnv.mockImplementationOnce(() => {
+        throw new Error('Invalid environment variable');
+      });
+
       jest.spyOn(SecretsManagerClient.prototype, 'send').mockImplementation(() => {
         return {
           SecretString: JSON.stringify({
@@ -302,29 +275,12 @@ describe('Spotify Proxy Handler', () => {
           }),
         };
       });
-      process.env = {};
-      const { handler } = await import('./postSpotify');
-      // FIXME: This should be caught earlier, it's falling back to the catch.
-      const expectedBody = JSON.stringify({
-        message: 'Error',
-        error: 'Error while creating Spotify code.',
-      });
-      const expectedResponse = {
-        ...defaultExpectedResponse,
-        body: expectedBody,
-        statusCode: 500,
-      };
-
-      mockedHttpRequest.mockResolvedValueOnce({
-        status: 500,
-        data: {},
-      });
 
       const event: Partial<IAPIGatewayEvent> = {
         body: JSON.stringify({}),
       };
-      const res = await handler(event as IAPIGatewayEvent);
-      expect(res).toEqual(expectedResponse);
+
+      await expect(() => handler(event as IAPIGatewayEvent)).rejects.toThrow();
     });
   });
 });

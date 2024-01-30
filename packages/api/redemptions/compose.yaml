@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${REDEMPTIONS_DATABASE_USER}
+      POSTGRES_PASSWORD: ${REDEMPTIONS_DATABASE_PASSWORD}
+      POSTGRES_DB: ${REDEMPTIONS_DATABASE_NAME}
+    ports:
+      - ${REDEMPTIONS_DATABASE_PORT}:5432

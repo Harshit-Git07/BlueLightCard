@@ -1,10 +1,7 @@
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { EventBus, StackContext } from 'sst/constructs';
-import { CfnLoggingConfiguration, CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
-import { LogGroup } from 'aws-cdk-lib/aws-logs';
+import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
 import { Network } from './infra/network';
-import { IVpc } from 'aws-cdk-lib/aws-ec2';
-import { isDev } from '@blc-mono/core/src/utils/checkEnvironment';
 
 interface ICertificate {
   certificateArn?: string;

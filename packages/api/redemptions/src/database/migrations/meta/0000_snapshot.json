@@ -1,0 +1,378 @@
+{
+  "id": "5ddccf24-696c-40d8-95d3-bc7d281aa070",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "generics": {
+      "name": "generics",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "redemptionId": {
+          "name": "redemptionId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "generics_redemptionId_redemptions_id_fk": {
+          "name": "generics_redemptionId_redemptions_id_fk",
+          "tableFrom": "generics",
+          "tableTo": "redemptions",
+          "columnsFrom": ["redemptionId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "redemptions": {
+      "name": "redemptions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "affiliate": {
+          "name": "affiliate",
+          "type": "affiliate",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "connection": {
+          "name": "connection",
+          "type": "connection",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "offerId": {
+          "name": "offerId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "offerType": {
+          "name": "offerType",
+          "type": "offerType",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "platform": {
+          "name": "platform",
+          "type": "platform",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "redemptionType": {
+          "name": "redemptionType",
+          "type": "redemptionType",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "vaultBatches": {
+      "name": "vaultBatches",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vaultId": {
+          "name": "vaultId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file": {
+          "name": "file",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vaultBatches_vaultId_vaults_id_fk": {
+          "name": "vaultBatches_vaultId_vaults_id_fk",
+          "tableFrom": "vaultBatches",
+          "tableTo": "vaults",
+          "columnsFrom": ["vaultId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "vaultCodes": {
+      "name": "vaultCodes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vaultId": {
+          "name": "vaultId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "batchId": {
+          "name": "batchId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created": {
+          "name": "created",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expiry": {
+          "name": "expiry",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memberId": {
+          "name": "memberId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vaultCodes_vaultId_vaults_id_fk": {
+          "name": "vaultCodes_vaultId_vaults_id_fk",
+          "tableFrom": "vaultCodes",
+          "tableTo": "vaults",
+          "columnsFrom": ["vaultId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "vaultCodes_batchId_vaultBatches_id_fk": {
+          "name": "vaultCodes_batchId_vaultBatches_id_fk",
+          "tableFrom": "vaultCodes",
+          "tableTo": "vaultBatches",
+          "columnsFrom": ["batchId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "vaults": {
+      "name": "vaults",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "redemptionId": {
+          "name": "redemptionId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alertBelow": {
+          "name": "alertBelow",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 100
+        },
+        "created": {
+          "name": "created",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "integration": {
+          "name": "integration",
+          "type": "integration",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "integrationId": {
+          "name": "integrationId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maxPerUser": {
+          "name": "maxPerUser",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "boolean": {
+          "name": "boolean",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "status": {
+          "name": "status",
+          "type": "status",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "terms": {
+          "name": "terms",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vaults_redemptionId_redemptions_id_fk": {
+          "name": "vaults_redemptionId_redemptions_id_fk",
+          "tableFrom": "vaults",
+          "tableTo": "redemptions",
+          "columnsFrom": ["redemptionId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "affiliate": {
+      "name": "affiliate",
+      "values": {
+        "awin": "awin",
+        "affiliateFuture": "affiliateFuture",
+        "rakuten": "rakuten",
+        "affilinet": "affilinet",
+        "webgains": "webgains",
+        "partnerize": "partnerize",
+        "impactRadius": "impactRadius",
+        "adtraction": "adtraction",
+        "affiliateGateway": "affiliateGateway",
+        "optimiseMedia": "optimiseMedia",
+        "commissionJunction": "commissionJunction",
+        "tradedoubler": "tradedoubler"
+      }
+    },
+    "connection": {
+      "name": "connection",
+      "values": {
+        "affiliate": "affiliate",
+        "direct": "direct",
+        "spotify": "spotify"
+      }
+    },
+    "integration": {
+      "name": "integration",
+      "values": {
+        "eagleeye": "eagleeye",
+        "uniqodo": "uniqodo"
+      }
+    },
+    "offerType": {
+      "name": "offerType",
+      "values": {
+        "online": "online",
+        "in-store": "in-store"
+      }
+    },
+    "platform": {
+      "name": "platform",
+      "values": {
+        "BLC_UK": "BLC_UK",
+        "BLC_AU": "BLC_AU",
+        "DDS_UK": "DDS_UK"
+      }
+    },
+    "redemptionType": {
+      "name": "redemptionType",
+      "values": {
+        "generic": "generic",
+        "vault": "vault"
+      }
+    },
+    "status": {
+      "name": "status",
+      "values": {
+        "active": "active",
+        "in-active": "in-active"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

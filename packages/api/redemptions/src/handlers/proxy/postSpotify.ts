@@ -2,8 +2,11 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 
+import { getEnv } from '@blc-mono/core/utils/getEnv';
+
 import { httpRequest, RequestResponse } from '../../../../core/src/utils/fetch/httpRequest';
 import { Response } from '../../../../core/src/utils/restResponse/response';
+import { EnvironmentKeys } from '../../constants/environment';
 import { generateKey } from '../../helpers/newVaultAuth';
 
 export interface IAPIGatewayEvent extends APIGatewayEvent {
@@ -11,38 +14,11 @@ export interface IAPIGatewayEvent extends APIGatewayEvent {
 }
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-post` });
-enum ErrorMessages {
-  MissingEndpoint = 'empty environment variables - missing endpoint',
-}
 
 interface ResponseData {
   codes: Array<{ code: number }>;
   code: number;
   trackingUrl: string;
-}
-
-interface ValidationParams {
-  codeRedeemedHost: string;
-  codeRedeemedEnvironment: string;
-  codeRedeemedPath: string;
-  assignUserCodesPath: string;
-}
-
-function validateEnvironmentVariables({
-  codeRedeemedHost,
-  codeRedeemedPath,
-  assignUserCodesPath,
-  codeRedeemedEnvironment,
-}: ValidationParams): string | undefined {
-  if (!codeRedeemedHost) {
-    return ErrorMessages.MissingEndpoint;
-  } else if (!codeRedeemedPath) {
-    return ErrorMessages.MissingEndpoint;
-  } else if (!codeRedeemedEnvironment) {
-    return ErrorMessages.MissingEndpoint;
-  } else if (!assignUserCodesPath) {
-    return ErrorMessages.MissingEndpoint;
-  }
 }
 
 function getResponseData(response: RequestResponse, url: string): ResponseData | undefined {
@@ -62,15 +38,6 @@ function getResponseData(response: RequestResponse, url: string): ResponseData |
 /**
  * Secrets for code redeemed
  */
-
-/**
- *  environment values for code redeemed for setting urls
- */
-const codeRedeemedHost = process.env.CODES_REDEEMED_HOST ?? '';
-const codeRedeemedEnvironment = process.env.ENVIRONMENT ?? '';
-const codeRedeemedPath = process.env.CODE_REDEEMED_PATH ?? '';
-const assignUserCodesPath = process.env.CODE_ASSIGNED_REDEEMED_PATH ?? '';
-
 interface Secrets {
   codeRedeemedData: string;
   codeRedeemedPassword: string;
@@ -80,6 +47,13 @@ interface Secrets {
 
 export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyStructuredResultV2> => {
   logger.info('POST Spotify Proxy Input', { event });
+
+  // environment values for code redeemed for setting urls
+  const codesRedeemedHost = getEnv(EnvironmentKeys.CODES_REDEEMED_HOST);
+  const codesRedeemedEnvironment = getEnv(EnvironmentKeys.CODES_REDEEMED_ENVIRONMENT);
+  const codeRedeemedPath = getEnv(EnvironmentKeys.CODE_REDEEMED_PATH);
+  const codeAssignedRedeemedPath = getEnv(EnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH);
+
   try {
     const client = new SecretsManagerClient({
       region: 'eu-west-2',
@@ -96,16 +70,7 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
       ...codeRedemptionSecrets,
     };
 
-    const codeEndpoint = `${codeRedeemedHost}/${codeRedeemedEnvironment}/${codeRedeemedPath}`;
-    const validationMessage = validateEnvironmentVariables({
-      codeRedeemedHost,
-      codeRedeemedEnvironment,
-      codeRedeemedPath,
-      assignUserCodesPath,
-    });
-    if (validationMessage) {
-      return Response.Error(new Error('Invalid validation for environment variables'));
-    }
+    const codeEndpoint = `${codesRedeemedHost}/${codesRedeemedEnvironment}/${codeRedeemedPath}`;
     const { platform, companyId, offerId, memberId, url } = JSON.parse(event.body);
     const key = generateKey(secrets.codeRedeemedData, secrets.codeRedeemedPassword);
     const payload = { brand: platform, companyId, offerId, userId: memberId };
@@ -130,7 +95,7 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
         return Response.OK({ message: 'Success', data: { trackingUrl, code } });
       }
 
-      const assignUserEndpont = `${codeRedeemedHost}/${codeRedeemedEnvironment}/${assignUserCodesPath}`;
+      const assignUserEndpont = `${codesRedeemedHost}/${codesRedeemedEnvironment}/${codeAssignedRedeemedPath}`;
       const assignUserKey = generateKey(secrets.assignUserCodesData, secrets.assignUserCodesPassword);
       const assignUserResponse: RequestResponse | undefined = await httpRequest({
         method: 'POST',

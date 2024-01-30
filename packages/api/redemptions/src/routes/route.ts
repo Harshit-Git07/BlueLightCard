@@ -9,30 +9,32 @@ import {
   ResponseModel,
 } from '@blc-mono/core/extensions/apiGatewayExtension';
 
-interface RouteParams {
-  apiGatewayModelGenerator: ApiGatewayModelGenerator;
-  model: Model;
-  restApi: RestApi;
-}
+import { EnvironmentKeys } from '../constants/environment';
 
-interface RouteParamsWithHandlerAndStack extends RouteParams {
-  stack: Stack;
+export type RouteOptions = {
+  apiGatewayModelGenerator: ApiGatewayModelGenerator;
+  environment?: Partial<Record<EnvironmentKeys, string>>;
   handler: string;
+  model: Model;
   requestValidatorName: string;
-}
+  restApi: RestApi;
+  stack: Stack;
+};
 
 export class Route {
-  public getRoute({
-    model,
+  public static createRoute({
     apiGatewayModelGenerator,
+    environment,
+    handler,
+    model,
+    requestValidatorName,
     restApi,
     stack,
-    handler,
-    requestValidatorName,
-  }: RouteParamsWithHandlerAndStack): ApiGatewayV1ApiRouteProps<'Authorizer'> {
+  }: RouteOptions): ApiGatewayV1ApiRouteProps<'Authorizer'> {
     return {
       function: {
         handler,
+        environment,
       },
       cdk: {
         method: {

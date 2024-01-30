@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { createZodNamedType } from '@blc-mono/core/src/extensions/apiGatewayExtension/agModelGenerator';
+import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 
 export const PostRedeemModel = createZodNamedType(
   'PostRedeemModel',

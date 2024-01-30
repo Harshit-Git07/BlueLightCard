@@ -1,7 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 
-import { Logger } from '@blc-mono/core/src/utils/logger/logger';
-import { Response } from '@blc-mono/core/src/utils/restResponse/response';
+import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 
 import { AffiliateConfigurationHelper } from '../../helpers/affiliateConfiguration';
 import { PostAffiliateModel } from '../../models/postAffiliate';
@@ -11,20 +11,15 @@ interface IAPIGatewayEvent extends APIGatewayEvent {
 }
 
 const service: string = process.env.service as string;
-const logger = new Logger();
-
-logger.init({ serviceName: `${service}-affiliate-post` });
+const logger = new LambdaLogger({ serviceName: `${service}-affiliate-post` });
 
 export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyStructuredResultV2> => {
-  logger.info({
-    message: 'POST Affiliate Input',
-  });
   const { affiliateUrl, memberId, platform, offerId, companyId }: PostAffiliateModel = JSON.parse(event.body);
   const affiliateConfig = new AffiliateConfigurationHelper(affiliateUrl).getConfig();
 
   if (!affiliateConfig) {
     logger.error({
-      message: 'Affiliate not supported',
+      message: 'Error while creating tracking URL',
       body: { affiliateUrl, platform },
     });
 

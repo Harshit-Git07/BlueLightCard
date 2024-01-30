@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noEmit": true,
+    "skipLibCheck": true,
     "paths": {
       "@blc-mono/core/*": ["../core/src/*"]
     }

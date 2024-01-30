@@ -2,13 +2,18 @@
   "name": "@blc-mono/redemptions",
   "version": "1.4.0",
   "scripts": {
+    "pre:dev": "npm run db:up",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "format": "npx prettier . --write",
     "format:check": "npx prettier . --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain redemptions"
+    "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain redemptions",
+    "db:up": "dotenv -e ../../../.env -- docker compose up -d",
+    "db:down": "dotenv -e ../../../.env -- docker compose down",
+    "drizzle:generate": "dotenv -e ../../../.env -- drizzle-kit generate:pg",
+    "drizzle:studio": "dotenv -e ../../../.env -- drizzle-kit studio"
   },
   "author": "",
   "license": "ISC",

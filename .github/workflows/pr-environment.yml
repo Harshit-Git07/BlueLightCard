@@ -49,18 +49,8 @@ jobs:
           path: /home/runner/.npm/_logs/
       - run: npm run build
       - name: Deploy Global
-        env:
-          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
-          ENVIRONMENT: develop
-          CODE_REDEEMED_PATH: NewVault/codesRedeemed
-          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy global --stage $PR_PREFIX
       - name: Deploy Identity
-        env:
-          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
-          ENVIRONMENT: develop
-          CODE_REDEEMED_PATH: NewVault/codesRedeemed
-          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy identity --stage $PR_PREFIX
       - name: Extract Identity URL
         id: sst-identity-outputs
@@ -69,11 +59,6 @@ jobs:
           IDENTITY_URL=$(jq -r '.[].IdentityApiEndpoint | select(. != null)' .sst/outputs.json)
           echo "identityApiUrl=$IDENTITY_URL" >> $GITHUB_OUTPUT
       - name: Deploy Offers
-        env:
-          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
-          ENVIRONMENT: develop
-          CODE_REDEEMED_PATH: NewVault/codesRedeemed
-          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy offers --stage $PR_PREFIX
       - name: Extract Api URL and set output
         id: sst-offers-outputs
@@ -82,11 +67,6 @@ jobs:
           OFFERS_URL=$(jq -r '.[].OffersApiEndpoint | select(. != null)' .sst/outputs.json)
           echo "offersApiUrl=$OFFERS_URL" >> $GITHUB_OUTPUT
       - name: Deploy Redemptions
-        env:
-          CODES_REDEEMED_HOST: https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com
-          ENVIRONMENT: develop
-          CODE_REDEEMED_PATH: NewVault/codesRedeemed
-          CODE_ASSIGNED_REDEEMED_PATH: NewVault/assignUserCodes
         run: npx sst deploy redemptions --stage $PR_PREFIX
       - name: Extract Api URL and set output
         id: sst-redemptions-outputs

@@ -15,7 +15,7 @@ export default {
     };
   },
 
-  stacks (app) {
+  async stacks(app) {
     app.setDefaultFunctionProps({
       runtime: 'nodejs18.x',
       environment: {
@@ -32,8 +32,12 @@ export default {
       .stack(Offers, { id: 'offers' })
       .stack(Web, { id: 'web' })
       .stack(CMS, { id: 'cms' })
-      .stack(MemberServicesHub, { id: 'member-services-hub' })
-      .stack(Redemptions, { id: 'redemptions' })
+      .stack(MemberServicesHub, { id: 'member-services-hub' });
+    
+    await Promise.all([
+      // Add async stacks here https://docs.sst.dev/constructs/Stack#async-stacks
+      app.stack(Redemptions, { id: 'redemptions' })
+    ])
 
   },
 } satisfies SSTConfig;

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.27.0...bluelightcard/web-v1.28.0) (2024-01-30)
+
+
+### Features
+
+* bundle analyser ([#810](https://github.com/bluelightcard/BlueLightCard-2.0/issues/810)) ([17e44ee](https://github.com/bluelightcard/BlueLightCard-2.0/commit/17e44ee43409925d651eaa8ce331ae5f87c3d263))
+* serp search bar experiment ([#808](https://github.com/bluelightcard/BlueLightCard-2.0/issues/808)) ([1e8c1a7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1e8c1a7c184169caafdb6920da602c05c76436a4))
+
 ## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.26.0...bluelightcard/web-v1.27.0) (2024-01-24)
 
 

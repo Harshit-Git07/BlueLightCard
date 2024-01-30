@@ -13,5 +13,5 @@ done
 
 node ./swagger.mjs $Stage
 
-REDOCLY_AUTHORIZATION=$REDOCLY_AUTHORIZATION npx @redocly/cli@latest push swagger.json --destination="$Stage.$Domain@$APIVersion" --organization="blc-jgk"
+REDOCLY_AUTHORIZATION=$REDOCLY_AUTHORIZATION npx @redocly/cli push swagger.json --destination="$Stage.$Domain@$APIVersion" --organization="blc-jgk"
 

@@ -37,7 +37,7 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
       return;
     }
 
-    if (this.app.mode !== 'dev') {
+    if (this.app.mode !== 'dev' && this.app.mode !== 'remove') {
       throw new Error(
         [
           'Local databases are only supported when running "sst dev".',

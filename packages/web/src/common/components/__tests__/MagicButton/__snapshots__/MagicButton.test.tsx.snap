@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button component snapshot Test renders a button that is diabled 1`] = `
+<button
+  className="relative text-blue-800 w-fit rounded-full overflow-hidden m-1 "
+  disabled={true}
+  onClick={[Function]}
+>
+  <div
+    className="relative py-4 px-16 rounded-full z-50 h-full w-full flex justify-center items-center transition-all duration-300 text-white bg-gray-400 disabled"
+  >
+    Button
+  </div>
+</button>
+`;
+
+exports[`Button component snapshot Test renders a button with animated border 1`] = `
+<button
+  className="relative text-blue-800 w-fit rounded-full overflow-hidden p-1 cursor-pointer"
+  disabled={false}
+  onClick={[Function]}
+>
+  <div
+    className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"
+  >
+    <div
+      className="bg-gradient-to-b from-[#020369] from-25% to-75% to-[#98E5FF] h-full w-full animate-spin"
+    />
+  </div>
+  <div
+    className="relative py-4 px-16 rounded-full z-50 h-full w-full flex justify-center items-center transition-all duration-300 text-[#020369] bg-white animated"
+  >
+    Button
+  </div>
+</button>
+`;

@@ -30,6 +30,9 @@ const config: Config = {
       borderWidth: themeTokens.borderWidth,
       spacing: themeTokens.spacing,
       fontSize: themeTokens.font.size,
+      animation: {
+        spin: 'spin 3s linear infinite',
+      },
     },
     screens: {
       mobile: '280px',

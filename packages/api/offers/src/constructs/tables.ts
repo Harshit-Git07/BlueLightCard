@@ -1,19 +1,19 @@
-import { Table } from 'sst/constructs'
-import { Stack } from 'aws-cdk-lib'
+import { Table } from 'sst/constructs';
+import { Stack } from 'aws-cdk-lib';
 
 /**
  *  This class creates all the tables for the Offers API
  *  @param stack - The stack to add the tables to
  */
 export class Tables {
-  offerHomepageTable: Table
-  brandTable: Table
-  offerTable: Table
-  companyTable: Table
-  categoryTable: Table
-  offerTypeTable: Table
-  bannersTable: Table
-  tagsTable: Table
+  offerHomepageTable: Table;
+  brandTable: Table;
+  offerTable: Table;
+  companyTable: Table;
+  categoryTable: Table;
+  offerTypeTable: Table;
+  bannersTable: Table;
+  tagsTable: Table;
   offerBrandConnectionTable: Table;
   offerCategoryConnectionTable: Table;
   offerTypeConnectionTable: Table;
@@ -22,8 +22,7 @@ export class Tables {
   companyCategoryConnectionTable: Table;
   companyBrandConnectionTable: Table;
 
-
-  constructor (private stack: Stack) {
+  constructor(private stack: Stack) {
     this.offerHomepageTable = this.createOfferHomepageTable();
     this.brandTable = this.createBrandTable();
     this.offerTable = this.createOfferTable();
@@ -41,33 +40,33 @@ export class Tables {
     this.companyBrandConnectionTable = this.createCompanyBrandConnectionTable();
   }
 
-  private createOfferHomepageTable (): Table {
+  private createOfferHomepageTable(): Table {
     return new Table(this.stack, 'offersHomepage', {
       fields: {
         id: 'string',
         type: 'string',
-        json: 'string'
+        json: 'string',
       },
       primaryIndex: {
         partitionKey: 'id',
-        sortKey: 'type'
-      }
-    })
+        sortKey: 'type',
+      },
+    });
   }
 
-  private createBrandTable (): Table {
+  private createBrandTable(): Table {
     return new Table(this.stack, 'brand', {
       fields: {
         id: 'string',
       },
       primaryIndex: {
         partitionKey: 'id',
-      }
-    })
+      },
+    });
   }
 
-  private createOfferTable (): Table {
-    return new Table(this.stack, 'offers', {
+  private createOfferTable(): Table {
+    return new Table(this.stack, 'offersTable', {
       fields: {
         legacyId: 'string',
         id: 'string',
@@ -80,10 +79,10 @@ export class Tables {
           partitionKey: 'legacyId',
         },
       },
-    })
+    });
   }
 
-  private createCompanyTable (): Table {
+  private createCompanyTable(): Table {
     return new Table(this.stack, 'companies', {
       fields: {
         legacyId: 'string', // Value: Brand#legacyID - ex: blc-uk#1209
@@ -97,10 +96,10 @@ export class Tables {
           partitionKey: 'legacyId',
         },
       },
-    })
+    });
   }
 
-  private createCategoryTable (): Table {
+  private createCategoryTable(): Table {
     return new Table(this.stack, 'categories', {
       fields: {
         id: 'string',
@@ -115,20 +114,20 @@ export class Tables {
       globalIndexes: {
         type: {
           partitionKey: 'type',
-          sortKey: 'name'
+          sortKey: 'name',
         },
         legacyId: {
           partitionKey: 'legacyId',
         },
         parentCategoryId: {
           partitionKey: 'parentCategoryId',
-          sortKey: 'name'
-        }
-      }
-    })
+          sortKey: 'name',
+        },
+      },
+    });
   }
 
-  private createOfferTypeTable (): Table {
+  private createOfferTypeTable(): Table {
     return new Table(this.stack, 'offerTypes', {
       fields: {
         id: 'string',
@@ -140,12 +139,12 @@ export class Tables {
       globalIndexes: {
         legacyId: {
           partitionKey: 'legacyId',
-        }
+        },
       },
-    })
+    });
   }
 
-  private createTagsTable (): Table {
+  private createTagsTable(): Table {
     return new Table(this.stack, 'tags', {
       fields: {
         id: 'string',
@@ -157,12 +156,12 @@ export class Tables {
       globalIndexes: {
         name: {
           partitionKey: 'name',
-        }
+        },
       },
-    })
+    });
   }
 
-  private createOfferBrandConnectionTable (): Table {
+  private createOfferBrandConnectionTable(): Table {
     return new Table(this.stack, 'offerBrandsConnection', {
       fields: {
         offerId: 'string',
@@ -176,12 +175,12 @@ export class Tables {
         offerId: {
           partitionKey: 'offerId',
           sortKey: 'brandId',
-        }
-      }
-    })
+        },
+      },
+    });
   }
 
-  private createOfferCategoryConnectionTable (): Table {
+  private createOfferCategoryConnectionTable(): Table {
     return new Table(this.stack, 'offerCategoriesConnection', {
       fields: {
         offerId: 'string',
@@ -195,31 +194,31 @@ export class Tables {
         offerId: {
           partitionKey: 'offerId',
           sortKey: 'categoryId',
-        }
-      }
-    })
+        },
+      },
+    });
   }
 
-  private createOfferTypeConnectionTable (): Table {
+  private createOfferTypeConnectionTable(): Table {
     return new Table(this.stack, 'offerTypesConnection', {
       fields: {
         offerId: 'string',
         offerTypeId: 'string',
       },
       primaryIndex: {
-          partitionKey: 'offerTypeId',
-          sortKey: 'offerId',
+        partitionKey: 'offerTypeId',
+        sortKey: 'offerId',
       },
       globalIndexes: {
         offerId: {
           partitionKey: 'offerId',
           sortKey: 'offerTypeId',
-        }
-      }
-    })
+        },
+      },
+    });
   }
 
-  private createOfferTagConnectionTable (): Table {
+  private createOfferTagConnectionTable(): Table {
     return new Table(this.stack, 'offerTagsConnection', {
       fields: {
         offerId: 'string',
@@ -228,11 +227,11 @@ export class Tables {
       primaryIndex: {
         partitionKey: 'offerId',
         sortKey: 'tagId',
-      }
-    })
+      },
+    });
   }
 
-  private createCompanyTagConnectionTable (): Table {
+  private createCompanyTagConnectionTable(): Table {
     return new Table(this.stack, 'companyTagsConnection', {
       fields: {
         companyId: 'string',
@@ -242,10 +241,10 @@ export class Tables {
         partitionKey: 'companyId',
         sortKey: 'tagId',
       },
-    })
+    });
   }
 
-  private createCompanyCategoryConnectionTable (): Table {
+  private createCompanyCategoryConnectionTable(): Table {
     return new Table(this.stack, 'companyCategoriesConnection', {
       fields: {
         companyId: 'string',
@@ -259,12 +258,12 @@ export class Tables {
         companyId: {
           partitionKey: 'companyId',
           sortKey: 'categoryId',
-        }
-      }
+        },
+      },
     });
   }
 
-  private createCompanyBrandConnectionTable (): Table {
+  private createCompanyBrandConnectionTable(): Table {
     return new Table(this.stack, 'companyBrandsConnection', {
       fields: {
         companyId: 'string',
@@ -278,12 +277,12 @@ export class Tables {
         companyId: {
           partitionKey: 'companyId',
           sortKey: 'brandId',
-        }
-      }
+        },
+      },
     });
   }
 
-  private createBannersTable (): Table {
+  private createBannersTable(): Table {
     return new Table(this.stack, 'banners', {
       fields: {
         id: 'string',
@@ -310,6 +309,6 @@ export class Tables {
           sortKey: 'brand',
         },
       },
-    })
+    });
   }
 }

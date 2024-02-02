@@ -1,9 +1,9 @@
-import { Stack } from 'aws-cdk-lib';
+import { Stack } from 'sst/constructs';
 import { AuthorizationType, FieldLogLevel, GraphqlApi, SchemaFile } from 'aws-cdk-lib/aws-appsync';
 import { IUserPool } from 'aws-cdk-lib/aws-cognito';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { isProduction } from '../../../core/src/utils/checkEnvironment';
-import { Secrets } from './secrets';
+import { SecretManager } from './secret-manager';
 
 /**
  * This class creates the GraphQL API for the Offers API
@@ -14,20 +14,31 @@ import { Secrets } from './secrets';
  * @return The GraphQL API
  */
 export class OffersApi {
-  static api: GraphqlApi;
+  private readonly _api: GraphqlApi;
 
-  static create(stack: Stack, stage: string, userPool: IUserPool, schemaPath: string) {
-    const secrets = new Secrets(stack, stage);
-    const certificateArn: string = secrets.appSyncCertificateArn;
+  constructor(
+    private stack: Stack,
+    private userPool: IUserPool,
+    private secrets: SecretManager,
+    private schemaPath: string,
+  ) {
+    this._api = this.createApi();
+  }
 
-    this.api = new GraphqlApi(stack, 'Api', {
-      name: `cms-api-${stage}`,
-      schema: SchemaFile.fromAsset(schemaPath),
+  get api() {
+    return this._api;
+  }
+
+  private createApi() {
+    const certificateArn: string = this.secrets.appSyncCertificateArn;
+    return new GraphqlApi(this.stack, 'Api', {
+      name: `cms-api-${this.stack.stage}`,
+      schema: SchemaFile.fromAsset(this.schemaPath),
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: AuthorizationType.USER_POOL,
           userPoolConfig: {
-            userPool: userPool,
+            userPool: this.userPool,
           },
         },
       },
@@ -35,14 +46,15 @@ export class OffersApi {
       logConfig: {
         fieldLogLevel: FieldLogLevel.ERROR,
       },
-      ...(['production', 'staging'].includes(stage) &&
+      ...(['production', 'staging'].includes(this.stack.stage) &&
         certificateArn && {
           domainName: {
-            domainName: isProduction(stage) ? 'offers.blcshine.io' : `${stage}-offers.blcshine.io`,
-            certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
+            domainName: isProduction(this.stack.stage)
+              ? 'offers.blcshine.io'
+              : `${this.stack.stage}-offers.blcshine.io`,
+            certificate: Certificate.fromCertificateArn(this.stack, 'DomainCertificate', certificateArn),
           },
         }),
     });
-    return this.api;
   }
 }

@@ -27,3 +27,39 @@ jobs:
           aws-region: eu-west-2
       - name: Destroy Global
         run: npx sst remove --stage $PR_PREFIX
+      - name: Notify
+        if: failure()
+        run: |
+          curl --location ${{ vars.CI_NOTIFICATIONS_WEBHOOK }} \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "type": "message",
+              "attachments": [
+                {
+                  "contentType": "application/vnd.microsoft.card.adaptive",
+                  "contentUrl": null,
+                  "content": {
+                    "type": "AdaptiveCard",
+                    "version": "1.2",
+                    "body": [
+                      {
+                        "type": "TextBlock",
+                        "text": "❌ Workflow Failed ❌",
+                        "style": "heading"
+                      },
+                      {
+                        "type": "TextBlock",
+                        "text": "The workflow \"Destroy PR Environment\" failed. This requires attention from a developer."
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "type": "Action.OpenUrl",
+                        "title": "View Workflow",
+                        "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }'

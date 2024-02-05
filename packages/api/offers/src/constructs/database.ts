@@ -26,7 +26,7 @@ import { DATABASE_PROPS } from '../utils/global-constants';
  * RDS Proxies, and development database instances, based on the application's environment.
  */
 export class Database {
-  private readonly _database: DatabaseInstance | DatabaseCluster;
+  private readonly _database: DatabaseInstance | DatabaseCluster | undefined;
   private readonly _rdsProxy: DatabaseProxy | undefined;
 
   constructor(
@@ -37,7 +37,7 @@ export class Database {
     private ec2Manager: EC2Manager,
   ) {
     if (isDev(this.stack.stage)) {
-      this._database = this.createLocalDevelopmentDatabase();
+      //  this._database = this.createLocalDevelopmentDatabase();
     } else {
       this._database = this.createAuroraServerlessV2();
       this._rdsProxy = this.createProxy();
@@ -58,7 +58,7 @@ export class Database {
    *
    * @return {DatabaseInstance | DatabaseCluster} the database instance or cluster
    */
-  get database(): DatabaseInstance | DatabaseCluster {
+  get database(): DatabaseInstance | DatabaseCluster | undefined {
     return this._database;
   }
 

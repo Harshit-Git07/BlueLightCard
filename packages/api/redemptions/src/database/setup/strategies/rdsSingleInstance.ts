@@ -200,6 +200,20 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
       egressSecurityGroup,
       grantCredentialsSecretRead: (lambda) => databaseCredentialsSecret.grantRead(lambda),
       grantConnect: (lambda) => database.grantConnect(lambda),
+      getFunctionProps: (props) => ({
+        ...props,
+        enableLiveDev: false,
+        vpc: this.vpc,
+        vpcSubnets: {
+          subnetType: SubnetType.PRIVATE_WITH_EGRESS,
+          ...props.vpcSubnets,
+        },
+        securityGroups: [egressSecurityGroup, ...(props.securityGroups ?? [])],
+        environment: {
+          ...connectionConfig.toEnvironmentVariables(),
+          ...props.environment,
+        },
+      }),
     };
   }
 }

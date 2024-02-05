@@ -1,12 +1,11 @@
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 
-import { LinkEvents } from '../../events/';
+import { LinkEvents } from '../../events';
 import { IEventBridge } from '../../types/event';
 
 import { linkCreatedHandler, linkUpdatedHandler } from './linkEventHandlers';
 
-const service: string = process.env.service as string;
-const logger = new LambdaLogger({ serviceName: `${service}-link-event-handler` });
+const logger = new LambdaLogger({ serviceName: 'redemption-link-event-handler' });
 
 export const handler = async (event: IEventBridge): Promise<void> => {
   const { source } = event;

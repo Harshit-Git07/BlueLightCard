@@ -111,6 +111,14 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
       connectionConfig: databaseConnectionConfig,
       grantCredentialsSecretRead: () => null,
       grantConnect: () => null,
+      getFunctionProps: (props) => ({
+        ...props,
+        enableLiveDev: true,
+        environment: {
+          ...databaseConnectionConfig.toEnvironmentVariables(),
+          ...props.environment,
+        },
+      }),
     };
   }
 }

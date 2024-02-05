@@ -10,7 +10,6 @@ import { RedemptionsConfigResolver } from './src/config/config';
 import { EnvironmentKeys } from './src/constants/environment';
 import { RedemptionsDatabase } from './src/database/database';
 import { EventBridge } from './src/eventBridge/eventBridge';
-import { LinkEvents, OfferEvents, PromotionEvents, VaultEvents } from './src/eventBridge/events/';
 import { createLinkRule, createOfferRule, createPromotionRule, createVaultRule } from './src/eventBridge/rules';
 import { PostAffiliateModel } from './src/models/postAffiliate';
 import { PostRedeemModel } from './src/models/postRedeem';
@@ -30,8 +29,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   const config = RedemptionsConfigResolver.for(stack);
 
   // Create Database
-  const database = new RedemptionsDatabase(app, stack, vpc);
-  await database.setup();
+  const database = await new RedemptionsDatabase(app, stack, vpc).setup();
 
   const api = new ApiGatewayV1Api(stack, 'redemptions', {
     authorizers: {
@@ -70,34 +68,12 @@ export async function Redemptions({ app, stack }: StackContext) {
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
   const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
 
-  // TODO: Pass through DB variables for lambdas
-  // eslint-disable-next-line no-new
-  new EventBridge(stack, [
-    createLinkRule({
-      ruleName: 'linkRule',
-      events: [LinkEvents.LINK_CREATED, LinkEvents.LINK_UPDATED],
-      permissions: [],
-      stack,
-    }),
-    createVaultRule({
-      ruleName: 'vaultRule',
-      events: [VaultEvents.VAULT_CREATED, VaultEvents.VAULT_UPDATED],
-      permissions: [],
-      stack,
-    }),
-    createPromotionRule({
-      ruleName: 'promotionRule',
-      events: [PromotionEvents.PROMOTION_UPDATED],
-      permissions: [],
-      stack,
-    }),
-    createOfferRule({
-      ruleName: 'offerRule',
-      events: [OfferEvents.OFFER_CREATED, OfferEvents.OFFER_UPDATED],
-      permissions: [],
-      stack,
-    }),
-  ]);
+  new EventBridge(stack, {
+    linkRule: createLinkRule(stack),
+    vaultRule: createVaultRule(stack, database),
+    promotionRule: createPromotionRule(stack),
+    offerRule: createOfferRule(stack),
+  });
 
   const allRoutes = new Routes();
   const restApi = api.cdk.restApi;

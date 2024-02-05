@@ -19,7 +19,7 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
 
   if (!affiliateConfig) {
     logger.error({
-      message: 'Error while creating tracking URL',
+      message: 'Affiliate not supported',
       body: { affiliateUrl, platform },
     });
 

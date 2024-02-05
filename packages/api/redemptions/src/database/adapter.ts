@@ -1,5 +1,5 @@
 import { Grant } from 'aws-cdk-lib/aws-iam';
-import { Function as SSTFunction } from 'sst/constructs';
+import { Function as SSTFunction, FunctionProps } from 'sst/constructs';
 
 import { DatabaseConnectionConfig } from './connection';
 import { DatabaseEgressSecurityGroup } from './types';
@@ -9,4 +9,5 @@ export interface IDatabase {
   egressSecurityGroup?: DatabaseEgressSecurityGroup;
   grantCredentialsSecretRead(lambda: SSTFunction): Grant | null;
   grantConnect(lambda: SSTFunction): Grant | null;
+  getFunctionProps(props: FunctionProps): FunctionProps;
 }

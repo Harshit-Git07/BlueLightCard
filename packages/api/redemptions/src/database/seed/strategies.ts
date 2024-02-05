@@ -1,4 +1,4 @@
-import { IVpc, SubnetType } from 'aws-cdk-lib/aws-ec2';
+import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { App, Function as SSTFunction, Script, Stack } from 'sst/constructs';
 
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
@@ -52,18 +52,14 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
   }
 
   public createSeedScript(database: IDatabase, migrationsScript: Script) {
-    const seedFunction = new SSTFunction(this.stack, 'RedemptionsDatabaseSeedLambda', {
-      handler: 'packages/api/redemptions/src/database/seed/seedHandler.handler',
-      enableLiveDev: false, // true is not allowed when applied to the Script construct.
-      functionName: `redemptions-database-seed-${this.stack.stage}`,
-      vpc: this.vpc,
-      vpcSubnets: {
-        // Egress is required to connect to the secrets manager endpoint
-        subnetType: SubnetType.PRIVATE_WITH_EGRESS,
-      },
-      securityGroups: database.egressSecurityGroup ? [database.egressSecurityGroup] : [],
-      environment: database.connectionConfig.toEnvironmentVariables(),
-    });
+    const seedFunction = new SSTFunction(
+      this.stack,
+      'RedemptionsDatabaseSeedLambda',
+      database.getFunctionProps({
+        handler: 'packages/api/redemptions/src/database/seed/seedHandler.handler',
+        functionName: `redemptions-database-seed-${this.stack.stage}`,
+      }),
+    );
 
     const grantDatabaseConnect = database.grantConnect(seedFunction);
     const grantDatabaseCredentialsSecretRead = database.grantCredentialsSecretRead(seedFunction);

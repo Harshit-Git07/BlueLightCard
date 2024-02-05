@@ -1,32 +1,21 @@
-import { Queue, Stack } from 'sst/constructs';
+import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
-import { EventBridgePermissions } from '../eventBridgePermissions';
+import { PromotionEvents } from '../events';
 
-import { FunctionProps, Rule } from './rule';
-
-export const createPromotionRule = ({
-  ruleName,
-  events,
-  permissions,
-  stack,
-}: {
-  ruleName: string;
-  events: string[];
-  permissions: EventBridgePermissions[];
-  stack: Stack;
-}): Rule => {
+export function createPromotionRule(stack: Stack): EventBusRuleProps {
   const queue = new Queue(stack, 'promotionDeadLetterQueue');
-
-  const functionProps: FunctionProps = {
-    functionName: 'promotionHandler',
-    permissions,
-    handler: 'packages/api/redemptions/src/eventBridge/handlers/promotions/promotionsHandler.handler',
-    environment: {
-      SERVICE: 'redemption',
+  return {
+    pattern: { source: [PromotionEvents.PROMOTION_UPDATED] },
+    targets: {
+      promotionHandler: {
+        function: {
+          permissions: [],
+          handler: 'packages/api/redemptions/src/eventBridge/handlers/promotions/promotionsHandler.handler',
+          retryAttempts: 2,
+          deadLetterQueueEnabled: true,
+          deadLetterQueue: queue.cdk.queue,
+        },
+      },
     },
-    deadLetterQueueEnabled: true,
-    deadLetterQueue: queue.cdk.queue,
-    retryAttempts: 2,
   };
-  return new Rule(ruleName, events, functionProps);
-};
+}

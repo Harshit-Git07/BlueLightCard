@@ -12,7 +12,7 @@ export interface ILambdaLoggerDetail extends ILoggerDetail {
 /**
  * Logs structured JSON messages. Uses the AWS Powertools logger under the hood.
  * Use this logger in Lambda functions.
- * 
+ *
  * - ✅ Human readable
  * - ❌ Colored
  * - ✅ Machine readable (structured)
@@ -21,13 +21,11 @@ export interface ILambdaLoggerDetail extends ILoggerDetail {
 export class LambdaLogger implements ILogger<ILambdaLoggerDetail> {
   private logger: Logger;
 
-  constructor(
-    options: { serviceName: string; logLevel?: LogLevel }
-  ) {
+  constructor(options: { serviceName: string; logLevel?: LogLevel }) {
     this.logger = new Logger(options);
   }
 
-  info({ message, status, body, error, timestamp }: ILambdaLoggerDetail): void {
+  info({ message, status, body, error, timestamp, context }: ILambdaLoggerDetail): void {
     this.logger.info(
       JSON.stringify({
         message,
@@ -35,11 +33,12 @@ export class LambdaLogger implements ILogger<ILambdaLoggerDetail> {
         body,
         error,
         timestamp,
+        context,
       }),
     );
   }
 
-  debug({ message, status, body, error, timestamp }: ILambdaLoggerDetail): void {
+  debug({ message, status, body, error, timestamp, context }: ILambdaLoggerDetail): void {
     this.logger.debug(
       JSON.stringify({
         message,
@@ -47,11 +46,12 @@ export class LambdaLogger implements ILogger<ILambdaLoggerDetail> {
         body,
         error,
         timestamp,
+        context,
       }),
     );
   }
 
-  warn({ message, status, body, error, timestamp }: ILambdaLoggerDetail): void {
+  warn({ message, status, body, error, timestamp, context }: ILambdaLoggerDetail): void {
     this.logger.warn(
       JSON.stringify({
         message,
@@ -59,11 +59,12 @@ export class LambdaLogger implements ILogger<ILambdaLoggerDetail> {
         body,
         error,
         timestamp,
+        context,
       }),
     );
   }
 
-  error({ message, status, body, error, timestamp }: ILambdaLoggerDetail): void {
+  error({ message, status, body, error, timestamp, context }: ILambdaLoggerDetail): void {
     this.logger.error(
       JSON.stringify({
         message,
@@ -71,6 +72,7 @@ export class LambdaLogger implements ILogger<ILambdaLoggerDetail> {
         body,
         error,
         timestamp,
+        context,
       }),
     );
   }

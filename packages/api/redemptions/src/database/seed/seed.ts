@@ -1,15 +1,15 @@
 import { DatabaseConnection } from '../connection';
 import {
-  generics,
   genericsPrefix,
-  redemptions,
+  genericsTable,
   redemptionsPrefix,
-  vaultBatches,
+  redemptionsTable,
   vaultBatchesPrefix,
-  vaultCodes,
+  vaultBatchesTable,
   vaultCodesPrefix,
-  vaults,
+  vaultCodesTable,
   vaultsPrefix,
+  vaultsTable,
 } from '../schema';
 
 export async function seed({ db }: DatabaseConnection): Promise<void> {
@@ -17,25 +17,25 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
     {
       id: `${redemptionsPrefix}-6db7a3c8-13a8-4cf3-a072-9b08ecd9d534`,
       affiliate: 'awin',
-      companyId: '9179',
+      companyId: 9179,
       connection: 'affiliate',
-      offerId: '8722',
+      offerId: 8722,
       offerType: 'online',
       platform: 'BLC_UK',
       redemptionType: 'vault',
       url: 'https://awin1.com/',
     },
-  ] satisfies (typeof redemptions.$inferInsert)[];
-  await db.insert(redemptions).values(redemptionsData).onConflictDoNothing();
+  ] satisfies (typeof redemptionsTable.$inferInsert)[];
+  await db.insert(redemptionsTable).values(redemptionsData).onConflictDoNothing();
 
-  const genericsData: (typeof generics.$inferInsert)[] = [
+  const genericsData: (typeof genericsTable.$inferInsert)[] = [
     {
       id: `${genericsPrefix}-b5761799-d552-4496-a46e-8ff43162dbdb`,
       redemptionId: redemptionsData[0].id,
       code: 'BLC25OFF',
     },
   ];
-  await db.insert(generics).values(genericsData).onConflictDoNothing();
+  await db.insert(genericsTable).values(genericsData).onConflictDoNothing();
 
   const vaultsData = [
     {
@@ -50,8 +50,8 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       terms:
         'Cannot be used in conjunction with any other online and/or instore promotion. Excludes clearance lines. Online offer only.',
     },
-  ] satisfies (typeof vaults.$inferInsert)[];
-  await db.insert(vaults).values(vaultsData).onConflictDoNothing();
+  ] satisfies (typeof vaultsTable.$inferInsert)[];
+  await db.insert(vaultsTable).values(vaultsData).onConflictDoNothing();
 
   const vaultBatchesData = [
     {
@@ -59,8 +59,8 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       vaultId: vaultsData[0].id,
       file: 'codes.csv',
     },
-  ] satisfies (typeof vaultBatches.$inferInsert)[];
-  await db.insert(vaultBatches).values(vaultBatchesData).onConflictDoNothing();
+  ] satisfies (typeof vaultBatchesTable.$inferInsert)[];
+  await db.insert(vaultBatchesTable).values(vaultBatchesData).onConflictDoNothing();
 
   const vaultCodesData = [
     {
@@ -72,6 +72,6 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       expiry: new Date('2025-01-05T14:48:00.000Z'),
       memberId: '1234',
     },
-  ] satisfies (typeof vaultCodes.$inferInsert)[];
-  await db.insert(vaultCodes).values(vaultCodesData).onConflictDoNothing();
+  ] satisfies (typeof vaultCodesTable.$inferInsert)[];
+  await db.insert(vaultCodesTable).values(vaultCodesData).onConflictDoNothing();
 }

@@ -29,18 +29,17 @@ export const redemptionTypeEnum = pgEnum('redemptionType', ['generic', 'vault'])
 export const statusEnum = pgEnum('status', ['active', 'in-active']);
 
 export const redemptionsPrefix = 'rdm';
-export const redemptions = pgTable('redemptions', {
+export const createRedemptionsId = (): string => `${redemptionsPrefix}-${uuidv4()}`;
+export const redemptionsTable = pgTable('redemptions', {
   // PK
-  id: varchar('id')
-    .primaryKey()
-    .$defaultFn((): string => `${redemptionsPrefix}-${uuidv4()}`),
+  id: varchar('id').primaryKey().$defaultFn(createRedemptionsId),
   // FK
 
   // Other
   affiliate: affiliateEnum('affiliate'),
-  companyId: varchar('companyId').notNull(),
+  companyId: integer('companyId').notNull(),
   connection: connectionEnum('connection').notNull(),
-  offerId: varchar('offerId').notNull(),
+  offerId: integer('offerId').notNull(),
   offerType: offerTypeEnum('offerType').notNull(),
   platform: platformEnum('platform').notNull(),
   redemptionType: redemptionTypeEnum('redemptionType').notNull(),
@@ -48,67 +47,63 @@ export const redemptions = pgTable('redemptions', {
 });
 
 export const genericsPrefix = 'gnr';
-export const generics = pgTable('generics', {
+export const createGenericsId = (): string => `${genericsPrefix}-${uuidv4()}`;
+export const genericsTable = pgTable('generics', {
   // PK
-  id: varchar('id')
-    .primaryKey()
-    .$defaultFn((): string => `${genericsPrefix}-${uuidv4()}`),
+  id: varchar('id').primaryKey().$defaultFn(createGenericsId),
   // FK
   redemptionId: varchar('redemptionId')
-    .references(() => redemptions.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+    .references(() => redemptionsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
     .notNull(),
   // Other
   code: varchar('code').notNull(),
 });
 
 export const vaultsPrefix = 'vlt';
-export const vaults = pgTable('vaults', {
+export const createVaultId = (): string => `${vaultsPrefix}-${uuidv4()}`;
+export const vaultsTable = pgTable('vaults', {
   // PK
-  id: varchar('id')
-    .primaryKey()
-    .$defaultFn((): string => `${vaultsPrefix}-${uuidv4()}`),
+  id: varchar('id').primaryKey().$defaultFn(createVaultId),
   // FK
   redemptionId: varchar('redemptionId')
-    .references(() => redemptions.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+    .references(() => redemptionsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
     .notNull(),
   // Other
   alertBelow: integer('alertBelow').default(100).notNull(),
   created: timestamp('created').defaultNow().notNull(),
-  email: varchar('email').notNull(),
+  email: varchar('email'),
   integration: integrationEnum('integration'),
   integrationId: integer('integrationId'),
   maxPerUser: integer('maxPerUser'),
-  showQR: boolean('boolean').default(false).notNull(),
+  showQR: boolean('showQR').default(false).notNull(),
   status: statusEnum('status').notNull(),
   terms: varchar('terms'),
 });
 
 export const vaultBatchesPrefix = 'vbt';
-export const vaultBatches = pgTable('vaultBatches', {
+export const createVaultBatchesId = (): string => `${vaultBatchesPrefix}-${uuidv4()}`;
+export const vaultBatchesTable = pgTable('vaultBatches', {
   // PK
-  id: varchar('id')
-    .primaryKey()
-    .$defaultFn((): string => `${vaultBatchesPrefix}-${uuidv4()}`),
+  id: varchar('id').primaryKey().$defaultFn(createVaultBatchesId),
   // FK
   vaultId: varchar('vaultId')
-    .references(() => vaults.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+    .references(() => vaultsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
     .notNull(),
   // Other
   file: varchar('file').notNull(),
 });
 
 export const vaultCodesPrefix = 'vcd';
-export const vaultCodes = pgTable('vaultCodes', {
+export const createVaultCodesId = (): string => `${vaultCodesPrefix}-${uuidv4()}`;
+export const vaultCodesTable = pgTable('vaultCodes', {
   // PK
-  id: varchar('id')
-    .primaryKey()
-    .$defaultFn((): string => `vcd-${uuidv4()}`),
+  id: varchar('id').primaryKey().$defaultFn(createVaultCodesId),
   // FK
   vaultId: varchar('vaultId')
-    .references(() => vaults.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+    .references(() => vaultsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
     .notNull(),
   batchId: varchar('batchId')
-    .references(() => vaultBatches.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+    .references(() => vaultBatchesTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
     .notNull(),
   // Other
   code: varchar('code').notNull(),

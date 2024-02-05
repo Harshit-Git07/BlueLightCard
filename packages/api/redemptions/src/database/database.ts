@@ -3,6 +3,7 @@ import { App, Stack } from 'sst/constructs';
 
 import { DatabaseSeedMethod, DatabaseType, RedemptionsDatabaseConfigResolver } from '../config/database';
 
+import { IDatabase } from './adapter';
 import { DisabledDatabaseSeedStrategy, IDatabaseSeedStrategy, SyntheticDataSeedStrategy } from './seed/strategies';
 import { IDatabaseSetupStrategy } from './setup/strategies/abstract';
 import { AuroraPgClusterSetupStrategy } from './setup/strategies/auroraPgCluster';
@@ -21,10 +22,10 @@ export class RedemptionsDatabase {
    * Sets up the database. Depending on the environment, this may create a new database in AWS or setup a local
    * database. This will also run migrations and seed the database.
    */
-  public async setup(): Promise<void> {
+  public async setup(): Promise<IDatabase> {
     const seedStrategy = this.getDatabaseSeedStrategy();
     const setupStrategy = this.getDatabaseSetupStrategy(seedStrategy);
-    await setupStrategy.setup();
+    return await setupStrategy.setup();
   }
 
   private getDatabaseSetupStrategy(seedStrategy: IDatabaseSeedStrategy): IDatabaseSetupStrategy {

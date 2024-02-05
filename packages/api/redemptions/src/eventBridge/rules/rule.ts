@@ -20,9 +20,13 @@ export class Rule {
     this.ruleSet = this.createRule(name, patterns, functionProps);
   }
 
-  private createRule(name: string, patterns: string[], functionPros: FunctionProps): Record<string, EventBusRuleProps> {
+  private createRule(
+    name: string,
+    patterns: string[],
+    functionProps: FunctionProps,
+  ): Record<string, EventBusRuleProps> {
     const { functionName, permissions, environment, deadLetterQueue, handler, retryAttempts, deadLetterQueueEnabled } =
-      functionPros;
+      functionProps;
     return {
       [name]: {
         pattern: { source: patterns },

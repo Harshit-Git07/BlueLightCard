@@ -1,32 +1,24 @@
-import { Queue, Stack } from 'sst/constructs';
+import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
+import { Function } from 'sst/constructs';
 
-import { EventBridgePermissions } from '../eventBridgePermissions';
+import { IDatabase } from '../../database/adapter';
+import { VaultEvents } from '../events';
 
-import { FunctionProps, Rule } from './rule';
-
-export const createVaultRule = ({
-  ruleName,
-  events,
-  permissions,
-  stack,
-}: {
-  ruleName: string;
-  events: string[];
-  permissions: EventBridgePermissions[];
-  stack: Stack;
-}): Rule => {
+export function createVaultRule(stack: Stack, database: IDatabase): EventBusRuleProps {
   const queue = new Queue(stack, 'vaultDeadLetterQueue');
-
-  const functionProps: FunctionProps = {
-    functionName: 'vaultHandler',
-    permissions,
-    handler: 'packages/api/redemptions/src/eventBridge/handlers/vault/vaultHandler.handler',
-    environment: {
-      SERVICE: 'redemption',
-    },
-    deadLetterQueueEnabled: true,
-    deadLetterQueue: queue.cdk.queue,
-    retryAttempts: 2,
+  const vaultHandler = new Function(
+    stack,
+    'RedemptionsVaultEventHandler',
+    database.getFunctionProps({
+      handler: 'packages/api/redemptions/src/eventBridge/handlers/vault/vaultHandler.handler',
+      permissions: [],
+      retryAttempts: 2,
+      deadLetterQueueEnabled: true,
+      deadLetterQueue: queue.cdk.queue,
+    }),
+  );
+  return {
+    pattern: { source: [VaultEvents.VAULT_CREATED, VaultEvents.VAULT_UPDATED] },
+    targets: { vaultHandler },
   };
-  return new Rule(ruleName, events, functionProps);
-};
+}

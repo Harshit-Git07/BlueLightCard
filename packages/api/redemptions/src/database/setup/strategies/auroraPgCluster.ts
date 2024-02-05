@@ -214,6 +214,20 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
       egressSecurityGroup,
       grantCredentialsSecretRead: (lambda) => databaseCredentialsSecret.grantRead(lambda),
       grantConnect: () => null,
+      getFunctionProps: (props) => ({
+        ...props,
+        enableLiveDev: false,
+        vpc: this.vpc,
+        vpcSubnets: {
+          subnetType: SubnetType.PRIVATE_WITH_EGRESS,
+          ...props.vpcSubnets,
+        },
+        securityGroups: [egressSecurityGroup, ...(props.securityGroups ?? [])],
+        environment: {
+          ...connectionConfig.toEnvironmentVariables(),
+          ...props.environment,
+        },
+      }),
     };
   }
 }

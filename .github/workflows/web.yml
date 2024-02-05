@@ -24,6 +24,17 @@ env:
 permissions: write-all
 
 jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+
   changes:
     name: Changes
     runs-on: ubuntu-latest
@@ -38,43 +49,41 @@ jobs:
             components:
               - 'packages/web/src/common/components/**'
               - 'packages/web/src/offers/components/**'
-  # Run all unit tests on merge to main
+
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
-      - run: npm test -w packages/web
-
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run Unit Tests
+        run: npm test -w packages/web
 
   lint:
     name: Linting
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: JavaScript and Typescript
         run: npm run lint -w packages/web
-      - name: Styles
+
+  lint-styles:
+    name: Linting Styles
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Lint Styles
         run: npm run lint:style -w packages/web
 
   pr_deploy_storybook:
@@ -82,23 +91,18 @@ jobs:
     name: PR Deploy Storybook
     runs-on: ubuntu-latest
     needs:
+      - install
       - changes
       - test
       - lint
+      - lint-styles
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - name: Setup
+        uses: ./.github/actions/setup
       - uses: chromaui/action-next@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -111,23 +115,18 @@ jobs:
     name: Base Deploy Storybook
     runs-on: ubuntu-latest
     needs:
+      - install
       - changes
       - test
       - lint
+      - lint-styles
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - name: Setup
+        uses: ./.github/actions/setup
       - uses: chromaui/action-next@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -173,8 +172,10 @@ jobs:
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - lint
+      - lint-styles
       - changelog
     env:
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
@@ -193,19 +194,12 @@ jobs:
       NEXT_PUBLIC_DATADOG_ENV: staging_stage
       NEXT_PUBLIC_SEARCH_ENDPOINT: https://lcsn8cd6i6.execute-api.eu-west-2.amazonaws.com/develop/newSearch
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: remove mock login
         run: rm -rf packages/web/src/pages/mock-login.tsx
-      - run: npm install
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
       - name: Publish
@@ -236,7 +230,10 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
+      - lint
+      - lint-styles
       - changelog
       - staging
     env:
@@ -252,14 +249,10 @@ jobs:
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
       NEXT_PUBLIC_SEARCH_ENDPOINT: https://x26st9km9b.execute-api.eu-west-2.amazonaws.com/production/newSearch
     steps:
-      - uses: actions/checkout@v4
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: remove mock login
         run: rm -rf packages/web/src/pages/mock-login.tsx
       - name: Build

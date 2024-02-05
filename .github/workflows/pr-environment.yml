@@ -14,39 +14,35 @@ env:
   PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono
 
 jobs:
-  # Deploy the backend
-  backend:
-    name: Deploy Backend for PR
-    if: github.actor!= 'dependabot[bot]'
+  install:
+    name: Install
     runs-on: ubuntu-latest
-    outputs:
-      identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
-      offers-api-endpoint: ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
-      redemptions-api-endpoint: ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+
+  backend-shared:
+    name: Deploy Backend for PR (global & identity)
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs: install
+    outputs:
+      identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
+      # TODO: Should the build be cached?
       - run: npm run build
       - name: Deploy Global
         run: npx sst deploy global --stage $PR_PREFIX
@@ -58,6 +54,30 @@ jobs:
           cat .sst/outputs.json
           IDENTITY_URL=$(jq -r '.[].IdentityApiEndpoint | select(. != null)' .sst/outputs.json)
           echo "identityApiUrl=$IDENTITY_URL" >> $GITHUB_OUTPUT
+      - name: Echo outputs
+        run: |
+          echo ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
+
+  backend-offers:
+    name: Deploy Backend for PR (offers)
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - backend-shared
+    outputs:
+      offers-api-endpoint: ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - run: npm run build
       - name: Deploy Offers
         run: npx sst deploy offers --stage $PR_PREFIX
       - name: Extract Api URL and set output
@@ -66,6 +86,30 @@ jobs:
           cat .sst/outputs.json
           OFFERS_URL=$(jq -r '.[].OffersApiEndpoint | select(. != null)' .sst/outputs.json)
           echo "offersApiUrl=$OFFERS_URL" >> $GITHUB_OUTPUT
+      - name: Echo outputs
+        run: |
+          echo ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
+
+  backend-redemptions:
+    name: Deploy Backend for PR (redemptions)
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - backend-shared
+    outputs:
+      redemptions-api-endpoint: ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - run: npm run build
       - name: Deploy Redemptions
         run: npx sst deploy redemptions --stage $PR_PREFIX
       - name: Extract Api URL and set output
@@ -76,8 +120,6 @@ jobs:
           echo "redemptionsApiUrl=$REDEMPTION_URL" >> $GITHUB_OUTPUT
       - name: Echo outputs
         run: |
-          echo ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
-          echo ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
           echo ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
 
   # Deploy the frontend
@@ -94,8 +136,11 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.cloudflare-publish.outputs.url }}
-    needs:
-      - backend
+    needs: install
+    # TODO: Does this need to depend on the backend - it seems to be using the staging API...
+    #   - backend-shared
+    #   - backend-offers
+    #   - backend-redemptions
     env:
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
@@ -111,16 +156,10 @@ jobs:
       NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Cache NextJS Build
         uses: actions/cache@v3
         with:
@@ -132,12 +171,6 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
         env:
@@ -162,7 +195,9 @@ jobs:
     if: github.actor!= 'dependabot[bot]'
     runs-on: ubuntu-latest
     needs:
-      - backend
+      - backend-shared
+      - backend-offers
+      - backend-redemptions
       - frontend
     steps:
       - name: Find Comment
@@ -191,13 +226,19 @@ jobs:
             <a href='${{ needs.frontend.outputs.url }}'>${{ needs.frontend.outputs.url }}</a>
             </td></tr>
             <tr><td><strong>Identity API URL:</strong></td><td>
-            <a href='${{ needs.backend.outputs.identity-api-endpoint }}'>${{ needs.backend.outputs.identity-api-endpoint }}</a>
+            <a href='${{ needs.backend-shared.outputs.identity-api-endpoint }}'>
+              ${{ needs.backend-shared.outputs.identity-api-endpoint }}
+            </a>
             </td></tr>
             <tr><td><strong>Offers API URL:</strong></td><td>
-            <a href='${{ needs.backend.outputs.offers-api-endpoint }}'>${{ needs.backend.outputs.offers-api-endpoint }}</a>
+            <a href='${{ needs.backend-offers.outputs.offers-api-endpoint }}'>
+              ${{ needs.backend-offers.outputs.offers-api-endpoint }}
+            </a>
             </td></tr>
             <tr><td><strong>Redemptions API URL:</strong></td><td>
-            <a href='${{ needs.backend.outputs.redemptions-api-endpoint }}'>${{ needs.backend.outputs.redemptions-api-endpoint }}</a>
+            <a href='${{ needs.backend-redemptions.outputs.redemptions-api-endpoint }}'>
+              ${{ needs.backend-redemptions.outputs.redemptions-api-endpoint }}
+            </a>
             </td></tr>
             </table>
 
@@ -210,22 +251,10 @@ jobs:
     needs:
       - frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v10
         id: lighthouse_audit

@@ -120,6 +120,7 @@ const Search: NextPage = () => {
         fetchData();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authCtx.authState.idToken, userCtx.isAgeGated, router.isReady, query]);
 
   useEffect(() => {

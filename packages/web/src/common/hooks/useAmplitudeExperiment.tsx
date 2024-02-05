@@ -107,6 +107,7 @@ const useAmplitudeExperiment = (
         setError(error.message);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authCtx.isReady, userCtx.user]);
 
   return { component, error, variantName: selectedVariantName };

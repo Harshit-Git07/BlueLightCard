@@ -18,26 +18,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
       - name: Destroy Global
         run: npx sst remove --stage $PR_PREFIX

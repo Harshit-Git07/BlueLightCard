@@ -13,6 +13,7 @@ const SearchInputField: React.FC<SearchInputFieldProps> = ({
     if (textValue === '') {
       setTextValue(prefillData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prefillData]);
 
   return (

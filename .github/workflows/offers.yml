@@ -26,27 +26,29 @@ on:
 permissions: write-all
 
 jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+
   test:
     name: Test
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run test -w packages/api/offers
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run Tests
+        run: npm run test -w packages/api/offers
+
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Changelog
@@ -63,62 +65,43 @@ jobs:
           monorepo-tags: true
           package-name: bluelightcard/offers
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
   build:
     name: Build
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - changelog
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build
+        run: npm run build
+
   staging:
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - build
       - changelog
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Build
+        run: npm run build
       - name: Deploy Stack
         run: npx sst deploy global --stage staging && npx sst deploy offers --stage staging
   release:
@@ -127,6 +110,7 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - staging
       - changelog
@@ -134,26 +118,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::676719682338:role/github-action-role
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Build
+        run: npm run build
       - name: Deploy Stack
         run: npx sst deploy global --stage production && npx sst deploy offers --stage production

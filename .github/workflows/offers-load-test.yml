@@ -18,31 +18,24 @@ jobs:
     env:
       STAGING_API_NAME: 'cms-api-staging'
       COGNITO_STAGING_AWS_REGION: 'eu-west-2'
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
-
       - name: Get GraphQL Endpoint
         run: echo "graphql-uri=$(aws appsync list-graphql-apis --query "graphqlApis[?name=='${{ env.STAGING_API_NAME }}' && uris.GRAPHQL!='none'].uris.GRAPHQL" --output text)" >> $GITHUB_OUTPUT
         id: graphql
-
       - name: Create ENV file for Artillery
         run: |
           echo "${{ secrets.LOAD_TEST_ENV_FILE }}" > .env
-
-
       - name: Run Artillery Api Test on AWS Fargate (eu-west-1 region)
         uses: artilleryio/action-cli@v1
         with:
           command: run-fargate --region eu-west-1 --count 6 packages/api/offers/load-tests/offers-load-test-config.yml -t ${{ steps.graphql.outputs.graphql-uri }} --record --key ${{ secrets.ARTILLERYIO_AUTHORIZATION }} --dotenv .env
-
 
   artillery-playwright-test:
     if: github.event.inputs.jobToRun == 'artillery-playwright-test'
@@ -53,19 +46,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
-
       - name: Create ENV file for Artillery
         run: |
           echo "${{ secrets.LOAD_TEST_ENV_FILE }}" > .env
-
       - name: Run Artillery Playwright Test on AWS Fargate (eu-west-1 region)
         uses: artilleryio/action-cli@v1
         with:
           command: run-fargate --region eu-west-1 --count 5 packages/api/offers/load-tests/offers-load-test-playwright-config.yml -t ${{ env.STAGING_BASE_URL }} --record --key ${{ secrets.ARTILLERYIO_AUTHORIZATION }} --dotenv .env
-

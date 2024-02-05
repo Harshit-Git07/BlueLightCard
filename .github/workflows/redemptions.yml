@@ -22,99 +22,64 @@ on:
 permissions: write-all
 
 jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+
   test:
     name: Test
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run test -w packages/api/redemptions
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Test
+        run: npm run test -w packages/api/redemptions
   
   format:
     name: Check Formatting
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules-
-      - if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run format:check -w packages/api/redemptions
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Check Formatting
+        run: npm run format:check -w packages/api/redemptions
 
   lint:
     name: Check Linting
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules-
-      - if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run lint -w packages/api/redemptions
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Check Linting
+        run: npm run lint -w packages/api/redemptions
 
   typecheck:
     name: Check Types
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules-
-      - if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run typecheck -w packages/api/redemptions
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Check Types
+        run: npm run typecheck -w packages/api/redemptions
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -137,42 +102,34 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - format
       - lint
       - typecheck
       - changelog
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build
+        run: npm run build
 
   staging:
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - build
       - changelog
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -206,23 +163,8 @@ jobs:
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
             }'
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Build
+        run: npm run build
       - name: Deploy
         run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging
       - name: Deploy Spec
@@ -239,6 +181,7 @@ jobs:
       matrix:
         region: ['eu-west-2', 'ap-southeast-2']
     needs:
+      - install
       - test
       - staging
       - changelog
@@ -246,6 +189,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -279,23 +224,8 @@ jobs:
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
             }'
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Build
+        run: npm run build
       - name: Deploy
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy redemptions --stage production --region ${{matrix.region}}
       - name: Deploy Spec

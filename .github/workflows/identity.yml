@@ -24,27 +24,29 @@ on:
 permissions: write-all
 
 jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+
   test:
     name: Test
     runs-on: ubuntu-latest
+    needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run test -w packages/api/identity
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Test
+        run: npm run test -w packages/api/identity
+
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Changelog
@@ -65,27 +67,17 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - changelog
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build
+        run: npm run build
+
   staging:
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -94,67 +86,47 @@ jobs:
       matrix:
         region: ['eu-west-2', 'ap-southeast-2']
     needs:
+      - install
       - test
       - build
       - changelog
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Build
+        run: npm run build
       - name: Deploy
         run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy identity --stage staging --region ${{matrix.region}}
+
   e2e-test:
     name: End to End Test
     runs-on: ubuntu-latest
     needs:
+      - install
       - test
       - build
       - changelog
       - staging
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run e2e:identity -w packages/api/identity
+      - name: Run E2E Test
+        run: npm run e2e:identity -w packages/api/identity
+
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release
@@ -164,6 +136,7 @@ jobs:
       matrix:
         region: ['eu-west-2', 'ap-southeast-2']
     needs:
+      - install
       - test
       - staging
       - e2e-test
@@ -172,27 +145,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Configure Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::676719682338:role/github-action-role
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
-          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
-      - run: npm install @esbuild/linux-x64 #run it here as locally the os is darwin and not linux, and only needed for github action
-      - run: npm ci
-      - if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: NPM Logs
-          path: /home/runner/.npm/_logs/
-      - run: npm run build
+      - name: Build
+        run: npm run build
       - name: Deploy
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy identity --stage production --region ${{matrix.region}}

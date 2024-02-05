@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.20.1...bluelightcard/offers-v1.21.0) (2024-02-05)
+
+
+### Features
+
+* TO-491-492 implement database and restapi ([#820](https://github.com/bluelightcard/BlueLightCard-2.0/issues/820)) ([82c97cf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/82c97cf45182049249541f84b1a139901cdb1f36))
+
+
+### Bug Fixes
+
+* temporary remove local db creation ([#824](https://github.com/bluelightcard/BlueLightCard-2.0/issues/824)) ([440e13d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/440e13dc0a8d8c9729490127e0c0b7a683386741))
+
 ## [1.20.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.20.0...bluelightcard/offers-v1.20.1) (2024-01-18)
 
 

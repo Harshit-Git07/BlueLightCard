@@ -212,8 +212,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
     return {
       connectionConfig,
       egressSecurityGroup,
-      grantCredentialsSecretRead: (lambda) => databaseCredentialsSecret.grantRead(lambda),
-      grantConnect: () => null,
+      grantConnect: (lambda) => [databaseCredentialsSecret.grantRead(lambda)],
       getFunctionProps: (props) => ({
         ...props,
         enableLiveDev: false,

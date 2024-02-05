@@ -238,12 +238,7 @@ export class DatabaseConnection {
     return DatabaseConnection.connect(config, connectionType);
   }
 
-  // TODO: Use `await using` instead (currently doesn't seem to be supported by SST).
   public async close(): Promise<void> {
     await this.sql.end();
-  }
-
-  async [Symbol.asyncDispose]() {
-    await this.close();
   }
 }

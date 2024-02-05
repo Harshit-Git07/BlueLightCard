@@ -17,6 +17,7 @@ export function createVaultRule(stack: Stack, database: IDatabase): EventBusRule
       deadLetterQueue: queue.cdk.queue,
     }),
   );
+  database.grantConnect(vaultHandler);
   return {
     pattern: { source: [VaultEvents.VAULT_CREATED, VaultEvents.VAULT_UPDATED] },
     targets: { vaultHandler },

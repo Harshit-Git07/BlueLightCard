@@ -61,21 +61,14 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
       }),
     );
 
-    const grantDatabaseConnect = database.grantConnect(seedFunction);
-    const grantDatabaseCredentialsSecretRead = database.grantCredentialsSecretRead(seedFunction);
+    const databaseConnectGrants = database.grantConnect(seedFunction);
 
     const seedScript = new Script(this.stack, 'DatabaseSeedLambdas', {
       onCreate: seedFunction,
       onUpdate: seedFunction,
     });
 
-    if (grantDatabaseConnect) {
-      seedScript.node.addDependency(grantDatabaseConnect);
-    }
-    if (grantDatabaseCredentialsSecretRead) {
-      seedScript.node.addDependency(grantDatabaseCredentialsSecretRead);
-    }
-    seedScript.node.addDependency(migrationsScript);
+    seedScript.node.addDependency(migrationsScript, ...databaseConnectGrants);
   }
 }
 

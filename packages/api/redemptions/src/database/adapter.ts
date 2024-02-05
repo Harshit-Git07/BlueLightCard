@@ -7,7 +7,6 @@ import { DatabaseEgressSecurityGroup } from './types';
 export interface IDatabase {
   connectionConfig: DatabaseConnectionConfig;
   egressSecurityGroup?: DatabaseEgressSecurityGroup;
-  grantCredentialsSecretRead(lambda: SSTFunction): Grant | null;
-  grantConnect(lambda: SSTFunction): Grant | null;
+  grantConnect(lambda: SSTFunction): Grant[];
   getFunctionProps(props: FunctionProps): FunctionProps;
 }

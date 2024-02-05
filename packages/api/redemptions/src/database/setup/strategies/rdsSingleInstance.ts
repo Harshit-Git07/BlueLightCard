@@ -176,7 +176,6 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     migrations.node.addDependency(database);
 
     const grantDatabaseConnect = database.grantConnect(migrations);
-
     const grantDatabaseCredentialsSecretRead = databaseCredentialsSecret.grantRead(migrations);
 
     const migrationScript = new Script(this.stack, 'DatabaseMigrationLambdas', {
@@ -198,8 +197,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     return {
       connectionConfig,
       egressSecurityGroup,
-      grantCredentialsSecretRead: (lambda) => databaseCredentialsSecret.grantRead(lambda),
-      grantConnect: (lambda) => database.grantConnect(lambda),
+      grantConnect: (lambda) => [databaseCredentialsSecret.grantRead(lambda), database.grantConnect(lambda)],
       getFunctionProps: (props) => ({
         ...props,
         enableLiveDev: false,

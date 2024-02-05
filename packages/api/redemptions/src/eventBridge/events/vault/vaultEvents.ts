@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { NUMERIC_ID_SCHEMA } from '../../../schemas/common';
+import { NON_NEGATIVE_INT } from '../../../schemas/common';
 import { PLATFORM_SCHEMA } from '../../../schemas/domain';
 import { EventSchema, eventSchema } from '../../schemas/event';
 
@@ -16,18 +16,18 @@ export const VaultEventSchema = {
       adminEmail: z.string().email().nullable().optional(),
       alertBelow: z.number(),
       brand: z.string(),
-      companyId: NUMERIC_ID_SCHEMA,
+      companyId: NON_NEGATIVE_INT,
       companyName: z.string(),
-      eeCampaignId: NUMERIC_ID_SCHEMA.nullable().optional(),
+      eeCampaignId: NON_NEGATIVE_INT.nullable().optional(),
       link: z.string().url().nullable().optional(),
-      linkId: NUMERIC_ID_SCHEMA.nullable().optional(),
-      managerId: NUMERIC_ID_SCHEMA.nullable().optional(),
-      maxPerUser: NUMERIC_ID_SCHEMA,
-      offerId: NUMERIC_ID_SCHEMA,
+      linkId: NON_NEGATIVE_INT.nullable().optional(),
+      managerId: NON_NEGATIVE_INT.nullable().optional(),
+      maxPerUser: NON_NEGATIVE_INT,
+      offerId: NON_NEGATIVE_INT,
       platform: PLATFORM_SCHEMA,
       showQR: z.boolean(),
       terms: z.string(),
-      ucCampaignId: NUMERIC_ID_SCHEMA.nullable().optional(),
+      ucCampaignId: NON_NEGATIVE_INT.nullable().optional(),
       vaultStatus: z.boolean(),
     }),
   ),

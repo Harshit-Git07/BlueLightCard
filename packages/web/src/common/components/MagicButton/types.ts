@@ -7,4 +7,6 @@ export type MagicButtonProps = {
   onClick?: () => void;
   clickable?: boolean;
   children?: React.ReactNode;
+  className?: string;
+  transitionDurationMs?: number;
 };

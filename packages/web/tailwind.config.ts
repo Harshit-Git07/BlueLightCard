@@ -33,6 +33,9 @@ const config: Config = {
       animation: {
         spin: 'spin 3s linear infinite',
       },
+      boxShadow: {
+        offerSheetTop: '0 -2px 8px rgba(0, 0, 0, 0.1)',
+      },
     },
     screens: {
       mobile: '280px',

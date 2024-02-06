@@ -26,40 +26,23 @@ const DefaultTemplate: StoryFn<typeof MagicButton> = (args) => (
   <MagicButton {...args}>Button</MagicButton>
 );
 
-export const Default = DefaultTemplate.bind({});
-
-Default.args = {};
-
 export const Primary = DefaultTemplate.bind({});
 
 Primary.args = {
   variant: ThemeVariant.Primary,
 };
 
-export const Secondary = DefaultTemplate.bind({});
+export const Pressed = DefaultTemplate.bind({});
 
-Secondary.args = {
-  variant: ThemeVariant.Secondary,
-};
-
-export const SecondaryAnimated = DefaultTemplate.bind({});
-
-SecondaryAnimated.args = {
+Pressed.args = {
   variant: ThemeVariant.Secondary,
   animate: true,
 };
 
-export const PrimaryDisabled = DefaultTemplate.bind({});
+export const Disabled = DefaultTemplate.bind({});
 
-PrimaryDisabled.args = {
+Disabled.args = {
   variant: ThemeVariant.Primary,
-  disabled: true,
-};
-
-export const SecondaryDisabled = DefaultTemplate.bind({});
-
-SecondaryDisabled.args = {
-  variant: ThemeVariant.Secondary,
   disabled: true,
 };
 

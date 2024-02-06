@@ -13,4 +13,5 @@ export type ButtonProps = PropsWithChildren & {
   iconRight?: IconDefinition;
   href?: string;
   onClick?: MouseEventHandler;
+  withoutHover?: boolean;
 };

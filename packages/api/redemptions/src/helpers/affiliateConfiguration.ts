@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import { Affiliate } from '../database/schema';
+
 declare module 'lodash' {
   interface LoDashStatic {
     find<T>(collection: List<T> | Dictionary<T>, predicate?: ListIteratee<T>): T;
@@ -10,7 +12,7 @@ export type AffiliateConfiguration = {
   /**
    * The identifier for the affiliate (e.g. `awin`).
    */
-  affiliate: string;
+  affiliate: Affiliate;
   /**
    * Generates the tracking URL for the affiliate.
    *
@@ -57,7 +59,7 @@ export class AffiliateConfigurationHelper {
   }
 
   constructor(private readonly affiliateUrl: string) {
-    const affiliates: Record<string, AffiliateConfigurationMatch> = {
+    const affiliates: Record<Affiliate, AffiliateConfigurationMatch> = {
       awin: this.awin(),
       affiliateFuture: this.affiliateFuture(),
       rakuten: this.rakuten(),

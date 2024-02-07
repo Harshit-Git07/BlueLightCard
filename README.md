@@ -1,5 +1,8 @@
 # BLC Monorepo
 
+## Stack Specific Documentation
+
+- [Redemptions](packages/api/redemptions/README.md)
 
 ## Components
 ```
@@ -7,6 +10,7 @@
 -> API - REST API run on an environment tagged with your personal 'sst:stage'
 -> Web Client - NextJS frontend runs locally
 ```
+
 ## Getting started
 
 Install dependencies by running:

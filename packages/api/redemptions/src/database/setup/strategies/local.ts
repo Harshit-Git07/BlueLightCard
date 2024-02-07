@@ -9,7 +9,6 @@ import {
   DatabaseEndpoint,
   RawDatabaseCredentials,
 } from '../../connection';
-import { seed } from '../../seed/seed';
 import { runMigrations } from '../migrations/runMigrations';
 
 import { AbstractDatabaseSetupStrategy } from './abstract';
@@ -27,7 +26,7 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
     if (this.app.mode !== 'remove') {
       await this.ensureLocalDatabaseIsRunning(databaseConnectionConfig);
       await this.runMigrations(databaseConnectionConfig);
-      await this.seed(databaseConnectionConfig);
+      await this.seedStrategy.seed();
     }
     return this.createDatabaseAdapter(databaseConnectionConfig);
   }
@@ -92,17 +91,6 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
 
     this.logger.info({
       message: 'Migrations complete!',
-    });
-  }
-
-  private async seed(databaseConnectionConfig: DatabaseConnectionConfig): Promise<void> {
-    this.logger.info({
-      message: 'Seeding database...',
-    });
-    const databaseConnection = await databaseConnectionConfig.toConnection(DatabaseConnectionType.READ_WRITE);
-    await seed(databaseConnection);
-    this.logger.info({
-      message: 'Database seeded!',
     });
   }
 

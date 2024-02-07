@@ -7,19 +7,45 @@ export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDe
   adminEmail: faker.helpers.maybe(() => faker.internet.email()),
   alertBelow: faker.number.int(500),
   brand: faker.company.name(),
-  companyId: faker.number.int(),
+  companyId: faker.number.int({
+    min: 1,
+    max: 1_000_000,
+  }),
   companyName: faker.company.name(),
   directCode: faker.helpers.maybe(() => faker.string.alphanumeric(10)),
-  eeCampaignId: faker.helpers.maybe(() => faker.number.int()),
+  eeCampaignId: faker.helpers.maybe(() =>
+    faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+  ),
   link: faker.helpers.maybe(() => faker.internet.url()),
-  linkId: faker.helpers.maybe(() => faker.number.int()),
-  managerId: faker.helpers.maybe(() => faker.number.int()),
+  linkId: faker.helpers.maybe(() =>
+    faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+  ),
+  managerId: faker.helpers.maybe(() =>
+    faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+  ),
   maxPerUser: faker.number.int(500),
-  offerId: faker.number.int(),
+  offerId: faker.number.int({
+    min: 1,
+    max: 1_000_000,
+  }),
   platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
   showQR: faker.datatype.boolean(),
   terms: faker.lorem.paragraph(),
-  ucCampaignId: faker.helpers.maybe(() => faker.number.int()),
+  ucCampaignId: faker.helpers.maybe(() =>
+    faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+  ),
   vaultId: faker.string.uuid(),
   vaultStatus: faker.datatype.boolean(),
 }));

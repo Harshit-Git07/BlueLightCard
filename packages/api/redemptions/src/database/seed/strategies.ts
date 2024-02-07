@@ -5,6 +5,7 @@ import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 
 import { EnvironmentKeys } from '../../constants/environment';
+import { PRODUCTION_STAGE, STAGING_STAGE } from '../../constants/sst';
 import { IDatabase } from '../adapter';
 import { DatabaseConnectionType } from '../connection';
 import { runWithConnection } from '../connectionHelpers';
@@ -16,7 +17,7 @@ export interface IDatabaseSeedStrategy {
   createSeedScript(database: IDatabase, migrationsScript: Script): void;
 }
 
-const STAGES_WITHOUT_SEEDING = ['production', 'staging'];
+const STAGES_WITHOUT_SEEDING = [STAGING_STAGE, PRODUCTION_STAGE];
 
 export abstract class AbstractDatabaseSeedStrategy implements IDatabaseSeedStrategy {
   constructor(
@@ -37,21 +38,17 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
     }
 
     this.ensureAllowedStage();
+    this.logger.info({
+      message: 'Seeding database...',
+    });
     await runWithConnection(DatabaseConnectionType.READ_WRITE, seed);
-  }
-
-  private ensureAllowedStage(): void {
-    if (STAGES_WITHOUT_SEEDING.includes(this.stack.stage)) {
-      throw new Error(
-        [
-          `Cannot seed database in stage ${this.stack.stage}.`,
-          `Database seeding is not allowed in these stages: ${STAGES_WITHOUT_SEEDING.join(', ')}`,
-        ].join(' '),
-      );
-    }
+    this.logger.info({
+      message: 'Database seeded!',
+    });
   }
 
   public createSeedScript(database: IDatabase, migrationsScript: Script) {
+    this.ensureAllowedStage();
     const seedFunction = new SSTFunction(
       this.stack,
       'RedemptionsDatabaseSeedLambda',
@@ -69,6 +66,17 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
     });
 
     seedScript.node.addDependency(migrationsScript, ...databaseConnectGrants);
+  }
+
+  private ensureAllowedStage(): void {
+    if (STAGES_WITHOUT_SEEDING.includes(this.stack.stage)) {
+      throw new Error(
+        [
+          `Cannot seed database in stage ${this.stack.stage}.`,
+          `Database seeding is not allowed in these stages: ${STAGES_WITHOUT_SEEDING.join(', ')}`,
+        ].join(' '),
+      );
+    }
   }
 }
 

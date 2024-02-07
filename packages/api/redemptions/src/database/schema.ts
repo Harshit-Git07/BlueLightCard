@@ -25,8 +25,15 @@ export const connectionEnum = pgEnum('connection', ['affiliate', 'direct', 'spot
 export const integrationEnum = pgEnum('integration', ['eagleeye', 'uniqodo']);
 export const offerTypeEnum = pgEnum('offerType', ['online', 'in-store']);
 export const platformEnum = pgEnum('platform', ['BLC_UK', 'BLC_AU', 'DDS_UK']);
-export const redemptionTypeEnum = pgEnum('redemptionType', ['generic', 'vault']);
+export const redemptionTypeEnum = pgEnum('redemptionType', ['generic', 'vault', 'vaultQR']);
 export const statusEnum = pgEnum('status', ['active', 'in-active']);
+
+export type Affiliate = (typeof affiliateEnum.enumValues)[number];
+export type Integration = (typeof integrationEnum.enumValues)[number];
+export type OfferType = (typeof offerTypeEnum.enumValues)[number];
+export type Platform = (typeof platformEnum.enumValues)[number];
+export type RedemptionType = (typeof redemptionTypeEnum.enumValues)[number];
+export type Status = (typeof statusEnum.enumValues)[number];
 
 export const redemptionsPrefix = 'rdm';
 export const createRedemptionsId = (): string => `${redemptionsPrefix}-${uuidv4()}`;

@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.4.0...bluelightcard/redemptions-v1.5.0) (2024-02-07)
+
+
+### Features
+
+* [TR-137]: Handle redemption type updates ([#829](https://github.com/bluelightcard/BlueLightCard-2.0/issues/829)) ([fc51732](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fc5173209b7e8bd90afe863107c30c2133b5e9a1))
+* [TR-137]: Vault created handler ([#747](https://github.com/bluelightcard/BlueLightCard-2.0/issues/747)) ([9323009](https://github.com/bluelightcard/BlueLightCard-2.0/commit/932300920f1a23b2a4351f733976b73acfe36ef0))
+* [TR-174]: Redemptions database setup ([#801](https://github.com/bluelightcard/BlueLightCard-2.0/issues/801)) ([e55f31f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e55f31f8257c241ae67ccc6b740eab310b9e49d6))
+* add platform to logs ([#679](https://github.com/bluelightcard/BlueLightCard-2.0/issues/679)) ([08fb119](https://github.com/bluelightcard/BlueLightCard-2.0/commit/08fb1196049c9732e2435b3b8f0185e039c0d875))
+* add redeem endpoint ([#798](https://github.com/bluelightcard/BlueLightCard-2.0/issues/798)) ([fb9698c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fb9698c505a523314b88a05f9dc891fbc30e3bb0))
+* added  extra logging for affiliates ([f31286a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f31286ae00aca3213744268e2497c9f65002acb5))
+* added comapanyId and offerId to logging ([#790](https://github.com/bluelightcard/BlueLightCard-2.0/issues/790)) ([f31286a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f31286ae00aca3213744268e2497c9f65002acb5))
+* added create dynamo tables ([#722](https://github.com/bluelightcard/BlueLightCard-2.0/issues/722)) ([2d764af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2d764afae421bc889a0d05876047ab1fbf8f2e23))
+* added eventBridge for data sync ([2d764af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2d764afae421bc889a0d05876047ab1fbf8f2e23))
+* added platform the body of logs ([08fb119](https://github.com/bluelightcard/BlueLightCard-2.0/commit/08fb1196049c9732e2435b3b8f0185e039c0d875))
+
+
+### Bug Fixes
+
+* added check for remove mode on database setup ([#814](https://github.com/bluelightcard/BlueLightCard-2.0/issues/814)) ([96b3b46](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96b3b4601a00e73cf6c580b55c712b1c50c8cb5a))
+* database connections ([#827](https://github.com/bluelightcard/BlueLightCard-2.0/issues/827)) ([63e875f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63e875ff40d2724c7077f518cc33525866b42cd3))
+* events in vault handler ([#743](https://github.com/bluelightcard/BlueLightCard-2.0/issues/743)) ([7a7c12a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7a7c12ae241c3c0402c632dbb79f0d6ea390c631))
+* **redemptions:** database seeding fk violations ([#812](https://github.com/bluelightcard/BlueLightCard-2.0/issues/812)) ([4668865](https://github.com/bluelightcard/BlueLightCard-2.0/commit/466886571fe062581663617d2d166935a5051b41))
+
+
+### Other Changes
+
+* **redemptions:** [TR-137]: Refactor affiliate configuration helper ([#741](https://github.com/bluelightcard/BlueLightCard-2.0/issues/741)) ([c6e024f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c6e024fae2bb82752c08fca5816d0fe1ace43599))
+* **redemptions:** [TR-188]: Set up formatting, linting and type checking for redemptions ([#751](https://github.com/bluelightcard/BlueLightCard-2.0/issues/751)) ([3af97eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3af97eb947e18b9538486bed0d49119f8f9b6664))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.3.0...bluelightcard/redemptions-v1.4.0) (2023-11-29)
 
 

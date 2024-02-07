@@ -13,9 +13,9 @@ const TestPage: NextPage<any> = () => {
         <meta name="description" />
       </Head>
       <SearchModule
-        variant={SearchVariant.Secondary}
+        variant={SearchVariant.Primary}
         placeholder="Search for offers"
-        showFilterButton={false}
+        showFilterButton={true}
       />
       {/* <BrowseCategories /> */}
       <FilterPanel />

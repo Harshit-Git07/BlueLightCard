@@ -8,7 +8,7 @@ const useAPI = <R>(apiUrl: string) => {
     const listenerId = eventBus.on(Channels.API_RESPONSE, () => {
       const latest = eventBus.getLatestMessage(Channels.API_RESPONSE);
       const { url, response: _response } = latest!.message;
-
+      console.log('Response', _response);
       if (url === apiUrl) {
         setResponse(_response);
       }

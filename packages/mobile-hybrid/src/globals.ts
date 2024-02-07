@@ -12,5 +12,5 @@ export enum APIUrl {
   News = '/api/4/news/list.php',
   OfferPromos = '/api/4/offer/promos_new.php',
   FavouritedBrands = '/api/4/user/bookmark/retrieve.php',
-  Search = '/api/v4/offer/search.php',
+  Search = '/api/4/offer/search.php',
 }

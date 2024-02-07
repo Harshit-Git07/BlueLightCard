@@ -10,10 +10,12 @@ import SearchModule from '@/modules/search';
 import { SearchVariant } from '@/modules/search/types';
 import { spinner } from '@/modules/Spinner/store';
 import { useSetAtom } from 'jotai';
+import { useRouter } from 'next/router';
 
 const navigation = new InvokeNativeNavigation();
 
 const SearchPage: NextPage = () => {
+  const router = useRouter();
   const setSpinner = useSetAtom(spinner);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const SearchPage: NextPage = () => {
   }, []);
 
   const onCategoryClick = (categoryId: number) => {
-    navigation.navigate(`/category=${categoryId}`, 'search');
+    router.push(`/categories?category=${categoryId}`);
   };
 
   return (

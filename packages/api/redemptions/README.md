@@ -11,8 +11,9 @@ The exact requirements for granting resources such as Lambda functions access to
 const database = await new RedemptionsDatabase(app, stack, vpc).setup();
 
 // The SST `Function` construct can be easily configured.
-const seedFunction = new Function(
-  this.stack,
+import { Function } from 'sst/constructs';
+const exampleFunction = new Function(
+  stack,
   '<function-id>',
   // `IDatabase.getFunctionProps` will apply the correct function props for the environment
   //
@@ -34,7 +35,7 @@ const seedFunction = new Function(
 // This may include:
 //   - Granting access to secrets manager (to read DB credentials)
 //   - Granting access to the database (if access is controlled via IAM roles)
-const databaseConnectGrants = database.grantConnect(seedFunction);
+const databaseConnectGrants = database.grantConnect(exampleFunction);
 ```
 
 ### Testing

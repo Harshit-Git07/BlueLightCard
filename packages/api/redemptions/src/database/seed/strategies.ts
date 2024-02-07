@@ -7,13 +7,12 @@ import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { EnvironmentKeys } from '../../constants/environment';
 import { PRODUCTION_STAGE, STAGING_STAGE } from '../../constants/sst';
 import { IDatabase } from '../adapter';
-import { DatabaseConnectionType } from '../connection';
-import { runWithConnection } from '../connectionHelpers';
+import { DatabaseConnection } from '../connection';
 
 import { seed } from './seed';
 
 export interface IDatabaseSeedStrategy {
-  seed(): Promise<void>;
+  seed(connection: DatabaseConnection): Promise<void>;
   createSeedScript(database: IDatabase, migrationsScript: Script): void;
 }
 
@@ -27,12 +26,12 @@ export abstract class AbstractDatabaseSeedStrategy implements IDatabaseSeedStrat
     protected readonly logger: ILogger = new CliLogger(),
   ) {}
 
-  public abstract seed(): Promise<void>;
+  public abstract seed(connection: DatabaseConnection): Promise<void>;
   public abstract createSeedScript(database: IDatabase, migrationsScript: Script): void;
 }
 
 export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
-  public async seed(): Promise<void> {
+  public async seed(connection: DatabaseConnection): Promise<void> {
     if (this.app.mode === 'remove') {
       return;
     }
@@ -41,7 +40,7 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
     this.logger.info({
       message: 'Seeding database...',
     });
-    await runWithConnection(DatabaseConnectionType.READ_WRITE, seed);
+    await seed(connection);
     this.logger.info({
       message: 'Database seeded!',
     });

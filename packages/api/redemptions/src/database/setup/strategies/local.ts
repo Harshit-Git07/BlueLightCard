@@ -26,7 +26,7 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
     if (this.app.mode !== 'remove') {
       await this.ensureLocalDatabaseIsRunning(databaseConnectionConfig);
       await this.runMigrations(databaseConnectionConfig);
-      await this.seedStrategy.seed();
+      await this.seed(databaseConnectionConfig);
     }
     return this.createDatabaseAdapter(databaseConnectionConfig);
   }
@@ -92,6 +92,11 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
     this.logger.info({
       message: 'Migrations complete!',
     });
+  }
+
+  private async seed(databaseConnectionConfig: DatabaseConnectionConfig): Promise<void> {
+    const databaseConnection = await databaseConnectionConfig.toConnection(DatabaseConnectionType.READ_WRITE);
+    await this.seedStrategy.seed(databaseConnection);
   }
 
   private createDatabaseAdapter(databaseConnectionConfig: DatabaseConnectionConfig): IDatabase {

@@ -8,7 +8,6 @@ import { SearchResults } from '../types';
 import { spinner } from '@/modules/Spinner/store';
 import useAPI from '@/hooks/useAPI';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import { off } from 'process';
 
 const request = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -26,11 +25,10 @@ const SearchResultsContainer: FC = () => {
   const onOfferClick = useCallback<Props['onOfferClick']>((companyId, offerId) => {
     navigation.navigate(`/offerdetails.php?cid=${companyId}&oid=${offerId}`, 'search');
   }, []);
-  // initiate request if search term defined
+
   useEffect(() => {
     if (term) {
-      setSpinner(true);
-      request.requestData(APIUrl.Search, term);
+      request.requestData(APIUrl.Search, { term });
       console.log('search term', term);
     }
   }, [term, setSpinner]);

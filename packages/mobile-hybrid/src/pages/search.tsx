@@ -35,12 +35,7 @@ const SearchPage: NextPage = () => {
 
   return (
     <div>
-      <SearchModule
-        variant={SearchVariant.Secondary}
-        placeholder="Search for an offer"
-        showFilterButton={false}
-        searchDomain="search"
-      />
+      <SearchModule placeholder="Search for an offer" />
       <div className="mt-4 mb-5 ml-2">
         <button
           className="font-museo pl-3 py-2 block text-primary-dukeblue-700 dark:text-primary-vividskyblue-700 text-md w-full h-full text-left"

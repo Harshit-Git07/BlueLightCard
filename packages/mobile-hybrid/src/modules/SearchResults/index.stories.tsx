@@ -18,7 +18,7 @@ const componentMeta: Meta<typeof SearchResultsModule> = {
 const DefaultTemplate: StoryFn<typeof SearchResultsModule> = (args) => {
   const setTerm = useSetAtom(searchTerm);
   useEffect(() => {
-    setTerm({ term: 'The' });
+    setTerm('Nike');
   }, [setTerm]);
   return <SearchResultsModule {...args} />;
 };

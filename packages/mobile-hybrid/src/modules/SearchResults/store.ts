@@ -5,4 +5,4 @@ import { SearchQuery, SearchResults } from './types';
 export const searchResults = atom<SearchResults>([]);
 
 // store search term
-export const searchTerm = atom<SearchQuery>(undefined);
+export const searchTerm = atom<string | undefined>(undefined);

@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <NewsStoreProvider>
         <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
           <Component {...pageProps} />
-          {/* <Spinner /> */}
+          <Spinner />
         </main>
       </NewsStoreProvider>
     </AppStoreProvider>

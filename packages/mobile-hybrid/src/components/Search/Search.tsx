@@ -1,8 +1,14 @@
-import React, { FC, FormEventHandler, useRef, useState, ChangeEventHandler } from 'react';
+import React, {
+  FC,
+  FormEventHandler,
+  useRef,
+  useState,
+  ChangeEventHandler,
+  useEffect,
+} from 'react';
 import { SearchProps } from './types';
 import { faSearch, faCircleXmark, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isCustomErrorPage } from 'next/dist/build/utils';
 
 const Search: FC<SearchProps> = ({
   onSearch,
@@ -17,6 +23,12 @@ const Search: FC<SearchProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  useEffect(() => {
+    if (value) {
+      setSearchTerm(value);
+    }
+  }, [value]);
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -85,7 +97,7 @@ const Search: FC<SearchProps> = ({
   return (
     <form onSubmit={onSubmit} className="px-2 z-10 w-full">
       <div className="relative">
-        {isFocused ? leftArrow : searchIcon}
+        {isFocused || !!searchTerm ? leftArrow : searchIcon}
         <input
           aria-label={labelText}
           id="searchInput"

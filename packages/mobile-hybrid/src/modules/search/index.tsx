@@ -1,27 +1,18 @@
-import { FC, use, useCallback, useEffect, useState } from 'react';
-import { SearchModuleProps, SearchVariant } from './types';
+import { FC, useCallback, useState } from 'react';
+import { SearchModuleProps } from './types';
 import Search from '@/components/Search/Search';
 import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButton';
 import { recentSearchesData } from '@/constants';
-import InvokeNativeNavigation from '@/invoke/navigation';
-import Filter from '@/components/Filter/Filter';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { filters, isFilterPanelOpenAtom } from '@/modules/filterpanel/store/filters';
+import { useAtom, useAtomValue } from 'jotai';
+import { filters } from '@/modules/filterpanel/store/filters';
 import { useRouter } from 'next/router';
 import { searchTerm } from '@/modules/SearchResults/store';
 
-// const navigation = new InvokeNativeNavigation();
-
-const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeholder }) => {
-  const setTerm = useSetAtom(searchTerm);
+const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
+  const [term, setTerm] = useAtom(searchTerm);
   const router = useRouter();
-  const [isFilterPanelOpen, setIsFilterPanelOpen] = useAtom(isFilterPanelOpenAtom);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
   const [_filters] = useAtomValue(filters);
-
-  const onFilterClick = useCallback(() => {
-    setIsFilterPanelOpen(!isFilterPanelOpen);
-  }, [isFilterPanelOpen, setIsFilterPanelOpen]);
 
   const onSearchInputFocus = useCallback(() => {
     setSearchOverlayOpen(true);
@@ -29,17 +20,11 @@ const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeh
 
   const onBack = useCallback(() => {
     setSearchOverlayOpen(false);
-    // navigation.goBack();
+  }, []);
 
-    router.back();
-  }, [router]);
-
-  useEffect(() => {
-    if (router.query?.searchTerm) {
-      setTerm(router.query.searchTerm as any);
-      console.log('searchTerm', router.query.searchTerm);
-    }
-  }, [router.query, setTerm]);
+  const onClear = useCallback(() => {
+    setTerm('');
+  }, [setTerm]);
 
   return (
     <>
@@ -47,15 +32,13 @@ const SearchModule: FC<SearchModuleProps> = ({ variant, showFilterButton, placeh
         <Search
           onFocus={onSearchInputFocus}
           onBackButtonClick={onBack}
+          onClear={onClear}
           placeholderText={placeholder}
+          value={term}
           onSearch={(searchTerm) => {
             router.push(`/searchresults?searchTerm=${searchTerm}`);
           }}
         />
-
-        {variant === SearchVariant.Primary && showFilterButton && (
-          <Filter onClick={onFilterClick} filterCount={_filters?.length} />
-        )}
       </div>
       {searchOverlayOpen && (
         <div className="h-screen w-full absolute bg-neutral-white dark:bg-neutral-black left-0 top-0 z-[5]">

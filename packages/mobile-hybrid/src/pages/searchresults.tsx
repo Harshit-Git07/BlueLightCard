@@ -1,16 +1,18 @@
 import { useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import { searchTerm } from '@/modules/SearchResults/store';
 import { useEffect, useMemo } from 'react';
 import SearchResults from '@/modules/SearchResults';
 import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
 import BrowseCategoriesData from 'data/BrowseCategories';
 import SearchModule from '@/modules/search';
-import { SearchVariant } from '@/modules/search/types';
 
 const SearchResultsPage: NextPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchTermQuery = searchParams.get('searchTerm');
   const setTerm = useSetAtom(searchTerm);
 
   const browseCategories = useMemo(() => {
@@ -24,20 +26,14 @@ const SearchResultsPage: NextPage = () => {
     router.push(`/categories?category=${categoryId}`);
   };
   useEffect(() => {
-    if (router.query?.searchTerm) {
-      setTerm({ term: router.query.searchTerm });
-      console.log('searchTerm', router.query.searchTerm);
+    if (searchTermQuery) {
+      setTerm(searchTermQuery);
       return;
     }
-  }, [router.query.searchTerm, setTerm]);
+  }, [searchTermQuery, setTerm]);
   return (
     <div>
-      {/* <SearchModule
-        variant={SearchVariant.Primary}
-        placeholder="Search for an offer"
-        showFilterButton={true}
-        searchDomain={''}
-      /> */}
+      <SearchModule placeholder="Search for an offer" />
       <SearchResults />
       <BrowseCategories categories={browseCategories} onCategoryClick={onCategoryClick} />
     </div>

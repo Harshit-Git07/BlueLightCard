@@ -1,6 +1,6 @@
 import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import BrowseCategoriesData from 'data/BrowseCategories';
+import BrowseCategoriesData from '@/data/BrowseCategories';
 import { NextPage } from 'next';
 import { useEffect, useMemo } from 'react';
 import { faTag, faLocationDot } from '@fortawesome/pro-solid-svg-icons';
@@ -11,12 +11,15 @@ import { SearchVariant } from '@/modules/search/types';
 import { spinner } from '@/modules/Spinner/store';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
+import useDeeplinkRedirect from '@/hooks/useDeeplinkRedirect';
 
 const navigation = new InvokeNativeNavigation();
 
 const SearchPage: NextPage = () => {
   const router = useRouter();
   const setSpinner = useSetAtom(spinner);
+
+  useDeeplinkRedirect();
 
   useEffect(() => {
     setSpinner(false);

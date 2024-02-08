@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.2.1...bluelightcard/mobile-hybrid-v1.3.0) (2024-02-08)
+
+
+### Features
+
+* mobile/navigation domain deeplink ([#807](https://github.com/bluelightcard/BlueLightCard-2.0/issues/807)) ([a3e240f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a3e240ff31ab046cd0a7803c159de508a111d4f2))
+* mobile/to 444 create search results module ([#764](https://github.com/bluelightcard/BlueLightCard-2.0/issues/764)) ([a8b785c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a8b785c84d11e0eb99af029ba2e5f44bce867858))
+* mobile/to 453 create search page ([#775](https://github.com/bluelightcard/BlueLightCard-2.0/issues/775)) ([f1e22d9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f1e22d9278072753dfa1a484d3d28876c9c188a5))
+* **mobile:** 431 create filters module ([#756](https://github.com/bluelightcard/BlueLightCard-2.0/issues/756)) ([b466470](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b46647004826beffc79e7a229c1ce7b2f318d46c))
+* **mobile:** 432 create filter store ([#780](https://github.com/bluelightcard/BlueLightCard-2.0/issues/780)) ([efbb6d4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/efbb6d461887455df3c902929c0d59ed92ca3d3d))
+* **mobile:** 472 add search homepage ([#799](https://github.com/bluelightcard/BlueLightCard-2.0/issues/799)) ([6ff175a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6ff175ad4a0b77aa3574cf0de6b12d942861d4c4))
+* **mobile:** 473 add categories component ([#793](https://github.com/bluelightcard/BlueLightCard-2.0/issues/793)) ([049c813](https://github.com/bluelightcard/BlueLightCard-2.0/commit/049c8138223893746b3f9df03b2a788d972317b4))
+* **mobile:** bt 3560 add search module ([#750](https://github.com/bluelightcard/BlueLightCard-2.0/issues/750)) ([f5a5e53](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f5a5e53a21e0d2874358397e9b2c36f8cdac64c1))
+* **mobile:** create results page ([#831](https://github.com/bluelightcard/BlueLightCard-2.0/issues/831)) ([1dbc983](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1dbc983783e74b8829a8e6c7d8b8f4a8e1f8e829))
+* present nextjs pages in storybook ([#730](https://github.com/bluelightcard/BlueLightCard-2.0/issues/730)) ([b851817](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b851817dcb99583b54eb622fd8ae6eb35f1d714a))
+* set search term and set input value ([#834](https://github.com/bluelightcard/BlueLightCard-2.0/issues/834)) ([39ea8e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/39ea8e47b6e9dc2f0361370d42eb04f71158ef6a))
+
 ## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.2.0...bluelightcard/mobile-hybrid-v1.2.1) (2023-12-11)
 
 

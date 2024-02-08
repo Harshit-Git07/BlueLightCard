@@ -161,7 +161,7 @@ export function Identity({stack}: StackContext) {
     cognito.cdk.userPool.addDomain('domain', {
       customDomain: {
         domainName: domainName,
-        certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
+        certificate: Certificate.fromCertificateArn(stack, 'BLCAuthDomainCertificate', certificateArn),
       }
     });
   } else {
@@ -227,7 +227,7 @@ export function Identity({stack}: StackContext) {
     cognito_dds.cdk.userPool.addDomain('ddsdomain', {
       customDomain: {
         domainName: ddsDomainName,
-        certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
+        certificate: Certificate.fromCertificateArn(stack, 'DDSAuthDomainCertificate', certificateArn),
       }
     });
   } else {

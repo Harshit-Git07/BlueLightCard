@@ -114,6 +114,7 @@ export function Identity({stack}: StackContext) {
           blc_old_id: new StringAttribute({mutable: true}),
           blc_old_uuid: new StringAttribute({mutable: true}),
         },
+        selfSignUpEnabled: false,
       },
     },
   });
@@ -133,7 +134,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.PROFILE,
         OAuthScope.COGNITO_ADMIN
       ],
-      callbackUrls: ["https://bluelightcard.co.uk/"],
+      callbackUrls: [appSecret.secretValueFromJson('blc_callback_app').toString()],
     },
   });
   const webClient = cognito.cdk.userPool.addClient('webClient', {
@@ -151,7 +152,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.PROFILE,
         OAuthScope.COGNITO_ADMIN
       ],
-      callbackUrls: ["https://bluelightcard.co.uk/"],
+      callbackUrls: [appSecret.secretValueFromJson('blc_callback_web').toString()],
     },
   });
   if (certificateArn) {
@@ -216,6 +217,7 @@ export function Identity({stack}: StackContext) {
           blc_old_id: new StringAttribute({mutable: true}),
           blc_old_uuid: new StringAttribute({mutable: true}),
         },
+        selfSignUpEnabled: false,
       },
     },
   });
@@ -252,7 +254,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.PROFILE,
         OAuthScope.COGNITO_ADMIN
       ],
-      callbackUrls: ["https://bluelightcard.co.uk/"],
+      callbackUrls: [appSecret.secretValueFromJson('dds_callback_app').toString()],
     },
   });
   const webClientDds = cognito_dds.cdk.userPool.addClient('webClient', {
@@ -270,7 +272,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.PROFILE,
         OAuthScope.COGNITO_ADMIN
       ],
-      callbackUrls: ["https://bluelightcard.co.uk/"],
+      callbackUrls: [appSecret.secretValueFromJson('dds_callback_web').toString()],
     },
   });
   // Associate WAF WebACL with cognito

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.3.0...bluelightcard/mobile-hybrid-v1.4.0) (2024-02-08)
+
+
+### Features
+
+* [DISCO-78] Deeplink redirection in Hybrid WebUI ([#833](https://github.com/bluelightcard/BlueLightCard-2.0/issues/833)) ([28ad4e9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/28ad4e9dfef6b0f5c961f7a50340d9b6aebbfd9a))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.2.1...bluelightcard/mobile-hybrid-v1.3.0) (2024-02-08)
 
 

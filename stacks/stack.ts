@@ -44,6 +44,7 @@ export function Shared({ stack }: StackContext) {
     EventBusName: bus.eventBusName,
     webACL: webACL.name,
     vpcId: network.vpc.vpcId,
+    certificateArn
   });
   return {
     bus,

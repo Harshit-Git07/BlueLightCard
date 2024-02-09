@@ -155,23 +155,23 @@ export function Identity({stack}: StackContext) {
       callbackUrls: [appSecret.secretValueFromJson('blc_callback_web').toString()],
     },
   });
-  if (certificateArn) {
-    //custom domain
-    const domainName = stack.stage === 'prod' ? 'auth.blcshine.io' : `auth-${stack.stage}.blcshine.io`;
-    cognito.cdk.userPool.addDomain('domain', {
-      customDomain: {
-        domainName: domainName,
-        certificate: Certificate.fromCertificateArn(stack, 'BLCAuthDomainCertificate', certificateArn),
-      }
-    });
-  } else {
+  // if (certificateArn) {
+  //   //custom domain
+  //   const domainName = stack.stage === 'prod' ? 'auth.blcshine.io' : `auth-${stack.stage}.blcshine.io`;
+  //   cognito.cdk.userPool.addDomain('domain', {
+  //     customDomain: {
+  //       domainName: domainName,
+  //       certificate: Certificate.fromCertificateArn(stack, 'BLCAuthDomainCertificate', certificateArn),
+  //     }
+  //   });
+  // } else {
     //custom domain
     cognito.cdk.userPool.addDomain('cognitodomain', {
       cognitoDomain: {
         domainPrefix: `blc-${stack.stage}`,
       }
     });
-  }
+  // }
   // Associate WAF WebACL with cognito
   new CfnWebACLAssociation(stack, 'BlcWebAclAssociation', {
     resourceArn: cognito.cdk.userPool.userPoolArn,
@@ -221,23 +221,23 @@ export function Identity({stack}: StackContext) {
       },
     },
   });
-  if (certificateArn) {
-    //custom domain
-    const ddsDomainName = stack.stage === 'prod' ? 'auth-dds.blcshine.io' : `auth-dds-${stack.stage}.blcshine.io`;
-    cognito_dds.cdk.userPool.addDomain('ddsdomain', {
-      customDomain: {
-        domainName: ddsDomainName,
-        certificate: Certificate.fromCertificateArn(stack, 'DDSAuthDomainCertificate', certificateArn),
-      }
-    });
-  } else {
+  // if (certificateArn) {
+  //   //custom domain
+  //   const ddsDomainName = stack.stage === 'prod' ? 'auth-dds.blcshine.io' : `auth-dds-${stack.stage}.blcshine.io`;
+  //   cognito_dds.cdk.userPool.addDomain('ddsdomain', {
+  //     customDomain: {
+  //       domainName: ddsDomainName,
+  //       certificate: Certificate.fromCertificateArn(stack, 'DDSAuthDomainCertificate', certificateArn),
+  //     }
+  //   });
+  // } else {
     //custom domain
     cognito_dds.cdk.userPool.addDomain('ddscognitodomain', {
       cognitoDomain: {
         domainPrefix: `dds-${stack.stage}`,
       }
     });
-  }
+  // }
   const mobileClientDds = cognito_dds.cdk.userPool.addClient('membersClient', {
     authFlows: {
       userPassword: true,

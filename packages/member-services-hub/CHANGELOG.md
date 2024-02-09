@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.3.1...bluelightcard/member-services-hub-v1.3.2) (2024-02-07)
+
+
+### Other Changes
+
+* **redemptions:** [TR-188]: Set up formatting, linting and type checking for redemptions ([#751](https://github.com/bluelightcard/BlueLightCard-2.0/issues/751)) ([3af97eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3af97eb947e18b9538486bed0d49119f8f9b6664))
+
 ## [1.3.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.3.0...bluelightcard/member-services-hub-v1.3.1) (2023-11-15)
 
 

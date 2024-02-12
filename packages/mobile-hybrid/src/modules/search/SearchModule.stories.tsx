@@ -1,6 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
 import SearchModule from './index';
-import { SearchVariant } from './types';
 
 const componentMeta: Meta<typeof SearchModule> = {
   title: 'Modules/Search',
@@ -12,8 +11,8 @@ const componentMeta: Meta<typeof SearchModule> = {
 
 const Template: StoryFn<typeof SearchModule> = (args) => <SearchModule {...args} />;
 
-export const PrimaryVariant = Template.bind({});
-PrimaryVariant.args = {
+export const Default = Template.bind({});
+Default.args = {
   placeholder: 'Search for offers',
 };
 

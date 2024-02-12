@@ -3,8 +3,7 @@ import { SearchModuleProps } from './types';
 import Search from '@/components/Search/Search';
 import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButton';
 import { recentSearchesData } from '@/constants';
-import { useAtom, useAtomValue } from 'jotai';
-import { filters } from '@/modules/filterpanel/store/filters';
+import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { searchTerm } from '@/modules/SearchResults/store';
 
@@ -12,7 +11,6 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   const [term, setTerm] = useAtom(searchTerm);
   const router = useRouter();
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
-  const [_filters] = useAtomValue(filters);
 
   const onSearchInputFocus = useCallback(() => {
     setSearchOverlayOpen(true);

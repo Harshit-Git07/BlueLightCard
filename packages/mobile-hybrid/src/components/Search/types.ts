@@ -1,5 +1,6 @@
 export interface SearchProps {
   value?: string;
+  showBackArrow?: boolean;
   onSearch: (searchTerm: string) => void;
   labelText?: string;
   onBackButtonClick?: () => void;

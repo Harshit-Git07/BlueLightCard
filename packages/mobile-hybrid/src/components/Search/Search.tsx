@@ -5,6 +5,7 @@ import React, {
   useState,
   ChangeEventHandler,
   useEffect,
+  useCallback,
 } from 'react';
 import { SearchProps } from './types';
 import { faSearch, faCircleXmark, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
@@ -18,11 +19,14 @@ const Search: FC<SearchProps> = ({
   onFocus,
   placeholderText,
   value,
+  showBackArrow,
 }) => {
   const initialValue = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const _showBackArrow = isFocused || showBackArrow;
 
   useEffect(() => {
     if (value) {
@@ -53,12 +57,11 @@ const Search: FC<SearchProps> = ({
     }
   };
 
-  const _onBackButtonClick = () => {
+  const _onBackButtonClick = useCallback(() => {
     onBackButtonClick && onBackButtonClick();
     setIsFocused(false);
-    setSearchTerm('');
     setErrorMessage('');
-  };
+  }, []);
 
   const onInputFocus = () => {
     onFocus && onFocus();
@@ -66,14 +69,19 @@ const Search: FC<SearchProps> = ({
   };
 
   const leftArrow = (
-    <FontAwesomeIcon
-      icon={faArrowLeft}
-      role="button"
-      size="xl"
+    <button
+      aria-label="Back button"
+      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2"
+      type="button"
       onClick={_onBackButtonClick}
-      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-neutral-grey-800 dark:text-neutral-white"
-      aria-hidden="true"
-    />
+    >
+      <FontAwesomeIcon
+        icon={faArrowLeft}
+        size="xl"
+        className="text-neutral-grey-800 dark:text-neutral-white"
+        aria-hidden="true"
+      />
+    </button>
   );
 
   const searchIcon = (
@@ -85,19 +93,20 @@ const Search: FC<SearchProps> = ({
     />
   );
   const clearIcon = (
-    <FontAwesomeIcon
-      icon={faCircleXmark}
-      size="xl"
-      role="button"
-      onClick={clearSearch}
-      className="absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-neutral-grey-600 dark:text-neutral-white"
-      aria-hidden="true"
-    />
+    <button aria-label="Clear button" type="button">
+      <FontAwesomeIcon
+        icon={faCircleXmark}
+        size="xl"
+        onClick={clearSearch}
+        className="absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-neutral-grey-600 dark:text-neutral-white"
+        aria-hidden="true"
+      />
+    </button>
   );
   return (
     <form onSubmit={onSubmit} className="px-2 z-10 w-full">
       <div className="relative">
-        {isFocused || !!searchTerm ? leftArrow : searchIcon}
+        {_showBackArrow ? leftArrow : searchIcon}
         <input
           aria-label={labelText}
           id="searchInput"

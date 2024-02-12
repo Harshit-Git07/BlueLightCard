@@ -12,13 +12,8 @@ export interface Props {
  * @param {Props} props.results - array of search results provided by it's container
  */
 const SearchResultsPresenter: FC<Props> = ({ results, onOfferClick }) => {
-  const backBtn = () => {
-    window.history.back();
-  };
-
   return (
     <div role="list" className="px-4">
-      <button onClick={backBtn}>Back</button>
       {!results.length && <p className="text-center py-4 dark:text-white">No results found.</p>}
       {results.map((offer) => (
         <div key={offer.id} role="listitem" className="mb-4">

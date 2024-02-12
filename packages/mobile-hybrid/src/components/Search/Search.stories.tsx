@@ -13,6 +13,7 @@ export const Default = DefaultTemplate.bind({});
 Default.args = {
   labelText: 'Search',
   placeholderText: 'Search...',
+  showBackArrow: false,
 };
 
 export default componentMeta;

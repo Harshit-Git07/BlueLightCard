@@ -7,17 +7,7 @@ import { NewsModuleStore } from '@/modules/news/store';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import trackScrollDepth from '@/utils/scrollDepth';
 import Offers from '@/modules/offers';
-import ExploreLink from '@/components/ExploreLink/ExploreLink';
-import {
-  faTag,
-  faCompass,
-  faGiftCard,
-  faThumbsUp,
-  faAward,
-  faSignsPost,
-} from '@fortawesome/pro-light-svg-icons';
 import PromoBanner from '@/modules/promobanner';
-import Heading from '@/components/Heading/Heading';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import LegacySearch from '@/components/LegacySearch/LegacySearch';
 import InvokeNativeExperiment from '@/invoke/experiment';
@@ -96,37 +86,6 @@ const Home: NextPage<any> = () => {
         {expr['popular-offers'] === 'treatment' && !showFavouritedBrands && <PopularBrandsSlider />}
         <Offers />
         {expr['streamlined-homepage'] === 'on' && <NewsPreview />}
-        <Heading title="Explore" size="small" />
-        <ExploreLink
-          icon={faTag}
-          title="High Street"
-          onClick={() => navigation.navigate('/offers.php?type=5', 'home')}
-        />
-        <ExploreLink
-          icon={faCompass}
-          title="Online"
-          onClick={() => navigation.navigate('/offers.php?type=0', 'home')}
-        />
-        <ExploreLink
-          icon={faGiftCard}
-          title="Giftcards"
-          onClick={() => navigation.navigate('/offers.php?type=2', 'home')}
-        />
-        <ExploreLink
-          icon={faThumbsUp}
-          title="Popular"
-          onClick={() => navigation.navigate('/offers.php?type=3', 'home')}
-        />
-        <ExploreLink
-          icon={faAward}
-          title="Featured"
-          onClick={() => navigation.navigate('/offers.php?type=9', 'home')}
-        />
-        <ExploreLink
-          icon={faSignsPost}
-          title="Local Services"
-          onClick={() => navigation.navigate('/offers.php?type=6', 'home')}
-        />
       </div>
       <ListPanel visible={seeAllNews} onClose={seeAllClick}>
         {seeAllNews && <NewsList />}

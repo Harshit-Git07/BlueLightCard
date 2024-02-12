@@ -7,7 +7,6 @@ import { faTag, faLocationDot } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import SearchModule from '@/modules/search';
-import { SearchVariant } from '@/modules/search/types';
 import { spinner } from '@/modules/Spinner/store';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';

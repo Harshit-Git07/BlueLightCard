@@ -135,6 +135,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.COGNITO_ADMIN
       ],
       callbackUrls: [appSecret.secretValueFromJson('blc_callback_app').toString()],
+      logoutUrls: [appSecret.secretValueFromJson('blc_logout_app').toString()]
     },
   });
   const webClient = cognito.cdk.userPool.addClient('webClient', {
@@ -153,6 +154,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.COGNITO_ADMIN
       ],
       callbackUrls: [appSecret.secretValueFromJson('blc_callback_web').toString()],
+      logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()]
     },
   });
   // if (certificateArn) {
@@ -255,6 +257,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.COGNITO_ADMIN
       ],
       callbackUrls: [appSecret.secretValueFromJson('dds_callback_app').toString()],
+      logoutUrls: [appSecret.secretValueFromJson('dds_logout_app').toString()]
     },
   });
   const webClientDds = cognito_dds.cdk.userPool.addClient('webClient', {
@@ -273,6 +276,7 @@ export function Identity({stack}: StackContext) {
         OAuthScope.COGNITO_ADMIN
       ],
       callbackUrls: [appSecret.secretValueFromJson('dds_callback_web').toString()],
+      logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()]
     },
   });
   // Associate WAF WebACL with cognito

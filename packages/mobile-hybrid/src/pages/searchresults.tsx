@@ -8,11 +8,13 @@ import SearchResults from '@/modules/SearchResults';
 import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
 import BrowseCategoriesData from 'data/BrowseCategories';
 import SearchModule from '@/modules/search';
+import { spinner } from '@/modules/Spinner/store';
 
 const SearchResultsPage: NextPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchTermQuery = searchParams.get('searchTerm');
+  const setSpinner = useSetAtom(spinner);
   const setTerm = useSetAtom(searchTerm);
 
   const browseCategories = useMemo(() => {
@@ -28,6 +30,7 @@ const SearchResultsPage: NextPage = () => {
   useEffect(() => {
     if (searchTermQuery) {
       setTerm(searchTermQuery);
+      setSpinner(true);
       return;
     }
   }, [searchTermQuery, setTerm]);

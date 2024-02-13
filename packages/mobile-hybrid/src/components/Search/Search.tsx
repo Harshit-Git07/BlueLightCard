@@ -37,11 +37,11 @@ const Search: FC<SearchProps> = ({
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
-    if (searchTerm && searchTerm.length >= 2) {
+    if (searchTerm && searchTerm.length >= 3) {
       setErrorMessage('');
       onSearch(searchTerm);
     } else {
-      setErrorMessage('Enter 2 or more characters to search.');
+      setErrorMessage('Enter 3 or more characters to search.');
     }
   };
 

@@ -78,10 +78,10 @@ describe('SearchModule', () => {
     it.each(backNavagationalPaths)(
       'should navigate back a page when route matches %s',
       async (route) => {
-        const backMockFn = jest.fn();
+        const replaceMockFn = jest.fn();
         useRouterMock.mockReturnValue({
           route,
-          back: backMockFn,
+          replace: replaceMockFn,
         });
 
         render(<SearchModule />);
@@ -94,17 +94,17 @@ describe('SearchModule', () => {
 
         await user.click(backBtn);
 
-        expect(backMockFn).toHaveBeenCalled();
+        expect(replaceMockFn).toHaveBeenCalled();
       },
     );
 
     it.each(['/search', '/'])(
       'should NOT navigate back a page when route matches non back navigational paths such as %s',
       async (route) => {
-        const backMockFn = jest.fn();
+        const replaceMockFn = jest.fn();
         useRouterMock.mockReturnValue({
           route,
-          back: backMockFn,
+          replace: replaceMockFn,
         });
 
         render(<SearchModule />);
@@ -117,7 +117,7 @@ describe('SearchModule', () => {
 
         await user.click(backBtn);
 
-        expect(backMockFn).not.toHaveBeenCalled();
+        expect(replaceMockFn).not.toHaveBeenCalled();
       },
     );
   });

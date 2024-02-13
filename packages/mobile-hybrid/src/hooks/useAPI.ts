@@ -16,6 +16,7 @@ const useAPI = <R>(apiUrl: string) => {
 
     return () => {
       eventBus.off(Channels.API_RESPONSE, listenerId);
+      eventBus.clearMessages(Channels.API_RESPONSE);
     };
   }, [setResponse, apiUrl]);
 

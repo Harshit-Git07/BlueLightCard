@@ -29,7 +29,6 @@ const SearchResultsContainer: FC = () => {
   useEffect(() => {
     if (term) {
       request.requestData(APIUrl.Search, { term });
-      console.log('search term', term);
     }
   }, [term, setSpinner]);
 
@@ -39,7 +38,6 @@ const SearchResultsContainer: FC = () => {
       setResults(searchResultsData.data);
       setSpinner(false);
     }
-    console.info(searchResultsData);
   }, [searchResultsData]);
 
   return <SearchResultsPresenter results={results} onOfferClick={onOfferClick} />;

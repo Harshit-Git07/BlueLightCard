@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.4.0...bluelightcard/mobile-hybrid-v1.5.0) (2024-02-12)
+
+
+### Features
+
+* disco 49 adjust back arrow functionality ([#853](https://github.com/bluelightcard/BlueLightCard-2.0/issues/853)) ([313139a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/313139a435791429847b817d9e9f62d0c8345bbf))
+
+
+### Bug Fixes
+
+* [DISCO-50] Remove invalid search variant import from search and test pages. ([#855](https://github.com/bluelightcard/BlueLightCard-2.0/issues/855)) ([4d167dd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4d167dd25e9c9c75419df825104a553240b98ae1))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.3.0...bluelightcard/mobile-hybrid-v1.4.0) (2024-02-08)
 
 

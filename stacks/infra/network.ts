@@ -21,7 +21,7 @@ export class Network {
    */
   private createVpc(): Vpc {
     return new Vpc(this.stack, 'vpc', {
-      maxAzs: 3,
+      maxAzs: 2,
       subnetConfiguration: this.subnetConfiguration(),
     });
   }

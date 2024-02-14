@@ -22,14 +22,21 @@ export type SearchResultsType = {
  * @param queryRaw The raw query string for the search
  * @param idToken The id token for the user for authentication
  * @param allowAgeGated Whether or not the search should allow age gated content
+ * @param service Include the users service (organisation) for obtaining service specific content
  * @returns SearchResultsType object with either an error or results
  */
-export async function makeSearch(queryRaw: string, idToken: string, allowAgeGated: boolean = true) {
+export async function makeSearch(
+  queryRaw: string,
+  idToken: string,
+  allowAgeGated: boolean = true,
+  service: string
+) {
   const axios = require('axios');
   let data = {
     searchTerm: he.escape(queryRaw),
     siteId: getSiteIdFromBrandId(BRAND),
     allowAgeGated,
+    service,
   };
 
   let config = {

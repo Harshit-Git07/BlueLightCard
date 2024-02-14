@@ -1,6 +1,6 @@
 import { IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
-import { isDev, isStaging } from '@blc-mono/core/src/utils/checkEnvironment';
+import { isDev } from '@blc-mono/core/src/utils/checkEnvironment';
 import { SubnetConfiguration } from 'aws-cdk-lib/aws-ec2/lib/vpc';
 
 export class Network {
@@ -20,8 +20,8 @@ export class Network {
    * @return {Vpc} The created VPC.
    */
   private createVpc(): Vpc {
-    return new Vpc(this.stack, 'vpc', {
-      maxAzs: 2,
+    return new Vpc(this.stack, 'vpc-temp', {
+      maxAzs: 3,
       subnetConfiguration: this.subnetConfiguration(),
     });
   }

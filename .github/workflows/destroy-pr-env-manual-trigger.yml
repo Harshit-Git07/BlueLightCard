@@ -1,0 +1,67 @@
+name: Destroy PR Environment (Manual Trigger)
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
+
+env:
+  PR_PREFIX: pr-${{ inputs.pr_number }}-blc-mono
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - name: Destroy Global
+        run: npx sst remove --stage $PR_PREFIX
+      - name: Notify
+        if: failure()
+        run: |
+          curl --location ${{ vars.CI_NOTIFICATIONS_WEBHOOK }} \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "type": "message",
+              "attachments": [
+                {
+                  "contentType": "application/vnd.microsoft.card.adaptive",
+                  "contentUrl": null,
+                  "content": {
+                    "type": "AdaptiveCard",
+                    "version": "1.2",
+                    "body": [
+                      {
+                        "type": "TextBlock",
+                        "text": "❌ Workflow Failed ❌",
+                        "style": "heading"
+                      },
+                      {
+                        "type": "TextBlock",
+                        "text": "The workflow \"Destroy PR Environment\" failed. This requires attention from a developer."
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "type": "Action.OpenUrl",
+                        "title": "View Workflow",
+                        "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }'

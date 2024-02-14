@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.40.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.39.0...bluelightcard/identity-v1.40.0) (2024-02-13)
+
+
+### Features
+
+* Feat/hosted UI ([#800](https://github.com/bluelightcard/BlueLightCard-2.0/issues/800)) ([24be745](https://github.com/bluelightcard/BlueLightCard-2.0/commit/24be745655d737fa7b51e4cf46eab35b4710d5be))
+* read from ssm; disable signup on cognito ui ([#841](https://github.com/bluelightcard/BlueLightCard-2.0/issues/841)) ([86015ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/86015ad65cb952d22b6a1f894d1e7683681a76e9))
+* ssm for logout urls ([#847](https://github.com/bluelightcard/BlueLightCard-2.0/issues/847)) ([ed6b359](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed6b35937859e1cd4d20f4511cdc86bd197c328b))
+* temporary disable custom domain on Cognito UI ([#846](https://github.com/bluelightcard/BlueLightCard-2.0/issues/846)) ([286d794](https://github.com/bluelightcard/BlueLightCard-2.0/commit/286d7943ef62f845483954c1a1876f535f800010))
+
 ## [1.39.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.38.0...bluelightcard/identity-v1.39.0) (2024-01-12)
 
 

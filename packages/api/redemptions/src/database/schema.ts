@@ -25,7 +25,7 @@ export const connectionEnum = pgEnum('connection', ['affiliate', 'direct', 'spot
 export const integrationEnum = pgEnum('integration', ['eagleeye', 'uniqodo']);
 export const offerTypeEnum = pgEnum('offerType', ['online', 'in-store']);
 export const platformEnum = pgEnum('platform', ['BLC_UK', 'BLC_AU', 'DDS_UK']);
-export const redemptionTypeEnum = pgEnum('redemptionType', ['generic', 'vault', 'vaultQR']);
+export const redemptionTypeEnum = pgEnum('redemptionType', ['generic', 'vault', 'vaultQR', 'showCard', 'preApplied']);
 export const statusEnum = pgEnum('status', ['active', 'in-active']);
 
 export type Affiliate = (typeof affiliateEnum.enumValues)[number];

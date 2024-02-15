@@ -110,7 +110,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
   }
 
   private createInstance(ingressSecurityGroup: DatabaseIngressSecurityGroup): DatabaseInstance {
-    const databaseInstance = new DatabaseInstance(this.stack, 'RedemptionsDatabase', {
+    return new DatabaseInstance(this.stack, 'RedemptionsDatabase', {
       engine: DatabaseInstanceEngine.postgres({
         // TODO: Use the latest version
         version: PostgresEngineVersion.VER_12,
@@ -129,8 +129,6 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
       enablePerformanceInsights: false,
       port: this.config.port,
     });
-
-    return databaseInstance;
   }
 
   private getDatabaseCredentialsSecret(database: DatabaseInstance): ISecret {
@@ -144,13 +142,11 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     database: DatabaseInstance,
     databaseCredentialsSecret: ISecret,
   ): DatabaseConnectionConfig {
-    const connectionConfig = DatabaseConnectionConfig.fromCredentialsAndEndpoint(
+    return DatabaseConnectionConfig.fromCredentialsAndEndpoint(
       SecretsManagerDatabaseCredentials.fromSecretName(databaseCredentialsSecret.secretName),
       DatabaseEndpoint.fromHostAndPort(database.dbInstanceEndpointAddress, this.config.port),
       this.config.databaseName,
     );
-
-    return connectionConfig;
   }
 
   private createMigrationsScript(
@@ -197,7 +193,9 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     return {
       connectionConfig,
       egressSecurityGroup,
-      grantConnect: (lambda) => [databaseCredentialsSecret.grantRead(lambda), database.grantConnect(lambda)],
+      grantConnect: (lambda) => {
+        return [databaseCredentialsSecret.grantRead(lambda), database.grantConnect(lambda)];
+      },
       getFunctionProps: (props) => ({
         ...props,
         enableLiveDev: false,

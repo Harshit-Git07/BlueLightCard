@@ -102,7 +102,6 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
   private createDatabaseAdapter(databaseConnectionConfig: DatabaseConnectionConfig): IDatabase {
     return {
       connectionConfig: databaseConnectionConfig,
-      grantConnect: () => [],
       getFunctionProps: (props) => ({
         ...props,
         enableLiveDev: true,

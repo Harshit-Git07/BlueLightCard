@@ -1,6 +1,6 @@
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { ApiGatewayV1ApiRouteProps, Stack } from 'sst/constructs';
+import { ApiGatewayV1ApiFunctionRouteProps, Stack } from 'sst/constructs';
 
 import {
   ApiGatewayModelGenerator,
@@ -10,12 +10,16 @@ import {
 } from '@blc-mono/core/extensions/apiGatewayExtension';
 
 import { EnvironmentKeys } from '../constants/environment';
+import { IDatabase } from '../database/adapter';
+import { SSTFunction } from '../helpers/SSTFunction';
 
 export type RouteOptions = {
   apiGatewayModelGenerator: ApiGatewayModelGenerator;
   environment?: Partial<Record<EnvironmentKeys, string>>;
   handler: string;
   model: Model;
+  functionName: string;
+  database?: IDatabase;
   requestValidatorName: string;
   restApi: RestApi;
   stack: Stack;
@@ -27,16 +31,19 @@ export class Route {
     environment,
     handler,
     model,
+    functionName,
     requestValidatorName,
     restApi,
     stack,
-  }: RouteOptions): ApiGatewayV1ApiRouteProps<'Authorizer'> {
+    database,
+  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'Authorizer'> {
     return {
-      function: {
-        handler,
-        environment,
-      },
       cdk: {
+        function: new SSTFunction(stack, `${functionName}`, {
+          handler,
+          environment,
+          database,
+        }),
         method: {
           requestModels: { 'application/json': model.getModel() },
           methodResponses: MethodResponses.toMethodResponses([

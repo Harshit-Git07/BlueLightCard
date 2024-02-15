@@ -28,6 +28,13 @@ export async function Redemptions({ app, stack }: StackContext) {
   // Config
   const config = RedemptionsConfigResolver.for(stack);
 
+  stack.setDefaultFunctionProps({
+    timeout: 20,
+    environment: {
+      service: 'redemptions',
+    },
+  });
+
   // Create Database
   const database = await new RedemptionsDatabase(app, stack, vpc).setup();
 
@@ -40,10 +47,6 @@ export async function Redemptions({ app, stack }: StackContext) {
     },
     defaults: {
       authorizer: 'Authorizer',
-      function: {
-        timeout: 20,
-        environment: { service: 'redemptions' },
-      },
     },
     cdk: {
       restApi: {
@@ -78,18 +81,22 @@ export async function Redemptions({ app, stack }: StackContext) {
   const allRoutes = new Routes();
   const restApi = api.cdk.restApi;
 
+  // functionName is automatically appended with the stage name
   allRoutes.addRoutes(api, stack, {
     'POST /member/redeem': Route.createRoute({
       model: postRedeemModel,
       apiGatewayModelGenerator,
       stack,
+      functionName: `PostRedeemHandler`,
       restApi,
+      database,
       handler: 'packages/api/redemptions/src/handlers/redeem/postRedeem.handler',
       requestValidatorName: 'PostRedeemValidator',
     }),
     'POST /member/connection/affiliate': Route.createRoute({
       model: postAffiliateModel,
       apiGatewayModelGenerator,
+      functionName: `PostAffiliateHandler`,
       stack,
       restApi,
       handler: 'packages/api/redemptions/src/handlers/affiliate/postAffiliate.handler',
@@ -99,6 +106,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       model: postSpotifyModel,
       apiGatewayModelGenerator,
       stack,
+      functionName: 'PostSpotifyHandler',
       restApi,
       handler: 'packages/api/redemptions/src/handlers/proxy/postSpotify.handler',
       requestValidatorName: 'PostSpotifyValidator',

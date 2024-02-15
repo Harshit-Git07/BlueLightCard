@@ -41,6 +41,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
       egressSecurityGroup,
       databaseCredentialsSecret,
     );
+
     this.seedStrategy.createSeedScript(awsDatabaseAdapter, migrationsScript);
     return awsDatabaseAdapter;
   }
@@ -212,7 +213,9 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
     return {
       connectionConfig,
       egressSecurityGroup,
-      grantConnect: (lambda) => [databaseCredentialsSecret.grantRead(lambda)],
+      grantConnect: (lambda) => {
+        return [databaseCredentialsSecret.grantRead(lambda)];
+      },
       getFunctionProps: (props) => ({
         ...props,
         enableLiveDev: false,

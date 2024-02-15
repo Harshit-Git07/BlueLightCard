@@ -1,6 +1,9 @@
+import postgres from 'postgres';
 import { DockerComposeEnvironment, Wait } from 'testcontainers';
 import { StartedDockerComposeEnvironment } from 'testcontainers/build';
 import { Environment } from 'testcontainers/build/types';
+
+import { waitOn } from '@blc-mono/core/utils/waitOn';
 
 import { DatabaseSeedMethod, DatabaseType } from '../../config/database';
 import { EnvironmentKeys } from '../../constants/environment';
@@ -25,6 +28,16 @@ export class RedemptionsTestDatabase {
     private composeEnvironment: StartedDockerComposeEnvironment,
     private databaseConnectionConfig: DatabaseConnectionConfig,
   ) {}
+  private static retryCount = 0;
+
+  private static waitForConnection = async (sql: postgres.Sql) => {
+    return waitOn(async () => {
+      const results = await sql`SELECT * FROM pg_catalog.pg_tables;`;
+      if (!results.length) {
+        throw new Error('Invalid response from database');
+      }
+    });
+  };
 
   /**
    * Start a new database instance for testing
@@ -57,6 +70,7 @@ export class RedemptionsTestDatabase {
     );
 
     const databaseConnection = await databaseConnectionConfig.toConnection(DatabaseConnectionType.READ_WRITE);
+    await this.waitForConnection(databaseConnection.sql);
 
     await runMigrations(databaseConnection, 'src/database/migrations');
 

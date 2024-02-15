@@ -220,16 +220,14 @@ export class DatabaseConnection {
   ): Promise<DatabaseConnection> {
     const rawCredentials = await config.credentials.toRaw();
 
-    const sql = postgres({
+    const sql: postgres.Sql = postgres({
       host: config.endpoint.getHost(connectionType),
       port: config.endpoint.port,
       database: config.databaseName,
       username: rawCredentials.username,
       password: rawCredentials.password,
     });
-
     const db = drizzle(sql);
-
     return new DatabaseConnection(db, sql);
   }
 

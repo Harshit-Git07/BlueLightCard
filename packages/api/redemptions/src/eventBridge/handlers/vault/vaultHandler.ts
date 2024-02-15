@@ -22,7 +22,7 @@ export function createHandler(
 
     switch (source) {
       case VaultEvents.VAULT_CREATED:
-        vaultCreatedHandler(connection, logger, event);
+        await vaultCreatedHandler(connection, logger, event);
         break;
       case VaultEvents.VAULT_UPDATED:
         vaultUpdatedHandler();

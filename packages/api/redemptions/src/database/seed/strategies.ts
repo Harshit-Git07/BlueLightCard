@@ -1,11 +1,12 @@
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
-import { App, Function as SSTFunction, Script, Stack } from 'sst/constructs';
+import { App, Script, Stack } from 'sst/constructs';
 
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 
 import { EnvironmentKeys } from '../../constants/environment';
 import { PRODUCTION_STAGE, STAGING_STAGE } from '../../constants/sst';
+import { SSTFunction } from '../../helpers/SSTFunction';
 import { IDatabase } from '../adapter';
 import { DatabaseConnection } from '../connection';
 
@@ -48,16 +49,12 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
 
   public createSeedScript(database: IDatabase, migrationsScript: Script) {
     this.ensureAllowedStage();
-    const seedFunction = new SSTFunction(
-      this.stack,
-      'RedemptionsDatabaseSeedLambda',
-      database.getFunctionProps({
-        handler: 'packages/api/redemptions/src/database/seed/seedHandler.handler',
-        functionName: `redemptions-database-seed-${this.stack.stage}`,
-      }),
-    );
-
-    const databaseConnectGrants = database.grantConnect(seedFunction);
+    const seedFunction = new SSTFunction(this.stack, 'RedemptionsDatabaseSeedFunction', {
+      functionName: `redemptions-database-seed`,
+      handler: 'packages/api/redemptions/src/database/seed/seedHandler.handler',
+      database,
+    });
+    const databaseConnectGrants = seedFunction.getGrants();
 
     const seedScript = new Script(this.stack, 'DatabaseSeedLambdas', {
       onCreate: seedFunction,

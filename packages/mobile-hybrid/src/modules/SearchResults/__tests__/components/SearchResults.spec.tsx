@@ -31,14 +31,6 @@ describe('Search results', () => {
   });
 
   describe('spinner', () => {
-    it('should show spinner on mount', () => {
-      render(<SearchResults />);
-
-      const spinner = screen.getByRole('progressbar');
-
-      expect(spinner).toBeTruthy();
-    });
-
     it('should hide spinner on receiving api response', () => {
       bus.broadcast(Channels.API_RESPONSE, {
         url: APIUrl.Search,

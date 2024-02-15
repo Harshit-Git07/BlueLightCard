@@ -36,8 +36,8 @@ const SearchResultsContainer: FC = () => {
   useEffect(() => {
     if (searchResultsData?.data) {
       setResults(searchResultsData.data);
-      setSpinner(false);
     }
+    setSpinner(false);
   }, [searchResultsData]);
 
   return <SearchResultsPresenter results={results} onOfferClick={onOfferClick} />;

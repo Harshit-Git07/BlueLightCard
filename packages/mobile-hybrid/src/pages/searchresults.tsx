@@ -34,6 +34,7 @@ const SearchResultsPage: NextPage = () => {
       return;
     }
   }, [searchTermQuery, setTerm]);
+
   return (
     <div>
       <SearchModule placeholder="Search for an offer" />

@@ -20,7 +20,7 @@ export class Network {
    * @return {Vpc} The created VPC.
    */
   private createVpc(): Vpc {
-    return new Vpc(this.stack, 'vpc-temp', {
+    return new Vpc(this.stack, 'vpc-shared', {
       maxAzs: 3,
       subnetConfiguration: this.subnetConfiguration(),
     });

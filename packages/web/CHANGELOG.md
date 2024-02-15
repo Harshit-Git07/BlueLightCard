@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.28.0...bluelightcard/web-v1.29.0) (2024-02-15)
+
+
+### Features
+
+* [DISCO-96] Enable users to see offers for their explicit service ([#859](https://github.com/bluelightcard/BlueLightCard-2.0/issues/859)) ([58320db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/58320db00ee6e08151dcb9d57a89c8a1255badd7))
+* Accordion component ([#821](https://github.com/bluelightcard/BlueLightCard-2.0/issues/821)) ([9010d85](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9010d850227ca74ef860aaf4ff0e023bb51e9556))
+* MagicButton ([#815](https://github.com/bluelightcard/BlueLightCard-2.0/issues/815)) ([907c77f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/907c77fc1217599128eb0451bbae78820a18269b))
+* Offer Sheet ([#828](https://github.com/bluelightcard/BlueLightCard-2.0/issues/828)) ([bb759ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bb759ad85d9b0cbcc07cdd66b90b99eb6846afab))
+* share/fave button ([#830](https://github.com/bluelightcard/BlueLightCard-2.0/issues/830)) ([4d6c8d4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4d6c8d4962bd436fae100a0f74a36eebeba03ab7))
+* to 380 offer sheet label ([#816](https://github.com/bluelightcard/BlueLightCard-2.0/issues/816)) ([15d3eee](https://github.com/bluelightcard/BlueLightCard-2.0/commit/15d3eeea5812d0af878fa72c518585560e251786))
+
 ## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.27.0...bluelightcard/web-v1.28.0) (2024-01-30)
 
 

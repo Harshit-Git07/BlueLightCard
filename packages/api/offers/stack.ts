@@ -25,7 +25,7 @@ export function Offers({ stack, app }: StackContext) {
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
   const ec2Manager: EC2Manager = new EC2Manager(stack, vpc, securityGroupManager);
   const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, cognito.userPoolId);
-  // const database: Database = new Database(stack, vpc, secretsManger, securityGroupManager, ec2Manager);
+  const database: Database = new Database(stack, vpc, secretsManger, securityGroupManager, ec2Manager);
   const offersApi: OffersApi = new OffersApi(
     stack,
     cognito.cdk.userPool,

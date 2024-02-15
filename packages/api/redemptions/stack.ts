@@ -29,7 +29,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   const config = RedemptionsConfigResolver.for(stack);
 
   // Create Database
-  // const database = await new RedemptionsDatabase(app, stack, vpc).setup();
+  const database = await new RedemptionsDatabase(app, stack, vpc).setup();
 
   const api = new ApiGatewayV1Api(stack, 'redemptions', {
     authorizers: {
@@ -70,7 +70,7 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   new EventBridge(stack, {
     linkRule: createLinkRule(stack),
-    // vaultRule: createVaultRule(stack, database),
+    vaultRule: createVaultRule(stack, database),
     promotionRule: createPromotionRule(stack),
     offerRule: createOfferRule(stack),
   });

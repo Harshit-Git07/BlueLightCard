@@ -5,7 +5,7 @@ export interface AppContextStructure {
   apiData: {
     [url: string]: any;
   };
-  experiments: any;
+  experiments: Record<string, string>;
 }
 
 export interface ActionApiData {

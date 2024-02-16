@@ -11,7 +11,7 @@ const initialState: AppStore = {
     [APIUrl.FavouritedBrands]: true,
   },
   apiData: {},
-  experiments: '',
+  experiments: {},
   dispatch() {},
 };
 

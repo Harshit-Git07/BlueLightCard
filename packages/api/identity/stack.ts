@@ -27,6 +27,9 @@ import {CfnWebACLAssociation} from 'aws-cdk-lib/aws-wafv2';
 import {Duration} from "aws-cdk-lib";
 import getAllowedDomains from './src/utils/getAllowedDomains';
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
+import path from 'path';
+import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
+import { BRANDS } from '@blc-mono/core/types/brands.enum';
 
 export function Identity({stack}: StackContext) {
   const {certificateArn} = use(Shared);
@@ -76,6 +79,8 @@ export function Identity({stack}: StackContext) {
   //import webACL
   const {webACL} = use(Shared);
   //auth
+  const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
+
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
     triggers: {
@@ -174,6 +179,19 @@ export function Identity({stack}: StackContext) {
       }
     });
   // }
+
+  const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
+  const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
+
+  new CognitoHostedUICustomization(
+    stack,
+    stack.region === 'ap-southeast-2' ? BRANDS.BLC_AU : BRANDS.BLC_UK,
+    cognito.cdk.userPool,
+    [webClient, mobileClient],
+    blcHostedUiCSSPath,
+    blcLogoPath,
+  ); 
+
   // Associate WAF WebACL with cognito
   new CfnWebACLAssociation(stack, 'BlcWebAclAssociation', {
     resourceArn: cognito.cdk.userPool.userPoolArn,
@@ -279,6 +297,19 @@ export function Identity({stack}: StackContext) {
       logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()]
     },
   });
+
+  const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
+  const ddsLogoPath = path.join(cognitoHostedUiAssets, 'dds-logo.png');
+
+  new CognitoHostedUICustomization(
+    stack,
+    BRANDS.DDS_UK,
+    cognito_dds.cdk.userPool,
+    [webClientDds, mobileClientDds],
+    ddsHostedUiCSSPath,
+    ddsLogoPath,
+  );  
+
   // Associate WAF WebACL with cognito
   new CfnWebACLAssociation(stack, 'DdsWebAclAssociation', {
     resourceArn: cognito_dds.cdk.userPool.userPoolArn,

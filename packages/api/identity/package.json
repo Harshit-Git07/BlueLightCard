@@ -16,9 +16,12 @@
     "@types/jwk-to-pem": "^2.0.3",
     "@types/node": "20.2.3",
     "@types/nodemailer": "^6.4.13",
+    "@types/stream-buffers": "3.0.7",
     "@types/uuid": "9.0.4",
     "mysql2": "3.2.4",
-    "sst": "2.38.7"
+    "runtypes": "6.7.0",
+    "sst": "2.38.7",
+    "stream-buffers": "3.0.2"
   },
   "dependencies": {
     "@aws-lambda-powertools/commons": "1.8.0",
@@ -29,10 +32,10 @@
     "@aws-sdk/client-secrets-manager": "3.423.0",
     "@sinclair/typebox": "0.28.13",
     "ajv": "8.12.0",
+    "aws-jwt-verify": "4.0.0",
     "axios": "1.4.0",
     "base-64": "1.0.0",
     "date-fns": "2.30.0",
-    "aws-jwt-verify": "4.0.0",
     "libphonenumber-js": "1.10.37",
     "ts-node": "^10.9.1",
     "uuid": "9.0.1"

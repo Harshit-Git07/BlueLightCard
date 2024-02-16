@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export const BLC_UK = 'blc-uk';
 export const BLC_AUS = 'blc-aus';
 export const DDS_UK = 'dds-uk';
@@ -44,3 +46,34 @@ export const enum OFFER_MENUS_FILE_NAMES {
   POPULAR = 'popularoffersPDO.txt',
   MARKETPLACE = 'marketplace.txt',
 }
+
+export const LEGACY_RETRIEVE_OFFERS_URL = 'api/4/offer/retrieve.php';
+
+export enum LEGACY_API_BASE_URL {
+  PRODUCTION = 'https://www.bluelightcard.co.uk',
+  STAGING = 'https://staging.bluelightcard.co.uk',
+}
+
+export const OFFERS_TYPE_ENUM = z.enum([
+  'Online',
+  'Cashback',
+  'Giftcards',
+  'Popular',
+  'Own Benefits',
+  'High Street Card',
+  'Local Offer',
+  'Featured',
+  'Local Services',
+]);
+
+export const OFFER_TYPES = {
+  0: OFFERS_TYPE_ENUM.enum.Online,
+  1: OFFERS_TYPE_ENUM.enum.Cashback,
+  2: OFFERS_TYPE_ENUM.enum.Giftcards,
+  3: OFFERS_TYPE_ENUM.enum.Popular,
+  4: OFFERS_TYPE_ENUM.enum['Own Benefits'],
+  5: OFFERS_TYPE_ENUM.enum['High Street Card'],
+  6: OFFERS_TYPE_ENUM.enum['Local Offer'],
+  9: OFFERS_TYPE_ENUM.enum.Featured,
+  13: OFFERS_TYPE_ENUM.enum['Local Services'],
+};

@@ -1,0 +1,13 @@
+{
+  "message": "Success",
+  "data": {
+    "id": 123,
+    "name": "offer name",
+    "description": "description",
+    "expiry": "2025-02-09T09:41:36.278Z",
+    "type": "Online",
+    "terms": "tnc",
+    "companyId": 3456,
+    "companyLogo": "https://www.example.com/logo.png"
+  }
+}

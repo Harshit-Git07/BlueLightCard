@@ -1,0 +1,24 @@
+{
+  "data": {
+      "offerCompSource": "memcache",
+      "success": true,
+      "message": "Found",
+      "datasource": "memcache",
+      "data": {
+          "id": 3456,
+          "offers": [],
+          "name": "Lorem",
+          "summary": "Lorem ipsum",
+          "legalurl": "https://example.com/articles/80000495578-security-privacy-and-cookie-policy",
+          "logos": "logo.jpg",
+          "absolutelogos": "https://www.example.com/absolutelogos.png",
+          "s3logos": "https://www.example.com/logo.png"
+      }
+  },
+  "headers": {},
+  "status": 200,
+  "statusText": "",
+  "config": {
+      "headers": {}
+  }
+}

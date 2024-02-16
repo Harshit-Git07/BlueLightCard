@@ -1,10 +1,7 @@
 import { ApiGatewayV1Api, Stack } from 'sst/constructs';
 import { OffersRoutes } from './offers/offerRoutes';
-import { CompanyRoutes } from './company/companyRoutes';
 import { ApiGatewayModelGenerator } from '../../../core/src/extensions/apiGatewayExtension';
-import { OffersLegacyRoute } from './offers/legacy/offersLegacyRoute';
 import { OffersModel } from '../models/offers';
-import { CompanyModel } from '../models/company';
 import { Model } from 'aws-cdk-lib/aws-apigateway';
 
 /**
@@ -23,35 +20,19 @@ export class RouteRegistry {
    */
   private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api) {
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
-    const modelMap: Map<string, Model> = this.generateModels(apiGatewayModelGenerator);
-    modelMap.get('OffersModel');
-    // Handle all /offer routes
+    const modelMap = this.generateModels(apiGatewayModelGenerator);
     new OffersRoutes({
       stack,
       api,
       apiGatewayModelGenerator,
       model: modelMap.get('OffersModel')!,
     }).initialiseRoutes();
-    // Handle all /offer/legacy routes
-    new OffersLegacyRoute({
-      stack,
-      api,
-      apiGatewayModelGenerator,
-      model: modelMap.get('OffersModel')!,
-    }).initialiseRoutes();
-    // Handle all /company routes
-    new CompanyRoutes({
-      stack,
-      api,
-      apiGatewayModelGenerator,
-      model: modelMap.get('CompanyModel')!,
-    }).initialiseRoutes();
   }
 
-  private generateModels(agmg: ApiGatewayModelGenerator) {
+  private generateModels(agmg: ApiGatewayModelGenerator): Map<string, Model> {
     const models: Map<string, Model> = new Map();
     models.set('OffersModel', agmg.generateModel(OffersModel).getModel());
-    models.set('CompanyModel', agmg.generateModel(CompanyModel).getModel());
+
     return models;
   }
 }

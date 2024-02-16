@@ -32,7 +32,7 @@ const MagicButton: FC<MagicButtonProps> = ({
 
   return (
     <button
-      className={`${className} relative text-blue-800 w-fit rounded-full overflow-hidden p-1 ${
+      className={`${className} relative text-blue-800 w-fit rounded-full overflow-hidden p-[2px] w-[21.4375] h-[3.75rem] ${
         disabled ? '' : clickable ? 'cursor-pointer' : 'cursor-default'
       }`}
       disabled={disabled}
@@ -44,7 +44,7 @@ const MagicButton: FC<MagicButtonProps> = ({
         </div>
       )}
       <div
-        className={`relative py-4 px-16 rounded-full z-10 h-full w-full flex justify-center items-center transition-all ${
+        className={`relative py-4 px-16 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-['MuseoSans'] text-base font-bold leading-6 ${
           bodyStyles[variant][disabled ? 'disabled' : animate ? 'animated' : 'notAnimated']
         } ${disabled ? 'disabled' : animate ? 'animated' : 'notAnimated'}`}
         style={{ transitionDuration: `${transitionDurationMs}ms` }}

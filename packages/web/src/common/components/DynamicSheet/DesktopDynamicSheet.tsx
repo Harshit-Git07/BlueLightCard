@@ -10,7 +10,7 @@ const DesktopDynamicSheet: React.FC<DynamicSheetProps> = ({
   outsideClickClose = true,
   isOpen,
   containerClassName = '',
-  width = '25%',
+  width = '24rem',
 }) => {
   return (
     <div className="absolute w-[100vw] bg-transparent">

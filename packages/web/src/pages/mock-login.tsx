@@ -50,7 +50,9 @@ function MockLogin() {
           idToken: response.data.AuthenticationResult.IdToken,
         });
 
-        router.push('/members-home');
+        const redirect = router.query.redirect as string;
+
+        router.push(redirect ? redirect : '/members-home');
         setIsLoading(false);
       })
       .catch((error: any) => {

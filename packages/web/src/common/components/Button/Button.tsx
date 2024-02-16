@@ -18,6 +18,7 @@ const Button: FC<ButtonProps> = ({
   variant = ThemeVariant.Primary,
   onClick,
   withoutHover = false,
+  borderless = false,
 }) => {
   const colorToken: any =
     invertColor && color[variant].invert ? color[variant].invert : color[variant].base;
@@ -25,7 +26,7 @@ const Button: FC<ButtonProps> = ({
     type === 'link' ? 'inline-block' : '',
     slim ? 'py-1' : 'py-1.5',
     'px-5 rounded-md transition border-2',
-    'focus:outline outline-2 outline-offset-2',
+    borderless ? '' : 'focus:outline outline-2 outline-offset-2',
     disabled ? 'opacity-25' : '',
     colorToken.text,
     !disabled && !withoutHover ? colorToken.hover : '',

@@ -14,4 +14,5 @@ export type ButtonProps = PropsWithChildren & {
   href?: string;
   onClick?: MouseEventHandler;
   withoutHover?: boolean;
+  borderless?: boolean;
 };

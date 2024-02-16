@@ -9,22 +9,22 @@ const Accordion: FC<AccordionProps> = ({ title, content }) => {
     setActive(!active);
   };
   return (
-    <div className="mb-8 w-full p-4 sm:p-8 lg:px-6 xl:px-8">
+    <div className="mb-8 w-full sm:p-8 lg:px-6 xl:px-8 leading-6">
       <button className={`flex w-full text-left`} onClick={() => handleToggle()}>
         <div className="w-full">
-          <h4 className="mt-1.5 font-['MuseoSans'] text-lg font-semibold text-shade-greyscale-grey-900">
+          <h4 className="mt-2 font-['MuseoSans'] text-base font-medium text-shade-greyscale-grey-900">
             {title}
           </h4>
         </div>
-        <div className="mr-5 flex h-10 w-full max-w-[40px] items-center justify-center">
-          <span className="icon inline-flex h-12 w-full max-w-[32px] items-center justify-center text-3xl font-semibold text-[#001B80]">
+        <div className="flex h-10 w-full max-w-[40px] items-center justify-end">
+          <span className="icon inline-flex h-12 w-full max-w-[32px] items-center justify-end text-2xl font-bold text-[#001B80]">
             {active ? '-' : '+'}
           </span>
         </div>
       </button>
 
       <div className={`duration-200 ease-in-out ${active ? 'block' : 'hidden'}`}>
-        <Markdown className="font-['MuseoSans'] py-3 text-shade-greyscale-grey-900 whitespace-pre-wrap">
+        <Markdown className="font-['MuseoSans'] py-3 text-base font-light leading-5 whitespace-pre-wrap">
           {content}
         </Markdown>
       </div>

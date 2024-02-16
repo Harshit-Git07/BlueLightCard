@@ -1,6 +1,7 @@
 export interface LabelProps {
   text: string;
   type: string;
+  className?: string;
 }
 
 export interface style {

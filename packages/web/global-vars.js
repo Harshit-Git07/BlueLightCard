@@ -1,4 +1,5 @@
 const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
+const LEGACY_MICROSERVICE_BRAND = process.env.NEXT_PUBLIC_APP_MICROSERVICE_BRAND ?? 'BLC';
 const REGION = process.env.NEXT_PUBLIC_APP_REGION ?? 'GB';
 const DEFAULT_LANG = process.env.NEXT_PUBLIC_APP_LANG ?? 'en';
 const FALLBACK_LNG = 'en';
@@ -39,6 +40,10 @@ const DATADOG_ENV = process.env.NEXT_PUBLIC_DATADOG_ENV ?? '';
 // Search
 const SEARCH_ENDPOINT = process.env.NEXT_PUBLIC_SEARCH_ENDPOINT ?? '';
 
+// Favourites end point
+const RETRIEVE_FAVOURITE_ENDPOINT = process.env.NEXT_PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT ?? '';
+const UPDATE_FAVOURITE_ENDPOINT = process.env.NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT ?? '';
+
 /*
  * Language is made up of the lng and region
  * Example: [lng]-[region]
@@ -54,6 +59,7 @@ const BRANDS = ['blc-uk', 'blc-au', 'dds-uk'];
 
 module.exports = {
   BRAND,
+  LEGACY_MICROSERVICE_BRAND,
   BRANDS,
   REGION,
   DEFAULT_LANG,
@@ -82,4 +88,6 @@ module.exports = {
   DATADOG_DEFAULT_SERVICE,
   DATADOG_ENV,
   SEARCH_ENDPOINT,
+  RETRIEVE_FAVOURITE_ENDPOINT,
+  UPDATE_FAVOURITE_ENDPOINT,
 };

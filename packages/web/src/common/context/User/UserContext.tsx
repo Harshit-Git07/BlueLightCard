@@ -12,6 +12,7 @@ export type User = {
   organisation: string;
   companies_follows: followType[];
   uuid: string;
+  legacyId: string;
 };
 
 export type UserContextType = {

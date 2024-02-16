@@ -8,13 +8,13 @@ type FunctionPropertiesWithDatabase = FunctionProps & { database?: IDatabase | u
 export class SSTFunction extends Function {
   private readonly dbGrants: Grant[] = [];
 
-  constructor(stack: Stack, name: string, functionProps: FunctionPropertiesWithDatabase) {
+  constructor(stack: Stack, id: string, functionProps: FunctionPropertiesWithDatabase) {
     const { database } = functionProps;
     const configuredProps = functionProps.database
       ? functionProps.database.getFunctionProps(functionProps)
       : functionProps;
 
-    super(stack, `${name}-${stack.stage}`, configuredProps);
+    super(stack, `${id}-${stack.stage}`, configuredProps);
     if (database && database.grantConnect) {
       this.dbGrants.push(...database.grantConnect(this));
     }

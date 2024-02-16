@@ -39,7 +39,7 @@ export class Route {
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'Authorizer'> {
     return {
       cdk: {
-        function: new SSTFunction(stack, `${functionName}`, {
+        function: new SSTFunction(stack, functionName, {
           handler,
           environment,
           database,

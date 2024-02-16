@@ -50,7 +50,7 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
   public createSeedScript(database: IDatabase, migrationsScript: Script) {
     this.ensureAllowedStage();
     const seedFunction = new SSTFunction(this.stack, 'RedemptionsDatabaseSeedFunction', {
-      functionName: `redemptions-database-seed`,
+      functionName: `redemptions-database-seed-${this.stack.stage}`,
       handler: 'packages/api/redemptions/src/database/seed/seedHandler.handler',
       database,
     });

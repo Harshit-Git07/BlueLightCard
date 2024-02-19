@@ -82,6 +82,15 @@ export function createOldCognito (stack: Stack, appSecret: ISecret, bus: EventBu
       },
     },
   });
+
+  const blcOldDomainPrefix = `blc${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(stack.region as REGIONS)}-old`;
+
+  cognito.cdk.userPool.addDomain('BLCOldCognitoDomain', {
+    cognitoDomain: {
+      domainPrefix: blcOldDomainPrefix,
+    }
+  });
+  
   const mobileClient = cognito.cdk.userPool.addClient('membersClient', {
     authFlows: {
       userPassword: true,
@@ -182,6 +191,14 @@ export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
     },
   });
 
+  const ddsOldDomainPrefix = `dds${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(stack.region as REGIONS)}-old`;
+    
+  cognito_dds.cdk.userPool.addDomain('DDSOldCognitoDomain', {
+    cognitoDomain: {
+      domainPrefix: ddsOldDomainPrefix,
+    }
+  });
+
   const mobileClientDds = cognito_dds.cdk.userPool.addClient('membersClient', {
     authFlows: {
       userPassword: true,
@@ -222,6 +239,7 @@ export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
       logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()]
     },
   });
+
   // Associate WAF WebACL with cognito
   new CfnWebACLAssociation(stack, 'DdsWebAclAssociation', {
     resourceArn: cognito_dds.cdk.userPool.userPoolArn,

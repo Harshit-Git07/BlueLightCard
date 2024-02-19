@@ -14,6 +14,8 @@ import { museoFont, sourceSansPro } from '@/font';
 import { NewsStoreProvider } from '@/modules/news/store';
 import eventBus from '@/eventBus';
 import Spinner from '@/modules/Spinner';
+import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
+import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 dayjs.extend(CustomParseFormat);
 
@@ -21,10 +23,12 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AppStoreProvider>
       <NewsStoreProvider>
-        <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
-          <Component {...pageProps} />
-          <Spinner />
-        </main>
+        <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
+          <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
+            <Component {...pageProps} />
+            <Spinner />
+          </main>
+        </AmplitudeProvider>
       </NewsStoreProvider>
     </AppStoreProvider>
   );

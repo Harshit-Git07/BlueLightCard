@@ -27,10 +27,13 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
     }
   }, [canBackNav, router]);
 
-  const onSearch = useCallback<SearchProps['onSearch']>((searchTerm) => {
-    setSearchOverlayOpen(false);
-    router.push(`/searchresults?searchTerm=${searchTerm}`);
-  }, []);
+  const onSearch = useCallback<SearchProps['onSearch']>(
+    (searchTerm) => {
+      setSearchOverlayOpen(false);
+      router.push(`/searchresults?searchTerm=${searchTerm}`);
+    },
+    [router],
+  );
 
   const onClear = useCallback(() => {
     setTerm('');

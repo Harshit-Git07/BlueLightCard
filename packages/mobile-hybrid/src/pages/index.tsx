@@ -64,7 +64,7 @@ const Home: NextPage<any> = () => {
     }
 
     request();
-  }, []);
+  }, [request]);
 
   useOnResume(request);
 

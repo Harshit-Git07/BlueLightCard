@@ -17,13 +17,13 @@ const AmplitudeProvider: FC<AmplitudeProviderProps> = ({
 
   useEffect(() => {
     invokeNativeExperiment.experiment(experimentKeys.concat(featureFlagKeys));
-  }, []);
+  }, [experimentKeys, featureFlagKeys]);
 
   useEffect(() => {
     if (expr) {
       setExperimentsAndFeatureFlags(expr);
     }
-  }, [expr]);
+  }, [expr, setExperimentsAndFeatureFlags]);
 
   return children;
 };

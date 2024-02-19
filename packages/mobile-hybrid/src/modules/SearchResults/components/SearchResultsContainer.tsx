@@ -38,7 +38,7 @@ const SearchResultsContainer: FC = () => {
       setResults(searchResultsData.data);
     }
     setSpinner(false);
-  }, [searchResultsData]);
+  }, [searchResultsData, setResults, setSpinner]);
 
   return <SearchResultsPresenter results={results} onOfferClick={onOfferClick} />;
 };

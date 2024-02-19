@@ -61,6 +61,7 @@ const Search: FC<SearchProps> = ({
     onBackButtonClick && onBackButtonClick();
     setIsFocused(false);
     setErrorMessage('');
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, []);
 
   const onInputFocus = () => {

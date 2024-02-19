@@ -1,6 +1,12 @@
 import { Duration } from 'aws-cdk-lib';
 import { InstanceClass, InstanceSize, InstanceType, Port, SecurityGroup, SubnetType } from 'aws-cdk-lib/aws-ec2';
-import { DatabaseInstance, DatabaseInstanceEngine, PostgresEngineVersion, StorageType } from 'aws-cdk-lib/aws-rds';
+import {
+  DatabaseInstance,
+  DatabaseInstanceEngine,
+  ParameterGroup,
+  PostgresEngineVersion,
+  StorageType,
+} from 'aws-cdk-lib/aws-rds';
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Function, Script } from 'sst/constructs';
 
@@ -112,10 +118,9 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
   private createInstance(ingressSecurityGroup: DatabaseIngressSecurityGroup): DatabaseInstance {
     return new DatabaseInstance(this.stack, 'RedemptionsDatabase', {
       engine: DatabaseInstanceEngine.postgres({
-        // TODO: Use the latest version
-        version: PostgresEngineVersion.VER_12,
+        version: PostgresEngineVersion.VER_15_2,
       }),
-      instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
+      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
       allocatedStorage: 20,
       multiAz: false,
       storageType: StorageType.GP2,
@@ -128,6 +133,15 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
       backupRetention: Duration.days(0),
       enablePerformanceInsights: false,
       port: this.config.port,
+      parameterGroup: new ParameterGroup(this.stack, `RedemptionsDatabaseParameterGroup-${this.stack.stage}`, {
+        engine: DatabaseInstanceEngine.postgres({
+          version: PostgresEngineVersion.VER_15_2,
+        }),
+        description: 'Default parameter group for the Redemptions Database',
+        parameters: {
+          'rds.force_ssl': '0',
+        },
+      }),
     });
   }
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.40.0...bluelightcard/identity-v1.41.0) (2024-02-19)
+
+
+### Features
+
+* TI-882: customise UI design of hosted UI sign in page ([#878](https://github.com/bluelightcard/BlueLightCard-2.0/issues/878)) ([e8e845d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8e845d726d4d8f4f5d94b7c1909e8997283ead6))
+* TI-883: added custom domain for cognito across all 3 brands ([#885](https://github.com/bluelightcard/BlueLightCard-2.0/issues/885)) ([bcfab16](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bcfab16d74aee63b8653e9f55c355e8e8d3d46d0))
+
+
+### Bug Fixes
+
+* [TR-301]: Reset temporary changes ([#871](https://github.com/bluelightcard/BlueLightCard-2.0/issues/871)) ([ae2af61](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae2af61576a5e29e02ce05062028c392d86b3c70))
+
 ## [1.40.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.39.0...bluelightcard/identity-v1.40.0) (2024-02-13)
 
 

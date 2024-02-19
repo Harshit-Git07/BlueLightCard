@@ -1,0 +1,10 @@
+services:
+  offers-db:
+    image: mysql:8.0.32
+    command: --default-authentication-plugin=mysql_native_password  --sql-mode=""
+    environment:
+      MYSQL_DATABASE: ${OFFERS_DATABASE_NAME}
+      MYSQL_ROOT_PASSWORD: ${OFFERS_DATABASE_ROOT_PASSWORD}
+    ports:
+      - ${OFFERS_DATABASE_PORT}:3306
+    restart: always

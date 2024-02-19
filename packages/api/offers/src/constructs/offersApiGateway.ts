@@ -2,6 +2,9 @@ import { ApiGatewayV1Api, Stack } from 'sst/constructs';
 import { Duration } from 'aws-cdk-lib';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { RouteRegistry } from '../routes/routeRegistry';
+import { IVpc } from 'aws-cdk-lib/aws-ec2';
+import { DatabaseConfig } from '../database/type';
+import { EnvironmentVariablesKeys } from '../utils/environment-variables';
 
 /**
  * Sets up and configures the API Gateway for the offers application, including defining routes and authorizers.
@@ -11,10 +14,15 @@ export class OffersApiGateway {
   private readonly _api: ApiGatewayV1Api;
   private readonly _restApi: RestApi;
 
-  constructor(private stack: Stack, private cognitoUserPoolId: string) {
+  constructor(
+    private stack: Stack,
+    private cognitoUserPoolId: string,
+    private vpc: IVpc,
+    private dbConfig: DatabaseConfig,
+  ) {
     this._api = this.createApi();
     this._restApi = this._api.cdk.restApi;
-    new RouteRegistry(this.stack, this.api);
+    new RouteRegistry(this.stack, this.api, this.vpc, this.dbConfig);
   }
 
   /**
@@ -52,7 +60,11 @@ export class OffersApiGateway {
         function: {
           timeout: Duration.seconds(5).toSeconds(),
           memorySize: 256,
-          environment: { service: 'offers' },
+          environment: {
+            service: 'offers',
+            REGION: this.stack.region,
+            [EnvironmentVariablesKeys.DATABASE_CONFIG]: JSON.stringify(this.dbConfig),
+          },
         },
       },
       cdk: {

@@ -1,7 +1,6 @@
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Stack } from 'sst/constructs';
-import { DATABASE_PROPS } from '../utils/global-constants';
-import { isDev } from '@blc-mono/core/utils/checkEnvironment';
+import { DATABASE_PROPS, ENVIRONMENTS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
 
 /**
  * The ISecretManager interface provides the necessary methods for managing secrets.
@@ -19,7 +18,7 @@ export interface ISecretManager {
 export class SecretManager implements ISecretManager {
   private readonly _appSyncCertificateArn: string;
   private readonly APPSYNC_CERTIFICATE_ARN_KEY: string;
-  private readonly _databaseSecret: ISecret;
+  private readonly _databaseSecret?: ISecret;
 
   /**
    * Constructor for setting up initial values and creating necessary secrets.
@@ -27,9 +26,12 @@ export class SecretManager implements ISecretManager {
   constructor(private stack: Stack) {
     this.APPSYNC_CERTIFICATE_ARN_KEY = this.composeAppSyncArnKey();
     this._appSyncCertificateArn = this.fetchAppSyncCertificateArn();
-    this._databaseSecret = isDev(this.stack.stage)
-      ? this.createDatabaseSecret('OffersDevelopmentDatabaseSecret', 'offers-development-database-secret')
-      : this.createDatabaseSecret('OffersDatabaseSecret', 'offers-database-secret');
+
+    if ([ENVIRONMENTS.PRODUCTION.valueOf(), ENVIRONMENTS.STAGING.valueOf()].includes(this.stack.stage)) {
+      this._databaseSecret = this.createDatabaseSecret('OffersDatabaseSecret', 'offers-database-secret');
+    } else if (EPHEMERAL_PR_REGEX.test(this.stack.stage)) {
+      this._databaseSecret = this.createDatabaseSecret('OffersPrDatabaseSecret', 'offers-Pr-database-secret');
+    }
   }
 
   /**
@@ -47,7 +49,7 @@ export class SecretManager implements ISecretManager {
    * @return {ISecret} The dev database secret
    */
   get databaseSecret(): ISecret {
-    return this._databaseSecret;
+    return this._databaseSecret!;
   }
 
   /**

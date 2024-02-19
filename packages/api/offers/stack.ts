@@ -12,10 +12,10 @@ import { Tags } from './src/constructs/tags';
 import { AppsyncCache } from './src/constructs/appsyncCache';
 import { Shared } from '../../../stacks/stack';
 import { OffersApiGateway } from './src/constructs/offersApiGateway';
-import { Database } from './src/constructs/database';
 import { SecurityGroupManager } from './src/constructs/security-group-manager';
 import { SecretManager } from './src/constructs/secret-manager';
 import { EC2Manager } from './src/constructs/ec2-manager';
+import { DatabaseAdapter } from './src/database/adapter';
 
 export function Offers({ stack, app }: StackContext) {
   new Tags(stack);
@@ -24,15 +24,35 @@ export function Offers({ stack, app }: StackContext) {
   const secretsManger: SecretManager = new SecretManager(stack);
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
   const ec2Manager: EC2Manager = new EC2Manager(stack, vpc, securityGroupManager);
-  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, cognito.userPoolId);
-  const database: Database = new Database(stack, vpc, secretsManger, securityGroupManager, ec2Manager);
+  const databaseAdapter: DatabaseAdapter = new DatabaseAdapter(
+    stack,
+    vpc,
+    secretsManger,
+    securityGroupManager,
+    ec2Manager,
+  );
+  const offersApiGateway: OffersApiGateway = new OffersApiGateway(
+    stack,
+    cognito.userPoolId,
+    vpc,
+    databaseAdapter.config,
+  );
+
+  /**
+   * Offers Appsync API
+   *
+   * Need to be removed once the new Apigateway API is ready to support the Offers API functionality
+   */
   const offersApi: OffersApi = new OffersApi(
     stack,
     cognito.cdk.userPool,
     secretsManger,
     './packages/api/offers/schema.graphql',
   );
+
+  // Need to be removed once the Appsync API is removed
   new AppsyncCache(stack, stack.stage, offersApi.api);
+
   const queues = new Queues(stack);
   const tables = new Tables(stack);
   const buckets = new Buckets(stack, stack.stage, queues);

@@ -3,6 +3,9 @@
   "version": "1.21.0",
   "type": "module",
   "scripts": {
+    "pre:dev": "npm run db:up",
+    "db:up": "dotenv -e ../../../.env -- docker compose up -d",
+    "db:down": "dotenv -e ../../../.env -- docker compose down",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc -noEmit"
   },

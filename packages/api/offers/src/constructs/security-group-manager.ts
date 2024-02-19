@@ -1,6 +1,6 @@
 import { Stack } from 'sst/constructs';
 import { IVpc, Peer, Port, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
-import { DATABASE_PROPS } from '../utils/global-constants';
+import { DATABASE_PROPS, ENVIRONMENTS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
 import { isDev } from '../../../core/src/utils/checkEnvironment';
 
 /**
@@ -9,7 +9,7 @@ import { isDev } from '../../../core/src/utils/checkEnvironment';
 export interface ISecurityGroupManager {
   get auroraServerlessV2SecurityGroup(): SecurityGroup | undefined;
   get bastionHostSecurityGroup(): SecurityGroup | undefined;
-  get developmentDatabaseSecurityGroup(): SecurityGroup | undefined;
+  get prDatabaseSecurityGroup(): SecurityGroup | undefined;
   get lambdaToRdsProxySecurityGroup(): SecurityGroup | undefined;
 }
 
@@ -21,19 +21,19 @@ export interface ISecurityGroupManager {
 export class SecurityGroupManager implements ISecurityGroupManager {
   private readonly _auroraServerlessV2SG: SecurityGroup | undefined;
   private readonly _bastionHostSG: SecurityGroup | undefined;
-  private readonly _developmentDatabaseSG: SecurityGroup | undefined;
+  private readonly _prDatabaseSG: SecurityGroup | undefined;
   private readonly _lambdaToRdsProxySG: SecurityGroup | undefined;
 
   /**
    * The constructor is private to prevent direct construction calls with the `new` operator.
    */
   constructor(private stack: Stack, private vpc: IVpc) {
-    if (isDev(this.stack.stage)) {
-      this._developmentDatabaseSG = this.createDevelopmentDatabaseSecurityGroup();
-    } else {
+    if ([ENVIRONMENTS.PRODUCTION.valueOf(), ENVIRONMENTS.STAGING.valueOf()].includes(this.stack.stage)) {
       this._lambdaToRdsProxySG = this.createLambdaToRdsProxySecurityGroup();
       this._auroraServerlessV2SG = this.createAuroraServerlessV2SecurityGroup();
       this._bastionHostSG = this.createBastionHostSecurityGroup();
+    } else if (EPHEMERAL_PR_REGEX.test(this.stack.stage)) {
+      this._prDatabaseSG = this.createPrDatabaseSecurityGroup();
     }
   }
 
@@ -54,11 +54,11 @@ export class SecurityGroupManager implements ISecurityGroupManager {
   }
 
   /**
-   * Get the development database security group.
-   * @return {SecurityGroup} the development database security group
+   * Get the PR database security group.
+   * @return {SecurityGroup} the PR database security group
    */
-  get developmentDatabaseSecurityGroup(): SecurityGroup | undefined {
-    return this._developmentDatabaseSG;
+  get prDatabaseSecurityGroup(): SecurityGroup | undefined {
+    return this._prDatabaseSG;
   }
 
   /**
@@ -86,12 +86,11 @@ export class SecurityGroupManager implements ISecurityGroupManager {
   }
 
   /**
-   * Creates a development database security group that allows MySQL access from any
-   * IPv4 or IPv6 address, facilitating local development.
-   * @return {SecurityGroup} the development database security group
+   * Creates a PR database security group that allows MySQL access from any IPv4 or IPv6 address.
+   * @return {SecurityGroup} the PR database security group
    */
-  private createDevelopmentDatabaseSecurityGroup(): SecurityGroup {
-    const sg: SecurityGroup = this.builder('DevelopmentDatabaseSG', 'Allow MySQL access from local machine');
+  private createPrDatabaseSecurityGroup(): SecurityGroup {
+    const sg: SecurityGroup = this.builder('PrDatabaseSG', 'Allow MySQL access from local machine');
     sg.addIngressRule(Peer.anyIpv4(), Port.tcp(DATABASE_PROPS.PORT.valueOf()), 'Allow MySQL Port 3306 from Any IPv4');
     sg.addIngressRule(Peer.anyIpv6(), Port.tcp(DATABASE_PROPS.PORT.valueOf()), 'Allow MySQL Port 3306 from Any IPv6');
     return sg;

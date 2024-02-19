@@ -3,11 +3,14 @@ import { z } from 'zod';
 export const BLC_UK = 'blc-uk';
 export const BLC_AUS = 'blc-aus';
 export const DDS_UK = 'dds-uk';
+export const EPHEMERAL_PR_REGEX = /^pr-\d+-blc-mono$/;
 
 export const enum ENVIRONMENTS {
-  DEVELOP = 'dev',
+  DEVELOPMENT = 'dev',
   STAGING = 'staging',
   PRODUCTION = 'production',
+  EPHEMERAL = 'pr-',
+  LOCAL = 'local',
 }
 
 export const enum APP_MODE {

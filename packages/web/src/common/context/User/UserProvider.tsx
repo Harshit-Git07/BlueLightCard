@@ -58,7 +58,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           },
         })
         .then((response) => {
-          userData = response.data.data as User;
+          userData = mapUser(response.data.data);
           setUser(userData);
           updateDislikes(userData);
         })
@@ -86,6 +86,20 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       {children}
     </UserContext.Provider>
   );
+};
+
+const mapUser = (fetchUserResponse: any): User => {
+  const user: User = {
+    profile: {
+      dob: fetchUserResponse.profile.dob,
+      organisation: fetchUserResponse.profile.organisation,
+    },
+    companies_follows: fetchUserResponse.companies_follows,
+    uuid: fetchUserResponse.uuid,
+    legacyId: fetchUserResponse.legacyId,
+  };
+
+  return user;
 };
 
 export default UserProvider;

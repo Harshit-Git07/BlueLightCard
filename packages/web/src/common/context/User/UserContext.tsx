@@ -8,8 +8,8 @@ type followType = {
 export type User = {
   profile: {
     dob: string;
+    organisation: string;
   };
-  organisation: string;
   companies_follows: followType[];
   uuid: string;
   legacyId: string;

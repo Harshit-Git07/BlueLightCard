@@ -87,7 +87,7 @@ const Search: NextPage = () => {
         authCtx.authState.idToken ?? '',
         // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
         userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false,
-        userCtx.user?.organisation ?? ''
+        userCtx.user?.profile.organisation ?? ''
       );
 
       if (searchResults.results) {

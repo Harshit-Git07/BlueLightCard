@@ -87,7 +87,7 @@ const HomePage: NextPage<any> = () => {
 
       try {
         const homePageData = await makeHomePageQueryWithDislikeRestrictions(
-          homePageQuery(BRAND, userCtx.isAgeGated ?? true, user?.organisation ?? 'NHS'),
+          homePageQuery(BRAND, userCtx.isAgeGated ?? true, user?.profile.organisation ?? 'NHS'),
           userCtx.dislikes
         );
         homePage = homePageData.data;

@@ -36,61 +36,67 @@ export const generateSecretHash = async (username: string, clientId: string, cli
 export const handler = async (event: any, context: any) => {
     logger.debug("event", {event})
     if (event.triggerSource == "UserMigration_Authentication") {
-        //check on an old user pool
-        if (oldClientId && oldUserPoolId && oldClientSecret) {
-          logger.debug('trying to look old user pool');
-          const cognitoISP = new CognitoIdentityServiceProvider();
-          try {
-            const cognitoResponse = await cognitoISP.adminInitiateAuth({
-              AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
-              AuthParameters: {
-                PASSWORD: event.request.password,
-                USERNAME: event.userName,
-                SECRET_HASH: await generateSecretHash(event.userName, oldClientId, oldClientSecret)
-              },
-              UserPoolId: oldUserPoolId,
-              ClientId: oldClientId
-            }).promise();
-            if (cognitoResponse) {
-              const accessToken= cognitoResponse.AuthenticationResult?.AccessToken
-              if (accessToken) {
-                try {
-                  const user = await cognitoISP.getUser({
-                    AccessToken: accessToken
-                  }).promise();
-                  if (user) {
-                    const attributesObject = user.UserAttributes.reduce((acc, attr) => {
-                      if (attr.Name !== 'sub') { // Continue to skip 'sub' attribute
-                        // @ts-ignore
-                        acc[attr.Name] = attr.Value; // Keep the attribute name unchanged, including 'custom:' prefix
-                      }
-                      return acc;
-                    }, {});
-                    event.response.userAttributes = attributesObject;
-                    event.response.finalUserStatus = "CONFIRMED";
-                    event.response.messageAction = "SUPPRESS";
+        // Authenticate the user with the old user pool
+        let user = await authenticateUserOldPool(event.userName, event.request.password);
 
-                    logger.debug('event returned', event);
-                    return event;
-                  }
-                } catch (e: any) {
-                  logger.debug("user not found on old cognito: ",  {e} );
-                }
-              }
-            }
-          } catch (err) {
-            logger.debug('user not authenticated on old cognito', {err} )
-          }
+        if (!user) {
+          // Authenticate the user with your existing user directory service
+          user = await authenticateUser(event.userName, event.request.password);
         }
-        // Authenticate the user with your existing user directory service
-        const user = await authenticateUser(event.userName, event.request.password);
+
         if (user) {
           event.response.userAttributes = user;
           event.response.finalUserStatus = "CONFIRMED";
           event.response.messageAction = "SUPPRESS";
         }
     }
+
     return event;
+}
+
+const authenticateUserOldPool = async (username: string, password: string) => {
+    //check on an old user pool
+    if (oldClientId && oldUserPoolId && oldClientSecret) {
+      logger.debug('trying to look old user pool');
+      const cognitoISP = new CognitoIdentityServiceProvider();
+      try {
+        const cognitoResponse = await cognitoISP.adminInitiateAuth({
+          AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
+          AuthParameters: {
+            PASSWORD: password,
+            USERNAME: username,
+            SECRET_HASH: await generateSecretHash(username, oldClientId, oldClientSecret)
+          },
+          UserPoolId: oldUserPoolId,
+          ClientId: oldClientId
+        }).promise();
+        if (cognitoResponse) {
+          const accessToken= cognitoResponse.AuthenticationResult?.AccessToken
+
+          if (accessToken) {
+            try {
+              const user = await cognitoISP.getUser({ AccessToken: accessToken }).promise();
+
+              if (user) {
+                const attributesObject = user.UserAttributes.reduce((acc, attr) => {
+                  if (attr.Name !== 'sub') { // Continue to skip 'sub' attribute
+                    // @ts-ignore
+                    acc[attr.Name] = attr.Value; // Keep the attribute name unchanged, including 'custom:' prefix
+                  }
+                  return acc;
+                }, {});
+                
+                return attributesObject;
+              }
+            } catch (e: any) {
+              logger.debug("user not found on old cognito: ",  {e} );
+            }
+          }
+        }
+      } catch (err) {
+        logger.debug('user not authenticated on old cognito', {err} )
+      }
+    }
 }
 
 const authenticateUser = async (username: string, password: string) => {

@@ -1,5 +1,4 @@
-import {ApiGatewayV1Api, Cognito, Cron, Function, Queue, StackContext, Table, use} from 'sst/constructs';
-import {AdvancedSecurityMode, CfnUserPoolClient, Mfa, OAuthScope, StringAttribute} from 'aws-cdk-lib/aws-cognito';
+import {ApiGatewayV1Api, Function, Queue, StackContext, Table, use} from 'sst/constructs';
 import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
 import {Shared} from '../../../stacks/stack';
 import {passwordResetRule} from './src/eventRules/passwordResetRule';
@@ -18,26 +17,16 @@ import {AddEcFormOutputDataRoute} from './src/routes/addEcFormOutputDataRoute';
 import {Tables} from './src/eligibility/constructs/tables';
 import {Buckets} from './src/eligibility/constructs/buckets';
 import {Lambda} from './src/common/lambda';
-import {FilterPattern, ILogGroup} from "aws-cdk-lib/aws-logs";
-import {LambdaDestination} from "aws-cdk-lib/aws-logs-destinations";
 import {userGdprRule} from './src/eventRules/userGdprRule';
 import {Rule, Schedule} from 'aws-cdk-lib/aws-events';
 import {LambdaFunction} from 'aws-cdk-lib/aws-events-targets';
-import {CfnWebACLAssociation} from 'aws-cdk-lib/aws-wafv2';
-import {Duration} from "aws-cdk-lib";
 import getAllowedDomains from './src/utils/getAllowedDomains';
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
-import path from 'path';
-import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
-import { BRANDS } from '@blc-mono/core/types/brands.enum';
+import { STAGES } from '@blc-mono/core/types/stages.enum';
+import { REGIONS } from '@blc-mono/core/types/regions.enum';
+import { createNewCognito, createNewCognitoDDS, createOldCognito, createOldCognitoDDS } from './stackHelper'
 
 export function Identity({stack}: StackContext) {
-  const EU_REGION = 'eu-west-2';
-  const AU_REGION = 'ap-southeast-2'
-
-  const STAGING = 'staging';
-  const PROD = 'production';
-
   const {certificateArn} = use(Shared);
   const documentationVersion = '1.0.0';
 
@@ -51,7 +40,7 @@ export function Identity({stack}: StackContext) {
   const tables = new Tables(stack)
   const buckets = new Buckets(stack, stack.stage)
 
-  const stageSecret = stack.stage === PROD || stack.stage === STAGING ? stack.stage : STAGING;
+  const stageSecret = stack.stage === STAGES.PROD || stack.stage === STAGES.STAGING ? stack.stage : STAGES.STAGING;
   const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
 
   //db - identityTable
@@ -74,272 +63,19 @@ export function Identity({stack}: StackContext) {
     primaryIndex: {partitionKey: 'legacy_id', sortKey: 'uuid'},
   });
 
+  const {webACL} = use(Shared);
   const {bus} = use(Shared);
   //add dead letter queue
   const dlq = new Queue(stack, 'DLQ');
 
-
-  //import webACL
-  const {webACL} = use(Shared);
-  //auth
-  const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
-
-  const auSuffix = stack.region === AU_REGION ? '-au' : '';
-
-  const getAuthCustomDomainName = (brandName: BRANDS = BRANDS.BLC_UK) => {
-    const domainPrefix = brandName === BRANDS.DDS_UK ? 'auth-dds' : 'auth';
-
-    const authCustomDomainNameLookUp: Record<string, string> = {
-      [EU_REGION]: `${domainPrefix}.blcshine.io`,
-      [AU_REGION]: `${domainPrefix}${auSuffix}.blcshine.io`
-    }
-
-    const customDomainName = stack.stage === PROD ? authCustomDomainNameLookUp[stack.region] : `${stack.stage}-${authCustomDomainNameLookUp[stack.region]}`;
-
-    return customDomainName;
-  }
-
-  const blcShineCertificateArn = appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
-
-  const cognito = new Cognito(stack, 'cognito', {
-    login: ['email'],
-    triggers: {
-      userMigration: {
-        handler: 'packages/api/identity/src/cognito/migration.handler',
-        environment: {
-          SERVICE: 'identity',
-          API_URL: appSecret.secretValueFromJson('blc_url').toString(),
-          API_AUTH: appSecret.secretValueFromJson('blc_auth').toString(),
-          EVENT_BUS: bus.eventBusName,
-          EVENT_SOURCE: 'user.signin.migrated',
-          DLQ_URL: dlq.queueUrl,
-          REGION: region
-        },
-        permissions: [bus]
-      },
-      postAuthentication: {
-        handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
-        environment: {
-          SERVICE: 'identity',
-        }
-      }
-    },
-    cdk: {
-      userPool: {
-        mfa: Mfa.OPTIONAL,
-        mfaSecondFactor: {
-          sms: true,
-          otp: true,
-        },
-        standardAttributes: {
-          email: {required: true, mutable: true},
-          phoneNumber: {required: true, mutable: true},
-        },
-        customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
-        },
-        selfSignUpEnabled: false,
-      },
-    },
-  });
-  const mobileClient = cognito.cdk.userPool.addClient('membersClient', {
-    authFlows: {
-      userPassword: true,
-    },
-    generateSecret: true,
-    refreshTokenValidity: Duration.hours(1),
-    oAuth: {
-      flows: {
-        authorizationCodeGrant: true,
-      },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
-      callbackUrls: [appSecret.secretValueFromJson('blc_callback_app').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('blc_logout_app').toString()]
-    },
-  });
-  const webClient = cognito.cdk.userPool.addClient('webClient', {
-    authFlows: {
-      userPassword: true,
-    },
-    generateSecret: true,
-    oAuth: {
-      flows: {
-        authorizationCodeGrant: true,
-      },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
-      callbackUrls: [appSecret.secretValueFromJson('blc_callback_web').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()]
-    },
-  });
-
-  if (stack.stage === PROD || stack.stage === STAGING) {
-    cognito.cdk.userPool.addDomain('BLCCognitoCustomDomain', {
-      customDomain: {
-        domainName: getAuthCustomDomainName(),
-        certificate: Certificate.fromCertificateArn(stack, 'BLCAuthDomainCertificate', blcShineCertificateArn),
-      }
-    });
-  } else {
-    const blcDomainPrefix = `${stack.stage}-blc${auSuffix}`;
-    
-    cognito.cdk.userPool.addDomain('BLCCognitoDomain', {
-      cognitoDomain: {
-        domainPrefix: blcDomainPrefix,
-      }
-    });
-  }
-
-  const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
-  const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
-
-  new CognitoHostedUICustomization(
-    stack,
-    stack.region === AU_REGION ? BRANDS.BLC_AU : BRANDS.BLC_UK,
-    cognito.cdk.userPool,
-    [webClient, mobileClient],
-    blcHostedUiCSSPath,
-    blcLogoPath,
-  ); 
-
-  // Associate WAF WebACL with cognito
-  new CfnWebACLAssociation(stack, 'BlcWebAclAssociation', {
-    resourceArn: cognito.cdk.userPool.userPoolArn,
-    webAclArn: webACL.attrArn
-  });
-
-  //auth - DDS
-  const cognito_dds = new Cognito(stack, 'cognito_dds', {
-    login: ['email'],
-    triggers: {
-      userMigration: {
-        handler: 'packages/api/identity/src/cognito/migration.handler',
-        environment: {
-          SERVICE: 'identity',
-          API_URL: appSecret.secretValueFromJson('dds_url').toString(),
-          API_AUTH: appSecret.secretValueFromJson('dds_auth').toString(),
-          EVENT_BUS: bus.eventBusName,
-          EVENT_SOURCE: 'user.signin.migrated',
-          DLQ_URL: dlq.queueUrl,
-          REGION: region
-        },
-        permissions: [bus]
-      },
-      postAuthentication: {
-        handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
-        environment: {
-          SERVICE: 'identity',
-        },
-      }
-    },
-    cdk: {
-      userPool: {
-        mfa: Mfa.OPTIONAL,
-        mfaSecondFactor: {
-          sms: true,
-          otp: true,
-        },
-        standardAttributes: {
-          email: {required: true, mutable: true},
-          phoneNumber: {required: true, mutable: true},
-        },
-        customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
-        },
-        selfSignUpEnabled: false,
-      },
-    },
-  });
-
-  if (stack.stage === PROD || stack.stage === STAGING) {
-    cognito_dds.cdk.userPool.addDomain('DDSCognitoCustomDomain', {
-      customDomain: {
-        domainName: getAuthCustomDomainName(BRANDS.DDS_UK),
-        certificate: Certificate.fromCertificateArn(stack, 'DDSAuthDomainCertificate', blcShineCertificateArn),
-      }
-    });
-  } else {
-    const ddsDomainPrefix = `${stack.stage}-dds${auSuffix}`;
-    
-    cognito_dds.cdk.userPool.addDomain('DDSCognitoDomain', {
-      cognitoDomain: {
-        domainPrefix: ddsDomainPrefix,
-      }
-    });
-  }
-
-  const mobileClientDds = cognito_dds.cdk.userPool.addClient('membersClient', {
-    authFlows: {
-      userPassword: true,
-    },
-    generateSecret: true,
-    refreshTokenValidity: Duration.hours(1),
-    oAuth: {
-      flows: {
-        authorizationCodeGrant: true,
-      },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
-      callbackUrls: [appSecret.secretValueFromJson('dds_callback_app').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('dds_logout_app').toString()]
-    },
-  });
-  const webClientDds = cognito_dds.cdk.userPool.addClient('webClient', {
-    authFlows: {
-      userPassword: true,
-    },
-    generateSecret: true,
-    oAuth: {
-      flows: {
-        authorizationCodeGrant: true,
-      },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
-      callbackUrls: [appSecret.secretValueFromJson('dds_callback_web').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()]
-    },
-  });
-
-  const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
-  const ddsLogoPath = path.join(cognitoHostedUiAssets, 'dds-logo.png');
-
-  new CognitoHostedUICustomization(
-    stack,
-    BRANDS.DDS_UK,
-    cognito_dds.cdk.userPool,
-    [webClientDds, mobileClientDds],
-    ddsHostedUiCSSPath,
-    ddsLogoPath,
-  );  
-
-  // Associate WAF WebACL with cognito
-  new CfnWebACLAssociation(stack, 'DdsWebAclAssociation', {
-    resourceArn: cognito_dds.cdk.userPool.userPoolArn,
-    webAclArn: webACL.attrArn
-  });
+  const {oldCognito, oldWebClient} = createOldCognito(stack, appSecret, bus, dlq, region, webACL);
+  const {oldCognitoDds, oldWebClientDds} = createOldCognitoDDS(stack, appSecret, bus, dlq, region, webACL);
+  const cognito = createNewCognito(stack, appSecret, bus, dlq, region, webACL, oldCognito, oldWebClient);
+  const cognito_dds = createNewCognitoDDS(stack, appSecret, bus, dlq, region, webACL, oldCognitoDds, oldWebClientDds);
 
   const customDomainNameLookUp: Record<string, string> = {
-    [EU_REGION]: 'identity.blcshine.io',
-    [AU_REGION]: 'identity-au.blcshine.io'
+    [REGIONS.EU_WEST_2]: 'identity.blcshine.io',
+    [REGIONS.AP_SOUTHEAST_2]: 'identity-au.blcshine.io'
   }
 
   //apis
@@ -378,11 +114,11 @@ export function Identity({stack}: StackContext) {
     },
     cdk: {
       restApi: {
-        ...([PROD, STAGING].includes(stack.stage) &&
+        ...([STAGES.PROD, STAGES.STAGING].includes(stack.stage as STAGES) &&
           certificateArn && {
             domainName: {
               domainName:
-                stack.stage === PROD
+                stack.stage === STAGES.PROD
                   ? customDomainNameLookUp[stack.region]
                   : `${stack.stage}-${customDomainNameLookUp[stack.region]}`,
               certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
@@ -407,41 +143,6 @@ export function Identity({stack}: StackContext) {
     Table: identityTable.tableName,
     IdentityApiEndpoint: identityApi.url,
   });
-
-  //we audit dwh only in production
-  if (stack.stage === PROD) {
-    //audit log
-    const blcAuditLogFunction = new Function(stack, 'blcAuditLogSignIn', {
-      handler: 'packages/api/identity/src/audit/audit.handler',
-      environment: {
-        SERVICE: 'identity',
-        DATA_STREAM: 'dwh-blc-production-login',
-        WEB_CLIENT_ID: webClient.userPoolClientId,
-        MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
-      },
-      permissions: ['firehose:PutRecord']
-    });
-    const ddsAuditLogFunction = new Function(stack, 'ddsAuditLogSignIn', {
-      handler: 'packages/api/identity/src/audit/audit.handler',
-      environment: {
-        SERVICE: 'identity',
-        DATA_STREAM: 'dwh-dds-production-login',
-        WEB_CLIENT_ID: webClientDds.userPoolClientId,
-        MOBILE_CLIENT_ID: mobileClientDds.userPoolClientId,
-      },
-      permissions: ['firehose:PutRecord']
-    });
-    const postAuthenticationLogGroup: ILogGroup | undefined = cognito.getFunction('postAuthentication')?.logGroup;
-    const postAuthenticationLogGroupDds: ILogGroup | undefined = cognito_dds.getFunction('postAuthentication')?.logGroup;
-    postAuthenticationLogGroup?.addSubscriptionFilter('auditLogSignIn', {
-      destination: new LambdaDestination(blcAuditLogFunction),
-      filterPattern: FilterPattern.booleanValue('$.audit', true),
-    });
-    postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignIn', {
-      destination: new LambdaDestination(ddsAuditLogFunction),
-      filterPattern: FilterPattern.booleanValue('$.audit', true),
-    });
-  }
 
   //API Key and Usage Plan
   const apikey = identityApi.cdk.restApi.addApiKey("identity-api-key");
@@ -488,7 +189,6 @@ export function Identity({stack}: StackContext) {
   bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
-
 
   return {
     identityApi,

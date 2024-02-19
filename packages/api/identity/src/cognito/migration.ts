@@ -1,14 +1,19 @@
 import { Logger } from '@aws-lambda-powertools/logger'
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge'
 import { v4 } from 'uuid';
-import { SQS } from 'aws-sdk';
+import { CognitoIdentityServiceProvider, SQS } from 'aws-sdk'
 import axios from 'axios';
 import parsePhoneNumber from 'libphonenumber-js';
 import { transformDateToFormatYYYYMMDD } from './../../../core/src/utils/date';
 import { setDate } from './../../../core/src/utils/setDate';
+import * as process from 'process'
+import { createHmac } from 'crypto';
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
+const oldClientId = process.env.OLD_CLIENT_ID
+const oldClientSecret = process.env.OLD_CLIENT_SECRET
+const oldUserPoolId = process.env.OLD_USER_POOL_ID
 const apiUrl = process.env.API_URL
 const apiAuth = process.env.API_AUTH
 const logger = new Logger({ serviceName: `${service}-migration` });
@@ -22,19 +27,71 @@ async function sendToDLQ(event: any) {
     await sqs.sendMessage(params).promise();
 }
 
+export const generateSecretHash = async (username: string, clientId: string, clientSecret: string) => {
+  return createHmac('SHA256', clientSecret)
+    .update(username + clientId)
+    .digest('base64');
+}
+
 export const handler = async (event: any, context: any) => {
     logger.debug("event", {event})
     if (event.triggerSource == "UserMigration_Authentication") {
+        //check on an old user pool
+        if (oldClientId && oldUserPoolId && oldClientSecret) {
+          logger.debug('trying to look old user pool');
+          const cognitoISP = new CognitoIdentityServiceProvider();
+          try {
+            const cognitoResponse = await cognitoISP.adminInitiateAuth({
+              AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
+              AuthParameters: {
+                PASSWORD: event.request.password,
+                USERNAME: event.userName,
+                SECRET_HASH: await generateSecretHash(event.userName, oldClientId, oldClientSecret)
+              },
+              UserPoolId: oldUserPoolId,
+              ClientId: oldClientId
+            }).promise();
+            if (cognitoResponse) {
+              const accessToken= cognitoResponse.AuthenticationResult?.AccessToken
+              if (accessToken) {
+                try {
+                  const user = await cognitoISP.getUser({
+                    AccessToken: accessToken
+                  }).promise();
+                  if (user) {
+                    const attributesObject = user.UserAttributes.reduce((acc, attr) => {
+                      if (attr.Name !== 'sub') { // Continue to skip 'sub' attribute
+                        // @ts-ignore
+                        acc[attr.Name] = attr.Value; // Keep the attribute name unchanged, including 'custom:' prefix
+                      }
+                      return acc;
+                    }, {});
+                    event.response.userAttributes = attributesObject;
+                    event.response.finalUserStatus = "CONFIRMED";
+                    event.response.messageAction = "SUPPRESS";
+
+                    logger.debug('event returned', event);
+                    return event;
+                  }
+                } catch (e: any) {
+                  logger.debug("user not found on old cognito: ",  {e} );
+                }
+              }
+            }
+          } catch (err) {
+            logger.debug('user not authenticated on old cognito', {err} )
+          }
+        }
         // Authenticate the user with your existing user directory service
         const user = await authenticateUser(event.userName, event.request.password);
         if (user) {
-            event.response.userAttributes = user;
-            event.response.finalUserStatus = "CONFIRMED";
-            event.response.messageAction = "SUPPRESS";
+          event.response.userAttributes = user;
+          event.response.finalUserStatus = "CONFIRMED";
+          event.response.messageAction = "SUPPRESS";
         }
     }
     return event;
-};
+}
 
 const authenticateUser = async (username: string, password: string) => {
     try {
@@ -48,7 +105,10 @@ const authenticateUser = async (username: string, password: string) => {
             }
         })
         logger.debug("old login response", { response })
-        if (response && response.data && response.data.success) {
+        if (response && response.data) {
+            if (!response.data.success) {
+              throw new Error(response.data.message)
+            }
             //add to event bus
             await addUserSignInMigratedEvent(response.data.data);
             return {
@@ -60,8 +120,9 @@ const authenticateUser = async (username: string, password: string) => {
                 "custom:blc_old_uuid": response.data.data.uuid,
             }
         }
-    } catch (error) {
+    } catch (error: any) {
         logger.error('error during old login', { error, username })
+        throw new Error(error.message)
     }
 }
 
@@ -137,5 +198,5 @@ const addUserSignInMigratedEvent = async (data: any) => {
         await sendToDLQ(data);
         throw new Error(`Error adding user sign in migrated event${data} : ${err.message}.`)
     }
-    
+
 }

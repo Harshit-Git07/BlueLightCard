@@ -33,7 +33,7 @@ export default {
       .stack(Web, { id: 'web' })
       .stack(CMS, { id: 'cms' })
       .stack(MemberServicesHub, { id: 'member-services-hub' });
-    
+
     await Promise.all([
       // Add async stacks here https://docs.sst.dev/constructs/Stack#async-stacks
       app.stack(Redemptions, { id: 'redemptions' })

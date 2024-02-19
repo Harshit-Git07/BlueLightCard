@@ -9,7 +9,6 @@ export function createVaultRule(stack: Stack, database: IDatabase): EventBusRule
   const vaultHandler = new SSTFunction(stack, 'vaultHandler', {
     database,
     handler: 'packages/api/redemptions/src/eventBridge/handlers/vault/vaultHandler.handler',
-    permissions: [],
     retryAttempts: 2,
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,

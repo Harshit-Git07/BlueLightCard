@@ -10,7 +10,7 @@ import { RedemptionsConfigResolver } from './src/config/config';
 import { EnvironmentKeys } from './src/constants/environment';
 import { RedemptionsDatabase } from './src/database/database';
 import { EventBridge } from './src/eventBridge/eventBridge';
-import { createLinkRule, createOfferRule, createPromotionRule, createVaultRule } from './src/eventBridge/rules';
+import { createLinkRule, createOfferRule, createPromotionUpdatedRule, createVaultRule } from './src/eventBridge/rules';
 import { PostAffiliateModel } from './src/models/postAffiliate';
 import { PostRedeemModel } from './src/models/postRedeem';
 import { PostSpotifyModel } from './src/models/postSpotify';
@@ -74,7 +74,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   new EventBridge(stack, {
     linkRule: createLinkRule(stack),
     vaultRule: createVaultRule(stack, database),
-    promotionRule: createPromotionRule(stack),
+    promotionUpdatedRule: createPromotionUpdatedRule(stack, database),
     offerRule: createOfferRule(stack),
   });
 

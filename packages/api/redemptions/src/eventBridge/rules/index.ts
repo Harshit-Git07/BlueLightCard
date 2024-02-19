@@ -1,9 +1,9 @@
 import { createLinkRule } from './linkRule';
 import { createOfferRule } from './offerRule';
-import { createPromotionRule } from './promotinRule';
+import { createPromotionUpdatedRule } from './promotinUpdatedRule';
 import { createVaultRule } from './vaultRule';
 
 export { createLinkRule };
-export { createPromotionRule };
+export { createPromotionUpdatedRule };
 export { createVaultRule };
 export { createOfferRule };

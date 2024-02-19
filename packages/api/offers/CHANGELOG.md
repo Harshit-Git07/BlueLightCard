@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.21.0...bluelightcard/offers-v1.22.0) (2024-02-19)
+
+
+### Features
+
+* OfferSheet control interface ([#850](https://github.com/bluelightcard/BlueLightCard-2.0/issues/850)) ([f014306](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f014306a9e44df1f110f7fa0a936fb79e27e76b4))
+* TO-458 offers API ([#849](https://github.com/bluelightcard/BlueLightCard-2.0/issues/849)) ([8e60fac](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8e60fac74456392645b76507ab184dd380e45755))
+* TO-493 Add docker and orm to offer stack ([#844](https://github.com/bluelightcard/BlueLightCard-2.0/issues/844)) ([48baf77](https://github.com/bluelightcard/BlueLightCard-2.0/commit/48baf779344a1c2362840ee4aecdee4c7ddbb58f))
+
+
+### Bug Fixes
+
+* [TR-301]: Reset temporary changes ([#871](https://github.com/bluelightcard/BlueLightCard-2.0/issues/871)) ([ae2af61](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae2af61576a5e29e02ce05062028c392d86b3c70))
+
 ## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.20.1...bluelightcard/offers-v1.21.0) (2024-02-05)
 
 

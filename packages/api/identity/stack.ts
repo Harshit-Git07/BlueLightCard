@@ -32,23 +32,26 @@ import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICu
 import { BRANDS } from '@blc-mono/core/types/brands.enum';
 
 export function Identity({stack}: StackContext) {
+  const EU_REGION = 'eu-west-2';
+  const AU_REGION = 'ap-southeast-2'
+
+  const STAGING = 'staging';
+  const PROD = 'production';
+
   const {certificateArn} = use(Shared);
   const documentationVersion = '1.0.0';
+
   //set tag service identity to all resources
   stack.tags.setTag('service', 'identity');
   stack.tags.setTag('map-migrated', 'd-server-017zxazumgiycz');
 
   //Region
   const region = stack.region;
-  let regionEnv = 'eu-west-2';
-  if (region !== undefined || region !== null) {
-    regionEnv = region;
-  }
 
   const tables = new Tables(stack)
   const buckets = new Buckets(stack, stack.stage)
 
-  const stageSecret = stack.stage === 'production' || stack.stage === 'staging' ? stack.stage : 'staging';
+  const stageSecret = stack.stage === PROD || stack.stage === STAGING ? stack.stage : STAGING;
   const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
 
   //db - identityTable
@@ -80,6 +83,23 @@ export function Identity({stack}: StackContext) {
   const {webACL} = use(Shared);
   //auth
   const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
+
+  const auSuffix = stack.region === AU_REGION ? '-au' : '';
+
+  const getAuthCustomDomainName = (brandName: BRANDS = BRANDS.BLC_UK) => {
+    const domainPrefix = brandName === BRANDS.DDS_UK ? 'auth-dds' : 'auth';
+
+    const authCustomDomainNameLookUp: Record<string, string> = {
+      [EU_REGION]: `${domainPrefix}.blcshine.io`,
+      [AU_REGION]: `${domainPrefix}${auSuffix}.blcshine.io`
+    }
+
+    const customDomainName = stack.stage === PROD ? authCustomDomainNameLookUp[stack.region] : `${stack.stage}-${authCustomDomainNameLookUp[stack.region]}`;
+
+    return customDomainName;
+  }
+
+  const blcShineCertificateArn = appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
 
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
@@ -162,30 +182,30 @@ export function Identity({stack}: StackContext) {
       logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()]
     },
   });
-  // if (certificateArn) {
-  //   //custom domain
-  //   const domainName = stack.stage === 'prod' ? 'auth.blcshine.io' : `auth-${stack.stage}.blcshine.io`;
-  //   cognito.cdk.userPool.addDomain('domain', {
-  //     customDomain: {
-  //       domainName: domainName,
-  //       certificate: Certificate.fromCertificateArn(stack, 'BLCAuthDomainCertificate', certificateArn),
-  //     }
-  //   });
-  // } else {
-    //custom domain
-    cognito.cdk.userPool.addDomain('cognitodomain', {
-      cognitoDomain: {
-        domainPrefix: `blc-${stack.stage}`,
+
+  if (stack.stage === PROD || stack.stage === STAGING) {
+    cognito.cdk.userPool.addDomain('BLCCognitoCustomDomain', {
+      customDomain: {
+        domainName: getAuthCustomDomainName(),
+        certificate: Certificate.fromCertificateArn(stack, 'BLCAuthDomainCertificate', blcShineCertificateArn),
       }
     });
-  // }
+  } else {
+    const blcDomainPrefix = `${stack.stage}-blc${auSuffix}`;
+    
+    cognito.cdk.userPool.addDomain('BLCCognitoDomain', {
+      cognitoDomain: {
+        domainPrefix: blcDomainPrefix,
+      }
+    });
+  }
 
   const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
   const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
 
   new CognitoHostedUICustomization(
     stack,
-    stack.region === 'ap-southeast-2' ? BRANDS.BLC_AU : BRANDS.BLC_UK,
+    stack.region === AU_REGION ? BRANDS.BLC_AU : BRANDS.BLC_UK,
     cognito.cdk.userPool,
     [webClient, mobileClient],
     blcHostedUiCSSPath,
@@ -241,23 +261,24 @@ export function Identity({stack}: StackContext) {
       },
     },
   });
-  // if (certificateArn) {
-  //   //custom domain
-  //   const ddsDomainName = stack.stage === 'prod' ? 'auth-dds.blcshine.io' : `auth-dds-${stack.stage}.blcshine.io`;
-  //   cognito_dds.cdk.userPool.addDomain('ddsdomain', {
-  //     customDomain: {
-  //       domainName: ddsDomainName,
-  //       certificate: Certificate.fromCertificateArn(stack, 'DDSAuthDomainCertificate', certificateArn),
-  //     }
-  //   });
-  // } else {
-    //custom domain
-    cognito_dds.cdk.userPool.addDomain('ddscognitodomain', {
-      cognitoDomain: {
-        domainPrefix: `dds-${stack.stage}`,
+
+  if (stack.stage === PROD || stack.stage === STAGING) {
+    cognito_dds.cdk.userPool.addDomain('DDSCognitoCustomDomain', {
+      customDomain: {
+        domainName: getAuthCustomDomainName(BRANDS.DDS_UK),
+        certificate: Certificate.fromCertificateArn(stack, 'DDSAuthDomainCertificate', blcShineCertificateArn),
       }
     });
-  // }
+  } else {
+    const ddsDomainPrefix = `${stack.stage}-dds${auSuffix}`;
+    
+    cognito_dds.cdk.userPool.addDomain('DDSCognitoDomain', {
+      cognitoDomain: {
+        domainPrefix: ddsDomainPrefix,
+      }
+    });
+  }
+
   const mobileClientDds = cognito_dds.cdk.userPool.addClient('membersClient', {
     authFlows: {
       userPassword: true,
@@ -317,8 +338,8 @@ export function Identity({stack}: StackContext) {
   });
 
   const customDomainNameLookUp: Record<string, string> = {
-    'eu-west-2': 'identity.blcshine.io',
-    'ap-southeast-2': 'identity-au.blcshine.io'
+    [EU_REGION]: 'identity.blcshine.io',
+    [AU_REGION]: 'identity-au.blcshine.io'
   }
 
   //apis
@@ -357,11 +378,11 @@ export function Identity({stack}: StackContext) {
     },
     cdk: {
       restApi: {
-        ...(['production', 'staging'].includes(stack.stage) &&
+        ...([PROD, STAGING].includes(stack.stage) &&
           certificateArn && {
             domainName: {
               domainName:
-                stack.stage === 'production'
+                stack.stage === PROD
                   ? customDomainNameLookUp[stack.region]
                   : `${stack.stage}-${customDomainNameLookUp[stack.region]}`,
               certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
@@ -388,7 +409,7 @@ export function Identity({stack}: StackContext) {
   });
 
   //we audit dwh only in production
-  if (stack.stage === 'production') {
+  if (stack.stage === PROD) {
     //audit log
     const blcAuditLogFunction = new Function(stack, 'blcAuditLogSignIn', {
       handler: 'packages/api/identity/src/audit/audit.handler',

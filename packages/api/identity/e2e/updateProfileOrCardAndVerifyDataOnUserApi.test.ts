@@ -248,7 +248,7 @@ describe('Send user card update event, and test user api to match data', () => {
     expect(res.status).toEqual(200);
     expect(res.data.message).toEqual('User Found');
     expect(res.data.data.uuid).not.toBeNull();
-    expect(res.data.data.cards).toHaveLength(2);
+    expect(res.data.data.cards).toHaveLength(3);
     expect(res.data.data.cards[0].cardId).toEqual(userCardId);
     if(cardExpiresDate === '0000000000000000'){
       expect(res.data.data.cards[0].expires).toEqual('0000000000000000');

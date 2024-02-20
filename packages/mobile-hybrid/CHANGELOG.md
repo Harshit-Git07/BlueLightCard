@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.5.0...bluelightcard/mobile-hybrid-v1.6.0) (2024-02-19)
+
+
+### Features
+
+* [DISCO-47] Search results page ([#860](https://github.com/bluelightcard/BlueLightCard-2.0/issues/860)) ([e5156e2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e5156e28fce64ef2ca76b112b3975a68edc94833))
+* [DISCO-88] Add feature flag for categories links on search results page ([#884](https://github.com/bluelightcard/BlueLightCard-2.0/issues/884)) ([2aa7e22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2aa7e22f92ab23d913fa2d053ed793483eb4e2f6))
+* [DISCO-89] Add Amplitude Provider & Amplitude components ([#877](https://github.com/bluelightcard/BlueLightCard-2.0/issues/877)) ([2c385c6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c385c668ea9448107512a60deed5190001ea0e3))
+
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.4.0...bluelightcard/mobile-hybrid-v1.5.0) (2024-02-12)
 
 

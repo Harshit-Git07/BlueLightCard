@@ -4,11 +4,12 @@ import { AmplitudeProps } from '@/components/Amplitude/types';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 describe('Amplitude component', () => {
   describe('Feature flag rendering value is set to `on`', () => {
     const amplitudeProps = {
-      keyName: 'feature-flag-name',
+      keyName: FeatureFlags.SEARCH_RECENT_SEARCHES,
       value: 'on',
     };
 
@@ -29,7 +30,7 @@ describe('Amplitude component', () => {
 
   describe('Feature flag rendering value is set to `off`', () => {
     const amplitudeProps = {
-      keyName: 'feature-flag-name',
+      keyName: FeatureFlags.SEARCH_RECENT_SEARCHES,
       value: 'off',
     };
 
@@ -57,7 +58,7 @@ describe('Amplitude component', () => {
     render(
       <JotaiTestProvider
         initialValues={[
-          [experimentsAndFeatureFlags, { 'feature-flag-name': featureFlagInitialValue }],
+          [experimentsAndFeatureFlags, { [amplitudeProps.keyName]: featureFlagInitialValue }],
         ]}
       >
         <Amplitude {...amplitudeProps}>

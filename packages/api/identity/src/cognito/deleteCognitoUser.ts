@@ -1,5 +1,7 @@
 import { CognitoIdentityServiceProvider, SQS } from 'aws-sdk';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DeleteCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 const service: string = process.env.SERVICE as string
 const logger = new Logger({ serviceName: `${service}-deleteUser` })
 const sqs = new SQS();
@@ -22,6 +24,8 @@ export const handler = async (event: any, context: any) => {
   const userPoolId = process.env.USER_POOL_ID || '';
   const poolId =(!/DDS/i.test(event.detail.brand)) ? userPoolId : userPoolIdDds;
   const username = event.detail.user_email;
+  const table = process.env.TABLE_NAME;
+  const region = process.env.REGION;
   try {
     try {
         await cognito.adminGetUser({
@@ -44,6 +48,22 @@ export const handler = async (event: any, context: any) => {
         Username: username
     }).promise();
     logger.info("user successfully deleted: ", { username });
+    const params = {
+      TableName: table,
+      Key: {
+        pk: username,
+        sk: poolId,
+      }
+    };
+  
+    const dynamoclient = new DynamoDBClient({region: region});
+    const dynamodb = DynamoDBDocumentClient.from(dynamoclient);
+    try {
+      await dynamodb.send(new DeleteCommand(params));  
+    } catch (error) {
+      console.error("Error deleting from table:", error);
+      throw error;
+    }
     return {
       statusCode: 200,
       body: JSON.stringify({

@@ -63,7 +63,16 @@ export function Identity({stack}: StackContext) {
     primaryIndex: {partitionKey: 'legacy_id', sortKey: 'uuid'},
   });
 
+  const incorrectAttemptsTable = new Table(stack, 'identityUnsuccessfulAttemptsTable', {
+    fields: {
+      pk: 'string',
+      sk: 'string',
+    },
+    primaryIndex: {partitionKey: 'pk', sortKey: 'sk'},
+  });
+
   const {webACL} = use(Shared);
+
   const {bus} = use(Shared);
   //add dead letter queue
   const dlq = new Queue(stack, 'DLQ');
@@ -181,14 +190,14 @@ export function Identity({stack}: StackContext) {
   eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
 
   //add event bridge rules
-  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
-  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
-  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
+  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
+  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
+  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
   bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName, region));
   bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
-  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region));
+  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
 
   return {
     identityApi,

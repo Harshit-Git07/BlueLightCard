@@ -9,9 +9,11 @@ const BEARER_PREFIX = 'Bearer ';
 const logger = new Logger({ serviceName: `customAuthenticatorLambdaHandler` });
 
 export const handler = async function (event: any): Promise<APIGatewayAuthorizerResult> {
+  const OLD_USER_POOL_ID = process.env.OLD_USER_POOL_ID ?? "";
+  const OLD_USER_POOL_ID_DDS = process.env.OLD_USER_POOL_ID_DDS ?? "";
   const USER_POOL_ID = process.env.USER_POOL_ID ?? "";
   const USER_POOL_ID_DDS = process.env.USER_POOL_ID_DDS ?? "";
-
+  
   logger.debug(`event => ${JSON.stringify(event)}`);
 
   const authToken = getAuthenticationToken(event);
@@ -21,6 +23,16 @@ export const handler = async function (event: any): Promise<APIGatewayAuthorizer
     logger.debug(decodedToken);
     
     const cognitoJwtVerifier = CognitoJwtVerifier.create([
+      {
+        userPoolId: OLD_USER_POOL_ID,
+        clientId: decodedToken.aud,
+        tokenUse: 'id',
+      },
+      {
+        userPoolId: OLD_USER_POOL_ID_DDS,
+        clientId: decodedToken.aud,
+        tokenUse: 'id',
+      },
       {
         userPoolId: USER_POOL_ID,
         clientId: decodedToken.aud,

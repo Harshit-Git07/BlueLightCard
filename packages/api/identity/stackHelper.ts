@@ -78,6 +78,13 @@ export function createOldCognito (stack: Stack, appSecret: ISecret, bus: EventBu
           blc_old_id: new StringAttribute({mutable: true}),
           blc_old_uuid: new StringAttribute({mutable: true}),
         },
+        passwordPolicy: {
+          minLength: 6,
+          requireLowercase: false,
+          requireUppercase: false,
+          requireDigits: false,
+          requireSymbols: false
+        },
         selfSignUpEnabled: false,
       },
     },
@@ -185,6 +192,13 @@ export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
         customAttributes: {
           blc_old_id: new StringAttribute({mutable: true}),
           blc_old_uuid: new StringAttribute({mutable: true}),
+        },
+        passwordPolicy: {
+          minLength: 6,
+          requireLowercase: false,
+          requireUppercase: false,
+          requireDigits: false,
+          requireSymbols: false
         },
         selfSignUpEnabled: false,
       },
@@ -299,6 +313,13 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
         customAttributes: {
           blc_old_id: new StringAttribute({mutable: true}),
           blc_old_uuid: new StringAttribute({mutable: true}),
+        },
+        passwordPolicy: {
+          minLength: 6,
+          requireLowercase: false,
+          requireUppercase: false,
+          requireDigits: false,
+          requireSymbols: false
         },
         selfSignUpEnabled: false,
       },
@@ -450,6 +471,13 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
         customAttributes: {
           blc_old_id: new StringAttribute({mutable: true}),
           blc_old_uuid: new StringAttribute({mutable: true}),
+        },
+        passwordPolicy: {
+          minLength: 6,
+          requireLowercase: false,
+          requireUppercase: false,
+          requireDigits: false,
+          requireSymbols: false
         },
         selfSignUpEnabled: false,
       },

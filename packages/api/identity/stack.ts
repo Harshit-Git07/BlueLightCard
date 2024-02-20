@@ -96,6 +96,8 @@ export function Identity({stack}: StackContext) {
           handler:
             './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
           environment: {
+            OLD_USER_POOL_ID: oldCognito.userPoolId,
+            OLD_USER_POOL_ID_DDS: oldCognitoDds.userPoolId,
             USER_POOL_ID: cognito.userPoolId,
             USER_POOL_ID_DDS: cognito_dds.userPoolId,
           },

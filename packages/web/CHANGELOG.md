@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.29.0...bluelightcard/web-v1.30.0) (2024-02-19)
+
+
+### Features
+
+* [DISCO-96] Update organisation mapping, add UserProvider tests ([#881](https://github.com/bluelightcard/BlueLightCard-2.0/issues/881)) ([11c6301](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11c630116469b078fe950b1165633749d73cd5e0))
+* OfferSheet control interface ([#850](https://github.com/bluelightcard/BlueLightCard-2.0/issues/850)) ([f014306](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f014306a9e44df1f110f7fa0a936fb79e27e76b4))
+
 ## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.28.0...bluelightcard/web-v1.29.0) (2024-02-15)
 
 

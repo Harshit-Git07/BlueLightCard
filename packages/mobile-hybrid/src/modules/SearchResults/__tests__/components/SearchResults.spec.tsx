@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import SearchResultsContainer from '@/modules/SearchResults/components/SearchResultsContainer';
 import Spinner from '@/modules/Spinner';
 import eventBus from '@/eventBus';
@@ -33,7 +33,7 @@ describe('Search results', () => {
   describe('spinner', () => {
     it('should hide spinner on receiving api response', () => {
       bus.broadcast(Channels.API_RESPONSE, {
-        url: APIUrl.Search,
+        url: `${APIUrl.Search}?term=nike`,
         response: {
           data: [],
         },
@@ -50,7 +50,7 @@ describe('Search results', () => {
   describe('render results', () => {
     it('should render list of results', () => {
       bus.broadcast(Channels.API_RESPONSE, {
-        url: APIUrl.Search,
+        url: `${APIUrl.Search}?term=nike`,
         response: {
           data: [
             { id: 123, companyname: '', offername: '', s3logos: '' },

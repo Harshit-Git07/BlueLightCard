@@ -9,7 +9,7 @@ const useAPI = <R>(apiUrl: string) => {
       const latest = eventBus.getLatestMessage(Channels.API_RESPONSE);
       const { url, response: _response } = latest!.message;
       console.log('Response', _response);
-      if (url === apiUrl) {
+      if (url.includes(apiUrl)) {
         setResponse(_response);
       }
     });

@@ -1,22 +1,23 @@
 import { NextRouter } from 'next/router';
-import { mocked } from 'jest-mock';
-import { ReadonlyURLSearchParams } from 'next/dist/client/components/navigation';
-import { useSearchParams } from 'next/navigation';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import SearchPage from '@/pages/search';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import '@testing-library/jest-dom/extend-expect';
 
-const mockRouter: Partial<NextRouter> = {
-  push: jest.fn(),
-};
+let mockRouter: Partial<NextRouter>;
 
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
 }));
 
 describe('Search', () => {
-  afterEach(() => {
-    jest.resetAllMocks();
+  beforeEach(() => {
+    mockRouter = {
+      push: jest.fn(),
+    };
   });
 
   describe('Redirect deeplinks', () => {
@@ -66,24 +67,105 @@ describe('Search', () => {
       });
     });
   });
+
+  describe('"Search for brands" button', () => {
+    it('should show "Search for brands" when feature enabled', () => {
+      whenSearchPageIsRenderedWithFlags({
+        [FeatureFlags.SEARCH_START_PAGE_BRANDS_LINK]: 'on',
+      });
+
+      expect(screen.queryByText('Search for brands')).toBeInTheDocument();
+    });
+
+    it('should not show "Search for brands" when feature disabled', () => {
+      whenSearchPageIsRenderedWithFlags({
+        [FeatureFlags.SEARCH_START_PAGE_BRANDS_LINK]: 'off',
+      });
+
+      expect(screen.queryByText('Search for brands')).not.toBeInTheDocument();
+    });
+
+    it('should not show "Search for brands" when feature flag not found', () => {
+      whenSearchPageIsRenderedWithFlags({});
+
+      expect(screen.queryByText('Search for brands')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Categories links', () => {
+    it('should show categories links when feature enabled', () => {
+      whenSearchPageIsRenderedWithFlags({
+        [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'on',
+      });
+
+      expect(screen.queryByText('Browse Categories')).toBeInTheDocument();
+    });
+
+    it('should not show categories links when feature disabled', () => {
+      whenSearchPageIsRenderedWithFlags({
+        [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'off',
+      });
+
+      expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
+    });
+
+    it('should not show categories links when feature flag not found', () => {
+      whenSearchPageIsRenderedWithFlags({});
+
+      expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
+    });
+  });
+
+  describe("'Offers near you' button", () => {
+    it('should show "Offers near you" when feature enabled', () => {
+      whenSearchPageIsRenderedWithFlags({
+        [FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK]: 'on',
+      });
+
+      expect(screen.queryByText('Offers near you')).toBeInTheDocument();
+    });
+
+    it('should not show "Offers near you" when feature disabled', () => {
+      whenSearchPageIsRenderedWithFlags({
+        [FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK]: 'off',
+      });
+
+      expect(screen.queryByText('Offers near you')).not.toBeInTheDocument();
+    });
+
+    it('should not show "Offers near you" when feature flag not found', () => {
+      whenSearchPageIsRenderedWithFlags({});
+
+      expect(screen.queryByText('Offers near you')).not.toBeInTheDocument();
+    });
+  });
 });
 
 const givenDeeplinkQueryParamIs = (deeplink?: string) => {
-  const mockUseSearchParams = mocked(useSearchParams);
-
-  mockUseSearchParams.mockImplementation(() => {
-    const params = new URLSearchParams();
-    if (deeplink) {
-      params.set('deeplink', encodeURIComponent(deeplink));
-    }
-    return new ReadonlyURLSearchParams(params);
-  });
+  if (deeplink) {
+    mockRouter = {
+      ...mockRouter,
+      query: {
+        deeplink: encodeURIComponent(deeplink),
+      },
+    };
+  }
 };
 
 const whenSearchPageIsRendered = () => {
   render(
     <RouterContext.Provider value={mockRouter as NextRouter}>
       <SearchPage />
+    </RouterContext.Provider>,
+  );
+};
+
+const whenSearchPageIsRenderedWithFlags = (featureFlags: any) => {
+  render(
+    <RouterContext.Provider value={mockRouter as NextRouter}>
+      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
+        <SearchPage />
+      </JotaiTestProvider>
     </RouterContext.Provider>,
   );
 };

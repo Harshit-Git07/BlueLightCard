@@ -1,17 +1,16 @@
 import { useRouter } from 'next/router';
-import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 const useDeeplinkRedirect = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
   useEffect(() => {
-    const deeplinkQueryParam = searchParams.get('deeplink');
+    const deeplinkQueryParam = router.query?.deeplink
+      ? (router.query?.deeplink as string)
+      : undefined;
     if (deeplinkQueryParam) {
       router.push(getDeeplinkRedirect(deeplinkQueryParam));
     }
-  }, [router, searchParams]);
+  }, [router]);
 };
 
 const getDeeplinkRedirect = (sourceUri: string): string => {

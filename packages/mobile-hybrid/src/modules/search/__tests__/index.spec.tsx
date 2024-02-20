@@ -1,10 +1,13 @@
-import { render, screen, act, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import SearchModule from '../index';
 import { SearchModuleProps } from '../types';
 import { useRouter } from 'next/router';
 import { backNavagationalPaths } from '../paths';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
@@ -19,50 +22,48 @@ describe('SearchModule', () => {
     props = {};
     useRouterMock = useRouter as jest.Mock;
     user = userEvent.setup();
+    useRouterMock.mockReturnValue({
+      route: '',
+    });
   });
 
   describe('search overlay', () => {
     it('should display search overlay', async () => {
-      useRouterMock.mockReturnValue({
-        route: '',
-      });
+      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
 
-      render(<SearchModule />);
-
-      const searchInput = screen.getByRole('searchbox');
-
-      await user.click(searchInput);
+      await whenSearchInputIsClicked(user);
 
       expect(screen.getByText('Your recent searches')).toBeInTheDocument();
     });
 
+    it('should not display search overlay when feature is off', async () => {
+      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'off' });
+
+      await whenSearchInputIsClicked(user);
+
+      expect(screen.queryByText('Your recent searches')).not.toBeInTheDocument();
+    });
+
     it('should hide search overlay', async () => {
-      useRouterMock.mockReturnValue({
-        route: '',
-      });
+      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
 
-      render(<SearchModule />);
+      await whenSearchInputIsClicked(user);
 
-      const searchInput = screen.getByRole('searchbox');
-
-      await user.click(searchInput);
-
-      const backBtn = screen.getByRole('button', { name: 'Back button' });
-
-      await user.click(backBtn);
+      await whenBackButtonIsClicked(user);
 
       expect(screen.queryByText('Your recent searches')).not.toBeInTheDocument();
     });
   });
 
   describe('search', () => {
-    it('should navigate to searchresults on submit search', async () => {
-      const pushMockFn = jest.fn();
+    const pushMockFn = jest.fn();
+    beforeEach(() => {
       useRouterMock.mockReturnValue({
         push: pushMockFn,
       });
-
-      render(<SearchModule />);
+    });
+    it('should navigate to searchresults on submit search', async () => {
+      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
 
       const searchInput = screen.getByRole('searchbox');
 
@@ -84,15 +85,13 @@ describe('SearchModule', () => {
           replace: replaceMockFn,
         });
 
-        render(<SearchModule />);
+        givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
 
         const searchInput = screen.getByRole('searchbox');
 
         await user.type(searchInput, 'test');
 
-        const backBtn = screen.getByRole('button', { name: 'Back button' });
-
-        await user.click(backBtn);
+        await whenBackButtonIsClicked(user);
 
         expect(replaceMockFn).toHaveBeenCalled();
       },
@@ -107,18 +106,34 @@ describe('SearchModule', () => {
           replace: replaceMockFn,
         });
 
-        render(<SearchModule />);
+        givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
 
         const searchInput = screen.getByRole('searchbox');
 
         await user.type(searchInput, 'test');
 
-        const backBtn = screen.getByRole('button', { name: 'Back button' });
-
-        await user.click(backBtn);
+        await whenBackButtonIsClicked(user);
 
         expect(replaceMockFn).not.toHaveBeenCalled();
       },
     );
   });
 });
+
+const givenSearchModuleIsRenderedWith = (featureFlags: any) => {
+  render(
+    <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
+      <SearchModule />
+    </JotaiTestProvider>,
+  );
+};
+
+const whenSearchInputIsClicked = async (user: UserEvent) => {
+  const searchInput = screen.getByRole('searchbox');
+  await user.click(searchInput);
+};
+
+const whenBackButtonIsClicked = async (user: UserEvent) => {
+  const backBtn = screen.getByRole('button', { name: 'Back button' });
+  await user.click(backBtn);
+};

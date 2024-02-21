@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.6.0...bluelightcard/mobile-hybrid-v1.7.0) (2024-02-20)
+
+
+### Features
+
+* [DISCO-86] Add feature flags to 'Search Start' page ([#889](https://github.com/bluelightcard/BlueLightCard-2.0/issues/889)) ([8a6caf3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8a6caf32f5a296678d51be612f20d7194640af8f))
+* [DISCO-87] Add flag for recent searches ([#890](https://github.com/bluelightcard/BlueLightCard-2.0/issues/890)) ([f77080e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f77080e509188eb4e7191d65c690d8b7d71eda4a))
+
+
+### Bug Fixes
+
+* [DISCO-114] Update hybrid useAPI url check to account for query params ([#894](https://github.com/bluelightcard/BlueLightCard-2.0/issues/894)) ([c57b8d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c57b8d0d166085ecb4170cd99eacbfa9bb0e7a3a))
+
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.5.0...bluelightcard/mobile-hybrid-v1.6.0) (2024-02-19)
 
 

@@ -1,12 +1,12 @@
 import type { Config } from 'drizzle-kit';
 
-import { RedemptionsDatabaseConfigResolver } from './src/config/database';
+import { RedemptionsDatabaseConfigResolver } from './infrastructure/config/database';
 
 const databaseConfig = RedemptionsDatabaseConfigResolver.fromEnvironmentVariablesLocal();
 
 export default {
-  schema: './src/database/schema.ts',
-  out: './src/database/migrations',
+  schema: './libs/database/schema.ts',
+  out: './infrastructure/database/migrations',
   driver: 'pg',
   dbCredentials: {
     host: databaseConfig.host,

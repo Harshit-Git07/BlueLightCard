@@ -4,14 +4,15 @@
     "allowJs": true,
     "strictNullChecks": true,
     "module": "ESNext",
-    "target": "es6",
+    "target": "ESNext",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
     "paths": {
-      "@blc-mono/core/*": ["../core/src/*"]
+      "@blc-mono/core/*": ["../core/src/*"],
+      "@blc-mono/redemptions/*": ["./*"]
     }
   }
 }

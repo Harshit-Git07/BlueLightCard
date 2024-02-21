@@ -35,6 +35,6 @@ const doc = {
 };
 
 const outputFile = './swagger.json';
-const routes = fs.readdirSync('./src/documentation/').map((file) => `./src/documentation/${file}`);
+const routes = fs.readdirSync('./application/documentation/').map((file) => `./application/documentation/${file}`);
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, routes, doc);

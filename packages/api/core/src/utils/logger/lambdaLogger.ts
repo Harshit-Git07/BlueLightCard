@@ -1,5 +1,5 @@
-import { Logger } from '@aws-lambda-powertools/logger';
-import { ILogger, ILoggerDetail, LogLevel } from './logger';
+import { Logger as LoggerImpl } from '@aws-lambda-powertools/logger';
+import { ILoggerDetail, LogLevel, Logger } from './logger';
 
 export interface ILambdaLoggerDetail extends ILoggerDetail {
   message: string;
@@ -18,11 +18,12 @@ export interface ILambdaLoggerDetail extends ILoggerDetail {
  * - ✅ Machine readable (structured)
  * - ✅ Additional context (e.g. timestamp)
  */
-export class LambdaLogger implements ILogger<ILambdaLoggerDetail> {
-  private logger: Logger;
+export class LambdaLogger extends Logger<ILambdaLoggerDetail> {
+  private logger: LoggerImpl;
 
   constructor(options: { serviceName: string; logLevel?: LogLevel }) {
-    this.logger = new Logger(options);
+    super();
+    this.logger = new LoggerImpl(options);
   }
 
   info({ message, status, body, error, timestamp, context }: ILambdaLoggerDetail): void {

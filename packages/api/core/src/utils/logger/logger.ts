@@ -16,3 +16,12 @@ export interface ILogger<Detail extends ILoggerDetail = ILoggerDetail> {
   error(detail: Detail): void;
   warn(detail: Detail): void;
 }
+
+export abstract class Logger<Detail extends ILoggerDetail> implements ILogger<Detail> {
+  static readonly key = 'Logger';
+
+  abstract info(detail: ILoggerDetail): void;
+  abstract debug(detail: ILoggerDetail): void;
+  abstract error(detail: ILoggerDetail): void;
+  abstract warn(detail: ILoggerDetail): void;
+}

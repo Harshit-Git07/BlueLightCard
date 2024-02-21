@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { ILogger, ILoggerDetail } from './logger';
+import { ILoggerDetail, Logger } from './logger';
 
 export interface ICliLoggerDetail extends ILoggerDetail {}
 
@@ -11,7 +11,7 @@ export interface ICliLoggerDetail extends ILoggerDetail {}
  * - ❌ Not machine readable (unstructured)
  * - ❌ No additional context (e.g. timestamp)
  */
-export class CliLogger implements ILogger {
+export class CliLogger extends Logger<ICliLoggerDetail> {
   static CONTEXT = chalk.gray;
   static INFO = chalk.white.bold;
   static DEBUG = chalk.gray.bold;

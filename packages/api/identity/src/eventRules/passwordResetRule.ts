@@ -1,4 +1,4 @@
-export const passwordResetRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string) => ({
+export const passwordResetRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string, oldUserPoolId: string, oldDdsUserPoolId: string) => ({
     passwordResetRule: {
         pattern: {source: ["user.password.change.requested"]},
         targets: {
@@ -9,6 +9,8 @@ export const passwordResetRule = (userPoolId: string, dlqUrl: string, ddsUserPoo
                   environment: {
                       USER_POOL_ID: userPoolId,
                       USER_POOL_ID_DDS: ddsUserPoolId,
+                      OLD_USER_POOL_ID: oldUserPoolId,
+                      OLD_USER_POOL_ID_DDS: oldDdsUserPoolId,
                       SERVICE: 'identity',
                       DLQ_URL: dlqUrl,
                       REGION: region,

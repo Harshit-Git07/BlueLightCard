@@ -16,38 +16,52 @@ async function sendToDLQ(event: any) {
   await sqs.sendMessage(params).promise();
 }
 
+const deleteCognitoUser = async (cognito: CognitoIdentityServiceProvider, poolId: string, username: string) => {
+  try {
+      await cognito.adminGetUser({
+        UserPoolId: poolId,
+        Username: username
+      }).promise();
+
+      logger.info("user found: ", { username });
+
+      await cognito.adminDeleteUser({
+          UserPoolId: poolId,
+          Username: username
+      }).promise();
+
+    logger.info("user successfully deleted: ", { username });
+  } catch (e: any) {
+    logger.info("user not found: ", { username });
+  
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: `User ${username} not found.`
+      })
+    };
+  }
+}
+
 
 export const handler = async (event: any, context: any) => {
   logger.info('event received', event);
   const cognito = new CognitoIdentityServiceProvider();
   const userPoolIdDds = process.env.USER_POOL_ID_DDS || '';
   const userPoolId = process.env.USER_POOL_ID || '';
+  const oldUserPoolId = process.env.OLD_USER_POOL_ID || '';
+  const oldUserPoolIdDds = process.env.OLD_USER_POOL_ID_DDS || '';
+
   const poolId =(!/DDS/i.test(event.detail.brand)) ? userPoolId : userPoolIdDds;
+  const oldPoolId =(!/DDS/i.test(event.detail.brand)) ? oldUserPoolId : oldUserPoolIdDds;
+
   const username = event.detail.user_email;
   const table = process.env.TABLE_NAME;
   const region = process.env.REGION;
   try {
-    try {
-        await cognito.adminGetUser({
-        UserPoolId: poolId,
-        Username: username
-      }).promise();
-    } catch (e: any) {
-      logger.info("user not found: ", { username });
-      
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          message: `User ${username} not found.`
-        })
-      };
-    }
-    logger.info("user found: ", { username });
-    await cognito.adminDeleteUser({
-        UserPoolId: poolId,
-        Username: username
-    }).promise();
-    logger.info("user successfully deleted: ", { username });
+    await deleteCognitoUser(cognito, poolId, username);
+    await deleteCognitoUser(cognito, oldPoolId, username);
+
     const params = {
       TableName: table,
       Key: {

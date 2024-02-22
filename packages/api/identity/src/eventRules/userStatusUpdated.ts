@@ -1,4 +1,4 @@
-export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string) => ({
+export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string, oldUserPoolId: string, oldDdsUserPoolId: string) => ({
     userStatusUpdatedRule: {
         pattern: { 
             source: ['user.status.updated'],
@@ -14,6 +14,8 @@ export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUse
                     environment: { 
                         USER_POOL_ID: userPoolId, 
                         USER_POOL_ID_DDS: ddsUserPoolId,
+                        OLD_USER_POOL_ID: oldUserPoolId,
+                        OLD_USER_POOL_ID_DDS: oldDdsUserPoolId,
                         SERVICE: 'identity',
                         DLQ_URL: dlqUrl,
                         REGION: region,

@@ -192,17 +192,18 @@ export function Identity({stack}: StackContext) {
   eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
 
   //add event bridge rules
-  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
-  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
-  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
+  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
+  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
+  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
   bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName, region));
   bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
-  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName));
+  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
 
   return {
     identityApi,
-    cognito
+    newCognito: cognito,
+    cognito: oldCognito
   };
 }

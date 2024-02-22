@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { SearchModuleProps } from './types';
 import Search from '@/components/Search/Search';
 import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButton';
@@ -32,8 +32,10 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   const onSearch = useCallback<SearchProps['onSearch']>(
     (searchTerm) => {
       setSearchOverlayOpen(false);
+      setTerm('');
       router.push(`/searchresults?searchTerm=${searchTerm}`);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [router],
   );
 

@@ -5,6 +5,9 @@ import Spinner from '@/modules/Spinner';
 import eventBus from '@/eventBus';
 import { APIUrl, Channels } from '@/globals';
 import { SearchResults } from '../../types';
+import InvokeNativeAPICall from '@/invoke/apiCall';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+import { searchTerm } from '../../store';
 
 const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -15,13 +18,17 @@ const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-const SearchResults = () => {
-  return (
-    <WithSpinner>
-      <SearchResultsContainer />
-    </WithSpinner>
+const renderSearchResultsModule = (term: string = '') => {
+  render(
+    <JotaiTestProvider initialValues={[[searchTerm, term]]}>
+      <WithSpinner>
+        <SearchResultsContainer />
+      </WithSpinner>
+    </JotaiTestProvider>,
   );
 };
+
+jest.mock('@/invoke/apiCall');
 
 describe('Search results', () => {
   let bus = eventBus();
@@ -39,7 +46,7 @@ describe('Search results', () => {
         },
       });
 
-      render(<SearchResults />);
+      renderSearchResultsModule();
 
       const spinner = screen.queryByRole('progressbar');
 
@@ -59,11 +66,24 @@ describe('Search results', () => {
         },
       });
 
-      render(<SearchResults />);
+      renderSearchResultsModule();
 
       const results = screen.getAllByRole('listitem');
 
       expect(results).toHaveLength(2);
+    });
+  });
+
+  describe('request data', () => {
+    it('should request data when search term is set', async () => {
+      const requestDataMock = jest
+        .spyOn(InvokeNativeAPICall.prototype, 'requestData')
+        .mockImplementation(() => jest.fn());
+
+      renderSearchResultsModule('nike');
+
+      expect(requestDataMock).toHaveBeenCalledTimes(1);
+      expect(requestDataMock).toHaveBeenCalledWith(APIUrl.Search, { term: 'nike' });
     });
   });
 });

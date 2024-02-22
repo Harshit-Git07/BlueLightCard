@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.7.0...bluelightcard/mobile-hybrid-v1.8.0) (2024-02-22)
+
+
+### Features
+
+* Disco 113 hybrid frontend previous search request being sent with new request ([#903](https://github.com/bluelightcard/BlueLightCard-2.0/issues/903)) ([f0b327d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f0b327d9953bf0c8105ed8591d002d2ab1f61993))
+
 ## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.6.0...bluelightcard/mobile-hybrid-v1.7.0) (2024-02-20)
 
 

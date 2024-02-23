@@ -19,7 +19,7 @@ import { DatabaseAdapter } from './src/database/adapter';
 
 export function Offers({ stack, app }: StackContext) {
   new Tags(stack);
-  const { cognito } = use(Identity);
+  const { cognito, newCognito } = use(Identity);
   const { vpc } = use(Shared);
   const secretsManger: SecretManager = new SecretManager(stack);
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
@@ -34,6 +34,7 @@ export function Offers({ stack, app }: StackContext) {
   const offersApiGateway: OffersApiGateway = new OffersApiGateway(
     stack,
     cognito.userPoolId,
+    newCognito.userPoolId,
     vpc,
     databaseAdapter.config,
   );
@@ -46,6 +47,7 @@ export function Offers({ stack, app }: StackContext) {
   const offersApi: OffersApi = new OffersApi(
     stack,
     cognito.cdk.userPool,
+    newCognito.cdk.userPool,
     secretsManger,
     './packages/api/offers/schema.graphql',
   );

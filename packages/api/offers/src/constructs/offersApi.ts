@@ -19,6 +19,7 @@ export class OffersApi {
   constructor(
     private stack: Stack,
     private userPool: IUserPool,
+    private newUserPool: IUserPool,
     private secrets: SecretManager,
     private schemaPath: string,
   ) {
@@ -41,6 +42,14 @@ export class OffersApi {
             userPool: this.userPool,
           },
         },
+        additionalAuthorizationModes: [
+          {
+            authorizationType: AuthorizationType.USER_POOL,
+            userPoolConfig: {
+              userPool: this.newUserPool,
+            },
+          },
+        ],
       },
       xrayEnabled: true,
       logConfig: {

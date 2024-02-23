@@ -17,6 +17,7 @@ export class OffersApiGateway {
   constructor(
     private stack: Stack,
     private cognitoUserPoolId: string,
+    private newCognitoUserPoolId: string,
     private vpc: IVpc,
     private dbConfig: DatabaseConfig,
   ) {
@@ -52,7 +53,7 @@ export class OffersApiGateway {
       authorizers: {
         OffersAuthorizer: {
           type: 'user_pools',
-          userPoolIds: [this.cognitoUserPoolId],
+          userPoolIds: [this.cognitoUserPoolId, this.newCognitoUserPoolId],
         },
       },
       defaults: {

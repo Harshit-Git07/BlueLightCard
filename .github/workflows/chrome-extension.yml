@@ -76,7 +76,6 @@ jobs:
       - name: Build & zip
         working-directory: packages/chrome-extension
         run: |
-          cd packages/chrome-extension
           npm run build:develop
           npm run run zip:develop
       - name: Archive staging artifacts

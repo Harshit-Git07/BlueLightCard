@@ -25,7 +25,7 @@ export abstract class Controller<
 
     try {
       const result = await this.handle(parseRequestResult.value);
-      const response = this.formatResponse(result);
+      const response = this.formatResponse(request, result);
       return response;
     } catch (err) {
       return await this.onUnhandledError(request, err);
@@ -33,7 +33,7 @@ export abstract class Controller<
   }
   protected abstract parseRequest(request: Request): Result<ParsedRequest, ParseRequestError>;
   protected abstract handle(request: ParsedRequest): Promise<HandlerResult>;
-  protected abstract formatResponse(result: HandlerResult): Response;
+  protected abstract formatResponse(request: Request, result: HandlerResult): Response;
   protected abstract onUnhandledError(request: Request, err: unknown): Promise<Response>;
   protected abstract onParseError(request: Request, err: ParseRequestError): Promise<Response>;
 }

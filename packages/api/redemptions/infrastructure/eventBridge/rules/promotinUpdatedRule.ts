@@ -1,9 +1,8 @@
 import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
-import { PromotionEvents } from '@blc-mono/redemptions/application/handlers/eventBridge/events';
-
 import { SSTFunction } from '../../constructs/SSTFunction';
 import { IDatabase } from '../../database/adapter';
+import { RedemptionsDatasyncEvents } from '../events/datasync';
 
 export function createPromotionUpdatedRule(stack: Stack, database: IDatabase): EventBusRuleProps {
   const queue = new Queue(stack, 'promotionDeadLetterQueue');
@@ -15,7 +14,7 @@ export function createPromotionUpdatedRule(stack: Stack, database: IDatabase): E
     deadLetterQueue: queue.cdk.queue,
   });
   return {
-    pattern: { source: [PromotionEvents.PROMOTION_UPDATED] },
+    pattern: { source: [RedemptionsDatasyncEvents.PROMOTION_UPDATED] },
     targets: { promotionUpdatedHandler },
   };
 }

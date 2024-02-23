@@ -4,13 +4,11 @@ import { NON_NEGATIVE_INT } from '@blc-mono/core/schemas/common';
 import { PLATFORM_SCHEMA } from '@blc-mono/core/schemas/domain';
 import { eventSchema } from '@blc-mono/core/schemas/event';
 import { OPTIONAL_URL_SCHEMA } from '@blc-mono/core/schemas/utility';
-
-export enum PromotionEvents {
-  PROMOTION_UPDATED = 'promotion.updated',
-}
+import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 
 export const PromotionUpdatedEventSchema = eventSchema(
-  PromotionEvents.PROMOTION_UPDATED,
+  RedemptionsDatasyncEvents.PROMOTION_UPDATED,
+  z.string(),
   z.object({
     update: z.object({
       link: OPTIONAL_URL_SCHEMA.optional(),

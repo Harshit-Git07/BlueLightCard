@@ -1,8 +1,7 @@
 import { EventBridgeEvent } from 'aws-lambda';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
-
-import { OfferEvents } from '../events';
+import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 
 import { offerCreatedHandler, offerUpdatedHandler } from './offerEventHandlers';
 
@@ -12,10 +11,10 @@ export const handler = async (event: EventBridgeEvent<string, unknown>): Promise
   const { source } = event;
 
   switch (source) {
-    case OfferEvents.OFFER_CREATED:
+    case RedemptionsDatasyncEvents.OFFER_CREATED:
       offerCreatedHandler();
       break;
-    case OfferEvents.OFFER_UPDATED:
+    case RedemptionsDatasyncEvents.OFFER_UPDATED:
       offerUpdatedHandler();
       break;
     default:

@@ -1,13 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
+import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 import { platformEnum } from '@blc-mono/redemptions/libs/database/schema';
 
-import {
-  PromotionEvents,
-  PromotionUpdatedEvent,
-  PromotionUpdatedEventDetail,
-} from '../../handlers/eventBridge/promotions/events';
+import { PromotionUpdatedEvent, PromotionUpdatedEventDetail } from '../../handlers/eventBridge/promotions/events';
 
 function randomDateYYYYMMDD() {
   const date = faker.date.recent();
@@ -61,8 +58,8 @@ export const promotionUpdatedEventFactory = Factory.define<PromotionUpdatedEvent
   'detail-type': 'promotion.updated.detail',
   id: faker.string.uuid(),
   region: faker.helpers.arrayElement(['eu-west-1', 'ap-west-2', 'us-east-1']),
-  resources: [PromotionEvents.PROMOTION_UPDATED],
-  source: PromotionEvents.PROMOTION_UPDATED,
+  resources: [RedemptionsDatasyncEvents.PROMOTION_UPDATED],
+  source: RedemptionsDatasyncEvents.PROMOTION_UPDATED,
   time: faker.date.recent().toISOString(),
   version: '0',
 }));

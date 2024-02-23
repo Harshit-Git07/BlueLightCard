@@ -1,9 +1,9 @@
 import { describe } from '@jest/globals';
 
 import { as } from '@blc-mono/core/utils/testing';
+import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 
 import { createSilentLogger, createTestLogger } from '../../../test/helpers/logger';
-import { VaultEvents } from '../events';
 
 import { createHandler } from './vaultHandler';
 
@@ -25,7 +25,7 @@ describe('vaultHandler', () => {
     const handler = createHandler(logger, vaultCreatedHandler, vaultUpdatedHandler);
 
     // Act
-    await handler(as(connection), as({ source: VaultEvents.VAULT_CREATED }));
+    await handler(as(connection), as({ source: RedemptionsDatasyncEvents.VAULT_CREATED }));
 
     // Assert
     expect(vaultCreatedHandler).toHaveBeenCalled();
@@ -41,7 +41,7 @@ describe('vaultHandler', () => {
     const handler = createHandler(logger, vaultCreatedHandler, vaultUpdatedHandler);
 
     // Act
-    await handler(as(connection), as({ source: VaultEvents.VAULT_UPDATED }));
+    await handler(as(connection), as({ source: RedemptionsDatasyncEvents.VAULT_UPDATED }));
 
     // Assert
     expect(vaultCreatedHandler).not.toHaveBeenCalled();

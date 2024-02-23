@@ -2,10 +2,9 @@ import { EventBridgeEvent } from 'aws-lambda';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
+import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 import { withConnection } from '@blc-mono/redemptions/libs/database/connectionHelpers';
-
-import { VaultEvents } from '../events';
 
 import { vaultCreatedHandler } from './vaultCreatedHandler';
 import { vaultUpdatedHandler } from './vaultUpdatedHandler';
@@ -25,10 +24,10 @@ export function createHandler(
     const { source } = event;
 
     switch (source) {
-      case VaultEvents.VAULT_CREATED:
+      case RedemptionsDatasyncEvents.VAULT_CREATED:
         await vaultCreatedHandler(connection, logger, event);
         break;
-      case VaultEvents.VAULT_UPDATED:
+      case RedemptionsDatasyncEvents.VAULT_UPDATED:
         vaultUpdatedHandler();
         break;
       default:

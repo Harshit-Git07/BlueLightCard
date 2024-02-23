@@ -6,7 +6,7 @@ import { ILogger } from '@blc-mono/core/utils/logger/logger';
 
 import { Controller } from '../Controller';
 
-type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+type JsonValue = string | number | boolean | null | JsonObject | JsonArray | undefined;
 type JsonObject = { [key: string]: JsonValue };
 type JsonArray = JsonValue[];
 
@@ -16,7 +16,7 @@ export type APIGatewayResult = {
   headers?: { [key: string]: string };
 };
 
-export type ParseRequestError = Record<string, unknown>;
+export type ParseRequestError = JsonValue;
 
 export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV2> extends Controller<
   APIGatewayProxyEventV2,
@@ -27,7 +27,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
 > {
   protected abstract logger: ILogger;
 
-  protected formatResponse(result: APIGatewayResult): APIGatewayProxyStructuredResultV2 {
+  protected formatResponse(_: APIGatewayProxyEventV2, result: APIGatewayResult): APIGatewayProxyStructuredResultV2 {
     return {
       statusCode: result.statusCode,
       body: JSON.stringify({
@@ -48,7 +48,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     this.logger.error({
       message: '[UNHANDLED ERROR] There was an unhandled error processing the request',
       context: {
-        controller: this.constructor.name || '[UnknownController] APIGatewayController.onUnhandledError',
+        controller: this.constructor.name || 'APIGatewayController (unknown)',
         location: 'APIGatewayController.onUnhandledError',
         tracingId: request.requestContext.requestId,
         error: err,
@@ -76,7 +76,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     this.logger.error({
       message: 'The request was invalid',
       context: {
-        controller: this.constructor.name || '[UnknownController] APIGatewayController.onParseError',
+        controller: this.constructor.name || 'APIGatewayController (unknown)',
         location: 'APIGatewayController.onParseError',
         tracingId: request.requestContext.requestId,
         error: err,
@@ -114,7 +114,12 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     return Result.err({
       cause: 'Request validation failed',
       message: result.error.message,
-      errors: result.error.errors,
+      errors: result.error.errors.map((error) => ({
+        path: error.path,
+        message: error.message,
+        code: error.code,
+        fatal: error.fatal,
+      })),
     });
   }
 }

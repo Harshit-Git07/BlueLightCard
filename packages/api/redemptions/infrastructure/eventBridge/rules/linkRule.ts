@@ -1,8 +1,7 @@
 import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
-import { LinkEvents } from '@blc-mono/redemptions/application/handlers/eventBridge/events';
-
 import { SSTFunction } from '../../constructs/SSTFunction';
+import { RedemptionsDatasyncEvents } from '../events/datasync';
 
 export function createLinkRule(stack: Stack): EventBusRuleProps {
   const queue = new Queue(stack, 'linkDeadLetterQueue');
@@ -14,7 +13,7 @@ export function createLinkRule(stack: Stack): EventBusRuleProps {
     deadLetterQueue: queue.cdk.queue,
   });
   return {
-    pattern: { source: [LinkEvents.LINK_CREATED, LinkEvents.LINK_UPDATED] },
+    pattern: { source: [RedemptionsDatasyncEvents.LINK_CREATED, RedemptionsDatasyncEvents.LINK_UPDATED] },
     targets: { linkHandler },
   };
 }

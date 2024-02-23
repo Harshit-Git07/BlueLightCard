@@ -1,8 +1,7 @@
 import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
-import { OfferEvents } from '@blc-mono/redemptions/application/handlers/eventBridge/events';
-
 import { SSTFunction } from '../../constructs/SSTFunction';
+import { RedemptionsDatasyncEvents } from '../events/datasync';
 
 export function createOfferRule(stack: Stack): EventBusRuleProps {
   const queue = new Queue(stack, 'offerDeadLetterQueue');
@@ -14,7 +13,7 @@ export function createOfferRule(stack: Stack): EventBusRuleProps {
     deadLetterQueue: queue.cdk.queue,
   });
   return {
-    pattern: { source: [OfferEvents.OFFER_CREATED, OfferEvents.OFFER_UPDATED] },
+    pattern: { source: [RedemptionsDatasyncEvents.OFFER_CREATED, RedemptionsDatasyncEvents.OFFER_UPDATED] },
     targets: { offerHandler },
   };
 }

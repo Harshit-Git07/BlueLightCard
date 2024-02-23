@@ -6,6 +6,7 @@ import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 
 import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemController';
+import { GenericsRepository } from '../../../repositories/GenericsRepository';
 import { RedemptionsRepository } from '../../../repositories/RedeptionsRepository';
 import { RedeemService } from '../../../services/redeem/RedeemService';
 import { RedeemStrategyResolver } from '../../../services/redeem/RedeemStrategyResolver';
@@ -25,6 +26,7 @@ const controller = createInjector()
   .provideValue(DatabaseConnection.key, connection)
   // Repositories
   .provideClass(RedemptionsRepository.key, RedemptionsRepository)
+  .provideClass(GenericsRepository.key, GenericsRepository)
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)

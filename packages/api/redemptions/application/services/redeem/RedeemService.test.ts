@@ -44,6 +44,7 @@ describe('RedeemService', () => {
     const redemption = redemptionFactory.build();
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
+      redemptionType: redemption.redemptionType,
       redemptionDetails: {
         url: faker.internet.url(),
         code: faker.string.alphanumeric(6),

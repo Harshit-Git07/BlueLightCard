@@ -3,17 +3,21 @@ import { eq } from 'drizzle-orm';
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
+import { Repository } from './Repository';
+
 export type Redemption = typeof redemptionsTable.$inferSelect;
 
 export interface IRedemptionsRepository {
   findOneByOfferId(offerId: number): Promise<Redemption | null>;
 }
 
-export class RedemptionsRepository implements IRedemptionsRepository {
+export class RedemptionsRepository extends Repository implements IRedemptionsRepository {
   static readonly key = 'RedemptionsRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
 
-  constructor(private readonly connection: IDatabaseConnection) {}
+  constructor(private readonly connection: IDatabaseConnection) {
+    super();
+  }
 
   public async findOneByOfferId(offerId: number): Promise<Redemption | null> {
     const results = await this.connection.db
@@ -24,19 +28,5 @@ export class RedemptionsRepository implements IRedemptionsRepository {
       .execute();
 
     return this.atMostOne(results);
-  }
-
-  /// ====== PRIVATE METHODS ====== ///
-
-  private atMostOne<T>(results: T[]): T | null {
-    if (results.length === 0) {
-      return null;
-    }
-
-    if (results.length > 1) {
-      throw new Error('Received multiple results but expected at most one');
-    }
-
-    return results[0];
   }
 }

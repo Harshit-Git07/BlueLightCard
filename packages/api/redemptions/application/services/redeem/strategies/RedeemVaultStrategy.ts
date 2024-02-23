@@ -1,16 +1,17 @@
 import { Redemption } from '../../../repositories/RedeptionsRepository';
 
-import { IRedeemStrategy, RedeemedStrategyResult } from './IRedeemStrategy';
+import { IRedeemStrategy, RedeemVaultStrategyResult } from './IRedeemStrategy';
 
 export class RedeemVaultStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemVaultStrategy' as const;
 
-  async redeem(redemption: Redemption): Promise<RedeemedStrategyResult> {
+  async redeem(redemption: Redemption): Promise<RedeemVaultStrategyResult> {
     console.log('handleVaultRedemption', redemption);
 
     return {
       kind: 'Ok',
-      redemptionDetails: {},
+      redemptionType: 'vault',
+      redemptionDetails: '',
     };
   }
 }

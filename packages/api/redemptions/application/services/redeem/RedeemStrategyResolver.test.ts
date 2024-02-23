@@ -1,5 +1,9 @@
 import { as } from '@blc-mono/core/utils/testing';
+import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
+
+import { GenericsRepository } from '../../repositories/GenericsRepository';
+import { createTestLogger } from '../../test/helpers/logger';
 
 import { RedeemStrategyResolver } from './RedeemStrategyResolver';
 import { RedeemGenericStrategy } from './strategies/RedeemGenericStrategy';
@@ -9,6 +13,14 @@ import { RedeemVaultQrStrategy } from './strategies/RedeemVaultQrStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
 
 describe('RedeemStrategyResolver', () => {
+  const mockedConnection = {
+    db: {
+      select: jest.fn(),
+    },
+  } as unknown as DatabaseConnection;
+  const mockedLogger = createTestLogger();
+  const genericRepo = new GenericsRepository(mockedConnection);
+
   it.each([
     ['generic', RedeemGenericStrategy],
     ['preApplied', RedeemPreAppliedStrategy],
@@ -20,7 +32,7 @@ describe('RedeemStrategyResolver', () => {
     (redemptionType, strategy) => {
       // Arrange
       const resolver = new RedeemStrategyResolver(
-        new RedeemGenericStrategy(),
+        new RedeemGenericStrategy(genericRepo, mockedLogger),
         new RedeemPreAppliedStrategy(),
         new RedeemShowCardStrategy(),
         new RedeemVaultQrStrategy(),
@@ -38,7 +50,7 @@ describe('RedeemStrategyResolver', () => {
   it('should throw when an unknown redemption type is provided', () => {
     // Arrange
     const resolver = new RedeemStrategyResolver(
-      new RedeemGenericStrategy(),
+      new RedeemGenericStrategy(genericRepo, mockedLogger),
       new RedeemPreAppliedStrategy(),
       new RedeemShowCardStrategy(),
       new RedeemVaultQrStrategy(),

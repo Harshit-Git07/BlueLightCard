@@ -45,6 +45,13 @@ export class RedeemController extends APIGatewayController<RedeemRequestModel> {
             message: 'No redemption found for the given offerId',
           },
         };
+      case 'GenericNotFound':
+        return {
+          statusCode: 500,
+          body: {
+            message: 'No generic found for the given offerId',
+          },
+        };
       default:
         exhaustiveCheck(result, 'Unhandled result kind');
     }

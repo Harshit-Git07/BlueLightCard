@@ -1,0 +1,195 @@
+name: 'Chrome extension'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/chrome-extension/**
+      - package-lock.json
+      - package.json
+      - .github/workflows/chrome-extension.yml
+  pull_request:
+    paths:
+      - packages/chrome-extension/**
+      - package-lock.json
+      - package.json
+      - .github/workflows/chrome-extension.yml
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs:
+      - install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build
+        working-directory: packages/chrome-extension
+        run: |
+          npm run build:production
+
+  changelog:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/chrome-extension
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/chrome-extension
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
+  staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Staging
+    environment: Staging
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - build
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build & zip
+        working-directory: packages/chrome-extension
+        run: |
+          cd packages/chrome-extension
+          npm run build:develop
+          npm run run zip:develop
+      - name: Archive staging artifacts
+        id: archive-artifacts-staging
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-chrome-extension
+          path: packages/chrome-extension/dev-dist.zip
+      - name: Notify
+        if: success()
+        run: |
+          curl --location ${{ vars.CI_CHROME_EXTENSION_WEBHOOK }} \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "type": "message",
+              "attachments": [
+                {
+                  "contentType": "application/vnd.microsoft.card.adaptive",
+                  "contentUrl": null,
+                  "content": {
+                    "type": "AdaptiveCard",
+                    "version": "1.2",
+                    "body": [
+                      {
+                        "type": "TextBlock",
+                        "text": "New Chrome Extension Build available (Staging)",
+                        "style": "heading"
+                      },
+                      {
+                        "type": "TextBlock",
+                        "text": "The staging (dev) build for chrome extension is now available."
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "type": "Action.OpenUrl",
+                        "title": "Download Extension",
+                        "url": "${{ steps.archive-artifacts-staging.outputs.artifact_url }}"
+                      },
+                      {
+                        "type": "Action.OpenUrl",
+                        "title": "View Workflow",
+                        "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }'
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - build
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build & zip
+        working-directory: packages/chrome-extension
+        run: |
+          npm run build:production
+          npm run zip:production
+      - name: Archive prod artifacts
+        id: archive-artifacts-production
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-chrome-extension
+          path: packages/chrome-extension/prod-dist.zip
+      - name: Notify
+        if: success()
+        run: |
+          curl --location ${{ vars.CI_CHROME_EXTENSION_WEBHOOK }} \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "type": "message",
+              "attachments": [
+                {
+                  "contentType": "application/vnd.microsoft.card.adaptive",
+                  "contentUrl": null,
+                  "content": {
+                    "type": "AdaptiveCard",
+                    "version": "1.2",
+                    "body": [
+                      {
+                        "type": "TextBlock",
+                        "text": "New Chrome Extension Build available (Production)",
+                        "style": "heading"
+                      },
+                      {
+                        "type": "TextBlock",
+                        "text": "The production build for chrome extension is now available."
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "type": "Action.OpenUrl",
+                        "title": "Download Extension",
+                        "url": "${{ steps.archive-artifacts-production.outputs.artifact_url }}"
+                      },
+                      {
+                        "type": "Action.OpenUrl",
+                        "title": "View Workflow",
+                        "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }'

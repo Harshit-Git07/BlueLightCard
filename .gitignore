@@ -158,3 +158,6 @@ packages/web/e2e/test-results
 # API Documentation export
 packages/api/*/swagger.json
 packages/web/e2e/test-results/cucumber-report.json
+
+# dist zip files for chrome extension
+packages/chrome-extension/*dist.zip

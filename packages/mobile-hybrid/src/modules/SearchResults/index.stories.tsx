@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { useSetAtom } from 'jotai';
 import SearchResultsModule from '@/modules/SearchResults';
-
 import pageDecorator from '@storybook/pageDecorator';
 import { useEffect } from 'react';
 import { searchTerm } from './store';

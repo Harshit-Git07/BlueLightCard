@@ -33,4 +33,27 @@ describe('Search component', () => {
       expect(props.onSearch).toHaveBeenCalledWith(searchTerm);
     });
   });
+
+  describe('Search Input focus', () => {
+    const searchTerm = 'example';
+    it('should set focus on input when user clicks input', async () => {
+      render(<Search {...props} />);
+      const inputElement = screen.getByRole('searchbox');
+
+      await act(async () => {
+        await userEvent.type(inputElement, `${searchTerm}`);
+      });
+      expect(inputElement).toHaveFocus();
+    });
+    it('should clear focus on input when user submits search', async () => {
+      render(<Search {...props} />);
+
+      const inputElement = screen.getByRole('searchbox');
+
+      await act(async () => {
+        await userEvent.type(inputElement, `${searchTerm}{enter}`);
+      });
+      expect(inputElement).not.toHaveFocus();
+    });
+  });
 });

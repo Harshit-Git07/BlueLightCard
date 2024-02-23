@@ -34,11 +34,18 @@ const Search: FC<SearchProps> = ({
     }
   }, [value]);
 
+  useEffect(() => {
+    if (initialValue) {
+      isFocused ? initialValue.current?.focus() : initialValue.current?.blur();
+    }
+  }, [isFocused]);
+
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     if (searchTerm && searchTerm.length >= 3) {
       setErrorMessage('');
+      setIsFocused(false);
       onSearch(searchTerm);
     } else {
       setErrorMessage('Enter 3 or more characters to search.');

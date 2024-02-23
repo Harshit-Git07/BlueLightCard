@@ -4,6 +4,7 @@ import BannerCarousel from '@/components/Banner/BannerCarousel';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { OfferPromosModel } from '@/models/offer';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -12,7 +13,7 @@ const PromoBanner: FC = () => {
   const onSlideItemClick = ({ compid, companyname, offername }: OfferPromosModel) => {
     navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
     analytics.logAnalyticsEvent({
-      event: 'homepage_carousel_card_clicked',
+      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {
         carousel_name: 'Billboard',
         brand_name: companyname,
@@ -23,7 +24,7 @@ const PromoBanner: FC = () => {
 
   const onSlideChange = () => {
     analytics.logAnalyticsEvent({
-      event: 'homepage_carousel_interacted',
+      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_INTERACTED,
       parameters: {
         carousel_name: 'Billboard',
       },

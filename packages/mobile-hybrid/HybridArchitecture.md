@@ -109,15 +109,18 @@ window.webkit.messageHandlers.AnalyticsRequest.postMessage({
 ```
 
 Based on the example above, to use the invoke class and send analytics data to native, you would do something like the below
+
 ```tsx
 // create an instance of InvokeNativeAnalytics
+import { AmplitudeEvents } from 'mobile-hybrid/src/utils/amplitude/amplitudeEvents'
+
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
   useEffect(() => {
     // call its function to send analytics data to native
     analytics.logAnalyticsEvent({
-      event: 'homepage_viewed',
+      event: AmplitudeEvents.HOMEPAGE_VIEWED,
       parameters: {
         'scroll_depth_(%)': depth,
       },

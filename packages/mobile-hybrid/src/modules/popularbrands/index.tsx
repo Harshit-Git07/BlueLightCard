@@ -4,6 +4,7 @@ import brands from './brands';
 import PopularBrands from '@/components/PopularBrands/PopularBrands';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AppContext } from '@/store';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -20,7 +21,7 @@ const PopularBrandsSlider: FC = () => {
   const onBrandItemClick = (compid: number) => {
     navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
     analytics.logAnalyticsEvent({
-      event: 'homepage_carousel_card_clicked',
+      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {
         carousel_name: 'Popular brands',
         brand_name: brands.find((brand) => brand.id === compid)?.brandName,
@@ -29,7 +30,7 @@ const PopularBrandsSlider: FC = () => {
   };
   const onCarouselInteracted = () => {
     analytics.logAnalyticsEvent({
-      event: 'homepage_carousel_interacted',
+      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_INTERACTED,
       parameters: {
         carousel_name: 'Popular brands',
       },

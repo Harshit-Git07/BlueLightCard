@@ -7,6 +7,7 @@ import InvokeNativeAnalytics from '@/invoke/analytics';
 import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
 import { AppContext } from '@/store';
 import { NewsPreview } from '../news';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -48,7 +49,7 @@ const Offers: FC = () => {
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
     navigation.navigate(`/flexibleOffers.php?id=${id}`, 'home');
     analytics.logAnalyticsEvent({
-      event: 'homepage_carousel_card_clicked',
+      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {
         carousel_name: flexiTitle,
         brand_offer: title,
@@ -61,7 +62,7 @@ const Offers: FC = () => {
   ) => {
     navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
     analytics.logAnalyticsEvent({
-      event: 'homepage_carousel_card_clicked',
+      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {
         carousel_name: categoryTitle,
         brand_name: companyname,
@@ -71,7 +72,7 @@ const Offers: FC = () => {
   };
   const onSlideChange = (carouselName: string) => {
     analytics.logAnalyticsEvent({
-      event: 'homepage_carousel_interacted',
+      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_INTERACTED,
       parameters: {
         carousel_name: carouselName,
       },

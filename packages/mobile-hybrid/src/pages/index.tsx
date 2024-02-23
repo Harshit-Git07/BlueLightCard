@@ -17,6 +17,7 @@ import FavouritedBrandsSlider from '@/modules/favouritedbrands';
 import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -55,7 +56,7 @@ const Home: NextPage<any> = () => {
     if (bodyHeight.current) {
       trackScrollDepth(bodyHeight.current, (depth) => {
         analytics.logAnalyticsEvent({
-          event: 'homepage_viewed',
+          event: AmplitudeEvents.HOMEPAGE_VIEWED,
           parameters: {
             'scroll_depth_(%)': depth,
           },

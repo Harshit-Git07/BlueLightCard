@@ -10,6 +10,7 @@ import { SecretManager } from './secret-manager';
  * @param stack - The stack to add the API to
  * @param stage - The stage name
  * @param userPool - The Cognito User Pool to use for authentication
+ * @param newUserPool - The Cognito New User Pool
  * @param schemaPath - The path to the GraphQL schema
  * @return The GraphQL API
  */

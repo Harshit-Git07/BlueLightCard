@@ -36,7 +36,7 @@ export class Route {
     restApi,
     stack,
     database,
-  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'Authorizer'> {
+  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'redemptionsAuthorizer'> {
     return {
       cdk: {
         function: new SSTFunction(stack, functionName, {

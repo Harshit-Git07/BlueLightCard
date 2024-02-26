@@ -1,4 +1,4 @@
-import { App, Cognito, Stack, StackContext, use } from 'sst/constructs';
+import { StackContext, use } from 'sst/constructs';
 import { Identity } from '@blc-mono/identity/stack';
 import { Tables } from './src/constructs/tables';
 import { OffersApi } from './src/constructs/offersApi';
@@ -19,7 +19,7 @@ import { DatabaseAdapter } from './src/database/adapter';
 
 export function Offers({ stack, app }: StackContext) {
   new Tags(stack);
-  const { cognito, newCognito } = use(Identity);
+  const { authorizer, cognito, newCognito } = use(Identity);
   const { vpc } = use(Shared);
   const secretsManger: SecretManager = new SecretManager(stack);
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
@@ -31,13 +31,7 @@ export function Offers({ stack, app }: StackContext) {
     securityGroupManager,
     ec2Manager,
   );
-  const offersApiGateway: OffersApiGateway = new OffersApiGateway(
-    stack,
-    cognito.userPoolId,
-    newCognito.userPoolId,
-    vpc,
-    databaseAdapter.config,
-  );
+  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, vpc, databaseAdapter.config);
 
   /**
    * Offers Appsync API

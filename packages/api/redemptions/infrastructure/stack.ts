@@ -8,6 +8,7 @@ import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 import { PostSpotifyModel } from '@blc-mono/redemptions/libs/models/postSpotify';
 
 import { Shared } from '../../../../stacks/stack';
+import { ApiGatewayAuthorizer } from '../../core/src/identity/authorizer';
 import { Identity } from '../../identity/stack';
 
 import { RedemptionsStackConfigResolver } from './config/config';
@@ -20,7 +21,7 @@ import { Routes } from './routes/routes';
 
 export async function Redemptions({ app, stack }: StackContext) {
   const { certificateArn, vpc } = use(Shared);
-  const { cognito } = use(Identity);
+  const { authorizer } = use(Identity);
 
   // set tag service identity to all resources
   stack.tags.setTag('service', 'redemptions');
@@ -41,13 +42,10 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   const api = new ApiGatewayV1Api(stack, 'redemptions', {
     authorizers: {
-      Authorizer: {
-        type: 'user_pools',
-        userPoolIds: [cognito.userPoolId],
-      },
+      redemptionsAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
     },
     defaults: {
-      authorizer: 'Authorizer',
+      authorizer: 'redemptionsAuthorizer',
     },
     cdk: {
       restApi: {

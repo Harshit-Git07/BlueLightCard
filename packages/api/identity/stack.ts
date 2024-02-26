@@ -1,34 +1,35 @@
-import {ApiGatewayV1Api, Function, Queue, StackContext, Table, use} from 'sst/constructs';
-import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
-import {Shared} from '../../../stacks/stack';
-import {passwordResetRule} from './src/eventRules/passwordResetRule';
-import {userStatusUpdatedRule} from './src/eventRules/userStatusUpdated';
-import {emailUpdateRule} from './src/eventRules/emailUpdateRule';
-import {ApiGatewayModelGenerator} from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
-import {UserModel} from './src/models/user';
-import {EcFormOutputDataModel} from './src/models/ecFormOutputDataModel';
-import {GetUserByIdRoute} from './src/routes/getUserByIdRoute';
-import {userSignInMigratedRule} from './src/eventRules/userSignInMigratedRule';
-import {cardStatusUpdatedRule} from './src/eventRules/cardStatusUpdatedRule';
-import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
-import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
-import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedRule";
-import {AddEcFormOutputDataRoute} from './src/routes/addEcFormOutputDataRoute';
-import {Tables} from './src/eligibility/constructs/tables';
-import {Buckets} from './src/eligibility/constructs/buckets';
-import {Lambda} from './src/common/lambda';
-import {userGdprRule} from './src/eventRules/userGdprRule';
-import {Rule, Schedule} from 'aws-cdk-lib/aws-events';
-import {LambdaFunction} from 'aws-cdk-lib/aws-events-targets';
+import { ApiGatewayV1Api, Function, Queue, StackContext, Table, use } from 'sst/constructs';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { Shared } from '../../../stacks/stack';
+import { passwordResetRule } from './src/eventRules/passwordResetRule';
+import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
+import { emailUpdateRule } from './src/eventRules/emailUpdateRule';
+import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
+import { UserModel } from './src/models/user';
+import { EcFormOutputDataModel } from './src/models/ecFormOutputDataModel';
+import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
+import { userSignInMigratedRule } from './src/eventRules/userSignInMigratedRule';
+import { cardStatusUpdatedRule } from './src/eventRules/cardStatusUpdatedRule';
+import { userProfileUpdatedRule } from './src/eventRules/userProfileUpdatedRule';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { companyFollowsUpdatedRule } from './src/eventRules/companyFollowsUpdatedRule';
+import { AddEcFormOutputDataRoute } from './src/routes/addEcFormOutputDataRoute';
+import { Tables } from './src/eligibility/constructs/tables';
+import { Buckets } from './src/eligibility/constructs/buckets';
+import { Lambda } from './src/common/lambda';
+import { userGdprRule } from './src/eventRules/userGdprRule';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import getAllowedDomains from './src/utils/getAllowedDomains';
-import * as apigateway from "aws-cdk-lib/aws-apigateway";
 import { STAGES } from '@blc-mono/core/types/stages.enum';
 import { REGIONS } from '@blc-mono/core/types/regions.enum';
-import { createNewCognito, createNewCognitoDDS, createOldCognito, createOldCognitoDDS } from './stackHelper'
+import { createNewCognito, createNewCognitoDDS, createOldCognito, createOldCognitoDDS } from './stackHelper';
+import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
+import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
+import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 
-export function Identity({stack}: StackContext) {
-  const {certificateArn} = use(Shared);
-  const documentationVersion = '1.0.0';
+export function Identity({ stack }: StackContext) {
+  const { certificateArn } = use(Shared);
 
   //set tag service identity to all resources
   stack.tags.setTag('service', 'identity');
@@ -37,8 +38,8 @@ export function Identity({stack}: StackContext) {
   //Region
   const region = stack.region;
 
-  const tables = new Tables(stack)
-  const buckets = new Buckets(stack, stack.stage)
+  const tables = new Tables(stack);
+  const buckets = new Buckets(stack, stack.stage);
 
   const stageSecret = stack.stage === STAGES.PROD || stack.stage === STAGES.STAGING ? stack.stage : STAGES.STAGING;
   const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
@@ -49,10 +50,10 @@ export function Identity({stack}: StackContext) {
       pk: 'string',
       sk: 'string',
     },
-    primaryIndex: {partitionKey: 'pk', sortKey: 'sk'},
+    primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
     globalIndexes: {
-      gsi1: {partitionKey: 'sk', sortKey: 'pk'},
-    }
+      gsi1: { partitionKey: 'sk', sortKey: 'pk' },
+    },
   });
 
   const idMappingTable = new Table(stack, 'identityIdMappingTable', {
@@ -60,7 +61,7 @@ export function Identity({stack}: StackContext) {
       uuid: 'string',
       legacy_id: 'string',
     },
-    primaryIndex: {partitionKey: 'legacy_id', sortKey: 'uuid'},
+    primaryIndex: { partitionKey: 'legacy_id', sortKey: 'uuid' },
   });
 
   const incorrectAttemptsTable = new Table(stack, 'identityUnsuccessfulAttemptsTable', {
@@ -68,42 +69,49 @@ export function Identity({stack}: StackContext) {
       pk: 'string',
       sk: 'string',
     },
-    primaryIndex: {partitionKey: 'pk', sortKey: 'sk'},
+    primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
   });
 
-  const {webACL} = use(Shared);
+  const { bus, webACL } = use(Shared);
 
-  const {bus} = use(Shared);
   //add dead letter queue
   const dlq = new Queue(stack, 'DLQ');
 
-  const {oldCognito, oldWebClient} = createOldCognito(stack, appSecret, bus, dlq, region, webACL);
-  const {oldCognitoDds, oldWebClientDds} = createOldCognitoDDS(stack, appSecret, bus, dlq, region, webACL);
+  const { oldCognito, oldWebClient } = createOldCognito(stack, appSecret, bus, dlq, region, webACL);
+  const { oldCognitoDds, oldWebClientDds } = createOldCognitoDDS(stack, appSecret, bus, dlq, region, webACL);
   const cognito = createNewCognito(stack, appSecret, bus, dlq, region, webACL, oldCognito, oldWebClient);
   const cognito_dds = createNewCognitoDDS(stack, appSecret, bus, dlq, region, webACL, oldCognitoDds, oldWebClientDds);
 
   const customDomainNameLookUp: Record<string, string> = {
     [REGIONS.EU_WEST_2]: 'identity.blcshine.io',
-    [REGIONS.AP_SOUTHEAST_2]: 'identity-au.blcshine.io'
-  }
+    [REGIONS.AP_SOUTHEAST_2]: 'identity-au.blcshine.io',
+  };
+
+  const identityCustomAuthenticatorLambda = new Function(stack, 'Authorizer', {
+    handler: './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
+    environment: {
+      OLD_USER_POOL_ID: oldCognito.userPoolId,
+      OLD_USER_POOL_ID_DDS: oldCognitoDds.userPoolId,
+      USER_POOL_ID: cognito.userPoolId,
+      USER_POOL_ID_DDS: cognito_dds.userPoolId,
+    },
+  });
+
+  identityCustomAuthenticatorLambda.addPermission('invokeLambda', {
+    action: 'lambda:InvokeFunction',
+    principal: new ServicePrincipal('apigateway.amazonaws.com'),
+  });
+
+  const sharedAuthorizer: SharedAuthorizer = {
+    functionArn: identityCustomAuthenticatorLambda.functionArn,
+    type: 'lambda_request',
+    identitySources: [IdentitySource.header('Authorization')],
+  };
 
   //apis
   const identityApi = new ApiGatewayV1Api(stack, 'identity', {
     authorizers: {
-      identityAuthorizer: {
-        type: 'lambda_request',
-        function: new Function(stack, 'Authorizer', {
-          handler:
-            './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
-          environment: {
-            OLD_USER_POOL_ID: oldCognito.userPoolId,
-            OLD_USER_POOL_ID_DDS: oldCognitoDds.userPoolId,
-            USER_POOL_ID: cognito.userPoolId,
-            USER_POOL_ID_DDS: cognito_dds.userPoolId,
-          },
-        }),
-        identitySources: [apigateway.IdentitySource.header('Authorization')],
-      },
+      identityAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', sharedAuthorizer),
     },
     defaults: {
       function: {
@@ -145,7 +153,10 @@ export function Identity({stack}: StackContext) {
 
   identityApi.addRoutes(stack, {
     'GET /user': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
-    'POST /{brand}/formOutputData': new AddEcFormOutputDataRoute(apiGatewayModelGenerator, agEcFormOutputDataModel).getRouteDetails(),
+    'POST /{brand}/formOutputData': new AddEcFormOutputDataRoute(
+      apiGatewayModelGenerator,
+      agEcFormOutputDataModel,
+    ).getRouteDetails(),
   });
 
   stack.addOutputs({
@@ -156,9 +167,9 @@ export function Identity({stack}: StackContext) {
   });
 
   //API Key and Usage Plan
-  const apikey = identityApi.cdk.restApi.addApiKey("identity-api-key");
+  const apikey = identityApi.cdk.restApi.addApiKey('identity-api-key');
 
-  const usagePlan = identityApi.cdk.restApi.addUsagePlan("identity-api-usage-plan", {
+  const usagePlan = identityApi.cdk.restApi.addUsagePlan('identity-api-usage-plan', {
     throttle: {
       rateLimit: 1,
       burstLimit: 2,
@@ -166,12 +177,11 @@ export function Identity({stack}: StackContext) {
     apiStages: [
       {
         api: identityApi.cdk.restApi,
-        stage: identityApi.cdk.restApi.deploymentStage
+        stage: identityApi.cdk.restApi.deploymentStage,
       },
     ],
   });
   usagePlan.addApiKey(apikey);
-
 
   stack.addOutputs({
     CognitoUserPoolWebClient: cognito.userPoolId,
@@ -192,18 +202,66 @@ export function Identity({stack}: StackContext) {
   eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
 
   //add event bridge rules
-  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
-  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
-  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
+  bus.addRules(
+    stack,
+    passwordResetRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
+  bus.addRules(
+    stack,
+    emailUpdateRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
+  bus.addRules(
+    stack,
+    userStatusUpdatedRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
   bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName, region));
   bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
-  bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
-  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, incorrectAttemptsTable.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
+  bus.addRules(
+    stack,
+    companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region),
+  );
+  bus.addRules(
+    stack,
+    userGdprRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
 
   return {
     identityApi,
     newCognito: cognito,
-    cognito: oldCognito
+    cognito: oldCognito,
+    authorizer: sharedAuthorizer,
   };
 }

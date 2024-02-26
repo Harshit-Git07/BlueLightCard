@@ -5,6 +5,7 @@ import { RouteRegistry } from '../routes/routeRegistry';
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { DatabaseConfig } from '../database/type';
 import { EnvironmentVariablesKeys } from '../utils/environment-variables';
+import { ApiGatewayAuthorizer, SharedAuthorizer } from '../../../core/src/identity/authorizer';
 
 /**
  * Sets up and configures the API Gateway for the offers application, including defining routes and authorizers.
@@ -16,8 +17,7 @@ export class OffersApiGateway {
 
   constructor(
     private stack: Stack,
-    private cognitoUserPoolId: string,
-    private newCognitoUserPoolId: string,
+    private authorizer: SharedAuthorizer,
     private vpc: IVpc,
     private dbConfig: DatabaseConfig,
   ) {
@@ -51,13 +51,10 @@ export class OffersApiGateway {
   private createApi(): ApiGatewayV1Api<any> {
     return new ApiGatewayV1Api(this.stack, 'offers', {
       authorizers: {
-        OffersAuthorizer: {
-          type: 'user_pools',
-          userPoolIds: [this.cognitoUserPoolId, this.newCognitoUserPoolId],
-        },
+        offersAuthorizer: ApiGatewayAuthorizer(this.stack, 'ApiGatewayAuthorizer', this.authorizer),
       },
       defaults: {
-        authorizer: 'OffersAuthorizer',
+        authorizer: 'offersAuthorizer',
         function: {
           timeout: Duration.seconds(5).toSeconds(),
           memorySize: 256,

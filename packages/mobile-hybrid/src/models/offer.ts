@@ -1,4 +1,4 @@
-interface OfferBaseModel {
+export interface OfferPromosModel {
   id: number;
   compid: number;
   offername: string;
@@ -10,15 +10,6 @@ interface OfferBaseModel {
   s3logos: string;
   absoluteImage: string;
 }
-
-export type OfferPromosModel = OfferBaseModel;
-
-export type OfferListItemModel = OfferBaseModel & {
-  catid: number;
-  typeid: number;
-  available_offer_types: number[];
-  available_offer_cats: number[];
-};
 
 export interface OfferSharedModel {
   title: string;

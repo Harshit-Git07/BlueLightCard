@@ -24,7 +24,7 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
         </h4>
         {text && (
           <p className="text-neutral-grey-600 dark:text-neutral-grey-200 font-museo text-sm lg:text-lg">
-            {decodeEntities(text)}
+            {text}
           </p>
         )}
       </div>

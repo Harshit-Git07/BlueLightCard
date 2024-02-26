@@ -13,7 +13,7 @@ import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const SearchResultsPage: NextPage = () => {
   const router = useRouter();
-  const searchTermQuery = (router.query?.searchTerm as string) ?? '';
+  const searchQueryValue = (router.query?.search as string) ?? '';
   const setSpinner = useSetAtom(spinner);
   const setTerm = useSetAtom(searchTerm);
 
@@ -28,12 +28,12 @@ const SearchResultsPage: NextPage = () => {
     router.push(`/categories?category=${categoryId}`);
   };
   useEffect(() => {
-    if (searchTermQuery) {
-      setTerm(searchTermQuery);
+    if (searchQueryValue) {
+      setTerm(searchQueryValue);
       setSpinner(true);
       return;
     }
-  }, [searchTermQuery, setTerm, setSpinner]);
+  }, [searchQueryValue, setTerm, setSpinner]);
 
   return (
     <div>

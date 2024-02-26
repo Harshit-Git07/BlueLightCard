@@ -33,7 +33,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
     (searchTerm) => {
       setSearchOverlayOpen(false);
       setTerm('');
-      router.push(`/searchresults?searchTerm=${searchTerm}`);
+      router.push(`/searchresults?search=${searchTerm}`);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router],

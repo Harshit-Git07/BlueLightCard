@@ -15,7 +15,7 @@ const componentMeta: Meta<typeof SearchResultsPage> = {
     nextjs: {
       router: {
         query: {
-          searchTerm: 'Nike',
+          search: 'Nike',
         },
       },
     },

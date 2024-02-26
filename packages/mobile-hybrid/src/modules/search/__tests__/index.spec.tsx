@@ -71,7 +71,7 @@ describe('SearchModule', () => {
 
       fireEvent.submit(searchInput);
 
-      expect(pushMockFn).toHaveBeenCalledWith('/searchresults?searchTerm=test');
+      expect(pushMockFn).toHaveBeenCalledWith('/searchresults?search=test');
     });
   });
 

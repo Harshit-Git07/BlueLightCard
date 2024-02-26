@@ -184,7 +184,7 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy Production
     environment: Production
     runs-on: ubuntu-latest

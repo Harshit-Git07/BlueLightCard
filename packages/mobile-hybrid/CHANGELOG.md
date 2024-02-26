@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.8.0...bluelightcard/mobile-hybrid-v1.9.0) (2024-02-26)
+
+
+### Features
+
+* [DISCO-121] Look for "search" query param instead of "searchTerm" ([#922](https://github.com/bluelightcard/BlueLightCard-2.0/issues/922)) ([e930573](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e9305738a8f2ee01b935e76157f2620883199989))
+* [DISCO-40] create list module ([#909](https://github.com/bluelightcard/BlueLightCard-2.0/issues/909)) ([ff03e6b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ff03e6b468c8df25b4b3ee2c22e58c109a3e63ee))
+* [DISCO-90] Add 'Search Results List Viewed' analytic event ([#898](https://github.com/bluelightcard/BlueLightCard-2.0/issues/898)) ([d03d8a6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d03d8a610466d91e6901646c52099a6f5f81e31e))
+
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.7.0...bluelightcard/mobile-hybrid-v1.8.0) (2024-02-22)
 
 

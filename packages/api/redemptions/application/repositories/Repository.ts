@@ -1,7 +1,14 @@
+import { DatabaseTransactionConnection } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
+import { IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
+
+type DBConnection = IDatabaseConnection | DatabaseTransactionConnection;
+
 /**
  * Base class for all repositories with common methods.
  */
-export class Repository {
+export abstract class Repository {
+  constructor(protected readonly connection: DBConnection) {}
+
   /**
    * Checks if the given results array contains at most one element and returns it.
    * If the array is empty, returns null.
@@ -18,4 +25,6 @@ export class Repository {
 
     return results[0];
   }
+
+  public abstract withTransaction(transaction: DatabaseTransactionConnection): Repository;
 }

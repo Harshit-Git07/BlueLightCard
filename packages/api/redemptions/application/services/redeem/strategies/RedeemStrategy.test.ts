@@ -2,10 +2,10 @@ import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
-import { Redemption } from '@blc-mono/redemptions/application/repositories/RedeptionsRepository';
+import { Redemption } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/application/test/helpers/database';
 import { createTestLogger } from '@blc-mono/redemptions/application/test/helpers/logger';
-import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
+import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 import { RedeemGenericStrategy } from './RedeemGenericStrategy';
@@ -13,7 +13,7 @@ import { RedeemGenericStrategy } from './RedeemGenericStrategy';
 describe('RedeemGenericStrategy', () => {
   const mockedLogger = createTestLogger();
 
-  async function callGenericRedeemStrategy(connection: DatabaseConnection, redemption: Redemption) {
+  async function callGenericRedeemStrategy(connection: IDatabaseConnection, redemption: Redemption) {
     const genericsRepository = new GenericsRepository(connection);
     const service = new RedeemGenericStrategy(genericsRepository, mockedLogger);
     return service.redeem(redemption);

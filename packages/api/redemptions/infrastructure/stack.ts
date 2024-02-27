@@ -15,7 +15,13 @@ import { RedemptionsStackConfigResolver } from './config/config';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
 import { RedemptionsDatabase } from './database/database';
 import { EventBridge } from './eventBridge/eventBridge';
-import { createLinkRule, createOfferRule, createPromotionUpdatedRule, createVaultRule } from './eventBridge/rules';
+import {
+  createLinkRule,
+  createOfferRule,
+  createPromotionUpdatedRule,
+  createVaultUpdatedRule,
+} from './eventBridge/rules';
+import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { Route } from './routes/route';
 import { Routes } from './routes/routes';
 
@@ -72,7 +78,8 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   new EventBridge(stack, {
     linkRule: createLinkRule(stack),
-    vaultRule: createVaultRule(stack, database),
+    vaultCreatedRule: createVaultCreatedRule(stack, database),
+    vaultUpdatedRule: createVaultUpdatedRule(stack, database),
     promotionUpdatedRule: createPromotionUpdatedRule(stack, database),
     offerRule: createOfferRule(stack),
   });

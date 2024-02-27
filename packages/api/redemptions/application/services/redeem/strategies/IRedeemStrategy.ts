@@ -1,6 +1,6 @@
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
-import { Redemption } from '../../../repositories/RedeptionsRepository';
+import { Redemption } from '../../../repositories/RedemptionsRepository';
 
 export type RedeemedStrategyResult =
   | RedeemGenericStrategyResult

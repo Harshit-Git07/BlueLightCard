@@ -1,4 +1,4 @@
-import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedeptionsRepository';
+import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
 import { IRedeemStrategyResolver, RedeemStrategyResolver } from './RedeemStrategyResolver';
 import { RedeemedStrategyResult } from './strategies/IRedeemStrategy';

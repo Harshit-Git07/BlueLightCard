@@ -6,7 +6,7 @@ import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 import { redemptionFactory } from '../test/factories/redemption.factory';
 import { RedemptionsTestDatabase } from '../test/helpers/database';
 
-import { RedemptionsRepository } from './RedeptionsRepository';
+import { RedemptionsRepository } from './RedemptionsRepository';
 
 describe('RedemptionsRespository', () => {
   let database: RedemptionsTestDatabase;

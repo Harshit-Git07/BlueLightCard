@@ -7,7 +7,7 @@ import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemption
 
 import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemController';
 import { GenericsRepository } from '../../../repositories/GenericsRepository';
-import { RedemptionsRepository } from '../../../repositories/RedeptionsRepository';
+import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
 import { RedeemService } from '../../../services/redeem/RedeemService';
 import { RedeemStrategyResolver } from '../../../services/redeem/RedeemStrategyResolver';
 import { RedeemGenericStrategy } from '../../../services/redeem/strategies/RedeemGenericStrategy';

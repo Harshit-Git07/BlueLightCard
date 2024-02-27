@@ -1,4 +1,4 @@
-import { Redemption } from '../../../repositories/RedeptionsRepository';
+import { Redemption } from '../../../repositories/RedemptionsRepository';
 
 import { IRedeemStrategy, RedeemShowCardStrategyResult } from './IRedeemStrategy';
 

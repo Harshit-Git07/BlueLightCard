@@ -1,7 +1,7 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 
-import { Redemption } from '../../../repositories/RedeptionsRepository';
+import { Redemption } from '../../../repositories/RedemptionsRepository';
 
 import { IRedeemStrategy, RedeemGenericStrategyResult } from './IRedeemStrategy';
 

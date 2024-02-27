@@ -8,6 +8,8 @@ import '@testing-library/jest-dom/extend-expect';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { APIUrl } from '@/globals';
+import { FC, PropsWithChildren } from 'react';
+import Spinner from '@/modules/Spinner';
 
 jest.mock('@/invoke/apiCall');
 
@@ -52,14 +54,32 @@ describe('Search Results', () => {
         term: searchValue,
       });
     });
+
+    it('should show the spinner when search is made', async () => {
+      whenPageIsRenderedWithFlags({});
+
+      const spinner = screen.queryByRole('progressbar');
+      expect(spinner).toBeTruthy();
+    });
   });
 });
+
+const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
+  return (
+    <div>
+      {children}
+      <Spinner />
+    </div>
+  );
+};
 
 const whenPageIsRenderedWithFlags = (featureFlags: any) => {
   render(
     <RouterContext.Provider value={mockRouter as NextRouter}>
       <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
-        <SearchResultsPage />
+        <WithSpinner>
+          <SearchResultsPage />
+        </WithSpinner>
       </JotaiTestProvider>
     </RouterContext.Provider>,
   );

@@ -46,7 +46,7 @@ const SearchResultsContainer: FC = () => {
     if (term) {
       request.requestData(APIUrl.Search, { term });
     }
-  }, [term, setSpinner]);
+  }, [term]);
 
   // set results into store
   useEffect(() => {
@@ -55,7 +55,8 @@ const SearchResultsContainer: FC = () => {
       logSearchResultsListViewedAnalytic(searchResultsData.data.length);
     }
     setSpinner(false);
-  }, [logSearchResultsListViewedAnalytic, searchResultsData, setResults, setSpinner]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchResultsData, setResults, setSpinner]);
 
   return <SearchResultsPresenter results={results} onOfferClick={onOfferClick} />;
 };

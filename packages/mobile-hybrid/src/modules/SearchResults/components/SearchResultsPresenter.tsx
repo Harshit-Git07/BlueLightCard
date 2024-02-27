@@ -13,7 +13,7 @@ export interface Props {
  */
 const SearchResultsPresenter: FC<Props> = ({ results, onOfferClick }) => {
   return (
-    <div role="list" className="px-4">
+    <div role="list" className="px-4 py-6">
       {!results.length && <p className="text-center py-4 dark:text-white">No results found.</p>}
       {results.map((offer) => (
         <div key={offer.id} role="listitem" className="mb-4">

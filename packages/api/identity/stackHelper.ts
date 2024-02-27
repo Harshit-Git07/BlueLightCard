@@ -1,4 +1,4 @@
-import { Cognito, EventBus, Function, Queue } from 'sst/constructs'
+import { Cognito, EventBus, Function, Queue, Table } from 'sst/constructs'
 import { Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
 import { Duration } from 'aws-cdk-lib'
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
@@ -15,24 +15,34 @@ import { REGIONS } from  '@blc-mono/core/types/regions.enum'
 import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
 
 const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
-
-const getBlcShineCertificateArn = (appSecret: ISecret) => appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
-const getAuSuffix = (region: REGIONS) => region === REGIONS.AP_SOUTHEAST_2 ? '-au' : '';
+const getBlcShineCertificateArn = (appSecret: ISecret) =>
+  appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
+const getAuSuffix = (region: REGIONS) => (region === REGIONS.AP_SOUTHEAST_2 ? '-au' : '');
 
 const getAuthCustomDomainName = (brandName: BRANDS = BRANDS.BLC_UK, stage: STAGES, region: REGIONS) => {
   const domainPrefix = brandName === BRANDS.DDS_UK ? 'auth-dds' : 'auth';
 
   const authCustomDomainNameLookUp: Record<string, string> = {
     [REGIONS.EU_WEST_2]: `${domainPrefix}.blcshine.io`,
-    [REGIONS.AP_SOUTHEAST_2]: `${domainPrefix}${getAuSuffix(region)}.blcshine.io`
-  }
+    [REGIONS.AP_SOUTHEAST_2]: `${domainPrefix}${getAuSuffix(region)}.blcshine.io`,
+  };
 
-  const customDomainName = stage === STAGES.PROD ? authCustomDomainNameLookUp[region] : `${stage}-${authCustomDomainNameLookUp[region]}`;
+  const customDomainName =
+    stage === STAGES.PROD ? authCustomDomainNameLookUp[region] : `${stage}-${authCustomDomainNameLookUp[region]}`;
 
   return customDomainName;
 }
 
-export function createOldCognito (stack: Stack, appSecret: ISecret, bus: EventBus, dlq: Queue, region: string, webACL: CfnWebACL) {
+export function createOldCognito(
+  stack: Stack,
+  unsuccessfulLoginAttemptsTable: Table,
+  appSecret: ISecret,
+  bus: EventBus,
+  dlq: Queue,
+  region: string,
+  webACL: CfnWebACL,
+  identitySecret: ISecret
+) {
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
     triggers: {
@@ -45,15 +55,17 @@ export function createOldCognito (stack: Stack, appSecret: ISecret, bus: EventBu
           EVENT_BUS: bus.eventBusName,
           EVENT_SOURCE: 'user.signin.migrated',
           DLQ_URL: dlq.queueUrl,
-          REGION: region
+          REGION: region,
         },
-        permissions: [bus]
+        permissions: [bus],
       },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-        }
+          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+        },
+        permissions: [unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -61,6 +73,11 @@ export function createOldCognito (stack: Stack, appSecret: ISecret, bus: EventBu
           SERVICE: 'identity',
         },
         permissions: ['dynamodb:*']
+      },
+      preAuthentication: {
+        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
+        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
+        permissions: [unsuccessfulLoginAttemptsTable]
       }
     },
     cdk: {
@@ -71,33 +88,35 @@ export function createOldCognito (stack: Stack, appSecret: ISecret, bus: EventBu
           otp: true,
         },
         standardAttributes: {
-          email: {required: true, mutable: true},
-          phoneNumber: {required: true, mutable: true},
+          email: { required: true, mutable: true },
+          phoneNumber: { required: true, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
           minLength: 6,
           requireLowercase: false,
           requireUppercase: false,
           requireDigits: false,
-          requireSymbols: false
+          requireSymbols: false,
         },
         selfSignUpEnabled: false,
       },
     },
   });
 
-  const blcOldDomainPrefix = `blc${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(stack.region as REGIONS)}-old`;
+  const blcOldDomainPrefix = `blc${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(
+    stack.region as REGIONS,
+  )}-old`;
 
   cognito.cdk.userPool.addDomain('BLCOldCognitoDomain', {
     cognitoDomain: {
       domainPrefix: blcOldDomainPrefix,
-    }
+    },
   });
-  
+
   const mobileClient = cognito.cdk.userPool.addClient('membersClient', {
     authFlows: {
       userPassword: true,
@@ -108,45 +127,44 @@ export function createOldCognito (stack: Stack, appSecret: ISecret, bus: EventBu
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('blc_callback_app').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('blc_logout_app').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('blc_logout_app').toString()],
     },
   });
   const webClient = cognito.cdk.userPool.addClient('webClient', {
     authFlows: {
       userPassword: true,
-      adminUserPassword: true
+      adminUserPassword: true,
     },
     generateSecret: true,
     oAuth: {
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('blc_callback_web').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()],
     },
   });
 
   new CfnWebACLAssociation(stack, 'BlcWebAclAssociation', {
     resourceArn: cognito.cdk.userPool.userPoolArn,
-    webAclArn: webACL.attrArn
+    webAclArn: webACL.attrArn,
   });
   return {oldCognito: cognito, oldWebClient: webClient};
 };
 
-export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: EventBus, dlq: Queue, region: string, webACL: CfnWebACL) {
+export function createOldCognitoDDS(
+  stack: Stack,
+  unsuccessfulLoginAttemptsTable: Table,
+  appSecret: ISecret,
+  bus: EventBus,
+  dlq: Queue,
+  region: string,
+  webACL: CfnWebACL,
+  identitySecret: ISecret
+) {
   //auth - DDS
   const cognito_dds = new Cognito(stack, 'cognito_dds', {
     login: ['email'],
@@ -160,15 +178,17 @@ export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
           EVENT_BUS: bus.eventBusName,
           EVENT_SOURCE: 'user.signin.migrated',
           DLQ_URL: dlq.queueUrl,
-          REGION: region
+          REGION: region,
         },
-        permissions: [bus]
+        permissions: [bus],
       },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
+          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
         },
+        permissions: [unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -176,6 +196,11 @@ export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
           SERVICE: 'identity',
         },
         permissions: ['dynamodb:*']
+      },
+      preAuthentication: {
+        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
+        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
+        permissions: [unsuccessfulLoginAttemptsTable]
       }
     },
     cdk: {
@@ -186,31 +211,33 @@ export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
           otp: true,
         },
         standardAttributes: {
-          email: {required: true, mutable: true},
-          phoneNumber: {required: true, mutable: true},
+          email: { required: true, mutable: true },
+          phoneNumber: { required: true, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
           minLength: 6,
           requireLowercase: false,
           requireUppercase: false,
           requireDigits: false,
-          requireSymbols: false
+          requireSymbols: false,
         },
         selfSignUpEnabled: false,
       },
     },
   });
 
-  const ddsOldDomainPrefix = `dds${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(stack.region as REGIONS)}-old`;
-    
+  const ddsOldDomainPrefix = `dds${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(
+    stack.region as REGIONS,
+  )}-old`;
+
   cognito_dds.cdk.userPool.addDomain('DDSOldCognitoDomain', {
     cognitoDomain: {
       domainPrefix: ddsOldDomainPrefix,
-    }
+    },
   });
 
   const mobileClientDds = cognito_dds.cdk.userPool.addClient('membersClient', {
@@ -223,49 +250,51 @@ export function createOldCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('dds_callback_app').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('dds_logout_app').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('dds_logout_app').toString()],
     },
   });
   const webClientDds = cognito_dds.cdk.userPool.addClient('webClient', {
     authFlows: {
       userPassword: true,
-      adminUserPassword: true
+      adminUserPassword: true,
     },
     generateSecret: true,
     oAuth: {
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('dds_callback_web').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()],
     },
   });
 
   // Associate WAF WebACL with cognito
   new CfnWebACLAssociation(stack, 'DdsWebAclAssociation', {
     resourceArn: cognito_dds.cdk.userPool.userPoolArn,
-    webAclArn: webACL.attrArn
+    webAclArn: webACL.attrArn,
   });
-  return {oldCognitoDds: cognito_dds, oldWebClientDds: webClientDds};
+  return { oldCognitoDds: cognito_dds, oldWebClientDds: webClientDds };
 }
 
-export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBus, dlq: Queue, region: string, webACL: CfnWebACL, oldCognito: Cognito, oldCognitoWebClient: UserPoolClient) {
+
+export function createNewCognito(
+  stack: Stack,
+  unsuccessfulLoginAttemptsTable: Table,
+  appSecret: ISecret,
+  bus: EventBus,
+  dlq: Queue,
+  region: string,
+  webACL: CfnWebACL,
+  oldCognito: Cognito,
+  oldCognitoWebClient: UserPoolClient,
+  identitySecret: ISecret
+) {
   const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
   const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
-  
+
   const cognito = new Cognito(stack, 'cognitoNew', {
     login: ['email'],
     triggers: {
@@ -281,15 +310,17 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
           EVENT_BUS: bus.eventBusName,
           EVENT_SOURCE: 'user.signin.migrated',
           DLQ_URL: dlq.queueUrl,
-          REGION: region
+          REGION: region,
         },
-        permissions: [bus, "cognito-idp:AdminInitiateAuth", "cognito-idp:AdminGetUser"]
+        permissions: [bus, 'cognito-idp:AdminInitiateAuth', 'cognito-idp:AdminGetUser'],
       },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-        }
+          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+        },
+        permissions: [unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -297,6 +328,11 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
           SERVICE: 'identity',
         },
         permissions: ['dynamodb:*']
+      },
+      preAuthentication: {
+        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
+        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
+        permissions: [unsuccessfulLoginAttemptsTable]
       }
     },
     cdk: {
@@ -307,19 +343,19 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
           otp: true,
         },
         standardAttributes: {
-          email: {required: false, mutable: true},
-          phoneNumber: {required: false, mutable: true},
+          email: { required: false, mutable: true },
+          phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
           minLength: 6,
           requireLowercase: false,
           requireUppercase: false,
           requireDigits: false,
-          requireSymbols: false
+          requireSymbols: false,
         },
         selfSignUpEnabled: false,
       },
@@ -335,14 +371,9 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('blc_callback_app').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('blc_logout_app').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('blc_logout_app').toString()],
     },
   });
   const webClient = cognito.cdk.userPool.addClient('webClientNew', {
@@ -354,14 +385,9 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('blc_callback_web').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()],
     },
   });
 
@@ -370,16 +396,20 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
     cognito.cdk.userPool.addDomain('BLCCognitoCustomDomain', {
       customDomain: {
         domainName: getAuthCustomDomainName(BRANDS.BLC_UK, stack.stage, stack.region as REGIONS),
-        certificate: Certificate.fromCertificateArn(stack, 'BLCAuthDomainCertificate', getBlcShineCertificateArn(appSecret)),
-      }
+        certificate: Certificate.fromCertificateArn(
+          stack,
+          'BLCAuthDomainCertificate',
+          getBlcShineCertificateArn(appSecret),
+        ),
+      },
     });
   } else {
     const blcDomainPrefix = `${stack.stage}-blc${getAuSuffix(stack.region as REGIONS)}`;
-    
+
     cognito.cdk.userPool.addDomain('BLCCognitoDomain', {
       cognitoDomain: {
         domainPrefix: blcDomainPrefix,
-      }
+      },
     });
   }
 
@@ -395,7 +425,7 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
   // Associate WAF WebACL with cognito
   new CfnWebACLAssociation(stack, 'BlcWebAclAssociationNew', {
     resourceArn: cognito.cdk.userPool.userPoolArn,
-    webAclArn: webACL.attrArn
+    webAclArn: webACL.attrArn,
   });
   //audit
   if (stack.stage === 'production') {
@@ -407,7 +437,7 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
         WEB_CLIENT_ID: webClient.userPoolClientId,
         MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
       },
-      permissions: ['firehose:PutRecord']
+      permissions: ['firehose:PutRecord'],
     });
     const postAuthenticationLogGroup: ILogGroup | undefined = cognito.getFunction('postAuthentication')?.logGroup;
     postAuthenticationLogGroup?.addSubscriptionFilter('auditLogSignIn', {
@@ -418,10 +448,21 @@ export function createNewCognito (stack: Stack, appSecret: ISecret, bus: EventBu
   return cognito;
 };
 
-export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: EventBus, dlq: Queue, region: string, webACL: CfnWebACL, oldCognito: Cognito, oldCognitoWebClient: UserPoolClient) {
+export function createNewCognitoDDS(
+  stack: Stack,
+  unsuccessfulLoginAttemptsTable: Table,
+  appSecret: ISecret,
+  bus: EventBus,
+  dlq: Queue,
+  region: string,
+  webACL: CfnWebACL,
+  oldCognito: Cognito,
+  oldCognitoWebClient: UserPoolClient,
+  identitySecret: ISecret
+) {
   const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
   const ddsLogoPath = path.join(cognitoHostedUiAssets, 'dds-logo.png');
-  
+
   //auth - DDS
   const cognito_dds = new Cognito(stack, 'cognito_ddsNew', {
     login: ['email'],
@@ -438,23 +479,30 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
           EVENT_BUS: bus.eventBusName,
           EVENT_SOURCE: 'user.signin.migrated',
           DLQ_URL: dlq.queueUrl,
-          REGION: region
+          REGION: region,
         },
-        permissions: [bus, "cognito-idp:AdminInitiateAuth", "cognito-idp:AdminGetUser"]
+        permissions: [bus, 'cognito-idp:AdminInitiateAuth', 'cognito-idp:AdminGetUser'],
       },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
+          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
         },
+        permissions: [unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
         environment: {
           SERVICE: 'identity',
-          REGION: region
+          REGION: region,
         },
         permissions: ['dynamodb:*']
+      },
+      preAuthentication: {
+        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
+        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
+        permissions: [unsuccessfulLoginAttemptsTable]
       }
     },
     cdk: {
@@ -465,19 +513,19 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
           otp: true,
         },
         standardAttributes: {
-          email: {required: false, mutable: true},
-          phoneNumber: {required: false, mutable: true},
+          email: { required: false, mutable: true },
+          phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
           minLength: 6,
           requireLowercase: false,
           requireUppercase: false,
           requireDigits: false,
-          requireSymbols: false
+          requireSymbols: false,
         },
         selfSignUpEnabled: false,
       },
@@ -488,8 +536,12 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
     cognito_dds.cdk.userPool.addDomain('DDSCognitoCustomDomain', {
       customDomain: {
         domainName: getAuthCustomDomainName(BRANDS.DDS_UK, stack.stage, stack.region as REGIONS),
-        certificate: Certificate.fromCertificateArn(stack, 'DDSAuthDomainCertificate', getBlcShineCertificateArn(appSecret)),
-      }
+        certificate: Certificate.fromCertificateArn(
+          stack,
+          'DDSAuthDomainCertificate',
+          getBlcShineCertificateArn(appSecret),
+        ),
+      },
     });
   } else {
     const ddsDomainPrefix = `${stack.stage}-dds${getAuSuffix(stack.region as REGIONS)}`;
@@ -497,7 +549,7 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
     cognito_dds.cdk.userPool.addDomain('DDSCognitoDomain', {
       cognitoDomain: {
         domainPrefix: ddsDomainPrefix,
-      }
+      },
     });
   }
 
@@ -511,14 +563,9 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('dds_callback_app').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('dds_logout_app').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('dds_logout_app').toString()],
     },
   });
   const webClientDds = cognito_dds.cdk.userPool.addClient('webClientNew', {
@@ -530,14 +577,9 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
       flows: {
         authorizationCodeGrant: true,
       },
-      scopes: [
-        OAuthScope.EMAIL,
-        OAuthScope.OPENID,
-        OAuthScope.PROFILE,
-        OAuthScope.COGNITO_ADMIN
-      ],
+      scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
       callbackUrls: [appSecret.secretValueFromJson('dds_callback_web').toString()],
-      logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()]
+      logoutUrls: [appSecret.secretValueFromJson('dds_logout_web').toString()],
     },
   });
 
@@ -553,7 +595,7 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
   // Associate WAF WebACL with cognito
   new CfnWebACLAssociation(stack, 'DdsWebAclAssociationNew', {
     resourceArn: cognito_dds.cdk.userPool.userPoolArn,
-    webAclArn: webACL.attrArn
+    webAclArn: webACL.attrArn,
   });
   if (stack.stage === 'production') {
     const ddsAuditLogFunction = new Function(stack, 'ddsAuditLogSignIn', {
@@ -564,9 +606,10 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
         WEB_CLIENT_ID: webClientDds.userPoolClientId,
         MOBILE_CLIENT_ID: mobileClientDds.userPoolClientId,
       },
-      permissions: ['firehose:PutRecord']
+      permissions: ['firehose:PutRecord'],
     });
-    const postAuthenticationLogGroupDds: ILogGroup | undefined = cognito_dds.getFunction('postAuthentication')?.logGroup;
+    const postAuthenticationLogGroupDds: ILogGroup | undefined =
+      cognito_dds.getFunction('postAuthentication')?.logGroup;
     postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignIn', {
       destination: new LambdaDestination(ddsAuditLogFunction),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
@@ -575,3 +618,14 @@ export function createNewCognitoDDS(stack: Stack, appSecret: ISecret, bus: Event
   return cognito_dds;
 }
 
+function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Table, identitySecret: ISecret) {
+  return {
+    SERVICE: 'identity',
+    TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+    API_AUTHORISER_USER_BLC: identitySecret.secretValueFromJson('API_AUTHORISER_USER_BLC').toString(),
+    API_AUTHORISER_PASSWORD_BLC: identitySecret.secretValueFromJson('API_AUTHORISER_PASSWORD_BLC').toString(),
+    RESET_PASSWORD_API_URL: identitySecret.secretValueFromJson('RESET_PASSWORD_API_URL').toString(),
+    WRONG_PASSWORD_ENTER_LIMIT: identitySecret.secretValueFromJson('WRONG_PASSWORD_ENTER_LIMIT').toString(),
+    WRONG_PASSWORD_RESET_TRIGGER_MINUTES: identitySecret.secretValueFromJson('WRONG_PASSWORD_RESET_TRIGGER_MINUTES').toString(),
+  }
+}

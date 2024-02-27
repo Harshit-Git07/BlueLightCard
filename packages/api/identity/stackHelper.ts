@@ -1,5 +1,5 @@
 import { Cognito, EventBus, Function, Queue, Table } from 'sst/constructs'
-import { Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
+import { BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
 import { Duration } from 'aws-cdk-lib'
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2'
@@ -65,7 +65,7 @@ export function createOldCognito(
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
         },
-        permissions: [unsuccessfulLoginAttemptsTable]
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -188,7 +188,7 @@ export function createOldCognitoDDS(
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
         },
-        permissions: [unsuccessfulLoginAttemptsTable]
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -319,8 +319,9 @@ export function createNewCognito(
         environment: {
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          OLD_USER_POOL_ID: oldCognito.userPoolId,
         },
-        permissions: [unsuccessfulLoginAttemptsTable]
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -347,8 +348,9 @@ export function createNewCognito(
           phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({ mutable: true }),
-          blc_old_uuid: new StringAttribute({ mutable: true }),
+          blc_old_id: new StringAttribute({mutable: true}),
+          blc_old_uuid: new StringAttribute({mutable: true}),
+          migrated_old_pool: new BooleanAttribute({mutable: true})
         },
         passwordPolicy: {
           minLength: 6,
@@ -488,8 +490,9 @@ export function createNewCognitoDDS(
         environment: {
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          OLD_USER_POOL_ID: oldCognito.userPoolId,
         },
-        permissions: [unsuccessfulLoginAttemptsTable]
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -517,8 +520,9 @@ export function createNewCognitoDDS(
           phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({ mutable: true }),
-          blc_old_uuid: new StringAttribute({ mutable: true }),
+          blc_old_id: new StringAttribute({mutable: true}),
+          blc_old_uuid: new StringAttribute({mutable: true}),
+          migrated_old_pool: new BooleanAttribute({mutable: true})
         },
         passwordPolicy: {
           minLength: 6,

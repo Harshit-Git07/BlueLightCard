@@ -78,14 +78,15 @@ const authenticateUserOldPool = async (username: string, password: string) => {
               const user = await cognitoISP.getUser({ AccessToken: accessToken }).promise();
 
               if (user) {
-                const attributesObject = user.UserAttributes.reduce((acc, attr) => {
+                const attributesObject = user.UserAttributes.reduce((acc: { [key: string]: any }, attr) => {
                   if (attr.Name !== 'sub') { // Continue to skip 'sub' attribute
                     // @ts-ignore
                     acc[attr.Name] = attr.Value; // Keep the attribute name unchanged, including 'custom:' prefix
                   }
                   return acc;
                 }, {});
-                
+
+                attributesObject['custom:migrated_old_pool'] = true;
                 return attributesObject;
               }
             } catch (e: any) {

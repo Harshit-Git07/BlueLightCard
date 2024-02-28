@@ -1,5 +1,5 @@
 import { Cognito, EventBus, Function, Queue } from 'sst/constructs';
-import { Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
+import { BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
 import { Duration } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2';
@@ -63,6 +63,7 @@ export function createOldCognito(
         environment: {
           SERVICE: 'identity',
         },
+        permissions: ['cognito-idp:AdminUpdateUserAttributes']
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -177,6 +178,7 @@ export function createOldCognitoDDS(
         environment: {
           SERVICE: 'identity',
         },
+        permissions: ['cognito-idp:AdminUpdateUserAttributes']
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -298,7 +300,9 @@ export function createNewCognito(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
+          OLD_USER_POOL_ID: oldCognito.userPoolId,
         },
+        permissions: ['cognito-idp:AdminUpdateUserAttributes']
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -320,8 +324,9 @@ export function createNewCognito(
           phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({ mutable: true }),
-          blc_old_uuid: new StringAttribute({ mutable: true }),
+          blc_old_id: new StringAttribute({mutable: true}),
+          blc_old_uuid: new StringAttribute({mutable: true}),
+          migrated_old_pool: new BooleanAttribute({mutable: true})
         },
         passwordPolicy: {
           minLength: 6,
@@ -458,7 +463,9 @@ export function createNewCognitoDDS(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
+          OLD_USER_POOL_ID: oldCognito.userPoolId,
         },
+        permissions: ['cognito-idp:AdminUpdateUserAttributes']
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -481,8 +488,9 @@ export function createNewCognitoDDS(
           phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({ mutable: true }),
-          blc_old_uuid: new StringAttribute({ mutable: true }),
+          blc_old_id: new StringAttribute({mutable: true}),
+          blc_old_uuid: new StringAttribute({mutable: true}),
+          migrated_old_pool: new BooleanAttribute({mutable: true})
         },
         passwordPolicy: {
           minLength: 6,

@@ -10,6 +10,7 @@ import { PostSpotifyModel } from '@blc-mono/redemptions/libs/models/postSpotify'
 import { Shared } from '../../../../stacks/stack';
 import { ApiGatewayAuthorizer } from '../../core/src/identity/authorizer';
 import { Identity } from '../../identity/stack';
+import { GetRedemptionDetailsModel } from '../libs/models/getRedemptionDetails';
 
 import { RedemptionsStackConfigResolver } from './config/config';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
@@ -75,6 +76,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   const postSpotifyModel = apiGatewayModelGenerator.generateModel(PostSpotifyModel);
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
   const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
+  const getRedemptionDetailsModel = apiGatewayModelGenerator.generateModel(GetRedemptionDetailsModel);
 
   new EventBridge(stack, {
     linkRule: createLinkRule(stack),
@@ -89,11 +91,22 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   // functionName is automatically appended with the stage name
   allRoutes.addRoutes(api, stack, {
+    'GET /member/redemptionDetails': Route.createRoute({
+      model: getRedemptionDetailsModel,
+      apiGatewayModelGenerator,
+      stack,
+      functionName: 'GetRedemptionDetailsHandler',
+      restApi,
+      database,
+      handler:
+        'packages/api/redemptions/application/handlers/apiGateway/redemptionDetails/getRedemptionDetails.handler',
+      requestValidatorName: 'GetRedemptionDetailsValidator',
+    }),
     'POST /member/redeem': Route.createRoute({
       model: postRedeemModel,
       apiGatewayModelGenerator,
       stack,
-      functionName: `PostRedeemHandler`,
+      functionName: 'PostRedeemHandler',
       restApi,
       database,
       handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
@@ -102,7 +115,7 @@ export async function Redemptions({ app, stack }: StackContext) {
     'POST /member/connection/affiliate': Route.createRoute({
       model: postAffiliateModel,
       apiGatewayModelGenerator,
-      functionName: `PostAffiliateHandler`,
+      functionName: 'PostAffiliateHandler',
       stack,
       restApi,
       handler: 'packages/api/redemptions/application/handlers/apiGateway/affiliate/postAffiliate.handler',

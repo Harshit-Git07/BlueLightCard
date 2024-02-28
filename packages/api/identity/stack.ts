@@ -11,11 +11,10 @@ import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
 import { userSignInMigratedRule } from './src/eventRules/userSignInMigratedRule';
 import { cardStatusUpdatedRule } from './src/eventRules/cardStatusUpdatedRule';
 import { userProfileUpdatedRule } from './src/eventRules/userProfileUpdatedRule';
-import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
-import { companyFollowsUpdatedRule } from "./src/eventRules/companyFollowsUpdatedRule";
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { companyFollowsUpdatedRule } from './src/eventRules/companyFollowsUpdatedRule';
 import { AddEcFormOutputDataRoute } from './src/routes/addEcFormOutputDataRoute';
-import { EcFormOutputDataTable } from './src/eligibility/constructs/tables';
-import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
+import { Tables } from './src/eligibility/constructs/tables';
 import { Buckets } from './src/eligibility/constructs/buckets';
 import { Lambda } from './src/common/lambda';
 import { userGdprRule } from './src/eventRules/userGdprRule';
@@ -39,13 +38,11 @@ export function Identity({ stack }: StackContext) {
   //Region
   const region = stack.region;
 
-  const ecFormOutputDataTable = new EcFormOutputDataTable(stack)
-  const buckets = new Buckets(stack, stack.stage)
-  
+  const tables = new Tables(stack);
+  const buckets = new Buckets(stack, stack.stage);
 
   const stageSecret = stack.stage === STAGES.PROD || stack.stage === STAGES.STAGING ? stack.stage : STAGES.STAGING;
   const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
-  const identitySecret = Secret.fromSecretNameV2(stack,'identity-secret',`blc-mono-identity/${stageSecret}/secrets`);
 
   //db - identityTable
   const identityTable = new Table(stack, 'identityTable', {
@@ -67,17 +64,23 @@ export function Identity({ stack }: StackContext) {
     primaryIndex: { partitionKey: 'legacy_id', sortKey: 'uuid' },
   });
 
-const unsuccessfulLoginAttemptsTable = new UnsuccessfulLoginAttemptsTables(stack);
+  const incorrectAttemptsTable = new Table(stack, 'identityUnsuccessfulAttemptsTable', {
+    fields: {
+      pk: 'string',
+      sk: 'string',
+    },
+    primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
+  });
 
   const { bus, webACL } = use(Shared);
 
   //add dead letter queue
   const dlq = new Queue(stack, 'DLQ');
 
-  const {oldCognito, oldWebClient} = createOldCognito(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret);
-  const {oldCognitoDds, oldWebClientDds} = createOldCognitoDDS(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret);
-  const cognito = createNewCognito(stack,unsuccessfulLoginAttemptsTable.table ,appSecret, bus, dlq, region, webACL, oldCognito, oldWebClient, identitySecret);
-  const cognito_dds = createNewCognitoDDS(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, oldCognitoDds, oldWebClientDds, identitySecret);
+  const { oldCognito, oldWebClient } = createOldCognito(stack, appSecret, bus, dlq, region, webACL);
+  const { oldCognitoDds, oldWebClientDds } = createOldCognitoDDS(stack, appSecret, bus, dlq, region, webACL);
+  const cognito = createNewCognito(stack, appSecret, bus, dlq, region, webACL, oldCognito, oldWebClient);
+  const cognito_dds = createNewCognitoDDS(stack, appSecret, bus, dlq, region, webACL, oldCognitoDds, oldWebClientDds);
 
   const customDomainNameLookUp: Record<string, string> = {
     [REGIONS.EU_WEST_2]: 'identity.blcshine.io',
@@ -115,12 +118,12 @@ const unsuccessfulLoginAttemptsTable = new UnsuccessfulLoginAttemptsTables(stack
         timeout: 20,
         environment: {
           identityTableName: identityTable.tableName,
-          ecFormOutputDataTableName: ecFormOutputDataTable.table.tableName,
+          ecFormOutputDataTableName: tables.ecFormOutputDataTable.tableName,
           service: 'identity',
           allowedDomains: getAllowedDomains(stack.stage),
           REGION: stack.region,
         },
-        permissions: [identityTable, ecFormOutputDataTable.table],
+        permissions: [identityTable, tables.ecFormOutputDataTable],
       },
     },
     routes: {
@@ -194,19 +197,66 @@ const unsuccessfulLoginAttemptsTable = new UnsuccessfulLoginAttemptsTables(stack
     }),
   });
 
-  const lambdas = new Lambda(stack, ecFormOutputDataTable, buckets, stack.stage);
+  const lambdas = new Lambda(stack, tables, buckets, stack.stage);
 
   eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
 
   //add event bridge rules
-  bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
-  bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
-  bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
+  bus.addRules(
+    stack,
+    passwordResetRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
+  bus.addRules(
+    stack,
+    emailUpdateRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
+  bus.addRules(
+    stack,
+    userStatusUpdatedRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
   bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName, region));
   bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
-  bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
-  bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
+  bus.addRules(
+    stack,
+    companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region),
+  );
+  bus.addRules(
+    stack,
+    userGdprRule(
+      cognito.userPoolId,
+      dlq.queueUrl,
+      cognito_dds.userPoolId,
+      region,
+      incorrectAttemptsTable.tableName,
+      oldCognito.userPoolId,
+      oldCognitoDds.userPoolId,
+    ),
+  );
 
   return {
     identityApi,
@@ -215,4 +265,3 @@ const unsuccessfulLoginAttemptsTable = new UnsuccessfulLoginAttemptsTables(stack
     authorizer: sharedAuthorizer,
   };
 }
-

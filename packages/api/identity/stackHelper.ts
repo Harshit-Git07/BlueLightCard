@@ -1,20 +1,21 @@
-import { Cognito, EventBus, Function, Queue, Table } from 'sst/constructs'
-import { BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
-import { Duration } from 'aws-cdk-lib'
-import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
-import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2'
-import { FilterPattern, ILogGroup } from 'aws-cdk-lib/aws-logs'
-import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations'
-import { Stack } from 'sst/constructs'
-import { ISecret } from 'aws-cdk-lib/aws-secretsmanager'
-import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2'
-import path from 'path'
-import { BRANDS } from '@blc-mono/core/types/brands.enum'
-import { STAGES } from '@blc-mono/core/types/stages.enum'
-import { REGIONS } from  '@blc-mono/core/types/regions.enum'
+import { Cognito, EventBus, Function, Queue } from 'sst/constructs';
+import { Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
+import { Duration } from 'aws-cdk-lib';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2';
+import { FilterPattern, ILogGroup } from 'aws-cdk-lib/aws-logs';
+import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations';
+import { Stack } from 'sst/constructs';
+import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
+import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
+import path from 'path';
+import { BRANDS } from '@blc-mono/core/types/brands.enum';
+import { STAGES } from '@blc-mono/core/types/stages.enum';
+import { REGIONS } from '@blc-mono/core/types/regions.enum';
 import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
 
 const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
+
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
   appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
 const getAuSuffix = (region: REGIONS) => (region === REGIONS.AP_SOUTHEAST_2 ? '-au' : '');
@@ -31,17 +32,15 @@ const getAuthCustomDomainName = (brandName: BRANDS = BRANDS.BLC_UK, stage: STAGE
     stage === STAGES.PROD ? authCustomDomainNameLookUp[region] : `${stage}-${authCustomDomainNameLookUp[region]}`;
 
   return customDomainName;
-}
+};
 
 export function createOldCognito(
   stack: Stack,
-  unsuccessfulLoginAttemptsTable: Table,
   appSecret: ISecret,
   bus: EventBus,
   dlq: Queue,
   region: string,
   webACL: CfnWebACL,
-  identitySecret: ISecret
 ) {
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
@@ -63,22 +62,15 @@ export function createOldCognito(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
         environment: {
           SERVICE: 'identity',
         },
-        permissions: ['dynamodb:*']
+        permissions: ['dynamodb:*'],
       },
-      preAuthentication: {
-        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
-        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
-        permissions: [unsuccessfulLoginAttemptsTable]
-      }
     },
     cdk: {
       userPool: {
@@ -152,18 +144,16 @@ export function createOldCognito(
     resourceArn: cognito.cdk.userPool.userPoolArn,
     webAclArn: webACL.attrArn,
   });
-  return {oldCognito: cognito, oldWebClient: webClient};
-};
+  return { oldCognito: cognito, oldWebClient: webClient };
+}
 
 export function createOldCognitoDDS(
   stack: Stack,
-  unsuccessfulLoginAttemptsTable: Table,
   appSecret: ISecret,
   bus: EventBus,
   dlq: Queue,
   region: string,
   webACL: CfnWebACL,
-  identitySecret: ISecret
 ) {
   //auth - DDS
   const cognito_dds = new Cognito(stack, 'cognito_dds', {
@@ -186,22 +176,15 @@ export function createOldCognitoDDS(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
         environment: {
           SERVICE: 'identity',
         },
-        permissions: ['dynamodb:*']
+        permissions: ['dynamodb:*'],
       },
-      preAuthentication: {
-        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
-        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
-        permissions: [unsuccessfulLoginAttemptsTable]
-      }
     },
     cdk: {
       userPool: {
@@ -279,10 +262,8 @@ export function createOldCognitoDDS(
   return { oldCognitoDds: cognito_dds, oldWebClientDds: webClientDds };
 }
 
-
 export function createNewCognito(
   stack: Stack,
-  unsuccessfulLoginAttemptsTable: Table,
   appSecret: ISecret,
   bus: EventBus,
   dlq: Queue,
@@ -290,7 +271,6 @@ export function createNewCognito(
   webACL: CfnWebACL,
   oldCognito: Cognito,
   oldCognitoWebClient: UserPoolClient,
-  identitySecret: ISecret
 ) {
   const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
   const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
@@ -318,23 +298,15 @@ export function createNewCognito(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
-          OLD_USER_POOL_ID: oldCognito.userPoolId,
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
         environment: {
           SERVICE: 'identity',
         },
-        permissions: ['dynamodb:*']
+        permissions: ['dynamodb:*'],
       },
-      preAuthentication: {
-        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
-        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
-        permissions: [unsuccessfulLoginAttemptsTable]
-      }
     },
     cdk: {
       userPool: {
@@ -348,9 +320,8 @@ export function createNewCognito(
           phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
-          migrated_old_pool: new BooleanAttribute({mutable: true})
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
           minLength: 6,
@@ -448,11 +419,10 @@ export function createNewCognito(
     });
   }
   return cognito;
-};
+}
 
 export function createNewCognitoDDS(
   stack: Stack,
-  unsuccessfulLoginAttemptsTable: Table,
   appSecret: ISecret,
   bus: EventBus,
   dlq: Queue,
@@ -460,7 +430,6 @@ export function createNewCognitoDDS(
   webACL: CfnWebACL,
   oldCognito: Cognito,
   oldCognitoWebClient: UserPoolClient,
-  identitySecret: ISecret
 ) {
   const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
   const ddsLogoPath = path.join(cognitoHostedUiAssets, 'dds-logo.png');
@@ -489,10 +458,7 @@ export function createNewCognitoDDS(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
-          OLD_USER_POOL_ID: oldCognito.userPoolId,
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -500,13 +466,8 @@ export function createNewCognitoDDS(
           SERVICE: 'identity',
           REGION: region,
         },
-        permissions: ['dynamodb:*']
+        permissions: ['dynamodb:*'],
       },
-      preAuthentication: {
-        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
-        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
-        permissions: [unsuccessfulLoginAttemptsTable]
-      }
     },
     cdk: {
       userPool: {
@@ -520,9 +481,8 @@ export function createNewCognitoDDS(
           phoneNumber: { required: false, mutable: true },
         },
         customAttributes: {
-          blc_old_id: new StringAttribute({mutable: true}),
-          blc_old_uuid: new StringAttribute({mutable: true}),
-          migrated_old_pool: new BooleanAttribute({mutable: true})
+          blc_old_id: new StringAttribute({ mutable: true }),
+          blc_old_uuid: new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
           minLength: 6,
@@ -620,16 +580,4 @@ export function createNewCognitoDDS(
     });
   }
   return cognito_dds;
-}
-
-function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Table, identitySecret: ISecret) {
-  return {
-    SERVICE: 'identity',
-    TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
-    API_AUTHORISER_USER_BLC: identitySecret.secretValueFromJson('API_AUTHORISER_USER_BLC').toString(),
-    API_AUTHORISER_PASSWORD_BLC: identitySecret.secretValueFromJson('API_AUTHORISER_PASSWORD_BLC').toString(),
-    RESET_PASSWORD_API_URL: identitySecret.secretValueFromJson('RESET_PASSWORD_API_URL').toString(),
-    WRONG_PASSWORD_ENTER_LIMIT: identitySecret.secretValueFromJson('WRONG_PASSWORD_ENTER_LIMIT').toString(),
-    WRONG_PASSWORD_RESET_TRIGGER_MINUTES: identitySecret.secretValueFromJson('WRONG_PASSWORD_RESET_TRIGGER_MINUTES').toString(),
-  }
 }

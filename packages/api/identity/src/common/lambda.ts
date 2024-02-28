@@ -1,5 +1,5 @@
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
-import {EcFormOutputDataTable} from '../eligibility/constructs/tables';
+import {Tables} from '../eligibility/constructs/tables';
 import {Stack} from 'aws-cdk-lib';
 import {Buckets} from '../eligibility/constructs/buckets';
 import {EcFormOutrputDataLambda} from "../eligibility/constructs/lambdas/ecFormOutrputDataLambda";
@@ -15,7 +15,7 @@ export class Lambda {
     customAuthenticatorLambda: NodejsFunction;
 
     constructor(private stack: Stack,
-                private tables: EcFormOutputDataTable,
+                private tables: Tables,
                 private buckets: Buckets,
 				private stage: String) {
         this.ecFormOutrputDataLambda = new EcFormOutrputDataLambda(this.stack, this.tables, this.buckets, this.stage).create();

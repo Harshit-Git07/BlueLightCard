@@ -1,6 +1,6 @@
 import { LambdaAbstract } from "../../../common/lambdaAbstract";
 import { Stack } from "aws-cdk-lib";
-import { EcFormOutputDataTable } from "../tables";
+import { Tables } from "../tables";
 import { Buckets } from "../buckets";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -12,7 +12,7 @@ const sesPolicy = new iam.PolicyStatement({
 });
 
 export class EcFormOutrputDataLambda extends LambdaAbstract {
-  constructor(private stack: Stack, private tables: EcFormOutputDataTable, private buckets: Buckets, private stage: String) {
+  constructor(private stack: Stack, private tables: Tables, private buckets: Buckets, private stage: String) {
     super();
   }
 
@@ -24,7 +24,7 @@ export class EcFormOutrputDataLambda extends LambdaAbstract {
       retryAttempts: 2,
       deadLetterQueueEnabled: true,
       environment: {
-        EC_FORM_OUTPUT_DATA_TABLE: this.tables.table.tableName,
+        EC_FORM_OUTPUT_DATA_TABLE: this.tables.ecFormOutputDataTable.tableName,
         S3_BUCKET_NAME: this.buckets.ecFormOutputBucket.bucketName,
 		    EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS: this.getEmailRecipients(),
         REGION: this.stack.region,
@@ -49,7 +49,7 @@ export class EcFormOutrputDataLambda extends LambdaAbstract {
   }
 
   protected grantPermissions(lambdaFunction: NodejsFunction): void {
-    this.tables.table.cdk.table.grantReadData(lambdaFunction);
+    this.tables.ecFormOutputDataTable.cdk.table.grantReadData(lambdaFunction);
     this.buckets.ecFormOutputBucket.cdk.bucket.grantReadWrite(lambdaFunction);
   }
 }

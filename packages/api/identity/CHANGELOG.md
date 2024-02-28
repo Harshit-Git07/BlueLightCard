@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.41.0...bluelightcard/identity-v1.42.0) (2024-02-28)
+
+
+### Features
+
+* [TR-138] Updated vault ([#929](https://github.com/bluelightcard/BlueLightCard-2.0/issues/929)) ([4a7b77e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4a7b77e4d9028a3ed227642464aca7e19b880671))
+* **api:** Post Auth Lambda to delete entry in Dynamo for the logged in user ([#907](https://github.com/bluelightcard/BlueLightCard-2.0/issues/907)) ([1027037](https://github.com/bluelightcard/BlueLightCard-2.0/commit/102703728df5911bd2ee4798135a739e7b5ece3c))
+* remove data from unsuccessful attempts table ([#883](https://github.com/bluelightcard/BlueLightCard-2.0/issues/883)) ([9aa45e6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9aa45e638c9b062a5e9a4d3895f4996194a8ce20))
+* TI-000 use common authorizer ([#921](https://github.com/bluelightcard/BlueLightCard-2.0/issues/921)) ([47bd37d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/47bd37dd9f2b0d81810dc74604821f9db6ac9f86))
+* TI-000: adding audit changes ([#933](https://github.com/bluelightcard/BlueLightCard-2.0/issues/933)) ([c4fc91b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c4fc91b4d09a25ee81e3634b90168c8442e6db6b))
+* TI-000: fix cognito staging ([#895](https://github.com/bluelightcard/BlueLightCard-2.0/issues/895)) ([66e1493](https://github.com/bluelightcard/BlueLightCard-2.0/commit/66e1493c20a0b6a048e72e2eef340175b1bab85c))
+* TI-000: fix e2e test for identity ([#896](https://github.com/bluelightcard/BlueLightCard-2.0/issues/896)) ([181ad82](https://github.com/bluelightcard/BlueLightCard-2.0/commit/181ad8237dbb057eda0c36aa88aa86529566c7b6))
+* TI-000: identity staging deployment fix ([#935](https://github.com/bluelightcard/BlueLightCard-2.0/issues/935)) ([65acad7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/65acad794b522387eaee1a6b84281ddf115d126c))
+* TI-000: run audit only once ([#928](https://github.com/bluelightcard/BlueLightCard-2.0/issues/928)) ([5d71cdd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5d71cdd929a5869231c17853d3c6e32afc52fd34))
+* TI-000: update identity stack to work with old and new pools ([#905](https://github.com/bluelightcard/BlueLightCard-2.0/issues/905)) ([f40ee85](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f40ee85687ed4ea6a238d597d72ef6267faf5840))
+* TI-883: add cognito domain to old pools ([#886](https://github.com/bluelightcard/BlueLightCard-2.0/issues/886)) ([73a95cf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/73a95cfe2474659a8a1189569cc28c283739822f))
+* TI-883: fixed migration lambda ([#888](https://github.com/bluelightcard/BlueLightCard-2.0/issues/888)) ([52bfa70](https://github.com/bluelightcard/BlueLightCard-2.0/commit/52bfa707ca8b47182dca779320fd7c05976b8739))
+* **web:** Customise UI design of Cognito UI sign in page ([#902](https://github.com/bluelightcard/BlueLightCard-2.0/issues/902)) ([e059f2c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e059f2c84e149c8fcd6a9f4bc5c96efcb66fddc4))
+
+
+### Bug Fixes
+
+* **identity:** css files for blc and dds corrected to match logo images ([#891](https://github.com/bluelightcard/BlueLightCard-2.0/issues/891)) ([094c9b7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/094c9b790f569f9e46d11ee2c2929be933fd6358))
+
 ## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.40.0...bluelightcard/identity-v1.41.0) (2024-02-19)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.45.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.44.0...bluelightcard/identity-v1.45.0) (2024-02-29)
+
+
+### Features
+
+* ti 000 update table name ([#947](https://github.com/bluelightcard/BlueLightCard-2.0/issues/947)) ([ab22d3c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ab22d3cdf349f23a8c3ab9ce087b0b3baa6a7a2c))
+
 ## [1.44.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.43.0...bluelightcard/identity-v1.44.0) (2024-02-29)
 
 

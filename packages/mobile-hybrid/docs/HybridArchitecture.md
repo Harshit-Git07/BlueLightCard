@@ -1,4 +1,4 @@
-# Mobile hybrid app
+# Mobile hybrid app architecture
 
 This package contains the web UI code that runs in our blue light card mobile app for both Android and iOS.
 
@@ -6,7 +6,9 @@ The purpose of this hybridisation, is to help easily roll out experimental chang
 
 ## Architecture
 
-![Architecture](images/architecture.png)
+![Architecture](../images/architecture.png)
+
+The most up-to-date diagram is located here: https://miro.com/app/board/uXjVM3bgK9g=/
 
 Native provides a bridge to open communication between native and web UI, which is expressed through the use of interfaces. Certain communication is only one way based on it's usecase, for example sending analytics data when a user interacts with an element within the web UI is only one way, web UI doesn't need to receive anything regarding analytics from native, however there are others that are two way such as data requests or more specifically this would be a round-trip.
 
@@ -237,17 +239,8 @@ Native needs to send simple messages to web UI and web UI needs to output these 
       ```
   
 ### How do I test and debug?
-To run a test within the app, you will need to do the following:
-  1. Setup a Cloudflare pages project in Cloudflare, this will be used as your dev environment i.e raza-mobile-hybrid.
-  2. Add your Github -> dev environment (Cloudflare Pages name) to the `dev-env-mapping.txt` like so:
-     ```
-     githubusername=user-mobile-hybrid
-     ```
-  3. Contact Assghar or Davie in the apps team and ask them to add your dev environment urls against your BLC email address, this means when logging into the app the webview will point to you dev environment.
-     - They will also need to provide you with a debuggable app version, that you can either install on your own phone for your OS or run it within browserstack.
-  4. When your ready to test your changes, just commit and push them up, then you should see a CI job deploying to your dev environment, then log in to the app and you should see your changes.
-     ![Dev Jobs](images/ci-jobs.png)
-     ![Dev env deploy](images/ci-dev-deploy.png)
+There is a current solution in progress using `localhost` development.
+Reach out to the Discovery team for assistance for the meantime.
 
 ### Logging
 This package comes with logging capabilities to help with debugging both on the web UI side and native side.

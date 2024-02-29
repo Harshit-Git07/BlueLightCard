@@ -41,7 +41,7 @@ export function Identity({ stack }: StackContext) {
   const tables = new Tables(stack);
   const buckets = new Buckets(stack, stack.stage);
 
-  const stageSecret = stack.stage === STAGES.PROD || stack.stage === STAGES.STAGING ? stack.stage : STAGES.STAGING;
+  const stageSecret = stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING ? stack.stage : STAGES.STAGING;
   const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
 
   //db - identityTable
@@ -133,11 +133,11 @@ export function Identity({ stack }: StackContext) {
     },
     cdk: {
       restApi: {
-        ...([STAGES.PROD, STAGES.STAGING].includes(stack.stage as STAGES) &&
+        ...([STAGES.PRODUCTION, STAGES.STAGING].includes(stack.stage as STAGES) &&
           certificateArn && {
             domainName: {
               domainName:
-                stack.stage === STAGES.PROD
+                stack.stage === STAGES.PRODUCTION
                   ? customDomainNameLookUp[stack.region]
                   : `${stack.stage}-${customDomainNameLookUp[stack.region]}`,
               certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),

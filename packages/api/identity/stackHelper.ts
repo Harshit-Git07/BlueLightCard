@@ -29,7 +29,7 @@ const getAuthCustomDomainName = (brandName: BRANDS = BRANDS.BLC_UK, stage: STAGE
   };
 
   const customDomainName =
-    stage === STAGES.PROD ? authCustomDomainNameLookUp[region] : `${stage}-${authCustomDomainNameLookUp[region]}`;
+    stage === STAGES.PRODUCTION ? authCustomDomainNameLookUp[region] : `${stage}-${authCustomDomainNameLookUp[region]}`;
 
   return customDomainName;
 };
@@ -100,7 +100,7 @@ export function createOldCognito(
     },
   });
 
-  const blcOldDomainPrefix = `blc${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(
+  const blcOldDomainPrefix = `blc${stack.stage === STAGES.PRODUCTION ? '' : `-${stack.stage}`}${getAuSuffix(
     stack.region as REGIONS,
   )}-old`;
 
@@ -215,7 +215,7 @@ export function createOldCognitoDDS(
     },
   });
 
-  const ddsOldDomainPrefix = `dds${stack.stage === STAGES.PROD ? '' : `-${stack.stage}`}${getAuSuffix(
+  const ddsOldDomainPrefix = `dds${stack.stage === STAGES.PRODUCTION ? '' : `-${stack.stage}`}${getAuSuffix(
     stack.region as REGIONS,
   )}-old`;
 
@@ -370,7 +370,7 @@ export function createNewCognito(
   });
 
   // Create Cognito domains
-  if (stack.stage === STAGES.PROD || stack.stage === STAGES.STAGING) {
+  if (stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING) {
     cognito.cdk.userPool.addDomain('BLCCognitoCustomDomain', {
       customDomain: {
         domainName: getAuthCustomDomainName(BRANDS.BLC_UK, stack.stage, stack.region as REGIONS),
@@ -504,7 +504,7 @@ export function createNewCognitoDDS(
     },
   });
 
-  if (stack.stage === STAGES.PROD || stack.stage === STAGES.STAGING) {
+  if (stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING) {
     cognito_dds.cdk.userPool.addDomain('DDSCognitoCustomDomain', {
       customDomain: {
         domainName: getAuthCustomDomainName(BRANDS.DDS_UK, stack.stage, stack.region as REGIONS),

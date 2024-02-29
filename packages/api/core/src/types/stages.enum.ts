@@ -1,5 +1,5 @@
 export enum STAGES {
   STAGING = 'staging',
-  PROD = 'production'
+  PRODUCTION = 'production'
 }
     

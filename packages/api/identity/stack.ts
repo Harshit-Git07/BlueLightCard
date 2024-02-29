@@ -64,7 +64,7 @@ export function Identity({ stack }: StackContext) {
     primaryIndex: { partitionKey: 'legacy_id', sortKey: 'uuid' },
   });
 
-  const incorrectAttemptsTable = new Table(stack, 'identityUnsuccessfulAttemptsTabletmp2', {
+  const incorrectAttemptsTable = new Table(stack, 'identityUnsuccessfulAttemptsTabletmp3', {
     fields: {
       pk: 'string',
       sk: 'string',

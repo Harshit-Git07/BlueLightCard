@@ -21,7 +21,7 @@ export const affiliateEnum = pgEnum('affiliate', [
   'commissionJunction',
   'tradedoubler',
 ]);
-export const connectionEnum = pgEnum('connection', ['affiliate', 'direct', 'spotify']);
+export const connectionEnum = pgEnum('connection', ['affiliate', 'direct', 'spotify', 'none']);
 export const integrationEnum = pgEnum('integration', ['eagleeye', 'uniqodo']);
 export const offerTypeEnum = pgEnum('offerType', ['online', 'in-store']);
 export const platformEnum = pgEnum('platform', ['BLC_UK', 'BLC_AU', 'DDS_UK']);

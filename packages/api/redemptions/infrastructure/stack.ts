@@ -83,7 +83,7 @@ export async function Redemptions({ app, stack }: StackContext) {
     vaultCreatedRule: createVaultCreatedRule(stack, database),
     vaultUpdatedRule: createVaultUpdatedRule(stack, database),
     promotionUpdatedRule: createPromotionUpdatedRule(stack, database),
-    offerRule: createOfferRule(stack),
+    offerRule: createOfferRule(stack, database),
   });
 
   const allRoutes = new Routes();

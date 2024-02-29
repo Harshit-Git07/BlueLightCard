@@ -66,7 +66,7 @@ describe('Database Tests', () => {
     await database?.reset();
   });
 
-  // Tead down the database after all tests have finished running.
+  // Tear down the database after all tests have finished running.
   afterAll(async () => {
     // Note that we use the optional chaining operator, to ensure this doesn't
     // throw if there was an exception during database startup. This help avoid

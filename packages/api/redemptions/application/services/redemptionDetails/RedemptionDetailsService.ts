@@ -1,6 +1,6 @@
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
-import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedeptionsRepository';
+import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
 export type RedemptionDetailsResult =
   | {

@@ -6,7 +6,7 @@ import { RedemptionDetailsController } from '@blc-mono/redemptions/application/c
 import { RedemptionDetailsService } from '@blc-mono/redemptions/application/services/redemptionDetails/RedemptionDetailsService';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 
-import { RedemptionsRepository } from '../../../repositories/RedeptionsRepository';
+import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
 
 const logger = new LambdaLogger({ serviceName: 'redemptions-redeem-post' });
 const connection = await DatabaseConnection.fromEnvironmentVariables(DatabaseConnectionType.READ_WRITE);

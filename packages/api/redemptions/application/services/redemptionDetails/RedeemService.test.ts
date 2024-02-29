@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { IRedemptionsRepository } from '../../repositories/RedeptionsRepository';
+import { IRedemptionsRepository } from '../../repositories/RedemptionsRepository';
 import { redemptionFactory } from '../../test/factories/redemption.factory';
 
 import { RedemptionDetailsService } from './RedemptionDetailsService';
@@ -10,6 +10,8 @@ describe('RedemptionDetailsService', () => {
     // Arrange
     const redemptionsRepository = {
       findOneByOfferId: jest.fn(),
+      updateByOfferId: jest.fn(),
+      withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;
     const service = new RedemptionDetailsService(redemptionsRepository);
     redemptionsRepository.findOneByOfferId.mockResolvedValue(null);
@@ -31,6 +33,8 @@ describe('RedemptionDetailsService', () => {
     // Arrange
     const redemptionsRepository = {
       findOneByOfferId: jest.fn(),
+      updateByOfferId: jest.fn(),
+      withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;
     const service = new RedemptionDetailsService(redemptionsRepository);
     const redemption = redemptionFactory.build();

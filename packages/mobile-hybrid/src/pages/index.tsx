@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useEffect, useRef, useContext, useCallback } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import ListPanel from '@/components/ListPanel/ListPanel';
 import { NewsList, NewsPreview } from '@/modules/news';
@@ -32,7 +32,8 @@ const Home: NextPage<any> = () => {
   const bodyHeight = useRef<HTMLElement>(null);
 
   const request = useCallback(() => {
-    Object.values(APIUrl).forEach((url) => {
+    const homePageServices = [APIUrl.News, APIUrl.FavouritedBrands, APIUrl.OfferPromos];
+    homePageServices.forEach((url) => {
       if (!apiData[url]) {
         apiCall.requestData(url);
       }
@@ -65,7 +66,8 @@ const Home: NextPage<any> = () => {
     }
 
     request();
-  }, [request]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useOnResume(request);
 

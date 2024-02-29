@@ -124,6 +124,7 @@ const Search: FC<SearchProps> = ({
           value={searchTerm}
           placeholder={placeholderText}
           type="search"
+          enterKeyHint="search"
           className="new-search pl-14 pr-12 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-neutral-white border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
         />
         {searchTerm && clearIcon}

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.30.0...bluelightcard/web-v1.31.0) (2024-02-29)
+
+
+### Features
+
+* added search experiment to search ([#951](https://github.com/bluelightcard/BlueLightCard-2.0/issues/951)) ([a60c1ec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a60c1ec5387fd85e7b465a86123f2c0e789a199d))
+* to 563 offer sheet experiment ([#882](https://github.com/bluelightcard/BlueLightCard-2.0/issues/882)) ([7ab07d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7ab07d2f78e8439c773ab55a9a41a3d1fca7f35c))
+
 ## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.29.0...bluelightcard/web-v1.30.0) (2024-02-19)
 
 

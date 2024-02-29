@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.43.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.42.0...bluelightcard/identity-v1.43.0) (2024-02-29)
+
+
+### Features
+
+* TI-000: change prod stage name ([#941](https://github.com/bluelightcard/BlueLightCard-2.0/issues/941)) ([4dfb9fa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4dfb9fa9f483044bbd1e05e581e08081ce0ce04c))
+
 ## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.41.0...bluelightcard/identity-v1.42.0) (2024-02-28)
 
 

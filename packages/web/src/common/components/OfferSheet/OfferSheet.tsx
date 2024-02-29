@@ -1,4 +1,4 @@
-import React, { use, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { OfferSheetProps } from './types';
 import DynamicSheet from '../DynamicSheet/DynamicSheet';
 import { ThemeVariant } from '@/types/theme';
@@ -16,41 +16,48 @@ import Label from '../Label/Label';
 import Image from '@/components/Image/Image';
 import getCDNUrl from '@/utils/getCDNUrl';
 import { useRouter } from 'next/router';
-import axios from 'axios';
-import {
-  UPDATE_FAVOURITE_ENDPOINT,
-  RETRIEVE_FAVOURITE_ENDPOINT,
-  LEGACY_MICROSERVICE_BRAND,
-} from '@/global-vars';
 import UserContext from '@/context/User/UserContext';
 import AuthContext from '@/context/Auth/AuthContext';
+import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
+import { displayDateDDMMYYYY } from '@core/utils/date';
+import OfferSheetContext, { offerResponse } from '@/context/OfferSheet/OfferSheetContext';
+import { retrieveFavourites, UpdateFavourites } from '@/utils/company/favourites';
+import { getOfferById } from '@/utils/offers/getOffer';
+import amplitudeEvents from '@/utils/amplitude/events';
+import AmplitudeContext from '@/context/AmplitudeContext';
+import Heading from '@/components/Heading/Heading';
+import Link from '@/components/Link/Link';
+import { logOfferView } from '@/utils/amplitude/logOfferView';
 
 const OfferSheet: React.FC<OfferSheetProps> = ({
-  open,
-  setOpen,
-  offer: { offerId, companyId, offerName, offerDescription, image, termsAndConditions },
-  labels,
+  offer: { offerId, companyId, companyName },
   onButtonClick,
 }) => {
+  const { setLabels, offerLabels, open, setOpen } = useContext(OfferSheetContext);
   const router = useRouter();
   const userCtx = useContext(UserContext);
   const authCtx = useContext(AuthContext);
+  const amplitude = useContext(AmplitudeContext);
 
-  const [magicButtonState, setMagicButtonState] = React.useState<'primary' | 'secondary'>(
-    'primary'
-  );
-  const [shareBtnState, setShareBtnState] = React.useState<'share' | 'error' | 'success'>('share');
-  const [curFavBtnState, setFavBtnState] = React.useState<
+  const [magicButtonState, setMagicButtonState] = useState<'primary' | 'secondary'>('primary');
+  const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
+  const [curFavBtnState, setFavBtnState] = useState<
     'favourite' | 'unfavourite' | 'disabled' | 'error'
   >('disabled');
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const blankOffer: offerResponse = {};
+  const [offerData, setOfferData] = useState(blankOffer);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadOfferError, setLoadOfferError] = useState(false);
 
   const finalFallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
-  const imageSource = image ?? finalFallbackImage;
+  const imageSource =
+    `https://cdn.bluelightcard.co.uk/${offerData.companyLogo}${offerData.companyId}.jpg` ??
+    finalFallbackImage;
 
   // Event handlers
   const copyLink = () => {
-    const copyUrl = `${window.location.protocol}//${window.location.hostname}/offerdetails.php?cid=${companyId}&oid=${offerId}`;
+    const copyUrl = `${window.location.protocol}//${window.location.hostname}/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`;
 
     if (!navigator.clipboard) {
       return false;
@@ -73,75 +80,77 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
     }
   };
 
-  const retrieveFavouriteState = async () => {
-    let data = {
-      userId: userCtx.user?.legacyId,
-      brand: LEGACY_MICROSERVICE_BRAND,
-    };
-
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: RETRIEVE_FAVOURITE_ENDPOINT,
-      headers: {
-        Authorization: `Bearer ${authCtx.authState.idToken}`,
-      },
-      data: data,
-    };
-
-    axios(config)
-      .then((res) => {
-        const favouriteCompanies = res.data.data;
-        if (favouriteCompanies.includes(parseInt(companyId, 10))) {
-          setFavBtnState('favourite');
-        }
-      })
-      .catch(() => setFavBtnState('unfavourite'));
-  };
-
-  const onFavouriteClick = () => {
-    let data = {
-      companyId: parseInt(companyId, 10),
-      brand: LEGACY_MICROSERVICE_BRAND,
-      userId: userCtx.user?.legacyId,
-    };
-
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: UPDATE_FAVOURITE_ENDPOINT,
-      headers: {
-        Authorization: `Bearer ${authCtx.authState.idToken}`,
-      },
-      data: data,
-    };
-
-    // Will fail due to cors on the endpoint, nice display of the error though so left it for now.
-    axios(config)
-      .then((res) => {
-        setFavBtnState(curFavBtnState === 'favourite' ? 'unfavourite' : 'favourite');
-      })
-      .catch(() => {
-        const originalState = curFavBtnState;
-        setFavBtnState('error');
-        setTimeout(() => setFavBtnState(originalState), 1500);
-      });
+  const onFavouriteClick = async () => {
+    if (await UpdateFavourites(offerData, authCtx.authState.idToken, userCtx.user?.legacyId)) {
+      setFavBtnState(curFavBtnState === 'favourite' ? 'unfavourite' : 'favourite');
+    } else {
+      const originalState = curFavBtnState;
+      setFavBtnState('error');
+      setTimeout(() => setFavBtnState(originalState), 1500);
+    }
   };
 
   const buttonClickEvent = () => {
     setMagicButtonState('secondary');
+    if (amplitude) {
+      amplitude.setUserId(userCtx.user?.uuid ?? '');
+      amplitude.trackEventAsync(amplitudeEvents.VAULT_CODE_REQUEST_CLICKED, {
+        company_id: companyId,
+        company_name: companyName,
+        offer_id: offerId,
+        offer_name: offerData.name,
+        source: 'sheet',
+      });
+    }
     if (onButtonClick) {
       onButtonClick();
-    } else if (offerId && companyId) router.push(`/out.php?lid=${offerId}&cid=${companyId}`);
+    } else if (offerData.id && offerData.companyId)
+      router.push(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
+  };
+
+  const logAmpOfferView = (eventSource: string) => {
+    logOfferView(
+      amplitude,
+      userCtx.user?.uuid || '',
+      eventSource,
+      router.route,
+      offerId,
+      offerData.name,
+      companyId,
+      companyName
+    );
+  };
+
+  const fetchofferSheetDetails = async () => {
+    setIsLoading(true);
+    const offerDataResponse = await getOfferById(authCtx.authState.idToken, offerId);
+    if (!offerDataResponse || typeof offerDataResponse === null) {
+      setOfferData(blankOffer);
+      setIsLoading(false);
+      setLoadOfferError(true);
+    } else {
+      logAmpOfferView('sheet');
+      setOfferData(offerDataResponse);
+      const { expiry, type } = offerDataResponse;
+      const expiryDate: string | null = displayDateDDMMYYYY(expiry);
+      setLabels([type ?? '', `Expires: ${expiryDate}`]);
+      setIsLoading(false);
+    }
+  };
+
+  const fetchFavourite = async () => {
+    const favouriteCompany = (await retrieveFavourites(companyId)) ? 'favourite' : 'unfavourite';
+    setFavBtnState(favouriteCompany);
   };
 
   useEffect(() => {
     if (userCtx.user || companyId) {
-      setFavBtnState('unfavourite');
-      retrieveFavouriteState();
+      setLoadOfferError(false);
       setExpanded(false);
+      fetchFavourite();
+      fetchofferSheetDetails();
     }
-  }, [userCtx.user, companyId]);
+  }, [userCtx.user, offerId, companyId]);
 
   return (
     <DynamicSheet
@@ -150,131 +159,164 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
       showCloseButton
       containerClassName="flex flex-col justify-between w-full"
     >
-      {/* Top section - Product info, share/fav etc. */}
-      <div className="flex flex-col text-center text-wrap space-y-2 p-6 pt-0 font-['MuseoSans']">
-        <div className="pb-16">
-          <div className="flex justify-center">
-            {imageSource && (
-              <Image
-                src={imageSource}
-                alt={offerName as string}
-                responsive={false}
-                width={100}
-                height={64}
-                className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
-              />
-            )}
-          </div>
-
-          <h1 className="text-2xl font-bold font-['MuseoSans'] leading-8 mt-4">{offerName}</h1>
-
-          <p
-            className={`text-base font-light font-['MuseoSans'] leading-5 mt-2 ${
-              offerDescription && offerDescription.length > 300 && !expanded
-                ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
-                : ''
-            }`}
-          >
-            {offerDescription}
+      {isLoading && (
+        <LoadingSpinner containerClassName="text-palette-primary" spinnerClassName="text-[5em]" />
+      )}
+      {loadOfferError && (
+        <div className="text-palette-primary text-center mx-4 space-y-4">
+          <Heading headingLevel={'h2'}>Error loading offer</Heading>
+          <p className="text-base">
+            Refresh the page and try again. If this problem persists contact member services on Live
+            Chat&nbsp;
+            <Link href={'https://www.bluelightcard.co.uk/contactblc.php'} className={'underline'}>
+              here
+            </Link>
           </p>
 
-          {offerDescription && offerDescription.length > 300 && (
-            <Button
-              variant={ThemeVariant.Tertiary}
-              slim
-              withoutHover
-              className={`w-fit`}
-              onClick={handleSeeMore}
-              borderless
-            >
-              {expanded ? 'See less' : 'See more...'}
-            </Button>
-          )}
+          <p>Alternatively, you can still visit your offer page and get your discount there</p>
+          <Button
+            type={'link'}
+            href={`/offerdetails.php?cid=${companyId}&oid=${offerId}`}
+            onClick={() => logAmpOfferView('page')}
+          >
+            {companyName}
+          </Button>
+        </div>
+      )}
+      {/* Top section - Product info, share/fav etc. */}
+      {!isLoading && !loadOfferError && (
+        <div className="flex flex-col text-center text-wrap space-y-2 p-6 pt-0 font-['MuseoSans']">
+          <div className="pb-16">
+            <div className="flex justify-center">
+              {imageSource && (
+                <Image
+                  src={imageSource}
+                  alt={offerData.name as string}
+                  responsive={false}
+                  width={100}
+                  height={64}
+                  className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+                />
+              )}
+            </div>
 
-          <div className={`flex flex-wrap justify-center mt-4`}>
-            <Button
-              variant={ThemeVariant.Tertiary}
-              slim
-              withoutHover
-              className="w-fit m-1"
-              onClick={onShareClick}
+            <Heading headingLevel={'h2'} className={'leading-8 mt-4 !text-black'}>
+              {offerData.name}
+            </Heading>
+
+            <p
+              className={`text-base font-light font-['MuseoSans'] leading-5 mt-2 ${
+                offerData.description && offerData.description.length > 300 && !expanded
+                  ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
+                  : ''
+              }`}
             >
-              <span
-                className={`${
-                  shareBtnState === 'error' && 'text-palette-danger-base'
-                } text-base font-['MuseoSans'] font-bold leading-6`}
+              {offerData.description}
+            </p>
+
+            {offerData.description && offerData.description.length > 300 && (
+              <Button
+                variant={ThemeVariant.Tertiary}
+                slim
+                withoutHover
+                className={`w-fit`}
+                onClick={handleSeeMore}
+                borderless
               >
-                <FontAwesomeIcon icon={faArrowUpFromBracket} className="mr-2" />
-                {shareBtnState === 'share'
-                  ? 'Share'
-                  : shareBtnState === 'success'
-                  ? 'Copied to clipboard'
-                  : 'Failed to copy'}
-              </span>
-            </Button>
-            {curFavBtnState !== 'disabled' && (
+                {expanded ? 'See less' : 'See more...'}
+              </Button>
+            )}
+
+            <div className={`flex flex-wrap justify-center mt-4`}>
               <Button
                 variant={ThemeVariant.Tertiary}
                 slim
                 withoutHover
                 className="w-fit m-1"
-                onClick={() => curFavBtnState !== 'error' && onFavouriteClick()}
+                onClick={onShareClick}
               >
                 <span
                   className={`${
-                    curFavBtnState === 'error' && 'text-palette-danger-base'
+                    shareBtnState === 'error' && 'text-palette-danger-base'
                   } text-base font-['MuseoSans'] font-bold leading-6`}
                 >
-                  <FontAwesomeIcon
-                    icon={curFavBtnState === 'favourite' ? faStarSolid : faStarRegular}
-                    className="mr-2"
-                  />
-                  {curFavBtnState === 'error' ? 'Failed to update' : 'Favourite'}
+                  <FontAwesomeIcon icon={faArrowUpFromBracket} className="mr-2" />
+                  {shareBtnState === 'share'
+                    ? 'Share'
+                    : shareBtnState === 'success'
+                    ? 'Copied to clipboard'
+                    : 'Failed to copy'}
                 </span>
               </Button>
-            )}
-          </div>
+              {curFavBtnState !== 'disabled' && (
+                <Button
+                  variant={ThemeVariant.Tertiary}
+                  slim
+                  withoutHover
+                  className="w-fit m-1"
+                  onClick={() => curFavBtnState !== 'error' && onFavouriteClick()}
+                >
+                  <span
+                    className={`${
+                      curFavBtnState === 'error' && 'text-palette-danger-base'
+                    } text-base font-['MuseoSans'] font-bold leading-6`}
+                  >
+                    <FontAwesomeIcon
+                      icon={curFavBtnState === 'favourite' ? faStarSolid : faStarRegular}
+                      className="mr-2"
+                    />
+                    {curFavBtnState === 'error' ? 'Failed to update' : 'Favourite'}
+                  </span>
+                </Button>
+              )}
+            </div>
 
-          <div className="w-full text-left mt-4">
-            {termsAndConditions && (
-              <Accordion title="Terms and Conditions" content={termsAndConditions} />
-            )}
+            <div className="w-full text-left mt-4">
+              {offerData.terms && (
+                <Accordion title="Terms and Conditions" content={offerData.terms} />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Bottom section - Button labels etc */}
-      <div className="w-full pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
-        <div className="w-full flex flex-wrap mb-2 justify-center">
-          {labels &&
-            labels.map((label, index) => (
-              <Label key={index} type={'normal'} text={label} className="m-1" />
-            ))}
-        </div>
+      {!loadOfferError && (
+        <div className="w-full pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
+          <div className="w-full flex flex-wrap mb-2 justify-center">
+            {offerLabels &&
+              offerLabels.map((label, index) => (
+                <Label key={index} type={'normal'} text={label} className="m-1" />
+              ))}
+          </div>
 
-        <MagicButton
-          variant={magicButtonState}
-          className="w-full"
-          onClick={buttonClickEvent}
-          animate={magicButtonState === 'secondary'}
-          transitionDurationMs={1000}
-        >
-          {magicButtonState === 'primary' ? (
-            <div className="leading-10 font-bold text-md">
-              <h1 className="h-full text-center text-nowrap">Get Discount</h1>
-            </div>
-          ) : (
-            <div className="flex-col min-h-7 text-nowrap">
-              <div className="text-md font-bold">
-                <FontAwesomeIcon icon={faWandMagicSparkles} /> Discount automatically applied
+          <MagicButton
+            variant={magicButtonState}
+            className="w-full"
+            onClick={buttonClickEvent}
+            animate={magicButtonState === 'secondary'}
+            transitionDurationMs={1000}
+          >
+            {magicButtonState === 'primary' ? (
+              <div className="leading-10 font-bold text-md">
+                <Heading
+                  headingLevel={'h5'}
+                  className={'text-white h-full text-center text-nowrap mb-0'}
+                >
+                  Get Discount
+                </Heading>
               </div>
-              <div className="text-sm font-medium text-[#616266]">
-                Redirecting you to partner website
+            ) : (
+              <div className="flex-col min-h-7 text-nowrap">
+                <div className="text-md font-bold">
+                  <FontAwesomeIcon icon={faWandMagicSparkles} /> Discount automatically applied
+                </div>
+                <div className="text-sm">Redirecting you to partner website</div>
               </div>
-            </div>
-          )}
-        </MagicButton>
-      </div>
+            )}
+          </MagicButton>
+        </div>
+      )}
     </DynamicSheet>
   );
 };

@@ -4,7 +4,7 @@ import requireAuth from '@/hoc/requireAuth';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next/types';
-import React, { useContext, useEffect } from 'react';
+import React, { use, useContext, useEffect } from 'react';
 
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { makeQuery } from 'src/graphql/makeQuery';
@@ -38,6 +38,7 @@ import {
   getOffersByCategoryUrl,
   getOffersBySearchTermUrl,
 } from '@/utils/externalPageUrls';
+import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 
 const he = require('he');
 
@@ -76,6 +77,8 @@ const Search: NextPage = () => {
 
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
+
+  const { setOpen, setOffer } = useContext(OfferSheetContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -155,6 +158,16 @@ const Search: NextPage = () => {
     'control'
   );
 
+  // Offer Sheet Experiment
+  const { variantName: offerSheetVariant } = useAmplitudeExperiment(
+    'web-search-offer-sheet',
+    [
+      { variantName: 'control', component: <></> },
+      { variantName: 'treatment', component: <></> },
+    ],
+    'control'
+  );
+
   return (
     <>
       {/* Header */}
@@ -176,6 +189,19 @@ const Search: NextPage = () => {
           {!isLoading &&
             searchResults.map((result, index) => {
               const imageSrc = result.offerimg.replaceAll('\\/', '/');
+              let hasLink = true;
+              let onClick = undefined;
+              if (offerSheetVariant === 'treatment') {
+                hasLink = false;
+                onClick = () => {
+                  setOffer({
+                    offerId: result.ID as unknown as string,
+                    companyId: result.CompID as unknown as string,
+                    companyName: result.CompanyName,
+                  });
+                  setOpen(true);
+                };
+              }
               return (
                 <div className="p-2 m-2" key={index}>
                   <OfferCard
@@ -190,6 +216,11 @@ const Search: NextPage = () => {
                     offerLink={`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`}
                     offerTag={result.OfferType}
                     withBorder
+                    offerId={result.ID.toString()}
+                    companyId={result.CompID.toString()}
+                    id={'_offer_card_' + index}
+                    onClick={onClick}
+                    hasLink={hasLink}
                   />
                 </div>
               );

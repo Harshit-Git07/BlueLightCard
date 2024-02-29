@@ -44,6 +44,9 @@ const SEARCH_ENDPOINT = process.env.NEXT_PUBLIC_SEARCH_ENDPOINT ?? '';
 const RETRIEVE_FAVOURITE_ENDPOINT = process.env.NEXT_PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT ?? '';
 const UPDATE_FAVOURITE_ENDPOINT = process.env.NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT ?? '';
 
+//Offers
+const RETRIEVE_OFFER_ENDPOINT = process.env.NEXT_PUBLIC_RETRIEVE_OFFER_ENDPOINT ?? '';
+
 /*
  * Language is made up of the lng and region
  * Example: [lng]-[region]
@@ -90,4 +93,5 @@ module.exports = {
   SEARCH_ENDPOINT,
   RETRIEVE_FAVOURITE_ENDPOINT,
   UPDATE_FAVOURITE_ENDPOINT,
+  RETRIEVE_OFFER_ENDPOINT,
 };

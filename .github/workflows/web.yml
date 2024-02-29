@@ -195,6 +195,7 @@ jobs:
       NEXT_PUBLIC_SEARCH_ENDPOINT: https://lcsn8cd6i6.execute-api.eu-west-2.amazonaws.com/develop/newSearch
       NEXT_PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT: https://hmkt7fpodd.execute-api.eu-west-2.amazonaws.com/develop/Favourites/retrieve
       NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT: https://hmkt7fpodd.execute-api.eu-west-2.amazonaws.com/develop/Favourites/update
+      NEXT_PUBLIC_RETRIEVE_OFFER_ENDPOINT: https://6sz52oo9ud.execute-api.eu-west-2.amazonaws.com/v1/offers/
       NEXT_PUBLIC_APP_MICROSERVICE_BRAND: BLC
     steps:
       - name: Checkout
@@ -253,6 +254,7 @@ jobs:
       NEXT_PUBLIC_SEARCH_ENDPOINT: https://x26st9km9b.execute-api.eu-west-2.amazonaws.com/production/newSearch
       NEXT_PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT: https://ysgt36ldck.execute-api.eu-west-2.amazonaws.com/production/Favourites/retrieve
       NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT: https://ysgt36ldck.execute-api.eu-west-2.amazonaws.com/production/Favourites/update
+      NEXT_PUBLIC_RETRIEVE_OFFER_ENDPOINT: https://h9to9ist4k.execute-api.eu-west-2.amazonaws.com/v1/offers/
       NEXT_PUBLIC_APP_MICROSERVICE_BRAND: BLC
     steps:
       - name: Checkout

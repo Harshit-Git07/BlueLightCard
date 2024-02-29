@@ -33,6 +33,8 @@ import { shuffle } from 'lodash';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
+import useAmplitudeExperiment from '@/hooks/useAmplitudeExperiment';
+import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -54,8 +56,9 @@ function handleImageFallbacks(
 ) {
   if (primaryImage && primaryImage !== '') return primaryImage;
 
-  if (secondaryImage && secondaryImage !== '')
+  if (secondaryImage && secondaryImage !== '') {
     return getCDNUrl(`/companyimages/complarge/retina/${secondaryImage}`);
+  }
 
   return finalFallbackImage;
 }
@@ -120,12 +123,35 @@ const HomePage: NextPage<any> = () => {
     userCtx.error,
   ]);
 
+  const { setOpen, setOffer } = useContext(OfferSheetContext);
+  const { variantName } = useAmplitudeExperiment(
+    'web-homepage-offer-sheet',
+    [
+      { variantName: 'control', component: <></> },
+      { variantName: 'treatment', component: <></> },
+    ],
+    'control'
+  );
+
   // Format carousel data
   const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({
     offername: cleanText(offer.offername),
     companyname: cleanText(offer.companyname),
     imageUrl: handleImageFallbacks(offer.image, offer.logos),
     href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
+    offerId: offer.id,
+    companyId: offer.compid,
+    hasLink: variantName === 'control',
+    onClick: () => {
+      if (variantName === 'treatment') {
+        setOffer({
+          offerId: offer.id,
+          companyId: offer.compid,
+          companyName: cleanText(offer.companyname),
+        });
+        setOpen(true);
+      }
+    },
   }));
 
   const flexibleOffersData = flexibleMenu
@@ -142,6 +168,19 @@ const HomePage: NextPage<any> = () => {
     offername: cleanText(offer.offername),
     href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
     imageUrl: handleImageFallbacks(offer.image, offer.logos),
+    offerId: offer.id,
+    companyId: offer.compid,
+    hasLink: variantName === 'control',
+    onClick: () => {
+      if (variantName === 'treatment') {
+        setOffer({
+          offerId: offer.id,
+          companyId: offer.compid,
+          companyName: cleanText(offer.companyname),
+        });
+        setOpen(true);
+      }
+    },
   }));
 
   const isBlackFriday = inTimePeriod(BLACK_FRIDAY_TIMELOCK_SETTINGS);
@@ -236,6 +275,19 @@ const HomePage: NextPage<any> = () => {
                   companyname: cleanText(item.companyname),
                   imageUrl: handleImageFallbacks(item.image, item.logos),
                   href: `/offerdetails.php?cid=${item.compid}&oid=${item.offerId}`,
+                  offerId: item.offerId,
+                  companyId: item.compid,
+                  hasLink: variantName === 'control',
+                  onClick: () => {
+                    if (variantName === 'treatment') {
+                      setOffer({
+                        offerId: item.offerId,
+                        companyId: item.compid,
+                        companyName: cleanText(item.companyname),
+                      });
+                      setOpen(true);
+                    }
+                  },
                 };
               })}
             />

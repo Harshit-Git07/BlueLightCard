@@ -10,6 +10,9 @@ describe('OfferCard component', () => {
     companyName: 'LG',
     offerLink: 'https://www.bluelightcard.co.uk/offerdetails.php',
     showFindOutMore: true,
+    id: '123',
+    offerId: '123',
+    source: 'homepage',
   };
   describe('offer card smoke test', () => {
     it('should render offer card component without error', () => {

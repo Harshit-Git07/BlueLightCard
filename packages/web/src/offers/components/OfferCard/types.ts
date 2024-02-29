@@ -5,13 +5,17 @@ export interface OfferCardProps {
   alt: string;
   offerLink: string;
   variant?: string;
-  id?: string;
+  id: string;
   addBackground?: boolean;
   offerTag?: 'local offer' | 'online offer' | 'high street' | 'gift card' | number | undefined;
   withBorder?: boolean;
   upperCaseTitle?: boolean;
   showFindOutMore?: boolean;
   fallbackImage?: string;
+  offerId?: string;
+  companyId?: string;
+  hasLink?: boolean;
+  onClick?: () => void;
 }
 
 export interface OfferCardDetailsProps {

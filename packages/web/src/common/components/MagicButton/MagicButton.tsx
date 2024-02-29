@@ -32,7 +32,7 @@ const MagicButton: FC<MagicButtonProps> = ({
 
   return (
     <button
-      className={`${className} relative text-blue-800 w-fit rounded-full overflow-hidden p-[2px] w-[21.4375] h-[3.75rem] ${
+      className={`${className} relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] ${
         disabled ? '' : clickable ? 'cursor-pointer' : 'cursor-default'
       }`}
       disabled={disabled}

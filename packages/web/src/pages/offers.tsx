@@ -58,6 +58,7 @@ const OffersPage: NextPage<OffersPageProps> = () => {
                     imageSrc={offer.imageUrl}
                     alt={offer.imageAlt}
                     offerLink={offer.linkUrl}
+                    id={'_offer_card_' + index}
                   />
                 ))}
               </SwiperCarousel>
@@ -76,6 +77,7 @@ const OffersPage: NextPage<OffersPageProps> = () => {
                   imageSrc={offer.imageUrl}
                   alt={offer.imageAlt}
                   offerLink={offer.linkUrl}
+                  id={'_offer_card_' + index}
                   addBackground
                 />
               );

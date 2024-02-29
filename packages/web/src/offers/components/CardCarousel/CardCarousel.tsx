@@ -48,6 +48,10 @@ const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouse
                     id={'_offer_card_' + index}
                     showFindOutMore
                     upperCaseTitle
+                    offerId={offer.offerId}
+                    companyId={offer.companyId}
+                    hasLink={offer.hasLink}
+                    onClick={offer.onClick}
                   />
                 ))
               : [...Array(itemsToShow)].map((_, index) => <OfferCardPlaceholder key={index} />)}

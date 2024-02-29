@@ -10,8 +10,8 @@ export type DealsOfTheWeekType = {
   image?: string;
   logos?: string;
   href: string;
-  compid: number;
-  id: number;
+  compid: string;
+  id: string;
 };
 
 export type MarketPlaceItemType = {

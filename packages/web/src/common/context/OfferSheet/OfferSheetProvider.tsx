@@ -1,20 +1,20 @@
 import OfferSheet from '@/components/OfferSheet/OfferSheet';
 import OfferSheetContext, { offer } from './OfferSheetContext';
-import React from 'react';
+import React, { useState } from 'react';
 
 type OfferSheetProviderProps = {
   children: React.ReactNode;
 };
 
 const OfferSheetProvider: React.FC<OfferSheetProviderProps> = ({ children }) => {
-  const [offer, setOffer] = React.useState<offer | undefined>();
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [labels, setLabels] = React.useState<string[]>([]);
+  const [offer, setOffer] = useState<offer | undefined>();
+  const [open, setOpen] = useState<boolean>(false);
+  const [labels, setLabels] = useState<string[]>([]);
 
   return (
     <OfferSheetContext.Provider
       value={{
-        open: false,
+        open: open,
 
         offer: offer,
         offerLabels: labels,
@@ -24,7 +24,7 @@ const OfferSheetProvider: React.FC<OfferSheetProviderProps> = ({ children }) => 
         setLabels: setLabels,
       }}
     >
-      {offer && <OfferSheet open={open} setOpen={setOpen} offer={offer} labels={labels} />}
+      {offer && <OfferSheet offer={offer} />}
       {children}
     </OfferSheetContext.Provider>
   );

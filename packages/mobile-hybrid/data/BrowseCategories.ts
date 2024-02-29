@@ -1,4 +1,6 @@
-const BrowseCategoriesData = [
+import { OfferListDataType } from './types';
+
+const BrowseCategoriesData: OfferListDataType[] = [
   {
     id: 11,
     text: 'Children and toys',

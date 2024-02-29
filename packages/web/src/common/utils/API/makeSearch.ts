@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { BRAND, SEARCH_ENDPOINT } from '@/global-vars';
 import { getSiteIdFromBrandId } from '../getSiteIdFromBrandId';
 
@@ -29,9 +30,13 @@ export async function makeSearch(
   queryRaw: string,
   idToken: string,
   allowAgeGated: boolean = true,
-  service: string
+  service: string,
+  ampExpSearchOn: boolean = false
 ) {
-  const axios = require('axios');
+  const searchPath = ampExpSearchOn
+    ? `${SEARCH_ENDPOINT}/expSearch`
+    : `${SEARCH_ENDPOINT}/newSearch`;
+
   let data = {
     searchTerm: he.escape(queryRaw),
     siteId: getSiteIdFromBrandId(BRAND),
@@ -42,7 +47,7 @@ export async function makeSearch(
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: SEARCH_ENDPOINT,
+    url: searchPath,
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${idToken}`,

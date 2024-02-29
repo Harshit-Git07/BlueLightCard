@@ -78,6 +78,20 @@ const Search: NextPage = () => {
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
 
+  const searchExperiment = useAmplitudeExperiment(
+    'category_level_three_search',
+    [
+      {
+        variantName: 'control',
+        component: <></>,
+      },
+      {
+        variantName: 'treatment',
+        component: <></>,
+      },
+    ],
+    'control'
+  );
   const { setOpen, setOffer } = useContext(OfferSheetContext);
 
   useEffect(() => {
@@ -90,7 +104,8 @@ const Search: NextPage = () => {
         authCtx.authState.idToken ?? '',
         // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
         userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false,
-        userCtx.user?.profile.organisation ?? ''
+        userCtx.user?.profile.organisation ?? '',
+        searchExperiment.variantName === 'treatment'
       );
 
       if (searchResults.results) {

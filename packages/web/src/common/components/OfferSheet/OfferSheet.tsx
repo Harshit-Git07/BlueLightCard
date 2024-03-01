@@ -51,9 +51,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
   const [loadOfferError, setLoadOfferError] = useState(false);
 
   const finalFallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
-  const imageSource =
-    `https://cdn.bluelightcard.co.uk/${offerData.companyLogo}${offerData.companyId}.jpg` ??
-    finalFallbackImage;
+  const imageSource = offerData.companyLogo ?? finalFallbackImage;
 
   // Event handlers
   const copyLink = () => {
@@ -105,7 +103,10 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
     if (onButtonClick) {
       onButtonClick();
     } else if (offerData.id && offerData.companyId)
-      router.push(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
+      // I hate this. But it was requested so that the can see the message
+      setTimeout(() => {
+        router.push(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
+      }, 1500);
   };
 
   const logAmpOfferView = (eventSource: string) => {

@@ -24,7 +24,7 @@ const Accordion: FC<AccordionProps> = ({ title, content }) => {
       </button>
 
       <div className={`duration-200 ease-in-out ${active ? 'block' : 'hidden'}`}>
-        <Markdown className="font-['MuseoSans'] py-3 text-base font-light leading-5 whitespace-pre-wrap">
+        <Markdown className="font-['MuseoSans'] py-3 text-base break-words font-light leading-5 whitespace-pre-wrap">
           {content}
         </Markdown>
       </div>

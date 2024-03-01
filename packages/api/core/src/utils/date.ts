@@ -14,9 +14,10 @@ export function displayDateDDMMYYYY(isoDate :string = ''): string | null {
     return null;
   }
 
-  const newDate: Date = new Date(isoDate)
+  const newDate = new Date(isoDate);
   const year: number = newDate.getFullYear();
-  const month: string = newDate.getMonth().toString().padStart(2, '0');
-  const day: string = newDate.getDay().toString().padStart(2, '0');
+  // Add one to month because indexing starts at 0
+  const month: string = (newDate.getMonth() + 1).toString().padStart(2, '0');
+  const day: string = newDate.getUTCDate().toString().padStart(2, '0');
   return `${day}/${month}/${year}`;
 }

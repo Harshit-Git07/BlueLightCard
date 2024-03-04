@@ -77,7 +77,7 @@ remove_stale_stacks() {
     jq -c '.' stages-to-remove.json > stages-to-remove-compact.json
 
     # Loop over stages and delete stacks
-    local NUM_STAGES=$(cat stages-to-remove-compact.json | jq 'length')
+    local NUM_STAGES=$(cat stages-to-remove-compact.json | wc -l)
     echo "Found $NUM_STAGES stages to remove..."
     cat stages-to-remove-compact.json | while read STAGE; do
         local STAGE_NAME=$(echo $STAGE | jq -r '.stage')
@@ -160,10 +160,14 @@ remove_stale_stacks() {
     done
 }
 
-echo "Removing stale PR stacks..."
+echo "REMOVING STALE PR STACKS"
+echo "------------------------"
+echo ""
 remove_stale_stacks "true" 3
 echo "Done."
 
-echo "Removing other stale stacks..."
+echo "REMOVING OTHER STALE STACKS"
+echo "---------------------------"
+echo ""
 remove_stale_stacks "false" 21
 echo "Done."

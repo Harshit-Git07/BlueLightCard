@@ -117,23 +117,6 @@ jobs:
 
             <p><b>Storybook Url:</b> <a href="${{ needs.storybook.outputs.url }}">${{ needs.storybook.outputs.url }}</a></p>
 
-  changelog:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    name: Changelog
-    runs-on: ubuntu-latest
-    outputs:
-      releases_created: ${{ steps.tag-release.outputs.releases_created }}
-    steps:
-      - uses: GoogleCloudPlatform/release-please-action@v3
-        id: tag-release
-        with:
-          path: packages/mobile-hybrid
-          token: ${{ secrets.GITHUB_TOKEN }}
-          monorepo-tags: true
-          release-type: node
-          package-name: bluelightcard/mobile-hybrid
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
-
   dev:
     if: github.event_name == 'push' && github.ref != 'refs/heads/main' && needs.dev-env-mapping.outputs.devEnv
     name: Deploy Dev
@@ -192,7 +175,6 @@ jobs:
       - install
       - test
       - staging
-      - changelog
     steps:
       - name: Checkout
         uses: actions/checkout@v4

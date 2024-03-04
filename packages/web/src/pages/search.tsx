@@ -4,7 +4,7 @@ import requireAuth from '@/hoc/requireAuth';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next/types';
-import React, { use, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { makeQuery } from 'src/graphql/makeQuery';
@@ -134,7 +134,7 @@ const Search: NextPage = () => {
       }
     };
 
-    if (authCtx.authState.idToken && router.isReady) {
+    if (authCtx.authState.idToken && Boolean(userCtx.user) && router.isReady) {
       if (usedQuery !== query) {
         fetchData();
       }

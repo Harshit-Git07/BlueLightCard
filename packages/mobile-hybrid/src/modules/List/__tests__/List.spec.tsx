@@ -4,10 +4,12 @@ import userEvent, { UserEvent } from '@testing-library/user-event';
 import { ListProps, ListVariant } from '../types';
 import eventBus from '@/eventBus';
 import '@testing-library/jest-dom';
-import { Channels, APIUrl } from '@/globals';
+import { APIUrl, Channels } from '@/globals';
 import Spinner from '@/modules/Spinner';
 import { FC, PropsWithChildren } from 'react';
 import { offerListItemFactory } from '../__mocks__/factory';
+import InvokeNativeAnalytics from '@/invoke/analytics';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 
 jest.mock('@/../data/index.ts', () => ({
   offerListDataMap: {
@@ -48,6 +50,7 @@ describe('ListModule', () => {
 
   afterEach(() => {
     bus.clearMessages(Channels.API_RESPONSE);
+    jest.resetAllMocks();
   });
 
   beforeEach(() => {
@@ -221,6 +224,55 @@ describe('ListModule', () => {
       const heading = screen.queryByText('Cat Two');
 
       expect(heading).not.toBeInTheDocument();
+    });
+  });
+
+  describe('log analytics events', () => {
+    const analyticsMock = jest
+      .spyOn(InvokeNativeAnalytics.prototype, 'logAnalyticsEvent')
+      .mockImplementation(() => jest.fn());
+
+    beforeEach(() => {
+      bus.broadcast(Channels.API_RESPONSE, {
+        url: '/api/4/offer/list.php',
+        response: {
+          data: offerListItemFactory.buildList(5),
+        },
+      });
+    });
+
+    describe('types list', () => {
+      it('should log "type_list_viewed" analytic event on results returned', () => {
+        props.listVariant = ListVariant.Types;
+        props.entityId = 0;
+
+        render(<ListWithSpinner {...props} />);
+
+        expect(analyticsMock).toHaveBeenCalledWith({
+          event: AmplitudeEvents.TYPE_LIST_VIEWED,
+          parameters: {
+            type_name: 'Type One',
+            number_of_results: 5,
+          },
+        });
+      });
+    });
+
+    describe('categories list', () => {
+      it('should not log "type_list_viewed" analytic event on results returned', () => {
+        props.listVariant = ListVariant.Categories;
+        props.entityId = 0;
+
+        render(<ListWithSpinner {...props} />);
+
+        expect(analyticsMock).not.toHaveBeenCalledWith({
+          event: AmplitudeEvents.TYPE_LIST_VIEWED,
+          parameters: {
+            type_name: 'Type One',
+            number_of_results: 5,
+          },
+        });
+      });
     });
   });
 });

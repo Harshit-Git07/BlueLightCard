@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { ListProps } from './types';
+import { ListProps, ListVariant } from './types';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import useAPI from '@/hooks/useAPI';
@@ -11,9 +11,12 @@ import ListItem from '@/components/ListItem/ListItem';
 import Button from '@/components/Button/Button';
 import { offerListDataMap } from '@/data/index';
 import { PAGE_SIZE } from '@/globals';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import InvokeNativeAnalytics from '@/invoke/analytics';
 
-const request = new InvokeNativeAPICall();
+const analytics = new InvokeNativeAnalytics();
 const navigation = new InvokeNativeNavigation();
+const request = new InvokeNativeAPICall();
 
 const List: FC<ListProps> = ({ listVariant, entityId }) => {
   const setSpinner = useSetAtom(spinner);
@@ -33,6 +36,22 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
     return findHeadingById?.text;
   }, [entityId, listVariant]);
 
+  const logListViewedAnalytic = useCallback(
+    (numberOfResults: number) => {
+      // TODO: Update with categories analytic when implementing categories page
+      if (listVariant === ListVariant.Types) {
+        analytics.logAnalyticsEvent({
+          event: AmplitudeEvents.TYPE_LIST_VIEWED,
+          parameters: {
+            type_name: heading,
+            number_of_results: numberOfResults,
+          },
+        });
+      }
+    },
+    [heading, listVariant],
+  );
+
   useEffect(() => {
     request.requestData(apiUrl, {
       [queryParamName]: entityId,
@@ -44,6 +63,7 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
   useEffect(() => {
     if (listResponse?.data) {
       setResults(results.concat(...listResponse.data));
+      logListViewedAnalytic(listResponse.data.length);
     }
     setSpinner(false);
     setIsLoadingMore(false);

@@ -140,7 +140,7 @@ const Search: NextPage = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authCtx.authState.idToken, userCtx.isAgeGated, router.isReady, query]);
+  }, [authCtx.authState.idToken, userCtx.isAgeGated, userCtx.user, router.isReady, query]);
 
   useEffect(() => {
     setQuery((router.query.q as string) ?? '');

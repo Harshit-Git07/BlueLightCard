@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.1...bluelightcard/web-v1.31.2) (2024-03-04)
+
+
+### Bug Fixes
+
+* added boolean check to fetch data request ([#963](https://github.com/bluelightcard/BlueLightCard-2.0/issues/963)) ([06be730](https://github.com/bluelightcard/BlueLightCard-2.0/commit/06be7306cf437bd71b4a4a5ef868416a2dd768f4))
+
 ## [1.31.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.0...bluelightcard/web-v1.31.1) (2024-03-01)
 
 

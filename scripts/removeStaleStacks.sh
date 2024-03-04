@@ -46,7 +46,7 @@ remove_stale_stacks() {
             })
     ' sst-stacks-filtered.json > stacks-by-stage.json
 
-    local REMOVE_BEFORE_DATE=$(date -v -"$MAX_AGE_IN_DAYS"d +%Y-%m-%dT%H:%M:%SZ)
+    local REMOVE_BEFORE_DATE=$(date --date="-$MAX_AGE_IN_DAYS days" +%Y-%m-%dT%H:%M:%SZ)
 
     echo "Filtering out stages where no stacks have been updated in the threshold window..."
     jq '

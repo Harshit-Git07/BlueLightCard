@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.2...bluelightcard/web-v1.31.3) (2024-03-04)
+
+
+### Bug Fixes
+
+* added user as dependency to useEffect ([#966](https://github.com/bluelightcard/BlueLightCard-2.0/issues/966)) ([c2c7c80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c2c7c80eb153baba3235f9842e2ff197ef344a39))
+
 ## [1.31.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.1...bluelightcard/web-v1.31.2) (2024-03-04)
 
 

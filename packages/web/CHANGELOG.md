@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.31.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.0...bluelightcard/web-v1.31.1) (2024-03-01)
+
+
+### Bug Fixes
+
+* Offer Sheet fixes ([#956](https://github.com/bluelightcard/BlueLightCard-2.0/issues/956)) ([d77ecf1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d77ecf1ac0933702fc2ab2d4fb47500e6adfed1d))
+
+
+### Other Changes
+
+* remove sst config compiled js ([#952](https://github.com/bluelightcard/BlueLightCard-2.0/issues/952)) ([226eee7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/226eee7350519d6be2a8ff54a7ae7f5a41cee1af))
+
 ## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.30.0...bluelightcard/web-v1.31.0) (2024-02-29)
 
 

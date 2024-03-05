@@ -145,6 +145,26 @@ export function createOldCognito(
     resourceArn: cognito.cdk.userPool.userPoolArn,
     webAclArn: webACL.attrArn,
   });
+
+  //audit
+  if (stack.stage === 'production') {
+    const blcAuditLogFunction = new Function(stack, 'blcAuditLogSignInOldPool', {
+      handler: 'packages/api/identity/src/audit/audit.handler',
+      environment: {
+        SERVICE: 'identity',
+        DATA_STREAM: 'dwh-blc-production-login',
+        WEB_CLIENT_ID: webClient.userPoolClientId,
+        MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
+      },
+      permissions: ['firehose:PutRecord'],
+    });
+    const postAuthenticationLogGroup: ILogGroup | undefined = cognito.getFunction('postAuthentication')?.logGroup;
+    postAuthenticationLogGroup?.addSubscriptionFilter('auditLogSignIn', {
+      destination: new LambdaDestination(blcAuditLogFunction),
+      filterPattern: FilterPattern.booleanValue('$.audit', true),
+    });
+  }
+
   return { oldCognito: cognito, oldWebClient: webClient };
 }
 
@@ -261,6 +281,27 @@ export function createOldCognitoDDS(
     resourceArn: cognito_dds.cdk.userPool.userPoolArn,
     webAclArn: webACL.attrArn,
   });
+
+  //audit
+  if (stack.stage === 'production') {
+    const ddsAuditLogFunction = new Function(stack, 'ddsAuditLogSignInOldPool', {
+      handler: 'packages/api/identity/src/audit/audit.handler',
+      environment: {
+        SERVICE: 'identity',
+        DATA_STREAM: 'dwh-dds-production-login',
+        WEB_CLIENT_ID: webClientDds.userPoolClientId,
+        MOBILE_CLIENT_ID: mobileClientDds.userPoolClientId,
+      },
+      permissions: ['firehose:PutRecord'],
+    });
+    const postAuthenticationLogGroupDds: ILogGroup | undefined =
+      cognito_dds.getFunction('postAuthentication')?.logGroup;
+    postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignIn', {
+      destination: new LambdaDestination(ddsAuditLogFunction),
+      filterPattern: FilterPattern.booleanValue('$.audit', true),
+    });
+  }
+
   return { oldCognitoDds: cognito_dds, oldWebClientDds: webClientDds };
 }
 
@@ -569,6 +610,8 @@ export function createNewCognitoDDS(
     resourceArn: cognito_dds.cdk.userPool.userPoolArn,
     webAclArn: webACL.attrArn,
   });
+
+  //audit
   if (stack.stage === 'production') {
     const ddsAuditLogFunction = new Function(stack, 'ddsAuditLogSignIn', {
       handler: 'packages/api/identity/src/audit/audit.handler',
@@ -587,5 +630,6 @@ export function createNewCognitoDDS(
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
   }
+  
   return cognito_dds;
 }

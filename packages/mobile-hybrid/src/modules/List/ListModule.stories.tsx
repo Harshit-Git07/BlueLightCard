@@ -2,6 +2,8 @@ import { Meta, StoryFn } from '@storybook/react';
 import List from './List';
 import pageDecorator from '@storybook/pageDecorator';
 import { ListVariant } from './types';
+import { userService } from '@/components/UserServiceProvider/store';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 
 const componentMeta: Meta<typeof List> = {
   title: 'Modules/List',
@@ -12,7 +14,11 @@ const componentMeta: Meta<typeof List> = {
   decorators: [pageDecorator],
 };
 
-const Template: StoryFn<typeof List> = (args) => <List {...args} />;
+const Template: StoryFn<typeof List> = (args) => (
+  <JotaiTestProvider initialValues={[[userService, 'NHS']]}>
+    <List {...args} />
+  </JotaiTestProvider>
+);
 
 export const Default = Template.bind({});
 Default.args = {

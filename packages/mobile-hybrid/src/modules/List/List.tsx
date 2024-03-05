@@ -13,6 +13,8 @@ import { offerListDataMap } from '@/data/index';
 import { PAGE_SIZE } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import InvokeNativeAnalytics from '@/invoke/analytics';
+import { useAtomValue } from 'jotai';
+import { userService } from '@/components/UserServiceProvider/store';
 
 const analytics = new InvokeNativeAnalytics();
 const navigation = new InvokeNativeNavigation();
@@ -20,6 +22,7 @@ const request = new InvokeNativeAPICall();
 
 const List: FC<ListProps> = ({ listVariant, entityId }) => {
   const setSpinner = useSetAtom(spinner);
+  const userServiceValue = useAtomValue(userService);
   const [results, setResults] = useState<OfferListItemModel[]>([]);
   const [page, setPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -53,12 +56,15 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
   );
 
   useEffect(() => {
-    request.requestData(apiUrl, {
-      [queryParamName]: entityId,
-      page,
-    });
-    setIsLoadingMore(true);
-  }, [apiUrl, entityId, queryParamName, page]);
+    if (userServiceValue) {
+      request.requestData(apiUrl, {
+        [queryParamName]: entityId,
+        page,
+        service: userServiceValue,
+      });
+      setIsLoadingMore(true);
+    }
+  }, [apiUrl, entityId, queryParamName, page, userServiceValue]);
 
   useEffect(() => {
     if (listResponse?.data) {

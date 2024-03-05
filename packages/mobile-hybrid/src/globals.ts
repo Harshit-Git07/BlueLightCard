@@ -15,4 +15,5 @@ export enum APIUrl {
   FavouritedBrands = '/api/4/user/bookmark/retrieve.php',
   Search = '/api/4/offer/search.php',
   List = '/api/4/offer/list.php',
+  UserService = '/api/4/user/profile/service/retrieve.php',
 }

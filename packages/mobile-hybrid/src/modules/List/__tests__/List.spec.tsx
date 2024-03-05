@@ -8,6 +8,9 @@ import { APIUrl, Channels } from '@/globals';
 import Spinner from '@/modules/Spinner';
 import { FC, PropsWithChildren } from 'react';
 import { offerListItemFactory } from '../__mocks__/factory';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+import { userService } from '@/components/UserServiceProvider/store';
+import InvokeNativeAPICall from '@/invoke/apiCall';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 
@@ -25,28 +28,13 @@ jest.mock('@/../data/index.ts', () => ({
     ],
   },
 }));
-
-const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
-  return (
-    <div>
-      {children}
-      <Spinner />
-    </div>
-  );
-};
-
-const ListWithSpinner: FC<ListProps> = (props) => {
-  return (
-    <WithSpinner>
-      <List {...props} />
-    </WithSpinner>
-  );
-};
+jest.mock('@/invoke/apiCall');
 
 describe('ListModule', () => {
   let props: ListProps;
   let bus = eventBus();
   let user: UserEvent;
+  let userServiceValue: string | undefined;
 
   afterEach(() => {
     bus.clearMessages(Channels.API_RESPONSE);
@@ -59,11 +47,12 @@ describe('ListModule', () => {
       listVariant: ListVariant.Types,
     };
     user = userEvent.setup();
+    userServiceValue = 'NHS';
   });
 
   describe('smoke test', () => {
     it('should render component without error', () => {
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
     });
   });
 
@@ -76,13 +65,70 @@ describe('ListModule', () => {
         },
       });
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const spinner = screen.queryByRole('progressbar');
 
       expect(spinner).toBeFalsy();
     });
   });
+
+  describe('request data', () => {
+    const requestDataMock = jest
+      .spyOn(InvokeNativeAPICall.prototype, 'requestData')
+      .mockImplementation(() => jest.fn());
+
+    it('should not make request to api when "service" value is "undefined"', () => {
+      userServiceValue = undefined;
+
+      whenListWithSpinnerIsRendered(props);
+
+      expect(requestDataMock).not.toHaveBeenCalled();
+    });
+
+    describe('"types" list', () => {
+      beforeEach(() => {
+        props = {
+          entityId: 0,
+          listVariant: ListVariant.Types,
+        };
+      });
+
+      it('should make request to api when "service" value is set', () => {
+        userServiceValue = 'NHS';
+
+        whenListWithSpinnerIsRendered(props);
+
+        expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
+          typeid: 0,
+          page: 1,
+          service: userServiceValue,
+        });
+      });
+    });
+
+    describe('"categories" list', () => {
+      beforeEach(() => {
+        props = {
+          entityId: 0,
+          listVariant: ListVariant.Categories,
+        };
+      });
+
+      it('should make request to api when "service" value is set', () => {
+        userServiceValue = 'NHS';
+
+        whenListWithSpinnerIsRendered(props);
+
+        expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
+          catid: 0,
+          page: 1,
+          service: userServiceValue,
+        });
+      });
+    });
+  });
+
   describe('render data', () => {
     it('should render list of results', () => {
       props.listVariant = ListVariant.Categories;
@@ -95,12 +141,13 @@ describe('ListModule', () => {
         },
       });
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const results = screen.getAllByRole('listitem');
 
       expect(results).toHaveLength(2);
     });
+
     it('should display "No results found." message when no data is present', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
@@ -112,7 +159,7 @@ describe('ListModule', () => {
         },
       });
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const noResultsMessage = screen.getByText('No results found.');
       const noListItem = screen.queryAllByRole('listitem');
@@ -133,12 +180,13 @@ describe('ListModule', () => {
           data: offerListItemFactory.buildList(20),
         },
       });
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
       const loadMoreButton = screen.getByText('Load More');
 
       await user.click(loadMoreButton);
       expect(loadMoreButton).toHaveTextContent('Loading...');
     });
+
     it('should not show the button if there are no results', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
@@ -150,12 +198,13 @@ describe('ListModule', () => {
         },
       });
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const loadMoreButton = screen.queryByText('Load More');
 
       expect(loadMoreButton).not.toBeInTheDocument();
     });
+
     it('should not show the button if number of results is less than pagesize(20)', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
@@ -167,12 +216,13 @@ describe('ListModule', () => {
         },
       });
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const loadMoreButton = screen.queryByText('Load More');
 
       expect(loadMoreButton).not.toBeInTheDocument();
     });
+
     it('should show the button if number of results match the pagesize(20)', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
@@ -184,7 +234,7 @@ describe('ListModule', () => {
         },
       });
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const loadMoreButton = screen.getByText('Load More');
 
@@ -197,7 +247,7 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 1;
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const heading = screen.getByText('Cat Two');
 
@@ -208,7 +258,7 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Types;
       props.entityId = 1;
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const heading = screen.getByText('Type Two');
 
@@ -219,7 +269,7 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 4;
 
-      render(<ListWithSpinner {...props} />);
+      whenListWithSpinnerIsRendered(props);
 
       const heading = screen.queryByText('Cat Two');
 
@@ -246,7 +296,7 @@ describe('ListModule', () => {
         props.listVariant = ListVariant.Types;
         props.entityId = 0;
 
-        render(<ListWithSpinner {...props} />);
+        whenListWithSpinnerIsRendered(props);
 
         expect(analyticsMock).toHaveBeenCalledWith({
           event: AmplitudeEvents.TYPE_LIST_VIEWED,
@@ -263,7 +313,7 @@ describe('ListModule', () => {
         props.listVariant = ListVariant.Categories;
         props.entityId = 0;
 
-        render(<ListWithSpinner {...props} />);
+        whenListWithSpinnerIsRendered(props);
 
         expect(analyticsMock).not.toHaveBeenCalledWith({
           event: AmplitudeEvents.TYPE_LIST_VIEWED,
@@ -275,4 +325,29 @@ describe('ListModule', () => {
       });
     });
   });
+
+  const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
+    return (
+      <div>
+        {children}
+        <Spinner />
+      </div>
+    );
+  };
+
+  const ListWithSpinner: FC<ListProps> = (props) => {
+    return (
+      <WithSpinner>
+        <List {...props} />
+      </WithSpinner>
+    );
+  };
+
+  const whenListWithSpinnerIsRendered = (props: ListProps): void => {
+    render(
+      <JotaiTestProvider initialValues={[[userService, userServiceValue]]}>
+        <ListWithSpinner {...props} />
+      </JotaiTestProvider>,
+    );
+  };
 });

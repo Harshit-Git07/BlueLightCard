@@ -16,20 +16,23 @@ import eventBus from '@/eventBus';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
+import UserServiceProvider from '@/components/UserServiceProvider/UserServiceProvider';
 
 dayjs.extend(CustomParseFormat);
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AppStoreProvider>
-      <NewsStoreProvider>
-        <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
-          <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
-            <Component {...pageProps} />
-            <Spinner />
-          </main>
-        </AmplitudeProvider>
-      </NewsStoreProvider>
+      <UserServiceProvider>
+        <NewsStoreProvider>
+          <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
+            <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
+              <Component {...pageProps} />
+              <Spinner />
+            </main>
+          </AmplitudeProvider>
+        </NewsStoreProvider>
+      </UserServiceProvider>
     </AppStoreProvider>
   );
 }

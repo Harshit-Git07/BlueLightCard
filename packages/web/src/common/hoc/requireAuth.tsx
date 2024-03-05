@@ -20,6 +20,8 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
     const authContext = useContext(AuthContext);
     const router = useRouter();
 
+    // TODO: Check idToken and refreshToken in local storage and refresh if appropriate
+    // If refresh not 200, call LOGOUT_ROUTE in global-vars.js
     useEffect(() => {
       if (authContext.isReady && !authContext.isUserAuthenticated()) {
         redirectToLogin(router);

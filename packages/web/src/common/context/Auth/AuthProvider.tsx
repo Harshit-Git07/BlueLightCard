@@ -17,15 +17,26 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
   const [authState, setAuthState] = useState({
     accessToken: '',
     idToken: '',
+    refreshToken: '',
   });
 
-  const setUserAuthInfo = ({ accessToken, idToken }: { accessToken: string; idToken: string }) => {
+  const setUserAuthInfo = ({
+    accessToken,
+    idToken,
+    refreshToken,
+  }: {
+    accessToken: string;
+    idToken: string;
+    refreshToken: string;
+  }) => {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('idToken', idToken);
+    localStorage.setItem('refreshToken', refreshToken);
 
     setAuthState({
       accessToken,
       idToken,
+      refreshToken,
     });
   };
 
@@ -33,6 +44,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
     setAuthState({
       accessToken: localStorage.getItem('accessToken') || '',
       idToken: localStorage.getItem('idToken') || '',
+      refreshToken: localStorage.getItem('refreshToken') || '',
     });
 
     setIsReady(true);

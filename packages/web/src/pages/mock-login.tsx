@@ -48,6 +48,7 @@ function MockLogin() {
         authContext?.updateAuthTokens({
           accessToken: response.data.AuthenticationResult.AccessToken,
           idToken: response.data.AuthenticationResult.IdToken,
+          refreshToken: response.data.AuthenticationResult.RefreshToken,
         });
 
         const redirect = router.query.redirect as string;

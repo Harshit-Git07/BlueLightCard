@@ -7,6 +7,9 @@ This folder contains documentation surrounding the architecture and implementati
 ### [Architecture](./HybridArchitecture.md)
 Details how the hybrid mobile app communicates with the mobile native applications. Additionally, how to test and debug the mobile hybrid app.
 
+### [React Hooks](./ReactHooks.md)
+Useful react hooks that help with using hybrid apis and other utilities.
+
 ### [Analytics](./Analytics.md)
 Details how analytics are implemented within the app, how to add analytic events to a component & how to test your analytics successfully published to Amplitude.
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.0.0...bluelightcard/chrome-extension-v1.0.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* change the method name ([#984](https://github.com/bluelightcard/BlueLightCard-2.0/issues/984)) ([58e0e72](https://github.com/bluelightcard/BlueLightCard-2.0/commit/58e0e72d56f0da72182b23ea614081a6e0ddf53a))
+
 ## 1.0.0 (2024-03-06)
 
 

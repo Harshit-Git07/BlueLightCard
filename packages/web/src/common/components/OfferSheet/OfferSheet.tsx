@@ -6,6 +6,8 @@ import {
   faStar as faStarSolid,
   faWandMagicSparkles,
   faArrowUpFromBracket,
+  faCheck,
+  faX,
 } from '@fortawesome/pro-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -105,7 +107,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
     } else if (offerData.id && offerData.companyId)
       // I hate this. But it was requested so that the can see the message
       setTimeout(() => {
-        router.push(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
+        window.open(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
       }, 1500);
   };
 
@@ -132,9 +134,19 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
     } else {
       logAmpOfferView('sheet');
       setOfferData(offerDataResponse);
+
+      let labels: string[] = [];
+
       const { expiry, type } = offerDataResponse;
-      const expiryDate: string | null = displayDateDDMMYYYY(expiry);
-      setLabels([type ?? '', `Expires: ${expiryDate}`]);
+
+      if (type) labels.push(type);
+
+      if (expiry) {
+        let dateFormatted = displayDateDDMMYYYY(expiry);
+        if (dateFormatted) labels.push(dateFormatted);
+      }
+
+      setLabels(labels);
       setIsLoading(false);
     }
   };
@@ -152,6 +164,11 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
       fetchofferSheetDetails();
     }
   }, [userCtx.user, offerId, companyId]);
+
+  useEffect(() => {
+    setMagicButtonState('primary');
+    setShareBtnState('share');
+  }, [open]);
 
   return (
     <DynamicSheet
@@ -241,11 +258,20 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
                     shareBtnState === 'error' && 'text-palette-danger-base'
                   } text-base font-['MuseoSans'] font-bold leading-6`}
                 >
-                  <FontAwesomeIcon icon={faArrowUpFromBracket} className="mr-2" />
+                  <FontAwesomeIcon
+                    icon={
+                      shareBtnState === 'share'
+                        ? faArrowUpFromBracket
+                        : shareBtnState === 'success'
+                        ? faCheck
+                        : faX
+                    }
+                    className="mr-2"
+                  />
                   {shareBtnState === 'share'
                     ? 'Share'
                     : shareBtnState === 'success'
-                    ? 'Copied to clipboard'
+                    ? 'Link Copied'
                     : 'Failed to copy'}
                 </span>
               </Button>
@@ -283,7 +309,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
 
       {/* Bottom section - Button labels etc */}
       {!loadOfferError && (
-        <div className="w-full pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
+        <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
           <div className="w-full flex flex-wrap mb-2 justify-center">
             {offerLabels &&
               offerLabels.map((label, index) => (
@@ -308,8 +334,8 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
                 </Heading>
               </div>
             ) : (
-              <div className="flex-col min-h-7 text-nowrap">
-                <div className="text-md font-bold">
+              <div className="flex-col w-full min-h-7 text-nowrap whitespace-nowrap flex-nowrap">
+                <div className="text-md font-bold text-center">
                   <FontAwesomeIcon icon={faWandMagicSparkles} /> Discount automatically applied
                 </div>
                 <div className="text-sm">Redirecting you to partner website</div>

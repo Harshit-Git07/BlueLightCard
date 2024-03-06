@@ -7,7 +7,7 @@ exports[`Button component snapshot Test renders a button that is diabled 1`] = `
   onClick={[Function]}
 >
   <div
-    className="relative py-4 px-16 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-['MuseoSans'] text-base font-bold leading-6 text-white bg-[#001B80] opacity-30 disabled"
+    className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-['MuseoSans'] text-base font-bold leading-6 text-white bg-[#001B80] opacity-30 disabled"
     style={
       {
         "transitionDuration": "300ms",
@@ -33,7 +33,7 @@ exports[`Button component snapshot Test renders a button with animated border 1`
     />
   </div>
   <div
-    className="relative py-4 px-16 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-['MuseoSans'] text-base font-bold leading-6 text-[#020369] bg-white animated"
+    className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-['MuseoSans'] text-base font-bold leading-6 text-[#020369] bg-white animated"
     style={
       {
         "transitionDuration": "300ms",

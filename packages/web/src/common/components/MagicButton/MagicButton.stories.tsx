@@ -23,7 +23,9 @@ const componentMeta: Meta<typeof MagicButton> = {
 };
 
 const DefaultTemplate: StoryFn<typeof MagicButton> = (args) => (
-  <MagicButton {...args}>Button</MagicButton>
+  <MagicButton {...args}>
+    <div className="py-4 px-16">Button</div>
+  </MagicButton>
 );
 
 export const Primary = DefaultTemplate.bind({});

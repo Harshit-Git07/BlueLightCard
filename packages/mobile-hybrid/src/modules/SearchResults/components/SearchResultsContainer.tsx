@@ -4,7 +4,7 @@ import { APIUrl } from '@/globals';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import SearchResultsPresenter, { Props } from './SearchResultsPresenter';
 import { searchResults, searchTerm } from '../store';
-import { SearchResults } from '../types';
+import { OfferListItem, SearchResults } from '../types';
 import { spinner } from '@/modules/Spinner/store';
 import useAPI from '@/hooks/useAPI';
 import InvokeNativeNavigation from '@/invoke/navigation';
@@ -38,10 +38,27 @@ const SearchResultsContainer: FC = () => {
     [term],
   );
 
-  const onOfferClick = useCallback<Props['onOfferClick']>((companyId, offerId) => {
+  const onOfferClick = ({
+    companyName,
+    companyId,
+    offerId,
+    offerName,
+    searchResultNumber,
+  }: OfferListItem) => {
     navigation.navigate(`/offerdetails.php?cid=${companyId}&oid=${offerId}`, 'search');
-  }, []);
-
+    analytics.logAnalyticsEvent({
+      event: AmplitudeEvents.SEARCH_RESULTS_LIST_CLICKED,
+      parameters: {
+        company_id: companyId,
+        company_name: companyName,
+        offer_id: offerId,
+        offer_name: offerName,
+        number_of_results: results.length,
+        search_term: term,
+        search_result_number: searchResultNumber,
+      },
+    });
+  };
   useEffect(() => {
     if (term) {
       request.requestData(APIUrl.Search, { term });

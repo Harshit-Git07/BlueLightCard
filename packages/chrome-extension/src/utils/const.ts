@@ -1,6 +1,6 @@
-const lightFont = chrome.runtime.getURL("MuseoSansRounded100.otf");
-const mediumFont = chrome.runtime.getURL("MuseoSansRounded300.otf");
-const boldFont = chrome.runtime.getURL("MuseoSansRounded700.otf");
+const lightFont = chrome.runtime.getURL('MuseoSansRounded100.otf');
+const mediumFont = chrome.runtime.getURL('MuseoSansRounded300.otf');
+const boldFont = chrome.runtime.getURL('MuseoSansRounded700.otf');
 
 export const customFontFaceLight = `
 @font-face {
@@ -38,7 +38,7 @@ right: 15px!important;
 width: 375px!important;
 height: 440px!important;
 color: black!important;
-z-index: 9999!important;
+z-index: 2147483647!important;
 background: white!important;
 border-radius: 16px!important;
 box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.35)!important;

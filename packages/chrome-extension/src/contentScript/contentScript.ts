@@ -34,7 +34,7 @@ const observer = new MutationObserver((mutations) => {
       });
     }
   });
-  googleResultScanner();
+  googleResultMapper();
 });
 
 if (window.location.href.includes('google')) {
@@ -45,7 +45,7 @@ if (window.location.href.includes('google')) {
 }
 
 const alreadyInsertedNodesMap: Map<string, Set<Element>> = new Map<string, Set<Element>>();
-const googleResultScanner = () => {
+const googleResultMapper = () => {
   chrome.runtime.sendMessage({ message: 'scanUrls', urls: urls }, function (response) {
     elementsMap.forEach((nodes, url) => {
       response.matchedUrls.map((item: { url: string; idx: number }) => {

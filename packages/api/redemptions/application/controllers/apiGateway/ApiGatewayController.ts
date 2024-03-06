@@ -1,8 +1,11 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import micromatch from 'micromatch';
 import { z } from 'zod';
 
 import { Result } from '@blc-mono/core/types/result';
+import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
+import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 import { Controller } from '../Controller';
 
@@ -27,7 +30,11 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
 > {
   protected abstract logger: ILogger;
 
-  protected formatResponse(_: APIGatewayProxyEventV2, result: APIGatewayResult): APIGatewayProxyStructuredResultV2 {
+  protected formatResponse(
+    request: APIGatewayProxyEventV2,
+    result: APIGatewayResult,
+  ): APIGatewayProxyStructuredResultV2 {
+    const allowedOrigin = this.getAllowedOrigin(request);
     return {
       statusCode: result.statusCode,
       body: JSON.stringify({
@@ -37,6 +44,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       headers: {
         ...result.headers,
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': allowedOrigin,
       },
     };
   }
@@ -121,5 +129,15 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
         fatal: error.fatal,
       })),
     });
+  }
+
+  protected getAllowedOrigin(request: APIGatewayProxyEventV2): string {
+    const origin = request.headers.origin;
+    const allowedOrigins = JSON.parse(getEnv(RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS));
+    if (origin && (micromatch.isMatch(origin, allowedOrigins) || allowedOrigins.includes('*'))) {
+      return origin;
+    } else {
+      return '';
+    }
   }
 }

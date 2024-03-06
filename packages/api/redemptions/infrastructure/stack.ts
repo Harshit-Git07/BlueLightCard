@@ -67,6 +67,12 @@ export async function Redemptions({ app, stack }: StackContext) {
         deployOptions: {
           stageName: 'v1',
         },
+        defaultCorsPreflightOptions: {
+          allowOrigins: config.apiDefaultAllowedOrigins,
+          allowHeaders: ['*'],
+          allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+          allowCredentials: true,
+        },
       },
     },
   });
@@ -91,7 +97,7 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   // functionName is automatically appended with the stage name
   allRoutes.addRoutes(api, stack, {
-    'GET /member/redemptionDetails': Route.createRoute({
+    'POST /member/redemptionDetails': Route.createRoute({
       model: getRedemptionDetailsModel,
       apiGatewayModelGenerator,
       stack,
@@ -101,6 +107,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       handler:
         'packages/api/redemptions/application/handlers/apiGateway/redemptionDetails/getRedemptionDetails.handler',
       requestValidatorName: 'GetRedemptionDetailsValidator',
+      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
     'POST /member/redeem': Route.createRoute({
       model: postRedeemModel,
@@ -111,6 +118,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       database,
       handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
       requestValidatorName: 'PostRedeemValidator',
+      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
     'POST /member/connection/affiliate': Route.createRoute({
       model: postAffiliateModel,
@@ -120,6 +128,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       restApi,
       handler: 'packages/api/redemptions/application/handlers/apiGateway/affiliate/postAffiliate.handler',
       requestValidatorName: 'PostAffiliateValidator',
+      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
     'POST /member/online/single-use/custom/spotify': Route.createRoute({
       model: postSpotifyModel,
@@ -135,6 +144,7 @@ export async function Redemptions({ app, stack }: StackContext) {
         [RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH]: config.codeRedeemedPath,
         [RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH]: config.codeAssignedRedeemedPath,
       },
+      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
   });
 

@@ -10,6 +10,7 @@ export type RedemptionsStackConfig = {
   codesRedeemedHost: string;
   codeRedeemedPath: string;
   codeAssignedRedeemedPath: string;
+  apiDefaultAllowedOrigins: string[];
 };
 
 export class RedemptionsStackConfigResolver {
@@ -32,6 +33,11 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
       codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
+      apiDefaultAllowedOrigins: [
+        'https://*.bluelightcard.co.uk',
+        'https://*.bluelightcard.com.au',
+        'https://*.defencediscountservice.co.uk',
+      ],
     };
   }
 
@@ -41,6 +47,12 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
       codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
+      apiDefaultAllowedOrigins: [
+        'https://*.blc-uk.pages.dev',
+        'https://*.blc-au.pages.dev',
+        'https://*.dds-uk.pages.dev',
+        'http://localhost:*',
+      ],
     };
   }
 
@@ -50,6 +62,12 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
       codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
+      apiDefaultAllowedOrigins: [
+        'https://*.blc-uk.pages.dev',
+        'https://*.blc-au.pages.dev',
+        'https://*.dds-uk.pages.dev',
+        'http://localhost:*',
+      ],
     };
   }
 
@@ -59,6 +77,7 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: getEnv(RedemptionsStackEnvironmentKeys.CODES_REDEEMED_HOST),
       codeRedeemedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH),
       codeAssignedRedeemedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH),
+      apiDefaultAllowedOrigins: ['*'],
     };
   }
 }

@@ -23,6 +23,7 @@ export type RouteOptions = {
   requestValidatorName: string;
   restApi: RestApi;
   stack: Stack;
+  defaultAllowedOrigins: string[];
 };
 
 export class Route {
@@ -36,12 +37,16 @@ export class Route {
     restApi,
     stack,
     database,
+    defaultAllowedOrigins,
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'redemptionsAuthorizer'> {
     return {
       cdk: {
         function: new SSTFunction(stack, functionName, {
           handler,
-          environment,
+          environment: {
+            ...environment,
+            [RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]: JSON.stringify(defaultAllowedOrigins),
+          },
           database,
         }),
         method: {

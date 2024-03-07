@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.22.0...bluelightcard/offers-v1.23.0) (2024-03-07)
+
+
+### Features
+
+* Feat/to 575 offer sheet firehose event ([#988](https://github.com/bluelightcard/BlueLightCard-2.0/issues/988)) ([2dfa561](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2dfa5616a219ad437efc811098bb1c7c442db7cf))
+* TI-000 use common authorizer ([#921](https://github.com/bluelightcard/BlueLightCard-2.0/issues/921)) ([47bd37d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/47bd37dd9f2b0d81810dc74604821f9db6ac9f86))
+
+
+### Bug Fixes
+
+* add multiple cognito support to both api ([#912](https://github.com/bluelightcard/BlueLightCard-2.0/issues/912)) ([ea0b341](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ea0b341bf2bee16ffeffbd8d00fc53f39633b203))
+
 ## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.21.0...bluelightcard/offers-v1.22.0) (2024-02-19)
 
 

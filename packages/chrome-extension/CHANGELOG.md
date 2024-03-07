@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.0.1...bluelightcard/chrome-extension-v1.0.2) (2024-03-07)
+
+
+### Bug Fixes
+
+* remove zip command from staging and  prod ([#992](https://github.com/bluelightcard/BlueLightCard-2.0/issues/992)) ([682c248](https://github.com/bluelightcard/BlueLightCard-2.0/commit/682c248380e8c289b007be9e189cd7138c46062d))
+
 ## [1.0.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.0.0...bluelightcard/chrome-extension-v1.0.1) (2024-03-06)
 
 

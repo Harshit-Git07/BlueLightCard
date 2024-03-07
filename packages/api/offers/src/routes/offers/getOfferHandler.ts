@@ -8,19 +8,19 @@ import { LegacyCompanyOffers } from '../../models/legacy/legacyCompanyOffers';
 import { Offers, OffersModel } from '../../models/offers';
 import { API_SOURCE, OFFER_TYPES } from '../../utils/global-constants';
 import { getLegacyUserId } from '../../utils/getLegacyUserIdFromToken';
-import { FirehoseDeliveryStream } from '../../utils/firehose';
+import { FirehoseDeliveryStream } from '../../../../core/src/utils/firehose';
 import { isDev } from '../../../../core/src/utils/checkEnvironment';
 
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-offers-get` });
-const stage = process.env.STAGE || '';
-const firehose = new FirehoseDeliveryStream();
+const stage = process.env.STAGE ?? '';
+const firehose = new FirehoseDeliveryStream(logger);
 
 export const handler = async (event: APIGatewayEvent) => {
   try {
     const offerId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
-    const authToken = event.headers.Authorization as string;
-    const source = event.headers.source || '';
+    const authToken = event.headers.Authorization ?? '';
+    const source = event.headers.source ?? '';
     const uid = getLegacyUserId(authToken);
 
     if (!offerId) {
@@ -30,7 +30,7 @@ export const handler = async (event: APIGatewayEvent) => {
 
     const legacyOffersUrl = process.env.LEGACY_RETRIEVE_OFFERS_URL as string;
     if (!legacyOffersUrl) {
-      throw Response.Error(
+      return Response.Error(
         {
           name: 'legacyApiUrlNotSet',
           message: 'Error fetching offers',
@@ -41,7 +41,7 @@ export const handler = async (event: APIGatewayEvent) => {
 
     const apiUrl = `${legacyOffersUrl}?id=${offerId}&uid=${uid}&bypass=true`;
     logger.info({ message: 'apiUrl', data: apiUrl });
-    return getOfferDetailFromLegacy(apiUrl, event.headers.Authorization as string, uid, source, offerId);
+    return getOfferDetailFromLegacy(apiUrl, event.headers.Authorization as string, uid, source);
   } catch (error: any) {
     logger.error({ message: 'Error fetching offers', data: error });
     return error;
@@ -53,7 +53,6 @@ async function getOfferDetailFromLegacy(
   bearerToken: string,
   uid: string,
   source: string,
-  offerId: string,
 ): Promise<Response> {
   try {
     const { data: legacyOffersResponse } = await axios.get<AxiosResponse<LegacyCompanyOffers>>(apiUrl, {
@@ -73,7 +72,13 @@ async function getOfferDetailFromLegacy(
     }) as Offers;
 
     if (!isDev(stage)) {
-      triggerFireHose({ companyId: offersResponse.companyId, id: offerId }, uid, source);
+      const stream = source === API_SOURCE.APP ? process.env.FIREHOSE_STREAM_APP! : process.env.FIREHOSE_STREAM_WEB!;
+      const data = {
+        companyId: offersResponse.companyId,
+        offerId: offersResponse.id,
+        memberId: uid,
+      };
+      await firehose.send({stream, data});
     }
 
     return Response.OK({ message: 'Success', data: offersResponse });
@@ -114,27 +119,5 @@ function validateOffersResponse(offer: Offers): Offers | Response {
       },
       HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
-  }
-}
-
-/**
- * Do not have firehose stream for local dev envirmoent
- */
-async function triggerFireHose(offersResponse: { companyId: number; id?: string }, uid: string, source?: string) {
-  const firehoseData = {
-    companyId: offersResponse.companyId,
-    offerId: offersResponse.id,
-    memberId: uid,
-  };
-
-  const stream = source === API_SOURCE.APP ? process.env.FIREHOSE_STREAM_APP : process.env.FIREHOSE_STREAM_WEB;
-
-  if (stream) {
-    await firehose.send({
-      stream: stream,
-      firehoseData: firehoseData,
-    });
-  } else {
-    logger.error({ message: 'Firehose stream not found' });
   }
 }

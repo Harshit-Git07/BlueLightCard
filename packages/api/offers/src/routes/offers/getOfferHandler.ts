@@ -72,6 +72,7 @@ async function getOfferDetailFromLegacy(
     }) as Offers;
 
     if (!isDev(stage)) {
+      //set the stream depending on header sent
       const stream = source === API_SOURCE.APP ? process.env.FIREHOSE_STREAM_APP! : process.env.FIREHOSE_STREAM_WEB!;
       const data = {
         companyId: offersResponse.companyId,

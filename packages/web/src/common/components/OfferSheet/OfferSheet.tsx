@@ -1,36 +1,20 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { OfferSheetProps } from './types';
-import DynamicSheet from '../DynamicSheet/DynamicSheet';
-import { ThemeVariant } from '@/types/theme';
-import {
-  faStar as faStarSolid,
-  faWandMagicSparkles,
-  faArrowUpFromBracket,
-  faCheck,
-  faX,
-} from '@fortawesome/pro-solid-svg-icons';
-import { faStar as faStarRegular } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Accordion from '../Accordion/Accordion';
-import Button from '../Button/Button';
-import MagicButton from '../MagicButton/MagicButton';
-import Label from '../Label/Label';
-import Image from '@/components/Image/Image';
-import getCDNUrl from '@/utils/getCDNUrl';
+import React, { useState, useContext, useEffect, ReactElement } from 'react';
 import { useRouter } from 'next/router';
+import { OfferSheetProps, RedemptionResponse } from './types';
+import DynamicSheet from '../DynamicSheet/DynamicSheet';
 import UserContext from '@/context/User/UserContext';
 import AuthContext from '@/context/Auth/AuthContext';
 import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
-import { displayDateDDMMYYYY } from '@core/utils/date';
 import OfferSheetContext, { offerResponse } from '@/context/OfferSheet/OfferSheetContext';
-import { retrieveFavourites, UpdateFavourites } from '@/utils/company/favourites';
+import OfferGetDiscount from './OfferGetDiscount/OfferGetDiscount';
+import { displayDateDDMMYYYY } from '@core/utils/date';
 import { getOfferById } from '@/utils/offers/getOffer';
-import amplitudeEvents from '@/utils/amplitude/events';
 import AmplitudeContext from '@/context/AmplitudeContext';
 import Heading from '@/components/Heading/Heading';
 import Link from '@/components/Link/Link';
+import Button from '../Button/Button';
 import { logOfferView } from '@/utils/amplitude/logOfferView';
-import Check from './Check.svg';
+import { ENVIRONMENT } from '@/global-vars';
 
 const OfferSheet: React.FC<OfferSheetProps> = ({
   offer: { offerId, companyId, companyName },
@@ -38,78 +22,27 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
 }) => {
   const { setLabels, offerLabels, open, setOpen } = useContext(OfferSheetContext);
   const router = useRouter();
+
   const userCtx = useContext(UserContext);
   const authCtx = useContext(AuthContext);
   const amplitude = useContext(AmplitudeContext);
 
-  const [magicButtonState, setMagicButtonState] = useState<'primary' | 'secondary'>('primary');
-  const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
-  const [curFavBtnState, setFavBtnState] = useState<
-    'favourite' | 'unfavourite' | 'disabled' | 'error'
-  >('disabled');
-  const [expanded, setExpanded] = useState(false);
   const blankOffer: offerResponse = {};
+  const blankRedemption: RedemptionResponse = {};
   const [offerData, setOfferData] = useState(blankOffer);
   const [isLoading, setIsLoading] = useState(false);
+  const [redemptionData, setRedemptionData] = useState<RedemptionResponse>(blankRedemption);
   const [loadOfferError, setLoadOfferError] = useState(false);
 
-  const finalFallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
-  const imageSource = offerData.companyLogo ?? finalFallbackImage;
-
-  // Event handlers
-  const copyLink = () => {
-    const copyUrl = `${window.location.protocol}//${window.location.hostname}/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`;
-
-    if (!navigator.clipboard) {
-      return false;
+  const copyCodeToClipboard = async (redemptionDataResponse: RedemptionResponse) => {
+    try {
+      if (redemptionDataResponse?.redemptionDetails?.code) {
+        await navigator.clipboard.writeText(redemptionDataResponse?.redemptionDetails.code);
+        if (ENVIRONMENT === 'local') console.log('Content copied to clipboard');
+      }
+    } catch (err) {
+      if (ENVIRONMENT === 'local') console.error('Failed to copy: ', err);
     }
-    navigator.clipboard.writeText(copyUrl);
-    return true;
-  };
-
-  const handleSeeMore = () => {
-    setExpanded(!expanded);
-  };
-
-  const onShareClick = () => {
-    const success = copyLink();
-    if (success) {
-      setShareBtnState('success');
-    } else {
-      setShareBtnState('error');
-      setTimeout(() => setShareBtnState('share'), 1500);
-    }
-  };
-
-  const onFavouriteClick = async () => {
-    if (await UpdateFavourites(offerData, authCtx.authState.idToken, userCtx.user?.legacyId)) {
-      setFavBtnState(curFavBtnState === 'favourite' ? 'unfavourite' : 'favourite');
-    } else {
-      const originalState = curFavBtnState;
-      setFavBtnState('error');
-      setTimeout(() => setFavBtnState(originalState), 1500);
-    }
-  };
-
-  const buttonClickEvent = () => {
-    setMagicButtonState('secondary');
-    if (amplitude) {
-      amplitude.setUserId(userCtx.user?.uuid ?? '');
-      amplitude.trackEventAsync(amplitudeEvents.VAULT_CODE_REQUEST_CLICKED, {
-        company_id: companyId,
-        company_name: companyName,
-        offer_id: offerId,
-        offer_name: offerData.name,
-        source: 'sheet',
-      });
-    }
-    if (onButtonClick) {
-      onButtonClick();
-    } else if (offerData.id && offerData.companyId)
-      // I hate this. But it was requested so that the can see the message
-      setTimeout(() => {
-        window.open(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
-      }, 1500);
   };
 
   const logAmpOfferView = (eventSource: string) => {
@@ -152,23 +85,74 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
     }
   };
 
-  const fetchFavourite = async () => {
-    const favouriteCompany = (await retrieveFavourites(companyId)) ? 'favourite' : 'unfavourite';
-    setFavBtnState(favouriteCompany);
+  // Redemption API call on Get Discount button click
+  const handleOnGetDiscountClick = async () => {
+    setIsLoading(true);
+    const mockedRedemptionApiRes: RedemptionResponse = {
+      redemptionType: 'generic',
+      redemptionDetails: {
+        code: 'BLC25OFF',
+        url: 'https://awin1.com/',
+      },
+    };
+
+    const redemptionDataResponse: RedemptionResponse = mockedRedemptionApiRes;
+
+    // TODO on API integration, else should fallback to legacy API
+    if (redemptionDataResponse) {
+      setRedemptionData(redemptionDataResponse);
+      setIsLoading(false);
+      copyCodeToClipboard(redemptionDataResponse);
+    } else {
+      router.push(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
+    }
+  };
+
+  // render components based on redemption type vaultQR or ShowCard
+  const renderOfferOnRedemptionType = (): ReactElement => {
+    if (
+      !Object.keys(redemptionData).length ||
+      redemptionData.redemptionType === 'generic' ||
+      redemptionData.redemptionType === 'vault' ||
+      redemptionData.redemptionType === 'preApplied'
+    ) {
+      return (
+        <OfferGetDiscount
+          {...{
+            offer: { offerId, companyId, companyName },
+            offerData,
+            onButtonClick: onButtonClick || handleOnGetDiscountClick,
+            companyId,
+            redemptionData,
+          }}
+        />
+      );
+    }
+
+    switch (redemptionData.redemptionType) {
+      case 'vaultQR':
+        return <h1>VaultQR redemption type</h1>;
+      case 'showCard':
+        return <h1>Show card redemption type</h1>;
+      default:
+        return <></>;
+    }
   };
 
   useEffect(() => {
-    if (userCtx.user || companyId) {
+    if ((userCtx.user || companyId) && open && !offerData.id) {
       setLoadOfferError(false);
-      setExpanded(false);
-      fetchFavourite();
       fetchofferSheetDetails();
     }
-  }, [userCtx.user, offerId, companyId]);
+  }, [userCtx.user, offerId, companyId, open]);
 
   useEffect(() => {
-    setMagicButtonState('primary');
-    setShareBtnState('share');
+    if (!open) {
+      setRedemptionData(blankRedemption);
+      setOfferData(blankOffer);
+      setLoadOfferError(false);
+      setIsLoading(false);
+    }
   }, [open]);
 
   return (
@@ -204,151 +188,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
           </Button>
         </div>
       )}
-      {/* Top section - Product info, share/fav etc. */}
-      {!isLoading && !loadOfferError && (
-        <div className="flex flex-col text-center text-wrap space-y-2 p-6 pt-0 font-['MuseoSans']">
-          <div className="pb-16">
-            <div className="flex justify-center">
-              {imageSource && (
-                <Image
-                  src={imageSource}
-                  alt={offerData.name as string}
-                  responsive={false}
-                  width={100}
-                  height={64}
-                  className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
-                />
-              )}
-            </div>
-
-            <Heading headingLevel={'h2'} className={'leading-8 mt-4 !text-black'}>
-              {offerData.name}
-            </Heading>
-
-            <p
-              className={`text-base font-light font-['MuseoSans'] leading-5 mt-2 ${
-                offerData.description && offerData.description.length > 300 && !expanded
-                  ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
-                  : ''
-              }`}
-            >
-              {offerData.description}
-            </p>
-
-            {offerData.description && offerData.description.length > 300 && (
-              <Button
-                variant={ThemeVariant.Tertiary}
-                slim
-                withoutHover
-                className={`w-fit`}
-                onClick={handleSeeMore}
-                borderless
-              >
-                {expanded ? 'See less' : 'See more...'}
-              </Button>
-            )}
-
-            <div className={`flex flex-wrap justify-center mt-4`}>
-              <Button
-                variant={ThemeVariant.Tertiary}
-                slim
-                withoutHover
-                borderless
-                className="w-fit m-1"
-                onClick={onShareClick}
-              >
-                <span
-                  className={`${
-                    shareBtnState === 'error' && 'text-palette-danger-base'
-                  } text-base font-['MuseoSans'] font-bold leading-6 flex flex-row`}
-                >
-                  {shareBtnState !== 'share' ? (
-                    <div className="my-auto">
-                      <Check />
-                    </div>
-                  ) : (
-                    <div className="my-auto">
-                      <FontAwesomeIcon
-                        icon={
-                          shareBtnState === 'share'
-                            ? faArrowUpFromBracket
-                            : shareBtnState === 'success'
-                            ? faCheck
-                            : faX
-                        }
-                        className="mr-2"
-                      />
-                    </div>
-                  )}
-                  {shareBtnState === 'share'
-                    ? 'Share'
-                    : shareBtnState === 'success'
-                    ? 'Link Copied'
-                    : 'Failed to copy'}
-                </span>
-              </Button>
-              {curFavBtnState !== 'disabled' && (
-                <Button
-                  variant={ThemeVariant.Tertiary}
-                  slim
-                  withoutHover
-                  borderless
-                  className="w-fit m-1"
-                  onClick={() => curFavBtnState !== 'error' && onFavouriteClick()}
-                >
-                  <span
-                    className={`${
-                      curFavBtnState === 'error' && 'text-palette-danger-base'
-                    } text-base font-['MuseoSans'] font-bold leading-6`}
-                  >
-                    <FontAwesomeIcon
-                      icon={curFavBtnState === 'favourite' ? faStarSolid : faStarRegular}
-                      className="mr-2"
-                    />
-                    {curFavBtnState === 'error' ? 'Failed to update' : 'Favourite'}
-                  </span>
-                </Button>
-              )}
-            </div>
-
-            <div className="w-full text-left mt-4">
-              {offerData.terms && (
-                <Accordion title="Terms and Conditions" content={offerData.terms} />
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Bottom section - Button labels etc */}
-      {!loadOfferError && (
-        <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
-          <div className="w-full flex flex-wrap mb-2 justify-center">
-            {offerLabels &&
-              offerLabels.map((label, index) => (
-                <Label key={index} type={'normal'} text={label} className="m-1" />
-              ))}
-          </div>
-
-          <MagicButton
-            variant={magicButtonState}
-            className="w-full"
-            onClick={buttonClickEvent}
-            animate={magicButtonState === 'secondary'}
-            transitionDurationMs={1000}
-          >
-            {magicButtonState === 'primary' ? (
-              <div className="leading-10 font-bold text-md">Get Discount</div>
-            ) : (
-              <div className="flex-col w-full h-fit m-auto text-nowrap whitespace-nowrap flex-nowrap">
-                <div className="text-md font-bold text-center">
-                  <FontAwesomeIcon icon={faWandMagicSparkles} /> Redirecting you to offer
-                </div>
-              </div>
-            )}
-          </MagicButton>
-        </div>
-      )}
+      {open && !isLoading && !loadOfferError && <>{renderOfferOnRedemptionType()}</>}
     </DynamicSheet>
   );
 };

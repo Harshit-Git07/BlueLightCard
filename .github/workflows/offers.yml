@@ -119,8 +119,8 @@ jobs:
       - changelog
       - build
     env:
-      FIREHOSE_STREAM_APP_VIEW_PROD: dwh-blc-p1-production-compAppView
-      FIREHOSE_STREAM_WEB_VIEW_PROD: dwh-blc-p1-production-compView
+      FIREHOSE_STREAM_APP_VIEW_PROD: dwh-blc-production-compAppView
+      FIREHOSE_STREAM_WEB_VIEW_PROD: dwh-blc-production-compView
     steps:
       - name: Checkout
         uses: actions/checkout@v4

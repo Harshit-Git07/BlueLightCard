@@ -18,6 +18,7 @@ const Button: FC<ButtonProps> = ({
   variant = ThemeVariant.Primary,
   onClick,
   withoutHover = false,
+  withoutFocus = false,
   borderless = false,
 }) => {
   const colorToken: any =
@@ -30,7 +31,7 @@ const Button: FC<ButtonProps> = ({
     disabled ? 'opacity-25' : '',
     colorToken.text,
     !disabled && !withoutHover ? colorToken.hover : '',
-    colorToken.focus,
+    !withoutFocus ? colorToken.focus : '',
     colorToken.bg ?? '',
     colorToken.border ?? '',
     className ?? '',

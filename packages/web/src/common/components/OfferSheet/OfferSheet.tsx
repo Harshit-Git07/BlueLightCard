@@ -183,7 +183,9 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
       )}
       {loadOfferError && (
         <div className="text-palette-primary text-center mx-4 space-y-4">
-          <Heading headingLevel={'h2'}>Error loading offer</Heading>
+          <Heading headingLevel={'h2'} className=" text-black">
+            Error loading offer
+          </Heading>
           <p className="text-base">
             Refresh the page and try again. If this problem persists contact member services on Live
             Chat&nbsp;
@@ -251,6 +253,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
                 variant={ThemeVariant.Tertiary}
                 slim
                 withoutHover
+                borderless
                 className="w-fit m-1"
                 onClick={onShareClick}
               >
@@ -289,6 +292,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
                   variant={ThemeVariant.Tertiary}
                   slim
                   withoutHover
+                  borderless
                   className="w-fit m-1"
                   onClick={() => curFavBtnState !== 'error' && onFavouriteClick()}
                 >
@@ -336,11 +340,10 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
             {magicButtonState === 'primary' ? (
               <div className="leading-10 font-bold text-md">Get Discount</div>
             ) : (
-              <div className="flex-col w-full min-h-7 text-nowrap whitespace-nowrap flex-nowrap">
+              <div className="flex-col w-full h-fit m-auto text-nowrap whitespace-nowrap flex-nowrap">
                 <div className="text-md font-bold text-center">
-                  <FontAwesomeIcon icon={faWandMagicSparkles} /> Discount automatically applied
+                  <FontAwesomeIcon icon={faWandMagicSparkles} /> Redirecting you to offer
                 </div>
-                <div className="text-sm">Redirecting you to partner website</div>
               </div>
             )}
           </MagicButton>

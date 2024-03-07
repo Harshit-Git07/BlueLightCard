@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.32.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.3...bluelightcard/web-v1.32.0) (2024-03-07)
+
+
+### Features
+
+* Add tan stack query to web ([#979](https://github.com/bluelightcard/BlueLightCard-2.0/issues/979)) ([49fa8c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/49fa8c331c71a9099e35c2e1eb7f369daeb823d5))
+* TI-000: added refresh token to local storage ([#974](https://github.com/bluelightcard/BlueLightCard-2.0/issues/974)) ([f876ba5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f876ba535cf87d35716297c8b64b24614c43df44))
+
+
+### Bug Fixes
+
+* offer sheet date label ([#977](https://github.com/bluelightcard/BlueLightCard-2.0/issues/977)) ([8d676f8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8d676f8a754e72bb6d8a5faa0c02c69f532a7286))
+* offer sheet formatting ([#996](https://github.com/bluelightcard/BlueLightCard-2.0/issues/996)) ([ad7a65b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ad7a65beef46a9176544eca5fbd76fd1fe1cff45))
+* offer-sheet design tweaks ([#993](https://github.com/bluelightcard/BlueLightCard-2.0/issues/993)) ([b43929f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b43929f0c0c14bc74e6acf344470ebf56573d585))
+
 ## [1.31.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.2...bluelightcard/web-v1.31.3) (2024-03-04)
 
 

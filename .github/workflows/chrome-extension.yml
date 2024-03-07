@@ -77,13 +77,12 @@ jobs:
         working-directory: packages/chrome-extension
         run: |
           npm run build:develop
-          npm run zip:develop
       - name: Archive staging artifacts
         id: archive-artifacts-staging
         uses: actions/upload-artifact@v4
         with:
           name: staging-chrome-extension
-          path: packages/chrome-extension/dev-dist.zip
+          path: packages/chrome-extension/dist/
       - name: Notify
         if: success()
         run: |
@@ -145,13 +144,12 @@ jobs:
         working-directory: packages/chrome-extension
         run: |
           npm run build:production
-          npm run zip:production
       - name: Archive prod artifacts
         id: archive-artifacts-production
         uses: actions/upload-artifact@v4
         with:
           name: prod-chrome-extension
-          path: packages/chrome-extension/prod-dist.zip
+          path: packages/chrome-extension/dist/
       - name: Notify
         if: success()
         run: |

@@ -9,7 +9,7 @@ We manage the processing of Google search results inside the content script.
 
 We utilize MutationObserver to monitor changes in the DOM, and then we transmit the data to the background script.
 
-We monitor the following CSS classes and tags on the Google search result page:
+We monitor the following CSS classes and tags on the Google search result page.
 
 ```javascript
 const searchResults = target.querySelectorAll('.MjjYud'); // search result

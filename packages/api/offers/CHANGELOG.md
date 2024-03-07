@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.0...bluelightcard/offers-v1.24.1) (2024-03-07)
+
+
+### Other Changes
+
+* create chore ([#1005](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1005)) ([d27504b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d27504bd3d7f4c1d87cfd53bf3a83aadfcf7028a))
+
 ## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.23.0...bluelightcard/offers-v1.24.0) (2024-03-07)
 
 

@@ -30,6 +30,7 @@ import AmplitudeContext from '@/context/AmplitudeContext';
 import Heading from '@/components/Heading/Heading';
 import Link from '@/components/Link/Link';
 import { logOfferView } from '@/utils/amplitude/logOfferView';
+import Check from './Check.svg';
 
 const OfferSheet: React.FC<OfferSheetProps> = ({
   offer: { offerId, companyId, companyName },
@@ -143,7 +144,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
 
       if (expiry) {
         let dateFormatted = displayDateDDMMYYYY(expiry);
-        if (dateFormatted) labels.push(dateFormatted);
+        if (dateFormatted) labels.push(`Expiry: ${dateFormatted}`);
       }
 
       setLabels(labels);
@@ -256,18 +257,26 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
                 <span
                   className={`${
                     shareBtnState === 'error' && 'text-palette-danger-base'
-                  } text-base font-['MuseoSans'] font-bold leading-6`}
+                  } text-base font-['MuseoSans'] font-bold leading-6 flex flex-row`}
                 >
-                  <FontAwesomeIcon
-                    icon={
-                      shareBtnState === 'share'
-                        ? faArrowUpFromBracket
-                        : shareBtnState === 'success'
-                        ? faCheck
-                        : faX
-                    }
-                    className="mr-2"
-                  />
+                  {shareBtnState !== 'share' ? (
+                    <div className="my-auto">
+                      <Check />
+                    </div>
+                  ) : (
+                    <div className="my-auto">
+                      <FontAwesomeIcon
+                        icon={
+                          shareBtnState === 'share'
+                            ? faArrowUpFromBracket
+                            : shareBtnState === 'success'
+                            ? faCheck
+                            : faX
+                        }
+                        className="mr-2"
+                      />
+                    </div>
+                  )}
                   {shareBtnState === 'share'
                     ? 'Share'
                     : shareBtnState === 'success'
@@ -325,14 +334,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
             transitionDurationMs={1000}
           >
             {magicButtonState === 'primary' ? (
-              <div className="leading-10 font-bold text-md">
-                <Heading
-                  headingLevel={'h5'}
-                  className={'text-white h-full text-center text-nowrap mb-0'}
-                >
-                  Get Discount
-                </Heading>
-              </div>
+              <div className="leading-10 font-bold text-md">Get Discount</div>
             ) : (
               <div className="flex-col w-full min-h-7 text-nowrap whitespace-nowrap flex-nowrap">
                 <div className="text-md font-bold text-center">

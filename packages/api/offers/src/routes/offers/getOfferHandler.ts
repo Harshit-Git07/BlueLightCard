@@ -75,9 +75,10 @@ async function getOfferDetailFromLegacy(
       //set the stream depending on header sent
       const stream = source === API_SOURCE.APP ? process.env.FIREHOSE_STREAM_APP! : process.env.FIREHOSE_STREAM_WEB!;
       const data = {
-        companyId: offersResponse.companyId,
-        offerId: offersResponse.id,
-        memberId: uid,
+        cid: offersResponse.companyId,
+        oid: offersResponse.id,
+        mid: uid,
+        timedate: new Date().toISOString()
       };
       await firehose.send({stream, data});
     }

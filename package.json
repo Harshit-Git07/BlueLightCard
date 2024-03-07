@@ -84,6 +84,7 @@
     "@amplitude/experiment-js-client": "^1.9.7",
     "@apollo/client": "^3.8.3",
     "@aws-sdk/client-dynamodb": "^3.476.0",
+    "@aws-sdk/client-firehose": "3.523.0",
     "@aws-sdk/lib-dynamodb": "^3.476.0",
     "@fast-csv/parse": "^4.3.6",
     "@storybook/preset-scss": "^1.0.3",

@@ -6,23 +6,30 @@ import { HttpStatusCode } from '../../../../core/src/types/http-status-code.enum
 import { LegacyOffers } from '../../models/legacy/legacyOffers';
 import { LegacyCompanyOffers } from '../../models/legacy/legacyCompanyOffers';
 import { Offers, OffersModel } from '../../models/offers';
-import { OFFER_TYPES } from '../../utils/global-constants';
+import { API_SOURCE, OFFER_TYPES } from '../../utils/global-constants';
 import { getLegacyUserId } from '../../utils/getLegacyUserIdFromToken';
+import { FirehoseDeliveryStream } from '../../utils/firehose';
+import { isDev } from '../../../../core/src/utils/checkEnvironment';
 
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-offers-get` });
+const stage = process.env.STAGE || '';
+const firehose = new FirehoseDeliveryStream();
 
 export const handler = async (event: APIGatewayEvent) => {
   try {
-    logger.info({ message: 'auth token', data: event.headers.Authorization });
-    const { id } = event.pathParameters as APIGatewayProxyEventPathParameters;
+    const offerId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
     const authToken = event.headers.Authorization as string;
+    const source = event.headers.source || '';
     const uid = getLegacyUserId(authToken);
-    logger.info({ message: 'GET Offers Input', data: { id, uid } });
+
+    if (!offerId) {
+      logger.error({ message: 'offerId not set' });
+      return Response.NotFound({ message: 'offerId not set' });
+    }
 
     const legacyOffersUrl = process.env.LEGACY_RETRIEVE_OFFERS_URL as string;
     if (!legacyOffersUrl) {
-      logger.error({ message: 'Legacy API Url not set' });
       throw Response.Error(
         {
           name: 'legacyApiUrlNotSet',
@@ -32,20 +39,22 @@ export const handler = async (event: APIGatewayEvent) => {
       );
     }
 
-    const apiUrl = `${legacyOffersUrl}?id=${id}&uid=${uid}`;
-    logger.info({
-      message: 'trigger GET legacy Offers api',
-      data: { auth: authToken, apiUrl },
-    });
-
-    return getOfferDetailFromLegacy(apiUrl, event.headers.Authorization as string);
+    const apiUrl = `${legacyOffersUrl}?id=${offerId}&uid=${uid}&bypass=true`;
+    logger.info({ message: 'apiUrl', data: apiUrl });
+    return getOfferDetailFromLegacy(apiUrl, event.headers.Authorization as string, uid, source, offerId);
   } catch (error: any) {
     logger.error({ message: 'Error fetching offers', data: error });
     return error;
   }
 };
 
-async function getOfferDetailFromLegacy(apiUrl: string, bearerToken: string): Promise<Response> {
+async function getOfferDetailFromLegacy(
+  apiUrl: string,
+  bearerToken: string,
+  uid: string,
+  source: string,
+  offerId: string,
+): Promise<Response> {
   try {
     const { data: legacyOffersResponse } = await axios.get<AxiosResponse<LegacyCompanyOffers>>(apiUrl, {
       headers: {
@@ -62,6 +71,11 @@ async function getOfferDetailFromLegacy(apiUrl: string, bearerToken: string): Pr
       companyId: legacyOffersResponse.data.id,
       companyLogo: legacyOffersResponse.data.s3logos,
     }) as Offers;
+
+    if (!isDev(stage)) {
+      triggerFireHose({ companyId: offersResponse.companyId, id: offerId }, uid, source);
+    }
+
     return Response.OK({ message: 'Success', data: offersResponse });
   } catch (error) {
     logger.error({ message: 'Error fetching offers from legacy API', data: error });
@@ -100,5 +114,27 @@ function validateOffersResponse(offer: Offers): Offers | Response {
       },
       HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
+  }
+}
+
+/**
+ * Do not have firehose stream for local dev envirmoent
+ */
+async function triggerFireHose(offersResponse: { companyId: number; id?: string }, uid: string, source?: string) {
+  const firehoseData = {
+    companyId: offersResponse.companyId,
+    offerId: offersResponse.id,
+    memberId: uid,
+  };
+
+  const stream = source === API_SOURCE.APP ? process.env.FIREHOSE_STREAM_APP : process.env.FIREHOSE_STREAM_WEB;
+
+  if (stream) {
+    await firehose.send({
+      stream: stream,
+      firehoseData: firehoseData,
+    });
+  } else {
+    logger.error({ message: 'Firehose stream not found' });
   }
 }

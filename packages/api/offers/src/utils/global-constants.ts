@@ -55,6 +55,7 @@ export const LEGACY_RETRIEVE_OFFERS_URL = 'api/4/offer/retrieve.php';
 export enum LEGACY_API_BASE_URL {
   PRODUCTION = 'https://www.bluelightcard.co.uk',
   STAGING = 'https://staging.bluelightcard.co.uk',
+  DEVELOPMENT = 'http://localhost:8080',
 }
 
 export const OFFERS_TYPE_ENUM = z.enum([
@@ -63,7 +64,7 @@ export const OFFERS_TYPE_ENUM = z.enum([
   'Giftcards',
   'Popular',
   'Own Benefits',
-  'High Street Card',
+  'In-store',
   'Local Offer',
   'Featured',
   'Local Services',
@@ -75,8 +76,13 @@ export const OFFER_TYPES = {
   2: OFFERS_TYPE_ENUM.enum.Giftcards,
   3: OFFERS_TYPE_ENUM.enum.Popular,
   4: OFFERS_TYPE_ENUM.enum['Own Benefits'],
-  5: OFFERS_TYPE_ENUM.enum['High Street Card'],
+  5: OFFERS_TYPE_ENUM.enum['In-store'],
   6: OFFERS_TYPE_ENUM.enum['Local Offer'],
   9: OFFERS_TYPE_ENUM.enum.Featured,
   13: OFFERS_TYPE_ENUM.enum['Local Services'],
 };
+
+export enum API_SOURCE {
+  APP = 'app',
+  WEB = 'web',
+}

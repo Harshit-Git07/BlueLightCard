@@ -42,9 +42,7 @@ describe('handler', () => {
       },
     };
 
-    const result = await handler(event).catch((error) => {
-      console.log(error);
-    });
+    const result = await handler(event);
 
     expect(result.statusCode).toEqual(HttpStatusCode.NOT_FOUND);
     expect(result.body).toEqual(JSON.stringify({ message: 'Offer not found', data: {} }));

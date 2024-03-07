@@ -3,12 +3,12 @@ import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExten
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { LEGACY_API_BASE_URL, LEGACY_RETRIEVE_OFFERS_URL } from 'src/utils/global-constants';
-import { getEnvOrDefault } from '../../../../core/src/utils/getEnv';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { ENVIRONMENTS } from '../../utils/global-constants';
+import { EnvironmentVariablesKeys } from 'src/utils/environment-variables';
+import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 
 export class OffersRoutes {
   constructor(private readonly routeProps: RouteProps) {}
-  logger = new Logger({ serviceName: `route-offers-get` });
   initialiseRoutes() {
     this.routeProps.api.addRoutes(this.routeProps.stack, {
       'GET /offers/{id}': this.get(),
@@ -22,11 +22,19 @@ export class OffersRoutes {
         environment: {
           LEGACY_RETRIEVE_OFFERS_URL: this.getLegacyOffersUrl(this.routeProps.stack.stage),
           service: 'offers',
+          [EnvironmentVariablesKeys.STAGE]: this.routeProps.stack.stage,
+          [EnvironmentVariablesKeys.FIREHOSE_STREAM_APP]: isProduction(this.routeProps.stack.stage)
+            ? (process.env.FIREHOSE_STREAM_APP_VIEW_PROD as string)
+            : (process.env.FIREHOSE_STREAM_APP_VIEW_STAGE as string),
+          [EnvironmentVariablesKeys.FIREHOSE_STREAM_WEB]: isProduction(this.routeProps.stack.stage)
+            ? (process.env.FIREHOSE_STREAM_WEB_VIEW_PROD as string)
+            : (process.env.FIREHOSE_STREAM_WEB_VIEW_STAGE as string),
         },
+        permissions: ['firehose:PutRecord'],
       },
       cdk: {
         method: {
-          requestModels: { 'application/json': this.routeProps.model },
+          requestModels: { 'application/json': this.routeProps.model! },
           methodResponses: MethodResponses.toMethodResponses([
             this.routeProps.apiGatewayModelGenerator.getError404(),
             this.routeProps.apiGatewayModelGenerator.getError500(),
@@ -42,18 +50,14 @@ export class OffersRoutes {
   }
 
   private getLegacyOffersUrl(stage: string): string {
-    this.logger.info({ message: 'getLegacyOffersUrl', data: { stage } });
     switch (stage) {
-      case 'production':
+      case ENVIRONMENTS.PRODUCTION:
         return `${LEGACY_API_BASE_URL.PRODUCTION}/${LEGACY_RETRIEVE_OFFERS_URL}`;
-      case 'staging':
+      case ENVIRONMENTS.STAGING:
         return `${LEGACY_API_BASE_URL.STAGING}/${LEGACY_RETRIEVE_OFFERS_URL}`;
       // for local development replace this 'development' with your value of stage when legacy service is running locally on port 8080
-      case 'rajats':
-        return `${getEnvOrDefault('LEGACY_OFFERS_API_BASE_URL', 'localhost:8080')}/${LEGACY_RETRIEVE_OFFERS_URL}`;
-      // for PR environments we don't have a dedicated URL for legacy service and a known mapping for users, so the case is not handled here
       default:
-        return `${LEGACY_API_BASE_URL.PRODUCTION}/${LEGACY_RETRIEVE_OFFERS_URL}`;
+        return `${LEGACY_API_BASE_URL.DEVELOPMENT}/${LEGACY_RETRIEVE_OFFERS_URL}`;
     }
   }
 }

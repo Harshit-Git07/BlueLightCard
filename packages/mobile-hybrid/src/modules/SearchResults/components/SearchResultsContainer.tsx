@@ -67,9 +67,11 @@ const SearchResultsContainer: FC = () => {
 
   // set results into store
   useEffect(() => {
-    if (searchResultsData?.data) {
+    if (searchResultsData?.data && searchResultsData.data.length > 0) {
       setResults(searchResultsData.data);
       logSearchResultsListViewedAnalytic(searchResultsData.data.length);
+    } else {
+      setResults([]);
     }
     setSpinner(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps

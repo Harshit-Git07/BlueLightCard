@@ -8,10 +8,12 @@ import InvokeNativeAnalytics from '@/invoke/analytics';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
-import { searchTerm } from '@/modules/SearchResults/store';
+import { searchResults, searchTerm } from '@/modules/SearchResults/store';
 import SearchResultsContainer from '@/modules/SearchResults/components/SearchResultsContainer';
 import { OfferListItemModel } from '@/models/offer';
 import { offerListItemFactory } from '@/modules/List/__mocks__/factory';
+import '@testing-library/jest-dom';
+import { SearchResult, SearchResults } from '@/modules/SearchResults/types';
 
 jest.mock('@/invoke/apiCall');
 jest.mock('@/invoke/analytics');
@@ -58,6 +60,22 @@ describe('Search results', () => {
 
       const results = screen.getAllByRole('listitem');
       expect(results).toHaveLength(2);
+    });
+    it('should show no results found when nothing found', () => {
+      givenSearchResultsAreReturnedFromTheAPI([]);
+
+      whenTheSearchResultsPageIsRendered(searchTermValue);
+
+      const results = screen.queryByText('No results found.');
+      expect(results).toBeInTheDocument();
+    });
+    it('should show no results found when nothing found but a previous search was successful', () => {
+      givenSearchResultsAreReturnedFromTheAPI([]);
+
+      whenTheSearchResultsPageIsRendered(searchTermValue, [buildSearchResult()]);
+
+      const results = screen.queryByText('No results found.');
+      expect(results).toBeInTheDocument();
     });
   });
 
@@ -129,13 +147,35 @@ describe('Search results', () => {
     );
   };
 
-  const whenTheSearchResultsPageIsRendered = (term: string = '') => {
+  const whenTheSearchResultsPageIsRendered = (
+    term: string = '',
+    existingSearchResults: SearchResults = [],
+  ) => {
     render(
-      <JotaiTestProvider initialValues={[[searchTerm, term]]}>
+      <JotaiTestProvider
+        initialValues={[
+          [searchTerm, term],
+          [searchResults, existingSearchResults],
+        ]}
+      >
         <WithSpinner>
           <SearchResultsContainer />
         </WithSpinner>
       </JotaiTestProvider>,
     );
+  };
+
+  const buildSearchResult = (): SearchResult => {
+    return {
+      id: 123,
+      catid: 123,
+      compid: 123,
+      typeid: 5,
+      offername: 'Offer 1',
+      companyname: 'Company 1',
+      logos: '',
+      absoluteLogos: '',
+      s3logos: '',
+    };
   };
 });

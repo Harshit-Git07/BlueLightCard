@@ -100,8 +100,8 @@ describe('ListModule', () => {
         whenListWithSpinnerIsRendered(props);
 
         expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
-          typeid: 0,
-          page: 1,
+          typeid: '0',
+          page: '1',
           service: userServiceValue,
         });
       });
@@ -121,8 +121,8 @@ describe('ListModule', () => {
         whenListWithSpinnerIsRendered(props);
 
         expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
-          catid: 0,
-          page: 1,
+          catid: '0',
+          page: '1',
           service: userServiceValue,
         });
       });

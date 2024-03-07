@@ -10,6 +10,7 @@ eventBus();
 import '@/nativeReceive';
 import eventBus from '@/eventBus';
 import Spinner from "@/modules/Spinner";
+import UserServiceProvider from "@/components/UserServiceProvider/UserServiceProvider";
 
 const pageDecorator: Decorator = (Story) => {
   const globalState = window as GlobalState;
@@ -26,10 +27,12 @@ const pageDecorator: Decorator = (Story) => {
   return (
     <AppStoreProvider>
       <NewsStoreProvider>
-        <main className={`${museoFont.variable} ${sourceSansPro.variable} font-museo dark:bg-neutral-black`}>
-          <Story />
-          <Spinner />
-        </main>
+        <UserServiceProvider>
+          <main className={`${museoFont.variable} ${sourceSansPro.variable} font-museo dark:bg-neutral-black`}>
+            <Story />
+            <Spinner />
+          </main>
+        </UserServiceProvider>
       </NewsStoreProvider>
     </AppStoreProvider>
   );

@@ -58,8 +58,8 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
   useEffect(() => {
     if (userServiceValue) {
       request.requestData(apiUrl, {
-        [queryParamName]: entityId,
-        page,
+        [queryParamName]: entityId.toString(),
+        page: page.toString(),
         service: userServiceValue,
       });
       setIsLoadingMore(true);
@@ -94,7 +94,7 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
           {heading}
         </h1>
       )}
-      <div className="my-4">
+      <div className="py-4">
         {!results.length && <p className="text-center py-4 dark:text-white">No results found.</p>}
         {results.map((offer) => (
           <div key={offer.id} role="listitem" className="mb-4">

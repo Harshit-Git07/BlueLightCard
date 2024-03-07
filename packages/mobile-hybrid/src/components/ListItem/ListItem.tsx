@@ -9,7 +9,7 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
   return (
     <div className={rootClass} role={onClick ? 'button' : undefined} onClick={onClick}>
       {imageSrc && (
-        <div className="relative md:w-[28%] md:pb-[14%] w-[45%] pb-[20%]">
+        <div className="relative md:w-[28%] md:pb-[14%] w-[50%] pb-[20%]">
           <Image
             src={imageSrc}
             responsive={true}

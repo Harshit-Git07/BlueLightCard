@@ -24,11 +24,11 @@ export class OffersRoutes {
           service: 'offers',
           [EnvironmentVariablesKeys.STAGE]: this.routeProps.stack.stage,
           [EnvironmentVariablesKeys.FIREHOSE_STREAM_APP]: isProduction(this.routeProps.stack.stage)
-            ? (process.env.FIREHOSE_STREAM_APP_VIEW_PROD as string)
-            : (process.env.FIREHOSE_STREAM_APP_VIEW_STAGE as string),
+            ? (process.env.FIREHOSE_STREAM_APP_VIEW_PROD!)
+            : (process.env.FIREHOSE_STREAM_APP_VIEW_STAGE!),
           [EnvironmentVariablesKeys.FIREHOSE_STREAM_WEB]: isProduction(this.routeProps.stack.stage)
-            ? (process.env.FIREHOSE_STREAM_WEB_VIEW_PROD as string)
-            : (process.env.FIREHOSE_STREAM_WEB_VIEW_STAGE as string),
+            ? (process.env.FIREHOSE_STREAM_WEB_VIEW_PROD!)
+            : (process.env.FIREHOSE_STREAM_WEB_VIEW_STAGE!),
         },
         permissions: ['firehose:PutRecord'],
       },

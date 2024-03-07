@@ -90,6 +90,9 @@ jobs:
       - test
       - build
       - changelog
+    env:
+      FIREHOSE_STREAM_APP_VIEW_STAGE: dwh-blc-p1-develop-compAppView
+      FIREHOSE_STREAM_WEB_VIEW_STAGE: dwh-blc-p1-develop-compView
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -115,6 +118,9 @@ jobs:
       - staging
       - changelog
       - build
+    env:
+      FIREHOSE_STREAM_APP_VIEW_PROD: dwh-blc-p1-production-compAppView
+      FIREHOSE_STREAM_WEB_VIEW_PROD: dwh-blc-p1-production-compView
     steps:
       - name: Checkout
         uses: actions/checkout@v4

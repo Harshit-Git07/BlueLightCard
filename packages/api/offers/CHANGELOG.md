@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.23.0...bluelightcard/offers-v1.24.0) (2024-03-07)
+
+
+### Features
+
+* Feat/to 575 offer sheet firehose event ([#997](https://github.com/bluelightcard/BlueLightCard-2.0/issues/997)) ([ad7e682](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ad7e6826f214aa87387335e284ed20ea10454465))
+
 ## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.22.0...bluelightcard/offers-v1.23.0) (2024-03-07)
 
 

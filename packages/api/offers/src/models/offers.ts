@@ -11,7 +11,7 @@ export const OffersModel = createZodNamedType(
     type: OFFERS_TYPE_ENUM,
     companyId: z.number().int(),
     companyLogo: z.string(),
-    expiry: z.date(),
+    expiry: z.date().optional(),
     terms: z.string(),
   }),
 );

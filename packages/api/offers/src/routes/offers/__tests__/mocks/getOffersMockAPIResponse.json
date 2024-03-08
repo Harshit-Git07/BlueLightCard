@@ -1,12 +1,12 @@
 {
   "message": "Success",
   "data": {
-    "id": 123,
+    "id": 1234,
     "name": "offer name",
     "description": "description",
-    "expiry": "2025-02-09T09:41:36.278Z",
     "type": "Online",
     "terms": "tnc",
+    "expiry": "2025-02-09T09:41:36.278Z",
     "companyId": 3456,
     "companyLogo": "https://www.example.com/logo.png"
   }

@@ -28,20 +28,7 @@ export const handler = async (event: APIGatewayEvent) => {
       return Response.NotFound({ message: 'offerId not set' });
     }
 
-    const legacyOffersUrl = process.env.LEGACY_RETRIEVE_OFFERS_URL as string;
-    if (!legacyOffersUrl) {
-      return Response.Error(
-        {
-          name: 'legacyApiUrlNotSet',
-          message: 'Error fetching offers',
-        },
-        HttpStatusCode.INTERNAL_SERVER_ERROR,
-      );
-    }
-
-    const apiUrl = `${legacyOffersUrl}?id=${offerId}&uid=${uid}&bypass=true`;
-    logger.info({ message: 'apiUrl', data: apiUrl });
-    return getOfferDetailFromLegacy(apiUrl, event.headers.Authorization as string, uid, source);
+    return getOfferDetailFromLegacy(offerId as string, uid, event.headers.Authorization as string, source);
   } catch (error: any) {
     logger.error({ message: 'Error fetching offers', data: error });
     return error;
@@ -49,24 +36,26 @@ export const handler = async (event: APIGatewayEvent) => {
 };
 
 async function getOfferDetailFromLegacy(
-  apiUrl: string,
-  bearerToken: string,
+  id: string,
   uid: string,
+  bearerToken: string,
   source: string,
 ): Promise<Response> {
   try {
-    const { data: legacyOffersResponse } = await axios.get<AxiosResponse<LegacyCompanyOffers>>(apiUrl, {
-      headers: {
-        Authorization: bearerToken,
-      },
-    });
+    const { data: legacyOffersResponse } = await getLegacyOffersData(id, uid, bearerToken);
     logger.info({ message: 'GET legacy Offers Output', data: legacyOffersResponse });
 
     if (legacyOffersResponse.data.offers.length === 0) {
+      logger.info({ message: 'no offers received from legacy API' });
+      return Response.NotFound({ message: 'Offer not found', data: {} });
+    }
+    const offer = legacyOffersResponse.data.offers.find((offer: LegacyOffers) => offer.id === Number(id));
+    if (!offer) {
+      logger.info({ message: `Legacy API response did not contain the offer with id: ${id}` });
       return Response.NotFound({ message: 'Offer not found', data: {} });
     }
     const offersResponse = validateOffersResponse({
-      ...getOfferDetails(legacyOffersResponse.data.offers[0]), // using id in query params will get only one offer
+      ...getOfferDetail(offer), // using id in query params will get only one offer
       companyId: legacyOffersResponse.data.id,
       companyLogo: legacyOffersResponse.data.s3logos,
     }) as Offers;
@@ -78,9 +67,9 @@ async function getOfferDetailFromLegacy(
         cid: offersResponse.companyId,
         oid: offersResponse.id,
         mid: uid,
-        timedate: new Date().toISOString()
+        timedate: new Date().toISOString(),
       };
-      await firehose.send({stream, data});
+      await firehose.send({ stream, data });
     }
 
     return Response.OK({ message: 'Success', data: offersResponse });
@@ -96,16 +85,19 @@ async function getOfferDetailFromLegacy(
   }
 }
 
-function getOfferDetails(offer: LegacyOffers): Omit<Offers, 'companyId' | 'companyLogo'> {
+function getOfferDetail(offer: LegacyOffers): Omit<Offers, 'companyId' | 'companyLogo'> {
   const offerType = OFFER_TYPES[offer.typeid as keyof typeof OFFER_TYPES];
-  return {
+  const expiry = offer.expires && !isNaN(new Date(offer.expires).valueOf()) ? new Date(offer.expires) : undefined;
+  const offerWithOutExpiry = {
     id: offer.id,
     name: offer.name,
     description: offer.desc,
-    expiry: new Date(offer.expires),
     type: offerType,
     terms: offer.terms,
   };
+
+  const offerRes = expiry ? { ...offerWithOutExpiry, expiry } : offerWithOutExpiry;
+  return offerRes;
 }
 
 function validateOffersResponse(offer: Offers): Offers | Response {
@@ -122,4 +114,28 @@ function validateOffersResponse(offer: Offers): Offers | Response {
       HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
   }
+}
+
+function getLegacyOffersData(id: string, uid: string, bearerToken: string) {
+  const legacyOffersUrl = process.env.LEGACY_RETRIEVE_OFFERS_URL;
+  if (!legacyOffersUrl) {
+    logger.error({ message: 'Legacy API Url not set' });
+    throw Response.Error(
+      {
+        name: 'legacyApiUrlNotSet',
+        message: 'Error fetching offers',
+      },
+      HttpStatusCode.INTERNAL_SERVER_ERROR,
+    );
+  }
+  const apiUrl = `${legacyOffersUrl}?id=${id}&uid=${uid}`;
+  logger.info({
+    message: 'GET legacy Offers api',
+    data: { auth: bearerToken, apiUrl },
+  });
+  return axios.get<AxiosResponse<LegacyCompanyOffers>>(apiUrl, {
+    headers: {
+      Authorization: bearerToken,
+    },
+  });
 }

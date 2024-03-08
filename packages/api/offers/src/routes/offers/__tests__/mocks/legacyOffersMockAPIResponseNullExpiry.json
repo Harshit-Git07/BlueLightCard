@@ -14,7 +14,7 @@
           "desc": "description",
           "terms": "tnc",
           "code": "code",
-          "expires": "2025-02-09T09:41:36.278Z",
+          "expires": null,
           "button": "btn",
           "imageoffer": "https://www.example.com/image.png",
           "absoluteimageoffer": "https://www.example.com/absoluteimage.png",

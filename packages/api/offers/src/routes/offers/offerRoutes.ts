@@ -2,8 +2,7 @@ import { RouteProps } from '../routeProps';
 import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
-import { LEGACY_API_BASE_URL, LEGACY_RETRIEVE_OFFERS_URL } from 'src/utils/global-constants';
-import { ENVIRONMENTS } from '../../utils/global-constants';
+import { ENVIRONMENTS, LEGACY_API_BASE_URL, LEGACY_RETRIEVE_OFFERS_URL } from 'src/utils/global-constants';
 import { EnvironmentVariablesKeys } from 'src/utils/environment-variables';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 

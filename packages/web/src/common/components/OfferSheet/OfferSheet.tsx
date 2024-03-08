@@ -93,11 +93,12 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
   const handleOnGetDiscountClick = async () => {
     setIsLoading(true);
     const mockedRedemptionApiRes: RedemptionResponse = {
-      redemptionType: 'generic',
-      redemptionDetails: {
-        code: 'BLC25OFF',
-        url: 'https://awin1.com/',
-      },
+      // TODO commented out so we are redirected to offers legacy page for now
+      // redemptionType: 'generic',
+      // redemptionDetails: {
+      //   code: 'BLC25OFF',
+      //   url: 'https://awin1.com/',
+      // },
     };
 
     const redemptionDataResponse: RedemptionResponse = mockedRedemptionApiRes;

@@ -59,8 +59,11 @@ const OfferGetDiscount: React.FC<OfferDetails> = ({
 
     if (magicButtonState === 'secondary') {
       timeout = setTimeout(() => {
-        if (redemptionData?.redemptionDetails?.url)
+        if (redemptionData?.redemptionDetails?.url) {
           router.push(redemptionData.redemptionDetails.url);
+        } else if (offerData.id && offerData.companyId) {
+          window.open(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
+        }
       }, 3000);
     }
 
@@ -69,11 +72,17 @@ const OfferGetDiscount: React.FC<OfferDetails> = ({
 
   const renderMagicCtaLabel = () => {
     const type = redemptionData && redemptionData.redemptionType;
-    if (type === 'generic' || type === 'vault') {
-      return <div>Code copied!</div>;
+    // adds here to handle no redemptionData and redirect to offer legacy page for now
+    if (!type) {
+      return <div>Redirecting you to offer</div>;
     }
-    if (type === 'preApplied') {
-      return <div>Discount automatically applied</div>;
+
+    switch (type) {
+      case 'generic':
+      case 'vault':
+        return <div>Code copied!</div>;
+      case 'preApplied':
+        return <div>Discount automatically applied</div>;
     }
   };
 
@@ -100,14 +109,16 @@ const OfferGetDiscount: React.FC<OfferDetails> = ({
           {magicButtonState === 'primary' ? (
             <div className="leading-10 font-bold text-md">Get Discount</div>
           ) : (
-            <div className="flex-col w-full min-h-7 text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
+            <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
               <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
                 <FontAwesomeIcon icon={faWandMagicSparkles} />
                 {renderMagicCtaLabel()}
               </div>
-              <div className="text-sm text-[#616266] font-medium">
-                Redirecting to partner website
-              </div>
+              {redemptionData?.redemptionType && (
+                <div className="text-sm text-[#616266] font-medium">
+                  Redirecting to partner website
+                </div>
+              )}
             </div>
           )}
         </MagicButton>

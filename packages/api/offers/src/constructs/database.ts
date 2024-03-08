@@ -114,7 +114,7 @@ export class Database {
       defaultDatabaseName: DATABASE_PROPS.NAME.valueOf(),
       port: DATABASE_PROPS.PORT.valueOf(),
       securityGroups: [this.securityGroupManager.auroraServerlessV2SecurityGroup!],
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
     // Allow connections from bastion host

@@ -17,8 +17,8 @@ export class RouteRegistry {
     stack: Stack,
     api: ApiGatewayV1Api,
     vpc: IVpc,
-    dbConfig: DatabaseConfig,
-    private securityGroupManager: SecurityGroupManager,
+    dbConfig?: DatabaseConfig,
+    private securityGroupManager?: SecurityGroupManager,
   ) {
     this.registerAllRoutes(stack, api, vpc, dbConfig);
   }
@@ -29,7 +29,7 @@ export class RouteRegistry {
    * @param {Stack} stack the AWS CDK stack
    * @param {ApiGatewayV1Api} api the API Gateway instance
    */
-  private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api, vpc: IVpc, dbConfig: DatabaseConfig) {
+  private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api, vpc: IVpc, dbConfig?: DatabaseConfig) {
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
     const modelMap = this.generateModels(apiGatewayModelGenerator);
     new DatabaseRoute({
@@ -41,7 +41,7 @@ export class RouteRegistry {
       securityGroups:
         isDev(stack.stage) || isProduction(stack.stage)
           ? undefined
-          : [this.securityGroupManager.lambdaToRdsSecurityGroup!],
+          : [this.securityGroupManager?.lambdaToRdsSecurityGroup!],
     }).initialiseRoutes();
     new OffersRoutes({
       stack,

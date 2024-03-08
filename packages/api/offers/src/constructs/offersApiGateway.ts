@@ -20,8 +20,8 @@ export class OffersApiGateway {
     private stack: Stack,
     private authorizer: SharedAuthorizer,
     private vpc: IVpc,
-    private dbConfig: DatabaseConfig,
-    private securityGroupManager: SecurityGroupManager,
+    private dbConfig?: DatabaseConfig,
+    private securityGroupManager?: SecurityGroupManager,
   ) {
     this._api = this.createApi();
     this._restApi = this._api.cdk.restApi;

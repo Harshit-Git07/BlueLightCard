@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.3...bluelightcard/offers-v1.24.4) (2024-03-08)
+
+
+### Bug Fixes
+
+* temp fix ([#1019](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1019)) ([b4e1edb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b4e1edb3ef6721c1417821770551ce6e2d5ff62c))
+
 ## [1.24.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.2...bluelightcard/offers-v1.24.3) (2024-03-08)
 
 

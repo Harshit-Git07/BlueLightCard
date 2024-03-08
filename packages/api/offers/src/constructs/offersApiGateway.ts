@@ -6,6 +6,7 @@ import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { DatabaseConfig } from '../database/type';
 import { EnvironmentVariablesKeys } from '../utils/environment-variables';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../../../core/src/identity/authorizer';
+import { SecurityGroupManager } from './security-group-manager';
 
 /**
  * Sets up and configures the API Gateway for the offers application, including defining routes and authorizers.
@@ -20,10 +21,11 @@ export class OffersApiGateway {
     private authorizer: SharedAuthorizer,
     private vpc: IVpc,
     private dbConfig: DatabaseConfig,
+    private securityGroupManager: SecurityGroupManager,
   ) {
     this._api = this.createApi();
     this._restApi = this._api.cdk.restApi;
-    new RouteRegistry(this.stack, this.api, this.vpc, this.dbConfig);
+    new RouteRegistry(this.stack, this.api, this.vpc, this.dbConfig, this.securityGroupManager);
   }
 
   /**

@@ -27,7 +27,8 @@ export class SecretManager implements ISecretManager {
     this.APPSYNC_CERTIFICATE_ARN_KEY = this.composeAppSyncArnKey();
     this._appSyncCertificateArn = this.fetchAppSyncCertificateArn();
 
-    if ([ENVIRONMENTS.PRODUCTION.valueOf(), ENVIRONMENTS.STAGING.valueOf()].includes(this.stack.stage)) {
+    if ([ENVIRONMENTS.STAGING.valueOf()].includes(this.stack.stage)) {
+      // Todo: Add Production Environment After DB setup
       this._databaseSecret = this.createDatabaseSecret('OffersDatabaseSecret', 'offers-database-secret');
     } else if (EPHEMERAL_PR_REGEX.test(this.stack.stage)) {
       this._databaseSecret = this.createDatabaseSecret('OffersPrDatabaseSecret', 'offers-Pr-database-secret');

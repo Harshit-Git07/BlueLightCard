@@ -2,19 +2,19 @@ import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ConnectionDetails, DatabaseConfig, DatabaseInstanceType, DatabaseType, Secret } from './type';
 import { EnvironmentVariablesKeys } from '../utils/environment-variables';
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
-import { ILogger } from '../../../core/src/utils/logger/logger';
 import mysql from 'mysql2/promise';
 import { drizzle } from 'drizzle-orm/mysql2';
 import { DATABASE_PROPS } from '../utils/global-constants';
+import { Logger } from '@aws-lambda-powertools/logger';
 
 export class DatabaseConnectionManager {
-  private static logger: ILogger;
+  private static logger: Logger;
 
-  public static async connect(instanceType: DatabaseInstanceType, logger: ILogger) {
+  public static async connect(instanceType: DatabaseInstanceType, logger: Logger) {
     return await this.getConnection(instanceType, logger);
   }
 
-  private static async getConnection(instanceType: DatabaseInstanceType, logger: ILogger) {
+  private static async getConnection(instanceType: DatabaseInstanceType, logger: Logger) {
     this.logger = logger;
     const dbConfig: DatabaseConfig = JSON.parse(getEnv(EnvironmentVariablesKeys.DATABASE_CONFIG));
     logger.info({ message: `Database config: ${JSON.stringify(dbConfig)}` });

@@ -11,7 +11,7 @@ import {
 import { Stack } from 'sst/constructs';
 import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import { SecurityGroupManager } from './security-group-manager';
-import { isDev } from '../../../core/src/utils/checkEnvironment';
+import { isDev, isProduction, isStaging } from '../../../core/src/utils/checkEnvironment';
 
 /**
  * The IEC2 interface provides a centralized way to manage all EC2 instances for the application.
@@ -28,7 +28,8 @@ export class EC2Manager implements IEC2 {
   private readonly _bastionHost: BastionHostLinux | undefined;
 
   constructor(private stack: Stack, private vpc: IVpc, private securityGroups: SecurityGroupManager) {
-    if (!isDev(this.stack.stage)) {
+    if (isStaging(this.stack.stage)) {
+      // Todo: add isProduction when we setup DB in production
       this._bastionHost = this.createBastionHost();
     }
   }
@@ -50,8 +51,8 @@ export class EC2Manager implements IEC2 {
   private createBastionHost(): BastionHostLinux {
     const host = new BastionHostLinux(this.stack, 'bastion-host', {
       instanceName: `${this.stack.stage}-bastion-host-offers`,
-      vpc: this.vpc,
       instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL),
+      vpc: this.vpc,
       subnetSelection: {
         subnetType: SubnetType.PUBLIC,
       },

@@ -6,12 +6,20 @@ import { Model } from 'aws-cdk-lib/aws-apigateway';
 import { DatabaseRoute } from './database/databaseRoute';
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { DatabaseConfig } from '../database/type';
+import { SecurityGroupManager } from '../constructs/security-group-manager';
+import { isDev, isProduction } from '@blc-mono/core/utils/checkEnvironment';
 
 /**
  * The RouteRegistry class provides a centralized way to register all routes for the application.
  */
 export class RouteRegistry {
-  constructor(stack: Stack, api: ApiGatewayV1Api, vpc: IVpc, dbConfig: DatabaseConfig) {
+  constructor(
+    stack: Stack,
+    api: ApiGatewayV1Api,
+    vpc: IVpc,
+    dbConfig: DatabaseConfig,
+    private securityGroupManager: SecurityGroupManager,
+  ) {
     this.registerAllRoutes(stack, api, vpc, dbConfig);
   }
 
@@ -30,6 +38,10 @@ export class RouteRegistry {
       vpc,
       dbConfig,
       apiGatewayModelGenerator,
+      securityGroups:
+        isDev(stack.stage) || isProduction(stack.stage)
+          ? undefined
+          : [this.securityGroupManager.lambdaToRdsSecurityGroup!],
     }).initialiseRoutes();
     new OffersRoutes({
       stack,

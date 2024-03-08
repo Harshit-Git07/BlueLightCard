@@ -31,7 +31,13 @@ export function Offers({ stack, app }: StackContext) {
     securityGroupManager,
     ec2Manager,
   );
-  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, vpc, databaseAdapter.config);
+  const offersApiGateway: OffersApiGateway = new OffersApiGateway(
+    stack,
+    authorizer,
+    vpc,
+    databaseAdapter.config,
+    securityGroupManager,
+  );
 
   /**
    * Offers Appsync API

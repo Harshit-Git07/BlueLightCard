@@ -1,7 +1,7 @@
 import { Stack } from 'sst/constructs';
 import { IVpc, Peer, Port, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
 import { DATABASE_PROPS, ENVIRONMENTS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
-import { isDev } from '../../../core/src/utils/checkEnvironment';
+import { isDev, isStaging } from '../../../core/src/utils/checkEnvironment';
 
 /**
  * Defines the interface for managing various security groups within the application.
@@ -9,8 +9,8 @@ import { isDev } from '../../../core/src/utils/checkEnvironment';
 export interface ISecurityGroupManager {
   get auroraServerlessV2SecurityGroup(): SecurityGroup | undefined;
   get bastionHostSecurityGroup(): SecurityGroup | undefined;
-  get prDatabaseSecurityGroup(): SecurityGroup | undefined;
-  get lambdaToRdsProxySecurityGroup(): SecurityGroup | undefined;
+  get ephemeralDatabaseSecurityGroup(): SecurityGroup | undefined;
+  get lambdaToRdsSecurityGroup(): SecurityGroup | undefined;
 }
 
 /**
@@ -21,19 +21,20 @@ export interface ISecurityGroupManager {
 export class SecurityGroupManager implements ISecurityGroupManager {
   private readonly _auroraServerlessV2SG: SecurityGroup | undefined;
   private readonly _bastionHostSG: SecurityGroup | undefined;
-  private readonly _prDatabaseSG: SecurityGroup | undefined;
-  private readonly _lambdaToRdsProxySG: SecurityGroup | undefined;
+  private readonly _ephemeralDatabaseSG: SecurityGroup | undefined;
+  private readonly _lambdaToRdsSG: SecurityGroup | undefined;
 
   /**
    * The constructor is private to prevent direct construction calls with the `new` operator.
    */
   constructor(private stack: Stack, private vpc: IVpc) {
-    if ([ENVIRONMENTS.PRODUCTION.valueOf(), ENVIRONMENTS.STAGING.valueOf()].includes(this.stack.stage)) {
-      this._lambdaToRdsProxySG = this.createLambdaToRdsProxySecurityGroup();
+    if (isStaging(this.stack.stage)) {
+      // Todo: Add production environment after DB setup
+      this._lambdaToRdsSG = this.createLambdaToRdsSecurityGroup();
       this._auroraServerlessV2SG = this.createAuroraServerlessV2SecurityGroup();
       this._bastionHostSG = this.createBastionHostSecurityGroup();
     } else if (EPHEMERAL_PR_REGEX.test(this.stack.stage)) {
-      this._prDatabaseSG = this.createPrDatabaseSecurityGroup();
+      this._ephemeralDatabaseSG = this.createEphemeralDatabaseSecurityGroup();
     }
   }
 
@@ -57,16 +58,16 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    * Get the PR database security group.
    * @return {SecurityGroup} the PR database security group
    */
-  get prDatabaseSecurityGroup(): SecurityGroup | undefined {
-    return this._prDatabaseSG;
+  get ephemeralDatabaseSecurityGroup(): SecurityGroup | undefined {
+    return this._ephemeralDatabaseSG;
   }
 
   /**
    * Get the Lambda to RDS Proxy security group.
    * @return {SecurityGroup} the Lambda to RDS Proxy security group
    */
-  get lambdaToRdsProxySecurityGroup(): SecurityGroup | undefined {
-    return this._lambdaToRdsProxySG;
+  get lambdaToRdsSecurityGroup(): SecurityGroup | undefined {
+    return this._lambdaToRdsSG;
   }
 
   /**
@@ -76,11 +77,10 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    */
   private createAuroraServerlessV2SecurityGroup(): SecurityGroup {
     const sg: SecurityGroup = this.builder('AuroraServerlessV2SG', 'Allow MySQL Traffic');
-    sg.addIngressRule(sg, Port.tcp(DATABASE_PROPS.PORT.valueOf()), 'Allow MySQL Port 3306 from within the VPC');
     sg.addIngressRule(
-      this.lambdaToRdsProxySecurityGroup!,
+      this.lambdaToRdsSecurityGroup!,
       Port.tcp(DATABASE_PROPS.PORT.valueOf()),
-      'Allow Lambda to RDS Proxy Connection',
+      'Allow Lambda to RDS Connection',
     );
     return sg;
   }
@@ -89,7 +89,7 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    * Creates a PR database security group that allows MySQL access from any IPv4 or IPv6 address.
    * @return {SecurityGroup} the PR database security group
    */
-  private createPrDatabaseSecurityGroup(): SecurityGroup {
+  private createEphemeralDatabaseSecurityGroup(): SecurityGroup {
     const sg: SecurityGroup = this.builder('PrDatabaseSG', 'Allow MySQL access from local machine');
     sg.addIngressRule(Peer.anyIpv4(), Port.tcp(DATABASE_PROPS.PORT.valueOf()), 'Allow MySQL Port 3306 from Any IPv4');
     sg.addIngressRule(Peer.anyIpv6(), Port.tcp(DATABASE_PROPS.PORT.valueOf()), 'Allow MySQL Port 3306 from Any IPv6');
@@ -112,7 +112,7 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    * facilitating secure database interactions from serverless functions.
    * @return {SecurityGroup} the Lambda to RDS Proxy security group
    */
-  private createLambdaToRdsProxySecurityGroup(): SecurityGroup {
+  private createLambdaToRdsSecurityGroup(): SecurityGroup {
     return this.builder('LambdaToRdsSG', 'Allow Lambda to Rds Proxy Connection');
   }
 

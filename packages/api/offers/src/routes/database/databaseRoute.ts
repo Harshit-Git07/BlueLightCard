@@ -21,6 +21,8 @@ export class DatabaseRoute {
         vpcSubnets: {
           subnetType: SubnetType.PRIVATE_WITH_EGRESS,
         },
+        securityGroups: this.routeProps.securityGroups,
+        enableLiveDev: false,
       },
       cdk: {
         method: {

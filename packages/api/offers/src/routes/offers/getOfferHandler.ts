@@ -65,7 +65,7 @@ async function getOfferDetailFromLegacy(
       const stream = source === API_SOURCE.APP ? process.env.FIREHOSE_STREAM_APP! : process.env.FIREHOSE_STREAM_WEB!;
       const data = {
         cid: offersResponse.companyId,
-        oid: offersResponse.id,
+        oid_: offersResponse.id,
         mid: uid,
         timedate: new Date().toISOString(),
       };
@@ -128,7 +128,7 @@ function getLegacyOffersData(id: string, uid: string, bearerToken: string) {
       HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
   }
-  const apiUrl = `${legacyOffersUrl}?id=${id}&uid=${uid}`;
+  const apiUrl = `${legacyOffersUrl}?id=${id}&uid=${uid}&bypass=true`;
   logger.info({
     message: 'GET legacy Offers api',
     data: { auth: bearerToken, apiUrl },

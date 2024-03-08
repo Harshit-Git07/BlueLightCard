@@ -20,6 +20,7 @@ import { SecurityGroupManager } from './security-group-manager';
 import { EC2Manager } from './ec2-manager';
 import { DATABASE_PROPS, ENVIRONMENTS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
 import { DatabaseResource, DatabaseType } from '../database/type';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 /**
  * Manages the creation and configuration of database resources, including Aurora Serverless V2 clusters,
@@ -40,13 +41,14 @@ export class Database {
   }
 
   private initDatabase(): DatabaseResource {
-    switch (true) {
-      case [ENVIRONMENTS.PRODUCTION.valueOf(), ENVIRONMENTS.STAGING.valueOf()].includes(this.stack.stage):
-        return this.createAuroraServerlessV2();
-      case EPHEMERAL_PR_REGEX.test(this.stack.stage):
-        return this.createEphemeralDatabase();
-      default:
-        return DatabaseType.LOCAL;
+    const stage = this.stack.stage;
+    if (isStaging(stage)) {
+      // Todo: add isProduction when everything works on Staging
+      return this.createAuroraServerlessV2();
+    } else if (EPHEMERAL_PR_REGEX.test(stage)) {
+      return this.createEphemeralDatabase();
+    } else {
+      return DatabaseType.LOCAL;
     }
   }
 
@@ -88,33 +90,36 @@ export class Database {
 
     // Create Writer instance
     const writerInstance: IClusterInstance = ClusterInstance.serverlessV2('Writer', {
-      instanceIdentifier: `${this.stack.stage}-offers-database-writer`,
       autoMinorVersionUpgrade: true,
       scaleWithWriter: true,
     });
     // Create Reader instances
     const readerInstances: IClusterInstance[] = [
       ClusterInstance.serverlessV2('Reader', {
-        instanceIdentifier: `${this.stack.stage}-offers-database-reader-1`,
         autoMinorVersionUpgrade: true,
         scaleWithWriter: true,
       }),
     ];
 
     // Create cluster
-    const cluster = new DatabaseCluster(this.stack, 'ServerlessDatabase', {
-      clusterIdentifier: `${this.stack.stage}-offers-database-cluster`,
-      engine: DatabaseClusterEngine.auroraMysql({ version: AuroraMysqlEngineVersion.VER_3_05_0 }),
+    const cluster = new DatabaseCluster(this.stack, 'ServerlessDatabaseOffers', {
+      clusterIdentifier: `offers-database-cluster-${this.stack.stage}`,
+      engine: DatabaseClusterEngine.auroraMysql({
+        version: AuroraMysqlEngineVersion.of('8.0.mysql_aurora.3.05.2', '8.0'),
+      }),
       writer: writerInstance,
       readers: readerInstances,
       credentials: Credentials.fromSecret(this.secretManager.databaseSecret),
       serverlessV2MinCapacity: 0.5,
       serverlessV2MaxCapacity: 128,
       vpc: this.iVpc,
+      vpcSubnets: {
+        subnetType: SubnetType.PRIVATE_ISOLATED,
+      },
       defaultDatabaseName: DATABASE_PROPS.NAME.valueOf(),
       port: DATABASE_PROPS.PORT.valueOf(),
       securityGroups: [this.securityGroupManager.auroraServerlessV2SecurityGroup!],
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: RemovalPolicy.RETAIN,
     });
 
     // Allow connections from bastion host
@@ -171,7 +176,7 @@ export class Database {
       port: DATABASE_PROPS.PORT.valueOf(),
       autoMinorVersionUpgrade: true,
       enablePerformanceInsights: false,
-      securityGroups: [this.securityGroupManager.prDatabaseSecurityGroup!],
+      securityGroups: [this.securityGroupManager.ephemeralDatabaseSecurityGroup!],
       multiAz: false,
       deletionProtection: false,
       storageType: StorageType.GP2,

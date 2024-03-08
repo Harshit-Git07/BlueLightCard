@@ -1,6 +1,6 @@
 {
   "name": "@blc-mono/offers",
-  "version": "1.24.2",
+  "version": "1.24.3",
   "type": "module",
   "scripts": {
     "pre:dev": "npm run db:up",

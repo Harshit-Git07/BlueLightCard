@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.2...bluelightcard/offers-v1.24.3) (2024-03-08)
+
+
+### Bug Fixes
+
+* TO-605 remove db  and fix lambda rds connection ([#1016](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1016)) ([6f48e60](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6f48e60343c9151b3615b0f21268220f64358900))
+
 ## [1.24.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.1...bluelightcard/offers-v1.24.2) (2024-03-08)
 
 

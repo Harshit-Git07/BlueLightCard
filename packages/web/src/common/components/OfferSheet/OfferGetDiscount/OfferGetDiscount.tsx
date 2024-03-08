@@ -67,6 +67,16 @@ const OfferGetDiscount: React.FC<OfferDetails> = ({
     return () => clearTimeout(timeout);
   }, [magicButtonState]);
 
+  const renderMagicCtaLabel = () => {
+    const type = redemptionData && redemptionData.redemptionType;
+    if (type === 'generic' || type === 'vault') {
+      return <div>Code copied!</div>;
+    }
+    if (type === 'preApplied') {
+      return <div>Discount automatically applied</div>;
+    }
+  };
+
   return (
     <>
       <OfferTopDetailsHeader {...{ offerData, companyId }} />
@@ -92,7 +102,8 @@ const OfferGetDiscount: React.FC<OfferDetails> = ({
           ) : (
             <div className="flex-col w-full min-h-7 text-nowrap whitespace-nowrap flex-nowrap">
               <div className="text-md font-bold text-center">
-                <FontAwesomeIcon icon={faWandMagicSparkles} /> Discount automatically applied
+                <FontAwesomeIcon icon={faWandMagicSparkles} />
+                {renderMagicCtaLabel()}
               </div>
               <div className="text-sm text-[#616266] font-medium">
                 Redirecting to partner website

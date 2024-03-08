@@ -7,6 +7,8 @@ import AuthContext from '@/context/Auth/AuthContext';
 import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import OfferSheetContext, { offerResponse } from '@/context/OfferSheet/OfferSheetContext';
 import OfferGetDiscount from './OfferGetDiscount/OfferGetDiscount';
+import DesktopShowCardOrQrCode from './DesktopShowCardOrQrCode/DesktopShowCardOrQrCode';
+import MobileShowCardOrQrCode from './MobileShowCardOrQrCode/MobileShowCardOrQrCode';
 import { displayDateDDMMYYYY } from '@core/utils/date';
 import { getOfferById } from '@/utils/offers/getOffer';
 import AmplitudeContext from '@/context/AmplitudeContext';
@@ -15,6 +17,7 @@ import Link from '@/components/Link/Link';
 import Button from '../Button/Button';
 import { logOfferView } from '@/utils/amplitude/logOfferView';
 import { ENVIRONMENT } from '@/global-vars';
+import { useMediaQuery } from 'usehooks-ts';
 
 const OfferSheet: React.FC<OfferSheetProps> = ({
   offer: { offerId, companyId, companyName },
@@ -25,6 +28,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
 
   const userCtx = useContext(UserContext);
   const authCtx = useContext(AuthContext);
+  const isMobile = useMediaQuery('(max-width: 500px)');
   const amplitude = useContext(AmplitudeContext);
 
   const blankOffer: offerResponse = {};
@@ -89,7 +93,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
   const handleOnGetDiscountClick = async () => {
     setIsLoading(true);
     const mockedRedemptionApiRes: RedemptionResponse = {
-      redemptionType: 'generic',
+      redemptionType: 'vaultQR',
       redemptionDetails: {
         code: 'BLC25OFF',
         url: 'https://awin1.com/',
@@ -131,9 +135,27 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
 
     switch (redemptionData.redemptionType) {
       case 'vaultQR':
-        return <h1>VaultQR redemption type</h1>;
-      case 'showCard':
-        return <h1>Show card redemption type</h1>;
+      case 'showCard': {
+        if (isMobile) {
+          return (
+            <MobileShowCardOrQrCode
+              redemptionType={redemptionData.redemptionType}
+              offerData={offerData}
+              companyId={companyId as string}
+            />
+          );
+        } else {
+          return (
+            <DesktopShowCardOrQrCode
+              redemptionType={redemptionData.redemptionType}
+              companyName={offerData?.name?.slice(10) as string}
+              companyId={companyId as string}
+              offerData={offerData}
+            />
+            /* CompanyName - Nedd to clarify if this can come from other place. */
+          );
+        }
+      }
       default:
         return <></>;
     }

@@ -88,8 +88,8 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
   }, [open]);
 
   return (
-    <div className="flex flex-col text-center text-wrap space-y-2 p-6 pt-0 font-['MuseoSans']">
-      <div className="pb-16">
+    <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-['MuseoSans']">
+      <div>
         {/* Offer Image */}
         <div className="flex justify-center">
           {imageSource && (

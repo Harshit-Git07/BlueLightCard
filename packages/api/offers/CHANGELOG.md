@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.24.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.1...bluelightcard/offers-v1.24.2) (2024-03-08)
+
+
+### Bug Fixes
+
+* temp change - change db removal to destroy ([#1011](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1011)) ([82f7a0a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/82f7a0a366d03f423ed6dc2465544b56bec388f7))
+* TO-601 fixed the offers API response when expiry is null or inva… ([#975](https://github.com/bluelightcard/BlueLightCard-2.0/issues/975)) ([fddedc9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fddedc9c3461ede2810dde35fbe780bb4586c482))
+
 ## [1.24.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.0...bluelightcard/offers-v1.24.1) (2024-03-07)
 
 

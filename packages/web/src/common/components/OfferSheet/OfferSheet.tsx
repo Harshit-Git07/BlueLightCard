@@ -93,7 +93,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
   const handleOnGetDiscountClick = async () => {
     setIsLoading(true);
     const mockedRedemptionApiRes: RedemptionResponse = {
-      redemptionType: 'vaultQR',
+      redemptionType: 'generic',
       redemptionDetails: {
         code: 'BLC25OFF',
         url: 'https://awin1.com/',

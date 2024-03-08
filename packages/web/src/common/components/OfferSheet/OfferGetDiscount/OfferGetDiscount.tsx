@@ -100,8 +100,8 @@ const OfferGetDiscount: React.FC<OfferDetails> = ({
           {magicButtonState === 'primary' ? (
             <div className="leading-10 font-bold text-md">Get Discount</div>
           ) : (
-            <div className="flex-col w-full min-h-7 text-nowrap whitespace-nowrap flex-nowrap">
-              <div className="text-md font-bold text-center">
+            <div className="flex-col w-full min-h-7 text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
+              <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
                 <FontAwesomeIcon icon={faWandMagicSparkles} />
                 {renderMagicCtaLabel()}
               </div>

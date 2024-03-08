@@ -24,7 +24,7 @@ const CardCarousel: FC<CardCarouselProps> = ({ slides, onSlideItemClick, onSlide
       centerMode={true} // Center the current item
       selectedItem={currentSlide} // Set the active slide index
       preventMovementUntilSwipeScrollTolerance={true}
-      swipeScrollTolerance={10}
+      swipeScrollTolerance={30}
       onChange={handleSlideChange} // Event handler for slide change
     >
       {slides.map((slide, index) => {

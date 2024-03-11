@@ -9,6 +9,7 @@ const initialState: AppStore = {
     [APIUrl.News]: true,
     [APIUrl.OfferPromos]: true,
     [APIUrl.FavouritedBrands]: true,
+    [APIUrl.UserService]: true,
   },
   apiData: {},
   experiments: {},
@@ -51,9 +52,14 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(storeReducer, initialState);
   const setSpinner = useSetAtom(spinner);
 
+  // MIGRATION - migrating over to the use of atoms, by setting the loading state on the new spinner
   useEffect(() => {
-    // MIGRATION - migrating over to the use of atoms, by setting the loading state on the new spinner
-    if (Object.values(state.loading).filter((loading) => !loading).length === 3) {
+    const initialApiCalls = [APIUrl.News, APIUrl.OfferPromos, APIUrl.FavouritedBrands];
+    const hasFinishedLoading = (apiCalls: string[]): boolean => {
+      return !apiCalls.map((apiCall) => state.loading[apiCall].valueOf()).includes(true);
+    };
+
+    if (hasFinishedLoading(initialApiCalls)) {
       setSpinner(false);
     }
   }, [setSpinner, state.loading]);

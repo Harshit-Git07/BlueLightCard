@@ -21,6 +21,9 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
+      "@/services/*": [
+        "src/services/*",
+      ],
       "@/components/*": [
         "src/common/components/*",
       ],
@@ -50,6 +53,9 @@
       ],
       "@/global-vars": [
         "global-vars"
+      ],
+      "@/globals/*": [
+        "src/common/globals/*"
       ],
       "@/page-types/*": [
         "src/common/page-types/*"

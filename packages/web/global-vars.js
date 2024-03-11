@@ -4,7 +4,6 @@ const REGION = process.env.NEXT_PUBLIC_APP_REGION ?? 'GB';
 const DEFAULT_LANG = process.env.NEXT_PUBLIC_APP_LANG ?? 'en';
 const FALLBACK_LNG = 'en';
 const ASSET_PREFIX = !process.env.STORYBOOK_ENV ? '/_next/static/assets' : '';
-const FEATURE_FLAG_ENVIRONMENT_ID = process.env.FEATURE_FLAG_ENVIRONMENT_ID ?? '';
 const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcard.co.uk';
 const COGNITO_CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID ?? '';
 const COGNITO_CLIENT_SECRET = process.env.NEXT_PUBLIC_COGNITO_CLIENT_SECRET ?? '';
@@ -71,7 +70,6 @@ module.exports = {
   FALLBACK_LNG,
   LANGUAGE,
   ASSET_PREFIX,
-  FEATURE_FLAG_ENVIRONMENT_ID,
   CDN_URL,
   COGNITO_CLIENT_ID,
   COGNITO_CLIENT_SECRET,

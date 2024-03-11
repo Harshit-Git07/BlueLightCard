@@ -15,7 +15,7 @@ type JsonArray = JsonValue[];
 
 export type APIGatewayResult = {
   statusCode: number;
-  body?: JsonValue;
+  data?: JsonValue;
   headers?: { [key: string]: string };
 };
 
@@ -39,7 +39,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       statusCode: result.statusCode,
       body: JSON.stringify({
         statusCode: result.statusCode,
-        data: result.body,
+        data: result.data,
       }),
       headers: {
         ...result.headers,

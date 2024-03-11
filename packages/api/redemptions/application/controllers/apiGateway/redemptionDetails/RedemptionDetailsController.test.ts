@@ -36,7 +36,7 @@ describe('RedemptionDetailsController', () => {
 
     // Assert
     expect(result.statusCode).toEqual(200);
-    expect(result.body).toEqual({
+    expect(result.data).toEqual({
       redemptionType: 'generic',
     });
   });
@@ -64,7 +64,7 @@ describe('RedemptionDetailsController', () => {
 
     // Assert
     expect(result.statusCode).toEqual(404);
-    expect(result.body).toEqual({
+    expect(result.data).toEqual({
       message: 'No redemption found for the given offerId',
     });
   });

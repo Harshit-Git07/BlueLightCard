@@ -33,8 +33,8 @@ import { shuffle } from 'lodash';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
-import useAmplitudeExperiment from '@/hooks/useAmplitudeExperiment';
 import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
+import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -124,14 +124,7 @@ const HomePage: NextPage<any> = () => {
   ]);
 
   const { setOpen, setOffer } = useContext(OfferSheetContext);
-  const { variantName } = useAmplitudeExperiment(
-    'web-homepage-offer-sheet',
-    [
-      { variantName: 'control', component: <></> },
-      { variantName: 'treatment', component: <></> },
-    ],
-    'control'
-  );
+  const experiment = useAmplitudeExperiment('web-homepage-offer-sheet', 'control');
 
   // Format carousel data
   const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({
@@ -141,9 +134,9 @@ const HomePage: NextPage<any> = () => {
     href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
     offerId: offer.id,
     companyId: offer.compid,
-    hasLink: variantName === 'control',
+    hasLink: experiment.data?.variantName === 'control',
     onClick: () => {
-      if (variantName === 'treatment') {
+      if (experiment.data?.variantName === 'treatment') {
         setOffer({
           offerId: offer.id,
           companyId: offer.compid,
@@ -170,9 +163,9 @@ const HomePage: NextPage<any> = () => {
     imageUrl: handleImageFallbacks(offer.image, offer.logos),
     offerId: offer.id,
     companyId: offer.compid,
-    hasLink: variantName === 'control',
+    hasLink: experiment.data?.variantName === 'control',
     onClick: () => {
-      if (variantName === 'treatment') {
+      if (experiment.data?.variantName === 'treatment') {
         setOffer({
           offerId: offer.id,
           companyId: offer.compid,
@@ -277,9 +270,9 @@ const HomePage: NextPage<any> = () => {
                   href: `/offerdetails.php?cid=${item.compid}&oid=${item.offerId}`,
                   offerId: item.offerId,
                   companyId: item.compid,
-                  hasLink: variantName === 'control',
+                  hasLink: experiment.data?.variantName === 'control',
                   onClick: () => {
-                    if (variantName === 'treatment') {
+                    if (experiment.data?.variantName === 'treatment') {
                       setOffer({
                         offerId: item.offerId,
                         companyId: item.compid,

@@ -31,7 +31,6 @@ import getI18nStaticProps from '@/utils/i18nStaticProps';
 import { default as HeaderV2 } from '@/components/HeaderV2/Header';
 
 import { navItems } from '@/data/headerConfig';
-import useAmplitudeExperiment from '@/hooks/useAmplitudeExperiment';
 import Header from '@/components/Header/Header';
 import {
   getCompanyOfferDetailsUrl,
@@ -39,6 +38,10 @@ import {
   getOffersBySearchTermUrl,
 } from '@/utils/externalPageUrls';
 import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
+import {
+  useAmplitudeExperiment,
+  useAmplitudeExperimentComponent,
+} from '@/context/AmplitudeExperiment';
 
 const he = require('he');
 
@@ -78,20 +81,7 @@ const Search: NextPage = () => {
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
 
-  const searchExperiment = useAmplitudeExperiment(
-    'category_level_three_search',
-    [
-      {
-        variantName: 'control',
-        component: <></>,
-      },
-      {
-        variantName: 'treatment',
-        component: <></>,
-      },
-    ],
-    'control'
-  );
+  const searchExperiment = useAmplitudeExperiment('category_level_three_search', 'control');
   const { setOpen, setOffer } = useContext(OfferSheetContext);
 
   useEffect(() => {
@@ -105,7 +95,7 @@ const Search: NextPage = () => {
         // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
         userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false,
         userCtx.user?.profile.organisation ?? '',
-        searchExperiment.variantName === 'treatment'
+        searchExperiment.data?.variantName === 'treatment'
       );
 
       if (searchResults.results) {
@@ -147,7 +137,7 @@ const Search: NextPage = () => {
   }, [router.query.q]);
 
   // Serp Experiment
-  const control = (
+  const control = () => (
     <Header
       navItems={navItems}
       loggedIn={authCtx.isUserAuthenticated()}
@@ -156,37 +146,21 @@ const Search: NextPage = () => {
       onSearchTerm={onSearchTerm}
     />
   );
-  const treatment = <HeaderV2 navItems={navItems} loggedIn />;
+  const treatment = () => <HeaderV2 navItems={navItems} loggedIn />;
 
-  const serpExperiment = useAmplitudeExperiment(
+  const serpExperiment = useAmplitudeExperimentComponent(
     'serp-search-bar',
-    [
-      {
-        variantName: 'control',
-        component: control,
-      },
-      {
-        variantName: 'treatment',
-        component: treatment,
-      },
-    ],
+    { control, treatment },
     'control'
   );
 
   // Offer Sheet Experiment
-  const { variantName: offerSheetVariant } = useAmplitudeExperiment(
-    'web-search-offer-sheet',
-    [
-      { variantName: 'control', component: <></> },
-      { variantName: 'treatment', component: <></> },
-    ],
-    'control'
-  );
+  const searchOfferSheetExperiment = useAmplitudeExperiment('web-search-offer-sheet', 'control');
 
   return (
     <>
       {/* Header */}
-      {serpExperiment.component ?? control}
+      {serpExperiment.data?.component ?? control()}
 
       {/* Search Results */}
       <Container className="py-5" addBottomHorizontalLine={false}>
@@ -206,7 +180,7 @@ const Search: NextPage = () => {
               const imageSrc = result.offerimg.replaceAll('\\/', '/');
               let hasLink = true;
               let onClick = undefined;
-              if (offerSheetVariant === 'treatment') {
+              if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
                 hasLink = false;
                 onClick = () => {
                   setOffer({

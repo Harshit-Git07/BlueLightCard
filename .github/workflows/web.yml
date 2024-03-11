@@ -18,7 +18,6 @@ on:
       - .github/workflows/web.yml
 
 env:
-  FEATURE_FLAG_ENVIRONMENT_ID: ${{ vars.FEATURE_FLAG_ENVIRONMENT_ID }}
   CI: true
 
 permissions: write-all

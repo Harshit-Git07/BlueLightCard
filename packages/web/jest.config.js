@@ -11,6 +11,8 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   moduleNameMapper: {
     '^@/global-vars': '<rootDir>/global-vars.js',
+    '^@/globals/(.*)$': '<rootDir>/src/common/globals/$1',
+    '^@/services/(.*)$': '<rootDir>/src/services/$1',
     '^@/components/(.*)$': '<rootDir>/src/common/components/$1',
     '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
     '^@/hooks/(.*)$': '<rootDir>/src/common/hooks/$1',

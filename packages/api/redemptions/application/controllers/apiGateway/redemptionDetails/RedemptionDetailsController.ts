@@ -39,14 +39,14 @@ export class RedemptionDetailsController extends APIGatewayController<GetRedempt
       case 'Ok':
         return {
           statusCode: 200,
-          body: {
+          data: {
             redemptionType: result.data.redemptionType,
           },
         };
       case 'RedemptionNotFound':
         return {
           statusCode: 404,
-          body: {
+          data: {
             message: 'No redemption found for the given offerId',
           },
         };

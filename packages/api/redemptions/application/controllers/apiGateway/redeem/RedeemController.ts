@@ -33,7 +33,7 @@ export class RedeemController extends APIGatewayController<RedeemRequestModel> {
       case 'Ok':
         return {
           statusCode: 200,
-          body: {
+          data: {
             redemptionType: result.redemptionType,
             redemptionDetails: result.redemptionDetails,
           },
@@ -41,14 +41,14 @@ export class RedeemController extends APIGatewayController<RedeemRequestModel> {
       case 'RedemptionNotFound':
         return {
           statusCode: 404,
-          body: {
+          data: {
             message: 'No redemption found for the given offerId',
           },
         };
       case 'GenericNotFound':
         return {
           statusCode: 500,
-          body: {
+          data: {
             message: 'No generic found for the given offerId',
           },
         };

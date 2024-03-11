@@ -3,6 +3,7 @@ import UserContext, { User } from './UserContext';
 import { IDENTITY_USER_PROFILE_ENDPOINT } from '@/global-vars';
 import AuthContext from '../Auth/AuthContext';
 import axios, { AxiosError } from 'axios';
+import { Logger } from '@/services/Logger';
 
 const ageGated = (dob: string) => {
   const today = new Date();
@@ -66,10 +67,12 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           if (error.response?.status === 401) {
             setError('You are not logged in');
           } else {
+            Logger.instance.error('Error fetching user data', { error });
             setError('An unknown error occurred');
           }
         })
         .catch((error) => {
+          Logger.instance.error('Error fetching user data', { error });
           setError('An unknown error occurred');
         });
     };

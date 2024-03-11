@@ -1,10 +1,13 @@
 import AuthContext from '@/context/Auth/AuthContext';
 import { REDEMPTION_DETAILS_ENDPOINT } from '@/global-vars';
-import { useQuery } from '@tanstack/react-query';
+import { RedemptionDetailsResponse, RedemptionDetailsResponseSchema } from '@/types/api';
+import { UseQueryResult, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useContext } from 'react';
 
-export function useRedemptionDetails(offerId: number) {
+export function useRedemptionDetails(
+  offerId: number
+): UseQueryResult<RedemptionDetailsResponse, Error> {
   const authCtx = useContext(AuthContext);
   const authToken = authCtx.authState.idToken;
 
@@ -22,6 +25,6 @@ export function useRedemptionDetails(offerId: number) {
             Authorization: authToken,
           },
         })
-        .then((res) => res.data),
+        .then((res) => RedemptionDetailsResponseSchema.parse(res.data)),
   });
 }

@@ -1,8 +1,6 @@
 import type { AppProps } from 'next/app';
 import { FC, ReactElement } from 'react';
 import { appWithTranslation } from 'next-i18next';
-import { FlagsmithProvider } from 'flagsmith/react';
-import flagsmith from 'flagsmith/isomorphic';
 import { datadogRum } from '@datadog/browser-rum';
 
 import '../styles/globals.css';
@@ -12,7 +10,6 @@ import {
   DATADOG_ENV,
   DATADOG_DEFAULT_SERVICE,
   DATADOG_SITE,
-  FEATURE_FLAG_ENVIRONMENT_ID,
 } from '@/global-vars';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -86,12 +83,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           />
           <meta name="format-detection" content="telephone=no" />
         </Head>
-        <FlagsmithProvider
-          options={{ environmentID: FEATURE_FLAG_ENVIRONMENT_ID }}
-          flagsmith={flagsmith}
-        >
-          <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
-        </FlagsmithProvider>
+        <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
       </QueryClientProvider>
     </>
   );

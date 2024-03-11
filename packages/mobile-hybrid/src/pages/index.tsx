@@ -64,10 +64,11 @@ const Home: NextPage<any> = () => {
         });
       });
     }
-
-    request();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    request();
+  }, [request]);
 
   useOnResume(request);
 

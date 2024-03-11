@@ -11,11 +11,8 @@ describe('PillButtons component', () => {
 
   beforeEach(() => {
     props = {
-      pills: [
-        { text: 'Pill 1', value: 'first-pill' },
-        { text: 'Pill 2', value: 'second-pill' },
-        { text: 'Pill 3', value: 'third-pill' },
-      ],
+      text: 'Pill 1',
+      onSelected: () => void 0,
     };
     user = userEvent.setup();
   });
@@ -31,12 +28,8 @@ describe('PillButtons component', () => {
       render(<PillButtons {...props} />);
 
       const pill1 = screen.getByText(/pill 1/i);
-      const pill2 = screen.getByText(/pill 2/i);
-      const pill3 = screen.getByText(/pill 3/i);
 
       expect(pill1).toBeInTheDocument();
-      expect(pill2).toBeInTheDocument();
-      expect(pill3).toBeInTheDocument();
     });
   });
 
@@ -47,9 +40,7 @@ describe('PillButtons component', () => {
       const pillButton = screen.getByText(/pill 1/i);
       await act(() => user.click(pillButton));
 
-      expect(pillButton).toHaveClass(
-        'bg-background-cta-toggle-selected-base dark:bg-background-cta-toggle-selected-dark text-font-cta-toggle-selected-base dark:text-font-cta-toggle-selected-dark'
-      );
+      expect(pillButton).toHaveClass('bg-[#001B80] text-white');
     });
 
     describe('component callbacks', () => {
@@ -60,29 +51,24 @@ describe('PillButtons component', () => {
         render(<PillButtons {...props} />);
 
         const pillButtonOne = screen.getByText(/pill 1/i);
-        const pillButtonThree = screen.getByText(/pill 3/i);
         await act(() => user.click(pillButtonOne));
-        await act(() => user.click(pillButtonThree));
 
-        expect(onSelectedMockFn).toHaveBeenCalledWith(['third-pill', 'first-pill']);
+        expect(onSelectedMockFn).toHaveBeenCalledWith();
       });
 
       it('should invoke onSelected callback with updated deselected values', async () => {
         const onSelectedMockFn = jest.fn();
         props.onSelected = onSelectedMockFn;
+        props.disabled = true;
 
         render(<PillButtons {...props} />);
 
         const pillButtonOne = screen.getByText(/pill 1/i);
-        const pillButtonThree = screen.getByText(/pill 3/i);
 
         // Simulate selecting the pills
         await act(() => user.click(pillButtonOne));
-        await act(() => user.click(pillButtonThree));
-        // Simulate deselecting the first pill
-        await act(() => user.click(pillButtonOne));
 
-        expect(onSelectedMockFn).toHaveBeenCalledWith(['third-pill']);
+        expect(pillButtonOne).toBeDisabled();
       });
     });
   });

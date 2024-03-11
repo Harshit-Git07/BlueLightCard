@@ -1,7 +1,8 @@
 export type PillButtonProps = {
-  pills: {
-    value: string;
-    text: string;
-  }[];
-  onSelected?: (selected: string[]) => void;
+  text: string;
+  onSelected: () => void;
+  disabled?: boolean;
+  outline?: boolean;
+  iconLeft?: React.ReactNode;
+  iconRight?: React.ReactNode;
 };

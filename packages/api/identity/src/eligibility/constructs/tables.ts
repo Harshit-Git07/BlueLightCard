@@ -1,18 +1,18 @@
-import { Table } from 'sst/constructs'
-import { Stack } from 'aws-cdk-lib'
+import { Table } from 'sst/constructs';
+import { Stack } from 'aws-cdk-lib';
 
 /**
  *  This class creates all the tables for the Eligibility Checker
  *  @param stack - The stack to add the tables to
  */
-export class Tables {
-  ecFormOutputDataTable: Table;
+export class EcFormOutputDataTable {
+  table: Table;
 
   constructor (private stack: Stack) {
-    this.ecFormOutputDataTable = this.createEcFormOutputDataTable();
+    this.table = this.createEcFormOutputDataTable();
   }
 
-  private createEcFormOutputDataTable (): Table {
+  private createEcFormOutputDataTable(): Table {
     return new Table(this.stack, 'ecFormOutputData', {
       fields: {
         pk: 'string',
@@ -25,8 +25,8 @@ export class Tables {
       },
       primaryIndex: {
         partitionKey: 'pk',
-        sortKey: 'sk'
-      }
-    })
+        sortKey: 'sk',
+      },
+    });
   }
 }

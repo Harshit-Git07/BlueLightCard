@@ -4,6 +4,7 @@ import { NextRouter } from 'next/router';
 import { render, screen } from '@testing-library/react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { APIUrl, Channels } from '@/globals';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import eventBus from '@/eventBus';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { userService } from '@/components/UserServiceProvider/store';
@@ -18,6 +19,7 @@ let mockRouter: Partial<NextRouter> = {
 };
 let userServiceValue: string | undefined;
 let bus = eventBus();
+let user: UserEvent;
 
 describe('Types Page', () => {
   afterEach(() => {
@@ -27,10 +29,15 @@ describe('Types Page', () => {
 
   beforeEach(() => {
     userServiceValue = 'NHS';
+    user = userEvent.setup();
+    mockRouter = {
+      push: jest.fn(),
+    };
   });
 
   describe('Smoke test', () => {
     it('should render component without error', () => {
+      givenTypeQueryParamIs('5');
       whenTypesPageIsRendered();
     });
   });
@@ -63,7 +70,6 @@ describe('Types Page', () => {
       givenTypeQueryParamIs('5');
 
       whenTypesPageIsRendered();
-
       const offer = await screen.findByText('Highstreet');
 
       expect(offer).toBeInTheDocument();
@@ -83,7 +89,6 @@ describe('Types Page', () => {
       givenTypeQueryParamIs('5');
 
       whenTypesPageIsRendered();
-
       const spinner = screen.queryByRole('progressbar');
 
       expect(spinner).toBeTruthy();
@@ -99,10 +104,21 @@ describe('Types Page', () => {
       givenTypeQueryParamIs('5');
 
       whenTypesPageIsRendered();
-
       const spinner = screen.queryByRole('progressbar');
 
       expect(spinner).toBeFalsy();
+    });
+  });
+
+  describe('Back button', () => {
+    it('should take user to search page when the back button is clicked', async () => {
+      givenTypeQueryParamIs('5');
+
+      whenTypesPageIsRendered();
+      const backButton = screen.getByRole('button', { name: /back button/i });
+      await user.click(backButton);
+
+      expect(mockRouter.push).toHaveBeenCalledWith('/search');
     });
   });
 });

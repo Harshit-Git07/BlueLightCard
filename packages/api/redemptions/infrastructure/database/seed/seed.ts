@@ -25,6 +25,17 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       redemptionType: 'vault',
       url: 'https://awin1.com/',
     },
+    {
+      id: `${redemptionsPrefix}-8s7a3c8-13a8-4cf3-a072-9b08ecd9d534`,
+      affiliate: 'awin',
+      companyId: 9179,
+      connection: 'affiliate',
+      offerId: 8723,
+      offerType: 'online',
+      platform: 'BLC_UK',
+      redemptionType: 'vault',
+      url: 'https://awin1.com/',
+    },
   ] satisfies (typeof redemptionsTable.$inferInsert)[];
   await db.insert(redemptionsTable).values(redemptionsData).onConflictDoNothing();
 
@@ -47,6 +58,20 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       maxPerUser: 3,
       showQR: false,
       status: 'active',
+      vaultType: 'standard',
+      terms:
+        'Cannot be used in conjunction with any other online and/or instore promotion. Excludes clearance lines. Online offer only.',
+    },
+    {
+      id: `${vaultsPrefix}-a3fa14f4-81e2-45be-a5da-f1445641f378`,
+      redemptionId: redemptionsData[1].id,
+      alertBelow: 10,
+      created: new Date('2024-02-06T14:48:00.000Z'),
+      email: 'admin@bluelightcard.co.uk',
+      maxPerUser: 3,
+      showQR: false,
+      status: 'active',
+      vaultType: 'legacy',
       terms:
         'Cannot be used in conjunction with any other online and/or instore promotion. Excludes clearance lines. Online offer only.',
     },

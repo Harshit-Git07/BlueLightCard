@@ -1,4 +1,5 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import jwtDecode from 'jwt-decode';
 import micromatch from 'micromatch';
 import { z } from 'zod';
 
@@ -129,6 +130,26 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
         fatal: error.fatal,
       })),
     });
+  }
+
+  protected parseBearerToken(authorizationHeader: string): Result<string, ParseRequestError> {
+    if (authorizationHeader.startsWith('Bearer ')) {
+      const parsedToken = authorizationHeader.substring(7, authorizationHeader.length);
+      return Result.ok(parsedToken);
+    } else {
+      return Result.err('Invalid Authorization header');
+    }
+  }
+
+  /**
+   * This method extracts the data from the token without any validation
+   */
+  protected unsafeExtractDataFromToken(token: string): Result<JsonObject, ParseRequestError> {
+    try {
+      return Result.ok(jwtDecode(token));
+    } catch (err) {
+      return Result.err({ cause: 'Invalid token', message: 'The token was invalid or malformed' });
+    }
   }
 
   protected getAllowedOrigin(request: APIGatewayProxyEventV2): string {

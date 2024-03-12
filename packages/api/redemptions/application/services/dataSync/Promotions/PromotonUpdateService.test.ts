@@ -134,6 +134,7 @@ describe('PromotionUpdateService', () => {
 
     mocked(httpRequest).mockImplementation(() => {
       return Promise.resolve({
+        status: 200,
         data: {
           success: true,
           data: [

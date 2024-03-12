@@ -50,6 +50,7 @@ describe('PromotionUpdateRepository', () => {
 
     mocked(httpRequest).mockImplementation(() => {
       return Promise.resolve({
+        status: 200,
         data: {
           success: true,
           data: [
@@ -109,6 +110,7 @@ describe('PromotionUpdateRepository', () => {
 
     mocked(httpRequest).mockImplementation(() => {
       return Promise.resolve({
+        status: 200,
         data: {
           success: true,
           data: [
@@ -143,6 +145,7 @@ describe('PromotionUpdateRepository', () => {
 
     mocked(httpRequest).mockImplementation(() =>
       Promise.resolve({
+        status: 200,
         data: mockedData,
       }),
     );

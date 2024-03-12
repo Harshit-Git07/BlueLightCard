@@ -1,4 +1,5 @@
-import { boolean, integer, pgEnum, pgTable, ReferenceConfig, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { boolean, index, integer, pgEnum, pgTable, ReferenceConfig, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { v4 as uuidv4 } from 'uuid';
 
 const DEFAULT_FOREIGN_KEY_ACTIONS: ReferenceConfig['actions'] = {
@@ -27,6 +28,7 @@ export const offerTypeEnum = pgEnum('offerType', ['online', 'in-store']);
 export const platformEnum = pgEnum('platform', ['BLC_UK', 'BLC_AU', 'DDS_UK']);
 export const redemptionTypeEnum = pgEnum('redemptionType', ['generic', 'vault', 'vaultQR', 'showCard', 'preApplied']);
 export const statusEnum = pgEnum('status', ['active', 'in-active']);
+export const vaultTypeEnum = pgEnum('vaultType', ['standard', 'legacy']);
 
 export type Affiliate = (typeof affiliateEnum.enumValues)[number];
 export type Integration = (typeof integrationEnum.enumValues)[number];
@@ -34,6 +36,7 @@ export type OfferType = (typeof offerTypeEnum.enumValues)[number];
 export type Platform = (typeof platformEnum.enumValues)[number];
 export type RedemptionType = (typeof redemptionTypeEnum.enumValues)[number];
 export type Status = (typeof statusEnum.enumValues)[number];
+export type VaultType = (typeof vaultTypeEnum.enumValues)[number];
 export type Connection = (typeof connectionEnum.enumValues)[number];
 
 export const redemptionsPrefix = 'rdm';
@@ -86,6 +89,7 @@ export const vaultsTable = pgTable('vaults', {
   showQR: boolean('showQR').default(false).notNull(),
   status: statusEnum('status').notNull(),
   terms: varchar('terms'),
+  vaultType: vaultTypeEnum('vaultType').default('standard').notNull(),
 });
 
 export const vaultBatchesPrefix = 'vbt';
@@ -103,19 +107,29 @@ export const vaultBatchesTable = pgTable('vaultBatches', {
 
 export const vaultCodesPrefix = 'vcd';
 export const createVaultCodesId = (): string => `${vaultCodesPrefix}-${uuidv4()}`;
-export const vaultCodesTable = pgTable('vaultCodes', {
-  // PK
-  id: varchar('id').primaryKey().$defaultFn(createVaultCodesId),
-  // FK
-  vaultId: varchar('vaultId')
-    .references(() => vaultsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
-    .notNull(),
-  batchId: varchar('batchId')
-    .references(() => vaultBatchesTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
-    .notNull(),
-  // Other
-  code: varchar('code').notNull(),
-  created: timestamp('created').defaultNow().notNull(),
-  expiry: timestamp('expiry').notNull(),
-  memberId: varchar('memberId'),
-});
+export const vaultCodesTable = pgTable(
+  'vaultCodes',
+  {
+    // PK
+    id: varchar('id').primaryKey().$defaultFn(createVaultCodesId),
+    // FK
+    vaultId: varchar('vaultId')
+      .references(() => vaultsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+      .notNull(),
+    batchId: varchar('batchId')
+      .references(() => vaultBatchesTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+      .notNull(),
+    // Other
+    code: varchar('code').notNull(),
+    created: timestamp('created').defaultNow().notNull(),
+    expiry: timestamp('expiry').notNull(),
+    memberId: varchar('memberId').default(sql`NULL`),
+  },
+  (table) => ({
+    vaultIdx: index('vault_idx').on(table.vaultId),
+    batchIdx: index('batch_idx').on(table.batchId),
+    createdIdx: index('created_idx').on(table.created),
+    expiryIdx: index('expiry_idx').on(table.expiry),
+    memberIdx: index('member_idx').on(table.memberId),
+  }),
+);

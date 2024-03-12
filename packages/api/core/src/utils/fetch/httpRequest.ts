@@ -11,7 +11,7 @@ export type headers = {
   [header: string]: string
 }
 
-export type RequestResponse = {data?: any, status?: number, message?: string | undefined}
+export type RequestResponse = {data?: any, status: number, message?: string | undefined}
 type RequestMethods = keyof typeof HTTPRequestMethods
 
 
@@ -57,7 +57,7 @@ const determineResponse = async (response: Response): Promise<RequestResponse> =
     return  { data: await response.text(), status: response.status }
   }
   else {
-    return { message: ErrorMessages.invalidContentType}
+    return { message: ErrorMessages.invalidContentType, status: response.status };
   }
 }
 /**

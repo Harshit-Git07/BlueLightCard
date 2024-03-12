@@ -105,6 +105,7 @@ export class VaultService implements IVaultService {
         terms: detail.terms,
         email: detail.adminEmail || null,
         redemptionId: redemption.id,
+        vaultType: 'legacy',
         ...this.getIntegrationsForCreateVault(detail),
       }));
       const createdVaults = await vaultRepoTransaction.createMany(vaults);
@@ -222,6 +223,7 @@ export class VaultService implements IVaultService {
 
     return {
       status: this.getVaultStatusForUpdatedVault(detail),
+      vaultType: 'legacy',
       ...integrations,
     };
   }

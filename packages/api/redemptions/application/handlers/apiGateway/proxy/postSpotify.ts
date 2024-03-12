@@ -1,5 +1,4 @@
 import { Logger } from '@aws-lambda-powertools/logger';
-import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 
 import { httpRequest, RequestResponse } from '@blc-mono/core/utils/fetch/httpRequest';
@@ -7,7 +6,7 @@ import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
-import { generateKey } from '../../../helpers/newVaultAuth';
+import { generateKey, getKeysFromSecretManager } from '../../../helpers/newVaultAuth';
 
 export interface IAPIGatewayEvent extends APIGatewayEvent {
   body: string;
@@ -35,16 +34,6 @@ function getResponseData(response: RequestResponse, url: string): ResponseData |
   }
 }
 
-/**
- * Secrets for code redeemed
- */
-interface Secrets {
-  codeRedeemedData: string;
-  codeRedeemedPassword: string;
-  assignUserCodesData: string;
-  assignUserCodesPassword: string;
-}
-
 export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyStructuredResultV2> => {
   logger.info('POST Spotify Proxy Input', { event });
 
@@ -55,20 +44,7 @@ export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyS
   const codeAssignedRedeemedPath = getEnv(RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH);
 
   try {
-    const client = new SecretsManagerClient({
-      region: 'eu-west-2',
-    });
-    const awsResponse = await client.send(
-      new GetSecretValueCommand({
-        SecretId: 'blc-mono-redemptions/NewVaultSecrets',
-      }),
-    );
-
-    const codeRedemptionSecrets = awsResponse.SecretString ? JSON.parse(awsResponse.SecretString) : {};
-
-    const secrets: Secrets = {
-      ...codeRedemptionSecrets,
-    };
+    const secrets = await getKeysFromSecretManager('blc-mono-redemptions/NewVaultSecrets');
 
     const codeEndpoint = `${codesRedeemedHost}/${codesRedeemedEnvironment}/${codeRedeemedPath}`;
     const { platform, companyId, offerId, memberId, url } = JSON.parse(event.body);

@@ -4,7 +4,14 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
+import {
+  LegacyVaultApiRepository,
+  vaultSecrets,
+} from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
+import { VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
+import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
+import { SecretsManger } from '@blc-mono/redemptions/libs/SecretsManger/SecretsManger';
 
 import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemController';
 import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
@@ -24,9 +31,13 @@ const controller = createInjector()
   // Common
   .provideValue(Logger.key, logger)
   .provideValue(DatabaseConnection.key, connection)
+  .provideClass(SecretsManger.key, SecretsManger<vaultSecrets>)
   // Repositories
   .provideClass(RedemptionsRepository.key, RedemptionsRepository)
   .provideClass(GenericsRepository.key, GenericsRepository)
+  .provideClass(VaultsRepository.key, VaultsRepository)
+  .provideClass(VaultCodesRepository.key, VaultCodesRepository)
+  .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)

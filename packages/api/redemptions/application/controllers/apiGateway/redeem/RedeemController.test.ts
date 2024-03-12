@@ -30,6 +30,10 @@ describe('RedeemController', () => {
           max: 1_000_000,
         }),
       },
+      headers: {
+        Authorization: 'Bearer token',
+      },
+      memberId: faker.string.sample(5),
     });
 
     // Assert
@@ -62,6 +66,10 @@ describe('RedeemController', () => {
           max: 1_000_000,
         }),
       },
+      headers: {
+        Authorization: 'Bearer token',
+      },
+      memberId: faker.string.sample(5),
     });
 
     // Assert

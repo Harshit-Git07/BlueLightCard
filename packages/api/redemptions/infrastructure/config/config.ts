@@ -10,6 +10,7 @@ export type RedemptionsStackConfig = {
   codesRedeemedHost: string;
   codeRedeemedPath: string;
   codeAssignedRedeemedPath: string;
+  codeAmountIssuedPath: string;
   apiDefaultAllowedOrigins: string[];
   vaultRedeemHost: string;
   vaultRedeemPath: string;
@@ -39,6 +40,7 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
       codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
+      codeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
         'https://*.bluelightcard.co.uk',
         'https://*.bluelightcard.com.au',
@@ -56,6 +58,7 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
       codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
+      codeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
         'https://*.blc-uk.pages.dev',
         'https://*.blc-au.pages.dev',
@@ -74,6 +77,7 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
       codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
+      codeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
         'https://*.blc-uk.pages.dev',
         'https://*.blc-au.pages.dev',
@@ -92,6 +96,7 @@ export class RedemptionsStackConfigResolver {
       codesRedeemedHost: getEnv(RedemptionsStackEnvironmentKeys.CODES_REDEEMED_HOST),
       codeRedeemedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH),
       codeAssignedRedeemedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH),
+      codeAmountIssuedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_AMOUNT_ISSUED_PATH),
       apiDefaultAllowedOrigins: ['*'],
     };
   }

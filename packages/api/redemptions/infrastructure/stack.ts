@@ -95,6 +95,14 @@ export async function Redemptions({ app, stack }: StackContext) {
   const allRoutes = new Routes();
   const restApi = api.cdk.restApi;
 
+  // Create permissions
+  // TODO: Specify the resource for the secrets manager from Secret.fromSecretCompleteArn (It was not getting the final 6 characters as expected, need to investigate further)
+  const getSecretValueSecretsManager = new PolicyStatement({
+    actions: ['secretsmanager:GetSecretValue'],
+    effect: Effect.ALLOW,
+    resources: ['*'],
+  });
+
   // functionName is automatically appended with the stage name
   allRoutes.addRoutes(api, stack, {
     'POST /member/redemptionDetails': Route.createRoute({
@@ -118,7 +126,15 @@ export async function Redemptions({ app, stack }: StackContext) {
       database,
       handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
       requestValidatorName: 'PostRedeemValidator',
+      environment: {
+        [RedemptionsStackEnvironmentKeys.CODES_REDEEMED_HOST]: config.codesRedeemedHost,
+        [RedemptionsStackEnvironmentKeys.CODES_REDEEMED_ENVIRONMENT]: config.codesRedeemedEnvironment,
+        [RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH]: config.codeRedeemedPath,
+        [RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH]: config.codeAssignedRedeemedPath,
+        [RedemptionsStackEnvironmentKeys.CODE_AMOUNT_ISSUED_PATH]: config.codeAmountIssuedPath,
+      },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      permissions: [getSecretValueSecretsManager],
     }),
     'POST /member/connection/affiliate': Route.createRoute({
       model: postAffiliateModel,
@@ -145,17 +161,9 @@ export async function Redemptions({ app, stack }: StackContext) {
         [RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH]: config.codeAssignedRedeemedPath,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      permissions: [getSecretValueSecretsManager],
     }),
   });
-
-  // Attach Permissions to Lambda
-  api.attachPermissionsToRoute('POST /member/online/single-use/custom/spotify', [
-    new PolicyStatement({
-      actions: ['secretsmanager:GetSecretValue'],
-      effect: Effect.ALLOW,
-      resources: ['*'],
-    }),
-  ]);
 
   stack.addOutputs({
     RedemptionsApiEndpoint: api.url,

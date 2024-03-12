@@ -1,8 +1,12 @@
 import { as } from '@blc-mono/core/utils/testing';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
+import { SecretsManger } from '@blc-mono/redemptions/libs/SecretsManger/SecretsManger';
 
 import { GenericsRepository } from '../../repositories/GenericsRepository';
+import { LegacyVaultApiRepository, vaultSecrets } from '../../repositories/LegacyVaultApiRepository';
+import { VaultCodesRepository } from '../../repositories/VaultCodesRepository';
+import { VaultsRepository } from '../../repositories/VaultsRepository';
 import { createTestLogger } from '../../test/helpers/logger';
 
 import { RedeemStrategyResolver } from './RedeemStrategyResolver';
@@ -11,6 +15,9 @@ import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy'
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
 import { RedeemVaultQrStrategy } from './strategies/RedeemVaultQrStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
+jest.mock('../../../../core/src/utils/getEnv', () => ({
+  getEnv: jest.fn(),
+}));
 
 describe('RedeemStrategyResolver', () => {
   const mockedConnection = {
@@ -19,7 +26,16 @@ describe('RedeemStrategyResolver', () => {
     },
   } as unknown as DatabaseConnection;
   const mockedLogger = createTestLogger();
-  const genericRepo = new GenericsRepository(mockedConnection);
+  const mockedSecretsManager = {
+    awsSecretsMangerClient: jest.fn(),
+    logger: jest.fn(),
+    setRegion: jest.fn(),
+    getSecretValue: jest.fn(),
+  } as unknown as SecretsManger<vaultSecrets>;
+  const genericsRepo = new GenericsRepository(mockedConnection);
+  const vaultsRepo = new VaultsRepository(mockedConnection);
+  const vaultCodesRepo = new VaultCodesRepository(mockedConnection);
+  const legacyVaultApiRepo = new LegacyVaultApiRepository(mockedLogger, mockedSecretsManager);
 
   it.each([
     ['generic', RedeemGenericStrategy],
@@ -32,11 +48,11 @@ describe('RedeemStrategyResolver', () => {
     (redemptionType, strategy) => {
       // Arrange
       const resolver = new RedeemStrategyResolver(
-        new RedeemGenericStrategy(genericRepo, mockedLogger),
+        new RedeemGenericStrategy(genericsRepo, mockedLogger),
         new RedeemPreAppliedStrategy(),
         new RedeemShowCardStrategy(),
         new RedeemVaultQrStrategy(),
-        new RedeemVaultStrategy(),
+        new RedeemVaultStrategy(vaultsRepo, vaultCodesRepo, legacyVaultApiRepo, mockedLogger),
       );
 
       // Act
@@ -50,11 +66,11 @@ describe('RedeemStrategyResolver', () => {
   it('should throw when an unknown redemption type is provided', () => {
     // Arrange
     const resolver = new RedeemStrategyResolver(
-      new RedeemGenericStrategy(genericRepo, mockedLogger),
+      new RedeemGenericStrategy(genericsRepo, mockedLogger),
       new RedeemPreAppliedStrategy(),
       new RedeemShowCardStrategy(),
       new RedeemVaultQrStrategy(),
-      new RedeemVaultStrategy(),
+      new RedeemVaultStrategy(vaultsRepo, vaultCodesRepo, legacyVaultApiRepo, mockedLogger),
     );
 
     // Act

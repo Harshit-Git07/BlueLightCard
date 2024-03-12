@@ -150,7 +150,9 @@ jobs:
               "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
               "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
-              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
+              "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
                "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
                "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
             }'
@@ -163,7 +165,9 @@ jobs:
               "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
               "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
-              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
+              "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
             }'
@@ -216,6 +220,8 @@ jobs:
               "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
+              "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
                "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
             }'
@@ -228,9 +234,11 @@ jobs:
               "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
               "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
-              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}"
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
+              "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
-              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }
+              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
             }'
       - name: Build
         run: npm run build

@@ -1,6 +1,8 @@
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1ApiFunctionRouteProps, Stack } from 'sst/constructs';
+import { SSTConstruct } from 'sst/constructs/Construct';
 
 import {
   ApiGatewayModelGenerator,
@@ -23,7 +25,9 @@ export type RouteOptions = {
   requestValidatorName: string;
   restApi: RestApi;
   stack: Stack;
+  bind?: SSTConstruct[];
   defaultAllowedOrigins: string[];
+  permissions?: PolicyStatement[];
 };
 
 export class Route {
@@ -38,10 +42,12 @@ export class Route {
     stack,
     database,
     defaultAllowedOrigins,
+    permissions,
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'redemptionsAuthorizer'> {
     return {
       cdk: {
         function: new SSTFunction(stack, functionName, {
+          permissions,
           handler,
           environment: {
             ...environment,

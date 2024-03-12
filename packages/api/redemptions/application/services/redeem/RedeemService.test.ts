@@ -26,7 +26,7 @@ describe('RedeemService', () => {
     });
 
     // Act
-    const result = await service.redeem(offerId);
+    const result = await service.redeem(offerId, { memberId: faker.string.sample(5) });
 
     // Assert
     expect(result).toEqual({
@@ -66,7 +66,7 @@ describe('RedeemService', () => {
     });
 
     // Act
-    const result = await service.redeem(offerId);
+    const result = await service.redeem(offerId, { memberId: faker.string.sample(5) });
 
     // Assert
     expect(result).toEqual({

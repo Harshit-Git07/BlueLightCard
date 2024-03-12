@@ -43,13 +43,24 @@ export type RedeemVaultQrStrategyResult = {
   redemptionDetails: string;
 };
 
-// TODO: This is a placeholder for the future implementation
-export type RedeemVaultStrategyResult = {
-  kind: 'Ok';
-  redemptionType: RedemptionType;
-  redemptionDetails: string;
-};
+export type RedeemVaultStrategyResult =
+  | {
+      kind: 'Ok';
+      redemptionType: RedemptionType;
+      redemptionDetails: {
+        url: string;
+        code: string;
+      };
+    }
+  | { kind: 'VaultNotFound' }
+  | { kind: 'InvalidVaultType' }
+  | { kind: 'VaultInactive' }
+  | { kind: 'MaxPerUserReached' }
+  | { kind: 'CheckHowManyCodesIssuedApiRequestNonSuccessful' }
+  | { kind: 'AssignCodeApiRequestNonSuccessful' }
+  | { kind: 'RedemptionUrlNotFound' }
+  | { kind: 'ErrorWhileRedeemingVault' };
 
 export interface IRedeemStrategy {
-  redeem(redemption: Redemption): Promise<RedeemedStrategyResult>;
+  redeem(redemption: Redemption, ...params: unknown[]): Promise<RedeemedStrategyResult>;
 }

@@ -9,8 +9,12 @@ export type RedeemResult =
       kind: 'RedemptionNotFound';
     };
 
+export type StrategyParams = {
+  memberId: string;
+  [key: string]: unknown;
+};
 export interface IRedeemService {
-  redeem(offerId: number): Promise<RedeemResult>;
+  redeem(offerId: number, ...params: unknown[]): Promise<RedeemResult>;
 }
 
 export class RedeemService implements IRedeemService {
@@ -22,7 +26,7 @@ export class RedeemService implements IRedeemService {
     private readonly redeemStrategyResolver: IRedeemStrategyResolver,
   ) {}
 
-  public async redeem(offerId: number): Promise<RedeemResult> {
+  public async redeem(offerId: number, params: StrategyParams): Promise<RedeemResult> {
     const redemption = await this.redemptionsRepository.findOneByOfferId(offerId);
 
     if (!redemption) {
@@ -33,6 +37,6 @@ export class RedeemService implements IRedeemService {
 
     const redeemStrategy = this.redeemStrategyResolver.getRedemptionStrategy(redemption.redemptionType);
 
-    return redeemStrategy.redeem(redemption);
+    return redeemStrategy.redeem(redemption, params);
   }
 }

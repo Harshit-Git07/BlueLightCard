@@ -8,7 +8,7 @@ import { RedemptionsTestDatabase } from '../test/helpers/database';
 
 import { RedemptionsRepository } from './RedemptionsRepository';
 
-describe('RedemptionsRespository', () => {
+describe('RedemptionsRepository', () => {
   let database: RedemptionsTestDatabase;
   let connection: DatabaseConnection;
 

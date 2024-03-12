@@ -3,10 +3,10 @@ import { createInjector } from 'typed-inject';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
+import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 
 import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemController';
-import { GenericsRepository } from '../../../repositories/GenericsRepository';
 import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
 import { RedeemService } from '../../../services/redeem/RedeemService';
 import { RedeemStrategyResolver } from '../../../services/redeem/RedeemStrategyResolver';

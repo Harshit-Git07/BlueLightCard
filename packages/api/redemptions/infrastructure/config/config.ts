@@ -11,6 +11,9 @@ export type RedemptionsStackConfig = {
   codeRedeemedPath: string;
   codeAssignedRedeemedPath: string;
   apiDefaultAllowedOrigins: string[];
+  vaultRedeemHost: string;
+  vaultRedeemPath: string;
+  vaultRedeemEnvironment: string;
 };
 
 export class RedemptionsStackConfigResolver {
@@ -29,6 +32,9 @@ export class RedemptionsStackConfigResolver {
 
   public static forProductionStage(): RedemptionsStackConfig {
     return {
+      vaultRedeemEnvironment: 'production',
+      vaultRedeemHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
+      vaultRedeemPath: 'NewVault/retrieveAllVaults',
       codesRedeemedEnvironment: 'production',
       codesRedeemedHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
@@ -43,6 +49,9 @@ export class RedemptionsStackConfigResolver {
 
   public static forStagingStage(): RedemptionsStackConfig {
     return {
+      vaultRedeemEnvironment: 'staging',
+      vaultRedeemHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
+      vaultRedeemPath: 'NewVault/retrieveAllVaults',
       codesRedeemedEnvironment: 'develop',
       codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
@@ -58,6 +67,9 @@ export class RedemptionsStackConfigResolver {
 
   public static forPrStage(): RedemptionsStackConfig {
     return {
+      vaultRedeemEnvironment: 'develop',
+      vaultRedeemHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
+      vaultRedeemPath: 'NewVault/retrieveAllVaults',
       codesRedeemedEnvironment: 'develop',
       codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
       codeRedeemedPath: 'NewVault/codesRedeemed',
@@ -73,6 +85,9 @@ export class RedemptionsStackConfigResolver {
 
   public static fromEnvironmentVariables(): RedemptionsStackConfig {
     return {
+      vaultRedeemEnvironment: getEnv(RedemptionsStackEnvironmentKeys.VAULT_REDEEM_ENVIRONMENT),
+      vaultRedeemHost: getEnv(RedemptionsStackEnvironmentKeys.VAULT_REDEEM_HOST),
+      vaultRedeemPath: getEnv(RedemptionsStackEnvironmentKeys.VAULT_REDEEM_PATH),
       codesRedeemedEnvironment: getEnv(RedemptionsStackEnvironmentKeys.CODES_REDEEMED_ENVIRONMENT),
       codesRedeemedHost: getEnv(RedemptionsStackEnvironmentKeys.CODES_REDEEMED_HOST),
       codeRedeemedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH),

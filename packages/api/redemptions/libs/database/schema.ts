@@ -34,6 +34,7 @@ export type OfferType = (typeof offerTypeEnum.enumValues)[number];
 export type Platform = (typeof platformEnum.enumValues)[number];
 export type RedemptionType = (typeof redemptionTypeEnum.enumValues)[number];
 export type Status = (typeof statusEnum.enumValues)[number];
+export type Connection = (typeof connectionEnum.enumValues)[number];
 
 export const redemptionsPrefix = 'rdm';
 export const createRedemptionsId = (): string => `${redemptionsPrefix}-${uuidv4()}`;

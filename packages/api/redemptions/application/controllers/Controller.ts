@@ -25,8 +25,7 @@ export abstract class Controller<
 
     try {
       const result = await this.handle(parseRequestResult.value);
-      const response = this.formatResponse(request, result);
-      return response;
+      return this.formatResponse(request, result);
     } catch (err) {
       return await this.onUnhandledError(request, err);
     }

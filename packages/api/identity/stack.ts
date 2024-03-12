@@ -26,8 +26,8 @@ import { createNewCognito, createNewCognitoDDS, createOldCognito, createOldCogni
 import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { EcFormOutputDataTable } from 'src/eligibility/constructs/tables';
-import { UnsuccessfulLoginAttemptsTables } from 'src/cognito/tables';
+import { EcFormOutputDataTable } from './src/eligibility/constructs/tables';
+import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
 
 export function Identity({ stack }: StackContext) {
   const { certificateArn } = use(Shared);

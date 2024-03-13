@@ -9,7 +9,6 @@ import OfferSheetContext, { offerResponse } from '@/context/OfferSheet/OfferShee
 import OfferGetDiscount from './OfferGetDiscount/OfferGetDiscount';
 import DesktopShowCardOrQrCode from './DesktopShowCardOrQrCode/DesktopShowCardOrQrCode';
 import MobileShowCardOrQrCode from './MobileShowCardOrQrCode/MobileShowCardOrQrCode';
-import { displayDateDDMMYYYY } from '@core/utils/date';
 import { getOfferById } from '@/utils/offers/getOffer';
 import AmplitudeContext from '@/context/AmplitudeContext';
 import Heading from '@/components/Heading/Heading';
@@ -18,12 +17,13 @@ import Button from '../Button/Button';
 import { logOfferView } from '@/utils/amplitude/logOfferView';
 import { ENVIRONMENT } from '@/global-vars';
 import { useMediaQuery } from 'usehooks-ts';
+import { formatDateDDMMYYYY } from '@/utils/dates';
 
 const OfferSheet: React.FC<OfferSheetProps> = ({
   offer: { offerId, companyId, companyName },
   onButtonClick,
 }) => {
-  const { setLabels, offerLabels, open, setOpen } = useContext(OfferSheetContext);
+  const { setLabels, open, setOpen } = useContext(OfferSheetContext);
   const router = useRouter();
 
   const userCtx = useContext(UserContext);
@@ -80,7 +80,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
       if (type) labels.push(type);
 
       if (expiry) {
-        let dateFormatted = displayDateDDMMYYYY(expiry);
+        const dateFormatted = formatDateDDMMYYYY(expiry);
         if (dateFormatted) labels.push(`Expiry: ${dateFormatted}`);
       }
 

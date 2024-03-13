@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import Image from '@/components/Image/Image';
-import UserContext from '@/context/User/UserContext';
-import AuthContext from '@/context/Auth/AuthContext';
 import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 import getCDNUrl from '@/utils/getCDNUrl';
 import { ThemeVariant } from '@/types/theme';
@@ -9,8 +7,7 @@ import { OfferTopDetailsHeaderProps } from '../types';
 import Button from '../../Button/Button';
 import Accordion from '../../Accordion/Accordion';
 import ShareButton from '@/components/ShareButton/ShareButton';
-import FavoriteButton from '@/components/FavoriteButton/FavoriteButton';
-import { retrieveFavourites, UpdateFavourites } from '@/utils/company/favourites';
+import FavouriteButton from '@/components/FavouriteButton/FavouriteButton';
 import Heading from '@/components/Heading/Heading';
 
 const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
@@ -20,16 +17,9 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
   showShareFavorite = true,
   showTerms = true,
 }) => {
-  const userCtx = useContext(UserContext);
-  const authCtx = useContext(AuthContext);
   const { open } = useContext(OfferSheetContext);
-
   const [expanded, setExpanded] = useState(false);
   const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
-  const [curFavBtnState, setFavBtnState] = useState<
-    'favourite' | 'unfavourite' | 'disabled' | 'error'
-  >('disabled');
-
   const finalFallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
   const imageSource = offerData.companyLogo ?? finalFallbackImage;
 
@@ -60,29 +50,9 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
     }
   };
 
-  const onFavouriteClick = async () => {
-    if (await UpdateFavourites(offerData, authCtx.authState.idToken, userCtx.user?.legacyId)) {
-      setFavBtnState(curFavBtnState === 'favourite' ? 'unfavourite' : 'favourite');
-    } else {
-      const originalState = curFavBtnState;
-      setFavBtnState('error');
-      setTimeout(() => setFavBtnState(originalState), 1500);
-    }
-  };
-
-  const fetchFavourite = async () => {
-    const favouriteCompany = (await retrieveFavourites(companyId)) ? 'favourite' : 'unfavourite';
-    setFavBtnState(favouriteCompany);
-  };
-
-  useEffect(() => {
-    fetchFavourite();
-  }, [userCtx.user, offerData.id, companyId]);
-
   useEffect(() => {
     if (!open) {
       setExpanded(false);
-      setFavBtnState('unfavourite');
       setShareBtnState('share');
     }
   }, [open]);
@@ -142,9 +112,7 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
         {showShareFavorite && (
           <div className={`flex flex-wrap justify-center mt-4`}>
             <ShareButton {...{ onShareClick, shareBtnState }} />
-            {curFavBtnState !== 'disabled' && (
-              <FavoriteButton {...{ curFavBtnState, onFavouriteClick }} />
-            )}
+            <FavouriteButton {...{ offerData, companyId }} />
           </div>
         )}
 

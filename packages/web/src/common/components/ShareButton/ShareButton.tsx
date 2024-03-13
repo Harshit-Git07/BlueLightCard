@@ -5,7 +5,11 @@ import { ThemeVariant } from '@/types/theme';
 import { ShareButtonProps } from './types';
 import Check from './Check.svg';
 
-const ShareButton: React.FC<ShareButtonProps> = ({ onShareClick, shareBtnState }) => {
+const ShareButton: React.FC<ShareButtonProps> = ({
+  onShareClick,
+  shareBtnState,
+  hasText = true,
+}) => {
   return (
     <Button
       variant={ThemeVariant.Tertiary}
@@ -37,11 +41,12 @@ const ShareButton: React.FC<ShareButtonProps> = ({ onShareClick, shareBtnState }
             />
           </div>
         )}
-        {shareBtnState === 'share'
-          ? 'Share'
-          : shareBtnState === 'success'
-          ? 'Copied to clipboard'
-          : 'Failed to copy'}
+        {hasText &&
+          (shareBtnState === 'share'
+            ? 'Share'
+            : shareBtnState === 'success'
+            ? 'Copied to clipboard'
+            : 'Failed to copy')}
       </span>
     </Button>
   );

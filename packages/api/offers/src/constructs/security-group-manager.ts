@@ -34,6 +34,7 @@ export class SecurityGroupManager implements ISecurityGroupManager {
       this._auroraServerlessV2SG = this.createAuroraServerlessV2SecurityGroup();
       this._bastionHostSG = this.createBastionHostSecurityGroup();
     } else if (EPHEMERAL_PR_REGEX.test(this.stack.stage)) {
+      this._lambdaToRdsSG = this.createLambdaToRdsSecurityGroup();
       this._ephemeralDatabaseSG = this.createEphemeralDatabaseSecurityGroup();
     }
   }
@@ -91,6 +92,11 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    */
   private createEphemeralDatabaseSecurityGroup(): SecurityGroup {
     const sg: SecurityGroup = this.builder('PrDatabaseSG', 'Allow MySQL access from local machine');
+    sg.addIngressRule(
+      this.lambdaToRdsSecurityGroup!,
+      Port.tcp(DATABASE_PROPS.PORT.valueOf()),
+      'Allow Lambda to RDS Connection',
+    );
     sg.addIngressRule(Peer.anyIpv4(), Port.tcp(DATABASE_PROPS.PORT.valueOf()), 'Allow MySQL Port 3306 from Any IPv4');
     sg.addIngressRule(Peer.anyIpv6(), Port.tcp(DATABASE_PROPS.PORT.valueOf()), 'Allow MySQL Port 3306 from Any IPv6');
     return sg;

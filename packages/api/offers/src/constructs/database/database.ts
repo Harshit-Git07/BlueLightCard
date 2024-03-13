@@ -15,12 +15,13 @@ import {
   StorageType,
 } from 'aws-cdk-lib/aws-rds';
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
-import { SecretManager } from './secret-manager';
-import { SecurityGroupManager } from './security-group-manager';
-import { EC2Manager } from './ec2-manager';
-import { DATABASE_PROPS, ENVIRONMENTS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
+
 import { DatabaseResource, DatabaseType } from '../database/type';
-import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isStaging } from '../../../../core/src/utils/checkEnvironment';
+import { SecretManager } from '../secret-manager';
+import { SecurityGroupManager } from '../security-group-manager';
+import { EC2Manager } from '../ec2-manager';
+import { DATABASE_PROPS, EPHEMERAL_PR_REGEX } from '../../utils/global-constants';
 
 /**
  * Manages the creation and configuration of database resources, including Aurora Serverless V2 clusters,

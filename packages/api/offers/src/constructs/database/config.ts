@@ -1,7 +1,7 @@
 import { DatabaseInstanceType, DatabaseConfig, DatabaseResource, DatabaseType, Host } from './type';
 import { DatabaseCluster, DatabaseInstance, DatabaseProxy } from 'aws-cdk-lib/aws-rds';
-import { getEnv } from '../../../core/src/utils/getEnv';
-import { EnvironmentVariablesKeys } from '../utils/environment-variables';
+import { EnvironmentVariablesKeys } from '../../utils/environment-variables';
+import { getEnv } from '../../../../core/src/utils/getEnv';
 
 export class DatabaseConfigurator {
   private readonly _config: DatabaseConfig;

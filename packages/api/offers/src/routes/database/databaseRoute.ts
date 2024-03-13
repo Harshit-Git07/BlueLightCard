@@ -1,7 +1,8 @@
 import { RouteProps } from '../routeProps';
 import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
-import { SubnetType } from 'aws-cdk-lib/aws-ec2';
+import { OffersFunction } from '../../constructs/sst/OffersFunction';
+import { DatabaseAdapter } from '../../constructs/database/adapter';
 
 export class DatabaseRoute {
   constructor(private readonly routeProps: RouteProps) {}
@@ -14,17 +15,11 @@ export class DatabaseRoute {
 
   private get(): ApiGatewayV1ApiRouteProps<any> {
     return {
-      function: {
-        handler: 'packages/api/offers/src/routes/database/databaseHandler.handler',
-        permissions: ['secretsmanager:GetSecretValue'],
-        vpc: this.routeProps.vpc,
-        vpcSubnets: {
-          subnetType: SubnetType.PRIVATE_WITH_EGRESS,
-        },
-        securityGroups: this.routeProps.securityGroups,
-        enableLiveDev: false,
-      },
       cdk: {
+        function: new OffersFunction(this.routeProps.stack, 'DatabaseHandler', {
+          handler: 'packages/api/offers/src/routes/database/databaseHandler.handler',
+          database: DatabaseAdapter.get(),
+        }),
         method: {
           methodResponses: MethodResponses.toMethodResponses([
             this.routeProps.apiGatewayModelGenerator.getError404(),

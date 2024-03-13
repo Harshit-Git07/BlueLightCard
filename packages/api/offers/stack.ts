@@ -15,8 +15,9 @@ import { OffersApiGateway } from './src/constructs/offersApiGateway';
 import { SecurityGroupManager } from './src/constructs/security-group-manager';
 import { SecretManager } from './src/constructs/secret-manager';
 import { EC2Manager } from './src/constructs/ec2-manager';
-import { DatabaseAdapter } from './src/database/adapter';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { IDatabaseAdapter } from './src/constructs/database/IDatabaseAdapter';
+import { DatabaseAdapter } from './src/constructs/database/adapter';
 
 export function Offers({ stack, app }: StackContext) {
   new Tags(stack);
@@ -25,17 +26,11 @@ export function Offers({ stack, app }: StackContext) {
   const secretsManger: SecretManager = new SecretManager(stack);
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
   const ec2Manager: EC2Manager = new EC2Manager(stack, vpc, securityGroupManager);
-  let databaseAdapter: DatabaseAdapter | undefined;
+  let dbAdapter: IDatabaseAdapter | undefined;
   if (!isProduction(stack.stage)) {
-    databaseAdapter = new DatabaseAdapter(stack, vpc, secretsManger, securityGroupManager, ec2Manager);
+    dbAdapter = new DatabaseAdapter(stack, vpc, secretsManger, securityGroupManager, ec2Manager).init();
   }
-  const offersApiGateway: OffersApiGateway = new OffersApiGateway(
-    stack,
-    authorizer,
-    vpc,
-    databaseAdapter ? databaseAdapter.config : undefined,
-    securityGroupManager,
-  );
+  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer);
 
   /**
    * Offers Appsync API

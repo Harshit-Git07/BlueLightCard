@@ -1,11 +1,11 @@
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ConnectionDetails, DatabaseConfig, DatabaseInstanceType, DatabaseType, Secret } from './type';
-import { EnvironmentVariablesKeys } from '../utils/environment-variables';
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import mysql from 'mysql2/promise';
 import { drizzle } from 'drizzle-orm/mysql2';
-import { DATABASE_PROPS } from '../utils/global-constants';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { EnvironmentVariablesKeys } from '../../utils/environment-variables';
+import { DATABASE_PROPS } from '../../utils/global-constants';
 
 export class DatabaseConnectionManager {
   private static logger: Logger;

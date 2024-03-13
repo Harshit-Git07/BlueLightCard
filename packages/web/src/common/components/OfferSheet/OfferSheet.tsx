@@ -193,15 +193,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({
           <Heading headingLevel={'h2'} className=" text-black">
             Error loading offer
           </Heading>
-          <p className="text-base">
-            Refresh the page and try again. If this problem persists contact member services on Live
-            Chat&nbsp;
-            <Link href={'https://www.bluelightcard.co.uk/contactblc.php'} className={'underline'}>
-              here
-            </Link>
-          </p>
-
-          <p>Alternatively, you can still visit your offer page and get your discount there</p>
+          <p className="text-base">You can still get to your offer by clicking the button below.</p>
           <Button
             type={'link'}
             href={`/offerdetails.php?cid=${companyId}&oid=${offerId}`}

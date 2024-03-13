@@ -24,6 +24,7 @@ const BaseLayout: React.FC<LayoutProps> = ({
   children,
   translationNamespace,
   headerOverride = undefined,
+  footerOverride = undefined,
 }) => {
   // Converts brand codes to text using the brand translation file
   // Uses data from locales folder as data source
@@ -61,7 +62,7 @@ const BaseLayout: React.FC<LayoutProps> = ({
         />
       )}
       <div>{children}</div>
-      <Footer {...footerConfig} loggedIn={loggedIn} />
+      {footerOverride ? footerOverride : <Footer {...footerConfig} loggedIn={loggedIn} />}
     </div>
   );
 };

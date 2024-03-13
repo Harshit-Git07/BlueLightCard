@@ -8,6 +8,8 @@ import { cssUtil } from '@/utils/cssUtil';
 const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
   const [isMobile, setIsMobile] = useState(false);
 
+  const copyrightText = `©Blue Light Card 2008 - ${new Date().getFullYear()}`;
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= mobileBreakpoint); // Adjust the breakpoint as needed
@@ -48,16 +50,16 @@ const Footer: FC<FooterProps> = ({ navItems, mobileBreakpoint }) => {
           </div>
 
           <p className="text-center text-slate-600 text-sm font-normal leading-tight tracking-tight">
-            ©Blue Light Card 2008 - 2023
+            {copyrightText}
           </p>
         </>
       ) : (
-        <div className="self-stretch justify-between items-center gap-[260px] inline-flex">
-          <p className="w-[221.79px] h-[46.31px] text-center text-slate-600 text-lg font-normal leading-7 tracking-tight">
-            ©Blue Light Card 2008 - 2023
+        <div className="self-stretch justify-between items-center gap-[100px] inline-flex">
+          <p className="text-center text-slate-600 text-lg font-normal leading-7 tracking-tight">
+            {copyrightText}
           </p>
 
-          <div className="justify-start items-end gap-[35.56px] flex">
+          <div className="justify-start items-center gap-[35.56px] flex">
             {navItems.map((item) => (
               <Link
                 id={item.text + '-nav-item'}

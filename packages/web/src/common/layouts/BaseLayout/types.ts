@@ -6,6 +6,7 @@ export interface LayoutProps {
   children: ReactNode;
   translationNamespace?: string;
   headerOverride?: ReactNode;
+  footerOverride?: ReactNode;
 }
 
 export type PartialLayoutProps = Partial<LayoutProps>;

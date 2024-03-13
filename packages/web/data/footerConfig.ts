@@ -51,7 +51,7 @@ const footerConfig: FooterProps = {
       ],
     },
   ],
-  copyrightText: '© Blue Light Card 2008 - 2023',
+  copyrightText: `©Blue Light Card 2008 - ${new Date().getFullYear()}`,
   socialLinks: [
     {
       iconName: 'facebook',

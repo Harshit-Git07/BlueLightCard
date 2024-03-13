@@ -104,6 +104,8 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
     }),
   });
 
+  const formHasErrors = Object.keys(errors).length > 0;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {fields.map((formField, index) =>
@@ -124,7 +126,9 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
           />
         )
       )}
-      <Button type="submit">{submitButtonText ?? 'Submit'}</Button>
+      <Button type="submit" disabled={formHasErrors}>
+        {submitButtonText ?? 'Submit'}
+      </Button>
     </form>
   );
 };

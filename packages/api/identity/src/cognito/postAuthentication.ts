@@ -5,7 +5,7 @@ import { UnsuccessfulLoginAttemptsService } from '../../src/services/Unsuccessfu
 
 const oldUserPoolId = process.env.OLD_USER_POOL_ID;
 const service: string = process.env.SERVICE as string;
-const logger = new Logger({ serviceName: `${service}-postAuthentication`, logLevel: 'DEBUG' });
+const logger = new Logger({ serviceName: `${service}-postAuthentication`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 const TABLE_NAME = process.env.TABLE_NAME ?? "";
 
 const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);
@@ -46,7 +46,7 @@ export const handler = async (event: PostAuthenticationTriggerEvent, context: an
   }
   
   if (isNewPool(oldUserPoolId, userPoolId)) {
-    deleteDBRecordIfExists(email, userPoolId);
+    await deleteDBRecordIfExists(email, userPoolId);
   }
 
   return event;

@@ -21,6 +21,7 @@ import {
   createOfferRule,
   createPromotionUpdatedRule,
   createVaultUpdatedRule,
+  updateOfferRule,
 } from './eventBridge/rules';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { Route } from './routes/route';
@@ -90,6 +91,7 @@ export async function Redemptions({ app, stack }: StackContext) {
     vaultUpdatedRule: createVaultUpdatedRule(stack, database),
     promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),
     offerRule: createOfferRule(stack, database),
+    offerUpdatedRule: updateOfferRule(stack, database),
   });
 
   const allRoutes = new Routes();

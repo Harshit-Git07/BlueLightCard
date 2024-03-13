@@ -1,65 +1,33 @@
-import { ILogger } from '@blc-mono/core/utils/logger/logger';
-import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
+import { createInjector } from 'typed-inject';
 
-import { parseConnection, parseOfferType, parseOfferUrl, parseRedemptionType } from '../../../helpers/offer';
+import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
+import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { Logger } from '@blc-mono/core/utils/logger/logger';
+import { OfferCreatedController } from '@blc-mono/redemptions/application/controllers/eventBridge/offer/OfferCreatedController';
+import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
+import { RedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+import { OfferCreatedService } from '@blc-mono/redemptions/application/services/dataSync/offer/OfferCreatedService';
+import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
+import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 
-import { OfferCreatedEventSchema } from './events';
+const service: string = getEnvRaw('SERVICE_NAME') ?? 'redemptions';
+const logger = new LambdaLogger({ serviceName: `${service}-created-offer` });
+const connection = await DatabaseConnection.fromEnvironmentVariables(DatabaseConnectionType.READ_WRITE);
 
-type NewRedemption = typeof redemptionsTable.$inferInsert;
-type NewGeneric = typeof genericsTable.$inferInsert;
+const controller = createInjector()
+  // Common
+  .provideValue(Logger.key, logger)
+  .provideValue(DatabaseConnection.key, connection)
+  .provideClass(TransactionManager.key, TransactionManager)
+  // Repositories
+  .provideClass(RedemptionsRepository.key, RedemptionsRepository)
+  .provideClass(GenericsRepository.key, GenericsRepository)
+  // API Service
+  .provideClass(OfferCreatedService.key, OfferCreatedService)
+  // Controller
+  .injectClass(OfferCreatedController);
 
-export const offerCreatedHandler = async ({ db }: DatabaseConnection, logger: ILogger, event: unknown) => {
-  const offerCreatedEvent = OfferCreatedEventSchema.parse(event);
-  const eventDetail = offerCreatedEvent.detail;
-
-  const redemptionData: NewRedemption = {
-    offerId: eventDetail.offerId,
-    companyId: eventDetail.companyId,
-    platform: eventDetail.platform,
-    ...parseRedemptionType(eventDetail.offerUrl, eventDetail.offerCode),
-    ...parseConnection(eventDetail.offerUrl),
-    ...parseOfferType(eventDetail.offerType, eventDetail.offerUrl),
-    ...parseOfferUrl(eventDetail.offerUrl),
-  };
-
-  await db.transaction(async (tx) => {
-    const redemptionInsert = await tx
-      .insert(redemptionsTable)
-      .values(redemptionData)
-      .returning({ id: redemptionsTable.id });
-
-    if (redemptionInsert.length < 1) {
-      logger.error({
-        message: 'Redemption insert for create offer failed',
-        context: {
-          offerId: eventDetail.offerId,
-          companyId: eventDetail.companyId,
-          platform: eventDetail.platform,
-        },
-      });
-      return;
-    }
-
-    const redemptionId = redemptionInsert[0].id;
-    if (redemptionData.redemptionType === 'generic') {
-      const genericData: NewGeneric = {
-        redemptionId: redemptionId,
-        code: eventDetail.offerCode,
-      };
-      const genericInsert = await tx.insert(genericsTable).values(genericData).returning({ id: genericsTable.id });
-
-      if (genericInsert.length < 1) {
-        logger.error({
-          message: 'Generic code insert for create offer failed',
-          context: {
-            offerId: eventDetail.offerId,
-            companyId: eventDetail.companyId,
-            redemptionId: redemptionId,
-            platform: eventDetail.platform,
-          },
-        });
-      }
-    }
-  });
-};
+/**
+ * Handler for event bridge event when an offer is created.
+ */
+export const handler = controller.invoke;

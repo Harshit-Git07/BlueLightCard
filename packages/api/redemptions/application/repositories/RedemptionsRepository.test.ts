@@ -67,4 +67,54 @@ describe('RedemptionsRepository', () => {
       await expect(() => repository.findOneByOfferId(redemption1.offerId)).rejects.toThrow();
     });
   });
+
+  describe('updateByOfferId', () => {
+    it('should update the redemptions record by offer ID', async () => {
+      const offerId = 123;
+      const redemption = redemptionFactory.build({
+        offerId: offerId,
+        companyId: 123,
+        platform: 'BLC_UK',
+        redemptionType: 'preApplied',
+        connection: 'direct',
+        offerType: 'online',
+        url: 'https://www.awin1.com',
+        affiliate: 'awin',
+      });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      const repository = new RedemptionsRepository(connection);
+      const redemptionUpdate = redemptionFactory.build({
+        offerId: offerId,
+        companyId: 123,
+        platform: 'DDS_UK',
+        redemptionType: 'generic',
+        connection: 'none',
+        offerType: 'in-store',
+        url: null,
+        affiliate: null,
+      });
+      await repository.updateByOfferId(offerId, redemptionUpdate);
+      const redemptionData = await connection.db.select().from(redemptionsTable).execute();
+      expect(redemptionData.length).toBe(1);
+      expect(redemptionData[0].affiliate).toBe(null);
+      expect(redemptionData[0].companyId).toBe(123);
+      expect(redemptionData[0].connection).toBe('none');
+      expect(redemptionData[0].offerId).toBe(123);
+      expect(redemptionData[0].offerType).toBe('in-store');
+      expect(redemptionData[0].platform).toBe('DDS_UK');
+      expect(redemptionData[0].redemptionType).toBe('generic');
+      expect(redemptionData[0].url).toBe(null);
+    });
+  });
+
+  describe('createRedemption', () => {
+    it('should create the redemptions record', async () => {
+      const repository = new RedemptionsRepository(connection);
+      const redemption = redemptionFactory.build();
+      await repository.createRedemption(redemption);
+      const redemptionData = await connection.db.select().from(redemptionsTable).execute();
+      expect(redemptionData.length).toBe(1);
+    });
+  });
 });

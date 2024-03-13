@@ -13,6 +13,7 @@ describe('RedeemService', () => {
     const redemptionsRepository = {
       findOneByOfferId: jest.fn(),
       updateByOfferId: jest.fn(),
+      createRedemption: jest.fn(),
       withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;
     const redeemStrategyResolver = {
@@ -39,6 +40,7 @@ describe('RedeemService', () => {
     const redemptionsRepository = {
       findOneByOfferId: jest.fn(),
       updateByOfferId: jest.fn(),
+      createRedemption: jest.fn(),
       withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;
     const redeemStrategyResolver = {

@@ -9,6 +9,7 @@ import { Repository } from './Repository';
 
 export type Redemption = typeof redemptionsTable.$inferSelect;
 export type UpdateRedemption = Partial<typeof redemptionsTable.$inferInsert>;
+export type NewRedemption = typeof redemptionsTable.$inferInsert;
 export interface RedemptionUpdateResults {
   id: string;
 }
@@ -16,6 +17,7 @@ export interface RedemptionUpdateResults {
 export interface IRedemptionsRepository {
   findOneByOfferId(offerId: number): Promise<Redemption | null>;
   updateByOfferId(offerId: number, redemptionDataToUpdate: UpdateRedemption): Promise<Pick<Redemption, 'id'>[]>;
+  createRedemption(redemptionData: NewRedemption): Promise<Pick<Redemption, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): RedemptionsRepository;
 }
 
@@ -78,6 +80,14 @@ export class RedemptionsRepository extends Repository implements IRedemptionsRep
       .returning({
         id: redemptionsTable.id,
       })
+      .execute();
+  }
+
+  public async createRedemption(redemptionData: NewRedemption): Promise<Pick<Redemption, 'id'>[]> {
+    return this.connection.db
+      .insert(redemptionsTable)
+      .values(redemptionData)
+      .returning({ id: redemptionsTable.id })
       .execute();
   }
 

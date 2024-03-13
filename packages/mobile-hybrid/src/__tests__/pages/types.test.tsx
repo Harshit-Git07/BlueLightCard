@@ -82,6 +82,22 @@ describe('Types Page', () => {
 
       expect(requestDataMock).not.toHaveBeenCalled();
     });
+
+    it('should NOT request data when type query param is not within type list', () => {
+      givenTypeQueryParamIs('27');
+
+      whenTypesPageIsRendered();
+
+      expect(requestDataMock).not.toHaveBeenCalled();
+    });
+
+    it('should direct user to "search" page when type query param is not within type list', () => {
+      givenTypeQueryParamIs('27');
+
+      whenTypesPageIsRendered();
+
+      expect(mockRouter.push).toHaveBeenCalledWith('/search');
+    });
   });
 
   describe('Spinner', () => {

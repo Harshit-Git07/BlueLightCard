@@ -4,9 +4,10 @@ import { NextPage } from 'next';
 import { faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { spinner } from '@/modules/Spinner/store';
 import { useSetAtom } from 'jotai';
+import BrowseTypesData from '@/data/BrowseTypes';
 
 const TypesPage: NextPage = () => {
   const router = useRouter();
@@ -17,12 +18,22 @@ const TypesPage: NextPage = () => {
     router.push(`/search`);
   }, [router]);
 
+  const isValidTypeId = useMemo(() => {
+    return BrowseTypesData.find((item) => item.id === typesQueryParam);
+  }, [typesQueryParam]);
+
   useEffect(() => {
-    if (typesQueryParam) {
+    if (typesQueryParam && isValidTypeId) {
       setSpinner(true);
-      return;
     }
-  }, [typesQueryParam, setSpinner]);
+  }, [typesQueryParam, setSpinner, isValidTypeId]);
+
+  useEffect(() => {
+    if (typesQueryParam && !isValidTypeId) {
+      router.push('/search');
+    }
+  }, [typesQueryParam, isValidTypeId, router]);
+
   return (
     <div className="px-4 py-6">
       <button aria-label="Back button" className="mb-10" type="button" onClick={onBack}>
@@ -33,7 +44,9 @@ const TypesPage: NextPage = () => {
           aria-hidden="true"
         />
       </button>
-      {typesQueryParam && <List listVariant={ListVariant.Types} entityId={typesQueryParam} />}
+      {typesQueryParam && isValidTypeId && (
+        <List listVariant={ListVariant.Types} entityId={typesQueryParam} />
+      )}
     </div>
   );
 };

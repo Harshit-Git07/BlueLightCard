@@ -14,6 +14,7 @@ export interface CountrySelector {
 
 export interface NavigationProps {
   navItems:
+    | []
     | [NavItem]
     | [NavItem, NavItem]
     | [NavItem, NavItem, NavItem]
@@ -22,6 +23,7 @@ export interface NavigationProps {
   countries?: CountrySelector[];
   loginLink?: string;
   signUpLink?: string;
+  showFlag?: boolean;
 }
 
 export type NavLinkProps = PropsWithChildren & {

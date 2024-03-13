@@ -57,6 +57,7 @@ const Navigation: FC<NavigationProps> = ({
     },
   ],
   countryKey = 'uk',
+  showFlag = true,
 }) => {
   const selectedCountry = countries?.find((country) => country.key === countryKey);
   const [expanded, setExpanded] = useState(false);
@@ -128,7 +129,7 @@ const Navigation: FC<NavigationProps> = ({
               Sign up
             </NavButtonLink>
           )}
-          {!!(countries && selectedCountry) && (
+          {!!(showFlag && countries && selectedCountry) && (
             <div className="relative z-10">
               <button
                 title={selectedCountry.name}
@@ -162,13 +163,15 @@ const Navigation: FC<NavigationProps> = ({
               </ul>
             </div>
           )}
-          <button
-            className="block laptop:hidden px-3 py-2 rounded-md focus:bg-palette-tertiary-base focus:dark:bg-palette-tertiary-dark text-palette-tertiary-on-base dark:text-palette-tertiary-on-dark"
-            onClick={handleMobileNavClick}
-            aria-label="Open mobile navigation menu"
-          >
-            <FontAwesomeIcon icon={faBars} className="text-white" size="lg" />
-          </button>
+          {navItems.length > 0 && (
+            <button
+              className="block laptop:hidden px-3 py-2 rounded-md focus:bg-palette-tertiary-base focus:dark:bg-palette-tertiary-dark text-palette-tertiary-on-base dark:text-palette-tertiary-on-dark"
+              onClick={handleMobileNavClick}
+              aria-label="Open mobile navigation menu"
+            >
+              <FontAwesomeIcon icon={faBars} className="text-white" size="lg" />
+            </button>
+          )}
         </div>
       </div>
     </div>

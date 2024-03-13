@@ -1,11 +1,11 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import { PostAuthenticationTriggerEvent } from 'aws-lambda';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
-import { UnsuccessfulLoginAttemptsService } from "src/services/UnsuccessfulLoginAttemptsService";
+import { UnsuccessfulLoginAttemptsService } from '../../src/services/UnsuccessfulLoginAttemptsService';
 
 const oldUserPoolId = process.env.OLD_USER_POOL_ID;
 const service: string = process.env.SERVICE as string;
-const logger = new Logger({ serviceName: `${service}-postAuthentication` });
+const logger = new Logger({ serviceName: `${service}-postAuthentication`, logLevel: 'DEBUG' });
 const TABLE_NAME = process.env.TABLE_NAME ?? "";
 
 const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);

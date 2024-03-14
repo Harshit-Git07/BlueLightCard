@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.4...bluelightcard/offers-v1.25.0) (2024-03-14)
+
+
+### Features
+
+* TO-585 company details ([#1024](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1024)) ([3e8277f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3e8277f133dc3c2ba35ecf0c692cd371394d2993))
+* TO-605 lambda rds connection part5 ([#1027](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1027)) ([8885cf0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8885cf0de41e04d8e9f9e0e5fdb9f0c4bb0928b6))
+
+
+### Bug Fixes
+
+* remove Database Route from Production ([#1041](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1041)) ([54b6945](https://github.com/bluelightcard/BlueLightCard-2.0/commit/54b69455b7a0db71873c10ef452405f9f57caf2b))
+
 ## [1.24.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.3...bluelightcard/offers-v1.24.4) (2024-03-08)
 
 

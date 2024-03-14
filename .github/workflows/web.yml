@@ -85,10 +85,12 @@ jobs:
       - name: Lint Styles
         run: npm run lint:style -w packages/web
 
-  pr_deploy_storybook:
+  storybook:
     if: github.event_name == 'pull_request' && needs.changes.outputs.components == 'true'
-    name: PR Deploy Storybook
+    name: Storybook Preview
     runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.cloudflare-pages.outputs.url }}
     needs:
       - install
       - changes
@@ -98,40 +100,46 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Setup
         uses: ./.github/actions/setup
-      - uses: chromaui/action-next@v1
+      - name: Build
+        run: npm run build-storybook -w packages/web
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        id: cloudflare-pages
         with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: packages/web
-          exitZeroOnChanges: false
-          onlyChanged: true
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: web-storybook
+          directory: packages/web/storybook-static
+          branch: ${{ github.ref_name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
-  base_deploy_storybook:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changes.outputs.components == 'true'
-    name: Base Deploy Storybook
+  comment:
+    name: Comment on PR
     runs-on: ubuntu-latest
     needs:
-      - install
-      - changes
-      - test
-      - lint
-      - lint-styles
+      - storybook
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
         with:
-          fetch-depth: 0
-      - name: Setup
-        uses: ./.github/actions/setup
-      - uses: chromaui/action-next@v1
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully deployed storybook'
+
+      - name: Create Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
         with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: packages/web
-          exitZeroOnChanges: false
-          onlyChanged: true
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully deployed storybook
+
+            <p><b>Storybook Url:</b> <a href="${{ needs.storybook.outputs.url }}">${{ needs.storybook.outputs.url }}</a></p>
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

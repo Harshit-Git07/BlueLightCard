@@ -8,7 +8,6 @@ import axios from 'axios';
 import exp from 'constants';
 import { v4 } from 'uuid';
 
-const randomCardNumber = Math.floor(Math.random() * 8888888888888888 + 1111111111111111);
 const brands = ['BLC_UK', 'DDS_UK', 'BLC_AU'];
 const randomBrand = brands[Math.floor(Math.random() * brands.length)];
 

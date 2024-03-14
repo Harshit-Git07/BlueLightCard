@@ -68,4 +68,3 @@ async function deleteDBRecordIfExists(email: string, userPoolId: string) {
 function isNewPool(oldUserPoolId: string | undefined, userPoolId: string) {
   return oldUserPoolId && userPoolId !== oldUserPoolId;
 }
-

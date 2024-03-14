@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.32.0...bluelightcard/web-v1.33.0) (2024-03-13)
+
+
+### Features
+
+* [TI-950] Implement footer ([#981](https://github.com/bluelightcard/BlueLightCard-2.0/issues/981)) ([ed95e30](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed95e30810c2faf875f7f4c5cf7701683ffc807a))
+* [TR-322]: Experiments for redemption types ([#1017](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1017)) ([f154809](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f1548099cbc2f2ea586dacba71e1a76066f9d858))
+* added text optional on share and fav button and moved in api call ([#1039](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1039)) ([d8e345a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d8e345abdedfec4dc16a3f07ab91048106342836))
+* pill component for company page ([#1022](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1022)) ([13a5fab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/13a5fab17ac74eed57f38a83d9a5576aa944fac8))
+* redemption type UI for vaultQR and showCard  ([#936](https://github.com/bluelightcard/BlueLightCard-2.0/issues/936)) ([5bde6e0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5bde6e0a90d928931f0330cda84b3c7e3097fbf2))
+* TI-950: implement header ([#980](https://github.com/bluelightcard/BlueLightCard-2.0/issues/980)) ([46697e5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/46697e5b799e41b257a2c1b34da1b8c57a0e3d90))
+* TI-952: Implement form for extra details after SSO-sign-up ([#1030](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1030)) ([deddbde](https://github.com/bluelightcard/BlueLightCard-2.0/commit/deddbdedf81c5a23349f85d2abaa45b53213b347))
+* TO-592 offer card component ([#985](https://github.com/bluelightcard/BlueLightCard-2.0/issues/985)) ([c8430dd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c8430ddad1baf211aabe10c9861033ce626dbbaf))
+* TO-615 adds moment date library to handle utc dates in OfferSheet labels ([#1034](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1034)) ([1089098](https://github.com/bluelightcard/BlueLightCard-2.0/commit/10890982cb796e7715501a66e4b6b5e93fb71ea2))
+* TR-253 fix mocked data ([#1015](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1015)) ([15b4280](https://github.com/bluelightcard/BlueLightCard-2.0/commit/15b428083f37b71443388bb22aa048b34a11db92))
+* TR-253 redemption offers codes generic vault ([#934](https://github.com/bluelightcard/BlueLightCard-2.0/issues/934)) ([c767a0c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c767a0c92c465801c449b0884151e0662b6e4c79))
+
+
+### Bug Fixes
+
+* change redemption type to generic  ([#1008](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1008)) ([a74b79b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a74b79b0b37caef1e9639121ed5d8ff6b8baa030))
+* fix storybook, adding remaining option for pills ([#1026](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1026)) ([9a7a594](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9a7a59425be31a3129775f13aa59edfdbe7e59a1))
+* fixed bug on offers discount cta ([#1010](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1010)) ([bbe3d22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bbe3d2242956219085d5b9155738ba4a7b98be43))
+* fixed error screen on offers ([#1032](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1032)) ([e146cce](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e146ccec7dca40c7f5a4d8a866817f904ed8a4c9))
+
 ## [1.32.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.31.3...bluelightcard/web-v1.32.0) (2024-03-07)
 
 

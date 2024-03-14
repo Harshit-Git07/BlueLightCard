@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.46.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.45.0...bluelightcard/identity-v1.46.0) (2024-03-14)
+
+
+### Features
+
+* Add audit back in for old cognito pools ([#970](https://github.com/bluelightcard/BlueLightCard-2.0/issues/970)) ([2052940](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2052940da45d954cd6f9357b2a60e3f7e1771925))
+* Ti 000 add debugger to post auth ([#1037](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1037)) ([37ca961](https://github.com/bluelightcard/BlueLightCard-2.0/commit/37ca96196c072cfa108ac9b3dd048a96875f0d3a))
+* ti 889 pre auth lambda and db provision ([#897](https://github.com/bluelightcard/BlueLightCard-2.0/issues/897)) ([b30a12b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b30a12bc4390d9ddd8859f4e929cbf877261eb27))
+* TI-927: Update Cognito UI to match designs BLC_Aus (web) ([#1025](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1025)) ([c4bd3d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c4bd3d827e4298b2f4ea792595ff3b73f2255678))
+
+
+### Bug Fixes
+
+* fix imports ([#1028](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1028)) ([70a3b41](https://github.com/bluelightcard/BlueLightCard-2.0/commit/70a3b41e8a7aef1e85f4213526d77cbf83891b90))
+
 ## [1.45.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.44.0...bluelightcard/identity-v1.45.0) (2024-02-29)
 
 

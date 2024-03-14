@@ -3,7 +3,7 @@ import { Stack } from 'sst/constructs';
 import { IVpc, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import { DatabaseConfigurator } from './config';
 import { IDatabaseAdapter } from './IDatabaseAdapter';
-import { isDev } from '../../../../core/src/utils/checkEnvironment';
+import { isDev, isProduction } from '../../../../core/src/utils/checkEnvironment';
 import { Database } from './database';
 import { EC2Manager } from '../ec2-manager';
 import { SecurityGroupManager } from '../security-group-manager';
@@ -31,7 +31,10 @@ export class DatabaseAdapter {
     );
     const config: DatabaseConfig = new DatabaseConfigurator(db.database).config;
     const adapter: IDatabaseAdapter = this.createDatabaseFunctionProps(db, config);
-    DatabaseAdapter._db = adapter;
+    if (!isProduction(this.stack.stage)) {
+      // Todo: Remove this condition after database Prod setup
+      DatabaseAdapter._db = adapter;
+    }
     return adapter;
   }
 

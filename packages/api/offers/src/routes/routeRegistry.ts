@@ -6,6 +6,7 @@ import { Model } from 'aws-cdk-lib/aws-apigateway';
 import { DatabaseRoute } from './database/databaseRoute';
 import { CompanyRoutes } from './company/companyRoutes';
 import { CompanyInfoModel } from 'src/models/companyInfo';
+import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 
 /**
  * The RouteRegistry class provides a centralized way to register all routes for the application.
@@ -24,11 +25,14 @@ export class RouteRegistry {
   private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api) {
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
     const modelMap = this.generateModels(apiGatewayModelGenerator);
-    new DatabaseRoute({
-      stack,
-      api,
-      apiGatewayModelGenerator,
-    }).initialiseRoutes();
+    if (!isProduction(stack.stage)) {
+      // TODO: Remove this Condition after adding Prod DB
+      new DatabaseRoute({
+        stack,
+        api,
+        apiGatewayModelGenerator,
+      }).initialiseRoutes();
+    }
     new OffersRoutes({
       stack,
       api,

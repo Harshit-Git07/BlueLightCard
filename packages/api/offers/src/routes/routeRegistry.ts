@@ -4,6 +4,8 @@ import { ApiGatewayModelGenerator } from '../../../core/src/extensions/apiGatewa
 import { OffersModel } from '../models/offers';
 import { Model } from 'aws-cdk-lib/aws-apigateway';
 import { DatabaseRoute } from './database/databaseRoute';
+import { CompanyRoutes } from './company/companyRoutes';
+import { CompanyInfoModel } from 'src/models/companyInfo';
 
 /**
  * The RouteRegistry class provides a centralized way to register all routes for the application.
@@ -31,13 +33,15 @@ export class RouteRegistry {
       stack,
       api,
       apiGatewayModelGenerator,
-      model: modelMap.get('OffersModel')!,
+      model: modelMap.get('CompanyInfoModel')!,
     }).initialiseRoutes();
+    new CompanyRoutes({ stack, api, apiGatewayModelGenerator, model: modelMap.get('OffersModel')! }).initialiseRoutes();
   }
 
   private generateModels(agmg: ApiGatewayModelGenerator): Map<string, Model> {
     const models: Map<string, Model> = new Map();
     models.set('OffersModel', agmg.generateModel(OffersModel).getModel());
+    models.set('CompanyInfoModel', agmg.generateModel(CompanyInfoModel).getModel());
 
     return models;
   }

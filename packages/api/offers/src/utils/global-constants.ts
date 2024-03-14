@@ -50,7 +50,9 @@ export const enum OFFER_MENUS_FILE_NAMES {
   MARKETPLACE = 'marketplace.txt',
 }
 
-export const LEGACY_RETRIEVE_OFFERS_URL = 'api/4/offer/retrieve.php';
+export enum LegacyAPIEndPoints {
+  RETRIEVE_OFFERS = 'api/4/offer/retrieve.php',
+}
 
 export enum LEGACY_API_BASE_URL {
   PRODUCTION = 'https://www.bluelightcard.co.uk',

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.47.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.46.0...bluelightcard/identity-v1.47.0) (2024-03-14)
+
+
+### Features
+
+* Ti 000 pr to get database adapter fix on prod ([#1044](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1044)) ([d743aed](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d743aedf4f86ab63cfe03942588323569a6fa8d3))
+
 ## [1.46.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.45.0...bluelightcard/identity-v1.46.0) (2024-03-14)
 
 

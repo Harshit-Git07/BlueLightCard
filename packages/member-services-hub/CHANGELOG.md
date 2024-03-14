@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.3.2...bluelightcard/member-services-hub-v1.4.0) (2024-03-13)
+
+
+### Features
+
+* [TR-322]: Experiments for redemption types ([#1017](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1017)) ([f154809](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f1548099cbc2f2ea586dacba71e1a76066f9d858))
+* TR-253 redemption offers codes generic vault ([#934](https://github.com/bluelightcard/BlueLightCard-2.0/issues/934)) ([c767a0c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c767a0c92c465801c449b0884151e0662b6e4c79))
+
 ## [1.3.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.3.1...bluelightcard/member-services-hub-v1.3.2) (2024-02-07)
 
 

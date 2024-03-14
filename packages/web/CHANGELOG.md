@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.33.0...bluelightcard/web-v1.34.0) (2024-03-14)
+
+
+### Features
+
+* feat/TO-595-addCompanyAboutComponent ([#1040](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1040)) ([ed4f033](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed4f033291306594c8f10276276d4f5303a3bc30))
+
 ## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.32.0...bluelightcard/web-v1.33.0) (2024-03-13)
 
 

@@ -1,6 +1,7 @@
 export interface LinkProps {
   useLegacyRouting?: boolean;
-  href: string;
+  href?: string;
   children?: React.ReactNode[] | React.ReactNode;
+  onClickLink?: () => void;
   [key: string]: any;
 }

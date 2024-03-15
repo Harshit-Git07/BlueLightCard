@@ -27,6 +27,7 @@ export type OfferTopDetailsHeaderProps = {
   showOfferDescription?: boolean;
   showShareFavorite?: boolean;
   showTerms?: boolean;
+  showExclusions?: boolean;
 };
 
 export type RedemptionDetails = {

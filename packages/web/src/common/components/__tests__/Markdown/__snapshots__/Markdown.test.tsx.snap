@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Markdown component should render Markdown content 1`] = `
+<span>
+  These are the terms and conditions for the above offer.
+</span>
+`;
+
+exports[`Markdown component should render Markdown with bold text 1`] = `
+<span>
+  These are 
+  <strong>
+    bold
+  </strong>
+   terms and conditions for the above offer.
+</span>
+`;
+
+exports[`Markdown component should render Markdown with italic text 1`] = `
+<span>
+  These are 
+  <em>
+    italic
+  </em>
+   terms and conditions for the above offer.
+</span>
+`;
+
+exports[`Markdown component should render Markdown with new lines text 1`] = `
+<p>
+  These are 
+ terms and conditions 
+ on a new line 
+ for the above offer.
+</p>
+`;
+
+exports[`Markdown component should render Markdown with strike through text 1`] = `
+<del>
+  These are terms and conditions on a new line for the above offer.
+</del>
+`;
+
+exports[`Markdown component should render Markdown with strong text 1`] = `
+<span>
+  These are 
+  <strong>
+    strong
+  </strong>
+   terms and conditions for the above offer.
+</span>
+`;

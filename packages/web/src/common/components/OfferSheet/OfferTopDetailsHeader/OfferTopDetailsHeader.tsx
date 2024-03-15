@@ -9,6 +9,8 @@ import Accordion from '../../Accordion/Accordion';
 import ShareButton from '@/components/ShareButton/ShareButton';
 import FavouriteButton from '@/components/FavouriteButton/FavouriteButton';
 import Heading from '@/components/Heading/Heading';
+import Markdown from '@/components/Markdown/Markdown';
+import IconListItem from '@/components/IconListItem/IconListItem';
 
 const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
   offerData,
@@ -16,6 +18,7 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
   showOfferDescription = true,
   showShareFavorite = true,
   showTerms = true,
+  showExclusions = true,
 }) => {
   const { open } = useContext(OfferSheetContext);
   const [expanded, setExpanded] = useState(false);
@@ -116,12 +119,42 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
           </div>
         )}
 
-        {/* Offer Terms & Conditions */}
-        {showTerms && (
+        {/* Exclusions */}
+        {/* TODO add check on API integration do only display this block if exclusions exist in the offer*/}
+        {showExclusions && (
           <div className="w-full text-left mt-4">
-            {offerData.terms && (
-              <Accordion title="Terms and Conditions" content={offerData.terms} />
-            )}
+            <Accordion title="Exclusions">
+              {/* TODO for each exclusion check if it exists in the offer response to display */}
+              <IconListItem
+                iconSrc="/assets/box-open-light-slash.svg"
+                title="Not valid on certain item(s)"
+                link="View details"
+                onClickLink={() => console.log('link clicked!')}
+              />
+              <IconListItem
+                iconSrc="/assets/store-light-slash.svg"
+                title="Not valid in certain store(s)"
+                link="View details"
+                onClickLink={() => console.log('link clicked!')}
+              />
+              <IconListItem
+                iconSrc="/assets/tags-light-slash.svg"
+                title="Not valid with other promotions"
+              />
+              <IconListItem
+                iconSrc="/assets/circle-sterling-light.svg"
+                title="Only valid on full price items"
+              />
+            </Accordion>
+          </div>
+        )}
+
+        {/* Offer Terms & Conditions */}
+        {showTerms && offerData.terms && (
+          <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
+            <Accordion title="Terms & Conditions">
+              <Markdown content={offerData.terms} />
+            </Accordion>
           </div>
         )}
       </div>

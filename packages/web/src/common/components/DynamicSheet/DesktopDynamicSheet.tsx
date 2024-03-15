@@ -36,7 +36,7 @@ const DesktopDynamicSheet: React.FC<DynamicSheetProps> = ({
             />
           </div>
         )}
-        <div className={`${containerClassName} flex-1 w-full h-full overflow-scroll`}>
+        <div className={`${containerClassName} flex-1 w-full h-full overflow-scroll pb-40`}>
           {children}
         </div>
       </div>

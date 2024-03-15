@@ -24,4 +24,15 @@ describe('Custom Link component which allows for legacy routing', () => {
     const element = screen.getByTestId('next-link');
     expect(element).toBeTruthy();
   });
+
+  it('should use a div when there is no href and an onLinkClick function is passed on', () => {
+    const {} = render(
+      <Link useLegacyRouting={false} onClickLink={() => {}}>
+        Test
+      </Link>
+    );
+
+    const element = screen.getByTestId('on-click-link');
+    expect(element).toBeTruthy();
+  });
 });

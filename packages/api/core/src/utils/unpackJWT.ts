@@ -1,6 +1,7 @@
 import jwt_decode from "jwt-decode";
 
 type JWT = {
+  sub: string;
   phone_number: string;
   exp: number;
   iat: number;

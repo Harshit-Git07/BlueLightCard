@@ -21,6 +21,7 @@ const customJestConfig = {
     'src/services/EligibilityApi': '<rootDir>/src/services/EligibilityApi',
     '^.+\\.(svg)$': '<rootDir>/src/__mocks__/SvgrMock.js',
     '\\.(scss|sass|css)$': 'identity-obj-proxy',
+    '^uuid$': require.resolve('uuid'),
   },
   transform: {
     '^.+\\.css$': 'jest-transform-css',

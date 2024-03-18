@@ -53,6 +53,8 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     needs: install
+    env:
+      NEXT_PUBLIC_COGNITO_CLIENT_REGION: eu-west-2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -204,6 +206,7 @@ jobs:
       NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT: https://hmkt7fpodd.execute-api.eu-west-2.amazonaws.com/develop/Favourites/update
       NEXT_PUBLIC_RETRIEVE_OFFER_ENDPOINT: https://6sz52oo9ud.execute-api.eu-west-2.amazonaws.com/v1/offers/
       NEXT_PUBLIC_APP_MICROSERVICE_BRAND: BLC
+      NEXT_PUBLIC_COGNITO_CLIENT_REGION: eu-west-2
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import AuthContext from './AuthContext';
+import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -18,25 +19,30 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
     accessToken: '',
     idToken: '',
     refreshToken: '',
+    username: '',
   });
 
   const setUserAuthInfo = ({
     accessToken,
     idToken,
     refreshToken,
+    username,
   }: {
     accessToken: string;
     idToken: string;
     refreshToken: string;
+    username: string;
   }) => {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('idToken', idToken);
     localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('username', username);
 
     setAuthState({
       accessToken,
       idToken,
       refreshToken,
+      username,
     });
   };
 
@@ -45,6 +51,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
       accessToken: localStorage.getItem('accessToken') || '',
       idToken: localStorage.getItem('idToken') || '',
       refreshToken: localStorage.getItem('refreshToken') || '',
+      username: localStorage.getItem('username') || '',
     });
 
     setIsReady(true);
@@ -52,16 +59,21 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
 
   // checks if the user is authenticated or not
   const isUserAuthenticated = () => {
-    if (!authState.accessToken && !authState.idToken) {
+    if (
+      !authState.accessToken &&
+      !authState.idToken &&
+      !authState.username &&
+      !authState.refreshToken
+    ) {
       return false;
     }
 
-    const { exp: tokenExpiryTimeStamp } = unpackJWT(authState.idToken);
+    const { exp: tokenExpiryTimeStamp, sub: username } = unpackJWT(authState.idToken);
 
     const currentTimeStamp = Math.ceil(Date.now() / 1000);
 
     if (currentTimeStamp >= tokenExpiryTimeStamp) {
-      return false;
+      return reAuthFromRefreshToken(username, authState.refreshToken);
     }
 
     return true;

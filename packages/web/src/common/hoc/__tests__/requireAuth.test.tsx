@@ -42,6 +42,7 @@ describe('withAuth HOC', () => {
     process.env = {
       ...originalEnv,
       NEXT_PUBLIC_LOGIN_ROUTE: '/login',
+      NEXT_PUBLIC_COGNITO_CLIENT_REGION: 'eu-west-2',
     };
   });
 
@@ -67,7 +68,7 @@ describe('withAuth HOC', () => {
     expect(displayText).toBeNull();
   });
 
-  it('should fail to authenticate due to expried token, therefore failing to show the component', () => {
+  it('should continue with expired token as refresh token authed, therefore not failing to show the component', () => {
     const text = 'Hello World';
     const Comp: NextPage<any> = (props: any) => {
       return <h1>{text}</h1>;
@@ -87,7 +88,7 @@ describe('withAuth HOC', () => {
     );
 
     const displayText = screen.queryByText(text);
-    expect(displayText).toBeNull();
+    expect(displayText).toBeTruthy();
   });
 
   // Success Cases
@@ -115,7 +116,12 @@ describe('withAuth HOC', () => {
       const ctx = useContext(AuthContext);
 
       useEffect(() => {
-        ctx.updateAuthTokens({ accessToken: 'test', idToken: 'test' });
+        ctx.updateAuthTokens({
+          accessToken: 'test',
+          idToken: 'test',
+          refreshToken: 'test',
+          username: 'test',
+        });
         // Linting disabled because it causes an infinite loop
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
@@ -131,9 +137,13 @@ describe('withAuth HOC', () => {
 
     const accessToken = localStorage.getItem('accessToken');
     const idToken = localStorage.getItem('idToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    const username = localStorage.getItem('username');
 
     expect(accessToken).toBe('test');
     expect(idToken).toBe('test');
+    expect(refreshToken).toBe('test');
+    expect(username).toBe('test');
   });
 
   it('should attempt to redirect using window.location.replace due to domain name', () => {

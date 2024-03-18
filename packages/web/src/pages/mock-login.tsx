@@ -11,10 +11,17 @@ import AuthContext from '@/context/Auth/AuthContext';
 import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
 import withLayout from '@/hoc/withLayout';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
+import { unpackJWT } from '@core/utils/unpackJWT';
 
 function MockLogin() {
   // As this exposes client_secret which should not be exposed.
   // This is only a mock of the login, used to get a token for testing GraphQL queries it is NOT INTENDED FOR PRODUCTION.
+
+  function getUsername(token: string) {
+    const { sub: username } = unpackJWT(token);
+    return username;
+  }
+
   async function getToken(username: string, password: string) {
     const secret = secretHash(username, COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET);
 
@@ -49,6 +56,7 @@ function MockLogin() {
           accessToken: response.data.AuthenticationResult.AccessToken,
           idToken: response.data.AuthenticationResult.IdToken,
           refreshToken: response.data.AuthenticationResult.RefreshToken,
+          username: getUsername(response.data.AuthenticationResult.AccessToken),
         });
 
         const redirect = router.query.redirect as string;

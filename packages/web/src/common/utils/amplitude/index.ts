@@ -5,7 +5,7 @@ import { AMPLITUDE_API_KEY } from '@/global-vars';
 import EVENTS from './events';
 
 export function initialiseAmplitude() {
-  const idToken = localStorage.getItem('idToken');
+  const idToken = localStorage.getItem('idToken') ?? '';
 
   if (idToken) {
     let { 'custom:blc_old_uuid': userId } = unpackJWT(idToken);

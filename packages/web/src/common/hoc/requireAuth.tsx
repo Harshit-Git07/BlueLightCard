@@ -1,11 +1,11 @@
 import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
-
 import AuthContext from '@/context/Auth/AuthContext';
-
 import { LOGOUT_ROUTE } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
+import { unpackJWT } from '@core/utils/unpackJWT';
+import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 
 export function redirectToLogin(router: NextRouter) {
   if (process.env.NODE_ENV == 'production') {
@@ -15,14 +15,37 @@ export function redirectToLogin(router: NextRouter) {
   }
 }
 
+function isAuthed(idToken: string, refreshToken: string) {
+  const { exp: tokenExpiryTimeStamp, sub: usernameFromToken } = unpackJWT(idToken);
+
+  const currentTimeStamp = Math.ceil(Date.now() / 1000);
+
+  if (currentTimeStamp >= tokenExpiryTimeStamp) {
+    //refresh token and update storage and return true or false based on if it works
+    return reAuthFromRefreshToken(usernameFromToken, refreshToken);
+  }
+  return true;
+}
+
 const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
   const Component: React.FC<any> = (props: any) => {
     const authContext = useContext(AuthContext);
     const router = useRouter();
 
-    // TODO: Check idToken and refreshToken in local storage and refresh if appropriate
-    // If refresh not 200, call LOGOUT_ROUTE in global-vars.js
     useEffect(() => {
+      const idToken: string = localStorage.getItem('idToken') as string;
+      const accessToken: string = localStorage.getItem('accessToken') as string;
+      const refreshToken: string = localStorage.getItem('refreshToken') as string;
+      const username: string = localStorage.getItem('username') as string;
+      if (idToken && username && accessToken && refreshToken) {
+        authContext.authState.idToken = idToken;
+        authContext.authState.accessToken = accessToken;
+        authContext.authState.refreshToken = refreshToken;
+        authContext.authState.username = username;
+        const isAuthenticated = isAuthed(idToken, refreshToken);
+        authContext.isReady = isAuthenticated;
+        authContext.isUserAuthenticated = () => isAuthenticated;
+      }
       if (authContext.isReady && !authContext.isUserAuthenticated()) {
         redirectToLogin(router);
       }

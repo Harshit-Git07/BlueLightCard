@@ -54,6 +54,8 @@ const whenComponentIsRendered = () => {
         authState: {
           accessToken: '',
           idToken: '',
+          refreshToken: '',
+          username: '',
         },
         updateAuthTokens: jest.fn(),
         isUserAuthenticated: jest.fn(),

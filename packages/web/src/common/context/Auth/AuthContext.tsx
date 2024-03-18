@@ -1,6 +1,8 @@
 import React from 'react';
 
 export type AuthState = {
+  username: string;
+  refreshToken: string;
   accessToken: string;
   idToken: string;
 };
@@ -16,6 +18,8 @@ const AuthContext = React.createContext<AuthContextType>({
   authState: {
     accessToken: '',
     idToken: '',
+    refreshToken: '',
+    username: '',
   },
   updateAuthTokens: () => {},
   isUserAuthenticated: () => {

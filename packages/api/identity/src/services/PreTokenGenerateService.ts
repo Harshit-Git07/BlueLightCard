@@ -18,7 +18,7 @@ export class PreTokenGenerateService {
       const cardStatusResponse = await this.userRepository.findItemsByUuid(uuid);
 
       cardStatusResponse.Items?.map((i) => {
-        if (i.sk.includes('CARD')) {
+        if (i.sk.includes('CARD') && CardModel.parse(i).cardId !== 'null') {
           this.cardDetails.push(CardModel.parse(i));
         }
       });

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.48.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.47.0...bluelightcard/identity-v1.48.0) (2024-03-18)
+
+
+### Features
+
+* ti 925 add card status to jwt token ([#1059](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1059)) ([fe288ff](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fe288ff1d62b365f94497037c96edc26f902f839))
+* ti-925 Add user card status to token ([#978](https://github.com/bluelightcard/BlueLightCard-2.0/issues/978)) ([6490c93](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6490c93a7a481ad7163bde5f69074aa73986aa95))
+
 ## [1.47.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.46.0...bluelightcard/identity-v1.47.0) (2024-03-14)
 
 

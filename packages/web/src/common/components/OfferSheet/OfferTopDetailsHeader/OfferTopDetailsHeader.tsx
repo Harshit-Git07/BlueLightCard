@@ -99,12 +99,10 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
               />
             )}
           </div>
-
           {/* Offer Name */}
           <Heading headingLevel={'h2'} className={'leading-8 mt-4 !text-black'}>
             {offerData.name}
           </Heading>
-
           {/* Offer description */}
           {showOfferDescription && (
             <>
@@ -133,7 +131,6 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
               )}
             </>
           )}
-
           {/* Share & Favorite */}
           {showShareFavorite && (
             <div className={`flex flex-wrap justify-center mt-4`}>
@@ -141,13 +138,12 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
               <FavouriteButton {...{ offerData, companyId }} />
             </div>
           )}
-
           {/* Exclusions */}
+          {/* --- Uncomment when Exclusions API is ready --- */}
           {/* TODO add check on API integration do only display this block if exclusions exist in the offer*/}
-          {showExclusions && (
+          {/* {showExclusions && (
             <div className="w-full text-left mt-4">
               <Accordion title="Exclusions">
-                {/* TODO for each exclusion check if it exists in the offer response to display */}
                 <IconListItem
                   iconSrc="/assets/box-open-light-slash.svg"
                   title="Not valid on certain item(s)"
@@ -170,8 +166,7 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
                 />
               </Accordion>
             </div>
-          )}
-
+          )} */}
           {/* Offer Terms & Conditions */}
           {showTerms && offerData.terms && (
             <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
@@ -181,6 +176,7 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
             </div>
           )}
         </div>
+        {/* --- Uncomment when Exclusions API is ready ---
         <OfferExclusions
           navigateBack={() => setOpenExclusionsDetails(null)}
           openExclusionsDetails={!!openExclusionsDetails}
@@ -189,7 +185,7 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
           }
           iconSrc={openExclusionsDetails ? exclusionsParser[openExclusionsDetails].iconSrc : ''}
           text={openExclusionsDetails ? exclusionsParser[openExclusionsDetails].text : ''}
-        />
+        /> */}
       </div>
     </>
   );

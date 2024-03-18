@@ -5,11 +5,25 @@ import { createHmac } from 'crypto';
 
 import { describe, expect, test } from '@jest/globals';
 import axios from 'axios';
-import exp from 'constants';
-import { v4 } from 'uuid';
 
 const brands = ['BLC_UK', 'DDS_UK', 'BLC_AU'];
 const randomBrand = brands[Math.floor(Math.random() * brands.length)];
+
+const randomSurname = generateString(12);
+const randomFirstname = generateString(12);
+let client: any = {};
+let data: { user_api_url: ''; event_bus: ''; table_name: ''; aws_region: ''; user_uuid: ''; user_email: '', user_pass: '', cognito_user_pool_id: '', cognito_app_client_id: '', cognito_app_client_secret: '' };
+let url = '';
+let body: Record<string, unknown> = {};
+let headers: Record<string, unknown> = {};
+const timeOut = 100;
+let res: any = {};
+let userApiResponse: any;
+let sum = 0;
+let userCardId = 0;
+let cardPostedDate = '';
+let cardExpiresDate = '';
+let cognito:any;
 
 async function delay(ms: number): Promise<object> {
   return await new Promise((resolve) => setTimeout(resolve, ms));
@@ -28,6 +42,57 @@ async function loadParameter(parameterName: string): Promise<string> {
   }
 }
 
+async function setupTest() {
+  const value = await loadParameter('e2e');
+  const data = JSON.parse(value)
+  process.env.E2E_AWS_REGION = data.aws_region;
+  process.env.E2E_USER_API_URL = data.user_api_url;
+  process.env.E2E_TABLE_NAME = data.table_name;
+  process.env.E2E_EVENT_BUS = data.event_bus;
+  process.env.E2E_USER_UUID = data.user_uuid;
+  process.env.E2E_USER_EMAIL = data.user_email;
+  process.env.E2E_USER_PASS = data.user_pass;
+  process.env.E2E_COGNITO_USER_POOL_ID = data.cognito_user_pool_id;
+  process.env.E2E_COGNITO_APP_CLIENT_ID = data.cognito_app_client_id;
+  process.env.E2E_COGNITO_APP_CLIENT_SECRET = data.cognito_app_client_secret;
+
+  cognito = new CognitoIdentityProviderClient({ 
+    apiVersion: '2016-04-18',
+    region: process.env.E2E_AWS_REGION
+  });
+}
+
+async function loginUserAPI() {
+  const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
+  hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
+  const input = {
+    AuthFlow : 'USER_PASSWORD_AUTH', 
+    AuthParameters: {
+    USERNAME : `${process.env.E2E_USER_EMAIL}`,
+    PASSWORD : `${process.env.E2E_USER_PASS}`,
+    SECRET_HASH: `${hasher.digest('base64')}`
+    },
+    UserPoolId : `${process.env.E2E_COGNITO_USER_POOL_ID}`,
+    ClientId : `${process.env.E2E_COGNITO_APP_CLIENT_ID}`
+  };
+
+  const command = new InitiateAuthCommand(input);
+    const response = await cognito.send(command);
+    process.env.identityTableName = process.env.E2E_TABLE_NAME;
+    if(response && response.AuthenticationResult && (response.AuthenticationResult.IdToken !== undefined || response.AuthenticationResult.IdToken !== '')){
+      try {
+        const userApiResponse:any = await axios.get(
+          `${process.env.E2E_USER_API_URL}`, 
+          {
+            headers: { "Authorization": `Bearer ${response.AuthenticationResult.IdToken}` }
+          }
+        );
+        await delay(1000)
+        return userApiResponse;
+      } catch (err: any) {}
+    }
+}
+
 function generateString(length: number): string {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -38,70 +103,38 @@ function generateString(length: number): string {
 
   return result;
 }
-const randomSurname = generateString(12);
-const randomFirstname = generateString(12);
-const randomUUId = v4();
-let client: any = {};
-let cognito: any = {};
-let data: { user_api_url: ''; event_bus: ''; table_name: ''; aws_region: ''; user_uuid: ''; user_email: '', user_pass: '', cognito_user_pool_id: '', cognito_app_client_id: '', cognito_app_client_secret: '' };
-let url = '';
-let body: Record<string, unknown> = {};
-let headers: Record<string, unknown> = {};
-let res: any = {};
-const timeOut = 100;
-let sum = 0;
-let userCardId = 0;
-let cardPostedDate = '';
-let cardExpiresDate = '';
+
 
 describe('Fetch env variables', () => {
+  beforeAll(async () => {
+    await setupTest();    
+  })
   afterEach(async () => {
     sum += timeOut + timeOut;
     await delay(sum);
   });
   test('Env variable are not null', async () => {
-    loadParameter('e2e')
-      .then((value) => {
-        data = JSON.parse(value);
-        console.log(data.aws_region);
-        process.env.E2E_AWS_REGION = data.aws_region;
-        process.env.E2E_USER_API_URL = data.user_api_url;
-        process.env.E2E_TABLE_NAME = data.table_name;
-        process.env.E2E_EVENT_BUS = data.event_bus;
-        process.env.E2E_USER_UUID = data.user_uuid;
-        process.env.E2E_USER_EMAIL = data.user_email;
-        process.env.E2E_USER_PASS = data.user_pass;
-        process.env.E2E_COGNITO_USER_POOL_ID = data.cognito_user_pool_id;
-        process.env.E2E_COGNITO_APP_CLIENT_ID = data.cognito_app_client_id;
-        process.env.E2E_COGNITO_APP_CLIENT_SECRET = data.cognito_app_client_secret;
+    expect(process.env.E2E_AWS_REGION).toBeTruthy();
+    expect(process.env.E2E_USER_API_URL).toBeTruthy();
+    expect(process.env.E2E_TABLE_NAME).toBeTruthy();
+    expect(process.env.E2E_EVENT_BUS).toBeTruthy();
+    expect(process.env.E2E_USER_UUID).toBeTruthy();
+    expect(process.env.E2E_USER_EMAIL).toBeTruthy();
+    expect(process.env.E2E_USER_PASS).toBeTruthy();
+    expect(process.env.E2E_COGNITO_USER_POOL_ID).toBeTruthy();
+    expect(process.env.E2E_COGNITO_APP_CLIENT_ID).toBeTruthy();
+    expect(process.env.E2E_COGNITO_APP_CLIENT_SECRET).toBeTruthy();
 
-        expect(process.env.E2E_AWS_REGION).toBeTruthy();
-        expect(process.env.E2E_USER_API_URL).toBeTruthy();
-        expect(process.env.E2E_TABLE_NAME).toBeTruthy();
-        expect(process.env.E2E_EVENT_BUS).toBeTruthy();
-        expect(process.env.E2E_USER_UUID).toBeTruthy();
-        expect(process.env.E2E_USER_EMAIL).toBeTruthy();
-        expect(process.env.E2E_USER_PASS).toBeTruthy();
-        expect(process.env.E2E_COGNITO_USER_POOL_ID).toBeTruthy();
-        expect(process.env.E2E_COGNITO_APP_CLIENT_ID).toBeTruthy();
-        expect(process.env.E2E_COGNITO_APP_CLIENT_SECRET).toBeTruthy();
-
-        client = new EventBridgeClient({ region: process.env.E2E_AWS_REGION });
-        cognito = new CognitoIdentityProviderClient({ 
-          apiVersion: '2016-04-18',
-          region: process.env.E2E_AWS_REGION
-      });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    await delay(5000);
-  }, 10000);
+    client = new EventBridgeClient({ region: process.env.E2E_AWS_REGION });
+  });
 });
 
 let dataToSend: Record<string, string | number> = {};
 
 describe('Send user profile update event, and test user api to match data', () => {
+  beforeAll(async () => {
+    await setupTest();    
+  })
   beforeEach(async () => {
     res = {};
     sum += timeOut;
@@ -134,36 +167,10 @@ describe('Send user profile update event, and test user api to match data', () =
       expect(res.statusText).toEqual('OK');
       expect(res.data.data.message).toEqual('user profile data added');
     } catch (error) {}
-
   });
 
   test('User api - returns expected data', async () => {
-    const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
-  
-    hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
-    const input = {
-      AuthFlow : 'USER_PASSWORD_AUTH', 
-      AuthParameters: {
-      USERNAME : `${process.env.E2E_USER_EMAIL}`,
-      PASSWORD : `${process.env.E2E_USER_PASS}`,
-      SECRET_HASH: `${hasher.digest('base64')}`
-      },
-      UserPoolId : `${process.env.E2E_COGNITO_USER_POOL_ID}`,
-      ClientId : `${process.env.E2E_COGNITO_APP_CLIENT_ID}`
-  };
-  
-    const command = new InitiateAuthCommand(input);
-    try {
-      const response = await cognito.send(command);
-      process.env.identityTableName = process.env.E2E_TABLE_NAME;
-      if(response.AuthenticationResult.IdToken !== undefined || response.AuthenticationResult.IdToken !== ''){
-        try{
-          res = await axios.get(`${process.env.E2E_USER_API_URL}`, {
-          headers: { "Authorization": `Bearer ${response.AuthenticationResult.IdToken}` }
-        });
-      }catch (err: any) {}
-      }
-    } catch (err: any) {console.log(err);}
+    const res = await loginUserAPI();
     expect(res.status).toEqual(200);
     expect(res.data.message).toEqual('User Found');
     expect(res.data.data.profile.gender).toEqual('P');
@@ -179,11 +186,13 @@ describe('Send user profile update event, and test user api to match data', () =
     userCardId = res.data.data.cards[0].cardId;
     cardPostedDate = res.data.data.cards[0].datePosted;
     cardExpiresDate = res.data.data.cards[0].expires;
-
-  });
+  }, 10000);
 });
 
 describe('Send user card update event, and test user api to match data', () => {
+  beforeAll(async () => {
+    await setupTest();    
+  })
   beforeEach(async () => {
     res = {};
     sum += timeOut;
@@ -218,32 +227,7 @@ describe('Send user card update event, and test user api to match data', () => {
   });
 
   test('User api - returns expected data for card', async () => {
-    const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
-  
-    hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
-    const input = {
-      AuthFlow : 'USER_PASSWORD_AUTH', 
-      AuthParameters: {
-      USERNAME : `${process.env.E2E_USER_EMAIL}`,
-      PASSWORD : `${process.env.E2E_USER_PASS}`,
-      SECRET_HASH: `${hasher.digest('base64')}`
-      },
-      UserPoolId : `${process.env.E2E_COGNITO_USER_POOL_ID}`,
-      ClientId : `${process.env.E2E_COGNITO_APP_CLIENT_ID}`
-  };
-  
-    const command = new InitiateAuthCommand(input);
-    try {
-      const response = await cognito.send(command);
-      process.env.identityTableName = process.env.E2E_TABLE_NAME;
-      if(response.AuthenticationResult.IdToken !== undefined || response.AuthenticationResult.IdToken !== ''){
-        try{
-          res = await axios.get(`${process.env.E2E_USER_API_URL}`, {
-          headers: { "Authorization": `Bearer ${response.AuthenticationResult.IdToken}` }
-        });
-      }catch (err: any) {}
-      }
-    } catch (err: any) {console.log(err);}
+    const res = await loginUserAPI();
     expect(res.status).toEqual(200);
     expect(res.data.message).toEqual('User Found');
     expect(res.data.data.uuid).not.toBeNull();
@@ -260,8 +244,7 @@ describe('Send user card update event, and test user api to match data', () => {
     }else{
       expect(res.data.data.cards[0].datePosted).not.toBe('0000000000000000');
     }
-
-  });
+  }, 10000);
 
   test('Event bus - user card update sets card status, expires and posted in correct format', async () => {
     dataToSend.uuid = String(process.env.E2E_USER_UUID);
@@ -292,39 +275,16 @@ describe('Send user card update event, and test user api to match data', () => {
   });
 
   test('User api - returns expected data for card', async () => {
-    const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
+    for (let i = 1; i <= 10; i++) { //run this test 10 times to test so that we test pre/post auth lambdas
+      const res = await loginUserAPI();
+      expect(res.status).toEqual(200);
+      expect(res.data.message).toEqual('User Found');
+      expect(res.data.data.cards[0].cardId).toEqual(userCardId);
+      expect(res.data.data.cards[0].expires).not.toBe('0000000000000000');
+      expect(res.data.data.cards[0].cardStatus).toEqual('PHYSICAL_CARD');
+      expect(res.data.data.cards[0].datePosted).not.toBe('0000000000000000');
+    }
+  }, 20000);
   
-    hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
-    const input = {
-      AuthFlow : 'USER_PASSWORD_AUTH', 
-      AuthParameters: {
-      USERNAME : `${process.env.E2E_USER_EMAIL}`,
-      PASSWORD : `${process.env.E2E_USER_PASS}`,
-      SECRET_HASH: `${hasher.digest('base64')}`
-      },
-      UserPoolId : `${process.env.E2E_COGNITO_USER_POOL_ID}`,
-      ClientId : `${process.env.E2E_COGNITO_APP_CLIENT_ID}`
-  };
-  
-    const command = new InitiateAuthCommand(input);
-    try {
-      const response = await cognito.send(command);
-      process.env.identityTableName = process.env.E2E_TABLE_NAME;
-      if(response.AuthenticationResult.IdToken !== undefined || response.AuthenticationResult.IdToken !== ''){
-        try{
-          res = await axios.get(`${process.env.E2E_USER_API_URL}`, {
-          headers: { "Authorization": `Bearer ${response.AuthenticationResult.IdToken}` }
-        });
-      }catch (err: any) {}
-      }
-    } catch (err: any) {console.log(err);}
-    expect(res.status).toEqual(200);
-    expect(res.data.message).toEqual('User Found');
-    expect(res.data.data.cards[0].cardId).toEqual(userCardId);
-    expect(res.data.data.cards[0].expires).not.toBe('0000000000000000');
-    expect(res.data.data.cards[0].cardStatus).toEqual('PHYSICAL_CARD');
-    expect(res.data.data.cards[0].datePosted).not.toBe('0000000000000000');
-
-  });
 });
 

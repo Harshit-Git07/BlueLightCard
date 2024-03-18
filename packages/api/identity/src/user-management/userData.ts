@@ -54,6 +54,7 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     let cardDetails:CardModel[] = [];
     let brandDetails = {};
 
+
     results.Items?.map(i => {
       if(i.sk.includes('PROFILE')) {
         userDetails = UserModel.parse(i)

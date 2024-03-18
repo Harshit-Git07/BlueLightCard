@@ -67,23 +67,15 @@ export function Identity({ stack }: StackContext) {
     primaryIndex: { partitionKey: 'legacy_id', sortKey: 'uuid' },
   });
 
-  const incorrectAttemptsTable = new Table(stack, 'identityUnsuccessfulAttemptsTabletmp3', {
-    fields: {
-      pk: 'string',
-      sk: 'string',
-    },
-    primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
-  });
-
   const { bus, webACL } = use(Shared);
 
   //add dead letter queue
   const dlq = new Queue(stack, 'DLQ');
 
-  const {oldCognito, oldWebClient} = createOldCognito(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret);
-  const {oldCognitoDds, oldWebClientDds} = createOldCognitoDDS(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret);
-  const cognito = createNewCognito(stack,unsuccessfulLoginAttemptsTable.table ,appSecret, bus, dlq, region, webACL, oldCognito, oldWebClient, identitySecret);
-  const cognito_dds = createNewCognitoDDS(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, oldCognitoDds, oldWebClientDds, identitySecret);
+  const {oldCognito, oldWebClient} = createOldCognito(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret, identityTable);
+  const {oldCognitoDds, oldWebClientDds} = createOldCognitoDDS(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret, identityTable);
+  const cognito = createNewCognito(stack,unsuccessfulLoginAttemptsTable.table ,appSecret, bus, dlq, region, webACL, oldCognito, oldWebClient, identitySecret, identityTable);
+  const cognito_dds = createNewCognitoDDS(stack,unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, oldCognitoDds, oldWebClientDds, identitySecret, identityTable);
 
   const customDomainNameLookUp: Record<string, string> = {
     [REGIONS.EU_WEST_2]: 'identity.blcshine.io',

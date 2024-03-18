@@ -1,4 +1,4 @@
-import { Cognito, EventBus, Function, Queue, Table } from 'sst/constructs'
+import { Cognito, EventBus, Function, Queue, Table } from 'sst/constructs';
 import { BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
 import { Duration } from 'aws-cdk-lib'
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
@@ -41,7 +41,8 @@ export function createOldCognito(
   dlq: Queue,
   region: string,
   webACL: CfnWebACL,
-  identitySecret: ISecret
+  identitySecret: ISecret,
+  identityTable: Table
 ) {
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
@@ -70,6 +71,8 @@ export function createOldCognito(
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
         environment: {
           SERVICE: 'identity',
+          REGION: region,
+          IDENTITY_TABLE_NAME: identityTable.tableName
         },
         permissions: ['dynamodb:*']
       }
@@ -177,7 +180,8 @@ export function createOldCognitoDDS(
   dlq: Queue,
   region: string,
   webACL: CfnWebACL,
-  identitySecret: ISecret
+  identitySecret: ISecret,
+  identityTable: Table
 ) {
   //auth - DDS
   const cognito_dds = new Cognito(stack, 'cognito_dds', {
@@ -208,6 +212,8 @@ export function createOldCognitoDDS(
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
         environment: {
           SERVICE: 'identity',
+          REGION: region,
+          IDENTITY_TABLE_NAME: identityTable.tableName
         },
         permissions: ['dynamodb:*']
       },
@@ -324,7 +330,8 @@ export function createNewCognito(
   webACL: CfnWebACL,
   oldCognito: Cognito,
   oldCognitoWebClient: UserPoolClient,
-  identitySecret: ISecret
+  identitySecret: ISecret,
+  identityTable: Table
 ) {
   const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
   const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
@@ -361,8 +368,10 @@ export function createNewCognito(
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
         environment: {
           SERVICE: 'identity',
+          REGION: region,
+          IDENTITY_TABLE_NAME: identityTable.tableName
         },
-        permissions: ['dynamodb:*']
+        permissions: ['dynamodb:*', identityTable],
       },
       preAuthentication: {
         handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
@@ -494,7 +503,8 @@ export function createNewCognitoDDS(
   webACL: CfnWebACL,
   oldCognito: Cognito,
   oldCognitoWebClient: UserPoolClient,
-  identitySecret: ISecret
+  identitySecret: ISecret,
+  identityTable: Table
 ) {
   const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
   const ddsLogoPath = path.join(cognitoHostedUiAssets, 'dds-logo.png');
@@ -533,8 +543,9 @@ export function createNewCognitoDDS(
         environment: {
           SERVICE: 'identity',
           REGION: region,
+          IDENTITY_TABLE_NAME: identityTable.tableName
         },
-        permissions: ['dynamodb:*']
+        permissions: ['dynamodb:*', identityTable],
       },
       preAuthentication: {
         handler: 'packages/api/identity/src/cognito/preAuthentication.handler',

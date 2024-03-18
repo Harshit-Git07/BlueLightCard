@@ -5,7 +5,7 @@
     "typecheck": "tsc -noEmit",
     "test": "jest src/ --coverage",
     "migrate:userprofileandcarddata": "ts-node src/cognito/oneTimeUserProfileAndCardMigrationScript.ts",
-    "e2e:identity": "jest e2e/"
+    "e2e:identity": "jest e2e/ --runInBand"
   },
   "devDependencies": {
     "@aws-sdk/client-firehose": "3.425.0",

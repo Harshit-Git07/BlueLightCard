@@ -7,6 +7,7 @@ export const BrandModel = z.object({
 }).transform(brand => ({
   legacyId: brand.legacy_id,
   uuid: brand.pk.replace('MEMBER#', ''),
+  brand: brand.sk.replace('BRAND#', ''),
 }));
 
 (BrandModel as any)._ModelName = 'BrandModel'

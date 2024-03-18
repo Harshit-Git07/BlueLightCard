@@ -70,7 +70,7 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     if(!isEmpty(userDetails)) {
       let responseModel = {
         profile: userDetails,
-        cards: cardDetails,
+        cards: cardDetails.filter(c => c.cardId !== 'null'), //remove objects with null card ID
         companies_follows: companyFollowsDetails,
         ...brandDetails,
       }

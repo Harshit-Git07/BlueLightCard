@@ -244,70 +244,70 @@ jobs:
 
   # Lighthouse Audit of Web frontend
   # TODO: Currently not working with authenticated pages due to being redirected to login page
-  lighthouse:
-    name: Web Audit using Lighthouse
-    if: github.actor!= 'dependabot[bot]'
-    runs-on: ubuntu-latest
-    needs:
-      - frontend
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-      - name: Audit URLs using Lighthouse
-        uses: treosh/lighthouse-ci-action@v10
-        id: lighthouse_audit
-        with:
-          urls: |
-            ${{ needs.frontend.outputs.url }}/eligibility
-          budgetPath: '.github/lighthouse/budget.json'
-          configPath: '.github/lighthouse/.lighthouserc.json'
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          runs: 3
+  # lighthouse:
+  #   name: Web Audit using Lighthouse
+  #   if: github.actor!= 'dependabot[bot]'
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - frontend
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Setup
+  #       uses: ./.github/actions/setup
+  #     - name: Audit URLs using Lighthouse
+  #       uses: treosh/lighthouse-ci-action@v10
+  #       id: lighthouse_audit
+  #       with:
+  #         urls: |
+  #           ${{ needs.frontend.outputs.url }}/eligibility
+  #         budgetPath: '.github/lighthouse/budget.json'
+  #         configPath: '.github/lighthouse/.lighthouserc.json'
+  #         uploadArtifacts: true
+  #         temporaryPublicStorage: true
+  #         runs: 3
 
-      - name: Format lighthouse result
-        id: lighthouse_result
-        if: ${{ always() }}
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const { default: formatLighthouseResult } = await import('${{ github.workspace }}/.github/scripts/formatLighthouseResult.js')
-            const links = ${{ steps.lighthouse_audit.outputs.links }};
-            const manifest = ${{ steps.lighthouse_audit.outputs.manifest }}
-            await formatLighthouseResult({ links, manifest, core })
+  #     - name: Format lighthouse result
+  #       id: lighthouse_result
+  #       if: ${{ always() }}
+  #       uses: actions/github-script@v6
+  #       with:
+  #         github-token: ${{secrets.GITHUB_TOKEN}}
+  #         script: |
+  #           const { default: formatLighthouseResult } = await import('${{ github.workspace }}/.github/scripts/formatLighthouseResult.js')
+  #           const links = ${{ steps.lighthouse_audit.outputs.links }};
+  #           const manifest = ${{ steps.lighthouse_audit.outputs.manifest }}
+  #           await formatLighthouseResult({ links, manifest, core })
 
-      - name: Format budget result
-        id: budget_result
-        if: ${{ always() }}
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const { default: formatBudgetResult } = await import('${{ github.workspace }}/.github/scripts/formatBudgetResult.js')
-            const assertions = ${{ steps.lighthouse_audit.outputs.assertionResults }}
-            await formatBudgetResult({ assertions, core })
+  #     - name: Format budget result
+  #       id: budget_result
+  #       if: ${{ always() }}
+  #       uses: actions/github-script@v6
+  #       with:
+  #         github-token: ${{secrets.GITHUB_TOKEN}}
+  #         script: |
+  #           const { default: formatBudgetResult } = await import('${{ github.workspace }}/.github/scripts/formatBudgetResult.js')
+  #           const assertions = ${{ steps.lighthouse_audit.outputs.assertionResults }}
+  #           await formatBudgetResult({ assertions, core })
 
-      - name: Add Lighthouse comment to PR
-        id: lighthouse_comment_to_pr
-        if: ${{ always() }}
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ github.event.pull_request.number }}
-          header: lighthouse
-          message: |
-            ${{ steps.lighthouse_result.outputs.comment }}
+  #     - name: Add Lighthouse comment to PR
+  #       id: lighthouse_comment_to_pr
+  #       if: ${{ always() }}
+  #       uses: marocchino/sticky-pull-request-comment@v2
+  #       with:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         number: ${{ github.event.pull_request.number }}
+  #         header: lighthouse
+  #         message: |
+  #           ${{ steps.lighthouse_result.outputs.comment }}
 
-      - name: Add Budget comment to PR
-        id: budget_comment_to_pr
-        if: ${{ always() }}
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ github.event.pull_request.number }}
-          header: budget
-          message: |
-            ${{ steps.budget_result.outputs.comment }}
+  #     - name: Add Budget comment to PR
+  #       id: budget_comment_to_pr
+  #       if: ${{ always() }}
+  #       uses: marocchino/sticky-pull-request-comment@v2
+  #       with:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         number: ${{ github.event.pull_request.number }}
+  #         header: budget
+  #         message: |
+  #           ${{ steps.budget_result.outputs.comment }}

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.49.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.48.0...bluelightcard/identity-v1.49.0) (2024-03-18)
+
+
+### Features
+
+* Add brand to the user API response ([#1051](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1051)) ([6d76f5b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6d76f5b911b1b5cec6f78488af2b7d8fdada93f5))
+
 ## [1.48.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.47.0...bluelightcard/identity-v1.48.0) (2024-03-18)
 
 

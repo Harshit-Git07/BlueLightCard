@@ -29,14 +29,14 @@ export const customFontFaceBold = `
 }
 `;
 
-export const discountBannerContainer = `
+export const discountBannerContainer = (height: string = '440px') => `
 display: flex!important;
 flex-direction: column!important;
 position: fixed!important;
 top: 0!important;
 right: 15px!important;
 width: 375px!important;
-height: 440px!important;
+height: ${height}!important;
 color: black!important;
 z-index: 2147483647!important;
 background: white!important;
@@ -141,7 +141,7 @@ export const injectedStyles = `
     height: 24px!important;
     cursor: pointer!important;
     }
-    
+
     #notification-banner .titleSucces {
     color: #36966F!important;
     font-family: 'MediumMuseoSansRounded'!important;
@@ -151,6 +151,11 @@ export const injectedStyles = `
     font-weight: 600!important;
     line-height: 24px!important;
     letter-spacing: 0.16px!important;
+    }
+
+    #notification-banner .messageSuccess, #notification-banner .titleSucces {
+      padding: 0!important;
+      margin: 0!important;
     }
 
     .text-center{

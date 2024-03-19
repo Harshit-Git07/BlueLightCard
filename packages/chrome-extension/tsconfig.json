@@ -7,7 +7,6 @@
     "esModuleInterop": true,
 
     "noEmit": true,
-
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "exactOptionalPropertyTypes": true,

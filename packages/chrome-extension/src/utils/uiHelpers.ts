@@ -1,3 +1,4 @@
+import { NotificationType } from 'src/types/notificationType';
 import { injectedStyles, discountBannerContainer } from './const';
 const iconLogo = chrome.runtime.getURL('icon.png');
 
@@ -9,7 +10,19 @@ export function injectGoogleSearchResultNotification(parent: Element) {
   parent.insertAdjacentHTML('afterbegin', message);
 }
 
-export function injectDiscountReceivedNotification(id: string) {
+export function injectDiscountReceivedNotification(id: string, type: NotificationType) {
+  const successMessage =
+    type === 'CODE'
+      ? {
+          title: 'Offer Code Copied',
+          message: 'Complete your purchase by pasting the code during checkout',
+        }
+      : {
+          title: '',
+          message: 'Special pricing now applied to selected products',
+        };
+
+  const popupModalHeight = type === 'CODE' ? '440px' : '385px';
   const imageLogo = chrome.runtime.getURL('BLC_Logo.png');
   const closeIcon = `
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -52,7 +65,7 @@ export function injectDiscountReceivedNotification(id: string) {
     <style>
       ${injectedStyles}
     </Style>
-    <div style="${discountBannerContainer}" id="notification-banner">
+    <div style="${discountBannerContainer(popupModalHeight)}" id="notification-banner">
     <div class="discountHeaderContainer">
     <div class="headerContainer">
     <div class="emptyBox"></div>
@@ -64,10 +77,10 @@ export function injectDiscountReceivedNotification(id: string) {
     </div>
     <div class="discountBody">
       <div class="bodyContainer">
-        <p class="titleSucces">Offer Code Copied</p>
+        <p class="titleSucces">${successMessage.title}</p>
         ${checkIcon}
-        <p class="textLarge text-center">
-        Complete your purchase by pasting the code during checkout
+        <p class="textLarge text-center messageSuccess">
+        ${successMessage.message}
         </p>
       </div>
     </div>
@@ -105,7 +118,7 @@ export function injectNotification(id: string, offerDetailsUrl: string) {
     <style>
       ${injectedStyles}
     </Style>
-    <div style="${discountBannerContainer}" id="notification-banner">
+    <div style="${discountBannerContainer()}" id="notification-banner">
     <div class="discountHeaderContainer">
     <div class="headerContainer">
     <div class="emptyBox"></div>

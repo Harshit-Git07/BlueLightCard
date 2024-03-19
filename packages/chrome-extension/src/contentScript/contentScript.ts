@@ -67,7 +67,7 @@ const googleResultMapper = () => {
 
 chrome.runtime.onMessage.addListener((request) => {
   if (request.isDiscountReceived) {
-    injectDiscountReceivedNotification(request.id);
+    injectDiscountReceivedNotification(request.id, request.type);
   } else if (request.id) {
     injectNotification(request.id, createUrlWithGA4CampaignQueryParams(request.id, request.name));
   }

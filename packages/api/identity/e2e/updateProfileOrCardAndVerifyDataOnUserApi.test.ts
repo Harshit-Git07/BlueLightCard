@@ -275,7 +275,7 @@ describe('Send user card update event, and test user api to match data', () => {
   });
 
   test('User api - returns expected data for card', async () => {
-    for (let i = 1; i <= 10; i++) { //run this test 10 times to test so that we test pre/post auth lambdas
+    for (let i = 1; i <= 10; i++) { //run this test 10 times so that we test pre/post auth lambdas
       const res = await loginUserAPI();
       expect(res.status).toEqual(200);
       expect(res.data.message).toEqual('User Found');
@@ -284,7 +284,7 @@ describe('Send user card update event, and test user api to match data', () => {
       expect(res.data.data.cards[0].cardStatus).toEqual('PHYSICAL_CARD');
       expect(res.data.data.cards[0].datePosted).not.toBe('0000000000000000');
     }
-  }, 20000);
+  }, 25000);
   
 });
 

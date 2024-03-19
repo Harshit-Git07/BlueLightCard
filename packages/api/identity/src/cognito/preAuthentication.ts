@@ -13,7 +13,7 @@ const RESET_PASSWORD_API_URL = process.env.RESET_PASSWORD_API_URL ?? "";
 const WRONG_PASSWORD_ENTER_LIMIT:number = Number(process.env.WRONG_PASSWORD_ENTER_LIMIT) ?? 2;
 const WRONG_PASSWORD_RESET_TRIGGER_MINUTES:number = Number(process.env.WRONG_PASSWORD_RESET_TRIGGER_MINUTES) ?? 30;
 
-const UNSUCCESSFUL_ATTEMPTS_CUSTOM_ERROR_MESSAGE = ": You previously had " + WRONG_PASSWORD_ENTER_LIMIT + " unsuccessful login attempts for this email in the last " + WRONG_PASSWORD_RESET_TRIGGER_MINUTES +" minutes. As a precaution, your current login attempt has been blocked. If your email exists in our system, you will receive a password reset email in your inbox.";
+const UNSUCCESSFUL_ATTEMPTS_CUSTOM_ERROR_MESSAGE = ": You previously had " + WRONG_PASSWORD_ENTER_LIMIT + " unsuccessful login attempts for this email in the last " + WRONG_PASSWORD_RESET_TRIGGER_MINUTES +" minutes. As a precaution, your current login attempt has been blocked. If your email exists in our system, you will receive a password reset email in your inbox";
 const SYSTEM_DOWN_ERROR_MESSAGE = ": Unable to process your request, please contact customer service";
 
 const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);

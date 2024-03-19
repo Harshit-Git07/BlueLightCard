@@ -5,7 +5,7 @@ import { httpRequest } from '@blc-mono/core/utils/fetch/httpRequest';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import {
   LegacyVaultApiRepository,
-  vaultSecrets,
+  Secrets,
 } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { RedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
 import {
@@ -21,7 +21,7 @@ import { RedemptionsTestDatabase } from '@blc-mono/redemptions/application/test/
 import { createTestLogger } from '@blc-mono/redemptions/application/test/helpers/logger';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
-import { SecretsManger } from '@blc-mono/redemptions/libs/SecretsManger/SecretsManger';
+import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 jest.mock('@blc-mono/core/utils/fetch/httpRequest');
 
@@ -30,9 +30,13 @@ describe('PromotionUpdateService', () => {
   let dbconnection: DatabaseConnection;
 
   beforeAll(async () => {
-    process.env.REDEMPTIONS_RETRIEVE_ALL_VAULTS_HOST = 'https://test.com';
-    process.env.REDEMPTIONS_RETRIEVE_ALL_VAULTS_PATH = '/test';
-    process.env.REDEMPTIONS_RETRIEVE_ALL_ENVIRONMENT = 'test';
+    process.env.REDEMPTIONS_LAMBDA_SCRIPTS_HOST = 'https://test.com';
+    process.env.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH = '/test';
+    process.env.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH = '/test';
+    process.env.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH = '/test';
+    process.env.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH = '/test';
+    process.env.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT = 'test';
+    process.env.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER = 'test';
     database = await RedemptionsTestDatabase.start();
     dbconnection = await database.getConnection();
   }, 60_000);
@@ -43,9 +47,13 @@ describe('PromotionUpdateService', () => {
   });
 
   afterAll(async () => {
-    delete process.env.REDEMPTIONS_RETRIEVE_ALL_VAULTS_HOST;
-    delete process.env.REDEMPTIONS_RETRIEVE_ALL_VAULTS_PATH;
-    delete process.env.REDEMPTIONS_RETRIEVE_ALL_ENVIRONMENT;
+    delete process.env.REDEMPTIONS_LAMBDA_SCRIPTS_HOST;
+    delete process.env.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH;
+    delete process.env.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH;
+    delete process.env.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH;
+    delete process.env.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH;
+    delete process.env.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT;
+    delete process.env.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER;
     await database?.down?.();
     jest.clearAllMocks();
   });
@@ -78,16 +86,16 @@ describe('PromotionUpdateService', () => {
         id: redemptionsTable.id,
       });
 
-    const mockedSecretsManger = {
+    const mockedSecretsManager = {
       getSecretValue: jest.fn().mockReturnValue({
         retrieveAllVaultsData: 'NewVault/retrieveAllVaults',
         retrieveAllVaultsPassword: 'sjDpKVBt^FxCzq8y',
       }),
-    } as unknown as SecretsManger<vaultSecrets>;
+    } as unknown as SecretsManager<Secrets>;
 
     const logger: ILogger = createTestLogger();
     const redemptionRepository = new RedemptionsRepository(dbconnection);
-    const legacyRepository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+    const legacyRepository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
     const redemptionUpdate: RedemptionUpdate = {
       meta: {
@@ -183,12 +191,12 @@ describe('PromotionUpdateService', () => {
       });
 
     const logger: ILogger = createTestLogger();
-    const mockedSecretsManger = {
+    const mockedSecretsManager = {
       getSecretValue: jest.fn().mockReturnValue({
         retrieveAllVaultsData: 'NewVault/retrieveAllVaults',
         retrieveAllVaultsPassword: 'sjDpKVBt^FxCzq8y',
       }),
-    } as unknown as SecretsManger<vaultSecrets>;
+    } as unknown as SecretsManager<Secrets>;
 
     const mockedResponse = {
       kind: PromotionUpdateResults.PROMOTION_UPDATE_UNSUCCESSFUL,
@@ -198,7 +206,7 @@ describe('PromotionUpdateService', () => {
     };
 
     const redemptionRepository = new RedemptionsRepository(dbconnection);
-    const legacyRepository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+    const legacyRepository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
     const redemptionUpdate: RedemptionUpdate = {
       meta: {
@@ -264,15 +272,15 @@ describe('PromotionUpdateService', () => {
         id: redemptionsTable.id,
       });
 
-    const mockedSecretsManger = {
+    const mockedSecretsManager = {
       getSecretValue: jest.fn().mockReturnValue({
         retrieveAllVaultsData: 'NewVault/retrieveAllVaults',
         retrieveAllVaultsPassword: 'sjDpKVBt^FxCzq8y',
       }),
-    } as unknown as SecretsManger<vaultSecrets>;
+    } as unknown as SecretsManager<Secrets>;
 
     const redemptionRepository = new RedemptionsRepository(dbconnection);
-    const legacyRepository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+    const legacyRepository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
     const redemptionUpdate: RedemptionUpdate = {
       meta: {

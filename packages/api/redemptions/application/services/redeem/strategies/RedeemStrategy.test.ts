@@ -23,10 +23,6 @@ import { StrategyParams } from '../RedeemService';
 import { RedeemGenericStrategy } from './RedeemGenericStrategy';
 import { RedeemVaultStrategy } from './RedeemVaultStrategy';
 
-jest.mock('../../../helpers/newVaultAuth', () => ({
-  getKeysFromSecretManager: jest.fn().mockResolvedValue({}),
-}));
-
 describe('RedeemGenericStrategy', () => {
   const mockedLogger = createTestLogger();
 
@@ -134,6 +130,8 @@ describe('RedeemVaultStrategy', () => {
       getNumberOfCodesIssued: jest.fn(),
       assignCodeToMember: jest.fn(),
       getVaultByLinkId: jest.fn(),
+      getResponseData: jest.fn(),
+      redeemCode: jest.fn(),
     };
     const vaultsRepository = new VaultsRepository(connection);
     const vaultCodesRepository = new VaultCodesRepository(connection);
@@ -316,6 +314,8 @@ describe('RedeemVaultStrategy', () => {
         getNumberOfCodesIssued: jest.fn().mockResolvedValue(undefined),
         assignCodeToMember: jest.fn().mockResolvedValue(undefined),
         getVaultByLinkId: jest.fn(),
+        getResponseData: jest.fn(),
+        redeemCode: jest.fn(),
       };
       const redemptionCreated = redemption.build();
       const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
@@ -339,6 +339,8 @@ describe('RedeemVaultStrategy', () => {
         getNumberOfCodesIssued: jest.fn().mockResolvedValue({ status: 500, data: undefined }),
         assignCodeToMember: jest.fn().mockResolvedValue(undefined),
         getVaultByLinkId: jest.fn(),
+        getResponseData: jest.fn(),
+        redeemCode: jest.fn(),
       };
       const redemptionCreated = redemption.build();
       const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
@@ -362,6 +364,8 @@ describe('RedeemVaultStrategy', () => {
         getNumberOfCodesIssued: jest.fn().mockResolvedValue({ status: 200, data: 3 }),
         assignCodeToMember: jest.fn().mockResolvedValue(undefined),
         getVaultByLinkId: jest.fn(),
+        getResponseData: jest.fn(),
+        redeemCode: jest.fn(),
       };
       const redemptionCreated = redemption.build();
       const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
@@ -385,6 +389,8 @@ describe('RedeemVaultStrategy', () => {
         getNumberOfCodesIssued: jest.fn().mockResolvedValue({ status: 200, data: 2 }),
         assignCodeToMember: jest.fn().mockResolvedValue(undefined),
         getVaultByLinkId: jest.fn(),
+        getResponseData: jest.fn(),
+        redeemCode: jest.fn(),
       };
       const redemptionCreated = redemption.build();
       const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
@@ -408,6 +414,8 @@ describe('RedeemVaultStrategy', () => {
         getNumberOfCodesIssued: jest.fn().mockResolvedValue({ status: 200, data: 2 }),
         assignCodeToMember: jest.fn().mockResolvedValue({ status: 500, data: undefined }),
         getVaultByLinkId: jest.fn(),
+        getResponseData: jest.fn(),
+        redeemCode: jest.fn(),
       };
       const redemptionCreated = redemption.build();
       const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
@@ -440,6 +448,8 @@ describe('RedeemVaultStrategy', () => {
           },
         }),
         getVaultByLinkId: jest.fn(),
+        getResponseData: jest.fn(),
+        redeemCode: jest.fn(),
       };
       const redemptionCreated = redemption.build();
       const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();

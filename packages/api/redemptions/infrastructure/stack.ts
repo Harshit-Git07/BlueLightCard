@@ -129,11 +129,15 @@ export async function Redemptions({ app, stack }: StackContext) {
       handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
       requestValidatorName: 'PostRedeemValidator',
       environment: {
-        [RedemptionsStackEnvironmentKeys.CODES_REDEEMED_HOST]: config.codesRedeemedHost,
-        [RedemptionsStackEnvironmentKeys.CODES_REDEEMED_ENVIRONMENT]: config.codesRedeemedEnvironment,
-        [RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH]: config.codeRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH]: config.codeAssignedRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.CODE_AMOUNT_ISSUED_PATH]: config.codeAmountIssuedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
+          config.redemptionsLambdaScriptsEnvironment,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH]:
+          config.redemptionsLambdaScriptsCodeRedeemedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
+          config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
+          config.redemptionsLambdaScriptsCodeAmountIssuedPath,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [getSecretValueSecretsManager],
@@ -157,10 +161,15 @@ export async function Redemptions({ app, stack }: StackContext) {
       handler: 'packages/api/redemptions/application/handlers/apiGateway/proxy/postSpotify.handler',
       requestValidatorName: 'PostSpotifyValidator',
       environment: {
-        [RedemptionsStackEnvironmentKeys.CODES_REDEEMED_HOST]: config.codesRedeemedHost,
-        [RedemptionsStackEnvironmentKeys.CODES_REDEEMED_ENVIRONMENT]: config.codesRedeemedEnvironment,
-        [RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH]: config.codeRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH]: config.codeAssignedRedeemedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
+          config.redemptionsLambdaScriptsEnvironment,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH]:
+          config.redemptionsLambdaScriptsCodeRedeemedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
+          config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER]:
+          config.redemptionsLambdaScriptsSecretManager,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [getSecretValueSecretsManager],

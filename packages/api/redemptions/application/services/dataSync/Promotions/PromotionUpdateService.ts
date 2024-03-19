@@ -8,7 +8,7 @@ import { isSpotifyUrl } from '@blc-mono/redemptions/application/helpers/isSpotif
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { RedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
 import { Affiliate, Connection, OfferType, Platform } from '@blc-mono/redemptions/libs/database/schema';
-import { SecretsErrorResponse } from '@blc-mono/redemptions/libs/SecretsManger/SecretsManger';
+import { SecretsErrorResponse } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 export enum PromotionUpdateResults {
   PROMOTION_UPDATE_UNSUCCESSFUL = 'PROMOTION_UPDATE_UNSUCCESSFUL',

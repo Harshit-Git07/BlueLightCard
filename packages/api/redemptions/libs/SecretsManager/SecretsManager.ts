@@ -7,8 +7,8 @@ export type SecretsErrorResponse = {
   message: string;
 };
 
-export class SecretsManger<O extends object> {
-  static key = 'SecretManger' as const;
+export class SecretsManager<O extends object> {
+  static key = 'SecretManager' as const;
   static readonly inject = [Logger.key] as const;
 
   private awsSecretsMangerClient: SecretsManagerClient;

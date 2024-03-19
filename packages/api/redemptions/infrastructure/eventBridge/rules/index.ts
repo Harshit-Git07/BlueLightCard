@@ -1,6 +1,6 @@
 import { createLinkRule } from './linkRule';
 import { createOfferRule, updateOfferRule } from './offerRule';
-import { createPromotionUpdatedRule } from './promotinUpdatedRule';
+import { createPromotionUpdatedRule } from './promotionUpdatedRule';
 import { createVaultUpdatedRule } from './VaultUpdatedRule';
 
 export { createLinkRule };

@@ -1,6 +1,5 @@
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { getKeysFromSecretManager } from '@blc-mono/redemptions/application/helpers/newVaultAuth';
 import {
   ILegacyVaultApiRepository,
   LegacyVaultApiRepository,
@@ -119,10 +118,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
         kind: 'RedemptionUrlNotFound',
       };
     }
-    // AWS Key setup
-    const secrets = await getKeysFromSecretManager('blc-mono-redemptions/NewVaultSecrets');
     const checkHowManyCodesIssuedResponse = await this.legacyVaultApiRepository.getNumberOfCodesIssued(
-      secrets,
       memberId,
       redemption.companyId,
       redemption.offerId,
@@ -148,7 +144,6 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     if (amountIssued >= (vault.maxPerUser ?? 0)) return { kind: 'MaxPerUserReached' };
 
     const assignCodeResponse = await this.legacyVaultApiRepository.assignCodeToMember(
-      secrets,
       memberId,
       redemption.companyId,
       redemption.offerId,

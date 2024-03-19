@@ -27,9 +27,9 @@ export function createPromotionUpdatedRule(
       }),
     ],
     environment: {
-      REDEMPTIONS_RETRIEVE_ALL_VAULTS_HOST: config.vaultRedeemHost,
-      REDEMPTIONS_RETRIEVE_ALL_VAULTS_PATH: config.vaultRedeemPath,
-      REDEMPTIONS_RETRIEVE_ALL_ENVIRONMENT: config.vaultRedeemEnvironment,
+      REDEMPTIONS_LAMBDA_SCRIPTS_HOST: config.redemptionsLambdaScriptsHost,
+      REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH: config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
+      REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT: config.redemptionsLambdaScriptsEnvironment,
     },
   });
   return {

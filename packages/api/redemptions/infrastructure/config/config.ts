@@ -6,15 +6,14 @@ import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
 
 export type RedemptionsStackConfig = {
-  codesRedeemedEnvironment: string;
-  codesRedeemedHost: string;
-  codeRedeemedPath: string;
-  codeAssignedRedeemedPath: string;
-  codeAmountIssuedPath: string;
+  redemptionsLambdaScriptsSecretManager: string;
+  redemptionsLambdaScriptsEnvironment: string;
+  redemptionsLambdaScriptsHost: string;
+  redemptionsLambdaScriptsRetrieveAllVaultsPath: string;
+  redemptionsLambdaScriptsCodeRedeemedPath: string;
+  redemptionsLambdaScriptsAssignUserCodesRedeemedPath: string;
+  redemptionsLambdaScriptsCodeAmountIssuedPath: string;
   apiDefaultAllowedOrigins: string[];
-  vaultRedeemHost: string;
-  vaultRedeemPath: string;
-  vaultRedeemEnvironment: string;
 };
 
 export class RedemptionsStackConfigResolver {
@@ -33,14 +32,13 @@ export class RedemptionsStackConfigResolver {
 
   public static forProductionStage(): RedemptionsStackConfig {
     return {
-      vaultRedeemEnvironment: 'production',
-      vaultRedeemHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
-      vaultRedeemPath: 'NewVault/retrieveAllVaults',
-      codesRedeemedEnvironment: 'production',
-      codesRedeemedHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
-      codeRedeemedPath: 'NewVault/codesRedeemed',
-      codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
-      codeAmountIssuedPath: 'NewVault/amountIssued',
+      redemptionsLambdaScriptsSecretManager: 'blc-mono-redemptions/NewVaultSecrets',
+      redemptionsLambdaScriptsEnvironment: 'production',
+      redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
+      redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
+      redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
+      redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
+      redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
         'https://*.bluelightcard.co.uk',
         'https://*.bluelightcard.com.au',
@@ -51,14 +49,13 @@ export class RedemptionsStackConfigResolver {
 
   public static forStagingStage(): RedemptionsStackConfig {
     return {
-      vaultRedeemEnvironment: 'staging',
-      vaultRedeemHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
-      vaultRedeemPath: 'NewVault/retrieveAllVaults',
-      codesRedeemedEnvironment: 'develop',
-      codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
-      codeRedeemedPath: 'NewVault/codesRedeemed',
-      codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
-      codeAmountIssuedPath: 'NewVault/amountIssued',
+      redemptionsLambdaScriptsSecretManager: 'blc-mono-redemptions/NewVaultSecrets',
+      redemptionsLambdaScriptsEnvironment: 'staging',
+      redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
+      redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
+      redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
+      redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
+      redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
         'https://*.blc-uk.pages.dev',
         'https://*.blc-au.pages.dev',
@@ -70,14 +67,13 @@ export class RedemptionsStackConfigResolver {
 
   public static forPrStage(): RedemptionsStackConfig {
     return {
-      vaultRedeemEnvironment: 'develop',
-      vaultRedeemHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
-      vaultRedeemPath: 'NewVault/retrieveAllVaults',
-      codesRedeemedEnvironment: 'develop',
-      codesRedeemedHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
-      codeRedeemedPath: 'NewVault/codesRedeemed',
-      codeAssignedRedeemedPath: 'NewVault/assignUserCodes',
-      codeAmountIssuedPath: 'NewVault/amountIssued',
+      redemptionsLambdaScriptsSecretManager: 'blc-mono-redemptions/NewVaultSecrets',
+      redemptionsLambdaScriptsEnvironment: 'develop',
+      redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
+      redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
+      redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
+      redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
+      redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
         'https://*.blc-uk.pages.dev',
         'https://*.blc-au.pages.dev',
@@ -89,14 +85,25 @@ export class RedemptionsStackConfigResolver {
 
   public static fromEnvironmentVariables(): RedemptionsStackConfig {
     return {
-      vaultRedeemEnvironment: getEnv(RedemptionsStackEnvironmentKeys.VAULT_REDEEM_ENVIRONMENT),
-      vaultRedeemHost: getEnv(RedemptionsStackEnvironmentKeys.VAULT_REDEEM_HOST),
-      vaultRedeemPath: getEnv(RedemptionsStackEnvironmentKeys.VAULT_REDEEM_PATH),
-      codesRedeemedEnvironment: getEnv(RedemptionsStackEnvironmentKeys.CODES_REDEEMED_ENVIRONMENT),
-      codesRedeemedHost: getEnv(RedemptionsStackEnvironmentKeys.CODES_REDEEMED_HOST),
-      codeRedeemedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_REDEEMED_PATH),
-      codeAssignedRedeemedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_ASSIGNED_REDEEMED_PATH),
-      codeAmountIssuedPath: getEnv(RedemptionsStackEnvironmentKeys.CODE_AMOUNT_ISSUED_PATH),
+      redemptionsLambdaScriptsSecretManager: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER,
+      ),
+      redemptionsLambdaScriptsEnvironment: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT,
+      ),
+      redemptionsLambdaScriptsHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST),
+      redemptionsLambdaScriptsRetrieveAllVaultsPath: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH,
+      ),
+      redemptionsLambdaScriptsCodeRedeemedPath: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH,
+      ),
+      redemptionsLambdaScriptsAssignUserCodesRedeemedPath: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH,
+      ),
+      redemptionsLambdaScriptsCodeAmountIssuedPath: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH,
+      ),
       apiDefaultAllowedOrigins: ['*'],
     };
   }

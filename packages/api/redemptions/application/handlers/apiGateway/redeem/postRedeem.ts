@@ -6,12 +6,12 @@ import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import {
   LegacyVaultApiRepository,
-  vaultSecrets,
+  Secrets,
 } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
-import { SecretsManger } from '@blc-mono/redemptions/libs/SecretsManger/SecretsManger';
+import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemController';
 import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
@@ -31,7 +31,7 @@ const controller = createInjector()
   // Common
   .provideValue(Logger.key, logger)
   .provideValue(DatabaseConnection.key, connection)
-  .provideClass(SecretsManger.key, SecretsManger<vaultSecrets>)
+  .provideClass(SecretsManager.key, SecretsManager<Secrets>)
   // Repositories
   .provideClass(RedemptionsRepository.key, RedemptionsRepository)
   .provideClass(GenericsRepository.key, GenericsRepository)

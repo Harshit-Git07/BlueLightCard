@@ -1,10 +1,10 @@
 import { as } from '@blc-mono/core/utils/testing';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
-import { SecretsManger } from '@blc-mono/redemptions/libs/SecretsManger/SecretsManger';
+import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 import { GenericsRepository } from '../../repositories/GenericsRepository';
-import { LegacyVaultApiRepository, vaultSecrets } from '../../repositories/LegacyVaultApiRepository';
+import { LegacyVaultApiRepository, Secrets } from '../../repositories/LegacyVaultApiRepository';
 import { VaultCodesRepository } from '../../repositories/VaultCodesRepository';
 import { VaultsRepository } from '../../repositories/VaultsRepository';
 import { createTestLogger } from '../../test/helpers/logger';
@@ -27,11 +27,11 @@ describe('RedeemStrategyResolver', () => {
   } as unknown as DatabaseConnection;
   const mockedLogger = createTestLogger();
   const mockedSecretsManager = {
-    awsSecretsMangerClient: jest.fn(),
+    awsSecretsManagerClient: jest.fn(),
     logger: jest.fn(),
     setRegion: jest.fn(),
     getSecretValue: jest.fn(),
-  } as unknown as SecretsManger<vaultSecrets>;
+  } as unknown as SecretsManager<Secrets>;
   const genericsRepo = new GenericsRepository(mockedConnection);
   const vaultsRepo = new VaultsRepository(mockedConnection);
   const vaultCodesRepo = new VaultCodesRepository(mockedConnection);

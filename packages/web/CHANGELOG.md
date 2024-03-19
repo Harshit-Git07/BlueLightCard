@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.34.0...bluelightcard/web-v1.35.0) (2024-03-18)
+
+
+### Features
+
+* added exclusions component ([#1052](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1052)) ([958fab7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/958fab7980ddf2fae59533fd72f6e902ae1d8f2c))
+* ti-993-use-refresh-token ([#1055](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1055)) ([41a33e0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/41a33e00ad6ef0f75d34ad195869f0b28f8b83e1))
+* TO-590 exclusions offer sheet ([#1047](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1047)) ([f997a78](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f997a781e648b61660004bb752633b010104085e))
+
+
+### Bug Fixes
+
+* comment exclusions html until API is done ([#1054](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1054)) ([54269fc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/54269fc81262888a94b2faac86b43dce645cd5cc))
+
 ## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.33.0...bluelightcard/web-v1.34.0) (2024-03-14)
 
 

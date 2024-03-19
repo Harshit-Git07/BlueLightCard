@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.0.2...bluelightcard/chrome-extension-v1.1.0) (2024-03-19)
+
+
+### Features
+
+* TO-565 dynamic success messages ([#1048](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1048)) ([9d11509](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9d11509c0f6e59ad3b1cd56b2c10bbd757398c57))
+
+
+### Bug Fixes
+
+* update manifest name and desc ([#1012](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1012)) ([f049f6a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f049f6a79e9a5ca541be359b496ca6f2ed3d329a))
+
 ## [1.0.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.0.1...bluelightcard/chrome-extension-v1.0.2) (2024-03-07)
 
 

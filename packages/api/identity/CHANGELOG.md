@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.50.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.49.0...bluelightcard/identity-v1.50.0) (2024-03-19)
+
+
+### Features
+
+* Ti 000 remove extra dot on pre auth lambda error message ([#1063](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1063)) ([0cadeb5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0cadeb585192d2c325cd855a2e2afd60e4c669da))
+
 ## [1.49.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.48.0...bluelightcard/identity-v1.49.0) (2024-03-18)
 
 

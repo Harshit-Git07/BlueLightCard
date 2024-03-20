@@ -19,7 +19,7 @@ import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { IDatabaseAdapter } from './src/constructs/database/IDatabaseAdapter';
 import { DatabaseAdapter } from './src/constructs/database/adapter';
 
-export function Offers({ stack, app }: StackContext) {
+export async function Offers({ stack, app }: StackContext) {
   new Tags(stack);
   const { authorizer, cognito, newCognito } = use(Identity);
   const { vpc } = use(Shared);
@@ -28,15 +28,11 @@ export function Offers({ stack, app }: StackContext) {
   const ec2Manager: EC2Manager = new EC2Manager(stack, vpc, securityGroupManager);
   let dbAdapter: IDatabaseAdapter | undefined;
   if (!isProduction(stack.stage)) {
-    dbAdapter = new DatabaseAdapter(stack, vpc, secretsManger, securityGroupManager, ec2Manager).init();
+    dbAdapter = await new DatabaseAdapter(stack, app, vpc, secretsManger, securityGroupManager, ec2Manager).init();
   }
-  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer);
+  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, dbAdapter);
 
-  /**
-   * Offers Appsync API
-   *
-   * Need to be removed once the new Apigateway API is ready to support the Offers API functionality
-   */
+  //Need to be removed once the ApiGateway is ready to support the Offers API functionality
   const offersApi: OffersApi = new OffersApi(
     stack,
     cognito.cdk.userPool,

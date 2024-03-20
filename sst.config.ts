@@ -26,19 +26,15 @@ export default {
     if (app.stage !== 'production' && app.stage !== 'staging') {
       app.setDefaultRemovalPolicy('destroy');
     }
-    app
-      .stack(Shared, { id: 'global' })
-      .stack(Identity, { id: 'identity' })
-      .stack(Offers, { id: 'offers' })
-      .stack(Web, { id: 'web' })
-      .stack(CMS, { id: 'cms' })
-      .stack(MemberServicesHub, { id: 'member-services-hub' });
+    app.stack(Shared, { id: 'global' }).stack(Identity, { id: 'identity' });
 
     await Promise.all([
       // Add async stacks here https://docs.sst.dev/constructs/Stack#async-stacks
-      app.stack(Redemptions, { id: 'redemptions' })
-    ])
+      app.stack(Redemptions, { id: 'redemptions' }),
+      app.stack(Offers, { id: 'offers' }),
+    ]);
 
+    app.stack(Web, { id: 'web' }).stack(CMS, { id: 'cms' }).stack(MemberServicesHub, { id: 'member-services-hub' });
   },
 } satisfies SSTConfig;
 

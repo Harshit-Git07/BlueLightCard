@@ -6,10 +6,8 @@ export const DDS_UK = 'dds-uk';
 export const EPHEMERAL_PR_REGEX = /^pr-\d+-blc-mono$/;
 
 export const enum ENVIRONMENTS {
-  DEVELOPMENT = 'dev',
   STAGING = 'staging',
   PRODUCTION = 'production',
-  EPHEMERAL = 'pr-',
   LOCAL = 'local',
 }
 

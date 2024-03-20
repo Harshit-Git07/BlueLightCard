@@ -7,13 +7,14 @@ import { DatabaseRoute } from './database/databaseRoute';
 import { CompanyRoutes } from './company/companyRoutes';
 import { CompanyInfoModel } from 'src/models/companyInfo';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { IDatabaseAdapter } from '../constructs/database/IDatabaseAdapter';
 
 /**
  * The RouteRegistry class provides a centralized way to register all routes for the application.
  */
 export class RouteRegistry {
-  constructor(stack: Stack, api: ApiGatewayV1Api) {
-    this.registerAllRoutes(stack, api);
+  constructor(stack: Stack, api: ApiGatewayV1Api, dbAdapter?: IDatabaseAdapter) {
+    this.registerAllRoutes(stack, api, dbAdapter);
   }
 
   /**
@@ -22,7 +23,7 @@ export class RouteRegistry {
    * @param {Stack} stack the AWS CDK stack
    * @param {ApiGatewayV1Api} api the API Gateway instance
    */
-  private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api) {
+  private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api, dbAdapter?: IDatabaseAdapter) {
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
     const modelMap = this.generateModels(apiGatewayModelGenerator);
     if (!isProduction(stack.stage)) {
@@ -31,15 +32,21 @@ export class RouteRegistry {
         stack,
         api,
         apiGatewayModelGenerator,
+        dbAdapter,
       }).initialiseRoutes();
     }
     new OffersRoutes({
       stack,
       api,
       apiGatewayModelGenerator,
+      model: modelMap.get('OffersModel')!,
+    }).initialiseRoutes();
+    new CompanyRoutes({
+      stack,
+      api,
+      apiGatewayModelGenerator,
       model: modelMap.get('CompanyInfoModel')!,
     }).initialiseRoutes();
-    new CompanyRoutes({ stack, api, apiGatewayModelGenerator, model: modelMap.get('OffersModel')! }).initialiseRoutes();
   }
 
   private generateModels(agmg: ApiGatewayModelGenerator): Map<string, Model> {

@@ -1,14 +1,13 @@
-import { RouteProps } from '../routeProps';
 import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { OffersFunction } from '../../constructs/sst/OffersFunction';
-import { DatabaseAdapter } from '../../constructs/database/adapter';
+import { RouteProps } from '../routeProps';
 
 export class DatabaseRoute {
-  constructor(private readonly routeProps: RouteProps) {}
+  constructor(private readonly props: RouteProps) {}
 
   initialiseRoutes() {
-    this.routeProps.api.addRoutes(this.routeProps.stack, {
+    this.props.api.addRoutes(this.props.stack, {
       'GET /db': this.get(),
     });
   }
@@ -16,14 +15,14 @@ export class DatabaseRoute {
   private get(): ApiGatewayV1ApiRouteProps<any> {
     return {
       cdk: {
-        function: new OffersFunction(this.routeProps.stack, 'DatabaseHandler', {
+        function: new OffersFunction(this.props.stack, 'DatabaseHandler', {
           handler: 'packages/api/offers/src/routes/database/databaseHandler.handler',
-          database: DatabaseAdapter.get(),
+          database: this.props.dbAdapter,
         }),
         method: {
           methodResponses: MethodResponses.toMethodResponses([
-            this.routeProps.apiGatewayModelGenerator.getError404(),
-            this.routeProps.apiGatewayModelGenerator.getError500(),
+            this.props.apiGatewayModelGenerator.getError404(),
+            this.props.apiGatewayModelGenerator.getError500(),
           ]),
         },
       },

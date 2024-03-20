@@ -6,6 +6,7 @@
     "pre:dev": "npm run db:up",
     "db:up": "dotenv -e ../../../.env -- docker compose up -d",
     "db:down": "dotenv -e ../../../.env -- docker compose down",
+    "drizzle:generate": "dotenv -e ../../../.env -- drizzle-kit generate:mysql",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc -noEmit"
   },

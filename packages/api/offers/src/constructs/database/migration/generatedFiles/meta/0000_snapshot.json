@@ -1,0 +1,123 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "52e3bd0d-9667-4021-948b-08841500b237",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "exclusionType": {
+      "name": "exclusionType",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "exclusionType_id": {
+          "name": "exclusionType_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "exclusionType_id_unique": {
+          "name": "exclusionType_id_unique",
+          "columns": [
+            "id"
+          ]
+        },
+        "exclusionType_name_unique": {
+          "name": "exclusionType_name_unique",
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "offerExclusions": {
+      "name": "offerExclusions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "offerId": {
+          "name": "offerId",
+          "type": "bigint unsigned",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "exclusionTypeId": {
+          "name": "exclusionTypeId",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "offerId_idx": {
+          "name": "offerId_idx",
+          "columns": [
+            "offerId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "offerExclusions_exclusionTypeId_exclusionType_id_fk": {
+          "name": "offerExclusions_exclusionTypeId_exclusionType_id_fk",
+          "tableFrom": "offerExclusions",
+          "tableTo": "exclusionType",
+          "columnsFrom": [
+            "exclusionTypeId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "offerExclusions_id": {
+          "name": "offerExclusions_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "offerExclusions_id_unique": {
+          "name": "offerExclusions_id_unique",
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

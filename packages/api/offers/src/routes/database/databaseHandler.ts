@@ -1,19 +1,33 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import { Logger } from '@aws-lambda-powertools/logger';
-import { DatabaseConnectionManager } from '../../constructs/database/connection';
 import { DatabaseInstanceType } from '../../constructs/database/type';
+import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import {
+  DatabaseSafeFailConnectionType,
+  SafeFailDatabaseConnectionService,
+} from '../../services/databaseConnectionService';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 
-const logger = new Logger({ serviceName: `offers-database-handler` });
-const db = await DatabaseConnectionManager.connect(DatabaseInstanceType.WRITER, logger);
+const logger = new LambdaLogger({ serviceName: `offers-database-handler` });
 
+// This is a simple handler to test database connection, in real world scenario, this should be removed as we use Repositories.
 export const handler = async (event: APIGatewayEvent) => {
   try {
-    const [rows, fields] = await db.sql.query('SELECT 1 + 1 AS solution');
+    const safeFailConnection: DatabaseSafeFailConnectionType | null =
+      await SafeFailDatabaseConnectionService.getConnection(logger, DatabaseInstanceType.READER);
+    let connection;
+    if (safeFailConnection && safeFailConnection.success) {
+      connection = safeFailConnection.connection;
+    } else {
+      logger.error({ message: `Database connection failed`, body: safeFailConnection?.error?.message });
+      return Response.Error(safeFailConnection?.error!);
+    }
+
+    const [rows, fields] = await connection!.directConnection.query('SELECT 1 + 1 AS solution');
     const resultString = JSON.stringify(rows); // Assuming the query returns at least one row
-    logger.info('Database connection successful', { resultString });
-    return { statusCode: 200, body: `Database connection successful - Query result: ${resultString}` };
+    logger.info({ message: `Database connection successful - Query result: ${resultString}` });
+    return Response.OK({ message: `Database connection successful - Query result: ${resultString}`, data: rows });
   } catch (error) {
-    logger.error('Database connection failed', { error });
-    return { statusCode: 500, body: `${error} - Database connection failed` };
+    logger.error({ message: `Database connection failed`, body: error });
+    return Response.Error(error as Error);
   }
 };

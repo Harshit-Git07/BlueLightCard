@@ -1,4 +1,4 @@
-import { Stack, Function, FunctionProps } from 'sst/constructs';
+import { Stack, Function } from 'sst/constructs';
 
 import { WithOffersDatabaseFunctionProps } from './types';
 

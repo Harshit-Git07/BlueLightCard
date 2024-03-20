@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { eventSchema } from '@blc-mono/core/schemas/event';
 import { Result } from '@blc-mono/core/types/result';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
+import { EmailService } from '@blc-mono/redemptions/application/services/email/EmailService';
 import {
   RedemptionEventDetailType,
   REDEMPTIONS_EVENT_SOURCE,
@@ -10,7 +11,21 @@ import {
 
 import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeController';
 
-const RedemptionTransactionalEmailEventDetailSchema = z.object({});
+const RedemptionTransactionalEmailEventDetailSchema = z.object({
+  memberDetails: z.object({
+    memberId: z.string(),
+    brazeExternalUserId: z.string(),
+  }),
+  redemptionDetails: z.object({
+    redemptionType: z.string(),
+    companyId: z.string(),
+    companyName: z.string(),
+    offerId: z.string(),
+    offerName: z.string(),
+    code: z.string(),
+    url: z.string(),
+  }),
+});
 const RedemptionTransactionalEmailEventSchema = eventSchema(
   REDEMPTIONS_EVENT_SOURCE,
   z.enum([
@@ -22,12 +37,12 @@ const RedemptionTransactionalEmailEventSchema = eventSchema(
   ]),
   RedemptionTransactionalEmailEventDetailSchema,
 );
-type RedemptionTransactionalEmailEvent = z.infer<typeof RedemptionTransactionalEmailEventSchema>;
+export type RedemptionTransactionalEmailEvent = z.infer<typeof RedemptionTransactionalEmailEventSchema>;
 
 export class RedemptionTransactionalEmailController extends EventBridgeController<RedemptionTransactionalEmailEvent> {
-  static readonly inject = [Logger.key] as const;
+  static inject = [Logger.key, EmailService.key] as const;
 
-  constructor(protected logger: ILogger) {
+  constructor(protected logger: ILogger, private emailService: EmailService) {
     super();
   }
 
@@ -35,10 +50,7 @@ export class RedemptionTransactionalEmailController extends EventBridgeControlle
     return this.zodParseRequest(request, RedemptionTransactionalEmailEventSchema);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected async handle(_: RedemptionTransactionalEmailEvent): Promise<void> {
-    this.logger.info({
-      message: 'NOT IMPLEMENTED',
-    });
+  public async handle(event: RedemptionTransactionalEmailEvent): Promise<void> {
+    await this.emailService.sendRedemptionTransactionEmail(event);
   }
 }

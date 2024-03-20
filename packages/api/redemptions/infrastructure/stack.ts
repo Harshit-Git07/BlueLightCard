@@ -3,6 +3,7 @@ import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
+import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 import { PostSpotifyModel } from '@blc-mono/redemptions/libs/models/postSpotify';
@@ -91,6 +92,7 @@ export async function Redemptions({ app, stack }: StackContext) {
     vaultUpdatedRule: createVaultUpdatedRule(stack, database),
     promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),
     offerRule: createOfferRule(stack, database),
+    emailTransactionalRule: createRedemptionTransactionalEmailRule(stack, config),
     offerUpdatedRule: updateOfferRule(stack, database),
   });
 

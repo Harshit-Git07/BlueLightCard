@@ -153,8 +153,9 @@ jobs:
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
               "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
-               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
-               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
+              "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
+              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Create Secret
         if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
@@ -169,7 +170,8 @@ jobs:
               "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
-              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
+              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Build
         run: npm run build
@@ -222,8 +224,9 @@ jobs:
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
               "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
-               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
-              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
+              "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
+              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Create Secret
         if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
@@ -238,7 +241,8 @@ jobs:
               "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
-              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}"
+              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Build
         run: npm run build

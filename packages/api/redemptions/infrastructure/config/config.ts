@@ -1,6 +1,6 @@
 import { Stack } from 'sst/constructs';
 
-import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { getEnv, getEnvRaw } from '@blc-mono/core/utils/getEnv';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
@@ -14,6 +14,8 @@ export type RedemptionsStackConfig = {
   redemptionsLambdaScriptsAssignUserCodesRedeemedPath: string;
   redemptionsLambdaScriptsCodeAmountIssuedPath: string;
   apiDefaultAllowedOrigins: string[];
+  brazeVaultRedemptionVaultCampaignId: string;
+  brazeApiUrl: string;
 };
 
 export class RedemptionsStackConfigResolver {
@@ -44,6 +46,9 @@ export class RedemptionsStackConfigResolver {
         'https://*.bluelightcard.com.au',
         'https://*.defencediscountservice.co.uk',
       ],
+      brazeVaultRedemptionVaultCampaignId:
+        getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID) ?? '',
+      brazeApiUrl: getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_API_URL) ?? '',
     };
   }
 
@@ -62,6 +67,8 @@ export class RedemptionsStackConfigResolver {
         'https://*.dds-uk.pages.dev',
         'http://localhost:*',
       ],
+      brazeVaultRedemptionVaultCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
+      brazeApiUrl: 'https://rest.fra-02.braze.eu',
     };
   }
 
@@ -80,6 +87,8 @@ export class RedemptionsStackConfigResolver {
         'https://*.dds-uk.pages.dev',
         'http://localhost:*',
       ],
+      brazeVaultRedemptionVaultCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
+      brazeApiUrl: 'https://rest.fra-02.braze.eu',
     };
   }
 
@@ -105,6 +114,10 @@ export class RedemptionsStackConfigResolver {
         RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH,
       ),
       apiDefaultAllowedOrigins: ['*'],
+      brazeVaultRedemptionVaultCampaignId: getEnv(
+        RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID,
+      ),
+      brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
     };
   }
 }

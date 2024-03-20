@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.1.0...bluelightcard/chrome-extension-v1.1.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* TO-649 removed 34875 id company from brands with offers ([#1068](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1068)) ([2094e69](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2094e698d9f053672b532b826a19d6873a960431))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.0.2...bluelightcard/chrome-extension-v1.1.0) (2024-03-19)
 
 

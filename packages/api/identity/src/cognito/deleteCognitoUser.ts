@@ -23,16 +23,16 @@ const deleteCognitoUser = async (cognito: CognitoIdentityServiceProvider, poolId
         Username: username
       }).promise();
 
-      logger.info("user found: ", { username });
+        logger.debug("user found");
 
       await cognito.adminDeleteUser({
           UserPoolId: poolId,
           Username: username
       }).promise();
 
-    logger.info("user successfully deleted: ", { username });
+    logger.info("user successfully deleted from Cognito ");
   } catch (e: any) {
-    logger.info("user not found: ", { username });
+    logger.debug("user not found");
   
     return {
       statusCode: 200,
@@ -75,7 +75,7 @@ export const handler = async (event: any, context: any) => {
     try {
       await dynamodb.send(new DeleteCommand(params));  
     } catch (error) {
-      console.error("Error deleting from table:", error);
+      logger.debug("Error deleting from table", { error });
       throw error;
     }
     return {
@@ -85,7 +85,7 @@ export const handler = async (event: any, context: any) => {
       })
     };
   } catch (err: any) {
-    logger.error("error deleting user ", { username, err });
+    logger.debug("error deleting user from dynamoDB ", { err });
     await sendToDLQ(event);
     throw new Error(`Error deleting user ${username} : ${err.message}.`)
   }

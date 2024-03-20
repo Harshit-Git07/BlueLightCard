@@ -41,13 +41,13 @@ describe('ResponsiveOfferCard component', () => {
   it('Should render component with vertical variant', () => {
     render(<ResponsiveOfferCard {...args} />);
     const offerCard = screen.getByTestId('offer-card-123');
-    expect(offerCard).toHaveClass('p-2');
-    expect(offerCard).not.toHaveClass('flow-root');
+    expect(offerCard).toHaveClass('desktop:p-2 desktop:pb-4 pb-0');
+    expect(offerCard).not.toHaveClass('py-3 flow-root');
   });
 
   it('Should render component with horizontal variant', () => {
     render(<ResponsiveOfferCard {...args} variant="horizontal" />);
     const offerCard = screen.getByTestId('offer-card-123');
-    expect(offerCard).toHaveClass('flow-root');
+    expect(offerCard).toHaveClass('py-3 flow-root');
   });
 });

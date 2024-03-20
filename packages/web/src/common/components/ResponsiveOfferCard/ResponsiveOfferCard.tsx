@@ -37,7 +37,7 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   return (
     <div
       className={`w-full h-full relative overflow-hidden ${
-        variant === 'vertical' ? 'p-2 pb-4' : 'px-4 py-3 flow-root'
+        variant === 'vertical' ? 'desktop:p-2 desktop:pb-4 pb-0' : 'py-3 flow-root'
       }`}
       data-testid={`offer-card-${id}`}
     >

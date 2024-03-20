@@ -4,7 +4,7 @@ import Heading from '../Heading/Heading';
 
 const CompanyAbout: FC<CompanyAboutProps> = ({ CompanyName, CompanyDescription }) => {
   return (
-    <div className="p-4">
+    <div>
       {/* Company name */}
       <Heading
         headingLevel={'h1'}

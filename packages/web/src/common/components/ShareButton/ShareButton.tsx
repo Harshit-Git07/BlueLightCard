@@ -15,7 +15,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
       variant={ThemeVariant.Tertiary}
       slim
       withoutHover
-      className="w-fit m-1"
+      className="w-fit m-1 mobile:px-0 mobile:py-0"
       onClick={onShareClick}
     >
       <span

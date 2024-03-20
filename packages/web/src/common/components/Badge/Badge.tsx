@@ -6,7 +6,11 @@ const Badge: FC<BadgeProps> = ({ label, color, size }) => {
     <div
       className={`w-fit rounded-tl-lg rounded-br-lg flex items-center justify-center font-semibold font-['MuseoSans'] text-[#202125] ${
         color.includes('bg-') ? color : ''
-      } ${size === 'large' ? 'absolute top-2 left-2 px-6 py-2 text-base' : 'px-2 py-0.5 text-xs'}`}
+      } ${
+        size === 'large'
+          ? 'absolute top-0 left-0 desktop:top-2 desktop:left-2 px-6 py-2 text-base'
+          : 'px-2 py-0.5 text-xs'
+      }`}
     >
       {label}
     </div>

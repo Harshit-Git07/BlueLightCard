@@ -10,7 +10,11 @@ import { ThemeVariant } from '@/types/theme';
 import { FavouriteButtonProps } from './types';
 import { retrieveFavourites, UpdateFavourites } from '@/utils/company/favourites';
 
-const FavouriteButton: React.FC<FavouriteButtonProps> = ({ offerData, companyId, hasText }) => {
+const FavouriteButton: React.FC<FavouriteButtonProps> = ({
+  offerData,
+  companyId,
+  hasText = true,
+}) => {
   const userCtx = useContext(UserContext);
   const authCtx = useContext(AuthContext);
   const { open } = useContext(OfferSheetContext);
@@ -49,7 +53,7 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({ offerData, companyId,
       variant={ThemeVariant.Tertiary}
       slim
       withoutHover
-      className="w-fit m-1"
+      className="w-fit mx-1 mobile:px-0"
       onClick={() =>
         curFavBtnState !== 'error' && curFavBtnState !== 'disabled' && onFavouriteClick()
       }
@@ -57,14 +61,14 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({ offerData, companyId,
       <span
         className={`${
           curFavBtnState === 'error' && 'text-palette-danger-base'
-        } text-base font-['MuseoSans'] font-bold leading-6`}
+        } text-base font-['MuseoSans'] font-bold leading-6 flex items-center`}
       >
         <FontAwesomeIcon
           icon={curFavBtnState === 'favourite' ? faStarSolid : faStarRegular}
-          className="mr-2"
+          className="desktop:mr-2 mr-0"
         />
 
-        {hasText && curFavBtnState === 'error' ? 'Failed to update' : 'Favourite'}
+        {hasText && (curFavBtnState === 'error' ? 'Failed to update' : 'Favourite')}
       </span>
     </Button>
   );

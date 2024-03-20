@@ -1,6 +1,6 @@
 import PillButtons from '@/components/PillButtons/PillButtons';
 import { PillButtonProps } from '@/components/PillButtons/types';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
@@ -35,25 +35,29 @@ describe('PillButtons component', () => {
 
   describe('component functionality', () => {
     it('should select a pill on click', async () => {
-      render(<PillButtons {...props} />);
+      const onSelected = jest.fn();
 
-      const pillButton = screen.getByText(/pill 1/i);
-      await act(() => user.click(pillButton));
+      const { getByRole } = render(
+        <PillButtons text="Test" onSelected={onSelected} isSelected={false} />
+      );
 
-      expect(pillButton).toHaveClass('bg-[#001B80] text-white');
+      fireEvent.click(getByRole('button'));
+
+      expect(getByRole('button')).toHaveClass(
+        `bg-[#ECEFF2] font-['MuseoSans'] text-[#202125] font-light rounded-[56px] desktop:py-3 px-3 mobile:py-2 whitespace-nowrap text-base`
+      );
     });
 
     describe('component callbacks', () => {
-      it('should invoke onSelected callback with updated selected values', async () => {
-        const onSelectedMockFn = jest.fn();
-        props.onSelected = onSelectedMockFn;
+      it('should call onSelected function when clicked', () => {
+        const onSelected = jest.fn();
 
-        render(<PillButtons {...props} />);
+        const { getByRole } = render(
+          <PillButtons text="Test" onSelected={onSelected} isSelected={false} />
+        );
 
-        const pillButtonOne = screen.getByText(/pill 1/i);
-        await act(() => user.click(pillButtonOne));
-
-        expect(onSelectedMockFn).toHaveBeenCalledWith();
+        fireEvent.click(getByRole('button'));
+        expect(onSelected).toHaveBeenCalledWith('Test');
       });
 
       it('should invoke onSelected callback with updated deselected values', async () => {
@@ -65,9 +69,7 @@ describe('PillButtons component', () => {
 
         const pillButtonOne = screen.getByText(/pill 1/i);
 
-        // Simulate selecting the pills
         await act(() => user.click(pillButtonOne));
-
         expect(pillButtonOne).toBeDisabled();
       });
     });

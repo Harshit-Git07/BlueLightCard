@@ -119,6 +119,15 @@ describe('RedeemVaultQrStrategy (TODO)', () => {
 describe('RedeemVaultStrategy', () => {
   const mockedLogger = createTestLogger();
   const defaultMemberId = faker.string.sample(8);
+  const defaultBrazeExternalUserId = faker.string.uuid();
+  const defaultOfferName = faker.string.sample(5);
+  const defaultCompanyName = 'BLC';
+  const defaultParams = {
+    memberId: defaultMemberId,
+    brazeExternalUserId: defaultBrazeExternalUserId,
+    companyName: defaultCompanyName,
+    offerName: defaultOfferName,
+  };
 
   async function callVaultRedeemStrategy(
     connection: IDatabaseConnection,
@@ -226,7 +235,7 @@ describe('RedeemVaultStrategy', () => {
     await connection.db.insert(redemptionsTable).values(redemptionCreated);
 
     // Act
-    const result = await callVaultRedeemStrategy(connection, redemptionCreated, { memberId: defaultMemberId });
+    const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultParams);
 
     // Assert
     expect(result.kind).toBe('VaultNotFound');
@@ -240,7 +249,7 @@ describe('RedeemVaultStrategy', () => {
       await connection.db.insert(vaultsTable).values(vaultCreated);
 
       // Act
-      const result = await callVaultRedeemStrategy(connection, redemptionCreated, { memberId: defaultMemberId });
+      const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultParams);
 
       // Assert
       expect(result.kind).toBe('VaultInactive');
@@ -253,7 +262,7 @@ describe('RedeemVaultStrategy', () => {
       await connection.db.insert(vaultsTable).values(vaultCreated);
 
       // Act
-      const result = await callVaultRedeemStrategy(connection, redemptionCreated, { memberId: defaultMemberId });
+      const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultParams);
 
       // Assert
       expect(result.kind).toBe('ErrorWhileRedeemingVault');
@@ -274,7 +283,7 @@ describe('RedeemVaultStrategy', () => {
       await connection.db.insert(vaultCodesTable).values(vaultCodesCreated);
 
       // Act
-      const result = await callVaultRedeemStrategy(connection, redemptionCreated, { memberId: defaultMemberId });
+      const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultParams);
 
       // Assert
       expect(result.kind).toBe('MaxPerUserReached');
@@ -296,7 +305,7 @@ describe('RedeemVaultStrategy', () => {
       await connection.db.insert(vaultCodesTable).values(vaultCodesCreated);
 
       // Act
-      const result = await callVaultRedeemStrategy(connection, redemptionCreated, { memberId: defaultMemberId });
+      const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultParams);
 
       // Assert
       expect(result.kind).toBe('Ok');
@@ -326,7 +335,7 @@ describe('RedeemVaultStrategy', () => {
       const result = await callVaultRedeemStrategy(
         connection,
         redemptionCreated,
-        { memberId: defaultMemberId },
+        defaultParams,
         mockedLegacyVaultApiRepository,
       );
 
@@ -351,7 +360,7 @@ describe('RedeemVaultStrategy', () => {
       const result = await callVaultRedeemStrategy(
         connection,
         redemptionCreated,
-        { memberId: defaultMemberId },
+        defaultParams,
         mockedLegacyVaultApiRepository,
       );
 
@@ -376,7 +385,7 @@ describe('RedeemVaultStrategy', () => {
       const result = await callVaultRedeemStrategy(
         connection,
         redemptionCreated,
-        { memberId: defaultMemberId },
+        defaultParams,
         mockedLegacyVaultApiRepository,
       );
 
@@ -401,7 +410,7 @@ describe('RedeemVaultStrategy', () => {
       const result = await callVaultRedeemStrategy(
         connection,
         redemptionCreated,
-        { memberId: defaultMemberId },
+        defaultParams,
         mockedLegacyVaultApiRepository,
       );
 
@@ -426,7 +435,7 @@ describe('RedeemVaultStrategy', () => {
       const result = await callVaultRedeemStrategy(
         connection,
         redemptionCreated,
-        { memberId: defaultMemberId },
+        defaultParams,
         mockedLegacyVaultApiRepository,
       );
 
@@ -460,7 +469,7 @@ describe('RedeemVaultStrategy', () => {
       const result = await callVaultRedeemStrategy(
         connection,
         redemptionCreated,
-        { memberId: defaultMemberId },
+        defaultParams,
         mockedLegacyVaultApiRepository,
       );
 

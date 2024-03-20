@@ -1,5 +1,3 @@
-import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
-
 import { Redemption } from '../../../repositories/RedemptionsRepository';
 
 export type RedeemedStrategyResult =
@@ -12,7 +10,7 @@ export type RedeemedStrategyResult =
 export type RedeemGenericStrategyResult =
   | {
       kind: 'Ok';
-      redemptionType: RedemptionType;
+      redemptionType: 'generic';
       redemptionDetails: {
         url: string;
         code: string;
@@ -25,28 +23,28 @@ export type RedeemGenericStrategyResult =
 // TODO: This is a placeholder for the future implementation
 export type RedeemPreAppliedStrategyResult = {
   kind: 'Ok';
-  redemptionType: RedemptionType;
+  redemptionType: 'preApplied';
   redemptionDetails: string;
 };
 
 // TODO: This is a placeholder for the future implementation
 export type RedeemShowCardStrategyResult = {
   kind: 'Ok';
-  redemptionType: RedemptionType;
+  redemptionType: 'showCard';
   redemptionDetails: string;
 };
 
 // TODO: This is a placeholder for the future implementation
 export type RedeemVaultQrStrategyResult = {
   kind: 'Ok';
-  redemptionType: RedemptionType;
+  redemptionType: 'vaultQR';
   redemptionDetails: string;
 };
 
 export type RedeemVaultStrategyResult =
   | {
       kind: 'Ok';
-      redemptionType: RedemptionType;
+      redemptionType: 'vault';
       redemptionDetails: {
         url: string;
         code: string;

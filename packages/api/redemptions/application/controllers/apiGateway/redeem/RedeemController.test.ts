@@ -29,11 +29,14 @@ describe('RedeemController', () => {
           min: 1,
           max: 1_000_000,
         }),
+        companyName: faker.string.sample(5),
+        offerName: faker.string.sample(5),
       },
       headers: {
         Authorization: 'Bearer token',
       },
       memberId: faker.string.sample(5),
+      brazeExternalUserId: faker.string.uuid(),
     });
 
     // Assert
@@ -65,11 +68,14 @@ describe('RedeemController', () => {
           min: 1,
           max: 1_000_000,
         }),
+        companyName: faker.string.sample(5),
+        offerName: faker.string.sample(5),
       },
       headers: {
         Authorization: 'Bearer token',
       },
       memberId: faker.string.sample(5),
+      brazeExternalUserId: faker.string.uuid(),
     });
 
     // Assert

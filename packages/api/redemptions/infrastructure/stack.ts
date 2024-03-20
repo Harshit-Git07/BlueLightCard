@@ -28,7 +28,7 @@ import { Route } from './routes/route';
 import { Routes } from './routes/routes';
 
 export async function Redemptions({ app, stack }: StackContext) {
-  const { certificateArn, vpc } = use(Shared);
+  const { certificateArn, vpc, bus } = use(Shared);
   const { authorizer } = use(Identity);
 
   // set tag service identity to all resources
@@ -138,6 +138,7 @@ export async function Redemptions({ app, stack }: StackContext) {
           config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
           config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [getSecretValueSecretsManager],

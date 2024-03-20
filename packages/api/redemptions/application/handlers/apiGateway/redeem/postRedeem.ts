@@ -8,6 +8,7 @@ import {
   LegacyVaultApiRepository,
   Secrets,
 } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
+import { RedemptionEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionEventsRepository';
 import { VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
@@ -38,6 +39,7 @@ const controller = createInjector()
   .provideClass(VaultsRepository.key, VaultsRepository)
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)
   .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
+  .provideClass(RedemptionEventsRepository.key, RedemptionEventsRepository)
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)

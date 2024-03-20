@@ -20,4 +20,7 @@ export enum RedemptionsStackEnvironmentKeys {
 
   // CORS
   API_DEFAULT_ALLOWED_ORIGINS = 'API_DEFAULT_ALLOWED_ORIGINS',
+
+  // Event bus
+  REDEMPTIONS_EVENT_BUS_NAME = 'REDEMPTIONS_EVENT_BUS_NAME',
 }

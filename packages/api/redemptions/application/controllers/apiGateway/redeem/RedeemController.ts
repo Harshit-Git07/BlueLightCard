@@ -17,7 +17,7 @@ const RedeemRequestModel = z.object({
   }),
 });
 type RedeemRequestModel = z.infer<typeof RedeemRequestModel>;
-type ParsedRequest = RedeemRequestModel & { memberId: string };
+type ParsedRequest = RedeemRequestModel & { memberId: string; brazeExternalUserId: string };
 
 export class RedeemController extends APIGatewayController<RedeemRequestModel> {
   static readonly inject = [Logger.key, RedeemService.key] as const;
@@ -46,15 +46,20 @@ export class RedeemController extends APIGatewayController<RedeemRequestModel> {
     }
 
     const memberId = tokenPayloadResult.value['custom:blc_old_id'];
-    if (typeof memberId !== 'string') {
-      return Result.err({ message: 'Invalid memberId in token' });
-    }
+    const brazeExternalUserId = tokenPayloadResult.value['custom:blc_old_uuid'];
+    if (typeof memberId !== 'string') return Result.err({ message: 'Invalid memberId in token' });
+    if (typeof brazeExternalUserId !== 'string') return Result.err({ message: 'Invalid brazeExternalUserId in token' });
 
-    return Result.ok({ ...parsedRequest.value, memberId });
+    return Result.ok({ ...parsedRequest.value, memberId, brazeExternalUserId });
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const result = await this.redeemService.redeem(request.body.offerId, { memberId: request.memberId });
+    const result = await this.redeemService.redeem(request.body.offerId, {
+      memberId: request.memberId,
+      brazeExternalUserId: request.brazeExternalUserId,
+      companyName: request.body.companyName,
+      offerName: request.body.offerName,
+    });
 
     switch (result.kind) {
       case 'Ok':

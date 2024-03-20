@@ -24,7 +24,7 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
     }
     return {
       kind: 'Ok',
-      redemptionType: redemption.redemptionType,
+      redemptionType: 'generic',
       redemptionDetails: {
         code: generic.code,
         url: redemption.url ?? '',

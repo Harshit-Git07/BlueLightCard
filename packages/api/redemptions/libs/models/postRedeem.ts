@@ -7,6 +7,8 @@ export const PostRedeemModel = createZodNamedType(
   'PostRedeemModel',
   z.object({
     offerId: NON_NEGATIVE_INT,
+    companyName: z.string(),
+    offerName: z.string(),
   }),
 );
 

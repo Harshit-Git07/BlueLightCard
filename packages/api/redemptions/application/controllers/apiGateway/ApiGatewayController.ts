@@ -154,7 +154,9 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
 
   protected getAllowedOrigin(request: APIGatewayProxyEventV2): string {
     const origin = request.headers.origin;
-    const allowedOrigins = JSON.parse(getEnv(RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS));
+    const allowedOrigins = JSON.parse(getEnv(RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS)) as
+      | string
+      | string[];
     if (origin && (micromatch.isMatch(origin, allowedOrigins) || allowedOrigins.includes('*'))) {
       return origin;
     } else {

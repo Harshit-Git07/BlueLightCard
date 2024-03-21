@@ -42,6 +42,6 @@ export class SecretsManager<O extends object> {
       this.logger.error(response);
       return response;
     }
-    return JSON.parse(awsResponse.SecretString);
+    return JSON.parse(awsResponse.SecretString) as O;
   }
 }

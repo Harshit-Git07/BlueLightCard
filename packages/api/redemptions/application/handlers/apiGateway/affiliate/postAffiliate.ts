@@ -14,7 +14,9 @@ const service: string = process.env.service as string;
 const logger = new LambdaLogger({ serviceName: `${service}-affiliate-post` });
 
 export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyStructuredResultV2> => {
-  const { affiliateUrl, memberId, platform, offerId, companyId }: PostAffiliateModel = JSON.parse(event.body);
+  const { affiliateUrl, memberId, platform, offerId, companyId }: PostAffiliateModel = JSON.parse(
+    event.body,
+  ) as PostAffiliateModel;
   const affiliateConfig = new AffiliateConfigurationHelper(affiliateUrl).getConfig();
 
   if (!affiliateConfig) {

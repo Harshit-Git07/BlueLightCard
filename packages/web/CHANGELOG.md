@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.35.0...bluelightcard/web-v1.36.0) (2024-03-21)
+
+
+### Features
+
+* added company page ([#1067](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1067)) ([0107b39](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0107b394b7b3976c08163c0efba02598d296d9a8))
+* banner data work ([#1080](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1080)) ([60b2a46](https://github.com/bluelightcard/BlueLightCard-2.0/commit/60b2a464c022a76aac8aaa2b9ee7292334e02f7e))
+
 ## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.34.0...bluelightcard/web-v1.35.0) (2024-03-18)
 
 

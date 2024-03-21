@@ -13,7 +13,7 @@ const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl }) => {
     <div className="relative w-full h-[200px]">
       <Link href={linkUrl}>
         <Image
-          src={imageSource}
+          src={image}
           alt={`${name} banner`}
           className="w-full"
           onError={() => {

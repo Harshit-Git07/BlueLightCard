@@ -1,8 +1,15 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import requireAuth from '@/hoc/requireAuth';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useMediaQuery } from 'usehooks-ts';
+import { advertQuery } from 'src/graphql/advertQuery';
+import { makeQuery } from 'src/graphql/makeQuery';
+import { shuffle } from 'lodash';
+import { BRAND } from '@/global-vars';
+import AuthContext from '@/context/Auth/AuthContext';
+import UserContext from '@/context/User/UserContext';
 import Heading from '@/components/Heading/Heading';
 import Container from '@/components/Container/Container';
 import CompanyAbout from '@/components/CompanyAbout/CompanyAbout';
@@ -14,12 +21,7 @@ import getOffersStaticProps from '@/utils/getProps/getOffersProps';
 import Link from '@/components/Link/Link';
 import CampaignCard from '@/components/CampaignCard/CampaignCard';
 
-type CompanyPageProps = {
-  // offers: OfferCardProp[];
-  // companyName?: string;
-  // companyDescription?: string;
-  // adverts?: { imageUrl: string; imageAlt: string; linkUrl: string }[];
-};
+type CompanyPageProps = {};
 
 type OfferCardProp = {
   id: string;
@@ -29,10 +31,10 @@ type OfferCardProp = {
   companyId: string;
   companyName: string;
 };
-type AdvertProp = {
-  name: string;
-  image: string;
-  linkUrl: string;
+
+type BannerDataType = {
+  imageSource: string;
+  link: string;
 };
 
 const filterArray = ['All', 'Online', 'In-store', 'Gift card'];
@@ -88,31 +90,19 @@ const mockOfferCardResponse: OfferCardProp[] = [
   },
 ];
 
-const adverts: AdvertProp[] = [
-  {
-    name: 'banner1',
-    image: '/assets/forest.jpeg',
-    linkUrl: 'www.samsung.com',
-  },
-  {
-    name: 'banner2',
-    image: '/assets/forest.jpeg',
-    linkUrl: 'www.seat.com',
-  },
-  {
-    name: 'banner3',
-    image: '/assets/forest.jpeg',
-    linkUrl: 'www.samsung.com',
-  },
-];
-
 const CompanyPage: NextPage<CompanyPageProps> = () => {
+  const router = useRouter();
   const isMobile = useMediaQuery('(max-width: 500px)');
+  const authCtx = useContext(AuthContext);
+  const userCtx = useContext(UserContext);
   const companyName = 'Samsung';
   const companyNameMobile = `About ${companyName}`;
   const companyDescription = `Samsung is an internationally recognized industry leader in technology and a Top 10 global brand. From the latest Samsung Galaxy smartphones to Samsung QLED TVs and Galaxy Buds, we've got you covered with the best deals.`;
   const [firstItem, ...restItems] = mockOfferCardResponse;
   const [selectedType, setSelectedType] = useState<string>('All');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [query, setQuery] = useState<string>((router.query.q as string) ?? '');
+  const [adverts, setAdverts] = useState<any[]>([]);
 
   const filteredOffers =
     selectedType === 'All'
@@ -128,6 +118,27 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       setSelectedType(pillType);
     }
   };
+
+  useEffect(() => {
+    const fetchBannerData = async () => {
+      setIsLoading(true);
+
+      // Banner Data
+      try {
+        let bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
+        setAdverts(shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[]);
+      } catch (error) {
+        setAdverts([]);
+      }
+
+      setIsLoading(false);
+    };
+
+    if (authCtx.authState.idToken && Boolean(userCtx.user) && router.isReady) {
+      fetchBannerData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authCtx.authState.idToken, userCtx.isAgeGated, userCtx.user, router.isReady, query]);
 
   return (
     <>
@@ -201,7 +212,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         </div>
 
         {/* Adverts (ONLY ON WEB) */}
-        {!isMobile && adverts && adverts.length > 0 && (
+        {!isMobile && !isLoading && adverts && adverts.length > 0 && (
           <>
             <div className="w-full mb-16">
               <div className="grid grid-cols-2 gap-10">
@@ -209,9 +220,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                   return (
                     <CampaignCard
                       key={index}
-                      name={advert.name}
-                      image={advert.image}
-                      linkUrl={advert.linkUrl}
+                      name={advert.__typename}
+                      image={advert.imageSource}
+                      linkUrl={advert.link}
                     />
                   );
                 })}

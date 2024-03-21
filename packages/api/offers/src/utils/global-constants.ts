@@ -17,6 +17,11 @@ export const enum APP_MODE {
   DEPLOY = 'deploy',
 }
 
+export const enum OFFERS_DOMAIN_NAME {
+  UK = 'offers.blcshine.io',
+  AUS = 'offers-au.blcshine.io',
+}
+
 export const enum DATABASE_PROPS {
   NAME = 'offers',
   USERNAME = 'offersAdmin',

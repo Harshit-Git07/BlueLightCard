@@ -56,15 +56,6 @@ export class OffersApi {
       logConfig: {
         fieldLogLevel: FieldLogLevel.ERROR,
       },
-      ...(['production', 'staging'].includes(this.stack.stage) &&
-        certificateArn && {
-          domainName: {
-            domainName: isProduction(this.stack.stage)
-              ? 'offers.blcshine.io'
-              : `${this.stack.stage}-offers.blcshine.io`,
-            certificate: Certificate.fromCertificateArn(this.stack, 'DomainCertificate', certificateArn),
-          },
-        }),
     });
   }
 }

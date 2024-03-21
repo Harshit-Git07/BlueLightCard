@@ -22,7 +22,7 @@ import { DatabaseAdapter } from './src/constructs/database/adapter';
 export async function Offers({ stack, app }: StackContext) {
   new Tags(stack);
   const { authorizer, cognito, newCognito } = use(Identity);
-  const { vpc } = use(Shared);
+  const { vpc, certificateArn } = use(Shared);
   const secretsManger: SecretManager = new SecretManager(stack);
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
   const ec2Manager: EC2Manager = new EC2Manager(stack, vpc, securityGroupManager);
@@ -30,7 +30,7 @@ export async function Offers({ stack, app }: StackContext) {
   if (!isProduction(stack.stage)) {
     dbAdapter = await new DatabaseAdapter(stack, app, vpc, secretsManger, securityGroupManager, ec2Manager).init();
   }
-  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, dbAdapter);
+  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, dbAdapter, certificateArn);
 
   //Need to be removed once the ApiGateway is ready to support the Offers API functionality
   const offersApi: OffersApi = new OffersApi(

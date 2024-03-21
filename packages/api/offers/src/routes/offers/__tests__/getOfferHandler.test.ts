@@ -138,25 +138,6 @@ describe('handler', () => {
     expect(result.statusCode).toEqual(HttpStatusCode.NOT_FOUND);
     expect(result.body).toEqual(JSON.stringify({ message: 'Offer not found', data: {} }));
   });
-  it('should return an error response when the legacy api url is not set in env', async () => {
-    process.env.LEGACY_RETRIEVE_OFFERS_URL = '';
-    const event: APIGatewayEvent = {
-      ...mockLambdaEvent,
-      pathParameters: {
-        id: '1234',
-      },
-    };
-
-    const result = await handler(event);
-
-    expect(result.statusCode).toEqual(HttpStatusCode.INTERNAL_SERVER_ERROR);
-    expect(result.body).toEqual(
-      JSON.stringify({
-        message: 'Error',
-        error: 'Error fetching offers',
-      }),
-    );
-  });
 
   it('should return an error response when the legacy api returns an error', async () => {
     axios.get = jest.fn().mockRejectedValue({ message: 'Error fetching offers' });

@@ -1,19 +1,20 @@
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { Response } from '../../../../core/src/utils/restResponse/response';
-import axios, { AxiosResponse } from 'axios';
 import { HttpStatusCode } from '../../../../core/src/types/http-status-code.enum';
 import { LegacyOffers } from '../../models/legacy/legacyOffers';
 import { LegacyCompanyOffers } from '../../models/legacy/legacyCompanyOffers';
-import { Offers, OffersModel } from '../../models/offers';
-import { API_SOURCE, OFFER_TYPES } from '../../utils/global-constants';
+import { Offer, OfferModel } from '../../models/offers';
+import { API_SOURCE, ENVIRONMENTS, LegacyAPIEndPoints } from '../../utils/global-constants';
 import { getLegacyUserId } from '../../utils/getLegacyUserIdFromToken';
 import { FirehoseDeliveryStream } from '../../../../core/src/utils/firehose';
 import { isDev } from '../../../../core/src/utils/checkEnvironment';
+import { getOfferDetail } from '../../utils/parseLegacyOffers';
+import { LegacyAPIService } from '../../services/legacyAPIService';
 
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-offers-get` });
-const stage = process.env.STAGE ?? '';
+const stage = (process.env.STAGE ?? 'dev') as ENVIRONMENTS;
 const firehose = new FirehoseDeliveryStream(logger);
 
 export const handler = async (event: APIGatewayEvent) => {
@@ -30,7 +31,7 @@ export const handler = async (event: APIGatewayEvent) => {
 
     return getOfferDetailFromLegacy(offerId as string, uid, event.headers.Authorization as string, source);
   } catch (error: any) {
-    logger.error({ message: 'Error fetching offers', data: error });
+    logger.error({ message: 'Error fetching offer', data: error });
     return error;
   }
 };
@@ -58,7 +59,7 @@ async function getOfferDetailFromLegacy(
       ...getOfferDetail(offer), // using id in query params will get only one offer
       companyId: legacyOffersResponse.data.id,
       companyLogo: legacyOffersResponse.data.s3logos,
-    }) as Offers;
+    }) as Offer;
 
     if (!isDev(stage)) {
       //set the stream depending on header sent
@@ -85,23 +86,8 @@ async function getOfferDetailFromLegacy(
   }
 }
 
-function getOfferDetail(offer: LegacyOffers): Omit<Offers, 'companyId' | 'companyLogo'> {
-  const offerType = OFFER_TYPES[offer.typeid as keyof typeof OFFER_TYPES];
-  const expiry = offer.expires && !isNaN(new Date(offer.expires).valueOf()) ? new Date(offer.expires) : undefined;
-  const offerWithOutExpiry = {
-    id: offer.id,
-    name: offer.name,
-    description: offer.desc,
-    type: offerType,
-    terms: offer.terms,
-  };
-
-  const offerRes = expiry ? { ...offerWithOutExpiry, expiry } : offerWithOutExpiry;
-  return offerRes;
-}
-
-function validateOffersResponse(offer: Offers): Offers | Response {
-  const result = OffersModel.safeParse(offer);
+function validateOffersResponse(offer: Offer): Offer | Response {
+  const result = OfferModel.safeParse(offer);
   if (result.success) {
     return offer;
   } else {
@@ -116,26 +102,7 @@ function validateOffersResponse(offer: Offers): Offers | Response {
   }
 }
 
-function getLegacyOffersData(id: string, uid: string, bearerToken: string) {
-  const legacyOffersUrl = process.env.LEGACY_RETRIEVE_OFFERS_URL;
-  if (!legacyOffersUrl) {
-    logger.error({ message: 'Legacy API Url not set' });
-    throw Response.Error(
-      {
-        name: 'legacyApiUrlNotSet',
-        message: 'Error fetching offers',
-      },
-      HttpStatusCode.INTERNAL_SERVER_ERROR,
-    );
-  }
-  const apiUrl = `${legacyOffersUrl}?id=${id}&uid=${uid}&bypass=true`;
-  logger.info({
-    message: 'GET legacy Offers api',
-    data: { auth: bearerToken, apiUrl },
-  });
-  return axios.get<AxiosResponse<LegacyCompanyOffers>>(apiUrl, {
-    headers: {
-      Authorization: bearerToken,
-    },
-  });
+function getLegacyOffersData(id: string, uid: string, token: string) {
+  const legacyAPIService = new LegacyAPIService({ stage, token, logger });
+  return legacyAPIService.get<LegacyCompanyOffers>(LegacyAPIEndPoints.RETRIEVE_OFFERS, `id=${id}&uid=${uid}`);
 }

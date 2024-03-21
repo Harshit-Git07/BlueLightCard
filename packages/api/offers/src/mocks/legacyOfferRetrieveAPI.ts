@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { OFFER_TYPES } from '../utils/global-constants';
 
 // not providing overrides for mocked offer as of now.
 // at the moment it would be an overkill to override for a specific indexed offer object
@@ -6,7 +7,7 @@ import { faker } from '@faker-js/faker';
 function mockedOffer() {
   return {
     id: faker.number.int(),
-    typeid: faker.number.int(),
+    typeid: faker.helpers.arrayElement(Object.keys(OFFER_TYPES)),
     name: faker.lorem.words(),
     desc: faker.lorem.sentences(3),
     terms: faker.lorem.sentences(3),

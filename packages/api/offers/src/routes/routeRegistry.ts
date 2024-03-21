@@ -1,13 +1,15 @@
 import { ApiGatewayV1Api, Stack } from 'sst/constructs';
 import { OffersRoutes } from './offers/offerRoutes';
 import { ApiGatewayModelGenerator } from '../../../core/src/extensions/apiGatewayExtension';
-import { OffersModel } from '../models/offers';
+import { OfferModel } from '../models/offers';
 import { Model } from 'aws-cdk-lib/aws-apigateway';
 import { DatabaseRoute } from './database/databaseRoute';
 import { CompanyRoutes } from './company/companyRoutes';
 import { CompanyInfoModel } from 'src/models/companyInfo';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { IDatabaseAdapter } from '../constructs/database/IDatabaseAdapter';
+import { CompanyOfferRoutes } from './company/offers/companyOfferRoutes';
+import { CompanyOffersModel } from 'src/models/companyOffers';
 
 /**
  * The RouteRegistry class provides a centralized way to register all routes for the application.
@@ -39,7 +41,7 @@ export class RouteRegistry {
       stack,
       api,
       apiGatewayModelGenerator,
-      model: modelMap.get('OffersModel')!,
+      model: modelMap.get('OfferModel')!,
     }).initialiseRoutes();
     new CompanyRoutes({
       stack,
@@ -47,13 +49,19 @@ export class RouteRegistry {
       apiGatewayModelGenerator,
       model: modelMap.get('CompanyInfoModel')!,
     }).initialiseRoutes();
+    new CompanyOfferRoutes({
+      stack,
+      api,
+      apiGatewayModelGenerator,
+      model: modelMap.get('CompanyOffersModel')!,
+    }).initialiseRoutes();
   }
 
   private generateModels(agmg: ApiGatewayModelGenerator): Map<string, Model> {
     const models: Map<string, Model> = new Map();
-    models.set('OffersModel', agmg.generateModel(OffersModel).getModel());
+    models.set('OfferModel', agmg.generateModel(OfferModel).getModel());
     models.set('CompanyInfoModel', agmg.generateModel(CompanyInfoModel).getModel());
-
+    models.set('CompanyOffersModel', agmg.generateModel(CompanyOffersModel).getModel());
     return models;
   }
 }

@@ -1,24 +1,25 @@
-import { RouteProps } from '../routeProps';
-import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExtension';
+import { RouteProps } from '../../routeProps';
+import { MethodResponses } from '../../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { EnvironmentVariablesKeys } from 'src/utils/environment-variables';
 
-export class CompanyRoutes {
+export class CompanyOfferRoutes {
   constructor(private readonly routeProps: RouteProps) {}
   initialiseRoutes() {
     this.routeProps.api.addRoutes(this.routeProps.stack, {
-      'GET /company/{id}': this.get(),
+      'GET /company/{id}/offers': this.get(),
     });
   }
 
   private get(): ApiGatewayV1ApiRouteProps<any> {
+    //configures API route
     return {
       function: {
-        handler: 'packages/api/offers/src/routes/company/getCompanyInfoHandler.handler',
+        handler: 'packages/api/offers/src/routes/company/offers/getCompanyOffersHandler.handler',
         environment: {
           [EnvironmentVariablesKeys.STAGE]: this.routeProps.stack.stage,
-          service: 'company',
+          service: 'company offers',
         },
       },
       cdk: {
@@ -28,7 +29,7 @@ export class CompanyRoutes {
             this.routeProps.apiGatewayModelGenerator.getError404(),
             this.routeProps.apiGatewayModelGenerator.getError500(),
           ]),
-          requestValidator: new RequestValidator(this.routeProps.stack, 'GetCompanyInfoValidator', {
+          requestValidator: new RequestValidator(this.routeProps.stack, 'GetCompanyOffersValidator', {
             restApi: this.routeProps.api.cdk.restApi,
             validateRequestBody: false,
             validateRequestParameters: false,

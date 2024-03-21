@@ -13,9 +13,6 @@ jest.mock('../../../utils/getLegacyUserIdFromToken', () => ({
 
 jest.mock('../../../../../core/src/utils/getEnv', () => ({
   getEnv: jest.fn().mockImplementation((param) => {
-    if (param === 'LEGACY_RETRIEVE_OFFERS_URL') {
-      return faker.internet.url();
-    }
     if (param === 'service') {
       return 'test-company';
     }
@@ -50,7 +47,6 @@ describe('handler', () => {
     };
 
     const result = await handler(event);
-
     validateSuccessfulResponse(result, legacyAPIMockResponse.data.data);
   });
 

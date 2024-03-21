@@ -1,11 +1,28 @@
+import axios, { AxiosResponse } from 'axios';
 import { ENVIRONMENTS, LEGACY_API_BASE_URL, LegacyAPIEndPoints } from '../utils/global-constants';
+import { Logger } from '@aws-lambda-powertools/logger';
 
-// TODO: TO-586 extend the functionality of this class to make API calls as well.
-// Doing above would mean that value of stage will be passed from lambda code AKA this will not be triggered in CompanyRoutes.ts file
+interface ILegacyAPIService {
+  stage: ENVIRONMENTS;
+  token: string;
+  logger: Logger;
+}
+
 export class LegacyAPIService {
-  public getURL(stage: ENVIRONMENTS, api: LegacyAPIEndPoints): string {
+  private stage: ENVIRONMENTS;
+  private authToken: string;
+  private logger: Logger;
+  constructor({ stage, token, logger }: ILegacyAPIService) {
+    this.stage = stage;
+    this.authToken = token;
+    this.logger = logger;
+  }
+
+  private getLegacyBaseURL(): string {
+    this.logger.info({ message: 'getLegacyBaseURL', data: { stage: this.stage } });
+    //returns URL
     let baseUrl;
-    switch (stage) {
+    switch (this.stage) {
       case ENVIRONMENTS.PRODUCTION:
         baseUrl = LEGACY_API_BASE_URL.PRODUCTION;
         break;
@@ -16,6 +33,21 @@ export class LegacyAPIService {
         baseUrl = LEGACY_API_BASE_URL.DEVELOPMENT;
         break;
     }
-    return `${baseUrl}/${api}`;
+    return baseUrl;
+  }
+
+  get<T>(apiEndPoint: LegacyAPIEndPoints, queryParams: string, headers: Record<string, string> = {}) {
+    //performs GET request
+    const url = `${this.getLegacyBaseURL()}/${apiEndPoint}?${queryParams}&bypass=true`;
+    this.logger.info({
+      message: 'GET legacy api',
+      data: { url },
+    });
+    return axios.get<AxiosResponse<T>>(url, {
+      headers: {
+        Authorization: this.authToken,
+        ...headers,
+      },
+    });
   }
 }

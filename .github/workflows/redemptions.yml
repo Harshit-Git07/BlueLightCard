@@ -152,7 +152,7 @@ jobs:
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
               "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
-              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
               "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
@@ -168,7 +168,7 @@ jobs:
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
               "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
-              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
               "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
@@ -223,7 +223,7 @@ jobs:
               "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
               "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
               "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
-              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}"
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
               "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"

@@ -128,11 +128,6 @@ export class PromotionUpdateService implements IPromotionUpdateServiceInterface 
 
     const currentPlatform = platform as Platform;
 
-    if (!link) {
-      this.logger.info({ message: 'event not supported link is not defined' });
-      throw new Error('event not supported link is not defined');
-    }
-
     const brand = bandMap[currentPlatform];
 
     const meta = await this.getMetaData(linkId, brand);
@@ -152,8 +147,13 @@ export class PromotionUpdateService implements IPromotionUpdateServiceInterface 
 
     const connection = this.parseConnection(link);
     if (!connection) {
-      this.logger.info({ message: 'failed to parse connection' });
-      throw new Error('failed to parse connection');
+      this.logger.error({
+        message: 'Promotion Update - Parse connection failed',
+        context: {
+          link,
+        },
+      });
+      throw new Error(`Promotion Update - Parse connection failed (link="${link}")`);
     }
 
     const redemptionUpdate: RedemptionUpdate = {

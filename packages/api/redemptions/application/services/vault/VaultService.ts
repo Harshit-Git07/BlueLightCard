@@ -33,22 +33,26 @@ export class VaultService implements IVaultService {
     const redemption = await this.redemptionsRepo.findOneByOfferId(detail.offerId);
     if (!redemption) {
       this.logger.error({
-        message: `Redemption not found for offerId: ${detail.offerId} while updating vault`,
+        message: 'Vault Update - Redemption find one by offer id failed: Redemption not found',
         context: {
           offerId: detail.offerId,
         },
       });
-      return;
+      throw new Error(
+        `Vault Update - Redemption find one by offer id failed: Redemption not found (offerId=${detail.offerId})`,
+      );
     }
     const vault = await this.vaultsRepo.findOneByRedemptionId(redemption.id);
     if (!vault) {
       this.logger.error({
-        message: `Vault not found for redemptionId: ${redemption.id} while updating vault`,
+        message: 'Vault Update - Vault find one by redemption id failed: Vault not found',
         context: {
           redemptionId: redemption.id,
         },
       });
-      return;
+      throw new Error(
+        `Vault Update - Vault find one by redemption id failed: Vault not found (redemptionId=${redemption.id})`,
+      );
     }
 
     const updatedRedemptionData = this.makeUpdatedRedemptionDataForUpdateVault(detail, redemption);
@@ -76,17 +80,19 @@ export class VaultService implements IVaultService {
 
       if (updatedRedemptions.length === 0) {
         this.logger.error({
-          message: 'No redemptions found for vault',
+          message: 'Vault Create - Redemption update by offer id failed: No redemptions found',
           context: {
             offerId: detail.offerId,
             companyId: detail.companyId,
             platform: detail.platform,
           },
         });
-        return;
+        throw new Error(
+          `Vault Create - Redemption update by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
+        );
       } else if (updatedRedemptions.length > 1) {
         this.logger.error({
-          message: 'Multiple redemptions found for vault',
+          message: 'Vault Create - Redemption update by offer id failed: Multiple redemptions found',
           context: {
             offerId: detail.offerId,
             companyId: detail.companyId,
@@ -94,7 +100,9 @@ export class VaultService implements IVaultService {
             redemptions: updatedRedemptions,
           },
         });
-        return;
+        throw new Error(
+          `Vault Create - Redemption update by offer id failed: Multiple redemptions found (offerId="${detail.offerId}")`,
+        );
       }
 
       const vaults: NewVault[] = updatedRedemptions.map((redemption) => ({
@@ -112,17 +120,17 @@ export class VaultService implements IVaultService {
 
       if (createdVaults.length === 0) {
         this.logger.error({
-          message: 'No redemption found for vault',
+          message: 'Vault Create - Vault create many failed: No vaults were created',
           context: {
             offerId: detail.offerId,
             companyId: detail.companyId,
             platform: detail.platform,
           },
         });
-        return;
+        throw new Error('Vault Create - Vault create many failed: No vaults were created');
       } else if (createdVaults.length > 1) {
         this.logger.error({
-          message: 'Multiple redemptions found for vault',
+          message: 'Vault Create - Vault create many failed: Multiple redemptions found for vault',
           context: {
             offerId: detail.offerId,
             companyId: detail.companyId,
@@ -130,7 +138,7 @@ export class VaultService implements IVaultService {
             vaults: createdVaults,
           },
         });
-        return;
+        throw new Error('Vault Create - Vault create many failed: Multiple redemptions found for vault');
       }
     });
   }

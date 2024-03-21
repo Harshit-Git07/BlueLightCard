@@ -106,6 +106,11 @@ export async function Redemptions({ app, stack }: StackContext) {
     effect: Effect.ALLOW,
     resources: ['*'],
   });
+  const publishRedemptionsEventBus = new PolicyStatement({
+    actions: ['events:PutEvents'],
+    effect: Effect.ALLOW,
+    resources: [bus.eventBusArn],
+  });
 
   // functionName is automatically appended with the stage name
   allRoutes.addRoutes(api, stack, {
@@ -140,10 +145,12 @@ export async function Redemptions({ app, stack }: StackContext) {
           config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
           config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER]:
+          config.redemptionsLambdaScriptsSecretManager,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
-      permissions: [getSecretValueSecretsManager],
+      permissions: [getSecretValueSecretsManager, publishRedemptionsEventBus],
     }),
     'POST /member/connection/affiliate': Route.createRoute({
       model: postAffiliateModel,

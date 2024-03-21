@@ -96,14 +96,16 @@ export class OfferUpdatedService implements IOfferUpdatedService {
         const redemptionUpdate = await redemptionTransaction.updateByOfferId(detail.offerId, updateRedemptionData);
         if (redemptionUpdate.length < 1) {
           this.logger.error({
-            message: 'Redemption update for update offer failed',
+            message: 'Offer Update - Redemption update by offerId failed: No redemptions were updated',
             context: {
               offerId: detail.offerId,
               companyId: detail.companyId,
               platform: detail.platform,
             },
           });
-          return;
+          throw new Error(
+            `Offer Update - Redemption update by offerId failed: No redemptions were updated (offerId="${detail.offerId}")`,
+          );
         }
 
         if (existingRedemptionData.redemptionType === 'generic' || updateRedemptionData.redemptionType == 'generic') {
@@ -123,7 +125,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             const genericDelete = await genericTransaction.deleteByRedemptionId(existingRedemptionData.id);
             if (genericDelete.length < 1) {
               this.logger.error({
-                message: 'Generic code delete for update offer failed',
+                message: 'Offer Update - Generic delete by redemptionId failed: No generics were deleted',
                 context: {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
@@ -131,8 +133,10 @@ export class OfferUpdatedService implements IOfferUpdatedService {
                   platform: detail.platform,
                 },
               });
+              throw new Error(
+                `Offer Update - Generic delete by redemptionId failed: No generics were deleted (redemptionId="${existingRedemptionData.id}")`,
+              );
             }
-            return;
           }
 
           if (genericToInsert) {
@@ -143,7 +147,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             const genericInsert = await genericTransaction.createGeneric(genericData);
             if (genericInsert.length < 1) {
               this.logger.error({
-                message: 'Generic code insert for update offer failed',
+                message: 'Offer Update - Generic insert failed: no generics were inserted',
                 context: {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
@@ -151,8 +155,8 @@ export class OfferUpdatedService implements IOfferUpdatedService {
                   platform: detail.platform,
                 },
               });
+              throw new Error('Offer Update - Generic insert failed: no generics were inserted');
             }
-            return;
           }
 
           if (genericToUpdate) {
@@ -162,7 +166,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             const genericUpdate = await genericTransaction.updateByRedemptionId(existingRedemptionData.id, genericData);
             if (genericUpdate.length < 1) {
               this.logger.error({
-                message: 'Generic code update for update offer failed',
+                message: 'Offer Update - Generic update by redemptionId failed: No generics were updated',
                 context: {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
@@ -170,6 +174,9 @@ export class OfferUpdatedService implements IOfferUpdatedService {
                   platform: detail.platform,
                 },
               });
+              throw new Error(
+                `Offer Update - Generic update by redemptionId failed: No generics were updated (redemptionId="${existingRedemptionData.id}")`,
+              );
             }
           }
         }

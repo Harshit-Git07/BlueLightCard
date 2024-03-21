@@ -255,7 +255,6 @@ const layoutProps = {
 export async function getStaticPaths() {
   // Fetch the list of company IDs from your data source
   // Example: const companyIds = await fetchCompanyIds();
-  // For demo purpose, setting dummy company IDs
   const companyIds = ['123'];
 
   // Map the company IDs to the paths object required by Next.js

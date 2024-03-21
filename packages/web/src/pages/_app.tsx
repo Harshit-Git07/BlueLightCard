@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import { FC, ReactElement } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { datadogRum } from '@datadog/browser-rum';
+import flagsmith from 'flagsmith';
 
 import '../styles/globals.css';
 import {
@@ -10,6 +11,7 @@ import {
   DATADOG_ENV,
   DATADOG_DEFAULT_SERVICE,
   DATADOG_SITE,
+  FLAGSMITH_KEY,
 } from '@/global-vars';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -21,6 +23,8 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import { NextPageWithLayout } from '@/page-types/layout';
 import Head from 'next/head';
 import AmplitudeProvider from '@/utils/amplitude/provider';
+import { FlagsmithProvider } from 'flagsmith/react';
+
 config.autoAddCss = false;
 
 if (DATADOG_APP_ID && DATADOG_CLIENT_TOKEN) {
@@ -83,7 +87,15 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           />
           <meta name="format-detection" content="telephone=no" />
         </Head>
-        <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
+        <FlagsmithProvider
+          options={{
+            environmentID: FLAGSMITH_KEY,
+            cacheFlags: true,
+          }}
+          flagsmith={flagsmith}
+        >
+          <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
+        </FlagsmithProvider>
       </QueryClientProvider>
     </>
   );

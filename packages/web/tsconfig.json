@@ -21,6 +21,9 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
+      "@/root/*": [
+        "./*"
+      ],
       "@/services/*": [
         "src/services/*",
       ],

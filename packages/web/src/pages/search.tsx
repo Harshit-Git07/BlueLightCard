@@ -29,8 +29,6 @@ import {
 import { shuffle } from 'lodash';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import { default as HeaderV2 } from '@/components/HeaderV2/Header';
-
-import { navItems } from '@/data/headerConfig';
 import Header from '@/components/Header/Header';
 import {
   getCompanyOfferDetailsUrl,
@@ -139,14 +137,13 @@ const Search: NextPage = () => {
   // Serp Experiment
   const control = () => (
     <Header
-      navItems={navItems}
       loggedIn={authCtx.isUserAuthenticated()}
       onSearchCompanyChange={onSearchCompanyChange}
       onSearchCategoryChange={onSearchCategoryChange}
       onSearchTerm={onSearchTerm}
     />
   );
-  const treatment = () => <HeaderV2 navItems={navItems} loggedIn />;
+  const treatment = () => <HeaderV2 loggedIn />;
 
   const serpExperiment = useAmplitudeExperimentComponent(
     'serp-search-bar',

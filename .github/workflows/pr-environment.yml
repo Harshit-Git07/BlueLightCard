@@ -133,6 +133,7 @@ jobs:
           - brand: 'blc-uk'
             identity_brand: 'blc_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
+            region: 'eu-west-2'
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.cloudflare-publish.outputs.url }}
@@ -155,6 +156,10 @@ jobs:
       NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
       NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
+      NEXT_PUBLIC_COGNITO_CLIENT_REGION: ${{matrix.region}}
+      NEXT_PUBLIC_FLAGSMITH_KEY: ${{ secrets.FLAGSMITH_KEY }}
+      NEXT_PUBLIC_COGNITO_LOGIN_URL: https://staging-auth.blcshine.io/login?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php
+      NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -12,7 +12,6 @@ import {
   getOffersBySearchTermUrl,
 } from '@/utils/externalPageUrls';
 
-import { navItems } from '@/data/headerConfig';
 import footerConfig from '@/data/footerConfig';
 import { LayoutProps } from './types';
 import { useContext } from 'react';
@@ -54,7 +53,6 @@ const BaseLayout: React.FC<LayoutProps> = ({
         headerOverride
       ) : (
         <Header
-          navItems={navItems}
           loggedIn={loggedIn}
           onSearchCompanyChange={onSearchCompanyChange}
           onSearchCategoryChange={onSearchCategoryChange}

@@ -6,10 +6,8 @@ import InputTextFieldWithRef from '@/components/InputTextField/InputTextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { useRouter } from 'next/router';
-import AuthProvider from '@/context/Auth/AuthProvider';
 import AuthContext from '@/context/Auth/AuthContext';
 import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
-import withLayout from '@/hoc/withLayout';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { unpackJWT } from '@core/utils/unpackJWT';
 

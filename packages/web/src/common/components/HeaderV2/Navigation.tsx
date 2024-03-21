@@ -10,9 +10,13 @@ import DesktopNavigation from '../Header/DesktopNavigation';
 // New imports
 import { NavProp } from './types';
 import SearchInputField from '../SearchInputField/SearchInputField';
+import { getNavItems } from '@/data/headerConfig';
+import useFeatureFlag from '@/hooks/useFeatureFlag';
+import { FlagsmithFeatureFlags } from '@/utils/flagsmith/flagsmithFlags';
 
-const Navigation: FC<NavProp> = ({ authenticated, navItems }) => {
+const Navigation: FC<NavProp> = ({ authenticated }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
+  const isCognitoUIEnabled = useFeatureFlag(FlagsmithFeatureFlags.IDENTITY_COGNITO_UI_ENABLED);
 
   const router = useRouter();
   const { q } = router.query;
@@ -22,9 +26,8 @@ const Navigation: FC<NavProp> = ({ authenticated, navItems }) => {
     setDropdownMenu(!dropdownMenu);
   }
 
-  const { loggedIn, loggedOut } = navItems;
-
-  let menu = authenticated ? loggedIn : loggedOut;
+  const { loggedIn, loggedOut } = getNavItems(isCognitoUIEnabled);
+  const menu = authenticated ? loggedIn : loggedOut;
 
   return (
     <>

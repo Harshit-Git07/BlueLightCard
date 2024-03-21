@@ -8,16 +8,17 @@ import Navigation from './Navigation';
 import Search from './Search';
 import SelectCountry from './SelectCountry';
 
+import { navLinks } from '@/data/headerConfig';
+
 const Header: FC<HeaderProps> = ({
   loggedIn = false,
-  navItems,
   onSearchCompanyChange,
   onSearchCategoryChange,
   onSearchTerm,
 }) => {
   const [displaySearch, setDisplaySearch] = useState(false);
 
-  const { links } = navItems;
+  const links = navLinks;
 
   return (
     <div>
@@ -36,7 +37,6 @@ const Header: FC<HeaderProps> = ({
         authenticated={loggedIn}
         displaySearch={displaySearch}
         setDisplaySearch={setDisplaySearch}
-        navItems={navItems}
       />
       {displaySearch && (
         <Search

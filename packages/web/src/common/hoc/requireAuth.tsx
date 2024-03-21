@@ -2,16 +2,23 @@ import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
-import { LOGOUT_ROUTE } from '@/global-vars';
+import { LOGOUT_ROUTE, COGNITO_LOGOUT_URL } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
+import { FlagsmithFeatureFlags } from '@/utils/flagsmith/flagsmithFlags';
+import getFlag from '@/utils/flagsmith/getFlag';
 
 export function redirectToLogin(router: NextRouter) {
+  const isCognitoUIEnabled = getFlag(FlagsmithFeatureFlags.IDENTITY_COGNITO_UI_ENABLED);
+
+  const legacyLogoutUrl = `${LOGOUT_ROUTE}?redirect=${router.asPath}`;
+  const logoutUrl = isCognitoUIEnabled ? COGNITO_LOGOUT_URL : legacyLogoutUrl;
+
   if (process.env.NODE_ENV == 'production') {
-    window.location.replace(`${LOGOUT_ROUTE}?redirect=${router.asPath}`);
+    window.location.replace(logoutUrl);
   } else {
-    router.push(`${LOGOUT_ROUTE}?redirect=${router.asPath}`);
+    router.push(logoutUrl);
   }
 }
 
@@ -37,6 +44,7 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
       const accessToken: string = localStorage.getItem('accessToken') as string;
       const refreshToken: string = localStorage.getItem('refreshToken') as string;
       const username: string = localStorage.getItem('username') as string;
+
       if (idToken && username && accessToken && refreshToken) {
         authContext.authState.idToken = idToken;
         authContext.authState.accessToken = accessToken;

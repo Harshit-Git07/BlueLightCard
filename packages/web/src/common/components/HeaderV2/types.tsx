@@ -1,16 +1,6 @@
 export type HeaderProps = {
   loggedIn?: boolean;
-  navItems: NavItems;
 };
-
-export interface NavItems {
-  links: {
-    homeUrl: string;
-    notificationsUrl: string;
-  };
-  loggedIn: NavItem[];
-  loggedOut: NavItem[];
-}
 
 export interface NavItem {
   text: string;
@@ -24,5 +14,4 @@ export interface NavItem {
 
 export interface NavProp {
   authenticated: boolean;
-  navItems: NavItems;
 }

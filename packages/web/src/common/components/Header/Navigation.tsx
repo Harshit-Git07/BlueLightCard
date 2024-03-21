@@ -7,9 +7,13 @@ import MobileNavigation from './MobileNavigation';
 import DesktopNavigation from './DesktopNavigation';
 import SearchButton from './SearchButton';
 import { NavProp } from './types';
+import { getNavItems } from '@/data/headerConfig';
+import useFeatureFlag from '@/hooks/useFeatureFlag';
+import { FlagsmithFeatureFlags } from '@/utils/flagsmith/flagsmithFlags';
 
-const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearch, navItems }) => {
+const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearch }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
+  const isCognitoUIEnabled = useFeatureFlag(FlagsmithFeatureFlags.IDENTITY_COGNITO_UI_ENABLED);
 
   function dropdownMenuHandler() {
     setDropdownMenu(!dropdownMenu);
@@ -19,9 +23,8 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
     setDisplaySearch(!displaySearch);
   }
 
-  const { loggedIn, loggedOut } = navItems;
-
-  let menu = authenticated ? loggedIn : loggedOut;
+  const { loggedIn, loggedOut } = getNavItems(isCognitoUIEnabled);
+  const menu = authenticated ? loggedIn : loggedOut;
 
   return (
     <>

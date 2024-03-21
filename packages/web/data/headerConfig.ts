@@ -1,5 +1,10 @@
 import { NavItems } from '@/components/Header/types';
-import { BLACK_FRIDAY_TIME_LOCK_END_DATE, BLACK_FRIDAY_TIME_LOCK_START_DATE } from '@/global-vars';
+import {
+  BLACK_FRIDAY_TIME_LOCK_END_DATE,
+  BLACK_FRIDAY_TIME_LOCK_START_DATE,
+  COGNITO_LOGIN_URL,
+  COGNITO_LOGOUT_URL,
+} from '@/global-vars';
 
 const blackFridayLink = {
   text: 'Black Friday',
@@ -10,11 +15,12 @@ const blackFridayLink = {
   endTime: BLACK_FRIDAY_TIME_LOCK_END_DATE,
 };
 
-export const navItems: NavItems = {
-  links: {
-    homeUrl: '/',
-    notificationsUrl: '/notifications.php',
-  },
+export const navLinks = {
+  homeUrl: '/',
+  notificationsUrl: '/notifications.php',
+};
+
+export const getNavItems = (isCognitoUIEnabled: boolean = false): NavItems => ({
   loggedOut: [
     {
       text: 'Home',
@@ -41,7 +47,7 @@ export const navItems: NavItems = {
     },
     {
       text: 'Login',
-      link: '/login.php',
+      link: isCognitoUIEnabled ? COGNITO_LOGIN_URL : '/login.php',
     },
     {
       text: 'Discover savings',
@@ -121,7 +127,7 @@ export const navItems: NavItems = {
     },
     {
       text: 'Logout',
-      link: '/logout.php',
+      link: isCognitoUIEnabled ? COGNITO_LOGOUT_URL : '/logout.php',
     },
   ],
-};
+});

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render } from '@/root/test-utils';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import Header from '@/components/Header/Header';
@@ -8,36 +8,6 @@ describe('Header component', () => {
   let props: HeaderProps;
   beforeEach(() => {
     props = {
-      navItems: {
-        links: {
-          homeUrl: '/',
-          notificationsUrl: '/notifications.php',
-        },
-        loggedIn: [
-          {
-            text: 'Register',
-            link: '/',
-            dropdown: [
-              {
-                text: 'test',
-                link: '/',
-              },
-            ],
-          },
-        ],
-        loggedOut: [
-          {
-            text: 'Log out',
-            link: '/',
-            dropdown: [
-              {
-                text: 'test',
-                link: '/',
-              },
-            ],
-          },
-        ],
-      },
       onSearchCompanyChange(companyId, company) {},
       onSearchCategoryChange(categoryId, company) {},
       onSearchTerm(searchTerm) {},

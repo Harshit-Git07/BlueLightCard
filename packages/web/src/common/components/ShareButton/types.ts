@@ -1,5 +1,9 @@
 export type ShareButtonProps = {
-  onShareClick: () => void;
-  shareBtnState?: 'share' | 'error' | 'success';
-  hasText?: boolean;
+  showShareLabel?: boolean;
+  shareDetails: {
+    name: string | undefined;
+    description: string | undefined;
+    url: string;
+  };
+  shareLabel?: string;
 };

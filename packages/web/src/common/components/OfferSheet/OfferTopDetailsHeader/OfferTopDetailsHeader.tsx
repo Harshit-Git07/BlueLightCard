@@ -19,7 +19,6 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
   showExclusions = true,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
   const [openExclusionsDetails] = useState<'items' | 'store' | null>(null);
 
   const exclusionsParser = {
@@ -38,31 +37,8 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
   const finalFallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
   const imageSource = offerData.companyLogo ?? finalFallbackImage;
 
-  console.log(offerData.companyLogo && getCDNUrl(offerData.companyLogo));
-
-  // Event handlers
-  const copyLink = () => {
-    const copyUrl = `${window.location.protocol}//${window.location.hostname}/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`;
-
-    if (!navigator.clipboard) {
-      return false;
-    }
-    navigator.clipboard.writeText(copyUrl);
-    return true;
-  };
-
   const handleSeeMore = () => {
     setExpanded(!expanded);
-  };
-
-  const onShareClick = () => {
-    const success = copyLink();
-    if (success) {
-      setShareBtnState('success');
-    } else {
-      setShareBtnState('error');
-      setTimeout(() => setShareBtnState('share'), 1500);
-    }
   };
 
   return (
@@ -121,8 +97,17 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
           {/* Share & Favorite */}
           {showShareFavorite && (
             <div className={`flex flex-wrap justify-center mt-4`}>
-              <ShareButton {...{ onShareClick, shareBtnState }} />
-              <FavouriteButton offerMeta={offerMeta} offerData={offerData} />
+              <ShareButton
+                {...{
+                  shareDetails: {
+                    name: offerData.name,
+                    description: offerData.description,
+                    url: `${window.location.protocol}/${window.location.hostname}/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
+                  },
+                  shareLabel: 'Share offer',
+                }}
+              />
+              <FavouriteButton {...{ offerMeta, offerData }} />
             </div>
           )}
           {/* Exclusions */}

@@ -19,6 +19,7 @@ import ResponsiveOfferCard from '@/components/ResponsiveOfferCard/ResponsiveOffe
 import getOffersStaticProps from '@/utils/getProps/getOffersProps';
 import Link from '@/components/Link/Link';
 import CampaignCard from '@/components/CampaignCard/CampaignCard';
+import { ENVIRONMENT } from '@/global-vars';
 import { useMedia } from 'react-use';
 
 type CompanyPageProps = {};
@@ -92,6 +93,7 @@ const mockOfferCardResponse: OfferCardProp[] = [
 
 const CompanyPage: NextPage<CompanyPageProps> = () => {
   const router = useRouter();
+  const { id: companyId } = router.query;
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
   const isMobile = useMedia('(max-width: 500px)');
@@ -153,7 +155,18 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             {companyName}
           </Heading>
           <div className="flex desktop:justify-end desktop:items-start mobile:gap-2">
-            <ShareButton onShareClick={() => void 0} hasText={isMobile ? false : true} />
+            <ShareButton
+              showShareLabel={isMobile ? false : true}
+              shareDetails={{
+                name: companyName,
+                description: companyDescription,
+                // adds check on ENVIRONMENT so we can pass the port on localhost:3000 for the share URL. Otherwise it will not show port in the url
+                url: `${window.location.protocol}/${window.location.hostname}${
+                  ENVIRONMENT === 'local' && window.location.port ? `:${window.location.port}` : ''
+                }/company/${companyId}`,
+              }}
+              shareLabel="Share Company"
+            />
             <FavouriteButton
               offerData={{
                 id: 42,

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShareButton component Should render ShareButton component with no errors 1`] = `
+<button
+  className=" py-1 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-font-cta-standard-tertiary-base dark:text-font-cta-standard-tertiary-dark  focus:outline-outline-cta-standard-base dark:focus:outline-outline-cta-standard-dark  border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit"
+  onClick={[Function]}
+  type="button"
+>
+  <div
+    className="false text-base font-['MuseoSans'] font-bold leading-6 flex flex-row"
+  >
+    <div
+      className="my-auto"
+    >
+      <svg
+        aria-hidden="true"
+        className="svg-inline--fa fa-arrow-up-from-bracket "
+        data-icon="arrow-up-from-bracket"
+        data-prefix="fas"
+        data-testid="font-awesome-share-icon"
+        focusable="false"
+        role="img"
+        style={{}}
+        viewBox="0 0 448 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+          fill="currentColor"
+          style={{}}
+        />
+      </svg>
+    </div>
+    <span
+      className="ml-2"
+    >
+      Share
+    </span>
+  </div>
+</button>
+`;

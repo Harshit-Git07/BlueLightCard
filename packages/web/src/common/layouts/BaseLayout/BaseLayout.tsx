@@ -17,6 +17,8 @@ import { LayoutProps } from './types';
 import { useContext } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
 import MetaData from '@/components/MetaData/MetaData';
+import { ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BaseLayout: React.FC<LayoutProps> = ({
   seo,
@@ -60,6 +62,14 @@ const BaseLayout: React.FC<LayoutProps> = ({
         />
       )}
       <div>{children}</div>
+      <ToastContainer
+        transition={Slide}
+        autoClose={4000}
+        hideProgressBar
+        className="!w-full !p-4"
+        toastClassName="!bg-[#202125] !text-white !font-['MuseoSans'] !text-base !font-normal !rounded !px-4 !py-3.5"
+        pauseOnHover={false}
+      />
       {footerOverride ? footerOverride : <Footer {...footerConfig} loggedIn={loggedIn} />}
     </div>
   );

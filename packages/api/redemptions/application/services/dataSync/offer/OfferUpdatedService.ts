@@ -69,12 +69,11 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           url: parseOfferUrl(detail.offerUrl).url,
         };
 
-        const redemptionInsert = await redemptionTransaction.createRedemption(redemptionData);
+        const newRedemption = await redemptionTransaction.createRedemption(redemptionData);
 
-        const redemptionId = redemptionInsert[0].id;
         if (redemptionData.redemptionType === 'generic') {
           const genericData: NewGeneric = {
-            redemptionId: redemptionId,
+            redemptionId: newRedemption.id,
             code: detail.offerCode,
           };
 
@@ -93,8 +92,8 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           url: parseOfferUrl(detail.offerUrl).url,
         };
 
-        const redemptionUpdate = await redemptionTransaction.updateByOfferId(detail.offerId, updateRedemptionData);
-        if (redemptionUpdate.length < 1) {
+        const redemptionUpdate = await redemptionTransaction.updateOneByOfferId(detail.offerId, updateRedemptionData);
+        if (!redemptionUpdate) {
           this.logger.error({
             message: 'Offer Update - Redemption update by offerId failed: No redemptions were updated',
             context: {

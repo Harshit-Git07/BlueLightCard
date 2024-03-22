@@ -2,7 +2,6 @@ import { EventBridgeEvent } from 'aws-lambda';
 import { z } from 'zod';
 
 import { Result } from '@blc-mono/core/types/result';
-import { ILogger } from '@blc-mono/core/utils/logger/logger';
 
 import { Controller } from '../Controller';
 
@@ -15,8 +14,6 @@ export abstract class EventBridgeController<ParsedRequest> extends Controller<
   ParsedRequest,
   Error
 > {
-  protected abstract logger: ILogger;
-
   protected formatResponse(request: UnknownEventBridgeEvent): void {
     // There is no option to return a response to the caller in this context so
     // instead we log that the event was handled successfully.
@@ -31,15 +28,7 @@ export abstract class EventBridgeController<ParsedRequest> extends Controller<
   }
 
   protected async onUnhandledError(request: UnknownEventBridgeEvent, err: unknown): Promise<void> {
-    this.logger.error({
-      message: '[UNHANDLED ERROR] There was an unhandled error processing the event',
-      context: {
-        controller: this.constructor.name || 'EventBridgeController (unknown)',
-        location: 'EventBridgeController.onUnhandledError',
-        tracingId: request.id,
-        error: err,
-      },
-    });
+    this.logUnhandledError(request.id, err);
 
     throw err;
   }

@@ -1,18 +1,29 @@
 import { Amplitude } from './amplitude';
 import amplitudeEvents from '@/utils/amplitude/events';
 
-export const logOfferView = (
-  amplitude: Amplitude | null | undefined,
-  uuid: string,
-  eventSource: string,
-  origin: string,
-  offerId?: string,
-  offerName?: string,
-  companyId?: string,
-  companyName?: string
-) => {
+export type LogOfferViewParams = {
+  amplitude: Amplitude | null | undefined;
+  userUuid?: string;
+  eventSource: string;
+  origin: string;
+  offerId?: string;
+  offerName?: string;
+  companyId?: string;
+  companyName?: string;
+};
+
+export const logOfferView = ({
+  amplitude,
+  userUuid,
+  eventSource,
+  origin,
+  offerId,
+  offerName,
+  companyId,
+  companyName,
+}: LogOfferViewParams) => {
   if (amplitude && offerId) {
-    amplitude.setUserId(uuid);
+    amplitude.setUserId(userUuid ?? '');
     amplitude.trackEventAsync(amplitudeEvents.OFFER_VIEWED, {
       company_id: companyId,
       company_name: companyName,

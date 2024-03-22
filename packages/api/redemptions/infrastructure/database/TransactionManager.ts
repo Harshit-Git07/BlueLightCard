@@ -13,6 +13,10 @@ export type DatabaseTransactionConnection = {
   db: DatabaseTransactionOperator;
 };
 
+export interface ITransactionManager {
+  withTransaction<T>(callback: (transaction: DatabaseTransactionOperator) => Promise<T>): Promise<T>;
+}
+
 /**
  * A manager for transactions
  */

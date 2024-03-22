@@ -3,7 +3,6 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import requireAuth from '@/hoc/requireAuth';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
-import { useMediaQuery } from 'usehooks-ts';
 import { advertQuery } from 'src/graphql/advertQuery';
 import { makeQuery } from 'src/graphql/makeQuery';
 import { shuffle } from 'lodash';
@@ -20,6 +19,7 @@ import ResponsiveOfferCard from '@/components/ResponsiveOfferCard/ResponsiveOffe
 import getOffersStaticProps from '@/utils/getProps/getOffersProps';
 import Link from '@/components/Link/Link';
 import CampaignCard from '@/components/CampaignCard/CampaignCard';
+import { useMedia } from 'react-use';
 
 type CompanyPageProps = {};
 
@@ -92,12 +92,12 @@ const mockOfferCardResponse: OfferCardProp[] = [
 
 const CompanyPage: NextPage<CompanyPageProps> = () => {
   const router = useRouter();
-  const isMobile = useMediaQuery('(max-width: 500px)');
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
+  const isMobile = useMedia('(max-width: 500px)');
   const companyName = 'Samsung';
   const companyNameMobile = `About ${companyName}`;
-  const companyDescription = `Samsung is an internationally recognized industry leader in technology and a Top 10 global brand. From the latest Samsung Galaxy smartphones to Samsung QLED TVs and Galaxy Buds, we've got you covered with the best deals.`;
+  const companyDescription = `Samsung is an internationally recognized industry leader in technology and a Top 10 global brand. From the latest Samsung Galaxy smartphones to Samsung QLED TVs and Galaxy Buds, we've got you covered with the best deals.`;
   const [firstItem, ...restItems] = mockOfferCardResponse;
   const [selectedType, setSelectedType] = useState<string>('All');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -154,7 +154,17 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           </Heading>
           <div className="flex desktop:justify-end desktop:items-start mobile:gap-2">
             <ShareButton onShareClick={() => void 0} hasText={isMobile ? false : true} />
-            <FavouriteButton offerData={{}} companyId={'1234'} hasText={isMobile ? false : true} />
+            <FavouriteButton
+              offerData={{
+                id: 42,
+              }}
+              offerMeta={{
+                companyId: '42',
+                companyName: 'Samsung',
+                offerId: '42',
+              }}
+              hasText={isMobile ? false : true}
+            />
           </div>
         </div>
         {!isMobile && (

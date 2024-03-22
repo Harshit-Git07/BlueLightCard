@@ -5,7 +5,7 @@ interface LoadingPlaceholderProps {
   containerClassName?: string;
   spinnerClassName?: string;
 }
-const LoadingPlaceholder = ({ containerClassName, spinnerClassName }: LoadingPlaceholderProps) => {
+const LoadingSpinner = ({ containerClassName, spinnerClassName }: LoadingPlaceholderProps) => {
   return (
     <div className={`${containerClassName} flex justify-center`}>
       <FontAwesomeIcon icon={faSpinner} className={`animate-spin m-auto ${spinnerClassName}`} />
@@ -13,4 +13,4 @@ const LoadingPlaceholder = ({ containerClassName, spinnerClassName }: LoadingPla
   );
 };
 
-export default LoadingPlaceholder;
+export default LoadingSpinner;

@@ -26,5 +26,21 @@ export abstract class Repository {
     return results[0];
   }
 
+  /**
+   * Checks if the given results array contains exactly one element and returns it.
+   * If the array is empty, or contains more than one element, an error is thrown.
+   */
+  public exactlyOne<T>(results: T[]): T {
+    if (results.length === 0) {
+      throw new Error('Received zero results but expected at exactly one');
+    }
+
+    if (results.length > 1) {
+      throw new Error('Received multiple results but expected at exactly one');
+    }
+
+    return results[0];
+  }
+
   public abstract withTransaction(transaction: DatabaseTransactionConnection): Repository;
 }

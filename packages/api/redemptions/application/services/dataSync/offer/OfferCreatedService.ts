@@ -49,9 +49,9 @@ export class OfferCreatedService implements IOfferCreatedService {
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
       const redemptionTransaction = this.redemptionsRepository.withTransaction(transactionConnection);
-      const redemptionInsert = await redemptionTransaction.createRedemption(redemptionData);
+      const newRedemption = await redemptionTransaction.createRedemption(redemptionData);
 
-      const redemptionId = redemptionInsert[0].id;
+      const redemptionId = newRedemption.id;
       if (redemptionData.redemptionType === 'generic') {
         const genericData: NewGeneric = {
           redemptionId: redemptionId,

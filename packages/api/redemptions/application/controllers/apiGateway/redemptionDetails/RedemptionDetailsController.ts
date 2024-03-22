@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { z } from 'zod';
 
-import { JsonStringSchema } from '@blc-mono/core/schemas/common';
+import { NON_NEGATIVE_INT } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -9,12 +9,25 @@ import {
   IRedemptionDetailsService,
   RedemptionDetailsService,
 } from '@blc-mono/redemptions/application/services/redemptionDetails/RedemptionDetailsService';
-import { GetRedemptionDetailsModel } from '@blc-mono/redemptions/libs/models/getRedemptionDetails';
 
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../ApiGatewayController';
 
 const GetRedemptionDetailsRequestModel = z.object({
-  body: JsonStringSchema.pipe(GetRedemptionDetailsModel),
+  queryStringParameters: z.object({
+    offerId: z
+      .string()
+      .transform((value, ctx) => {
+        const parsed = Number(value);
+        if (isNaN(parsed)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'offerId must be a number',
+          });
+        }
+        return parsed;
+      })
+      .pipe(NON_NEGATIVE_INT),
+  }),
 });
 type GetRedemptionDetailsRequestModel = z.infer<typeof GetRedemptionDetailsRequestModel>;
 
@@ -33,7 +46,7 @@ export class RedemptionDetailsController extends APIGatewayController<GetRedempt
   }
 
   public async handle(request: GetRedemptionDetailsRequestModel): Promise<APIGatewayResult> {
-    const result = await this.redemptionDetailsService.getRedemptionDetails(request.body.offerId);
+    const result = await this.redemptionDetailsService.getRedemptionDetails(request.queryStringParameters.offerId);
 
     switch (result.kind) {
       case 'Ok':

@@ -2,10 +2,10 @@ import { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-l
 import jwtDecode from 'jwt-decode';
 import micromatch from 'micromatch';
 import { z } from 'zod';
+import { fromZodError } from 'zod-validation-error';
 
 import { Result } from '@blc-mono/core/types/result';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 import { Controller } from '../Controller';
@@ -29,8 +29,6 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
   ParsedRequest,
   ParseRequestError
 > {
-  protected abstract logger: ILogger;
-
   protected formatResponse(
     request: APIGatewayProxyEventV2,
     result: APIGatewayResult,
@@ -54,15 +52,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     request: APIGatewayProxyEventV2,
     err: unknown,
   ): Promise<APIGatewayProxyStructuredResultV2> {
-    this.logger.error({
-      message: '[UNHANDLED ERROR] There was an unhandled error processing the request',
-      context: {
-        controller: this.constructor.name || 'APIGatewayController (unknown)',
-        location: 'APIGatewayController.onUnhandledError',
-        tracingId: request.requestContext.requestId,
-        error: err,
-      },
-    });
+    this.logUnhandledError(request.requestContext.requestId, err);
 
     return {
       statusCode: 500,
@@ -122,7 +112,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
 
     return Result.err({
       cause: 'Request validation failed',
-      message: result.error.message,
+      message: fromZodError(result.error).toString(),
       errors: result.error.errors.map((error) => ({
         path: error.path,
         message: error.message,

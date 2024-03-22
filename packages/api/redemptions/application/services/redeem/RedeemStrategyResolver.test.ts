@@ -1,10 +1,10 @@
 import { as } from '@blc-mono/core/utils/testing';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
-import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
+import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 import { GenericsRepository } from '../../repositories/GenericsRepository';
-import { LegacyVaultApiRepository, Secrets } from '../../repositories/LegacyVaultApiRepository';
+import { LegacyVaultApiRepository } from '../../repositories/LegacyVaultApiRepository';
 import { VaultCodesRepository } from '../../repositories/VaultCodesRepository';
 import { VaultsRepository } from '../../repositories/VaultsRepository';
 import { createTestLogger } from '../../test/helpers/logger';
@@ -15,6 +15,7 @@ import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy'
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
 import { RedeemVaultQrStrategy } from './strategies/RedeemVaultQrStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
+
 jest.mock('../../../../core/src/utils/getEnv', () => ({
   getEnv: jest.fn(),
 }));
@@ -27,11 +28,8 @@ describe('RedeemStrategyResolver', () => {
   } as unknown as DatabaseConnection;
   const mockedLogger = createTestLogger();
   const mockedSecretsManager = {
-    awsSecretsManagerClient: jest.fn(),
-    logger: jest.fn(),
-    setRegion: jest.fn(),
-    getSecretValue: jest.fn(),
-  } as unknown as SecretsManager<Secrets>;
+    getSecretValueJson: jest.fn(),
+  } as unknown as ISecretsManager;
   const genericsRepo = new GenericsRepository(mockedConnection);
   const vaultsRepo = new VaultsRepository(mockedConnection);
   const vaultCodesRepo = new VaultCodesRepository(mockedConnection);

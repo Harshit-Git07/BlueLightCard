@@ -1,27 +1,20 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
+import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 
 import { ILegacyVaultApiRepository, LegacyVaultApiRepository } from '../../repositories/LegacyVaultApiRepository';
 
-export type RedeemSpotifyResult =
-  | {
-      kind: 'CodeRedemedOk';
-      data: {
-        trackingUrl: string;
-        code: number;
-      };
-    }
-  | {
-      kind: 'AssignUserCodeOk';
-      data: {
-        trackingUrl: string;
-        code: number;
-        dwh?: boolean;
-      };
-    };
+export type RedeemSpotifyResult = {
+  kind: 'Ok';
+  data: {
+    trackingUrl: string;
+    code: string;
+    dwh?: boolean;
+  };
+};
 
 export interface ISpotifyService {
   redeem(
-    platform: string,
+    platform: Platform,
     companyId: number,
     offerId: number,
     memberId: string,
@@ -36,96 +29,44 @@ export class SpotifyService implements ISpotifyService {
   constructor(private readonly legacyVaultApiRepository: ILegacyVaultApiRepository, private readonly logger: ILogger) {}
 
   public async redeem(
-    platform: string,
+    platform: Platform,
     companyId: number,
     offerId: number,
     memberId: string,
     url: string,
   ): Promise<RedeemSpotifyResult> {
-    const codeRedeemedResponse = await this.legacyVaultApiRepository.redeemCode(platform, companyId, offerId, memberId);
+    // Check if user has already redeemed a code
+    const codesRedeemed = await this.legacyVaultApiRepository.getCodesRedeemed(companyId, offerId, memberId, platform);
 
-    if (!codeRedeemedResponse) {
-      this.logger.error({
-        message: 'Could not send request to code redeemed API',
-        context: {
-          platform,
-          companyId,
-          offerId,
-          memberId,
-        },
-      });
-      throw new Error('Could not send request to code redeemed API');
-    }
+    // If so, return the tracking URL with the already redeemed code
+    if (codesRedeemed.length) {
+      const code = codesRedeemed[0];
+      const trackingUrl = await this.getTrackingUrl(url, code);
 
-    const codeRedeemedData = this.legacyVaultApiRepository.getResponseData(codeRedeemedResponse, url);
-
-    if (!codeRedeemedData) {
-      this.logger.error({
-        message: 'Code redeemed API request non successful',
-        context: {
-          platform,
-          companyId,
-          offerId,
-          memberId,
-          response: codeRedeemedResponse,
-        },
-      });
-      throw new Error('Code redeemed API request non successful');
-    }
-
-    if (codeRedeemedData?.codes.length) {
       return {
-        kind: 'CodeRedemedOk',
+        kind: 'Ok',
         data: {
-          trackingUrl: codeRedeemedData.trackingUrl,
-          code: codeRedeemedData.code,
+          code,
+          trackingUrl,
         },
       };
     }
 
-    const assignUserResponse = await this.legacyVaultApiRepository.assignCodeToMember(
-      memberId,
-      companyId,
-      offerId,
-      platform,
-    );
-
-    if (!assignUserResponse) {
-      this.logger.error({
-        message: 'Could not send request to assign code API',
-        context: {
-          memberId,
-          companyId,
-          offerId,
-          platform,
-        },
-      });
-      throw new Error('Could not send request to assign code API');
-    }
-
-    const assignedUserResponseData = this.legacyVaultApiRepository.getResponseData(assignUserResponse, url);
-
-    if (!assignedUserResponseData) {
-      this.logger.error({
-        message: 'Assign code API request non successful',
-        context: {
-          memberId,
-          companyId,
-          offerId,
-          platform,
-          response: assignUserResponse,
-        },
-      });
-      throw new Error('Assign code API request non successful');
-    }
+    // Otherwise, assign a new code to the user
+    const { code } = await this.legacyVaultApiRepository.assignCodeToMember(memberId, companyId, offerId, platform);
+    const trackingUrl = await this.getTrackingUrl(url, code);
 
     return {
-      kind: 'AssignUserCodeOk',
+      kind: 'Ok',
       data: {
-        trackingUrl: assignedUserResponseData.trackingUrl,
-        code: assignedUserResponseData.code,
+        trackingUrl,
+        code,
         dwh: true,
       },
     };
+  }
+
+  private async getTrackingUrl(url: string, code: string) {
+    return url.replace('!!!CODE!!!', code);
   }
 }

@@ -1,6 +1,5 @@
 import { and, eq, inArray } from 'drizzle-orm';
 
-import { RedemptionUpdate } from '@blc-mono/redemptions/application/services/dataSync/Promotions/PromotionUpdateService';
 import { DatabaseTransactionConnection } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
@@ -10,15 +9,14 @@ import { Repository } from './Repository';
 export type Redemption = typeof redemptionsTable.$inferSelect;
 export type UpdateRedemption = Partial<typeof redemptionsTable.$inferInsert>;
 export type NewRedemption = typeof redemptionsTable.$inferInsert;
-export interface RedemptionUpdateResults {
-  id: string;
-}
+export type RedemptionId = Pick<Redemption, 'id'>;
 
 export interface IRedemptionsRepository {
   findOneByOfferId(offerId: number): Promise<Redemption | null>;
-  updateByOfferId(offerId: number, redemptionDataToUpdate: UpdateRedemption): Promise<Pick<Redemption, 'id'>[]>;
-  createRedemption(redemptionData: NewRedemption): Promise<Pick<Redemption, 'id'>[]>;
-  withTransaction(transaction: DatabaseTransactionConnection): RedemptionsRepository;
+  updateManyByOfferId(offerIds: number[], update: UpdateRedemption): Promise<RedemptionId[]>;
+  updateOneByOfferId(offerId: number, update: UpdateRedemption): Promise<RedemptionId | null>;
+  createRedemption(redemptionData: NewRedemption): Promise<RedemptionId>;
+  withTransaction(transaction: DatabaseTransactionConnection): IRedemptionsRepository;
 }
 
 export class RedemptionsRepository extends Repository implements IRedemptionsRepository {
@@ -35,60 +33,38 @@ export class RedemptionsRepository extends Repository implements IRedemptionsRep
 
     return this.atMostOne(results);
   }
-  public async updateManyByOfferId(redemptionUpdate: RedemptionUpdate): Promise<RedemptionUpdateResults[]> {
-    const { connection, url, offerType, affiliate } = redemptionUpdate;
-
-    const meta = redemptionUpdate.meta;
-
-    return await this.connection.db.transaction(async (dbTransaction) => {
-      const result = await dbTransaction
-        .update(redemptionsTable)
-        .set({
-          affiliate,
-          url,
-          connection,
-          offerType,
-        })
-        .where(
-          and(
-            inArray(
-              redemptionsTable.offerId,
-              meta.dependentEntities.map((entity) => entity.offerId),
-            ),
-          ),
-        )
-        .returning({
-          id: redemptionsTable.id,
-        })
-        .execute();
-      if (result.length > 1) {
-        dbTransaction.rollback();
-        throw new Error('Error in updating the redemption more than 1 row was updated');
-      }
-      return result;
-    });
-  }
-
-  public async updateByOfferId(
-    offerId: number,
-    redemptionDataToUpdate: UpdateRedemption,
-  ): Promise<Pick<Redemption, 'id'>[]> {
-    return this.connection.db
+  public async updateManyByOfferId(offerIds: number[], update: UpdateRedemption): Promise<RedemptionId[]> {
+    return await this.connection.db
       .update(redemptionsTable)
-      .set(redemptionDataToUpdate)
-      .where(eq(redemptionsTable.offerId, offerId))
+      .set(update)
+      .where(and(inArray(redemptionsTable.offerId, offerIds)))
       .returning({
         id: redemptionsTable.id,
       })
       .execute();
   }
 
-  public async createRedemption(redemptionData: NewRedemption): Promise<Pick<Redemption, 'id'>[]> {
-    return this.connection.db
-      .insert(redemptionsTable)
-      .values(redemptionData)
-      .returning({ id: redemptionsTable.id })
-      .execute();
+  public async updateOneByOfferId(offerId: number, update: UpdateRedemption): Promise<RedemptionId | null> {
+    return this.atMostOne(
+      await this.connection.db
+        .update(redemptionsTable)
+        .set(update)
+        .where(eq(redemptionsTable.offerId, offerId))
+        .returning({
+          id: redemptionsTable.id,
+        })
+        .execute(),
+    );
+  }
+
+  public async createRedemption(redemptionData: NewRedemption): Promise<RedemptionId> {
+    return this.exactlyOne(
+      await this.connection.db
+        .insert(redemptionsTable)
+        .values(redemptionData)
+        .returning({ id: redemptionsTable.id })
+        .execute(),
+    );
   }
 
   public withTransaction(transaction: DatabaseTransactionConnection): RedemptionsRepository {

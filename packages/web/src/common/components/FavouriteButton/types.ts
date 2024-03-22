@@ -1,7 +1,8 @@
-import { offerResponse } from '@/context/OfferSheet/OfferSheetContext';
+import { OfferMeta } from '@/context/OfferSheet/OfferSheetContext';
+import { OfferData } from '@/types/api/offers';
 
 export type FavouriteButtonProps = {
-  offerData: offerResponse;
-  companyId: string | undefined;
+  offerMeta: OfferMeta;
+  offerData: OfferData;
   hasText?: boolean;
 };

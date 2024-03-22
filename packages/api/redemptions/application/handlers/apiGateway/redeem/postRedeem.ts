@@ -4,10 +4,7 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
-import {
-  LegacyVaultApiRepository,
-  Secrets,
-} from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
+import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { RedemptionEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionEventsRepository';
 import { VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
@@ -32,7 +29,7 @@ const controller = createInjector()
   // Common
   .provideValue(Logger.key, logger)
   .provideValue(DatabaseConnection.key, connection)
-  .provideClass(SecretsManager.key, SecretsManager<Secrets>)
+  .provideClass(SecretsManager.key, SecretsManager)
   // Repositories
   .provideClass(RedemptionsRepository.key, RedemptionsRepository)
   .provideClass(GenericsRepository.key, GenericsRepository)

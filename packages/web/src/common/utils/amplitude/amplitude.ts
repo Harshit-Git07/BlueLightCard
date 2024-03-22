@@ -14,12 +14,14 @@ export class Amplitude {
       throw new Error('No API key set');
     }
 
-    amplitude.init(apiKey, {
+    const initResult = amplitude.init(apiKey, {
       serverZone: ServerZone.EU,
       logLevel: LogLevel.Warn,
     });
 
     this.isInitialised = true;
+
+    return initResult;
   }
 
   setUserId(userId: string) {

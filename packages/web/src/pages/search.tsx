@@ -35,11 +35,11 @@ import {
   getOffersByCategoryUrl,
   getOffersBySearchTermUrl,
 } from '@/utils/externalPageUrls';
-import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 import {
   useAmplitudeExperiment,
   useAmplitudeExperimentComponent,
 } from '@/context/AmplitudeExperiment';
+import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
 
 const he = require('he');
 
@@ -80,7 +80,7 @@ const Search: NextPage = () => {
   const userCtx = useContext(UserContext);
 
   const searchExperiment = useAmplitudeExperiment('category_level_three_search', 'control');
-  const { setOpen, setOffer } = useContext(OfferSheetContext);
+  const offerSheetControls = useOfferSheetControls();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -180,12 +180,11 @@ const Search: NextPage = () => {
               if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
                 hasLink = false;
                 onClick = () => {
-                  setOffer({
+                  offerSheetControls.open({
                     offerId: result.ID as unknown as string,
                     companyId: result.CompID as unknown as string,
                     companyName: result.CompanyName,
                   });
-                  setOpen(true);
                 };
               }
               return (

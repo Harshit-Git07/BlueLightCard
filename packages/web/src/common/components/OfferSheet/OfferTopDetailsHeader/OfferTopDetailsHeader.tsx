@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from '@/components/Image/Image';
-import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 import getCDNUrl from '@/utils/getCDNUrl';
 import { ThemeVariant } from '@/types/theme';
 import { OfferTopDetailsHeaderProps } from '../types';
@@ -10,23 +9,18 @@ import ShareButton from '@/components/ShareButton/ShareButton';
 import FavouriteButton from '@/components/FavouriteButton/FavouriteButton';
 import Heading from '@/components/Heading/Heading';
 import Markdown from '@/components/Markdown/Markdown';
-import IconListItem from '@/components/IconListItem/IconListItem';
-import OfferExclusions from '../OfferExclusions/OfferExclusions';
 
 const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
+  offerMeta,
   offerData,
-  companyId,
   showOfferDescription = true,
   showShareFavorite = true,
   showTerms = true,
   showExclusions = true,
 }) => {
-  const { open } = useContext(OfferSheetContext);
   const [expanded, setExpanded] = useState(false);
   const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
-  const [openExclusionsDetails, setOpenExclusionsDetails] = useState<'items' | 'store' | null>(
-    null
-  );
+  const [openExclusionsDetails] = useState<'items' | 'store' | null>(null);
 
   const exclusionsParser = {
     items: {
@@ -70,13 +64,6 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
       setTimeout(() => setShareBtnState('share'), 1500);
     }
   };
-
-  useEffect(() => {
-    if (!open) {
-      setExpanded(false);
-      setShareBtnState('share');
-    }
-  }, [open]);
 
   return (
     <>
@@ -135,7 +122,7 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
           {showShareFavorite && (
             <div className={`flex flex-wrap justify-center mt-4`}>
               <ShareButton {...{ onShareClick, shareBtnState }} />
-              <FavouriteButton {...{ offerData, companyId }} />
+              <FavouriteButton offerMeta={offerMeta} offerData={offerData} />
             </div>
           )}
           {/* Exclusions */}

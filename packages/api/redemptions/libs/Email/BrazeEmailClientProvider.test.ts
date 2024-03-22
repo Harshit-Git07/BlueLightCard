@@ -1,5 +1,7 @@
-import { BrazeEmailClientProvider, BrazeEmailSecrets } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
-import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
+import { Braze } from 'braze-api';
+
+import { BrazeCredentials, BrazeEmailClientProvider } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
+import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 const setup = () => {
   process.env.BRAZE_API_URL = 'https://rest.fra-02.braze.com.eu';
@@ -22,30 +24,40 @@ describe('BrazeEmail', () => {
 
   it('should initialise correctly', async () => {
     const secretsManger = {
-      getSecretValue: jest.fn().mockResolvedValue(
+      getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
           brazeApiKey: 'test',
-        } as BrazeEmailSecrets),
+        } satisfies BrazeCredentials),
       ),
-    };
-    const brazeEmail = await new BrazeEmailClientProvider(
-      secretsManger as unknown as SecretsManager<BrazeEmailSecrets>,
-    ).init();
+    } satisfies ISecretsManager;
+    const brazeEmail = await new BrazeEmailClientProvider(secretsManger).init();
     expect(brazeEmail).toBeDefined();
-    expect(brazeEmail).toHaveProperty('campaigns');
+    expect(brazeEmail).toBeInstanceOf(Braze);
   });
 
   it('should throw error if secrets are invalid', async () => {
-    const secretsManger = {
-      getSecretValue: jest.fn().mockResolvedValue(
+    const secretsManger: ISecretsManager = {
+      getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
           brazeApiKey: '',
-        } as BrazeEmailSecrets),
+        } satisfies BrazeCredentials),
       ),
     };
 
-    await expect(
-      new BrazeEmailClientProvider(secretsManger as unknown as SecretsManager<BrazeEmailSecrets>).init(),
-    ).rejects.toThrow('Invalid secrets');
+    await expect(new BrazeEmailClientProvider(secretsManger).init()).rejects.toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          "code": "too_small",
+          "minimum": 1,
+          "type": "string",
+          "inclusive": true,
+          "exact": false,
+          "message": "String must contain at least 1 character(s)",
+          "path": [
+            "brazeApiKey"
+          ]
+        }
+      ]"
+    `);
   });
 });

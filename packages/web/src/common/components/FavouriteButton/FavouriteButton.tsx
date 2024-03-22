@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import UserContext from '@/context/User/UserContext';
 import AuthContext from '@/context/Auth/AuthContext';
-import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as faStarRegular } from '@fortawesome/pro-regular-svg-icons';
 import { faStar as faStarSolid } from '@fortawesome/pro-solid-svg-icons';
@@ -10,14 +9,9 @@ import { ThemeVariant } from '@/types/theme';
 import { FavouriteButtonProps } from './types';
 import { retrieveFavourites, UpdateFavourites } from '@/utils/company/favourites';
 
-const FavouriteButton: React.FC<FavouriteButtonProps> = ({
-  offerData,
-  companyId,
-  hasText = true,
-}) => {
+const FavouriteButton: React.FC<FavouriteButtonProps> = ({ offerMeta, offerData, hasText }) => {
   const userCtx = useContext(UserContext);
   const authCtx = useContext(AuthContext);
-  const { open } = useContext(OfferSheetContext);
   const [curFavBtnState, setFavBtnState] = useState<
     'favourite' | 'unfavourite' | 'disabled' | 'error' | ''
   >('disabled');
@@ -33,20 +27,16 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   };
 
   const fetchFavourite = async () => {
-    const favouriteCompany = (await retrieveFavourites(companyId)) ? 'favourite' : 'unfavourite';
+    const favouriteCompany = (await retrieveFavourites(offerMeta.companyId))
+      ? 'favourite'
+      : 'unfavourite';
     setFavBtnState(favouriteCompany);
   };
 
   useEffect(() => {
     fetchFavourite();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userCtx.user, offerData.id, companyId]);
-
-  useEffect(() => {
-    if (!open) {
-      setFavBtnState('unfavourite');
-    }
-  }, [open]);
+  }, [userCtx.user, offerMeta.companyId]);
 
   return (
     <Button

@@ -5,7 +5,7 @@ import {
 } from '@/global-vars';
 import axios from 'axios';
 import { unpackJWT } from '@core/utils/unpackJWT';
-import { offerResponse } from '@/context/OfferSheet/OfferSheetContext';
+import { OfferData } from '@/types/api/offers';
 
 export async function retrieveFavourites(companyId?: string) {
   const idToken = localStorage.getItem('idToken');
@@ -41,12 +41,12 @@ export async function retrieveFavourites(companyId?: string) {
 }
 
 export async function UpdateFavourites(
-  offerData: offerResponse,
+  offerMeta: OfferData,
   idToken: string,
   userId?: string
 ): Promise<boolean> {
   let data = {
-    companyId: offerData.companyId && parseInt(offerData.companyId, 10),
+    companyId: offerMeta.companyId,
     brand: LEGACY_MICROSERVICE_BRAND,
     userId: userId,
   };
@@ -62,7 +62,7 @@ export async function UpdateFavourites(
   };
 
   try {
-    const res = await axios(config);
+    await axios(config);
     return true;
   } catch (e) {
     return false;

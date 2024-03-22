@@ -19,7 +19,7 @@ export type RouteOptions = {
   apiGatewayModelGenerator: ApiGatewayModelGenerator;
   environment?: Partial<Record<RedemptionsStackEnvironmentKeys, string>>;
   handler: string;
-  model: Model;
+  model?: Model;
   functionName: string;
   database?: IDatabase;
   requestValidatorName: string;
@@ -44,6 +44,15 @@ export class Route {
     defaultAllowedOrigins,
     permissions,
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'redemptionsAuthorizer'> {
+    const requestModels = model ? { 'application/json': model.getModel() } : undefined;
+    const methodResponses = MethodResponses.toMethodResponses(
+      [
+        model ? new ResponseModel('200', model) : undefined,
+        apiGatewayModelGenerator.getError404(),
+        apiGatewayModelGenerator.getError500(),
+      ].filter(Boolean),
+    );
+
     return {
       cdk: {
         function: new SSTFunction(stack, functionName, {
@@ -56,12 +65,8 @@ export class Route {
           database,
         }),
         method: {
-          requestModels: { 'application/json': model.getModel() },
-          methodResponses: MethodResponses.toMethodResponses([
-            new ResponseModel('200', model),
-            apiGatewayModelGenerator.getError404(),
-            apiGatewayModelGenerator.getError500(),
-          ]),
+          requestModels,
+          methodResponses,
           requestValidator: new RequestValidator(stack, requestValidatorName, {
             restApi,
             validateRequestBody: true,

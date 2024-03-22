@@ -10,7 +10,8 @@ describe('RedemptionDetailsService', () => {
     // Arrange
     const redemptionsRepository = {
       findOneByOfferId: jest.fn(),
-      updateByOfferId: jest.fn(),
+      updateOneByOfferId: jest.fn(),
+      updateManyByOfferId: jest.fn(),
       createRedemption: jest.fn(),
       withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;
@@ -34,7 +35,8 @@ describe('RedemptionDetailsService', () => {
     // Arrange
     const redemptionsRepository = {
       findOneByOfferId: jest.fn(),
-      updateByOfferId: jest.fn(),
+      updateOneByOfferId: jest.fn(),
+      updateManyByOfferId: jest.fn(),
       createRedemption: jest.fn(),
       withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;

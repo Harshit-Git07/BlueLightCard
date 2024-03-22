@@ -3,15 +3,13 @@ import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
+import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
-import { PostSpotifyModel } from '@blc-mono/redemptions/libs/models/postSpotify';
 
 import { Shared } from '../../../../stacks/stack';
-import { ApiGatewayAuthorizer } from '../../core/src/identity/authorizer';
 import { Identity } from '../../identity/stack';
-import { GetRedemptionDetailsModel } from '../libs/models/getRedemptionDetails';
 
 import { RedemptionsStackConfigResolver } from './config/config';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
@@ -81,10 +79,8 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   // Create API Models
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
-  const postSpotifyModel = apiGatewayModelGenerator.generateModel(PostSpotifyModel);
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
   const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
-  const getRedemptionDetailsModel = apiGatewayModelGenerator.generateModel(GetRedemptionDetailsModel);
 
   new EventBridge(stack, {
     linkRule: createLinkRule(stack),
@@ -114,8 +110,7 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   // functionName is automatically appended with the stage name
   allRoutes.addRoutes(api, stack, {
-    'POST /member/redemptionDetails': Route.createRoute({
-      model: getRedemptionDetailsModel,
+    'GET /member/redemptionDetails': Route.createRoute({
       apiGatewayModelGenerator,
       stack,
       functionName: 'GetRedemptionDetailsHandler',
@@ -139,14 +134,14 @@ export async function Redemptions({ app, stack }: StackContext) {
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
           config.redemptionsLambdaScriptsEnvironment,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH]:
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
           config.redemptionsLambdaScriptsCodeRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
           config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
           config.redemptionsLambdaScriptsCodeAmountIssuedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER]:
-          config.redemptionsLambdaScriptsSecretManager,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
+          config.redemptionsLambdaScriptsSecretName,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
@@ -163,7 +158,6 @@ export async function Redemptions({ app, stack }: StackContext) {
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
     'POST /member/online/single-use/custom/spotify': Route.createRoute({
-      model: postSpotifyModel,
       apiGatewayModelGenerator,
       stack,
       functionName: 'PostSpotifyHandler',
@@ -174,12 +168,12 @@ export async function Redemptions({ app, stack }: StackContext) {
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
           config.redemptionsLambdaScriptsEnvironment,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH]:
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
           config.redemptionsLambdaScriptsCodeRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
           config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER]:
-          config.redemptionsLambdaScriptsSecretManager,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
+          config.redemptionsLambdaScriptsSecretName,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [getSecretValueSecretsManager],

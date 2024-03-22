@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { formatDateDDMMYYYY } from '../dates';
 
 describe('formatDateDDMMYYYY', () => {

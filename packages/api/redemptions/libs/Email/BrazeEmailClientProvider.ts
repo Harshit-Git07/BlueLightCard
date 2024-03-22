@@ -2,30 +2,26 @@ import { Braze } from 'braze-api';
 import z from 'zod';
 
 import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
-import { SecretsManager } from '../SecretsManager/SecretsManager';
+import { ISecretsManager, SecretsManager } from '../SecretsManager/SecretsManager';
 
-export interface BrazeEmailSecrets {
-  brazeApiKey: string;
-}
-
-const brazeEmailSecrets = z.object({
+const BrazeCredentialsSecretSchema = z.object({
   brazeApiKey: z.string().nonempty(),
 });
+export type BrazeCredentials = z.infer<typeof BrazeCredentialsSecretSchema>;
 
 export class BrazeEmailClientProvider {
   static key = 'BrazeEmail' as const;
   static inject = [SecretsManager.key] as const;
 
-  constructor(private secretsManger: SecretsManager<BrazeEmailSecrets>) {}
+  constructor(private secretsManger: ISecretsManager) {}
+
+  private brazeApiUrl = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL);
 
   public async init(): Promise<Braze> {
-    const secrets = await this.secretsManger.getSecretValue('blc-mono-redemptions/NewVaultSecrets');
-    const braze = brazeEmailSecrets.safeParse(secrets);
-    if (braze.success) {
-      const brazeAPIUrl = getEnv('BRAZE_API_URL');
-      return new Braze(brazeAPIUrl, braze.data.brazeApiKey);
-    }
-    throw new Error('Invalid secrets');
+    const secrets = await this.secretsManger.getSecretValueJson('blc-mono-redemptions/NewVaultSecrets');
+    const braze = BrazeCredentialsSecretSchema.parse(secrets);
+    return new Braze(this.brazeApiUrl, braze.brazeApiKey);
   }
 }

@@ -1,4 +1,5 @@
 import { Result } from '@blc-mono/core/types/result';
+import { ILogger } from '@blc-mono/core/utils/logger/logger';
 
 export abstract class Controller<
   Request,
@@ -7,6 +8,8 @@ export abstract class Controller<
   ParsedRequest = Request,
   ParseRequestError = unknown,
 > {
+  protected abstract logger: ILogger;
+
   constructor() {
     this.invoke = this.invoke.bind(this);
   }
@@ -35,4 +38,21 @@ export abstract class Controller<
   protected abstract formatResponse(request: Request, result: HandlerResult): Response;
   protected abstract onUnhandledError(request: Request, err: unknown): Promise<Response>;
   protected abstract onParseError(request: Request, err: ParseRequestError): Promise<Response>;
+  protected logUnhandledError(tracingId: string, err: unknown): void {
+    this.logger.error({
+      message: '[UNHANDLED ERROR] There was an unhandled error processing the event',
+      context: {
+        controller: this.constructor.name || 'EventBridgeController (unknown)',
+        location: 'EventBridgeController.onUnhandledError',
+        tracingId,
+        error: this.displayError(err),
+      },
+    });
+  }
+  private displayError(err: unknown): string {
+    if (err instanceof Error) {
+      return `[${err.name}] ${err.message}\n${err.stack ?? '<no stack>'}`;
+    }
+    return typeof err === 'string' ? err : JSON.stringify(err);
+  }
 }

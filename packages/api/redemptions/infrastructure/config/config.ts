@@ -6,7 +6,7 @@ import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
 
 export type RedemptionsStackConfig = {
-  redemptionsLambdaScriptsSecretManager: string;
+  redemptionsLambdaScriptsSecretName: string;
   redemptionsLambdaScriptsEnvironment: string;
   redemptionsLambdaScriptsHost: string;
   redemptionsLambdaScriptsRetrieveAllVaultsPath: string;
@@ -34,7 +34,7 @@ export class RedemptionsStackConfigResolver {
 
   public static forProductionStage(): RedemptionsStackConfig {
     return {
-      redemptionsLambdaScriptsSecretManager: 'blc-mono-redemptions/NewVaultSecrets',
+      redemptionsLambdaScriptsSecretName: 'blc-mono-redemptions/NewVaultSecrets',
       redemptionsLambdaScriptsEnvironment: 'production',
       redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
       redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
@@ -54,7 +54,7 @@ export class RedemptionsStackConfigResolver {
 
   public static forStagingStage(): RedemptionsStackConfig {
     return {
-      redemptionsLambdaScriptsSecretManager: 'blc-mono-redemptions/NewVaultSecrets',
+      redemptionsLambdaScriptsSecretName: 'blc-mono-redemptions/NewVaultSecrets',
       redemptionsLambdaScriptsEnvironment: 'staging',
       redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
       redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
@@ -74,7 +74,7 @@ export class RedemptionsStackConfigResolver {
 
   public static forPrStage(): RedemptionsStackConfig {
     return {
-      redemptionsLambdaScriptsSecretManager: 'blc-mono-redemptions/NewVaultSecrets',
+      redemptionsLambdaScriptsSecretName: 'blc-mono-redemptions/NewVaultSecrets',
       redemptionsLambdaScriptsEnvironment: 'develop',
       redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
       redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
@@ -94,8 +94,8 @@ export class RedemptionsStackConfigResolver {
 
   public static fromEnvironmentVariables(): RedemptionsStackConfig {
     return {
-      redemptionsLambdaScriptsSecretManager: getEnv(
-        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER,
+      redemptionsLambdaScriptsSecretName: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME,
       ),
       redemptionsLambdaScriptsEnvironment: getEnv(
         RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT,
@@ -105,7 +105,7 @@ export class RedemptionsStackConfigResolver {
         RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH,
       ),
       redemptionsLambdaScriptsCodeRedeemedPath: getEnv(
-        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH,
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH,
       ),
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: getEnv(
         RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH,

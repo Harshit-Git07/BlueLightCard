@@ -6,8 +6,8 @@ import { EmailService } from '@blc-mono/redemptions/application/services/email/E
 import { emailEventFactory } from '@blc-mono/redemptions/application/test/factories/emailEvent.factory';
 import { createTestLogger } from '@blc-mono/redemptions/application/test/helpers/logger';
 import { RedemptionEventDetailType } from '@blc-mono/redemptions/infrastructure/eventBridge/events/redemptions';
-import { BrazeEmailClientProvider, BrazeEmailSecrets } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
-import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
+import { BrazeCredentials, BrazeEmailClientProvider } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
+import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 const setup = () => {
   process.env.BRAZE_API_URL = 'https://rest.fra-02.braze.com.eu';
   process.env.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID = 'test';
@@ -31,13 +31,13 @@ describe('RedemptionTransactionalEmailController', () => {
   it(`should send email for ${RedemptionEventDetailType.REDEEMED_VAULT}`, async () => {
     const logger = createTestLogger();
     const secretsManger = {
-      getSecretValue: jest.fn().mockResolvedValue(
+      getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
           brazeApiKey: 'test',
-        } as BrazeEmailSecrets),
+        } satisfies BrazeCredentials),
       ),
-    };
-    const emailClient = new BrazeEmailClientProvider(secretsManger as unknown as SecretsManager<BrazeEmailSecrets>);
+    } satisfies ISecretsManager;
+    const emailClient = new BrazeEmailClientProvider(secretsManger);
 
     const emailRepository = new EmailRepository(logger, emailClient);
     const brazeEmail = new EmailService(emailRepository);
@@ -77,16 +77,13 @@ describe('RedemptionTransactionalEmailController', () => {
   it('did not send an email', async () => {
     const logger = createTestLogger();
     const secretsManger = {
-      getSecretValue: jest.fn().mockResolvedValue(
+      getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
           brazeApiKey: 'test',
-        } as BrazeEmailSecrets),
+        } satisfies BrazeCredentials),
       ),
-    };
-    const emailRepository = new EmailRepository(
-      logger,
-      new BrazeEmailClientProvider(secretsManger as unknown as SecretsManager<BrazeEmailSecrets>),
-    );
+    } satisfies ISecretsManager;
+    const emailRepository = new EmailRepository(logger, new BrazeEmailClientProvider(secretsManger));
     const brazeEmail = new EmailService(emailRepository);
     const controller = new RedemptionTransactionalEmailController(logger, brazeEmail);
     await brazeEmail.sendRedemptionTransactionEmail(emailEventFactory.build());
@@ -125,16 +122,13 @@ describe('RedemptionTransactionalEmailController', () => {
   it(`should not send email for ${RedemptionEventDetailType.REDEEMED_VAULT_QR}`, async () => {
     const logger = createTestLogger();
     const secretsManger = {
-      getSecretValue: jest.fn().mockResolvedValue(
+      getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
           brazeApiKey: 'test',
-        } as BrazeEmailSecrets),
+        } satisfies BrazeCredentials),
       ),
-    };
-    const emailRepository = new EmailRepository(
-      logger,
-      new BrazeEmailClientProvider(secretsManger as unknown as SecretsManager<BrazeEmailSecrets>),
-    );
+    } satisfies ISecretsManager;
+    const emailRepository = new EmailRepository(logger, new BrazeEmailClientProvider(secretsManger));
     const brazeEmail = new EmailService(emailRepository);
     const controller = new RedemptionTransactionalEmailController(logger, brazeEmail);
     await brazeEmail.sendRedemptionTransactionEmail(emailEventFactory.build());

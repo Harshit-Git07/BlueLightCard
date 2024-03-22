@@ -1,6 +1,6 @@
 import { useAmplitudeExperimentClient } from '@/context/AmplitudeExperiment';
 import { useRedemptionDetails } from './useRedemptionDetails';
-import { RedemptionType } from '@/types/api';
+import { RedemptionType } from '@/types/api/redemptions';
 import { useMemo } from 'react';
 
 function getAmplitudeExperimentName(redemptionType: RedemptionType) {
@@ -28,6 +28,7 @@ export type UseRedeemExperimentResult =
   | {
       status: 'success';
       data: {
+        redemptionType: RedemptionType;
         treatmentEnabled: boolean;
       };
     }
@@ -54,10 +55,12 @@ export function useRedeemExperiment(offerId: number): UseRedeemExperimentResult 
         amplitudeExperimentName,
         'control'
       );
+      console.log('variant: ', variant);
 
       return {
         status: 'success',
         data: {
+          redemptionType: redemptionDetailsQuery.data.data.redemptionType,
           treatmentEnabled: variant.value === 'treatment',
         },
       };

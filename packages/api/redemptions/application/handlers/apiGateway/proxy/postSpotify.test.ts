@@ -24,7 +24,7 @@ it.todo('Implement integration tests for postSpotify');
 //         return 'http://url-test.com';
 //       case RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT:
 //         return 'test';
-//       case RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH:
+//       case RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH:
 //         return 'codeRedeemed';
 //       case RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH:
 //         return 'assignedUserCode';

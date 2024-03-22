@@ -26,7 +26,7 @@ describe('RedemptionDetailsController', () => {
 
     // Act
     const result = await controller.handle({
-      body: {
+      queryStringParameters: {
         offerId: faker.number.int({
           min: 1,
           max: 1_000_000,
@@ -54,7 +54,7 @@ describe('RedemptionDetailsController', () => {
 
     // Act
     const result = await controller.handle({
-      body: {
+      queryStringParameters: {
         offerId: faker.number.int({
           min: 1,
           max: 1_000_000,

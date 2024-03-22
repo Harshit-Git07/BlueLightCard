@@ -1,11 +1,19 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
+import {
+  ITransactionManager,
+  TransactionManager,
+} from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 
 import { VaultCreatedEvent, VaultCreatedEventDetail } from '../../controllers/eventBridge/vault/VaultCreatedController';
 import { VaultUpdatedEvent, VaultUpdatedEventDetail } from '../../controllers/eventBridge/vault/VaultUpdatedController';
 import { AffiliateConfigurationHelper } from '../../helpers/affiliateConfiguration';
-import { Redemption, RedemptionsRepository, UpdateRedemption } from '../../repositories/RedemptionsRepository';
-import { NewVault, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
+import {
+  IRedemptionsRepository,
+  Redemption,
+  RedemptionsRepository,
+  UpdateRedemption,
+} from '../../repositories/RedemptionsRepository';
+import { IVaultsRepository, NewVault, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
 
 export interface IVaultService {
   updateVault(event: VaultUpdatedEvent): Promise<void>;
@@ -23,9 +31,9 @@ export class VaultService implements IVaultService {
 
   constructor(
     private readonly logger: ILogger,
-    private readonly redemptionsRepo: RedemptionsRepository,
-    private readonly vaultsRepo: VaultsRepository,
-    private readonly transactionManager: TransactionManager,
+    private readonly redemptionsRepo: IRedemptionsRepository,
+    private readonly vaultsRepo: IVaultsRepository,
+    private readonly transactionManager: ITransactionManager,
   ) {}
 
   public async updateVault(event: VaultUpdatedEvent): Promise<void> {
@@ -63,7 +71,7 @@ export class VaultService implements IVaultService {
       const redemptionRepoTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
       const vaultRepoTransaction = this.vaultsRepo.withTransaction(transactionConnection);
 
-      await redemptionRepoTransaction.updateByOfferId(detail.offerId, updatedRedemptionData);
+      await redemptionRepoTransaction.updateOneByOfferId(detail.offerId, updatedRedemptionData);
       await vaultRepoTransaction.updateOneById(vault.id, updatedVaultData);
     });
   }
@@ -71,14 +79,17 @@ export class VaultService implements IVaultService {
   public async createVault(event: VaultCreatedEvent): Promise<void> {
     const { detail } = event;
 
-    const updatedRedemptionData = this.makeUpdatedRedemptionForCreateVault(detail);
     await this.transactionManager.withTransaction(async (transaction) => {
+      const updatedRedemptionData = this.makeUpdatedRedemptionForCreateVault(detail);
       const transactionConnection = { db: transaction };
       const redemptionRepoTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
       const vaultRepoTransaction = this.vaultsRepo.withTransaction(transactionConnection);
-      const updatedRedemptions = await redemptionRepoTransaction.updateByOfferId(detail.offerId, updatedRedemptionData);
+      const updatedRedemption = await redemptionRepoTransaction.updateOneByOfferId(
+        detail.offerId,
+        updatedRedemptionData,
+      );
 
-      if (updatedRedemptions.length === 0) {
+      if (!updatedRedemption) {
         this.logger.error({
           message: 'Vault Create - Redemption update by offer id failed: No redemptions found',
           context: {
@@ -87,59 +98,20 @@ export class VaultService implements IVaultService {
             platform: detail.platform,
           },
         });
-        throw new Error(
-          `Vault Create - Redemption update by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
-        );
-      } else if (updatedRedemptions.length > 1) {
-        this.logger.error({
-          message: 'Vault Create - Redemption update by offer id failed: Multiple redemptions found',
-          context: {
-            offerId: detail.offerId,
-            companyId: detail.companyId,
-            platform: detail.platform,
-            redemptions: updatedRedemptions,
-          },
-        });
-        throw new Error(
-          `Vault Create - Redemption update by offer id failed: Multiple redemptions found (offerId="${detail.offerId}")`,
-        );
+        throw new Error('Failed to create vault (no matching redemptions found)');
       }
 
-      const vaults: NewVault[] = updatedRedemptions.map((redemption) => ({
+      await vaultRepoTransaction.create({
         alertBelow: detail.alertBelow,
         status: detail.vaultStatus ? 'active' : 'in-active',
         maxPerUser: detail.maxPerUser,
         showQR: detail.showQR,
         terms: detail.terms,
         email: detail.adminEmail || null,
-        redemptionId: redemption.id,
+        redemptionId: updatedRedemption.id,
         vaultType: 'legacy',
         ...this.getIntegrationsForCreateVault(detail),
-      }));
-      const createdVaults = await vaultRepoTransaction.createMany(vaults);
-
-      if (createdVaults.length === 0) {
-        this.logger.error({
-          message: 'Vault Create - Vault create many failed: No vaults were created',
-          context: {
-            offerId: detail.offerId,
-            companyId: detail.companyId,
-            platform: detail.platform,
-          },
-        });
-        throw new Error('Vault Create - Vault create many failed: No vaults were created');
-      } else if (createdVaults.length > 1) {
-        this.logger.error({
-          message: 'Vault Create - Vault create many failed: Multiple redemptions found for vault',
-          context: {
-            offerId: detail.offerId,
-            companyId: detail.companyId,
-            platform: detail.platform,
-            vaults: createdVaults,
-          },
-        });
-        throw new Error('Vault Create - Vault create many failed: Multiple redemptions found for vault');
-      }
+      });
     });
   }
 

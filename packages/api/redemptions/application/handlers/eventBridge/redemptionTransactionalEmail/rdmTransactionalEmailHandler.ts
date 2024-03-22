@@ -5,7 +5,7 @@ import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionTransactionalEmailController } from '@blc-mono/redemptions/application/controllers/eventBridge/redemptionTransactionalEmail/RedemptionTransactionalEmailController';
 import { EmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
 import { EmailService } from '@blc-mono/redemptions/application/services/email/EmailService';
-import { BrazeEmailClientProvider, BrazeEmailSecrets } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
+import { BrazeEmailClientProvider } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
 import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 const logger = new LambdaLogger({ serviceName: 'redemptions-redemption-transactional-email' });
@@ -13,7 +13,7 @@ const logger = new LambdaLogger({ serviceName: 'redemptions-redemption-transacti
 const controller = createInjector()
   // Common
   .provideValue(Logger.key, logger)
-  .provideClass(SecretsManager.key, SecretsManager<BrazeEmailSecrets>)
+  .provideClass(SecretsManager.key, SecretsManager)
   .provideClass(BrazeEmailClientProvider.key, BrazeEmailClientProvider)
   .provideClass(EmailRepository.key, EmailRepository)
   .provideClass(EmailService.key, EmailService)

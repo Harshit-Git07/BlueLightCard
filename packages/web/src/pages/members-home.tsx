@@ -33,8 +33,8 @@ import { shuffle } from 'lodash';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
-import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
+import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -123,7 +123,7 @@ const HomePage: NextPage<any> = () => {
     userCtx.error,
   ]);
 
-  const { setOpen, setOffer } = useContext(OfferSheetContext);
+  const offerSheetControls = useOfferSheetControls();
   const experiment = useAmplitudeExperiment('web-homepage-offer-sheet', 'control');
 
   // Format carousel data
@@ -137,12 +137,11 @@ const HomePage: NextPage<any> = () => {
     hasLink: experiment.data?.variantName === 'control',
     onClick: () => {
       if (experiment.data?.variantName === 'treatment') {
-        setOffer({
+        offerSheetControls.open({
           offerId: offer.id,
           companyId: offer.compid,
           companyName: cleanText(offer.companyname),
         });
-        setOpen(true);
       }
     },
   }));
@@ -166,12 +165,11 @@ const HomePage: NextPage<any> = () => {
     hasLink: experiment.data?.variantName === 'control',
     onClick: () => {
       if (experiment.data?.variantName === 'treatment') {
-        setOffer({
+        offerSheetControls.open({
           offerId: offer.id,
           companyId: offer.compid,
           companyName: cleanText(offer.companyname),
         });
-        setOpen(true);
       }
     },
   }));
@@ -273,12 +271,11 @@ const HomePage: NextPage<any> = () => {
                   hasLink: experiment.data?.variantName === 'control',
                   onClick: () => {
                     if (experiment.data?.variantName === 'treatment') {
-                      setOffer({
+                      offerSheetControls.open({
                         offerId: item.offerId,
                         companyId: item.compid,
                         companyName: cleanText(item.companyname),
                       });
-                      setOpen(true);
                     }
                   },
                 };

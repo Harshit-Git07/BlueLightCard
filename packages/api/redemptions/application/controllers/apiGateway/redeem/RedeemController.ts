@@ -93,20 +93,6 @@ export class RedeemController extends APIGatewayController<RedeemRequestModel> {
             message: 'No vault found for the given offerId',
           },
         };
-      case 'InvalidVaultType':
-        return {
-          statusCode: 500,
-          data: {
-            message: 'Invalid vault type found for the given offerId',
-          },
-        };
-      case 'VaultInactive':
-        return {
-          statusCode: 500,
-          data: {
-            message: 'Vault is inactive for the given offerId',
-          },
-        };
       case 'MaxPerUserReached':
         return {
           statusCode: 403,
@@ -115,9 +101,6 @@ export class RedeemController extends APIGatewayController<RedeemRequestModel> {
           },
         };
       case 'ErrorWhileRedeemingVault':
-      case 'CheckHowManyCodesIssuedApiRequestNonSuccessful':
-      case 'AssignCodeApiRequestNonSuccessful':
-      case 'RedemptionUrlNotFound':
         this.logger.error({
           message: `Error while redeeming vault for the given offerId`,
           context: {

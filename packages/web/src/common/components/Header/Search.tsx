@@ -10,7 +10,7 @@ import { companiesCategoriesQuery } from '../../../graphql/homePageQueries';
 import { makeNavbarQueryWithDislikeRestrictions, makeQuery } from '../../../graphql/makeQuery';
 import { redirectToLogin } from '@/hoc/requireAuth';
 import { useRouter } from 'next/router';
-import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
+import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import UserContext from '@/context/User/UserContext';
 
 const sortByAlphabeticalOrder = (a: CategoryType | CompanyType, b: CategoryType | CompanyType) => {
@@ -174,7 +174,7 @@ const Search: FC<SearchProps> = ({
                 disabled={isSearching || isLoading}
               >
                 {isLoading || isSearching ? (
-                  <LoadingPlaceholder
+                  <LoadingSpinner
                     containerClassName="text-palette-white"
                     spinnerClassName="text-[1.5em]"
                   />

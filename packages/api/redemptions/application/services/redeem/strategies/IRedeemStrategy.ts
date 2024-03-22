@@ -51,12 +51,7 @@ export type RedeemVaultStrategyResult =
       };
     }
   | { kind: 'VaultNotFound' }
-  | { kind: 'InvalidVaultType' }
-  | { kind: 'VaultInactive' }
   | { kind: 'MaxPerUserReached' }
-  | { kind: 'CheckHowManyCodesIssuedApiRequestNonSuccessful' }
-  | { kind: 'AssignCodeApiRequestNonSuccessful' }
-  | { kind: 'RedemptionUrlNotFound' }
   | { kind: 'ErrorWhileRedeemingVault' };
 
 export interface IRedeemStrategy {

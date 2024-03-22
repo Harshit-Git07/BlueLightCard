@@ -32,15 +32,7 @@ export class SpotifyController extends APIGatewayController<SpotifyRequestModel>
     const result = await this.spotifyService.redeem(platform, companyId, offerId, memberId, url);
 
     switch (result.kind) {
-      case 'CodeRedemedOk':
-        return {
-          statusCode: 200,
-          data: {
-            trackingUrl: result.data.trackingUrl,
-            code: result.data.code,
-          },
-        };
-      case 'AssignUserCodeOk':
+      case 'Ok':
         return {
           statusCode: 200,
           data: {
@@ -50,7 +42,7 @@ export class SpotifyController extends APIGatewayController<SpotifyRequestModel>
           },
         };
       default:
-        exhaustiveCheck(result, 'Unhandled result kind');
+        exhaustiveCheck(result.kind, 'Unhandled result kind');
     }
   }
 }

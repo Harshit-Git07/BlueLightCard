@@ -3,285 +3,267 @@ import { randomBytes } from 'crypto';
 import * as pkcs7 from 'pkcs7';
 import z from 'zod';
 
-import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
-import { httpRequest, RequestResponse } from '@blc-mono/core/utils/fetch/httpRequest';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { SecretsErrorResponse, SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
-
-type RedemptionUpdateResponse = { dependentEntities: vaultItem[] } | SecretsErrorResponse;
-
-type ResponseData = {
-  codes: Array<{ code: number }>;
-  code: number;
-  trackingUrl: string;
-};
-
-export type Secrets = {
-  codeRedeemedPassword: string;
-  codeRedeemedData: string;
-  checkAmountIssuedData: string;
-  checkAmountIssuedPassword: string;
-  assignUserCodesData: string;
-  assignUserCodesPassword: string;
-  retrieveAllVaultsData: string;
-  retrieveAllVaultsPassword: string;
-};
+import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
+import { Platform } from '@blc-mono/redemptions/libs/database/schema';
+import { ISecretsManager, SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 enum ApisLambdaScripts {
   RETRIEVE_ALL_VAULTS = 'RETRIEVE_ALL_VAULTS',
   CHECK_AMOUNT_ISSUED = 'CHECK_AMOUNT_ISSUED',
   ASSIGN_USER_CODES = 'ASSIGN_USER',
-  CODE_REDEEMED_PATH = 'CODE_REDEEMED',
+  CODES_REDEEMED = 'CODES_REDEEMED',
 }
 
-const vaultDataResponse = z.array(
-  z.object({
-    terms: z.string(),
-    companyId: z.any(),
-    companyName: z.string(),
-    offerId: z.any(),
-    brand: z.string(),
-    createdAt: z.string(),
-    managerId: z.any(),
-    alertBelow: z.number(),
-    showQR: z.number(),
-    vaultStatus: z.boolean(),
-    sk: z.string(),
-    linkId: z.any(),
-    maxPerUser: z.number(),
-    id: z.string(),
-  }),
-);
+export const GetNumberOfCodesResponseSchema = z.object({
+  // The number of codes issued to the member
+  data: z.number(),
+});
+export type GetNumberOfCodesResponse = z.infer<typeof GetNumberOfCodesResponseSchema>;
 
-interface IGetNumberOfCodesResponse extends RequestResponse {
-  data?: number;
-}
+export const AssignCodeTeMemberDataSchema = z.object({
+  code: z.string(),
+});
+export const AssignCodeTeMemberResponseSchema = z.object({
+  data: AssignCodeTeMemberDataSchema,
+});
+export type AssignCodeTeMemberData = z.infer<typeof AssignCodeTeMemberDataSchema>;
+export type AssignCodeTeMemberResponse = z.infer<typeof AssignCodeTeMemberResponseSchema>;
 
-interface IAssignCodeToMemberResponse extends RequestResponse {
-  data?: { linkId: string; vaultId: string; terms: string; code: string };
-}
+export const RedeemedCodeSchema = z.object({
+  code: z.string(),
+});
+export const RedeemedCodesResponseSchema = z.object({
+  data: z.array(RedeemedCodeSchema),
+});
+export type RedeemedCode = z.infer<typeof RedeemedCodeSchema>;
+export type CodesRedeemedResponse = z.infer<typeof RedeemedCodesResponseSchema>;
 
-interface ICodeRedeemedResponse extends RequestResponse {
-  data?: {
-    companyId: unknown;
-    offerId: unknown;
-    userId: unknown;
-  };
-}
+export type AssignCodeTeMemberSpotifyData = AssignCodeTeMemberData & {
+  trackingUrl: string;
+};
 
-interface vaultItem {
-  type: string;
+export const LegacyVaultDataSchema = z.object({
+  companyId: z.any(),
+  offerId: z.any(),
+  linkId: z.any(),
+});
+export const VaultDataResponseSchema = z.object({
+  data: z.array(LegacyVaultDataSchema),
+});
+export type VaultDataResponse = z.infer<typeof VaultDataResponseSchema>;
+export type LegacyVaultData = VaultDataResponse['data'][number];
+
+export type VaultItem = {
   offerId: number;
   companyId: number;
-}
+};
+
+const platformToBrandMap: Record<Platform, string> = {
+  BLC_UK: 'BLC',
+  BLC_AU: 'BLC',
+  DDS_UK: 'DDS',
+};
+
+export const VaultSecretsSchema = z.object({
+  codeRedeemedData: z.string(),
+  codeRedeemedPassword: z.string(),
+  assignUserCodesData: z.string(),
+  assignUserCodesPassword: z.string(),
+  checkAmountIssuedData: z.string(),
+  checkAmountIssuedPassword: z.string(),
+  retrieveAllVaultsData: z.string(),
+  retrieveAllVaultsPassword: z.string(),
+});
+export type VaultSecrets = z.infer<typeof VaultSecretsSchema>;
 
 export interface ILegacyVaultApiRepository {
-  getNumberOfCodesIssued(
-    memberId: string,
-    companyId: number,
-    offerId: number,
-  ): Promise<IGetNumberOfCodesResponse | undefined>;
+  findVaultsRelatingToLinkId(linkId: number, platform: Platform): Promise<VaultItem[]>;
+  getNumberOfCodesIssued(memberId: string, companyId: number, offerId: number): Promise<number>;
+  getCodesRedeemed(companyId: number, offerId: number, memberId: string, platform: Platform): Promise<string[]>;
   assignCodeToMember(
     memberId: string,
     companyId: number,
     offerId: number,
-    brand?: string,
-  ): Promise<IAssignCodeToMemberResponse | undefined>;
-  getVaultByLinkId(linkId: number, brand: string): Promise<RedemptionUpdateResponse>;
-  redeemCode(
-    platform: string,
-    companyId: number,
-    offerId: number,
-    memberId: string,
-  ): Promise<ICodeRedeemedResponse | undefined>;
-  getResponseData(response: RequestResponse, url: string): ResponseData | undefined;
+    platform: Platform,
+  ): Promise<AssignCodeTeMemberData>;
 }
 
 export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
   static readonly key = 'LegacyVaultApiRepository' as const;
   static readonly inject = [Logger.key, SecretsManager.key] as const;
 
-  constructor(private readonly logger: ILogger, private readonly awsSecretsManagerClient: SecretsManager<Secrets>) {}
+  private readonly host: string = getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST);
+  private readonly environment: string = getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT);
+  private readonly apiPaths: Record<ApisLambdaScripts, string> = {
+    [ApisLambdaScripts.RETRIEVE_ALL_VAULTS]: getEnv(
+      RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH,
+    ),
+    [ApisLambdaScripts.CHECK_AMOUNT_ISSUED]: getEnv(
+      RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH,
+    ),
+    [ApisLambdaScripts.ASSIGN_USER_CODES]: getEnv(
+      RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH,
+    ),
+    [ApisLambdaScripts.CODES_REDEEMED]: getEnv(
+      RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH,
+    ),
+  };
 
-  public async getVaultByLinkId(linkId: number, brand: string): Promise<RedemptionUpdateResponse> {
-    const requestEndpoint = this.getRequestEndpoint(ApisLambdaScripts.RETRIEVE_ALL_VAULTS);
+  constructor(private readonly logger: ILogger, private readonly awsSecretsMangerClient: ISecretsManager) {}
 
-    const secrets = await this.awsSecretsManagerClient.getSecretValue(
-      getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER'),
-    );
+  public async findVaultsRelatingToLinkId(linkId: number, platform: Platform): Promise<VaultItem[]> {
+    const brand = platformToBrandMap[platform];
+    const endpoint = this.getRequestEndpoint(ApisLambdaScripts.RETRIEVE_ALL_VAULTS);
+    const credentials = await this.getLegacyVaultCredentials();
+    const key = this.generateKey(credentials.retrieveAllVaultsData, credentials.retrieveAllVaultsPassword);
 
-    if (!this.isVaultSecrets(secrets)) {
-      this.logger.error({
-        message: 'Error while fetching secrets from AWS',
-        context: secrets,
-      });
-      return secrets;
-    }
-
-    const key = await this.generateKey(secrets.retrieveAllVaultsData, secrets.retrieveAllVaultsPassword);
-
-    const response = await httpRequest({
+    const response = await fetch(`${endpoint}?brand=${brand}`, {
       method: 'GET',
-      endpoint: `${requestEndpoint}?brand=${brand}`,
       headers: {
         authorization: key,
       },
     });
 
-    if (!response) {
-      throw new Error('Error while fetching data from vault');
-    }
-    const { data } = response;
-    const success = data.success;
-
-    if (!success) {
-      this.logger.error({ message: 'Error while fetching data from vault', context: data });
-      throw new Error('bad response from vault');
-    }
-    const vaultData = this.parseVaultItems(data.data);
-
-    if (!vaultData.length) {
-      return {
-        dependentEntities: [],
-      };
+    if (!response.ok) {
+      return this.handleErrorResponse(response, 'Error retrieving vaults', {
+        linkId,
+        platform,
+      });
     }
 
-    const affectedVaults = vaultData.filter(({ linkId: vaultLinkId }) => vaultLinkId === linkId);
+    const body = await response.json();
+    const vaults = VaultDataResponseSchema.parse(body).data;
+    const affectedVaults = vaults.filter(({ linkId: vaultLinkId }) => vaultLinkId === linkId);
 
-    return {
-      dependentEntities: affectedVaults.map((item) => ({
-        type: 'vault',
-        offerId: item.offerId,
-        companyId: item.companyId,
-      })),
-    };
+    return affectedVaults.map((item) => ({
+      offerId: item.offerId,
+      companyId: item.companyId,
+    }));
   }
 
-  public async getNumberOfCodesIssued(
-    memberId: string,
-    companyId: number,
-    offerId: number,
-  ): Promise<IGetNumberOfCodesResponse | undefined> {
-    const requestEndpoint = this.getRequestEndpoint(ApisLambdaScripts.CHECK_AMOUNT_ISSUED);
+  public async getNumberOfCodesIssued(memberId: string, companyId: number, offerId: number): Promise<number> {
+    const endpoint = this.getRequestEndpoint(ApisLambdaScripts.CHECK_AMOUNT_ISSUED);
+    const credentials = await this.getLegacyVaultCredentials();
+    const key = this.generateKey(credentials.checkAmountIssuedData, credentials.checkAmountIssuedPassword);
 
-    const secrets = await this.awsSecretsManagerClient.getSecretValue(
-      getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER'),
-    );
-
-    if (!this.isVaultSecrets(secrets)) {
-      this.logger.error({
-        message: 'Error while fetching secrets from AWS',
-        context: secrets,
-      });
-      return undefined;
-    }
-
-    // AWS key gen
-    const key = await this.generateKey(secrets.checkAmountIssuedData, secrets.checkAmountIssuedPassword);
-    return httpRequest({
+    const response = await fetch(endpoint, {
       method: 'POST',
-      data: {
+      body: JSON.stringify({
         userId: memberId,
         brand: 'BLC',
         companyId,
         offerId,
-      },
-      endpoint: requestEndpoint,
+      }),
       headers: {
         authorization: key,
       },
     });
+
+    if (!response.ok) {
+      return this.handleErrorResponse(response, 'Error retrieving number of codes issued', {
+        memberId,
+        companyId,
+        offerId,
+      });
+    }
+
+    const data = await response.json();
+    return GetNumberOfCodesResponseSchema.parse(data).data;
+  }
+
+  public async getCodesRedeemed(
+    companyId: number,
+    offerId: number,
+    memberId: string,
+    platform: Platform,
+  ): Promise<string[]> {
+    const brand = platformToBrandMap[platform];
+    const endpoint = this.getRequestEndpoint(ApisLambdaScripts.CODES_REDEEMED);
+    const credentials = await this.getLegacyVaultCredentials();
+    const key = this.generateKey(credentials.codeRedeemedData, credentials.codeRedeemedPassword);
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify({ brand, companyId, offerId, userId: memberId }),
+      headers: {
+        authorization: key,
+      },
+    });
+
+    if (!response.ok) {
+      return this.handleErrorResponse(response, 'Error retrieving redeemed codes', {
+        memberId,
+        companyId,
+        offerId,
+        platform,
+      });
+    }
+
+    const data = await response.json();
+    return RedeemedCodesResponseSchema.parse(data).data.map((item) => item.code);
   }
 
   public async assignCodeToMember(
     memberId: string,
     companyId: number,
     offerId: number,
-    brand?: string,
-  ): Promise<IAssignCodeToMemberResponse | undefined> {
-    const requestEndpoint = this.getRequestEndpoint(ApisLambdaScripts.ASSIGN_USER_CODES);
-
-    const secrets = await this.awsSecretsManagerClient.getSecretValue(
-      getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER'),
-    );
-
-    if (!this.isVaultSecrets(secrets)) {
-      this.logger.error({
-        message: 'Error while fetching secrets from AWS',
-        context: secrets,
-      });
-      return undefined;
-    }
-
-    // AWS Key gen
-    const key = await this.generateKey(secrets.assignUserCodesData, secrets.assignUserCodesPassword);
-    return httpRequest({
+    platform: Platform,
+  ): Promise<AssignCodeTeMemberData> {
+    const brand = platformToBrandMap[platform];
+    const endpoint = this.getRequestEndpoint(ApisLambdaScripts.ASSIGN_USER_CODES);
+    const credentials = await this.getLegacyVaultCredentials();
+    const key = this.generateKey(credentials.assignUserCodesData, credentials.assignUserCodesPassword);
+    const response = await fetch(endpoint, {
       method: 'POST',
-      data: {
+      body: JSON.stringify({
         userId: memberId,
-        brand: brand ?? 'BLC',
+        brand,
         companyId,
         offerId,
-      },
+      }),
       headers: {
         authorization: key,
       },
-      endpoint: requestEndpoint,
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return AssignCodeTeMemberResponseSchema.parse(data).data;
+    }
+    return this.handleErrorResponse(response, 'Error while assigning code to member', {
+      memberId,
+      companyId,
+      offerId,
     });
   }
 
-  public async redeemCode(
-    platform: string,
-    companyId: number,
-    offerId: number,
-    memberId: string,
-  ): Promise<ICodeRedeemedResponse | undefined> {
-    const requestEndpoint = this.getRequestEndpoint(ApisLambdaScripts.CODE_REDEEMED_PATH);
+  // ================= Helpers =================
 
-    const secrets = await this.awsSecretsManagerClient.getSecretValue(
-      getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_MANAGER'),
-    );
-
-    if (!this.isVaultSecrets(secrets)) {
-      this.logger.error({
-        message: 'Error while fetching secrets from AWS',
-        context: secrets,
-      });
-      return undefined;
-    }
-
-    const key = await this.generateKey(secrets.codeRedeemedData, secrets.codeRedeemedPassword);
-
-    return httpRequest({
-      method: 'POST',
-      headers: {
-        authorization: key,
+  private async handleErrorResponse(
+    response: Response,
+    message: string,
+    context?: Record<string, unknown>,
+  ): Promise<never> {
+    this.logger.error({
+      message: `${message} (API request failed)`,
+      context: {
+        ...context,
+        response: {
+          status: response.status,
+          data: await response.text(),
+        },
       },
-      data: { brand: platform, companyId, offerId, userId: memberId },
-      endpoint: requestEndpoint,
     });
+    throw new Error(`${message} (unexpected status code: ${response.status})`);
   }
 
-  // HELPERS
+  private getLegacyVaultCredentials = async (): Promise<VaultSecrets> => {
+    const awsResponse = await this.awsSecretsMangerClient.getSecretValueJson('blc-mono-redemptions/NewVaultSecrets');
+    return VaultSecretsSchema.parse(awsResponse);
+  };
 
-  public getResponseData(response: RequestResponse, url: string): ResponseData | undefined {
-    const responseData = response.data;
-    if (!responseData || Object.keys(responseData).length < 1) {
-      return undefined;
-    }
-    const codes = responseData.data;
-    const code = responseData.data?.length ? responseData.data[0]?.code : responseData.data?.code;
-    if (!codes || !code) return undefined;
-    const trackingUrl = url?.replace('!!!CODE!!!', code);
-    return {
-      codes,
-      code,
-      trackingUrl,
-    };
-  }
-
-  private async generateKey(data: string, password: string): Promise<string> {
+  private generateKey(data: string, password: string): string {
     const dataBytes = aesjs.utils.utf8.toBytes(data);
     const passwordBytes = aesjs.utils.utf8.toBytes(password);
     const ivBytes = randomBytes(16);
@@ -295,41 +277,8 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     return buf.toString('base64');
   }
 
-  private parseVaultItems(data: string) {
-    const items = vaultDataResponse.safeParse(data);
-    return items.success ? items.data : [];
-  }
-
-  private isVaultSecrets(awsSecrets: Secrets | SecretsErrorResponse): awsSecrets is Secrets {
-    const aws = awsSecrets as unknown as Secrets;
-    const requiredKeys: (keyof Secrets)[] = [
-      'codeRedeemedPassword',
-      'codeRedeemedData',
-      'checkAmountIssuedData',
-      'checkAmountIssuedPassword',
-      'assignUserCodesData',
-      'assignUserCodesPassword',
-      'retrieveAllVaultsData',
-      'retrieveAllVaultsPassword',
-    ];
-
-    return requiredKeys.every((key) => key in aws);
-  }
-
-  private getRequestEndpoint(desiredApi: ApisLambdaScripts): string {
-    const host = getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_HOST');
-    const environment = getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT');
-    switch (desiredApi) {
-      case ApisLambdaScripts.RETRIEVE_ALL_VAULTS:
-        return `${host}/${environment}/${getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH')}`;
-      case ApisLambdaScripts.CHECK_AMOUNT_ISSUED:
-        return `${host}/${environment}/${getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH')}`;
-      case ApisLambdaScripts.ASSIGN_USER_CODES:
-        return `${host}/${environment}/${getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH')}`;
-      case ApisLambdaScripts.CODE_REDEEMED_PATH:
-        return `${host}/${environment}/${getEnv('REDEMPTIONS_LAMBDA_SCRIPTS_CODE_REDEEMED_PATH')}`;
-      default:
-        exhaustiveCheck(desiredApi);
-    }
+  private getRequestEndpoint(api: ApisLambdaScripts): string {
+    const path = this.apiPaths[api];
+    return `${this.host}/${this.environment}/${path}`;
   }
 }

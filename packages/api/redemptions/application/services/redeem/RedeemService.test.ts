@@ -37,7 +37,8 @@ describe('RedeemService', () => {
       redemptionsRepository ??
       ({
         findOneByOfferId: jest.fn(),
-        updateByOfferId: jest.fn(),
+        updateManyByOfferId: jest.fn(),
+        updateOneByOfferId: jest.fn(),
         createRedemption: jest.fn(),
         withTransaction: jest.fn(),
       } satisfies IRedemptionsRepository);
@@ -63,7 +64,8 @@ describe('RedeemService', () => {
     // Arrange
     const mockedRedemptionsRepository = {
       findOneByOfferId: jest.fn().mockResolvedValue(null),
-      updateByOfferId: jest.fn(),
+      updateManyByOfferId: jest.fn(),
+      updateOneByOfferId: jest.fn(),
       createRedemption: jest.fn(),
       withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;
@@ -92,7 +94,8 @@ describe('RedeemService', () => {
     };
     const redemptionsRepository = {
       findOneByOfferId: jest.fn().mockResolvedValue(redemption),
-      updateByOfferId: jest.fn(),
+      updateManyByOfferId: jest.fn(),
+      updateOneByOfferId: jest.fn(),
       createRedemption: jest.fn(),
       withTransaction: jest.fn(),
     } satisfies IRedemptionsRepository;

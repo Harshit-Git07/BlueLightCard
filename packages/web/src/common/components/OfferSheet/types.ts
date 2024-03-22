@@ -1,28 +1,9 @@
-import { offerResponse } from '@/context/OfferSheet/OfferSheetContext';
-
-export type OfferSheetProps = {
-  offer: {
-    offerId?: string;
-    companyId?: string;
-    companyName?: string;
-  };
-  onButtonClick?: () => void;
-};
-
-export type OfferDetails = {
-  offer: {
-    offerId?: string;
-    companyId?: string;
-    companyName?: string;
-  };
-  offerData: offerResponse;
-  companyId?: string;
-  onButtonClick: () => void;
-  redemptionData?: RedemptionResponse;
-};
+import { OfferMeta } from '@/context/OfferSheet/OfferSheetContext';
+import { OfferData } from '@/types/api/offers';
 
 export type OfferTopDetailsHeaderProps = {
-  offerData: offerResponse;
+  offerMeta: OfferMeta;
+  offerData: OfferData;
   companyId?: string;
   showOfferDescription?: boolean;
   showShareFavorite?: boolean;
@@ -36,7 +17,7 @@ export type RedemptionDetails = {
 };
 
 export type OfferRedemptionProps = {
-  offerData: offerResponse;
+  offerData: OfferData;
   companyId?: string;
   redemptionDetails: RedemptionDetails;
 };

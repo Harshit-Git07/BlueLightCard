@@ -9,7 +9,7 @@ const MagicButton: FC<MagicButtonProps> = ({
   clickable = true,
   onClick = undefined,
   className = '',
-  transitionDurationMs = 300,
+  transitionDurationMs = 10000,
   children,
 }) => {
   // This isn't whitelabelled. Designs dont have variables for this to be whitelabelled yet.

@@ -36,8 +36,10 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
   ) {}
 
   async redeem(redemption: Redemption, params: StrategyParams): Promise<RedeemVaultStrategyResult> {
-    const memberId = params.memberId;
-    const vault = await this.vaultsRepository.findOneByRedemptionId(redemption.id);
+    const vault = await this.vaultsRepository.findOneByRedemptionId(redemption.id, {
+      status: 'active',
+    });
+
     if (!vault) {
       this.logger.error({
         message: `Vault not found`,
@@ -49,11 +51,12 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
         kind: 'VaultNotFound',
       };
     }
+
     switch (vault.vaultType) {
       case 'standard':
-        return this.handleRedeemStandardVault(vault, redemption, memberId);
+        return this.handleRedeemStandardVault(vault, redemption, params.memberId);
       case 'legacy':
-        return this.handleRedeemLegacyVault(vault, redemption, memberId);
+        return this.handleRedeemLegacyVault(vault, redemption, params.memberId);
       default:
         exhaustiveCheck(vault.vaultType, 'Invalid vault type');
     }
@@ -65,25 +68,21 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     memberId: string,
   ): Promise<RedeemVaultStrategyResult> {
     if (!redemption.url) {
-      return {
-        kind: 'RedemptionUrlNotFound',
-      };
+      throw new Error('Invalid redemption for redemption type "vault" (missing url)');
     }
-    if (vault.status !== 'active') {
-      return {
-        kind: 'VaultInactive',
-      };
-    }
+
     const reachedMaxCodeClaimed = await this.vaultCodesRepository.checkIfMemberReachedMaxCodeClaimed(
       vault.id,
       memberId,
       vault.maxPerUser ?? 0, // TODO: Check what default limit is
     );
+
     if (reachedMaxCodeClaimed) {
       return {
         kind: 'MaxPerUserReached',
       };
     }
+
     const claimedCode = await this.vaultCodesRepository.claimVaultCode(vault.id, memberId);
     if (!claimedCode) {
       this.logger.error({
@@ -114,63 +113,34 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     memberId: string,
   ): Promise<RedeemVaultStrategyResult> {
     if (!redemption.url) {
-      return {
-        kind: 'RedemptionUrlNotFound',
-      };
+      throw new Error('Invalid redemption for redemption type "vault" (missing url)');
     }
-    const checkHowManyCodesIssuedResponse = await this.legacyVaultApiRepository.getNumberOfCodesIssued(
+
+    // AWS Key setup
+    const codesIssued = await this.legacyVaultApiRepository.getNumberOfCodesIssued(
       memberId,
       redemption.companyId,
       redemption.offerId,
     );
-    if (!checkHowManyCodesIssuedResponse) {
-      return {
-        kind: 'ErrorWhileRedeemingVault',
-      };
-    }
 
-    if (checkHowManyCodesIssuedResponse.status !== 200 || !checkHowManyCodesIssuedResponse.data) {
-      this.logger.error({
-        message: `Lambda Scripts API - Error while hitting endpoint of get number of codes issued`,
-        context: {
-          kind: 'CheckHowManyCodesIssuedApiRequestNonSuccessful',
-          response: checkHowManyCodesIssuedResponse,
-        },
-      });
-      return { kind: 'CheckHowManyCodesIssuedApiRequestNonSuccessful' };
+    if (codesIssued >= (vault.maxPerUser ?? 0)) {
+      return { kind: 'MaxPerUserReached' };
     }
-
-    const amountIssued = checkHowManyCodesIssuedResponse.data;
-    if (amountIssued >= (vault.maxPerUser ?? 0)) return { kind: 'MaxPerUserReached' };
 
     const assignCodeResponse = await this.legacyVaultApiRepository.assignCodeToMember(
       memberId,
       redemption.companyId,
       redemption.offerId,
+      // TODO: This should not be hard-coded to BLC_UK
+      'BLC_UK',
     );
-    if (!assignCodeResponse) {
-      return {
-        kind: 'ErrorWhileRedeemingVault',
-      };
-    }
-
-    if (assignCodeResponse?.status !== 200 || !assignCodeResponse.data?.code) {
-      this.logger.error({
-        message: `Lambda Scripts API - Error while hitting endpoint of assign code to member`,
-        context: {
-          kind: 'AssignCodeApiRequestNonSuccessful',
-          response: assignCodeResponse,
-        },
-      });
-      return { kind: 'AssignCodeApiRequestNonSuccessful' };
-    }
 
     return {
       kind: 'Ok',
       redemptionType: 'vault',
       redemptionDetails: {
         url: redemption.url,
-        code: assignCodeResponse.data.code,
+        code: assignCodeResponse.code,
       },
     };
   }

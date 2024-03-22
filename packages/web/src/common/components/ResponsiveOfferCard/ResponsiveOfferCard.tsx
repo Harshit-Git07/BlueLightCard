@@ -1,9 +1,9 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useState } from 'react';
 import Image from '@/components/Image/Image';
 import { BgColorTagParser, ResponsiveOfferCardProps } from './types';
-import OfferSheetContext from '@/context/OfferSheet/OfferSheetContext';
 import getCDNUrl from '@/utils/getCDNUrl';
 import Badge from '../Badge/Badge';
+import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
 
 const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   id,
@@ -16,12 +16,11 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
 }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
-  const { setOpen, setOffer } = useContext(OfferSheetContext);
+  const { open } = useOfferSheetControls();
   const [imageSource, setImageSource] = useState(getCDNUrl(image));
 
   const openOfferSheet = () => {
-    setOpen(true);
-    setOffer({
+    open({
       offerId: id,
       companyId,
       companyName,

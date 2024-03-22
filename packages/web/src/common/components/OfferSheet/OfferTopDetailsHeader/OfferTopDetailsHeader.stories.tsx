@@ -1,66 +1,54 @@
 import { Meta, StoryFn } from '@storybook/react';
 import OfferTopDetailsHeaderComponent from './OfferTopDetailsHeader';
+import { OfferTopDetailsHeaderProps } from '../types';
 
-const componentMeta: Meta<typeof OfferTopDetailsHeaderComponent> = {
+const props: OfferTopDetailsHeaderProps = {
+  offerData: {
+    companyId: 0,
+    companyLogo: '',
+    description:
+      'SEAT have put together a discount on the price of a new car. Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
+    expiry: '2030-06-30T23:59:59.000Z',
+    id: 0,
+    name: 'Save with SEAT',
+    terms: 'Must be a Blue Light Card member in order to receive the discount.',
+    type: 'Online',
+  },
+  offerMeta: {
+    offerId: '0',
+    companyId: '0',
+    companyName: 'SEAT',
+  },
+};
+
+const meta: Meta<typeof OfferTopDetailsHeaderComponent> = {
   title: 'Component System/Offer Sheet/Offer Top Details Header',
   component: OfferTopDetailsHeaderComponent,
+  args: props,
   parameters: {
     layout: 'centered',
   },
 };
 
-const ShowOrHideSectionsTemplate: StoryFn<typeof OfferTopDetailsHeaderComponent> = (args) => (
+const renderTemplate = (args: Partial<OfferTopDetailsHeaderProps>) => (
   // This represents the width of the parent container
   <div style={{ width: '24rem' }}>
-    <OfferTopDetailsHeaderComponent {...args} />
+    <OfferTopDetailsHeaderComponent {...props} {...args} />
   </div>
 );
 
-export const ShowOrHideSections = ShowOrHideSectionsTemplate.bind({});
+export const ShowOrHideSections = () =>
+  renderTemplate({
+    showOfferDescription: true,
+    showShareFavorite: true,
+    showTerms: true,
+  });
 
-ShowOrHideSections.args = {
-  offerData: {
-    id: '3802',
-    name: 'Save with SEAT',
-    description:
-      'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
-    expiry: '2030-06-30T23:59:59.000Z',
-    type: 'Online',
-    terms: 'Must be a Blue Light Card member in order to receive the discount.',
-    companyId: '4016',
-    companyLogo: 'companyimages/complarge/retina/',
-  },
-  companyId: '4016',
-  showOfferDescription: true,
-  showShareFavorite: true,
-  showTerms: true,
-};
+export const DescriptionSeeMore = () =>
+  renderTemplate({
+    showOfferDescription: true,
+    showShareFavorite: false,
+    showTerms: false,
+  });
 
-const DescriptionSeeMoreTemplate: StoryFn<typeof OfferTopDetailsHeaderComponent> = (args) => (
-  // This represents the width of the parent container
-  <div style={{ width: '24rem' }}>
-    <OfferTopDetailsHeaderComponent {...args} />
-  </div>
-);
-
-export const DescriptionSeeMore = DescriptionSeeMoreTemplate.bind({});
-
-DescriptionSeeMore.args = {
-  offerData: {
-    id: '3802',
-    name: 'Save with SEAT',
-    description:
-      'SEAT have put together a discount on the price of a new car. Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent. To redeem this offer simply use the discount code at the checkout stage. This code is only available for Blue Light Card members and must not be shared on any other Voucher site -Please use code BLC25CC if calling the Call Centre',
-    expiry: '2030-06-30T23:59:59.000Z',
-    type: 'Online',
-    terms: 'Must be a Blue Light Card member in order to receive the discount.',
-    companyId: '4016',
-    companyLogo: 'companyimages/complarge/retina/',
-  },
-  companyId: '4016',
-  showOfferDescription: true,
-  showShareFavorite: false,
-  showTerms: false,
-};
-
-export default componentMeta;
+export default meta;

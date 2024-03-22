@@ -3,11 +3,11 @@ import { NextRouter, useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
 import { LOGOUT_ROUTE, COGNITO_LOGOUT_URL } from '@/global-vars';
-import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 import { FlagsmithFeatureFlags } from '@/utils/flagsmith/flagsmithFlags';
 import getFlag from '@/utils/flagsmith/getFlag';
+import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
 
 export function redirectToLogin(router: NextRouter) {
   const isCognitoUIEnabled = getFlag(FlagsmithFeatureFlags.IDENTITY_COGNITO_UI_ENABLED);
@@ -64,7 +64,7 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
         {authContext.isUserAuthenticated() ? (
           <AuthComponent {...props} />
         ) : (
-          <LoadingPlaceholder
+          <LoadingSpinner
             containerClassName="w-full h-[100vh]"
             spinnerClassName="text-[5em] text-palette-primary dark:text-palette-secondary"
           />

@@ -43,16 +43,16 @@ const OfferCard: FC<OfferCardProps> = ({
   const [imageSource, setImageSource] = useState(imageSrc);
 
   const logClick = (eventSource: string) => {
-    logOfferView(
+    logOfferView({
       amplitude,
-      userCtx.user?.uuid || '',
+      userUuid: userCtx.user?.uuid,
       eventSource,
-      pathname,
+      origin: pathname,
       offerId,
       offerName,
       companyId,
-      companyName
-    );
+      companyName,
+    });
   };
 
   const body = (

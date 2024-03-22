@@ -134,6 +134,8 @@ jobs:
             identity_brand: 'blc_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
             region: 'eu-west-2'
+            cognito_client_id: 'BLC_UK_COGNITO_CLIENT_ID'
+            cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.cloudflare-publish.outputs.url }}
@@ -144,9 +146,6 @@ jobs:
     #   - backend-redemptions
     env:
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
-      NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
-      NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
-      NEXT_PUBLIC_COGNITO_IDP_ID: ${{ secrets.COGNITO_IDP_ID }}
       NEXT_PUBLIC_LOGOUT_ROUTE: /mock-login
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://staging-offers.blcshine.io/graphql
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
@@ -157,6 +156,8 @@ jobs:
       NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
       NEXT_PUBLIC_COGNITO_CLIENT_REGION: ${{matrix.region}}
+      NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets[matrix.cognito_client_id] }}
+      NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets[matrix.cognito_client_secret] }}
       NEXT_PUBLIC_FLAGSMITH_KEY: ${{ secrets.FLAGSMITH_KEY }}
       NEXT_PUBLIC_COGNITO_LOGIN_URL: https://staging-auth.blcshine.io/login?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php

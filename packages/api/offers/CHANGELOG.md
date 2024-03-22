@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.25.0...bluelightcard/offers-v1.26.0) (2024-03-21)
+
+
+### Features
+
+* Feat/to 586 get company offers ([#1071](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1071)) ([76c7888](https://github.com/bluelightcard/BlueLightCard-2.0/commit/76c788867fb45ca98bb2c74e9032a700370ca2ae))
+* TO-616 add migration script ([#1066](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1066)) ([e176133](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e176133d76b9574048deab3981ec7c037959b7ab))
+
+
+### Bug Fixes
+
+* TO-467 create new cname ([#1072](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1072)) ([a50387d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a50387d955dd35bd65d843b0d05fca8fd73bb89f))
+
 ## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.24.4...bluelightcard/offers-v1.25.0) (2024-03-14)
 
 

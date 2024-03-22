@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.36.0...bluelightcard/web-v1.37.0) (2024-03-22)
+
+
+### Features
+
+* TI-000: update web yml cognito client secrets ([#1084](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1084)) ([e38fae3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e38fae31bc83bd23c16cda9ef52e724dcd15c7a1))
+* TI-1048: integrate flagsmith modern members homepage ([#1081](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1081)) ([d286bae](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d286baebe82806b7426c1307f11ee8b0affbc6bb))
+
 ## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.35.0...bluelightcard/web-v1.36.0) (2024-03-21)
 
 

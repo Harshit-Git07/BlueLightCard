@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.26.0...bluelightcard/offers-v1.27.0) (2024-03-22)
+
+
+### Features
+
+* [DISCO-186] MVP recommended brands API and implementation ([#1078](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1078)) ([e6fbbca](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e6fbbcaf70d5937b69ab352658a4e1ae4958aba7))
+
+
+### Bug Fixes
+
+* Add new field to api ([#1088](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1088)) ([664578a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/664578ad0cd45c80ba3504ee055002233627032e))
+
 ## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.25.0...bluelightcard/offers-v1.26.0) (2024-03-21)
 
 

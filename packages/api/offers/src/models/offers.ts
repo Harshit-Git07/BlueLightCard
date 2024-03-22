@@ -9,6 +9,7 @@ export const OfferSchema = z.object({
   type: OFFERS_TYPE_ENUM,
   expiry: z.date().optional(),
   terms: z.string(),
+  image: z.string(),
 });
 
 export const OfferModel = createZodNamedType(

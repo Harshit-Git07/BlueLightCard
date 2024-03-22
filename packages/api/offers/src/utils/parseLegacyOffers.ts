@@ -11,6 +11,7 @@ export function getOfferDetail(offer: LegacyOffers): CompanyOffer {
     description: offer.desc,
     type: offerType,
     terms: offer.terms,
+    image: offer.imageoffer,
   };
   const offerRes = expiry ? { ...offerWithOutExpiry, expiry } : offerWithOutExpiry;
   return offerRes;

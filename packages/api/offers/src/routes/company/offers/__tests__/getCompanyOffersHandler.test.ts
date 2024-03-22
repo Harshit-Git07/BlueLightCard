@@ -39,6 +39,7 @@ const validateSuccessfulResponse = (result: any, legacyAPIMockResponseData: any)
       expect(companyOffer['name']).toEqual(legacyOffer['name']);
       expect(companyOffer['description']).toEqual(legacyOffer['desc']);
       expect(companyOffer['terms']).toEqual(legacyOffer['terms']);
+      expect(companyOffer['image']).toEqual(legacyOffer['imageoffer']);
 
       const validType = companyOffer.type in OFFERS_TYPE_ENUM.enum;
       expect(validType).toBeTruthy();

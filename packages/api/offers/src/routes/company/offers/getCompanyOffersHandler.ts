@@ -53,7 +53,7 @@ async function getDetailFromLegacy(id: string, uid: string, bearerToken: string)
       return Response.NoContent();
     }
 
-    // company name is mendatory in legacy code, so expecting we will always have a value for it
+    // company name is mandatory in legacy code, so expecting we will always have a value for it
     const companyInfoResponse = validateOffersResponse({
       offers: legacyAPIResponse.data.offers.map((offer: LegacyOffers) => getOfferDetail(offer)),
     });

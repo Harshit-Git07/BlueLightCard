@@ -6,6 +6,7 @@
     "description": "description",
     "type": "Online",
     "terms": "tnc",
+    "image": "https://www.example.com/image.png",
     "expiry": "2025-02-09T09:41:36.278Z",
     "companyId": 3456,
     "companyLogo": "https://www.example.com/logo.png"

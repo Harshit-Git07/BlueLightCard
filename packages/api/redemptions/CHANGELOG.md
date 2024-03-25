@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.2...bluelightcard/redemptions-v1.6.3) (2024-03-25)
+
+
+### Bug Fixes
+
+* **redemptions:** revert remaining temp changes ([#1100](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1100)) ([e86ef27](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e86ef27201d33f172c575e7439d600bf5aba9684))
+
 ## [1.6.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.1...bluelightcard/redemptions-v1.6.2) (2024-03-25)
 
 

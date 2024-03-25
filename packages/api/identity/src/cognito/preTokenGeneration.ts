@@ -10,11 +10,10 @@ const logger = new Logger({ serviceName: `${service}-preTokenGeneration`, logLev
 const preTokenGenerateService = new PreTokenGenerateService(TABLE_NAME, REGION, logger);
 
 export const handler = async (event: PreTokenGenerationTriggerEvent, context: any) => {
-
   logger.info('audit', {
     audit: true,
-    action: 'preTokenGenerateLambda',
-    blc_old_uuid : event.request.userAttributes['custom:blc_old_uuid'],
+    action: event.triggerSource,
+    memberId : event.request.userAttributes['custom:blc_old_uuid']
 });
 
   const latestCardId = await preTokenGenerateService.findLatestCardStatus(event.request.userAttributes['custom:blc_old_uuid']);

@@ -151,7 +151,7 @@ export function createOldCognito(
   });
 
   //audit
-  if (stack.stage === 'production') {
+  if (stack.stage === STAGES.PRODUCTION) {
     const blcAuditLogFunction = new Function(stack, 'blcAuditLogSignInOldPool', {
       handler: 'packages/api/identity/src/audit/audit.handler',
       environment: {
@@ -165,6 +165,22 @@ export function createOldCognito(
     const postAuthenticationLogGroup: ILogGroup | undefined = cognito.getFunction('postAuthentication')?.logGroup;
     postAuthenticationLogGroup?.addSubscriptionFilter('auditLogSignIn', {
       destination: new LambdaDestination(blcAuditLogFunction),
+      filterPattern: FilterPattern.booleanValue('$.audit', true),
+    });
+    const blcAuditLogFunctionPre = new Function(stack, 'blcAuditLogSignInOldPoolPre', {
+      handler: 'packages/api/identity/src/audit/audit.handler',
+      environment: {
+        SERVICE: 'identity',
+        DATA_STREAM: 'dwh-dds-production-login',
+        WEB_CLIENT_ID: webClient.userPoolClientId,
+        MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
+      },
+      permissions: ['firehose:PutRecord'],
+    });
+    const preTokenGenerationLogGroup: ILogGroup | undefined =
+      cognito.getFunction('preTokenGeneration')?.logGroup;
+      preTokenGenerationLogGroup?.addSubscriptionFilter('auditLogSignInPre', {
+      destination: new LambdaDestination(blcAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
   }
@@ -298,7 +314,7 @@ export function createOldCognitoDDS(
   });
 
   //audit
-  if (stack.stage === 'production') {
+  if (stack.stage === STAGES.PRODUCTION) {
     const ddsAuditLogFunction = new Function(stack, 'ddsAuditLogSignInOldPool', {
       handler: 'packages/api/identity/src/audit/audit.handler',
       environment: {
@@ -313,6 +329,22 @@ export function createOldCognitoDDS(
       cognito_dds.getFunction('postAuthentication')?.logGroup;
     postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignIn', {
       destination: new LambdaDestination(ddsAuditLogFunction),
+      filterPattern: FilterPattern.booleanValue('$.audit', true),
+    });
+    const ddsAuditLogFunctionPre = new Function(stack, 'ddsAuditLogSignInOldPoolPre', {
+      handler: 'packages/api/identity/src/audit/audit.handler',
+      environment: {
+        SERVICE: 'identity',
+        DATA_STREAM: 'dwh-dds-production-login',
+        WEB_CLIENT_ID: webClientDds.userPoolClientId,
+        MOBILE_CLIENT_ID: mobileClientDds.userPoolClientId,
+      },
+      permissions: ['firehose:PutRecord'],
+    });
+    const preTokenGenerationLogGroupDds: ILogGroup | undefined =
+      cognito_dds.getFunction('preTokenGeneration')?.logGroup;
+      preTokenGenerationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
+      destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
   }
@@ -473,7 +505,7 @@ export function createNewCognito(
     webAclArn: webACL.attrArn,
   });
   //audit
-  if (stack.stage === 'production') {
+  if (stack.stage === STAGES.PRODUCTION) {
     const blcAuditLogFunction = new Function(stack, 'blcAuditLogSignIn', {
       handler: 'packages/api/identity/src/audit/audit.handler',
       environment: {
@@ -487,6 +519,21 @@ export function createNewCognito(
     const postAuthenticationLogGroup: ILogGroup | undefined = cognito.getFunction('postAuthentication')?.logGroup;
     postAuthenticationLogGroup?.addSubscriptionFilter('auditLogSignIn', {
       destination: new LambdaDestination(blcAuditLogFunction),
+      filterPattern: FilterPattern.booleanValue('$.audit', true),
+    });
+    const blcAuditLogFunctionPre = new Function(stack, 'blcAuditLogSignInPre', {
+      handler: 'packages/api/identity/src/audit/audit.handler',
+      environment: {
+        SERVICE: 'identity',
+        DATA_STREAM: 'dwh-blc-production-login',
+        WEB_CLIENT_ID: webClient.userPoolClientId,
+        MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
+      },
+      permissions: ['firehose:PutRecord'],
+    });
+    const preAuthenticationLogGroup: ILogGroup | undefined = cognito.getFunction('preTokenGeneration')?.logGroup;
+    preAuthenticationLogGroup?.addSubscriptionFilter('auditLogSignInPre', {
+      destination: new LambdaDestination(blcAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
   }
@@ -648,7 +695,7 @@ export function createNewCognitoDDS(
   });
 
   //audit
-  if (stack.stage === 'production') {
+  if (stack.stage === STAGES.PRODUCTION) {
     const ddsAuditLogFunction = new Function(stack, 'ddsAuditLogSignIn', {
       handler: 'packages/api/identity/src/audit/audit.handler',
       environment: {
@@ -663,6 +710,22 @@ export function createNewCognitoDDS(
       cognito_dds.getFunction('postAuthentication')?.logGroup;
     postAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignIn', {
       destination: new LambdaDestination(ddsAuditLogFunction),
+      filterPattern: FilterPattern.booleanValue('$.audit', true),
+    });
+    const ddsAuditLogFunctionPre = new Function(stack, 'ddsAuditLogSignInPre', {
+      handler: 'packages/api/identity/src/audit/audit.handler',
+      environment: {
+        SERVICE: 'identity',
+        DATA_STREAM: 'dwh-dds-production-login',
+        WEB_CLIENT_ID: webClientDds.userPoolClientId,
+        MOBILE_CLIENT_ID: mobileClientDds.userPoolClientId,
+      },
+      permissions: ['firehose:PutRecord'],
+    });
+    const preAuthenticationLogGroupDds: ILogGroup | undefined =
+      cognito_dds.getFunction('preTokenGeneration')?.logGroup;
+    preAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
+      destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
   }

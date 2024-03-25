@@ -3,6 +3,7 @@ import {FirehoseClient, PutRecordCommand, PutRecordInput} from '@aws-sdk/client-
 import {type CloudWatchLogsEvent, type Context} from 'aws-lambda';
 import zlib from 'fast-zlib';
 import {PutRecordCommandInput} from "@aws-sdk/client-firehose/dist-types/commands/PutRecordCommand";
+import { LoginAudit } from 'src/models/loginAudits';
 
 const service = process.env.SERVICE;
 const webClientId = process.env.WEB_CLIENT_ID;
@@ -16,14 +17,16 @@ export const handler = async (event: CloudWatchLogsEvent, context: Context): Pro
         const logevents = JSON.parse(unzip.process(buffer).toString()).logEvents;
         for (const logevent of logevents) {
             const parsed = JSON.parse(logevent.message);
+            let state = 0;
             logger.info('log', {parsed});
-            if (parsed.clientId == webClientId) {
-                logger.info('web client not audited for now');
-                continue;
+            if (parsed.action === 'TokenGeneration_Authentication' || parsed.action === 'TokenGeneration_HostedAuth'){
+                state = parsed.clientId == webClientId ? LoginAudit.WEB_LOGIN : LoginAudit.APP_LOGIN;
+            } else if(parsed.action === 'TokenGeneration_RefreshTokens'){
+                state = parsed.clientId == webClientId ? LoginAudit.WEB_REFRESH_TOKEN : LoginAudit.APP_REFRESH_TOKEN;
             }
             const data = JSON.stringify({
                 mid: parsed.memberId,
-                state: 2,
+                state: state,
                 time: parsed.timestamp,
             });
             const input: PutRecordCommandInput = {

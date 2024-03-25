@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import requireAuth from '@/hoc/requireAuth';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
+import { useMedia } from 'react-use';
 import { advertQuery } from 'src/graphql/advertQuery';
 import { makeQuery } from 'src/graphql/makeQuery';
 import { shuffle } from 'lodash';
@@ -19,12 +20,12 @@ import ResponsiveOfferCard from '@/components/ResponsiveOfferCard/ResponsiveOffe
 import getOffersStaticProps from '@/utils/getProps/getOffersProps';
 import Link from '@/components/Link/Link';
 import CampaignCard from '@/components/CampaignCard/CampaignCard';
+import { getCompany, getOffersByCompany } from '../common/utils/company/companyData';
 import { ENVIRONMENT } from '@/global-vars';
-import { useMedia } from 'react-use';
 
 type CompanyPageProps = {};
 
-type OfferCardProp = {
+export type OfferCardProp = {
   id: string;
   type: 'Online' | 'In-store' | 'Gift card';
   name: string;
@@ -36,82 +37,29 @@ type OfferCardProp = {
 type BannerDataType = {
   imageSource: string;
   link: string;
+  __typename: string;
+};
+
+export type ResponseError = {
+  message: string;
 };
 
 const filterArray = ['All', 'Online', 'In-store', 'Gift card'];
 
-const mockOfferCardResponse: OfferCardProp[] = [
-  {
-    id: '1',
-    type: 'Online',
-    name: 'Get up to 10% off all Galaxy devices',
-    image: '/assets/forest.jpeg',
-    companyId: '4016',
-    companyName: 'Samsung',
-  },
-  {
-    id: '2',
-    type: 'Online',
-    name: 'Get 10% off and free Galaxy Buds2 with any Galaxy Tab S9 Series tablet',
-    image: '/assets/forest.jpeg',
-    companyId: '4016',
-    companyName: 'Samsung',
-  },
-  {
-    id: '3',
-    type: 'Online',
-    name: 'Pre-order the Galaxy S24 now to get 5% off* and we will double your storage to 256GB',
-    image: '/assets/forest.jpeg',
-    companyId: '4016',
-    companyName: 'Samsung',
-  },
-  {
-    id: '4',
-    type: 'In-store',
-    name: 'Save up to 20% on Samsung TVs*',
-    image: '/assets/forest.jpeg',
-    companyId: '4016',
-    companyName: 'Samsung',
-  },
-  {
-    id: '5',
-    type: 'Gift card',
-    name: 'Save up to 15% extra on Winter Savings across Laundry! While stocks last.',
-    image: '/assets/forest.jpeg',
-    companyId: '4016',
-    companyName: 'Samsung',
-  },
-  {
-    id: '6',
-    type: 'Online',
-    name: 'Pre-order the Galaxy S24 Ultra now to get 5% off ',
-    image: '/assets/forest.jpeg',
-    companyId: '4016',
-    companyName: 'Samsung',
-  },
-];
-
 const CompanyPage: NextPage<CompanyPageProps> = () => {
   const router = useRouter();
-  const { id: companyId } = router.query;
+  const { cid: companyId } = router.query;
+
+  const isMobile = useMedia('(max-width: 500px)');
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
-  const isMobile = useMedia('(max-width: 500px)');
-  const companyName = 'Samsung';
-  const companyNameMobile = `About ${companyName}`;
-  const companyDescription = `Samsung is an internationally recognized industry leader in technology and a Top 10 global brand. From the latest Samsung Galaxy smartphones to Samsung QLED TVs and Galaxy Buds, we've got you covered with the best deals.`;
-  const [firstItem, ...restItems] = mockOfferCardResponse;
+
   const [selectedType, setSelectedType] = useState<string>('All');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query, setQuery] = useState<string>((router.query.q as string) ?? '');
-  const [adverts, setAdverts] = useState<any[]>([]);
-
-  const filteredOffers =
-    selectedType === 'All'
-      ? mockOfferCardResponse
-      : mockOfferCardResponse.filter((offer) => offer.type === selectedType);
-
-  const isFirstItemMatching = selectedType === 'All' || firstItem.type === selectedType;
+  const [adverts, setAdverts] = useState<BannerDataType[]>([]);
+  const [companyData, setCompanyData] = useState<any | null>(null);
+  const [offerData, setOfferData] = useState<any | null>([]);
 
   const toggleFilter = (pillType: string) => {
     if (selectedType === pillType) {
@@ -132,8 +80,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       } catch (error) {
         setAdverts([]);
       }
-
-      setIsLoading(false);
     };
 
     if (authCtx.authState.idToken && Boolean(userCtx.user) && router.isReady) {
@@ -141,6 +87,57 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authCtx.authState.idToken, userCtx.isAgeGated, userCtx.user, router.isReady, query]);
+
+  useEffect(() => {
+    const fetchCompanyData = async () => {
+      setIsLoading(true);
+
+      // Company data
+      const companyDataResponse = await getCompany(authCtx.authState.idToken, companyId);
+      if (!companyDataResponse || typeof companyDataResponse === null) {
+        setCompanyData(null);
+        router.push('/404');
+      } else {
+        setCompanyData(companyDataResponse);
+      }
+    };
+    if (authCtx.authState.idToken && companyId) {
+      fetchCompanyData();
+    }
+  }, [authCtx.authState.idToken, companyId]);
+
+  useEffect(() => {
+    const fetchOfferData = async () => {
+      setIsLoading(true);
+
+      //Offers data
+      const offerDataResponse = await getOffersByCompany(authCtx.authState.idToken, companyId);
+      if (!offerDataResponse || typeof offerDataResponse === null) {
+        setCompanyData(null);
+      } else {
+        setOfferData(offerDataResponse.offers);
+      }
+    };
+    if (authCtx.authState.idToken && companyId) {
+      fetchOfferData();
+    }
+  }, [authCtx.authState.idToken, companyId]);
+
+  useEffect(() => {
+    if (adverts.length && companyData && offerData.length) {
+      setIsLoading(false);
+    }
+  }, [adverts, companyData, offerData]);
+
+  const [firstItem, ...rest] = offerData;
+
+  const filteredOffers =
+    rest && selectedType === 'All'
+      ? rest
+      : rest.filter((offer: OfferCardProp) => offer.type === selectedType);
+
+  const isFirstItemMatching =
+    firstItem && (selectedType === 'All' || firstItem.type === selectedType);
 
   return (
     <>
@@ -152,14 +149,14 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             headingLevel={'h1'}
             className="!text-black tablet:!text-5xl mobile:!text-xl tablet:!leading-[56px] mobile:!leading-5 tablet:font-bold mobile:font-semibold"
           >
-            {companyName}
+            {companyData?.name}
           </Heading>
           <div className="flex desktop:justify-end desktop:items-start mobile:gap-2">
             <ShareButton
               showShareLabel={isMobile ? false : true}
               shareDetails={{
-                name: companyName,
-                description: companyDescription,
+                name: companyData?.name,
+                description: companyData?.description,
                 // adds check on ENVIRONMENT so we can pass the port on localhost:3000 for the share URL. Otherwise it will not show port in the url
                 url: `${window.location.protocol}/${window.location.hostname}${
                   ENVIRONMENT === 'local' && window.location.port ? `:${window.location.port}` : ''
@@ -182,11 +179,11 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         </div>
         {!isMobile && (
           <div className="w-full">
-            <CompanyAbout CompanyDescription={companyDescription} />
+            <CompanyAbout CompanyDescription={companyData?.description} />
           </div>
         )}
 
-        {/* Pills */}
+        {/* Filters */}
         <div className="py-6 flex gap-3">
           {filterArray.map((pillType, index) => {
             return (
@@ -202,37 +199,40 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         </div>
 
         {/* Offer cards */}
-        <div className="desktop:mb-[71px] mobile:mb-0">
-          <div key={firstItem.id} className="flex flex-col desktop:mb-10 mobile:mb-2">
-            {/* Render the first item separately */}
-            {isFirstItemMatching && (
-              <ResponsiveOfferCard
-                id={firstItem.id}
-                type={firstItem.type}
-                name={firstItem.name}
-                image={firstItem.image}
-                companyId={firstItem.companyId}
-                companyName={firstItem.companyName}
-              />
-            )}
-          </div>
-
-          <div className="desktop:grid desktop:grid-cols-2 desktop:gap-10 mobile:flex mobile:flex-col mobile:gap-2">
-            {filteredOffers.map((offerCard, index) => (
-              <div key={index}>
+        {!!offerData.length && companyData && (
+          <div className="desktop:mb-[71px] mobile:mb-0">
+            <div className="flex flex-col desktop:mb-10 mobile:mb-2">
+              {/* Render the first item separately */}
+              {isFirstItemMatching && (
                 <ResponsiveOfferCard
-                  id={offerCard.id}
-                  type={offerCard.type}
-                  name={offerCard.name}
-                  image={offerCard.image}
-                  companyId={offerCard.companyId}
-                  companyName={offerCard.companyName}
-                  variant={isMobile ? 'horizontal' : 'vertical'}
+                  id={firstItem.id}
+                  type={firstItem.type}
+                  name={firstItem.name}
+                  image={firstItem.image}
+                  companyId={companyId as string}
+                  companyName={companyData?.name}
                 />
-              </div>
-            ))}
+              )}
+            </div>
+
+            <div className="desktop:grid desktop:grid-cols-2 desktop:gap-10 mobile:flex mobile:flex-col mobile:gap-2">
+              {filteredOffers &&
+                filteredOffers.map((offer: OfferCardProp, index: string) => (
+                  <div key={index}>
+                    <ResponsiveOfferCard
+                      id={offer.id}
+                      type={offer.type}
+                      name={offer.name}
+                      image={offer.image}
+                      companyId={companyId as string}
+                      companyName={companyData.name}
+                      variant={isMobile ? 'horizontal' : 'vertical'}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Adverts (ONLY ON WEB) */}
         {!isMobile && !isLoading && adverts && adverts.length > 0 && (
@@ -257,7 +257,10 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         {/* About page (MOBILE) */}
         {isMobile && (
           <div className="my-4">
-            <CompanyAbout CompanyName={companyNameMobile} CompanyDescription={companyDescription} />
+            <CompanyAbout
+              CompanyName={`About ${companyData?.name}`}
+              CompanyDescription={companyData?.description}
+            />
           </div>
         )}
       </Container>
@@ -274,21 +277,5 @@ const layoutProps = {
     keywords: 'offers.seo.keywords',
   },
 };
-
-export async function getStaticPaths() {
-  // Fetch the list of company IDs from your data source
-  // Example: const companyIds = await fetchCompanyIds();
-  const companyIds = ['123'];
-
-  // Map the company IDs to the paths object required by Next.js
-  const paths = companyIds.map((id) => ({
-    params: { id },
-  }));
-
-  return {
-    paths,
-    fallback: false, // or true if you want to use fallback rendering
-  };
-}
 
 export default withAuthProviderLayout(requireAuth(CompanyPage), layoutProps);

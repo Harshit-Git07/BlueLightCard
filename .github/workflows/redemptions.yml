@@ -116,72 +116,71 @@ jobs:
       - name: Build
         run: npm run build
 
-  # Commenting this out as we don't want to remove staging resources
-  # staging:
-  #   name: Staging Deployment
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - install
-  #     - test
-  #     - build
-  #     - changelog
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Setup
-  #       uses: ./.github/actions/setup
-  #     - name: Configure Non Prod AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-  #         aws-region: eu-west-2
-  #     - name: Get secret
-  #       run: |
-  #         SECRET_NAME=$(aws secretsmanager describe-secret --secret-id blc-mono-redemptions/NewVaultSecrets --query Name --output text)
-  #         echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
-  #       continue-on-error: true
-  #       id: vault-secret
-  #     - name: Update Secret
-  #       if: ${{ env.SECRET_NAME == 'blc-mono-redemptions/NewVaultSecrets' }}
-  #       run: |
-  #         aws secretsmanager put-secret-value \
-  #           --secret-id blc-mono-redemptions/NewVaultSecrets \
-  #           --secret-string '{
-  #             "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
-  #             "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
-  #             "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
-  #             "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
-  #             "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
-  #             "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
-  #             "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
-  #             "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
-  #             "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
-  #           }'
-  #     - name: Create Secret
-  #       if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
-  #       run: |
-  #         aws secretsmanager create-secret \
-  #           --name blc-mono-redemptions/NewVaultSecrets \
-  #           --secret-string '{
-  #             "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
-  #             "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
-  #             "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
-  #             "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
-  #             "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
-  #             "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
-  #             "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
-  #             "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
-  #             "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
-  #           }'
-  #     - name: Build
-  #       run: npm run build
-  #     - name: Deploy
-  #       run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging
-  #     - name: Deploy Spec
-  #       env:
-  #         REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
-  #       run: npm run -s oas --region=eu-west-2 --stage=staging --api-version=v1
+  staging:
+    name: Staging Deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - test
+      - build
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - name: Get secret
+        run: |
+          SECRET_NAME=$(aws secretsmanager describe-secret --secret-id blc-mono-redemptions/NewVaultSecrets --query Name --output text)
+          echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
+        continue-on-error: true
+        id: vault-secret
+      - name: Update Secret
+        if: ${{ env.SECRET_NAME == 'blc-mono-redemptions/NewVaultSecrets' }}
+        run: |
+          aws secretsmanager put-secret-value \
+            --secret-id blc-mono-redemptions/NewVaultSecrets \
+            --secret-string '{
+              "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
+              "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
+              "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
+              "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
+              "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
+              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
+            }'
+      - name: Create Secret
+        if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
+        run: |
+          aws secretsmanager create-secret \
+            --name blc-mono-redemptions/NewVaultSecrets \
+            --secret-string '{
+              "codeRedeemedData":"${{ secrets.CODE_REDEEMED_DATA }}",
+              "codeRedeemedPassword":"${{ secrets.CODE_REDEEMED_PASSWORD }}",
+              "assignUserCodesData":"${{ secrets.ASSIGN_USER_CODES_DATA }}",
+              "assignUserCodesPassword":"${{ secrets.ASSIGN_USER_CODES_PASSWORD }}",
+              "checkAmountIssuedData":"${{ secrets.CHECK_AMOUNT_ISSUED_DATA }}",
+              "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
+              "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
+              "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
+            }'
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging
+      - name: Deploy Spec
+        env:
+          REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
+        run: npm run -s oas --region=eu-west-2 --stage=staging --api-version=v1
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -190,12 +189,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Removed eu-west deployment for now as this is working as expected (let's not break it by tring to fix ap-southeast-2!)
-        region: ['ap-southeast-2']
+        region: ['eu-west-2', 'ap-southeast-2']
     needs:
       - install
       - test
-      # - staging
+      - staging
       - changelog
       - build
     steps:

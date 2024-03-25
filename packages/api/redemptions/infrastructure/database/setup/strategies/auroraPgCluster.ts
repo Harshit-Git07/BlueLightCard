@@ -133,7 +133,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
       },
       securityGroups: [ingressSecurityGroup],
       defaultDatabaseName: this.config.databaseName,
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: RemovalPolicy.RETAIN,
       port: this.config.port,
       clusterIdentifier: `redemptions-db-cluster-${this.stack.stage}`,
       // TODO: Enable IAM authentication

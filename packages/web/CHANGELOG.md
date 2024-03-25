@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.37.0...bluelightcard/web-v1.38.0) (2024-03-25)
+
+
+### Features
+
+* [TR-252]: Integrate redeem API, refactor offer sheet, tidy-up redemptions BE ([#1056](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1056)) ([d69faf9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d69faf9a4420f1d5c317c645fcd437a598792691))
+* added api calls to company page  ([#1091](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1091)) ([90d9410](https://github.com/bluelightcard/BlueLightCard-2.0/commit/90d9410c60e2779f77ac8ad3fd999edbd1ee8d00))
+* TO-597 share mobile native functionality ([#1089](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1089)) ([b4b5f3b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b4b5f3b893adb449eefb8c01fa9296b6a2d36c22))
+
+
+### Bug Fixes
+
+* **redemptions:** broken import ([d69faf9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d69faf9a4420f1d5c317c645fcd437a598792691))
+
+
+### Other Changes
+
+* add story for OfferDetailsErrorPage ([#1062](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1062)) ([219727d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/219727d04db17b87ba48693e702ebc9d98ab0400))
+
 ## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.36.0...bluelightcard/web-v1.37.0) (2024-03-22)
 
 

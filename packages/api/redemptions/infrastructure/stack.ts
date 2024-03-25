@@ -6,28 +6,28 @@ import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayEx
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
-import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 
+// import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 import { Shared } from '../../../../stacks/stack';
 import { Identity } from '../../identity/stack';
 
 import { RedemptionsStackConfigResolver } from './config/config';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
-import { RedemptionsDatabase } from './database/database';
+// import { RedemptionsDatabase } from './database/database';
 import { EventBridge } from './eventBridge/eventBridge';
 import {
   createLinkRule,
-  createOfferRule,
-  createPromotionUpdatedRule,
-  createVaultUpdatedRule,
-  updateOfferRule,
+  // createOfferRule,
+  // createPromotionUpdatedRule,
+  // createVaultUpdatedRule,
+  // updateOfferRule,
 } from './eventBridge/rules';
-import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
+// import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { Route } from './routes/route';
 import { Routes } from './routes/routes';
 
-export async function Redemptions({ app, stack }: StackContext) {
-  const { certificateArn, vpc, bus } = use(Shared);
+export async function Redemptions({ stack }: StackContext) {
+  const { certificateArn } = use(Shared);
   const { authorizer } = use(Identity);
 
   // set tag service identity to all resources
@@ -45,7 +45,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   });
 
   // Create Database
-  const database = await new RedemptionsDatabase(app, stack, vpc).setup();
+  // const database = await new RedemptionsDatabase(app, stack, vpc).setup();
 
   const api = new ApiGatewayV1Api(stack, 'redemptions', {
     authorizers: {
@@ -80,16 +80,16 @@ export async function Redemptions({ app, stack }: StackContext) {
   // Create API Models
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
-  const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
+  // const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
 
   new EventBridge(stack, {
     linkRule: createLinkRule(stack),
-    vaultCreatedRule: createVaultCreatedRule(stack, database),
-    vaultUpdatedRule: createVaultUpdatedRule(stack, database),
-    promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),
-    offerRule: createOfferRule(stack, database),
+    // vaultCreatedRule: createVaultCreatedRule(stack, database),
+    // vaultUpdatedRule: createVaultUpdatedRule(stack, database),
+    // promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),
+    // offerRule: createOfferRule(stack, database),
     emailTransactionalRule: createRedemptionTransactionalEmailRule(stack, config),
-    offerUpdatedRule: updateOfferRule(stack, database),
+    // offerUpdatedRule: updateOfferRule(stack, database),
   });
 
   const allRoutes = new Routes();
@@ -102,51 +102,51 @@ export async function Redemptions({ app, stack }: StackContext) {
     effect: Effect.ALLOW,
     resources: ['*'],
   });
-  const publishRedemptionsEventBus = new PolicyStatement({
-    actions: ['events:PutEvents'],
-    effect: Effect.ALLOW,
-    resources: [bus.eventBusArn],
-  });
+  // const publishRedemptionsEventBus = new PolicyStatement({
+  //   actions: ['events:PutEvents'],
+  //   effect: Effect.ALLOW,
+  //   resources: [bus.eventBusArn],
+  // });
 
   // functionName is automatically appended with the stage name
   allRoutes.addRoutes(api, stack, {
-    'GET /member/redemptionDetails': Route.createRoute({
-      apiGatewayModelGenerator,
-      stack,
-      functionName: 'GetRedemptionDetailsHandler',
-      restApi,
-      database,
-      handler:
-        'packages/api/redemptions/application/handlers/apiGateway/redemptionDetails/getRedemptionDetails.handler',
-      requestValidatorName: 'GetRedemptionDetailsValidator',
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
-    }),
-    'POST /member/redeem': Route.createRoute({
-      model: postRedeemModel,
-      apiGatewayModelGenerator,
-      stack,
-      functionName: 'PostRedeemHandler',
-      restApi,
-      database,
-      handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
-      requestValidatorName: 'PostRedeemValidator',
-      environment: {
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
-          config.redemptionsLambdaScriptsEnvironment,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
-          config.redemptionsLambdaScriptsCodeRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
-          config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
-          config.redemptionsLambdaScriptsCodeAmountIssuedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
-          config.redemptionsLambdaScriptsSecretName,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
-      },
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
-      permissions: [getSecretValueSecretsManager, publishRedemptionsEventBus],
-    }),
+    // 'GET /member/redemptionDetails': Route.createRoute({
+    //   apiGatewayModelGenerator,
+    //   stack,
+    //   functionName: 'GetRedemptionDetailsHandler',
+    //   restApi,
+    //   database,
+    //   handler:
+    //     'packages/api/redemptions/application/handlers/apiGateway/redemptionDetails/getRedemptionDetails.handler',
+    //   requestValidatorName: 'GetRedemptionDetailsValidator',
+    //   defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+    // }),
+    // 'POST /member/redeem': Route.createRoute({
+    //   model: postRedeemModel,
+    //   apiGatewayModelGenerator,
+    //   stack,
+    //   functionName: 'PostRedeemHandler',
+    //   restApi,
+    //   database,
+    //   handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
+    //   requestValidatorName: 'PostRedeemValidator',
+    //   environment: {
+    //     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+    //     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
+    //       config.redemptionsLambdaScriptsEnvironment,
+    //     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
+    //       config.redemptionsLambdaScriptsCodeRedeemedPath,
+    //     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
+    //       config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
+    //     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
+    //       config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+    //     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
+    //       config.redemptionsLambdaScriptsSecretName,
+    //     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
+    //   },
+    //   defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+    //   permissions: [getSecretValueSecretsManager, publishRedemptionsEventBus],
+    // }),
     'POST /member/connection/affiliate': Route.createRoute({
       model: postAffiliateModel,
       apiGatewayModelGenerator,

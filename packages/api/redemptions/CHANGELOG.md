@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.0...bluelightcard/redemptions-v1.6.1) (2024-03-25)
+
+
+### Bug Fixes
+
+* attempt 1 to fix ap-southeast-2 deployment ([#1094](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1094)) ([11558d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11558d844bb0c373ee377e027a5d550a7374b796))
+
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.5.0...bluelightcard/redemptions-v1.6.0) (2024-03-25)
 
 

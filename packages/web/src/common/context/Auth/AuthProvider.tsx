@@ -73,7 +73,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
     const currentTimeStamp = Math.ceil(Date.now() / 1000);
 
     if (currentTimeStamp >= tokenExpiryTimeStamp) {
-      return reAuthFromRefreshToken(username, authState.refreshToken);
+      reAuthFromRefreshToken(username, authState.refreshToken).then((authenticated) => {
+        return authenticated;
+      });
     }
 
     return true;

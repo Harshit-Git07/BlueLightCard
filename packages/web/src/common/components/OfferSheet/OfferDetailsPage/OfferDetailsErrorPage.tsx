@@ -3,7 +3,7 @@ import Heading from '@/components/Heading/Heading';
 import { OfferMeta } from '@/context/OfferSheet/OfferSheetContext';
 import { useLogOfferView } from '@/hooks/useLogOfferView';
 
-type Props = {
+export type Props = {
   offer: OfferMeta;
 };
 

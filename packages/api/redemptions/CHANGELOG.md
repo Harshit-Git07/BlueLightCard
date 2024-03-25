@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.1...bluelightcard/redemptions-v1.6.2) (2024-03-25)
+
+
+### Bug Fixes
+
+* revert temporary deployment changes to redemptions stack ([#1097](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1097)) ([98cf000](https://github.com/bluelightcard/BlueLightCard-2.0/commit/98cf00094b65bf1b0b55c55cac26cf2126de1fde))
+* TEMP allow delete redemptions DB in prod ([#1099](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1099)) ([41ab84d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/41ab84d5c1ce0afafa7a951da05b3ba012b96482))
+
 ## [1.6.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.0...bluelightcard/redemptions-v1.6.1) (2024-03-25)
 
 

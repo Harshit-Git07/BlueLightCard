@@ -2,10 +2,13 @@
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "resolveJsonModule": true,
-    "module": "esnext",
+    "module": "ES2015",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
       "@blc-mono/core/*": ["../core/src/*"]
     }
   }
 }
+

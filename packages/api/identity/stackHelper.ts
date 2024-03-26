@@ -171,7 +171,7 @@ export function createOldCognito(
       handler: 'packages/api/identity/src/audit/audit.handler',
       environment: {
         SERVICE: 'identity',
-        DATA_STREAM: 'dwh-dds-production-login',
+        DATA_STREAM: 'dwh-blc-production-login',
         WEB_CLIENT_ID: webClient.userPoolClientId,
         MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
       },

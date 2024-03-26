@@ -24,20 +24,22 @@ export const handler = async (event: CloudWatchLogsEvent, context: Context): Pro
             } else if(parsed.action === 'TokenGeneration_RefreshTokens'){
                 state = parsed.clientId == webClientId ? LoginAudit.WEB_REFRESH_TOKEN : LoginAudit.APP_REFRESH_TOKEN;
             }
-            const data = JSON.stringify({
-                mid: parsed.memberId,
-                state: state,
-                time: parsed.timestamp,
-            });
-            const input: PutRecordCommandInput = {
-                DeliveryStreamName: process.env.DATA_STREAM,
-                Record: {
-                    Data: Buffer.from(data),
-                },
-            };
-            await firehose.send(new PutRecordCommand(input)).catch(function (error) {
-                logger.error('err => ', error);
-            });
+            if(state !== 0){
+                const data = JSON.stringify({
+                    mid: parsed.memberId,
+                    state: state,
+                    time: parsed.timestamp,
+                });
+                const input: PutRecordCommandInput = {
+                    DeliveryStreamName: process.env.DATA_STREAM,
+                    Record: {
+                        Data: Buffer.from(data),
+                    },
+                };
+                await firehose.send(new PutRecordCommand(input)).catch(function (error) {
+                    logger.error('err => ', error);
+                });
+            }
         }
     }
 };

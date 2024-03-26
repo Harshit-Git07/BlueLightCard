@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.53.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.52.1...bluelightcard/identity-v1.53.0) (2024-03-26)
+
+
+### Features
+
+* send id for auth and refresh logs ([#1110](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1110)) ([4585f83](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4585f83627b8ea864525bb4ba646f057d0319b2f))
+
 ## [1.52.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.52.0...bluelightcard/identity-v1.52.1) (2024-03-26)
 
 

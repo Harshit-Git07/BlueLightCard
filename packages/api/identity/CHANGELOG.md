@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.52.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.52.0...bluelightcard/identity-v1.52.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* dont log if default state ([#1107](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1107)) ([ae1b5d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae1b5d8af27b4f564467b9511d086e9bf284f5a7))
+
 ## [1.52.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.51.0...bluelightcard/identity-v1.52.0) (2024-03-26)
 
 

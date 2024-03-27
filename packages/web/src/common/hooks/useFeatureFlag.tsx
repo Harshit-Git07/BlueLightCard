@@ -14,7 +14,10 @@ const useFeatureFlag = (flagName: FlagsmithFeatureFlags, prioritiseCookie = true
   useEffect(() => {
     if (prioritiseCookie) {
       const cookieValue = cookies.get(flagName);
-      if (cookieValue) setFlagEnabled(cookieValue === 'true' ? true : false);
+      if (cookieValue) {
+        setFlagEnabled(cookieValue === 'true' ? true : false);
+        return () => {};
+      }
     }
 
     const flagValue = flags[flagName] && flags[flagName].enabled && flags[flagName].value;

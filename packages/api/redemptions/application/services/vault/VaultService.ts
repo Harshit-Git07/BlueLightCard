@@ -9,11 +9,10 @@ import { VaultUpdatedEvent, VaultUpdatedEventDetail } from '../../controllers/ev
 import { AffiliateConfigurationHelper } from '../../helpers/affiliateConfiguration';
 import {
   IRedemptionsRepository,
-  Redemption,
   RedemptionsRepository,
   UpdateRedemption,
 } from '../../repositories/RedemptionsRepository';
-import { IVaultsRepository, NewVault, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
+import { IVaultsRepository, NewVault, UpdateVault, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
 
 export interface IVaultService {
   updateVault(event: VaultUpdatedEvent): Promise<void>;
@@ -44,52 +43,126 @@ export class VaultService implements IVaultService {
         message: 'Vault Update - Redemption find one by offer id failed: Redemption not found',
         context: {
           offerId: detail.offerId,
+          companyId: detail.companyId,
+          platform: detail.platform,
         },
       });
       throw new Error(
         `Vault Update - Redemption find one by offer id failed: Redemption not found (offerId=${detail.offerId})`,
       );
     }
+    //TODO: refactor logic here so that we are checking vault results are undefined and apply logic from line 151
+    let vaultId = 'VAULT_NOT_EXIST';
     const vault = await this.vaultsRepo.findOneByRedemptionId(redemption.id);
-    if (!vault) {
-      this.logger.error({
-        message: 'Vault Update - Vault find one by redemption id failed: Vault not found',
-        context: {
-          redemptionId: redemption.id,
-        },
-      });
-      throw new Error(
-        `Vault Update - Vault find one by redemption id failed: Vault not found (redemptionId=${redemption.id})`,
-      );
+    if (vault) {
+      vaultId = vault.id;
     }
-
-    const updatedRedemptionData = this.makeUpdatedRedemptionDataForUpdateVault(detail, redemption);
-    const updatedVaultData = this.makeUpdatedVaultDataForUpdateVault(detail);
 
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
-      const redemptionRepoTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
-      const vaultRepoTransaction = this.vaultsRepo.withTransaction(transactionConnection);
+      const vaultTransaction = this.vaultsRepo.withTransaction(transactionConnection);
+      const redemptionTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
+      const redemptionData = this.makeRedemptionsData(detail);
+      const redemptionUpdate = await redemptionTransaction.updateOneByOfferId(detail.offerId, redemptionData);
 
-      await redemptionRepoTransaction.updateOneByOfferId(detail.offerId, updatedRedemptionData);
-      await vaultRepoTransaction.updateOneById(vault.id, updatedVaultData);
+      if (!redemptionUpdate) {
+        this.logger.error({
+          message: 'Vault Update - Redemption update by offer id failed: No redemptions found',
+          context: {
+            redemptionId: redemption.id,
+            offerId: detail.offerId,
+            companyId: detail.companyId,
+            platform: detail.platform,
+          },
+        });
+        throw new Error(
+          `Vault Update - Redemption update by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
+        );
+      }
+
+      if (vaultId === 'VAULT_NOT_EXIST') {
+        //vault does not exist, so may have been data sync issue in the past, so create it now
+        const vaultData: NewVault = {
+          alertBelow: detail.alertBelow,
+          status: detail.vaultStatus ? 'active' : 'in-active',
+          maxPerUser: detail.maxPerUser,
+          showQR: detail.showQR,
+          terms: detail.terms,
+          email: detail.adminEmail,
+          redemptionId: redemption.id,
+          vaultType: 'legacy',
+          ...this.getIntegrationsSettings(detail),
+        };
+        const vaultInsert = await vaultTransaction.create(vaultData);
+
+        if (!vaultInsert) {
+          this.logger.error({
+            message: 'Vault Update - Vault create failed: No vaults were created',
+            context: {
+              offerId: detail.offerId,
+              companyId: detail.companyId,
+              platform: detail.platform,
+            },
+          });
+          throw new Error('Vault Update - Vault create failed: No vaults were created');
+        }
+      } else {
+        //vault exists, so update it
+        const vaultData: UpdateVault = {
+          alertBelow: detail.alertBelow,
+          status: detail.vaultStatus ? 'active' : 'in-active',
+          maxPerUser: detail.maxPerUser,
+          showQR: detail.showQR,
+          terms: detail.terms,
+          email: detail.adminEmail,
+          redemptionId: redemption.id,
+          vaultType: 'legacy',
+          ...this.getIntegrationsSettings(detail),
+        };
+        const vaultUpdated = await vaultTransaction.updateOneById(vaultId, vaultData);
+
+        if (!vaultUpdated) {
+          this.logger.error({
+            message: 'Vault Update - Vault update failed: No vaults were updated',
+            context: {
+              redemptionId: redemption.id,
+              offerId: detail.offerId,
+              companyId: detail.companyId,
+              platform: detail.platform,
+            },
+          });
+          throw new Error(`Vault Update - Vault create failed: No vaults were updated (redemptionId=${redemption.id})`);
+        }
+      }
     });
   }
 
   public async createVault(event: VaultCreatedEvent): Promise<void> {
     const { detail } = event;
 
-    await this.transactionManager.withTransaction(async (transaction) => {
-      const updatedRedemptionData = this.makeUpdatedRedemptionForCreateVault(detail);
-      const transactionConnection = { db: transaction };
-      const redemptionRepoTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
-      const vaultRepoTransaction = this.vaultsRepo.withTransaction(transactionConnection);
-      const updatedRedemption = await redemptionRepoTransaction.updateOneByOfferId(
-        detail.offerId,
-        updatedRedemptionData,
+    const redemption = await this.redemptionsRepo.findOneByOfferId(detail.offerId);
+    if (!redemption) {
+      this.logger.error({
+        message: 'Vault create - Redemption find one by offer id failed: Redemption not found',
+        context: {
+          offerId: detail.offerId,
+          companyId: detail.companyId,
+          platform: detail.platform,
+        },
+      });
+      throw new Error(
+        `Vault Create - Redemption find one by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
       );
+    }
 
-      if (!updatedRedemption) {
+    await this.transactionManager.withTransaction(async (transaction) => {
+      const transactionConnection = { db: transaction };
+      const vaultTransaction = this.vaultsRepo.withTransaction(transactionConnection);
+      const redemptionTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
+      const redemptionData = this.makeRedemptionsData(detail);
+      const redemptionUpdate = await redemptionTransaction.updateOneByOfferId(detail.offerId, redemptionData);
+
+      if (!redemptionUpdate) {
         this.logger.error({
           message: 'Vault Create - Redemption update by offer id failed: No redemptions found',
           context: {
@@ -98,163 +171,89 @@ export class VaultService implements IVaultService {
             platform: detail.platform,
           },
         });
-        throw new Error('Failed to create vault (no matching redemptions found)');
+        throw new Error(
+          `Vault Create - Redemption update by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
+        );
       }
 
-      await vaultRepoTransaction.create({
+      const vaultData: NewVault = {
         alertBelow: detail.alertBelow,
         status: detail.vaultStatus ? 'active' : 'in-active',
         maxPerUser: detail.maxPerUser,
         showQR: detail.showQR,
         terms: detail.terms,
-        email: detail.adminEmail || null,
-        redemptionId: updatedRedemption.id,
+        email: detail.adminEmail,
+        redemptionId: redemption.id,
         vaultType: 'legacy',
-        ...this.getIntegrationsForCreateVault(detail),
-      });
+        ...this.getIntegrationsSettings(detail),
+      };
+      const vaultInsert = await vaultTransaction.create(vaultData);
+
+      if (!vaultInsert) {
+        this.logger.error({
+          message: 'Vault Create - Vault create failed: No vaults were created',
+          context: {
+            offerId: detail.offerId,
+            companyId: detail.companyId,
+            platform: detail.platform,
+          },
+        });
+        throw new Error('Vault Create - Vault create failed: No vaults were created');
+      }
     });
   }
 
-  // HELPERS
-
-  private getAffiliateSettingForUpdatedVault(
-    detail: VaultUpdatedEventDetail,
-    redemptionAttachedToVault: Redemption,
-  ): Pick<Redemption, 'connection' | 'affiliate' | 'url'> | undefined {
-    if (detail?.link) {
-      if (detail.link == redemptionAttachedToVault?.url) {
-        const affiliateConfig = new AffiliateConfigurationHelper(detail.link).getConfig();
-        if (affiliateConfig) {
-          return {
-            connection: 'affiliate',
-            affiliate: affiliateConfig?.affiliate,
-            url: detail.link,
-          };
-        } else {
-          return {
-            connection: 'direct',
-            affiliate: null,
-            url: detail.link,
-          };
-        }
-      }
-      if (detail.link !== redemptionAttachedToVault?.url) {
-        return {
-          connection: 'direct',
-          affiliate: null,
-          url: detail.link,
-        };
-      }
+  private makeRedemptionsData(detail: VaultCreatedEventDetail | VaultUpdatedEventDetail): UpdateRedemption {
+    if (!detail.link) {
+      return {
+        redemptionType: 'vaultQR',
+        connection: 'none',
+        affiliate: null,
+        url: null,
+        offerType: 'in-store',
+      };
     }
+
+    const affiliateConfiguration = new AffiliateConfigurationHelper(detail.link).getConfig();
+    if (affiliateConfiguration) {
+      return {
+        redemptionType: 'vault',
+        connection: 'affiliate',
+        affiliate: affiliateConfiguration.affiliate,
+        url: detail.link,
+        offerType: 'online',
+      };
+    }
+
+    return {
+      redemptionType: 'vault',
+      connection: 'direct',
+      affiliate: null,
+      url: detail.link,
+      offerType: 'online',
+    };
   }
 
-  private getVaultStatusForUpdatedVault(detail: VaultUpdatedEventDetail): Vault['status'] | undefined {
-    switch (detail?.vaultStatus) {
-      case true:
-        return 'active';
-      case false:
-        return 'in-active';
-      default:
-        return undefined;
-    }
-  }
-
-  private getIntegrationsSettingForUpdatedVault(
-    detail: VaultUpdatedEventDetail,
+  private getIntegrationsSettings(
+    detail: VaultCreatedEventDetail | VaultUpdatedEventDetail,
   ): Pick<Vault, 'integration' | 'integrationId'> | undefined {
     if (detail?.eeCampaignId) {
       return {
         integration: 'eagleeye',
         integrationId: detail?.eeCampaignId,
       };
-    } else if (detail?.ucCampaignId) {
+    }
+
+    if (detail?.ucCampaignId) {
       return {
         integration: 'uniqodo',
         integrationId: detail?.ucCampaignId,
       };
     }
-    if (detail?.eeCampaignId === null) {
-      return {
-        integration: null,
-        integrationId: null,
-      };
-    } else if (detail?.ucCampaignId === null) {
-      return {
-        integration: null,
-        integrationId: null,
-      };
-    }
-  }
-
-  private makeUpdatedRedemptionDataForUpdateVault(
-    detail: VaultUpdatedEventDetail,
-    redemptionAttachedToVault: Redemption,
-  ): Partial<Redemption> {
-    const affiliateSetting = this.getAffiliateSettingForUpdatedVault(detail, redemptionAttachedToVault);
 
     return {
-      ...affiliateSetting,
-      redemptionType: detail?.linkId ? 'vault' : 'vaultQR',
-    };
-  }
-
-  private makeUpdatedVaultDataForUpdateVault(detail: VaultUpdatedEventDetail): Partial<Vault> {
-    const integrations = this.getIntegrationsSettingForUpdatedVault(detail);
-
-    return {
-      status: this.getVaultStatusForUpdatedVault(detail),
-      vaultType: 'legacy',
-      ...integrations,
-    };
-  }
-
-  private getIntegrationsForCreateVault(
-    event: VaultCreatedEventDetail,
-  ): Pick<NewVault, 'integration' | 'integrationId'> {
-    switch (true) {
-      case Boolean(event.eeCampaignId):
-        return {
-          integration: 'eagleeye',
-          integrationId: event.eeCampaignId ?? null,
-        };
-      case Boolean(event.ucCampaignId):
-        return {
-          integration: 'uniqodo',
-          integrationId: event.ucCampaignId ?? null,
-        };
-      default:
-        return {
-          integration: null,
-          integrationId: null,
-        };
-    }
-  }
-
-  private makeUpdatedRedemptionForCreateVault(event: VaultCreatedEventDetail): UpdateRedemption {
-    if (!event.link) {
-      return {
-        redemptionType: 'vaultQR',
-        connection: 'direct',
-        affiliate: null,
-        url: null,
-      };
-    }
-    const affiliateConfiguration = new AffiliateConfigurationHelper(event.link).getConfig();
-
-    if (!affiliateConfiguration) {
-      return {
-        redemptionType: 'vault',
-        connection: 'direct',
-        affiliate: null,
-        url: event.link,
-      };
-    }
-
-    return {
-      redemptionType: 'vault',
-      connection: 'affiliate',
-      affiliate: affiliateConfiguration.affiliate,
-      url: event.link,
+      integration: null,
+      integrationId: null,
     };
   }
 }

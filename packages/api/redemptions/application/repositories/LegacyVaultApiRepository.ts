@@ -135,7 +135,7 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
 
     const body = await response.json();
     const vaults = VaultDataResponseSchema.parse(body).data;
-    const affectedVaults = vaults.filter(({ linkId: vaultLinkId }) => vaultLinkId === linkId);
+    const affectedVaults = vaults.filter(({ linkId: vaultLinkId }) => Number(vaultLinkId) === linkId);
 
     return affectedVaults.map((item) => ({
       offerId: item.offerId,

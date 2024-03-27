@@ -27,10 +27,6 @@ export const PromotionUpdatedEventSchema = eventSchema(
     status: z.number(),
     link: z.string().url(),
     platform: PLATFORM_SCHEMA,
-    bannerName: z.string(),
-    promotionType: z.number(),
-    companyId: z.number(),
-    isAgeGated: z.boolean(),
   }),
 );
 export type PromotionUpdatedEvent = z.infer<typeof PromotionUpdatedEventSchema>;
@@ -52,6 +48,11 @@ export class PromotionUpdateController extends EventBridgeController<PromotionUp
       case PromotionUpdateResults.PROMOTION_UPDATED_SUCCESS:
         this.logger.info({
           message: 'Promotion updated successfully',
+        });
+        return;
+      case PromotionUpdateResults.NO_PROMOTION_TO_UPDATE:
+        this.logger.info({
+          message: 'There are no vaults with the promotionId',
         });
         return;
       case PromotionUpdateResults.NO_PROMOTIONS_UPDATED:

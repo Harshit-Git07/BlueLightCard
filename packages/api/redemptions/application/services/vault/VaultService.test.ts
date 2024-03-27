@@ -335,18 +335,18 @@ describe('VaultService', () => {
         expect(vaults.at(0)?.integration).toBe(null);
         expect(vaults.at(0)?.integrationId).toBe(null);
       });
-      it('when linkId is sent, redemptionType of vault should be vault', async () => {
+      it('when linkId and link is sent, redemptionType of vault should be vault', async () => {
         // Arrange
         const event = vaultUpdatedEventFactory.build({
           detail: {
             offerId: defaultOfferId,
             linkId: 1234,
+            link: 'https://www.example.com',
           },
         });
         await connection.db.insert(redemptionsTable).values({
           id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
+          connection: 'direct',
           offerType: 'online',
           platform: 'BLC_UK',
           redemptionType: 'vaultQR',
@@ -361,18 +361,18 @@ describe('VaultService', () => {
 
         // Act
         await callUpdateVault(event);
-
         // Assert
         const redemptions = await connection.db.select().from(redemptionsTable).execute();
         expect(redemptions).toHaveLength(1);
         expect(redemptions.at(0)?.redemptionType).toBe('vault');
       });
-      it('when linkId is not sent, redemptionType of vault should be vaultQR', async () => {
+      it('when linkId and link is not sent, redemptionType of vault should be vaultQR', async () => {
         // Arrange
         const event = vaultUpdatedEventFactory.build({
           detail: {
             offerId: defaultOfferId,
             linkId: null,
+            link: null,
           },
         });
         await connection.db.insert(redemptionsTable).values({
@@ -393,7 +393,6 @@ describe('VaultService', () => {
 
         // Act
         await callUpdateVault(event);
-
         // Assert
         const redemptions = await connection.db.select().from(redemptionsTable).execute();
         expect(redemptions).toHaveLength(1);
@@ -809,7 +808,7 @@ describe('VaultService', () => {
         const redemptions = await connection.db.select().from(redemptionsTable).execute();
         expect(redemptions).toHaveLength(1);
         expect(redemptions[0].redemptionType).toBe('vaultQR');
-        expect(redemptions[0].connection).toBe('direct');
+        expect(redemptions[0].connection).toBe('none');
       });
     });
   });

@@ -100,6 +100,7 @@ export const vaultUpdatedEventDetailFactory = Factory.define<VaultUpdatedEventDe
     }),
   ),
   vaultStatus: faker.datatype.boolean(),
+  platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
 }));
 export const vaultUpdatedEventFactory = Factory.define<VaultUpdatedEvent>(() => ({
   account: faker.string.numeric(12),

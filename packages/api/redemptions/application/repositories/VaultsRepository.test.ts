@@ -123,36 +123,29 @@ describe('VaultsRepository', () => {
     });
   });
 
-  describe('createMany', () => {
-    it('should create the vaults', async () => {
+  describe('createVault', () => {
+    it('should create the vault', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
       const redemption = redemptionFactory.build();
-      const vaults = [
-        vaultFactory.build({
-          redemptionId: redemption.id,
-          status: 'active',
-          maxPerUser: 1,
-        }),
-        vaultFactory.build({
-          redemptionId: redemption.id,
-          status: 'active',
-          maxPerUser: 1,
-        }),
-      ];
+      const vault = vaultFactory.build({
+        redemptionId: redemption.id,
+        status: 'active',
+        maxPerUser: 1,
+      });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
       // Act
-      const result = await repository.createMany(vaults);
+      const result = await repository.create(vault);
 
       // Assert
-      expect(result).toEqual([{ id: vaults[0].id }, { id: vaults[1].id }]);
+      expect(result).toEqual({ id: vault.id });
       const createdVaults = await connection.db
         .select()
         .from(vaultsTable)
         .where(eq(vaultsTable.redemptionId, redemption.id))
         .execute();
-      expect(createdVaults).toEqual(vaults);
+      expect(createdVaults[0]).toEqual(vault);
     });
   });
 });

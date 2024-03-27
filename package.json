@@ -25,10 +25,10 @@
   },
   "lint-staged": {
     "packages/api/redemptions/**/*.{js,jsx,ts,tsx,json,md}": [
-      "prettier --ignore-unknown --write"
+      "npm run -w packages/api/redemptions format:staged --"
     ],
     "packages/api/redemptions/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
+      "npm run -w packages/api/redemptions lint:staged --"
     ]
   },
   "devDependencies": {

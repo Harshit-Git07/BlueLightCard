@@ -9,7 +9,10 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemGenericStrategy' as const;
   static readonly inject = [GenericsRepository.key, Logger.key] as const;
 
-  constructor(private readonly genericsRepository: GenericsRepository, private readonly logger: ILogger) {}
+  constructor(
+    private readonly genericsRepository: GenericsRepository,
+    private readonly logger: ILogger,
+  ) {}
 
   async redeem(redemption: Redemption): Promise<RedeemGenericStrategyResult> {
     const generic = await this.genericsRepository.findOneByRedemptionId(redemption.id);

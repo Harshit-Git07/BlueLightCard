@@ -42,7 +42,10 @@ export interface IDatabaseCredentials {
 }
 
 export class RawDatabaseCredentials implements IDatabaseCredentials {
-  constructor(public readonly password: string, public readonly username: string) {}
+  constructor(
+    public readonly password: string,
+    public readonly username: string,
+  ) {}
 
   public static fromRaw(username: string, password: string) {
     return new RawDatabaseCredentials(password, username);
@@ -220,7 +223,10 @@ export interface IDatabaseConnection {
 
 export class DatabaseConnection implements IDatabaseConnection {
   static readonly key = 'DatabaseConnection' as const;
-  constructor(public readonly db: PostgresJsDatabase<Record<string, never>>, public readonly sql: postgres.Sql) {}
+  constructor(
+    public readonly db: PostgresJsDatabase<Record<string, never>>,
+    public readonly sql: postgres.Sql,
+  ) {}
 
   public static async connect(
     config: DatabaseConnectionConfig,

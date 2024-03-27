@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { eventSchema } from '@blc-mono/core/schemas/event';
 import { Result } from '@blc-mono/core/types/result';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { EmailService } from '@blc-mono/redemptions/application/services/email/EmailService';
+import { EmailService, IEmailService } from '@blc-mono/redemptions/application/services/email/EmailService';
 import {
   RedemptionEventDetailType,
   REDEMPTIONS_EVENT_SOURCE,
@@ -42,7 +42,10 @@ export type RedemptionTransactionalEmailEvent = z.infer<typeof RedemptionTransac
 export class RedemptionTransactionalEmailController extends EventBridgeController<RedemptionTransactionalEmailEvent> {
   static inject = [Logger.key, EmailService.key] as const;
 
-  constructor(protected logger: ILogger, private emailService: EmailService) {
+  constructor(
+    protected logger: ILogger,
+    private emailService: IEmailService,
+  ) {
     super();
   }
 

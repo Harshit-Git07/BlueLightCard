@@ -26,7 +26,10 @@ export class SpotifyService implements ISpotifyService {
   static readonly key = 'SpotifyService';
   static readonly inject = [LegacyVaultApiRepository.key, Logger.key] as const;
 
-  constructor(private readonly legacyVaultApiRepository: ILegacyVaultApiRepository, private readonly logger: ILogger) {}
+  constructor(
+    private readonly legacyVaultApiRepository: ILegacyVaultApiRepository,
+    private readonly logger: ILogger,
+  ) {}
 
   public async redeem(
     platform: Platform,

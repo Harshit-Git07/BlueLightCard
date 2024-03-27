@@ -34,7 +34,10 @@ export type PromotionUpdatedEvent = z.infer<typeof PromotionUpdatedEventSchema>;
 export class PromotionUpdateController extends EventBridgeController<PromotionUpdatedEvent> {
   static readonly inject = [Logger.key, PromotionUpdateService.key] as const;
 
-  constructor(protected readonly logger: ILogger, private readonly promotionsUpdateService: IPromotionUpdateService) {
+  constructor(
+    protected readonly logger: ILogger,
+    private readonly promotionsUpdateService: IPromotionUpdateService,
+  ) {
     super();
   }
 

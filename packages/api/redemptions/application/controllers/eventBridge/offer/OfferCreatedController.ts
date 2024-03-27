@@ -34,7 +34,10 @@ export type OfferCreatedEventDetail = z.infer<typeof OfferCreatedEventDetailSche
 export class OfferCreatedController extends EventBridgeController<OfferCreatedEvent> {
   static readonly inject = [Logger.key, OfferCreatedService.key] as const;
 
-  constructor(protected logger: ILogger, protected offerCreatedService: IOfferCreatedService) {
+  constructor(
+    protected logger: ILogger,
+    protected offerCreatedService: IOfferCreatedService,
+  ) {
     super();
   }
 

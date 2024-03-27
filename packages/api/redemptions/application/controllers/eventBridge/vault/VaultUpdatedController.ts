@@ -39,7 +39,10 @@ export type VaultUpdatedEventDetail = z.infer<typeof VaultUpdatedEventDetailSche
 export class VaultUpdatedController extends EventBridgeController<VaultUpdatedEvent> {
   static readonly inject = [Logger.key, VaultService.key] as const;
 
-  constructor(protected logger: ILogger, protected vaultService: IVaultService) {
+  constructor(
+    protected logger: ILogger,
+    protected vaultService: IVaultService,
+  ) {
     super();
   }
 

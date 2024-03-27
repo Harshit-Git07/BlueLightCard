@@ -128,8 +128,8 @@ export class AffiliateConfigurationHelper {
         url.pathname = url.pathname.includes('MEMID')
           ? url.pathname.replace('MEMID', memberId)
           : url.pathname.includes('/destination:')
-          ? url.pathname.replace('/destination:', `/pubref:${memberId}/destination:`)
-          : url.pathname.replace('/camref:', `/pubref:${memberId}/camref:`);
+            ? url.pathname.replace('/destination:', `/pubref:${memberId}/destination:`)
+            : url.pathname.replace('/camref:', `/pubref:${memberId}/camref:`);
         return url.href;
       },
     };

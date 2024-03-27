@@ -19,7 +19,10 @@ type ParsedRequest = SpotifyRequestModel;
 export class SpotifyController extends APIGatewayController<SpotifyRequestModel> {
   static readonly inject = [Logger.key, SpotifyService.key] as const;
 
-  constructor(protected readonly logger: ILogger, private readonly spotifyService: ISpotifyService) {
+  constructor(
+    protected readonly logger: ILogger,
+    private readonly spotifyService: ISpotifyService,
+  ) {
     super();
   }
 

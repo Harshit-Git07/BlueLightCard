@@ -31,7 +31,10 @@ export class EmailRepository implements IEmailRepository {
 
   private emailApiClient: Braze | undefined;
 
-  constructor(private logger: ILogger, private emailClient: BrazeEmailClientProvider) {}
+  constructor(
+    private logger: ILogger,
+    private emailClient: BrazeEmailClientProvider,
+  ) {}
 
   private async getClient() {
     if (!this.emailApiClient) {

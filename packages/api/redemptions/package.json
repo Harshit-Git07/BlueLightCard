@@ -5,10 +5,12 @@
     "pre:dev": "npm run db:up",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "format": "npx prettier . --write",
-    "format:check": "npx prettier . --check",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "format:staged": "prettier --ignore-unknown --write",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "lint:staged": "eslint --fix",
     "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain redemptions",
     "db:up": "dotenv -e ../../../.env -- docker compose up -d",
     "db:down": "dotenv -e ../../../.env -- docker compose down",
@@ -18,6 +20,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "prettier": "^3.1.1"
+    "prettier": "3.2.5"
   }
 }

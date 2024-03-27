@@ -22,7 +22,10 @@ type ParsedRequest = RedeemRequestModel & { memberId: string; brazeExternalUserI
 export class RedeemController extends APIGatewayController<RedeemRequestModel> {
   static readonly inject = [Logger.key, RedeemService.key] as const;
 
-  constructor(protected readonly logger: ILogger, private readonly redeemService: IRedeemService) {
+  constructor(
+    protected readonly logger: ILogger,
+    private readonly redeemService: IRedeemService,
+  ) {
     super();
   }
 

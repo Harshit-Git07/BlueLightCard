@@ -111,7 +111,10 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     ),
   };
 
-  constructor(private readonly logger: ILogger, private readonly awsSecretsMangerClient: ISecretsManager) {}
+  constructor(
+    private readonly logger: ILogger,
+    private readonly awsSecretsMangerClient: ISecretsManager,
+  ) {}
 
   public async findVaultsRelatingToLinkId(linkId: number, platform: Platform): Promise<VaultItem[]> {
     const brand = platformToBrandMap[platform];

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.38.0...bluelightcard/web-v1.39.0) (2024-03-26)
+
+
+### Features
+
+* TI-1057 Add Async and Awaits ([#1092](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1092)) ([2834149](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2834149bd3ca55ba5f3c7607fd1bbceec5394832))
+
 ## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.37.0...bluelightcard/web-v1.38.0) (2024-03-25)
 
 

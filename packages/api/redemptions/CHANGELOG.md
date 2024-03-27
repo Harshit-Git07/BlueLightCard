@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.0...bluelightcard/redemptions-v1.7.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* **redemptions:** [TR-360]: Update prettier & use correct version (Demo deployment) ([#1114](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1114)) ([727dc22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/727dc220e74d4dd68f914a40c50c008e8f00a97b))
+
 ## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.3...bluelightcard/redemptions-v1.7.0) (2024-03-27)
 
 

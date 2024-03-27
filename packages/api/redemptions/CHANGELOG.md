@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.3...bluelightcard/redemptions-v1.7.0) (2024-03-27)
+
+
+### Features
+
+* [TR-364] fix-event-bus-data ([#1090](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1090)) ([4a6f1fa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4a6f1faf749b8bbea16ab852305b0363c9e0b98b))
+
 ## [1.6.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.2...bluelightcard/redemptions-v1.6.3) (2024-03-25)
 
 

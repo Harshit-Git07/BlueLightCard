@@ -13,7 +13,7 @@ const PillButtons: FC<PillButtonProps> = ({
 }) => {
   const handleClick = () => {
     if (!isSelected && !disabled) {
-      onSelected(text);
+      onSelected();
     }
   };
 

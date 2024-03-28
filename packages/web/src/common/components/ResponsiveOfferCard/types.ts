@@ -1,8 +1,9 @@
+import { OfferTypeStrLiterals } from '../../utils/offers/offerTypeParser';
 import { BgColorString } from '../Badge/types';
 
 export type ResponsiveOfferCardProps = {
   id: string;
-  type: 'Online' | 'In-store' | 'Gift card';
+  type: OfferTypeStrLiterals;
   name: string;
   image: string;
   companyId: string;
@@ -11,7 +12,5 @@ export type ResponsiveOfferCardProps = {
 };
 
 export type BgColorTagParser = {
-  Online: BgColorString;
-  'In-store': BgColorString;
-  'Gift card': BgColorString;
+  [key in OfferTypeStrLiterals]: BgColorString;
 };

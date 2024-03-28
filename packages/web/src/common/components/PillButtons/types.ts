@@ -1,6 +1,6 @@
 export type PillButtonProps = {
   text: string;
-  onSelected: (text: string) => void;
+  onSelected: () => void;
   disabled?: boolean;
   outline?: boolean;
   iconLeft?: React.ReactNode;

@@ -1,9 +1,10 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Image from '@/components/Image/Image';
 import { BgColorTagParser, ResponsiveOfferCardProps } from './types';
 import getCDNUrl from '@/utils/getCDNUrl';
 import Badge from '../Badge/Badge';
 import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
+import { offerTypeParser } from '../../utils/offers/offerTypeParser';
 
 const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   id,
@@ -17,7 +18,7 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
   const { open } = useOfferSheetControls();
-  const [imageSource, setImageSource] = useState(getCDNUrl(image));
+  const [imageSource, setImageSource] = useState('');
 
   const openOfferSheet = () => {
     open({
@@ -28,10 +29,14 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   };
 
   const tagBackground: BgColorTagParser = {
-    Online: 'bg-[#BCA5F7]',
-    'In-store': 'bg-[#E9C46A]',
-    'Gift card': 'bg-[#EC779E]',
-  };
+    [offerTypeParser.Online.type]: 'bg-[#BCA5F7]',
+    [offerTypeParser['In-store'].type]: 'bg-[#E9C46A]',
+    [offerTypeParser.Giftcards.type]: 'bg-[#EC779E]',
+  } as const;
+
+  useEffect(() => {
+    if (image) setImageSource(getCDNUrl(image));
+  }, [image]);
 
   return (
     <div
@@ -61,7 +66,7 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
       </div>
 
       <Badge
-        label={type}
+        label={offerTypeParser[type].label}
         color={tagBackground[type]}
         size={variant === 'vertical' ? 'large' : 'small'}
       />

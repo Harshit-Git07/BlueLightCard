@@ -22,12 +22,13 @@ import Link from '@/components/Link/Link';
 import CampaignCard from '@/components/CampaignCard/CampaignCard';
 import { getCompany, getOffersByCompany } from '../common/utils/company/companyData';
 import { ENVIRONMENT } from '@/global-vars';
+import { OfferTypeStrLiterals, offerTypeParser } from '../common/utils/offers/offerTypeParser';
 
 type CompanyPageProps = {};
 
 export type OfferCardProp = {
   id: string;
-  type: 'Online' | 'In-store' | 'Gift card';
+  type: OfferTypeStrLiterals;
   name: string;
   image: string;
   companyId: string;
@@ -44,7 +45,8 @@ export type ResponseError = {
   message: string;
 };
 
-const filterArray = ['All', 'Online', 'In-store', 'Gift card'];
+const offerTypesArray = Object.keys(offerTypeParser) as Array<keyof typeof offerTypeParser>;
+const filterArray = ['All', ...offerTypesArray];
 
 const CompanyPage: NextPage<CompanyPageProps> = () => {
   const router = useRouter();
@@ -189,7 +191,11 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             return (
               <div key={index}>
                 <PillButtons
-                  text={filterArray[index]}
+                  text={
+                    pillType === offerTypeParser.Giftcards.type
+                      ? offerTypeParser.Giftcards.label
+                      : filterArray[index]
+                  }
                   onSelected={() => toggleFilter(pillType)}
                   isSelected={selectedType === pillType}
                 />

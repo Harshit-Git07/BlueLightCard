@@ -57,7 +57,7 @@ describe('PillButtons component', () => {
         );
 
         fireEvent.click(getByRole('button'));
-        expect(onSelected).toHaveBeenCalledWith('Test');
+        expect(onSelected).toHaveBeenCalled();
       });
 
       it('should invoke onSelected callback with updated deselected values', async () => {

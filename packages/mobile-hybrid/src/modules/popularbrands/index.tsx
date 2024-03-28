@@ -5,6 +5,7 @@ import PopularBrands from '@/components/PopularBrands/PopularBrands';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AppContext } from '@/store';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -17,7 +18,9 @@ const PopularBrandsSlider: FC = () => {
    * @description Render the subtitle for popular brands if the feature flag is not on
    * */
   const controlSubtitle =
-    expr['streamlined-homepage'] === 'on' ? undefined : 'Explore popular brands with a swipe!';
+    expr[Experiments.STREAMLINED_HOMEPAGE] === 'on'
+      ? undefined
+      : 'Explore popular brands with a swipe!';
   const onBrandItemClick = (compid: number) => {
     navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
     analytics.logAnalyticsEvent({

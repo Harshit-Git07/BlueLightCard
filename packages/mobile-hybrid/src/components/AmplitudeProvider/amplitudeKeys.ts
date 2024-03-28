@@ -6,7 +6,15 @@ export enum FeatureFlags {
   SEARCH_RECENT_SEARCHES = 'search-recent-searches',
 }
 
-export enum Experiments {}
+export enum Experiments {
+  SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER = 'spring-event-recommended-brands-slider',
+  HOMEPAGE_SEARCHBAR = 'homepage-searchbar',
+  NON_EXCLUSIVE_OFFERS = 'non-exclusive-offers',
+  POPULAR_OFFERS = 'popular-offers',
+  FAVOURITED_BRANDS = 'favourited-brands',
+  STREAMLINED_HOMEPAGE = 'streamlined-homepage',
+  FAVOURITE_SUBTITLE = 'favourite-subtitle',
+}
 
 export const featureFlagKeys = Object.values(FeatureFlags);
 export const experimentKeys = Object.values(Experiments);

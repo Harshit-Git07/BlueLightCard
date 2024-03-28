@@ -8,6 +8,7 @@ import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
 import { AppContext } from '@/store';
 import { NewsPreview } from '../news';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -83,7 +84,7 @@ const Offers: FC = () => {
       {flexible && (
         <div className="mb-4">
           <Heading title={headingFeatureFlag ? 'Shop Black Friday' : flexible.title} />
-          {expr['streamlined-homepage'] !== 'on' && flexible.subtitle.length && (
+          {expr[Experiments.STREAMLINED_HOMEPAGE] !== 'on' && flexible.subtitle.length && (
             <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
           )}
           <CardCarousel
@@ -125,7 +126,7 @@ const Offers: FC = () => {
           />
         </section>
       )}
-      {expr['streamlined-homepage'] !== 'on' && <NewsPreview />}
+      {expr[Experiments.STREAMLINED_HOMEPAGE] !== 'on' && <NewsPreview />}
       <div className="my-2">
         {offers.map((group, index) => (
           <section key={`${group.title}_${index}`} className="mb-6">

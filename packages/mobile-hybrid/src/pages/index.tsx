@@ -10,7 +10,6 @@ import Offers from '@/modules/offers';
 import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import LegacySearch from '@/components/LegacySearch/LegacySearch';
-import InvokeNativeExperiment from '@/invoke/experiment';
 import { AppContext } from '@/store';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import FavouritedBrandsSlider from '@/modules/favouritedbrands';
@@ -18,17 +17,19 @@ import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import RecommendedBrandsSlider from '@/modules/recommendedbrands';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import Amplitude from '@/components/Amplitude/Amplitude';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
-const experiments = new InvokeNativeExperiment();
 
 const Home: NextPage<any> = () => {
   const brands = useFavouritedBrands();
   const { seeAllNews, setSeeAllNews } = useContext(NewsModuleStore);
   const { experiments: expr, apiData } = useContext(AppContext);
-  const showFavouritedBrands = brands.length > 0 && expr['favourited-brands'] === 'on';
+  const showFavouritedBrands = brands.length > 0 && expr[Experiments.FAVOURITED_BRANDS] === 'on';
   const bodyHeight = useRef<HTMLElement>(null);
 
   const request = useCallback(() => {
@@ -38,14 +39,6 @@ const Home: NextPage<any> = () => {
         apiCall.requestData(url);
       }
     });
-    experiments.experiment([
-      'homepage-searchbar',
-      'non-exclusive-offers',
-      'popular-offers',
-      'favourited-brands',
-      'streamlined-homepage',
-      'favourite-subtitle',
-    ]);
   }, [apiData]);
 
   const seeAllClick = () => {
@@ -75,7 +68,7 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
-        {expr['homepage-searchbar'] === 'treatment' && (
+        {expr[Experiments.HOMEPAGE_SEARCHBAR] === 'treatment' && (
           <LegacySearch
             onSearch={(searchTerm) =>
               navigation.navigate(
@@ -86,10 +79,15 @@ const Home: NextPage<any> = () => {
           />
         )}
         <PromoBanner />
+        <Amplitude keyName={Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER} value="treatment">
+          <RecommendedBrandsSlider />
+        </Amplitude>
         {showFavouritedBrands && <FavouritedBrandsSlider />}
-        {expr['popular-offers'] === 'treatment' && !showFavouritedBrands && <PopularBrandsSlider />}
+        {expr[Experiments.POPULAR_OFFERS] === 'treatment' && !showFavouritedBrands && (
+          <PopularBrandsSlider />
+        )}
         <Offers />
-        {expr['streamlined-homepage'] === 'on' && <NewsPreview />}
+        {expr[Experiments.STREAMLINED_HOMEPAGE] === 'on' && <NewsPreview />}
       </div>
       <ListPanel visible={seeAllNews} onClose={seeAllClick}>
         {seeAllNews && <NewsList />}

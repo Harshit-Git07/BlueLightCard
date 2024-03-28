@@ -4,14 +4,14 @@ import { TransactionManager } from '@blc-mono/redemptions/infrastructure/databas
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
+import { vaultCreatedEventFactory, vaultUpdatedEventFactory } from '../../../libs/test/factories/vaultEvents.factory';
+import { RedemptionsTestDatabase } from '../../../libs/test/helpers/database';
+import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { VaultCreatedEvent } from '../../controllers/eventBridge/vault/VaultCreatedController';
 import { VaultUpdatedEvent } from '../../controllers/eventBridge/vault/VaultUpdatedController';
 import { AffiliateConfigurationHelper } from '../../helpers/affiliateConfiguration';
 import { RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 import { VaultsRepository } from '../../repositories/VaultsRepository';
-import { vaultCreatedEventFactory, vaultUpdatedEventFactory } from '../../test/factories/vaultEvents.factory';
-import { RedemptionsTestDatabase } from '../../test/helpers/database';
-import { createTestLogger } from '../../test/helpers/logger';
 
 import { VaultService } from './VaultService';
 

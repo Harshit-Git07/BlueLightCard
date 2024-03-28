@@ -3,11 +3,11 @@ import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connecti
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
+import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { GenericsRepository } from '../../repositories/GenericsRepository';
 import { LegacyVaultApiRepository } from '../../repositories/LegacyVaultApiRepository';
 import { VaultCodesRepository } from '../../repositories/VaultCodesRepository';
 import { VaultsRepository } from '../../repositories/VaultsRepository';
-import { createTestLogger } from '../../test/helpers/logger';
 
 import { RedeemStrategyResolver } from './RedeemStrategyResolver';
 import { RedeemGenericStrategy } from './strategies/RedeemGenericStrategy';

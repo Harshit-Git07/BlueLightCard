@@ -3,8 +3,14 @@ import { Factory } from 'fishery';
 
 import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 
-import { OfferCreatedEvent, OfferCreatedEventDetail } from '../../controllers/eventBridge/offer/OfferCreatedController';
-import { OfferUpdatedEvent, OfferUpdatedEventDetail } from '../../controllers/eventBridge/offer/OfferUpdatedController';
+import {
+  OfferCreatedEvent,
+  OfferCreatedEventDetail,
+} from '../../../application/controllers/eventBridge/offer/OfferCreatedController';
+import {
+  OfferUpdatedEvent,
+  OfferUpdatedEventDetail,
+} from '../../../application/controllers/eventBridge/offer/OfferUpdatedController';
 
 export const offerCreatedEventDetailFactory = Factory.define<OfferCreatedEventDetail>(() => ({
   offerId: faker.number.int({

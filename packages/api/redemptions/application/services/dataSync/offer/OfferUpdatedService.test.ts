@@ -2,12 +2,12 @@ import { TransactionManager } from '@blc-mono/redemptions/infrastructure/databas
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
+import { offerUpdatedEventFactory } from '../../../../libs/test/factories/offerEvents.factory';
+import { RedemptionsTestDatabase } from '../../../../libs/test/helpers/database';
+import { createTestLogger } from '../../../../libs/test/helpers/logger';
 import { OfferUpdatedEvent } from '../../../controllers/eventBridge/offer/OfferUpdatedController';
 import { GenericsRepository, NewGeneric } from '../../../repositories/GenericsRepository';
 import { NewRedemption, RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
-import { offerUpdatedEventFactory } from '../../../test/factories/offerEvents.factory';
-import { RedemptionsTestDatabase } from '../../../test/helpers/database';
-import { createTestLogger } from '../../../test/helpers/logger';
 
 import { OfferUpdatedService } from './OfferUpdatedService';
 

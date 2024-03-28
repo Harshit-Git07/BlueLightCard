@@ -1,7 +1,7 @@
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 
-import { createTestLogger } from '../../test/helpers/logger';
+import { createTestLogger } from '../../../libs/test/helpers/logger';
 
 import { SpotifyService } from './SpotifyService';
 

@@ -2,12 +2,12 @@ import { faker } from '@faker-js/faker';
 import nock from 'nock';
 
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
-import { createTestLogger } from '@blc-mono/redemptions/application/test/helpers/logger';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
+import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { legacyVaultDataFactory } from '../test/factories/legacyVaultData.factory';
+import { legacyVaultDataFactory } from '../../libs/test/factories/legacyVaultData.factory';
 
 function mockEnv(values: Record<string, string>): {
   set(): void;

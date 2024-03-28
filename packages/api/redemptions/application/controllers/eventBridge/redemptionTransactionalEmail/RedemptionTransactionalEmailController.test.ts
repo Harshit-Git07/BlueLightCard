@@ -3,11 +3,11 @@ import { Braze } from 'braze-api';
 import { RedemptionTransactionalEmailController } from '@blc-mono/redemptions/application/controllers/eventBridge/redemptionTransactionalEmail/RedemptionTransactionalEmailController';
 import { EmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
 import { EmailService } from '@blc-mono/redemptions/application/services/email/EmailService';
-import { emailEventFactory } from '@blc-mono/redemptions/application/test/factories/emailEvent.factory';
-import { createTestLogger } from '@blc-mono/redemptions/application/test/helpers/logger';
 import { RedemptionEventDetailType } from '@blc-mono/redemptions/infrastructure/eventBridge/events/redemptions';
 import { BrazeCredentials, BrazeEmailClientProvider } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
+import { emailEventFactory } from '@blc-mono/redemptions/libs/test/factories/emailEvent.factory';
+import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 const setup = () => {
   process.env.BRAZE_API_URL = 'https://rest.fra-02.braze.com.eu';
   process.env.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID = 'test';

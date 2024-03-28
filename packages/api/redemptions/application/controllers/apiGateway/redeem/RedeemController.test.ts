@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
+import { createTestLogger } from '../../../../libs/test/helpers/logger';
 import { IRedeemService, RedeemResult } from '../../../services/redeem/RedeemService';
-import { createTestLogger } from '../../../test/helpers/logger';
 
 import { RedeemController } from './RedeemController';
 

@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-import { redemptionFactory } from '../test/factories/redemption.factory';
-import { RedemptionsTestDatabase } from '../test/helpers/database';
+import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
+import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
 import { RedemptionsRepository } from './RedemptionsRepository';
 

@@ -4,9 +4,9 @@ import {
   PromotionUpdateResults,
   PromotionUpdateService,
 } from '@blc-mono/redemptions/application/services/dataSync/Promotions/PromotionUpdateService';
-import { promotionsUpdatedEventFactory } from '@blc-mono/redemptions/application/test/factories/promotionsEvents.factory';
-import { vaultItemFactory } from '@blc-mono/redemptions/application/test/factories/vaultItem.factory';
-import { createTestLogger } from '@blc-mono/redemptions/application/test/helpers/logger';
+import { promotionsUpdatedEventFactory } from '@blc-mono/redemptions/libs/test/factories/promotionsEvents.factory';
+import { vaultItemFactory } from '@blc-mono/redemptions/libs/test/factories/vaultItem.factory';
+import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 describe('PromotionUpdateService', () => {
   it('Updates the correct redemptions by their offer IDs', async () => {

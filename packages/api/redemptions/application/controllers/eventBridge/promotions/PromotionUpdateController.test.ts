@@ -2,9 +2,9 @@ import {
   IPromotionUpdateService,
   PromotionUpdateResults,
 } from '@blc-mono/redemptions/application/services/dataSync/Promotions/PromotionUpdateService';
-import { promotionsUpdatedEventFactory } from '@blc-mono/redemptions/application/test/factories/promotionsEvents.factory';
+import { promotionsUpdatedEventFactory } from '@blc-mono/redemptions/libs/test/factories/promotionsEvents.factory';
 
-import { createTestLogger } from '../../../test/helpers/logger';
+import { createTestLogger } from '../../../../libs/test/helpers/logger';
 
 import { PromotionUpdateController } from './PromotionUpdateController';
 

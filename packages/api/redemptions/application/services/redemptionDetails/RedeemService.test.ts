@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
+import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
 import { IRedemptionsRepository } from '../../repositories/RedemptionsRepository';
-import { redemptionFactory } from '../../test/factories/redemption.factory';
 
 import { RedemptionDetailsService } from './RedemptionDetailsService';
 

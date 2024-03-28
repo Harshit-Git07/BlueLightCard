@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 
+import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
 import { RedemptionEventsRepository } from '../../repositories/RedemptionEventsRepository';
 import { IRedemptionsRepository } from '../../repositories/RedemptionsRepository';
-import { redemptionFactory } from '../../test/factories/redemption.factory';
 
 import { RedeemResult, RedeemService, StrategyParams } from './RedeemService';
 import { IRedeemStrategyResolver } from './RedeemStrategyResolver';

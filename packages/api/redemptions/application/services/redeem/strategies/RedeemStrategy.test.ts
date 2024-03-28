@@ -7,8 +7,6 @@ import { Redemption } from '@blc-mono/redemptions/application/repositories/Redem
 import { VaultBatch } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import { VaultCode, VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { Vault, VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
-import { RedemptionsTestDatabase } from '@blc-mono/redemptions/application/test/helpers/database';
-import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/application/test/helpers/logger';
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import {
   genericsTable,
@@ -17,6 +15,8 @@ import {
   vaultCodesTable,
   vaultsTable,
 } from '@blc-mono/redemptions/libs/database/schema';
+import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { StrategyParams } from '../RedeemService';
 

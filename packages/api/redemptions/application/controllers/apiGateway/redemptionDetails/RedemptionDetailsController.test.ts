@@ -5,7 +5,7 @@ import {
   RedemptionDetailsResult,
 } from '@blc-mono/redemptions/application/services/redemptionDetails/RedemptionDetailsService';
 
-import { createTestLogger } from '../../../test/helpers/logger';
+import { createTestLogger } from '../../../../libs/test/helpers/logger';
 
 import { RedemptionDetailsController } from './RedemptionDetailsController';
 

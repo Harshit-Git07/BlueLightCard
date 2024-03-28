@@ -1,9 +1,9 @@
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-import { genericFactory } from '../test/factories/generic.factory';
-import { redemptionFactory } from '../test/factories/redemption.factory';
-import { RedemptionsTestDatabase } from '../test/helpers/database';
+import { genericFactory } from '../../libs/test/factories/generic.factory';
+import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
+import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
 import { GenericsRepository } from './GenericsRepository';
 

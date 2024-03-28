@@ -4,9 +4,9 @@ import { eq } from 'drizzle-orm';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-import { redemptionFactory } from '../test/factories/redemption.factory';
-import { vaultFactory } from '../test/factories/vault.factory';
-import { RedemptionsTestDatabase } from '../test/helpers/database';
+import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
+import { vaultFactory } from '../../libs/test/factories/vault.factory';
+import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
 import { Vault, VaultsRepository } from './VaultsRepository';
 

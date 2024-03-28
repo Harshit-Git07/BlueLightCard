@@ -3,8 +3,14 @@ import { Factory } from 'fishery';
 
 import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 
-import { VaultCreatedEvent, VaultCreatedEventDetail } from '../../controllers/eventBridge/vault/VaultCreatedController';
-import { VaultUpdatedEvent, VaultUpdatedEventDetail } from '../../controllers/eventBridge/vault/VaultUpdatedController';
+import {
+  VaultCreatedEvent,
+  VaultCreatedEventDetail,
+} from '../../../application/controllers/eventBridge/vault/VaultCreatedController';
+import {
+  VaultUpdatedEvent,
+  VaultUpdatedEventDetail,
+} from '../../../application/controllers/eventBridge/vault/VaultUpdatedController';
 
 export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDetail>(() => ({
   adminEmail: faker.helpers.maybe(() => faker.internet.email()),

@@ -8,6 +8,7 @@ import { unpackJWT } from '@core/utils/unpackJWT';
 import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 import { FlagsmithFeatureFlags } from '@/utils/flagsmith/flagsmithFlags';
 import getFlag from '@/utils/flagsmith/getFlag';
+import AuthTokensService from '../services/authTokensService';
 
 export function redirectToLogin(router: NextRouter) {
   const isCognitoUIEnabled = getFlag(FlagsmithFeatureFlags.IDENTITY_COGNITO_UI_ENABLED);
@@ -29,7 +30,8 @@ async function isAuthenticated(idToken: string, refreshToken: string) {
 
   if (currentTimeStamp >= tokenExpiryTimeStamp) {
     //refresh token and update storage and return true or false based on if it works
-    return await reAuthFromRefreshToken(usernameFromToken, refreshToken);
+    const authenticated = await reAuthFromRefreshToken(usernameFromToken, refreshToken);
+    return authenticated;
   }
 
   return true;
@@ -41,18 +43,17 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
     const router = useRouter();
 
     useEffect(() => {
-      async function perfromTokenRefreshIfRequired() {
-        const idToken: string = localStorage.getItem('idToken') as string;
-        const accessToken: string = localStorage.getItem('accessToken') as string;
-        const refreshToken: string = localStorage.getItem('refreshToken') as string;
-        const username: string = localStorage.getItem('username') as string;
+      async function performTokenRefreshIfRequired() {
+        if (AuthTokensService.authTokensPresent()) {
+          const refreshToken = AuthTokensService.getRefreshToken();
+          const username = AuthTokensService.getUsername();
 
-        if (idToken && username && accessToken && refreshToken) {
-          authContext.authState.idToken = idToken;
-          authContext.authState.accessToken = accessToken;
+          const isAuthed = await isAuthenticated(AuthTokensService.getIdToken(), refreshToken);
+
+          authContext.authState.idToken = AuthTokensService.getIdToken();
+          authContext.authState.accessToken = AuthTokensService.getAccessToken();
           authContext.authState.refreshToken = refreshToken;
           authContext.authState.username = username;
-          const isAuthed = await isAuthenticated(idToken, refreshToken);
           authContext.isReady = isAuthed;
           authContext.isUserAuthenticated = () => isAuthed;
         }
@@ -60,7 +61,7 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
           redirectToLogin(router);
         }
       }
-      perfromTokenRefreshIfRequired();
+      performTokenRefreshIfRequired();
     }, [authContext, router]);
 
     return (

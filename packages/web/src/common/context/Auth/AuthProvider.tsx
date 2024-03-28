@@ -57,7 +57,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
     setIsReady(true);
   }, []);
 
-  // checks if the user is authenticated or not
+  // Checks if the user is authenticated or not.
+  // No need to refresh here as this is the default state.
+  // Context will be injected and overridden by requireAuth.ts
   const isUserAuthenticated = () => {
     if (
       !authState.accessToken &&
@@ -66,16 +68,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
       !authState.refreshToken
     ) {
       return false;
-    }
-
-    const { exp: tokenExpiryTimeStamp, sub: username } = unpackJWT(authState.idToken);
-
-    const currentTimeStamp = Math.ceil(Date.now() / 1000);
-
-    if (currentTimeStamp >= tokenExpiryTimeStamp) {
-      reAuthFromRefreshToken(username, authState.refreshToken).then((authenticated) => {
-        return authenticated;
-      });
     }
 
     return true;

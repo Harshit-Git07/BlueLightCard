@@ -4,6 +4,7 @@ import {
   CognitoIdentityProvider,
   InitiateAuthCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
+import AuthTokensService from '../services/authTokensService';
 
 export async function reAuthFromRefreshToken(username: string, refreshToken: string) {
   const params = {
@@ -27,6 +28,7 @@ export async function reAuthFromRefreshToken(username: string, refreshToken: str
     localStorage.setItem('refreshToken', refreshToken);
     localStorage.setItem('username', username);
   } catch (err) {
+    AuthTokensService.clearTokens();
     return false;
   }
 

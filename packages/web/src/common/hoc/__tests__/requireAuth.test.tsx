@@ -82,13 +82,12 @@ describe('withAuth HOC', () => {
     localStorage.setItem('idToken', pastJWT);
 
     render(
-      <AuthProvider>
+      <AuthProvider isUserAuthenticated={() => true}>
         <PageWithAuth />
       </AuthProvider>
     );
 
-    const displayText = screen.queryByText(text);
-    expect(displayText).toBeTruthy();
+    expect(screen.queryByText(text)).toBeTruthy();
   });
 
   // Success Cases

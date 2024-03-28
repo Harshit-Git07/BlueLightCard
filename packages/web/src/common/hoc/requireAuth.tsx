@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
 import { LOGOUT_ROUTE, COGNITO_LOGOUT_URL } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
@@ -39,6 +39,7 @@ async function isAuthenticated(idToken: string, refreshToken: string) {
 
 const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
   const Component: React.FC<any> = (props: any) => {
+    const [, setIdToken] = useState<string>('');
     const authContext = useContext(AuthContext);
     const router = useRouter();
 
@@ -56,6 +57,7 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
           authContext.authState.username = username;
           authContext.isReady = isAuthed;
           authContext.isUserAuthenticated = () => isAuthed;
+          setIdToken(AuthTokensService.getIdToken());
         }
         if (authContext.isReady && !authContext.isUserAuthenticated()) {
           redirectToLogin(router);

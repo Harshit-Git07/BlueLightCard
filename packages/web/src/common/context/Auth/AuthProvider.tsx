@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import AuthContext from './AuthContext';
-import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -67,6 +66,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
       !authState.username &&
       !authState.refreshToken
     ) {
+      return false;
+    }
+
+    const { exp: tokenExpiryTimeStamp } = unpackJWT(authState.idToken);
+    const currentTimeStamp = Math.ceil(Date.now() / 1000);
+
+    if (currentTimeStamp >= tokenExpiryTimeStamp) {
       return false;
     }
 

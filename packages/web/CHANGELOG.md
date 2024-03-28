@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.40.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.39.0...bluelightcard/web-v1.40.0) (2024-03-28)
+
+
+### Features
+
+* TI-000: fix refresh token propagating first refresh ([#1121](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1121)) ([58c2474](https://github.com/bluelightcard/BlueLightCard-2.0/commit/58c24747a97301c817587fe61bc3c54c904194dd))
+* TI-000: update tokens on first refresh ([#1123](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1123)) ([0f2eace](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0f2eace6beb43c7cd54c3803ab242093163a3b03))
+* TI-1048: fixed flagsmith identity cognito ui cookie ([#1119](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1119)) ([94d520b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/94d520b024cae8519773b3ead453883f9f203985))
+* TO-651 ([#1113](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1113)) ([ddff609](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ddff609c997d81f3fec33b3cc821f2e30f86efe9))
+
 ## [1.39.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.38.0...bluelightcard/web-v1.39.0) (2024-03-26)
 
 

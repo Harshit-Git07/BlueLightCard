@@ -27,7 +27,6 @@ export class RedemptionsTestDatabase {
     private composeEnvironment: StartedDockerComposeEnvironment,
     private databaseConnectionConfig: DatabaseConnectionConfig,
   ) {}
-  private static retryCount = 0;
 
   private static waitForConnection = async (sql: postgres.Sql) => {
     return waitOn(async () => {

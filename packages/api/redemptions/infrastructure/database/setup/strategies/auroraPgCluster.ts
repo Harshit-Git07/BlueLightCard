@@ -1,5 +1,14 @@
 import { RemovalPolicy } from 'aws-cdk-lib';
-import { Port, SecurityGroup, SubnetType } from 'aws-cdk-lib/aws-ec2';
+import {
+  BastionHostLinux,
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  Port,
+  SecurityGroup,
+  SubnetType,
+} from 'aws-cdk-lib/aws-ec2';
+import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import {
   AuroraPostgresEngineVersion,
   ClusterInstance,
@@ -31,6 +40,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
     const ingressSecurityGroup = this.createIngressSecurityGroup();
     this.configureSecurityGroupRules(egressSecurityGroup, ingressSecurityGroup);
     const databaseCluster = this.createDatabaseCluster(ingressSecurityGroup);
+    const bastionHost = this.createBastionHost(egressSecurityGroup);
     // TODO: Add a secret rotation schedule
     // TODO: Create RDS proxy
     const databaseCredentialsSecret = this.getDatabaseCredentialsSecret(databaseCluster);
@@ -43,6 +53,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
     );
     const awsDatabaseAdapter = this.createDatabaseAdapter(
       databaseConnectionConfig,
+      bastionHost,
       egressSecurityGroup,
       databaseCredentialsSecret,
     );
@@ -151,6 +162,17 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
     return databaseCluster;
   }
 
+  private createBastionHost(databaseEgressSecurityGroup: DatabaseEgressSecurityGroup): BastionHostLinux {
+    const host = new BastionHostLinux(this.stack, 'bastion-host-redemptions', {
+      instanceName: `${this.stack.stage}-bastion-host-redemptions`,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.NANO),
+      vpc: this.vpc,
+      securityGroup: databaseEgressSecurityGroup,
+    });
+    host.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore'));
+    return host;
+  }
+
   private getDatabaseCredentialsSecret(database: DatabaseCluster): ISecret {
     if (!database.secret) {
       throw new Error('The database secret was not found.');
@@ -212,6 +234,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
 
   private createDatabaseAdapter(
     connectionConfig: DatabaseConnectionConfig,
+    bastionHost: BastionHostLinux,
     egressSecurityGroup: DatabaseEgressSecurityGroup,
     databaseCredentialsSecret: ISecret,
   ): IDatabase {
@@ -235,6 +258,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
           ...props.environment,
         },
       }),
+      getBastionHost: () => bastionHost,
     };
   }
 }

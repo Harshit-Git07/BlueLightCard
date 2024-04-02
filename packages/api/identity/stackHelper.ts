@@ -1,4 +1,4 @@
-import { Cognito, EventBus, Function, Queue, Table } from 'sst/constructs';
+import { Cognito, Config, EventBus, Function, Queue, Table } from 'sst/constructs';
 import { BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
 import { Duration } from 'aws-cdk-lib'
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
@@ -425,7 +425,8 @@ export function createNewCognito(
         customAttributes: {
           blc_old_id: new StringAttribute({ mutable: true }),
           blc_old_uuid: new StringAttribute({ mutable: true }),
-          migrated_old_pool: new BooleanAttribute({mutable: true})
+          migrated_old_pool: new BooleanAttribute({mutable: true}),
+          'e2e': new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
           minLength: 6,
@@ -467,6 +468,21 @@ export function createNewCognito(
       logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()],
     },
   });
+
+  // For non-production stages, create a client for E2E testing. This client is
+  // used to issue tokens. We don't want to use the web client for this as it
+  // would couple the E2E tests for other stacks to the configuration of the
+  // web client.
+  if (stack.stage !== STAGES.PRODUCTION) {
+    const e2eClient = cognito.cdk.userPool.addClient('e2eClientNew', {
+      authFlows: {
+        adminUserPassword: true,
+      },
+    });
+    new Config.Parameter(stack, 'IDENTITY_COGNITO_E2E_CLIENT_ID', {
+      value: e2eClient.userPoolClientId,
+    });
+  }
 
   // Create Cognito domains
   if (stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING) {

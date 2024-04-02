@@ -41,6 +41,7 @@ export type Connection = (typeof connectionEnum.enumValues)[number];
 
 export const redemptionsPrefix = 'rdm';
 export const createRedemptionsId = (): string => `${redemptionsPrefix}-${uuidv4()}`;
+export const createRedemptionsIdE2E = (): string => `e2e:${createRedemptionsId()}`;
 export const redemptionsTable = pgTable('redemptions', {
   // PK
   id: varchar('id').primaryKey().$defaultFn(createRedemptionsId),

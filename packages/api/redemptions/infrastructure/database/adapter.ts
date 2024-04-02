@@ -1,3 +1,4 @@
+import { BastionHostLinux } from 'aws-cdk-lib/aws-ec2';
 import { Grant } from 'aws-cdk-lib/aws-iam';
 import { Function as SSTFunction, FunctionProps } from 'sst/constructs';
 
@@ -10,4 +11,5 @@ export interface IDatabase {
   egressSecurityGroup?: DatabaseEgressSecurityGroup;
   grantConnect?(lambda: SSTFunction): Grant[];
   getFunctionProps(props: FunctionProps): FunctionProps;
+  getBastionHost(): BastionHostLinux | null;
 }

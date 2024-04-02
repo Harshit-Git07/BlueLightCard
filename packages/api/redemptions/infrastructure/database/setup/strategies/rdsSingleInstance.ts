@@ -1,5 +1,14 @@
 import { Duration } from 'aws-cdk-lib';
-import { InstanceClass, InstanceSize, InstanceType, Port, SecurityGroup, SubnetType } from 'aws-cdk-lib/aws-ec2';
+import {
+  BastionHostLinux,
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  Port,
+  SecurityGroup,
+  SubnetType,
+} from 'aws-cdk-lib/aws-ec2';
+import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import {
   DatabaseInstance,
   DatabaseInstanceEngine,
@@ -36,6 +45,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     const ingressSecurityGroup = this.createIngressSecurityGroup();
     this.configureSecurityGroupRules(egressSecurityGroup, ingressSecurityGroup);
     const databaseInstance = this.createInstance(ingressSecurityGroup);
+    const bastionHost = this.createBastionHost(egressSecurityGroup);
     const databaseCredentialsSecret = this.getDatabaseCredentialsSecret(databaseInstance);
     const databaseConnectionConfig = this.createDatabaseConnectionConfig(databaseInstance, databaseCredentialsSecret);
     const migrationsScript = this.createMigrationsScript(
@@ -46,6 +56,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     );
     const awsDatabaseAdapter = this.createDatabaseAdapter(
       databaseInstance,
+      bastionHost,
       databaseConnectionConfig,
       egressSecurityGroup,
       databaseCredentialsSecret,
@@ -77,8 +88,6 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
           `Running "sst dev" is not recommended with RDS because RDS cannot be used with live lambda`,
           'It is recommended to use a local database instead of RDS. To use a local database, set the',
           `${RedemptionsStackEnvironmentKeys.REDEMPTIONS_DATABASE_TYPE} environment variable to ${DatabaseType.LOCAL}.`,
-          'If you are certain you want to use an RDS database, set the environment variable',
-          `${RedemptionsStackEnvironmentKeys.REDEMPTIONS_DANGEROUSLY_ALLOW_DATABASE_SETUP_STRATEGY} to true.`,
         ].join(' '),
       });
     }
@@ -150,6 +159,17 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     });
   }
 
+  private createBastionHost(databaseEgressSecurityGroup: DatabaseEgressSecurityGroup): BastionHostLinux {
+    const host = new BastionHostLinux(this.stack, 'bastion-host-redemptions', {
+      instanceName: `${this.stack.stage}-bastion-host-redemptions`,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.NANO),
+      vpc: this.vpc,
+      securityGroup: databaseEgressSecurityGroup,
+    });
+    host.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore'));
+    return host;
+  }
+
   private getDatabaseCredentialsSecret(database: DatabaseInstance): ISecret {
     if (!database.secret) {
       throw new Error('The database secret was not found.');
@@ -205,6 +225,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
 
   private createDatabaseAdapter(
     database: DatabaseInstance,
+    bastionHost: BastionHostLinux,
     connectionConfig: DatabaseConnectionConfig,
     egressSecurityGroup: DatabaseEgressSecurityGroup,
     databaseCredentialsSecret: ISecret,
@@ -229,6 +250,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
           ...props.environment,
         },
       }),
+      getBastionHost: () => bastionHost,
     };
   }
 }

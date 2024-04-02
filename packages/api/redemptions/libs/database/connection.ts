@@ -51,6 +51,13 @@ export class RawDatabaseCredentials implements IDatabaseCredentials {
     return new RawDatabaseCredentials(password, username);
   }
 
+  public static fromEnvironmentVariables() {
+    return RawDatabaseCredentials.fromRaw(
+      getEnv(DatabaseConnectionEnvironmentKeys.REDEMPTIONS_DATABASE_USER),
+      getEnv(DatabaseConnectionEnvironmentKeys.REDEMPTIONS_DATABASE_PASSWORD),
+    );
+  }
+
   public toEnvironmentVariables(): Record<string, string> {
     return {
       [DatabaseConnectionEnvironmentKeys.REDEMPTIONS_DATABASE_CREDENTIALS_TYPE]: DatabaseCredentialsType.RAW,

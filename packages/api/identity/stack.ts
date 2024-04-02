@@ -1,4 +1,4 @@
-import {ApiGatewayV1Api, Function, Queue, StackContext, Table, use} from 'sst/constructs';
+import {ApiGatewayV1Api, Config, Function, Queue, StackContext, Table, use} from 'sst/constructs';
 import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
 import {Shared} from '../../../stacks/stack';
 import {passwordResetRule} from './src/eventRules/passwordResetRule';
@@ -178,6 +178,11 @@ export function Identity({ stack }: StackContext) {
   });
   usagePlan.addApiKey(apikey);
 
+  // Output the Cognito User Pool ID as a config parameter so that it can be
+  // used in E2E tests.
+  new Config.Parameter(stack, 'IDENTITY_COGNITO_USER_POOL_ID', {
+    value: cognito.userPoolId,
+  });
   stack.addOutputs({
     CognitoUserPoolWebClient: cognito.userPoolId,
     CognitoDdsUserPoolWebClient: cognito_dds.userPoolId,

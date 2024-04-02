@@ -1,6 +1,6 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
+import { ApiGatewayV1Api, Config, StackContext, use } from 'sst/constructs';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
@@ -10,6 +10,7 @@ import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 
 import { Shared } from '../../../../stacks/stack';
 import { Identity } from '../../identity/stack';
+import { DatabaseConnectionType, SecretsManagerDatabaseCredentials } from '../libs/database/connection';
 
 import { RedemptionsStackConfigResolver } from './config/config';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
@@ -178,6 +179,32 @@ export async function Redemptions({ app, stack }: StackContext) {
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [getSecretValueSecretsManager],
     }),
+  });
+
+  const databaseReadOnlyHost = database.connectionConfig.endpoint.getHost(DatabaseConnectionType.READ_ONLY);
+  const databaseReadWriteHost = database.connectionConfig.endpoint.getHost(DatabaseConnectionType.READ_WRITE);
+  new Config.Parameter(stack, 'REDEMPTIONS_DATABASE_READ_ONLY_HOST', {
+    value: databaseReadOnlyHost,
+  });
+  new Config.Parameter(stack, 'REDEMPTIONS_DATABASE_READ_WRITE_HOST', {
+    value: databaseReadWriteHost,
+  });
+
+  // To avoid TypeScript errors, we set the instance ID to 'DISABLED' if there
+  // is no bastion host
+  const bastionHost = database.getBastionHost();
+  const instanceId = bastionHost ? bastionHost.instanceId : 'DISABLED';
+  new Config.Parameter(stack, 'REDEMPTIONS_BASTION_HOST_INSTANCE', {
+    value: instanceId,
+  });
+
+  // To avoid TypeScript errors, we set the secret name to 'DISABLED' if the
+  // database credentials are not stored in Secrets Manager
+  const databaseCredentials = database.connectionConfig.credentials;
+  const databaseCredentialsSecretName =
+    databaseCredentials instanceof SecretsManagerDatabaseCredentials ? databaseCredentials.secretName : 'DISABLED';
+  new Config.Parameter(stack, 'REDEMPTIONS_DATABASE_CREDENTIALS_SECRET_NAME', {
+    value: databaseCredentialsSecretName,
   });
 
   stack.addOutputs({

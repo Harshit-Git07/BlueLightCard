@@ -104,7 +104,7 @@ export class RedemptionsDatabaseConfigResolver {
   }
 }
 
-class DatabaseConfigHelpers {
+export class DatabaseConfigHelpers {
   public static getDatabaseTypeFromEnv(): DatabaseType {
     const databaseType = getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_DATABASE_TYPE);
 

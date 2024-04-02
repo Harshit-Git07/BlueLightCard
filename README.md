@@ -14,45 +14,60 @@
 ## Getting started
 
 Install dependencies by running:
-```
+```sh
 npm i
 ```
 
 Setup your aws access key by running:
-```
+```sh
 aws configure
 ```
 
 Alternatively, use Leapp - this tool can help you to assume roles.
 
 To start the backend run the following (this will deploy the backend to your aws account)
-```
+```sh
 npm run dev
 ```
 
 To start the front end run (in another terminal)
-```
+```sh
 npm run dev -w packages/web
 ```
 
 To start the admin panel frontend run (in another terminal)
-```
+```sh
 npm run dev -w packages/cms
 ```
 
 To teardown this environment run (this will remove everything except data storage services like S3 buckets and DynamoDB):
-```
+```sh
 npm run remove
 ```
 
 ## Test
 
-```
+```sh
 npm run test -w packages/api/{package folder name}
 ```
 
+### Redemptions
+
+By default, the above command will run both unit and end-to-end tests. To run
+either in isolation, use the following commands:
+
+```sh
+npm run test:unit -w packages/api/redemptions
+npm run test:e2e -w packages/api/redemptions
+```
+
+Note that you may need to [install the Session Manager plugin for the AWS CLI](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
+if you intend to run tests against a DB hosted in AWS. This is not required when
+running a local DB instance.
+
 ## Errors
 Sometimes you might get an error like this:
+
 ```
 > @bluelightcard/app@1.0.0 dev
 > sst dev

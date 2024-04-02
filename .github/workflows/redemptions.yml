@@ -42,8 +42,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+      - name: Generate SST Types
+        run: npx sst types --stage staging
       - name: Test
-        run: npm run test -w packages/api/redemptions
+        run: npm run test:unit -w packages/api/redemptions
 
   format:
     name: Check Formatting
@@ -78,6 +80,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+      - name: Generate SST Types
+        run: npx sst types --stage staging
       - name: Check Types
         run: npm run typecheck -w packages/api/redemptions
 
@@ -181,6 +185,34 @@ jobs:
         env:
           REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
         run: npm run -s oas --region=eu-west-2 --stage=staging --api-version=v1
+
+  e2e-redemptions:
+    name: Run E2E tests (redemptions)
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - name: Install Session Manager Plugin
+        run: |
+          curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+          sudo dpkg -i session-manager-plugin.deb
+      - name: Run E2E tests
+        working-directory: packages/api/redemptions
+        env:
+          REDEMPTIONS_DATABASE_PORT: 5432
+          REDEMPTIONS_DATABASE_NAME: redemptions
+          REDEMPTIONS_DATABASE_TYPE: AURORA_PG_CLUSTER
+        run: npx sst bind --stage staging vitest
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created

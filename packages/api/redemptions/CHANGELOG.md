@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.1...bluelightcard/redemptions-v1.7.2) (2024-04-02)
+
+
+### Other Changes
+
+* **redemptions:** move test helpers to libs ([#1122](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1122)) ([8946bdc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8946bdc8d0e6e9ef0cdcd93f3f606f5c3cf50e63))
+* **redemptions:** Redemptions add e2e tests ([#1115](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1115)) ([a376343](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a376343765f1aaf0f213c87989f2c23571000ffe))
+
 ## [1.7.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.0...bluelightcard/redemptions-v1.7.1) (2024-03-27)
 
 

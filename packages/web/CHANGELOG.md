@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.40.0...bluelightcard/web-v1.41.0) (2024-04-03)
+
+
+### Features
+
+* TI-1077: fix refresh on members home ([#1130](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1130)) ([4ba1800](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4ba180049bc1ab169e0c7d3e367c8fe8757e55ef))
+
 ## [1.40.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.39.0...bluelightcard/web-v1.40.0) (2024-03-28)
 
 

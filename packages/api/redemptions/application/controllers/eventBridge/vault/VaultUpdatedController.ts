@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { NON_NEGATIVE_INT } from '@blc-mono/core/schemas/common';
 import { PLATFORM_SCHEMA } from '@blc-mono/core/schemas/domain';
 import { eventSchema } from '@blc-mono/core/schemas/event';
+import { OPTIONAL_URL_SCHEMA } from '@blc-mono/core/schemas/utility';
 import { Result } from '@blc-mono/core/types/result';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { IVaultService, VaultService } from '@blc-mono/redemptions/application/services/vault/VaultService';
@@ -17,7 +18,7 @@ const VaultUpdatedEventDetailSchema = z.object({
   companyId: NON_NEGATIVE_INT,
   companyName: z.string(),
   eeCampaignId: NON_NEGATIVE_INT.nullable().optional(),
-  link: z.string().url().nullable().optional(),
+  link: OPTIONAL_URL_SCHEMA,
   linkId: NON_NEGATIVE_INT.nullable().optional(),
   managerId: NON_NEGATIVE_INT.nullable().optional(),
   maxPerUser: NON_NEGATIVE_INT,

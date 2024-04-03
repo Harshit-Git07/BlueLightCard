@@ -6,6 +6,16 @@ import { z } from 'zod';
  */
 export const OPTIONAL_URL_SCHEMA = z
   .string()
-  .transform((value) => (value.trim() === '' ? undefined : value))
-  .pipe(z.string().url().optional());
+  .nullable()
+  .optional()
+  .transform((value) => {
+    if (!value) {
+      return undefined;
+    }
+    if (value.trim() === '') {
+      return undefined;
+    }
+    return value;
+  })
+  .pipe(z.string().url().optional().nullable());
 export type OptionalUrl = z.infer<typeof OPTIONAL_URL_SCHEMA>;

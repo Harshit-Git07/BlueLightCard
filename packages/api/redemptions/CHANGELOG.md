@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.2...bluelightcard/redemptions-v1.7.3) (2024-04-03)
+
+
+### Other Changes
+
+* TR-345 event bridge services ([#1112](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1112)) ([1677a3b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1677a3b414d13529dc1e537c9a97e5e1a3e1ed31))
+
 ## [1.7.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.1...bluelightcard/redemptions-v1.7.2) (2024-04-02)
 
 

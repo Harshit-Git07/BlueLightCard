@@ -52,7 +52,7 @@ export class OfferCreatedService implements IOfferCreatedService {
       const newRedemption = await redemptionTransaction.createRedemption(redemptionData);
 
       const redemptionId = newRedemption.id;
-      if (redemptionData.redemptionType === 'generic') {
+      if (redemptionData.redemptionType === 'generic' && detail.offerCode) {
         const genericData: NewGeneric = {
           redemptionId: redemptionId,
           code: detail.offerCode,

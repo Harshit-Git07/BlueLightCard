@@ -3,6 +3,7 @@ import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
 import { RedemptionsStackConfig } from '@blc-mono/redemptions/infrastructure/config/config';
 
+import { RedemptionsStackEnvironmentKeys } from '../../constants/environment';
 import { SSTFunction } from '../../constructs/SSTFunction';
 import { IDatabase } from '../../database/adapter';
 import { RedemptionsDatasyncEvents } from '../events/datasync';
@@ -27,12 +28,19 @@ export function createPromotionUpdatedRule(
       }),
     ],
     environment: {
-      REDEMPTIONS_LAMBDA_SCRIPTS_HOST: config.redemptionsLambdaScriptsHost,
-      REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH: config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
-      REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT: config.redemptionsLambdaScriptsEnvironment,
-      REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH: config.redemptionsLambdaScriptsCodeAmountIssuedPath,
-      REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH: config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
-      REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH: config.redemptionsLambdaScriptsCodeRedeemedPath,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH]:
+        config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
+        config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
+        config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
+        config.redemptionsLambdaScriptsCodeRedeemedPath,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
+        config.redemptionsLambdaScriptsEnvironment,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
+        config.redemptionsLambdaScriptsSecretName,
     },
   });
   return {

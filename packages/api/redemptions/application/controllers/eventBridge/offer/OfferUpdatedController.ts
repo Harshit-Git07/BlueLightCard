@@ -16,8 +16,8 @@ import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeCo
 const OfferUpdatedEventDetailSchema = z.object({
   offerId: NON_NEGATIVE_INT,
   companyId: NON_NEGATIVE_INT,
-  offerUrl: z.string(),
-  offerCode: z.string(),
+  offerUrl: z.string().nullable(),
+  offerCode: z.string().nullable(),
   offerType: NON_NEGATIVE_INT,
   platform: PLATFORM_SCHEMA,
 });

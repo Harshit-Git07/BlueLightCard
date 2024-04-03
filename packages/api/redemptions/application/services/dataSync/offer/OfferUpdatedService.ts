@@ -71,7 +71,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
 
         const newRedemption = await redemptionTransaction.createRedemption(redemptionData);
 
-        if (redemptionData.redemptionType === 'generic') {
+        if (redemptionData.redemptionType === 'generic' && detail.offerCode) {
           const genericData: NewGeneric = {
             redemptionId: newRedemption.id,
             code: detail.offerCode,
@@ -138,7 +138,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             }
           }
 
-          if (genericToInsert) {
+          if (genericToInsert && detail.offerCode) {
             const genericData: NewGeneric = {
               redemptionId: existingRedemptionData.id,
               code: detail.offerCode,
@@ -158,7 +158,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             }
           }
 
-          if (genericToUpdate) {
+          if (genericToUpdate && detail.offerCode) {
             const genericData: UpdateGeneric = {
               code: detail.offerCode,
             };

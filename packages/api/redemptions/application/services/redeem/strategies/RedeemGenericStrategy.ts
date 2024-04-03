@@ -1,5 +1,8 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
+import {
+  GenericsRepository,
+  IGenericsRepository,
+} from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 
 import { Redemption } from '../../../repositories/RedemptionsRepository';
 
@@ -10,7 +13,7 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
   static readonly inject = [GenericsRepository.key, Logger.key] as const;
 
   constructor(
-    private readonly genericsRepository: GenericsRepository,
+    private readonly genericsRepository: IGenericsRepository,
     private readonly logger: ILogger,
   ) {}
 

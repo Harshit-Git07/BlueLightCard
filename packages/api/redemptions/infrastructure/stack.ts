@@ -88,7 +88,7 @@ export async function Redemptions({ app, stack }: StackContext) {
     vaultCreatedRule: createVaultCreatedRule(stack, database),
     vaultUpdatedRule: createVaultUpdatedRule(stack, database),
     promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),
-    offerRule: createOfferRule(stack, database),
+    offerCreatedRule: createOfferRule(stack, database),
     emailTransactionalRule: createRedemptionTransactionalEmailRule(stack, config),
     offerUpdatedRule: updateOfferRule(stack, database),
   });

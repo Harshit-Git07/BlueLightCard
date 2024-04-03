@@ -37,30 +37,35 @@ type NewRedemption = typeof redemptionsTable.$inferInsert;
  * @param offerUrl
  * @param offerCode
  */
-export function parseRedemptionType(offerUrl: string, offerCode: string): Pick<NewRedemption, 'redemptionType'> {
+export function parseRedemptionType(
+  offerUrl: string | null,
+  offerCode: string | null,
+): Pick<NewRedemption, 'redemptionType'> {
   /**
    * vaultQR handled when vault created/updated
    */
-  const parsedUrl = getParsedUrl(offerUrl);
-  if (parsedUrl !== null) {
-    if (parsedUrl.hostname === vaultUrlHostname || isSpotifyUrl(offerUrl)) {
-      //online or in-store, codes stored DB.vaults/vaultBatches/vaultCodes
+  if (offerUrl) {
+    const parsedUrl = getParsedUrl(offerUrl);
+    if (parsedUrl !== null) {
+      if (parsedUrl.hostname === vaultUrlHostname || isSpotifyUrl(offerUrl)) {
+        //online or in-store, codes stored DB.vaults/vaultBatches/vaultCodes
+        return {
+          redemptionType: 'vault',
+        };
+      }
+
+      if (offerCode) {
+        //online generic offer, code stored in DB.generics
+        return {
+          redemptionType: 'generic',
+        };
+      }
+
+      //online only, discount already applied/EPP
       return {
-        redemptionType: 'vault',
+        redemptionType: 'preApplied',
       };
     }
-
-    if (offerCode) {
-      //online generic offer, code stored in DB.generics
-      return {
-        redemptionType: 'generic',
-      };
-    }
-
-    //online only, discount already applied/EPP
-    return {
-      redemptionType: 'preApplied',
-    };
   }
 
   //handle offers without a URL
@@ -86,31 +91,33 @@ export function parseRedemptionType(offerUrl: string, offerCode: string): Pick<N
  *
  * @param offerUrl
  */
-export function parseConnection(offerUrl: string): Pick<NewRedemption, 'connection'> {
-  const parsedUrl = getParsedUrl(offerUrl);
-  if (parsedUrl !== null) {
-    if (parsedUrl.hostname === vaultUrlHostname) {
+export function parseConnection(offerUrl: string | null): Pick<NewRedemption, 'connection'> {
+  if (offerUrl) {
+    const parsedUrl = getParsedUrl(offerUrl);
+    if (parsedUrl !== null) {
+      if (parsedUrl.hostname === vaultUrlHostname) {
+        return {
+          connection: 'none',
+        };
+      }
+
+      if (isSpotifyUrl(offerUrl)) {
+        return {
+          connection: 'spotify',
+        };
+      }
+
+      const affiliateConfig = offerUrl && new AffiliateConfigurationHelper(offerUrl).getConfig();
+      if (affiliateConfig !== null) {
+        return {
+          connection: 'affiliate',
+        };
+      }
+
       return {
-        connection: 'none',
+        connection: 'direct',
       };
     }
-
-    if (isSpotifyUrl(offerUrl)) {
-      return {
-        connection: 'spotify',
-      };
-    }
-
-    const affiliateConfig = new AffiliateConfigurationHelper(offerUrl).getConfig();
-    if (affiliateConfig !== null) {
-      return {
-        connection: 'affiliate',
-      };
-    }
-
-    return {
-      connection: 'direct',
-    };
   }
 
   return {
@@ -118,14 +125,16 @@ export function parseConnection(offerUrl: string): Pick<NewRedemption, 'connecti
   };
 }
 
-export function parseAffiliate(offerUrl: string): Pick<NewRedemption, 'affiliate'> {
-  const parsedUrl = getParsedUrl(offerUrl);
-  if (parsedUrl !== null) {
-    const affiliateConfig = new AffiliateConfigurationHelper(offerUrl).getConfig();
-    if (affiliateConfig !== null) {
-      return {
-        affiliate: affiliateConfig.affiliate,
-      };
+export function parseAffiliate(offerUrl: string | null): Pick<NewRedemption, 'affiliate'> {
+  if (offerUrl) {
+    const parsedUrl = getParsedUrl(offerUrl);
+    if (parsedUrl !== null) {
+      const affiliateConfig = new AffiliateConfigurationHelper(offerUrl).getConfig();
+      if (affiliateConfig !== null) {
+        return {
+          affiliate: affiliateConfig.affiliate,
+        };
+      }
     }
   }
   return {
@@ -166,21 +175,23 @@ export function parseOfferType(offerType: number): Pick<NewRedemption, 'offerTyp
  *
  * @param offerUrl
  */
-export function parseOfferUrl(offerUrl: string): Pick<NewRedemption, 'url'> {
-  const parsedUrl = getParsedUrl(offerUrl);
-  if (parsedUrl !== null) {
-    return {
-      url: offerUrl,
-    };
+export function parseOfferUrl(offerUrl: string | null): Pick<NewRedemption, 'url'> {
+  if (offerUrl) {
+    const parsedUrl = getParsedUrl(offerUrl);
+    if (parsedUrl !== null) {
+      return {
+        url: offerUrl,
+      };
+    }
   }
   return {
     url: null,
   };
 }
 
-function getParsedUrl(offerUrl: string): URL | null {
+function getParsedUrl(offerUrl: string | null): URL | null {
   try {
-    return new URL(offerUrl);
+    return offerUrl ? new URL(offerUrl) : null;
   } catch {
     return null;
   }

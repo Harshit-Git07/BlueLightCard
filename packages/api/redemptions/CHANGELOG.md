@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.3...bluelightcard/redemptions-v1.7.4) (2024-04-03)
+
+
+### Bug Fixes
+
+* **redemptions:** Correctly validate optional urls in datasync ([#1128](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1128)) ([27bd1f1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/27bd1f10a20f3352eb583ffdfded6fc42fe15503))
+
 ## [1.7.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.2...bluelightcard/redemptions-v1.7.3) (2024-04-03)
 
 

@@ -2,7 +2,6 @@ import { NextPage } from 'next';
 import Navigation from '@/components/NavigationLegacy/Navigation';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
-import requireAuth from '@/hoc/requireAuth';
 import Footer from '../identity/components/Footer/Footer';
 import Form from '@/components/Form/Form';
 import InputTextField from '@/components/InputTextField/InputTextField';
@@ -182,4 +181,4 @@ const layoutProps = {
   ),
 };
 
-export default withAuthProviderLayout(requireAuth(SsoSignUpPage), layoutProps);
+export default withAuthProviderLayout(SsoSignUpPage, layoutProps);

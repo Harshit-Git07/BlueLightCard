@@ -8,8 +8,8 @@ import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { useRouter } from 'next/router';
 import AuthContext from '@/context/Auth/AuthContext';
 import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
-import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { unpackJWT } from '@core/utils/unpackJWT';
+import withAuthProviderLayout from '../common/hoc/withAuthProviderLayout';
 
 function MockLogin() {
   // As this exposes client_secret which should not be exposed.
@@ -119,4 +119,7 @@ function MockLogin() {
   );
 }
 
-export default withAuthProviderLayout(MockLogin, { seo: { title: 'Dev Env login' } });
+export default withAuthProviderLayout(MockLogin, {
+  requireAuth: false,
+  seo: { title: 'Dev Env login' },
+});

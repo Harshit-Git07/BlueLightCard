@@ -4,7 +4,6 @@ import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import Image from '@/components/Image/Image';
 import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
 import Link from '@/components/Link/Link';
-import requireAuth from '@/hoc/requireAuth';
 import { NextPage } from 'next';
 import Container from '@/components/Container/Container';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
@@ -122,4 +121,4 @@ const layoutProps = {
   },
 };
 
-export default withAuthProviderLayout(requireAuth(OffersPage), layoutProps);
+export default withAuthProviderLayout(OffersPage, layoutProps);

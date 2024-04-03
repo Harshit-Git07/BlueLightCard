@@ -1,6 +1,5 @@
 import Container from '@/components/Container/Container';
 import Heading from '@/components/Heading/Heading';
-import requireAuth from '@/hoc/requireAuth';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next/types';
@@ -241,7 +240,7 @@ const Search: NextPage = () => {
 
 export const getStaticProps = getI18nStaticProps;
 
-export default withAuthProviderLayout(requireAuth(Search), {
+export default withAuthProviderLayout(Search, {
   headerOverride: <></>,
   seo: {
     title: 'offers.search.title',

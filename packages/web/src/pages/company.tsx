@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import requireAuth from '@/hoc/requireAuth';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useMedia } from 'react-use';
 import { advertQuery } from 'src/graphql/advertQuery';
@@ -284,4 +283,4 @@ const layoutProps = {
   },
 };
 
-export default withAuthProviderLayout(requireAuth(CompanyPage), layoutProps);
+export default withAuthProviderLayout(CompanyPage, layoutProps);

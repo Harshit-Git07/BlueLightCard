@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import requireAuth from '@/hoc/requireAuth';
 import { homePageQuery } from '../graphql/homePageQueries';
 import { makeHomePageQueryWithDislikeRestrictions } from '../graphql/makeQuery';
 import getCDNUrl from '@/utils/getCDNUrl';
@@ -309,4 +308,4 @@ const layoutProps = {
   },
 };
 
-export default withAuthProviderLayout(requireAuth(HomePage), layoutProps);
+export default withAuthProviderLayout(HomePage, layoutProps);

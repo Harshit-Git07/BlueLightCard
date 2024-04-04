@@ -132,17 +132,21 @@ export async function Redemptions({ app, stack }: StackContext) {
       handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
       requestValidatorName: 'PostRedeemValidator',
       environment: {
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+        // Lambda Script Integration
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
+          config.redemptionsLambdaScriptsSecretName,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
           config.redemptionsLambdaScriptsEnvironment,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH]:
+          config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
           config.redemptionsLambdaScriptsCodeRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
           config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
           config.redemptionsLambdaScriptsCodeAmountIssuedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
-          config.redemptionsLambdaScriptsSecretName,
+        // Event Bus
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
@@ -166,15 +170,20 @@ export async function Redemptions({ app, stack }: StackContext) {
       handler: 'packages/api/redemptions/application/handlers/apiGateway/proxy/postSpotify.handler',
       requestValidatorName: 'PostSpotifyValidator',
       environment: {
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+        // Lambda Script Integration
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
+          config.redemptionsLambdaScriptsSecretName,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
           config.redemptionsLambdaScriptsEnvironment,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH]:
+          config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
           config.redemptionsLambdaScriptsCodeRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
           config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
-          config.redemptionsLambdaScriptsSecretName,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
+          config.redemptionsLambdaScriptsCodeAmountIssuedPath,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [getSecretValueSecretsManager],

@@ -28,19 +28,20 @@ export function createPromotionUpdatedRule(
       }),
     ],
     environment: {
+      // Lambda Script Integration
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
+        config.redemptionsLambdaScriptsSecretName,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
+        config.redemptionsLambdaScriptsEnvironment,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH]:
         config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
-        config.redemptionsLambdaScriptsCodeAmountIssuedPath,
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
-        config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
         config.redemptionsLambdaScriptsCodeRedeemedPath,
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
-        config.redemptionsLambdaScriptsEnvironment,
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
-        config.redemptionsLambdaScriptsSecretName,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
+        config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
+        config.redemptionsLambdaScriptsCodeAmountIssuedPath,
     },
   });
   return {

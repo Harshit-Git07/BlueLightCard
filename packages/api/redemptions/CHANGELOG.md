@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.5](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.4...bluelightcard/redemptions-v1.7.5) (2024-04-04)
+
+
+### Bug Fixes
+
+* add missing environment variables for apis ([#1134](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1134)) ([359e823](https://github.com/bluelightcard/BlueLightCard-2.0/commit/359e8230fc6d3f69af45d7d65c1b89ac6c6c4856))
+
 ## [1.7.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.3...bluelightcard/redemptions-v1.7.4) (2024-04-03)
 
 

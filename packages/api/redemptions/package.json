@@ -1,6 +1,6 @@
 {
   "name": "@blc-mono/redemptions",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "scripts": {
     "pre:dev": "npm run db:up",
     "test": "npm run test:unit && npm run test:e2e",

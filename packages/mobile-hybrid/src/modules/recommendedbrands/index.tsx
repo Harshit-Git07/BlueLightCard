@@ -42,7 +42,7 @@ const RecommendedBrandsSlider: FC = () => {
     <>
       {recommendedBrands.length > 0 && (
         <PopularBrands
-          text="Explore brands picked for you with a swipe!"
+          text="Personalised picks for your spring event saving"
           onBrandItemClick={onBrandItemClick}
           brands={recommendedBrands}
           onInteracted={onCarouselInteracted}

@@ -83,9 +83,9 @@ const Home: NextPage<any> = () => {
           <RecommendedBrandsSlider />
         </Amplitude>
         {showFavouritedBrands && <FavouritedBrandsSlider />}
-        {expr[Experiments.POPULAR_OFFERS] === 'treatment' && !showFavouritedBrands && (
-          <PopularBrandsSlider />
-        )}
+        {expr[Experiments.POPULAR_OFFERS] === 'treatment' &&
+          expr[Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER] !== 'treatment' &&
+          !showFavouritedBrands && <PopularBrandsSlider />}
         <Offers />
         {expr[Experiments.STREAMLINED_HOMEPAGE] === 'on' && <NewsPreview />}
       </div>

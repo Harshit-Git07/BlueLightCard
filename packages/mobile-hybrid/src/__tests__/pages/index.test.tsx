@@ -11,17 +11,25 @@ import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { Brand } from '@/components/PopularBrands/types';
 import eventBus from '@/eventBus';
 import useRecommendedBrands from '@/hooks/useRecommendedBrands';
+import useOffers from '@/hooks/useOffers';
 
 jest.mock('@/invoke/apiCall');
 jest.mock('@/hooks/useRecommendedBrands');
 jest.mock('@/modules/popularbrands/brands');
-jest.mock('@/modules/offers/index');
+jest.mock('@/hooks/useOffers');
 
 const useRecommendedBrandsMock = jest.mocked(useRecommendedBrands);
+const useOffersMock = jest.mocked(useOffers);
 
 // Old & new way of storing experiments, eventually all will be moved to atoms
 let appContextExperiments: Record<string, string>;
 let atomExperiments: Record<string, string>;
+
+const recommendedBrandList: Brand[] = [
+  { id: 1, brandName: 'Nike', imageSrc: '' },
+  { id: 2, brandName: 'Adidas', imageSrc: '' },
+  { id: 3, brandName: 'New Balance', imageSrc: '' },
+];
 
 describe('Home', () => {
   let bus = eventBus();
@@ -32,6 +40,23 @@ describe('Home', () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
+
+    useOffersMock.mockReturnValue({
+      flexible: {
+        title: 'Flexible offer carousel',
+        random: false,
+        subtitle: '',
+        items: [],
+      },
+      deals: [],
+      groups: [
+        {
+          title: 'Standard offer carousel',
+          random: false,
+          items: [],
+        },
+      ],
+    });
 
     appContextExperiments = {
       [Experiments.HOMEPAGE_SEARCHBAR]: 'control',
@@ -74,12 +99,6 @@ describe('Home', () => {
   });
 
   describe('Recommended Brands Experiment', () => {
-    const recommendedBrandList: Brand[] = [
-      { id: 1, brandName: 'Nike', imageSrc: '' },
-      { id: 2, brandName: 'Adidas', imageSrc: '' },
-      { id: 3, brandName: 'New Balance', imageSrc: '' },
-    ];
-
     it('should render when experiment enabled', () => {
       atomExperiments = {
         ...atomExperiments,
@@ -106,10 +125,6 @@ describe('Home', () => {
       expect(screen.queryByAltText('Adidas')).not.toBeInTheDocument();
       expect(screen.queryByAltText('New Balance')).not.toBeInTheDocument();
     });
-
-    const givenRecommendedBrandsAreReturnedFromTheAPI = (recommendedBrands: Brand[]) => {
-      useRecommendedBrandsMock.mockReturnValue(recommendedBrands);
-    };
   });
 
   describe('Favourited Brands Experiment', () => {
@@ -139,17 +154,52 @@ describe('Home', () => {
   });
 
   describe('Popular Offers Experiment', () => {
-    it('should render when experiment enabled & favourited brands disabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
-        [Experiments.FAVOURITED_BRANDS]: 'off',
-        [Experiments.POPULAR_OFFERS]: 'treatment',
-      };
+    describe('with popular offers experiment enabled & favourited brands disabled', () => {
+      beforeEach(() => {
+        appContextExperiments = {
+          ...appContextExperiments,
+          [Experiments.FAVOURITED_BRANDS]: 'off',
+          [Experiments.POPULAR_OFFERS]: 'treatment',
+          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'control',
+        };
+        atomExperiments = {
+          ...atomExperiments,
+          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'control',
+        };
+      });
 
-      whenHomePageIsRendered();
+      it('should render', () => {
+        whenHomePageIsRendered();
 
-      const popularBrandsTitle = screen.queryByText('Popular brands');
-      expect(popularBrandsTitle).toBeInTheDocument();
+        const popularBrandsTitle = screen.queryByText('Popular brands');
+        expect(popularBrandsTitle).toBeInTheDocument();
+      });
+
+      it('should render popular offers above "flexible offer carousel" when spring event not enabled', () => {
+        whenHomePageIsRendered();
+
+        const popularBrandsTitle = screen.getByText('Popular brands');
+        const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
+        expect(flexibleOfferCarousel.compareDocumentPosition(popularBrandsTitle)).toBe(2);
+      });
+
+      it('should render popular offers below "flexible offer carousel" when spring event enabled', () => {
+        appContextExperiments = {
+          ...appContextExperiments,
+          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'treatment',
+        };
+        atomExperiments = {
+          ...atomExperiments,
+          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'treatment',
+        };
+        givenRecommendedBrandsAreReturnedFromTheAPI(recommendedBrandList);
+
+        whenHomePageIsRendered();
+
+        const popularBrandsTitle = screen.getByText('Popular brands');
+        const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
+        expect(popularBrandsTitle.compareDocumentPosition(flexibleOfferCarousel)).toBe(2);
+      });
     });
 
     it('should not render when experiment enabled & favourited brands enabled', () => {
@@ -179,7 +229,7 @@ describe('Home', () => {
   });
 
   describe('Streamlined homepage Experiment', () => {
-    it('should render "News" when experiment enabled', () => {
+    it('should render "News" below standard offer carousel when experiment enabled', () => {
       appContextExperiments = {
         ...appContextExperiments,
         [Experiments.STREAMLINED_HOMEPAGE]: 'on',
@@ -187,11 +237,12 @@ describe('Home', () => {
 
       whenHomePageIsRendered();
 
-      const newsTitle = screen.queryByText('Latest news');
-      expect(newsTitle).toBeInTheDocument();
+      const newsTitle = screen.getByText('Latest news');
+      const standardOfferCarousel = screen.getByText('Standard offer carousel');
+      expect(newsTitle.compareDocumentPosition(standardOfferCarousel)).toBe(2);
     });
 
-    it('should not render "News" when experiment disabled', () => {
+    it('should render "News" above standard offer carousel when experiment disabled', () => {
       appContextExperiments = {
         ...appContextExperiments,
         [Experiments.STREAMLINED_HOMEPAGE]: 'off',
@@ -199,11 +250,16 @@ describe('Home', () => {
 
       whenHomePageIsRendered();
 
-      const newsTitle = screen.queryByText('Latest news');
-      expect(newsTitle).not.toBeInTheDocument();
+      const newsTitle = screen.getByText('Latest news');
+      const standardOfferCarousel = screen.getByText('Standard offer carousel');
+      expect(standardOfferCarousel.compareDocumentPosition(newsTitle)).toBe(2);
     });
   });
 });
+
+const givenRecommendedBrandsAreReturnedFromTheAPI = (recommendedBrands: Brand[]) => {
+  useRecommendedBrandsMock.mockReturnValue(recommendedBrands);
+};
 
 const whenHomePageIsRendered = () => {
   const mockAppContext: Partial<AppStore> = {

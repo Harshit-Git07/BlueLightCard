@@ -9,6 +9,8 @@ import { AppContext } from '@/store';
 import { NewsPreview } from '../news';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import Amplitude from '@/components/Amplitude/Amplitude';
+import PopularBrandsSlider from '@/modules/popularbrands';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -82,7 +84,7 @@ const Offers: FC = () => {
   return (
     <>
       {flexible && (
-        <div className="mb-4">
+        <div className="mb-6">
           <Heading title={headingFeatureFlag ? 'Shop Black Friday' : flexible.title} />
           {expr[Experiments.STREAMLINED_HOMEPAGE] !== 'on' && flexible.subtitle.length && (
             <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
@@ -104,6 +106,10 @@ const Offers: FC = () => {
           />
         </div>
       )}
+      {expr[Experiments.POPULAR_OFFERS] === 'treatment' &&
+        expr[Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER] === 'treatment' && (
+          <PopularBrandsSlider />
+        )}
       {homepagePositionOffersExpr && (
         <section className="mb-6">
           <Heading title={homepagePositionOffersExpr.title} />
@@ -127,7 +133,7 @@ const Offers: FC = () => {
         </section>
       )}
       {expr[Experiments.STREAMLINED_HOMEPAGE] !== 'on' && <NewsPreview />}
-      <div className="my-2">
+      <div className="mb-2">
         {offers.map((group, index) => (
           <section key={`${group.title}_${index}`} className="mb-6">
             <Heading title={group.title} />

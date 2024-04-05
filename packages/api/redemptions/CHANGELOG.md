@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.6](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.5...bluelightcard/redemptions-v1.7.6) (2024-04-05)
+
+
+### Bug Fixes
+
+* **redemptions:** CORS errors for redemptions APIs ([#1136](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1136)) ([11f4faf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11f4faff04e4609a804161c02c5c4c6242602ba5))
+
 ## [1.7.5](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.4...bluelightcard/redemptions-v1.7.5) (2024-04-04)
 
 

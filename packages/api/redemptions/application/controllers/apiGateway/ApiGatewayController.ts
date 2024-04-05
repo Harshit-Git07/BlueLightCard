@@ -1,11 +1,11 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import jwtDecode from 'jwt-decode';
-import micromatch from 'micromatch';
 import { z } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
+import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
-import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { getEnvValidated } from '@blc-mono/core/utils/getEnv';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 import { Controller } from '../Controller';
@@ -43,7 +43,14 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       headers: {
         ...result.headers,
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': allowedOrigin,
+        // IMPORTANT: If you need to update these settings, remember to also
+        //            update the `defaultCorsPreflightOptions` for the API Gateway
+        ...(allowedOrigin && {
+          'Access-Control-Allow-Credentials': 'true',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+          'Access-Control-Allow-Origin': allowedOrigin,
+        }),
       },
     };
   }
@@ -142,15 +149,23 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     }
   }
 
-  protected getAllowedOrigin(request: APIGatewayProxyEventV2): string {
+  protected getAllowedOrigin(request: APIGatewayProxyEventV2): string | undefined {
     const origin = request.headers.origin;
-    const allowedOrigins = JSON.parse(getEnv(RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS)) as
-      | string
-      | string[];
-    if (origin && (micromatch.isMatch(origin, allowedOrigins) || allowedOrigins.includes('*'))) {
+    const allowedOrigins = getEnvValidated(
+      RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
+      JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
+    );
+
+    if (!origin) {
+      return;
+    }
+
+    if (allowedOrigins.includes('*')) {
+      return '*';
+    }
+
+    if (allowedOrigins.includes(origin)) {
       return origin;
-    } else {
-      return '';
     }
   }
 }

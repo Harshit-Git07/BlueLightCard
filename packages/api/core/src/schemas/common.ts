@@ -15,3 +15,5 @@ export const JsonStringSchema = z.string().transform((body, ctx) => {
     return z.NEVER;
   }
 });
+
+export const CORS_ALLOWED_ORIGINS_SCHEMA = z.array(z.string()).min(1);

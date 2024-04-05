@@ -1,6 +1,7 @@
 import { Stack } from 'sst/constructs';
 
-import { getEnv, getEnvRaw } from '@blc-mono/core/utils/getEnv';
+import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
+import { getEnv, getEnvRaw, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
@@ -42,9 +43,9 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
       redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
-        'https://*.bluelightcard.co.uk',
-        'https://*.bluelightcard.com.au',
-        'https://*.defencediscountservice.co.uk',
+        'https://www.bluelightcard.co.uk',
+        'https://www.bluelightcard.com.au',
+        'https://www.defencediscountservice.co.uk',
       ],
       brazeVaultRedemptionVaultCampaignId:
         getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID) ?? '',
@@ -62,10 +63,9 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
       redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: [
-        'https://*.blc-uk.pages.dev',
-        'https://*.blc-au.pages.dev',
-        'https://*.dds-uk.pages.dev',
-        'http://localhost:*',
+        // TODO: Configure origins for DDS and BLC AU
+        'https://www.staging.bluelightcard.co.uk',
+        'http://localhost:3000',
       ],
       brazeVaultRedemptionVaultCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
@@ -81,12 +81,7 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
       redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
-      apiDefaultAllowedOrigins: [
-        'https://*.blc-uk.pages.dev',
-        'https://*.blc-au.pages.dev',
-        'https://*.dds-uk.pages.dev',
-        'http://localhost:*',
-      ],
+      apiDefaultAllowedOrigins: ['*'],
       brazeVaultRedemptionVaultCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
     };
@@ -113,7 +108,10 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCodeAmountIssuedPath: getEnv(
         RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH,
       ),
-      apiDefaultAllowedOrigins: ['*'],
+      apiDefaultAllowedOrigins: getEnvValidated(
+        RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
+        JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
+      ),
       brazeVaultRedemptionVaultCampaignId: getEnv(
         RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID,
       ),

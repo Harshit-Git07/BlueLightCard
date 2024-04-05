@@ -25,7 +25,6 @@ import {
 } from './eventBridge/rules';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { Route } from './routes/route';
-import { Routes } from './routes/routes';
 
 export async function Redemptions({ app, stack }: StackContext) {
   const { certificateArn, vpc, bus } = use(Shared);
@@ -68,6 +67,8 @@ export async function Redemptions({ app, stack }: StackContext) {
         deployOptions: {
           stageName: 'v1',
         },
+        // IMPORTANT: If you need to update these settings, remember to also
+        //            update them in APIGatewayController
         defaultCorsPreflightOptions: {
           allowOrigins: config.apiDefaultAllowedOrigins,
           allowHeaders: ['*'],
@@ -77,6 +78,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       },
     },
   });
+  const restApi = api.cdk.restApi;
 
   // Create API Models
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
@@ -93,9 +95,6 @@ export async function Redemptions({ app, stack }: StackContext) {
     offerUpdatedRule: updateOfferRule(stack, database),
   });
 
-  const allRoutes = new Routes();
-  const restApi = api.cdk.restApi;
-
   // Create permissions
   // TODO: Specify the resource for the secrets manager from Secret.fromSecretCompleteArn (It was not getting the final 6 characters as expected, need to investigate further)
   const getSecretValueSecretsManager = new PolicyStatement({
@@ -110,7 +109,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   });
 
   // functionName is automatically appended with the stage name
-  allRoutes.addRoutes(api, stack, {
+  api.addRoutes(stack, {
     'GET /member/redemptionDetails': Route.createRoute({
       apiGatewayModelGenerator,
       stack,

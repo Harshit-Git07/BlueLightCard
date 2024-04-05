@@ -113,7 +113,6 @@
     "jotai": "^2.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "4.17.21",
-    "micromatch": "4.0.5",
     "next": "^14.0.2",
     "node": "^20.5.1",
     "nodemailer": "^6.9.7",

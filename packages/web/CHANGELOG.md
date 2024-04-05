@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.41.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.41.0...bluelightcard/web-v1.41.1) (2024-04-05)
+
+
+### Bug Fixes
+
+* trigger web release PR creation ([#1140](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1140)) ([47de1f2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/47de1f291dfdef6b0b8c6982bc9da3b76a637420))
+
 ## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.40.0...bluelightcard/web-v1.41.0) (2024-04-03)
 
 

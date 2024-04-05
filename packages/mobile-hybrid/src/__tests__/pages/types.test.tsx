@@ -12,6 +12,7 @@ import Spinner from '@/modules/Spinner';
 import { FC, PropsWithChildren } from 'react';
 import { offerListItemFactory } from '@/modules/List/__mocks__/factory';
 import '@testing-library/jest-dom';
+import BrowseTypesData from '@/data/BrowseTypes';
 
 jest.mock('@/invoke/apiCall');
 let mockRouter: Partial<NextRouter> = {
@@ -47,17 +48,20 @@ describe('Types Page', () => {
       .spyOn(InvokeNativeAPICall.prototype, 'requestData')
       .mockImplementation(() => jest.fn());
 
-    it('should get the correct type id', () => {
-      givenTypeQueryParamIs('5');
+    it.each(BrowseTypesData.map((type) => type.id))(
+      'should request types for type: %s',
+      (typeId) => {
+        givenTypeQueryParamIs(typeId.toString());
 
-      whenTypesPageIsRendered();
+        whenTypesPageIsRendered();
 
-      expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
-        typeid: '5',
-        page: '1',
-        service: userServiceValue,
-      });
-    });
+        expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
+          typeid: typeId.toString(),
+          page: '1',
+          service: userServiceValue,
+        });
+      },
+    );
 
     it('should display types variant list module', async () => {
       const offerData = offerListItemFactory.build();

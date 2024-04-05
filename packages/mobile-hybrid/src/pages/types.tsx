@@ -23,13 +23,13 @@ const TypesPage: NextPage = () => {
   }, [typesQueryParam]);
 
   useEffect(() => {
-    if (typesQueryParam && isValidTypeId) {
+    if (typesQueryParam !== undefined && isValidTypeId) {
       setSpinner(true);
     }
   }, [typesQueryParam, setSpinner, isValidTypeId]);
 
   useEffect(() => {
-    if (typesQueryParam && !isValidTypeId) {
+    if (typesQueryParam !== undefined && !isValidTypeId) {
       router.push('/search');
     }
   }, [typesQueryParam, isValidTypeId, router]);
@@ -44,7 +44,7 @@ const TypesPage: NextPage = () => {
           aria-hidden="true"
         />
       </button>
-      {typesQueryParam && isValidTypeId && (
+      {typesQueryParam !== undefined && isValidTypeId && (
         <List listVariant={ListVariant.Types} entityId={typesQueryParam} />
       )}
     </div>

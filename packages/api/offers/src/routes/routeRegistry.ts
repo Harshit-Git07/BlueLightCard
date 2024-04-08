@@ -10,6 +10,8 @@ import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { IDatabaseAdapter } from '../constructs/database/IDatabaseAdapter';
 import { CompanyOfferRoutes } from './company/offers/companyOfferRoutes';
 import { CompanyOffersModel } from 'src/models/companyOffers';
+import { OffersHomepageRoutes } from './offers/homepage/homepageRoutes';
+import { OffersHomepageModel } from 'src/models/offersHomepage';
 
 /**
  * The RouteRegistry class provides a centralized way to register all routes for the application.
@@ -55,6 +57,12 @@ export class RouteRegistry {
       apiGatewayModelGenerator,
       model: modelMap.get('CompanyOffersModel')!,
     }).initialiseRoutes();
+    new OffersHomepageRoutes({
+      stack,
+      api,
+      apiGatewayModelGenerator,
+      model: modelMap.get('OffersHomepageModel')!,
+    }).initialiseRoutes();
   }
 
   private generateModels(agmg: ApiGatewayModelGenerator): Map<string, Model> {
@@ -62,6 +70,7 @@ export class RouteRegistry {
     models.set('OfferModel', agmg.generateModel(OfferModel).getModel());
     models.set('CompanyInfoModel', agmg.generateModel(CompanyInfoModel).getModel());
     models.set('CompanyOffersModel', agmg.generateModel(CompanyOffersModel).getModel());
+    models.set('OffersHomepageModel', agmg.generateModel(OffersHomepageModel).getModel());
     return models;
   }
 }

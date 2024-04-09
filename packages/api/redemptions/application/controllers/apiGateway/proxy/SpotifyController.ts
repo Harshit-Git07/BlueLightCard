@@ -20,10 +20,10 @@ export class SpotifyController extends APIGatewayController<SpotifyRequestModel>
   static readonly inject = [Logger.key, SpotifyService.key] as const;
 
   constructor(
-    protected readonly logger: ILogger,
+    logger: ILogger,
     private readonly spotifyService: ISpotifyService,
   ) {
-    super();
+    super(logger);
   }
 
   protected parseRequest(request: APIGatewayProxyEventV2): Result<ParsedRequest, ParseRequestError> {

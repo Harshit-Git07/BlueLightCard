@@ -23,10 +23,10 @@ export class RedeemController extends APIGatewayController<RedeemRequestModel> {
   static readonly inject = [Logger.key, RedeemService.key] as const;
 
   constructor(
-    protected readonly logger: ILogger,
+    logger: ILogger,
     private readonly redeemService: IRedeemService,
   ) {
-    super();
+    super(logger);
   }
 
   protected parseRequest(request: APIGatewayProxyEventV2): Result<ParsedRequest, ParseRequestError> {

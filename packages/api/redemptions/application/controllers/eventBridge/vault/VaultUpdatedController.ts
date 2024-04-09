@@ -41,13 +41,20 @@ export class VaultUpdatedController extends EventBridgeController<VaultUpdatedEv
   static readonly inject = [Logger.key, VaultService.key] as const;
 
   constructor(
-    protected logger: ILogger,
+    logger: ILogger,
     protected vaultService: IVaultService,
   ) {
-    super();
+    super(logger);
   }
 
   protected parseRequest(request: UnknownEventBridgeEvent): Result<VaultUpdatedEvent, Error> {
+    // TODO: Remove this log message after migration
+    this.logger.info({
+      message: 'Parsing request',
+      context: {
+        request,
+      },
+    });
     return this.zodParseRequest(request, VaultUpdatedEventSchema);
   }
 

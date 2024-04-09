@@ -35,13 +35,20 @@ export class OfferUpdatedController extends EventBridgeController<OfferUpdatedEv
   static readonly inject = [Logger.key, OfferUpdatedService.key] as const;
 
   constructor(
-    protected logger: ILogger,
+    logger: ILogger,
     protected offerUpdatedService: IOfferUpdatedService,
   ) {
-    super();
+    super(logger);
   }
 
   protected parseRequest(request: UnknownEventBridgeEvent): Result<OfferUpdatedEvent, Error> {
+    // TODO: Remove this log message after migration
+    this.logger.info({
+      message: 'Parsing request',
+      context: {
+        request,
+      },
+    });
     return this.zodParseRequest(request, OfferUpdatedEventSchema);
   }
 

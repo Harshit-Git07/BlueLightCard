@@ -1,6 +1,6 @@
 export interface ILoggerDetail {
   message: string;
-  context?: unknown;
+  context?: Record<string, unknown>;
 }
 
 export enum LogLevel {

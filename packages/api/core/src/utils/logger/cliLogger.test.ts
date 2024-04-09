@@ -6,8 +6,6 @@ import { CliLogger } from './cliLogger';
 const chalk = new Instance({ level: 0 });
 
 describe('CliLogger', () => {
-  const mockTimestamp = '2023-01-01T00:00:00.000Z';
-
   describe('info method', () => {
     it('should log info level messages', () => {
       // Arrange
@@ -18,7 +16,7 @@ describe('CliLogger', () => {
       logger.info({ message: 'Test Info' });
 
       // Assert
-      expect(log.mock.calls.at(-1)).toMatchInlineSnapshot(`
+      expect(log.mock.lastCall).toMatchInlineSnapshot(`
         [
           "[INFO] Test Info",
         ]
@@ -36,7 +34,7 @@ describe('CliLogger', () => {
       logger.debug({ message: 'Test Debug' });
 
       // Assert
-      expect(log.mock.calls.at(-1)).toMatchInlineSnapshot(`
+      expect(log.mock.lastCall).toMatchInlineSnapshot(`
         [
           "[DEBUG] Test Debug",
         ]
@@ -54,7 +52,7 @@ describe('CliLogger', () => {
       logger.warn({ message: 'Test Warn' });
 
       // Assert
-      expect(warn.mock.calls.at(-1)).toMatchInlineSnapshot(`
+      expect(warn.mock.lastCall).toMatchInlineSnapshot(`
         [
           "[WARNING] Test Warn",
         ]
@@ -72,7 +70,7 @@ describe('CliLogger', () => {
       logger.error({ message: 'Test Error' });
 
       // Assert
-      expect(error.mock.calls.at(-1)).toMatchInlineSnapshot(`
+      expect(error.mock.lastCall).toMatchInlineSnapshot(`
         [
           "[ERROR] Test Error",
         ]

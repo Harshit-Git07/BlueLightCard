@@ -35,13 +35,20 @@ export class PromotionUpdateController extends EventBridgeController<PromotionUp
   static readonly inject = [Logger.key, PromotionUpdateService.key] as const;
 
   constructor(
-    protected readonly logger: ILogger,
+    logger: ILogger,
     private readonly promotionsUpdateService: IPromotionUpdateService,
   ) {
-    super();
+    super(logger);
   }
 
   protected parseRequest(request: UnknownEventBridgeEvent): Result<PromotionUpdatedEvent, Error> {
+    // TODO: Remove this log message after migration
+    this.logger.info({
+      message: 'Parsing request',
+      context: {
+        request,
+      },
+    });
     return this.zodParseRequest(request, PromotionUpdatedEventSchema);
   }
 

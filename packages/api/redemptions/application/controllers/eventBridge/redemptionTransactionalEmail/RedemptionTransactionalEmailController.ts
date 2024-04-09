@@ -43,10 +43,10 @@ export class RedemptionTransactionalEmailController extends EventBridgeControlle
   static inject = [Logger.key, EmailService.key] as const;
 
   constructor(
-    protected logger: ILogger,
+    logger: ILogger,
     private emailService: IEmailService,
   ) {
-    super();
+    super(logger);
   }
 
   protected parseRequest(request: UnknownEventBridgeEvent): Result<RedemptionTransactionalEmailEvent, Error> {

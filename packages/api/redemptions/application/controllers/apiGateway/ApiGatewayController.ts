@@ -29,6 +29,14 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
   ParsedRequest,
   ParseRequestError
 > {
+  protected onRequest(request: APIGatewayProxyEventV2): void {
+    this.setDefaultLoggerDetail({
+      context: {
+        tracingId: request.requestContext.requestId,
+      },
+    });
+  }
+
   protected formatResponse(
     request: APIGatewayProxyEventV2,
     result: APIGatewayResult,
@@ -59,7 +67,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     request: APIGatewayProxyEventV2,
     err: unknown,
   ): Promise<APIGatewayProxyStructuredResultV2> {
-    this.logUnhandledError(request.requestContext.requestId, err);
+    this.logUnhandledError(err);
 
     return {
       statusCode: 500,

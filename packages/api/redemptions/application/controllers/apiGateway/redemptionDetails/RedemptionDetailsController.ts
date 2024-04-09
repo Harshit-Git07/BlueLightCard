@@ -35,10 +35,10 @@ export class RedemptionDetailsController extends APIGatewayController<GetRedempt
   static readonly inject = [Logger.key, RedemptionDetailsService.key] as const;
 
   constructor(
-    protected readonly logger: ILogger,
+    logger: ILogger,
     private readonly redemptionDetailsService: IRedemptionDetailsService,
   ) {
-    super();
+    super(logger);
   }
 
   protected parseRequest(request: APIGatewayProxyEventV2): Result<GetRedemptionDetailsRequestModel, ParseRequestError> {

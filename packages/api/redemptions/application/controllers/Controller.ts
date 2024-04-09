@@ -1,5 +1,12 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 import { Result } from '@blc-mono/core/types/result';
-import { ILogger } from '@blc-mono/core/utils/logger/logger';
+import { ContextAwareLogger, LoggerContext } from '@blc-mono/core/utils/logger/contextAwareLogger';
+import { ILogger, ILoggerDetail } from '@blc-mono/core/utils/logger/logger';
+
+type RequestContext = LoggerContext;
+const INITIAL_REQUEST_CONTEXT: RequestContext = { logger: {} };
+const asyncRequestContext = new AsyncLocalStorage<RequestContext>();
 
 export abstract class Controller<
   Request,
@@ -8,43 +15,68 @@ export abstract class Controller<
   ParsedRequest = Request,
   ParseRequestError = unknown,
 > {
-  protected abstract logger: ILogger;
+  protected readonly logger: ILogger;
 
-  constructor() {
+  constructor(logger: ILogger) {
     this.invoke = this.invoke.bind(this);
+
+    this.logger = new ContextAwareLogger(asyncRequestContext, logger);
   }
 
   public async invoke(request: Request): Promise<Response> {
-    let parseRequestResult: Result<ParsedRequest, ParseRequestError>;
-    try {
-      parseRequestResult = this.parseRequest(request);
-    } catch (err) {
-      return await this.onUnhandledError(request, err);
-    }
+    return asyncRequestContext.run(INITIAL_REQUEST_CONTEXT, async () => {
+      try {
+        this.onRequest?.(request);
 
-    if (parseRequestResult.isFailure) {
-      return await this.onParseError(request, parseRequestResult.error);
-    }
+        const parseRequestResult = this.parseRequest(request);
+        if (parseRequestResult.isFailure) {
+          return await this.onParseError(request, parseRequestResult.error);
+        }
 
-    try {
-      const result = await this.handle(parseRequestResult.value);
-      return this.formatResponse(request, result);
-    } catch (err) {
-      return await this.onUnhandledError(request, err);
-    }
+        const result = await this.handle(parseRequestResult.value);
+
+        return this.formatResponse(request, result);
+      } catch (err) {
+        return await this.onUnhandledError(request, err);
+      }
+    });
   }
+  /**
+   * Called when the request is received in the invoke method. This method is
+   * called before anything else and and can be used to set up any context that
+   * is needed for the request. For example, this can be used to set the default
+   * logger detail for the request.
+   *
+   * @param request The incoming request
+   */
+  protected abstract onRequest(request: Request): void;
   protected abstract parseRequest(request: Request): Result<ParsedRequest, ParseRequestError>;
   protected abstract handle(request: ParsedRequest): Promise<HandlerResult>;
   protected abstract formatResponse(request: Request, result: HandlerResult): Response;
   protected abstract onUnhandledError(request: Request, err: unknown): Promise<Response>;
   protected abstract onParseError(request: Request, err: ParseRequestError): Promise<Response>;
-  protected logUnhandledError(tracingId: string, err: unknown): void {
+  protected setDefaultLoggerDetail(detail: Partial<ILoggerDetail>): void {
+    const requestContext = asyncRequestContext.getStore();
+
+    if (!requestContext) {
+      this.logger.error({
+        message: '[UNHANDLED ERROR] Attempted to set default logger detail outside of request context',
+        context: {
+          controller: this.constructor.name || 'Controller (unknown)',
+          location: 'Controller.setDefaultLoggerDetail',
+        },
+      });
+      return;
+    }
+
+    requestContext.logger.defaultLoggerDetail = detail;
+  }
+  protected logUnhandledError(err: unknown): void {
     this.logger.error({
       message: '[UNHANDLED ERROR] There was an unhandled error processing the event',
       context: {
-        controller: this.constructor.name || 'EventBridgeController (unknown)',
-        location: 'EventBridgeController.onUnhandledError',
-        tracingId,
+        controller: this.constructor.name || 'Controller (unknown)',
+        location: 'Controller.onUnhandledError',
         error: this.displayError(err),
       },
     });

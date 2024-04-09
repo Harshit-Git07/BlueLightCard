@@ -14,6 +14,14 @@ export abstract class EventBridgeController<ParsedRequest> extends Controller<
   ParsedRequest,
   Error
 > {
+  protected onRequest(request: UnknownEventBridgeEvent): void {
+    this.setDefaultLoggerDetail({
+      context: {
+        tracingId: request.id,
+      },
+    });
+  }
+
   protected formatResponse(request: UnknownEventBridgeEvent): void {
     // There is no option to return a response to the caller in this context so
     // instead we log that the event was handled successfully.
@@ -27,8 +35,8 @@ export abstract class EventBridgeController<ParsedRequest> extends Controller<
     });
   }
 
-  protected async onUnhandledError(request: UnknownEventBridgeEvent, err: unknown): Promise<void> {
-    this.logUnhandledError(request.id, err);
+  protected async onUnhandledError(_: UnknownEventBridgeEvent, err: unknown): Promise<void> {
+    this.logUnhandledError(err);
 
     throw err;
   }

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.6...bluelightcard/redemptions-v1.8.0) (2024-04-09)
+
+
+### Features
+
+* transactional email settings ([#1129](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1129)) ([143baa3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/143baa3cb52238bfd51a3cea02a6f6872cbd6be5))
+
+
+### Bug Fixes
+
+* [TR-398]: Log migration event payloads, and add tracing ID to all logs ([#1145](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1145)) ([6482799](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6482799d877bedb90064082e7e13d903d0b061fe))
+
 ## [1.7.6](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.5...bluelightcard/redemptions-v1.7.6) (2024-04-05)
 
 

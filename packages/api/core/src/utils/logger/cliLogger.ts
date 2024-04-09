@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalkDefault, { type Chalk } from 'chalk';
 import { ILoggerDetail, Logger } from './logger';
 
 export interface ICliLoggerDetail extends ILoggerDetail {}
@@ -12,29 +12,34 @@ export interface ICliLoggerDetail extends ILoggerDetail {}
  * - ❌ No additional context (e.g. timestamp)
  */
 export class CliLogger extends Logger<ICliLoggerDetail> {
-  static CONTEXT = chalk.gray;
-  static INFO = chalk.white.bold;
-  static DEBUG = chalk.gray.bold;
-  static WARN = chalk.yellow.bold;
-  static ERROR = chalk.red.bold;
+  constructor(
+    private readonly _chalk: Chalk = chalkDefault,
+    private CONTEXT = _chalk.gray,
+    private INFO = _chalk.white.bold,
+    private DEBUG = _chalk.gray.bold,
+    private WARN = _chalk.yellow.bold,
+    private ERROR = _chalk.red.bold,
+  ) {
+    super();
+  }
 
   info({ message, context }: ICliLoggerDetail) {
-    console.log(CliLogger.INFO(`[INFO] ${message}`));
+    console.log(this.INFO(`[INFO] ${message}`));
     this.logContext(context);
   }
 
   debug({ message, context }: ICliLoggerDetail) {
-    console.log(CliLogger.DEBUG(`[DEBUG] ${message}`));
+    console.log(this.DEBUG(`[DEBUG] ${message}`));
     this.logContext(context);
   }
 
   warn({ message, context }: ICliLoggerDetail) {
-    console.warn(CliLogger.WARN(`[WARNING] ${message}`));
+    console.warn(this.WARN(`[WARNING] ${message}`));
     this.logContext(context);
   }
 
   error({ message, context }: ICliLoggerDetail) {
-    console.error(CliLogger.ERROR(`[ERROR] ${message}`));
+    console.error(this.ERROR(`[ERROR] ${message}`));
     this.logContext(context);
   }
 
@@ -43,7 +48,7 @@ export class CliLogger extends Logger<ICliLoggerDetail> {
       return;
     }
 
-    console.log(CliLogger.CONTEXT(`[CONTEXT] ${this.stringifyContext(context)}`));
+    console.log(this.CONTEXT(`[CONTEXT] ${this.stringifyContext(context)}`));
   }
 
   private stringifyContext(context: unknown) {

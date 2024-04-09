@@ -6,6 +6,7 @@ on:
     paths:
       - packages/api/identity/**
       - packages/api/identity/CHANGELOG.md
+      - packages/api/core/**
       - stacks/**
       - .github/workflows/identity.yml
       - package-lock.json
@@ -15,6 +16,7 @@ on:
     paths:
       - packages/api/identity/**
       - packages/api/identity/CHANGELOG.md
+      - packages/api/core/**
       - stacks/**
       - .github/workflows/identity.yml
       - package-lock.json

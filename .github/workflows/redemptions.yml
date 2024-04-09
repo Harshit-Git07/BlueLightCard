@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - packages/api/redemptions/**
+      - packages/api/core/**
       - stacks/**
       - .github/workflows/redemptions.yml
       - package-lock.json
@@ -13,6 +14,7 @@ on:
   pull_request:
     paths:
       - packages/api/redemptions/**
+      - packages/api/core/**
       - stacks/**
       - .github/workflows/redemptions.yml
       - package-lock.json

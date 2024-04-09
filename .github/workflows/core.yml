@@ -1,0 +1,56 @@
+name: Core
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/api/core/**
+      - .github/workflows/core.yml
+      - package-lock.json
+      - package.json
+  pull_request:
+    paths:
+      - packages/api/core/**
+      - .github/workflows/core.yml
+      - package-lock.json
+      - package.json
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Generate SST Types
+        run: npx sst types --stage staging
+      - name: Test
+        run: npm run test -w packages/api/core
+
+  typecheck:
+    name: Check Types
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Generate SST Types
+        run: npx sst types --stage staging
+      - name: Check Types
+        run: npm run typecheck -w packages/api/core

@@ -6,6 +6,7 @@ on:
     paths:
       - packages/api/offers/**
       - packages/api/offers/CHANGELOG.md
+      - packages/api/core/**
       - packages/cms/**
       - stacks/**
       - .github/workflows/offers.yml
@@ -16,6 +17,7 @@ on:
     paths:
       - packages/api/offers/**
       - packages/api/offers/CHANGELOG.md
+      - packages/api/core/**
       - packages/cms/**
       - stacks/**
       - .github/workflows/offers.yml

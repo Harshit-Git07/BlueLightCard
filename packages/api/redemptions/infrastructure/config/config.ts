@@ -56,7 +56,8 @@ export class RedemptionsStackConfigResolver {
   public static forStagingStage(): RedemptionsStackConfig {
     return {
       redemptionsLambdaScriptsSecretName: 'blc-mono-redemptions/NewVaultSecrets',
-      redemptionsLambdaScriptsEnvironment: 'staging',
+      // TODO: Temporary until we have vaults for staging
+      redemptionsLambdaScriptsEnvironment: 'develop',
       redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
       redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
       redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',

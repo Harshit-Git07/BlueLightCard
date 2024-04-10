@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MagicButton from '../../../MagicButton/MagicButton';
@@ -6,27 +6,49 @@ import Label from '../../../Label/Label';
 import OfferTopDetailsHeader from '../../OfferTopDetailsHeader/OfferTopDetailsHeader';
 import AmplitudeContext from '@/context/AmplitudeContext';
 import UserContext from '@/context/User/UserContext';
-import amplitudeEvents from '@/utils/amplitude/events';
 import { RedeemData } from '@/types/api/redemptions';
 import { RedemptionPage } from '../RedemptionPage';
 import { Logger } from '@/services/Logger';
 import { OfferData } from '@/types/api/offers';
 import { OfferDetailsErrorPage } from '../../OfferDetailsPage/OfferDetailsErrorPage';
+import { logVaultCodeRequestClicked } from '@/root/src/common/utils/amplitude/logVaultCodeRequestClicked';
+import { usePathname } from 'next/navigation';
+import { logVaultCodeRequestViewed } from '@/root/src/common/utils/amplitude/logVaultCodeRequestViewed';
 
 // TODO: Split this out into components for each redemption type
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props, hooks) => {
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
+  const pathname = usePathname();
+
+  const logClick = () => {
+    logVaultCodeRequestClicked({
+      amplitude,
+      userUuid: userCtx.user?.uuid,
+      eventSource: 'sheet',
+      origin: pathname,
+      offerId: props.offerMeta.offerId,
+      offerName: props.offerData.name,
+      companyId: props.offerMeta.companyId,
+      companyName: props.offerMeta.companyName,
+    });
+  };
+
+  const logCodeView = () => {
+    logVaultCodeRequestViewed({
+      amplitude,
+      userUuid: userCtx.user?.uuid,
+      eventSource: 'sheet',
+      origin: pathname,
+      offerId: props.offerMeta.offerId,
+      offerName: props.offerData.name,
+      companyId: props.offerMeta.companyId,
+      companyName: props.offerMeta.companyName,
+    });
+  };
 
   hooks.useOnRedeemed((redeemData) => {
-    amplitude?.setUserId(userCtx.user?.uuid ?? '');
-    amplitude?.trackEventAsync(amplitudeEvents.VAULT_CODE_REQUEST_CLICKED, {
-      company_id: props.offerMeta.companyId,
-      company_name: props.offerMeta.companyName,
-      offer_id: props.offerMeta.offerId,
-      offer_name: props.offerData.name,
-      source: 'sheet',
-    });
+    logClick();
     const timeout = setTimeout(
       () => redirectToOffer(props.offerData, redeemData as RedeemData),
       1500
@@ -64,11 +86,17 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props, hooks) => {
           <MagicButton
             variant="secondary"
             className="w-full"
-            onClick={() => redirectToOffer(props.offerData, props.redeemData as RedeemData)}
+            onClick={() => {
+              logClick();
+              redirectToOffer(props.offerData, props.redeemData as RedeemData);
+            }}
             animate
           >
             <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
-              <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
+              <div
+                onLoad={() => logCodeView()}
+                className="text-md font-bold text-center flex justify-center gap-2 items-center"
+              >
                 <FontAwesomeIcon icon={faWandMagicSparkles} />
                 {props.redeemData.redemptionType === 'preApplied'
                   ? 'Discount automatically applied'

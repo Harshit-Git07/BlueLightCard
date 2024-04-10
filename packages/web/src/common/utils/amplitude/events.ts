@@ -9,6 +9,7 @@ const events = {
   SERP_SEARCH_STARTED: 'SERP_search_started',
   OFFER_VIEWED: 'offer_viewed',
   VAULT_CODE_REQUEST_CLICKED: 'vault_code_request_code_clicked',
+  VAULT_CODE_REQUEST_VIEWED: 'vault_code_request_code_viewed',
 };
 
 export default events;

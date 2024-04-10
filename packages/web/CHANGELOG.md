@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.41.1...bluelightcard/web-v1.42.0) (2024-04-10)
+
+
+### Features
+
+* add amplitude events on view code and click redirect; refactor on click get discount ([#1143](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1143)) ([5516436](https://github.com/bluelightcard/BlueLightCard-2.0/commit/551643695380793e09ab5f94544668c28577f825))
+
+
+### Bug Fixes
+
+* redeem with offer name and company name ([#1154](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1154)) ([c3d0475](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c3d0475078f984725a526e994192c0dfdd97ca9b))
+
 ## [1.41.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.41.0...bluelightcard/web-v1.41.1) (2024-04-05)
 
 

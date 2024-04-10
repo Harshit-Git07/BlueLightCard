@@ -1,6 +1,7 @@
 export interface ILoggerDetail {
   message: string;
   context?: Record<string, unknown>;
+  error?: unknown;
 }
 
 export enum LogLevel {
@@ -24,4 +25,21 @@ export abstract class Logger<Detail extends ILoggerDetail> implements ILogger<De
   abstract debug(detail: ILoggerDetail): void;
   abstract error(detail: ILoggerDetail): void;
   abstract warn(detail: ILoggerDetail): void;
+
+  protected serializeError(error: unknown): { message: string; stack?: string } | undefined {
+    if (error === undefined) {
+      return undefined;
+    }
+
+    if (error instanceof Error) {
+      return {
+        message: error.message,
+        stack: error.stack,
+      };
+    }
+
+    return {
+      message: String(error),
+    };
+  }
 }

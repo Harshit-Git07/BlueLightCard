@@ -32,6 +32,10 @@ describe('RedemptionDetailsController', () => {
           max: 1_000_000,
         }),
       },
+      headers: {
+        Authorization: 'Bearer token',
+      },
+      memberId: faker.string.numeric(8),
     });
 
     // Assert
@@ -60,6 +64,10 @@ describe('RedemptionDetailsController', () => {
           max: 1_000_000,
         }),
       },
+      headers: {
+        Authorization: 'Bearer token',
+      },
+      memberId: faker.string.numeric(8),
     });
 
     // Assert

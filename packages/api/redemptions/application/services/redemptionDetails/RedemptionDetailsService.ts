@@ -1,5 +1,7 @@
+import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
+import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
 import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
 export type RedemptionDetailsResult =
@@ -14,16 +16,20 @@ export type RedemptionDetailsResult =
     };
 
 export interface IRedemptionDetailsService {
-  getRedemptionDetails(offerId: number): Promise<RedemptionDetailsResult>;
+  getRedemptionDetails(offerId: number, memberId: string): Promise<RedemptionDetailsResult>;
 }
 
 export class RedemptionDetailsService implements IRedemptionDetailsService {
   static readonly key = 'RedemptionDetailsService';
-  static readonly inject = [RedemptionsRepository.key] as const;
+  static readonly inject = [Logger.key, RedemptionsRepository.key, DwhRepository.key] as const;
 
-  constructor(private readonly redemptionsRepository: IRedemptionsRepository) {}
+  constructor(
+    private readonly logger: ILogger,
+    private readonly redemptionsRepository: IRedemptionsRepository,
+    private readonly dwhRepository: IDwhRepository,
+  ) {}
 
-  public async getRedemptionDetails(offerId: number): Promise<RedemptionDetailsResult> {
+  public async getRedemptionDetails(offerId: number, memberId: string): Promise<RedemptionDetailsResult> {
     const redemption = await this.redemptionsRepository.findOneByOfferId(offerId);
 
     if (!redemption) {
@@ -31,6 +37,13 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
         kind: 'RedemptionNotFound',
       };
     }
+
+    await this.dwhRepository.logOfferView(offerId, redemption.companyId, memberId).catch((error) => {
+      this.logger.error({
+        message: 'Failed to log offer view',
+        error,
+      });
+    });
 
     return {
       kind: 'Ok',

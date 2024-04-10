@@ -2,6 +2,8 @@ import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatem
 import { EventBus, StackContext } from 'sst/constructs';
 import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
 import { Network } from './infra/network';
+import { isProduction } from '@blc-mono/core/src/utils/checkEnvironment';
+import { DwhKenisisFirehoseStreams } from './infra/firehose/DwhKenisisFirehoseStreams';
 
 interface ICertificate {
   certificateArn?: string;
@@ -40,6 +42,9 @@ export function Shared({ stack }: StackContext) {
   // Create VPC for production and staging
   const network = new Network(stack);
 
+  // Create DWH Kinesis Firehose Streams
+  const dwhKenisisFirehoseStreams = new DwhKenisisFirehoseStreams(stack);
+
   stack.addOutputs({
     EventBusName: bus.eventBusName,
     webACL: webACL.name,
@@ -51,5 +56,6 @@ export function Shared({ stack }: StackContext) {
     certificateArn,
     webACL,
     vpc: network.vpc,
+    dwhKenisisFirehoseStreams,
   };
 }

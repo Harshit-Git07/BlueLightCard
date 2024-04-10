@@ -5,9 +5,8 @@ import { IRedeemStrategy, RedeemPreAppliedStrategyResult } from './IRedeemStrate
 export class RedeemPreAppliedStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemPreAppliedStrategy' as const;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async redeem(redemption: Redemption): Promise<RedeemPreAppliedStrategyResult> {
-    console.log('handlePreAppliedRedemption', redemption);
-
     return {
       kind: 'Ok',
       redemptionType: 'preApplied',

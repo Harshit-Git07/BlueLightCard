@@ -92,12 +92,12 @@ describe('GET /member/redemptionDetails', () => {
 
     // Assert
     const body = await result.json();
-    expect(result.status).toBe(200);
     expect(body).toEqual({
       data: {
         redemptionType: redemption.redemptionType,
       },
       statusCode: 200,
     });
+    expect(result.status).toBe(200);
   });
 });

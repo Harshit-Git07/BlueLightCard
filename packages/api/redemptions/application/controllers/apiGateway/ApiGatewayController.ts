@@ -41,7 +41,6 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     request: APIGatewayProxyEventV2,
     result: APIGatewayResult,
   ): APIGatewayProxyStructuredResultV2 {
-    const allowedOrigin = this.getAllowedOrigin(request);
     return {
       statusCode: result.statusCode,
       body: JSON.stringify({
@@ -51,14 +50,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       headers: {
         ...result.headers,
         'Content-Type': 'application/json',
-        // IMPORTANT: If you need to update these settings, remember to also
-        //            update the `defaultCorsPreflightOptions` for the API Gateway
-        ...(allowedOrigin && {
-          'Access-Control-Allow-Credentials': 'true',
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-          'Access-Control-Allow-Origin': allowedOrigin,
-        }),
+        ...this.getCorsHeaders(request),
       },
     };
   }
@@ -79,6 +71,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       }),
       headers: {
         'Content-Type': 'application/json',
+        ...this.getCorsHeaders(request),
       },
     };
   }
@@ -114,11 +107,11 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
 
   // ====== Helpers ======
 
-  protected zodParseRequest(
+  protected zodParseRequest<TOutput>(
     request: APIGatewayProxyEventV2,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    schema: z.ZodObject<any, any, any, ParsedRequest, any>,
-  ): Result<ParsedRequest, ParseRequestError> {
+    schema: z.ZodObject<any, any, any, TOutput, any>,
+  ): Result<TOutput, ParseRequestError> {
     const result = schema.safeParse(request);
 
     if (result.success) {
@@ -157,7 +150,24 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     }
   }
 
-  protected getAllowedOrigin(request: APIGatewayProxyEventV2): string | undefined {
+  // ================================= HELPERS =================================
+
+  private getCorsHeaders(request: APIGatewayProxyEventV2): { [key: string]: string } {
+    const allowedOrigin = this.getAllowedOrigin(request);
+    if (!allowedOrigin) {
+      return {};
+    }
+    return {
+      // IMPORTANT: If you need to update these settings, remember to also
+      //            update the `defaultCorsPreflightOptions` for the API Gateway
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+      'Access-Control-Allow-Origin': allowedOrigin,
+    };
+  }
+
+  private getAllowedOrigin(request: APIGatewayProxyEventV2): string | undefined {
     const origin = request.headers.origin;
     const allowedOrigins = getEnvValidated(
       RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,

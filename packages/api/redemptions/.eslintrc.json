@@ -4,6 +4,8 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "simple-import-sort"],
   "rules": {
+    // Use an ILogger instance instead of console.log and variants
+    "no-console": ["error"],
     "simple-import-sort/imports": [
       "error",
       {

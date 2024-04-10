@@ -17,6 +17,7 @@ type TestUserDetails = {
   email: string;
   password: string;
   attributes: {
+    blcOldId: number;
     blcOldUuid: string;
   };
 };
@@ -68,6 +69,10 @@ export class TestUser {
       email: `e2e-${faker.internet.email()}`,
       password: faker.internet.password(),
       attributes: {
+        blcOldId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
         blcOldUuid: faker.string.uuid(),
       },
     };
@@ -89,6 +94,7 @@ export class TestUser {
           { Name: 'email', Value: userDetail.email },
           { Name: 'email_verified', Value: 'true' },
           // Custom attributes
+          { Name: 'custom:blc_old_id', Value: userDetail.attributes.blcOldId.toString() },
           { Name: 'custom:blc_old_uuid', Value: userDetail.attributes.blcOldUuid },
           // Tag user as test user (in case we need to manually cleanup later)
           { Name: 'custom:e2e', Value: 'true' },

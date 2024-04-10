@@ -23,27 +23,31 @@ export class CliLogger extends Logger<ICliLoggerDetail> {
     super();
   }
 
-  info({ message, context }: ICliLoggerDetail) {
+  info({ message, context, error }: ICliLoggerDetail) {
     console.log(this.INFO(`[INFO] ${message}`));
     this.logContext(context);
+    this.logError(error);
   }
 
-  debug({ message, context }: ICliLoggerDetail) {
+  debug({ message, context, error }: ICliLoggerDetail) {
     console.log(this.DEBUG(`[DEBUG] ${message}`));
     this.logContext(context);
+    this.logError(error);
   }
 
-  warn({ message, context }: ICliLoggerDetail) {
+  warn({ message, context, error }: ICliLoggerDetail) {
     console.warn(this.WARN(`[WARNING] ${message}`));
     this.logContext(context);
+    this.logError(error);
   }
 
-  error({ message, context }: ICliLoggerDetail) {
+  error({ message, context, error }: ICliLoggerDetail) {
     console.error(this.ERROR(`[ERROR] ${message}`));
     this.logContext(context);
+    this.logError(error);
   }
 
-  private logContext(context?: unknown) {
+  private logContext(context: unknown) {
     if (context === undefined) {
       return;
     }
@@ -56,5 +60,15 @@ export class CliLogger extends Logger<ICliLoggerDetail> {
       return context;
     }
     return JSON.stringify(context);
+  }
+
+  private logError(error: unknown) {
+    const serialized = this.serializeError(error);
+
+    if (serialized === undefined) {
+      return;
+    }
+
+    console.error(this.CONTEXT(`${serialized.message}\n${serialized.stack}`));
   }
 }

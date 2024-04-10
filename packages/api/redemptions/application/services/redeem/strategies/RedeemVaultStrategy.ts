@@ -15,9 +15,8 @@ import {
 } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 
 import { Redemption } from '../../../repositories/RedemptionsRepository';
-import { StrategyParams } from '../RedeemService';
 
-import { IRedeemStrategy, RedeemVaultStrategyResult } from './IRedeemStrategy';
+import { IRedeemStrategy, RedeemParams, RedeemVaultStrategyResult } from './IRedeemStrategy';
 
 export class RedeemVaultStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemVaultStrategy' as const;
@@ -35,7 +34,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     private readonly logger: ILogger,
   ) {}
 
-  async redeem(redemption: Redemption, params: StrategyParams): Promise<RedeemVaultStrategyResult> {
+  async redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemVaultStrategyResult> {
     const vault = await this.vaultsRepository.findOneByRedemptionId(redemption.id, {
       status: 'active',
     });

@@ -18,8 +18,7 @@ import {
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { StrategyParams } from '../RedeemService';
-
+import { RedeemParams } from './IRedeemStrategy';
 import { RedeemGenericStrategy } from './RedeemGenericStrategy';
 import { RedeemVaultStrategy } from './RedeemVaultStrategy';
 
@@ -34,7 +33,7 @@ describe('Redemption Strategies', () => {
       options: { silent?: boolean } = {},
     ) {
       const genericsRepository = new GenericsRepository(connection);
-      const service = new RedeemGenericStrategy(genericsRepository, options.silent ? mockedLogger : mockedSilentLogger);
+      const service = new RedeemGenericStrategy(genericsRepository, options.silent ? mockedSilentLogger : mockedLogger);
       return service.redeem(redemption);
     }
 
@@ -125,7 +124,7 @@ describe('Redemption Strategies', () => {
   describe('RedeemVaultStrategy', () => {
     const mockedLogger = createTestLogger();
     const mockedSilentLogger = createSilentLogger();
-    const defaultStrategyParams: StrategyParams = {
+    const defaultStrategyParams: RedeemParams = {
       brazeExternalUserId: faker.string.uuid(),
       companyName: faker.company.name(),
       memberId: faker.string.sample(8),
@@ -135,7 +134,7 @@ describe('Redemption Strategies', () => {
     async function callVaultRedeemStrategy(
       connection: IDatabaseConnection,
       redemption: Redemption,
-      params: StrategyParams,
+      params: RedeemParams,
       options: {
         overrides?: {
           legacyVaultApiRepository?: ILegacyVaultApiRepository;

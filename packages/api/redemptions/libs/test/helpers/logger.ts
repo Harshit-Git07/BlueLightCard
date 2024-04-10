@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 
 /**

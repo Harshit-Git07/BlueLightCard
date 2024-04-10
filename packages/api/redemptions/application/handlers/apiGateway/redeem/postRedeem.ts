@@ -3,6 +3,7 @@ import { createInjector } from 'typed-inject';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
+import { DwhRepository } from '@blc-mono/redemptions/application/repositories/DwhRepository';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { RedemptionEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionEventsRepository';
@@ -37,6 +38,7 @@ const controller = createInjector()
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)
   .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
   .provideClass(RedemptionEventsRepository.key, RedemptionEventsRepository)
+  .provideClass(DwhRepository.key, DwhRepository)
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)

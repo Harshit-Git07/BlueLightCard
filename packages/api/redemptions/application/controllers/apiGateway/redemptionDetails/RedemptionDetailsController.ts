@@ -13,6 +13,9 @@ import {
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../ApiGatewayController';
 
 const GetRedemptionDetailsRequestModel = z.object({
+  headers: z.object({
+    Authorization: z.string(),
+  }),
   queryStringParameters: z.object({
     offerId: z
       .string()
@@ -29,9 +32,9 @@ const GetRedemptionDetailsRequestModel = z.object({
       .pipe(NON_NEGATIVE_INT),
   }),
 });
-type GetRedemptionDetailsRequestModel = z.infer<typeof GetRedemptionDetailsRequestModel>;
+type ParsedRequest = z.infer<typeof GetRedemptionDetailsRequestModel> & { memberId: string };
 
-export class RedemptionDetailsController extends APIGatewayController<GetRedemptionDetailsRequestModel> {
+export class RedemptionDetailsController extends APIGatewayController<ParsedRequest> {
   static readonly inject = [Logger.key, RedemptionDetailsService.key] as const;
 
   constructor(
@@ -41,12 +44,41 @@ export class RedemptionDetailsController extends APIGatewayController<GetRedempt
     super(logger);
   }
 
-  protected parseRequest(request: APIGatewayProxyEventV2): Result<GetRedemptionDetailsRequestModel, ParseRequestError> {
-    return this.zodParseRequest(request, GetRedemptionDetailsRequestModel);
+  protected parseRequest(request: APIGatewayProxyEventV2): Result<ParsedRequest, ParseRequestError> {
+    const parsedRequest = this.zodParseRequest(request, GetRedemptionDetailsRequestModel);
+
+    // TODO: Move token parsing logic to helper class and inject as dependency
+
+    if (parsedRequest.isFailure) {
+      return parsedRequest;
+    }
+
+    const parsedBearerToken = this.parseBearerToken(parsedRequest.value.headers.Authorization);
+
+    if (parsedBearerToken.isFailure) {
+      return parsedBearerToken;
+    }
+
+    const tokenPayloadResult = this.unsafeExtractDataFromToken(parsedBearerToken.value);
+
+    if (tokenPayloadResult.isFailure) {
+      return tokenPayloadResult;
+    }
+
+    const memberId = tokenPayloadResult.value['custom:blc_old_id'];
+    if (typeof memberId !== 'string') return Result.err({ message: 'Invalid memberId in token' });
+
+    return Result.ok({
+      ...parsedRequest.value,
+      memberId,
+    });
   }
 
-  public async handle(request: GetRedemptionDetailsRequestModel): Promise<APIGatewayResult> {
-    const result = await this.redemptionDetailsService.getRedemptionDetails(request.queryStringParameters.offerId);
+  public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
+    const result = await this.redemptionDetailsService.getRedemptionDetails(
+      request.queryStringParameters.offerId,
+      request.memberId,
+    );
 
     switch (result.kind) {
       case 'Ok':

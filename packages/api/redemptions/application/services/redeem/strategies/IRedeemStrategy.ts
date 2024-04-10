@@ -54,6 +54,13 @@ export type RedeemVaultStrategyResult =
   | { kind: 'MaxPerUserReached' }
   | { kind: 'ErrorWhileRedeemingVault' };
 
+export type RedeemParams = {
+  memberId: string;
+  brazeExternalUserId: string;
+  companyName: string;
+  offerName: string;
+};
+
 export interface IRedeemStrategy {
-  redeem(redemption: Redemption, ...params: unknown[]): Promise<RedeemedStrategyResult>;
+  redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemedStrategyResult>;
 }

@@ -16,10 +16,9 @@ const RedeemRequestModel = z.object({
     Authorization: z.string(),
   }),
 });
-type RedeemRequestModel = z.infer<typeof RedeemRequestModel>;
-type ParsedRequest = RedeemRequestModel & { memberId: string; brazeExternalUserId: string };
+type ParsedRequest = z.infer<typeof RedeemRequestModel> & { memberId: string; brazeExternalUserId: string };
 
-export class RedeemController extends APIGatewayController<RedeemRequestModel> {
+export class RedeemController extends APIGatewayController<ParsedRequest> {
   static readonly inject = [Logger.key, RedeemService.key] as const;
 
   constructor(

@@ -73,6 +73,8 @@ export function useRedeemOffer(
           method: 'POST',
           data: {
             offerId: offerData.id,
+            offerName: offerData.name ?? offerMeta.companyName,
+            companyName: offerMeta.companyName,
           },
           headers: {
             Authorization: `Bearer ${authToken}`,

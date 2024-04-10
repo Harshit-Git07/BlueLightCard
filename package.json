@@ -21,7 +21,8 @@
     "test:watch": "npm -ws run --if-present test:watch",
     "oas": "npm -ws run --if-present oas",
     "e2e:identity": "npm -ws run --if-present e2e:identity",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "fontawesome:fix": "bash scripts/fontawesome.sh"
   },
   "lint-staged": {
     "packages/api/redemptions/**/*.{js,jsx,ts,tsx,json,md}": [

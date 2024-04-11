@@ -1,0 +1,185 @@
+{
+  "success": true,
+  "message": "Found",
+  "data": [
+      {
+          "id": 11705,
+          "catid": 15,
+          "compid": 11727,
+          "typeid": 5,
+          "offername": "Get 20% off your food bill, valid Monday - Friday",
+          "companyname": "Ember Inns",
+          "logos": "11727.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/11727.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/11727.jpg",
+          "available_offer_types": [
+              5
+          ],
+          "available_offer_cats": [
+              3,
+              15,
+              14
+          ]
+      },
+      {
+          "id": 15876,
+          "catid": 15,
+          "compid": 15834,
+          "typeid": 0,
+          "offername": "Get an Exclusive 16% off all products at Craft Company",
+          "companyname": "The Craft Company ",
+          "logos": "15834.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/15834.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/15834.jpg",
+          "available_offer_types": [
+              0
+          ],
+          "available_offer_cats": [
+              15,
+              14
+          ]
+      },
+      {
+          "id": 8720,
+          "catid": 15,
+          "compid": 8938,
+          "typeid": 0,
+          "offername": "Save 10% sitewide!",
+          "companyname": "Menkind",
+          "logos": "8938.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/8938.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/8938.jpg",
+          "available_offer_types": [
+              0,
+              5
+          ],
+          "available_offer_cats": [
+              11,
+              1,
+              6,
+              15,
+              5,
+              4,
+              10,
+              12,
+              14
+          ]
+      },
+      {
+          "id": 24064,
+          "catid": 15,
+          "compid": 24357,
+          "typeid": 0,
+          "offername": "50% off the first box + free shipping, then 25% off the next 4 boxes.",
+          "companyname": "Green Chef",
+          "logos": "24357.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/24357.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/24357.jpg",
+          "available_offer_types": [
+              0
+          ],
+          "available_offer_cats": [
+              15,
+              14
+          ]
+      },
+      {
+          "id": 13602,
+          "catid": 15,
+          "compid": 13591,
+          "typeid": 0,
+          "offername": "25% Discount",
+          "companyname": "Klean Kanteen UK",
+          "logos": "13591.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/13591.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/13591.jpg",
+          "available_offer_types": [
+              0
+          ],
+          "available_offer_cats": [
+              15
+          ]
+      },
+      {
+          "id": 16171,
+          "catid": 15,
+          "compid": 16129,
+          "typeid": 0,
+          "offername": "20% Discount",
+          "companyname": "Melitta UK Ltd",
+          "logos": "16129.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/16129.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/16129.jpg",
+          "available_offer_types": [
+              0
+          ],
+          "available_offer_cats": [
+              1,
+              15,
+              5,
+              10,
+              13,
+              14
+          ]
+      },
+      {
+          "id": 4747,
+          "catid": 15,
+          "compid": 4941,
+          "typeid": 0,
+          "offername": "Receive 10% off your order",
+          "companyname": "Sponge",
+          "logos": "4941.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/4941.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/4941.jpg",
+          "available_offer_types": [
+              0
+          ],
+          "available_offer_cats": [
+              15,
+              5,
+              14
+          ]
+      },
+      {
+          "id": 17024,
+          "catid": 15,
+          "compid": 17118,
+          "typeid": 0,
+          "offername": "Save 10% on Full Priced Items",
+          "companyname": "VIP Bottles",
+          "logos": "17118.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/17118.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/17118.jpg",
+          "available_offer_types": [
+              0
+          ],
+          "available_offer_cats": [
+              15,
+              5,
+              14
+          ]
+      },
+      {
+          "id": 15660,
+          "catid": 15,
+          "compid": 411,
+          "typeid": 5,
+          "offername": "Save 10% in-store",
+          "companyname": "Holland &amp; Barrett",
+          "logos": "411.jpg",
+          "absoluteLogos": "www.bluelightcard.co.uk/images/companyimages/complarge/retina/411.jpg",
+          "s3logos": "https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/411.jpg",
+          "available_offer_types": [
+              5,
+              0
+          ],
+          "available_offer_cats": [
+              15,
+              5,
+              4,
+              14
+          ]
+      }
+  ]
+}

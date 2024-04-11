@@ -2,9 +2,17 @@ import Head from 'next/head';
 import { NextPage } from 'next';
 import SearchModule from '@/modules/search';
 import FilterPanel from '@/modules/filterpanel';
-import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
+import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
+import { spinner } from '@/modules/Spinner/store';
 
 const TestPage: NextPage<any> = () => {
+  const setSpinner = useSetAtom(spinner);
+
+  useEffect(() => {
+    setSpinner(false);
+  }, []);
+
   return (
     <div>
       <Head>

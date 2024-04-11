@@ -18,6 +18,13 @@ const apiUrl = process.env.API_URL
 const apiAuth = process.env.API_AUTH
 const logger = new Logger({ serviceName: `${service}-migration` });
 const sqs = new SQS();
+
+const accountStatusErrors: { [key: string]: string} = {
+  'Email Not Verified. Please see FAQs': "Your email has not been verified.\nPlease check your inbox for a verification link",
+  'Awaiting Staff Approval. Please see FAQs': "Your account is awaiting staff approval",
+  'Please contact us about your account.': "Your account has been suspended.\nPlease contact us",
+};
+
 async function sendToDLQ(event: any) {
     const dlqUrl = process.env.DLQ_URL || '';
     const params = {
@@ -35,7 +42,9 @@ export const generateSecretHash = async (username: string, clientId: string, cli
 
 export const handler = async (event: any, context: any) => {
     logger.debug("event", {event})
+
     if (event.triggerSource == "UserMigration_Authentication") {
+      try {
         // Authenticate the user with the old user pool
         let user = await authenticateUserOldPool(event.userName, event.request.password);
 
@@ -49,6 +58,22 @@ export const handler = async (event: any, context: any) => {
           event.response.finalUserStatus = "CONFIRMED";
           event.response.messageAction = "SUPPRESS";
         }
+      } catch (error: any) {
+        logger.debug("error: ", { error });
+        const mappedAccountStatusError = accountStatusErrors[error.message];
+
+        if (mappedAccountStatusError) {
+          throw new Error(":\n" + mappedAccountStatusError);
+        } else {
+          let errorMessage = error.message;
+          
+          if (errorMessage.length > 0 && errorMessage[errorMessage.length-1] === ".") {
+            errorMessage = errorMessage.slice(0,-1);
+          }
+
+          throw new Error(":\n" + errorMessage);
+        }
+      }
     }
 
     return event;

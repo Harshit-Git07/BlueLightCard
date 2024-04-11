@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.8.0...bluelightcard/redemptions-v1.9.0) (2024-04-10)
+
+
+### Features
+
+* Data warehouse integration ([#1149](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1149)) ([0f785ec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0f785ec8eaff43c657919bc25064cf0487bd963c))
+
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.6...bluelightcard/redemptions-v1.8.0) (2024-04-09)
 
 

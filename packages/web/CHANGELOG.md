@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.43.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.42.0...bluelightcard/web-v1.43.0) (2024-04-11)
+
+
+### Features
+
+* [DISCO-110] tracking amplitude search card click event ([#1158](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1158)) ([7131f0e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7131f0e8624d90bea3230f5b6200b4b6027bd77e))
+
+
+### Bug Fixes
+
+* fontawesome ([#1153](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1153)) ([ab5e497](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ab5e497dc259f0e5100989e2f4606868658ce025))
+* **web:** invalid token for redemption details ([#1159](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1159)) ([b9b2167](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b9b216771e9f3fcfe01a3cb3f651f3fbf8268706))
+
 ## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.41.1...bluelightcard/web-v1.42.0) (2024-04-10)
 
 

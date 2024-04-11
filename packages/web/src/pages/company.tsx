@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useMedia } from 'react-use';
 import { advertQuery } from 'src/graphql/advertQuery';
@@ -16,12 +17,12 @@ import ShareButton from '@/components/ShareButton/ShareButton';
 import FavouriteButton from '@/components/FavouriteButton/FavouriteButton';
 import PillButtons from '@/components/PillButtons/PillButtons';
 import ResponsiveOfferCard from '@/components/ResponsiveOfferCard/ResponsiveOfferCard';
-import getOffersStaticProps from '@/utils/getProps/getOffersProps';
 import Link from '@/components/Link/Link';
 import CampaignCard from '@/components/CampaignCard/CampaignCard';
 import { getCompany, getOffersByCompany } from '../common/utils/company/companyData';
 import { ENVIRONMENT } from '@/global-vars';
 import { OfferTypeStrLiterals, offerTypeParser } from '../common/utils/offers/offerTypeParser';
+import getI18nStaticProps from '@/utils/i18nStaticProps';
 
 type CompanyPageProps = {};
 
@@ -142,6 +143,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
   return (
     <>
+      <Head>
+        <title>{companyData?.name} offers | Blue Light Card</title>
+      </Head>
       <Container className="desktop:mt-16 mobile:mt-[14px]">
         {/* About page (ONLY ON WEB), ShareButton and FavouriteButton */}
         <div className="flex justify-between desktop:items-start mobile:items-center">
@@ -273,13 +277,12 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   );
 };
 
-export const getStaticProps = getOffersStaticProps;
+export const getStaticProps = getI18nStaticProps;
 
 const layoutProps = {
   seo: {
-    title: 'offers.seo.title',
-    description: 'offers.seo.description',
-    keywords: 'offers.seo.keywords',
+    title: 'company.seo.title',
+    description: 'company.seo.description',
   },
 };
 

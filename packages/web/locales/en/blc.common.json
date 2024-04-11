@@ -9,17 +9,24 @@
   },
   "offers": {
     "members-home": {
-        "title": "Blue Light Card Home",
-        "description": "The UK's largest Emergency Service discount and NHS discount service for UK public sector.  Free to register online and home of the Blue Light Card High Street Card",
-        "keywords": "NHS Discounts, Discounts, Fire, Police, Online Discounts, Highstreet Discounts, Emergency Services, Emergency Service Workers"
+      "title": "Blue Light Card Home",
+      "description": "The UK's largest Emergency Service discount and NHS discount service for UK public sector.  Free to register online and home of the Blue Light Card High Street Card",
+      "keywords": "NHS Discounts, Discounts, Fire, Police, Online Discounts, Highstreet Discounts, Emergency Services, Emergency Service Workers"
     },
     "search": {
-        "title": "Search | Blue Light Card"}
+      "title": "Search | Blue Light Card"
+    }
   },
   "identity": {
     "seo": {
       "title": "Create Account",
       "description": "Create an account"
+    }
+  },
+  "company": {
+    "seo": {
+      "title": "Offers | Blue Light Card",
+      "description": "Some of the latest discount offers from"
     }
   }
 }

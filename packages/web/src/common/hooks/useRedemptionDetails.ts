@@ -25,7 +25,7 @@ export function useRedemptionDetails(
             offerId,
           },
           headers: {
-            Authorization: authToken,
+            Authorization: `Bearer ${authToken}`,
           },
         })
         .then((res) => RedemptionDetailsResponseSchema.parse(res.data)),

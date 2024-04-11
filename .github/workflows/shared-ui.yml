@@ -109,11 +109,11 @@ jobs:
       - uses: GoogleCloudPlatform/release-please-action@v3
         id: tag-release
         with:
-          path: packages/tokens
+          path: packages/shared-ui
           token: ${{ secrets.GITHUB_TOKEN }}
           monorepo-tags: true
           release-type: node
-          package-name: bluelightcard/design-tokens
+          package-name: '@bluelightcard/shared-ui'
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
 
   release:

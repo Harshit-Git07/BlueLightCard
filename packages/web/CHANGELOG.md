@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.44.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.44.0...bluelightcard/web-v1.44.1) (2024-04-12)
+
+
+### Bug Fixes
+
+* Removed fav button and shifted first card position ([#1173](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1173)) ([94f8e8c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/94f8e8c229527a2c9e25a26c6b1a5ef22262c24d))
+
 ## [1.44.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.43.0...bluelightcard/web-v1.44.0) (2024-04-12)
 
 

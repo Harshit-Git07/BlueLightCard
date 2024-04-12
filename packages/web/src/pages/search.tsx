@@ -19,7 +19,6 @@ import getCDNUrl from '@/utils/getCDNUrl';
 import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceholder';
 import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
 import {
-  logSearchCardClicked,
   logSearchCategoryEvent,
   logSearchCompanyEvent,
   logSearchPage,
@@ -61,27 +60,6 @@ const onSearchCategoryChange = async (categoryId: string, categoryName: string) 
 
 const onSearchTerm = async (searchTerm: string) => {
   await logSearchTermEvent(searchTerm);
-  window.location.href = getOffersBySearchTermUrl(searchTerm);
-};
-
-const onSearchCardClick = async (
-  companyId: number,
-  comapanyName: string,
-  offerId: number,
-  offerName: string,
-  searchTerm: string,
-  numberOfResults: number,
-  searchResultNumber: number
-) => {
-  await logSearchCardClicked(
-    companyId,
-    comapanyName,
-    offerId,
-    offerName,
-    searchTerm,
-    numberOfResults,
-    searchResultNumber
-  );
   window.location.href = getOffersBySearchTermUrl(searchTerm);
 };
 
@@ -197,36 +175,15 @@ const Search: NextPage = () => {
             searchResults.map((result, index) => {
               const imageSrc = result.offerimg.replaceAll('\\/', '/');
               let hasLink = true;
-              let onOfferCardClick = undefined;
+              let onClick = undefined;
               if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
                 hasLink = false;
-                onOfferCardClick = () => {
+                onClick = () => {
                   offerSheetControls.open({
                     offerId: result.ID as unknown as string,
                     companyId: result.CompID as unknown as string,
                     companyName: result.CompanyName,
                   });
-                  onSearchCardClick(
-                    result.CompID,
-                    result.CompanyName,
-                    result.ID,
-                    result.OfferName,
-                    query,
-                    searchResults.length,
-                    index + 1
-                  );
-                };
-              } else {
-                onOfferCardClick = () => {
-                  onSearchCardClick(
-                    result.CompID,
-                    result.CompanyName,
-                    result.ID,
-                    result.OfferName,
-                    query,
-                    searchResults.length,
-                    index + 1
-                  );
                 };
               }
               return (
@@ -246,7 +203,7 @@ const Search: NextPage = () => {
                     offerId={result.ID.toString()}
                     companyId={result.CompID.toString()}
                     id={'_offer_card_' + index}
-                    onClick={onOfferCardClick}
+                    onClick={onClick}
                     hasLink={hasLink}
                   />
                 </div>

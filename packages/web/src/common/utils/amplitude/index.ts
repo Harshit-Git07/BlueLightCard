@@ -107,24 +107,3 @@ export async function logSerpSearchStarted(searchTerm?: string, resultsCount?: n
   };
   await amplitude.track(EVENTS.SERP_SEARCH_STARTED, searchResultsEvent).promise;
 }
-
-export async function logSearchCardClicked(
-  companyId?: number,
-  companyName?: string,
-  offerId?: number,
-  offerName?: string,
-  searchTerm?: string,
-  resultsCount?: number,
-  searchResultNumber?: number
-) {
-  const eventProperties = {
-    company_id: companyId ?? 0,
-    company_name: companyName ?? '',
-    offer_id: offerId ?? 0,
-    offer_name: offerName ?? '',
-    number_of_results: resultsCount ?? 0,
-    search_term: searchTerm ?? '',
-    search_result_number: searchResultNumber ?? 0,
-  };
-  await amplitude.track(EVENTS.SEARCH_RESULTS_CARD_CLICKED, eventProperties).promise;
-}

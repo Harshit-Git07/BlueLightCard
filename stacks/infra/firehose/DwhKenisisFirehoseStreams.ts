@@ -62,7 +62,8 @@ class KenisisFirehoseStream {
   }
 
   private createDestinationBucket(): s3.Bucket {
-    const bucketName = `${this.stack.stage}-${this.streamName}-destination`.toLowerCase().substring(0, 63);
+    const regionPrefix = this.stack.region === 'eu-west-2' ? '' : `au-`;
+    const bucketName = `${regionPrefix}${this.stack.stage}-${this.streamName}-destination`.toLowerCase().substring(0, 63);
     return new s3.Bucket(this.stack, bucketName, {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,

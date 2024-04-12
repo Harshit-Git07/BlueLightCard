@@ -1,10 +1,14 @@
 import * as amplitude from '@amplitude/analytics-browser';
-const { ServerZone, LogLevel } = amplitude.Types;
+import { ServerZoneType } from '@amplitude/analytics-types/lib/esm/server-zone';
+const { LogLevel } = amplitude.Types;
+
+export const AMPLITUDE_SERVER_ZONE: ServerZoneType = 'EU';
+export const AMPLITUDE_LOG_LEVEL = LogLevel.Warn;
 
 export class Amplitude {
   public isInitialised: boolean = false;
 
-  initialise(apiKey: string) {
+  async initialise(apiKey: string) {
     if (this.isInitialised) {
       console.log('already initialised');
       return;
@@ -14,10 +18,13 @@ export class Amplitude {
       throw new Error('No API key set');
     }
 
-    const initResult = amplitude.init(apiKey, {
-      serverZone: ServerZone.EU,
-      logLevel: LogLevel.Warn,
-    });
+    const sessionId = sessionStorage.getItem('amplitude_session_id');
+
+    const initResult = await amplitude.init(apiKey, {
+      serverZone: AMPLITUDE_SERVER_ZONE,
+      logLevel: AMPLITUDE_LOG_LEVEL,
+    }).promise;
+    if (sessionId) this.setSessionId(sessionId);
 
     this.isInitialised = true;
 
@@ -26,6 +33,10 @@ export class Amplitude {
 
   setUserId(userId: string) {
     amplitude.setUserId(userId);
+  }
+
+  setSessionId(sessionId: string) {
+    amplitude.setSessionId(Number(sessionId));
   }
 
   _isAmplitudeInitialised() {

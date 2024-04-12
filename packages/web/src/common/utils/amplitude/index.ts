@@ -3,17 +3,20 @@ import { unpackJWT } from '@core/utils/unpackJWT';
 
 import { AMPLITUDE_API_KEY } from '@/global-vars';
 import EVENTS from './events';
+import { AMPLITUDE_LOG_LEVEL, AMPLITUDE_SERVER_ZONE } from '@/utils/amplitude/amplitude';
 
-export function initialiseAmplitude() {
+export async function initialiseAmplitude() {
   const idToken = localStorage.getItem('idToken') ?? '';
+  const sessionId = sessionStorage.getItem('amplitude_session_id');
 
   if (idToken) {
     let { 'custom:blc_old_uuid': userId } = unpackJWT(idToken);
     userId = userId ?? null;
-    amplitude.init(AMPLITUDE_API_KEY, userId, {
-      serverZone: 'EU',
-      logLevel: amplitude.Types.LogLevel.Warn,
-    });
+    await amplitude.init(AMPLITUDE_API_KEY, userId, {
+      serverZone: AMPLITUDE_SERVER_ZONE,
+      logLevel: AMPLITUDE_LOG_LEVEL,
+    }).promise;
+    if (sessionId) amplitude.setSessionId(Number(sessionId));
   } else {
     throw new Error('User is not authenticated. Cannot initialise Amplitude without user uuid');
   }

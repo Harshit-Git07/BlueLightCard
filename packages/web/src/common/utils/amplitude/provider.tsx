@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactNode, useContext } from 'react';
+import { useState, ReactNode } from 'react';
 import AmplitudeContext from '../../context/AmplitudeContext';
 import { Amplitude } from './amplitude';
 import { AMPLITUDE_API_KEY } from '@/global-vars';
@@ -15,7 +15,7 @@ const AmplitudeProvider = ({ children }: AmplitudeProviderProps) => {
   useEffectOnce(() => {
     try {
       const amplitude = new Amplitude();
-      amplitude.initialise(AMPLITUDE_API_KEY)?.promise.then(() => {
+      amplitude.initialise(AMPLITUDE_API_KEY).then(() => {
         setAmplitudeService(amplitude);
       });
     } catch (error) {

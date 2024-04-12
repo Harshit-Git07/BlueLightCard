@@ -3,11 +3,13 @@ import { Braze, CampaignsTriggerSendObject } from 'braze-api';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
-import { BrazeEmailClientProvider } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
+import {
+  BrazeEmailClientProvider,
+  IBrazeEmailClientProvider,
+} from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
 
 export type RedemptionTransactionalEmailPayload = {
   memberDetails: {
-    memberId: string;
     brazeExternalUserId: string;
   };
   redemptionDetails: {
@@ -33,12 +35,12 @@ export class EmailRepository implements IEmailRepository {
 
   constructor(
     private logger: ILogger,
-    private emailClient: BrazeEmailClientProvider,
+    private emailClientProvider: IBrazeEmailClientProvider,
   ) {}
 
   private async getClient() {
     if (!this.emailApiClient) {
-      this.emailApiClient = await this.emailClient.init();
+      this.emailApiClient = await this.emailClientProvider.getClient();
     }
     return this.emailApiClient;
   }
@@ -55,7 +57,12 @@ export class EmailRepository implements IEmailRepository {
           external_user_id: memberDetails.brazeExternalUserId,
         },
       ],
-      trigger_properties: redemptionDetails,
+      trigger_properties: {
+        companyName: redemptionDetails.companyName,
+        offerName: redemptionDetails.offerName,
+        // TODO(TR-437): Go to copy-code URL with correct
+        url: redemptionDetails.url,
+      },
     };
 
     const emailServiceResponse = await emailClient.campaigns.trigger.send(emailPayload);

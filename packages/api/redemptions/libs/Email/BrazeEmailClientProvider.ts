@@ -11,7 +11,11 @@ const BrazeCredentialsSecretSchema = z.object({
 });
 export type BrazeCredentials = z.infer<typeof BrazeCredentialsSecretSchema>;
 
-export class BrazeEmailClientProvider {
+export interface IBrazeEmailClientProvider {
+  getClient: () => Promise<Braze>;
+}
+
+export class BrazeEmailClientProvider implements IBrazeEmailClientProvider {
   static key = 'BrazeEmail' as const;
   static inject = [SecretsManager.key] as const;
 
@@ -19,7 +23,7 @@ export class BrazeEmailClientProvider {
 
   private brazeApiUrl = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL);
 
-  public async init(): Promise<Braze> {
+  public async getClient(): Promise<Braze> {
     const secrets = await this.secretsManger.getSecretValueJson('blc-mono-redemptions/NewVaultSecrets');
     const braze = BrazeCredentialsSecretSchema.parse(secrets);
     return new Braze(this.brazeApiUrl, braze.brazeApiKey);

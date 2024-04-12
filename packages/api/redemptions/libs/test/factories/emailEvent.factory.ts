@@ -2,6 +2,8 @@ import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
 import { RedemptionTransactionalEmailEvent } from '@blc-mono/redemptions/application/controllers/eventBridge/redemptionTransactionalEmail/RedemptionTransactionalEmailController';
+
+import { redemptionTypeEnum } from '../../database/schema';
 export const emailEventFactory = Factory.define<RedemptionTransactionalEmailEvent>(() => ({
   account: faker.string.numeric(12),
   detail: {
@@ -11,13 +13,7 @@ export const emailEventFactory = Factory.define<RedemptionTransactionalEmailEven
     },
     redemptionDetails: {
       redemptionId: faker.string.uuid(),
-      redemptionType: faker.helpers.arrayElement([
-        'REDEEMED_GENERIC',
-        'REDEEMED_PRE_APPLIED',
-        'REDEEMED_SHOW_CARD',
-        'REDEEMED_VAULT',
-        'REDEEMED_VAULT_QR',
-      ]),
+      redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
       companyId: faker.string.uuid(),
       companyName: faker.company.name(),
       offerId: faker.string.uuid(),

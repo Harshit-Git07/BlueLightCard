@@ -34,13 +34,7 @@ export function createRedemptionTransactionalEmailRule(
   return {
     pattern: {
       source: [REDEMPTIONS_EVENT_SOURCE],
-      detailType: [
-        RedemptionEventDetailType.REDEEMED_GENERIC,
-        RedemptionEventDetailType.REDEEMED_PRE_APPLIED,
-        RedemptionEventDetailType.REDEEMED_SHOW_CARD,
-        RedemptionEventDetailType.REDEEMED_VAULT_QR,
-        RedemptionEventDetailType.REDEEMED_VAULT,
-      ],
+      detailType: [RedemptionEventDetailType.REDEEMED_VAULT],
     },
     targets: { redeemedTransactionalEmailHandler: redemptionTransactionalEmailHandler },
   };

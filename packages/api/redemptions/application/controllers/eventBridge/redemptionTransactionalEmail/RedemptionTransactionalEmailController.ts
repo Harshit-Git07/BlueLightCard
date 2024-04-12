@@ -8,6 +8,7 @@ import {
   RedemptionEventDetailType,
   REDEMPTIONS_EVENT_SOURCE,
 } from '@blc-mono/redemptions/infrastructure/eventBridge/events/redemptions';
+import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
 
 import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeController';
 
@@ -17,7 +18,7 @@ const RedemptionTransactionalEmailEventDetailSchema = z.object({
     brazeExternalUserId: z.string(),
   }),
   redemptionDetails: z.object({
-    redemptionType: z.string(),
+    redemptionType: z.enum(redemptionTypeEnum.enumValues),
     companyId: z.string(),
     companyName: z.string(),
     offerId: z.string(),

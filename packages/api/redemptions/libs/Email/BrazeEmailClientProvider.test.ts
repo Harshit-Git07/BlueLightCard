@@ -30,7 +30,7 @@ describe('BrazeEmail', () => {
         } satisfies BrazeCredentials),
       ),
     } satisfies ISecretsManager;
-    const brazeEmail = await new BrazeEmailClientProvider(secretsManger).init();
+    const brazeEmail = await new BrazeEmailClientProvider(secretsManger).getClient();
     expect(brazeEmail).toBeDefined();
     expect(brazeEmail).toBeInstanceOf(Braze);
   });
@@ -44,7 +44,7 @@ describe('BrazeEmail', () => {
       ),
     };
 
-    await expect(new BrazeEmailClientProvider(secretsManger).init()).rejects.toThrowErrorMatchingInlineSnapshot(`
+    await expect(new BrazeEmailClientProvider(secretsManger).getClient()).rejects.toThrowErrorMatchingInlineSnapshot(`
       "[
         {
           "code": "too_small",

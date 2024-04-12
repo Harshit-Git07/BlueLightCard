@@ -17,6 +17,7 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   name,
   image,
   variant = 'vertical',
+  quality = 75,
 }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
@@ -61,18 +62,20 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
           height={0}
           sizes="100vw"
           className={`h-auto w-full !relative`}
-          quality={75}
+          quality={quality}
           onError={() => {
             setImageSource(fallbackImage);
           }}
         />
       </div>
 
-      <Badge
-        label={offerTypeParser[type].label}
-        color={tagBackground[type]}
-        size={variant === 'vertical' ? 'large' : 'small'}
-      />
+      {Object.keys(offerTypeParser).includes(type) && (
+        <Badge
+          label={offerTypeParser[type].label}
+          color={tagBackground[type]}
+          size={variant === 'vertical' ? 'large' : 'small'}
+        />
+      )}
       <p
         className={`font-['MuseoSans'] text-[#202125] line-clamp-2 ${
           variant === 'vertical'

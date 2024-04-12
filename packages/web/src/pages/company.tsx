@@ -98,7 +98,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       const companyDataResponse = await getCompany(authCtx.authState.idToken, companyId);
       if (!companyDataResponse || typeof companyDataResponse === null) {
         setCompanyData(null);
-        router.push('/404');
       } else {
         setCompanyData(companyDataResponse);
       }
@@ -131,15 +130,10 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
     }
   }, [adverts, companyData, offerData]);
 
-  const [firstItem, ...rest] = offerData;
-
   const filteredOffers =
-    rest && selectedType === 'All'
-      ? rest
-      : rest.filter((offer: OfferCardProp) => offer.type === selectedType);
-
-  const isFirstItemMatching =
-    firstItem && (selectedType === 'All' || firstItem.type === selectedType);
+    offerData && selectedType === 'All'
+      ? offerData
+      : offerData.filter((offer: OfferCardProp) => offer.type === selectedType);
 
   return (
     <>
@@ -168,17 +162,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                 }/company/${companyId}`,
               }}
               shareLabel="Share Company"
-            />
-            <FavouriteButton
-              offerData={{
-                id: 42,
-              }}
-              offerMeta={{
-                companyId: '42',
-                companyName: 'Samsung',
-                offerId: '42',
-              }}
-              hasText={isMobile ? false : true}
             />
           </div>
         </div>
@@ -210,20 +193,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         {/* Offer cards */}
         {!!offerData.length && companyData && (
           <div className="desktop:mb-[71px] mobile:mb-0">
-            <div className="flex flex-col desktop:mb-10 mobile:mb-2">
-              {/* Render the first item separately */}
-              {isFirstItemMatching && (
-                <ResponsiveOfferCard
-                  id={firstItem.id}
-                  type={firstItem.type}
-                  name={firstItem.name}
-                  image={firstItem.image}
-                  companyId={companyId as string}
-                  companyName={companyData?.name}
-                />
-              )}
-            </div>
-
             <div className="desktop:grid desktop:grid-cols-2 desktop:gap-10 mobile:flex mobile:flex-col mobile:gap-2">
               {filteredOffers &&
                 filteredOffers.map((offer: OfferCardProp, index: string) => (

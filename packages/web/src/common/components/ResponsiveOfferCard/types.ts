@@ -9,6 +9,7 @@ export type ResponsiveOfferCardProps = {
   companyId: string;
   companyName: string;
   variant?: 'vertical' | 'horizontal';
+  quality?: number;
 };
 
 export type BgColorTagParser = {

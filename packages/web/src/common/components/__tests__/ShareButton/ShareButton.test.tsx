@@ -73,7 +73,7 @@ describe('ShareButton component', () => {
 
     const { getByText, getByTestId } = render(<ShareButton shareDetails={shareDetails} />);
 
-    fireEvent.click(getByText('Share'));
+    fireEvent.click(getByTestId('share_cta'));
 
     await act(async () => {
       await new Promise((r) => setTimeout(r, 500)); // wait for state update
@@ -91,7 +91,7 @@ describe('ShareButton component', () => {
       <ShareButton shareDetails={shareDetails} />
     );
 
-    fireEvent.click(getByText('Share'));
+    fireEvent.click(getByTestId('share_cta'));
 
     await act(async () => {
       await new Promise((r) => setTimeout(r, 500)); // wait for state update

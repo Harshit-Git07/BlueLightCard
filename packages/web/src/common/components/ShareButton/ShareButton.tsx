@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useAtom, atom } from 'jotai';
 import { toast } from 'react-toastify';
 import { useMedia } from 'react-use';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,10 @@ import Check from './Check.svg';
 import CheckCircle from './CheckCircle.svg';
 import ErrorCircle from './ErrorCircle.svg';
 
+type ShareButtonState = 'share' | 'error' | 'success';
+
+const shareBtnStateAtom = atom<ShareButtonState>('share');
+
 const ShareButton: React.FC<ShareButtonProps> = ({
   showShareLabel = true,
   shareDetails,
@@ -17,7 +21,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 }) => {
   const isMobile = useMedia('(max-width: 500px)');
 
-  const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
+  const [shareBtnState, setShareBtnState] = useAtom(shareBtnStateAtom);
 
   const copyLink = () => {
     if (!shareDetails.url) return;
@@ -105,8 +109,9 @@ const ShareButton: React.FC<ShareButtonProps> = ({
             />
           )}
         </div>
+
         {showShareLabel && (
-          <span className="ml-2">
+          <span className="ml-2" data-testid="share_cta">
             {shareBtnState === 'share'
               ? shareLabel
               : shareBtnState === 'success'

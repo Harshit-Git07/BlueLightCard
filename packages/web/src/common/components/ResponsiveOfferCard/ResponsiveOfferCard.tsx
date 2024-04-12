@@ -1,10 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
+import { atom, useAtom } from 'jotai';
 import Image from '@/components/Image/Image';
 import { BgColorTagParser, ResponsiveOfferCardProps } from './types';
 import getCDNUrl from '@/utils/getCDNUrl';
 import Badge from '../Badge/Badge';
 import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
 import { offerTypeParser } from '../../utils/offers/offerTypeParser';
+
+const imageSourceAtom = atom<string>('');
 
 const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   id,
@@ -18,7 +21,7 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
   const { open } = useOfferSheetControls();
-  const [imageSource, setImageSource] = useState('');
+  const [imageSource, setImageSource] = useAtom(imageSourceAtom);
 
   const openOfferSheet = () => {
     open({
@@ -40,7 +43,7 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
 
   return (
     <div
-      className={`w-full h-full relative overflow-hidden ${
+      className={`w-full h-full relative overflow-hidden cursor-pointer ${
         variant === 'vertical' ? 'desktop:p-2 desktop:pb-4 pb-0' : 'py-3 flow-root'
       }`}
       data-testid={`offer-card-${id}`}

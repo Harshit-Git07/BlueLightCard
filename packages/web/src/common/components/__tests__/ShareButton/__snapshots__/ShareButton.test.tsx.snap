@@ -33,6 +33,7 @@ exports[`ShareButton component Should render ShareButton component with no error
     </div>
     <span
       className="ml-2"
+      data-testid="share_cta"
     >
       Share
     </span>

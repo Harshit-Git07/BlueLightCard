@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.44.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.43.0...bluelightcard/web-v1.44.0) (2024-04-12)
+
+
+### Features
+
+* [DISCO-137] Use session sent from php code for Amplitude ([#1147](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1147)) ([3839f79](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3839f793cef7020368bb176d41e7166efffd0ef2))
+* refactored components to use Jotai ([#1169](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1169)) ([c4ff82e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c4ff82e4afdefb76406a1c0aa4c635ac3eb7e5ea))
+
+
+### Bug Fixes
+
+* added seo to company page ([#1162](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1162)) ([ecf9551](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ecf9551fccdd360b80b5e79af7efa1ca645b7dd4))
+* disco 110 rollback ([#1171](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1171)) ([c76cdf0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c76cdf04f5623ffa75f2a93b7cf9fb8c85ff2860))
+
 ## [1.43.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.42.0...bluelightcard/web-v1.43.0) (2024-04-11)
 
 

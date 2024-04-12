@@ -1,0 +1,20 @@
+{
+    "BLC": [
+        {
+            "partnersName": "UK Reward Gateway",
+            "callBackUrl": "https://accounts.rewardgateway.com/callback.php",
+            "signoutUrl": "https://bluelightcard.rewardgateway.co.uk/Authentication/Logout"
+        },
+        {
+            "partnersName": "UK Yalson",
+            "callBackUrl": "https://localhost",
+            "signoutUrl": "https://localhost"
+        },
+        {
+            "partnersName": "UK Creditec",
+            "callBackUrl": "https://localhost",
+            "signoutUrl": "https://localhost"
+        }
+    ],
+    "DDS": []
+}

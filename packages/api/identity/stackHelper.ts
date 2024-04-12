@@ -13,6 +13,8 @@ import { BRANDS } from '@blc-mono/core/types/brands.enum'
 import { STAGES } from '@blc-mono/core/types/stages.enum'
 import { REGIONS } from  '@blc-mono/core/types/regions.enum'
 import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
+import externalClientProvidersUk from "../identity/src/cognito/resources/externalCognitoPartners-eu-west-2.json";
+import externalClientProvidersAus from "../identity/src/cognito/resources/externalCognitoPartners-ap-southeast-2.json";
 
 const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
@@ -552,6 +554,8 @@ export function createNewCognito(
       destination: new LambdaDestination(blcAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
+
+    createExternalClient(stack, cognito, true);
   }
   return cognito;
 }
@@ -744,6 +748,8 @@ export function createNewCognitoDDS(
       destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
+    
+    createExternalClient(stack, cognito_dds, true);
   }
   
   return cognito_dds;
@@ -759,4 +765,26 @@ function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Ta
     WRONG_PASSWORD_ENTER_LIMIT: identitySecret.secretValueFromJson('WRONG_PASSWORD_ENTER_LIMIT').toString(),
     WRONG_PASSWORD_RESET_TRIGGER_MINUTES: identitySecret.secretValueFromJson('WRONG_PASSWORD_RESET_TRIGGER_MINUTES').toString(),
   }
+}
+
+const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean) => {
+  const providerList = stack.region === REGIONS.AP_SOUTHEAST_2 ? externalClientProvidersAus: externalClientProvidersUk
+  const providers = isDds? providerList.DDS : providerList.BLC;
+
+  providers.map((clients: { partnersName: string; callBackUrl: string; signoutUrl: string; }) => {
+        cognito.cdk.userPool.addClient(clients.partnersName, {
+        authFlows: {
+          userPassword: true,
+        },
+        generateSecret: true,
+        oAuth: {
+          flows: {
+            authorizationCodeGrant: true,
+          },
+          scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
+          callbackUrls: [clients.callBackUrl],
+          logoutUrls: [clients.signoutUrl],
+        },
+      });
+    })
 }

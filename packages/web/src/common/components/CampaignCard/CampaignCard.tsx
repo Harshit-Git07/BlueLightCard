@@ -22,7 +22,7 @@ const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl }) => {
         <Image
           src={image}
           alt={`${name} banner`}
-          className="w-full"
+          className="w-full h-auto object-contain"
           onError={() => {
             setImageSource(fallbackImage);
           }}

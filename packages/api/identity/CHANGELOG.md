@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.54.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.53.0...bluelightcard/identity-v1.54.0) (2024-04-12)
+
+
+### Features
+
+* Ti 1074 external partners integration ([#1170](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1170)) ([a60695b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a60695b986127104020f630eb3dcfb003421936b))
+* TI-000: cognito custom error messages ([#1148](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1148)) ([3cce16e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3cce16e4040c1edec5bb8266ef5b4acc96161da3))
+
+
+### Other Changes
+
+* **redemptions:** Redemptions add e2e tests ([#1115](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1115)) ([a376343](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a376343765f1aaf0f213c87989f2c23571000ffe))
+
 ## [1.53.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.52.1...bluelightcard/identity-v1.53.0) (2024-03-26)
 
 

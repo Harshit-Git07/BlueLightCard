@@ -62,7 +62,7 @@ export function useRedeemOffer(
       logVaultCodeRequestClicked('sheet');
       if (redemptionType === 'legacy') {
         logOfferView('page', offerMeta);
-        router.push(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
+        window.open(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`, '_blank');
         return {
           redemptionType: 'legacy',
         };

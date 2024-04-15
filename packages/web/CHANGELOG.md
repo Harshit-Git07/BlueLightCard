@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.45.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.44.1...bluelightcard/web-v1.45.0) (2024-04-15)
+
+
+### Features
+
+* TI-000: amplitude experiment cognito ui ([#1174](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1174)) ([f787f7f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f787f7ff58584836db1faf844da6771210696914))
+
 ## [1.44.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.44.0...bluelightcard/web-v1.44.1) (2024-04-12)
 
 

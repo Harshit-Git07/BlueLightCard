@@ -37,6 +37,7 @@ jobs:
         uses: ./.github/actions/setup
         with:
           restore_cache: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   test:
     name: Unit Tests
@@ -102,7 +103,7 @@ jobs:
           package-name: bluelightcard/${{ env.PKG_NAME }}
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
 
-  pr-frontend: 
+  pr-frontend:
     if: github.event_name == 'pull_request'
     name: Deploy member services hub Frontend for PR
     runs-on: ubuntu-latest
@@ -154,7 +155,7 @@ jobs:
           directory: packages/${{ env.PKG_NAME }}/dist
           branch: 'staging'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          
+
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Deploy Production

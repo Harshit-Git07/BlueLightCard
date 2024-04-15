@@ -9,7 +9,6 @@ permissions:
   id-token: write
   deployments: write
 
-  
 env:
   PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono
 
@@ -24,6 +23,7 @@ jobs:
         uses: ./.github/actions/setup
         with:
           restore_cache: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   backend-shared:
     name: Deploy Backend for PR (global & identity)

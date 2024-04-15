@@ -5,6 +5,8 @@ inputs:
     description: 'Restore cache'
     required: true
     default: 'true'
+  token:
+    required: true
 runs:
   using: 'composite'
   steps:
@@ -29,9 +31,16 @@ runs:
       run: npm run fontawesome:fix
 
     - name: Install Dependencies
-      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      # if: steps.cache-node-modules.outputs.cache-hit != 'true'
       shell: 'bash'
+      env:
+        NPM_AUTH: ${{ inputs.token }}
       run: npm install
+
+    # This is needed if npm tries to use local workspace version
+    - name: Build shared-ui
+      shell: 'bash'
+      run: npm run build -w packages/shared-ui
 
     - if: failure()
       uses: actions/upload-artifact@v4

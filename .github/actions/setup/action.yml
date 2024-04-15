@@ -19,7 +19,7 @@ runs:
       with:
         # If inputs.restore_cache is set to false, set lookup-only to true
         lookup-only: ${{ !fromJSON(inputs.restore_cache) }}
-        path: "**/node_modules"
+        path: '**/node_modules'
         key: ${{ runner.os }}-${{ runner.arch }}-node_modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-${{ runner.arch }}-node_modules-

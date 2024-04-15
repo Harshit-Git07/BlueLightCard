@@ -60,7 +60,6 @@
     "format:staged": "prettier --ignore-unknown --write",
     "lint:staged": "eslint --fix",
     "build": "rollup -c",
-    "preinstall": "npm run build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

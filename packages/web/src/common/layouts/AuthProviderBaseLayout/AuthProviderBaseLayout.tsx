@@ -4,10 +4,13 @@ import AuthProvider from '@/context/Auth/AuthProvider';
 import UserProvider from '@/context/User/UserProvider';
 import BaseLayout from '../BaseLayout/BaseLayout';
 import OfferSheetProvider from '@/context/OfferSheet/OfferSheetProvider';
-import { AuthedAmplitudeExperimentProvider } from '@/context/AmplitudeExperiment';
+import {
+  LoggedOutAmplitudeExperimentProvider,
+  AuthedAmplitudeExperimentProvider,
+} from '@/context/AmplitudeExperiment';
 import requireAuth from '../../hoc/requireAuth';
 
-const BaseLayoutWrapper: React.FC<LayoutProps> = (props) => (
+const BaseLayoutWrapperAuth: React.FC<LayoutProps> = (props) => (
   <UserProvider>
     <AuthedAmplitudeExperimentProvider>
       <OfferSheetProvider>
@@ -17,7 +20,15 @@ const BaseLayoutWrapper: React.FC<LayoutProps> = (props) => (
   </UserProvider>
 );
 
-const BaseLayoutWrapperWithAuth = requireAuth(BaseLayoutWrapper);
+const BaseLayoutWrapper: React.FC<LayoutProps> = (props) => (
+  <UserProvider>
+    <LoggedOutAmplitudeExperimentProvider>
+      <BaseLayout {...props}>{props.children}</BaseLayout>
+    </LoggedOutAmplitudeExperimentProvider>
+  </UserProvider>
+);
+
+const BaseLayoutWrapperWithAuth = requireAuth(BaseLayoutWrapperAuth);
 
 const AuthProviderBaseLayout: React.FC<LayoutProps> = ({ requireAuth, ...props }) => {
   return (

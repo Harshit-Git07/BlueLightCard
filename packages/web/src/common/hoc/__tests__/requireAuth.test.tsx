@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@/root/test-utils';
 import AuthProvider from '@/context/Auth/AuthProvider';
 import AuthContext from '@/context/Auth/AuthContext';
 import requireAuth from '@/hoc/requireAuth';
@@ -7,6 +7,18 @@ import React, { FC, useContext, useEffect } from 'react';
 
 const futureJWT =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjEwMDAwMDAwMDAwMDAwMDAwfQ.SM2xcm771CPS2CqOCUS91SF9ntftQl6cvoOCA11qSJA';
+
+jest.mock('../../utils/amplitude/AmplitudeDeviceExperimentClient', () => ({
+  __esModule: true,
+  default: {
+    Instance: () =>
+      Promise.resolve({
+        variant: () => ({
+          value: 'treatment',
+        }),
+      }),
+  },
+}));
 
 jest.mock('next/router', () => ({
   useRouter() {
@@ -145,7 +157,7 @@ describe('withAuth HOC', () => {
     expect(username).toBe('test');
   });
 
-  it('should attempt to redirect using window.location.replace due to domain name', () => {
+  it('should attempt to redirect using window.location.replace due to domain name', async () => {
     // Mock window location
     Object.defineProperty(window, 'location', {
       value: {
@@ -175,6 +187,8 @@ describe('withAuth HOC', () => {
       </AuthProvider>
     );
 
-    expect(replaceMock).toBeCalled();
+    await waitFor(() => {
+      expect(replaceMock).toHaveBeenCalled();
+    });
   });
 });

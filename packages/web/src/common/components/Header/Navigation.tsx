@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/pro-regular-svg-icons';
@@ -8,12 +8,20 @@ import DesktopNavigation from './DesktopNavigation';
 import SearchButton from './SearchButton';
 import { NavProp } from './types';
 import { getNavItems } from '@/data/headerConfig';
-import useFeatureFlag from '@/hooks/useFeatureFlag';
-import { FlagsmithFeatureFlags } from '@/utils/flagsmith/flagsmithFlags';
+import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks';
+import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
+import getDeviceFingerprint from '../../utils/amplitude/getDeviceFingerprint';
 
 const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearch }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
-  const isCognitoUIEnabled = useFeatureFlag(FlagsmithFeatureFlags.IDENTITY_COGNITO_UI_ENABLED);
+
+  const cognitoUIExperiment = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.IDENTITY_COGNITO_UI_ENABLED,
+    'control',
+    getDeviceFingerprint()
+  );
+
+  const isCognitoUIEnabled = cognitoUIExperiment.data?.variantName === 'treatment';
 
   function dropdownMenuHandler() {
     setDropdownMenu(!dropdownMenu);

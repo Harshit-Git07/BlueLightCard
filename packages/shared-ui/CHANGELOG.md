@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.0.0...shared-ui-v1.0.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* added missing typescript eslint module ([#1178](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1178)) ([1311da4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1311da4ade52c2e5aee4b99873e2dba7a0a51ec1))
+
 ## 1.0.0 (2024-04-11)
 
 

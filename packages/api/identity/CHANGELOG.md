@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.55.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.54.0...bluelightcard/identity-v1.55.0) (2024-04-15)
+
+
+### Features
+
+* Ti 1074 external partners integration new ([#1179](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1179)) ([29b11bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/29b11bb97dd389f8d9a14c1a734ed08eeb376491))
+
 ## [1.54.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.53.0...bluelightcard/identity-v1.54.0) (2024-04-12)
 
 

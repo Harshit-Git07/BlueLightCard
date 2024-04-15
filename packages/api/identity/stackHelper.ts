@@ -555,7 +555,7 @@ export function createNewCognito(
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
 
-    createExternalClient(stack, cognito, true);
+    createExternalClient(stack, cognito, false);
   }
   return cognito;
 }

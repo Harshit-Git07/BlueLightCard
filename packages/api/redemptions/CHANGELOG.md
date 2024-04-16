@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.9.0...bluelightcard/redemptions-v1.10.0) (2024-04-15)
+
+
+### Features
+
+* shared UI ([#1109](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1109)) ([d7d3551](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d7d3551c040241bedede7c9a74e41405ce1dac78))
+
+
+### Bug Fixes
+
+* **redemptions:** Switch on correct redemption type on email handler ([#1161](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1161)) ([bd5c987](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bd5c98778e950c704849b7b6b29d7d2bc97f56de))
+
 ## [1.7.6](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.7.5...bluelightcard/redemptions-v1.7.6) (2024-04-05)
 
 

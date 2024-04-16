@@ -1,7 +1,7 @@
 'use client';
 import { ClipboardCard } from '@/page-components/ClipbaordCard/ClipboardCard';
 import { useContext, useEffect, useState, useRef } from 'react';
-import { OfferData } from '@/page-components/ClipbaordCard/types/offerData';
+import { OfferData } from '@core/types/offerdata';
 import { decodeBase64 } from '@/utils/base64';
 import amplitudeEvents from '@/utils/amplitude/events';
 import { useSearchParams } from 'next/navigation';
@@ -47,7 +47,7 @@ export default function CopyCodePage() {
       const codeString = decodeBase64(code);
       await navigator.clipboard.writeText(codeString);
       if (amplitude) {
-        amplitude.trackEventAsync(amplitudeEvents.EMAIL_CODE_CLICKED, data);
+        await amplitude.trackEventAsync(amplitudeEvents.EMAIL_CODE_CLICKED, data);
       }
       setCopied(true);
       setButtonText('Code copied!');

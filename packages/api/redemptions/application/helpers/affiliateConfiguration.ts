@@ -22,7 +22,7 @@ export type AffiliateConfiguration = {
   getTrackingUrl(memberId: string): string;
 };
 
-type AffiliateConfigurationMatch = AffiliateConfiguration & {
+export type AffiliateConfigurationMatch = AffiliateConfiguration & {
   /**
    * `true` if the affiliate URL is a match for this affiliate config.
    */

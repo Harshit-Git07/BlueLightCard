@@ -1,47 +1,20 @@
-import { APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import { createInjector } from 'typed-inject';
 
+import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
-import { Response } from '@blc-mono/core/utils/restResponse/response';
-import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
+import { Logger } from '@blc-mono/core/utils/logger/logger';
+import { AffiliateController } from '@blc-mono/redemptions/application/controllers/apiGateway/affiliate/AffiliateController';
 
-import { AffiliateConfigurationHelper } from '../../../helpers/affiliateConfiguration';
-
-interface IAPIGatewayEvent extends APIGatewayEvent {
-  body: string;
-}
-
-const service: string = process.env.service as string;
+const service: string = getEnvRaw('SERVICE_NAME') ?? 'redemptions';
 const logger = new LambdaLogger({ serviceName: `${service}-affiliate-post` });
 
-export const handler = async (event: IAPIGatewayEvent): Promise<APIGatewayProxyStructuredResultV2> => {
-  const { affiliateUrl, memberId, platform, offerId, companyId }: PostAffiliateModel = JSON.parse(
-    event.body,
-  ) as PostAffiliateModel;
-  const affiliateConfig = new AffiliateConfigurationHelper(affiliateUrl).getConfig();
+const controller = createInjector()
+  // Common
+  .provideValue(Logger.key, logger)
+  // Controller
+  .injectClass(AffiliateController);
 
-  if (!affiliateConfig) {
-    logger.error({
-      message: 'Affiliate not supported',
-      body: { affiliateUrl, platform },
-    });
-
-    return Response.Error(new Error('Error while creating tracking URL (affiliate not supported)'));
-  }
-
-  const trackingUrl: string = affiliateConfig.getTrackingUrl(memberId);
-  const response = Response.OK({ message: 'Success', data: { trackingUrl } });
-
-  logger.info({
-    message: 'Successful affiliate url request',
-    body: {
-      affiliateUrl,
-      trackingUrl,
-      platform,
-      companyId,
-      offerId,
-    },
-    status: response.statusCode,
-  });
-
-  return response;
-};
+/**
+ * Handler for a REST API endpoint to redeem an offer.
+ */
+export const handler = controller.invoke;

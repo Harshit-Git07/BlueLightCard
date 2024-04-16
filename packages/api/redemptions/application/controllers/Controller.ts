@@ -51,7 +51,7 @@ export abstract class Controller<
    */
   protected abstract onRequest(request: Request): void;
   protected abstract parseRequest(request: Request): Result<ParsedRequest, ParseRequestError>;
-  protected abstract handle(request: ParsedRequest): Promise<HandlerResult>;
+  protected abstract handle(request: ParsedRequest): Promise<HandlerResult> | HandlerResult;
   protected abstract formatResponse(request: Request, result: HandlerResult): Response;
   protected abstract onUnhandledError(request: Request, err: unknown): Promise<Response>;
   protected abstract onParseError(request: Request, err: ParseRequestError): Promise<Response>;

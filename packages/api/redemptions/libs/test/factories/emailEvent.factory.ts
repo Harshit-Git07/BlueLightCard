@@ -13,6 +13,7 @@ export const emailEventFactory = Factory.define<RedemptionTransactionalEmailEven
     },
     redemptionDetails: {
       redemptionId: faker.string.uuid(),
+      affiliate: faker.company.name(),
       redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
       companyId: faker.string.uuid(),
       companyName: faker.company.name(),

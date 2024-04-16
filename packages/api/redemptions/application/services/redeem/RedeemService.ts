@@ -1,4 +1,5 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
+import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import { RedemptionEventDetailType } from '@blc-mono/redemptions/infrastructure/eventBridge/events/redemptions';
 
 import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
@@ -57,6 +58,8 @@ export class RedeemService implements IRedeemService {
     const result = await redeemStrategy.redeem(redemption, params);
 
     if (result.kind === 'Ok' && result.redemptionType === 'vault') {
+      const affiliateConfig = AffiliateHelper.getAffiliateConfig(result.redemptionDetails.url);
+
       await Promise.all([
         this.redemptionEventsRepository.publishEvent(RedemptionEventDetailType.REDEEMED_VAULT, {
           memberDetails: {
@@ -70,6 +73,7 @@ export class RedeemService implements IRedeemService {
             offerId: String(redemption.offerId),
             offerName: params.offerName,
             code: result.redemptionDetails.code,
+            affiliate: affiliateConfig?.affiliate ?? null,
             url: result.redemptionDetails.url,
           },
         }),

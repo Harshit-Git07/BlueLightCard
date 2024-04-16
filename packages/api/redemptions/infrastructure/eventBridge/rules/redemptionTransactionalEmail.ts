@@ -28,6 +28,7 @@ export function createRedemptionTransactionalEmailRule(
     environment: {
       BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID: config.brazeVaultRedemptionVaultCampaignId,
       BRAZE_API_URL: config.brazeApiUrl,
+      REDEMPTIONS_DEVELOPMENT_HOST: config.redemptionsWebHost,
     },
     permissions: [getSecretValueSecretsManager],
   });

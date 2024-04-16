@@ -12,7 +12,7 @@ import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
 
 import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeController';
 
-const RedemptionTransactionalEmailEventDetailSchema = z.object({
+export const RedemptionTransactionalEmailEventDetailSchema = z.object({
   memberDetails: z.object({
     memberId: z.string(),
     brazeExternalUserId: z.string(),
@@ -24,6 +24,7 @@ const RedemptionTransactionalEmailEventDetailSchema = z.object({
     offerId: z.string(),
     offerName: z.string(),
     code: z.string(),
+    affiliate: z.string().nullable(),
     url: z.string(),
   }),
 });

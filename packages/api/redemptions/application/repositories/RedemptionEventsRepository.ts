@@ -7,7 +7,7 @@ import {
   REDEMPTIONS_EVENT_SOURCE,
 } from '@blc-mono/redemptions/infrastructure/eventBridge/events/redemptions';
 
-type RedemptionEventDetail = {
+export type RedemptionEventDetail = {
   memberDetails: {
     memberId: string;
     brazeExternalUserId: string;
@@ -19,6 +19,7 @@ type RedemptionEventDetail = {
     offerId: string;
     offerName: string;
     code: string;
+    affiliate: string | null;
     url: string;
   };
 };

@@ -8,6 +8,7 @@ import AmplitudeContext from '@/context/AmplitudeContext';
 import UserContext from '@/context/User/UserContext';
 import { logOfferView } from '@/utils/amplitude/logOfferView';
 import { usePathname } from 'next/navigation';
+import { redirect } from '@/utils/externalRedirect';
 
 const OfferCard: FC<OfferCardProps> = ({
   imageSrc,
@@ -90,7 +91,14 @@ const OfferCard: FC<OfferCardProps> = ({
       data-testid={id}
     >
       {hasLink && (
-        <Link href={offerLink} useLegacyRouting onClick={() => logClick('page')}>
+        <Link
+          href={offerLink}
+          useLegacyRouting
+          onClick={() => {
+            logClick('page');
+            redirect(offerLink);
+          }}
+        >
           {body}
         </Link>
       )}

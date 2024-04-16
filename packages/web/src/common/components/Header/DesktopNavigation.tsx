@@ -36,6 +36,9 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
               }`}
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
               data-testid={navItem.text + '-header-link'}
+              onClickLink={
+                navItem.onClickLink ? () => navItem.onClickLink!(navItem.text) : undefined
+              }
             >
               {navItem.text} {hasDropdown && downArrow}
             </Link>
@@ -53,6 +56,9 @@ const DesktopNavigation: FC<MenuNavProps> = ({ menu }) => {
                         data-testid={link.text + '-header-link'}
                         className="text-base text-palette-body-text hover:text-[#36c] block whitespace-nowrap no-underline px-5 py-2.5 border-b-[rgba(0,0,0,0.05)] border-b border-solid bg-shade-greyscale-white"
                         useLegacyRouting={link.link ? link.link.includes('.php') : true}
+                        onClickLink={
+                          link.onClickLink ? () => link.onClickLink!(link.text) : undefined
+                        }
                       >
                         {link.text}
                       </Link>

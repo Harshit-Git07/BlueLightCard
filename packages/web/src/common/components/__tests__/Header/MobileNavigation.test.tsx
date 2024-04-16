@@ -89,4 +89,56 @@ describe('Mobile Navigation component', () => {
       expect(navItem.length).toBeGreaterThan(0);
     });
   });
+
+  describe('onClickLink', () => {
+    it('should render onClickLink for parent item', () => {
+      let onClickLinkCalled = false;
+      render(
+        <MobileNavigation
+          menu={[
+            {
+              text: 'Discover savings',
+              link: '/discover',
+              onClickLink: (_target: string) => {
+                onClickLinkCalled = true;
+                return Promise.resolve();
+              },
+            },
+          ]}
+        />
+      );
+      const navLink = screen.getByRole('link', { name: 'Discover savings' });
+      navLink.click();
+
+      expect(onClickLinkCalled).toBeTruthy();
+    });
+
+    it('should render onClickLink for dropdown item', () => {
+      let onClickLinkCalled = false;
+      render(
+        <MobileNavigation
+          menu={[
+            {
+              text: 'Discover savings',
+              link: '/discover',
+              dropdown: [
+                {
+                  text: 'Holidays',
+                  link: '/holidays',
+                  onClickLink: (_target: string) => {
+                    onClickLinkCalled = true;
+                    return Promise.resolve();
+                  },
+                },
+              ],
+            },
+          ]}
+        />
+      );
+      const navLink = screen.getByRole('link', { name: 'Holidays' });
+      navLink.click();
+
+      expect(onClickLinkCalled).toBeTruthy();
+    });
+  });
 });

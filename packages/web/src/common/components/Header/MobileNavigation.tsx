@@ -31,6 +31,9 @@ const MobileNavigation: FC<MenuNavProps> = ({ menu }) => (
                 navItem.textColor ? navItem.textColor : 'group-hover:text-[#36c]'
               }`}
               useLegacyRouting={navItem.link ? navItem.link.includes('.php') : true}
+              onClickLink={
+                navItem.onClickLink ? () => navItem.onClickLink!(navItem.text) : undefined
+              }
             >
               {navItem.text}
               {hasDropdown && downArrow}
@@ -46,6 +49,9 @@ const MobileNavigation: FC<MenuNavProps> = ({ menu }) => (
                       href={link.link}
                       className="font-normal text-palette-body-text inline-block bg-shade-greyscale-white px-5 py-2 hover:text-[#36c]"
                       useLegacyRouting={link.link.includes('.php')}
+                      onClickLink={
+                        link.onClickLink ? () => link.onClickLink!(link.text) : undefined
+                      }
                     >
                       {link.text}
                     </Link>

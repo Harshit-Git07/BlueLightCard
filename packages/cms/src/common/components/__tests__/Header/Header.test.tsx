@@ -1,6 +1,5 @@
 import Header from '@/components/Header/Header';
 import { render, screen } from '@testing-library/react';
-import renderer from 'react-test-renderer';
 
 describe('Header component', () => {
   describe('smoke test', () => {

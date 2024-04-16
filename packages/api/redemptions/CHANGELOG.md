@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.10.0...bluelightcard/redemptions-v1.11.0) (2024-04-16)
+
+
+### Features
+
+* add logic for emails urls ([8eaeae4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8eaeae459d5e21ed83c093714e41a0bb9ff68137))
+
+
+### Bug Fixes
+
+* [TR-437] add affiliate urls to emails ([#1176](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1176)) ([8eaeae4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8eaeae459d5e21ed83c093714e41a0bb9ff68137))
+
 ## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.9.0...bluelightcard/redemptions-v1.10.0) (2024-04-15)
 
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.46.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.45.0...bluelightcard/web-v1.46.0) (2024-04-16)
+
+
+### Features
+
+* [DISCO-15] Add Global Nav analytics ([#1152](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1152)) ([6c0f8f1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6c0f8f1f4feac15506dfecca1b496b3929ecaa38))
+
+
+### Bug Fixes
+
+* missing npm auth token ([#1184](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1184)) ([2fa02ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2fa02ad4dc90c2464e3731cb9b4cdafc6f830c93))
+
 ## [1.45.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.44.1...bluelightcard/web-v1.45.0) (2024-04-15)
 
 

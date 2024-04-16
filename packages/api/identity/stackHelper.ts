@@ -234,11 +234,6 @@ export function createOldCognitoDDS(
           IDENTITY_TABLE_NAME: identityTable.tableName
         },
         permissions: ['dynamodb:*']
-      },
-      preAuthentication: {
-        handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
-        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
-        permissions: [unsuccessfulLoginAttemptsTable]
       }
     },
     cdk: {
@@ -409,7 +404,7 @@ export function createNewCognito(
       },
       preAuthentication: {
         handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
-        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
+        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret, false),
         permissions: [unsuccessfulLoginAttemptsTable]
       }
     },
@@ -616,7 +611,7 @@ export function createNewCognitoDDS(
       },
       preAuthentication: {
         handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
-        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret),
+        environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret, true),
         permissions: [unsuccessfulLoginAttemptsTable]
       }
     },
@@ -744,7 +739,7 @@ export function createNewCognitoDDS(
     });
     const preAuthenticationLogGroupDds: ILogGroup | undefined =
       cognito_dds.getFunction('preTokenGeneration')?.logGroup;
-    preAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
+      preAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
       destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
@@ -755,13 +750,17 @@ export function createNewCognitoDDS(
   return cognito_dds;
 }
 
-function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Table, identitySecret: ISecret) {
+function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Table, identitySecret: ISecret, isDds: boolean) {
+  const API_AUTHORISER_USER = isDds ? 'DDS_API_AUTHORISER_USER' : 'BLC_API_AUTHORISER_USER';
+  const API_AUTHORISER_PASSWORD = isDds ? 'DDS_API_AUTHORISER_PASSWORD' : 'BLC_API_AUTHORISER_PASSWORD';
+  const RESET_PASSWORD_API_URL = isDds ? 'DDS_RESET_PASSWORD_API_URL' : 'BLC_RESET_PASSWORD_API_URL';
+
   return {
     SERVICE: 'identity',
     TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
-    API_AUTHORISER_USER_BLC: identitySecret.secretValueFromJson('API_AUTHORISER_USER_BLC').toString(),
-    API_AUTHORISER_PASSWORD_BLC: identitySecret.secretValueFromJson('API_AUTHORISER_PASSWORD_BLC').toString(),
-    RESET_PASSWORD_API_URL: identitySecret.secretValueFromJson('RESET_PASSWORD_API_URL').toString(),
+    API_AUTHORISER_USER: identitySecret.secretValueFromJson(API_AUTHORISER_USER).toString(),
+    API_AUTHORISER_PASSWORD: identitySecret.secretValueFromJson(API_AUTHORISER_PASSWORD).toString(),
+    RESET_PASSWORD_API_URL: identitySecret.secretValueFromJson(RESET_PASSWORD_API_URL).toString(),
     WRONG_PASSWORD_ENTER_LIMIT: identitySecret.secretValueFromJson('WRONG_PASSWORD_ENTER_LIMIT').toString(),
     WRONG_PASSWORD_RESET_TRIGGER_MINUTES: identitySecret.secretValueFromJson('WRONG_PASSWORD_RESET_TRIGGER_MINUTES').toString(),
   }

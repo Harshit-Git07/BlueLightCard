@@ -4,15 +4,6 @@ import React from 'react';
 import Header from '@/components/Header/Header';
 import { HeaderProps } from '@/components/Header/types';
 
-jest.mock('@/hooks/useLogGlobalNavigation', () => ({
-  useLogGlobalNavigationOffersClicked: jest.fn(() => ({
-    logOffersClicked: jest.fn(),
-    logBrowseCategoriesClicked: jest.fn(),
-    logMyCardClicked: jest.fn(),
-    logMyAccountClicked: jest.fn(),
-  })),
-}));
-
 describe('Header component', () => {
   let props: HeaderProps;
   beforeEach(() => {

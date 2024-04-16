@@ -5,7 +5,6 @@ import {
   COGNITO_LOGIN_URL,
   COGNITO_LOGOUT_URL,
 } from '@/global-vars';
-import { redirect } from '@/utils/externalRedirect';
 
 const blackFridayLink = {
   text: 'Black Friday',
@@ -21,13 +20,7 @@ export const navLinks = {
   notificationsUrl: '/notifications.php',
 };
 
-export const getNavItems = (
-  isCognitoUIEnabled: boolean = false,
-  logOffersClicked: (navigationTarget: string) => Promise<void>,
-  logBrowseCategoriesClicked: (navigationTarget: string) => Promise<void>,
-  logMyCardClicked: () => Promise<void>,
-  logMyAccountClicked: () => Promise<void>
-): NavItems => ({
+export const getNavItems = (isCognitoUIEnabled: boolean = false): NavItems => ({
   loggedOut: [
     {
       text: 'Home',
@@ -84,50 +77,26 @@ export const getNavItems = (
         {
           text: 'Online Discounts',
           link: '/offers.php?type=0',
-          onClickLink: async (target) => {
-            await logOffersClicked(target);
-            redirect('/offers.php?type=0');
-          },
         },
         {
           text: 'Giftcard Discounts',
           link: '/offers.php?type=2',
-          onClickLink: async (target) => {
-            await logOffersClicked(target);
-            redirect('/offers.php?type=2');
-          },
         },
         {
           text: 'High Street Offers',
           link: '/offers.php?type=5',
-          onClickLink: async (target) => {
-            await logOffersClicked(target);
-            redirect('/offers.php?type=5');
-          },
         },
         {
           text: 'Popular Discounts',
           link: '/offers.php?type=3',
-          onClickLink: async (target) => {
-            await logOffersClicked(target);
-            redirect('/offers.php?type=3');
-          },
         },
         {
           text: 'Offers Near You',
           link: '/nearme.php',
-          onClickLink: async (target) => {
-            await logOffersClicked(target);
-            redirect('/nearme.php');
-          },
         },
         {
           text: 'Deals of the Week',
           link: '/members-home',
-          onClickLink: async (target) => {
-            await logOffersClicked(target);
-            redirect('/members-home');
-          },
         },
       ],
     },
@@ -137,36 +106,20 @@ export const getNavItems = (
         {
           text: 'Holiday Discounts',
           link: '/holiday-discounts.php',
-          onClickLink: async (target) => {
-            await logBrowseCategoriesClicked(target);
-            redirect('/holiday-discounts.php');
-          },
         },
         {
           text: 'Days Out',
           link: '/days-out.php',
-          onClickLink: async (target) => {
-            await logBrowseCategoriesClicked(target);
-            redirect('/days-out.php');
-          },
         },
       ],
     },
     {
       text: 'My Card',
       link: '/highstreetcard.php',
-      onClickLink: async (target) => {
-        await logMyCardClicked();
-        redirect('/highstreetcard.php');
-      },
     },
     {
       text: 'My Account',
       link: '/account.php',
-      onClickLink: async (target) => {
-        await logMyAccountClicked();
-        redirect('/account.php');
-      },
     },
     {
       text: 'FAQs',

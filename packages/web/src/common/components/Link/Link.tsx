@@ -11,13 +11,7 @@ const Link: FC<LinkProps> = ({
 }) => {
   if (useLegacyRouting) {
     return (
-      <a
-        className="dark:text-palette-secondary"
-        data-testid="anchor-link"
-        href={onClickLink ? '#' : href}
-        onClick={onClickLink}
-        {...props}
-      >
+      <a className="dark:text-palette-secondary" data-testid="anchor-link" href={href} {...props}>
         {children}
       </a>
     );
@@ -37,7 +31,6 @@ const Link: FC<LinkProps> = ({
         className="dark:text-palette-secondary"
         data-testid="next-link"
         href={href ? href : ''}
-        onClick={onClickLink}
         {...props}
       >
         {children}

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/pro-regular-svg-icons';
@@ -11,7 +11,6 @@ import { getNavItems } from '@/data/headerConfig';
 import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks';
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 import getDeviceFingerprint from '../../utils/amplitude/getDeviceFingerprint';
-import { useLogGlobalNavigationOffersClicked } from '@/hooks/useLogGlobalNavigation';
 
 const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearch }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
@@ -31,16 +30,8 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
   function displaySearchHandler() {
     setDisplaySearch(!displaySearch);
   }
-  const { logOffersClicked, logBrowseCategoriesClicked, logMyCardClicked, logMyAccountClicked } =
-    useLogGlobalNavigationOffersClicked();
 
-  const { loggedIn, loggedOut } = getNavItems(
-    isCognitoUIEnabled,
-    logOffersClicked,
-    logBrowseCategoriesClicked,
-    logMyCardClicked,
-    logMyAccountClicked
-  );
+  const { loggedIn, loggedOut } = getNavItems(isCognitoUIEnabled);
   const menu = authenticated ? loggedIn : loggedOut;
 
   return (

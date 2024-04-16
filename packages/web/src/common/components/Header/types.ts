@@ -29,8 +29,7 @@ export interface NavItem {
   textColor?: string;
   startTime?: string;
   endTime?: string;
-  dropdown?: { text: string; link: string; onClickLink?: (target: string) => Promise<void> }[];
-  onClickLink?: (target: string) => Promise<void>;
+  dropdown?: { text: string; link: string }[];
 }
 
 export interface NavigationProps {
@@ -58,11 +57,9 @@ export interface MenuNavProps {
     textColor?: string;
     startTime?: string;
     endTime?: string;
-    onClickLink?: (target: string) => Promise<void>;
     dropdown?: {
       text: string;
       link: string;
-      onClickLink?: (target: string) => Promise<void>;
     }[];
   }[];
 }

@@ -14,6 +14,7 @@ import { getNavItems } from '@/data/headerConfig';
 import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks';
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 import getDeviceFingerprint from '../../utils/amplitude/getDeviceFingerprint';
+import { useLogGlobalNavigationOffersClicked } from '@/hooks/useLogGlobalNavigation';
 
 const Navigation: FC<NavProp> = ({ authenticated }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
@@ -33,7 +34,16 @@ const Navigation: FC<NavProp> = ({ authenticated }) => {
     setDropdownMenu(!dropdownMenu);
   }
 
-  const { loggedIn, loggedOut } = getNavItems(isCognitoUIEnabled);
+  const { logOffersClicked, logBrowseCategoriesClicked, logMyCardClicked, logMyAccountClicked } =
+    useLogGlobalNavigationOffersClicked();
+
+  const { loggedIn, loggedOut } = getNavItems(
+    isCognitoUIEnabled,
+    logOffersClicked,
+    logBrowseCategoriesClicked,
+    logMyCardClicked,
+    logMyAccountClicked
+  );
   const menu = authenticated ? loggedIn : loggedOut;
 
   return (

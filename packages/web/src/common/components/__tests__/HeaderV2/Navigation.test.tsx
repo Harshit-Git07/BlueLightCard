@@ -1,7 +1,7 @@
 import { render, screen } from '@/root/test-utils';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import Navigation from '@/components/Header/Navigation';
+import Navigation from '@/components/HeaderV2/Navigation';
 import { NavProp } from '@/components/Header/types';
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context';

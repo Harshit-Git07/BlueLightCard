@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.11.0...bluelightcard/redemptions-v1.12.0) (2024-04-17)
+
+
+### Features
+
+* Removed vault `terms` property ([#1201](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1201)) ([59c9feb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/59c9febae25670b26919be66b295283038a9935c))
+
 ## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.10.0...bluelightcard/redemptions-v1.11.0) (2024-04-16)
 
 

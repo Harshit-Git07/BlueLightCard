@@ -21,5 +21,4 @@ export const vaultFactory = Factory.define<typeof vaultsTable.$inferSelect>(() =
     max: 10,
   }),
   showQR: false,
-  terms: faker.lorem.sentence(),
 }));

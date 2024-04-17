@@ -199,7 +199,6 @@ describe('Redemption Strategies', () => {
         integration: 'eagleeye',
         maxPerUser,
         showQR: false,
-        terms: faker.lorem.sentence(),
       }));
     const vaultBatches = (vaultId: VaultBatch['vaultId']) =>
       Factory.define<typeof vaultBatchesTable.$inferSelect>(() => ({
@@ -420,7 +419,6 @@ describe('Redemption Strategies', () => {
           assignCodeToMember: jest.fn().mockResolvedValue({
             linkId: faker.string.uuid(),
             vaultId: faker.string.uuid(),
-            terms: faker.lorem.sentence(),
             code: desiredCode,
           }),
           getCodesRedeemed: jest.fn(),

@@ -89,7 +89,6 @@ export const vaultsTable = pgTable('vaults', {
   maxPerUser: integer('maxPerUser'),
   showQR: boolean('showQR').default(false).notNull(),
   status: statusEnum('status').notNull(),
-  terms: varchar('terms'),
   vaultType: vaultTypeEnum('vaultType').default('standard').notNull(),
 });
 

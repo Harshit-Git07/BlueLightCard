@@ -563,7 +563,6 @@ describe('VaultService', () => {
             alertBelow: faker.number.int(100),
             maxPerUser: faker.number.int(100),
             showQR: faker.datatype.boolean(),
-            terms: faker.lorem.paragraph(),
           },
         });
         await connection.db.insert(redemptionsTable).values({
@@ -584,7 +583,6 @@ describe('VaultService', () => {
         expect(vaults[0].alertBelow).toBe(event.detail.alertBelow);
         expect(vaults[0].maxPerUser).toBe(event.detail.maxPerUser);
         expect(vaults[0].showQR).toBe(event.detail.showQR);
-        expect(vaults[0].terms).toBe(event.detail.terms);
       });
       it('for redemptionId', async () => {
         // Arrange

@@ -25,7 +25,6 @@ const VaultCreatedEventDetailSchema = z.object({
   offerId: NON_NEGATIVE_INT,
   platform: PLATFORM_SCHEMA,
   showQR: z.boolean(),
-  terms: z.string(),
   ucCampaignId: NON_NEGATIVE_INT.nullable().optional(),
   vaultStatus: z.boolean(),
 });

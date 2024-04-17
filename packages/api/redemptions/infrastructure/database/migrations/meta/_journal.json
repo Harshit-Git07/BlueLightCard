@@ -43,6 +43,13 @@
       "when": 1710248657759,
       "tag": "0005_common_white_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1713347066563,
+      "tag": "0006_spotty_marvex",
+      "breakpoints": true
     }
   ]
 }

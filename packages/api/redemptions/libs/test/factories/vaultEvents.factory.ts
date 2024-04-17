@@ -48,7 +48,6 @@ export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDe
   }),
   platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
   showQR: faker.datatype.boolean(),
-  terms: faker.lorem.paragraph(),
   ucCampaignId: faker.helpers.maybe(() =>
     faker.number.int({
       min: 1,
@@ -98,7 +97,6 @@ export const vaultUpdatedEventDetailFactory = Factory.define<VaultUpdatedEventDe
     max: 1_000_000,
   }),
   showQR: faker.datatype.boolean(),
-  terms: faker.lorem.paragraph(),
   ucCampaignId: faker.helpers.maybe(() =>
     faker.number.int({
       min: 1,

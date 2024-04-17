@@ -59,8 +59,6 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       showQR: false,
       status: 'active',
       vaultType: 'standard',
-      terms:
-        'Cannot be used in conjunction with any other online and/or instore promotion. Excludes clearance lines. Online offer only.',
     },
     {
       id: `${vaultsPrefix}-a3fa14f4-81e2-45be-a5da-f1445641f378`,
@@ -72,8 +70,6 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       showQR: false,
       status: 'active',
       vaultType: 'legacy',
-      terms:
-        'Cannot be used in conjunction with any other online and/or instore promotion. Excludes clearance lines. Online offer only.',
     },
   ] satisfies (typeof vaultsTable.$inferInsert)[];
   await db.insert(vaultsTable).values(vaultsData).onConflictDoNothing();

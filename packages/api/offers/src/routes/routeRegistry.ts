@@ -10,15 +10,16 @@ import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { IDatabaseAdapter } from '../constructs/database/IDatabaseAdapter';
 import { CompanyOfferRoutes } from './company/offers/companyOfferRoutes';
 import { CompanyOffersModel } from 'src/models/companyOffers';
-import { OffersHomepageRoutes } from './offers/homepage/homepageRoutes';
-import { OffersHomepageModel } from 'src/models/offersHomepage';
+import { OffersHomepageRoutes } from './homepage/homepageRoutes';
+import { CategoryMenuModel, CompanyMenuModel, OffersHomepageModel } from 'src/models/offersHomepage';
+import { Tables } from '../constructs/tables';
 
 /**
  * The RouteRegistry class provides a centralized way to register all routes for the application.
  */
 export class RouteRegistry {
-  constructor(stack: Stack, api: ApiGatewayV1Api, dbAdapter?: IDatabaseAdapter) {
-    this.registerAllRoutes(stack, api, dbAdapter);
+  constructor(stack: Stack, api: ApiGatewayV1Api, dynamoTables: Tables, dbAdapter?: IDatabaseAdapter) {
+    this.registerAllRoutes(stack, api, dynamoTables, dbAdapter);
   }
 
   /**
@@ -26,8 +27,10 @@ export class RouteRegistry {
    *
    * @param {Stack} stack the AWS CDK stack
    * @param {ApiGatewayV1Api} api the API Gateway instance
+   * @param dynamoTables the DynamoDB tables
+   * @param dbAdapter the database adapter
    */
-  private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api, dbAdapter?: IDatabaseAdapter) {
+  private registerAllRoutes(stack: Stack, api: ApiGatewayV1Api, dynamoTables: Tables, dbAdapter?: IDatabaseAdapter) {
     const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
     const modelMap = this.generateModels(apiGatewayModelGenerator);
     if (!isProduction(stack.stage)) {
@@ -61,7 +64,12 @@ export class RouteRegistry {
       stack,
       api,
       apiGatewayModelGenerator,
-      model: modelMap.get('OffersHomepageModel')!,
+      model: {
+        [CompanyMenuModel._ModelName]: modelMap.get(CompanyMenuModel._ModelName)!,
+        [CategoryMenuModel._ModelName]: modelMap.get(CategoryMenuModel._ModelName)!,
+        [OffersHomepageModel._ModelName]: modelMap.get(OffersHomepageModel._ModelName)!,
+      },
+      dynamoTables,
     }).initialiseRoutes();
   }
 
@@ -70,7 +78,9 @@ export class RouteRegistry {
     models.set('OfferModel', agmg.generateModel(OfferModel).getModel());
     models.set('CompanyInfoModel', agmg.generateModel(CompanyInfoModel).getModel());
     models.set('CompanyOffersModel', agmg.generateModel(CompanyOffersModel).getModel());
-    models.set('OffersHomepageModel', agmg.generateModel(OffersHomepageModel).getModel());
+    models.set(OffersHomepageModel._ModelName, agmg.generateModel(OffersHomepageModel).getModel());
+    models.set(CompanyMenuModel._ModelName, agmg.generateModel(CompanyMenuModel).getModel());
+    models.set(CategoryMenuModel._ModelName, agmg.generateModel(CategoryMenuModel).getModel());
     return models;
   }
 }

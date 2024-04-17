@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { AppSyncResolverEvent } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { OfferCategoriesAndCompaniesResolver } from './homepage/resolveGetAllCompaniesAndCategoriesByBrandId';

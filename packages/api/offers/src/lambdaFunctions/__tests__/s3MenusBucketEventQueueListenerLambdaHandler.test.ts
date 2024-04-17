@@ -1,24 +1,24 @@
-import { handler} from "../s3MenusBucketEventQueueListenerLambdaHandler";
-import { mockClient} from "aws-sdk-client-mock";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
-import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb'
+import 'reflect-metadata';
+import { handler } from '../s3MenusBucketEventQueueListenerLambdaHandler';
+import { mockClient } from 'aws-sdk-client-mock';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { sdkStreamMixin } from '@smithy/util-stream';
 import { Readable } from 'stream';
-import { beforeEach, describe, expect, jest } from "@jest/globals";
-import { promises as fs } from "fs";
-import path from "path";
-import { BLC_UK, OFFER_MENUS_FILE_NAMES } from "../../utils/global-constants";
-import { Convertor } from "../../utils/convertor";
+import { beforeEach, describe, expect, jest } from '@jest/globals';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { BLC_UK, OFFER_MENUS_FILE_NAMES } from '../../utils/global-constants';
+import { Convertor } from '../../utils/convertor';
 
 process.env.OFFER_HOMEPAGE_TABLE = 'test-blc-mono-offersHomepage';
 
-const s3Mock = mockClient(S3Client)
+const s3Mock = mockClient(S3Client);
 const dynamoDbMock = mockClient(DynamoDBDocumentClient);
 
 const bucketName = 'test-blc-uk-offer-menus';
 
 describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
-
   beforeEach(() => {
     s3Mock.reset();
     dynamoDbMock.reset();
@@ -29,32 +29,34 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.FEATURED, bucketName);
     const featured = await getFileData(OFFER_MENUS_FILE_NAMES.FEATURED);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.FEATURED }).resolves({
-      Body: toReadableStream(featured) as any
-    })
+      Body: toReadableStream(featured) as any,
+    });
 
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.FEATURED, featured.toString()));
+    dynamoDbMock
+      .on(PutCommand)
+      .resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.FEATURED, featured.toString()));
 
     await handler(event);
 
     expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
-
   });
 
   it('should process an SQS S3 event for FLEXIBLE type and save data to DynamoDB', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.FLEXIBLE, bucketName);
     const flexible = await getFileData(OFFER_MENUS_FILE_NAMES.FLEXIBLE);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.FLEXIBLE }).resolves({
-      Body: toReadableStream(flexible) as any
-    })
+      Body: toReadableStream(flexible) as any,
+    });
 
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.FLEXIBLE, flexible.toString()));
+    dynamoDbMock
+      .on(PutCommand)
+      .resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.FLEXIBLE, flexible.toString()));
 
     await handler(event);
 
     expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
-
   });
 
   it('should process an SQS S3 event for DEALS type and save data to DynamoDB', async () => {
@@ -62,8 +64,8 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
     const deals = await getFileData(OFFER_MENUS_FILE_NAMES.DEALS);
 
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.DEALS }).resolves({
-      Body: toReadableStream(deals) as any
-    })
+      Body: toReadableStream(deals) as any,
+    });
 
     dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.DEALS, deals.toString()));
 
@@ -71,71 +73,74 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
 
     expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
-
   });
 
   it('should process an SQS S3 event for POPULAR type and save data to DynamoDB', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.POPULAR, bucketName);
     const popular = await getFileData(OFFER_MENUS_FILE_NAMES.POPULAR);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.POPULAR }).resolves({
-      Body: toReadableStream(popular) as any
-    })
+      Body: toReadableStream(popular) as any,
+    });
 
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.POPULAR, popular.toString()));
+    dynamoDbMock
+      .on(PutCommand)
+      .resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.POPULAR, popular.toString()));
 
     await handler(event);
 
     expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
-
   });
 
   it('should process an SQS S3 event for CATEGORIES type and save data to DynamoDB', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.CATEGORIES, bucketName);
     const categories = await getFileData(OFFER_MENUS_FILE_NAMES.CATEGORIES);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.CATEGORIES }).resolves({
-      Body: toReadableStream(categories) as any
-    })
+      Body: toReadableStream(categories) as any,
+    });
 
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.CATEGORIES, categories.toString()));
+    dynamoDbMock
+      .on(PutCommand)
+      .resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.CATEGORIES, categories.toString()));
 
     await handler(event);
 
     expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
-
   });
 
   it('should process an SQS S3 event for COMPANIES type and save data to DynamoDB', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.COMPANIES, bucketName);
     const companies = await getFileData(OFFER_MENUS_FILE_NAMES.COMPANIES);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.COMPANIES }).resolves({
-      Body: toReadableStream(companies) as any
-    })
+      Body: toReadableStream(companies) as any,
+    });
 
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.COMPANIES, companies.toString()));
+    dynamoDbMock
+      .on(PutCommand)
+      .resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.COMPANIES, companies.toString()));
 
     await handler(event);
 
     expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
-
   });
 
   it('should process an SQS S3 event for MARKETPLACE type and save data to DynamoDB', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.MARKETPLACE, bucketName);
     const marketPlaces = await getFileData(OFFER_MENUS_FILE_NAMES.MARKETPLACE);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.MARKETPLACE }).resolves({
-      Body: toReadableStream(marketPlaces) as any
-    })
+      Body: toReadableStream(marketPlaces) as any,
+    });
 
-    dynamoDbMock.on(PutCommand).resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.MARKETPLACE, marketPlaces.toString()));
+    dynamoDbMock
+      .on(PutCommand)
+      .resolves(mockPutDynamoResult(BLC_UK, OFFER_MENUS_FILE_NAMES.MARKETPLACE, marketPlaces.toString()));
 
     await handler(event);
 
     expect(dynamoDbMock.calls()).toHaveLength(1);
     expect(s3Mock.calls()).toHaveLength(1);
-
   });
 
   it('should be undefined if id is not found in bucket name', async () => {
@@ -153,15 +158,17 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
       Records: [
         {
           body: JSON.stringify({}),
-        }
-      ]
-    }
+        },
+      ],
+    };
     await expect(handler(event)).resolves.toBeUndefined();
   });
 
   it('should throw error if fetching to s3 failed', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.FEATURED, bucketName);
-    s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.FEATURED }).rejects(new Error('error fetching data from S3'));
+    s3Mock
+      .on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.FEATURED })
+      .rejects(new Error('error fetching data from S3'));
 
     await expect(handler(event)).rejects.toThrowError('error fetching data from S3');
   });
@@ -169,19 +176,19 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
   it('should throw error if returned data from s3 has empty body ', async () => {
     const event = createEvent(OFFER_MENUS_FILE_NAMES.FEATURED, bucketName);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.FEATURED }).resolves({
-      Body: undefined
+      Body: undefined,
     });
 
     await expect(handler(event)).rejects.toThrowError('error reading returned data from S3');
   });
 
-  it("should throw error if failed to convert stream to string", () => {
+  it('should throw error if failed to convert stream to string', () => {
     const mock = jest.spyOn(Convertor, 'streamToString').mockImplementation(() => {
       throw new Error('error converting stream to string');
     });
     const event = createEvent(OFFER_MENUS_FILE_NAMES.FEATURED, bucketName);
     s3Mock.on(GetObjectCommand, { Bucket: bucketName, Key: OFFER_MENUS_FILE_NAMES.FEATURED }).resolves({
-      Body: toReadableStream(Buffer.from('test')) as any
+      Body: toReadableStream(Buffer.from('test')) as any,
     });
 
     expect(handler(event)).rejects.toThrowError('error converting stream to string');
@@ -192,9 +199,9 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
       Attributes: {
         id: brandId,
         type: OFFER_MENUS_FILE_NAMES.DEALS,
-        json: data
-      }
-    }
+        json: data,
+      },
+    };
   }
 
   function createEvent(key: string, bucketName: string) {
@@ -206,18 +213,18 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
               {
                 s3: {
                   bucket: {
-                    name: bucketName
+                    name: bucketName,
                   },
                   object: {
-                    key: key
-                  }
-                }
-              }
-            ]
+                    key: key,
+                  },
+                },
+              },
+            ],
           }),
-        }
-      ]
-    }
+        },
+      ],
+    };
   }
 
   function toReadableStream(data: string | Buffer): Readable {
@@ -230,6 +237,4 @@ describe('Test s3MenusBucketEventQueueListenerLambdaHandler', () => {
   async function getFileData(fileName: string) {
     return await fs.readFile(path.join(__dirname, '../../', 'seeds', 'sample-files', fileName));
   }
-
 });
-

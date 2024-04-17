@@ -25,12 +25,15 @@ export async function Offers({ stack, app }: StackContext) {
   const { vpc, certificateArn } = use(Shared);
   const secretsManger: SecretManager = new SecretManager(stack);
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
+  const queues = new Queues(stack);
+  const tables = new Tables(stack);
+  const buckets = new Buckets(stack, stack.stage, queues);
   const ec2Manager: EC2Manager = new EC2Manager(stack, vpc, securityGroupManager);
   let dbAdapter: IDatabaseAdapter | undefined;
   if (!isProduction(stack.stage)) {
     dbAdapter = await new DatabaseAdapter(stack, app, vpc, secretsManger, securityGroupManager, ec2Manager).init();
   }
-  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, dbAdapter, certificateArn);
+  const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, tables, dbAdapter, certificateArn);
 
   //Need to be removed once the ApiGateway is ready to support the Offers API functionality
   const offersApi: OffersApi = new OffersApi(
@@ -44,9 +47,6 @@ export async function Offers({ stack, app }: StackContext) {
   // Need to be removed once the Appsync API is removed
   new AppsyncCache(stack, stack.stage, offersApi.api);
 
-  const queues = new Queues(stack);
-  const tables = new Tables(stack);
-  const buckets = new Buckets(stack, stack.stage, queues);
   const lambdas = new Lambda(stack, tables, buckets, queues, stack.stage);
   const dataSources = new DataSource(offersApi.api, tables, lambdas);
   const resolvers = new Resolver(dataSources);

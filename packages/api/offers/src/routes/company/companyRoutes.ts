@@ -1,9 +1,9 @@
 import { RouteProps } from '../routeProps';
 import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
-import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
+import { Model, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { EnvironmentVariablesKeys } from 'src/utils/environment-variables';
-import { isProduction } from "@blc-mono/core/utils/checkEnvironment";
+import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 
 export class CompanyRoutes {
   constructor(private readonly routeProps: RouteProps) {}
@@ -25,7 +25,7 @@ export class CompanyRoutes {
       },
       cdk: {
         method: {
-          requestModels: { 'application/json': this.routeProps.model! },
+          requestModels: { 'application/json': this.routeProps.model as Model },
           methodResponses: MethodResponses.toMethodResponses([
             this.routeProps.apiGatewayModelGenerator.getError404(),
             this.routeProps.apiGatewayModelGenerator.getError500(),
@@ -48,13 +48,13 @@ export class CompanyRoutes {
           service: 'recommended_companies',
           tableName: isProduction(this.routeProps.stack.stage)
             ? 'production-blc-mono-recommended-companies'
-            : 'staging-blc-mono-recommended-companies'
+            : 'staging-blc-mono-recommended-companies',
         },
         permissions: ['dynamodb:GetItem'],
       },
       cdk: {
         method: {
-          requestModels: { 'application/json': this.routeProps.model! },
+          requestModels: { 'application/json': this.routeProps.model as Model },
           methodResponses: MethodResponses.toMethodResponses([
             this.routeProps.apiGatewayModelGenerator.getError404(),
             this.routeProps.apiGatewayModelGenerator.getError500(),

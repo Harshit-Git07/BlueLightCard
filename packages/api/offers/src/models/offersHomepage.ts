@@ -12,3 +12,23 @@ export const OffersHomepageModel = createZodNamedType(
 );
 
 export type OffersHomepage = z.infer<typeof OffersHomepageModel>;
+
+export const CompanyMenuModel = createZodNamedType(
+  'CompanyMenuModel',
+  z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+);
+
+export type CompanyMenu = z.infer<typeof CompanyMenuModel>;
+
+export const CategoryMenuModel = createZodNamedType(
+  'CategoryMenuModel',
+  z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+);
+
+export type CategoryMenu = z.infer<typeof CategoryMenuModel>;

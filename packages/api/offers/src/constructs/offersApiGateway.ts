@@ -1,5 +1,4 @@
 import { ApiGatewayV1Api, Stack } from 'sst/constructs';
-import { Duration } from 'aws-cdk-lib';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { RouteRegistry } from '../routes/routeRegistry';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../../../core/src/identity/authorizer';
@@ -8,6 +7,7 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ENVIRONMENTS, OFFERS_DOMAIN_NAME } from '../utils/global-constants';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { REGIONS } from '@blc-mono/core/types/regions.enum';
+import { Tables } from './tables';
 
 /**
  * Sets up and configures the API Gateway for the offers application, including defining routes and authorizers.
@@ -20,12 +20,13 @@ export class OffersApiGateway {
   constructor(
     private stack: Stack,
     private authorizer: SharedAuthorizer,
+    private readonly dynamoTables: Tables,
     private dbAdapter?: IDatabaseAdapter,
     private readonly certificateArn?: string,
   ) {
     this._api = this.createApi();
     this._restApi = this._api.cdk.restApi;
-    new RouteRegistry(this.stack, this.api, this.dbAdapter);
+    new RouteRegistry(this.stack, this.api, this.dynamoTables, this.dbAdapter);
   }
 
   /**
@@ -62,14 +63,6 @@ export class OffersApiGateway {
       },
       defaults: {
         authorizer: 'offersAuthorizer',
-        function: {
-          timeout: Duration.seconds(5).toSeconds(),
-          memorySize: 256,
-          environment: {
-            service: 'offers',
-            REGION: this.stack.region,
-          },
-        },
       },
       cdk: {
         restApi: {

@@ -3,6 +3,7 @@ import { MethodResponses } from '../../../../../core/src/extensions/apiGatewayEx
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { OffersFunction } from 'src/constructs/sst/OffersFunction';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { Model } from 'aws-cdk-lib/aws-apigateway';
 
 export class OffersHomepageRoutes {
   constructor(private readonly routeProps: RouteProps) {}
@@ -25,7 +26,7 @@ export class OffersHomepageRoutes {
           permissions: ['dynamodb:BatchGetItem'],
         }),
         method: {
-          requestModels: { 'application/json': this.routeProps.model! },
+          requestModels: { 'application/json': this.routeProps.model as Model },
           methodResponses: MethodResponses.toMethodResponses([
             this.routeProps.apiGatewayModelGenerator.getError404(),
             this.routeProps.apiGatewayModelGenerator.getError500(),

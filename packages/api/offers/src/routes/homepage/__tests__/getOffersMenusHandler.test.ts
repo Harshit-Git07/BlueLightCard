@@ -1,16 +1,15 @@
 const OFFER_HOMEPAGE_TABLE = 'test-blc-mono-offersHomepage';
 process.env.OFFER_HOMEPAGE_TABLE_NAME = OFFER_HOMEPAGE_TABLE;
 
-import { BLC_UK, TYPE_KEYS } from '../../../../utils/global-constants';
+import { BLC_UK, TYPE_KEYS } from '../../../utils/global-constants';
 import { promises as fs } from 'fs';
 import { BatchGetCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import path from 'path';
-import { handler } from '../getOffersHomepageHandler';
-import { mockLambdaEvent } from '../../../../mocks/lambdaEvent';
-import { HttpStatusCode } from '../../../../../../core/src/types/http-status-code.enum';
+import { handler } from '../getOffersMenusHandler';
+import { mockLambdaEvent } from '../../../mocks/lambdaEvent';
+import { HttpStatusCode } from '../../../../../core/src/types/http-status-code.enum';
 import { APIGatewayEvent } from 'aws-lambda';
-import exp from 'constants';
 
 const dynamoDbMock = mockClient(DynamoDBDocumentClient);
 describe('Test resolveGetOfferMenusByBrandId', () => {
@@ -20,7 +19,7 @@ describe('Test resolveGetOfferMenusByBrandId', () => {
 
   it('should fetch the data from DynamoDB', async () => {
     const brandId = 'blc-uk';
-    const goBackDir = '../../../../';
+    const goBackDir = '../../../';
 
     const dealsOfTheWeek = await fs.readFile(path.join(__dirname, goBackDir, 'seeds', 'sample-files', 'deals.txt'));
     const featuredOffers = await fs.readFile(path.join(__dirname, goBackDir, 'seeds', 'sample-files', 'features.txt'));

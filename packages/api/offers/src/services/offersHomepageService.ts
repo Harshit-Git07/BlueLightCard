@@ -1,24 +1,104 @@
-import { inject, injectable } from 'tsyringe';
+import 'reflect-metadata';
+import { container, inject, injectable } from 'tsyringe';
 import { Logger } from '../../../core/src/utils/logger/logger';
 import { LambdaLogger } from '../../../core/src/utils/logger/lambdaLogger';
 import sortNumbers from '../../../core/src/utils/sortNumbers';
 import { OfferHomepageQueryInput } from '../models/queries-input/homepageMenuQueryInput';
-import { OffersHomepage } from '../models/offersHomepage';
-import { OfferHomepageRepository } from '../repositories/offersHomepageRepository';
+import { CategoryMenu, CompanyMenu, OffersHomepage } from '../models/offersHomepage';
+import { IOfferHomepageRepository, OfferHomepageRepository } from '../repositories/offersHomepageRepository';
 import { TYPE_KEYS } from '../utils/global-constants';
 import { ObjectDynamicKeys } from '../graphql/resolvers/queries/handlers/homepage/types';
 import { OfferRestriction } from '../../../core/src/offers/offerRestriction';
 
-interface IOffersHomepageService {
+/**
+ * Offers Homepage Service Interface
+ */
+export interface IOffersHomepageService {
   getHomepage(
     tableName: string,
     { brandId, isUnder18, organisation }: OfferHomepageQueryInput,
   ): Promise<OffersHomepage>;
+  getCategoryMenu(brand: string, type: TYPE_KEYS): Promise<CategoryMenu[]>;
+  getCompanyMenu(brand: string, type: TYPE_KEYS, isAgeGated: boolean): Promise<CompanyMenu[]>;
 }
 
 @injectable()
 export class OffersHomepageService implements IOffersHomepageService {
-  constructor(@inject(Logger.key) private readonly logger: LambdaLogger) {}
+  private offersHomePageRepository: IOfferHomepageRepository;
+  constructor(@inject(Logger.key) private readonly logger: LambdaLogger) {
+    this.offersHomePageRepository = container.resolve(OfferHomepageRepository);
+  }
+
+  /**
+   * Get the category menu for a brand
+   * @param brand
+   * @param type
+   * @returns Promise<CategoryMenu[]>
+   */
+  public async getCategoryMenu(brand: string, type: TYPE_KEYS): Promise<CategoryMenu[]> {
+    this.logger.info({ message: 'getCategoryMenu triggered', body: { brand, type } });
+    const result = await this.fetchByIdAndType(brand, type);
+    if (result && result.json) {
+      return JSON.parse(result.json) as CategoryMenu[];
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Get the company menu for a brand and apply ageGated restriction
+   * @param brand
+   * @param type
+   * @param isAgeGated
+   * @returns Promise<CompanyMenu[]>
+   */
+  public async getCompanyMenu(brand: string, type: TYPE_KEYS, isAgeGated: boolean): Promise<CompanyMenu[]> {
+    this.logger.info({ message: 'getCompanyMenu triggered', body: { brand, type, isAgeGated } });
+    const result = await this.fetchByIdAndType(brand, type);
+    if (result && result.json) {
+      return this.applyCompaniesRestriction(JSON.parse(result.json) as CompanyMenu[], isAgeGated);
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Fetch the data from dynamo table for homepage by brand and type
+   * @param brand
+   * @param type
+   * @returns data from dynamo table or undefined
+   * @throws error if fetching data fails
+   */
+  private async fetchByIdAndType(brand: string, type: TYPE_KEYS) {
+    this.logger.info({ message: 'fetchByIdAndType triggered', body: { brand, type } });
+    try {
+      const data = await this.offersHomePageRepository.getByIdAndType({ id: brand, type });
+      if (!data || !data.Item) {
+        this.logger.error({ message: `No categories or companies found for brand ${brand}` });
+        return undefined;
+      } else {
+        return data.Item;
+      }
+    } catch (error) {
+      this.logger.error({ message: `Error fetching categories or companies for brand ${brand}`, body: error });
+      throw error;
+    }
+  }
+
+  /**
+   * Apply ageGated restriction to company menu
+   * @param companies
+   * @param isAgeGated
+   * @returns companies after applying ageGated restriction
+   */
+  private async applyCompaniesRestriction(companies: CompanyMenu[], isAgeGated: boolean) {
+    this.logger.info({
+      message: 'applyCompaniesRestriction triggered',
+      body: { isAgeGated },
+    });
+    const restrictOffers = new OfferRestriction({ isUnder18: isAgeGated });
+    return companies.filter((company) => !restrictOffers.isCompanyRestricted(company));
+  }
 
   public async getHomepage(
     tableName: string,

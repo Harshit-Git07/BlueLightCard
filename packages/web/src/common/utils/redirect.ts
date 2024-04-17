@@ -6,6 +6,7 @@ export const redirect = (redirectURL: string, milliseconds: number, router: Next
     setTimeout(async () => {
       try {
         await router.push(decodeBase64(redirectURL));
+
         resolve();
       } catch (error) {
         reject();

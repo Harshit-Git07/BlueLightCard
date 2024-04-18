@@ -26,8 +26,9 @@ export function useOfferDetails(offer: OfferMeta) {
   const authCtx = useContext(AuthContext);
 
   return useQuery({
-    queryKey: ['offerDetails', authCtx.authState.idToken, offer.offerId],
-    queryFn: () => getOfferById(authCtx.authState.idToken, offer.offerId),
+    queryKey: ['offerDetails', authCtx.authState.idToken, offer?.offerId],
+    queryFn: () => getOfferById(authCtx.authState.idToken, offer?.offerId),
+    enabled: !!offer?.offerId,
   });
 }
 

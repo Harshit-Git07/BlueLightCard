@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const OfferSchema = z.object({
-  companyId: z.number().optional(),
-  companyLogo: z.string().optional(),
-  description: z.string().optional(),
-  expiry: z.string().optional(),
+  companyId: z.number(),
+  companyLogo: z.string(),
+  description: z.string(),
+  expiry: z.string(),
   id: z.number(),
-  name: z.string().optional(),
-  terms: z.string().optional(),
-  type: z.string().optional(),
+  name: z.string(),
+  terms: z.string(),
+  type: z.string(),
 });
 export type OfferData = z.infer<typeof OfferSchema>;
 

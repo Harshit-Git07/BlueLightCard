@@ -1,4 +1,4 @@
-import { FC, useContext, useMemo } from 'react';
+import { FC, useContext, useMemo, useState } from 'react';
 import useOffers from '@/hooks/useOffers';
 import Heading from '@/components/Heading/Heading';
 import CardCarousel from '@/components/Carousel/CardCarousel';
@@ -8,6 +8,7 @@ import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
 import { AppContext } from '@/store';
 import { NewsPreview } from '../news';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { PlatformVariant, OfferSheet as SharedOfferSheet } from '@bluelightcard/shared-ui';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import PopularBrandsSlider from '@/modules/popularbrands';
@@ -18,6 +19,30 @@ const analytics = new InvokeNativeAnalytics();
 const Offers: FC = () => {
   const { flexible, groups } = useOffers();
   const { experiments: expr } = useContext(AppContext);
+  // TODO uncomment below state to see the offer sheet working on mobile app
+  // const [isOfferSheetOpen, setIsOfferSheetOpen] = useState(false);
+
+  // TODO uncomment below mocked data variables to see the offer sheet working on mobile app
+  // also need to uncomment code at the bottom of this file to see the offer sheet component
+  // const mockedOfferDetails: any = {
+  //   status: 'success',
+  //   data: {
+  //     companyId: 4016,
+  //     companyLogo: 'companyimages/complarge/retina/',
+  //     description:
+  //       'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
+  //     expiry: '2030-06-30T23:59:59.000Z',
+  //     id: 3802,
+  //     name: 'Save with SEAT',
+  //     terms: 'Must be a Blue Light Card member in order to receive the discount.',
+  //     type: 'Online',
+  //   },
+  // };
+  // const mockedOfferToDisplay: any = {
+  //   offerId: 3802,
+  //   companyId: 4016,
+  //   companyName: 'SEAT',
+  // };
 
   /**
    * @experiment
@@ -63,7 +88,10 @@ const Offers: FC = () => {
     categoryTitle: string,
     { compid, offername, companyname }: OfferPromosModel,
   ) => {
+    // TODO remove below navigation once OfferSheet integration is completed and APIs are integrated on Get Discount button
     navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
+    // TODO uncomment below set state to see the offer sheet working on mobile app and comment above navigation.navigate to open the offerSheet
+    // setIsOfferSheetOpen(true);
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {
@@ -155,6 +183,29 @@ const Offers: FC = () => {
           </section>
         ))}
       </div>
+      {/* TODO uncomment below div and component once we have API v5 integration on mobile hybrid */}
+      {/* NOTE: SharedOfferSheet naming can be updated, this was just to make it cleared for now in the code. */}
+      {/* above you will be able to find mocked data just for the purpose of understanding what should be passed on to the props in below component */}
+      {/* should be the exact same structure that we will have on web, since implementation should be the same with API v5 */}
+      {/* <div
+        className={`w-full h-full transition-visibility duration-1000 ${
+          isOfferSheetOpen ? 'visible' : 'invisible'
+        }`}
+      >
+        <SharedOfferSheet
+          platform={PlatformVariant.Mobile}
+          isOpen={isOfferSheetOpen}
+          onClose={() => setIsOfferSheetOpen(false)}
+          // TODO replace with below values once we have the API integration for v5
+          // now we see mocked values so the component does not break
+          offerStatus={mockedOfferDetails.status}
+          offerDetails={mockedOfferDetails.data}
+          offerMeta={mockedOfferToDisplay}
+          // TODO CDN URL should be coming from an environment variable as on web package
+          cdnUrl="https://cdn.bluelightcard.co.uk"
+          isMobileHybrid={true}
+        />
+      </div> */}
     </>
   );
 };

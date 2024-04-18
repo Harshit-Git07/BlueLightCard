@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Accordion component should render an accordion with Markdown bold text 1`] = `
+<div
+  className="w-full leading-6"
+>
+  <button
+    className="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-[#DCDCDC] border-solid"
+    onClick={[Function]}
+  >
+    <div
+      className="w-full"
+    >
+      <h4
+        className="font-['MuseoSans'] text-base font-medium text-[#1C1D22]"
+      >
+        Terms and Conditions
+      </h4>
+    </div>
+    <div
+      className="flex max-w-[40px] items-center justify-end"
+    >
+      <div
+        style={
+          {
+            "height": 15,
+            "width": 15,
+          }
+        }
+      >
+        <svg
+          fill="none"
+          height="16"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.99999 1.33325H7.66666V7.33325H1.66666V8.66659H7.66666V14.6666H8.99999V8.66659H15V7.33325H8.99999V1.33325Z"
+            fill="#000033"
+          />
+        </svg>
+      </div>
+    </div>
+  </button>
+  <div
+    className="duration-200 ease-in-out hidden font-['MuseoSans'] py-3 text-base break-words font-light leading-5 whitespace-pre-wrap"
+  >
+    <span>
+      This is an 
+      <strong>
+        accordion
+      </strong>
+       message.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Accordion component should render an accordion with simple text 1`] = `
+<div
+  className="w-full leading-6"
+>
+  <button
+    className="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-[#DCDCDC] border-solid"
+    onClick={[Function]}
+  >
+    <div
+      className="w-full"
+    >
+      <h4
+        className="font-['MuseoSans'] text-base font-medium text-[#1C1D22]"
+      >
+        Simple accordion message
+      </h4>
+    </div>
+    <div
+      className="flex max-w-[40px] items-center justify-end"
+    >
+      <div
+        style={
+          {
+            "height": 15,
+            "width": 15,
+          }
+        }
+      >
+        <svg
+          fill="none"
+          height="16"
+          viewBox="0 0 16 16"
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.99999 1.33325H7.66666V7.33325H1.66666V8.66659H7.66666V14.6666H8.99999V8.66659H15V7.33325H8.99999V1.33325Z"
+            fill="#000033"
+          />
+        </svg>
+      </div>
+    </div>
+  </button>
+  <div
+    className="duration-200 ease-in-out hidden font-['MuseoSans'] py-3 text-base break-words font-light leading-5 whitespace-pre-wrap"
+  >
+    This is a simple accordion message.
+  </div>
+</div>
+`;

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Label component should render normal label 1`] = `
+<div
+  className="bg-[#ECEFF2]  inline-flex rounded-full px-3 py-1"
+>
+  <p
+    className="text-[#202125] font-["MuseoSans"] flex items-center text-xs font-bold leading-4"
+  >
+    Online
+  </p>
+</div>
+`;
+
+exports[`Label component should render red label 1`] = `
+<div
+  className="bg-[#D41121]  inline-flex rounded-full px-3 py-1"
+>
+  <p
+    className="text-white font-["MuseoSans"] flex items-center text-xs font-bold leading-4"
+  >
+    0/3 codes remaining
+  </p>
+</div>
+`;

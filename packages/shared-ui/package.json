@@ -44,6 +44,7 @@
     "rollup-plugin-node-builtins": "2.1.2",
     "rollup-plugin-node-externals": "^6.1.2",
     "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-svg": "2.0.0",
     "storybook": "^7.6.7",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.1",
@@ -57,11 +58,12 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint --ext .ts,.tsx",
-    "format:staged": "prettier --ignore-unknown --write",
-    "lint:staged": "eslint --fix",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test:watch": "jest --watch",
+    "format:staged": "prettier --ignore-unknown --write",
+    "lint:staged": "eslint --fix"
   },
   "author": "",
   "license": "ISC",
@@ -69,6 +71,8 @@
     "registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
-    "jotai": "2.7.0"
+    "jotai": "2.7.0",
+    "markdown-to-jsx": "7.4.6",
+    "moment": "2.30.1"
   }
 }

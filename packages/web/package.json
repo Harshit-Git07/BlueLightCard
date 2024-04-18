@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.3.2",
+    "@bluelightcard/shared-ui": "1.0.2",
     "@cucumber/cucumber": "^9.3.0",
     "@datadog/browser-rum": "^5.4.0",
     "@fortawesome/fontawesome-pro": "6.5.1",

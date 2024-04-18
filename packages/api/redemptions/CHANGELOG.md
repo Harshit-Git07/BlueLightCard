@@ -90,67 +90,61 @@
 
 ## [1.6.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.2...bluelightcard/redemptions-v1.6.3) (2024-03-25)
 
-
 ### Bug Fixes
 
-* **redemptions:** revert remaining temp changes ([#1100](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1100)) ([e86ef27](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e86ef27201d33f172c575e7439d600bf5aba9684))
+- **redemptions:** revert remaining temp changes ([#1100](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1100)) ([e86ef27](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e86ef27201d33f172c575e7439d600bf5aba9684))
 
 ## [1.6.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.1...bluelightcard/redemptions-v1.6.2) (2024-03-25)
 
-
 ### Bug Fixes
 
-* revert temporary deployment changes to redemptions stack ([#1097](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1097)) ([98cf000](https://github.com/bluelightcard/BlueLightCard-2.0/commit/98cf00094b65bf1b0b55c55cac26cf2126de1fde))
-* TEMP allow delete redemptions DB in prod ([#1099](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1099)) ([41ab84d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/41ab84d5c1ce0afafa7a951da05b3ba012b96482))
+- revert temporary deployment changes to redemptions stack ([#1097](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1097)) ([98cf000](https://github.com/bluelightcard/BlueLightCard-2.0/commit/98cf00094b65bf1b0b55c55cac26cf2126de1fde))
+- TEMP allow delete redemptions DB in prod ([#1099](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1099)) ([41ab84d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/41ab84d5c1ce0afafa7a951da05b3ba012b96482))
 
 ## [1.6.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.6.0...bluelightcard/redemptions-v1.6.1) (2024-03-25)
 
-
 ### Bug Fixes
 
-* attempt 1 to fix ap-southeast-2 deployment ([#1094](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1094)) ([11558d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11558d844bb0c373ee377e027a5d550a7374b796))
+- attempt 1 to fix ap-southeast-2 deployment ([#1094](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1094)) ([11558d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/11558d844bb0c373ee377e027a5d550a7374b796))
 
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.5.0...bluelightcard/redemptions-v1.6.0) (2024-03-25)
 
-
 ### Features
 
-* [TR-138] Updated vault ([#929](https://github.com/bluelightcard/BlueLightCard-2.0/issues/929)) ([4a7b77e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4a7b77e4d9028a3ed227642464aca7e19b880671))
-* [TR-227]: Retrieve redem config ([#826](https://github.com/bluelightcard/BlueLightCard-2.0/issues/826)) ([6308302](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63083025e5506655fc69d3641164888b14d5f41d))
-* [TR-228] Redeem vault code ([#959](https://github.com/bluelightcard/BlueLightCard-2.0/issues/959)) ([4443e81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4443e81fb70fc35cc8109d1f177365c0e381ff7f))
-* [TR-229] Redeem generic code ([#913](https://github.com/bluelightcard/BlueLightCard-2.0/issues/913)) ([334d495](https://github.com/bluelightcard/BlueLightCard-2.0/commit/334d495504475b1ce270fad4bc4709cfc09f6676))
-* [TR-233]: Redemption event email handler ([#911](https://github.com/bluelightcard/BlueLightCard-2.0/issues/911)) ([cd58eba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd58eba8f54bf58949dc2f3e84713c94fcf27a4d))
-* [TR-252]: Integrate redeem API, refactor offer sheet, tidy-up redemptions BE ([#1056](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1056)) ([d69faf9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d69faf9a4420f1d5c317c645fcd437a598792691))
-* [TR-261] refactor promotion-update-and-allow-meta-data ( ([c6e0b90](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c6e0b906395dd14da6f17dc0e1bb6895937c3221))
-* [TR-261] refactor promotion-update-and-allow-meta-data ([#918](https://github.com/bluelightcard/BlueLightCard-2.0/issues/918)) ([c6e0b90](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c6e0b906395dd14da6f17dc0e1bb6895937c3221))
-* [TR-312]: Bump DB version to PG 15.2 ([#879](https://github.com/bluelightcard/BlueLightCard-2.0/issues/879)) ([54d8d75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/54d8d75bb9276acb6519bcc9fc1da3603cc9de5c))
-* [TR-322]: Experiments for redemption types ([#1017](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1017)) ([f154809](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f1548099cbc2f2ea586dacba71e1a76066f9d858))
-* [TR-336] Add Braze email integration and test cases ([#1057](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1057)) ([f8f25bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8f25bbc85e51a1798359cc403adbdc131e312c3))
-* [TR-346]: Add TS Reset ([#1074](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1074)) ([2e7b556](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2e7b5567f4e0c617292c84532da6b41263c93809))
-* Add tan stack query to web ([#979](https://github.com/bluelightcard/BlueLightCard-2.0/issues/979)) ([49fa8c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/49fa8c331c71a9099e35c2e1eb7f369daeb823d5))
-* Feature/tr 140 tblalloffers update lambda logic ([#1021](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1021)) ([f95751f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f95751f7ba10dfd912d2eb3942593469a08aaa53))
-* OfferSheet control interface ([#850](https://github.com/bluelightcard/BlueLightCard-2.0/issues/850)) ([f014306](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f014306a9e44df1f110f7fa0a936fb79e27e76b4))
-* publishing event on success redemption vault type ([#1065](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1065)) ([a59668f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a59668fd2e0349a3c68deaaf65175887f155eb1b))
-* redemption repositories tests ([#1036](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1036)) ([6054f88](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6054f883ac4078fa3053fc521cb992a27d70fae1))
-* **redemptions:** [TR-143]: Implement update promotions event handler ([#856](https://github.com/bluelightcard/BlueLightCard-2.0/issues/856)) ([45762d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/45762d84ecc328cbcd5be371f7899bfca85e3a86))
-* **redemptions:** implement redemption details endpoint ([#930](https://github.com/bluelightcard/BlueLightCard-2.0/issues/930)) ([52c5771](https://github.com/bluelightcard/BlueLightCard-2.0/commit/52c577123ece0e29ae9cd18bdc0f7adcdd40d1b1))
-* TI-000 use common authorizer ([#921](https://github.com/bluelightcard/BlueLightCard-2.0/issues/921)) ([47bd37d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/47bd37dd9f2b0d81810dc74604821f9db6ac9f86))
-* tr-139 create lambda logic ([#858](https://github.com/bluelightcard/BlueLightCard-2.0/issues/858)) ([5f57061](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5f5706110da1fb80fae3bd8ca6084980512b299a))
-* TR-345 throw on unsuccessful exe event bridge ([#1076](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1076)) ([679d097](https://github.com/bluelightcard/BlueLightCard-2.0/commit/679d097860c2cdcddb7e89f11c678e238ee5adbc))
-
+- [TR-138] Updated vault ([#929](https://github.com/bluelightcard/BlueLightCard-2.0/issues/929)) ([4a7b77e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4a7b77e4d9028a3ed227642464aca7e19b880671))
+- [TR-227]: Retrieve redem config ([#826](https://github.com/bluelightcard/BlueLightCard-2.0/issues/826)) ([6308302](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63083025e5506655fc69d3641164888b14d5f41d))
+- [TR-228] Redeem vault code ([#959](https://github.com/bluelightcard/BlueLightCard-2.0/issues/959)) ([4443e81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4443e81fb70fc35cc8109d1f177365c0e381ff7f))
+- [TR-229] Redeem generic code ([#913](https://github.com/bluelightcard/BlueLightCard-2.0/issues/913)) ([334d495](https://github.com/bluelightcard/BlueLightCard-2.0/commit/334d495504475b1ce270fad4bc4709cfc09f6676))
+- [TR-233]: Redemption event email handler ([#911](https://github.com/bluelightcard/BlueLightCard-2.0/issues/911)) ([cd58eba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd58eba8f54bf58949dc2f3e84713c94fcf27a4d))
+- [TR-252]: Integrate redeem API, refactor offer sheet, tidy-up redemptions BE ([#1056](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1056)) ([d69faf9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d69faf9a4420f1d5c317c645fcd437a598792691))
+- [TR-261] refactor promotion-update-and-allow-meta-data ( ([c6e0b90](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c6e0b906395dd14da6f17dc0e1bb6895937c3221))
+- [TR-261] refactor promotion-update-and-allow-meta-data ([#918](https://github.com/bluelightcard/BlueLightCard-2.0/issues/918)) ([c6e0b90](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c6e0b906395dd14da6f17dc0e1bb6895937c3221))
+- [TR-312]: Bump DB version to PG 15.2 ([#879](https://github.com/bluelightcard/BlueLightCard-2.0/issues/879)) ([54d8d75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/54d8d75bb9276acb6519bcc9fc1da3603cc9de5c))
+- [TR-322]: Experiments for redemption types ([#1017](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1017)) ([f154809](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f1548099cbc2f2ea586dacba71e1a76066f9d858))
+- [TR-336] Add Braze email integration and test cases ([#1057](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1057)) ([f8f25bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8f25bbc85e51a1798359cc403adbdc131e312c3))
+- [TR-346]: Add TS Reset ([#1074](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1074)) ([2e7b556](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2e7b5567f4e0c617292c84532da6b41263c93809))
+- Add tan stack query to web ([#979](https://github.com/bluelightcard/BlueLightCard-2.0/issues/979)) ([49fa8c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/49fa8c331c71a9099e35c2e1eb7f369daeb823d5))
+- Feature/tr 140 tblalloffers update lambda logic ([#1021](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1021)) ([f95751f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f95751f7ba10dfd912d2eb3942593469a08aaa53))
+- OfferSheet control interface ([#850](https://github.com/bluelightcard/BlueLightCard-2.0/issues/850)) ([f014306](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f014306a9e44df1f110f7fa0a936fb79e27e76b4))
+- publishing event on success redemption vault type ([#1065](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1065)) ([a59668f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a59668fd2e0349a3c68deaaf65175887f155eb1b))
+- redemption repositories tests ([#1036](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1036)) ([6054f88](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6054f883ac4078fa3053fc521cb992a27d70fae1))
+- **redemptions:** [TR-143]: Implement update promotions event handler ([#856](https://github.com/bluelightcard/BlueLightCard-2.0/issues/856)) ([45762d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/45762d84ecc328cbcd5be371f7899bfca85e3a86))
+- **redemptions:** implement redemption details endpoint ([#930](https://github.com/bluelightcard/BlueLightCard-2.0/issues/930)) ([52c5771](https://github.com/bluelightcard/BlueLightCard-2.0/commit/52c577123ece0e29ae9cd18bdc0f7adcdd40d1b1))
+- TI-000 use common authorizer ([#921](https://github.com/bluelightcard/BlueLightCard-2.0/issues/921)) ([47bd37d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/47bd37dd9f2b0d81810dc74604821f9db6ac9f86))
+- tr-139 create lambda logic ([#858](https://github.com/bluelightcard/BlueLightCard-2.0/issues/858)) ([5f57061](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5f5706110da1fb80fae3bd8ca6084980512b299a))
+- TR-345 throw on unsuccessful exe event bridge ([#1076](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1076)) ([679d097](https://github.com/bluelightcard/BlueLightCard-2.0/commit/679d097860c2cdcddb7e89f11c678e238ee5adbc))
 
 ### Bug Fixes
 
-* [TR-301]: Reset temporary changes ([#871](https://github.com/bluelightcard/BlueLightCard-2.0/issues/871)) ([ae2af61](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae2af61576a5e29e02ce05062028c392d86b3c70))
-* db seed function name ([#875](https://github.com/bluelightcard/BlueLightCard-2.0/issues/875)) ([d508714](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d5087143742b12396aa5dde10cd9b5be110b2adf))
-* local database seeding environment variables ([#835](https://github.com/bluelightcard/BlueLightCard-2.0/issues/835)) ([dcab0d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dcab0d2d319b364499a843de60d6bda2ed499ffa))
-* **redemptions:** broken import ([d69faf9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d69faf9a4420f1d5c317c645fcd437a598792691))
-* **redemptions:** Failing redemptions tests & broken import in handler ([#938](https://github.com/bluelightcard/BlueLightCard-2.0/issues/938)) ([18750e9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/18750e99e9b6edbe160d2f5037d77384778bded7))
-
+- [TR-301]: Reset temporary changes ([#871](https://github.com/bluelightcard/BlueLightCard-2.0/issues/871)) ([ae2af61](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae2af61576a5e29e02ce05062028c392d86b3c70))
+- db seed function name ([#875](https://github.com/bluelightcard/BlueLightCard-2.0/issues/875)) ([d508714](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d5087143742b12396aa5dde10cd9b5be110b2adf))
+- local database seeding environment variables ([#835](https://github.com/bluelightcard/BlueLightCard-2.0/issues/835)) ([dcab0d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dcab0d2d319b364499a843de60d6bda2ed499ffa))
+- **redemptions:** broken import ([d69faf9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d69faf9a4420f1d5c317c645fcd437a598792691))
+- **redemptions:** Failing redemptions tests & broken import in handler ([#938](https://github.com/bluelightcard/BlueLightCard-2.0/issues/938)) ([18750e9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/18750e99e9b6edbe160d2f5037d77384778bded7))
 
 ### Other Changes
 
-* **redemptions:** [TR-307]: Implement redemptions code architecture patterns ([#900](https://github.com/bluelightcard/BlueLightCard-2.0/issues/900)) ([a7bc9a8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a7bc9a89803bc2423f8e8880fa85f9269c908119))
+- **redemptions:** [TR-307]: Implement redemptions code architecture patterns ([#900](https://github.com/bluelightcard/BlueLightCard-2.0/issues/900)) ([a7bc9a8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a7bc9a89803bc2423f8e8880fa85f9269c908119))
 
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.4.0...bluelightcard/redemptions-v1.5.0) (2024-02-07)
 

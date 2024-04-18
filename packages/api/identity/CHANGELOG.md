@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.56.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.55.0...bluelightcard/identity-v1.56.0) (2024-04-17)
+
+
+### Features
+
+* ti-1017 Dummy change to add to pipeline ([#1199](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1199)) ([ac53b3e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ac53b3ec1c8eb616d1d572e90689b991b08182cd))
+* ui updates for dds cognito login ([#1190](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1190)) ([a92a0e6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a92a0e62c6f67d3b63f1b3274bc6e1b06b70dd84))
+
 ## [1.55.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.54.0...bluelightcard/identity-v1.55.0) (2024-04-15)
 
 

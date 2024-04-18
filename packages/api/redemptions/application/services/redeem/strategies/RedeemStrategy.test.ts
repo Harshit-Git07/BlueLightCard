@@ -34,7 +34,13 @@ describe('Redemption Strategies', () => {
     ) {
       const genericsRepository = new GenericsRepository(connection);
       const service = new RedeemGenericStrategy(genericsRepository, options.silent ? mockedSilentLogger : mockedLogger);
-      return service.redeem(redemption);
+      const defaultParams = {
+        brazeExternalUserId: faker.string.uuid(),
+        companyName: faker.company.name(),
+        memberId: faker.string.sample(8),
+        offerName: faker.lorem.words(3),
+      };
+      return service.redeem(redemption, defaultParams);
     }
 
     let database: RedemptionsTestDatabase;

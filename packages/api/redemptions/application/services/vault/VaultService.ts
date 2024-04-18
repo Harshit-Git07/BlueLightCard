@@ -6,7 +6,7 @@ import {
 
 import { VaultCreatedEvent, VaultCreatedEventDetail } from '../../controllers/eventBridge/vault/VaultCreatedController';
 import { VaultUpdatedEvent, VaultUpdatedEventDetail } from '../../controllers/eventBridge/vault/VaultUpdatedController';
-import { AffiliateConfigurationHelper } from '../../helpers/affiliateConfiguration';
+import { AffiliateConfigurationHelper } from '../../helpers/affiliate/AffiliateConfiguration';
 import {
   IRedemptionsRepository,
   RedemptionsRepository,

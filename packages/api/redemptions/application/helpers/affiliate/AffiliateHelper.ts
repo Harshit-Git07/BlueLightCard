@@ -1,7 +1,7 @@
 import {
   AffiliateConfiguration,
   AffiliateConfigurationHelper,
-} from '@blc-mono/redemptions/application/helpers/affiliateConfiguration';
+} from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateConfiguration';
 
 export enum AffiliateResultsKinds {
   OK = 'OK',
@@ -64,5 +64,21 @@ export class AffiliateHelper {
 
   public static getAffiliateConfig(affiliateUrl: string): AffiliateConfiguration | null {
     return new AffiliateConfigurationHelper(affiliateUrl).getConfig();
+  }
+
+  /**
+   * If url is an affiliate link, add tracking information to it
+   * Else, return the url as is
+   */
+  public static checkAffiliateAndGetTrackingUrl(url: string, memberId: string): string {
+    const checkAffiliate = AffiliateHelper.getAffiliateConfig(url);
+    if (!checkAffiliate) {
+      return url;
+    }
+    const parsedUrl = AffiliateHelper.getTrackingUrl(memberId, url);
+    if (parsedUrl.kind !== 'OK') {
+      return url;
+    }
+    return parsedUrl.data.url;
   }
 }

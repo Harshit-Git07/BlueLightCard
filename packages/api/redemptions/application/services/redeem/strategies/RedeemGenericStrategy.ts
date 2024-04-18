@@ -1,4 +1,5 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
+import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import {
   GenericsRepository,
   IGenericsRepository,
@@ -6,7 +7,7 @@ import {
 
 import { Redemption } from '../../../repositories/RedemptionsRepository';
 
-import { IRedeemStrategy, RedeemGenericStrategyResult } from './IRedeemStrategy';
+import { IRedeemStrategy, RedeemGenericStrategyResult, RedeemParams } from './IRedeemStrategy';
 
 export class RedeemGenericStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemGenericStrategy' as const;
@@ -17,8 +18,9 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
     private readonly logger: ILogger,
   ) {}
 
-  async redeem(redemption: Redemption): Promise<RedeemGenericStrategyResult> {
+  async redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemGenericStrategyResult> {
     const generic = await this.genericsRepository.findOneByRedemptionId(redemption.id);
+    const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url ?? '', params.memberId);
     if (!generic) {
       this.logger.error({
         message: 'Generic code not found',
@@ -33,7 +35,7 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
       redemptionType: 'generic',
       redemptionDetails: {
         code: generic.code,
-        url: redemption.url ?? '',
+        url: parsedUrl,
       },
     };
   }

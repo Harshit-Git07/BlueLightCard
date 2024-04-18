@@ -1,5 +1,6 @@
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
+import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import {
   ILegacyVaultApiRepository,
   LegacyVaultApiRepository,
@@ -96,11 +97,12 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
       };
     }
 
+    const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, memberId);
     return {
       kind: 'Ok',
       redemptionType: 'vault',
       redemptionDetails: {
-        url: redemption.url,
+        url: parsedUrl,
         code: claimedCode.code,
       },
     };
@@ -134,11 +136,12 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
       'BLC_UK',
     );
 
+    const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, memberId);
     return {
       kind: 'Ok',
       redemptionType: 'vault',
       redemptionDetails: {
-        url: redemption.url,
+        url: parsedUrl,
         code: assignCodeResponse.code,
       },
     };

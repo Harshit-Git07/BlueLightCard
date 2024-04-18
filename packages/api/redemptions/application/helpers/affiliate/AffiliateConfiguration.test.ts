@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { describe, expect } from '@jest/globals';
 
-import { AffiliateConfigurationHelper } from './affiliateConfiguration';
+import { AffiliateConfigurationHelper } from './AffiliateConfiguration';
 
 describe('AffiliateConfigurationHelper', () => {
   const memberId = faker.string.numeric(4);

@@ -3,7 +3,7 @@ import { PromotionUpdatedEvent } from '@blc-mono/redemptions/application/control
 import {
   AffiliateConfiguration,
   AffiliateConfigurationHelper,
-} from '@blc-mono/redemptions/application/helpers/affiliateConfiguration';
+} from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateConfiguration';
 import { isSpotifyUrl } from '@blc-mono/redemptions/application/helpers/isSpotifyUrl';
 import {
   ILegacyVaultApiRepository,

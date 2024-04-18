@@ -9,7 +9,7 @@ import { RedemptionsTestDatabase } from '../../../libs/test/helpers/database';
 import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { VaultCreatedEvent } from '../../controllers/eventBridge/vault/VaultCreatedController';
 import { VaultUpdatedEvent } from '../../controllers/eventBridge/vault/VaultUpdatedController';
-import { AffiliateConfigurationHelper } from '../../helpers/affiliateConfiguration';
+import { AffiliateConfigurationHelper } from '../../helpers/affiliate/AffiliateConfiguration';
 import { RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 import { VaultsRepository } from '../../repositories/VaultsRepository';
 

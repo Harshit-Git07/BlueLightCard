@@ -10,7 +10,7 @@
 
 import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-import { AffiliateConfigurationHelper } from '../affiliateConfiguration';
+import { AffiliateConfigurationHelper } from '../affiliate/AffiliateConfiguration';
 import { isSpotifyUrl } from '../isSpotifyUrl';
 
 /**

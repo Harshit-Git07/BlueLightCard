@@ -7,8 +7,8 @@ const service: string = process.env.SERVICE as string
 const logger = new Logger({ serviceName: `${service}-preAuthentication` })
 
 const TABLE_NAME = process.env.TABLE_NAME ?? "";
-const API_AUTHORISER_USER_BLC = process.env.API_AUTHORISER_USER_BLC ?? "";
-const API_AUTHORISER_PASSWORD_BLC = process.env.API_AUTHORISER_PASSWORD_BLC ?? "";
+const API_AUTHORISER_USER = process.env.API_AUTHORISER_USER ?? "";
+const API_AUTHORISER_PASSWORD = process.env.API_AUTHORISER_PASSWORD ?? "";
 const RESET_PASSWORD_API_URL = process.env.RESET_PASSWORD_API_URL ?? "";
 const WRONG_PASSWORD_ENTER_LIMIT:number = Number(process.env.WRONG_PASSWORD_ENTER_LIMIT) ?? 2;
 const WRONG_PASSWORD_RESET_TRIGGER_MINUTES:number = Number(process.env.WRONG_PASSWORD_RESET_TRIGGER_MINUTES) ?? 30;
@@ -59,8 +59,8 @@ export const handler = async (event: PreAuthenticationTriggerEvent, context: any
         const sendResetPwdEmailApiResponse = await unsuccessfulLoginAttemptsService.sendEmailtoUser(
             email, 
             RESET_PASSWORD_API_URL, 
-            API_AUTHORISER_USER_BLC, 
-            API_AUTHORISER_PASSWORD_BLC)
+            API_AUTHORISER_USER, 
+            API_AUTHORISER_PASSWORD)
         logger.debug(sendResetPwdEmailApiResponse.json());
         if (!sendResetPwdEmailApiResponse.ok) {    
             throw new Error(SYSTEM_DOWN_ERROR_MESSAGE);

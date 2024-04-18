@@ -26,16 +26,12 @@ runs:
         restore-keys: |
           ${{ runner.os }}-${{ runner.arch }}-node_modules-
 
-    - name: Install Local Font Awesome
-      shell: 'bash'
-      run: npm run fontawesome:fix
-
     - name: Install Dependencies
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
       shell: 'bash'
       env:
         NPM_AUTH: ${{ inputs.token }}
-      run: npm install
+      run: npm ci
 
     - if: failure()
       uses: actions/upload-artifact@v4

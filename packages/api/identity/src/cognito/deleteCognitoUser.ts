@@ -65,8 +65,8 @@ export const handler = async (event: any, context: any) => {
     const params = {
       TableName: table,
       Key: {
-        pk: username,
-        sk: poolId,
+        email: username,
+        userPoolId: poolId,
       }
     };
   
@@ -75,7 +75,7 @@ export const handler = async (event: any, context: any) => {
     try {
       await dynamodb.send(new DeleteCommand(params));  
     } catch (error) {
-      logger.debug("Error deleting from table", { error });
+      logger.debug(`Delete command execution failed for user ${username} from dynamoDB table ${table}`, { error });
       throw error;
     }
     return {
@@ -84,10 +84,10 @@ export const handler = async (event: any, context: any) => {
         message: `User ${username} deleted.`
       })
     };
-  } catch (err: any) {
-    logger.debug("error deleting user from dynamoDB ", { err });
+  } catch (error: any) {
+    logger.debug(`error deleting user ${username} from dynamoDB table ${table}`, { error });
     await sendToDLQ(event);
-    throw new Error(`Error deleting user ${username} : ${err.message}.`)
+    throw new Error(`Error deleting user : ${error.message}.`)
   }
 };
 

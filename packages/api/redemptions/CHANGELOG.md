@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.12.0...bluelightcard/redemptions-v1.12.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* parse url on generic and vault redeem ([#1210](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1210)) ([e94d1a5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e94d1a53a62c8cf86d81525574939c02615b540c))
+
 ## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.11.0...bluelightcard/redemptions-v1.12.0) (2024-04-17)
 
 

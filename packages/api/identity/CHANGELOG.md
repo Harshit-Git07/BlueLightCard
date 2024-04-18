@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.57.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.56.0...bluelightcard/identity-v1.57.0) (2024-04-18)
+
+
+### Features
+
+* empty line change ([#1213](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1213)) ([9790785](https://github.com/bluelightcard/BlueLightCard-2.0/commit/97907857f150bfd0984ef5a33ee01c9aa300006d))
+
 ## [1.56.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.55.0...bluelightcard/identity-v1.56.0) (2024-04-17)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.48.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.47.0...bluelightcard/web-v1.48.0) (2024-04-19)
+
+
+### Features
+
+* [TR-427] amplitude experiment home and search ([#1206](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1206)) ([60fde12](https://github.com/bluelightcard/BlueLightCard-2.0/commit/60fde12a236db34e06e6ef60e002778792d44b83))
+* TO-624 offer sheet shared UI ([#1177](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1177)) ([91ebf84](https://github.com/bluelightcard/BlueLightCard-2.0/commit/91ebf84b1921e6aa17eb73350bd26cc43a51d4b2))
+
 ## [1.47.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.46.0...bluelightcard/web-v1.47.0) (2024-04-18)
 
 

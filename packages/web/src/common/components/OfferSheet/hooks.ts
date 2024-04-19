@@ -8,19 +8,7 @@ import { RedeemData, RedeemResponseSchema, RedemptionType } from '@/types/api/re
 import { getOfferById } from '@/utils/offers/getOffer';
 import { UseQueryResult, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { useRedeemExperiment } from '@/hooks/useRedeemExperiment';
-
-export function useRedemptionType(offer: OfferMeta): RedemptionType | 'legacy' {
-  const redeemExperiment = useRedeemExperiment(parseInt(offer.offerId));
-
-  if (redeemExperiment.status === 'success' && redeemExperiment.data.treatmentEnabled) {
-    return redeemExperiment.data.redemptionType;
-  }
-
-  return 'legacy';
-}
 
 export function useOfferDetails(offer: OfferMeta) {
   const authCtx = useContext(AuthContext);
@@ -43,8 +31,7 @@ export type UseRedeemData =
   | RedeemData;
 export function useRedeemOffer(
   offerMeta: OfferMeta,
-  offerData: OfferData,
-  redemptionType: RedemptionType | 'legacy'
+  offerData: OfferData
 ): UseQueryResult<UseRedeemData, Error> {
   const logOfferView = useLogOfferView();
   const logVaultCodeRequestClicked = useLogVaultCodeRequestClicked({
@@ -55,34 +42,25 @@ export function useRedeemOffer(
   });
   const authCtx = useContext(AuthContext);
   const authToken = authCtx.authState.idToken;
-  const router = useRouter();
 
   return useQuery({
     queryKey: ['redeemOffer', offerData.id],
     queryFn: async () => {
       logVaultCodeRequestClicked('sheet');
-      if (redemptionType === 'legacy') {
-        logOfferView('page', offerMeta);
-        window.open(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`, '_blank');
-        return {
-          redemptionType: 'legacy',
-        };
-      } else {
-        logOfferView('sheet', offerMeta);
-        const response = await axios.request({
-          url: REDEEM_ENDPOINT,
-          method: 'POST',
-          data: {
-            offerId: offerData.id,
-            offerName: offerData.name ?? offerMeta.companyName,
-            companyName: offerMeta.companyName,
-          },
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        return RedeemResponseSchema.parse(response.data).data;
-      }
+      logOfferView('sheet', offerMeta);
+      const response = await axios.request({
+        url: REDEEM_ENDPOINT,
+        method: 'POST',
+        data: {
+          offerId: offerData.id,
+          offerName: offerData.name ?? offerMeta.companyName,
+          companyName: offerMeta.companyName,
+        },
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      return RedeemResponseSchema.parse(response.data).data;
     },
     refetchInterval: false,
     refetchIntervalInBackground: false,

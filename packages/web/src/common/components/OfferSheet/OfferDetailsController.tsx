@@ -2,8 +2,8 @@ import { OfferMeta } from '@/context/OfferSheet/OfferSheetContext';
 import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { OfferDetailsErrorPage } from './OfferDetailsPage/OfferDetailsErrorPage';
 import { OfferDetailsPage } from './OfferDetailsPage/OfferDetailsPage';
-import { useOfferDetails, useRedemptionType } from './hooks';
-import { exhaustiveCheck } from '@core/utils/exhaustiveCheck';
+import { useOfferDetails } from './hooks';
+import { useRedemptionDetails } from '../../hooks/useRedemptionDetails';
 
 type Props = {
   offerMeta: OfferMeta;
@@ -11,24 +11,23 @@ type Props = {
 
 export function OfferSheetController({ offerMeta }: Props) {
   const offerDetails = useOfferDetails(offerMeta);
-  const redemptionType = useRedemptionType(offerMeta);
+  const redemptionDetails = useRedemptionDetails(offerMeta.offerId);
 
-  switch (offerDetails.status) {
-    case 'pending':
-      return (
-        <LoadingSpinner containerClassName="text-palette-primary" spinnerClassName="text-[5em]" />
-      );
-    case 'error':
-      return <OfferDetailsErrorPage offer={offerMeta} />;
-    case 'success':
-      return (
-        <OfferDetailsPage
-          offerMeta={offerMeta}
-          offerData={offerDetails.data}
-          redemptionType={redemptionType}
-        />
-      );
-    default:
-      exhaustiveCheck(offerDetails);
+  if (offerDetails.status === 'pending' || redemptionDetails.status === 'pending') {
+    return (
+      <LoadingSpinner containerClassName="text-palette-primary" spinnerClassName="text-[5em]" />
+    );
   }
+
+  if (offerDetails.status === 'error' || redemptionDetails.status === 'error') {
+    return <OfferDetailsErrorPage offer={offerMeta} />;
+  }
+
+  return (
+    <OfferDetailsPage
+      offerMeta={offerMeta}
+      offerData={offerDetails.data}
+      redemptionType={redemptionDetails.data.data.redemptionType}
+    />
+  );
 }

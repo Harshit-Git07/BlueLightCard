@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useContext } from 'react';
 
 export function useRedemptionDetails(
-  offerId: number
+  offerId: string
 ): UseQueryResult<RedemptionDetailsResponse, Error> {
   const authCtx = useContext(AuthContext);
   const authToken = authCtx.authState.idToken;

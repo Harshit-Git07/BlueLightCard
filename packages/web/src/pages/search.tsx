@@ -39,6 +39,7 @@ import {
   useAmplitudeExperimentComponent,
 } from '@/context/AmplitudeExperiment';
 import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
+import { getRedemptionDetails } from '../common/utils/API/getRedemptionDetails';
 
 const he = require('he');
 
@@ -151,7 +152,10 @@ const Search: NextPage = () => {
   );
 
   // Offer Sheet Experiment
-  const searchOfferSheetExperiment = useAmplitudeExperiment('web-search-offer-sheet', 'control');
+  const searchOfferSheetExperiment = useAmplitudeExperiment(
+    'offer-sheet-redeem-vault-search-and-homepage',
+    'control'
+  );
 
   return (
     <>
@@ -178,12 +182,21 @@ const Search: NextPage = () => {
               let onClick = undefined;
               if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
                 hasLink = false;
-                onClick = () => {
-                  offerSheetControls.open({
-                    offerId: result.ID as unknown as string,
-                    companyId: result.CompID as unknown as string,
-                    companyName: result.CompanyName,
-                  });
+                onClick = async () => {
+                  const getRedemptionType = await getRedemptionDetails(
+                    Number(result.ID),
+                    authCtx.authState.idToken
+                  );
+
+                  if (getRedemptionType === 'vault') {
+                    offerSheetControls.open({
+                      offerId: result.ID as unknown as string,
+                      companyId: result.CompID as unknown as string,
+                      companyName: result.CompanyName,
+                    });
+                  } else {
+                    router.push(`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`);
+                  }
                 };
               }
               return (

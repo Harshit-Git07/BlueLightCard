@@ -14,11 +14,11 @@ export type Props = {
   labels: string[];
   offerMeta: OfferMeta;
   offerData: OfferData;
-  redemptionType: RedemptionType | 'legacy';
+  redemptionType: RedemptionType;
 };
 
 export function RedemptionPageController(props: Props) {
-  const redeemQuery = useRedeemOffer(props.offerMeta, props.offerData, props.redemptionType);
+  const redeemQuery = useRedeemOffer(props.offerMeta, props.offerData);
   const RedemptionPageComponent = getPageComponent(props.redemptionType);
 
   switch (redeemQuery.status) {
@@ -36,7 +36,7 @@ export function RedemptionPageController(props: Props) {
   }
 }
 
-function getPageComponent(redemptionType: RedemptionType | 'legacy'): OfferRedemptionPageComponent {
+function getPageComponent(redemptionType: RedemptionType): OfferRedemptionPageComponent {
   switch (redemptionType) {
     case 'generic':
     case 'vault':
@@ -46,8 +46,6 @@ function getPageComponent(redemptionType: RedemptionType | 'legacy'): OfferRedem
       return ShowCardPage;
     case 'vaultQR':
       return VaultQRPage;
-    case 'legacy':
-      return LegacyPage;
     default:
       exhaustiveCheck(redemptionType, 'Unhandled redemption type');
   }

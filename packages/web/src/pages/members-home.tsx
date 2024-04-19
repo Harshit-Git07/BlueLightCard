@@ -34,6 +34,8 @@ import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
+import { getRedemptionDetails } from '../common/utils/API/getRedemptionDetails';
+import { useRouter } from 'next/router';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -70,6 +72,7 @@ const HomePage: NextPage<any> = () => {
   const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
   const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const router = useRouter();
 
   // Handle loading states
   const [loadingError, setLoadingError] = useState(false);
@@ -123,7 +126,27 @@ const HomePage: NextPage<any> = () => {
   ]);
 
   const offerSheetControls = useOfferSheetControls();
-  const experiment = useAmplitudeExperiment('web-homepage-offer-sheet', 'control');
+  const experiment = useAmplitudeExperiment(
+    'offer-sheet-redeem-vault-search-and-homepage',
+    'control'
+  );
+
+  async function onSelectOffer(offerId: string, companyId: string, companyName: string) {
+    const getRedemptionType = await getRedemptionDetails(
+      Number(offerId),
+      authCtx.authState.idToken
+    );
+    const experimentVariantName = experiment.data?.variantName;
+    if (getRedemptionType === 'vault' && experimentVariantName === 'treatment') {
+      offerSheetControls.open({
+        offerId: offerId,
+        companyId: companyId,
+        companyName: cleanText(companyName),
+      });
+    } else {
+      router.push(`/offerdetails.php?cid=${companyId}&oid=${offerId}`);
+    }
+  }
 
   // Format carousel data
   const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({
@@ -133,16 +156,8 @@ const HomePage: NextPage<any> = () => {
     href: `/offerdetails.php?cid=${offer.compid}&oid=${offer.id}`,
     offerId: offer.id,
     companyId: offer.compid,
-    hasLink: experiment.data?.variantName === 'control',
-    onClick: () => {
-      if (experiment.data?.variantName === 'treatment') {
-        offerSheetControls.open({
-          offerId: offer.id,
-          companyId: offer.compid,
-          companyName: cleanText(offer.companyname),
-        });
-      }
-    },
+    hasLink: false,
+    onClick: () => onSelectOffer(offer.id, offer.compid, offer.companyname),
   }));
 
   const flexibleOffersData = flexibleMenu
@@ -161,16 +176,8 @@ const HomePage: NextPage<any> = () => {
     imageUrl: handleImageFallbacks(offer.image, offer.logos),
     offerId: offer.id,
     companyId: offer.compid,
-    hasLink: experiment.data?.variantName === 'control',
-    onClick: () => {
-      if (experiment.data?.variantName === 'treatment') {
-        offerSheetControls.open({
-          offerId: offer.id,
-          companyId: offer.compid,
-          companyName: cleanText(offer.companyname),
-        });
-      }
-    },
+    hasLink: false,
+    onClick: () => onSelectOffer(offer.id, offer.compid, offer.companyname),
   }));
 
   const isBlackFriday = inTimePeriod(BLACK_FRIDAY_TIMELOCK_SETTINGS);
@@ -267,16 +274,8 @@ const HomePage: NextPage<any> = () => {
                   href: `/offerdetails.php?cid=${item.compid}&oid=${item.offerId}`,
                   offerId: item.offerId,
                   companyId: item.compid,
-                  hasLink: experiment.data?.variantName === 'control',
-                  onClick: () => {
-                    if (experiment.data?.variantName === 'treatment') {
-                      offerSheetControls.open({
-                        offerId: item.offerId,
-                        companyId: item.compid,
-                        companyName: cleanText(item.companyname),
-                      });
-                    }
-                  },
+                  hasLink: false,
+                  onClick: () => onSelectOffer(item.offerId, item.compid, item.companyname),
                 };
               })}
             />

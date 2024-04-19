@@ -11,7 +11,7 @@ import { RedemptionPageController } from '../RedemptionPage/RedemptionPageContro
 export type Props = {
   offerMeta: OfferMeta;
   offerData: OfferData;
-  redemptionType: RedemptionType | 'legacy';
+  redemptionType: RedemptionType;
 };
 
 export function OfferDetailsPage({ offerMeta, offerData, redemptionType }: Props) {

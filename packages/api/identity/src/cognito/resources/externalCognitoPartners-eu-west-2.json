@@ -7,8 +7,8 @@
         },
         {
             "partnersName": "UK Yalson",
-            "callBackUrl": "https://localhost",
-            "signoutUrl": "https://localhost"
+            "callBackUrl": "https://secure.yalsoncc.co.uk/blc_signin",
+            "signoutUrl": "https://secure.yalsoncc.co.uk/blc_callback"
         },
         {
             "partnersName": "UK Creditec",

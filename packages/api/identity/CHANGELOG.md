@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.59.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.58.0...bluelightcard/identity-v1.59.0) (2024-04-19)
+
+
+### Features
+
+* Add Yalson callback and signout url ([#1228](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1228)) ([bab80b5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bab80b527d040cd9172f62f9f37621a8599ca66d))
+
 ## [1.58.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.57.0...bluelightcard/identity-v1.58.0) (2024-04-18)
 
 

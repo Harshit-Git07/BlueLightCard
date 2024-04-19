@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.12.1...bluelightcard/redemptions-v1.13.0) (2024-04-19)
+
+
+### Features
+
+* TO-624 offer sheet shared UI ([#1177](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1177)) ([91ebf84](https://github.com/bluelightcard/BlueLightCard-2.0/commit/91ebf84b1921e6aa17eb73350bd26cc43a51d4b2))
+
+
+### Bug Fixes
+
+* **redemptions:** [TR-443]: Bump redemptions PostgreSQL version from 15.2 to 15.5 ([#1226](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1226)) ([a9732a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a9732a90592f15af7da6e51d78eb0c912652afa9))
+
 ## [1.12.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.12.0...bluelightcard/redemptions-v1.12.1) (2024-04-18)
 
 

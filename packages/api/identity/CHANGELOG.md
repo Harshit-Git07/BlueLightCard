@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.58.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.57.0...bluelightcard/identity-v1.58.0) (2024-04-18)
+
+
+### Features
+
+* correct key elemtns of table when deleting entry and update log messages ([#1218](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1218)) ([83d1a51](https://github.com/bluelightcard/BlueLightCard-2.0/commit/83d1a515e34481be3fac03b395c21bea27964a2d))
+
 ## [1.57.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.56.0...bluelightcard/identity-v1.57.0) (2024-04-18)
 
 

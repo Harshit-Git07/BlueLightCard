@@ -13,7 +13,7 @@ export interface ICliLoggerDetail extends ILoggerDetail {}
  */
 export class CliLogger extends Logger<ICliLoggerDetail> {
   constructor(
-    private readonly _chalk: Chalk = chalkDefault,
+    _chalk: Chalk = chalkDefault,
     private CONTEXT = _chalk.gray,
     private INFO = _chalk.white.bold,
     private DEBUG = _chalk.gray.bold,

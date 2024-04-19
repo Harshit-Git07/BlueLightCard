@@ -161,20 +161,19 @@ export async function migrate (): Promise<{ status: string; message: string }> {
 
     const bannerUuid: string = v4()
 
-    const params = {
-      TableName: tableName,
-      Select: 'COUNT',
-      KeyConditionExpression:
-        'legacyId = :legacyId',
-      IndexName: 'legacyId',
-      ExpressionAttributeValues: {
-        ':legacyId': row.id
-      }
-    }
     let response
     //check dynamo to see if already migrated
     try {
-      const command = new QueryCommand(params)
+      const command = new QueryCommand({
+        TableName: tableName,
+        Select: 'COUNT',
+        KeyConditionExpression:
+          'legacyId = :legacyId',
+        IndexName: 'legacyId',
+        ExpressionAttributeValues: {
+          ':legacyId': row.id
+        }
+      })
       response = await dynamodb.send(command)
     } catch (err: any) {
       await fs.writeFile(

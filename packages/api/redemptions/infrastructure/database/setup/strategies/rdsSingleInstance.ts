@@ -130,10 +130,15 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
   }
 
   private createInstance(ingressSecurityGroup: DatabaseIngressSecurityGroup): DatabaseInstance {
+    /**
+     * TODO(TR-448): Replace this with PostgresEngineVersion.VER_15_5
+     *
+     * @see https://github.com/aws/aws-cdk/blob/91246acde1ab0512ea6b375f66c283516cb6f2b0/packages/aws-cdk-lib/aws-rds/lib/instance-engine.ts#L1531C26-L1531C34
+     */
+    const version = PostgresEngineVersion.of('15.5', '15', { s3Import: true, s3Export: true });
+
     return new DatabaseInstance(this.stack, 'RedemptionsDatabase', {
-      engine: DatabaseInstanceEngine.postgres({
-        version: PostgresEngineVersion.VER_15_2,
-      }),
+      engine: DatabaseInstanceEngine.postgres({ version }),
       instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
       allocatedStorage: 20,
       multiAz: false,

@@ -130,10 +130,17 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
       scaleWithWriter: true,
     });
 
+    /**
+     * TODO(TR-448): Replace this with AuroraPostgresEngineVersion.VER_15_5
+     *
+     * @see https://github.com/aws/aws-cdk/blob/91246acde1ab0512ea6b375f66c283516cb6f2b0/packages/aws-cdk-lib/aws-rds/lib/cluster-engine.ts#L968C37-L968C117
+     */
+    const version = AuroraPostgresEngineVersion.of('15.5', '15', { s3Import: true, s3Export: true });
+
     // TODO: Look into storage encryption
     // TODO: Configure backups
     const databaseCluster = new DatabaseCluster(this.stack, `RedemptionsDatabase`, {
-      engine: DatabaseClusterEngine.auroraPostgres({ version: AuroraPostgresEngineVersion.VER_15_2 }),
+      engine: DatabaseClusterEngine.auroraPostgres({ version }),
       writer,
       readers: [reader],
       serverlessV2MinCapacity: 0.5,

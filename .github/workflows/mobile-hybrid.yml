@@ -153,6 +153,22 @@ jobs:
   staging:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy Staging
+    environment: Staging
+    strategy:
+      matrix:
+        include:
+          - brand: 'blc-uk-current'
+            cloudflare_pages_name: 'mobile-hybrid-poc'
+            branch: 'main'
+          - brand: 'blc-uk'
+            cloudflare_pages_name: 'mobile-hybrid-blc-uk'
+            branch: 'staging'
+          - brand: 'blc-au'
+            cloudflare_pages_name: 'mobile-hybrid-blc-au'
+            branch: 'staging'
+          - brand: 'dds-uk'
+            cloudflare_pages_name: 'mobile-hybrid-dds'
+            branch: 'staging'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -166,21 +182,32 @@ jobs:
       - name: Build shared-ui
         run: npm run build -w packages/shared-ui
       - name: Build
-        run: npm run build -w packages/mobile-hybrid
+        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/mobile-hybrid
       - name: Publish
         uses: cloudflare/pages-action@1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'mobile-hybrid-poc'
+          projectName: ${{ matrix.cloudflare_pages_name }}
           directory: packages/mobile-hybrid/dist
-          branch: 'main'
+          branch: ${{ matrix.branch }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy Production
     environment: Production
+    strategy:
+      matrix:
+        include:
+          - brand: 'blc-uk-current'
+            cloudflare_pages_name: 'mobile-hybrid'
+          - brand: 'blc-uk'
+            cloudflare_pages_name: 'mobile-hybrid-blc-uk'
+          - brand: 'blc-au'
+            cloudflare_pages_name: 'mobile-hybrid-blc-au'
+          - brand: 'dds-uk'
+            cloudflare_pages_name: 'mobile-hybrid-dds'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -194,13 +221,13 @@ jobs:
       - name: Build shared-ui
         run: npm run build -w packages/shared-ui
       - name: Build
-        run: npm run build -w packages/mobile-hybrid
+        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/mobile-hybrid
       - name: Publish
         uses: cloudflare/pages-action@1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'mobile-hybrid'
+          projectName: ${{ matrix.cloudflare_pages_name }}
           directory: packages/mobile-hybrid/dist
           branch: 'main'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

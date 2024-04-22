@@ -11,7 +11,6 @@ import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { PlatformVariant, OfferSheet as SharedOfferSheet } from '@bluelightcard/shared-ui';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import Amplitude from '@/components/Amplitude/Amplitude';
-import PopularBrandsSlider from '@/modules/popularbrands';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -144,10 +143,6 @@ const Offers: FC = () => {
           />
         </div>
       )}
-      {expr[Experiments.POPULAR_OFFERS] === 'treatment' &&
-        expr[Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER] === 'treatment' && (
-          <PopularBrandsSlider />
-        )}
       {homepagePositionOffersExpr && (
         <section className="mb-6">
           <Heading title={homepagePositionOffersExpr.title} />

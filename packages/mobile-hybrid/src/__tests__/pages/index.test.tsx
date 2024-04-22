@@ -10,26 +10,17 @@ import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { Brand } from '@/components/PopularBrands/types';
 import eventBus from '@/eventBus';
-import useRecommendedBrands from '@/hooks/useRecommendedBrands';
 import useOffers from '@/hooks/useOffers';
 
 jest.mock('@/invoke/apiCall');
-jest.mock('@/hooks/useRecommendedBrands');
 jest.mock('@/modules/popularbrands/brands');
 jest.mock('@/hooks/useOffers');
 
-const useRecommendedBrandsMock = jest.mocked(useRecommendedBrands);
 const useOffersMock = jest.mocked(useOffers);
 
 // Old & new way of storing experiments, eventually all will be moved to atoms
 let appContextExperiments: Record<string, string>;
 let atomExperiments: Record<string, string>;
-
-const recommendedBrandList: Brand[] = [
-  { id: 1, brandName: 'Nike', imageSrc: '' },
-  { id: 2, brandName: 'Adidas', imageSrc: '' },
-  { id: 3, brandName: 'New Balance', imageSrc: '' },
-];
 
 describe('Home', () => {
   let bus = eventBus();
@@ -64,10 +55,6 @@ describe('Home', () => {
       [Experiments.POPULAR_OFFERS]: 'control',
       [Experiments.STREAMLINED_HOMEPAGE]: 'off',
     };
-
-    atomExperiments = {
-      [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'control',
-    };
   });
 
   describe('Search Bar Experiment', () => {
@@ -95,35 +82,6 @@ describe('Home', () => {
 
       const searchBar = screen.queryByPlaceholderText(placeholderText);
       expect(searchBar).not.toBeInTheDocument();
-    });
-  });
-
-  describe('Recommended Brands Experiment', () => {
-    it('should render when experiment enabled', () => {
-      atomExperiments = {
-        ...atomExperiments,
-        [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'treatment',
-      };
-      givenRecommendedBrandsAreReturnedFromTheAPI(recommendedBrandList);
-
-      whenHomePageIsRendered();
-
-      expect(screen.queryByAltText('Nike')).toBeInTheDocument();
-      expect(screen.queryByAltText('Adidas')).toBeInTheDocument();
-      expect(screen.queryByAltText('New Balance')).toBeInTheDocument();
-    });
-
-    it('should not render when experiment disabled', () => {
-      atomExperiments = {
-        ...atomExperiments,
-        [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'control',
-      };
-
-      whenHomePageIsRendered();
-
-      expect(screen.queryByAltText('Nike')).not.toBeInTheDocument();
-      expect(screen.queryByAltText('Adidas')).not.toBeInTheDocument();
-      expect(screen.queryByAltText('New Balance')).not.toBeInTheDocument();
     });
   });
 
@@ -160,11 +118,9 @@ describe('Home', () => {
           ...appContextExperiments,
           [Experiments.FAVOURITED_BRANDS]: 'off',
           [Experiments.POPULAR_OFFERS]: 'treatment',
-          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'control',
         };
         atomExperiments = {
           ...atomExperiments,
-          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'control',
         };
       });
 
@@ -173,32 +129,6 @@ describe('Home', () => {
 
         const popularBrandsTitle = screen.queryByText('Popular brands');
         expect(popularBrandsTitle).toBeInTheDocument();
-      });
-
-      it('should render popular offers above "flexible offer carousel" when spring event not enabled', () => {
-        whenHomePageIsRendered();
-
-        const popularBrandsTitle = screen.getByText('Popular brands');
-        const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
-        expect(flexibleOfferCarousel.compareDocumentPosition(popularBrandsTitle)).toBe(2);
-      });
-
-      it('should render popular offers below "flexible offer carousel" when spring event enabled', () => {
-        appContextExperiments = {
-          ...appContextExperiments,
-          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'treatment',
-        };
-        atomExperiments = {
-          ...atomExperiments,
-          [Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER]: 'treatment',
-        };
-        givenRecommendedBrandsAreReturnedFromTheAPI(recommendedBrandList);
-
-        whenHomePageIsRendered();
-
-        const popularBrandsTitle = screen.getByText('Popular brands');
-        const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
-        expect(popularBrandsTitle.compareDocumentPosition(flexibleOfferCarousel)).toBe(2);
       });
     });
 
@@ -256,10 +186,6 @@ describe('Home', () => {
     });
   });
 });
-
-const givenRecommendedBrandsAreReturnedFromTheAPI = (recommendedBrands: Brand[]) => {
-  useRecommendedBrandsMock.mockReturnValue(recommendedBrands);
-};
 
 const whenHomePageIsRendered = () => {
   const mockAppContext: Partial<AppStore> = {

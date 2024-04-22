@@ -17,9 +17,7 @@ import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import RecommendedBrandsSlider from '@/modules/recommendedbrands';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import Amplitude from '@/components/Amplitude/Amplitude';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -79,13 +77,10 @@ const Home: NextPage<any> = () => {
           />
         )}
         <PromoBanner />
-        <Amplitude keyName={Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER} value="treatment">
-          <RecommendedBrandsSlider />
-        </Amplitude>
         {showFavouritedBrands && <FavouritedBrandsSlider />}
-        {expr[Experiments.POPULAR_OFFERS] === 'treatment' &&
-          expr[Experiments.SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER] !== 'treatment' &&
-          !showFavouritedBrands && <PopularBrandsSlider />}
+        {expr[Experiments.POPULAR_OFFERS] === 'treatment' && !showFavouritedBrands && (
+          <PopularBrandsSlider />
+        )}
         <Offers />
         {expr[Experiments.STREAMLINED_HOMEPAGE] === 'on' && <NewsPreview />}
       </div>

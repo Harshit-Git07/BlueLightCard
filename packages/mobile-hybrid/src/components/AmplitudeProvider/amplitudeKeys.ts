@@ -7,7 +7,6 @@ export enum FeatureFlags {
 }
 
 export enum Experiments {
-  SPRING_EVENT_RECOMMENDED_BRANDS_SLIDER = 'spring-event-recommended-brands-slider',
   HOMEPAGE_SEARCHBAR = 'homepage-searchbar',
   NON_EXCLUSIVE_OFFERS = 'non-exclusive-offers',
   POPULAR_OFFERS = 'popular-offers',

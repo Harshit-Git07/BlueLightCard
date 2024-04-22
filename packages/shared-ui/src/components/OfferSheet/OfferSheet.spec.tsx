@@ -27,6 +27,8 @@ const props: Props = {
   offerStatus: 'success',
   cdnUrl: 'https://cdn.bluelightcard.co.uk',
   isMobileHybrid: false,
+  amplitudeEvent: jest.fn(),
+  BRAND: 'blc-uk',
 };
 
 describe('smoke test', () => {

@@ -26,3 +26,12 @@ export type RedemptionResponse = {
   redemptionType?: string;
   redemptionDetails?: RedemptionDetails;
 };
+
+export type AmplitudeLogParams = {
+  [key: string]: string | number | boolean | undefined;
+};
+
+export type AmplitudeArg = {
+  event: string;
+  params: AmplitudeLogParams;
+};

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faX } from '@fortawesome/pro-solid-svg-icons';
 import Button from '../Button';
-import { PlatformVariant, ThemeVariant } from '../../types';
+import { AmplitudeArg, PlatformVariant, ThemeVariant } from '../../types';
 import CheckSvg from './CheckSvg';
 import CheckCircleSvg from './CheckCircleSvg';
 import ErrorCircleSvg from './ErrorCircleSvg';
@@ -18,10 +18,16 @@ type Props = {
     url: string;
   };
   shareLabel?: string;
+  amplitudeDetails?: AmplitudeArg;
 };
 
-const ShareButton: FC<Props> = ({ showShareLabel = true, shareDetails, shareLabel = 'Share' }) => {
-  const { platform } = useAtomValue(offerSheetAtom);
+const ShareButton: FC<Props> = ({
+  showShareLabel = true,
+  shareDetails,
+  shareLabel = 'Share',
+  amplitudeDetails,
+}) => {
+  const { platform, amplitudeEvent } = useAtomValue(offerSheetAtom);
   const isMobile = platform === PlatformVariant.Mobile;
 
   const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
@@ -56,6 +62,10 @@ const ShareButton: FC<Props> = ({ showShareLabel = true, shareDetails, shareLabe
   };
 
   const handleShareClick = () => {
+    if (amplitudeEvent && amplitudeDetails) {
+      amplitudeEvent(amplitudeDetails);
+    }
+
     if (isMobile && !showShareLabel && shareDetails) {
       // Open native share drawer on mobile
       if (navigator.share) {
@@ -117,8 +127,8 @@ const ShareButton: FC<Props> = ({ showShareLabel = true, shareDetails, shareLabe
             {shareBtnState === 'share'
               ? shareLabel
               : shareBtnState === 'success'
-              ? 'Link copied'
-              : 'Failed to copy'}
+                ? 'Link copied'
+                : 'Failed to copy'}
           </span>
         )}
       </div>

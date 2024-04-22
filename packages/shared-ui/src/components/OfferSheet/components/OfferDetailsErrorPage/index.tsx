@@ -5,20 +5,25 @@ import Heading from '../../../Heading';
 import { offerSheetAtom } from '../../store';
 import { useRouter } from '../../../../lib/rewriters';
 import { ThemeVariant } from '../../../../types';
+import amplitudeEvents from '../../../../utils/amplitude/events';
 
 const OfferDetailsErrorPage: FC = () => {
-  const { isMobileHybrid, offerMeta, platform } = useAtomValue(offerSheetAtom);
+  const { isMobileHybrid, offerMeta, platform, amplitudeEvent } = useAtomValue(offerSheetAtom);
   const router = useRouter(platform);
-  // const logOfferView = useLogOfferView();
 
   const onButtonClick = () => {
+    if (amplitudeEvent) {
+      amplitudeEvent({
+        event: amplitudeEvents.OFFER_VIEWED_ERROR,
+        params: {
+          offerId: offerMeta?.offerId,
+          companyId: offerMeta?.companyId,
+          companyName: offerMeta?.companyName,
+        },
+      });
+    }
+
     if (!isMobileHybrid) {
-      // TODO add below when implementing amplitude
-      // logOfferView('page', {
-      //   offerId: offerMeta?.offerId,
-      //   companyId: offerMeta?.companyId,
-      //   companyName: offerMeta?.companyName,
-      // });
       router.push(`/offerdetails.php?cid=${offerMeta?.companyId}&oid=${offerMeta?.offerId}`);
     } else {
       router.pushNative(

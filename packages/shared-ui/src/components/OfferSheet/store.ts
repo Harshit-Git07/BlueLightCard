@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { atom } from 'jotai';
-import { PlatformVariant } from '../../types';
+import { AmplitudeArg, AmplitudeEvent, PlatformVariant } from '../../types';
 
 export const offerSheetAtom = atom({
   isOpen: false,
@@ -23,4 +24,6 @@ export const offerSheetAtom = atom({
   cdnUrl: '',
   isMobileHybrid: false,
   showRedemptionPage: false,
+  amplitudeEvent: ((arg: AmplitudeArg) => {}) as AmplitudeEvent,
+  BRAND: '' as string,
 });

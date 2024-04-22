@@ -1,4 +1,4 @@
-import { SharedProps, PlatformVariant } from '../../types';
+import { SharedProps, PlatformVariant, AmplitudeEvent } from '../../types';
 import { FC, useEffect } from 'react';
 import DynamicSheet from '../DynamicSheet';
 import { useSetAtom } from 'jotai';
@@ -15,6 +15,8 @@ export type Props = SharedProps & {
   height?: string;
   cdnUrl: string;
   isMobileHybrid?: boolean;
+  amplitudeEvent: AmplitudeEvent;
+  BRAND: string;
 };
 
 const OfferSheet: FC<Props> = ({
@@ -27,6 +29,8 @@ const OfferSheet: FC<Props> = ({
   offerStatus,
   cdnUrl,
   isMobileHybrid,
+  amplitudeEvent,
+  BRAND,
 }) => {
   const setOfferSheetData = useSetAtom(offerSheetAtom);
 
@@ -38,6 +42,8 @@ const OfferSheet: FC<Props> = ({
       platform,
       cdnUrl,
       isMobileHybrid: isMobileHybrid || false,
+      amplitudeEvent,
+      BRAND,
     }));
   }, [isOpen]);
 

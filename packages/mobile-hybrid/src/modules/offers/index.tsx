@@ -16,6 +16,16 @@ import PopularBrandsSlider from '@/modules/popularbrands';
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
+// TODO uncomment below types to see the offer sheet working on mobile app with amplitude events
+// type AmplitudeLogParams = {
+//   [key: string]: string | number | boolean | undefined;
+// };
+
+// type AmplitudeArg = {
+//   event: string;
+//   params: AmplitudeLogParams;
+// };
+
 const Offers: FC = () => {
   const { flexible, groups } = useOffers();
   const { experiments: expr } = useContext(AppContext);
@@ -204,6 +214,11 @@ const Offers: FC = () => {
           // TODO CDN URL should be coming from an environment variable as on web package
           cdnUrl="https://cdn.bluelightcard.co.uk"
           isMobileHybrid={true}
+          amplitudeEvent={({ event, params }: AmplitudeArg) => {
+            analytics.logAnalyticsEvent({ event, parameters: params });
+          }}
+          // BRAND is hardcoded as the app only supports blc-uk for now
+          BRAND="blc-uk"
         />
       </div> */}
     </>

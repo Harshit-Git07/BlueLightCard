@@ -34,6 +34,11 @@ const OfferTopDetailsHeaderProvider = () => {
               terms: 'Must be a Blue Light Card member in order to receive the discount.',
               type: 'Online',
             },
+            offerMeta: {
+              companyId: '4016',
+              companyName: 'SEAT',
+              offerId: '3802',
+            },
           },
         ],
       ]}

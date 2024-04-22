@@ -8,6 +8,7 @@ import { ThemeVariant } from '../../../../types';
 import ShareButton from '../../../ShareButton';
 import Accordion from '../../../Accordion';
 import Markdown from 'markdown-to-jsx';
+import amplitudeEvents from '../../../../utils/amplitude/events';
 
 type Props = {
   showOfferDescription?: boolean;
@@ -22,7 +23,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
   showTerms = true,
   showExclusions = true,
 }) => {
-  const { offerDetails: offerData, cdnUrl, platform } = useAtomValue(offerSheetAtom);
+  const { offerDetails: offerData, cdnUrl, offerMeta, BRAND } = useAtomValue(offerSheetAtom);
   const [imageSource, setImageSource] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
   // TODO CDN URL could be replaced with global var?
@@ -101,7 +102,16 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   }/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
                 },
                 shareLabel: 'Share offer',
-                platform: platform,
+                amplitudeDetails: {
+                  event: amplitudeEvents.OFFER_SHARE_CLICKED,
+                  params: {
+                    company_id: offerMeta.companyId,
+                    company_name: offerMeta.companyName,
+                    offer_id: offerMeta.offerId,
+                    offer_name: offerData.name,
+                    brand: BRAND,
+                  },
+                },
               }}
             />
           </div>
@@ -140,7 +150,19 @@ const OfferTopDetailsHeader: FC<Props> = ({
         {/* Offer Terms & Conditions */}
         {showTerms && offerData.terms && (
           <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
-            <Accordion title="Terms & Conditions">
+            <Accordion
+              title="Terms & Conditions"
+              amplitudeDetails={{
+                event: amplitudeEvents.OFFER_TERMS_CLICKED,
+                params: {
+                  company_id: offerMeta.companyId,
+                  company_name: offerMeta.companyName,
+                  offer_id: offerMeta.offerId,
+                  offer_name: offerData.name,
+                  brand: BRAND,
+                },
+              }}
+            >
               <Markdown>{offerData.terms}</Markdown>
             </Accordion>
           </div>

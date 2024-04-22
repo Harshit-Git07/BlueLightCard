@@ -36,3 +36,14 @@ export type ThemeColorTokens = Record<
     invert?: Record<string, string>;
   }
 >;
+
+export type AmplitudeLogParams = {
+  [key: string]: string | number | boolean | undefined;
+};
+
+export type AmplitudeArg = {
+  event: string;
+  params: AmplitudeLogParams;
+};
+
+export type AmplitudeEvent = (properties: AmplitudeArg) => void;

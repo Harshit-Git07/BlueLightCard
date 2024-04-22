@@ -1,18 +1,27 @@
 import { FC, useState } from 'react';
 import MinusSvg from './MinusSvg';
 import PlusSvg from './PlusSvg';
+import { useAtomValue } from 'jotai';
+import { offerSheetAtom } from '../OfferSheet/store';
+import { AmplitudeArg } from '../../types';
 
 export type Props = {
   title: string;
   children: React.ReactNode;
+  amplitudeDetails?: AmplitudeArg;
 };
 
-const Accordion: FC<Props> = ({ title, children }) => {
+const Accordion: FC<Props> = ({ title, children, amplitudeDetails }) => {
   const [active, setActive] = useState(false);
+  const { amplitudeEvent } = useAtomValue(offerSheetAtom);
 
   const handleToggle = () => {
     setActive(!active);
+    if (!active && amplitudeEvent && amplitudeDetails) {
+      amplitudeEvent(amplitudeDetails);
+    }
   };
+
   return (
     <div className="w-full leading-6">
       <button

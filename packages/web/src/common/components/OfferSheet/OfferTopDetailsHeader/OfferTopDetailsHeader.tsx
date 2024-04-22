@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Image from '@/components/Image/Image';
 import getCDNUrl from '@/utils/getCDNUrl';
 import { ThemeVariant } from '@/types/theme';
@@ -9,6 +9,9 @@ import ShareButton from '@/components/ShareButton/ShareButton';
 import FavouriteButton from '@/components/FavouriteButton/FavouriteButton';
 import Heading from '@/components/Heading/Heading';
 import Markdown from '@/components/Markdown/Markdown';
+import AmplitudeContext from '@/context/AmplitudeContext';
+import amplitudeEvents from '@/utils/amplitude/events';
+import { BRAND } from '@/global-vars';
 
 const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
   offerMeta,
@@ -20,6 +23,7 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [openExclusionsDetails] = useState<'items' | 'store' | null>(null);
+  const amplitude = useContext(AmplitudeContext);
 
   const exclusionsParser = {
     items: {
@@ -97,16 +101,30 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
           {/* Share & Favorite */}
           {showShareFavorite && (
             <div className={`flex flex-wrap justify-center mt-4`}>
-              <ShareButton
-                {...{
-                  shareDetails: {
-                    name: offerData.name,
-                    description: offerData.description,
-                    url: `${window.location.protocol}/${window.location.hostname}/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
-                  },
-                  shareLabel: 'Share offer',
+              <div
+                onClick={async () => {
+                  if (amplitude) {
+                    await amplitude.trackEventAsync(amplitudeEvents.OFFER_SHARE_CLICKED, {
+                      company_id: offerMeta?.companyId,
+                      company_name: offerMeta?.companyName,
+                      offer_id: offerData?.id,
+                      offer_name: offerData?.name,
+                      brand: BRAND,
+                    });
+                  }
                 }}
-              />
+              >
+                <ShareButton
+                  {...{
+                    shareDetails: {
+                      name: offerData.name,
+                      description: offerData.description,
+                      url: `${window.location.protocol}/${window.location.hostname}/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
+                    },
+                    shareLabel: 'Share offer',
+                  }}
+                />
+              </div>
               <FavouriteButton {...{ offerMeta, offerData }} />
             </div>
           )}
@@ -142,7 +160,20 @@ const OfferTopDetailsHeader: React.FC<OfferTopDetailsHeaderProps> = ({
           {/* Offer Terms & Conditions */}
           {showTerms && offerData.terms && (
             <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
-              <Accordion title="Terms & Conditions">
+              <Accordion
+                title="Terms & Conditions"
+                onClickOpen={async () => {
+                  if (amplitude) {
+                    await amplitude.trackEventAsync(amplitudeEvents.OFFER_TERMS_CLICKED, {
+                      company_id: offerMeta?.companyId,
+                      company_name: offerMeta?.companyName,
+                      offer_id: offerData?.id,
+                      offer_name: offerData?.name,
+                      brand: BRAND,
+                    });
+                  }
+                }}
+              >
                 <Markdown content={offerData.terms} />
               </Accordion>
             </div>

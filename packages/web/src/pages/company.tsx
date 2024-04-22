@@ -14,7 +14,6 @@ import Heading from '@/components/Heading/Heading';
 import Container from '@/components/Container/Container';
 import CompanyAbout from '@/components/CompanyAbout/CompanyAbout';
 import ShareButton from '@/components/ShareButton/ShareButton';
-import FavouriteButton from '@/components/FavouriteButton/FavouriteButton';
 import PillButtons from '@/components/PillButtons/PillButtons';
 import ResponsiveOfferCard from '@/components/ResponsiveOfferCard/ResponsiveOfferCard';
 import Link from '@/components/Link/Link';
@@ -23,10 +22,12 @@ import { getCompany, getOffersByCompany } from '../common/utils/company/companyD
 import { ENVIRONMENT } from '@/global-vars';
 import { OfferTypeStrLiterals, offerTypeParser } from '../common/utils/offers/offerTypeParser';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
+import AmplitudeContext from '@/context/AmplitudeContext';
+import amplitudeEvents from '@/utils/amplitude/events';
 
 type CompanyPageProps = {};
 
-export type OfferCardProp = {
+export type OfferData = {
   id: string;
   type: OfferTypeStrLiterals;
   name: string;
@@ -55,13 +56,14 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   const isMobile = useMedia('(max-width: 500px)');
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
+  const amplitude = useContext(AmplitudeContext);
 
   const [selectedType, setSelectedType] = useState<string>('All');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query, setQuery] = useState<string>((router.query.q as string) ?? '');
   const [adverts, setAdverts] = useState<BannerDataType[]>([]);
   const [companyData, setCompanyData] = useState<any | null>(null);
-  const [offerData, setOfferData] = useState<any | null>([]);
+  const [offerData, setOfferData] = useState<OfferData[] | null>([]);
 
   const toggleFilter = (pillType: string) => {
     if (selectedType === pillType) {
@@ -119,13 +121,14 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         setOfferData(offerDataResponse.offers);
       }
     };
+
     if (authCtx.authState.idToken && companyId) {
       fetchOfferData();
     }
   }, [authCtx.authState.idToken, companyId]);
 
   useEffect(() => {
-    if (adverts.length && companyData && offerData.length) {
+    if (adverts.length && companyData && offerData && offerData.length) {
       setIsLoading(false);
     }
   }, [adverts, companyData, offerData]);
@@ -133,7 +136,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   const filteredOffers =
     offerData && selectedType === 'All'
       ? offerData
-      : offerData.filter((offer: OfferCardProp) => offer.type === selectedType);
+      : offerData && offerData.filter((offer: OfferData) => offer.type === selectedType);
 
   return (
     <>
@@ -150,7 +153,18 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           >
             {companyData?.name}
           </Heading>
-          <div className="flex desktop:justify-end desktop:items-start mobile:gap-2">
+          <div
+            className="flex desktop:justify-end desktop:items-start mobile:gap-2"
+            onClick={async () => {
+              if (amplitude) {
+                await amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
+                  company_id: companyData?.id,
+                  company_name: companyData?.name,
+                  brand: BRAND,
+                });
+              }
+            }}
+          >
             <ShareButton
               showShareLabel={isMobile ? false : true}
               shareDetails={{
@@ -161,7 +175,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                   ENVIRONMENT === 'local' && window.location.port ? `:${window.location.port}` : ''
                 }/company/${companyId}`,
               }}
-              shareLabel="Share Company"
+              shareLabel="Share"
             />
           </div>
         </div>
@@ -182,7 +196,17 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                       ? offerTypeParser.Giftcards.label
                       : filterArray[index]
                   }
-                  onSelected={() => toggleFilter(pillType)}
+                  onSelected={async () => {
+                    toggleFilter(pillType);
+                    if (amplitude) {
+                      await amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
+                        company_id: companyData?.id,
+                        company_name: companyData?.name,
+                        filter_name: pillType,
+                        brand: BRAND,
+                      });
+                    }
+                  }}
                   isSelected={selectedType === pillType}
                 />
               </div>
@@ -191,12 +215,26 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         </div>
 
         {/* Offer cards */}
-        {!!offerData.length && companyData && (
+        {offerData && offerData.length && companyData && (
           <div className="desktop:mb-[71px] mobile:mb-0">
             <div className="desktop:grid desktop:grid-cols-2 desktop:gap-10 mobile:flex mobile:flex-col mobile:gap-2">
               {filteredOffers &&
-                filteredOffers.map((offer: OfferCardProp, index: string) => (
-                  <div key={index}>
+                filteredOffers.map((offer: OfferData, index: number) => (
+                  <div
+                    key={offer.id}
+                    onClick={async () => {
+                      if (amplitude) {
+                        await amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
+                          company_id: companyData?.id,
+                          company_name: companyData?.name,
+                          brand: BRAND,
+                          position: index + 1,
+                          offer_id: offer?.id,
+                          offer_name: offer?.name,
+                        });
+                      }
+                    }}
+                  >
                     <ResponsiveOfferCard
                       id={offer.id}
                       type={offer.type}

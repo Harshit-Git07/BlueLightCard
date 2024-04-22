@@ -1,13 +1,17 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { AccordionProps } from '@/components/Accordion/types';
 import Image from '../Image/Image';
 
-const Accordion: FC<AccordionProps> = ({ title, children }) => {
+const Accordion: FC<AccordionProps> = ({ title, children, onClickOpen }) => {
   const [active, setActive] = useState(false);
 
   const handleToggle = () => {
     setActive(!active);
+    if (!active && onClickOpen) {
+      onClickOpen();
+    }
   };
+
   return (
     <div className="w-full leading-6">
       <button

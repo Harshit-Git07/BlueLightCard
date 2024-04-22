@@ -2,14 +2,14 @@ import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatem
 import { EventBus, StackContext } from 'sst/constructs';
 import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
 import { Network } from './infra/network';
-import { isProduction } from '@blc-mono/core/src/utils/checkEnvironment';
 import { DwhKenisisFirehoseStreams } from './infra/firehose/DwhKenisisFirehoseStreams';
+import { BastionHost } from './infra/bastionHost/BastionHost';
 
 interface ICertificate {
   certificateArn?: string;
 }
 
-export function Shared({ stack }: StackContext) {
+export function Shared({ stack, app }: StackContext) {
   /**
    * The deployment is held until the certificate is verified.
    * To verify the certificate a new CNAME Record must be added to CloudFlare.
@@ -45,11 +45,18 @@ export function Shared({ stack }: StackContext) {
   // Create DWH Kinesis Firehose Streams
   const dwhKenisisFirehoseStreams = new DwhKenisisFirehoseStreams(stack);
 
+  /**
+   * Bastion host is only allowed in production and staging.
+   * It is not intended for use in development environments.
+   * It is used to access Production and Staging database inside the VPC from the outside.
+   */
+  const bastionHost = new BastionHost(stack, app, network.vpc);
+
   stack.addOutputs({
     EventBusName: bus.eventBusName,
     webACL: webACL.name,
     vpcId: network.vpc.vpcId,
-    certificateArn
+    certificateArn,
   });
   return {
     bus,
@@ -57,5 +64,6 @@ export function Shared({ stack }: StackContext) {
     webACL,
     vpc: network.vpc,
     dwhKenisisFirehoseStreams,
+    bastionHost,
   };
 }

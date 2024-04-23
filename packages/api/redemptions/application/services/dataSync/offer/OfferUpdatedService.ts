@@ -92,6 +92,37 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           url: parseOfferUrl(detail.offerUrl).url,
         };
 
+        if (existingRedemptionData.redemptionType === 'vault' && updateRedemptionData.redemptionType === 'vault') {
+          /**
+           * if the existing record redemption type is 'vault' and the update data redemption type is also a vault
+           * then we must exit here and not update the redemption for the following reasons:
+           *
+           * redemptionType has not changed, so does not require to be updated
+           * connection could be overwritten - tblpromotions.link could be an 'affiliate' or 'direct', but tblallOffers.OfferURL value will set connection to 'none'
+           * affiliate could be overwritten - tblpromotions.link could be an 'affiliate', but tblallOffers.OfferURL value will set affiliate to 'null'
+           * offerType will not change as vaults are 'online', 'in-store' vaults have a redemptionType of vaultQr (this is handled by vaultCreated/Updated lambdas)
+           * url value (tblpromotions.link) will be overwritten with tblalloffers.OfferURL value (http(s)://thevault.bluelightcard.co.uk)
+           *
+           * the basis here is, once the redemption record has been created by the offerCreated lambda
+           * and then the redemption record has been updated by the vaultCreated lambda
+           * all further updates to the redemption record if it is a vault and is to remain a vault
+           * will be performed by the updateVault and updatePromotions lambdas
+           *
+           * the only time a record with a redemptionType of vault will be updated here is if the vault is to be updated to another redemptionType
+           * or another redemptionType is to be updated to a vault
+           */
+          this.logger.info({
+            message:
+              'Offer Update - Redemption update by offerId exit: Redemption is a vault, update will overwrite values incorrectly',
+            context: {
+              offerId: detail.offerId,
+              companyId: detail.companyId,
+              platform: detail.platform,
+            },
+          });
+          return;
+        }
+
         const redemptionUpdate = await redemptionTransaction.updateOneByOfferId(detail.offerId, updateRedemptionData);
         if (!redemptionUpdate) {
           this.logger.error({
@@ -107,7 +138,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           );
         }
 
-        if (existingRedemptionData.redemptionType === 'generic' || updateRedemptionData.redemptionType == 'generic') {
+        if (existingRedemptionData.redemptionType === 'generic' || updateRedemptionData.redemptionType === 'generic') {
           const genericTransaction = this.genericsRepository.withTransaction(transactionConnection);
           const genericExist = await genericTransaction.findOneByRedemptionId(existingRedemptionData.id);
 

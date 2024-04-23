@@ -91,16 +91,17 @@ describe('OfferUpdatedService', () => {
         expect(genericsData[0].code).toBe('test123456');
       });
 
-      it('should update online vault to in-store', async () => {
+      it('should not update vault offer that is affiliate', async () => {
         //create record to be modified
         const currentData: NewRedemption = {
           offerId: 456,
           companyId: 123,
           platform: 'BLC_UK',
           redemptionType: 'vault',
-          connection: 'none',
+          connection: 'affiliate',
+          affiliate: 'awin',
           offerType: 'online',
-          url: 'https://thevault.bluelightcard.co.uk',
+          url: 'https://www.awin1.com/',
         };
         await createRedemptionToModify(currentData);
 
@@ -111,33 +112,33 @@ describe('OfferUpdatedService', () => {
             companyId: 123,
             offerUrl: 'https://thevault.bluelightcard.co.uk',
             offerCode: '',
-            offerType: 5,
+            offerType: 1,
             platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
         const updatedData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedData.length).toBe(1);
-        expect(updatedData[0].affiliate).toBe(null);
         expect(updatedData[0].companyId).toBe(123);
-        expect(updatedData[0].connection).toBe('none');
+        expect(updatedData[0].connection).toBe('affiliate');
+        expect(updatedData[0].affiliate).toBe('awin');
         expect(updatedData[0].offerId).toBe(456);
-        expect(updatedData[0].offerType).toBe('in-store');
+        expect(updatedData[0].offerType).toBe('online');
         expect(updatedData[0].platform).toBe('BLC_UK');
         expect(updatedData[0].redemptionType).toBe('vault');
-        expect(updatedData[0].url).toBe('https://thevault.bluelightcard.co.uk');
+        expect(updatedData[0].url).toBe('https://www.awin1.com/');
       });
 
-      it('should update in-store vault to online', async () => {
+      it('should not update vault offer that is direct', async () => {
         //create record to be modified
         const currentData: NewRedemption = {
           offerId: 456,
           companyId: 123,
           platform: 'BLC_UK',
           redemptionType: 'vault',
-          connection: 'none',
-          offerType: 'in-store',
-          url: 'https://thevault.bluelightcard.co.uk',
+          connection: 'direct',
+          offerType: 'online',
+          url: 'https://direct.co.uk',
         };
         await createRedemptionToModify(currentData);
 
@@ -157,12 +158,12 @@ describe('OfferUpdatedService', () => {
         expect(updatedData.length).toBe(1);
         expect(updatedData[0].affiliate).toBe(null);
         expect(updatedData[0].companyId).toBe(123);
-        expect(updatedData[0].connection).toBe('none');
+        expect(updatedData[0].connection).toBe('direct');
         expect(updatedData[0].offerId).toBe(456);
         expect(updatedData[0].offerType).toBe('online');
         expect(updatedData[0].platform).toBe('BLC_UK');
         expect(updatedData[0].redemptionType).toBe('vault');
-        expect(updatedData[0].url).toBe('https://thevault.bluelightcard.co.uk');
+        expect(updatedData[0].url).toBe('https://direct.co.uk');
       });
 
       it('should update generic offer to preApplied and delete generics record', async () => {

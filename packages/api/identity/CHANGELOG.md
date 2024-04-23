@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.60.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.59.0...bluelightcard/identity-v1.60.0) (2024-04-23)
+
+
+### Features
+
+* set refresh token to default value ([#1235](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1235)) ([311846a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/311846afb0e8ff95fab9dde6856d3d46851ed1c2))
+
 ## [1.59.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.58.0...bluelightcard/identity-v1.59.0) (2024-04-19)
 
 

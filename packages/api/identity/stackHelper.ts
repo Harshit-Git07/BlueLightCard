@@ -121,7 +121,6 @@ export function createOldCognito(
       userPassword: true,
     },
     generateSecret: true,
-    refreshTokenValidity: Duration.hours(1),
     oAuth: {
       flows: {
         authorizationCodeGrant: true,
@@ -278,7 +277,6 @@ export function createOldCognitoDDS(
       userPassword: true,
     },
     generateSecret: true,
-    refreshTokenValidity: Duration.hours(1),
     oAuth: {
       flows: {
         authorizationCodeGrant: true,
@@ -441,7 +439,6 @@ export function createNewCognito(
       userPassword: true,
     },
     generateSecret: true,
-    refreshTokenValidity: Duration.hours(1),
     oAuth: {
       flows: {
         authorizationCodeGrant: true,
@@ -669,7 +666,6 @@ export function createNewCognitoDDS(
       userPassword: true,
     },
     generateSecret: true,
-    refreshTokenValidity: Duration.hours(1),
     oAuth: {
       flows: {
         authorizationCodeGrant: true,

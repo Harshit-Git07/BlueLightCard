@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.13.0...bluelightcard/redemptions-v1.13.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* TR-438-Fix-migrated-vault-offer-URL-overwrite ([#1233](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1233)) ([eb64af1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eb64af1f0cba110a626b6846cd96b0cb91259de8))
+
 ## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.12.1...bluelightcard/redemptions-v1.13.0) (2024-04-19)
 
 

@@ -12,4 +12,12 @@ const LegacyCompanyOffersModel = z.object({
   offers: z.array(LegacyOffersModel),
 });
 
+const LegacyCompanyOffersResponseModel = z.object({
+  data: LegacyCompanyOffersModel,
+  success: z.boolean(),
+  message: z.string(),
+  datasource: z.string(),
+});
+
 export type LegacyCompanyOffers = z.infer<typeof LegacyCompanyOffersModel>;
+export type LegacyCompanyOffersResponse = z.infer<typeof LegacyCompanyOffersResponseModel>;

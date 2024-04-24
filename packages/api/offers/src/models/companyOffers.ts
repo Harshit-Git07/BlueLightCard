@@ -1,13 +1,12 @@
 import { z } from 'zod';
 import { createZodNamedType } from '@blc-mono/core/src/extensions/apiGatewayExtension/agModelGenerator';
-import { OfferSchema } from './offers';
+import { OfferModel } from './offers';
 
 export const CompanyOffersModel = createZodNamedType(
   'CompanyOffersModel',
   z.object({
-    offers: z.array(OfferSchema),
+    offers: z.array(OfferModel),
   }),
 );
 
-export type CompanyOffer = z.infer<typeof OfferSchema>;
-export type CompanyOffers = z.infer<typeof CompanyOffersModel>;
+export type CompanyOffers = z.infer<typeof CompanyOffersModel>; //array of company offers

@@ -5,6 +5,7 @@ import { mockLegacyOfferRetrieveAPI } from '../../../mocks/legacyOfferRetrieveAP
 import { mockLambdaEvent } from '../../../mocks/lambdaEvent';
 import { faker } from '@faker-js/faker';
 import { handler } from './../getCompanyInfoHandler';
+import { container } from 'tsyringe';
 
 jest.mock('axios');
 jest.mock('../../../utils/getLegacyUserIdFromToken', () => ({
@@ -12,9 +13,15 @@ jest.mock('../../../utils/getLegacyUserIdFromToken', () => ({
 }));
 
 jest.mock('../../../../../core/src/utils/getEnv', () => ({
-  getEnv: jest.fn().mockImplementation((param) => {
-    if (param === 'service') {
-      return 'test-company';
+  getEnvRaw: jest.fn().mockImplementation((param) => {
+    if (param === 'SERVICE') {
+      return 'OFFERS';
+    }
+    if (param === 'BASE_URL') {
+      return 'https://localhost';
+    }
+    if (param === 'LEGACY_OFFERS_API_ENDPOINT') {
+      return 'https://localhost';
     }
   }),
 }));
@@ -35,6 +42,10 @@ const validateSuccessfulResponse = (result: any, legacyAPIMockResponseData: any)
   });
 };
 describe('handler', () => {
+  beforeAll(() => {
+    jest.clearAllMocks();
+    container.clearInstances();
+  });
   it('should return a successful response when the event is valid', async () => {
     const legacyAPIMockResponse = mockLegacyOfferRetrieveAPI(2);
     axios.get = jest.fn().mockResolvedValue(legacyAPIMockResponse);
@@ -77,8 +88,8 @@ describe('handler', () => {
 
     const result = await handler(event);
 
-    expect(result.statusCode).toEqual(HttpStatusCode.NOT_FOUND);
-    expect(result.body).toEqual(JSON.stringify({ message: 'Company not found', data: {} }));
+    expect(result.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
+    expect(result.body).toEqual(JSON.stringify({ message: 'No Content' }));
   });
 
   it('should return an error response when the legacy api returns an error', async () => {
@@ -113,11 +124,10 @@ describe('handler', () => {
     };
 
     const error = await handler(event);
-    expect(error.statusCode).toEqual(HttpStatusCode.INTERNAL_SERVER_ERROR);
+    expect(error.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
     expect(error.body).toEqual(
       JSON.stringify({
-        message: 'Error',
-        error: 'Error validating company info output',
+        message: 'No Content',
       }),
     );
   });

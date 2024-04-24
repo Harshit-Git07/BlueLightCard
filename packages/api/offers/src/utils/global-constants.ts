@@ -53,16 +53,6 @@ export const enum OFFER_MENUS_FILE_NAMES {
   MARKETPLACE = 'marketplace.txt',
 }
 
-export enum LegacyAPIEndPoints {
-  RETRIEVE_OFFERS = 'api/4/offer/retrieve.php',
-}
-
-export enum LEGACY_API_BASE_URL {
-  PRODUCTION = 'https://www.bluelightcard.co.uk',
-  STAGING = 'https://staging.bluelightcard.co.uk',
-  DEVELOPMENT = 'http://localhost:8080',
-}
-
 export const OFFERS_TYPE_ENUM = z.enum([
   'Online',
   'Cashback',

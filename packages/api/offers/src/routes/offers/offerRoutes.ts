@@ -2,8 +2,10 @@ import { RouteProps } from '../routeProps';
 import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { Model, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
-import { EnvironmentVariablesKeys } from 'src/utils/environment-variables';
+import { EnvironmentVariablesKeys, getBLCBaseUrlFromEnv } from 'src/utils/environment-variables';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { OffersFunction } from 'src/constructs/sst/OffersFunction';
+import { th } from '@faker-js/faker';
 
 export class OffersRoutes {
   constructor(private readonly routeProps: RouteProps) {}
@@ -15,20 +17,24 @@ export class OffersRoutes {
 
   private get(): ApiGatewayV1ApiRouteProps<any> {
     return {
-      function: {
+      function: new OffersFunction(this.routeProps.stack, 'GetOfferHandler', {
         handler: 'packages/api/offers/src/routes/offers/getOfferHandler.handler',
         environment: {
-          service: 'offers',
+          [EnvironmentVariablesKeys.BASE_URL]: getBLCBaseUrlFromEnv(this.routeProps.stack.stage),
+          [EnvironmentVariablesKeys.LEGACY_OFFERS_API_ENDPOINT]: process.env
+            .LEGACY_API_RETRIEVE_OFFERS_ENDPOINT as string,
+          [EnvironmentVariablesKeys.FIREHOSE_STREAM_APP]: this.getFirehoseDeliveryStream(
+            process.env.FIREHOSE_STREAM_APP_VIEW_PROD!,
+            process.env.FIREHOSE_STREAM_APP_VIEW_STAGE!,
+          ),
+          [EnvironmentVariablesKeys.FIREHOSE_STREAM_WEB]: this.getFirehoseDeliveryStream(
+            process.env.FIREHOSE_STREAM_WEB_VIEW_PROD!,
+            process.env.FIREHOSE_STREAM_WEB_VIEW_STAGE!,
+          ),
           [EnvironmentVariablesKeys.STAGE]: this.routeProps.stack.stage,
-          [EnvironmentVariablesKeys.FIREHOSE_STREAM_APP]: isProduction(this.routeProps.stack.stage)
-            ? process.env.FIREHOSE_STREAM_APP_VIEW_PROD!
-            : process.env.FIREHOSE_STREAM_APP_VIEW_STAGE!,
-          [EnvironmentVariablesKeys.FIREHOSE_STREAM_WEB]: isProduction(this.routeProps.stack.stage)
-            ? process.env.FIREHOSE_STREAM_WEB_VIEW_PROD!
-            : process.env.FIREHOSE_STREAM_WEB_VIEW_STAGE!,
         },
         permissions: ['firehose:PutRecord'],
-      },
+      }),
       cdk: {
         method: {
           requestModels: { 'application/json': this.routeProps.model as Model },
@@ -44,5 +50,8 @@ export class OffersRoutes {
         },
       },
     };
+  }
+  getFirehoseDeliveryStream(prodStream: string, stageStream: string) {
+    return isProduction(this.routeProps.stack.stage) ? prodStream : stageStream;
   }
 }

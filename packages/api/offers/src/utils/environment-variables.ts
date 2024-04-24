@@ -1,3 +1,5 @@
+import { ENVIRONMENTS } from "./global-constants";
+
 export enum EnvironmentVariablesKeys {
   OFFERS_DATABASE_ROOT_PASSWORD = 'OFFERS_DATABASE_ROOT_PASSWORD',
   OFFERS_DATABASE_USER = 'OFFERS_DATABASE_USER',
@@ -10,4 +12,17 @@ export enum EnvironmentVariablesKeys {
   FIREHOSE_STREAM_APP = 'FIREHOSE_STREAM_APP',
   FIREHOSE_STREAM_WEB = 'FIREHOSE_STREAM_WEB',
   STAGE = 'STAGE',
+  BASE_URL = 'BASE_URL',
+  LEGACY_OFFERS_API_ENDPOINT = 'LEGACY_OFFERS_API_ENDPOINT',
+}
+
+export const getBLCBaseUrlFromEnv = (stage: string): string => {
+  switch (stage) {
+    case ENVIRONMENTS.PRODUCTION:
+      return process.env.PROD_BASE_URL!;
+    case ENVIRONMENTS.STAGING:
+      return process.env.STAGING_BASE_URL!;
+    default:
+      return process.env.DEV_BASE_URL!;
+  }
 }

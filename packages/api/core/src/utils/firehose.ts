@@ -1,5 +1,6 @@
 import { FirehoseClient, PutRecordCommand, PutRecordCommandInput } from '@aws-sdk/client-firehose';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger } from './logger/lambdaLogger';
 
 type FireHoseConfig = {
   stream: string;
@@ -8,7 +9,7 @@ type FireHoseConfig = {
 
 export class FirehoseDeliveryStream {
   private readonly firehose;
-  constructor(private readonly logger: Logger) {
+  constructor(private readonly logger: LambdaLogger) {
     this.firehose = new FirehoseClient({});
   }
 
@@ -23,7 +24,7 @@ export class FirehoseDeliveryStream {
     try {
       this.firehose.send(new PutRecordCommand(input));
     } catch (error) {
-      this.logger.error('Error sending to firehose', { error });
+      this.logger.error({message: 'Error sending to firehose', body: { error }});
     }
   }
 }

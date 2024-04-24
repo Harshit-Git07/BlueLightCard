@@ -2,7 +2,8 @@ import { RouteProps } from '../routeProps';
 import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { Model, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
-import { EnvironmentVariablesKeys } from 'src/utils/environment-variables';
+import { OffersFunction } from 'src/constructs/sst/OffersFunction';
+import { EnvironmentVariablesKeys, getBLCBaseUrlFromEnv } from 'src/utils/environment-variables';
 
 export class CompanyRoutes {
   constructor(private readonly routeProps: RouteProps) {}
@@ -14,13 +15,14 @@ export class CompanyRoutes {
 
   private get(): ApiGatewayV1ApiRouteProps<any> {
     return {
-      function: {
+      function: new OffersFunction(this.routeProps.stack, 'GetCompanyInfoHandler', {
         handler: 'packages/api/offers/src/routes/company/getCompanyInfoHandler.handler',
         environment: {
-          [EnvironmentVariablesKeys.STAGE]: this.routeProps.stack.stage,
-          service: 'company',
+          [EnvironmentVariablesKeys.BASE_URL]: getBLCBaseUrlFromEnv(this.routeProps.stack.stage),
+          [EnvironmentVariablesKeys.LEGACY_OFFERS_API_ENDPOINT]: process.env
+            .LEGACY_API_RETRIEVE_OFFERS_ENDPOINT as string,
         },
-      },
+      }),
       cdk: {
         method: {
           requestModels: { 'application/json': this.routeProps.model as Model },

@@ -5,8 +5,9 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { mockLambdaEvent } from '../../../../mocks/lambdaEvent';
 import { mockLegacyOfferRetrieveAPI } from '../../../../mocks/legacyOfferRetrieveAPI';
 import { OFFERS_TYPE_ENUM } from '../../../../utils/global-constants';
-import { CompanyOffer } from '../../../../models/companyOffers';
+import { Offer } from '../../../../models/offers';
 import { LegacyOffers } from '../../../../models/legacy/legacyOffers';
+import { container } from 'tsyringe';
 
 jest.mock('axios');
 
@@ -15,9 +16,15 @@ jest.mock('../../../../utils/getLegacyUserIdFromToken', () => ({
 }));
 
 jest.mock('../../../../../../core/src/utils/getEnv', () => ({
-  getEnv: jest.fn().mockImplementation((param) => {
-    if (param === 'service') {
-      return 'test';
+  getEnvRaw: jest.fn().mockImplementation((param) => {
+    if (param === 'SERVICE') {
+      return 'OFFERS';
+    }
+    if (param === 'BASE_URL') {
+      return 'https://localhost';
+    }
+    if (param === 'LEGACY_OFFERS_API_ENDPOINT') {
+      return 'https://localhost';
     }
   }),
 }));
@@ -28,9 +35,9 @@ const validateSuccessfulResponse = (result: any, legacyAPIMockResponseData: any)
   expect(APIResponseBody.message).toEqual('Success');
   expect(APIResponseBody).toHaveProperty('data');
 
-  const companyOffers: CompanyOffer[] = APIResponseBody.data.offers;
+  const companyOffers: Offer[] = APIResponseBody.data.offers;
   const legacyOffers = legacyAPIMockResponseData.offers;
-  companyOffers.forEach((companyOffer: CompanyOffer) => {
+  companyOffers.forEach((companyOffer: Offer) => {
     const legacyOffer: LegacyOffers = legacyOffers.find((offer: LegacyOffers) => offer.id === companyOffer.id);
     // every legacy offer will have an id, so this makes sure that we have a legacy offer to compare our API offer object with
     expect(legacyOffer).toHaveProperty('id');
@@ -54,6 +61,10 @@ const validateSuccessfulResponse = (result: any, legacyAPIMockResponseData: any)
 };
 
 describe('handler', () => {
+  beforeAll(() => {
+    jest.clearAllMocks();
+    container.clearInstances();
+  })
   it('should return a successful response when the legacy API returns multiple offers', async () => {
     const legacyAPIMockResponse = mockLegacyOfferRetrieveAPI(2);
     axios.get = jest.fn().mockResolvedValue(legacyAPIMockResponse);
@@ -66,6 +77,7 @@ describe('handler', () => {
     };
 
     const result = await handler(event);
+    console.log(result);
     validateSuccessfulResponse(result, legacyAPIMockResponse.data.data);
   });
 
@@ -126,7 +138,6 @@ describe('handler', () => {
       },
     };
     const result = await handler(event);
-    console.log(result);
     expect(result.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
     expect(result.body).toEqual(JSON.stringify({ message: 'No Content' }));
   });
@@ -140,6 +151,8 @@ describe('handler', () => {
       },
     };
     const result = await handler(event);
+
+    console.log(result);
 
     expect(result.statusCode).toEqual(HttpStatusCode.INTERNAL_SERVER_ERROR);
     expect(result.body).toEqual(

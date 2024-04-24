@@ -46,19 +46,19 @@ export class RouteRegistry {
       stack,
       api,
       apiGatewayModelGenerator,
-      model: modelMap.get('OfferModel')!,
+      model: modelMap.get(OfferModel._ModelName)!,
     }).initialiseRoutes();
     new CompanyRoutes({
       stack,
       api,
       apiGatewayModelGenerator,
-      model: modelMap.get('CompanyInfoModel')!,
+      model: modelMap.get(CompanyInfoModel._ModelName)!,
     }).initialiseRoutes();
     new CompanyOfferRoutes({
       stack,
       api,
       apiGatewayModelGenerator,
-      model: modelMap.get('CompanyOffersModel')!,
+      model: modelMap.get(CompanyOffersModel._ModelName)!,
     }).initialiseRoutes();
     new OffersHomepageRoutes({
       stack,
@@ -75,9 +75,9 @@ export class RouteRegistry {
 
   private generateModels(agmg: ApiGatewayModelGenerator): Map<string, Model> {
     const models: Map<string, Model> = new Map();
-    models.set('OfferModel', agmg.generateModel(OfferModel).getModel());
-    models.set('CompanyInfoModel', agmg.generateModel(CompanyInfoModel).getModel());
-    models.set('CompanyOffersModel', agmg.generateModel(CompanyOffersModel).getModel());
+    models.set(OfferModel._ModelName, agmg.generateModel(OfferModel).getModel());
+    models.set(CompanyInfoModel._ModelName, agmg.generateModel(CompanyInfoModel).getModel());
+    models.set(CompanyOffersModel._ModelName, agmg.generateModel(CompanyOffersModel).getModel());
     models.set(OffersHomepageModel._ModelName, agmg.generateModel(OffersHomepageModel).getModel());
     models.set(CompanyMenuModel._ModelName, agmg.generateModel(CompanyMenuModel).getModel());
     models.set(CategoryMenuModel._ModelName, agmg.generateModel(CategoryMenuModel).getModel());

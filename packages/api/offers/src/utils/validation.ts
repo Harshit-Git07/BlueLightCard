@@ -5,6 +5,7 @@ import {
   OfferRestrictionQueryInputModel,
 } from '../models/queries-input/offerRestrictionQueryInput';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { ZodSchema } from 'zod';
 
 export function validateBrand(brandId: string) {
   return !(!brandId || ![BLC_UK, BLC_AUS, DDS_UK].includes(brandId));
@@ -31,4 +32,14 @@ export function checkIfEnvironmentVariablesExist(
     }
   }
   return true;
+}
+
+export function validateByZodSafeParse<T>(schema: ZodSchema<T>, data: T, logger: LambdaLogger): T {
+  const result = schema.safeParse(data);
+  if (result.success) {
+    return result.data;
+  } else {
+    logger.error({ message: `Error validating the data ${result.error}` });
+    throw new Error('Error validating data info output');
+  }
 }

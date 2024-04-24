@@ -33,21 +33,7 @@ export class AffiliateController extends APIGatewayController<ParsedRequest> {
   }
 
   protected parseRequest(request: APIGatewayProxyEventV2): Result<ParsedRequest, ParseRequestError> {
-    const parsedRequest = this.zodParseRequest(request, GetAffiliateUrlRequest);
-
-    if (parsedRequest.isFailure) {
-      return parsedRequest;
-    }
-
-    if (parsedRequest.isSuccess) {
-      const parsedBearerToken = this.parseBearerToken(parsedRequest.value.headers.Authorization);
-      if (parsedBearerToken.isFailure) {
-        return parsedBearerToken;
-      }
-      return parsedRequest;
-    }
-
-    return parsedRequest;
+    return this.zodParseRequest(request, GetAffiliateUrlRequest);
   }
 
   public handle(request: ParsedRequest): APIGatewayResult {

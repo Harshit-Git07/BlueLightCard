@@ -5,6 +5,7 @@ import { NON_NEGATIVE_INT } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
+import { TokenHelper } from '@blc-mono/redemptions/application/helpers/TokenHelper';
 import {
   IRedemptionDetailsService,
   RedemptionDetailsService,
@@ -53,20 +54,20 @@ export class RedemptionDetailsController extends APIGatewayController<ParsedRequ
       return parsedRequest;
     }
 
-    const parsedBearerToken = this.parseBearerToken(parsedRequest.value.headers.Authorization);
-
-    if (parsedBearerToken.isFailure) {
-      return parsedBearerToken;
-    }
-
-    const tokenPayloadResult = this.unsafeExtractDataFromToken(parsedBearerToken.value);
+    const parsedBearerToken = TokenHelper.removeBearerPrefix(parsedRequest.value.headers.Authorization);
+    const tokenPayloadResult = TokenHelper.unsafeExtractDataFromToken(parsedBearerToken);
 
     if (tokenPayloadResult.isFailure) {
-      return tokenPayloadResult;
+      this.logger.error({
+        message: 'Error parsing bearer token from header',
+        error: tokenPayloadResult.error,
+      });
+      return Result.err({ cause: 'Invalid token', message: 'The token was invalid or malformed' });
     }
 
     const memberId = tokenPayloadResult.value['custom:blc_old_id'];
-    if (typeof memberId !== 'string') return Result.err({ message: 'Invalid memberId in token' });
+    if (typeof memberId !== 'string')
+      return Result.err({ cause: 'Invalid token', message: 'Invalid memberId in token' });
 
     return Result.ok({
       ...parsedRequest.value,

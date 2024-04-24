@@ -1,18 +1,14 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
-import jwtDecode from 'jwt-decode';
 import { z } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
 import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
+import { JsonValue } from '@blc-mono/core/types/json';
 import { Result } from '@blc-mono/core/types/result';
 import { getEnvValidated } from '@blc-mono/core/utils/getEnv';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 import { Controller } from '../Controller';
-
-type JsonValue = string | number | boolean | null | JsonObject | JsonArray | undefined;
-type JsonObject = { [key: string]: JsonValue };
-type JsonArray = JsonValue[];
 
 export type APIGatewayResult = {
   statusCode: number;
@@ -105,7 +101,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     };
   }
 
-  // ====== Helpers ======
+  // ================================= HELPERS =================================
 
   protected zodParseRequest<TOutput>(
     request: APIGatewayProxyEventV2,
@@ -129,28 +125,6 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       })),
     });
   }
-
-  protected parseBearerToken(authorizationHeader: string): Result<string, ParseRequestError> {
-    if (authorizationHeader.startsWith('Bearer ')) {
-      const parsedToken = authorizationHeader.substring(7, authorizationHeader.length);
-      return Result.ok(parsedToken);
-    } else {
-      return Result.err('Invalid Authorization header');
-    }
-  }
-
-  /**
-   * This method extracts the data from the token without any validation
-   */
-  protected unsafeExtractDataFromToken(token: string): Result<JsonObject, ParseRequestError> {
-    try {
-      return Result.ok(jwtDecode(token));
-    } catch (err) {
-      return Result.err({ cause: 'Invalid token', message: 'The token was invalid or malformed' });
-    }
-  }
-
-  // ================================= HELPERS =================================
 
   private getCorsHeaders(request: APIGatewayProxyEventV2): { [key: string]: string } {
     const allowedOrigin = this.getAllowedOrigin(request);

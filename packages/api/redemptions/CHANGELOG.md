@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.13.1...bluelightcard/redemptions-v1.13.2) (2024-04-24)
+
+
+### Bug Fixes
+
+* base64 encode ([#1239](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1239)) ([5cf2b75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5cf2b753d571d9d572ad31bae6a4f66cace7679c))
+* encode trackingURL to base64 ([5cf2b75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5cf2b753d571d9d572ad31bae6a4f66cace7679c))
+* **redemptions:** make internal token validations consistent with shared authoriser ([#1238](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1238)) ([612be84](https://github.com/bluelightcard/BlueLightCard-2.0/commit/612be84040afc2234a5dbba1852d7b8df0efa7d6))
+
 ## [1.13.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.13.0...bluelightcard/redemptions-v1.13.1) (2024-04-23)
 
 

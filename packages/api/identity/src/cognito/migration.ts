@@ -138,7 +138,7 @@ const authenticateUser = async (username: string, password: string) => {
         })
         logger.debug("old login response", { response })
         if (response && response.data) {
-            if (!response.data.success) {
+            if (!response.data.success && response.data.code !== 1013) {
               throw new Error(response.data.message)
             }
             //add to event bus

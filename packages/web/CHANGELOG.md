@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.49.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.48.0...bluelightcard/web-v1.49.0) (2024-04-24)
+
+
+### Features
+
+* amplitude tracking events done ([#1223](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1223)) ([4d3a0c4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4d3a0c497b27fa6616c6d87034d7ba31fd010918))
+* TO-661 integrate offer sheet ([#1225](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1225)) ([a75fc78](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a75fc78ded101e81658c1ec05e703639d0aa0900))
+
+
+### Bug Fixes
+
+* base64 encode ([#1239](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1239)) ([5cf2b75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5cf2b753d571d9d572ad31bae6a4f66cace7679c))
+* encode trackingURL to base64 ([5cf2b75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5cf2b753d571d9d572ad31bae6a4f66cace7679c))
+
 ## [1.48.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.47.0...bluelightcard/web-v1.48.0) (2024-04-19)
 
 

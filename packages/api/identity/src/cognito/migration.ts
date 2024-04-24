@@ -129,7 +129,7 @@ const authenticateUser = async (username: string, password: string) => {
     try {
         const response = await axios({
             method: 'get',
-            url: `${apiUrl}/api/4/user/migrationLogin.php.php?mode=1&audit=false`,
+            url: `${apiUrl}/api/4/user/migrationLogin.php?mode=1&audit=false`,
             headers: {
                 "x-duo-user": base64.encode(username),
                 "x-duo-password": base64.encode(password),

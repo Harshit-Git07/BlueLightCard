@@ -62,7 +62,7 @@ describe('EmailRepository', () => {
       expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
         companyName: payload.redemptionDetails.companyName,
         offerName: payload.redemptionDetails.offerName,
-        url: `${host}/copy-code?code=${mockBase64}&redirect=${payload.redemptionDetails.url}&metaData=${mockBase64}`,
+        url: `${host}/copy-code?code=${mockBase64}&redirect=${mockBase64}&metaData=${mockBase64}`,
       });
     });
 

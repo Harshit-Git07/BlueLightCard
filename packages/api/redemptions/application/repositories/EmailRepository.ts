@@ -56,16 +56,17 @@ export class EmailRepository implements IEmailRepository {
 
     const host = getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST);
     const affiliateConfig = AffiliateHelper.getTrackingUrl(userUID, url);
+    const urlEncoded = encodeBase64(url);
 
     if (!affiliate) {
-      return `${host}/copy-code?code=${code}&redirect=${url}&metaData=${base64Payload}`;
+      return `${host}/copy-code?code=${code}&redirect=${urlEncoded}&metaData=${base64Payload}`;
     }
 
     if (affiliateConfig.kind !== AffiliateResultsKinds.NotSupportedAffiliate) {
-      return `${host}/copy-code?code=${code}&redirect=${url}&metaData=${base64Payload}`;
+      return `${host}/copy-code?code=${code}&redirect=${urlEncoded}&metaData=${base64Payload}`;
     }
 
-    const trackingUrl = affiliateConfig.data.url;
+    const trackingUrl = encodeBase64(affiliateConfig.data.url);
     return `${host}/copy-code?code=${code}&redirect=${trackingUrl}&metaData=${base64Payload}`;
   }
 

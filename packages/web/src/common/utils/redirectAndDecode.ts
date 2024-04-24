@@ -1,12 +1,15 @@
 import { NextRouter } from 'next/router';
 import { decodeBase64 } from '@/utils/base64';
 
-export const redirect = (redirectURL: string, milliseconds: number, router: NextRouter) => {
+export const redirectAndDecodeURL = (
+  redirectURLBase64: string,
+  milliseconds: number,
+  router: NextRouter
+) => {
   return new Promise<void>((resolve, reject) => {
     setTimeout(async () => {
       try {
-        await router.push(decodeBase64(redirectURL));
-
+        await router.push(decodeBase64(redirectURLBase64));
         resolve();
       } catch (error) {
         reject();

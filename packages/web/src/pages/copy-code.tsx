@@ -6,7 +6,7 @@ import { decodeBase64 } from '@/utils/base64';
 import amplitudeEvents from '@/utils/amplitude/events';
 import { useSearchParams } from 'next/navigation';
 import AmplitudeContext from '@/context/AmplitudeContext';
-import { redirect } from '@/utils/redirect';
+import { redirectAndDecodeURL } from '@/utils/redirectAndDecode';
 import { useRouter } from 'next/router';
 
 export default function CopyCodePage() {
@@ -36,9 +36,9 @@ export default function CopyCodePage() {
 
   const handleCopy = async () => {
     const code = params.get('code') ?? '';
-    const redirectURL = params.get('redirect') ?? '';
+    const redirectURLBase64 = params.get('redirect') ?? '';
 
-    if (!code || !redirectURL) {
+    if (!code || !redirectURLBase64) {
       setError(true);
       return;
     }
@@ -52,7 +52,7 @@ export default function CopyCodePage() {
       setCopied(true);
       setButtonText('Code copied!');
 
-      await redirect(redirectURL, 1000, router);
+      await redirectAndDecodeURL(redirectURLBase64, 1000, router);
     } catch (error) {
       console.error(error);
       setError(true);

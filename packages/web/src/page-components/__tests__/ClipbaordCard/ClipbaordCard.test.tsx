@@ -7,7 +7,7 @@ import { NextRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
 import { mocked } from 'jest-mock';
 import { ReadonlyURLSearchParams } from 'next/dist/client/components/navigation';
-import { redirect } from '@/utils/redirect';
+import { redirectAndDecodeURL } from '@/utils/redirectAndDecode';
 import { decodeBase64 } from '@/utils/base64';
 const mockRouter: Partial<NextRouter> = {
   push: jest.fn(),
@@ -16,7 +16,7 @@ const mockRouter: Partial<NextRouter> = {
 };
 
 jest.mock('@/utils/base64');
-jest.mock('@/utils/redirect');
+jest.mock('@/utils/redirectAndDecode');
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
 }));
@@ -72,7 +72,7 @@ describe('ClipboardCard', () => {
   describe('when the user clicks the copy button', () => {
     it('should fire an event to copy code to clipboard and redirect user', async () => {
       const mockUseSearchParams = mocked(useSearchParams);
-      const mockedRedirect = mocked(redirect);
+      const mockedRedirect = mocked(redirectAndDecodeURL);
       const mockDecodeBase64 = mocked(decodeBase64);
 
       const handleCopy = jest

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { Logger } from "@aws-lambda-powertools/logger";
 import { BLC_UK, BLC_AUS, DDS_UK, TYPE_KEYS, OFFER_MENUS_FILE_NAMES } from "../utils/global-constants";
 import { Convertor } from "../utils/convertor";

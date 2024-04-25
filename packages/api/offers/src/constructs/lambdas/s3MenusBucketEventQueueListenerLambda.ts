@@ -1,5 +1,5 @@
 import { LambdaAbstract } from "./lambdaAbstract";
-import { Stack } from "aws-cdk-lib";
+import { Duration, Stack } from "aws-cdk-lib";
 import { Tables } from "../tables";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Buckets } from "../buckets";
@@ -15,6 +15,7 @@ export class S3MenusBucketEventQueueListenerLambda extends LambdaAbstract {
     const s3BucketListener = new NodejsFunction(this.stack, 'S3MenusBucketEventQueueListenerLambda', {
       entry: './packages/api/offers/src/lambdaFunctions/s3MenusBucketEventQueueListenerLambdaHandler.ts',
       handler: 'handler',
+      timeout: Duration.seconds(10),
       reservedConcurrentExecutions: 1,
       retryAttempts: 2,
       deadLetterQueueEnabled: true,

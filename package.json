@@ -96,6 +96,7 @@
     "@apollo/client": "^3.8.3",
     "@aws-sdk/client-dynamodb": "^3.476.0",
     "@aws-sdk/client-firehose": "3.523.0",
+    "@aws-sdk/client-s3": "3.556.0",
     "@aws-sdk/lib-dynamodb": "^3.476.0",
     "@fast-csv/parse": "^4.3.6",
     "@storybook/preset-scss": "^1.0.3",
@@ -111,7 +112,7 @@
     "esbuild": "0.19.12",
     "eslint-config-prettier": "^9.0.0",
     "fast-zlib": "^2.0.1",
-    "fs": "^0.0.1-security",
+    "glob": "10.0.0",
     "grapheme-splitter": "^1.0.4",
     "graphql": "^16.8.1",
     "he": "^1.2.0",
@@ -133,7 +134,7 @@
     "zod-validation-error": "3.0.3"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.9.5",
-    "@esbuild/linux-x64": "0.20.0"
+    "@esbuild/linux-x64": "0.20.0",
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }

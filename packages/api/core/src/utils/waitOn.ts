@@ -2,7 +2,7 @@ import { setDefaultHighWaterMark } from "stream";
 import { wait } from "./wait";
 
 export type WaitOnOptions = {
-  maxRetries?: number;
+  maxAttempts?: number;
   retryInterval?: number;
 };
 
@@ -12,25 +12,25 @@ export function waitOn<T>(test: TestFn<T>): Promise<T>;
 export function waitOn<T>(options: WaitOnOptions, test: TestFn<T>): Promise<T>;
 export async function waitOn<T>(optionsOrTest: WaitOnOptions | TestFn<T>, test?: TestFn<T>): Promise<T> {  
   const {
-    maxRetries = 10,
+    maxAttempts = 10,
     retryInterval = 1000,
     testFn,
   } = toOptions(optionsOrTest, test);
 
   let retries = 0;
-  while (retries < maxRetries) {
+  while (retries < maxAttempts) {
     try {
       return await testFn();
     } catch (error) {
       retries++;
-      if (retries === maxRetries) {
+      if (retries === maxAttempts) {
         throw error;
       }
       await wait(retryInterval);
     }
   }
   
-  throw new Error('UNREACHABLE');
+  throw new Error('maxAttempts must be greater than 0');
 }
 
 function toOptions<T>(optionsOrTest: WaitOnOptions | TestFn<T>, test?: TestFn<T>): WaitOnOptions & { testFn: TestFn<T> } {

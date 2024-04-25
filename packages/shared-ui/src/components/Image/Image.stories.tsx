@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Image from './';
 import { disableProps } from '../../utils/storyUtils';
-import { ArgTypes, Primary, Stories, Title } from '@storybook/addon-docs';
 
 const disableArgTypes = disableProps([
   'loading',

@@ -5,12 +5,15 @@
  * @returns
  */
 export const disableProps = (props: string[]) => {
-  return props.reduce((acc, prop) => {
-    acc[prop] = {
-      table: {
-        disable: true,
-      },
-    };
-    return acc;
-  }, {} as Record<string, any>);
+  return props.reduce(
+    (acc, prop) => {
+      acc[prop] = {
+        table: {
+          disable: true,
+        },
+      };
+      return acc;
+    },
+    {} as Record<string, any>,
+  );
 };

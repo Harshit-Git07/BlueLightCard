@@ -30,7 +30,7 @@ export type TestUserTokens = {
 export class TestUser {
   private constructor(
     private readonly client: CognitoIdentityProviderClient,
-    private readonly userDetail: TestUserDetails,
+    public readonly userDetail: TestUserDetails,
   ) {}
 
   public async authenticate(): Promise<TestUserTokens> {

@@ -67,7 +67,7 @@ export class DwhRepository implements IDwhRepository {
           JSON.stringify({
             company_id: companyId,
             offer_id: offerId.toString(),
-            member_id: memberId,
+            member_id: parseInt(memberId),
             timedate: new Date().toISOString(),
             // TODO: Handle mobile type for mobile hybrid?
             type: APPLICATION_TYPE_WEB,

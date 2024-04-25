@@ -92,7 +92,7 @@ describe('DwhRepository', () => {
       expect(putCommand.input.DeliveryStreamName).toBe('compVaultClickStream');
       const data = new TextDecoder().decode(putCommand.input.Record!.Data!);
       expect(data).toMatchInlineSnapshot(
-        `"{"company_id":2,"offer_id":"1","member_id":"3","timedate":"2021-09-01T00:00:00.000Z","type":1}"`,
+        `"{"company_id":2,"offer_id":"1","member_id":3,"timedate":"2021-09-01T00:00:00.000Z","type":1}"`,
       );
     });
   });

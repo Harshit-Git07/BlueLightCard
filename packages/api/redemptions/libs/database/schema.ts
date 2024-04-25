@@ -73,6 +73,7 @@ export const genericsTable = pgTable('generics', {
 
 export const vaultsPrefix = 'vlt';
 export const createVaultId = (): string => `${vaultsPrefix}-${uuidv4()}`;
+export const createVaultIdE2E = (): string => `e2e:${vaultsPrefix}-${uuidv4()}`;
 export const vaultsTable = pgTable('vaults', {
   // PK
   id: varchar('id').primaryKey().$defaultFn(createVaultId),
@@ -94,6 +95,7 @@ export const vaultsTable = pgTable('vaults', {
 
 export const vaultBatchesPrefix = 'vbt';
 export const createVaultBatchesId = (): string => `${vaultBatchesPrefix}-${uuidv4()}`;
+export const createVaultBatchesIdE2E = (): string => `e2e:${vaultBatchesPrefix}-${uuidv4()}`;
 export const vaultBatchesTable = pgTable('vaultBatches', {
   // PK
   id: varchar('id').primaryKey().$defaultFn(createVaultBatchesId),
@@ -107,6 +109,7 @@ export const vaultBatchesTable = pgTable('vaultBatches', {
 
 export const vaultCodesPrefix = 'vcd';
 export const createVaultCodesId = (): string => `${vaultCodesPrefix}-${uuidv4()}`;
+export const createVaultCodesIdE2E = (): string => `e2e:${vaultCodesPrefix}-${uuidv4()}`;
 export const vaultCodesTable = pgTable(
   'vaultCodes',
   {

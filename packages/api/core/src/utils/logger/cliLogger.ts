@@ -25,34 +25,34 @@ export class CliLogger extends Logger<ICliLoggerDetail> {
 
   info({ message, context, error }: ICliLoggerDetail) {
     console.log(this.INFO(`[INFO] ${message}`));
-    this.logContext(context);
-    this.logError(error);
+    this.logContext('log', context);
+    this.logError('log', error);
   }
 
   debug({ message, context, error }: ICliLoggerDetail) {
     console.log(this.DEBUG(`[DEBUG] ${message}`));
-    this.logContext(context);
-    this.logError(error);
+    this.logContext('log', context);
+    this.logError('log', error);
   }
 
   warn({ message, context, error }: ICliLoggerDetail) {
     console.warn(this.WARN(`[WARNING] ${message}`));
-    this.logContext(context);
-    this.logError(error);
+    this.logContext('warn', context);
+    this.logError('warn', error);
   }
 
   error({ message, context, error }: ICliLoggerDetail) {
     console.error(this.ERROR(`[ERROR] ${message}`));
-    this.logContext(context);
-    this.logError(error);
+    this.logContext('error', context);
+    this.logError('error', error);
   }
 
-  private logContext(context: unknown) {
+  private logContext(method: 'log' | 'warn' | 'error', context: unknown) {
     if (context === undefined) {
       return;
     }
 
-    console.log(this.CONTEXT(`[CONTEXT] ${this.stringifyContext(context)}`));
+    console[method](this.CONTEXT(`[CONTEXT] ${this.stringifyContext(context)}`));
   }
 
   private stringifyContext(context: unknown) {
@@ -62,13 +62,13 @@ export class CliLogger extends Logger<ICliLoggerDetail> {
     return JSON.stringify(context);
   }
 
-  private logError(error: unknown) {
+  private logError(method: 'log' | 'warn' | 'error', error: unknown) {
     const serialized = this.serializeError(error);
 
     if (serialized === undefined) {
       return;
     }
 
-    console.error(this.CONTEXT(`${serialized.message}\n${serialized.stack}`));
+    console[method](this.CONTEXT(`${serialized.message}\n${serialized.stack}`));
   }
 }

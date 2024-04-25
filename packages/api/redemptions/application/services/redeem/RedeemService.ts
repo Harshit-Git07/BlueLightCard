@@ -46,7 +46,7 @@ export class RedeemService implements IRedeemService {
       };
     }
 
-    await this.dwhRepository.logRedemptionAttempt(offerId, redemption?.companyId, params.memberId).catch((error) => {
+    await this.dwhRepository.logRedemptionAttempt(offerId, redemption.companyId, params.memberId).catch((error) => {
       this.logger.error({
         message: '[UNHANDLED ERROR] Error while logging redemption attempt to data warehouse',
         error,

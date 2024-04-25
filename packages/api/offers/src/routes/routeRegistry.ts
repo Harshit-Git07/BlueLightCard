@@ -10,7 +10,9 @@ import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { IDatabaseAdapter } from '../constructs/database/IDatabaseAdapter';
 import { CompanyOfferRoutes } from './company/offers/companyOfferRoutes';
 import { CompanyOffersModel } from 'src/models/companyOffers';
+import { BannerModel } from 'src/models/banner';
 import { OffersHomepageRoutes } from './homepage/homepageRoutes';
+import { BannerRoutes } from './banners/bannerRoutes';
 import { CategoryMenuModel, CompanyMenuModel, OffersHomepageModel } from 'src/models/offersHomepage';
 import { Tables } from '../constructs/tables';
 
@@ -71,6 +73,13 @@ export class RouteRegistry {
       },
       dynamoTables,
     }).initialiseRoutes();
+    new BannerRoutes({
+      stack,
+      api,
+      apiGatewayModelGenerator,
+      model: modelMap.get(BannerModel._ModelName)!,
+      dynamoTables
+    }).initialiseRoutes();
   }
 
   private generateModels(agmg: ApiGatewayModelGenerator): Map<string, Model> {
@@ -81,6 +90,7 @@ export class RouteRegistry {
     models.set(OffersHomepageModel._ModelName, agmg.generateModel(OffersHomepageModel).getModel());
     models.set(CompanyMenuModel._ModelName, agmg.generateModel(CompanyMenuModel).getModel());
     models.set(CategoryMenuModel._ModelName, agmg.generateModel(CategoryMenuModel).getModel());
+    models.set(BannerModel._ModelName, agmg.generateModel(BannerModel).getModel());
     return models;
   }
 }

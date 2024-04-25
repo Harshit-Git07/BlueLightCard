@@ -1,6 +1,9 @@
 import { z } from 'zod';
+import { createZodNamedType } from '../../../core/src/extensions/apiGatewayExtension/agModelGenerator';
 
-export const BannerModel = z.object({
+export const BannerModel = createZodNamedType(
+  'BannerModel',
+  z.object({
     id: z.number({
       required_error: 'ID is required',
       invalid_type_error: 'ID must be a number',
@@ -39,6 +42,7 @@ export const BannerModel = z.object({
       required_error: 'Company ID is required',
       invalid_type_error: 'Company ID must be a number',
     }),
-  });
+  })
+);
 
 export type Banner = z.infer<typeof BannerModel>;

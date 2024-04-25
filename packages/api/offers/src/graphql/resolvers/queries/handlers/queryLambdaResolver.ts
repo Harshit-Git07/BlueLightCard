@@ -11,7 +11,6 @@ import { CompanyRepository } from '../../../../repositories/companyRepository';
 import { AllCompaniesByBrandIdResolver } from './offersPage/resolveAllCompaniesByBrandId';
 
 const logger = new Logger({ serviceName: `queryLambdaResolver`, logLevel: 'DEBUG' });
-
 const offerHomePageTableName = process.env.OFFER_HOMEPAGE_TABLE as string;
 const bannerTableName = process.env.BANNER_TABLE as string;
 const companyBrandConnectionTableName = process.env.COMPANY_BRAND_CONNECTION_TABLE as string;

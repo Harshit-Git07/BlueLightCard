@@ -14,6 +14,7 @@ export enum EnvironmentVariablesKeys {
   STAGE = 'STAGE',
   BASE_URL = 'BASE_URL',
   LEGACY_OFFERS_API_ENDPOINT = 'LEGACY_OFFERS_API_ENDPOINT',
+  BANNERS_TABLE_NAME = 'BANNERS_TABLE_NAME'
 }
 
 export const getBLCBaseUrlFromEnv = (stage: string): string => {

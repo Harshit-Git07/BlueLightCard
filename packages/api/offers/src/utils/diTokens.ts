@@ -2,4 +2,5 @@
 export enum DI_KEYS {
   OffersHomePageTable = 'OffersHomePageTable',
   BlcBaseUrl = 'BlcBaseUrl',
+  BannersTable = 'BannersTable',
 }

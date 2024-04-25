@@ -19,9 +19,12 @@ export const handler = async (event: CloudWatchLogsEvent, context: Context): Pro
             const parsed = JSON.parse(logevent.message);
             let state = 0;
             logger.info('log', {parsed});
-            if (parsed.action === 'TokenGeneration_Authentication' || parsed.action === 'TokenGeneration_HostedAuth'){
+            if (parsed.action === 'TokenGeneration_Authentication'){
                 state = parsed.clientId == webClientId ? LoginAudit.WEB_LOGIN : LoginAudit.APP_LOGIN;
-            } else if(parsed.action === 'TokenGeneration_RefreshTokens'){
+            } else if(parsed.action === 'TokenGeneration_HostedAuth'){
+                state = parsed.clientId == webClientId ? LoginAudit.WEB_HOSTEDUI_LOGIN : LoginAudit.APP_HOSTEDUI_LOGIN;
+            }
+            else if(parsed.action === 'TokenGeneration_RefreshTokens'){
                 state = parsed.clientId == webClientId ? LoginAudit.WEB_REFRESH_TOKEN : LoginAudit.APP_REFRESH_TOKEN;
             }
             if(state !== 0){

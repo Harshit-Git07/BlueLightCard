@@ -1,9 +1,0 @@
-{
-  "font": {
-    "family": {
-      "sans": {
-        "value": "{asset.font.sourcesanspro.name.value}"
-      }
-    }
-  }
-}

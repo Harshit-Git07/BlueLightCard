@@ -3,7 +3,6 @@ import { Identity } from './packages/api/identity/stack';
 import { Offers } from './packages/api/offers/stack';
 import { Web } from './packages/web/stack';
 import { Shared } from './stacks/stack';
-import { CMS } from './packages/cms/stack';
 import { Redemptions } from './packages/api/redemptions/infrastructure/stack';
 import { MemberServicesHub } from './packages/member-services-hub/stack';
 
@@ -34,7 +33,7 @@ export default {
       app.stack(Offers, { id: 'offers' }),
     ]);
 
-    app.stack(Web, { id: 'web' }).stack(CMS, { id: 'cms' }).stack(MemberServicesHub, { id: 'member-services-hub' });
+    app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });
   },
 } satisfies SSTConfig;
 

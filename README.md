@@ -5,6 +5,7 @@
 - [Redemptions](packages/api/redemptions/README.md)
 
 ## Components
+
 ```
 -> SST - runs a personal dev environment on AWS with the web client run locally
 -> API - REST API run on an environment tagged with your personal 'sst:stage'
@@ -14,11 +15,13 @@
 ## Getting started
 
 Install dependencies by running:
+
 ```sh
 npm i
 ```
 
 Setup your aws access key by running:
+
 ```sh
 aws configure
 ```
@@ -26,21 +29,19 @@ aws configure
 Alternatively, use Leapp - this tool can help you to assume roles.
 
 To start the backend run the following (this will deploy the backend to your aws account)
+
 ```sh
 npm run dev
 ```
 
 To start the front end run (in another terminal)
+
 ```sh
 npm run dev -w packages/web
 ```
 
-To start the admin panel frontend run (in another terminal)
-```sh
-npm run dev -w packages/cms
-```
-
 To teardown this environment run (this will remove everything except data storage services like S3 buckets and DynamoDB):
+
 ```sh
 npm run remove
 ```
@@ -66,6 +67,7 @@ if you intend to run tests against a DB hosted in AWS. This is not required when
 running a local DB instance.
 
 ## Errors
+
 Sometimes you might get an error like this:
 
 ```
@@ -92,6 +94,7 @@ Need help with this error? Post it in #help on the SST Discord https://sst.dev/d
 The solution is to retry the command - it will work eventually 🫣
 
 ## Stack
-* SST - for managing Infrastructure-as-code
-* Hono - for API routing + middleware
-* NextJS - for the web application
+
+- SST - for managing Infrastructure-as-code
+- Hono - for API routing + middleware
+- NextJS - for the web application

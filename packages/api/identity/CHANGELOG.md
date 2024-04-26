@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.62.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.61.0...bluelightcard/identity-v1.62.0) (2024-04-26)
+
+
+### Features
+
+* add client ([#1253](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1253)) ([bbf58f5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bbf58f51671879299cbf30cb00e9ed229e970cfd))
+
 ## [1.61.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.60.0...bluelightcard/identity-v1.61.0) (2024-04-26)
 
 

@@ -13,7 +13,8 @@ export const handler = async (event: PreTokenGenerationTriggerEvent, context: an
   logger.info('audit', {
     audit: true,
     action: event.triggerSource,
-    memberId : (event.triggerSource === 'TokenGeneration_Authentication' || event.triggerSource === 'TokenGeneration_HostedAuth' || event.triggerSource === 'TokenGeneration_RefreshTokens') ? event.request.userAttributes['custom:blc_old_id'] : event.request.userAttributes['custom:blc_old_uuid']
+    memberId : (event.triggerSource === 'TokenGeneration_Authentication' || event.triggerSource === 'TokenGeneration_HostedAuth' || event.triggerSource === 'TokenGeneration_RefreshTokens') ? event.request.userAttributes['custom:blc_old_id'] : event.request.userAttributes['custom:blc_old_uuid'],
+    clientId: event.callerContext.clientId,
 });
 
   const latestCardId = await preTokenGenerateService.findLatestCardStatus(event.request.userAttributes['custom:blc_old_uuid']);

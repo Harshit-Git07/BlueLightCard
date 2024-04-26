@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.61.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.60.0...bluelightcard/identity-v1.61.0) (2024-04-26)
+
+
+### Features
+
+* Add yalson DDS URL in JSON ([#1252](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1252)) ([7808b4e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7808b4e7dcfb371f26664d40b137325213f0c547))
+* differential hosted ui auth with different login states ([#1248](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1248)) ([45e0831](https://github.com/bluelightcard/BlueLightCard-2.0/commit/45e0831a6a67da3539def131938a965ca579ee76))
+* fix typo in endpoint ([#1246](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1246)) ([8e52942](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8e52942fec2d1a434441dc01cdb8ae8177cf7cf9))
+* Handle code during migration from login if user has weak pwd ([#1240](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1240)) ([8a83ec0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8a83ec02689bc3c7a9a2d146b16a97d773b83854))
+* Ti 1124 call new dedicated API for user migration with weak pwd ([#1245](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1245)) ([1e52d55](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1e52d550d8a900dd4114910ec1e450f26e1c10dc))
+
 ## [1.60.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.59.0...bluelightcard/identity-v1.60.0) (2024-04-23)
 
 

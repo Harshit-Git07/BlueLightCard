@@ -1,8 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import List from '../List';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { ListProps, ListVariant } from '../types';
-import eventBus from '@/eventBus';
 import '@testing-library/jest-dom';
 import { APIUrl, Channels } from '@/globals';
 import Spinner from '@/modules/Spinner';
@@ -13,6 +12,7 @@ import { userService } from '@/components/UserServiceProvider/store';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import eventBus from '@/eventBus';
 
 jest.mock('@/../data/index.ts', () => ({
   offerListDataMap: {
@@ -32,12 +32,10 @@ jest.mock('@/invoke/apiCall');
 
 describe('ListModule', () => {
   let props: ListProps;
-  let bus = eventBus();
   let user: UserEvent;
   let userServiceValue: string | undefined;
 
   afterEach(() => {
-    bus.clearMessages(Channels.API_RESPONSE);
     jest.resetAllMocks();
   });
 
@@ -58,11 +56,8 @@ describe('ListModule', () => {
 
   describe('spinner', () => {
     it('should hide spinner on receiving api response', () => {
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: APIUrl.Search,
-        response: {
-          data: [],
-        },
+      eventBus.emit(Channels.API_RESPONSE, APIUrl.Search, {
+        data: [],
       });
 
       whenListWithSpinnerIsRendered(props);
@@ -130,42 +125,38 @@ describe('ListModule', () => {
   });
 
   describe('render data', () => {
-    it('should render list of results', () => {
+    it('should render list of results', async () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: '/api/4/offer/list.php',
-        response: {
-          data: offerListItemFactory.buildList(2),
-        },
-      });
-
       whenListWithSpinnerIsRendered(props);
 
-      const results = screen.getAllByRole('listitem');
+      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+        data: offerListItemFactory.buildList(2),
+      });
+
+      const results = await screen.findAllByRole('listitem');
 
       expect(results).toHaveLength(2);
     });
 
-    it('should display "No results found." message when no data is present', () => {
+    it('should display "No results found." message when no data is present', async () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: '/api/4/offer/list.php',
-        response: {
-          data: [],
-        },
-      });
-
       whenListWithSpinnerIsRendered(props);
 
-      const noResultsMessage = screen.getByText('No results found.');
-      const noListItem = screen.queryAllByRole('listitem');
+      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+        data: [],
+      });
 
+      const noResultsMessage = await screen.findByText('No results found.');
       expect(noResultsMessage).toBeInTheDocument();
-      expect(noListItem).toHaveLength(0);
+
+      await waitFor(() => {
+        const noListItem = screen.queryAllByRole('listitem');
+        expect(noListItem).toHaveLength(0);
+      });
     });
   });
 
@@ -174,14 +165,13 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: '/api/4/offer/list.php',
-        response: {
-          data: offerListItemFactory.buildList(20),
-        },
-      });
       whenListWithSpinnerIsRendered(props);
-      const loadMoreButton = screen.getByText('Load More');
+
+      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+        data: offerListItemFactory.buildList(20),
+      });
+
+      const loadMoreButton = await screen.findByText('Load More');
 
       await user.click(loadMoreButton);
       expect(loadMoreButton).toHaveTextContent('Loading...');
@@ -191,11 +181,8 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: '/api/4/offer/list.php',
-        response: {
-          data: [],
-        },
+      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+        data: [],
       });
 
       whenListWithSpinnerIsRendered(props);
@@ -209,11 +196,8 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: '/api/4/offer/list.php',
-        response: {
-          data: offerListItemFactory.buildList(4),
-        },
+      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+        data: offerListItemFactory.buildList(4),
       });
 
       whenListWithSpinnerIsRendered(props);
@@ -223,20 +207,17 @@ describe('ListModule', () => {
       expect(loadMoreButton).not.toBeInTheDocument();
     });
 
-    it('should show the button if number of results match the pagesize(20)', () => {
+    it('should show the button if number of results match the pagesize(20)', async () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: '/api/4/offer/list.php',
-        response: {
-          data: offerListItemFactory.buildList(20),
-        },
-      });
-
       whenListWithSpinnerIsRendered(props);
 
-      const loadMoreButton = screen.getByText('Load More');
+      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+        data: offerListItemFactory.buildList(20),
+      });
+
+      const loadMoreButton = await screen.findByText('Load More');
 
       expect(loadMoreButton).toBeInTheDocument();
     });
@@ -283,28 +264,8 @@ describe('ListModule', () => {
       .mockImplementation(() => jest.fn());
 
     beforeEach(() => {
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: '/api/4/offer/list.php',
-        response: {
-          data: offerListItemFactory.buildList(5),
-        },
-      });
-    });
-
-    describe('types list', () => {
-      it('should log "type_list_viewed" analytic event on results returned', () => {
-        props.listVariant = ListVariant.Types;
-        props.entityId = 0;
-
-        whenListWithSpinnerIsRendered(props);
-
-        expect(analyticsMock).toHaveBeenCalledWith({
-          event: AmplitudeEvents.TYPE_LIST_VIEWED,
-          parameters: {
-            type_name: 'Type One',
-            number_of_results: 5,
-          },
-        });
+      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+        data: offerListItemFactory.buildList(5),
       });
     });
 

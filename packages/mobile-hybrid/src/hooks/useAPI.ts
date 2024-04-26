@@ -1,26 +1,21 @@
-import { Channels, eventBus } from '@/globals';
+import eventBus from '@/eventBus';
+import { Channels } from '@/globals';
 import { useEffect, useState } from 'react';
 
-const useAPI = <R>(apiUrl: string) => {
-  const [response, setResponse] = useState<R>();
+const useAPI = (apiUrl: string) => {
+  const [response, setResponse] = useState<unknown>();
 
-  useEffect(() => {
-    const listenerId = eventBus.on(Channels.API_RESPONSE, () => {
-      const latest = eventBus.getLatestMessage(Channels.API_RESPONSE);
-      const { url, response: _response } = latest!.message;
-      console.log('Response', _response);
-      if (url.includes(apiUrl)) {
-        setResponse(_response);
-      }
-    });
+  useEffect(
+    () =>
+      eventBus.on(Channels.API_RESPONSE, (path, data) => {
+        if (path.includes(apiUrl)) {
+          setResponse(data);
+        }
+      }),
+    [setResponse, apiUrl],
+  );
 
-    return () => {
-      eventBus.off(Channels.API_RESPONSE, listenerId);
-      eventBus.clearMessages(Channels.API_RESPONSE);
-    };
-  }, [setResponse, apiUrl]);
-
-  return { response };
+  return response;
 };
 
 export default useAPI;

@@ -1,5 +1,5 @@
-import { MessageAPIResponse } from '@/eventBus/types';
-import { Channels, eventBus } from '@/globals';
+import eventBus from '@/eventBus';
+import { Channels } from '@/globals';
 import { Logger } from '@/logger';
 
 /**
@@ -44,11 +44,7 @@ export default class NativeReceiveAPIResponse implements NativeReceive.WebViewAP
     let parsedJSON;
     try {
       parsedJSON = JSON.parse(joinedChunks);
-      eventBus.broadcast(Channels.API_RESPONSE, {
-        url,
-        response: parsedJSON,
-      });
-
+      eventBus.emit(Channels.API_RESPONSE, url, parsedJSON);
       this.logger.debug('Successfully parsed JSON', NativeReceiveAPIResponse.TAG, parsedJSON);
     } catch (error) {
       this.logger.error('Failed to parse JSON in response', NativeReceiveAPIResponse.TAG, error);

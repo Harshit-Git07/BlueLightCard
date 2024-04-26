@@ -1,8 +1,8 @@
 import { FC, PropsWithChildren } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import Spinner from '@/modules/Spinner';
-import eventBus from '@/eventBus';
+import bus from '@/eventBus';
 import { APIUrl, Channels } from '@/globals';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import InvokeNativeAPICall from '@/invoke/apiCall';
@@ -19,16 +19,11 @@ jest.mock('@/invoke/apiCall');
 jest.mock('@/invoke/analytics');
 
 describe('Search results', () => {
-  let bus = eventBus();
   const searchTermValue = 'pizza';
   let analyticsMock: jest.SpyInstance<void, [properties: NativeAnalytics.Parameters], any>;
   let user: UserEvent;
 
   let testData: OfferListItemModel[];
-
-  afterEach(() => {
-    bus.clearMessages(Channels.API_RESPONSE);
-  });
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -53,29 +48,27 @@ describe('Search results', () => {
   });
 
   describe('render results', () => {
-    it('should render list of results', () => {
+    it('should render list of results', async () => {
+      whenTheSearchResultsPageIsRendered(searchTermValue);
+
       givenSearchResultsAreReturnedFromTheAPI();
 
-      whenTheSearchResultsPageIsRendered(searchTermValue);
-
-      const results = screen.getAllByRole('listitem');
+      const results = await screen.findAllByRole('listitem');
       expect(results).toHaveLength(2);
     });
-    it('should show no results found when nothing found', () => {
-      givenSearchResultsAreReturnedFromTheAPI([]);
-
+    it('should show no results found when nothing found', async () => {
       whenTheSearchResultsPageIsRendered(searchTermValue);
 
-      const results = screen.queryByText('No results found.');
-      expect(results).toBeInTheDocument();
-    });
-    it('should show no results found when nothing found but a previous search was successful', () => {
       givenSearchResultsAreReturnedFromTheAPI([]);
 
+      await screen.findByText('No results found.');
+    });
+    it('should show no results found when nothing found but a previous search was successful', async () => {
       whenTheSearchResultsPageIsRendered(searchTermValue, [buildSearchResult()]);
 
-      const results = screen.queryByText('No results found.');
-      expect(results).toBeInTheDocument();
+      givenSearchResultsAreReturnedFromTheAPI([]);
+
+      await screen.findByText('No results found.');
     });
   });
 
@@ -94,23 +87,27 @@ describe('Search results', () => {
   });
 
   describe('log analytics events', () => {
-    it('should log analytics event on results returned', () => {
-      givenSearchResultsAreReturnedFromTheAPI();
+    it('should log analytics event on results returned', async () => {
       whenTheSearchResultsPageIsRendered(searchTermValue);
 
-      expect(analyticsMock).toHaveBeenCalledWith({
-        event: AmplitudeEvents.SEARCH_RESULTS_LIST_VIEWED,
-        parameters: {
-          search_term: searchTermValue,
-          number_of_results: 2,
-        },
-      });
+      givenSearchResultsAreReturnedFromTheAPI();
+
+      await waitFor(() =>
+        expect(analyticsMock).toHaveBeenCalledWith({
+          event: AmplitudeEvents.SEARCH_RESULTS_LIST_VIEWED,
+          parameters: {
+            search_term: searchTermValue,
+            number_of_results: 2,
+          },
+        }),
+      );
     });
     it('should log analytics event when list item is clicked', async () => {
-      givenSearchResultsAreReturnedFromTheAPI();
       whenTheSearchResultsPageIsRendered(searchTermValue);
 
-      const listItems = screen.getAllByRole('button');
+      givenSearchResultsAreReturnedFromTheAPI();
+
+      const listItems = await screen.findAllByRole('button');
 
       await user.click(listItems[1]);
 
@@ -130,11 +127,8 @@ describe('Search results', () => {
   });
 
   const givenSearchResultsAreReturnedFromTheAPI = (data: OfferListItemModel[] = testData) => {
-    bus.broadcast(Channels.API_RESPONSE, {
-      url: `${APIUrl.Search}?term=nike`,
-      response: {
-        data,
-      },
+    bus.emit(Channels.API_RESPONSE, APIUrl.Search, {
+      data,
     });
   };
 
@@ -151,7 +145,7 @@ describe('Search results', () => {
     term: string = '',
     existingSearchResults: SearchResults = [],
   ) => {
-    render(
+    return render(
       <JotaiTestProvider
         initialValues={[
           [searchTerm, term],

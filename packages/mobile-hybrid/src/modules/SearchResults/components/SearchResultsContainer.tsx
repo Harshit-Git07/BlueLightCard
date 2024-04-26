@@ -23,7 +23,7 @@ const SearchResultsContainer: FC = () => {
   const term = useAtomValue(searchTerm);
   const setSpinner = useSetAtom(spinner);
 
-  const { response: searchResultsData } = useAPI<{ data: SearchResults }>(APIUrl.Search);
+  const searchResultsData = useAPI(APIUrl.Search) as { data: SearchResults };
 
   const logSearchResultsListViewedAnalytic = useCallback(
     (numberOfResults: number) => {

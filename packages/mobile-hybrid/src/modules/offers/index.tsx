@@ -8,9 +8,7 @@ import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
 import { AppContext } from '@/store';
 import { NewsPreview } from '../news';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import { PlatformVariant, OfferSheet as SharedOfferSheet } from '@bluelightcard/shared-ui';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import Amplitude from '@/components/Amplitude/Amplitude';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();

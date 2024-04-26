@@ -31,7 +31,7 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
   const apiUrl = apiMap[listVariant];
   const queryParamName = variantToQueryParam[listVariant];
 
-  const { response: listResponse } = useAPI<{ data: OfferListItemModel[] }>(apiUrl);
+  const listResponse = useAPI(apiUrl) as { data: OfferListItemModel[] };
 
   const heading = useMemo(() => {
     const headingMap = offerListDataMap[listVariant];

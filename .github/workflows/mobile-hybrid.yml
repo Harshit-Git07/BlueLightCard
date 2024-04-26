@@ -16,7 +16,6 @@ on:
       - .github/workflows/mobile-hybrid.yml
 
 env:
-  PKG_NAME: mobile-hybrid
   STORYBOOK_PROJECT_NAME: mobile-hybrid-storybook
   STORYBOOK_BUILD_OUTPUT: storybook-static
 
@@ -86,7 +85,7 @@ jobs:
       - name: Build shared-ui
         run: npm run build -w packages/shared-ui
       - name: Build
-        run: npm run build-storybook -w packages/${{ env.PKG_NAME }}
+        run: npm run build-storybook -w packages/mobile-hybrid
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-pages
@@ -94,7 +93,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ env.STORYBOOK_PROJECT_NAME }}
-          directory: packages/${{ env.PKG_NAME }}/${{ env.STORYBOOK_BUILD_OUTPUT }}
+          directory: packages/mobile-hybrid/${{ env.STORYBOOK_BUILD_OUTPUT }}
           branch: ${{ github.ref_name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 

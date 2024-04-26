@@ -1,5 +1,4 @@
-import eventBus from '@/eventBus';
-import { APIUrl, Channels } from '@/globals';
+import { APIUrl } from '@/globals';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { AppStore } from '@/store/types';
 import { render, screen } from '@testing-library/react';
@@ -9,12 +8,6 @@ import Offers from '..';
 import { NewsStoreProvider } from '@/modules/news/store';
 
 describe('Offers', () => {
-  let bus = eventBus();
-
-  afterEach(() => {
-    bus.clearMessages(Channels.API_RESPONSE);
-  });
-
   describe('Streamlined homepage experiment', () => {
     it('should not render "News" when experiment is on', () => {
       const experiments = {

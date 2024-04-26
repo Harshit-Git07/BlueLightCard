@@ -1,5 +1,3 @@
-import eventBus from '@/eventBus';
-import { Channels } from '@/globals';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { AppStore } from '@/store/types';
 import { render, screen } from '@testing-library/react';
@@ -10,12 +8,6 @@ import '@testing-library/jest-dom/extend-expect';
 jest.mock('@/modules/popularbrands/brands');
 
 describe('Popular Brands', () => {
-  let bus = eventBus();
-
-  afterEach(() => {
-    bus.clearMessages(Channels.API_RESPONSE);
-  });
-
   describe('Streamlined homepage experiment', () => {
     it('should not render subtitle when experiment is on', () => {
       const experiments = {

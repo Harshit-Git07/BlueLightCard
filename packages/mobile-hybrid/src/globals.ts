@@ -1,6 +1,3 @@
-import eventBusInit from './eventBus';
-
-export const eventBus = eventBusInit();
 export const PAGE_SIZE = 20;
 
 export enum Channels {

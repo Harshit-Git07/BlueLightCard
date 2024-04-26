@@ -18,6 +18,7 @@ import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { MobilePlatformAdapter } from '@/utils/platformAdapter';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();

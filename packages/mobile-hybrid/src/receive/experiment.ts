@@ -1,4 +1,5 @@
-import { Channels, eventBus } from '@/globals';
+import eventBus from '@/eventBus';
+import { Channels } from '@/globals';
 import { Logger } from '@/logger';
 
 /**
@@ -22,6 +23,6 @@ export default class NativeReceiveExperiment implements NativeReceive.WebViewExp
       experiments,
     );
     const experimentData = JSON.parse(experiments);
-    eventBus.broadcast(Channels.EXPERIMENTS, experimentData);
+    eventBus.emit(Channels.EXPERIMENTS, experimentData);
   }
 }

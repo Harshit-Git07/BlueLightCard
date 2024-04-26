@@ -1,8 +1,9 @@
 import { createContext, FC, useEffect, Reducer, useReducer, PropsWithChildren } from 'react';
 import { useSetAtom } from 'jotai';
 import { AppContextStructure, AppStore, DispatchActionData } from './types';
-import { APIUrl, Channels, eventBus } from '@/globals';
+import { APIUrl, Channels } from '@/globals';
 import { spinner } from '@/modules/Spinner/store';
+import eventBus from '@/eventBus';
 
 const initialState: AppStore = {
   loading: {
@@ -65,30 +66,26 @@ export const AppStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [setSpinner, state.loading]);
 
   useEffect(() => {
-    eventBus.on(Channels.API_RESPONSE, () => {
-      const latest = eventBus.getLatestMessage(Channels.API_RESPONSE);
-      const message = latest!.message;
+    eventBus.on(Channels.API_RESPONSE, (path, data) => {
       dispatch({
         type: 'setAPIData',
         state: {
-          url: message.url,
-          data: message.response,
+          url: path,
+          data,
         },
       });
       dispatch({
         type: 'setLoading',
         state: {
-          key: message.url,
+          key: path,
           loading: false,
         },
       });
     });
-    eventBus.on(Channels.EXPERIMENTS, () => {
-      const latest = eventBus.getLatestMessage(Channels.EXPERIMENTS);
-      const message = latest!.message;
+    eventBus.on(Channels.EXPERIMENTS, (experiments) => {
       dispatch({
         type: 'setExperiment',
-        state: message,
+        state: experiments,
       });
     });
   }, []);

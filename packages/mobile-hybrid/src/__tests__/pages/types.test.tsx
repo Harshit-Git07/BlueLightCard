@@ -1,11 +1,10 @@
 import TypesPage from '@/pages/types';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { APIUrl, Channels } from '@/globals';
 import userEvent, { UserEvent } from '@testing-library/user-event';
-import eventBus from '@/eventBus';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { userService } from '@/components/UserServiceProvider/store';
 import Spinner from '@/modules/Spinner';
@@ -13,18 +12,17 @@ import { FC, PropsWithChildren } from 'react';
 import { offerListItemFactory } from '@/modules/List/__mocks__/factory';
 import '@testing-library/jest-dom';
 import BrowseTypesData from '@/data/BrowseTypes';
+import eventBus from '@/eventBus';
 
 jest.mock('@/invoke/apiCall');
 let mockRouter: Partial<NextRouter> = {
   query: {},
 };
 let userServiceValue: string | undefined;
-let bus = eventBus();
 let user: UserEvent;
 
 describe('Types Page', () => {
   afterEach(() => {
-    bus.clearMessages(Channels.API_RESPONSE);
     jest.resetAllMocks();
   });
 
@@ -65,11 +63,8 @@ describe('Types Page', () => {
 
     it('should display types variant list module', async () => {
       const offerData = offerListItemFactory.build();
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: APIUrl.List,
-        response: {
-          data: [offerData],
-        },
+      eventBus.emit(Channels.API_RESPONSE, APIUrl.List, {
+        data: [offerData],
       });
       givenTypeQueryParamIs('5');
 
@@ -114,19 +109,19 @@ describe('Types Page', () => {
       expect(spinner).toBeTruthy();
     });
 
-    it('should hide spinner on receiving api response', () => {
-      bus.broadcast(Channels.API_RESPONSE, {
-        url: APIUrl.List,
-        response: {
-          data: [],
-        },
-      });
+    it('should hide spinner on receiving api response', async () => {
       givenTypeQueryParamIs('5');
 
       whenTypesPageIsRendered();
-      const spinner = screen.queryByRole('progressbar');
 
-      expect(spinner).toBeFalsy();
+      eventBus.emit(Channels.API_RESPONSE, APIUrl.List, {
+        data: [],
+      });
+
+      await waitFor(() => {
+        const spinner = screen.queryByRole('progressbar');
+        expect(spinner).toBeFalsy();
+      });
     });
   });
 

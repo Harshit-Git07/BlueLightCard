@@ -20,12 +20,31 @@ declare namespace NativeAPICall {
     static requestData(url: string): void;
   }
 
+  export type HttpMethod =
+    | 'GET'
+    | 'PUT'
+    | 'POST'
+    | 'DELETE'
+    | 'PATCH'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'TRACE';
+
   export interface Parameters {
+    version?: '5' | undefined;
+    /**
+     * Determines whether to allow the mobile app to cache the response. Setting
+     * this to 'true' does not guarantee that the response will be cached.
+     *
+     * @default 'true'
+     */
+    cacheable?: 'true' | 'false' | undefined;
     path: string;
-    method: string;
+    method: HttpMethod;
     parameters?: Record<string, any>;
     queries?: Record<string, any>;
     fields?: Record<string, any>;
+    body?: string | undefined;
   }
 }
 

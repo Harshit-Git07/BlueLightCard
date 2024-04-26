@@ -5,10 +5,7 @@ import { Decorator } from "@storybook/react";
 
 import mockResolvers from './mockResolvers';
 
-eventBus();
-
 import '@/nativeReceive';
-import eventBus from '@/eventBus';
 import Spinner from "@/modules/Spinner";
 import UserServiceProvider from "@/components/UserServiceProvider/UserServiceProvider";
 

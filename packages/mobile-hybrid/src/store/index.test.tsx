@@ -1,14 +1,11 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { AppStoreProvider } from '@/store/index';
 import Spinner from '@/modules/Spinner';
-import eventBus from '@/eventBus';
+import bus from '@/eventBus';
 import { APIUrl, Channels } from '@/globals';
-
-let bus = eventBus();
 
 describe('App Store Provider', () => {
   afterEach(() => {
-    bus.clearMessages(Channels.API_RESPONSE);
     jest.resetAllMocks();
   });
 
@@ -35,14 +32,14 @@ describe('App Store Provider', () => {
   });
 
   const andAllApiCallsRespondSuccessfully = () => {
-    bus.broadcast(Channels.API_RESPONSE, { url: APIUrl.OfferPromos, response: { data: [] } });
-    bus.broadcast(Channels.API_RESPONSE, { url: APIUrl.News, response: { data: [] } });
-    bus.broadcast(Channels.API_RESPONSE, { url: APIUrl.FavouritedBrands, response: { data: [] } });
+    bus.emit(Channels.API_RESPONSE, APIUrl.OfferPromos, { data: [] });
+    bus.emit(Channels.API_RESPONSE, APIUrl.News, { data: [] });
+    bus.emit(Channels.API_RESPONSE, APIUrl.FavouritedBrands, { data: [] });
   };
 
   const andNotAllApiCallsRespondSuccessfully = () => {
-    bus.broadcast(Channels.API_RESPONSE, { url: APIUrl.OfferPromos, response: { data: [] } });
-    bus.broadcast(Channels.API_RESPONSE, { url: APIUrl.News, response: { data: [] } });
+    bus.emit(Channels.API_RESPONSE, APIUrl.OfferPromos, { data: [] });
+    bus.emit(Channels.API_RESPONSE, APIUrl.News, { data: [] });
   };
 
   const whenAppStoreProviderIsRendered = () => {

@@ -4,12 +4,10 @@ import Home from '@/pages';
 import { AppStore } from '@/store/types';
 import { AppContext } from '@/store';
 import '@testing-library/jest-dom';
-import { APIUrl, Channels } from '@/globals';
+import { APIUrl } from '@/globals';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { Brand } from '@/components/PopularBrands/types';
-import eventBus from '@/eventBus';
 import useOffers from '@/hooks/useOffers';
 
 jest.mock('@/invoke/apiCall');
@@ -23,12 +21,6 @@ let appContextExperiments: Record<string, string>;
 let atomExperiments: Record<string, string>;
 
 describe('Home', () => {
-  let bus = eventBus();
-
-  afterEach(() => {
-    bus.clearMessages(Channels.API_RESPONSE);
-  });
-
   beforeEach(() => {
     jest.resetAllMocks();
 

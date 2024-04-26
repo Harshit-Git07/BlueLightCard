@@ -1,19 +1,14 @@
-import { Channels, eventBus } from '@/globals';
+import eventBus from '@/eventBus';
+import { Channels } from '@/globals';
 import { useEffect } from 'react';
 
 export const useOnResume = (callback: (event: string) => void) => {
   useEffect(() => {
-    const listenerId = eventBus.on(Channels.APP_LIFECYCLE, () => {
-      const latest = eventBus.getLatestMessage(Channels.APP_LIFECYCLE);
-
-      if (latest!.message === 'onResume') {
+    return eventBus.on(Channels.APP_LIFECYCLE, (lifecycleEvent) => {
+      if (lifecycleEvent === 'onResume') {
         console.info('App webview resuming');
-        callback(latest!.message);
+        callback(lifecycleEvent);
       }
     });
-
-    return () => {
-      eventBus.off(Channels.APP_LIFECYCLE, listenerId);
-    };
   }, [callback]);
 };

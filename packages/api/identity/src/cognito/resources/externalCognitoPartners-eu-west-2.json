@@ -1,20 +1,26 @@
 {
     "BLC": [
-        {
-            "partnersName": "UK Reward Gateway",
-            "callBackUrl": "https://accounts.rewardgateway.com/callback.php",
-            "signoutUrl": "https://bluelightcard.rewardgateway.co.uk/Authentication/Logout"
-        },
-        {
-            "partnersName": "UK Yalson",
-            "callBackUrl": "https://secure.yalsoncc.co.uk/blc_signin",
-            "signoutUrl": "https://secure.yalsoncc.co.uk/blc_callback"
-        },
-        {
-            "partnersName": "UK Creditec",
-            "callBackUrl": "https://localhost",
-            "signoutUrl": "https://localhost"
-        }
+      {
+          "partnersName": "UK Reward Gateway",
+          "callBackUrl": "https://accounts.rewardgateway.com/callback.php",
+          "signoutUrl": "https://bluelightcard.rewardgateway.co.uk/Authentication/Logout"
+      },
+      {
+          "partnersName": "UK Yalson",
+          "callBackUrl": "https://secure.yalsoncc.co.uk/blc_signin",
+          "signoutUrl": "https://secure.yalsoncc.co.uk/blc_callback"
+      },
+      {
+          "partnersName": "UK Creditec",
+          "callBackUrl": "https://localhost",
+          "signoutUrl": "https://localhost"
+      }
     ],
-    "DDS": []
+    "DDS": [
+      {
+        "partnersName": "UK Yalson",
+        "callBackUrl": "https://secure.yalsoncc.co.uk/blc_signin",
+        "signoutUrl": "https://secure.yalsoncc.co.uk/blc_callback"
+      }
+    ]
 }

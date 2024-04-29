@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.27.0...bluelightcard/offers-v1.28.0) (2024-04-26)
+
+
+### Features
+
+* [DISCO-205] Remove recommended brands ([#1231](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1231)) ([7f9f759](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7f9f759a1d44c4bc84788802872801de481bb098))
+* TO-000 add dependency injection ([#1102](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1102)) ([d8d1360](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d8d1360177c279a02f93daca3eee31c380a75ea8))
+* TO-652 home page menu ([#1139](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1139)) ([e253a68](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e253a682688eb253697a241ed3c9e1177bb41f82))
+* TO-653 GetBanners Api endpoint ([#1217](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1217)) ([ac479e1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ac479e15f66093f6b4e4f586e825668390450f7c))
+* TO-654 Homepage APIs for companies and categories ([#1195](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1195)) ([b119c29](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b119c29202a9c6e18ebb8199574eafd74562c7cb))
+* TO-658 refactor enhance retrieve offers api ([#1202](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1202)) ([b26658f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b26658fb24963f60f3a24de7f6d50b23878b52d9))
+
+
+### Bug Fixes
+
+* Added reflect metadata ([#1247](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1247)) ([5fca8db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5fca8db8cdb01dcf8b18823ad2c7faade7142db3))
+* **redemptions:** [TR-443]: Bump redemptions PostgreSQL version from 15.2 to 15.5 ([#1226](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1226)) ([a9732a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a9732a90592f15af7da6e51d78eb0c912652afa9))
+
+
+### Other Changes
+
+* TO-650 updatd offers API tests ([#1083](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1083)) ([b678741](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b67874180cb8e5a9ea31606ebe623fdfa125f6e8))
+
 ## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.26.0...bluelightcard/offers-v1.27.0) (2024-03-22)
 
 

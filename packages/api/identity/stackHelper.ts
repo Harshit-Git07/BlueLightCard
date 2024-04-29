@@ -516,11 +516,12 @@ export function createNewCognito(
   });
   //audit
   if (stack.stage === STAGES.PRODUCTION) {
+    const dataStream = (region === REGIONS.AP_SOUTHEAST_2) ? 'dwh-blc-p1-production-login' : 'dwh-blc-production-login';
     const blcAuditLogFunction = new Function(stack, 'blcAuditLogSignIn', {
       handler: 'packages/api/identity/src/audit/audit.handler',
       environment: {
         SERVICE: 'identity',
-        DATA_STREAM: 'dwh-blc-production-login',
+        DATA_STREAM: dataStream,
         WEB_CLIENT_ID: webClient.userPoolClientId,
         MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
       },
@@ -535,7 +536,7 @@ export function createNewCognito(
       handler: 'packages/api/identity/src/audit/audit.handler',
       environment: {
         SERVICE: 'identity',
-        DATA_STREAM: 'dwh-blc-production-login',
+        DATA_STREAM: dataStream,
         WEB_CLIENT_ID: webClient.userPoolClientId,
         MOBILE_CLIENT_ID: mobileClient.userPoolClientId,
       },

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.63.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.62.0...bluelightcard/identity-v1.63.0) (2024-04-29)
+
+
+### Features
+
+* blc au has diff stream name ([#1255](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1255)) ([8ac5971](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8ac5971ca1fd6bb53190ac6cd69fd0797d25d033))
+
 ## [1.62.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.61.0...bluelightcard/identity-v1.62.0) (2024-04-26)
 
 

@@ -1,6 +1,6 @@
 import { MouseEventHandler, PropsWithChildren } from 'react';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { ThemeVariant } from 'src/types';
+import { ThemeVariant } from '../../types';
 
 export type ColorToken = {
   bg: string;

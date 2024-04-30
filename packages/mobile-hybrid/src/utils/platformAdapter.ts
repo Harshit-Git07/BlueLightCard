@@ -1,14 +1,20 @@
 import { Unsubscribe } from '@/dependencies/nanoevents';
 import eventBus from '@/eventBus';
 import { Channels } from '@/globals';
+import InvokeNativeAnalytics from '@/invoke/analytics';
 import InvokeNativeAPICall from '@/invoke/apiCall';
+import InvokeNativeNavigation from '@/invoke/navigation';
 import {
+  AmplitudeLogParams,
   IPlatformAdapter,
   PlatformVariant,
   V5RequestOptions,
   V5Response,
 } from '@bluelightcard/shared-ui';
 import { z } from 'zod';
+
+const analytics = new InvokeNativeAnalytics();
+const navigation = new InvokeNativeNavigation();
 
 export class MobilePlatformAdapter implements IPlatformAdapter {
   private invokeNativeAPICall = new InvokeNativeAPICall();
@@ -62,5 +68,13 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
     this.invokeNativeAPICall.requestDataV5(path, options);
 
     return responsePromise;
+  }
+
+  logAnalyticsEvent(event: string, parameters: AmplitudeLogParams): void {
+    analytics.logAnalyticsEvent({ event, parameters });
+  }
+
+  navigate(path: string): void {
+    navigation.navigate(path, 'home');
   }
 }

@@ -7,13 +7,13 @@
     "dev": "next dev",
     "build": "next build",
     "test": "jest",
+    "test:watch": "jest --watch",
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@bluelightcard/shared-ui": "1.0.2",
     "@fortawesome/fontawesome-pro": "6.5.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/pro-light-svg-icons": "6.5.1",

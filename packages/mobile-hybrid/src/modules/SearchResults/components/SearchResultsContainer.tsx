@@ -1,27 +1,30 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useContext, useEffect } from 'react';
 import { useAtomValue, useAtom, useSetAtom } from 'jotai';
+import { useOfferDetails } from '@bluelightcard/shared-ui';
+import { AppContext } from '@/store';
 import { APIUrl } from '@/globals';
 import InvokeNativeAPICall from '@/invoke/apiCall';
-import SearchResultsPresenter, { Props } from './SearchResultsPresenter';
+import SearchResultsPresenter from './SearchResultsPresenter';
 import { searchResults, searchTerm } from '../store';
 import { OfferListItem, SearchResults } from '../types';
 import { spinner } from '@/modules/Spinner/store';
 import useAPI from '@/hooks/useAPI';
-import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const analytics = new InvokeNativeAnalytics();
 const request = new InvokeNativeAPICall();
-const navigation = new InvokeNativeNavigation();
 
 /**
  * Container requests the search results by using the stored term and listens for the response, setting the results in the store
  */
 const SearchResultsContainer: FC = () => {
+  const { viewOffer } = useOfferDetails();
   const [results, setResults] = useAtom(searchResults);
   const term = useAtomValue(searchTerm);
   const setSpinner = useSetAtom(spinner);
+  const { experiments: expr } = useContext(AppContext);
 
   const searchResultsData = useAPI(APIUrl.Search) as { data: SearchResults };
 
@@ -38,14 +41,13 @@ const SearchResultsContainer: FC = () => {
     [term],
   );
 
-  const onOfferClick = ({
+  const onOfferClick = async ({
     companyName,
     companyId,
     offerId,
     offerName,
     searchResultNumber,
   }: OfferListItem) => {
-    navigation.navigate(`/offerdetails.php?cid=${companyId}&oid=${offerId}`, 'search');
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.SEARCH_RESULTS_LIST_CLICKED,
       parameters: {
@@ -58,7 +60,10 @@ const SearchResultsContainer: FC = () => {
         search_result_number: searchResultNumber,
       },
     });
+
+    await viewOffer(expr[Experiments.OFFER_SHEET], offerId);
   };
+
   useEffect(() => {
     if (term) {
       request.requestData(APIUrl.Search, { term });

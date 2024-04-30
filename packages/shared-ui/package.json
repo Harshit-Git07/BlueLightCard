@@ -2,10 +2,10 @@
   "name": "@bluelightcard/shared-ui",
   "version": "1.0.2",
   "description": "Shared UI package to easily share UI code across web based apps",
-  "main": "dist/index.js",
-  "types": "dist/types/src/index.d.ts",
+  "main": "src/index.tsx",
+  "types": "src/index.tsx",
   "files": [
-    "dist"
+    "src"
   ],
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",
@@ -57,6 +57,7 @@
   },
   "scripts": {
     "test": "jest",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint --ext .ts,.tsx",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",

@@ -10,7 +10,7 @@ export function useAmplitudeExperimentClient(): UseQueryResult<ExperimentClient,
 
   if (!client) {
     throw new Error(
-      'useAmplitudeExperimentClient must be used within a AmplitudeExperimentProvider'
+      'useAmplitudeExperimentClient must be used within a AuthedAmplitudeExperimentProvider'
     );
   }
 

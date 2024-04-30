@@ -11,6 +11,7 @@ const events = {
   GLOBAL_NAVIGATION_MY_ACCOUNT_CLICKED: 'global_navigation_my_account_clicked',
   GLOBAL_NAVIGATION_NOTIFICATIONS_CLICKED: 'global_navigation_notifications_clicked',
   SEARCH_RESULTS_VIEWED: 'search_results_list_viewed',
+  SEARCH_RESULTS_CARD_CLICKED: 'search_results_card_clicked',
   SERP_SEARCH_STARTED: 'SERP_search_started',
   OFFER_VIEWED: 'offer_viewed',
   VAULT_CODE_REQUEST_CLICKED: 'vault_code_request_code_clicked',

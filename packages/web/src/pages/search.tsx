@@ -20,6 +20,7 @@ import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceho
 import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
 import {
   logSearchCategoryEvent,
+  logSearchCardClicked,
   logSearchCompanyEvent,
   logSearchPage,
   logSearchTermEvent,
@@ -62,6 +63,26 @@ const onSearchCategoryChange = async (categoryId: string, categoryName: string) 
 const onSearchTerm = async (searchTerm: string) => {
   await logSearchTermEvent(searchTerm);
   window.location.href = getOffersBySearchTermUrl(searchTerm);
+};
+
+const onSearchCardClick = async (
+  companyId: number,
+  comapanyName: string,
+  offerId: number,
+  offerName: string,
+  searchTerm: string,
+  numberOfResults: number,
+  searchResultNumber: number
+) => {
+  await logSearchCardClicked(
+    companyId,
+    comapanyName,
+    offerId,
+    offerName,
+    searchTerm,
+    numberOfResults,
+    searchResultNumber
+  );
 };
 
 const Search: NextPage = () => {
@@ -179,15 +200,26 @@ const Search: NextPage = () => {
             searchResults.map((result, index) => {
               const imageSrc = result.offerimg.replaceAll('\\/', '/');
               let hasLink = true;
-              let onClick = undefined;
+              let onOfferCardClick = undefined;
+              const onTrackSearchAnalytics = () => {
+                onSearchCardClick(
+                  result.CompID,
+                  result.CompanyName,
+                  result.ID,
+                  result.OfferName,
+                  query,
+                  searchResults.length,
+                  index + 1
+                );
+              };
               if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
                 hasLink = false;
-                onClick = async () => {
+                onOfferCardClick = async () => {
                   const getRedemptionType = await getRedemptionDetails(
                     Number(result.ID),
                     authCtx.authState.idToken
                   );
-
+                  onTrackSearchAnalytics();
                   if (getRedemptionType === 'vault') {
                     offerSheetControls.open({
                       offerId: result.ID as unknown as string,
@@ -197,6 +229,10 @@ const Search: NextPage = () => {
                   } else {
                     router.push(`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`);
                   }
+                };
+              } else {
+                onOfferCardClick = () => {
+                  onTrackSearchAnalytics();
                 };
               }
               return (
@@ -216,7 +252,7 @@ const Search: NextPage = () => {
                     offerId={result.ID.toString()}
                     companyId={result.CompID.toString()}
                     id={'_offer_card_' + index}
-                    onClick={onClick}
+                    onClick={onOfferCardClick}
                     hasLink={hasLink}
                   />
                 </div>

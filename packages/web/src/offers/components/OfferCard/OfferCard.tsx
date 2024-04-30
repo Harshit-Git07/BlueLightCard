@@ -58,7 +58,7 @@ const OfferCard: FC<OfferCardProps> = ({
 
   const body = (
     <>
-      <div onClick={() => onClick && onClick()} className="w-full h-auto aspect-[2/1]">
+      <div className="w-full h-auto aspect-[2/1]">
         <Image
           src={imageSource}
           alt={alt}
@@ -89,6 +89,7 @@ const OfferCard: FC<OfferCardProps> = ({
     <div
       className={`w-full h-full relative pb-5 mb-2 ${backgroundRootClasses} ${borderClasses} overflow-hidden`}
       data-testid={id}
+      onClick={onClick}
     >
       {hasLink && (
         <Link

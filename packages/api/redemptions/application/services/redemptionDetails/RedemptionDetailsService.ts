@@ -4,6 +4,7 @@ import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
 import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
+export type ClientType = 'web' | 'mobile';
 export type RedemptionDetailsResult =
   | {
       kind: 'Ok';
@@ -16,7 +17,7 @@ export type RedemptionDetailsResult =
     };
 
 export interface IRedemptionDetailsService {
-  getRedemptionDetails(offerId: number, memberId: string): Promise<RedemptionDetailsResult>;
+  getRedemptionDetails(offerId: number, memberId: string, clientType: ClientType): Promise<RedemptionDetailsResult>;
 }
 
 export class RedemptionDetailsService implements IRedemptionDetailsService {
@@ -29,7 +30,11 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
     private readonly dwhRepository: IDwhRepository,
   ) {}
 
-  public async getRedemptionDetails(offerId: number, memberId: string): Promise<RedemptionDetailsResult> {
+  public async getRedemptionDetails(
+    offerId: number,
+    memberId: string,
+    clientType: ClientType,
+  ): Promise<RedemptionDetailsResult> {
     const redemption = await this.redemptionsRepository.findOneByOfferId(offerId);
 
     if (!redemption) {
@@ -38,7 +43,7 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
       };
     }
 
-    await this.dwhRepository.logOfferView(offerId, redemption.companyId, memberId).catch((error) => {
+    await this.dwhRepository.logOfferView(offerId, redemption.companyId, memberId, clientType).catch((error) => {
       this.logger.error({
         message: 'Failed to log offer view',
         error,

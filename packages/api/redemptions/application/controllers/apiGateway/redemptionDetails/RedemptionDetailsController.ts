@@ -15,6 +15,7 @@ import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../Ap
 
 const GetRedemptionDetailsRequestModel = z.object({
   headers: z.object({
+    'X-Client-Type': z.optional(z.enum(['web', 'mobile'])),
     Authorization: z.string(),
   }),
   queryStringParameters: z.object({
@@ -79,6 +80,7 @@ export class RedemptionDetailsController extends APIGatewayController<ParsedRequ
     const result = await this.redemptionDetailsService.getRedemptionDetails(
       request.queryStringParameters.offerId,
       request.memberId,
+      request.headers['X-Client-Type'] ?? 'web',
     );
 
     switch (result.kind) {

@@ -1,14 +1,16 @@
 import { faker } from '@faker-js/faker';
 
-import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
 import { IDwhRepository } from '../../repositories/DwhRepository';
 import { IRedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
-import { RedemptionDetailsService } from './RedemptionDetailsService';
+import { ClientType, RedemptionDetailsService } from './RedemptionDetailsService';
 
 describe('RedemptionDetailsService', () => {
+  const defaultClientType: ClientType = faker.helpers.arrayElement(['web', 'mobile']);
+
   it('should return a RedemptionNotFound result if the redemption is not found', async () => {
     // Arrange
     const logger = createTestLogger();
@@ -33,7 +35,7 @@ describe('RedemptionDetailsService', () => {
     const memberId = faker.string.numeric(8);
 
     // Act
-    const result = await service.getRedemptionDetails(offerId, memberId);
+    const result = await service.getRedemptionDetails(offerId, memberId, defaultClientType);
 
     // Assert
     expect(result).toEqual({
@@ -66,7 +68,7 @@ describe('RedemptionDetailsService', () => {
     const memberId = faker.string.numeric(8);
 
     // Act
-    const result = await service.getRedemptionDetails(offerId, memberId);
+    const result = await service.getRedemptionDetails(offerId, memberId, defaultClientType);
 
     // Assert
     expect(result).toEqual({
@@ -102,15 +104,15 @@ describe('RedemptionDetailsService', () => {
     const memberId = faker.string.numeric(8);
 
     // Act
-    await service.getRedemptionDetails(offerId, memberId);
+    await service.getRedemptionDetails(offerId, memberId, defaultClientType);
 
     // Assert
-    expect(dwhRepository.logOfferView).toHaveBeenCalledWith(offerId, redemption.companyId, memberId);
+    expect(dwhRepository.logOfferView).toHaveBeenCalledWith(offerId, redemption.companyId, memberId, defaultClientType);
   });
 
   it('should return successfully if logging to data warehousing fails', async () => {
     // Arrange
-    const logger = createTestLogger();
+    const logger = createSilentLogger();
     const redemptionsRepository = {
       findOneByOfferId: jest.fn(),
       updateOneByOfferId: jest.fn(),
@@ -133,7 +135,7 @@ describe('RedemptionDetailsService', () => {
     const memberId = faker.string.numeric(8);
 
     // Act
-    const result = await service.getRedemptionDetails(offerId, memberId);
+    const result = await service.getRedemptionDetails(offerId, memberId, defaultClientType);
 
     // Assert
     expect(result).toEqual({

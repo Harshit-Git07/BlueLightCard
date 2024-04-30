@@ -1,6 +1,6 @@
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import { emailEventFactory } from '@blc-mono/redemptions/libs/test/factories/emailEvent.factory';
-import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { IEmailRepository } from '../../repositories/EmailRepository';
 
@@ -34,7 +34,7 @@ describe('EmailService', () => {
       'should throw error for unhandled redemption type',
       async (redemptionType) => {
         // Arrange
-        const logger = createTestLogger();
+        const logger = createSilentLogger();
         const emailRepository = {
           sendVaultRedemptionTransactionalEmail: jest.fn(),
         } satisfies IEmailRepository;

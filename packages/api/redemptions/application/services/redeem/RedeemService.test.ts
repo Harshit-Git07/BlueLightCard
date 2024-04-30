@@ -22,6 +22,7 @@ describe('RedeemService', () => {
     brazeExternalUserId: faker.string.uuid(),
     companyName: faker.string.sample(5),
     offerName: faker.string.sample(5),
+    clientType: faker.helpers.arrayElement(['web', 'mobile']),
   };
   async function callRedeemMethod(
     offerId: number,
@@ -183,11 +184,13 @@ describe('RedeemService', () => {
       redemption.offerId,
       redemption.companyId,
       defaultParams.memberId,
+      defaultParams.clientType,
     );
     expect(dwhRepository.logVaultRedemption).toHaveBeenCalledWith(
       redemption.offerId,
       redemption.companyId,
       defaultParams.memberId,
+      redeemedResult.redemptionDetails.code,
     );
   });
 
@@ -204,6 +207,7 @@ describe('RedeemService', () => {
         code: faker.string.alphanumeric(6),
       },
     };
+    const silentLogger = createSilentLogger();
     const redemptionsRepository = {
       findOneByOfferId: jest.fn().mockResolvedValue(redemption),
       updateManyByOfferId: jest.fn(),
@@ -225,6 +229,7 @@ describe('RedeemService', () => {
 
     // Act
     const result = await callRedeemMethod(defaultOfferId, {
+      logger: silentLogger,
       redemptionsRepository,
       redeemStrategyResolver,
       dwhRepository,

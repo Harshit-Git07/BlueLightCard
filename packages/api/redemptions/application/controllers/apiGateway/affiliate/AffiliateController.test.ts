@@ -4,7 +4,7 @@ import {
   AffiliateResultsKinds,
 } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import { affiliateFactory } from '@blc-mono/redemptions/libs/test/factories/affilate.factory';
-import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 describe('AffiliateController', () => {
   afterEach(() => {
@@ -35,7 +35,7 @@ describe('AffiliateController', () => {
 
   test('should handle request with 400', () => {
     // Arrange
-    const logger = createTestLogger();
+    const logger = createSilentLogger();
     const controller = new AffiliateController(logger);
     const request = {
       headers: {
@@ -51,7 +51,7 @@ describe('AffiliateController', () => {
 
   test('should handle request with 500', () => {
     // Arrange
-    const logger = createTestLogger();
+    const logger = createSilentLogger();
     const controller = new AffiliateController(logger);
     const request = {
       headers: {

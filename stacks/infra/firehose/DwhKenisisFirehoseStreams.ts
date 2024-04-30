@@ -14,12 +14,18 @@ import { Config } from 'sst/constructs';
 export class DwhKenisisFirehoseStreams {
   public readonly compViewStream: IFirehoseStreamAdapter;
   public readonly compClickStream: IFirehoseStreamAdapter;
-  public readonly compVaultClickStream: IFirehoseStreamAdapter;
+  public readonly compAppViewStream: IFirehoseStreamAdapter;
+  public readonly compAppClickStream: IFirehoseStreamAdapter;
+  public readonly vaultStream: IFirehoseStreamAdapter;
+
 
   constructor(stack: Stack) {
     this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compView').setup();
     this.compClickStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compClick').setup();
-    this.compVaultClickStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compVaultClick').setup();
+    this.compAppViewStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compAppView').setup();
+    this.compAppClickStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compAppClick').setup();
+    this.vaultStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-vault').setup();
+
   }
 }
 

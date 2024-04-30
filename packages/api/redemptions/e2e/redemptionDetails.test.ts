@@ -18,6 +18,7 @@ describe('GET /member/redemptionDetails', () => {
 
   beforeAll(async () => {
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
+    // TODO: Prevent emails being sent out
     testUser = await TestUser.setup();
     testUserTokens = await testUser.authenticate();
     // Set a conservative timeout
@@ -108,7 +109,45 @@ describe('GET /member/redemptionDetails', () => {
     expect(result.status).toBe(200);
   });
 
-  test('should send data to the compView stream', { timeout: 60_000 }, async () => {
+  test(
+    'should send data to the compView stream when the client type header is omitted',
+    { timeout: 60_000 },
+    async () => {
+      // Arrange
+      const redemption = redemptionFactory.build({
+        id: createRedemptionsIdE2E(),
+      });
+      await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+      onTestFinished(async () => {
+        await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+      });
+
+      // Act
+      const result = await fetch(
+        `${ApiGatewayV1Api.redemptions.url}member/redemptionDetails?offerId=${redemption.offerId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${testUserTokens.idToken}`,
+          },
+        },
+      );
+
+      // Assert
+      expect(result.status).toBe(200);
+
+      const compClickRecord = await new DwhTestHelper().findCompViewRecordByOfferId(redemption.offerId);
+      expect(compClickRecord.cid).toBe(redemption.companyId.toString());
+      expect(compClickRecord.oid_).toBe(redemption.offerId);
+      expect(compClickRecord.mid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.timedate).toBeDefined();
+      expect(compClickRecord.type).toBe(1); // Type of 1 corresponds to the web application
+      expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
+    },
+  );
+
+  test('should send data to the compView stream when client type is web', { timeout: 60_000 }, async () => {
     // Arrange
     const redemption = redemptionFactory.build({
       id: createRedemptionsIdE2E(),
@@ -124,6 +163,7 @@ describe('GET /member/redemptionDetails', () => {
       {
         method: 'GET',
         headers: {
+          'X-Client-Type': 'web',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${testUserTokens.idToken}`,
         },
@@ -139,6 +179,41 @@ describe('GET /member/redemptionDetails', () => {
     expect(compClickRecord.mid).toBe(testUser.userDetail.attributes.blcOldId.toString());
     expect(compClickRecord.timedate).toBeDefined();
     expect(compClickRecord.type).toBe(1); // Type of 1 corresponds to the web application
+    expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
+  });
+
+  test('should send data to the compAppView stream when client type is mobile', { timeout: 60_000 }, async () => {
+    // Arrange
+    const redemption = redemptionFactory.build({
+      id: createRedemptionsIdE2E(),
+    });
+    await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+    onTestFinished(async () => {
+      await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+    });
+
+    // Act
+    const result = await fetch(
+      `${ApiGatewayV1Api.redemptions.url}member/redemptionDetails?offerId=${redemption.offerId}`,
+      {
+        method: 'GET',
+        headers: {
+          'X-Client-Type': 'mobile',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${testUserTokens.idToken}`,
+        },
+      },
+    );
+
+    // Assert
+    expect(result.status).toBe(200);
+
+    const compClickRecord = await new DwhTestHelper().findCompAppViewRecordByOfferId(redemption.offerId);
+    expect(compClickRecord.cid).toBe(redemption.companyId.toString());
+    expect(compClickRecord.oid_).toBe(redemption.offerId);
+    expect(compClickRecord.mid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+    expect(compClickRecord.timedate).toBeDefined();
+    expect(compClickRecord.type).toBe(5); // Type of 5 corresponds to the mobile application
     expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
   });
 });

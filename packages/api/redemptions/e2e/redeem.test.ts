@@ -237,7 +237,7 @@ describe('POST /member/redeem', () => {
   });
 
   test(
-    'should send data to the compClick and compVaultClick streams when a vault redemption is successful',
+    'should send data to the compClick and vault streams when a vault redemption is successful and the client type header is omitted',
     { timeout: 60_000 },
     async () => {
       // Arrange
@@ -295,19 +295,171 @@ describe('POST /member/redeem', () => {
       expect(result.status).toBe(200);
 
       const compClickRecord = await new DwhTestHelper().findCompClickRecordByOfferId(redemption.offerId);
-      expect(compClickRecord.cid).toBe(redemption.companyId.toString());
-      expect(compClickRecord.oid_).toBe(redemption.offerId);
-      expect(compClickRecord.mid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.company_id).toBe(redemption.companyId.toString());
+      expect(compClickRecord.offer_id).toBe(redemption.offerId);
+      expect(compClickRecord.member_id).toBe(testUser.userDetail.attributes.blcOldId.toString());
       expect(compClickRecord.timedate).toBeDefined();
-      expect(compClickRecord.type).toBe(1); // Type of 1 corresponds to the web application
+      expect(compClickRecord.type).toBe(2); // Type of 2 corresponds to the web application
       expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
 
-      const compVaultClickRecord = await new DwhTestHelper().findCompVaultClickRecordByOfferId(redemption.offerId);
-      expect(compVaultClickRecord.company_id).toBe(redemption.companyId);
+      const compVaultClickRecord = await new DwhTestHelper().findVaultRecordByOfferId(redemption.offerId);
+      expect(compVaultClickRecord.compid).toBe(redemption.companyId.toString());
+      expect(compVaultClickRecord.code).toBe(vaultCode.code);
       expect(compVaultClickRecord.offer_id).toBe(redemption.offerId.toString());
-      expect(compVaultClickRecord.member_id).toBe(testUser.userDetail.attributes.blcOldId);
-      expect(compVaultClickRecord.timedate).toBeDefined();
-      expect(compVaultClickRecord.type).toBe(1); // Type of 1 corresponds to the web application
+      expect(compVaultClickRecord.uid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compVaultClickRecord.whenrequested).toBeDefined();
+    },
+  );
+
+  test(
+    'should send data to the compClick and vault streams when a vault redemption is successful and the client type is web',
+    { timeout: 60_000 },
+    async () => {
+      // Arrange
+      const redemption = redemptionFactory.build({
+        id: createRedemptionsIdE2E(),
+        redemptionType: 'vault',
+        connection: 'direct',
+        url: faker.internet.url(),
+      });
+      const vault = vaultFactory.build({
+        id: createVaultIdE2E(),
+        redemptionId: redemption.id,
+        status: 'active',
+        vaultType: 'standard',
+      });
+      const vaultBatch = vaultBatchFactory.build({
+        id: createVaultBatchesIdE2E(),
+        vaultId: vault.id,
+      });
+      const vaultCode = vaultCodeFactory.build({
+        id: createVaultCodesIdE2E(),
+        batchId: vaultBatch.id,
+        expiry: faker.date.future({ years: 1 }),
+        vaultId: vault.id,
+        memberId: null,
+      });
+      const companyName = faker.company.name();
+      const offerName = faker.commerce.productName();
+      onTestFinished(async () => {
+        await connectionManager.connection.db.delete(vaultCodesTable).where(eq(vaultCodesTable.id, vaultCode.id));
+        await connectionManager.connection.db.delete(vaultBatchesTable).where(eq(vaultBatchesTable.id, vaultBatch.id));
+        await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, vault.id));
+        await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+      });
+      await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+      await connectionManager.connection.db.insert(vaultsTable).values(vault);
+      await connectionManager.connection.db.insert(vaultBatchesTable).values(vaultBatch);
+      await connectionManager.connection.db.insert(vaultCodesTable).values(vaultCode);
+
+      // Act
+      const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
+        method: 'POST',
+        headers: {
+          'X-Client-Type': 'web',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${testUserTokens.idToken}`,
+        },
+        body: JSON.stringify({
+          offerId: redemption.offerId,
+          companyName,
+          offerName,
+        }),
+      });
+
+      // Assert
+      expect(result.status).toBe(200);
+
+      const compClickRecord = await new DwhTestHelper().findCompClickRecordByOfferId(redemption.offerId);
+      expect(compClickRecord.company_id).toBe(redemption.companyId.toString());
+      expect(compClickRecord.offer_id).toBe(redemption.offerId);
+      expect(compClickRecord.member_id).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.timedate).toBeDefined();
+      expect(compClickRecord.type).toBe(2); // Type of 2 corresponds to the web application
+      expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
+
+      const compVaultClickRecord = await new DwhTestHelper().findVaultRecordByOfferId(redemption.offerId);
+      expect(compVaultClickRecord.compid).toBe(redemption.companyId.toString());
+      expect(compVaultClickRecord.code).toBe(vaultCode.code);
+      expect(compVaultClickRecord.offer_id).toBe(redemption.offerId.toString());
+      expect(compVaultClickRecord.uid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compVaultClickRecord.whenrequested).toBeDefined();
+    },
+  );
+
+  test(
+    'should send data to the compAppClick and vault streams when a vault redemption is successful and the client type is mobile',
+    { timeout: 60_000 },
+    async () => {
+      // Arrange
+      const redemption = redemptionFactory.build({
+        id: createRedemptionsIdE2E(),
+        redemptionType: 'vault',
+        connection: 'direct',
+        url: faker.internet.url(),
+      });
+      const vault = vaultFactory.build({
+        id: createVaultIdE2E(),
+        redemptionId: redemption.id,
+        status: 'active',
+        vaultType: 'standard',
+      });
+      const vaultBatch = vaultBatchFactory.build({
+        id: createVaultBatchesIdE2E(),
+        vaultId: vault.id,
+      });
+      const vaultCode = vaultCodeFactory.build({
+        id: createVaultCodesIdE2E(),
+        batchId: vaultBatch.id,
+        expiry: faker.date.future({ years: 1 }),
+        vaultId: vault.id,
+        memberId: null,
+      });
+      const companyName = faker.company.name();
+      const offerName = faker.commerce.productName();
+      onTestFinished(async () => {
+        await connectionManager.connection.db.delete(vaultCodesTable).where(eq(vaultCodesTable.id, vaultCode.id));
+        await connectionManager.connection.db.delete(vaultBatchesTable).where(eq(vaultBatchesTable.id, vaultBatch.id));
+        await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, vault.id));
+        await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+      });
+      await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+      await connectionManager.connection.db.insert(vaultsTable).values(vault);
+      await connectionManager.connection.db.insert(vaultBatchesTable).values(vaultBatch);
+      await connectionManager.connection.db.insert(vaultCodesTable).values(vaultCode);
+
+      // Act
+      const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
+        method: 'POST',
+        headers: {
+          'X-Client-Type': 'mobile',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${testUserTokens.idToken}`,
+        },
+        body: JSON.stringify({
+          offerId: redemption.offerId,
+          companyName,
+          offerName,
+        }),
+      });
+
+      // Assert
+      expect(result.status).toBe(200);
+
+      const compClickRecord = await new DwhTestHelper().findCompAppClickRecordByOfferId(redemption.offerId);
+      expect(compClickRecord.company_id).toBe(redemption.companyId.toString());
+      expect(compClickRecord.offer_id).toBe(redemption.offerId);
+      expect(compClickRecord.member_id).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.timedate).toBeDefined();
+      expect(compClickRecord.type).toBe(4); // Type of 4 corresponds to the mobile application
+      expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
+
+      const compVaultClickRecord = await new DwhTestHelper().findVaultRecordByOfferId(redemption.offerId);
+      expect(compVaultClickRecord.compid).toBe(redemption.companyId.toString());
+      expect(compVaultClickRecord.code).toBe(vaultCode.code);
+      expect(compVaultClickRecord.offer_id).toBe(redemption.offerId.toString());
+      expect(compVaultClickRecord.uid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compVaultClickRecord.whenrequested).toBeDefined();
     },
   );
 });

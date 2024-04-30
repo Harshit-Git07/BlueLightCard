@@ -15,26 +15,26 @@ const compViewSchema = z.object({
   type: z.number(),
   origin: z.string(),
 });
-type CompViewRecord = z.infer<typeof compClickSchema>;
+type CompViewRecord = z.infer<typeof compViewSchema>;
 
 const compClickSchema = z.object({
-  cid: z.string(),
-  oid_: z.number(),
-  mid: z.string(),
+  company_id: z.string(),
+  offer_id: z.number(),
+  member_id: z.string(),
   timedate: z.string(),
   type: z.number(),
   origin: z.string(),
 });
 type CompClickRecord = z.infer<typeof compClickSchema>;
 
-const compCompVaultClickSchema = z.object({
-  company_id: z.number(),
+const vaultSchema = z.object({
+  compid: z.string(),
+  code: z.string(),
+  uid: z.string(),
+  whenrequested: z.string(),
   offer_id: z.string(),
-  member_id: z.number(),
-  timedate: z.string(),
-  type: z.number(),
 });
-type CompVaultClickRecord = z.infer<typeof compCompVaultClickSchema>;
+type VaultRecord = z.infer<typeof vaultSchema>;
 
 const logger = new CliLogger();
 
@@ -53,18 +53,31 @@ export class DwhTestHelper {
     );
   }
 
-  public async findCompClickRecordByOfferId(offerId: number) {
+  public async findCompAppViewRecordByOfferId(offerId: number) {
     return this.findObjectInBucket(
-      Config.DWH_BLC_PRODUCTION_COMPCLICK_DESTINATION_BUCKET,
-      (object): object is CompClickRecord => compClickSchema.parse(object).oid_ === offerId,
+      Config.DWH_BLC_PRODUCTION_COMPAPPVIEW_DESTINATION_BUCKET,
+      (object): object is CompViewRecord => compViewSchema.parse(object).oid_ === offerId,
     );
   }
 
-  public async findCompVaultClickRecordByOfferId(offerId: number) {
+  public async findCompClickRecordByOfferId(offerId: number) {
     return this.findObjectInBucket(
-      Config.DWH_BLC_PRODUCTION_COMPVAULTCLICK_DESTINATION_BUCKET,
-      (object): object is CompVaultClickRecord =>
-        compCompVaultClickSchema.parse(object).offer_id === offerId.toString(),
+      Config.DWH_BLC_PRODUCTION_COMPCLICK_DESTINATION_BUCKET,
+      (object): object is CompClickRecord => compClickSchema.parse(object).offer_id === offerId,
+    );
+  }
+
+  public async findCompAppClickRecordByOfferId(offerId: number) {
+    return this.findObjectInBucket(
+      Config.DWH_BLC_PRODUCTION_COMPAPPCLICK_DESTINATION_BUCKET,
+      (object): object is CompClickRecord => compClickSchema.parse(object).offer_id === offerId,
+    );
+  }
+
+  public async findVaultRecordByOfferId(offerId: number) {
+    return this.findObjectInBucket(
+      Config.DWH_BLC_PRODUCTION_VAULT_DESTINATION_BUCKET,
+      (object): object is VaultRecord => vaultSchema.parse(object).offer_id === offerId.toString(),
     );
   }
 
@@ -94,6 +107,9 @@ export class DwhTestHelper {
           } catch (error) {
             logger.error({
               message: 'Error testing object',
+              context: {
+                object,
+              },
               error,
             });
             return false;

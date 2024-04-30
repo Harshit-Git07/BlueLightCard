@@ -34,11 +34,12 @@ describe('Redemption Strategies', () => {
     ) {
       const genericsRepository = new GenericsRepository(connection);
       const service = new RedeemGenericStrategy(genericsRepository, options.silent ? mockedSilentLogger : mockedLogger);
-      const defaultParams = {
+      const defaultParams: RedeemParams = {
         brazeExternalUserId: faker.string.uuid(),
         companyName: faker.company.name(),
         memberId: faker.string.sample(8),
         offerName: faker.lorem.words(3),
+        clientType: faker.helpers.arrayElement(['web', 'mobile']),
       };
       return service.redeem(redemption, defaultParams);
     }
@@ -135,6 +136,7 @@ describe('Redemption Strategies', () => {
       companyName: faker.company.name(),
       memberId: faker.string.sample(8),
       offerName: faker.lorem.words(3),
+      clientType: faker.helpers.arrayElement(['web', 'mobile']),
     };
 
     async function callVaultRedeemStrategy(

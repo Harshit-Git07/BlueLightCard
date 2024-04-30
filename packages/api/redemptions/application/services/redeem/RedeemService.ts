@@ -46,12 +46,14 @@ export class RedeemService implements IRedeemService {
       };
     }
 
-    await this.dwhRepository.logRedemptionAttempt(offerId, redemption.companyId, params.memberId).catch((error) => {
-      this.logger.error({
-        message: '[UNHANDLED ERROR] Error while logging redemption attempt to data warehouse',
-        error,
+    await this.dwhRepository
+      .logRedemptionAttempt(offerId, redemption.companyId, params.memberId, params.clientType)
+      .catch((error) => {
+        this.logger.error({
+          message: '[UNHANDLED ERROR] Error while logging redemption attempt to data warehouse',
+          error,
+        });
       });
-    });
 
     const redeemStrategy = this.redeemStrategyResolver.getRedemptionStrategy(redemption.redemptionType);
 
@@ -77,12 +79,14 @@ export class RedeemService implements IRedeemService {
             url: result.redemptionDetails.url,
           },
         }),
-        this.dwhRepository.logVaultRedemption(offerId, redemption.companyId, params.memberId).catch((error) => {
-          this.logger.error({
-            message: '[UNHANDLED ERROR] Error while logging vault redemption to data warehouse',
-            error,
-          });
-        }),
+        this.dwhRepository
+          .logVaultRedemption(offerId, redemption.companyId, params.memberId, result.redemptionDetails.code)
+          .catch((error) => {
+            this.logger.error({
+              message: '[UNHANDLED ERROR] Error while logging vault redemption to data warehouse',
+              error,
+            });
+          }),
       ]);
     }
 

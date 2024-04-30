@@ -99,6 +99,7 @@ export class TestUser {
           // Tag user as test user (in case we need to manually cleanup later)
           { Name: 'custom:e2e', Value: 'true' },
         ],
+        MessageAction: 'SUPPRESS',
       }),
     );
 

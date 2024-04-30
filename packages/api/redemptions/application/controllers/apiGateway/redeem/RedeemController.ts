@@ -14,6 +14,7 @@ import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../Ap
 const RedeemRequestModel = z.object({
   body: JsonStringSchema.pipe(PostRedeemModel),
   headers: z.object({
+    'X-Client-Type': z.optional(z.enum(['web', 'mobile'])),
     Authorization: z.string(),
   }),
 });
@@ -61,6 +62,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
       brazeExternalUserId: request.brazeExternalUserId,
       companyName: request.body.companyName,
       offerName: request.body.offerName,
+      clientType: request.headers['X-Client-Type'] ?? 'web',
     });
 
     switch (result.kind) {

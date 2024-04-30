@@ -54,11 +54,13 @@ export type RedeemVaultStrategyResult =
   | { kind: 'MaxPerUserReached' }
   | { kind: 'ErrorWhileRedeemingVault' };
 
+export type ClientType = 'web' | 'mobile';
 export type RedeemParams = {
   memberId: string;
   brazeExternalUserId: string;
   companyName: string;
   offerName: string;
+  clientType: ClientType;
 };
 
 export interface IRedeemStrategy {

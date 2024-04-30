@@ -109,7 +109,9 @@ export async function Redemptions({ app, stack }: StackContext) {
   });
   const publishDwhCompViewStream = dwhKenisisFirehoseStreams.compViewStream.getPutRecordPolicyStatement();
   const publishDwhCompClickStream = dwhKenisisFirehoseStreams.compClickStream.getPutRecordPolicyStatement();
-  const publishDwhCompVaultClickStream = dwhKenisisFirehoseStreams.compVaultClickStream.getPutRecordPolicyStatement();
+  const publishDwhCompAppViewStream = dwhKenisisFirehoseStreams.compAppViewStream.getPutRecordPolicyStatement();
+  const publishDwhCompAppClickStream = dwhKenisisFirehoseStreams.compAppClickStream.getPutRecordPolicyStatement();
+  const publishDwhVaultStream = dwhKenisisFirehoseStreams.vaultStream.getPutRecordPolicyStatement();
 
   // functionName is automatically appended with the stage name
   api.addRoutes(stack, {
@@ -126,11 +128,14 @@ export async function Redemptions({ app, stack }: StackContext) {
       permissions: [
         // Data Warehouse
         publishDwhCompViewStream,
+        publishDwhCompAppViewStream,
       ],
       environment: {
         // Data Warehouse
         [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_VIEW_STREAM_NAME]:
           dwhKenisisFirehoseStreams.compViewStream.getStreamName(),
+        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_VIEW_STREAM_NAME]:
+          dwhKenisisFirehoseStreams.compAppViewStream.getStreamName(),
       },
     }),
     'POST /member/redeem': Route.createRoute({
@@ -162,8 +167,10 @@ export async function Redemptions({ app, stack }: StackContext) {
         // Data Warehouse
         [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_CLICK_STREAM_NAME]:
           dwhKenisisFirehoseStreams.compClickStream.getStreamName(),
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_VAULT_CLICK_STREAM_NAME]:
-          dwhKenisisFirehoseStreams.compVaultClickStream.getStreamName(),
+        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME]:
+          dwhKenisisFirehoseStreams.compAppClickStream.getStreamName(),
+        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME]:
+          dwhKenisisFirehoseStreams.vaultStream.getStreamName(),
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [
@@ -173,7 +180,8 @@ export async function Redemptions({ app, stack }: StackContext) {
         getSecretValueSecretsManager,
         // Data Warehouse
         publishDwhCompClickStream,
-        publishDwhCompVaultClickStream,
+        publishDwhCompAppClickStream,
+        publishDwhVaultStream,
       ],
     }),
     'POST /member/connection/affiliate': Route.createRoute({

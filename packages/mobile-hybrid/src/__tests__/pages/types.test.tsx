@@ -1,7 +1,7 @@
 import TypesPage from '@/pages/types';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { APIUrl, Channels } from '@/globals';
 import userEvent, { UserEvent } from '@testing-library/user-event';
@@ -114,10 +114,8 @@ describe('Types Page', () => {
 
       whenTypesPageIsRendered();
 
-      act(() => {
-        eventBus.emit(Channels.API_RESPONSE, APIUrl.List, {
-          data: [],
-        });
+      eventBus.emit(Channels.API_RESPONSE, APIUrl.List, {
+        data: [],
       });
 
       await waitFor(() => {

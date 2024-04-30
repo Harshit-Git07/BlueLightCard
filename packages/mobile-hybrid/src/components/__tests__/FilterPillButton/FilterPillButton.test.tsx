@@ -1,6 +1,6 @@
 import FilterPillButton from '@/components/FilterPillButton/FilterPillButton';
 import { FilterPillButtonProps } from '@/components/FilterPillButton/types';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
@@ -32,8 +32,7 @@ describe('FilterPillButton component', () => {
       const pillToSelect = props.pills[0].text;
       const filterButton = screen.getByText(pillToSelect);
 
-      fireEvent.click(filterButton);
-
+      await userEvent.click(filterButton);
       expect(props.onSelected).toHaveBeenCalledWith('featured');
     });
 
@@ -43,8 +42,7 @@ describe('FilterPillButton component', () => {
       const pillToDeselect = props.pills[0].text;
       const filterButton = screen.getByText(pillToDeselect);
 
-      fireEvent.click(filterButton);
-
+      await userEvent.click(filterButton);
       expect(props.onDeselected).toHaveBeenCalledWith('featured');
     });
 
@@ -54,8 +52,7 @@ describe('FilterPillButton component', () => {
       const pillToSelect = props.pills[1].text;
       const filterButton = screen.getByText(pillToSelect);
 
-      fireEvent.click(filterButton);
-
+      await userEvent.click(filterButton);
       expect(props.onSelected).toHaveBeenCalledWith('recent');
     });
   });

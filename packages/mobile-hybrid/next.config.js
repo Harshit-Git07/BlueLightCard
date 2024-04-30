@@ -9,7 +9,6 @@ const nextConfig = {
   experimental: {
     swcPlugins: [['@swc-jotai/react-refresh', {}]],
   },
-  transpilePackages: ['@bluelightcard/shared-ui'],
 };
 
 module.exports = nextConfig;

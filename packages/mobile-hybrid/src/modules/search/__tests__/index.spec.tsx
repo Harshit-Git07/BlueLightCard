@@ -89,9 +89,7 @@ describe('SearchModule', () => {
 
         const searchInput = screen.getByRole('searchbox');
 
-        await act(async () => {
-          await user.type(searchInput, 'test');
-        });
+        await user.type(searchInput, 'test');
 
         await whenBackButtonIsClicked(user);
 
@@ -112,9 +110,7 @@ describe('SearchModule', () => {
 
         const searchInput = screen.getByRole('searchbox');
 
-        await act(async () => {
-          await user.type(searchInput, 'test');
-        });
+        await user.type(searchInput, 'test');
 
         await whenBackButtonIsClicked(user);
 
@@ -133,15 +129,11 @@ const givenSearchModuleIsRenderedWith = (featureFlags: any) => {
 };
 
 const whenSearchInputIsClicked = async (user: UserEvent) => {
-  await act(async () => {
-    const searchInput = screen.getByRole('searchbox');
-    await user.click(searchInput);
-  });
+  const searchInput = screen.getByRole('searchbox');
+  await user.click(searchInput);
 };
 
 const whenBackButtonIsClicked = async (user: UserEvent) => {
-  await act(async () => {
-    const backBtn = screen.getByRole('button', { name: 'Back button' });
-    await user.click(backBtn);
-  });
+  const backBtn = screen.getByRole('button', { name: 'Back button' });
+  await user.click(backBtn);
 };

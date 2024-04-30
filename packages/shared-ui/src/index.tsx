@@ -8,8 +8,6 @@ export { default as Label } from './components/Label';
 export { default as EventBus } from './lib/eventBus';
 
 export * from './adapters';
-export * from './api';
-export * from './components/OfferDetails';
 export * from './hooks/useCSS';
 export * from './lib/rewriters';
 export * from './lib/invoke';

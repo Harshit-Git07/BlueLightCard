@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { AmplitudeLogParams, PlatformVariant } from '../types';
+import { PlatformVariant } from '../types';
 
 export type HttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'TRACE';
 
@@ -32,14 +32,6 @@ export interface IPlatformAdapter {
    * Invokes a v5 API endpoint
    */
   invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response>;
-  /**
-   * Logs analytics events
-   */
-  logAnalyticsEvent(event: string, parameters: AmplitudeLogParams): void;
-  /**
-   * Navigate to a route
-   */
-  navigate(path: string): void;
 }
 
 const PlatfromAdapterContext = createContext<IPlatformAdapter | null>(null);

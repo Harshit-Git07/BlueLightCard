@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import Spinner from '@/modules/Spinner';
 import bus from '@/eventBus';
@@ -109,9 +109,7 @@ describe('Search results', () => {
 
       const listItems = await screen.findAllByRole('button');
 
-      await act(() => {
-        fireEvent.click(listItems[1]);
-      });
+      await user.click(listItems[1]);
 
       expect(analyticsMock.mock.calls[1][0]).toEqual({
         event: AmplitudeEvents.SEARCH_RESULTS_LIST_CLICKED,
@@ -129,10 +127,8 @@ describe('Search results', () => {
   });
 
   const givenSearchResultsAreReturnedFromTheAPI = (data: OfferListItemModel[] = testData) => {
-    act(() => {
-      bus.emit(Channels.API_RESPONSE, APIUrl.Search, {
-        data,
-      });
+    bus.emit(Channels.API_RESPONSE, APIUrl.Search, {
+      data,
     });
   };
 

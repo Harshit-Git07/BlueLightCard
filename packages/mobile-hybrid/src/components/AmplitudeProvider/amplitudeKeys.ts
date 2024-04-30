@@ -13,7 +13,6 @@ export enum Experiments {
   FAVOURITED_BRANDS = 'favourited-brands',
   STREAMLINED_HOMEPAGE = 'streamlined-homepage',
   FAVOURITE_SUBTITLE = 'favourite-subtitle',
-  OFFER_SHEET = 'offer-sheet-redeem-vault-app',
 }
 
 export const featureFlagKeys = Object.values(FeatureFlags);

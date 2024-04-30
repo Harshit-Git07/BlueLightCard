@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import List from '../List';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { ListProps, ListVariant } from '../types';
@@ -131,8 +131,10 @@ describe('ListModule', () => {
 
       whenListWithSpinnerIsRendered(props);
 
-      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
-        data: offerListItemFactory.buildList(2),
+      act(() => {
+        eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+          data: offerListItemFactory.buildList(2),
+        });
       });
 
       const results = await screen.findAllByRole('listitem');
@@ -146,8 +148,10 @@ describe('ListModule', () => {
 
       whenListWithSpinnerIsRendered(props);
 
-      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
-        data: [],
+      act(() => {
+        eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+          data: [],
+        });
       });
 
       const noResultsMessage = await screen.findByText('No results found.');
@@ -167,13 +171,16 @@ describe('ListModule', () => {
 
       whenListWithSpinnerIsRendered(props);
 
-      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
-        data: offerListItemFactory.buildList(20),
+      act(() => {
+        eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+          data: offerListItemFactory.buildList(20),
+        });
       });
 
       const loadMoreButton = await screen.findByText('Load More');
 
-      await user.click(loadMoreButton);
+      fireEvent.click(loadMoreButton);
+
       expect(loadMoreButton).toHaveTextContent('Loading...');
     });
 
@@ -181,8 +188,10 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
-        data: [],
+      act(() => {
+        eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+          data: [],
+        });
       });
 
       whenListWithSpinnerIsRendered(props);
@@ -196,8 +205,10 @@ describe('ListModule', () => {
       props.listVariant = ListVariant.Categories;
       props.entityId = 0;
 
-      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
-        data: offerListItemFactory.buildList(4),
+      act(() => {
+        eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+          data: offerListItemFactory.buildList(4),
+        });
       });
 
       whenListWithSpinnerIsRendered(props);
@@ -213,8 +224,10 @@ describe('ListModule', () => {
 
       whenListWithSpinnerIsRendered(props);
 
-      eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
-        data: offerListItemFactory.buildList(20),
+      act(() => {
+        eventBus.emit(Channels.API_RESPONSE, '/api/4/offer/list.php', {
+          data: offerListItemFactory.buildList(20),
+        });
       });
 
       const loadMoreButton = await screen.findByText('Load More');

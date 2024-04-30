@@ -11,6 +11,7 @@ import { museoFont, sourceSansPro } from '@/font';
 import { NewsStoreProvider } from '@/modules/news/store';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
+import { ViewOfferProvider } from '@bluelightcard/shared-ui';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
 import UserServiceProvider from '@/components/UserServiceProvider/UserServiceProvider';
 import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
@@ -26,7 +27,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <NewsStoreProvider>
             <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
               <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
-                <Component {...pageProps} />
+                <ViewOfferProvider>
+                  <Component {...pageProps} />
+                </ViewOfferProvider>
                 <Spinner />
               </main>
             </AmplitudeProvider>

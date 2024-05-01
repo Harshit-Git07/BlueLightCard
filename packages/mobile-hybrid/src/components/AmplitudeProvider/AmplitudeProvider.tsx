@@ -1,9 +1,10 @@
-import { FC, useContext, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import InvokeNativeExperiment from '@/invoke/experiment';
 import { experimentsAndFeatureFlags } from './store';
 import { useSetAtom } from 'jotai';
-import { AppContext } from '@/store';
 import { AmplitudeProviderProps } from '@/components/AmplitudeProvider/types';
+import { Channels } from '@/globals';
+import eventBus from '@/eventBus';
 
 const invokeNativeExperiment = new InvokeNativeExperiment();
 
@@ -13,17 +14,18 @@ const AmplitudeProvider: FC<AmplitudeProviderProps> = ({
   children,
 }) => {
   const setExperimentsAndFeatureFlags = useSetAtom(experimentsAndFeatureFlags);
-  const { experiments: expr } = useContext(AppContext);
 
   useEffect(() => {
     invokeNativeExperiment.experiment(experimentKeys.concat(featureFlagKeys));
   }, [experimentKeys, featureFlagKeys]);
 
   useEffect(() => {
-    if (expr) {
-      setExperimentsAndFeatureFlags(expr);
-    }
-  }, [expr, setExperimentsAndFeatureFlags]);
+    eventBus.on(Channels.EXPERIMENTS, (variants) => {
+      if (variants) {
+        setExperimentsAndFeatureFlags(variants);
+      }
+    });
+  }, [setExperimentsAndFeatureFlags]);
 
   return children;
 };

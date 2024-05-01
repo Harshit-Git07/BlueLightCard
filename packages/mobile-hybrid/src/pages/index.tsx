@@ -1,16 +1,15 @@
 import { NextPage } from 'next';
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import ListPanel from '@/components/ListPanel/ListPanel';
 import { NewsList, NewsPreview } from '@/modules/news';
-import { NewsModuleStore } from '@/modules/news/store';
+import { newsPanelStore } from '@/modules/news/store';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import trackScrollDepth from '@/utils/scrollDepth';
 import Offers from '@/modules/offers';
 import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import LegacySearch from '@/components/LegacySearch/LegacySearch';
-import { AppContext } from '@/store';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import FavouritedBrandsSlider from '@/modules/favouritedbrands';
 import useFavouritedBrands from '@/hooks/useFavouritedBrands';
@@ -18,7 +17,13 @@ import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { MobilePlatformAdapter } from '@/utils/platformAdapter';
+import Amplitude from '@/components/Amplitude/Amplitude';
+import { useAmplitude } from '@/hooks/useAmplitude';
+import {
+  AmplitudeExperimentState,
+  AmplitudeFeatureFlagState,
+} from '@/components/AmplitudeProvider/types';
+import { useAtom } from 'jotai';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -26,19 +31,18 @@ const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
   const brands = useFavouritedBrands();
-  const { seeAllNews, setSeeAllNews } = useContext(NewsModuleStore);
-  const { experiments: expr, apiData } = useContext(AppContext);
-  const showFavouritedBrands = brands.length > 0 && expr[Experiments.FAVOURITED_BRANDS] === 'on';
+  const { is } = useAmplitude();
+  const [seeAllNews, setSeeAllNews] = useAtom(newsPanelStore);
+  const showFavouritedBrands =
+    brands.length > 0 && is(Experiments.FAVOURITED_BRANDS, AmplitudeFeatureFlagState.On);
   const bodyHeight = useRef<HTMLElement>(null);
 
   const request = useCallback(() => {
     const homePageServices = [APIUrl.News, APIUrl.FavouritedBrands, APIUrl.OfferPromos];
     homePageServices.forEach((url) => {
-      if (!apiData[url]) {
-        apiCall.requestData(url);
-      }
+      apiCall.requestData(url);
     });
-  }, [apiData]);
+  }, []);
 
   const seeAllClick = () => {
     document.getElementById('app-body')?.classList.remove('noscroll');
@@ -67,7 +71,10 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
-        {expr[Experiments.HOMEPAGE_SEARCHBAR] === 'treatment' && (
+        <Amplitude
+          keyName={Experiments.HOMEPAGE_SEARCHBAR}
+          value={AmplitudeExperimentState.Treatment}
+        >
           <LegacySearch
             onSearch={(searchTerm) =>
               navigation.navigate(
@@ -76,14 +83,15 @@ const Home: NextPage<any> = () => {
               )
             }
           />
-        )}
+        </Amplitude>
         <PromoBanner />
         {showFavouritedBrands && <FavouritedBrandsSlider />}
-        {expr[Experiments.POPULAR_OFFERS] === 'treatment' && !showFavouritedBrands && (
-          <PopularBrandsSlider />
-        )}
+        {is(Experiments.POPULAR_OFFERS, AmplitudeExperimentState.Treatment) &&
+          !showFavouritedBrands && <PopularBrandsSlider />}
         <Offers />
-        {expr[Experiments.STREAMLINED_HOMEPAGE] === 'on' && <NewsPreview />}
+        <Amplitude keyName={Experiments.STREAMLINED_HOMEPAGE} value={AmplitudeFeatureFlagState.On}>
+          <NewsPreview />
+        </Amplitude>
       </div>
       <ListPanel visible={seeAllNews} onClose={seeAllClick}>
         {seeAllNews && <NewsList />}

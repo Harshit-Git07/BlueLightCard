@@ -1,11 +1,9 @@
-import { APIUrl } from '@/globals';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { AppStore } from '@/store/types';
 import { render, screen } from '@testing-library/react';
-import { AppContext } from '@/store';
 import '@testing-library/jest-dom/extend-expect';
-import Offers from '..';
-import { NewsStoreProvider } from '@/modules/news/store';
+import Offers from '@/modules/offers';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 
 describe('Offers', () => {
   describe('Streamlined homepage experiment', () => {
@@ -33,21 +31,10 @@ describe('Offers', () => {
   });
 
   const whenOffersModuleIsRendered = (experiments: Record<string, string>) => {
-    const mockAppContext: Partial<AppStore> = {
-      experiments: experiments,
-      apiData: {
-        [APIUrl.News]: {
-          data: [],
-        },
-      },
-    };
-
     render(
-      <AppContext.Provider value={mockAppContext as AppStore}>
-        <NewsStoreProvider>
-          <Offers />
-        </NewsStoreProvider>
-      </AppContext.Provider>,
+      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, experiments]]}>
+        <Offers />
+      </JotaiTestProvider>,
     );
   };
 });

@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { ListProps, ListVariant } from './types';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAPICall from '@/invoke/apiCall';
-import useAPI from '@/hooks/useAPI';
+import useAPI, { APIResponse } from '@/hooks/useAPI';
 import { apiMap, variantToQueryParam } from './api';
 import { OfferListItemModel } from '@/models/offer';
 import { useSetAtom } from 'jotai/react';
@@ -31,7 +31,7 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
   const apiUrl = apiMap[listVariant];
   const queryParamName = variantToQueryParam[listVariant];
 
-  const listResponse = useAPI(apiUrl) as { data: OfferListItemModel[] };
+  const listResponse = useAPI(apiUrl) as APIResponse<OfferListItemModel[]>;
 
   const heading = useMemo(() => {
     const headingMap = offerListDataMap[listVariant];

@@ -1,12 +1,11 @@
 import { FC } from 'react';
-import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { useAtomValue } from 'jotai';
 import { AmplitudeProps } from '@/components/Amplitude/types';
+import { useAmplitude } from '@/hooks/useAmplitude';
 
 const Amplitude: FC<AmplitudeProps> = ({ keyName, value, children }) => {
-  const experimentsAndFeatureFlagsStore = useAtomValue(experimentsAndFeatureFlags);
+  const { is } = useAmplitude();
 
-  if (experimentsAndFeatureFlagsStore[keyName] === value) return children;
+  if (is(keyName, value)) return children;
 
   return <></>;
 };

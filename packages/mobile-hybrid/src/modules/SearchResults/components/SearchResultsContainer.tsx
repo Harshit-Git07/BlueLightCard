@@ -1,17 +1,17 @@
 import { FC, useCallback, useContext, useEffect } from 'react';
 import { useAtomValue, useAtom, useSetAtom } from 'jotai';
 import { useOfferDetails } from '@bluelightcard/shared-ui';
-import { AppContext } from '@/store';
 import { APIUrl } from '@/globals';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import SearchResultsPresenter from './SearchResultsPresenter';
 import { searchResults, searchTerm } from '../store';
 import { OfferListItem, SearchResults } from '../types';
 import { spinner } from '@/modules/Spinner/store';
-import useAPI from '@/hooks/useAPI';
+import useAPI, { APIResponse } from '@/hooks/useAPI';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 
 const analytics = new InvokeNativeAnalytics();
 const request = new InvokeNativeAPICall();
@@ -24,9 +24,9 @@ const SearchResultsContainer: FC = () => {
   const [results, setResults] = useAtom(searchResults);
   const term = useAtomValue(searchTerm);
   const setSpinner = useSetAtom(spinner);
-  const { experiments: expr } = useContext(AppContext);
+  const amplitudeExperiment = useAtomValue(experimentsAndFeatureFlags);
 
-  const searchResultsData = useAPI(APIUrl.Search) as { data: SearchResults };
+  const searchResultsData = useAPI(APIUrl.Search) as APIResponse<SearchResults>;
 
   const logSearchResultsListViewedAnalytic = useCallback(
     (numberOfResults: number) => {
@@ -61,7 +61,7 @@ const SearchResultsContainer: FC = () => {
       },
     });
 
-    await viewOffer(expr[Experiments.OFFER_SHEET], offerId);
+    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], offerId);
   };
 
   useEffect(() => {

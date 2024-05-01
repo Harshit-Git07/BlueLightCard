@@ -2,6 +2,10 @@ import eventBus from '@/eventBus';
 import { Channels } from '@/globals';
 import { useEffect, useState } from 'react';
 
+export interface APIResponse<TData> {
+  data: TData;
+}
+
 const useAPI = (apiUrl: string) => {
   const [response, setResponse] = useState<unknown>();
 

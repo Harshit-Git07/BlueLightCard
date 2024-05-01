@@ -13,6 +13,8 @@ export enum Experiments {
   FAVOURITED_BRANDS = 'favourited-brands',
   STREAMLINED_HOMEPAGE = 'streamlined-homepage',
   FAVOURITE_SUBTITLE = 'favourite-subtitle',
+  HOMEPAGE_POSITIONING = 'homepage-positioning',
+  BF_FLEXI = 'bf-flexi',
   OFFER_SHEET = 'offer-sheet-redeem-vault-app',
 }
 

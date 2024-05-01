@@ -2,11 +2,11 @@ import { render, renderHook, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { AmplitudeProviderProps } from '@/components/AmplitudeProvider/types';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
-import { AppContext } from '@/store';
-import { AppStore } from '@/store/types';
 import InvokeNativeExperiment from '@/invoke/experiment';
 import { useAtom } from 'jotai';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import eventBus from '@/eventBus';
+import { Channels } from '@/globals';
 
 jest.mock('../../../invoke/experiment');
 
@@ -69,16 +69,10 @@ describe('Amplitude Provider component', () => {
 });
 
 const whenAmplitudeProviderComponentIsRendered = (props: AmplitudeProviderProps) => {
-  const mockAppContext: Partial<AppStore> = {
-    experiments: {
-      'experiment-key': 'control',
-      'feature-flag-key': 'on',
-    },
-  };
+  eventBus.emit(Channels.EXPERIMENTS, {
+    'experiment-key': 'control',
+    'feature-flag-key': 'on',
+  });
 
-  render(
-    <AppContext.Provider value={mockAppContext as AppStore}>
-      <AmplitudeProvider {...props}>Test Component</AmplitudeProvider>
-    </AppContext.Provider>,
-  );
+  render(<AmplitudeProvider {...props}>Test Component</AmplitudeProvider>);
 };

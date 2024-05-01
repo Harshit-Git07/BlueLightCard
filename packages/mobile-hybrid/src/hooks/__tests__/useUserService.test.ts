@@ -1,17 +1,19 @@
-import useAPIData from '@/hooks/useAPIData';
+import useAPI from '@/hooks/useAPI';
 import { renderHook } from '@testing-library/react';
 import useUserService from '@/hooks/useUserService';
 
-jest.mock('@/hooks/useAPIData');
+jest.mock('@/hooks/useAPI');
 
-const useAPIDataMock = jest.mocked(useAPIData);
+const useAPIMock = jest.mocked(useAPI);
 
 describe('use user service', () => {
   it('should return "service" value from API data result when "service" value present', () => {
     const serviceValue = 'NHS';
-    useAPIDataMock.mockReturnValue({
-      tid: 12345,
-      service: serviceValue,
+    useAPIMock.mockReturnValue({
+      data: {
+        tid: 12345,
+        service: serviceValue,
+      },
     });
 
     const result = renderHook(() => useUserService());
@@ -20,11 +22,12 @@ describe('use user service', () => {
   });
 
   it('should return "undefined" value from API data result when no "service" value present', () => {
-    const serviceValue = undefined;
-    useAPIDataMock.mockReturnValue({});
+    useAPIMock.mockReturnValue({
+      data: {},
+    });
 
     const result = renderHook(() => useUserService());
 
-    expect(result.result.current).toEqual(undefined);
+    expect(result.result.current).toBeFalsy();
   });
 });

@@ -1,6 +1,4 @@
 import { museoFont, sourceSansPro } from "@/font";
-import { NewsStoreProvider } from "@/modules/news/store";
-import { AppStoreProvider } from "@/store";
 import { Decorator } from "@storybook/react";
 
 import mockResolvers from './mockResolvers';
@@ -22,16 +20,12 @@ const pageDecorator: Decorator = (Story) => {
     }, {} as typeof globalState.webkit.messageHandlers)
   };
   return (
-    <AppStoreProvider>
-      <NewsStoreProvider>
-        <UserServiceProvider>
-          <main className={`${museoFont.variable} ${sourceSansPro.variable} font-museo dark:bg-neutral-black`}>
-            <Story />
-            <Spinner />
-          </main>
-        </UserServiceProvider>
-      </NewsStoreProvider>
-    </AppStoreProvider>
+    <UserServiceProvider>
+      <main className={`${museoFont.variable} ${sourceSansPro.variable} font-museo dark:bg-neutral-black`}>
+        <Story />
+        <Spinner />
+      </main>
+    </UserServiceProvider>
   );
 };
 

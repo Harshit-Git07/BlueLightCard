@@ -1,20 +1,5 @@
-import { FC, createContext, useState, PropsWithChildren } from 'react';
+import { NewsModel } from '@/models/news';
+import { atom } from 'jotai';
 
-interface Store {
-  seeAllNews: boolean;
-  setSeeAllNews: (seeAll: boolean) => void;
-}
-
-export const NewsModuleStore = createContext<Store>({
-  seeAllNews: false,
-  setSeeAllNews() {},
-});
-
-export const NewsStoreProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [seeAllNews, setSeeAllNews] = useState(false);
-  return (
-    <NewsModuleStore.Provider value={{ seeAllNews, setSeeAllNews }}>
-      {children}
-    </NewsModuleStore.Provider>
-  );
-};
+export const newsPanelStore = atom<boolean>(false);
+export const newsStore = atom<NewsModel[]>([]);

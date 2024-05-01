@@ -1,10 +1,11 @@
 import { FC, useMemo } from 'react';
-import useOffers from '@/hooks/useOffers';
 import BannerCarousel from '@/components/Banner/BannerCarousel';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
-import { OfferPromosModel } from '@/models/offer';
+import { OfferDataModel, OfferPromosModel } from '@/models/offer';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import useAPI, { APIResponse } from '@/hooks/useAPI';
+import { APIUrl } from '@/globals';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -22,24 +23,17 @@ const PromoBanner: FC = () => {
     });
   };
 
-  const onSlideChange = () => {
-    analytics.logAnalyticsEvent({
-      event: AmplitudeEvents.HOMEPAGE_CAROUSEL_INTERACTED,
-      parameters: {
-        carousel_name: 'Billboard',
-      },
-    });
-  };
-  const { deals: promos } = useOffers();
+  const response = useAPI(APIUrl.OfferPromos) as APIResponse<OfferDataModel>;
+
   const deals = useMemo(
     () =>
-      promos.reduce((acc, deal) => {
+      (response?.data.deal ?? []).reduce((acc, deal) => {
         deal.items.forEach((item) => {
           acc.push(item);
         });
         return acc;
       }, [] as OfferPromosModel[]),
-    [promos],
+    [response?.data],
   );
 
   return (

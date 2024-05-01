@@ -1,24 +1,23 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import Home from '@/pages';
-import { AppStore } from '@/store/types';
-import { AppContext } from '@/store';
 import '@testing-library/jest-dom';
-import { APIUrl } from '@/globals';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import eventBus from '@/eventBus';
 import useOffers from '@/hooks/useOffers';
+import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 
 jest.mock('@/invoke/apiCall');
 jest.mock('@/modules/popularbrands/brands');
 jest.mock('@/hooks/useOffers');
+jest.mock('@/hooks/useFavouritedBrands');
 
 const useOffersMock = jest.mocked(useOffers);
+const useFavouritedBrandsMock = jest.mocked(useFavouritedBrands);
 
-// Old & new way of storing experiments, eventually all will be moved to atoms
-let appContextExperiments: Record<string, string>;
-let atomExperiments: Record<string, string>;
+let amplitudeFlagsAndExperiments: Record<string, string>;
 
 describe('Home', () => {
   beforeEach(() => {
@@ -31,7 +30,7 @@ describe('Home', () => {
         subtitle: '',
         items: [],
       },
-      deals: [],
+      deal: [],
       groups: [
         {
           title: 'Standard offer carousel',
@@ -41,7 +40,7 @@ describe('Home', () => {
       ],
     });
 
-    appContextExperiments = {
+    amplitudeFlagsAndExperiments = {
       [Experiments.HOMEPAGE_SEARCHBAR]: 'control',
       [Experiments.FAVOURITED_BRANDS]: 'off',
       [Experiments.POPULAR_OFFERS]: 'control',
@@ -53,8 +52,8 @@ describe('Home', () => {
     const placeholderText = 'Search stores or brands';
 
     it('should render when experiment enabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.HOMEPAGE_SEARCHBAR]: 'treatment',
       };
 
@@ -65,8 +64,8 @@ describe('Home', () => {
     });
 
     it('should not render when experiment disabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.HOMEPAGE_SEARCHBAR]: 'control',
       };
 
@@ -79,8 +78,8 @@ describe('Home', () => {
 
   describe('Favourited Brands Experiment', () => {
     it('should render when experiment enabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.FAVOURITED_BRANDS]: 'on',
       };
 
@@ -91,8 +90,8 @@ describe('Home', () => {
     });
 
     it('should not render when experiment disabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.FAVOURITED_BRANDS]: 'off',
       };
 
@@ -106,13 +105,10 @@ describe('Home', () => {
   describe('Popular Offers Experiment', () => {
     describe('with popular offers experiment enabled & favourited brands disabled', () => {
       beforeEach(() => {
-        appContextExperiments = {
-          ...appContextExperiments,
+        amplitudeFlagsAndExperiments = {
+          ...amplitudeFlagsAndExperiments,
           [Experiments.FAVOURITED_BRANDS]: 'off',
           [Experiments.POPULAR_OFFERS]: 'treatment',
-        };
-        atomExperiments = {
-          ...atomExperiments,
         };
       });
 
@@ -125,8 +121,8 @@ describe('Home', () => {
     });
 
     it('should not render when experiment enabled & favourited brands enabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.FAVOURITED_BRANDS]: 'on',
         [Experiments.POPULAR_OFFERS]: 'treatment',
       };
@@ -138,8 +134,8 @@ describe('Home', () => {
     });
 
     it('should not render when experiment disabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.POPULAR_OFFERS]: 'control',
       };
 
@@ -152,8 +148,8 @@ describe('Home', () => {
 
   describe('Streamlined homepage Experiment', () => {
     it('should render "News" below standard offer carousel when experiment enabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.STREAMLINED_HOMEPAGE]: 'on',
       };
 
@@ -165,8 +161,8 @@ describe('Home', () => {
     });
 
     it('should render "News" above standard offer carousel when experiment disabled', () => {
-      appContextExperiments = {
-        ...appContextExperiments,
+      amplitudeFlagsAndExperiments = {
+        ...amplitudeFlagsAndExperiments,
         [Experiments.STREAMLINED_HOMEPAGE]: 'off',
       };
 
@@ -180,26 +176,16 @@ describe('Home', () => {
 });
 
 const whenHomePageIsRendered = () => {
-  const mockAppContext: Partial<AppStore> = {
-    experiments: appContextExperiments,
-    apiData: {
-      [APIUrl.FavouritedBrands]: {
-        data: [
-          {
-            cid: 1,
-            companyname: 'Test Company',
-            logos: '',
-          },
-        ],
-      },
+  useFavouritedBrandsMock.mockReturnValue([
+    {
+      id: 1,
+      imageSrc: '',
+      brandName: 'Test Company',
     },
-  };
-
+  ]);
   render(
-    <AppContext.Provider value={mockAppContext as AppStore}>
-      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, atomExperiments]]}>
-        <Home />
-      </JotaiTestProvider>
-    </AppContext.Provider>,
+    <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, amplitudeFlagsAndExperiments]]}>
+      <Home />
+    </JotaiTestProvider>,
   );
 };

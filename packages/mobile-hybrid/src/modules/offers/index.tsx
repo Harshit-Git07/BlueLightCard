@@ -1,4 +1,4 @@
-import { FC, useContext, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useOfferDetails } from '@bluelightcard/shared-ui';
 import useOffers from '@/hooks/useOffers';
 import Heading from '@/components/Heading/Heading';
@@ -6,49 +6,55 @@ import CardCarousel from '@/components/Carousel/CardCarousel';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
-import { AppContext } from '@/store';
 import { NewsPreview } from '../news';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { useAmplitude } from '@/hooks/useAmplitude';
+import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
+import { useAtomValue } from 'jotai';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Offers: FC = () => {
+  const { is } = useAmplitude();
   const { flexible, groups } = useOffers();
+  const amplitudeExperiment = useAtomValue(experimentsAndFeatureFlags);
   const { viewOffer } = useOfferDetails();
-  const { experiments: expr } = useContext(AppContext);
 
   /**
    * @experiment
    * Locate specific offers
    */
   const homepagePositionOffersExpr = useMemo(() => {
-    if (expr['homepage-positioning'] === 'treatment-a') {
+    if (is(Experiments.HOMEPAGE_POSITIONING, 'treatment-a')) {
       return groups.find(
         (group) => group.title.toLowerCase() === `general offers - don't miss out`,
       );
-    } else if (expr['homepage-positioning'] === 'treatment-b') {
+    } else if (is(Experiments.HOMEPAGE_POSITIONING, 'treatment-b')) {
       return groups.find((group) => group.title.toLowerCase() === 'top offers');
     }
-  }, [expr, groups]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groups]);
 
   const offers = useMemo(() => {
-    if (expr['homepage-positioning'] === 'treatment-a') {
+    if (is(Experiments.HOMEPAGE_POSITIONING, 'treatment-a')) {
       return groups.filter(
         (group) => group.title.toLowerCase() !== `general offers - don't miss out`,
       );
-    } else if (expr['homepage-positioning'] === 'treatment-b') {
+    } else if (is(Experiments.HOMEPAGE_POSITIONING, 'treatment-b')) {
       return groups.filter((group) => group.title.toLowerCase() !== 'top offers');
     }
     return groups;
-  }, [expr, groups]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groups]);
 
   /**
    * @featureFlag bf-flexi
    * @description Conditionally render different headings depending on the feature flag
    * */
-  const headingFeatureFlag = expr['bf-flexi'] === 'on';
+  const headingFeatureFlag = is(Experiments.BF_FLEXI, AmplitudeFeatureFlagState.On);
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
     navigation.navigate(`/flexibleOffers.php?id=${id}`, 'home');
     analytics.logAnalyticsEvent({
@@ -72,7 +78,7 @@ const Offers: FC = () => {
       },
     });
 
-    await viewOffer(expr[Experiments.OFFER_SHEET], id);
+    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], id);
   };
   const onSlideChange = (carouselName: string) => {
     analytics.logAnalyticsEvent({
@@ -82,14 +88,16 @@ const Offers: FC = () => {
       },
     });
   };
+
   return (
     <>
       {flexible && (
         <div className="mb-6">
           <Heading title={headingFeatureFlag ? 'Shop Black Friday' : flexible.title} />
-          {expr[Experiments.STREAMLINED_HOMEPAGE] !== 'on' && flexible.subtitle.length && (
-            <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
-          )}
+          {!is(Experiments.STREAMLINED_HOMEPAGE, AmplitudeFeatureFlagState.On) &&
+            flexible.subtitle.length && (
+              <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
+            )}
           <CardCarousel
             slides={flexible.items
               .filter((offer) => offer.hide == false)
@@ -129,7 +137,7 @@ const Offers: FC = () => {
           />
         </section>
       )}
-      {expr[Experiments.STREAMLINED_HOMEPAGE] !== 'on' && <NewsPreview />}
+      {!is(Experiments.STREAMLINED_HOMEPAGE, AmplitudeFeatureFlagState.On) && <NewsPreview />}
       <div className="mb-2">
         {offers.map((group, index) => (
           <section key={`${group.title}_${index}`} className="mb-6">

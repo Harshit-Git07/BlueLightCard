@@ -1,9 +1,9 @@
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { AppStore } from '@/store/types';
 import { render, screen } from '@testing-library/react';
-import { AppContext } from '@/store';
 import PopularBrandsSlider from '..';
 import '@testing-library/jest-dom/extend-expect';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 
 jest.mock('@/modules/popularbrands/brands');
 
@@ -33,14 +33,10 @@ describe('Popular Brands', () => {
   });
 
   const whenPopularBrandsSliderIsRendered = (experiments: Record<string, string>) => {
-    const mockAppContext: Partial<AppStore> = {
-      experiments: experiments,
-    };
-
     render(
-      <AppContext.Provider value={mockAppContext as AppStore}>
+      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, experiments]]}>
         <PopularBrandsSlider />
-      </AppContext.Provider>,
+      </JotaiTestProvider>,
     );
   };
 });

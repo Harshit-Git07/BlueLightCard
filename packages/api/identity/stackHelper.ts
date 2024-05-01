@@ -387,9 +387,11 @@ export function createNewCognito(
         environment: {
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          IDENTITY_TABLE_NAME: identityTable.tableName,
+          REGION: region,
           OLD_USER_POOL_ID: oldCognito.userPoolId,
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable, identityTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',

@@ -2,11 +2,13 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { PostAuthenticationTriggerEvent } from 'aws-lambda';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { UnsuccessfulLoginAttemptsService } from '../../src/services/UnsuccessfulLoginAttemptsService';
+import { ProfileService } from '../../src/services/ProfileService';
 
 const oldUserPoolId = process.env.OLD_USER_POOL_ID;
 const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-postAuthentication`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 const TABLE_NAME = process.env.TABLE_NAME ?? "";
+const IDENTITY_TABLE_NAME = process.env.IDENTITY_TABLE_NAME ?? "";
 
 const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);
 
@@ -49,6 +51,14 @@ export const handler = async (event: PostAuthenticationTriggerEvent, context: an
     await deleteDBRecordIfExists(email, userPoolId);
   }
 
+  logger.info('auditEmailType', {
+    audit: true,
+    action: 'logEmailType',
+    memberUuid : event.request.userAttributes['custom:blc_old_uuid'],
+    clientId: event.callerContext.clientId,
+    emailType: await isSpareEmail(event.request.userAttributes['custom:blc_old_uuid'], email) ? 'spare' : 'primary'
+});
+
   return event;
 };
 
@@ -63,6 +73,16 @@ async function deleteDBRecordIfExists(email: string, userPoolId: string) {
         logger.error("failed to delete record with email: " + email + " and user pool id: " + userPoolId, {e} );
       }
     }
+}
+
+async function isSpareEmail(uuid: string, email: string): Promise<boolean>{
+  try {
+    const profileService = new ProfileService(IDENTITY_TABLE_NAME, process.env.REGION as string);
+    return await profileService.isSpareEmail(uuid, email);
+  } catch (error) {
+    logger.error('Get profile by email failed', { error });
+  }
+  return false;
 }
 
 function isNewPool(oldUserPoolId: string | undefined, userPoolId: string) {

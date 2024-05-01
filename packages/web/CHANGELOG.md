@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.50.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.49.0...bluelightcard/web-v1.50.0) (2024-05-01)
+
+
+### Features
+
+* [DISCO-213] add amp tracking search card click ([#1204](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1204)) ([2303a41](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2303a417b2cf7ff2868576cc8877a35ca7a2ed17))
+
+
+### Bug Fixes
+
+* TR-473 Fixed mobile dynamic sheet height for iOS ([#1266](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1266)) ([6b0a54a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6b0a54a2c83b031aac9a361d2802c677ccd12a41))
+
 ## [1.49.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.48.0...bluelightcard/web-v1.49.0) (2024-04-24)
 
 

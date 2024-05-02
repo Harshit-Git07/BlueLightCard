@@ -14,3 +14,5 @@ export enum APIUrl {
   List = '/api/4/offer/list.php',
   UserService = '/api/4/user/profile/service/retrieve.php',
 }
+
+export const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcard.co.uk';

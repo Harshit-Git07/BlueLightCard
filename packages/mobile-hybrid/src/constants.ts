@@ -1,3 +1,5 @@
+import getCDNUrl from '@/utils/getCDNUrl';
+
 export const CharacterEntities: Record<string, string> = {
   'Â£': '\u{00a3}',
   '\\.\\.\\.': '\u{2026}',
@@ -16,3 +18,5 @@ export const recentSearchesData = [
   'new look',
   'british airways',
 ];
+
+export const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);

@@ -67,7 +67,9 @@ export function createOldCognito(
         environment: {
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          IDENTITY_TABLE_NAME: identityTable.tableName,
         },
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', identityTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -222,8 +224,9 @@ export function createOldCognitoDDS(
         environment: {
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          IDENTITY_TABLE_NAME: identityTable.tableName,
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes']
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', identityTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',

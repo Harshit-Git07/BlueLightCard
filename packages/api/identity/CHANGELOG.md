@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.64.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.64.0...bluelightcard/identity-v1.64.1) (2024-05-02)
+
+
+### Bug Fixes
+
+* logger debug ([#1275](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1275)) ([737c4ea](https://github.com/bluelightcard/BlueLightCard-2.0/commit/737c4eaeec714ce1e26d9daf7e2a3cd3a71445d7))
+
 ## [1.64.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.63.0...bluelightcard/identity-v1.64.0) (2024-05-01)
 
 

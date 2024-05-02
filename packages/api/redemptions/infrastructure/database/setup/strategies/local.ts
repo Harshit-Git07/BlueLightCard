@@ -37,12 +37,12 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
     }
 
     if (this.app.mode !== 'dev' && this.app.mode !== 'remove') {
-      throw new Error(
-        [
+      this.logger.warn({
+        message: [
           'Local databases are only supported when running "sst dev".',
           'This is because local databases require the use of live lambda.',
         ].join(' '),
-      );
+      });
     }
 
     const disallowedStages = [PR_STAGE_REGEX, STAGING_STAGE_REGEX, PRODUCTION_STAGE_REGEX];
@@ -53,6 +53,8 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
           'It is intended for use in local development environments only, as it requires the use of SST live lambda.',
           'The strategy is disallowed for stages matching the regular expressions:',
           `${disallowedStages.map((stage) => stage.toString()).join(', ')}.`,
+          'If you are sure you want to use this strategy in this stage, set the environment variable',
+          'REDEMPTIONS_DANGEROUSLY_ALLOW_DATABASE_SETUP_STRATEGY=true.',
         ].join(' '),
       );
     }

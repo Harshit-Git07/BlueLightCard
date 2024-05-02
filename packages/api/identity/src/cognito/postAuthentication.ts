@@ -2,7 +2,7 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { PostAuthenticationTriggerEvent } from 'aws-lambda';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { UnsuccessfulLoginAttemptsService } from '../../src/services/UnsuccessfulLoginAttemptsService';
-import { ProfileService } from '../../src/services/ProfileService';
+import { IProfileService, ProfileService } from '../../src/services/ProfileService';
 
 const oldUserPoolId = process.env.OLD_USER_POOL_ID;
 const service: string = process.env.SERVICE as string;
@@ -77,12 +77,12 @@ async function deleteDBRecordIfExists(email: string, userPoolId: string) {
 
 async function isSpareEmail(uuid: string, email: string): Promise<boolean>{
   try {
-    const profileService = new ProfileService(IDENTITY_TABLE_NAME, process.env.REGION as string);
-    return await profileService.isSpareEmail(uuid, email);
+      const profileService = new ProfileService(IDENTITY_TABLE_NAME, process.env.REGION as string);
+      return await profileService.isSpareEmail(uuid, email);
   } catch (error) {
-    logger.error('Get profile by email failed', { error });
+      logger.info('is spare email check with uuid failed, error: ', { error });
+      return false;
   }
-  return false;
 }
 
 function isNewPool(oldUserPoolId: string | undefined, userPoolId: string) {

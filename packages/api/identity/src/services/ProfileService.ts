@@ -12,14 +12,10 @@ export class ProfileService implements IProfileService{
     }
 
   public async isSpareEmail(uuid: string, email: string) {
-    try {
       const data = await this.profile.findByUuid(uuid);
       if(data && data.Items && data.Items.length > 0){
         return data.Items[0].spare_email === email;
       }
-    } catch (error) {
-        throw new Error("error while fetching data: " + error);
-    }
-    return false;
+      return false;
   }
 }

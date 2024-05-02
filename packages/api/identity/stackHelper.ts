@@ -597,8 +597,9 @@ export function createNewCognitoDDS(
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           OLD_USER_POOL_ID: oldCognito.userPoolId,
+          IDENTITY_TABLE_NAME: identityTable.tableName,
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable]
+        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable, identityTable]
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',

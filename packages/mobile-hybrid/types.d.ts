@@ -9,7 +9,6 @@ declare namespace NativeNavigation {
 
   export interface Parameters {
     internalUrl: string;
-    domain: string;
   }
 }
 

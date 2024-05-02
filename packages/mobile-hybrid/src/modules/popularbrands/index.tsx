@@ -22,7 +22,7 @@ const PopularBrandsSlider: FC = () => {
     ? undefined
     : 'Explore popular brands with a swipe!';
   const onBrandItemClick = (compid: number) => {
-    navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
+    navigation.navigate(`/offerdetails.php?cid=${compid}`);
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {

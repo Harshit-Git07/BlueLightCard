@@ -79,7 +79,6 @@ const Home: NextPage<any> = () => {
             onSearch={(searchTerm) =>
               navigation.navigate(
                 `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
-                'home',
               )
             }
           />

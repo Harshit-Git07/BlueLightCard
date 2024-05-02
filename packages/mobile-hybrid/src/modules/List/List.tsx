@@ -78,7 +78,7 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
 
   const onOfferClick = useCallback<(companyId: number, offerId: number) => void>(
     (companyId, offerId) => {
-      navigation.navigate(`/offerdetails.php?cid=${companyId}&oid=${offerId}`, 'search');
+      navigation.navigate(`/offerdetails.php?cid=${companyId}&oid=${offerId}`);
     },
     [],
   );

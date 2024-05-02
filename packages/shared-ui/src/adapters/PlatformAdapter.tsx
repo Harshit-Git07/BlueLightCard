@@ -37,9 +37,13 @@ export interface IPlatformAdapter {
    */
   logAnalyticsEvent(event: string, parameters: AmplitudeLogParams): void;
   /**
-   * Navigate to a route
+   * Navigate to a route within the app
    */
   navigate(path: string): void;
+  /**
+   * Navigate to an external URL
+   */
+  navigateExternal(url: string): void;
 }
 
 const PlatfromAdapterContext = createContext<IPlatformAdapter | null>(null);

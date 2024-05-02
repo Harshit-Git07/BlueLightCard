@@ -12,7 +12,7 @@ const analytics = new InvokeNativeAnalytics();
 
 const PromoBanner: FC = () => {
   const onSlideItemClick = ({ compid, companyname, offername }: OfferPromosModel) => {
-    navigation.navigate(`/offerdetails.php?cid=${compid}`, 'home');
+    navigation.navigate(`/offerdetails.php?cid=${compid}`);
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {

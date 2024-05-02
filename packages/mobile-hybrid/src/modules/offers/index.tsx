@@ -56,7 +56,7 @@ const Offers: FC = () => {
    * */
   const headingFeatureFlag = is(Experiments.BF_FLEXI, AmplitudeFeatureFlagState.On);
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
-    navigation.navigate(`/flexibleOffers.php?id=${id}`, 'home');
+    navigation.navigate(`/flexibleOffers.php?id=${id}`);
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {

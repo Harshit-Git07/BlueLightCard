@@ -75,6 +75,10 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
   }
 
   navigate(path: string): void {
-    navigation.navigate(path, 'home');
+    navigation.navigate(path);
+  }
+
+  navigateExternal(path: string): void {
+    navigation.navigateExternal(path);
   }
 }

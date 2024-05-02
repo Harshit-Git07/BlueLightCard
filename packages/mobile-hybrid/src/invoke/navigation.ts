@@ -17,11 +17,24 @@ export default class InvokeNativeNavigation extends Facade implements NativeNavi
    * @description Navigates to the needed page
    * @param url
    */
-  public navigate(url: string, domain: string): void {
+  public navigate(url: string): void {
     this.logger.debug(`navigate to url ${url}`, this.TAG);
     this.callFunction('navigate', {
       internalUrl: url,
-      domain,
+    });
+  }
+
+  /**
+   * @description Navigates to an external page
+   * @param url
+   */
+  public navigateExternal(url: string): void {
+    this.logger.debug(`navigate to external url ${url}`, this.TAG);
+    // The `url.php` route is used to open external URLs in the app. When we
+    // navigate to this route with the `url` and `external` query parameters,
+    // the app will open the URL in the device's default browser.
+    this.callFunction('navigate', {
+      internalUrl: `url.php?url=${encodeURIComponent(url)}&external=true`,
     });
   }
 

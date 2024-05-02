@@ -44,7 +44,7 @@ const SearchPage: NextPage = () => {
         <Amplitude keyName={FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK} value="on">
           <button
             className="font-museo pl-3 py-2 block text-primary-dukeblue-700 dark:text-primary-vividskyblue-700 text-md w-full h-full text-left"
-            onClick={() => navigation.navigate('/mapsearch.php', 'search')}
+            onClick={() => navigation.navigate('/mapsearch.php')}
           >
             <FontAwesomeIcon
               icon={faLocationDot}

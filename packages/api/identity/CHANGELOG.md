@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.64.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.63.0...bluelightcard/identity-v1.64.0) (2024-05-01)
+
+
+### Features
+
+* log which email type ([#1267](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1267)) ([eb3311f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eb3311f729221262a83f7d4b0011c9caa50fafdc))
+
 ## [1.63.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.62.0...bluelightcard/identity-v1.63.0) (2024-04-29)
 
 

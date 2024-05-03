@@ -2,7 +2,12 @@
 const config = {
   content: ['./src/**/*.{tsx,js}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        museo: ['var(--font-museo)'],
+        sourcesans: ['var(--font-sourcesans)'],
+      },
+    },
   },
   plugins: [],
 };

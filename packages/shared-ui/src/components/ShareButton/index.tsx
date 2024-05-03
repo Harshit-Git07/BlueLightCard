@@ -108,7 +108,7 @@ const ShareButton: FC<Props> = ({
       <div
         className={`${
           shareBtnState === 'error' && 'text-[#D41121]'
-        } text-base font-['MuseoSans'] font-bold leading-6 flex flex-row`}
+        } text-base font-museo font-bold leading-6 flex flex-row`}
       >
         <div className="my-auto">
           {shareBtnState && shareBtnState === 'success' ? (

@@ -53,7 +53,7 @@ const MagicButton: FC<Props> = ({
         </div>
       )}
       <div
-        className={`relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-['MuseoSans'] text-base font-bold leading-6 ${
+        className={`relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-museo text-base font-bold leading-6 ${
           bodyStyles[variant][disabled ? 'disabled' : animate ? 'animated' : 'notAnimated']
         } ${disabled ? 'disabled' : animate ? 'animated' : 'notAnimated'}`}
         style={{ transitionDuration: `${transitionDurationMs}ms` }}

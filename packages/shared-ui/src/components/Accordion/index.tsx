@@ -29,7 +29,7 @@ const Accordion: FC<Props> = ({ title, children, amplitudeDetails }) => {
         onClick={() => handleToggle()}
       >
         <div className="w-full">
-          <h4 className="font-['MuseoSans'] text-base font-medium text-[#1C1D22]">{title}</h4>
+          <h4 className="font-museo text-base font-medium text-[#1C1D22]">{title}</h4>
         </div>
         <div className="flex max-w-[40px] items-center justify-end">
           {active ? (
@@ -47,7 +47,7 @@ const Accordion: FC<Props> = ({ title, children, amplitudeDetails }) => {
       <div
         className={`duration-200 ease-in-out ${
           active ? 'block' : 'hidden'
-        } font-['MuseoSans'] py-3 text-base break-words font-light leading-5 whitespace-pre-wrap`}
+        } font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap`}
       >
         {children}
       </div>

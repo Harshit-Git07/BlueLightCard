@@ -24,9 +24,7 @@ const Label: FC<Props> = ({ text, type, className = '' }) => {
 
   return (
     <div className={`${backgroundColor} ${className} inline-flex rounded-full px-3 py-1`}>
-      <p
-        className={`${textColor} font-["MuseoSans"] flex items-center text-xs font-bold leading-4`}
-      >
+      <p className={`${textColor} font-museo flex items-center text-xs font-bold leading-4`}>
         {text}
       </p>
     </div>

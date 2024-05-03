@@ -5,7 +5,7 @@ exports[`Label component should render normal label 1`] = `
   className="bg-[#ECEFF2]  inline-flex rounded-full px-3 py-1"
 >
   <p
-    className="text-[#202125] font-["MuseoSans"] flex items-center text-xs font-bold leading-4"
+    className="text-[#202125] font-museo flex items-center text-xs font-bold leading-4"
   >
     Online
   </p>
@@ -17,7 +17,7 @@ exports[`Label component should render red label 1`] = `
   className="bg-[#D41121]  inline-flex rounded-full px-3 py-1"
 >
   <p
-    className="text-white font-["MuseoSans"] flex items-center text-xs font-bold leading-4"
+    className="text-white font-museo flex items-center text-xs font-bold leading-4"
   >
     0/3 codes remaining
   </p>

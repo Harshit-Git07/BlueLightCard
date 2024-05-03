@@ -12,7 +12,7 @@ exports[`Accordion component should render an accordion with Markdown bold text 
       className="w-full"
     >
       <h4
-        className="font-['MuseoSans'] text-base font-medium text-[#1C1D22]"
+        className="font-museo text-base font-medium text-[#1C1D22]"
       >
         Terms and Conditions
       </h4>
@@ -44,7 +44,7 @@ exports[`Accordion component should render an accordion with Markdown bold text 
     </div>
   </button>
   <div
-    className="duration-200 ease-in-out hidden font-['MuseoSans'] py-3 text-base break-words font-light leading-5 whitespace-pre-wrap"
+    className="duration-200 ease-in-out hidden font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap"
   >
     <span>
       This is an 
@@ -69,7 +69,7 @@ exports[`Accordion component should render an accordion with simple text 1`] = `
       className="w-full"
     >
       <h4
-        className="font-['MuseoSans'] text-base font-medium text-[#1C1D22]"
+        className="font-museo text-base font-medium text-[#1C1D22]"
       >
         Simple accordion message
       </h4>
@@ -101,7 +101,7 @@ exports[`Accordion component should render an accordion with simple text 1`] = `
     </div>
   </button>
   <div
-    className="duration-200 ease-in-out hidden font-['MuseoSans'] py-3 text-base break-words font-light leading-5 whitespace-pre-wrap"
+    className="duration-200 ease-in-out hidden font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap"
   >
     This is a simple accordion message.
   </div>

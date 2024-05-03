@@ -38,7 +38,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
   }, [offerData]);
 
   return (
-    <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-['MuseoSans']">
+    <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-museo">
       <div>
         {/* Offer Image */}
         <div className="flex justify-center">
@@ -62,7 +62,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
         {showOfferDescription && (
           <>
             <p
-              className={`text-base font-light font-['MuseoSans'] leading-5 mt-2 ${
+              className={`text-base font-light font-museo leading-5 mt-2 ${
                 offerData.description && offerData.description.length > 300 && !expanded
                   ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
                   : ''

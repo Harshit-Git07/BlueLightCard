@@ -6,7 +6,7 @@ export interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
 
 const Heading: FC<Props> = ({ headingLevel, children, className }) => {
   const Heading = headingLevel;
-  const defaultStyles = 'text-[#FAFAFA] dark:text-[#32363C] mb-2 font-bold font-["MuseoSans"]';
+  const defaultStyles = 'text-[#FAFAFA] dark:text-[#32363C] mb-2 font-bold font-museo';
   let size;
   switch (Heading) {
     case 'h1':

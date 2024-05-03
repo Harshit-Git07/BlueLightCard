@@ -1,9 +1,9 @@
+import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { RedemptionTransactionalEmailEvent } from '@blc-mono/redemptions/application/controllers/eventBridge/redemptionTransactionalEmail/RedemptionTransactionalEmailController';
 import { EmailRepository, IEmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
 
 export interface IEmailService {
-  sendRedemptionTransactionEmail(event: RedemptionTransactionalEmailEvent): Promise<void>;
+  sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void>;
 }
 export class EmailService implements IEmailService {
   static key = 'BrazeEmailService' as const;
@@ -14,12 +14,22 @@ export class EmailService implements IEmailService {
     private emailRepository: IEmailRepository,
   ) {}
 
-  async sendRedemptionTransactionEmail(event: RedemptionTransactionalEmailEvent): Promise<void> {
+  async sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void> {
     const redemptionType = event.detail.redemptionDetails.redemptionType;
 
     switch (redemptionType) {
       case 'vault': {
-        await this.emailRepository.sendVaultRedemptionTransactionalEmail(event.detail);
+        await this.emailRepository.sendVaultRedemptionTransactionalEmail({
+          affiliate: event.detail.redemptionDetails.affiliate,
+          brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
+          code: event.detail.redemptionDetails.code,
+          companyId: event.detail.redemptionDetails.companyId.toString(),
+          companyName: event.detail.redemptionDetails.companyName,
+          memberId: event.detail.memberDetails.memberId,
+          offerId: event.detail.redemptionDetails.offerId.toString(),
+          offerName: event.detail.redemptionDetails.offerName,
+          url: event.detail.redemptionDetails.url,
+        });
         break;
       }
       default:

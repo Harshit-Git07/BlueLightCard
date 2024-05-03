@@ -1,5 +1,5 @@
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
-import { emailEventFactory } from '@blc-mono/redemptions/libs/test/factories/emailEvent.factory';
+import { memberRedemptionEventFactory } from '@blc-mono/redemptions/libs/test/factories/memberRedemptionEvent.factory';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { IEmailRepository } from '../../repositories/EmailRepository';
@@ -15,7 +15,7 @@ describe('EmailService', () => {
         sendVaultRedemptionTransactionalEmail: jest.fn(),
       } satisfies IEmailRepository;
       const service = new EmailService(logger, emailRepository);
-      const event = emailEventFactory.build({
+      const event = memberRedemptionEventFactory.build({
         detail: {
           redemptionDetails: {
             redemptionType: 'vault',
@@ -39,7 +39,7 @@ describe('EmailService', () => {
           sendVaultRedemptionTransactionalEmail: jest.fn(),
         } satisfies IEmailRepository;
         const service = new EmailService(logger, emailRepository);
-        const event = emailEventFactory.build({
+        const event = memberRedemptionEventFactory.build({
           detail: {
             redemptionDetails: {
               redemptionType,

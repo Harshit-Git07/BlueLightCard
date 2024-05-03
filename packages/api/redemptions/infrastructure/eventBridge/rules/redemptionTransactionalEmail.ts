@@ -1,10 +1,10 @@
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
+import { RedemptionEventDetailType, REDEMPTIONS_EVENT_SOURCE } from '@blc-mono/core/constants/redemptions';
 import { RedemptionsStackConfig } from '@blc-mono/redemptions/infrastructure/config/config';
 
 import { SSTFunction } from '../../constructs/SSTFunction';
-import { RedemptionEventDetailType, REDEMPTIONS_EVENT_SOURCE } from '../events/redemptions';
 
 /**
  * Creates a rule which is triggered when a redemption is successful and sends a transactional email
@@ -35,7 +35,12 @@ export function createRedemptionTransactionalEmailRule(
   return {
     pattern: {
       source: [REDEMPTIONS_EVENT_SOURCE],
-      detailType: [RedemptionEventDetailType.REDEEMED_VAULT],
+      detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
+      detail: {
+        redemptionDetails: {
+          redemptionType: ['vault'],
+        },
+      },
     },
     targets: { redeemedTransactionalEmailHandler: redemptionTransactionalEmailHandler },
   };

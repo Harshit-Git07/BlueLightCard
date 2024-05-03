@@ -5,7 +5,7 @@ type EventBridgeEventShape = {
   [key in keyof EventBridgeEvent<string, unknown>]: unknown;
 };
 
-type DetailTypeConstraint = z.ZodEnum<[string, ...string[]]> | z.ZodString;
+type DetailTypeConstraint = z.ZodEnum<[string, ...string[]]> | z.ZodString | z.ZodLiteral<string>;
 export function eventSchema<DetailType extends DetailTypeConstraint, Detail extends z.AnyZodObject>(
   source: string,
   eventDetailType: DetailType,

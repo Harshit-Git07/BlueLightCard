@@ -8,15 +8,26 @@ import {
   AffiliateResultsKinds,
 } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import { encodeBase64 } from '@blc-mono/redemptions/application/helpers/encodeBase64';
-import { RedemptionEventDetail } from '@blc-mono/redemptions/application/repositories/RedemptionEventsRepository';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import {
   BrazeEmailClientProvider,
   IBrazeEmailClientProvider,
 } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
 
+export type VaultRedemptionTransactionalEmailParams = {
+  brazeExternalUserId: string;
+  memberId: string;
+  offerId: string;
+  companyId: string;
+  companyName: string;
+  offerName: string;
+  url: string;
+  affiliate: string | null;
+  code: string;
+};
+
 export interface IEmailRepository {
-  sendVaultRedemptionTransactionalEmail: (payload: RedemptionEventDetail) => Promise<void>;
+  sendVaultRedemptionTransactionalEmail: (payload: VaultRedemptionTransactionalEmailParams) => Promise<void>;
 }
 
 export class EmailRepository implements IEmailRepository {
@@ -110,33 +121,30 @@ export class EmailRepository implements IEmailRepository {
     });
   }
 
-  async sendVaultRedemptionTransactionalEmail(payload: RedemptionEventDetail): Promise<void> {
+  async sendVaultRedemptionTransactionalEmail(params: VaultRedemptionTransactionalEmailParams): Promise<void> {
     const emailClient = await this.getClient();
 
-    const { memberDetails, redemptionDetails } = payload;
-    const { offerId, companyId, affiliate, offerName, companyName, url, code } = redemptionDetails;
-
     const emailUrl = this.generateEmailUrl({
-      memberId: memberDetails.memberId,
-      offerId: offerId,
-      companyId: companyId,
-      companyName: companyName,
-      offerName: offerName,
-      url,
-      affiliate,
-      code,
+      memberId: params.memberId,
+      offerId: params.offerId,
+      companyId: params.companyId,
+      companyName: params.companyName,
+      offerName: params.offerName,
+      url: params.url,
+      affiliate: params.affiliate,
+      code: params.code,
     });
 
     const emailPayload: CampaignsTriggerSendObject = {
       campaign_id: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID),
       recipients: [
         {
-          external_user_id: memberDetails.brazeExternalUserId,
+          external_user_id: params.brazeExternalUserId,
         },
       ],
       trigger_properties: {
-        companyName: redemptionDetails.companyName,
-        offerName: redemptionDetails.offerName,
+        companyName: params.companyName,
+        offerName: params.offerName,
         url: emailUrl,
       },
     };

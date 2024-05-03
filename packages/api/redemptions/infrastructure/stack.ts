@@ -23,6 +23,9 @@ import {
   createVaultUpdatedRule,
   updateOfferRule,
 } from './eventBridge/rules';
+import { createDwhMemberRedeemIntentRule } from './eventBridge/rules/dwhMemberRedeemIntentRule';
+import { createDwhMemberRedemptionRule } from './eventBridge/rules/dwhMemberRedemptionRule';
+import { createDwhMemberRetrievedRedemptionDetailsRule } from './eventBridge/rules/dwhMemberRetrievedRedemptionDetailsRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { Route } from './routes/route';
 
@@ -93,6 +96,9 @@ export async function Redemptions({ app, stack }: StackContext) {
     offerCreatedRule: createOfferRule(stack, database),
     emailTransactionalRule: createRedemptionTransactionalEmailRule(stack, config),
     offerUpdatedRule: updateOfferRule(stack, database),
+    dwhMemberRedemptionDetails: createDwhMemberRetrievedRedemptionDetailsRule(stack, dwhKenisisFirehoseStreams),
+    dwhMemberRedeemIntentRule: createDwhMemberRedeemIntentRule(stack, dwhKenisisFirehoseStreams),
+    dwhMemberRedemptionRule: createDwhMemberRedemptionRule(stack, dwhKenisisFirehoseStreams),
   });
 
   // Create permissions
@@ -107,11 +113,6 @@ export async function Redemptions({ app, stack }: StackContext) {
     effect: Effect.ALLOW,
     resources: [bus.eventBusArn],
   });
-  const publishDwhCompViewStream = dwhKenisisFirehoseStreams.compViewStream.getPutRecordPolicyStatement();
-  const publishDwhCompClickStream = dwhKenisisFirehoseStreams.compClickStream.getPutRecordPolicyStatement();
-  const publishDwhCompAppViewStream = dwhKenisisFirehoseStreams.compAppViewStream.getPutRecordPolicyStatement();
-  const publishDwhCompAppClickStream = dwhKenisisFirehoseStreams.compAppClickStream.getPutRecordPolicyStatement();
-  const publishDwhVaultStream = dwhKenisisFirehoseStreams.vaultStream.getPutRecordPolicyStatement();
 
   // functionName is automatically appended with the stage name
   api.addRoutes(stack, {
@@ -125,17 +126,10 @@ export async function Redemptions({ app, stack }: StackContext) {
         'packages/api/redemptions/application/handlers/apiGateway/redemptionDetails/getRedemptionDetails.handler',
       requestValidatorName: 'GetRedemptionDetailsValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
-      permissions: [
-        // Data Warehouse
-        publishDwhCompViewStream,
-        publishDwhCompAppViewStream,
-      ],
+      permissions: [publishRedemptionsEventBus],
       environment: {
-        // Data Warehouse
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_VIEW_STREAM_NAME]:
-          dwhKenisisFirehoseStreams.compViewStream.getStreamName(),
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_VIEW_STREAM_NAME]:
-          dwhKenisisFirehoseStreams.compAppViewStream.getStreamName(),
+        // Event Bus
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
       },
     }),
     'POST /member/redeem': Route.createRoute({
@@ -164,13 +158,6 @@ export async function Redemptions({ app, stack }: StackContext) {
           config.redemptionsLambdaScriptsCodeAmountIssuedPath,
         // Event Bus
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
-        // Data Warehouse
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_CLICK_STREAM_NAME]:
-          dwhKenisisFirehoseStreams.compClickStream.getStreamName(),
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME]:
-          dwhKenisisFirehoseStreams.compAppClickStream.getStreamName(),
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME]:
-          dwhKenisisFirehoseStreams.vaultStream.getStreamName(),
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [
@@ -178,10 +165,6 @@ export async function Redemptions({ app, stack }: StackContext) {
         publishRedemptionsEventBus,
         // Legacy Vault Service
         getSecretValueSecretsManager,
-        // Data Warehouse
-        publishDwhCompClickStream,
-        publishDwhCompAppClickStream,
-        publishDwhVaultStream,
       ],
     }),
     'POST /member/connection/affiliate': Route.createRoute({

@@ -13,10 +13,15 @@ const logger = new LambdaLogger({ serviceName: 'redemptions-redemption-transacti
 const controller = createInjector()
   // Common
   .provideValue(Logger.key, logger)
+  // Misc
   .provideClass(SecretsManager.key, SecretsManager)
+  // Providers
   .provideClass(BrazeEmailClientProvider.key, BrazeEmailClientProvider)
+  // Repositiories
   .provideClass(EmailRepository.key, EmailRepository)
+  // Services
   .provideClass(EmailService.key, EmailService)
+  // Controller
   .injectClass(RedemptionTransactionalEmailController);
 
 /**

@@ -3,10 +3,9 @@ import { createInjector } from 'typed-inject';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
-import { DwhRepository } from '@blc-mono/redemptions/application/repositories/DwhRepository';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
-import { RedemptionEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionEventsRepository';
+import { RedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 import { VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
@@ -37,8 +36,7 @@ const controller = createInjector()
   .provideClass(VaultsRepository.key, VaultsRepository)
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)
   .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
-  .provideClass(RedemptionEventsRepository.key, RedemptionEventsRepository)
-  .provideClass(DwhRepository.key, DwhRepository)
+  .provideClass(RedemptionsEventsRepository.key, RedemptionsEventsRepository)
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)

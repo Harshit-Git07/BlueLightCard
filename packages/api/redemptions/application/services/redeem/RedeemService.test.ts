@@ -4,8 +4,7 @@ import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
-import { IDwhRepository } from '../../repositories/DwhRepository';
-import { RedemptionEventsRepository } from '../../repositories/RedemptionEventsRepository';
+import { RedemptionsEventsRepository } from '../../repositories/RedemptionsEventsRepository';
 import { IRedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
 import { RedeemResult, RedeemService } from './RedeemService';
@@ -32,14 +31,12 @@ describe('RedeemService', () => {
       redemptionsRepository,
       redeemStrategyResolver,
       redemptionEventsRepository,
-      dwhRepository,
     }: {
       params?: RedeemParams;
       logger?: ILogger;
       redemptionsRepository?: IRedemptionsRepository;
       redeemStrategyResolver?: IRedeemStrategyResolver;
-      redemptionEventsRepository?: RedemptionEventsRepository;
-      dwhRepository?: IDwhRepository;
+      redemptionEventsRepository?: RedemptionsEventsRepository;
     },
   ): Promise<RedeemResult> {
     const mockedLogger = logger ?? createTestLogger();
@@ -61,21 +58,15 @@ describe('RedeemService', () => {
     const mockedRedemptionEventsRepository =
       redemptionEventsRepository ??
       ({
-        publishEvent: jest.fn(),
-      } satisfies RedemptionEventsRepository);
-    const mockedDwhRepository =
-      dwhRepository ??
-      ({
-        logOfferView: jest.fn(),
-        logRedemptionAttempt: jest.fn().mockResolvedValue(undefined),
-        logVaultRedemption: jest.fn().mockResolvedValue(undefined),
-      } satisfies IDwhRepository);
+        publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
+        publishMemberRedeemIntentEvent: jest.fn(),
+        publishRedemptionEvent: jest.fn(),
+      } satisfies RedemptionsEventsRepository);
     const service = new RedeemService(
       mockedLogger,
       mockedRedemptionsRepository,
       mockedRedeemStrategyResolver,
       mockedRedemptionEventsRepository,
-      mockedDwhRepository,
     );
     return service.redeem(offerId, mockedParams);
   }
@@ -101,7 +92,7 @@ describe('RedeemService', () => {
     });
   });
 
-  it('should return an Ok result when the redemption is found and redeemd successfully', async () => {
+  it('should return an Ok result when the redemption is found and redeemed successfully', async () => {
     // Arrange
     const redemption = redemptionFactory.build();
     const redeemedResult: RedeemedStrategyResult = {
@@ -125,11 +116,17 @@ describe('RedeemService', () => {
     const redeemStrategyResolver = {
       getRedemptionStrategy: jest.fn().mockReturnValue(redeemStrategy),
     } satisfies IRedeemStrategyResolver;
+    const redemptionEventsRepository = {
+      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
+      publishMemberRedeemIntentEvent: jest.fn().mockResolvedValue(undefined),
+      publishRedemptionEvent: jest.fn(),
+    } satisfies RedemptionsEventsRepository;
 
     // Act
     const result = await callRedeemMethod(defaultOfferId, {
       redemptionsRepository,
       redeemStrategyResolver,
+      redemptionEventsRepository,
     });
 
     // Assert
@@ -140,16 +137,17 @@ describe('RedeemService', () => {
     });
   });
 
-  it('should log data warehousing events', async () => {
+  it('should send data for DWH to event bus', async () => {
     // Arrange
     const redemption = redemptionFactory.build({
       offerId: defaultOfferId,
+      affiliate: 'awin',
     });
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
       redemptionType: 'vault',
       redemptionDetails: {
-        url: faker.internet.url(),
+        url: 'https://www.awin1.com',
         code: faker.string.alphanumeric(6),
       },
     };
@@ -166,32 +164,49 @@ describe('RedeemService', () => {
     const redeemStrategyResolver = {
       getRedemptionStrategy: jest.fn().mockReturnValue(redeemStrategy),
     } satisfies IRedeemStrategyResolver;
-    const dwhRepository = {
-      logOfferView: jest.fn(),
-      logRedemptionAttempt: jest.fn().mockResolvedValue(undefined),
-      logVaultRedemption: jest.fn().mockResolvedValue(undefined),
-    } satisfies IDwhRepository;
+    const redemptionEventsRepository = {
+      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
+      publishMemberRedeemIntentEvent: jest.fn().mockResolvedValue(undefined),
+      publishRedemptionEvent: jest.fn().mockResolvedValue(undefined),
+    } satisfies RedemptionsEventsRepository;
 
     // Act
     await callRedeemMethod(defaultOfferId, {
       redemptionsRepository,
       redeemStrategyResolver,
-      dwhRepository,
+      redemptionEventsRepository,
     });
 
     // Assert
-    expect(dwhRepository.logRedemptionAttempt).toHaveBeenCalledWith(
-      redemption.offerId,
-      redemption.companyId,
-      defaultParams.memberId,
-      defaultParams.clientType,
-    );
-    expect(dwhRepository.logVaultRedemption).toHaveBeenCalledWith(
-      redemption.offerId,
-      redemption.companyId,
-      defaultParams.memberId,
-      redeemedResult.redemptionDetails.code,
-    );
+    expect(redemptionEventsRepository.publishMemberRedeemIntentEvent).toHaveBeenCalledWith({
+      memberDetails: {
+        memberId: defaultParams.memberId,
+      },
+      redemptionDetails: {
+        clientType: defaultParams.clientType,
+        companyId: redemption.companyId,
+        offerId: defaultOfferId,
+        redemptionType: redemption.redemptionType,
+      },
+    });
+    expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+      memberDetails: {
+        memberId: defaultParams.memberId,
+        brazeExternalUserId: defaultParams.brazeExternalUserId,
+      },
+      redemptionDetails: {
+        redemptionId: redemption.id,
+        redemptionType: redemption.redemptionType,
+        companyId: redemption.companyId,
+        companyName: defaultParams.companyName,
+        offerId: redemption.offerId,
+        offerName: defaultParams.offerName,
+        code: redeemedResult.redemptionDetails.code,
+        affiliate: redemption.affiliate,
+        url: redeemedResult.redemptionDetails.url,
+        clientType: defaultParams.clientType,
+      },
+    });
   });
 
   it('should complete successfully when logRedemptionAttempt fails', async () => {
@@ -221,18 +236,18 @@ describe('RedeemService', () => {
     const redeemStrategyResolver = {
       getRedemptionStrategy: jest.fn().mockReturnValue(redeemStrategy),
     } satisfies IRedeemStrategyResolver;
-    const dwhRepository = {
-      logOfferView: jest.fn(),
-      logRedemptionAttempt: jest.fn().mockRejectedValue(new Error('Failed to log redemption attempt')),
-      logVaultRedemption: jest.fn().mockResolvedValue(undefined),
-    } satisfies IDwhRepository;
+    const redemptionEventsRepository = {
+      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
+      publishMemberRedeemIntentEvent: jest.fn().mockRejectedValue(new Error()),
+      publishRedemptionEvent: jest.fn(),
+    } satisfies RedemptionsEventsRepository;
 
     // Act
     const result = await callRedeemMethod(defaultOfferId, {
       logger: silentLogger,
       redemptionsRepository,
       redeemStrategyResolver,
-      dwhRepository,
+      redemptionEventsRepository,
     });
 
     // Assert
@@ -270,18 +285,18 @@ describe('RedeemService', () => {
     const redeemStrategyResolver = {
       getRedemptionStrategy: jest.fn().mockReturnValue(redeemStrategy),
     } satisfies IRedeemStrategyResolver;
-    const dwhRepository = {
-      logOfferView: jest.fn(),
-      logRedemptionAttempt: jest.fn().mockResolvedValue(undefined),
-      logVaultRedemption: jest.fn().mockRejectedValue(new Error('Failed to log vault redemption')),
-    } satisfies IDwhRepository;
+    const redemptionEventsRepository = {
+      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
+      publishMemberRedeemIntentEvent: jest.fn().mockResolvedValue(undefined),
+      publishRedemptionEvent: jest.fn().mockRejectedValue(new Error()),
+    } satisfies RedemptionsEventsRepository;
 
     // Act
     const result = await callRedeemMethod(defaultOfferId, {
       logger: silentLogger,
       redemptionsRepository,
       redeemStrategyResolver,
-      dwhRepository,
+      redemptionEventsRepository,
     });
 
     // Assert

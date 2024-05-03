@@ -56,12 +56,12 @@ describe('EmailRepository', () => {
       expect(mockEmailClient.campaigns.trigger.send).toHaveBeenCalled();
       expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('test');
       expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
-        payload.memberDetails.brazeExternalUserId,
+        payload.brazeExternalUserId,
       );
 
       expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
-        companyName: payload.redemptionDetails.companyName,
-        offerName: payload.redemptionDetails.offerName,
+        companyName: payload.companyName,
+        offerName: payload.offerName,
         url: `${host}/copy-code?code=${mockBase64}&redirect=${mockBase64}&metaData=${mockBase64}`,
       });
     });

@@ -1,3 +1,5 @@
+import { ClientType } from '@blc-mono/core/schemas/domain';
+
 import { Redemption } from '../../../repositories/RedemptionsRepository';
 
 export type RedeemedStrategyResult =
@@ -54,7 +56,6 @@ export type RedeemVaultStrategyResult =
   | { kind: 'MaxPerUserReached' }
   | { kind: 'ErrorWhileRedeemingVault' };
 
-export type ClientType = 'web' | 'mobile';
 export type RedeemParams = {
   memberId: string;
   brazeExternalUserId: string;

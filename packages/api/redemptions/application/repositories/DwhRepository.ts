@@ -1,10 +1,9 @@
 import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
 
+import { ClientType } from '@blc-mono/core/schemas/domain';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
-
-export type ClientType = 'web' | 'mobile';
 
 export interface IDwhRepository {
   logOfferView(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void>;

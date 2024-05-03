@@ -1,10 +1,13 @@
+import { ClientType } from '@blc-mono/core/schemas/domain';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
-import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
+import {
+  IRedemptionsEventsRepository,
+  RedemptionsEventsRepository,
+} from '../../repositories/RedemptionsEventsRepository';
 import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
-export type ClientType = 'web' | 'mobile';
 export type RedemptionDetailsResult =
   | {
       kind: 'Ok';
@@ -22,12 +25,12 @@ export interface IRedemptionDetailsService {
 
 export class RedemptionDetailsService implements IRedemptionDetailsService {
   static readonly key = 'RedemptionDetailsService';
-  static readonly inject = [Logger.key, RedemptionsRepository.key, DwhRepository.key] as const;
+  static readonly inject = [Logger.key, RedemptionsEventsRepository.key, RedemptionsRepository.key] as const;
 
   constructor(
     private readonly logger: ILogger,
+    private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
     private readonly redemptionsRepository: IRedemptionsRepository,
-    private readonly dwhRepository: IDwhRepository,
   ) {}
 
   public async getRedemptionDetails(
@@ -35,6 +38,12 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
     memberId: string,
     clientType: ClientType,
   ): Promise<RedemptionDetailsResult> {
+    this.logger.info({
+      message: 'CLIENT TYPE',
+      context: {
+        clientType,
+      },
+    });
     const redemption = await this.redemptionsRepository.findOneByOfferId(offerId);
 
     if (!redemption) {
@@ -43,12 +52,24 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
       };
     }
 
-    await this.dwhRepository.logOfferView(offerId, redemption.companyId, memberId, clientType).catch((error) => {
-      this.logger.error({
-        message: 'Failed to log offer view',
-        error,
+    await this.redemptionsEventsRepository
+      .publishMemberRetrievedRedemptionDetailsEvent({
+        memberDetails: {
+          memberId: memberId,
+        },
+        redemptionDetails: {
+          redemptionType: redemption.redemptionType,
+          offerId: offerId,
+          companyId: redemption.companyId,
+          clientType: clientType,
+        },
+      })
+      .catch((error) => {
+        this.logger.error({
+          message: '[UNHANDLED ERROR] Error while publishing member retrieved redemption details event',
+          error,
+        });
       });
-    });
 
     return {
       kind: 'Ok',

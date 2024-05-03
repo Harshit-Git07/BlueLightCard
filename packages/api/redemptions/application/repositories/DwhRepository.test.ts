@@ -1,9 +1,10 @@
 import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
 import { mockClient } from 'aws-sdk-client-mock';
 
+import { ClientType } from '@blc-mono/core/schemas/domain';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
-import { ClientType, DwhRepository } from './DwhRepository';
+import { DwhRepository } from './DwhRepository';
 
 jest.useFakeTimers({
   now: new Date('2021-09-01T00:00:00.000Z'),
@@ -24,8 +25,7 @@ describe('DwhRepository', () => {
   describe('logOfferView', () => {
     it('should send the correct data to the compView (web) stream when the client type is web', async () => {
       // Arrange
-      const streamName = 'compViewStream';
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_VIEW_STREAM_NAME] = streamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_VIEW_STREAM_NAME] = 'compViewStream';
       const offerId = 1;
       const companyId = 2;
       const memberId = '3';
@@ -49,8 +49,7 @@ describe('DwhRepository', () => {
 
     it('should send the correct data to the compAppView (app) stream when the client type is mobile', async () => {
       // Arrange
-      const streamName = 'compAppViewStream';
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_VIEW_STREAM_NAME] = streamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_VIEW_STREAM_NAME] = 'compAppViewStream';
       const offerId = 1;
       const companyId = 2;
       const memberId = '3';
@@ -76,8 +75,7 @@ describe('DwhRepository', () => {
       'should bubble exceptions from the firehose client to the caller when the client type is %s',
       async (clientType) => {
         // Arrange
-        const streamName = 'compAppViewStream';
-        process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_VIEW_STREAM_NAME] = streamName;
+        process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_VIEW_STREAM_NAME] = 'compAppViewStream';
         const offerId = 1;
         const companyId = 2;
         const memberId = '3';
@@ -96,8 +94,7 @@ describe('DwhRepository', () => {
   describe('logRedemptionAttempt', () => {
     it('should send the correct data to the compClick (web) stream when the client type is web', async () => {
       // Arrange
-      const streamName = 'compClickStream';
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_CLICK_STREAM_NAME] = streamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_CLICK_STREAM_NAME] = 'compClickStream';
       const offerId = 1;
       const companyId = 2;
       const memberId = '3';
@@ -120,8 +117,7 @@ describe('DwhRepository', () => {
     });
     it('should send the correct data to the compAppClick (app) stream when the client type is mobile', async () => {
       // Arrange
-      const streamName = 'compAppClickStream';
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME] = streamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME] = 'compAppClickStream';
       const offerId = 1;
       const companyId = 2;
       const memberId = '3';
@@ -146,8 +142,7 @@ describe('DwhRepository', () => {
       'should bubble exceptions from the firehose client to the caller when the client type is %s',
       async (clientType) => {
         // Arrange
-        const streamName = 'compClickStream';
-        process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME] = streamName;
+        process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME] = 'compClickStream';
         const offerId = 1;
         const companyId = 2;
         const memberId = '3';
@@ -166,8 +161,7 @@ describe('DwhRepository', () => {
   describe('logVaultRedemption', () => {
     it('should send the correct data to the vault stream', async () => {
       // Arrange
-      const streamName = 'vaultStream';
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME] = streamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME] = 'vaultStream';
       const offerId = 1;
       const companyId = 2;
       const code = 'code';
@@ -190,8 +184,7 @@ describe('DwhRepository', () => {
     });
     it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
       // Arrange
-      const streamName = 'vaultStream';
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME] = streamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME] = 'vaultStream';
       const offerId = 1;
       const companyId = 2;
       const code = 'code';

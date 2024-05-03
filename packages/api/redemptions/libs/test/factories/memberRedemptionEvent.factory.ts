@@ -1,10 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
-import { RedemptionTransactionalEmailEvent } from '@blc-mono/redemptions/application/controllers/eventBridge/redemptionTransactionalEmail/RedemptionTransactionalEmailController';
+import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 
 import { redemptionTypeEnum } from '../../database/schema';
-export const emailEventFactory = Factory.define<RedemptionTransactionalEmailEvent>(() => ({
+
+export const memberRedemptionEventFactory = Factory.define<MemberRedemptionEvent>(() => ({
   account: faker.string.numeric(12),
   detail: {
     memberDetails: {
@@ -15,12 +16,19 @@ export const emailEventFactory = Factory.define<RedemptionTransactionalEmailEven
       redemptionId: faker.string.uuid(),
       affiliate: faker.company.name(),
       redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
-      companyId: faker.string.uuid(),
+      companyId: faker.number.int({
+        min: 1,
+        max: 1_000_000,
+      }),
       companyName: faker.company.name(),
-      offerId: faker.string.uuid(),
+      offerId: faker.number.int({
+        min: 1,
+        max: 1_000_000,
+      }),
       offerName: faker.commerce.productName(),
       code: faker.string.alphanumeric(5),
       url: faker.internet.url(),
+      clientType: faker.helpers.arrayElement(['web', 'mobile']),
     },
   },
   'detail-type': faker.helpers.arrayElement([

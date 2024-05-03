@@ -2,6 +2,10 @@ import { sql } from 'drizzle-orm';
 import { boolean, index, integer, pgEnum, pgTable, ReferenceConfig, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { v4 as uuidv4 } from 'uuid';
 
+// FIXME: Using a relative import here because TypeScript is not resolving @blc-mono/core/constants/redemptions
+//        correctly. But only in this file... 🤷‍♂️
+import { REDEMPTION_TYPES } from '../../../core/src/constants/redemptions';
+
 const DEFAULT_FOREIGN_KEY_ACTIONS: ReferenceConfig['actions'] = {
   onDelete: 'restrict',
   onUpdate: 'cascade',
@@ -26,7 +30,7 @@ export const connectionEnum = pgEnum('connection', ['affiliate', 'direct', 'spot
 export const integrationEnum = pgEnum('integration', ['eagleeye', 'uniqodo']);
 export const offerTypeEnum = pgEnum('offerType', ['online', 'in-store']);
 export const platformEnum = pgEnum('platform', ['BLC_UK', 'BLC_AU', 'DDS_UK']);
-export const redemptionTypeEnum = pgEnum('redemptionType', ['generic', 'vault', 'vaultQR', 'showCard', 'preApplied']);
+export const redemptionTypeEnum = pgEnum('redemptionType', REDEMPTION_TYPES);
 export const statusEnum = pgEnum('status', ['active', 'in-active']);
 export const vaultTypeEnum = pgEnum('vaultType', ['standard', 'legacy']);
 

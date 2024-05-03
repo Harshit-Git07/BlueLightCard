@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.50.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.50.0...bluelightcard/web-v1.50.1) (2024-05-03)
+
+
+### Bug Fixes
+
+* TR-487 Fix offer sheet redirect on Safari ([#1274](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1274)) ([ee0f769](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ee0f769f6f71e475f895876e7783508026275986))
+
 ## [1.50.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.49.0...bluelightcard/web-v1.50.0) (2024-05-01)
 
 

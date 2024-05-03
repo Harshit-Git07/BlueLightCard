@@ -49,11 +49,7 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props, hooks) => {
 
   hooks.useOnRedeemed((redeemData) => {
     logClick();
-    const timeout = setTimeout(
-      () => redirectToOffer(props.offerData, redeemData as RedeemData),
-      1500
-    );
-    return () => clearTimeout(timeout);
+    redirectToOffer(props.offerData, redeemData as RedeemData);
   });
 
   if (props.state === 'error') {
@@ -66,6 +62,7 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props, hooks) => {
         offerMeta={props.offerMeta}
         offerData={props.offerData}
         companyId={props.offerMeta.companyId}
+        showShareFavorite={false}
       />
 
       {/* Bottom section - Button labels etc */}
@@ -113,7 +110,33 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props, hooks) => {
   );
 });
 
+const sleep = (delay: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, delay);
+  });
+
+function openInNewTab(url: string) {
+  const newWindow = window.open(url, '_blank');
+
+  if (!newWindow || newWindow.closed) {
+    // Sometimes window.open may fail, such as in Safari,
+    // if this is the case, redirect the current tab instead
+    window.location.href = url;
+  }
+}
+
 async function redirectToOffer(offerData: OfferData, redeemData: RedeemData) {
+  if (redeemData.redemptionDetails.code) {
+    // IMPORTANT: We have to write to the clipboard BEFORE waiting, so that
+    // the user activation has not expired
+    await navigator.clipboard.writeText(redeemData.redemptionDetails.code);
+  }
+
+  // Wait 1.5 seconds to give the user time to read the redirect message.
+  // IMPORTANT: In Safari, no further features that are gated by user activation
+  // can happen after this point (e.g. clipboard, window.open)
+  await sleep(1500);
+
   if (!redeemData.redemptionDetails.url) {
     Logger.instance.error('No redemption url found', {
       context: {
@@ -121,14 +144,10 @@ async function redirectToOffer(offerData: OfferData, redeemData: RedeemData) {
         offerData,
       },
     });
-    window.open(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`, '_blank');
+
+    openInNewTab(`/out.php?lid=${offerData.id}&cid=${offerData.companyId}`);
     return;
   }
-  if (redeemData.redemptionDetails.code) {
-    await navigator.clipboard.writeText(redeemData.redemptionDetails.code);
-  }
-  const newWindow = window.open(redeemData.redemptionDetails.url, '_blank');
-  if (!newWindow || newWindow.closed) {
-    window.location.href = redeemData.redemptionDetails.url;
-  }
+
+  openInNewTab(redeemData.redemptionDetails.url);
 }

@@ -215,7 +215,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         </div>
 
         {/* Offer cards */}
-        {offerData && offerData.length && companyData && (
+        {offerData && offerData.length > 0 && companyData && (
           <div className="desktop:mb-[71px] mobile:mb-0">
             <div className="desktop:grid desktop:grid-cols-2 desktop:gap-10 mobile:flex mobile:flex-col mobile:gap-2">
               {filteredOffers &&
@@ -250,7 +250,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           </div>
         )}
 
-        {/* Adverts (ONLY ON WEB) */}
+        {/* Adverts (ONLY ON DESKTOP) */}
         {!isMobile && !isLoading && adverts && adverts.length > 0 && (
           <>
             <div className="w-full mb-16">
@@ -262,6 +262,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                       name={advert.__typename}
                       image={advert.imageSource}
                       linkUrl={advert.link}
+                      className="h-[200px]"
                     />
                   );
                 })}
@@ -271,13 +272,34 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         )}
 
         {/* About page (MOBILE) */}
-        {isMobile && (
+        {isMobile && companyData?.name && (
           <div className="my-4">
             <CompanyAbout
-              CompanyName={`About ${companyData?.name}`}
+              CompanyName={`About ${companyData.name}`}
               CompanyDescription={companyData?.description}
             />
           </div>
+        )}
+
+        {/* Adverts (ONLY ON MOBILE RESPONSIVE - since it is positioned after the company about section) */}
+        {isMobile && !isLoading && adverts && adverts.length > 0 && (
+          <>
+            <div className="w-full mb-7 mt-14">
+              <div className="grid gap-2">
+                {adverts.slice(0, 2).map((advert, index) => {
+                  return (
+                    <CampaignCard
+                      key={index}
+                      name={advert.__typename}
+                      image={advert.imageSource}
+                      linkUrl={advert.link}
+                      className="min-h-[140px]"
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          </>
         )}
       </Container>
     </>

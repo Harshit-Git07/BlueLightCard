@@ -7,7 +7,7 @@ import Link from '@/components/Link/Link';
 
 const imageSourceAtom = atom<string | null>(null);
 
-const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl }) => {
+const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl, className }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
   const [imageSource, setImageSource] = useAtom(imageSourceAtom);
@@ -17,7 +17,7 @@ const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl }) => {
   }
 
   return (
-    <div className="relative w-full h-[200px]">
+    <div className={`relative w-full ${className}`}>
       <Link href={linkUrl}>
         <Image
           src={image}

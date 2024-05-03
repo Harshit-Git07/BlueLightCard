@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.10.0 (2024-05-03)
+## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.11.0...bluelightcard/mobile-hybrid-v1.12.0) (2024-05-03)
+
+
+### Features
+
+* Re-release of 1.11.0 to get release-please back on track.
+
+## 1.11.0 (2024-05-03)
 
 
 ### Features

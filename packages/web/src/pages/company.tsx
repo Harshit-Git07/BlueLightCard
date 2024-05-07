@@ -208,6 +208,10 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                     }
                   }}
                   isSelected={selectedType === pillType}
+                  disabled={
+                    pillType !== 'All' &&
+                    !offerData?.find((offer: OfferData) => offer.type === pillType)
+                  }
                 />
               </div>
             );
@@ -216,8 +220,12 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
         {/* Offer cards */}
         {offerData && offerData.length > 0 && companyData && (
-          <div className="desktop:mb-[71px] mobile:mb-0">
-            <div className="desktop:grid desktop:grid-cols-2 desktop:gap-10 mobile:flex mobile:flex-col mobile:gap-2">
+          <div className="mb-0 desktop:mb-[71px]">
+            <div
+              className={`flex flex-col ${
+                isMobile ? 'gap-2' : 'gap-10'
+              } tablet:gap-10 desktop:grid desktop:grid-cols-2`}
+            >
               {filteredOffers &&
                 filteredOffers.map((offer: OfferData, index: number) => (
                   <div
@@ -253,7 +261,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         {/* Adverts (ONLY ON DESKTOP) */}
         {!isMobile && !isLoading && adverts && adverts.length > 0 && (
           <>
-            <div className="w-full mb-16">
+            <div className="w-full mb-16 tablet:mt-14">
               <div className="grid grid-cols-2 gap-10">
                 {adverts.slice(0, 2).map((advert, index) => {
                   return (

@@ -22,9 +22,7 @@ const Container = ({
   return (
     <>
       <div className={containerRootClassNames} {...props}>
-        <div className={`mobile:mx-5 laptop:container laptop:mx-auto ${nestedClassName}`}>
-          {children}
-        </div>
+        <div className={`px-5 laptop:container laptop:mx-auto  ${nestedClassName}`}>{children}</div>
       </div>
     </>
   );

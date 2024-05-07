@@ -9,7 +9,7 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
     className=" "
   >
     <div
-      className="mobile:mx-5 laptop:container laptop:mx-auto "
+      className="px-5 laptop:container laptop:mx-auto  "
     >
       <h1
         className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] !text-[#FFFF00] mt-20 mb-4 !font-black text-6xl text-center "

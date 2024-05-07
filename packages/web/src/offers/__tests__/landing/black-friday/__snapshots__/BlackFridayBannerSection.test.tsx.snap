@@ -8,7 +8,7 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
     className=" "
   >
     <div
-      className="mobile:mx-5 laptop:container laptop:mx-auto justify-between flex flex-col h-[calc(100vh-56px)]"
+      className="px-5 laptop:container laptop:mx-auto  justify-between flex flex-col h-[calc(100vh-56px)]"
     >
       <div
         className="mx-auto flex flex-col justify-center h-[calc(100vh-112px)]"

@@ -52,7 +52,9 @@ const ResponsiveOfferCard: FC<ResponsiveOfferCardProps> = ({
       <div
         onClick={openOfferSheet}
         className={`rounded-t-lg overflow-hidden ${
-          variant === 'vertical' ? '' : 'rounded-lg h-16 float-left mr-3'
+          variant === 'vertical'
+            ? ''
+            : 'rounded-lg h-16 float-left mr-3 max-w-[100px] tablet:max-w-full'
         }`}
       >
         <Image

@@ -10,7 +10,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
@@ -767,7 +767,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
@@ -1524,7 +1524,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
@@ -2221,7 +2221,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
@@ -2918,7 +2918,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
@@ -3615,7 +3615,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
@@ -4372,7 +4372,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
@@ -5129,7 +5129,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
@@ -5886,7 +5886,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
       className=" "
     >
       <div
-        className="mobile:mx-5 laptop:container laptop:mx-auto "
+        className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
           className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "

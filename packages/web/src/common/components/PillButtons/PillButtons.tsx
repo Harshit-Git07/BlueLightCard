@@ -19,9 +19,9 @@ const PillButtons: FC<PillButtonProps> = ({
 
   const classes = cssUtil([
     isSelected ? 'bg-[#001B80] text-white' : 'bg-[#ECEFF2]',
-    `font-['MuseoSans'] text-[#202125] font-light rounded-[56px] desktop:py-3 px-3 mobile:py-2 whitespace-nowrap text-base`,
     disabled ? 'cursor-not-allowed bg-white text-[#DCDCDC] border-[#DCDCDC] border-1' : '',
     outline ? 'bg-white border-[#DCDCDC] border-1' : '',
+    `font-['MuseoSans'] text-[#202125] font-light rounded-[56px] desktop:py-3 px-3 mobile:py-2 whitespace-nowrap text-base min-w-[54px]`,
   ]);
 
   return (

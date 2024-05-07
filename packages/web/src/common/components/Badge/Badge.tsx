@@ -4,7 +4,7 @@ import { BadgeProps } from './types';
 const Badge: FC<BadgeProps> = ({ label, color, size }) => {
   return (
     <div
-      className={`w-fit rounded-tl-lg rounded-br-lg flex items-center justify-center font-semibold font-['MuseoSans'] text-[#202125] ${
+      className={`w-fit rounded-tl-md rounded-br-md tablet:rounded-tl-lg tablet:rounded-br-lg flex items-center justify-center font-semibold font-['MuseoSans'] text-[#202125] ${
         color.includes('bg-') ? color : ''
       } ${
         size === 'large'

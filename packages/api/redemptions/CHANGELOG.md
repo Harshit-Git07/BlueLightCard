@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.13.2...bluelightcard/redemptions-v1.14.0) (2024-05-03)
+
+
+### Features
+
+* [tr-464] mobile datewarhouse ([#1263](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1263)) ([0966e1d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0966e1dd84ce5dd1c453869cd8a025fcb15aba29))
+* [TR-464]: Refactor DWH logging to be handled by event handlers ([#1269](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1269)) ([bf7082c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bf7082c45fd5f26a047b17b46930296dfbc8c61e))
+
+
+### Bug Fixes
+
+* [TR-428]: Add E2E tests for redemption firehose integration & fix firehose integration for compVaultClick ([#1211](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1211)) ([74ed9f1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/74ed9f1b6d10643d8ab9bf53dcd902fce3ad5aa5))
+* allow running sst build without error ([#1271](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1271)) ([8bfd31d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8bfd31db8ff21939eb5633f064e3ddc425e6f300))
+
 ## [1.13.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.13.1...bluelightcard/redemptions-v1.13.2) (2024-04-24)
 
 

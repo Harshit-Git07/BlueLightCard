@@ -67,7 +67,7 @@ const Offers: FC = () => {
   };
   const onCompanyOfferClick = async (
     categoryTitle: string,
-    { offername, companyname, id }: OfferPromosModel,
+    { offername, companyname, id, compid }: OfferPromosModel,
   ) => {
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
@@ -78,7 +78,7 @@ const Offers: FC = () => {
       },
     });
 
-    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], id);
+    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], id, compid);
   };
   const onSlideChange = (carouselName: string) => {
     analytics.logAnalyticsEvent({

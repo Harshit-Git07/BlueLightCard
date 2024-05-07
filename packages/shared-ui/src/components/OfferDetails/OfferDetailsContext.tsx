@@ -24,9 +24,11 @@ const mockedOfferToDisplay: any = {
   companyName: 'SEAT',
 };
 
-type IOfferDetailsContext = { viewOffer: (experiment: string, offerId: number) => Promise<void> };
+type IOfferDetailsContext = {
+  viewOffer: (experiment: string, offerId: number, companyId: number) => Promise<void>;
+};
 const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
-  viewOffer: (experiment: string, offerId: number) => Promise.resolve(),
+  viewOffer: (experiment: string, offerId: number, companyId: number) => Promise.resolve(),
 });
 export const useOfferDetails = () => useContext(OfferDetailsContext);
 
@@ -35,13 +37,22 @@ type ViewOfferProviderProps = {
 };
 
 export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
+  const [offerDetails, setOfferDetails] = useState(mockedOfferDetails);
+  const [offerMeta, setOfferMeta] = useState(mockedOfferToDisplay);
+
   const platformAdapter = usePlatformAdapter();
   const [isOfferOpen, setIsOfferOpen] = useState(false);
   const { OfferDetailsComponent, updateOfferDetailsComponent } =
     useOfferDetailsComponent(platformAdapter);
 
-  const viewOffer = async (experiment: string, offerId: number) => {
+  const viewOffer = async (experiment: string, offerId: number, companyId: number) => {
     await updateOfferDetailsComponent(experiment, offerId);
+
+    setOfferDetails({
+      ...mockedOfferDetails,
+      data: { ...mockedOfferDetails.data, companyId, id: offerId },
+    });
+    setOfferMeta({ ...mockedOfferToDisplay, companyId, offerId });
     setIsOfferOpen(true);
   };
 
@@ -66,9 +77,9 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
           cdnUrl="https://cdn.bluelightcard.co.uk"
           isMobileHybrid={platformAdapter.platform === PlatformVariant.Mobile}
           isOpen={isOfferOpen}
-          offerStatus={mockedOfferDetails.status}
-          offerDetails={mockedOfferDetails.data}
-          offerMeta={mockedOfferToDisplay}
+          offerStatus={offerDetails.status}
+          offerDetails={offerDetails.data}
+          offerMeta={offerMeta}
           onClose={onClose}
           platform={platformAdapter.platform}
         />

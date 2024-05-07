@@ -61,7 +61,7 @@ const SearchResultsContainer: FC = () => {
       },
     });
 
-    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], offerId);
+    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], offerId, companyId);
   };
 
   useEffect(() => {

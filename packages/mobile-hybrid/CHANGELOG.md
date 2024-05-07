@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.13.0...bluelightcard/mobile-hybrid-v1.13.1) (2024-05-07)
+
+
+### Other Changes
+
+* TR-497 Re-ordered mobile-hybrid scripts ([#1295](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1295)) ([63b9cc9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63b9cc98a0afde0f3808f02c4f1ab560de55bbc0))
+
 ## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.12.0...bluelightcard/mobile-hybrid-v1.13.0) (2024-05-03)
 
 

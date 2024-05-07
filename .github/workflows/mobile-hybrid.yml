@@ -228,6 +228,7 @@ jobs:
     needs:
       - install
       - test
+      - changelog
       - staging
     steps:
       - name: Checkout

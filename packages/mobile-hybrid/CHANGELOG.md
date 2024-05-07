@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.13.1...bluelightcard/mobile-hybrid-v1.13.2) (2024-05-07)
+
+
+### Bug Fixes
+
+* TR-498 Fix offer details links to use actual company ID ([#1297](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1297)) ([15b8801](https://github.com/bluelightcard/BlueLightCard-2.0/commit/15b88013a0269886d8fa45340996e01563337c56))
+
 ## [1.13.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.13.0...bluelightcard/mobile-hybrid-v1.13.1) (2024-05-07)
 
 

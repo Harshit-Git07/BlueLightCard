@@ -1,7 +1,6 @@
 import AuthContext from '@/context/Auth/AuthContext';
 import { OfferMeta } from '@/context/OfferSheet/OfferSheetContext';
 import { REDEEM_ENDPOINT } from '@/global-vars';
-import { useLogOfferView } from '@/hooks/useLogOfferView';
 import { useLogVaultCodeRequestClicked } from '@/hooks/useLogVaultCodeRequestClicked';
 import { OfferData } from '@/types/api/offers';
 import { RedeemData, RedeemResponseSchema, RedemptionType } from '@/types/api/redemptions';
@@ -33,7 +32,6 @@ export function useRedeemOffer(
   offerMeta: OfferMeta,
   offerData: OfferData
 ): UseQueryResult<UseRedeemData, Error> {
-  const logOfferView = useLogOfferView();
   const logVaultCodeRequestClicked = useLogVaultCodeRequestClicked({
     companyId: offerMeta.companyId,
     companyName: offerMeta.companyName,
@@ -47,7 +45,6 @@ export function useRedeemOffer(
     queryKey: ['redeemOffer', offerData.id],
     queryFn: async () => {
       logVaultCodeRequestClicked('sheet');
-      logOfferView('sheet', offerMeta);
       const response = await axios.request({
         url: REDEEM_ENDPOINT,
         method: 'POST',

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.50.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.50.1...bluelightcard/web-v1.50.2) (2024-05-08)
+
+
+### Bug Fixes
+
+* remove amplitude view offer hook on redemption ([#1306](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1306)) ([73b1965](https://github.com/bluelightcard/BlueLightCard-2.0/commit/73b1965c8681f25e7467a324aecddfaaac0060d9))
+* TO-711 bottom tenancy banners not showing on mobile responsive for web ([#1282](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1282)) ([aae2d64](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aae2d64055e174154594063f00b1e244e010ef34))
+* TO-716 Company page design tweaks ([#1293](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1293)) ([33480bd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/33480bd4eaf5370e079e9d46f76029765b275af1))
+
 ## [1.50.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.50.0...bluelightcard/web-v1.50.1) (2024-05-03)
 
 

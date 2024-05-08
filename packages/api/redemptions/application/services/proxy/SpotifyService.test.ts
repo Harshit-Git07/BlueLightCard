@@ -6,7 +6,7 @@ import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { SpotifyService } from './SpotifyService';
 
 describe('SpotifyService', () => {
-  async function callSpotifyRedeemService(
+  function callSpotifyRedeemService(
     platform: Platform,
     companyId: number,
     offerId: number,

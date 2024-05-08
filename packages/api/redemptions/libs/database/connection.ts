@@ -66,8 +66,8 @@ export class RawDatabaseCredentials implements IDatabaseCredentials {
     };
   }
 
-  public async toRaw(): Promise<RawDatabaseCredentials> {
-    return this;
+  public toRaw(): Promise<RawDatabaseCredentials> {
+    return Promise.resolve(this);
   }
 }
 
@@ -216,7 +216,7 @@ export class DatabaseConnectionConfig {
     };
   }
 
-  public async toConnection(connectionType: DatabaseConnectionType): Promise<DatabaseConnection> {
+  public toConnection(connectionType: DatabaseConnectionType): Promise<DatabaseConnection> {
     return DatabaseConnection.connect(this, connectionType);
   }
 }
@@ -252,7 +252,7 @@ export class DatabaseConnection implements IDatabaseConnection {
     return new DatabaseConnection(db, sql);
   }
 
-  public static async fromEnvironmentVariables(connectionType: DatabaseConnectionType): Promise<DatabaseConnection> {
+  public static fromEnvironmentVariables(connectionType: DatabaseConnectionType): Promise<DatabaseConnection> {
     const config = DatabaseConnectionConfig.fromEnvironmentVariables();
     return DatabaseConnection.connect(config, connectionType);
   }

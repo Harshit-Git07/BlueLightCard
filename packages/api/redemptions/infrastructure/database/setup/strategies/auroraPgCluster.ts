@@ -34,7 +34,7 @@ import { MIGRATIONS_PATH } from '../migrations/migrationsScriptHandler';
 import { AbstractDatabaseSetupStrategy } from './abstract';
 
 export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<AuroraPgClusterDatabaseConfig> {
-  public async setup(): Promise<IDatabase> {
+  public setup(): Promise<IDatabase> {
     this.ensureAllowedStage();
     const egressSecurityGroup = this.createEgressSecurityGroup();
     const ingressSecurityGroup = this.createIngressSecurityGroup();
@@ -59,7 +59,7 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
     );
 
     this.seedStrategy.createSeedScript(awsDatabaseAdapter, migrationsScript);
-    return awsDatabaseAdapter;
+    return Promise.resolve(awsDatabaseAdapter);
   }
 
   private ensureAllowedStage(): void {

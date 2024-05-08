@@ -27,7 +27,7 @@ describe('Redemption Strategies', () => {
     const mockedLogger = createTestLogger();
     const mockedSilentLogger = createSilentLogger();
 
-    async function callGenericRedeemStrategy(
+    function callGenericRedeemStrategy(
       connection: IDatabaseConnection,
       redemption: Redemption,
       options: { silent?: boolean } = {},
@@ -139,7 +139,7 @@ describe('Redemption Strategies', () => {
       clientType: faker.helpers.arrayElement(['web', 'mobile']),
     };
 
-    async function callVaultRedeemStrategy(
+    function callVaultRedeemStrategy(
       connection: IDatabaseConnection,
       redemption: Redemption,
       params: RedeemParams,

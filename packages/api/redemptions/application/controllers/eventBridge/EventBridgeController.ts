@@ -35,13 +35,13 @@ export abstract class EventBridgeController<ParsedRequest> extends Controller<
     });
   }
 
-  protected async onUnhandledError(_: UnknownEventBridgeEvent, err: unknown): Promise<void> {
+  protected onUnhandledError(_: UnknownEventBridgeEvent, err: unknown): Promise<void> {
     this.logUnhandledError(err);
 
-    throw err;
+    return Promise.reject(err);
   }
 
-  protected async onParseError(request: UnknownEventBridgeEvent, err: Error): Promise<void> {
+  protected onParseError(request: UnknownEventBridgeEvent, err: Error): Promise<void> {
     // Because the request is coming from our own infrastructure, we can assume
     // that the error is due to a bug in our code. Therefore, this should be hanlded
     // the same as any other unhandled error. There is also no option to return an

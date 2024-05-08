@@ -28,7 +28,7 @@ describe('VaultService', () => {
     max: 1_000_000,
   });
 
-  async function makeVaultService(connection: IDatabaseConnection) {
+  function makeVaultService(connection: IDatabaseConnection) {
     const redemptionRepository = new RedemptionsRepository(connection);
     const vaultsRepository = new VaultsRepository(connection);
     const transactionManager = new TransactionManager(connection);
@@ -53,8 +53,8 @@ describe('VaultService', () => {
   });
 
   describe('updateVault', () => {
-    async function callUpdateVault(event: VaultUpdatedEvent) {
-      const service = await makeVaultService(connection);
+    function callUpdateVault(event: VaultUpdatedEvent) {
+      const service = makeVaultService(connection);
       return service.updateVault(event);
     }
 
@@ -402,8 +402,8 @@ describe('VaultService', () => {
   });
 
   describe('createVault', () => {
-    async function callCreateVault(event: VaultCreatedEvent) {
-      const service = await makeVaultService(connection);
+    function callCreateVault(event: VaultCreatedEvent) {
+      const service = makeVaultService(connection);
       return service.createVault(event);
     }
 

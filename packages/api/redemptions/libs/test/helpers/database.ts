@@ -28,7 +28,7 @@ export class RedemptionsTestDatabase {
     private databaseConnectionConfig: DatabaseConnectionConfig,
   ) {}
 
-  private static waitForConnection = async (sql: postgres.Sql) => {
+  private static waitForConnection = (sql: postgres.Sql) => {
     return waitOn(async () => {
       const results = await sql`SELECT * FROM pg_catalog.pg_tables;`;
       if (!results.length) {
@@ -85,7 +85,7 @@ export class RedemptionsTestDatabase {
   /**
    * Get a connection to the database
    */
-  public async getConnection(): Promise<DatabaseConnection> {
+  public getConnection(): Promise<DatabaseConnection> {
     return this.databaseConnectionConfig.toConnection(DatabaseConnectionType.READ_WRITE);
   }
 

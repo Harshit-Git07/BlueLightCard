@@ -33,11 +33,11 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
     return this.atMostOne(results);
   }
 
-  public async createGeneric(genericData: NewGeneric): Promise<Pick<Generic, 'id'>[]> {
+  public createGeneric(genericData: NewGeneric): Promise<Pick<Generic, 'id'>[]> {
     return this.connection.db.insert(genericsTable).values(genericData).returning({ id: genericsTable.id }).execute();
   }
 
-  public async updateByRedemptionId(redemptionId: string, genericData: UpdateGeneric): Promise<Pick<Generic, 'id'>[]> {
+  public updateByRedemptionId(redemptionId: string, genericData: UpdateGeneric): Promise<Pick<Generic, 'id'>[]> {
     return this.connection.db
       .update(genericsTable)
       .set(genericData)
@@ -46,7 +46,7 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
       .execute();
   }
 
-  public async deleteByRedemptionId(redemptionId: string): Promise<Pick<Generic, 'id'>[]> {
+  public deleteByRedemptionId(redemptionId: string): Promise<Pick<Generic, 'id'>[]> {
     return this.connection.db
       .delete(genericsTable)
       .where(eq(genericsTable.redemptionId, redemptionId))

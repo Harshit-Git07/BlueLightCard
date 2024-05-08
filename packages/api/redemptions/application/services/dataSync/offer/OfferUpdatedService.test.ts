@@ -14,7 +14,7 @@ import { OfferUpdatedService } from './OfferUpdatedService';
 describe('OfferUpdatedService', () => {
   const mockedLogger = createTestLogger();
 
-  async function makeOfferUpdatedService(connection: IDatabaseConnection) {
+  function makeOfferUpdatedService(connection: IDatabaseConnection) {
     const redemptionsRepository = new RedemptionsRepository(connection);
     const genericsRepository = new GenericsRepository(connection);
     const transactionManager = new TransactionManager(connection);
@@ -40,8 +40,8 @@ describe('OfferUpdatedService', () => {
   describe('updateOffer', () => {
     type Redemption = typeof redemptionsTable.$inferSelect;
     type Generic = typeof genericsTable.$inferSelect;
-    async function callUpdateOffer(event: OfferUpdatedEvent) {
-      const service = await makeOfferUpdatedService(connection);
+    function callUpdateOffer(event: OfferUpdatedEvent) {
+      const service = makeOfferUpdatedService(connection);
       return service.updateOffer(event);
     }
 

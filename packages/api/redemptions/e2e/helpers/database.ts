@@ -29,7 +29,7 @@ export class E2EDatabaseConnectionManager {
 
   // ============================= SETUP / CLEANUP =============================
 
-  public static async setup(connectionType: DatabaseConnectionType) {
+  public static setup(connectionType: DatabaseConnectionType) {
     const databaseType = DatabaseConfigHelpers.getDatabaseTypeFromEnv();
 
     if (databaseType === DatabaseType.LOCAL) {
@@ -218,7 +218,7 @@ export class E2EDatabaseConnectionManager {
 
   // ================================= HELPERS =================================
 
-  private static async waitForConnection(sql: postgres.Sql) {
+  private static waitForConnection(sql: postgres.Sql) {
     return waitOn(async () => {
       const results = await sql`SELECT * FROM pg_catalog.pg_tables;`;
       if (!results.length) {

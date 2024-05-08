@@ -23,7 +23,7 @@ export abstract class Controller<
     this.logger = new ContextAwareLogger(asyncRequestContext, logger);
   }
 
-  public async invoke(request: Request): Promise<Response> {
+  public invoke(request: Request): Promise<Response> {
     return asyncRequestContext.run(INITIAL_REQUEST_CONTEXT, async () => {
       try {
         this.onRequest?.(request);

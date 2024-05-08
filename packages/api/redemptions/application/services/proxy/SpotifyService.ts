@@ -44,7 +44,7 @@ export class SpotifyService implements ISpotifyService {
     // If so, return the tracking URL with the already redeemed code
     if (codesRedeemed.length) {
       const code = codesRedeemed[0];
-      const trackingUrl = await this.getTrackingUrl(url, code);
+      const trackingUrl = this.getTrackingUrl(url, code);
 
       return {
         kind: 'Ok',
@@ -57,7 +57,7 @@ export class SpotifyService implements ISpotifyService {
 
     // Otherwise, assign a new code to the user
     const { code } = await this.legacyVaultApiRepository.assignCodeToMember(memberId, companyId, offerId, platform);
-    const trackingUrl = await this.getTrackingUrl(url, code);
+    const trackingUrl = this.getTrackingUrl(url, code);
 
     return {
       kind: 'Ok',
@@ -69,7 +69,7 @@ export class SpotifyService implements ISpotifyService {
     };
   }
 
-  private async getTrackingUrl(url: string, code: string) {
+  private getTrackingUrl(url: string, code: string) {
     return url.replace('!!!CODE!!!', code);
   }
 }

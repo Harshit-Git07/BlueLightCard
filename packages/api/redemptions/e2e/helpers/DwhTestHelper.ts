@@ -46,42 +46,42 @@ const logger = new CliLogger();
 export class DwhTestHelper {
   constructor(private readonly s3Client: S3Client = new S3Client()) {}
 
-  public async findCompViewRecordByOfferId(offerId: number) {
+  public findCompViewRecordByOfferId(offerId: number) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPVIEW_DESTINATION_BUCKET,
       (object): object is CompViewRecord => compViewSchema.parse(object).oid_ === offerId,
     );
   }
 
-  public async findCompAppViewRecordByOfferId(offerId: number) {
+  public findCompAppViewRecordByOfferId(offerId: number) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPAPPVIEW_DESTINATION_BUCKET,
       (object): object is CompViewRecord => compViewSchema.parse(object).oid_ === offerId,
     );
   }
 
-  public async findCompClickRecordByOfferId(offerId: number) {
+  public findCompClickRecordByOfferId(offerId: number) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPCLICK_DESTINATION_BUCKET,
       (object): object is CompClickRecord => compClickSchema.parse(object).offer_id === offerId,
     );
   }
 
-  public async findCompAppClickRecordByOfferId(offerId: number) {
+  public findCompAppClickRecordByOfferId(offerId: number) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPAPPCLICK_DESTINATION_BUCKET,
       (object): object is CompClickRecord => compClickSchema.parse(object).offer_id === offerId,
     );
   }
 
-  public async findVaultRecordByOfferId(offerId: number) {
+  public findVaultRecordByOfferId(offerId: number) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_VAULT_DESTINATION_BUCKET,
       (object): object is VaultRecord => vaultSchema.parse(object).offer_id === offerId.toString(),
     );
   }
 
-  private async findObjectInBucket<T>(bucket: string, testObject: (object: unknown) => object is T): Promise<T> {
+  private findObjectInBucket<T>(bucket: string, testObject: (object: unknown) => object is T): Promise<T> {
     return waitOn(
       {
         // Wait for a maximum of 30 seconds

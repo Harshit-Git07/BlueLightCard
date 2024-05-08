@@ -77,8 +77,9 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
 }
 
 export class DisabledDatabaseSeedStrategy extends AbstractDatabaseSeedStrategy {
-  public async seed(): Promise<void> {
+  public seed(): Promise<void> {
     this.logWarnings();
+    return Promise.resolve();
   }
 
   public createSeedScript(): void {

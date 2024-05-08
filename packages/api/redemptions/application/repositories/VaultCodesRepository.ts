@@ -19,11 +19,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
   static readonly key = 'VaultCodesRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
 
-  public async checkIfMemberReachedMaxCodeClaimed(
-    vaultId: string,
-    memberId: string,
-    maxPerUser: number,
-  ): Promise<boolean> {
+  public checkIfMemberReachedMaxCodeClaimed(vaultId: string, memberId: string, maxPerUser: number): Promise<boolean> {
     return this.connection.db
       .select({
         numOfCodesClaimed: count(),

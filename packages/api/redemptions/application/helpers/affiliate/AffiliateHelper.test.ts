@@ -9,13 +9,13 @@ describe('Create Affiliate Tracking URL', () => {
     jest.restoreAllMocks();
   });
 
-  test('should correctly configure Awin tracking URL', async () => {
+  test('should correctly configure Awin tracking URL', () => {
     const url = 'https://www.awin1.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: 'https://www.awin1.com/?clickref=1234' }, kind: 'OK' });
   });
 
-  test('should correctly configure Affiliate Future tracking URL', async () => {
+  test('should correctly configure Affiliate Future tracking URL', () => {
     const url = 'https://scripts.affiliatefuture.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({
@@ -24,13 +24,13 @@ describe('Create Affiliate Tracking URL', () => {
     });
   });
 
-  test('should correctly configure Rakuten tracking URL', async () => {
+  test('should correctly configure Rakuten tracking URL', () => {
     const url = 'https://click.linksynergy.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://click.linksynergy.com/?u1=${memberId}` }, kind: 'OK' });
   });
 
-  test('should correctly configure Affilinet tracking URL', async () => {
+  test('should correctly configure Affilinet tracking URL', () => {
     const url = 'https://being.successfultogether.co.uk/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({
@@ -39,19 +39,19 @@ describe('Create Affiliate Tracking URL', () => {
     });
   });
 
-  test('should correctly configure Webgains tracking URL', async () => {
+  test('should correctly configure Webgains tracking URL', () => {
     const url = 'https://track.webgains.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://track.webgains.com/?clickref=${memberId}` }, kind: 'OK' });
   });
 
-  test('should correctly configure Partnerize tracking URL with MEMID', async () => {
+  test('should correctly configure Partnerize tracking URL with MEMID', () => {
     const url = 'https://prf.hn/MEMID/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://prf.hn/${memberId}/` }, kind: 'OK' });
   });
 
-  test('should correctly configure Partnerize tracking URL with /destination:', async () => {
+  test('should correctly configure Partnerize tracking URL with /destination:', () => {
     const url = 'https://prf.hn/destination:https://example.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({
@@ -60,25 +60,25 @@ describe('Create Affiliate Tracking URL', () => {
     });
   });
 
-  test('should correctly configure Impact Radius tracking URL', async () => {
+  test('should correctly configure Impact Radius tracking URL', () => {
     const url = 'https://impact.example.com/c/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://impact.example.com/c/?subId1=${memberId}` }, kind: 'OK' });
   });
 
-  test('should correctly configure Adtraction tracking URL', async () => {
+  test('should correctly configure Adtraction tracking URL', () => {
     const url = 'https://track.adtraction.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://track.adtraction.com/?epi=${memberId}` }, kind: 'OK' });
   });
 
-  test('should correctly configure Affiliate Gateway tracking URL', async () => {
+  test('should correctly configure Affiliate Gateway tracking URL', () => {
     const url = 'https://www.tagserve.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://www.tagserve.com/?SUBID=${memberId}` }, kind: 'OK' });
   });
 
-  test('should correctly configure Optimise Media tracking URL', async () => {
+  test('should correctly configure Optimise Media tracking URL', () => {
     const url = 'https://clk.omgt1.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://clk.omgt1.com/?UID=${memberId}` }, kind: 'OK' });
@@ -113,19 +113,19 @@ describe('Create Affiliate Tracking URL', () => {
     'qksz.net',
     'tkqlhce.com',
     'tqlkg.com',
-  ])('should correctly configure Commission Junction tracking URL: %s', async (domain) => {
+  ])('should correctly configure Commission Junction tracking URL: %s', (domain) => {
     const url = `https://${domain}/`;
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://${domain}/?sid=${memberId}` }, kind: 'OK' });
   });
 
-  test('should correctly configure Tradedoubler tracking URL', async () => {
+  test('should correctly configure Tradedoubler tracking URL', () => {
     const url = 'https://tradedoubler.com/';
     const trackingUrlData = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(trackingUrlData).toEqual({ data: { url: `https://tradedoubler.com/?epi=${memberId}` }, kind: 'OK' });
   });
 
-  test('should return a 500 error if the url does not exist', async () => {
+  test('should return a 500 error if the url does not exist', () => {
     const url = 'https://non-existant.com/';
     const res = AffiliateHelper.getTrackingUrl(memberId, url);
     expect(res).toEqual({ data: { url, message: 'Affiliate not supported' }, kind: 'NotSupportedAffiliate' });

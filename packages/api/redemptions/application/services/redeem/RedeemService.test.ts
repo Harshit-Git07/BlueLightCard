@@ -23,7 +23,7 @@ describe('RedeemService', () => {
     offerName: faker.string.sample(5),
     clientType: faker.helpers.arrayElement(['web', 'mobile']),
   };
-  async function callRedeemMethod(
+  function callRedeemMethod(
     offerId: number,
     {
       params,

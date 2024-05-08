@@ -40,7 +40,7 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
     return this.atMostOne(results);
   }
 
-  public async updateOneById(id: string, vaultDataToUpdate: UpdateVault): Promise<Pick<Vault, 'id'> | undefined> {
+  public updateOneById(id: string, vaultDataToUpdate: UpdateVault): Promise<Pick<Vault, 'id'> | undefined> {
     return this.connection.db
       .update(vaultsTable)
       .set(vaultDataToUpdate)
@@ -52,7 +52,7 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .then((result) => result?.at(0));
   }
 
-  public async createMany(vaults: NewVault[]): Promise<Pick<Vault, 'id'>[]> {
+  public createMany(vaults: NewVault[]): Promise<Pick<Vault, 'id'>[]> {
     return this.connection.db
       .insert(vaultsTable)
       .values(vaults)

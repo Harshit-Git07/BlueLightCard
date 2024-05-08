@@ -51,13 +51,13 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
     };
   }
 
-  protected async onUnhandledError(
+  protected onUnhandledError(
     request: APIGatewayProxyEventV2,
     err: unknown,
   ): Promise<APIGatewayProxyStructuredResultV2> {
     this.logUnhandledError(err);
 
-    return {
+    return Promise.resolve({
       statusCode: 500,
       body: JSON.stringify({
         meta: {
@@ -69,10 +69,10 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
         'Content-Type': 'application/json',
         ...this.getCorsHeaders(request),
       },
-    };
+    });
   }
 
-  protected async onParseError(
+  protected onParseError(
     request: APIGatewayProxyEventV2,
     err: ParseRequestError,
   ): Promise<APIGatewayProxyStructuredResultV2> {
@@ -86,7 +86,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       },
     });
 
-    return {
+    return Promise.resolve({
       statusCode: 400,
       body: JSON.stringify({
         meta: {
@@ -98,7 +98,7 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
       headers: {
         'Content-Type': 'application/json',
       },
-    };
+    });
   }
 
   // ================================= HELPERS =================================

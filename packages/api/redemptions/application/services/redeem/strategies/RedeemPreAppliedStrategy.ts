@@ -6,11 +6,11 @@ export class RedeemPreAppliedStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemPreAppliedStrategy' as const;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async redeem(redemption: Redemption): Promise<RedeemPreAppliedStrategyResult> {
-    return {
+  redeem(redemption: Redemption): Promise<RedeemPreAppliedStrategyResult> {
+    return Promise.resolve({
       kind: 'Ok',
       redemptionType: 'preApplied',
       redemptionDetails: '',
-    };
+    });
   }
 }

@@ -146,7 +146,7 @@ describe('RedemptionsEventsRepository', () => {
       const result = repository.publishMemberRetrievedRedemptionDetailsEvent(detail);
 
       // Assert
-      expect(result).rejects.toThrow('test error');
+      await expect(result).rejects.toThrow('test error');
     });
   });
 });

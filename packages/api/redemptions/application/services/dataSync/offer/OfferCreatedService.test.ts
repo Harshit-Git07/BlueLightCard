@@ -14,7 +14,7 @@ import { OfferCreatedService } from './OfferCreatedService';
 describe('OfferCreatedService', () => {
   const mockedLogger = createTestLogger();
 
-  async function makeOfferCreatedService(connection: IDatabaseConnection) {
+  function makeOfferCreatedService(connection: IDatabaseConnection) {
     const redemptionsRepository = new RedemptionsRepository(connection);
     const genericsRepository = new GenericsRepository(connection);
     const transactionManager = new TransactionManager(connection);
@@ -38,8 +38,8 @@ describe('OfferCreatedService', () => {
   });
 
   describe('createOffer', () => {
-    async function callCreateOffer(event: OfferCreatedEvent) {
-      const service = await makeOfferCreatedService(connection);
+    function callCreateOffer(event: OfferCreatedEvent) {
+      const service = makeOfferCreatedService(connection);
       return service.createOffer(event);
     }
 

@@ -17,7 +17,6 @@ import { RedemptionsStackEnvironmentKeys } from './constants/environment';
 import { RedemptionsDatabase } from './database/database';
 import { EventBridge } from './eventBridge/eventBridge';
 import {
-  createLinkRule,
   createOfferRule,
   createPromotionUpdatedRule,
   createVaultUpdatedRule,
@@ -89,7 +88,6 @@ export async function Redemptions({ app, stack }: StackContext) {
   const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
 
   new EventBridge(stack, {
-    linkRule: createLinkRule(stack),
     vaultCreatedRule: createVaultCreatedRule(stack, database),
     vaultUpdatedRule: createVaultUpdatedRule(stack, database),
     promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),

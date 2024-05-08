@@ -39,7 +39,7 @@ import { AbstractDatabaseSetupStrategy } from './abstract';
  * use in ephemeral environments such as those used for development and testing. It is not intended for production use.
  */
 export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrategy<RdsPgSingleInstanceDatabaseConfig> {
-  public async setup(): Promise<IDatabase> {
+  public setup(): Promise<IDatabase> {
     this.ensureAllowedStage();
     const egressSecurityGroup = this.createEgressSecurityGroup();
     const ingressSecurityGroup = this.createIngressSecurityGroup();
@@ -62,7 +62,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
       databaseCredentialsSecret,
     );
     this.seedStrategy.createSeedScript(awsDatabaseAdapter, migrationsScript);
-    return awsDatabaseAdapter;
+    return Promise.resolve(awsDatabaseAdapter);
   }
 
   private ensureAllowedStage(): void {

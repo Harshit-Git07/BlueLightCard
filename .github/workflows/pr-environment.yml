@@ -125,6 +125,41 @@ jobs:
         run: |
           echo ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
 
+  backend-discovery:
+    name: Deploy Backend for PR (discovery)
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region: [ 'eu-west-2' ]
+    needs:
+      - install
+      - backend-shared
+    outputs:
+      discovery-api-endpoint: ${{ steps.sst-discovery-outputs.outputs.discoveryApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: ${{matrix.region}}
+      - run: npm run build
+      - name: Deploy Discovery
+        run: npx sst deploy discovery --stage $PR_PREFIX --region ${{matrix.region}}
+      - name: Extract Api URL and set output
+        id: sst-discovery-outputs
+        run: |
+          cat .sst/outputs.json
+          DISCOVERY_URL=$(jq -r '.[].DiscoveryApiEndpoint | select(. != null)' .sst/outputs.json)
+          echo "discoveryApiUrl=$DISCOVERY_URL" >> $GITHUB_OUTPUT
+      - name: Echo outputs
+        run: |
+          echo ${{ steps.sst-discovery-outputs.outputs.discoveryApiUrl }}
+
   # Deploy the frontend
   frontend:
     name: Deploy Frontend BLC UK for PR

@@ -5,6 +5,7 @@ import { Web } from './packages/web/stack';
 import { Shared } from './stacks/stack';
 import { Redemptions } from './packages/api/redemptions/infrastructure/stack';
 import { MemberServicesHub } from './packages/member-services-hub/stack';
+import { Discovery } from "./packages/api/discovery/infrastructure/stack";
 
 export default {
   config(_input) {
@@ -31,6 +32,7 @@ export default {
       // Add async stacks here https://docs.sst.dev/constructs/Stack#async-stacks
       app.stack(Redemptions, { id: 'redemptions' }),
       app.stack(Offers, { id: 'offers' }),
+      app.stack(Discovery, { id: 'discovery' }),
     ]);
 
     app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });

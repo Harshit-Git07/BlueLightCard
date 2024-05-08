@@ -1,0 +1,26 @@
+{
+  "name": "@blc-mono/discovery",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npm run test:unit",
+    "test:unit": "jest",
+    "test:e2e": "dotenv -e ../../../.env -- sst bind vitest run",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "format:staged": "prettier --ignore-unknown --write",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:staged": "eslint --fix",
+    "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain discovery"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/he": "1.2.3"
+  },
+  "devDependencies": {
+    "prettier": "3.2.5",
+    "ts-jest": "^29.1.1"
+  }
+}

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.51.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.50.2...bluelightcard/web-v1.51.0) (2024-05-09)
+
+
+### Features
+
+* disco 235 seed dev local environments on new stack ([#1299](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1299)) ([063f9b8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/063f9b8fc92f9d980b088c3e39b76cebf8076499))
+* move company page components to shared-ui package ([#1197](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1197)) ([71a2a36](https://github.com/bluelightcard/BlueLightCard-2.0/commit/71a2a3655d81c5368014967e80cb8aabba1fb9ae))
+
+
+### Bug Fixes
+
+* remove dependency on shared-ui ([#1310](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1310)) ([d2c897f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d2c897f17fc594e1fbac1764266578f3832ce0a6))
+* remove retry limit on get offer `offerDetails` query ([#1321](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1321)) ([4b4183d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b4183d27dddbcfb8534b2fd877f67f62bbacbf5))
+
 ## [1.50.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.50.1...bluelightcard/web-v1.50.2) (2024-05-08)
 
 

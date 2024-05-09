@@ -10,14 +10,17 @@ import { shuffle } from 'lodash';
 import { BRAND } from '@/global-vars';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
-import Heading from '@/components/Heading/Heading';
-import Container from '@/components/Container/Container';
-import CompanyAbout from '@/components/CompanyAbout/CompanyAbout';
-import ShareButton from '@/components/ShareButton/ShareButton';
-import PillButtons from '@/components/PillButtons/PillButtons';
-import ResponsiveOfferCard from '@/components/ResponsiveOfferCard/ResponsiveOfferCard';
-import Link from '@/components/Link/Link';
-import CampaignCard from '@/components/CampaignCard/CampaignCard';
+import {
+  Container,
+  CompanyAbout,
+  Heading,
+  PillButtons,
+  PlatformVariant,
+  ResponsiveOfferCard,
+  CampaignCard,
+  Link,
+  ShareButton,
+} from '@bluelightcard/shared-ui';
 import { getCompany, getOffersByCompany } from '../common/utils/company/companyData';
 import { ENVIRONMENT } from '@/global-vars';
 import { OfferTypeStrLiterals, offerTypeParser } from '../common/utils/offers/offerTypeParser';
@@ -54,6 +57,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   const { cid: companyId } = router.query;
 
   const isMobile = useMedia('(max-width: 500px)');
+
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
@@ -143,7 +147,10 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       <Head>
         <title>{companyData?.name} offers | Blue Light Card</title>
       </Head>
-      <Container className="desktop:mt-16 mobile:mt-[14px]">
+      <Container
+        className="desktop:mt-16 mobile:mt-[14px]"
+        platform={isMobile ? PlatformVariant.Mobile : PlatformVariant.Desktop}
+      >
         {/* About page (ONLY ON WEB), ShareButton and FavouriteButton */}
         <div className="flex justify-between desktop:items-start mobile:items-center">
           {isMobile && <Link onClickLink={() => void 0}>Back</Link>}
@@ -175,13 +182,16 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                   ENVIRONMENT === 'local' && window.location.port ? `:${window.location.port}` : ''
                 }/company/${companyId}`,
               }}
-              shareLabel="Share"
             />
           </div>
         </div>
         {!isMobile && (
           <div className="w-full">
-            <CompanyAbout CompanyDescription={companyData?.description} />
+            <CompanyAbout
+              CompanyDescription={companyData?.description}
+              CompanyName={''}
+              platform={PlatformVariant.Desktop}
+            />
           </div>
         )}
 
@@ -208,6 +218,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                     }
                   }}
                   isSelected={selectedType === pillType}
+                  platform={isMobile ? PlatformVariant.Mobile : PlatformVariant.Desktop}
                   disabled={
                     pillType !== 'All' &&
                     !offerData?.find((offer: OfferData) => offer.type === pillType)
@@ -285,6 +296,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             <CompanyAbout
               CompanyName={`About ${companyData.name}`}
               CompanyDescription={companyData?.description}
+              platform={PlatformVariant.Mobile}
             />
           </div>
         )}

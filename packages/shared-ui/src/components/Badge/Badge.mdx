@@ -1,0 +1,55 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import * as Badge from './Badge.stories';
+
+<Meta of={Badge} />
+
+# Badge
+
+- [Overview](#overview)
+- [Props](#props)
+- [Usage](#usage)
+
+## Overview
+
+- This component renders a badge with a string. 
+- It accepts dynamic background colors, labels and sizes. 
+- It accepts 2 sizes: large | small. Large should be used for desktop platform, and small for mobile platform.
+- Platform is optional and will be used to define the absolute position of the badge, that only applies if the Badge has a large size.
+
+## Props
+
+<Controls />
+
+## Usage
+
+```js
+  <Badge
+    label='Online'
+    color='bg-[#000000]'
+    size='small'
+  />
+```
+
+- `color` prop must be in the string format `bg-[#000000]` 
+
+## Styling Issues 
+
+- Although you may see all styles being applied correctly in storybook stories, **once you incorporate this component in other packages, the rendering of the styles may not be applied correctly**.
+
+- The shared-ui library may present some Tailwind issues while using this component in other packages, like web or mobile-hybrid.
+Some classes with **arbitrary values** or native get purged by tailwind since they don't exist in the web/mobile-hybrid packages. 
+
+#### **Solution:**
+- The classes that don't apply correctly with tailwind must be **converted to css classes or inline styling**.
+- For static styles, you can add new css classes in `./styles/style.css` file (make sure to add the component name at the start of the class name).
+- For dynamic styles, you can use inline styling, like the background color for the Badge component.
+
+
+## Variants
+
+List of variants can be shown below here.
+
+### Default
+
+<Canvas of={Badge.Default} />

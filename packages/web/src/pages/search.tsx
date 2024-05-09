@@ -1,4 +1,3 @@
-import Container from '@/components/Container/Container';
 import Heading from '@/components/Heading/Heading';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useRouter } from 'next/router';
@@ -40,6 +39,7 @@ import {
   useAmplitudeExperimentComponent,
 } from '@/context/AmplitudeExperiment';
 import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
+import Container from '@/components/Container/Container';
 import { getRedemptionDetails } from '../common/utils/API/getRedemptionDetails';
 
 const he = require('he');

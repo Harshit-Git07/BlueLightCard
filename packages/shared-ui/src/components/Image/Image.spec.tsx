@@ -1,5 +1,4 @@
-import Image from './';
-import { Props } from './';
+import Image, { Props } from './';
 import { render } from '@testing-library/react';
 
 const CDN_URL = 'https://cdn.bluelightcard.co.uk';

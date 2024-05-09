@@ -3,8 +3,8 @@ import { BlackFridayOfferProps, BlackFridayOfferSectionProps } from './types';
 import { ThemeVariant } from '@/types/theme';
 import Button from '@/components/Button/Button';
 import Image from '@/components/Image/Image';
-import Container from '@/components/Container/Container';
 import Heading from '@/components/Heading/Heading';
+import Container from '@/components/Container/Container';
 
 const lightDesign = {
   backgroundColor: 'bg-[#FFFFFF]',

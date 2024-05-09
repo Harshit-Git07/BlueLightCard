@@ -60,7 +60,7 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsSecretName: 'blc-mono-redemptions/NewVaultSecrets',
       // TODO: Temporary until we have vaults for staging
       redemptionsLambdaScriptsEnvironment: 'develop',
-      redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
+      redemptionsLambdaScriptsHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
       redemptionsLambdaScriptsRetrieveAllVaultsPath: 'NewVault/retrieveAllVaults',
       redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',

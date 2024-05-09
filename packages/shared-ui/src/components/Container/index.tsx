@@ -25,12 +25,11 @@ const Container: FC<Props> = ({
   const containerRootClassNames = cssUtil([className ?? '', borderBottomClassNames]);
 
   const dynCss = useCSSConditional({
-    'mx-5': platform === PlatformVariant.Mobile,
     'laptop:container laptop:mx-auto tablet:container tablet:mx-auto':
       platform === PlatformVariant.Desktop,
   });
 
-  const css = useCSSMerge(nestedClassName, dynCss);
+  const css = useCSSMerge('px-5', nestedClassName, dynCss);
 
   return (
     <>

@@ -56,7 +56,6 @@ describe('Badge component', () => {
     };
     render(<Badge {...args} />);
     const badge = screen.getByText('Gift card');
-    expect(badge).toHaveClass('rounded-tl-lg');
-    expect(badge).toHaveClass('rounded-br-lg');
+    expect(badge).toHaveClass('badge-rounded-corners');
   });
 });

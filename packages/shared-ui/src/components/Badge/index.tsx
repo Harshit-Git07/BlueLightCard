@@ -14,10 +14,6 @@ const Badge: FC<Props> = ({ label, color, size, platform }) => {
   const dynCss = useCSSConditional({
     'desktop:top-2 desktop:left-2': platform === PlatformVariant.Desktop,
   });
-  const commonCss =
-    "w-fit rounded-tl-lg rounded-br-lg flex items-center justify-center font-semibold font-['MuseoSans'] text-[#202125]";
-  const largeCss = useCSSMerge('absolute top-0 left-0 px-6 py-2 text-base', commonCss, dynCss);
-  const smallCss = useCSSMerge('px-2 py-0.5 text-xs', commonCss);
 
   /* 
     Tailwind is purging the background color with arbitrary value and rounded corners of the Badge component on web package.
@@ -28,13 +24,21 @@ const Badge: FC<Props> = ({ label, color, size, platform }) => {
 
     i.e. font-['MuseoSans'] works, because we have this class in the web package already in use.
   */
+  // Custom style classes for tailwind purged classes on web or mobile-hybrid
+  const customStyleClasses = 'badge-rounded-corners';
+
+  // Dynamic class for background color must be inline styled
   const backgroundColor = color.includes('bg-') ? color.replace('bg-[', '').replace(']', '') : '';
 
+  /*----- END of tailwind purged classes handling -----*/
+
+  const commonCss = `w-fit flex items-center justify-center font-semibold font-['MuseoSans'] text-[#202125] ${customStyleClasses}`;
+
+  const largeCss = useCSSMerge('absolute top-0 left-0 px-6 py-2 text-base', commonCss, dynCss);
+  const smallCss = useCSSMerge('px-2 py-0.5 text-xs', commonCss);
+
   return (
-    <div
-      className={`${size === 'large' ? largeCss : smallCss} badge-rounded-corners`}
-      style={{ backgroundColor }}
-    >
+    <div className={`${size === 'large' ? largeCss : smallCss}`} style={{ backgroundColor }}>
       {label}
     </div>
   );

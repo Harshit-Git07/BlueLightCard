@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.13.3...bluelightcard/mobile-hybrid-v1.14.0) (2024-05-09)
+
+
+### Features
+
+* added brand to mobile hybrid amplitude events ([#1292](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1292)) ([de316eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/de316eba25f494272da8fee38d43effe624a1e05))
+
 ## [1.13.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.13.2...bluelightcard/mobile-hybrid-v1.13.3) (2024-05-08)
 
 

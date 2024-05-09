@@ -16,6 +16,7 @@ export function useOfferDetails(offer: OfferMeta) {
     queryKey: ['offerDetails', authCtx.authState.idToken, offer?.offerId],
     queryFn: () => getOfferById(authCtx.authState.idToken, offer?.offerId),
     enabled: !!offer?.offerId,
+    retry: false,
   });
 }
 

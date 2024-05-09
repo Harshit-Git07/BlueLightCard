@@ -3,6 +3,7 @@ import { FC, ReactElement } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { datadogRum } from '@datadog/browser-rum';
 import flagsmith from 'flagsmith';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import '../styles/globals.css';
 import {
@@ -45,13 +46,13 @@ if (DATADOG_APP_ID && DATADOG_CLIENT_TOKEN) {
   console.warn('Datadog auth keys are missing.');
 }
 
+const queryClient = new QueryClient();
+
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   // Use the layout defined at the page level, if available
   const getLayout = (Component as NextPageWithLayout).getLayout || ((page: ReactElement) => page);
 
   const renderedPageWithLayout = getLayout(<Component {...pageProps} />);
-
-  const queryClient = new QueryClient();
 
   return (
     <>
@@ -96,6 +97,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
         >
           <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
         </FlagsmithProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );

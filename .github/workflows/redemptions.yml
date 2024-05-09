@@ -191,7 +191,7 @@ jobs:
       - name: Deploy Spec
         env:
           REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
-        run: npm run -s oas -w api/redemptions --region=eu-west-2 --stage=staging --api-version=v1
+        run: npm run -s oas -w packages/api/redemptions  --region=eu-west-2 --stage=staging --api-version=v1
 
   e2e-redemptions:
     name: Run E2E tests (redemptions)
@@ -294,4 +294,4 @@ jobs:
       - name: Deploy Spec
         env:
           REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
-        run: npm run -s oas -w api/redemptions --region=${{matrix.region}} --stage=production --api-version=v1
+        run: npm run -s oas -w packages/api/redemptions --region=${{matrix.region}} --stage=production --api-version=v1

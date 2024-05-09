@@ -6,7 +6,7 @@ import { DwhMemberRedemptionController } from '@blc-mono/redemptions/application
 import { DwhRepository } from '@blc-mono/redemptions/application/repositories/DwhRepository';
 import { DwhLoggingService } from '@blc-mono/redemptions/application/services/DWH/dwhLoggingService';
 
-const logger = new LambdaLogger({ serviceName: 'redemptions-dwh-member-redeem-intent' });
+const logger = new LambdaLogger({ serviceName: 'redemptions-dwh-member-redemption' });
 
 const controller = createInjector()
   // Common

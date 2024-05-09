@@ -92,28 +92,40 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           url: parseOfferUrl(detail.offerUrl).url,
         };
 
-        if (existingRedemptionData.redemptionType === 'vault' && updateRedemptionData.redemptionType === 'vault') {
+        if (
+          updateRedemptionData.redemptionType === 'vault' &&
+          (existingRedemptionData.redemptionType === 'vault' || existingRedemptionData.redemptionType === 'vaultQR')
+        ) {
           /**
-           * if the existing record redemption type is 'vault' and the update data redemption type is also a vault
-           * then we must exit here and not update the redemption for the following reasons:
+           * if the existing record redemption type is 'vault' or 'vaultQR' and the update data redemption type is also
+           * 'vault' (this is default for vault identifier URL) then we must exit here and not update the redemption for
+           * the following reasons:
            *
            * redemptionType has not changed, so does not require to be updated
-           * connection could be overwritten - tblpromotions.link could be an 'affiliate' or 'direct', but tblallOffers.OfferURL value will set connection to 'none'
-           * affiliate could be overwritten - tblpromotions.link could be an 'affiliate', but tblallOffers.OfferURL value will set affiliate to 'null'
-           * offerType will not change as vaults are 'online', 'in-store' vaults have a redemptionType of vaultQr (this is handled by vaultCreated/Updated lambdas)
-           * url value (tblpromotions.link) will be overwritten with tblalloffers.OfferURL value (http(s)://thevault.bluelightcard.co.uk)
+           *
+           * connection could be overwritten for vault
+           * tblpromotions.link could be an 'affiliate' or 'direct', but tblallOffers.OfferURL value will set connection
+           * to 'none'
+           *
+           * affiliate could be overwritten for vault
+           * tblpromotions.link could be an 'affiliate', but tblallOffers.OfferURL value will set affiliate to 'null'
+           *
+           * offerType will not change as vaults are 'online',
+           * 'in-store' vaults have a redemptionType of vaultQr (this is handled by vaultCreated/Updated lambdas)
+           *
+           * url value (tblpromotions.link for vaults, null for vaultQR) will be overwritten with tblalloffers.OfferURL
+           * value (http(s)://thevault.bluelightcard.co.uk)
            *
            * the basis here is, once the redemption record has been created by the offerCreated lambda
            * and then the redemption record has been updated by the vaultCreated lambda
-           * all further updates to the redemption record if it is a vault and is to remain a vault
+           * all further updates to the redemption record if it is a vault or vaultQR and is to remain a vault or vaultQR
            * will be performed by the updateVault and updatePromotions lambdas
            *
-           * the only time a record with a redemptionType of vault will be updated here is if the vault is to be updated to another redemptionType
-           * or another redemptionType is to be updated to a vault
+           * the only time a record with a redemptionType of vault or vaultQR will be updated here is if the vault or
+           * vaultQR is to be updated to another redemptionType or another redemptionType is to be updated to a vault
            */
           this.logger.info({
-            message:
-              'Offer Update - Redemption update by offerId exit: Redemption is a vault, update will overwrite values incorrectly',
+            message: `Offer Update - Redemption update by offerId exit: Redemption is a ${existingRedemptionData.redemptionType}, update will overwrite values incorrectly`,
             context: {
               offerId: detail.offerId,
               companyId: detail.companyId,

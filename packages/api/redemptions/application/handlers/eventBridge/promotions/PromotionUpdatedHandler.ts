@@ -8,7 +8,7 @@ import { RedemptionsRepository } from '@blc-mono/redemptions/application/reposit
 import { PromotionUpdateService } from '@blc-mono/redemptions/application/services/dataSync/Promotions/PromotionUpdateService';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
-const logger: ILogger = new LambdaLogger({ serviceName: `redemptions-redeem-post` });
+const logger: ILogger = new LambdaLogger({ serviceName: `redemptions-updated-promotion` });
 const connection = await DatabaseConnection.fromEnvironmentVariables(DatabaseConnectionType.READ_WRITE);
 
 const controller = createInjector()

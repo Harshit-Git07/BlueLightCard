@@ -23,8 +23,10 @@ const SearchPage: NextPage = () => {
   useDeeplinkRedirect();
 
   useEffect(() => {
-    setSpinner(false);
-  }, [setSpinner]);
+    if (router.isReady && !router.query?.deeplink) {
+      setSpinner(false);
+    }
+  }, [router.isReady, router.query?.deeplink, setSpinner]);
 
   const browseCategories = useMemo(() => {
     return BrowseCategoriesData.map((category) => ({

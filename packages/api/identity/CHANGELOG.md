@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.65.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.64.2...bluelightcard/identity-v1.65.0) (2024-05-09)
+
+
+### Features
+
+* add names ([#1322](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1322)) ([88ee568](https://github.com/bluelightcard/BlueLightCard-2.0/commit/88ee568bab1f7284278ddf15e3ea403869293816))
+* disco 235 seed dev local environments on new stack ([#1299](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1299)) ([063f9b8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/063f9b8fc92f9d980b088c3e39b76cebf8076499))
+
 ## [1.64.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.64.1...bluelightcard/identity-v1.64.2) (2024-05-02)
 
 

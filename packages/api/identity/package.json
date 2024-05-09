@@ -1,6 +1,6 @@
 {
   "name": "@blc-mono/identity",
-  "version": "1.64.2",
+  "version": "1.65.0",
   "scripts": {
     "typecheck": "tsc -noEmit",
     "test": "jest src/ --coverage",

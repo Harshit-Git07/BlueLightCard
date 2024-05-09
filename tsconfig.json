@@ -1,13 +1,16 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "exclude": [
-    "packages"
-  ],
+  "exclude": ["packages"],
+  "compilerOptions": {
+    "paths": {
+      "@blc-mono/core/*": ["./packages/api/core/src/*"]
+    }
+  },
   "ts-node": {
-		"compilerOptions": {
-			"module": "ESNext",
-			"target": "es6",
-      "esModuleInterop": true,
-		}
-	},
+    "compilerOptions": {
+      "module": "ESNext",
+      "target": "es6",
+      "esModuleInterop": true
+    }
+  }
 }

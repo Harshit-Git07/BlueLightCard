@@ -34,11 +34,33 @@ To start the backend run the following (this will deploy the backend to your aws
 npm run dev
 ```
 
+### Seeding
+
+To seed your local environment run the seed command (in another terminal)
+
+> Note: Make sure to swap `[dev name]` with your developer name you deployed using sst with
+
+```sh
+npm run seed -- [dev name]
+```
+
+If successful you will see that the above command starts a mock server, this is mainly for mocking the search endpoint since this endpoint isn't deployed with SST at current, meaning there is no localised service for search, so this is a temporary solution to allow developers to access the search page until this search service is brought into the modernised stack.
+
+Configure the brand using brand flag
+
+```sh
+npm run seed -- [dev name] --brand='blc-au'
+```
+
+### Web
+
 To start the front end run (in another terminal)
 
 ```sh
 npm run dev -w packages/web
 ```
+
+### Remove Stacks
 
 To teardown this environment run (this will remove everything except data storage services like S3 buckets and DynamoDB):
 

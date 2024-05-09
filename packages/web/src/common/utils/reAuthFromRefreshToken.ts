@@ -14,7 +14,7 @@ export async function reAuthFromRefreshToken(username: string, refreshToken: str
       SECRET_HASH: secretHash(username, COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET),
       REFRESH_TOKEN: refreshToken,
     },
-  };
+  } as const;
 
   const cognito = new CognitoIdentityProvider({ region: COGNITO_CLIENT_REGION });
   const command = new InitiateAuthCommand(params);

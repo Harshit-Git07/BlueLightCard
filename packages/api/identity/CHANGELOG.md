@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.66.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.65.0...bluelightcard/identity-v1.66.0) (2024-05-10)
+
+
+### Features
+
+* add spare_email as gsi ([#1323](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1323)) ([d8256c4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d8256c40271eb777b4bb77edf2899b7567946098))
+
 ## [1.65.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.64.2...bluelightcard/identity-v1.65.0) (2024-05-09)
 
 

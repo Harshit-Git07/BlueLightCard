@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.66.0...bluelightcard/identity-v1.67.0) (2024-05-10)
+
+
+### Features
+
+* Update Yalson URLs for hosted UI ([#1331](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1331)) ([6767147](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6767147a10deca7885a585816609b67bee46d833))
+
 ## [1.66.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.65.0...bluelightcard/identity-v1.66.0) (2024-05-10)
 
 

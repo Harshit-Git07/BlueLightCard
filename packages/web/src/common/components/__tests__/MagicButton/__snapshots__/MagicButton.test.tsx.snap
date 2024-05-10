@@ -2,7 +2,7 @@
 
 exports[`Button component snapshot Test renders a button that is diabled 1`] = `
 <button
-  className=" relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] "
+  className=" z-10 relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] "
   disabled={true}
   onClick={[Function]}
 >
@@ -21,7 +21,7 @@ exports[`Button component snapshot Test renders a button that is diabled 1`] = `
 
 exports[`Button component snapshot Test renders a button with animated border 1`] = `
 <button
-  className=" relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] cursor-pointer"
+  className=" z-10 relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] cursor-pointer"
   disabled={false}
   onClick={[Function]}
 >
@@ -29,7 +29,12 @@ exports[`Button component snapshot Test renders a button with animated border 1`
     className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"
   >
     <div
-      className="bg-gradient-to-b from-[#020369] from-25% to-75% to-[#98E5FF] h-full w-full animate-spin"
+      className="bg-gradient-to-r from-[#98E5FF] from-5% via-[#020369] to-95% to-[#98E5FF] z-0 h-full w-full animate-magicButtonGradient"
+      style={
+        {
+          "backgroundSize": "400% 400%",
+        }
+      }
     />
   </div>
   <div

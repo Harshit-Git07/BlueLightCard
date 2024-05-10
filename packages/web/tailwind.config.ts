@@ -32,6 +32,13 @@ const config: Config = {
       fontSize: themeTokens.font.size,
       animation: {
         spin: 'spin 3s linear infinite',
+        magicButtonGradient: 'magicButtonGradient 3s linear infinite',
+      },
+      keyframes: {
+        magicButtonGradient: {
+          '0%, 100%': { 'background-position': '0% 0%' },
+          '50%': { 'background-position': '75% 0%' },
+        },
       },
       boxShadow: {
         offerSheetTop: '0 -2px 8px rgba(0, 0, 0, 0.1)',

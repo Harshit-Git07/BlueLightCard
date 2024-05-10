@@ -52,10 +52,12 @@ export function Identity({ stack }: StackContext) {
     fields: {
       pk: 'string',
       sk: 'string',
+      spare_email: 'string'
     },
     primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
     globalIndexes: {
       gsi1: { partitionKey: 'sk', sortKey: 'pk' },
+      spareEmailIndex: { partitionKey: 'spare_email', sortKey: 'pk' },
     },
   });
 

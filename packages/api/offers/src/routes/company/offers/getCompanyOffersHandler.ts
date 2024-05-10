@@ -4,7 +4,10 @@ import { Response } from '@blc-mono/core/src/utils/restResponse/response';
 import { LegacyCompanyOffersResponse } from '../../../models/legacy/legacyCompanyOffers';
 import { getLegacyUserId } from '../../../utils/getLegacyUserIdFromToken';
 import { getEnvRaw } from '../../../../../core/src/utils/getEnv';
-import { CompanyOffersService, ICompanyOffersService } from '../../../services/CompanyOffersService';
+import {
+  CompanyOffersService,
+  ICompanyOffersService,
+} from '../../../services/CompanyOffersService';
 import { LambdaLogger } from '../../../../../core/src/utils/logger/lambdaLogger';
 import { checkIfEnvironmentVariablesExist } from '../../../utils/validation';
 import { DI_KEYS } from '../../../utils/diTokens';
@@ -62,10 +65,10 @@ export const handler = async (event: APIGatewayEvent) => {
     );
 
     if (!data) {
-      return Response.NoContent();
-    } else {
-      return Response.OK({ message: 'Success', data });
+      return Response.NotFound({ message: 'No offers found' });
     }
+
+    return Response.OK({ message: 'Success', data });
   } catch (error: any) {
     logger.error({ message: 'Error fetching company offer details', body: error });
     return Response.Error(error as Error);

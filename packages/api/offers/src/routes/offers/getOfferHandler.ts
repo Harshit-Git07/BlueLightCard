@@ -24,7 +24,9 @@ let companyOffersService: ICompanyOffersService;
 const stage = getEnvRaw('STAGE') as string;
 const firehose = new FirehoseDeliveryStream(logger);
 
-if (checkIfEnvironmentVariablesExist({ service, blcBaseUrl, offersLegacyApiEndpoint, stage }, logger)) {
+if (
+  checkIfEnvironmentVariablesExist({ service, blcBaseUrl, offersLegacyApiEndpoint, stage }, logger)
+) {
   isEnvironmentVariableExist = true;
   container.register(Logger.key, { useValue: logger });
   container.register(DI_KEYS.BlcBaseUrl, { useValue: blcBaseUrl });
@@ -64,21 +66,25 @@ export const handler = async (event: APIGatewayEvent) => {
     );
 
     if (!data) {
-      return Response.NoContent();
-    } else {
-      if (!isDev(stage)) {
-        //set the stream depending on header sent
-        const stream = source === API_SOURCE.APP ? process.env.FIREHOSE_STREAM_APP! : process.env.FIREHOSE_STREAM_WEB!;
-        const firehoseData = {
-          cid: data.companyId,
-          oid_: data.id,
-          mid: uid,
-          timedate: new Date().toISOString(),
-        };
-        await firehose.send({ stream, data: firehoseData });
-      }
-      return Response.OK({ message: 'Success', data });
+      return Response.NotFound({ message: 'Offer not found' });
     }
+
+    if (!isDev(stage)) {
+      //set the stream depending on header sent
+      const stream =
+        source === API_SOURCE.APP
+          ? process.env.FIREHOSE_STREAM_APP!
+          : process.env.FIREHOSE_STREAM_WEB!;
+      const firehoseData = {
+        cid: data.companyId,
+        oid_: data.id,
+        mid: uid,
+        timedate: new Date().toISOString(),
+      };
+      await firehose.send({ stream, data: firehoseData });
+    }
+
+    return Response.OK({ message: 'Success', data });
   } catch (error: any) {
     logger.error({ message: 'Error fetching offer', body: error });
     return Response.Error(error as Error, HttpStatusCode.INTERNAL_SERVER_ERROR);

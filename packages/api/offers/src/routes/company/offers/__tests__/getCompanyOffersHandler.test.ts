@@ -38,7 +38,9 @@ const validateSuccessfulResponse = (result: any, legacyAPIMockResponseData: any)
   const companyOffers: Offer[] = APIResponseBody.data.offers;
   const legacyOffers = legacyAPIMockResponseData.offers;
   companyOffers.forEach((companyOffer: Offer) => {
-    const legacyOffer: LegacyOffers = legacyOffers.find((offer: LegacyOffers) => offer.id === companyOffer.id);
+    const legacyOffer: LegacyOffers = legacyOffers.find(
+      (offer: LegacyOffers) => offer.id === companyOffer.id,
+    );
     // every legacy offer will have an id, so this makes sure that we have a legacy offer to compare our API offer object with
     expect(legacyOffer).toHaveProperty('id');
     if (legacyOffer) {
@@ -64,7 +66,7 @@ describe('handler', () => {
   beforeAll(() => {
     jest.clearAllMocks();
     container.clearInstances();
-  })
+  });
   it('should return a successful response when the legacy API returns multiple offers', async () => {
     const legacyAPIMockResponse = mockLegacyOfferRetrieveAPI(2);
     axios.get = jest.fn().mockResolvedValue(legacyAPIMockResponse);
@@ -138,8 +140,8 @@ describe('handler', () => {
       },
     };
     const result = await handler(event);
-    expect(result.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
-    expect(result.body).toEqual(JSON.stringify({ message: 'No Content' }));
+    expect(result.statusCode).toEqual(HttpStatusCode.NOT_FOUND);
+    expect(result.body).toEqual(JSON.stringify({ message: 'No offers found' }));
   });
 
   it('should return an error response when the legacy api returns an error', async () => {

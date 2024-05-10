@@ -30,7 +30,11 @@ jest.mock('../../../../../core/src/utils/getEnv', () => ({
   }),
 }));
 
-const validateSuccessfulResponse = (offerId: number, result: any, legacyAPIMockResponseData: any) => {
+const validateSuccessfulResponse = (
+  offerId: number,
+  result: any,
+  legacyAPIMockResponseData: any,
+) => {
   expect(result.statusCode).toEqual(HttpStatusCode.OK);
   const APIResponseBody = JSON.parse(result.body);
   expect(APIResponseBody.message).toEqual('Success');
@@ -40,7 +44,9 @@ const validateSuccessfulResponse = (offerId: number, result: any, legacyAPIMockR
   const companyId = legacyAPIMockResponseData.id;
   const companyLogo = legacyAPIMockResponseData.s3logos;
   const legacyOffers = legacyAPIMockResponseData.offers;
-  const legacyOffer: LegacyOffers = legacyOffers.find((legacyOffer: LegacyOffers) => offerId === legacyOffer.id);
+  const legacyOffer: LegacyOffers = legacyOffers.find(
+    (legacyOffer: LegacyOffers) => offerId === legacyOffer.id,
+  );
 
   expect(legacyOffer).toHaveProperty('id');
   expect(legacyOffer.id).toEqual(offerId);
@@ -147,8 +153,8 @@ describe('handler', () => {
     };
 
     const result = await handler(event);
-    expect(result.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
-    expect(result.body).toEqual(JSON.stringify({ message: 'No Content' }));
+    expect(result.statusCode).toEqual(HttpStatusCode.NOT_FOUND);
+    expect(result.body).toEqual(JSON.stringify({ message: 'Offer not found' }));
   });
 
   it('should return a not found error response when the event is valid but offer is not present in multiple offers from legacy', async () => {
@@ -164,8 +170,8 @@ describe('handler', () => {
     };
 
     const result = await handler(event);
-    expect(result.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
-    expect(result.body).toEqual(JSON.stringify({ message: 'No Content' }));
+    expect(result.statusCode).toEqual(HttpStatusCode.NOT_FOUND);
+    expect(result.body).toEqual(JSON.stringify({ message: 'Offer not found' }));
   });
 
   it('should return an error response when the legacy api returns an error', async () => {

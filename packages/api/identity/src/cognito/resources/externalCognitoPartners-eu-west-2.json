@@ -7,8 +7,8 @@
       },
       {
           "partnersName": "UK Yalson",
-          "callBackUrl": "https://secure.yalsoncc.co.uk/blc_signin",
-          "signoutUrl": "https://secure.yalsoncc.co.uk/blc_callback"
+          "callBackUrl": "https://secure.yalsoncc.co.uk/blc_callback",
+          "signoutUrl": "https://secure.yalsoncc.co.uk/blc_signout"
       },
       {
           "partnersName": "UK Creditec",
@@ -19,8 +19,8 @@
     "DDS": [
       {
         "partnersName": "UK Yalson",
-        "callBackUrl": "https://secure.yalsoncc.co.uk/blc_signin",
-        "signoutUrl": "https://secure.yalsoncc.co.uk/blc_callback"
+        "callBackUrl": "https://secure.yalsoncc.co.uk/dds_callback",
+        "signoutUrl": "https://secure.yalsoncc.co.uk/dds_signout"
       }
     ]
 }

@@ -1,5 +1,6 @@
 import { ThemeVariant } from '../../types';
 import { FC, PropsWithChildren } from 'react';
+import { usePlatformAdapter } from '../../adapters';
 
 export type Props = PropsWithChildren & {
   variant?: ThemeVariant.Primary | ThemeVariant.Secondary | 'primary' | 'secondary';
@@ -21,6 +22,7 @@ const MagicButton: FC<Props> = ({
   transitionDurationMs = 10000,
   children,
 }) => {
+  const platformAdapter = usePlatformAdapter();
   // This isn't whitelabelled. Designs dont have variables for this to be whitelabelled yet.
   const blcAnimatedBg = 'bg-gradient-to-b from-[#020369] from-25% to-75% to-[#98E5FF]';
   const bodyStyles = {

@@ -2,12 +2,9 @@ import React, { useContext, useEffect, useRef } from 'react';
 import DynamicSheet from '../DynamicSheet/DynamicSheet';
 import { OfferSheetController } from './OfferDetailsController';
 import { OfferMeta } from '@/context/OfferSheet/OfferSheetContext';
-import { OfferSheet as SharedOfferSheet } from '@bluelightcard/shared-ui';
 import { useMedia } from 'react-use';
 import { useOfferDetails } from './hooks';
-import { BRAND, CDN_URL } from '@/global-vars';
 import AmplitudeContext from '@/context/AmplitudeContext';
-import { AmplitudeArg, AmplitudeLogParams } from './types';
 
 type OfferSheetProps = {
   offer: OfferMeta | null;
@@ -25,6 +22,8 @@ const OfferSheet: React.FC<OfferSheetProps> = ({ offer, close }) => {
   const offerToDisplay = offer || lastOpenOfferRef.current;
   const offerDetails = useOfferDetails(offerToDisplay as OfferMeta);
   const amplitude = useContext(AmplitudeContext);
+  const isOpen = Boolean(offer);
+
   // TODO should we add redemptionType call here?
   // const redemptionType = useRedemptionType(offerMeta);
 
@@ -63,6 +62,17 @@ const OfferSheet: React.FC<OfferSheetProps> = ({ offer, close }) => {
   //     />
   //   </div>
   // );
+
+  // Manage scrollbar when offer sheet opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      // Disable scrollbar when offer sheet opens
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-enable scrollbar when offer sheet closes
+      document.body.style.overflow = 'visible';
+    }
+  }, [isOpen]);
 
   return (
     <DynamicSheet

@@ -1,17 +1,17 @@
 import { Meta, Canvas, Controls } from '@storybook/blocks';
 
-import * as OfferSheet from './OfferSheet.stories';
+import * as GenericVaultOrPreAppliedPage from './GenericVaultOrPreAppliedPage.stories';
 
-<Meta of={OfferSheet} />
+<Meta of={GenericVaultOrPreAppliedPage} />
 
-# OfferSheet
+# GenericVaultOrPreAppliedPage
 
 - [Overview](#overview)
 - [Props](#props)
 - [Usage](#usage)
 
 ## Overview
-`OfferSheetDetailsPage` & `OfferDetailsErrorPage` don't have stories because they are being handled by offer sheet story variants
+Overview description of the GenericVaultOrPreAppliedPage component...
 
 ## Props
 <Controls />
@@ -29,11 +29,11 @@ import * as OfferSheet from './OfferSheet.stories';
 List of variants can be shown below here.
 
 ### Pending Status
-<Canvas of={OfferSheet.PendingStatus} />
+<Canvas of={GenericVaultOrPreAppliedPage.Loading} />
 
 ### Error Status
-<Canvas of={OfferSheet.ErrorStatus} />
+<Canvas of={GenericVaultOrPreAppliedPage.Error} />
 
 ### Success Status
-<Canvas of={OfferSheet.SuccessStatus} />
+<Canvas of={GenericVaultOrPreAppliedPage.Success} />
 

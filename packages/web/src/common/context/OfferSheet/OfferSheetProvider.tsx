@@ -14,6 +14,8 @@ const OfferSheetProvider: React.FC<OfferSheetProviderProps> = ({ children }) => 
   const setOffer = useCallback(
     (offer: OfferMeta | null) => {
       if (offer) {
+        // TODO: Remove once company page uses shared ui offer sheet
+        // Otherwise, it will log offer view amplitude event twice because its already triggering in shared ui offer sheet
         logOfferView('sheet', offer);
       }
       setOfferState(offer);

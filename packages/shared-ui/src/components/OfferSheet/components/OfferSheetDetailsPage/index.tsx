@@ -1,16 +1,33 @@
 import { useCSSMerge, useCSSConditional } from '../../../../hooks/useCSS';
 import { PlatformVariant } from '../../../../types';
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton from '../../../MagicButton';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
+import { RedemptionPageController } from '../RedemptionPage/RedemptionPageController';
+
+import { getRedemptionDetails } from '../../../../api';
+import { usePlatformAdapter } from '../../../../adapters';
+import { RedemptionType } from '../../types';
 
 const OfferSheetDetailsPage: FC = () => {
-  const { offerDetails: offerData, showRedemptionPage } = useAtomValue(offerSheetAtom);
+  const { offerDetails: offerData, showRedemptionPage, offerMeta } = useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
+  const platformAdapter = usePlatformAdapter();
+  const [redemptionType, setRedemptionType] = useState<RedemptionType | undefined>(undefined);
+
+  useEffect(() => {
+    // TODO: Fix offer sheet state to not have empty object
+    const checkIfOfferDataIsNotEmpty = Object.keys(offerData).length;
+    if (checkIfOfferDataIsNotEmpty && offerData.id) {
+      getRedemptionDetails(platformAdapter, offerData.id).then((data) => {
+        setRedemptionType(data.data.redemptionType);
+      });
+    }
+  }, [offerData]);
 
   const labels = useLabels(offerData);
   const { platform } = useAtomValue(offerSheetAtom);
@@ -20,12 +37,14 @@ const OfferSheetDetailsPage: FC = () => {
   });
   const css = useCSSMerge('', dynCss);
 
-  if (showRedemptionPage) {
+  if (showRedemptionPage && redemptionType) {
     return (
-      <div>
-        Here should be displayed the redemption controller to display the correct screen for each
-        redemption type
-      </div>
+      <RedemptionPageController
+        redemptionType={redemptionType}
+        companyName={offerMeta?.companyName || ''}
+        offerId={Number(offerData.id)}
+        offerName={offerData.name || ''}
+      />
     );
   }
 

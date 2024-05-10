@@ -3,18 +3,17 @@ import LoadingSpinner from '../../../LoadingSpinner';
 import OfferSheetDetailsPage from '../OfferSheetDetailsPage';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
 import { OfferStatus } from '../../types';
-import { exhaustiveCheck } from '../../../../utils/exhaustiveCheck';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
+import { exhaustiveCheck } from '../../../../utils/exhaustiveCheck';
 
 export type Props = {
-  offerStatus: OfferStatus | undefined;
+  offerStatus: OfferStatus;
 };
 
 const OfferSheetControler: FC<Props> = ({ offerStatus }) => {
   const { offerDetails, showRedemptionPage } = useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
-
   switch (offerStatus) {
     case 'pending': {
       if (showRedemptionPage) {

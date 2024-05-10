@@ -2,6 +2,9 @@
 import { PlatformVariant } from '../../types';
 import OfferSheet, { Props } from '.';
 import { render } from '@testing-library/react';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
+
+const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
 
 const props: Props = {
   platform: PlatformVariant.Desktop,
@@ -9,8 +12,8 @@ const props: Props = {
   onClose: jest.fn(),
   height: '90%',
   offerMeta: {
-    offerId: '3802',
-    companyId: '4016',
+    offerId: 3802,
+    companyId: 4016,
     companyName: 'SEAT',
   },
   offerDetails: {
@@ -32,12 +35,24 @@ const props: Props = {
 };
 
 describe('smoke test', () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render component without error', () => {
-    render(<OfferSheet {...props} />);
+    render(
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <OfferSheet {...props} />
+      </PlatformAdapterProvider>,
+    );
   });
 
   it('should render close button', () => {
-    const { container } = render(<OfferSheet {...props} />);
+    const { container } = render(
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <OfferSheet {...props} />
+      </PlatformAdapterProvider>,
+    );
 
     const closeButton = container.querySelector(
       'div > div > div > div:nth-child(2) > div:nth-child(1)',
@@ -47,7 +62,11 @@ describe('smoke test', () => {
   });
 
   it('should render offer details', () => {
-    const { getByRole, getByText } = render(<OfferSheet {...props} />);
+    const { getByRole, getByText } = render(
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <OfferSheet {...props} />
+      </PlatformAdapterProvider>,
+    );
 
     expect(getByRole('button', { name: /get discount/i })).toBeTruthy();
     expect(getByText(/Save with SEAT/i)).toBeTruthy();

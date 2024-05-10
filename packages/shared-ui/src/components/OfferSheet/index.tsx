@@ -3,8 +3,9 @@ import { FC, useEffect } from 'react';
 import DynamicSheet from '../DynamicSheet';
 import { useSetAtom } from 'jotai';
 import { offerSheetAtom } from './store';
-import { OfferDetails, OfferMeta, OfferStatus } from './types';
+import { OfferDetails, OfferMeta, OfferStatus, RedemptionType } from './types';
 import OfferSheetControler from './components/OfferSheetControler';
+import events from '../../utils/amplitude/events';
 
 export type Props = SharedProps & {
   isOpen?: boolean;
@@ -17,6 +18,7 @@ export type Props = SharedProps & {
   isMobileHybrid?: boolean;
   amplitudeEvent: AmplitudeEvent;
   BRAND: string;
+  redemptionType?: RedemptionType;
 };
 
 const OfferSheet: FC<Props> = ({
@@ -31,43 +33,65 @@ const OfferSheet: FC<Props> = ({
   isMobileHybrid,
   amplitudeEvent,
   BRAND,
+  redemptionType,
 }) => {
   const setOfferSheetData = useSetAtom(offerSheetAtom);
 
   useEffect(() => {
+    if (!offerMeta && !offerDetails) return;
     setOfferSheetData((prev) => ({
       ...prev,
       isOpen,
       onClose,
       platform,
       cdnUrl,
+      offerDetails: { ...offerDetails },
+      offerMeta: { ...offerMeta },
       isMobileHybrid: isMobileHybrid || false,
       amplitudeEvent,
       BRAND,
     }));
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && offerMeta && offerDetails && amplitudeEvent) {
+      amplitudeEvent({
+        event: events.OFFER_VIEWED,
+        params: {
+          company_id: String(offerMeta.companyId),
+          company_name: offerMeta.companyName,
+          offer_id: String(offerMeta.offerId),
+          offer_name: offerDetails.name,
+          source: 'sheet',
+          origin: isMobileHybrid ? PlatformVariant.Mobile : PlatformVariant.Desktop,
+          redemption_type: redemptionType,
+        },
+      });
+    }
+  }, [isOpen, offerMeta, offerDetails]);
+
+  // Manage scrollbar when offer sheet opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      // Disable scrollbar when offer sheet opens
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-enable scrollbar when offer sheet closes
+      document.body.style.overflow = 'visible';
+    }
   }, [isOpen]);
 
-  useEffect(() => {
-    if (offerMeta) {
-      setOfferSheetData((prev) => ({ ...prev, offerMeta }));
-    }
-  }, [offerMeta]);
-
-  useEffect(() => {
-    if (offerDetails) {
-      setOfferSheetData((prev) => ({ ...prev, offerDetails }));
-    }
-  }, [offerDetails]);
-
   return (
-    <DynamicSheet
-      platform={platform}
-      showCloseButton
-      containerClassName="flex flex-col justify-between"
-      height={height}
-    >
-      <OfferSheetControler offerStatus={offerStatus} />
-    </DynamicSheet>
+    <>
+      <DynamicSheet
+        platform={platform}
+        showCloseButton
+        containerClassName="flex flex-col justify-between"
+        height={height}
+      >
+        <OfferSheetControler offerStatus={offerStatus} />
+      </DynamicSheet>
+    </>
   );
 };
 

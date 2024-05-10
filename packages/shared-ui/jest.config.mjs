@@ -4,6 +4,8 @@ const config = {
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^src/(.*)$': '<rootDir>/src/$1',
+    '\\.(scss|sass|css)$': 'identity-obj-proxy',
   },
   testPathIgnorePatterns: ['.rollup.cache', 'dist'],
 };

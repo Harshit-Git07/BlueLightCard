@@ -33,14 +33,19 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   const [redemptionType, setRedemptionType] = useState('');
 
   const getOfferDetailsComponent = (experiment: string, redemptionType: string) => {
-    if (redemptionType === 'vault' && experiment === 'treatment') {
-      return OfferSheet;
+    const offerDetailsComponent = {
+      vault: OfferSheet,
+      generic: OfferSheet,
+      preApplied: OfferSheet,
+    }[redemptionType];
+
+    if (offerDetailsComponent && experiment === 'treatment') {
+      return offerDetailsComponent;
     }
 
     if (redemptionType !== '') {
       return OfferDetailsLink;
     }
-
     return EmptyOfferDetails;
   };
 

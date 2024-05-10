@@ -60,6 +60,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint --ext .ts,.tsx",
     "build": "rollup -c",
+    "build:watch": "rollup -c --watch",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:watch": "jest --watch",

@@ -1,7 +1,10 @@
+import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
 import MagicButton from './';
 import { Props } from './';
 import { render, screen } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+
+const mockPlatformAdapter = useMockPlatformAdapter();
 
 describe('Button component', () => {
   let props: Props;
@@ -12,7 +15,11 @@ describe('Button component', () => {
 
   describe('smoke test', () => {
     it('should render component without error', () => {
-      render(<MagicButton {...props} />);
+      render(
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <MagicButton {...props} />
+        </PlatformAdapterProvider>,
+      );
 
       const button = screen.getByRole('button');
 
@@ -23,9 +30,12 @@ describe('Button component', () => {
   describe('snapshot Test', () => {
     it('renders a button with animated border', () => {
       const component = renderer.create(
-        <MagicButton variant="secondary" animate>
-          Button
-        </MagicButton>,
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <MagicButton variant="secondary" animate>
+            Button
+          </MagicButton>
+          ,
+        </PlatformAdapterProvider>,
       );
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
@@ -33,9 +43,12 @@ describe('Button component', () => {
 
     it('renders a button that is diabled', () => {
       const component = renderer.create(
-        <MagicButton variant="primary" disabled>
-          Button
-        </MagicButton>,
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <MagicButton variant="primary" disabled>
+            Button
+          </MagicButton>
+          ,
+        </PlatformAdapterProvider>,
       );
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();

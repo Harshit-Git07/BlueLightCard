@@ -10,7 +10,7 @@ import Accordion from '../../../Accordion';
 import Markdown from 'markdown-to-jsx';
 import amplitudeEvents from '../../../../utils/amplitude/events';
 
-type Props = {
+export type Props = {
   showOfferDescription?: boolean;
   showShareFavorite?: boolean;
   showTerms?: boolean;
@@ -35,7 +35,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
 
   useEffect(() => {
     setImageSource(offerData?.companyLogo ?? finalFallbackImage);
-  }, [offerData]);
+  }, []);
 
   return (
     <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-museo">

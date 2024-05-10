@@ -4,6 +4,8 @@ import { useOfferDetailsComponent } from './useOfferDetailsComponent';
 import { usePlatformAdapter } from '../../adapters';
 import { OfferDetails, OfferMeta, OfferStatus } from '../OfferSheet/types';
 import { z } from 'zod';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { offerSheetAtom } from '../OfferSheet/store';
 
 type IOfferDetailsContext = {
   viewOffer: (experiment: string, offerId: number, companyId: number) => Promise<void>;
@@ -32,7 +34,8 @@ const v5ResponseSchema = z.object({
 
 export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
   const platformAdapter = usePlatformAdapter();
-  const [isOfferOpen, setIsOfferOpen] = useState(false);
+  const { isOpen } = useAtomValue(offerSheetAtom);
+  const setOfferAtom = useSetAtom(offerSheetAtom);
   const { OfferDetailsComponent, updateOfferDetailsComponent } =
     useOfferDetailsComponent(platformAdapter);
 
@@ -56,8 +59,9 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
         const data = v5ResponseSchema.parse(JSON.parse(response.body)).data;
         setOfferDetails(data as OfferDetails);
         setOfferMeta({
-          offerId: data.id.toString(),
-          companyId: data.companyId.toString(),
+          offerId: data.id,
+          companyId: data.companyId,
+          // TODO: Company name is not present in the V5 API response
           companyName: '',
         });
         setOfferStatus('success');
@@ -74,27 +78,30 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
         type: undefined,
       });
       setOfferMeta({
-        companyId: companyId.toString(),
+        companyId: companyId,
         companyName: '',
-        offerId: offerId.toString(),
+        offerId: offerId,
       });
     }
 
     await updateOfferDetailsComponent(experiment, offerId);
-    setIsOfferOpen(true);
+    setOfferAtom((prev) => ({ ...prev, isOpen: true }));
   };
 
   const onClose = () => {
-    setIsOfferOpen(false);
+    setOfferAtom((prev) => ({ ...prev, isOpen: false }));
+    // Delay the reset of the offer details to allow the animation to complete
+    setTimeout(() => {
+      setOfferAtom((prev) => ({ ...prev, showRedemptionPage: false }));
+    }, 300);
   };
 
   return (
     <OfferDetailsContext.Provider value={{ viewOffer }}>
       {children}
-
       <div
         className={`w-full h-full transition-visibility duration-1000 ${
-          isOfferOpen ? 'visible' : 'invisible'
+          isOpen ? 'visible' : 'invisible'
         }`}
       >
         <OfferDetailsComponent
@@ -104,7 +111,7 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
           BRAND="blc-uk"
           cdnUrl="https://cdn.bluelightcard.co.uk"
           isMobileHybrid={platformAdapter.platform === PlatformVariant.Mobile}
-          isOpen={isOfferOpen}
+          isOpen={isOpen}
           offerStatus={offerStatus}
           offerDetails={offerDetails}
           offerMeta={offerMeta}

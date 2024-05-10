@@ -4,11 +4,21 @@ import { PlatformVariant } from '../../types';
 import { useSetAtom } from 'jotai';
 import { offerSheetAtom } from './store';
 import { useEffect } from 'react';
+import { IPlatformAdapter, PlatformAdapterProvider } from '../../adapters';
 
 const componentMeta: Meta<typeof OfferSheet> = {
   title: 'Component System/Offer Sheet',
   component: OfferSheet,
 };
+
+const mockPlatformAdapter = {
+  invokeV5Api: () =>
+    Promise.resolve({ statusCode: 200, body: "{ data: { redemptionType: 'vault' } }" }),
+  logAnalyticsEvent: () => {},
+  navigate: () => {},
+  navigateExternal: () => {},
+  platform: PlatformVariant.Mobile,
+} satisfies IPlatformAdapter;
 
 const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
@@ -20,7 +30,7 @@ const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
       platform: PlatformVariant.Desktop,
       cdnUrl: 'https://cdn.bluelightcard.co.uk',
       isMobileHybrid: false,
-      offerMeta: { offerId: '3802', companyId: '4016', companyName: 'SEAT' },
+      offerMeta: { offerId: 3802, companyId: 4016, companyName: 'SEAT' },
       offerDetails: {
         companyId: 4016,
         companyLogo: 'companyimages/complarge/retina/',
@@ -37,7 +47,9 @@ const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
 
   return (
     <div style={{ minHeight: 250 }}>
-      <OfferSheet {...args} />
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <OfferSheet {...args} />
+      </PlatformAdapterProvider>
     </div>
   );
 };

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.14.0...bluelightcard/mobile-hybrid-v1.15.0) (2024-05-13)
+
+
+### Features
+
+* add offer sheet to mobile hybrid for generic/vault/pre applied offers ([#1234](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1234)) ([f9ffcf1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f9ffcf1058b8480bbcbdb525c63c7f4f256c1403))
+
+
+### Bug Fixes
+
+* [DISCO-199] ordering of types page render ([#1303](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1303)) ([981501f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/981501fa49eb37be501f6a94511a4fd860705736))
+* TR-534 company name missing ([#1334](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1334)) ([ed1431e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed1431e9ea5e02e9fa17b42f01f34c5cc1fd1677))
+
 ## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.13.3...bluelightcard/mobile-hybrid-v1.14.0) (2024-05-09)
 
 

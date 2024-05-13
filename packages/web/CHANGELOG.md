@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.53.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.52.0...bluelightcard/web-v1.53.0) (2024-05-13)
+
+
+### Features
+
+* all events populated with brand ([#1335](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1335)) ([2367731](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2367731a9768b07f472c76d82a22021117a44f9f))
+
 ## [1.52.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.51.0...bluelightcard/web-v1.52.0) (2024-05-10)
 
 

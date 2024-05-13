@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.52.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.51.0...bluelightcard/web-v1.52.0) (2024-05-10)
+
+
+### Features
+
+* add offer sheet to mobile hybrid for generic/vault/pre applied offers ([#1234](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1234)) ([f9ffcf1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f9ffcf1058b8480bbcbdb525c63c7f4f256c1403))
+
+
+### Bug Fixes
+
+* TR-510 Fixed magic button gradient animation for iOS/Safari ([#1333](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1333)) ([7d43f97](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d43f974fcbcea19580b3f64af9e71b14439d4a0))
+
 ## [1.51.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.50.2...bluelightcard/web-v1.51.0) (2024-05-09)
 
 

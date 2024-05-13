@@ -78,7 +78,7 @@ const Offers: FC = () => {
       },
     });
 
-    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], id, compid);
+    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], id, compid, companyname);
   };
   const onSlideChange = (carouselName: string) => {
     analytics.logAnalyticsEvent({

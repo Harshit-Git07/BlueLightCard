@@ -8,10 +8,16 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../OfferSheet/store';
 
 type IOfferDetailsContext = {
-  viewOffer: (experiment: string, offerId: number, companyId: number) => Promise<void>;
+  viewOffer: (
+    experiment: string,
+    offerId: number,
+    companyId: number,
+    companyName: string,
+  ) => Promise<void>;
 };
 const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
-  viewOffer: (experiment: string, offerId: number, companyId: number) => Promise.resolve(),
+  viewOffer: (experiment: string, offerId: number, companyId: number, companyName: string) =>
+    Promise.resolve(),
 });
 export const useOfferDetails = () => useContext(OfferDetailsContext);
 
@@ -43,7 +49,12 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
   const [offerDetails, setOfferDetails] = useState<OfferDetails | undefined>();
   const [offerStatus, setOfferStatus] = useState<OfferStatus>('pending');
 
-  const viewOffer = async (experiment: string, offerId: number, companyId: number) => {
+  const viewOffer = async (
+    experiment: string,
+    offerId: number,
+    companyId: number,
+    companyName: string,
+  ) => {
     /*
     Run the V5 api call when the experiment is active
     Similar logic to useOfferDetailsComponent.tsx
@@ -61,8 +72,7 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
         setOfferMeta({
           offerId: data.id,
           companyId: data.companyId,
-          // TODO: Company name is not present in the V5 API response
-          companyName: '',
+          companyName: companyName,
         });
         setOfferStatus('success');
       }
@@ -79,7 +89,7 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
       });
       setOfferMeta({
         companyId: companyId,
-        companyName: '',
+        companyName: companyName,
         offerId: offerId,
       });
     }

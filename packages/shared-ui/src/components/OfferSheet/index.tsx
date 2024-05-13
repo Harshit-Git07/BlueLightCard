@@ -51,7 +51,7 @@ const OfferSheet: FC<Props> = ({
       amplitudeEvent,
       BRAND,
     }));
-  }, []);
+  }, [offerMeta, offerDetails, isMobileHybrid]);
 
   useEffect(() => {
     if (isOpen && offerMeta && offerDetails && amplitudeEvent) {

@@ -1,7 +1,7 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { unpackJWT } from '@core/utils/unpackJWT';
 
-import { AMPLITUDE_API_KEY } from '@/global-vars';
+import { AMPLITUDE_API_KEY, BRAND } from '@/global-vars';
 import EVENTS from './events';
 import { AMPLITUDE_LOG_LEVEL, AMPLITUDE_SERVER_ZONE } from '@/utils/amplitude/amplitude';
 
@@ -35,9 +35,10 @@ function scrolledToBlock(scrolledPercentage: number): number {
   return 0;
 }
 
-function logMembersHomePageScrollDepth(depth: number) {
+export function logMembersHomePageScrollDepth(depth: number) {
   const eventProperties = {
     scroll_depth_percentage: depth,
+    brand: BRAND,
   };
   amplitude.track(EVENTS.HOMEPAGE_VIEWED, eventProperties);
 }
@@ -65,6 +66,7 @@ export async function logSearchCompanyEvent(companyId: string, companyName: stri
   const eventProperties = {
     company_id: companyId,
     company_name: companyName,
+    brand: BRAND,
   };
   await amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties).promise;
 }
@@ -73,6 +75,7 @@ export async function logSearchCategoryEvent(categoryId: string, categoryName: s
   const eventProperties = {
     category_id: categoryId,
     category_name: categoryName,
+    brand: BRAND,
   };
   await amplitude.track(EVENTS.SEARCH_BY_CATEGORY_STARTED, eventProperties).promise;
 }
@@ -80,6 +83,7 @@ export async function logSearchCategoryEvent(categoryId: string, categoryName: s
 export async function logSearchTermEvent(searchTerm: string) {
   const eventProperties = {
     search_term: searchTerm,
+    brand: BRAND,
   };
   if (searchTerm) {
     await amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties).promise;
@@ -96,6 +100,7 @@ export async function logSearchResultsViewed(searchTerm?: string, resultsCount?:
   const searchResultsEvent = {
     search_term: searchTerm ?? '',
     number_of_results: resultsCount ?? 0,
+    brand: BRAND,
   };
   await amplitude.track(EVENTS.SEARCH_RESULTS_VIEWED, searchResultsEvent).promise;
 }
@@ -117,6 +122,7 @@ export async function logSearchCardClicked(
     number_of_results: resultsCount ?? 0,
     search_term: searchTerm ?? '',
     search_result_number: searchResultNumber ?? 0,
+    brand: BRAND,
   };
   await amplitude.track(EVENTS.SEARCH_RESULTS_CARD_CLICKED, eventProperties).promise;
 }
@@ -125,6 +131,7 @@ export async function logSerpSearchStarted(searchTerm?: string, resultsCount?: n
   const searchResultsEvent = {
     search_term: searchTerm ?? '',
     number_of_results: resultsCount ?? 0,
+    brand: BRAND,
   };
   await amplitude.track(EVENTS.SERP_SEARCH_STARTED, searchResultsEvent).promise;
 }

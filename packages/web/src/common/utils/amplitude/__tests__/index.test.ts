@@ -1,6 +1,8 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import * as target from '../index';
 import jwt_decode from 'jwt-decode';
+import EVENTS from '../../amplitude/events';
+import { logMembersHomePageScrollDepth, logSearchTermEvent } from '../../amplitude/index';
 
 const mockedUserId = '1234';
 
@@ -8,6 +10,7 @@ jest.mock('jwt-decode');
 jest.mock('@amplitude/analytics-browser');
 jest.mock('@/global-vars', () => ({
   AMPLITUDE_API_KEY: 'API_KEY',
+  BRAND: 'blc-uk',
 }));
 
 const jwtDecodeMock = jest.mocked(jwt_decode);
@@ -42,5 +45,31 @@ describe('Initialise Amplitude', () => {
 
       expect(amplitudeMock.setSessionId).toHaveBeenCalledWith(5678);
     });
+  });
+
+  it('should call logMembersHomePageScrollDepth with correct parameters', () => {
+    const depth = 50;
+    const eventProperties = {
+      scroll_depth_percentage: depth,
+      brand: 'blc-uk',
+    };
+
+    logMembersHomePageScrollDepth(depth);
+
+    expect(amplitude.track).toHaveBeenCalledWith(EVENTS.HOMEPAGE_VIEWED, eventProperties);
+  });
+
+  it('should call logSearchTermEvent with correct parameters when searchTerm is provided', async () => {
+    const searchTerm = 'test';
+    const eventProperties = {
+      search_term: searchTerm,
+      brand: 'blc-uk',
+    };
+    const trackMock = jest.spyOn(amplitude, 'track');
+    trackMock.mockResolvedValue({ promise: Promise.resolve() } as never);
+
+    await logSearchTermEvent(searchTerm);
+
+    expect(trackMock).toHaveBeenCalledWith(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties);
   });
 });

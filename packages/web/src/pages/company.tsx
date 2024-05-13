@@ -167,7 +167,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                 await amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
                   company_id: companyData?.id,
                   company_name: companyData?.name,
-                  brand: BRAND,
                 });
               }
             }}
@@ -213,7 +212,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                         company_id: companyData?.id,
                         company_name: companyData?.name,
                         filter_name: pillType,
-                        brand: BRAND,
                       });
                     }
                   }}
@@ -246,7 +244,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                         await amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
                           company_id: companyData?.id,
                           company_name: companyData?.name,
-                          brand: BRAND,
                           position: index + 1,
                           offer_id: offer?.id,
                           offer_name: offer?.name,

@@ -1,5 +1,7 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { ServerZoneType } from '@amplitude/analytics-types/lib/esm/server-zone';
+import { BRAND } from '@/global-vars';
+
 const { LogLevel } = amplitude.Types;
 
 export const AMPLITUDE_SERVER_ZONE: ServerZoneType = 'EU';
@@ -48,7 +50,12 @@ export class Amplitude {
       throw new Error('Amplitude is not initialised');
     }
 
-    return amplitude.track(event, data).promise;
+    const dataWithBrand = {
+      ...data,
+      brand: BRAND,
+    };
+
+    return amplitude.track(event, dataWithBrand).promise;
   }
 
   trackEvent(event: string, data: any) {
@@ -56,6 +63,11 @@ export class Amplitude {
       throw new Error('Amplitude is not initialised');
     }
 
-    amplitude.track(event, data);
+    const dataWithBrand = {
+      ...data,
+      brand: BRAND,
+    };
+
+    amplitude.track(event, dataWithBrand);
   }
 }

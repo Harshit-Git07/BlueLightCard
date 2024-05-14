@@ -4,10 +4,7 @@ import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda'
 import { Response } from '../../../../core/src/utils/restResponse/response';
 import { HttpStatusCode } from '../../../../core/src/types/http-status-code.enum';
 import { LegacyCompanyOffersResponse } from '../../models/legacy/legacyCompanyOffers';
-import { API_SOURCE } from '../../utils/global-constants';
 import { getLegacyUserId } from '../../utils/getLegacyUserIdFromToken';
-import { FirehoseDeliveryStream } from '../../../../core/src/utils/firehose';
-import { isDev } from '../../../../core/src/utils/checkEnvironment';
 import { CompanyOffersService, ICompanyOffersService } from '../../services/CompanyOffersService';
 import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { getEnvRaw } from '../../../../core/src/utils/getEnv';
@@ -22,7 +19,6 @@ const offersLegacyApiEndpoint = getEnvRaw('LEGACY_OFFERS_API_ENDPOINT');
 const logger = new LambdaLogger({ serviceName: `${service}-get-offer-detail` });
 let companyOffersService: ICompanyOffersService;
 const stage = getEnvRaw('STAGE') as string;
-const firehose = new FirehoseDeliveryStream(logger);
 
 if (
   checkIfEnvironmentVariablesExist({ service, blcBaseUrl, offersLegacyApiEndpoint, stage }, logger)
@@ -67,21 +63,6 @@ export const handler = async (event: APIGatewayEvent) => {
 
     if (!data) {
       return Response.NotFound({ message: 'Offer not found' });
-    }
-
-    if (!isDev(stage)) {
-      //set the stream depending on header sent
-      const stream =
-        source === API_SOURCE.APP
-          ? process.env.FIREHOSE_STREAM_APP!
-          : process.env.FIREHOSE_STREAM_WEB!;
-      const firehoseData = {
-        cid: data.companyId,
-        oid_: data.id,
-        mid: uid,
-        timedate: new Date().toISOString(),
-      };
-      await firehose.send({ stream, data: firehoseData });
     }
 
     return Response.OK({ message: 'Success', data });

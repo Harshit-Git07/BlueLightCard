@@ -92,8 +92,6 @@ jobs:
       - build
       - changelog
     env:
-      FIREHOSE_STREAM_APP_VIEW_STAGE: dwh-blc-p1-develop-compAppView
-      FIREHOSE_STREAM_WEB_VIEW_STAGE: dwh-blc-p1-develop-compView
       STAGING_BASE_URL: https://staging.bluelightcard.co.uk
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
     steps:
@@ -122,8 +120,6 @@ jobs:
       - changelog
       - build
     env:
-      FIREHOSE_STREAM_APP_VIEW_PROD: dwh-blc-production-compAppView
-      FIREHOSE_STREAM_WEB_VIEW_PROD: dwh-blc-production-compView
       PROD_BASE_URL: https://www.bluelightcard.co.uk
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
     steps:

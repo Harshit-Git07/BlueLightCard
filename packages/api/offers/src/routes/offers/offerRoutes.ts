@@ -23,17 +23,9 @@ export class OffersRoutes {
           [EnvironmentVariablesKeys.BASE_URL]: getBLCBaseUrlFromEnv(this.routeProps.stack.stage),
           [EnvironmentVariablesKeys.LEGACY_OFFERS_API_ENDPOINT]: process.env
             .LEGACY_API_RETRIEVE_OFFERS_ENDPOINT as string,
-          [EnvironmentVariablesKeys.FIREHOSE_STREAM_APP]: this.getFirehoseDeliveryStream(
-            process.env.FIREHOSE_STREAM_APP_VIEW_PROD!,
-            process.env.FIREHOSE_STREAM_APP_VIEW_STAGE!,
-          ),
-          [EnvironmentVariablesKeys.FIREHOSE_STREAM_WEB]: this.getFirehoseDeliveryStream(
-            process.env.FIREHOSE_STREAM_WEB_VIEW_PROD!,
-            process.env.FIREHOSE_STREAM_WEB_VIEW_STAGE!,
-          ),
           [EnvironmentVariablesKeys.STAGE]: this.routeProps.stack.stage,
         },
-        permissions: ['firehose:PutRecord'],
+        permissions: [],
       }),
       cdk: {
         method: {
@@ -50,8 +42,5 @@ export class OffersRoutes {
         },
       },
     };
-  }
-  getFirehoseDeliveryStream(prodStream: string, stageStream: string) {
-    return isProduction(this.routeProps.stack.stage) ? prodStream : stageStream;
   }
 }

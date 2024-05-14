@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.54.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.53.0...bluelightcard/web-v1.54.0) (2024-05-14)
+
+
+### Features
+
+* TO-714 Add Amplitude Company Viewed event ([#1300](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1300)) ([aeda7c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aeda7c336efbf629e4ffbe6a2b7316cfb4eebb80))
+
 ## [1.53.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.52.0...bluelightcard/web-v1.53.0) (2024-05-13)
 
 

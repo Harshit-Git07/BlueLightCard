@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.55.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.54.0...bluelightcard/web-v1.55.0) (2024-05-14)
+
+
+### Features
+
+* [DISCO-126] Add v5 search API and amplitude experiment ([#1294](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1294)) ([9cc153e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9cc153e3f7ac19749af4d8c491ac06da0ebadf0b))
+* [DISCO-238] Add Braze content card banner for spike ([#1339](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1339)) ([97bc10f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/97bc10f27991658c6467db3b0afe5dfd5dc982c3))
+
 ## [1.54.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.53.0...bluelightcard/web-v1.54.0) (2024-05-14)
 
 

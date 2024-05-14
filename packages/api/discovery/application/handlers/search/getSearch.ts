@@ -16,7 +16,7 @@ export const handler = async (event: APIGatewayEvent) => {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        data: result,
+        data: result.results,
       }),
     };
   } else {

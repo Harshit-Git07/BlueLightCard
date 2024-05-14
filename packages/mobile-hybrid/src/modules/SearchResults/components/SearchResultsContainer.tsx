@@ -1,7 +1,7 @@
-import { FC, useCallback, useContext, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useAtomValue, useAtom, useSetAtom } from 'jotai';
 import { useOfferDetails } from '@bluelightcard/shared-ui';
-import { APIUrl } from '@/globals';
+import { APIUrl, V5_API_URL } from '@/globals';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import SearchResultsPresenter from './SearchResultsPresenter';
 import { searchResults, searchTerm } from '../store';
@@ -12,6 +12,7 @@ import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { userService } from '@/components/UserServiceProvider/store';
 
 const analytics = new InvokeNativeAnalytics();
 const request = new InvokeNativeAPICall();
@@ -25,8 +26,12 @@ const SearchResultsContainer: FC = () => {
   const term = useAtomValue(searchTerm);
   const setSpinner = useSetAtom(spinner);
   const amplitudeExperiment = useAtomValue(experimentsAndFeatureFlags);
+  const userServiceValue = useAtomValue(userService);
 
-  const searchResultsData = useAPI(APIUrl.Search) as APIResponse<SearchResults>;
+  const categoryTreeExperimentEnabled =
+    amplitudeExperiment[Experiments.CATEGORY_LEVEL_THREE_SEARCH] === 'treatment';
+  const searchResultsApi = categoryTreeExperimentEnabled ? V5_API_URL.Search : APIUrl.Search;
+  const searchResultsData = useAPI(searchResultsApi) as APIResponse<SearchResults>;
 
   const logSearchResultsListViewedAnalytic = useCallback(
     (numberOfResults: number) => {
@@ -61,14 +66,22 @@ const SearchResultsContainer: FC = () => {
       },
     });
 
-    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], offerId, companyId);
+    await viewOffer(amplitudeExperiment[Experiments.OFFER_SHEET], offerId, companyId, companyName);
   };
 
   useEffect(() => {
     if (term) {
-      request.requestData(APIUrl.Search, { term });
+      if (categoryTreeExperimentEnabled) {
+        request.requestDataV5(searchResultsApi, {
+          method: 'GET',
+          queryParameters: { query: term, organisation: userServiceValue ?? '' },
+          cachePolicy: 'auto',
+        });
+      } else {
+        request.requestData(searchResultsApi, { term });
+      }
     }
-  }, [term]);
+  }, [term, searchResultsApi, categoryTreeExperimentEnabled, userServiceValue]);
 
   // set results into store
   useEffect(() => {

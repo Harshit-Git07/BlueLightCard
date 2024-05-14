@@ -14,6 +14,7 @@ describe('getSearch Handler', () => {
         CompID: 1,
         CompanyName: 'Company1',
         OfferType: 1,
+        S3Logos: 'Image',
       },
     ],
   };
@@ -24,7 +25,7 @@ describe('getSearch Handler', () => {
     const results = await whenSearchCalled();
 
     const expectedResponse = {
-      body: JSON.stringify({ data: expectedSearchResults }),
+      body: JSON.stringify({ data: expectedSearchResults.results }),
       statusCode: 200,
     };
 
@@ -36,7 +37,7 @@ describe('getSearch Handler', () => {
     const results = await whenSearchCalled();
 
     const expectedResponse = {
-      body: JSON.stringify({ data: { results: [] } }),
+      body: JSON.stringify({ data: [] }),
       statusCode: 200,
     };
 

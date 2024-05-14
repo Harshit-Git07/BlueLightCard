@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import Spinner from '@/modules/Spinner';
 import bus from '@/eventBus';
-import { APIUrl, Channels } from '@/globals';
+import { APIUrl, Channels, V5_API_URL } from '@/globals';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
@@ -14,6 +14,8 @@ import { OfferListItemModel } from '@/models/offer';
 import { offerListItemFactory } from '@/modules/List/__mocks__/factory';
 import '@testing-library/jest-dom';
 import { SearchResult, SearchResults } from '@/modules/SearchResults/types';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 jest.mock('@/invoke/apiCall');
 jest.mock('@/invoke/analytics');
@@ -40,7 +42,7 @@ describe('Search results', () => {
     it('should hide spinner on receiving api response', () => {
       givenSearchResultsAreReturnedFromTheAPI();
 
-      whenTheSearchResultsPageIsRendered(searchTermValue);
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       const spinner = screen.queryByRole('progressbar');
       expect(spinner).toBeFalsy();
@@ -49,22 +51,30 @@ describe('Search results', () => {
 
   describe('render results', () => {
     it('should render list of results', async () => {
-      whenTheSearchResultsPageIsRendered(searchTermValue);
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       givenSearchResultsAreReturnedFromTheAPI();
 
       const results = await screen.findAllByRole('listitem');
       expect(results).toHaveLength(2);
     });
+    it('should render list of results when category level three search experiment is on', async () => {
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment');
+
+      givenSearchResultsAreReturnedFromV5API();
+
+      const results = await screen.findAllByRole('listitem');
+      expect(results).toHaveLength(2);
+    });
     it('should show no results found when nothing found', async () => {
-      whenTheSearchResultsPageIsRendered(searchTermValue);
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       givenSearchResultsAreReturnedFromTheAPI([]);
 
       await screen.findByText('No results found.');
     });
     it('should show no results found when nothing found but a previous search was successful', async () => {
-      whenTheSearchResultsPageIsRendered(searchTermValue, [buildSearchResult()]);
+      whenSearchResultsPageIsRendered(searchTermValue, [buildSearchResult()]);
 
       givenSearchResultsAreReturnedFromTheAPI([]);
 
@@ -79,16 +89,31 @@ describe('Search results', () => {
         .mockImplementation(() => jest.fn());
       givenSearchResultsAreReturnedFromTheAPI();
 
-      whenTheSearchResultsPageIsRendered(searchTermValue);
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       expect(requestDataMock).toHaveBeenCalledTimes(1);
       expect(requestDataMock).toHaveBeenCalledWith(APIUrl.Search, { term: searchTermValue });
+    });
+    it('should request data from experimental search API when search term is set', async () => {
+      const requestDataMock = jest
+        .spyOn(InvokeNativeAPICall.prototype, 'requestDataV5')
+        .mockImplementation(() => jest.fn());
+      givenSearchResultsAreReturnedFromV5API();
+
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment');
+
+      expect(requestDataMock).toHaveBeenCalledTimes(1);
+      expect(requestDataMock).toHaveBeenCalledWith(V5_API_URL.Search, {
+        method: 'GET',
+        queryParameters: { query: searchTermValue, organisation: '' },
+        cachePolicy: 'auto',
+      });
     });
   });
 
   describe('log analytics events', () => {
     it('should log analytics event on results returned', async () => {
-      whenTheSearchResultsPageIsRendered(searchTermValue);
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       givenSearchResultsAreReturnedFromTheAPI();
 
@@ -103,7 +128,7 @@ describe('Search results', () => {
       );
     });
     it('should log analytics event when list item is clicked', async () => {
-      whenTheSearchResultsPageIsRendered(searchTermValue);
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       givenSearchResultsAreReturnedFromTheAPI();
 
@@ -136,6 +161,14 @@ describe('Search results', () => {
     });
   };
 
+  const givenSearchResultsAreReturnedFromV5API = (data: OfferListItemModel[] = testData) => {
+    act(() => {
+      bus.emit(Channels.API_RESPONSE, V5_API_URL.Search, {
+        data,
+      });
+    });
+  };
+
   const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
     return (
       <div>
@@ -145,15 +178,20 @@ describe('Search results', () => {
     );
   };
 
-  const whenTheSearchResultsPageIsRendered = (
+  const whenSearchResultsPageIsRendered = (
     term: string = '',
     existingSearchResults: SearchResults = [],
+    categoryLevelThreeSearchExperiment = 'control',
   ) => {
     return render(
       <JotaiTestProvider
         initialValues={[
           [searchTerm, term],
           [searchResults, existingSearchResults],
+          [
+            experimentsAndFeatureFlags,
+            { [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: categoryLevelThreeSearchExperiment },
+          ],
         ]}
       >
         <WithSpinner>

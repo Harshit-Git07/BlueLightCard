@@ -16,6 +16,7 @@ export enum Experiments {
   HOMEPAGE_POSITIONING = 'homepage-positioning',
   BF_FLEXI = 'bf-flexi',
   OFFER_SHEET = 'offer-sheet-redeem-vault-app',
+  CATEGORY_LEVEL_THREE_SEARCH = 'category_level_three_search_hybrid',
 }
 
 export const featureFlagKeys = Object.values(FeatureFlags);

@@ -38,6 +38,9 @@ export const search = async (queryRaw: string, idToken: string, allowAgeGated = 
   try {
     const response = await axios.request(config);
     output.results = response.data.data as SearchOfferType[];
+    if (output.results) {
+      mapSearchResults(output.results);
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     output.error = error.message;
@@ -46,6 +49,9 @@ export const search = async (queryRaw: string, idToken: string, allowAgeGated = 
 
   return output;
 };
+
+const mapSearchResults = (results: SearchOfferType[]) =>
+  results.forEach((result) => (result.S3Logos = result.offerimg));
 
 const getIdToken = (userIdToken: string) => {
   const authTokenOverride = getEnvRaw(DiscoveryStackEnvironmentKeys.SEARCH_AUTH_TOKEN_OVERRIDE);

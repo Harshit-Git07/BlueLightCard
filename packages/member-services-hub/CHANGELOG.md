@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.4.0...bluelightcard/member-services-hub-v1.5.0) (2024-04-18)
+
+
+### Features
+
+* shared UI ([#1109](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1109)) ([d7d3551](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d7d3551c040241bedede7c9a74e41405ce1dac78))
+
+
+### Bug Fixes
+
+* fontawesome ([#1153](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1153)) ([ab5e497](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ab5e497dc259f0e5100989e2f4606868658ce025))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/member-services-hub-v1.3.2...bluelightcard/member-services-hub-v1.4.0) (2024-03-13)
 
 

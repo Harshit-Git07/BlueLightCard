@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.67.1...bluelightcard/identity-v1.67.2) (2024-05-14)
+
+
+### Bug Fixes
+
+* more empty string checks ([#1352](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1352)) ([885b967](https://github.com/bluelightcard/BlueLightCard-2.0/commit/885b967a8f767a0d7d6d2405ed4e5ac9068ef8f8))
+
 ## [1.67.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.67.0...bluelightcard/identity-v1.67.1) (2024-05-14)
 
 

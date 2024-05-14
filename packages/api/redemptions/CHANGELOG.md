@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.14.0...bluelightcard/redemptions-v1.14.1) (2024-05-13)
+
+
+### Bug Fixes
+
+* point staging to dev ([#1312](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1312)) ([a20d402](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a20d402d263617411b90b59ab73b8eb62a104ec5))
+* TR-514-vaultqr-data-sync ([#1309](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1309)) ([73ddfa8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/73ddfa8c8e761c93668d28b193551a4f7487753f))
+
+
+### Other Changes
+
+* **redemptions:** add eslint rule require-await ([#1302](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1302)) ([7fee893](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7fee893c15a83b36ba7e461950ff20d4e85ebeaf))
+
 ## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.13.2...bluelightcard/redemptions-v1.14.0) (2024-05-03)
 
 

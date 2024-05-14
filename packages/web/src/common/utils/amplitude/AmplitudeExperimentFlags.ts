@@ -1,3 +1,4 @@
 export enum AmplitudeExperimentFlags {
   IDENTITY_COGNITO_UI_ENABLED = 'cognito-ui-web',
+  BRAZE_CONTENT_CARDS_ENABLED = 'web-braze-content-cards',
 }

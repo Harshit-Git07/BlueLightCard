@@ -240,6 +240,8 @@ jobs:
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
       NEXT_PUBLIC_REDEMPTION_DETAILS_ENDPOINT: ${{ matrix.redemption_details_endpoint }}
       NEXT_PUBLIC_REDEEM_ENDPOINT: ${{ matrix.redeem_endpoint }}
+      NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
+      NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -325,6 +327,8 @@ jobs:
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://auth.blcshine.io/logout?client_id=7b854of9jqjte75vglfnm1gd3t&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.bluelightcard.co.uk%2Flogout.php
       NEXT_PUBLIC_REDEMPTION_DETAILS_ENDPOINT: ${{ matrix.redemption_details_endpoint }}
       NEXT_PUBLIC_REDEEM_ENDPOINT: ${{ matrix.redeem_endpoint }}
+      NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
+      NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

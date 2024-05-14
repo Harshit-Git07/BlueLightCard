@@ -23,7 +23,6 @@ import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerP
 import AlertBox from '@/components/AlertBox/AlertBox';
 import Container from '@/components/Container/Container';
 import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
-import withLayout from '@/hoc/withLayout';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 
@@ -34,8 +33,10 @@ import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
-import { getRedemptionDetails } from '../common/utils/API/getRedemptionDetails';
+import { getRedemptionDetails } from '@/utils/API/getRedemptionDetails';
 import { useRouter } from 'next/router';
+import { useBrazeContentCards } from '@/hooks/useBrazeContentCards';
+import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -72,7 +73,14 @@ const HomePage: NextPage<any> = () => {
   const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
   const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
+
+  const contentCards = useBrazeContentCards();
   const router = useRouter();
+
+  const brazeContentCardsEnabled = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
+    'control'
+  );
 
   // Handle loading states
   const [loadingError, setLoadingError] = useState(false);
@@ -215,6 +223,35 @@ const HomePage: NextPage<any> = () => {
                   id={'promoBanner' + index}
                 />
               ))
+            ) : (
+              <PromoBannerPlaceholder />
+            )}
+          </SwiperCarousel>
+        </Container>
+      )}
+
+      {/* Example braze carousel */}
+      {brazeContentCardsEnabled.data?.variantName === 'treatment' && (
+        <Container className="py-5" data-testid="example-braze-carousel" addBottomHorizontalLine>
+          <SwiperCarousel
+            autoPlay
+            elementsPerPageLaptop={1}
+            elementsPerPageDesktop={1}
+            elementsPerPageTablet={1}
+            elementsPerPageMobile={1}
+            hidePillButtons
+          >
+            {contentCards.length > 0 ? (
+              contentCards
+                .filter((card) => !card.isControl && card.extras?.location === 'top-banner')
+                .map((card: any, index: number) => (
+                  <PromoBanner
+                    key={index}
+                    image={card.imageUrl}
+                    href={card.href}
+                    id={'brazeBanner' + index}
+                  />
+                ))
             ) : (
               <PromoBannerPlaceholder />
             )}

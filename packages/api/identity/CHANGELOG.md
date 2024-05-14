@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.67.0...bluelightcard/identity-v1.67.1) (2024-05-14)
+
+
+### Bug Fixes
+
+* default spare NA ([#1343](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1343)) ([8cade1f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8cade1fcb5625b73efe69ec16b406c5a9fd1b55d))
+
 ## [1.67.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.66.0...bluelightcard/identity-v1.67.0) (2024-05-10)
 
 

@@ -27,6 +27,8 @@ import { OfferTypeStrLiterals, offerTypeParser } from '../common/utils/offers/of
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import AmplitudeContext from '@/context/AmplitudeContext';
 import amplitudeEvents from '@/utils/amplitude/events';
+import { logCompanyView } from '@/utils/amplitude/logCompanyView';
+import { usePathname } from 'next/navigation';
 
 type CompanyPageProps = {};
 
@@ -37,6 +39,12 @@ export type OfferData = {
   image: string;
   companyId: string;
   companyName: string;
+};
+
+type CompanyData = {
+  id: string;
+  name: string;
+  description: string;
 };
 
 type BannerDataType = {
@@ -53,6 +61,7 @@ const offerTypesArray = Object.keys(offerTypeParser) as Array<keyof typeof offer
 const filterArray = ['All', ...offerTypesArray];
 
 const CompanyPage: NextPage<CompanyPageProps> = () => {
+  const pathname = usePathname();
   const router = useRouter();
   const { cid: companyId } = router.query;
 
@@ -61,13 +70,29 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
+  const defaultCompanyPropertyValue = '';
 
   const [selectedType, setSelectedType] = useState<string>('All');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query, setQuery] = useState<string>((router.query.q as string) ?? '');
   const [adverts, setAdverts] = useState<BannerDataType[]>([]);
-  const [companyData, setCompanyData] = useState<any | null>(null);
+  const [companyData, setCompanyData] = useState<CompanyData>({
+    id: defaultCompanyPropertyValue,
+    name: defaultCompanyPropertyValue,
+    description: defaultCompanyPropertyValue,
+  });
   const [offerData, setOfferData] = useState<OfferData[] | null>([]);
+
+  const handleCompanyView = (eventSource: string, companyId: string, companyName: string) => {
+    logCompanyView({
+      amplitude,
+      userUuid: userCtx.user?.uuid,
+      eventSource,
+      origin: pathname,
+      companyId,
+      companyName,
+    });
+  };
 
   const toggleFilter = (pillType: string) => {
     if (selectedType === pillType) {
@@ -102,12 +127,13 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
       // Company data
       const companyDataResponse = await getCompany(authCtx.authState.idToken, companyId);
-      if (!companyDataResponse || typeof companyDataResponse === null) {
-        setCompanyData(null);
-      } else {
+
+      if (companyDataResponse || typeof companyDataResponse !== null) {
         setCompanyData(companyDataResponse);
+        handleCompanyView('companyPage', companyDataResponse.id, companyDataResponse.name);
       }
     };
+
     if (authCtx.authState.idToken && companyId) {
       fetchCompanyData();
     }
@@ -119,9 +145,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
       //Offers data
       const offerDataResponse = await getOffersByCompany(authCtx.authState.idToken, companyId);
-      if (!offerDataResponse || typeof offerDataResponse === null) {
-        setCompanyData(null);
-      } else {
+      if (offerDataResponse || typeof offerDataResponse !== null) {
         setOfferData(offerDataResponse.offers);
       }
     };
@@ -145,7 +169,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   return (
     <>
       <Head>
-        <title>{companyData?.name} offers | Blue Light Card</title>
+        <title>{companyData.name} offers | Blue Light Card</title>
       </Head>
       <Container
         className="desktop:mt-16 mobile:mt-[14px]"
@@ -158,15 +182,15 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             headingLevel={'h1'}
             className="!text-black tablet:!text-5xl mobile:!text-xl tablet:!leading-[56px] mobile:!leading-5 tablet:font-bold mobile:font-semibold"
           >
-            {companyData?.name}
+            {companyData.name}
           </Heading>
           <div
             className="flex desktop:justify-end desktop:items-start mobile:gap-2"
             onClick={async () => {
               if (amplitude) {
                 await amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
-                  company_id: companyData?.id,
-                  company_name: companyData?.name,
+                  company_id: companyData.id,
+                  company_name: companyData.name,
                 });
               }
             }}
@@ -174,8 +198,8 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             <ShareButton
               showShareLabel={isMobile ? false : true}
               shareDetails={{
-                name: companyData?.name,
-                description: companyData?.description,
+                name: companyData.name,
+                description: companyData.description,
                 // adds check on ENVIRONMENT so we can pass the port on localhost:3000 for the share URL. Otherwise it will not show port in the url
                 url: `${window.location.protocol}/${window.location.hostname}${
                   ENVIRONMENT === 'local' && window.location.port ? `:${window.location.port}` : ''
@@ -187,7 +211,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         {!isMobile && (
           <div className="w-full">
             <CompanyAbout
-              CompanyDescription={companyData?.description}
+              CompanyDescription={companyData.description}
               CompanyName={''}
               platform={PlatformVariant.Desktop}
             />
@@ -209,8 +233,8 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                     toggleFilter(pillType);
                     if (amplitude) {
                       await amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
-                        company_id: companyData?.id,
-                        company_name: companyData?.name,
+                        company_id: companyData.id,
+                        company_name: companyData.name,
                         filter_name: pillType,
                       });
                     }
@@ -242,8 +266,8 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                     onClick={async () => {
                       if (amplitude) {
                         await amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
-                          company_id: companyData?.id,
-                          company_name: companyData?.name,
+                          company_id: companyData.id,
+                          company_name: companyData.name,
                           position: index + 1,
                           offer_id: offer?.id,
                           offer_name: offer?.name,
@@ -288,11 +312,11 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         )}
 
         {/* About page (MOBILE) */}
-        {isMobile && companyData?.name && (
+        {isMobile && companyData.name && (
           <div className="my-4">
             <CompanyAbout
               CompanyName={`About ${companyData.name}`}
-              CompanyDescription={companyData?.description}
+              CompanyDescription={companyData.description}
               platform={PlatformVariant.Mobile}
             />
           </div>

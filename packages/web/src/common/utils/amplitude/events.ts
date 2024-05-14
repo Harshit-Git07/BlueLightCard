@@ -21,6 +21,7 @@ const events = {
   COMPANY_FILTER_CLICKED: 'company_filter_clicked',
   OFFER_TERMS_CLICKED: 'offer_terms_clicked',
   OFFER_SHARE_CLICKED: 'offer_share_clicked',
+  COMPANY_VIEWED: 'company_viewed',
 };
 
 export default events;

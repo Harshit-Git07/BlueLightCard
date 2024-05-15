@@ -16,7 +16,7 @@ const Card: NextPage<any> = (props) => {
             <CardPrintingImg height={340} width={340} />
             <div className="flex-col justify-start items-center gap-4 flex">
               <h1 className="text-neutral-700 text-[32px] font-semibold font-['Museo Sans'] leading-10 tracking-tight">
-                Card Printing Area Coming Soon!
+                Card Printing Area Coming Soon!!
               </h1>
               <p className="text-neutral-700 text-xl font-light font-['Museo Sans'] leading-normal tracking-tight">
                 Please hold....Some exciting new things are in progress

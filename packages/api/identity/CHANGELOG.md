@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.69.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.68.0...bluelightcard/identity-v1.69.0) (2024-05-15)
+
+
+### Features
+
+* Apply styling to external provider's hosted UI page ([#1364](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1364)) ([be1c60c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/be1c60c5ab1d3ba1bbe6d7b7b7d96f5d03494a04))
+
 ## [1.68.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.67.2...bluelightcard/identity-v1.68.0) (2024-05-15)
 
 

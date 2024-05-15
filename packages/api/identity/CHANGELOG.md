@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.68.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.67.2...bluelightcard/identity-v1.68.0) (2024-05-15)
+
+
+### Features
+
+* **TI-1126:** added Region variable check for number format ([#1338](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1338)) ([72edb0f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/72edb0fb657aa6ed9e66191c010c779b887c16a5))
+
 ## [1.67.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.67.1...bluelightcard/identity-v1.67.2) (2024-05-14)
 
 

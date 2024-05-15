@@ -10,7 +10,8 @@ const mockPlatformAdapter = {
   logAnalyticsEvent: () => {},
   navigate: () => {},
   navigateExternal: () => {},
-  platform: PlatformVariant.Mobile,
+  writeTextToClipboard: () => Promise.resolve(),
+  platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;
 
 const props: Props = {

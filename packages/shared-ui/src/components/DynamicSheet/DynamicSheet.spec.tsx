@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { PlatformVariant } from '../../types';
 
 const props = {
-  platform: PlatformVariant.Mobile,
+  platform: PlatformVariant.MobileHybrid,
   showCloseButton: true,
   containerClassName: '',
   height: '90%',

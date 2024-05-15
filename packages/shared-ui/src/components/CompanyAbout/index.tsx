@@ -10,13 +10,13 @@ export type Props = SharedProps & {
 
 const CompanyAbout: FC<Props> = ({ CompanyName, CompanyDescription, platform }) => {
   const dynHeadingCss = useCSSConditional({
-    '!text-base !leading-5 font-normal': platform === PlatformVariant.Mobile,
-    '!text-5xl !leading-[56px] font-bold': platform === PlatformVariant.Desktop,
+    '!text-base !leading-5 font-normal': platform === PlatformVariant.MobileHybrid,
+    '!text-5xl !leading-[56px] font-bold': platform === PlatformVariant.Web,
   });
 
   const dynDescriptionCss = useCSSConditional({
-    '!text-sm leading-5': platform === PlatformVariant.Mobile,
-    '!text-base leading-6': platform === PlatformVariant.Desktop,
+    '!text-sm leading-5': platform === PlatformVariant.MobileHybrid,
+    '!text-base leading-6': platform === PlatformVariant.Web,
   });
 
   const cssHeading = useCSSMerge(`!text-black`, dynHeadingCss);

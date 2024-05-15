@@ -10,13 +10,13 @@ export type Props = SharedProps & {
 
 const Search: FC<Props> = ({
   value,
-  platform = PlatformVariant.Mobile,
+  platform = PlatformVariant.MobileHybrid,
   placeholder = 'Search...',
   onChange,
 }) => {
   const dynCss = useCSSConditional({
-    'w-full p-3': platform === PlatformVariant.Desktop,
-    'p-2': platform === PlatformVariant.Mobile,
+    'w-full p-3': platform === PlatformVariant.Web,
+    'p-2': platform === PlatformVariant.MobileHybrid,
   });
   const css = useCSSMerge('border rounded-sm ring-offset-2 focus:outline-none focus:ring', dynCss);
 

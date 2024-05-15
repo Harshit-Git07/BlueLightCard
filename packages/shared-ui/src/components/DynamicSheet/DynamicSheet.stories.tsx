@@ -33,13 +33,13 @@ const DefaultTemplate: StoryFn<typeof DynamicSheet> = (args) => {
 
 export const DesktopDinamicSheet = DefaultTemplate.bind({});
 DesktopDinamicSheet.args = {
-  platform: PlatformVariant.Desktop,
+  platform: PlatformVariant.Web,
   showCloseButton: true,
 };
 
 export const MobileDinamicSheet = DefaultTemplate.bind({});
 MobileDinamicSheet.args = {
-  platform: PlatformVariant.Mobile,
+  platform: PlatformVariant.MobileHybrid,
   showCloseButton: true,
   height: '80%',
 };

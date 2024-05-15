@@ -10,8 +10,8 @@ type Props = SharedProps & {
 };
 
 const platformApiUrls = {
-  [PlatformVariant.Desktop]: 'https://identity.blcshine.io/user',
-  [PlatformVariant.Mobile]: '/api/4/user/profile/retrieve.php',
+  [PlatformVariant.Web]: 'https://identity.blcshine.io/user',
+  [PlatformVariant.MobileHybrid]: '/api/4/user/profile/retrieve.php',
 };
 
 /**
@@ -20,8 +20,8 @@ const platformApiUrls = {
  * @param props
  * @returns
  */
-const Iso: FC<Props> = ({ idToken, routeToPath, platform = PlatformVariant.Desktop }) => {
-  const router = useRouter(PlatformVariant.Mobile);
+const Iso: FC<Props> = ({ idToken, routeToPath, platform = PlatformVariant.Web }) => {
+  const router = useRouter(PlatformVariant.MobileHybrid);
   const [apiResponse, setApiResponse] = useState();
   const apiUrl = platformApiUrls[platform];
 
@@ -30,7 +30,7 @@ const Iso: FC<Props> = ({ idToken, routeToPath, platform = PlatformVariant.Deskt
   }, [apiResponse]);
 
   const onButtonClick = useCallback(() => {
-    if (platform === PlatformVariant.Desktop) {
+    if (platform === PlatformVariant.Web) {
       router.push(routeToPath);
     } else {
       router.pushNative(routeToPath, 'iso');

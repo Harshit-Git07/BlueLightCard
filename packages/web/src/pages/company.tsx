@@ -173,7 +173,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       </Head>
       <Container
         className="desktop:mt-16 mobile:mt-[14px]"
-        platform={isMobile ? PlatformVariant.Mobile : PlatformVariant.Desktop}
+        platform={isMobile ? PlatformVariant.MobileHybrid : PlatformVariant.Web}
       >
         {/* About page (ONLY ON WEB), ShareButton and FavouriteButton */}
         <div className="flex justify-between desktop:items-start mobile:items-center">
@@ -213,7 +213,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             <CompanyAbout
               CompanyDescription={companyData.description}
               CompanyName={''}
-              platform={PlatformVariant.Desktop}
+              platform={PlatformVariant.Web}
             />
           </div>
         )}
@@ -240,7 +240,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                     }
                   }}
                   isSelected={selectedType === pillType}
-                  platform={isMobile ? PlatformVariant.Mobile : PlatformVariant.Desktop}
+                  platform={isMobile ? PlatformVariant.MobileHybrid : PlatformVariant.Web}
                   disabled={
                     pillType !== 'All' &&
                     !offerData?.find((offer: OfferData) => offer.type === pillType)
@@ -317,7 +317,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             <CompanyAbout
               CompanyName={`About ${companyData.name}`}
               CompanyDescription={companyData.description}
-              platform={PlatformVariant.Mobile}
+              platform={PlatformVariant.MobileHybrid}
             />
           </div>
         )}

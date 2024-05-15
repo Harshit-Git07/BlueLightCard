@@ -17,7 +17,8 @@ const mockPlatformAdapter = {
   logAnalyticsEvent: () => {},
   navigate: () => {},
   navigateExternal: () => {},
-  platform: PlatformVariant.Mobile,
+  writeTextToClipboard: () => Promise.resolve(),
+  platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;
 
 const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
@@ -27,7 +28,7 @@ const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
       ...prev,
       isOpen: true,
       onClose: () => {},
-      platform: PlatformVariant.Desktop,
+      platform: PlatformVariant.Web,
       cdnUrl: 'https://cdn.bluelightcard.co.uk',
       isMobileHybrid: false,
       offerMeta: { offerId: 3802, companyId: 4016, companyName: 'SEAT' },

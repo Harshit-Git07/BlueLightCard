@@ -3,8 +3,8 @@
  */
 
 export enum PlatformVariant {
-  Mobile = 'mobile',
-  Desktop = 'desktop',
+  MobileHybrid = 'mobile-hybrid',
+  Web = 'web',
 }
 
 export enum SizeVariant {

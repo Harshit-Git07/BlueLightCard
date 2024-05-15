@@ -55,7 +55,11 @@ describe('Rewriters', () => {
           url: 'http://mobile.example.com/',
           response: {},
         });
-        const response = await fetch('http://mobile.example.com/', {}, PlatformVariant.Mobile);
+        const response = await fetch(
+          'http://mobile.example.com/',
+          {},
+          PlatformVariant.MobileHybrid,
+        );
         expect(response.status).toBe(200);
         expect(invokeNativeMock).toHaveBeenCalledWith('DataRequest', {
           message: 'requestData',
@@ -71,7 +75,11 @@ describe('Rewriters', () => {
           url: 'http://mobile.example.com/',
           response: {},
         });
-        const response = await fetch('http://mobile.example.com/', {}, PlatformVariant.Mobile);
+        const response = await fetch(
+          'http://mobile.example.com/',
+          {},
+          PlatformVariant.MobileHybrid,
+        );
         const json = await response.json();
         expect(json).toEqual({});
       });
@@ -83,7 +91,7 @@ describe('Rewriters', () => {
           response: {},
         });
         try {
-          await fetch('http://mobile.example.com/', {}, PlatformVariant.Mobile);
+          await fetch('http://mobile.example.com/', {}, PlatformVariant.MobileHybrid);
         } catch (error) {
           expect(error).toBeTruthy();
         }
@@ -92,7 +100,7 @@ describe('Rewriters', () => {
 
     describe('desktop platform', () => {
       it('should call window.fetch', async () => {
-        await fetch('http://desktop.example.com/', {}, PlatformVariant.Desktop);
+        await fetch('http://desktop.example.com/', {}, PlatformVariant.Web);
         expect(window.fetch).toHaveBeenCalledWith('http://desktop.example.com/', {});
       });
     });
@@ -101,7 +109,7 @@ describe('Rewriters', () => {
   describe('useRouter rewriter', () => {
     describe('mobile platform', () => {
       it('it should not call invokeNative', () => {
-        const router = useRouter(PlatformVariant.Mobile);
+        const router = useRouter(PlatformVariant.MobileHybrid);
         router.pushNative('/test', 'example.com');
         expect(invokeNative).toHaveBeenCalledTimes(1);
       });
@@ -109,7 +117,7 @@ describe('Rewriters', () => {
 
     describe('desktop platform', () => {
       it('it should not have invokeNative', () => {
-        const router = useRouter(PlatformVariant.Desktop);
+        const router = useRouter(PlatformVariant.Web);
         router.pushNative('/test', 'example.com');
         expect(invokeNative).toHaveBeenCalledTimes(0);
       });

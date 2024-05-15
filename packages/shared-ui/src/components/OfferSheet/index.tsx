@@ -22,7 +22,7 @@ export type Props = SharedProps & {
 };
 
 const OfferSheet: FC<Props> = ({
-  platform = PlatformVariant.Mobile,
+  platform = PlatformVariant.MobileHybrid,
   isOpen = false,
   onClose,
   height,
@@ -63,7 +63,7 @@ const OfferSheet: FC<Props> = ({
           offer_id: String(offerMeta.offerId),
           offer_name: offerDetails.name,
           source: 'sheet',
-          origin: isMobileHybrid ? PlatformVariant.Mobile : PlatformVariant.Desktop,
+          origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
           redemption_type: redemptionType,
         },
       });

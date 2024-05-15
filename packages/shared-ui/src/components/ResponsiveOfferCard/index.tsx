@@ -62,7 +62,7 @@ const ResponsiveOfferCard: FC<Props> = ({
   }, [image]);
 
   const dynCss = useCSSConditional({
-    'desktop:p-2 desktop:pb-4': platform === PlatformVariant.Desktop,
+    'desktop:p-2 desktop:pb-4': platform === PlatformVariant.Web,
   });
   const css = useCSSMerge('pb-0', dynCss);
 

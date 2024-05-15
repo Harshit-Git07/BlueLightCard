@@ -29,8 +29,8 @@ const PillButtons: FC<Props> = ({
   };
 
   const dynCss = useCSSConditional({
-    'py-3': platform === PlatformVariant.Desktop,
-    'py-2': platform === PlatformVariant.Mobile,
+    'py-3': platform === PlatformVariant.Web,
+    'py-2': platform === PlatformVariant.MobileHybrid,
     'bg-[#001B80] text-white': !!isSelected,
     'bg-[#ECEFF2]': !isSelected,
     'cursor-not-allowed bg-white text-[#DCDCDC] border-[#DCDCDC] border-[1px]': !!disabled,

@@ -38,7 +38,7 @@ function mobileFetch(input: Parameters<typeof window.fetch>[0]): Promise<Respons
 
     const _timeoutId = setTimeout(() => {
       removeTimeoutId(timeoutId, timeoutKey);
-      reject(`Fetch error[${PlatformVariant.Mobile}]: Fetch timed out waiting on response`);
+      reject(`Fetch error[${PlatformVariant.MobileHybrid}]: Fetch timed out waiting on response`);
     }, FETCH_TIMEOUT);
 
     timeoutIdMap[timeoutKey] = _timeoutId;
@@ -66,10 +66,10 @@ function mobileFetch(input: Parameters<typeof window.fetch>[0]): Promise<Respons
  */
 function fetchRewriter(platform: PlatformVariant) {
   return (...args: Parameters<typeof window.fetch>) => {
-    if (platform === PlatformVariant.Mobile && args[1]?.method?.toLowerCase() === 'post') {
+    if (platform === PlatformVariant.MobileHybrid && args[1]?.method?.toLowerCase() === 'post') {
       console.error('Fetch options error[%s]: Method "POST" is not supported', platform);
     }
-    return platform === PlatformVariant.Desktop ? window.fetch(...args) : mobileFetch(args[0]);
+    return platform === PlatformVariant.Web ? window.fetch(...args) : mobileFetch(args[0]);
   };
 }
 
@@ -83,7 +83,7 @@ function useRouterRewriter(platform: PlatformVariant) {
     pushNative: (route: string, domain: string) => void;
   };
   router.pushNative = (route, domain) => {
-    if (platform === PlatformVariant.Desktop) {
+    if (platform === PlatformVariant.Web) {
       return;
     }
     invokeNative('NavigationRequest', {
@@ -106,12 +106,12 @@ function useRouterRewriter(platform: PlatformVariant) {
 export async function fetch(
   input: Parameters<typeof window.fetch>[0],
   options?: Parameters<typeof window.fetch>[1],
-  platform: PlatformVariant = PlatformVariant.Desktop,
+  platform: PlatformVariant = PlatformVariant.Web,
 ) {
   return fetchRewriter(platform)(input, options);
 }
 
 // takes in an extra argument - platform
-export function useRouter(platform: PlatformVariant = PlatformVariant.Desktop) {
+export function useRouter(platform: PlatformVariant = PlatformVariant.Web) {
   return useRouterRewriter(platform);
 }

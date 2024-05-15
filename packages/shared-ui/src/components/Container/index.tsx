@@ -26,7 +26,7 @@ const Container: FC<Props> = ({
 
   const dynCss = useCSSConditional({
     'laptop:container laptop:mx-auto tablet:container tablet:mx-auto':
-      platform === PlatformVariant.Desktop,
+      platform === PlatformVariant.Web,
   });
 
   const css = useCSSMerge('px-5', nestedClassName, dynCss);

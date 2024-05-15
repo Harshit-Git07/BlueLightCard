@@ -44,6 +44,10 @@ export interface IPlatformAdapter {
    * Navigate to an external URL
    */
   navigateExternal(url: string): void;
+  /**
+   * Write text to the clipboard
+   */
+  writeTextToClipboard(text: string): Promise<void>;
 }
 
 const PlatfromAdapterContext = createContext<IPlatformAdapter | null>(null);

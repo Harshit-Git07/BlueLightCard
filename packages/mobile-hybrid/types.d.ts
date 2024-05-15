@@ -47,6 +47,14 @@ declare namespace NativeAPICall {
   }
 }
 
+declare namespace NativeClipboard {
+  export interface Parameters {
+    path: string;
+    method: 'POST';
+    body: string;
+  }
+}
+
 declare namespace NativeAnalytics {
   function logAnalyticsEvent(event: string, meta?: string): void;
 
@@ -95,6 +103,7 @@ declare namespace NativeReceive {
 declare type NativeCallParameters =
   | NativeNavigation.Parameters
   | NativeAPICall.Parameters
+  | NativeClipboard.Parameters
   | NativeAnalytics.Parameters
   | NativeExperiment.Parameters;
 

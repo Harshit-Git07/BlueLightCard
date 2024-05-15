@@ -45,7 +45,7 @@ const OfferSheet: React.FC<OfferSheetProps> = ({ offer, close }) => {
   //     }`}
   //   >
   //     <SharedOfferSheet
-  //       platform={isMobile ? PlatformVariant.Mobile : PlatformVariant.Desktop}
+  //       platform={isMobile ? PlatformVariant.MobileHybrid : PlatformVariant.Web}
   //       isOpen={Boolean(offer)}
   //       onClose={close}
   //       height="80%"

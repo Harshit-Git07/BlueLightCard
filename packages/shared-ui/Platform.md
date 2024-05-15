@@ -30,10 +30,10 @@ const IsoComponent: FC<Props> = ({ platform }) => {
 };
 
 // usage on mobile-hybrid
-<IsoComponent platform={PlatformVariant.Mobile} />
+<IsoComponent platform={PlatformVariant.MobileHybrid} />
 
 // usage on web browser
-<IsoComponent platform={PlatformVariant.Desktop} />
+<IsoComponent platform={PlatformVariant.Web} />
 ```
 
 Using useRouter from `lib/rewriters`, this uses the original nextjs hook with additional support for navigating on native apps.
@@ -45,7 +45,7 @@ const Component: FC<Props> = ({ platform }) => {
   const router = useRouter();
 
   const onClick = useCallback(() => {
-    if (platform === PlatformVariant.Mobile) {
+    if (platform === PlatformVariant.MobileHybrid) {
       router.pushNative('/deeplink.php');
     } else {
       router.push('/nextjs-route');

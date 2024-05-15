@@ -13,7 +13,7 @@ type Story = StoryObj<typeof Iso>;
 
 export const Default: Story = {
   args: {
-    platform: PlatformVariant.Mobile,
+    platform: PlatformVariant.MobileHybrid,
   },
 };
 

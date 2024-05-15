@@ -126,7 +126,7 @@ export type Props = SharedProps & {
 };
 
 const Component: FC<Props> = ({ platform }) => {
-  const css = platform === PlatformVariant.Mobile ? 'p-2' : 'p-4';
+  const css = platform === PlatformVariant.MobileHybrid ? 'p-2' : 'p-4';
   ...
 };
 ```

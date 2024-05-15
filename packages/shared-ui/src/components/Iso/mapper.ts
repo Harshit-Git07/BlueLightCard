@@ -20,14 +20,14 @@ export interface UserProfileDesktop {
 }
 
 export const mapping = {
-  [PlatformVariant.Mobile]: (apiResponse?: UserProfileMobile): Profile => {
+  [PlatformVariant.MobileHybrid]: (apiResponse?: UserProfileMobile): Profile => {
     return {
       dob: apiResponse?.data?.dob ?? null,
       gender: apiResponse?.data?.gender ?? null,
       mobile: apiResponse?.data?.mobile ?? null,
     };
   },
-  [PlatformVariant.Desktop]: (apiResponse?: UserProfileDesktop): Profile => {
+  [PlatformVariant.Web]: (apiResponse?: UserProfileDesktop): Profile => {
     return {
       dob: apiResponse?.data?.profile?.dob ?? null,
       gender: apiResponse?.data?.profile?.gender ?? null,

@@ -7,7 +7,7 @@ import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
 const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
 
 const props: Props = {
-  platform: PlatformVariant.Desktop,
+  platform: PlatformVariant.Web,
   isOpen: false,
   onClose: jest.fn(),
   height: '90%',

@@ -6,13 +6,15 @@ export const useMockPlatformAdapter = (statusCode = 200, body = {}) => {
   const logAnalyticsEvent = jest.fn();
   const navigate = jest.fn();
   const navigateExternal = jest.fn();
+  const writeTextToClipboard = jest.fn().mockReturnValue(Promise.resolve());
 
   const mockPlatformAdapter = {
-    platform: PlatformVariant.Mobile,
+    platform: PlatformVariant.MobileHybrid,
     invokeV5Api,
     logAnalyticsEvent,
     navigate,
     navigateExternal,
+    writeTextToClipboard,
   } satisfies IPlatformAdapter;
 
   return mockPlatformAdapter;

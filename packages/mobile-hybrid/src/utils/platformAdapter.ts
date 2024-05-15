@@ -3,6 +3,7 @@ import eventBus from '@/eventBus';
 import { Channels } from '@/globals';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import InvokeNativeAPICall from '@/invoke/apiCall';
+import InvokeNativeClipboard from '@/invoke/clipboard';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import {
   AmplitudeLogParams,
@@ -15,11 +16,12 @@ import { z } from 'zod';
 
 const analytics = new InvokeNativeAnalytics();
 const navigation = new InvokeNativeNavigation();
+const clipboard = new InvokeNativeClipboard();
 
 export class MobilePlatformAdapter implements IPlatformAdapter {
   private invokeNativeAPICall = new InvokeNativeAPICall();
 
-  platform = PlatformVariant.Mobile;
+  platform = PlatformVariant.MobileHybrid;
 
   invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response> {
     const responsePromise = new Promise<V5Response>((resolve, reject) => {
@@ -80,5 +82,9 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
 
   navigateExternal(path: string): void {
     navigation.navigateExternal(path);
+  }
+
+  writeTextToClipboard(text: string): Promise<void> {
+    return Promise.resolve(clipboard.writeText(text));
   }
 }

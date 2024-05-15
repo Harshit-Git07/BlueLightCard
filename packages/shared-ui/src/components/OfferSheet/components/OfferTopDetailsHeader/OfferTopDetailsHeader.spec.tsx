@@ -4,6 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
 import { offerSheetAtom } from '../../store';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../adapters';
 
 const HydrateAtoms = ({ initialValues, children }: any) => {
   useHydrateAtoms(initialValues);
@@ -50,11 +51,21 @@ const OfferTopDetailsHeaderProvider = () => {
 
 describe('smoke test', () => {
   it('should render component without error', () => {
-    render(<OfferTopDetailsHeader />);
+    const platformAdapter = useMockPlatformAdapter();
+    render(
+      <PlatformAdapterProvider adapter={platformAdapter}>
+        <OfferTopDetailsHeader />
+      </PlatformAdapterProvider>,
+    );
   });
 
   it('should render offer details correctly with jotai state management', () => {
-    const { getByRole, getByText } = render(<OfferTopDetailsHeaderProvider />);
+    const platformAdapter = useMockPlatformAdapter();
+    const { getByRole, getByText } = render(
+      <PlatformAdapterProvider adapter={platformAdapter}>
+        <OfferTopDetailsHeaderProvider />
+      </PlatformAdapterProvider>,
+    );
     expect(getByRole('img', { name: /some dummy alt text here/i })).toBeTruthy();
     expect(getByRole('heading', { name: /save with seat/i })).toBeTruthy();
     expect(
@@ -65,13 +76,23 @@ describe('smoke test', () => {
   });
 
   it('should render share offer button', () => {
-    const { getByRole } = render(<OfferTopDetailsHeaderProvider />);
+    const platformAdapter = useMockPlatformAdapter();
+    const { getByRole } = render(
+      <PlatformAdapterProvider adapter={platformAdapter}>
+        <OfferTopDetailsHeaderProvider />
+      </PlatformAdapterProvider>,
+    );
 
     expect(getByRole('button', { name: /terms & conditions/i })).toBeTruthy();
   });
 
   it('should render terms & conditions accordion correctly', () => {
-    const { getByRole, getByText } = render(<OfferTopDetailsHeaderProvider />);
+    const platformAdapter = useMockPlatformAdapter();
+    const { getByRole, getByText } = render(
+      <PlatformAdapterProvider adapter={platformAdapter}>
+        <OfferTopDetailsHeaderProvider />
+      </PlatformAdapterProvider>,
+    );
 
     const tcAccordion = getByRole('button', { name: /terms & conditions/i });
 

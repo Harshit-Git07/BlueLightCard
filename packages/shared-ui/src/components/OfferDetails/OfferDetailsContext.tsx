@@ -120,7 +120,7 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
           }}
           BRAND="blc-uk"
           cdnUrl="https://cdn.bluelightcard.co.uk"
-          isMobileHybrid={platformAdapter.platform === PlatformVariant.Mobile}
+          isMobileHybrid={platformAdapter.platform === PlatformVariant.MobileHybrid}
           isOpen={isOpen}
           offerStatus={offerStatus}
           offerDetails={offerDetails}

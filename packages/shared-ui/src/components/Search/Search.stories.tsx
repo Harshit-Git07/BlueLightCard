@@ -12,7 +12,7 @@ type Story = StoryObj<typeof Search>;
 
 export const Default: Story = {
   args: {
-    platform: PlatformVariant.Mobile,
+    platform: PlatformVariant.MobileHybrid,
     onChange: () => {},
   },
 };

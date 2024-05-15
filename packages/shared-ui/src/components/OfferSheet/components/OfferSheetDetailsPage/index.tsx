@@ -33,7 +33,7 @@ const OfferSheetDetailsPage: FC = () => {
   const { platform } = useAtomValue(offerSheetAtom);
 
   const dynCss = useCSSConditional({
-    'w-full': platform === PlatformVariant.Desktop,
+    'w-full': platform === PlatformVariant.Web,
   });
   const css = useCSSMerge('', dynCss);
 

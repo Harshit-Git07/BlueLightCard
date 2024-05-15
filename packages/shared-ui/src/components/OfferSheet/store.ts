@@ -8,7 +8,7 @@ const initializeOfferSheetAtom = () => {
     onClose: () => {},
     offerMeta: {} as OfferMeta,
     offerDetails: {} as OfferDetails,
-    platform: PlatformVariant.Mobile,
+    platform: PlatformVariant.MobileHybrid,
     cdnUrl: '',
     isMobileHybrid: false,
     showRedemptionPage: false,

@@ -12,7 +12,7 @@ export type Props = SharedProps & {
 
 const Badge: FC<Props> = ({ label, color, size, platform }) => {
   const dynCss = useCSSConditional({
-    'desktop:top-2 desktop:left-2': platform === PlatformVariant.Desktop,
+    'desktop:top-2 desktop:left-2': platform === PlatformVariant.Web,
   });
 
   /* 

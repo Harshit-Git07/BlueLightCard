@@ -11,15 +11,15 @@ export type Props = SharedProps &
     height?: string;
   };
 
-const DynamicSheet: FC<Props> = ({ platform = PlatformVariant.Mobile, ...props }) => {
+const DynamicSheet: FC<Props> = ({ platform = PlatformVariant.MobileHybrid, ...props }) => {
   const dynCss = useCSSConditional({
-    'w-full h-full': platform === PlatformVariant.Mobile,
+    'w-full h-full': platform === PlatformVariant.MobileHybrid,
   });
   const css = useCSSMerge('fixed top-0 left-0 z-50', dynCss);
 
   return (
     <div className={css}>
-      {platform === PlatformVariant.Mobile ? (
+      {platform === PlatformVariant.MobileHybrid ? (
         <MobileDynamicSheet {...props} />
       ) : (
         <DesktopDynamicSheet {...props} />

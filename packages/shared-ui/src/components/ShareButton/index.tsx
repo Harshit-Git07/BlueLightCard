@@ -9,6 +9,7 @@ import CheckCircleSvg from './CheckCircleSvg';
 import ErrorCircleSvg from './ErrorCircleSvg';
 import { offerSheetAtom } from '../OfferSheet/store';
 import { useAtomValue } from 'jotai';
+import { usePlatformAdapter } from '../../adapters';
 
 type Props = {
   showShareLabel?: boolean;
@@ -27,22 +28,25 @@ const ShareButton: FC<Props> = ({
   shareLabel = 'Share',
   amplitudeDetails,
 }) => {
+  const platformAdapter = usePlatformAdapter();
   const { platform, amplitudeEvent } = useAtomValue(offerSheetAtom);
-  const isMobile = platform === PlatformVariant.Mobile;
+  const isMobile = platform === PlatformVariant.MobileHybrid;
 
   const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
 
-  const copyLink = () => {
-    if (!shareDetails.url) return;
+  const copyLink = async () => {
+    if (!shareDetails.url) return false;
     if (!navigator.clipboard) {
       return false;
     }
-    navigator.clipboard.writeText(shareDetails.url);
-    return true;
+    return platformAdapter
+      .writeTextToClipboard(shareDetails.url)
+      .then(() => true)
+      .catch(() => false);
   };
 
-  const handleLinkCopiedWhenNoLabel = () => {
-    const success = copyLink();
+  const handleLinkCopiedWhenNoLabel = async () => {
+    const success = await copyLink();
 
     if (success) {
       toast.success('Link copied', {
@@ -61,14 +65,14 @@ const ShareButton: FC<Props> = ({
     }
   };
 
-  const handleShareClick = () => {
+  const handleShareClick = async () => {
     if (amplitudeEvent && amplitudeDetails) {
       amplitudeEvent(amplitudeDetails);
     }
 
     if (isMobile && !showShareLabel && shareDetails) {
       // Open native share drawer on mobile
-      if (navigator.share) {
+      if (platformAdapter.platform === PlatformVariant.Web && navigator.share) {
         navigator.share({
           title: shareDetails.name,
           text: shareDetails.description,
@@ -83,7 +87,7 @@ const ShareButton: FC<Props> = ({
 
     if (showShareLabel) {
       // When share button displays icon and label
-      const success = copyLink();
+      const success = await copyLink();
       if (success) {
         setShareBtnState('success');
         setTimeout(() => setShareBtnState('share'), 4000);

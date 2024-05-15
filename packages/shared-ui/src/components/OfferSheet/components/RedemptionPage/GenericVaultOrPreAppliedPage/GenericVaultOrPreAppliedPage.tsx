@@ -15,27 +15,27 @@ import { sleep } from '../../../../../utils/sleep';
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   const { offerDetails: offerData, offerMeta, isMobileHybrid } = useAtomValue(offerSheetAtom);
   const labels = useLabels(offerData);
-  const { logAnalyticsEvent, navigateExternal } = usePlatformAdapter();
+  const platformAdapter = usePlatformAdapter();
 
   const logCodeView = () => {
-    logAnalyticsEvent(events.VAULT_CODE_USE_CODE_CLICKED, {
+    platformAdapter.logAnalyticsEvent(events.VAULT_CODE_USE_CODE_CLICKED, {
       company_id: offerMeta.companyId,
       company_name: offerMeta.companyName,
       offer_id: offerData.id,
       offer_name: offerData.name,
       source: 'sheet',
-      origin: isMobileHybrid ? PlatformVariant.Mobile : PlatformVariant.Desktop,
+      origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
       design_type: 'modal_popup',
     });
   };
 
   async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
-    if (code && navigator.clipboard) {
-      await navigator.clipboard.writeText(code);
+    if (code) {
+      await platformAdapter.writeTextToClipboard(code);
     }
     await sleep(1500);
     if (url) {
-      navigateExternal(url);
+      platformAdapter.navigateExternal(url);
     }
   }
 

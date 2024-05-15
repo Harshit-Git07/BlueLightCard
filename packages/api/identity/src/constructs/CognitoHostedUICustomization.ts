@@ -11,7 +11,8 @@ import { CognitoUICustomizationAttachment } from './CognitoUICustomizationAttach
 export class CognitoHostedUICustomization {
   constructor(
     private stack: Stack,
-    private brand: BRANDS,
+    private brand: string,
+    private region: string,
     private userPool: IUserPool,
     private appClients: IUserPoolClient[],
     private cssPath: string,
@@ -22,7 +23,7 @@ export class CognitoHostedUICustomization {
 
   private customizeHostedUI() {
     for (const client of this.appClients) {
-      new CognitoUICustomizationAttachment(this.stack, `${this.brand}-CognitoUICustomizationAttachment-${client.node.id}`, {
+      new CognitoUICustomizationAttachment(this.stack, `${this.brand}-${this.region}-CognitoUICustomizationAttachment-${client.node.id}`, {
         userPool: this.userPool,
         userPoolClient: client,
         cssPath: this.cssPath,

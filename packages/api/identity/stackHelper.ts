@@ -17,6 +17,11 @@ import externalClientProvidersUk from "../identity/src/cognito/resources/externa
 import externalClientProvidersAus from "../identity/src/cognito/resources/externalCognitoPartners-ap-southeast-2.json";
 
 const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
+const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
+const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
+const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
+const ddsLogoPath = path.join(cognitoHostedUiAssets, 'dds-logo.png');
+
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
   appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
 const getAuSuffix = (region: REGIONS) => (region === REGIONS.AP_SOUTHEAST_2 ? '-au' : '');
@@ -363,8 +368,6 @@ export function createNewCognito(
   identitySecret: ISecret,
   identityTable: Table
 ) {
-  const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
-  const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
 
   const cognito = new Cognito(stack, 'cognitoNew', {
     login: ['email'],
@@ -507,6 +510,7 @@ export function createNewCognito(
 
   new CognitoHostedUICustomization(
     stack,
+    "blc",
     stack.region === REGIONS.AP_SOUTHEAST_2 ? BRANDS.BLC_AU : BRANDS.BLC_UK,
     cognito.cdk.userPool,
     [webClient, mobileClient],
@@ -555,6 +559,7 @@ export function createNewCognito(
 
     createExternalClient(stack, cognito, false);
   }
+
   return cognito;
 }
 
@@ -571,8 +576,6 @@ export function createNewCognitoDDS(
   identitySecret: ISecret,
   identityTable: Table
 ) {
-  const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
-  const ddsLogoPath = path.join(cognitoHostedUiAssets, 'dds-logo.png');
 
   //auth - DDS
   const cognito_dds = new Cognito(stack, 'cognito_ddsNew', {
@@ -699,6 +702,7 @@ export function createNewCognitoDDS(
 
   new CognitoHostedUICustomization(
     stack,
+    "dds",
     BRANDS.DDS_UK,
     cognito_dds.cdk.userPool,
     [webClientDds, mobileClientDds],
@@ -749,7 +753,7 @@ export function createNewCognitoDDS(
     
     createExternalClient(stack, cognito_dds, true);
   }
-  
+
   return cognito_dds;
 }
 
@@ -774,19 +778,30 @@ const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean) =>
   const providers = isDds? providerList.DDS : providerList.BLC;
 
   providers.map((clients: { partnersName: string; callBackUrl: string; signoutUrl: string; }) => {
-        cognito.cdk.userPool.addClient(clients.partnersName, {
-        authFlows: {
-          userPassword: true,
-        },
-        generateSecret: true,
-        oAuth: {
-          flows: {
-            authorizationCodeGrant: true,
+        const externalClient = cognito.cdk.userPool.addClient(clients.partnersName, {
+          authFlows: {
+            userPassword: true,
           },
-          scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
-          callbackUrls: [clients.callBackUrl],
-          logoutUrls: [clients.signoutUrl],
-        },
-      });
+          generateSecret: true,
+          oAuth: {
+            flows: {
+              authorizationCodeGrant: true,
+            },
+            scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
+            callbackUrls: [clients.callBackUrl],
+            logoutUrls: [clients.signoutUrl],
+          },
+       });
+      new CognitoHostedUICustomization(
+        stack,
+        isDds? "dds" : "blc",
+        stack.region === REGIONS.AP_SOUTHEAST_2 ? BRANDS.BLC_AU : BRANDS.BLC_UK,
+        cognito.cdk.userPool,
+        [externalClient],
+        isDds? ddsHostedUiCSSPath : blcHostedUiCSSPath,
+        isDds? ddsLogoPath : blcLogoPath,
+      );
     })
+
+
 }

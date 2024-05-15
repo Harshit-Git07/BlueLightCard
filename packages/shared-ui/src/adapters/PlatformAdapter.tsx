@@ -29,6 +29,11 @@ export interface IPlatformAdapter {
    */
   platform: PlatformVariant;
   /**
+   * Retrieve the value of a single Amplitude feature flag/experiment
+   * @param featureFlagName Name of the feature flag/experiment to retrieve
+   */
+  getAmplitudeFeatureFlag(featureFlagName: string): string | undefined;
+  /**
    * Invokes a v5 API endpoint
    */
   invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response>;

@@ -7,6 +7,8 @@ import {
 } from '../useOfferDetailsComponent';
 import { useMockPlatformAdapter } from '../../../adapters';
 
+const supportedRedemptionTypes = ['vault', 'generic'];
+
 describe('useOfferDetailsComponent', () => {
   test('it returns empty offer details by default', () => {
     const mockPlatformAdapter = useMockPlatformAdapter();
@@ -16,27 +18,47 @@ describe('useOfferDetailsComponent', () => {
     expect(result.current.OfferDetailsComponent).toBe(EmptyOfferDetails);
   });
 
-  test('it returns the offer details link for the control', async () => {
-    const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
+  test.each(supportedRedemptionTypes)(
+    'it returns the offer details link for the %s offer control group',
+    async (redemptionType) => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType } });
+      mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('control');
 
-    const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+      const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
 
-    await act(async () => {
-      await result.current.updateOfferDetailsComponent('control', 1);
-    });
+      await act(async () => {
+        await result.current.updateOfferDetailsComponent(1);
+      });
 
-    expect(result.current.OfferDetailsComponent).toBe(OfferDetailsLink);
-  });
+      expect(result.current.OfferDetailsComponent).toBe(OfferDetailsLink);
+    },
+  );
 
-  test('it returns the offer details link for the treatment and a non-vault offer', async () => {
+  test.each(supportedRedemptionTypes)(
+    'it returns the offer sheet for the %s offer treatment group',
+    async (redemptionType) => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType } });
+      mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
+
+      const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+
+      await act(async () => {
+        await result.current.updateOfferDetailsComponent(1);
+      });
+
+      expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
+    },
+  );
+
+  test('it returns the offer details link for an unsupported redemption type', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, {
-      data: { redemptionType: 'default' },
+      data: { redemptionType: 'unsupported-redemption-type' },
     });
 
     const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
 
     await act(async () => {
-      await result.current.updateOfferDetailsComponent('treatment', 1);
+      await result.current.updateOfferDetailsComponent(1);
     });
 
     expect(result.current.OfferDetailsComponent).toBe(OfferDetailsLink);
@@ -48,33 +70,9 @@ describe('useOfferDetailsComponent', () => {
     const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
 
     await act(async () => {
-      await result.current.updateOfferDetailsComponent('treatment', 1);
+      await result.current.updateOfferDetailsComponent(1);
     });
 
     expect(result.current.OfferDetailsComponent).toBe(OfferDetailsLink);
-  });
-
-  test('it returns the offer sheet for the treatment and a vault offer', async () => {
-    const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
-
-    const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
-
-    await act(async () => {
-      await result.current.updateOfferDetailsComponent('treatment', 1);
-    });
-
-    expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
-  });
-
-  test('it does not get redemption details if the user is not in the experiment treatment', async () => {
-    const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
-
-    const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
-
-    await act(async () => {
-      await result.current.updateOfferDetailsComponent('control', 1);
-    });
-
-    expect(mockPlatformAdapter.invokeV5Api).not.toHaveBeenCalled();
   });
 });

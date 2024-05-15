@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { IPlatformAdapter, usePlatformAdapter } from '../../adapters';
+import { getPlatformExperimentForRedemptionType } from './offerDetailsExperiments';
 import { getRedemptionDetails } from '../../api';
 import OfferSheet from '../OfferSheet';
 
@@ -29,37 +30,27 @@ export const OfferDetailsLink: FC<OfferDetailsComponentProps> = ({
 };
 
 export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
-  const [experiment, setExperiment] = useState('control');
   const [redemptionType, setRedemptionType] = useState('');
 
-  const getOfferDetailsComponent = (experiment: string, redemptionType: string) => {
-    const offerDetailsComponent = {
-      vault: OfferSheet,
-      generic: OfferSheet,
-      preApplied: OfferSheet,
-    }[redemptionType];
-
-    if (offerDetailsComponent && experiment === 'treatment') {
-      return offerDetailsComponent;
+  const getOfferDetailsComponent = (redemptionType: string) => {
+    if (!redemptionType) {
+      return EmptyOfferDetails;
     }
 
-    if (redemptionType !== '') {
+    const experiment = getPlatformExperimentForRedemptionType(platformAdapter, redemptionType);
+
+    if (!experiment || experiment === 'control') {
       return OfferDetailsLink;
     }
+
+    if (experiment === 'treatment') {
+      return OfferSheet;
+    }
+
     return EmptyOfferDetails;
   };
 
-  const updateOfferDetailsComponent = async (experiment: string, offerId: number) => {
-    setExperiment(experiment);
-
-    // IMPORTANT: Define a more reliable means of safeguarding against older app versions.
-    // If we decide to fully implement this experiment then we will need a different way of
-    // determining if the app version has V5 API support.
-    if (experiment !== 'treatment') {
-      setRedemptionType('default');
-      return;
-    }
-
+  const updateOfferDetailsComponent = async (offerId: number) => {
     try {
       const redemptionDetails = await getRedemptionDetails(platformAdapter, offerId);
       setRedemptionType(redemptionDetails.data.redemptionType);
@@ -68,7 +59,7 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
     }
   };
 
-  const OfferDetailsComponent = getOfferDetailsComponent(experiment, redemptionType);
+  const OfferDetailsComponent = getOfferDetailsComponent(redemptionType);
 
   return { OfferDetailsComponent, updateOfferDetailsComponent };
 };

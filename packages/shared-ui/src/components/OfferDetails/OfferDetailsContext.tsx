@@ -3,40 +3,21 @@ import { PlatformVariant } from '../../types';
 import { useOfferDetailsComponent } from './useOfferDetailsComponent';
 import { usePlatformAdapter } from '../../adapters';
 import { OfferDetails, OfferMeta, OfferStatus } from '../OfferSheet/types';
-import { z } from 'zod';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../OfferSheet/store';
+import { getOffer } from '../../api/offers';
 
 type IOfferDetailsContext = {
-  viewOffer: (
-    experiment: string,
-    offerId: number,
-    companyId: number,
-    companyName: string,
-  ) => Promise<void>;
+  viewOffer: (offerId: number, companyId: number, companyName: string) => Promise<void>;
 };
 const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
-  viewOffer: (experiment: string, offerId: number, companyId: number, companyName: string) =>
-    Promise.resolve(),
+  viewOffer: (offerId: number, companyId: number, companyName: string) => Promise.resolve(),
 });
 export const useOfferDetails = () => useContext(OfferDetailsContext);
 
 type ViewOfferProviderProps = {
   children?: React.ReactNode;
 };
-
-const v5ResponseSchema = z.object({
-  data: z.object({
-    id: z.number(),
-    companyId: z.number(),
-    companyLogo: z.string(),
-    description: z.string(),
-    expiry: z.string(),
-    name: z.string(),
-    terms: z.string(),
-    type: z.string(),
-  }),
-});
 
 export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
   const platformAdapter = usePlatformAdapter();
@@ -49,34 +30,22 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
   const [offerDetails, setOfferDetails] = useState<OfferDetails | undefined>();
   const [offerStatus, setOfferStatus] = useState<OfferStatus>('pending');
 
-  const viewOffer = async (
-    experiment: string,
-    offerId: number,
-    companyId: number,
-    companyName: string,
-  ) => {
+  const viewOffer = async (offerId: number, companyId: number, companyName: string) => {
     /*
     Run the V5 api call when the experiment is active
     Similar logic to useOfferDetailsComponent.tsx
     */
-    if (experiment === 'treatment') {
-      const response = await platformAdapter.invokeV5Api(`/eu/offers/offers/${offerId}`, {
-        method: 'GET',
-      });
+    try {
+      const data = await getOffer(platformAdapter, offerId);
 
-      if (response.statusCode !== 200) {
-        setOfferStatus('error');
-      } else {
-        const data = v5ResponseSchema.parse(JSON.parse(response.body)).data;
-        setOfferDetails(data as OfferDetails);
-        setOfferMeta({
-          offerId: data.id,
-          companyId: data.companyId,
-          companyName: companyName,
-        });
-        setOfferStatus('success');
-      }
-    } else {
+      setOfferDetails(data as OfferDetails);
+      setOfferMeta({
+        offerId: data.id,
+        companyId: data.companyId,
+        companyName: companyName,
+      });
+      setOfferStatus('success');
+    } catch (err) {
       setOfferDetails({
         id: offerId,
         companyId,
@@ -92,9 +61,10 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
         companyName: companyName,
         offerId: offerId,
       });
+      setOfferStatus('error');
     }
 
-    await updateOfferDetailsComponent(experiment, offerId);
+    await updateOfferDetailsComponent(offerId);
     setOfferAtom((prev) => ({ ...prev, isOpen: true }));
   };
 

@@ -12,6 +12,7 @@ const componentMeta: Meta<typeof OfferSheet> = {
 };
 
 const mockPlatformAdapter = {
+  getAmplitudeFeatureFlag: () => 'control',
   invokeV5Api: () =>
     Promise.resolve({ statusCode: 200, body: "{ data: { redemptionType: 'vault' } }" }),
   logAnalyticsEvent: () => {},

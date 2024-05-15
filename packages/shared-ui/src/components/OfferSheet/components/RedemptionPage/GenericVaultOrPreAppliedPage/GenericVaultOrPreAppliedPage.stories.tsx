@@ -5,6 +5,7 @@ import { IPlatformAdapter, PlatformAdapterProvider } from '../../../../../adapte
 import { PlatformVariant } from '../../../../../types';
 
 const mockPlatformAdapter = {
+  getAmplitudeFeatureFlag: () => 'control',
   invokeV5Api: () =>
     Promise.resolve({ statusCode: 200, body: "{ data: { redemptionType: 'vault' } }" }),
   logAnalyticsEvent: () => {},

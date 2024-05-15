@@ -13,6 +13,9 @@ import {
   V5Response,
 } from '@bluelightcard/shared-ui';
 import { z } from 'zod';
+import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const analytics = new InvokeNativeAnalytics();
 const navigation = new InvokeNativeNavigation();
@@ -23,7 +26,19 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
 
   platform = PlatformVariant.MobileHybrid;
 
+  getAmplitudeFeatureFlag(featureFlagName: string): string | undefined {
+    const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
+
+    return amplitudeExperiments[featureFlagName];
+  }
+
   invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response> {
+    const v5ApiFeatureFlag = this.getAmplitudeFeatureFlag(FeatureFlags.V5_API_INTEGRATION);
+
+    if (v5ApiFeatureFlag !== 'on') {
+      throw new Error('V5 API calls are not supported by current app version');
+    }
+
     const responsePromise = new Promise<V5Response>((resolve, reject) => {
       let unsubscribe: Unsubscribe | null = null;
 

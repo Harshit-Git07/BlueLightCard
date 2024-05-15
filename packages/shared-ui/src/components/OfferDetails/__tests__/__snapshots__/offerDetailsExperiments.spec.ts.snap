@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the generic redemption type 1`] = `"offer-sheet-redeem-generic-app"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the vault redemption type 1`] = `"offer-sheet-redeem-vault-app"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the web experiment for the vault redemption type 1`] = `"offer-sheet-redeem-vault-search-and-homepage"`;

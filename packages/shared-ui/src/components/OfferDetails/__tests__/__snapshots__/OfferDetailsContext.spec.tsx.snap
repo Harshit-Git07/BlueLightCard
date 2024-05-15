@@ -1,0 +1,248 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ViewOfferProvider it renders the given children 1`] = `
+<DocumentFragment>
+  <div
+    style="min-height: 250px;"
+  >
+    <button>
+      View Offer
+    </button>
+    <div
+      class="w-full h-full transition-visibility duration-1000 invisible"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ViewOfferProvider it renders the offer link 1`] = `
+<DocumentFragment>
+  <div
+    style="min-height: 250px;"
+  >
+    <button>
+      View Offer
+    </button>
+    <div
+      class="w-full h-full transition-visibility duration-1000 invisible"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ViewOfferProvider it renders the offer sheet 1`] = `
+<DocumentFragment>
+  <div
+    style="min-height: 250px;"
+  >
+    <button>
+      View Offer
+    </button>
+    <div
+      class="w-full h-full transition-visibility duration-1000 visible"
+    >
+      <div
+        class="fixed top-0 left-0 z-50 w-full h-full"
+      >
+        <div
+          class="absolute w-full h-full bg-transparent"
+        >
+          <div
+            class="absolute w-full h-full transition-opacity duration-1000 bg-[#00000088] opacity-100"
+          />
+          <div
+            class="absolute w-full flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-white translate-y-[-100%]"
+            style="height: 90%; bottom: -90%;"
+          >
+            <div
+              class="w-full flex justify-end p-4"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-x cursor-pointer"
+                data-icon="x"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 384 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+            <div
+              class="flex flex-col justify-between flex-1 w-full h-full overflow-scroll pb-40"
+            >
+              <div
+                class=" "
+              >
+                <div
+                  class="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-museo"
+                >
+                  <div>
+                    <div
+                      class="flex justify-center"
+                    >
+                      <img
+                        alt="Some dummy alt text here"
+                        class="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+                        data-nimg="1"
+                        decoding="async"
+                        height="64"
+                        loading="lazy"
+                        src="http://localhost/_next/static/misc/Logo_coming_soon.jpg?width=256&quality=75"
+                        srcset="_next/static/misc/Logo_coming_soon.jpg?width=128&quality=75 1x, _next/static/misc/Logo_coming_soon.jpg?width=256&quality=75 2x"
+                        style="color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+                        width="100"
+                      />
+                    </div>
+                    <h2
+                      class="text-2xl text-[#FAFAFA] dark:text-[#32363C] mb-2 font-bold font-museo leading-8 mt-4 !text-black "
+                    >
+                      Test Company
+                    </h2>
+                    <p
+                      class="text-base font-light font-museo leading-5 mt-2 "
+                    >
+                      A Test Company description
+                    </p>
+                    <div
+                      class="flex flex-wrap justify-center mt-4"
+                    >
+                      <button
+                        class=" py-1 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-[#000099] dark:text-[#2EB8E6]  focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit"
+                        type="button"
+                      >
+                        <div
+                          class="false text-base font-museo font-bold leading-6 flex flex-row"
+                        >
+                          <div
+                            class="my-auto"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="svg-inline--fa fa-arrow-up-from-bracket "
+                              data-icon="arrow-up-from-bracket"
+                              data-prefix="fas"
+                              data-testid="font-awesome-share-icon"
+                              focusable="false"
+                              role="img"
+                              viewBox="0 0 448 512"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </div>
+                          <span
+                            class="ml-2"
+                          >
+                            Share offer
+                          </span>
+                        </div>
+                      </button>
+                    </div>
+                    <div
+                      class="w-full text-left "
+                    >
+                      <div
+                        class="w-full leading-6"
+                      >
+                        <button
+                          class="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-[#DCDCDC] border-solid"
+                        >
+                          <div
+                            class="w-full"
+                          >
+                            <h4
+                              class="font-museo text-base font-medium text-[#1C1D22]"
+                            >
+                              Terms & Conditions
+                            </h4>
+                          </div>
+                          <div
+                            class="flex max-w-[40px] items-center justify-end"
+                          >
+                            <div
+                              style="width: 15px; height: 15px;"
+                            >
+                              <svg
+                                fill="none"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                width="16"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M8.99999 1.33325H7.66666V7.33325H1.66666V8.66659H7.66666V14.6666H8.99999V8.66659H15V7.33325H8.99999V1.33325Z"
+                                  fill="#000033"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </button>
+                        <div
+                          class="duration-200 ease-in-out hidden font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap"
+                        >
+                          <span>
+                            Some test terms and conditions
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white"
+                >
+                  <div
+                    class="w-full flex flex-wrap mb-2 justify-center"
+                  >
+                    <div
+                      class="bg-[#ECEFF2] m-1 inline-flex rounded-full px-3 py-1"
+                    >
+                      <p
+                        class="text-[#202125] font-museo flex items-center text-xs font-bold leading-4"
+                      >
+                        some-offer-type
+                      </p>
+                    </div>
+                    <div
+                      class="bg-[#ECEFF2] m-1 inline-flex rounded-full px-3 py-1"
+                    >
+                      <p
+                        class="text-[#202125] font-museo flex items-center text-xs font-bold leading-4"
+                      >
+                        Expiry: 01/01/2024
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    class="w-full relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] cursor-pointer"
+                  >
+                    <div
+                      class="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-museo text-base font-bold leading-6 text-white bg-gradient-to-b from-blue-700 to-[#000099] hover:opacity-90 transition-opacity duration-200 notAnimated"
+                      style="transition-duration: 10000ms;"
+                    >
+                      <span
+                        class="leading-10 font-bold text-md"
+                      >
+                        Get Discount
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

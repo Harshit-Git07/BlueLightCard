@@ -160,15 +160,17 @@ const authenticateUser = async (username: string, password: string) => {
 }
 
 const formatPhoneNumber = (unparsedPhoneNumber: string) => {
+    const countryCode = process.env.REGION && process.env.REGION === 'ap-southeast-2' ? 'AU' : 'GB';
+    const defaultNumber = countryCode === 'AU' ? '+610000000000' : '+440000000000';
     if (typeof unparsedPhoneNumber !== 'string'){
-        return '+440000000000';
+        return defaultNumber;
     }
-    const phoneNumber = parsePhoneNumber(unparsedPhoneNumber, 'GB');
+    const phoneNumber = parsePhoneNumber(unparsedPhoneNumber, countryCode);
     if (phoneNumber && phoneNumber.isValid() && phoneNumber.number) {
         logger.debug ("phoneNumber", phoneNumber.number);
         return phoneNumber.number
     } else {
-        return '+440000000000';
+        return defaultNumber;
     }
 };
 

@@ -25,16 +25,20 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <PlatformAdapterProvider adapter={new MobilePlatformAdapter()}>
-        <UserServiceProvider>
-          <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
+        <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
+          {/*
+            AmplitudeProvider uses a custom Jotai store so all providers that use the default store should be
+            added as children of the AmplitudeProvider.
+          */}
+          <UserServiceProvider>
             <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
               <ViewOfferProvider>
                 <Component {...pageProps} />
               </ViewOfferProvider>
               <Spinner />
             </main>
-          </AmplitudeProvider>
-        </UserServiceProvider>
+          </UserServiceProvider>
+        </AmplitudeProvider>
       </PlatformAdapterProvider>
     </QueryClientProvider>
   );

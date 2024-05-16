@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.69.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.1...bluelightcard/identity-v1.69.2) (2024-05-16)
+
+
+### Bug Fixes
+
+* null check ([#1369](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1369)) ([69baf15](https://github.com/bluelightcard/BlueLightCard-2.0/commit/69baf158937ce781a27711051324509160328831))
+
 ## [1.69.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.0...bluelightcard/identity-v1.69.1) (2024-05-16)
 
 

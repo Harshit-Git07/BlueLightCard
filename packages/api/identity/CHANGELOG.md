@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.69.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.0...bluelightcard/identity-v1.69.1) (2024-05-16)
+
+
+### Bug Fixes
+
+* sync profile ([#1366](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1366)) ([ff4333b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ff4333bfedffa0b3ce635247603fed6a61251d0b))
+
 ## [1.69.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.68.0...bluelightcard/identity-v1.69.0) (2024-05-15)
 
 

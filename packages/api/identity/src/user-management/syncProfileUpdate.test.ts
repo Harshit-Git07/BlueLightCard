@@ -119,6 +119,40 @@ describe('Sync User Profile Data', () => {
         });
     });
 
+    test('Returns 200 for successful update', async () => {
+        ddbMock.on(QueryCommand).resolves({
+            Items: [
+              {
+                pk: 'MEMBER#3df8674b-780a-4dd9-b8ae-1effa340c1de',
+                sk: 'PROFILE#6eeea0cd-df9d-43d0-8441-737c771e3982',
+                surname: 'Surname',
+                firstname: 'Firstname',
+                employer: '365478',
+              },
+            ],
+          });
+          ddbMock.on(UpdateCommand).resolves({
+            $metadata: {
+              httpStatusCode: 200,
+            },
+          });
+        const res = await handler(
+            {
+                headers: {},
+                body: { },
+                detail: { brand: 'BLC_UK', spare_email: '', uuid: '3df8674b-780a-4dd9-b8ae-1effa340c1de'}
+            },
+            {},
+        );
+        expect(res).toEqual({
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*' 
+            },
+            statusCode: 200, body: JSON.stringify({ message: 'user profile data updated' })
+        });
+    });
+
     test('Returns 200 for successful create', async () => {
         ddbMock.on(QueryCommand).resolves({
             Items: [

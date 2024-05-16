@@ -98,6 +98,8 @@ export const handler = async (event: any, context: any) => {
     (Object.keys(detail) as (keyof typeof detail)[]).find((key) => {
       if(key === 'dob'){
         detail[key]= typeof detail[key] === "string" ? transformDateToFormatYYYYMMDD(String(detail[key])) : null;
+      }else if(key === 'spare_email'){
+        detail[key] = detail[key] === '' ? 'NA' : detail[key];
       }
         updateExp += ` ${key} = :${key},`;
         expAttrValues[`:${key}`] = detail[key];

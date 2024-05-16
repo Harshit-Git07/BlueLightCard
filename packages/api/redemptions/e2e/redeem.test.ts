@@ -18,10 +18,10 @@ import { redemptionFactory } from '../libs/test/factories/redemption.factory';
 import { vaultFactory } from '../libs/test/factories/vault.factory';
 import { vaultBatchFactory } from '../libs/test/factories/vaultBatches.factory';
 import { vaultCodeFactory } from '../libs/test/factories/vaultCode.factory';
+import { TestUser, TestUserTokens } from '../libs/test/helpers/identity';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
 import { DwhTestHelper } from './helpers/DwhTestHelper';
-import { TestUser, TestUserTokens } from './helpers/identity';
 
 describe('POST /member/redeem', () => {
   let connectionManager: E2EDatabaseConnectionManager;
@@ -31,14 +31,14 @@ describe('POST /member/redeem', () => {
   beforeAll(async () => {
     // eslint-disable-next-line no-console
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
-    testUser = await TestUser.setup();
+    testUser = await TestUser.create();
     testUserTokens = await testUser.authenticate();
     // Set a conservative timeout
   }, 60_000);
 
   afterAll(async () => {
     await connectionManager?.cleanup();
-    await testUser?.cleanup();
+    await testUser?.delete();
   });
 
   test('should return unauthorized when called with invalid token', async () => {

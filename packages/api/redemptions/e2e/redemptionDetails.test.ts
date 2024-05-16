@@ -6,10 +6,10 @@ import { afterAll, beforeAll, describe, expect, onTestFinished, test } from 'vit
 import { DatabaseConnectionType } from '../libs/database/connection';
 import { createRedemptionsIdE2E, redemptionsTable } from '../libs/database/schema';
 import { redemptionFactory } from '../libs/test/factories/redemption.factory';
+import { TestUser, TestUserTokens } from '../libs/test/helpers/identity';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
 import { DwhTestHelper } from './helpers/DwhTestHelper';
-import { TestUser, TestUserTokens } from './helpers/identity';
 
 describe('GET /member/redemptionDetails', () => {
   let connectionManager: E2EDatabaseConnectionManager;
@@ -19,14 +19,14 @@ describe('GET /member/redemptionDetails', () => {
   beforeAll(async () => {
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
     // TODO: Prevent emails being sent out
-    testUser = await TestUser.setup();
+    testUser = await TestUser.create();
     testUserTokens = await testUser.authenticate();
     // Set a conservative timeout
   }, 60_000);
 
   afterAll(async () => {
     await connectionManager?.cleanup();
-    await testUser?.cleanup();
+    await testUser?.delete();
   });
 
   test('should return unauthorized when called with invalid token', async () => {

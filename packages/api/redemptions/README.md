@@ -1,5 +1,33 @@
 # Redemptions
 
+## Test Users
+
+### Generating Testing Tokens
+
+Lightweight test users can be created for testing APIs. These are (for now) API-only users, which cannot be used to login via the front-end.
+
+To create a test user, run:
+
+```sh
+npm run -w packages/api/redemptions createTestUser
+```
+
+This will create a test user and persist the details of this user to disk. Once a test user has been successfully created, you can generate tokens for that user with the following command.
+
+```sh
+npm run -w packages/api/redemptions authenticateTestUser
+```
+
+If you need to remove the test user, simply run:
+
+```sh
+npm run -w packages/api/redemptions deleteTestUser
+```
+
+Alternatively, if you don't need the user to be removed in cognito, you can delete the file `.redemptionsTestUserDetails.json` instead.
+
+Please note that to run any of the above commands, you will need to be running the backend locally with `npm run dev`.
+
 ## Database
 
 ### Accessing the DB via the Bastion Host

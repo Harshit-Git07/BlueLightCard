@@ -6,21 +6,23 @@ import {
   CognitoIdentityProviderClient,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { faker } from '@faker-js/faker';
-// import { createHmac } from "crypto";
 import { Config } from 'sst/node/config';
+import { z } from 'zod';
 
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
 
 const logger = new CliLogger();
 
-type TestUserDetails = {
-  email: string;
-  password: string;
-  attributes: {
-    blcOldId: number;
-    blcOldUuid: string;
-  };
-};
+export const TestUserDetailsSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+  attributes: z.object({
+    blcOldId: z.number(),
+    blcOldUuid: z.string(),
+  }),
+});
+
+export type TestUserDetails = z.infer<typeof TestUserDetailsSchema>;
 
 export type TestUserTokens = {
   idToken: string;
@@ -28,10 +30,9 @@ export type TestUserTokens = {
 };
 
 export class TestUser {
-  private constructor(
-    private readonly client: CognitoIdentityProviderClient,
-    public readonly userDetail: TestUserDetails,
-  ) {}
+  private readonly client = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
+
+  constructor(public readonly userDetail: TestUserDetails) {}
 
   public async authenticate(): Promise<TestUserTokens> {
     const authResponse = await this.client.send(
@@ -42,7 +43,6 @@ export class TestUser {
         AuthParameters: {
           USERNAME: this.userDetail.email,
           PASSWORD: this.userDetail.password,
-          // SECRET_HASH: this.generateSecretHash(),
         },
       }),
     );
@@ -62,7 +62,7 @@ export class TestUser {
 
   // ============================= SETUP / CLEANUP =============================
 
-  public static async setup() {
+  public static async create() {
     const client = new CognitoIdentityProviderClient({ region: 'eu-west-2' });
 
     const userDetail: TestUserDetails = {
@@ -121,10 +121,10 @@ export class TestUser {
       message: '✅ Cognito user setup complete',
     });
 
-    return new TestUser(client, userDetail);
+    return new TestUser(userDetail);
   }
 
-  public async cleanup() {
+  public async delete() {
     logger.info({
       message: 'Cleaning up cognito user...',
     });

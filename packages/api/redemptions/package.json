@@ -17,7 +17,10 @@
     "db:up": "dotenv -e ../../../.env -- docker compose up -d",
     "db:down": "dotenv -e ../../../.env -- docker compose down",
     "drizzle:generate": "dotenv -e ../../../.env -- drizzle-kit generate:pg",
-    "drizzle:studio": "dotenv -e ../../../.env -- drizzle-kit studio"
+    "drizzle:studio": "dotenv -e ../../../.env -- drizzle-kit studio",
+    "createTestUser": "dotenv -e ../../../.env -- sst bind vite-node ./scripts/testUser/create.ts",
+    "deleteTestUser": "dotenv -e ../../../.env -- sst bind vite-node ./scripts/testUser/delete.ts",
+    "authenticateTestUser": "dotenv -e ../../../.env -- sst bind vite-node ./scripts/testUser/authenticate.ts"
   },
   "author": "",
   "license": "ISC",

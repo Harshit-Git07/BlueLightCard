@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.14.1...bluelightcard/redemptions-v1.14.2) (2024-05-17)
+
+
+### Other Changes
+
+* [TR-547]: Create test user scripts ([#1359](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1359)) ([4e6ab5e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4e6ab5e62085b76ef77ea0ce562e8491fbc86d3f))
+
 ## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.14.0...bluelightcard/redemptions-v1.14.1) (2024-05-13)
 
 

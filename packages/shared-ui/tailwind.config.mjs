@@ -20,6 +20,16 @@ const config = {
         museo: ['var(--font-museo)'],
         sourcesans: ['var(--font-sourcesans)'],
       },
+      animation: {
+        spin: 'spin 3s linear infinite',
+        magicButtonGradient: 'magicButtonGradient 3s linear infinite',
+      },
+      keyframes: {
+        magicButtonGradient: {
+          '0%, 100%': { 'background-position': '0% 0%' },
+          '50%': { 'background-position': '75% 0%' },
+        },
+      },
     },
   },
   plugins: [],

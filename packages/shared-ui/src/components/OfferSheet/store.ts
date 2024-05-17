@@ -1,8 +1,8 @@
 import { atom } from 'jotai';
 import { AmplitudeArg, AmplitudeEvent, PlatformVariant } from '../../types';
-import { OfferDetails, OfferMeta } from './types';
+import { OfferDetails, OfferMeta, RedemptionType } from './types';
 
-const initializeOfferSheetAtom = () => {
+export const initializeOfferSheetAtom = () => {
   return {
     isOpen: false,
     onClose: () => {},
@@ -14,6 +14,8 @@ const initializeOfferSheetAtom = () => {
     showRedemptionPage: false,
     amplitudeEvent: ((arg: AmplitudeArg) => {}) as AmplitudeEvent | null,
     BRAND: '',
+    redemptionType: '' as RedemptionType | undefined,
+    height: '80%',
   };
 };
 

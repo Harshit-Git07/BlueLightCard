@@ -5,19 +5,26 @@ import { useSetAtom } from 'jotai';
 import { offerSheetAtom } from './store';
 import { useEffect } from 'react';
 import { IPlatformAdapter, PlatformAdapterProvider } from '../../adapters';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 const componentMeta: Meta<typeof OfferSheet> = {
   title: 'Component System/Offer Sheet',
   component: OfferSheet,
 };
 
+const mockQueryClient = new QueryClient();
 const mockPlatformAdapter = {
   getAmplitudeFeatureFlag: () => 'control',
   invokeV5Api: () =>
-    Promise.resolve({ statusCode: 200, body: "{ data: { redemptionType: 'vault' } }" }),
+    Promise.resolve({ status: 200, data: "{ data: { redemptionType: 'vault' } }" }),
   logAnalyticsEvent: () => {},
   navigate: () => {},
   navigateExternal: () => {},
+  endpoints: {
+    REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
+    REDEEM_OFFER: '/eu/redemptions/member/redeem',
+    OFFER_DETAILS: '/eu/offers/offers',
+  },
   writeTextToClipboard: () => Promise.resolve(),
   platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;
@@ -49,26 +56,29 @@ const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
 
   return (
     <div style={{ minHeight: 250 }}>
-      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <OfferSheet {...args} />
-      </PlatformAdapterProvider>
+      <QueryClientProvider client={mockQueryClient}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheet {...args} />
+        </PlatformAdapterProvider>
+      </QueryClientProvider>
     </div>
   );
 };
 
+// TODO: Search a way to mock react-query hooks to test the different states
 export const PendingStatus = DefaultTemplate.bind({});
 PendingStatus.args = {
-  offerStatus: 'pending',
+  height: '250px',
 };
 
 export const ErrorStatus = DefaultTemplate.bind({});
 ErrorStatus.args = {
-  offerStatus: 'error',
+  height: '250px',
 };
 
 export const SuccessStatus = DefaultTemplate.bind({});
 SuccessStatus.args = {
-  offerStatus: 'success',
+  height: '250px',
 };
 
 export default componentMeta;

@@ -30,5 +30,6 @@ export * from './types';
 export * from './utils/offers/offerSheetParser';
 export * from './context/OfferSheet/OfferSheetContext';
 export * from './context/OfferSheet/hooks';
+export * from './helpers/urlResolver';
 
 import './styles/styles.css';

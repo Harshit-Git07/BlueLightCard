@@ -7,7 +7,7 @@ import { useMedia } from 'react-use';
 import { advertQuery } from 'src/graphql/advertQuery';
 import { makeQuery } from 'src/graphql/makeQuery';
 import { shuffle } from 'lodash';
-import { BRAND } from '@/global-vars';
+import { BRAND, CDN_URL } from '@/global-vars';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
 import {
@@ -29,11 +29,12 @@ import AmplitudeContext from '@/context/AmplitudeContext';
 import amplitudeEvents from '@/utils/amplitude/events';
 import { logCompanyView } from '@/utils/amplitude/logCompanyView';
 import { usePathname } from 'next/navigation';
+import { useOfferDetails } from '@bluelightcard/shared-ui';
 
 type CompanyPageProps = {};
 
 export type OfferData = {
-  id: string;
+  id: number;
   type: OfferTypeStrLiterals;
   name: string;
   image: string;
@@ -83,6 +84,8 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   });
   const [offerData, setOfferData] = useState<OfferData[] | null>([]);
 
+  const { viewOffer } = useOfferDetails();
+
   const handleCompanyView = (eventSource: string, companyId: string, companyName: string) => {
     logCompanyView({
       amplitude,
@@ -101,6 +104,27 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       setSelectedType(pillType);
     }
   };
+
+  function cleanText(text: string) {
+    return text
+      .replace(/&nbsp;/g, ' ') // Might not matter, but just in case
+      .replace(/&amp;/g, '&')
+      .replace(/&pound;/g, '£');
+  }
+
+  async function onSelectOffer(offerId: number, companyId: number, companyName: string) {
+    await viewOffer({
+      offerId: offerId,
+      companyId: companyId,
+      companyName: companyName,
+      platform: PlatformVariant.Web,
+      cdnUrl: CDN_URL,
+      BRAND: 'blc-uk',
+      isMobileHybrid: false,
+      height: '80%',
+      amplitudeCtx: amplitude,
+    });
+  }
 
   useEffect(() => {
     const fetchBannerData = async () => {
@@ -264,6 +288,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                   <div
                     key={offer.id}
                     onClick={async () => {
+                      await onSelectOffer(offer.id, Number(companyData?.id), companyData?.name);
                       if (amplitude) {
                         await amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
                           company_id: companyData.id,
@@ -280,7 +305,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                       type={offer.type}
                       name={offer.name}
                       image={offer.image}
-                      companyId={companyId as string}
+                      companyId={Number(companyId)}
                       companyName={companyData.name}
                       variant={isMobile ? 'horizontal' : 'vertical'}
                     />

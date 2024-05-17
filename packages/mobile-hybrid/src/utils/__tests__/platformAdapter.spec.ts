@@ -1,6 +1,7 @@
 import { MobilePlatformAdapter } from '../platformAdapter';
 import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { EndpointsKeys } from '@bluelightcard/shared-ui';
 
 describe('MobilePlatformAdapter', () => {
   describe('getAmplitudeFeatureFlag', () => {
@@ -32,7 +33,8 @@ describe('MobilePlatformAdapter', () => {
       const platformAdapter = new MobilePlatformAdapter();
       platformAdapter.getAmplitudeFeatureFlag = jest.fn().mockReturnValue(undefined);
 
-      const request = () => platformAdapter.invokeV5Api('/a-path', { method: 'GET' });
+      const request = () =>
+        platformAdapter.invokeV5Api(EndpointsKeys.REDEEM_OFFER, { method: 'GET' });
 
       expect(request).toThrow('V5 API calls are not supported by current app version');
     });

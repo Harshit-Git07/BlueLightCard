@@ -2,12 +2,12 @@ import { IPlatformAdapter } from './PlatformAdapter';
 import { PlatformVariant } from '../types';
 
 export const useMockPlatformAdapter = (
-  statusCode = 200,
-  body = {},
+  status = 200,
+  data = {},
   platform = PlatformVariant.MobileHybrid,
 ) => {
   const getAmplitudeFeatureFlag = jest.fn();
-  const invokeV5Api = jest.fn().mockResolvedValue({ statusCode, body: JSON.stringify(body) });
+  const invokeV5Api = jest.fn().mockResolvedValue({ status, data: JSON.stringify(data) });
   const logAnalyticsEvent = jest.fn();
   const navigate = jest.fn();
   const navigateExternal = jest.fn();
@@ -20,6 +20,11 @@ export const useMockPlatformAdapter = (
     logAnalyticsEvent,
     navigate,
     navigateExternal,
+    endpoints: {
+      REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
+      REDEEM_OFFER: '/eu/redemptions/member/redeem',
+      OFFER_DETAILS: '/eu/offers/offers',
+    },
     writeTextToClipboard,
   } satisfies IPlatformAdapter;
 

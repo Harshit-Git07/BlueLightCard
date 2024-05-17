@@ -3,7 +3,7 @@ import { Logger } from '@/services/Logger';
 import { OfferData, OfferResponseSchema } from '@/types/api/offers';
 import axios from 'axios';
 
-export const getOfferById = async (idToken: string, offerId: string): Promise<OfferData> => {
+export const getOfferById = async (idToken: string, offerId: number): Promise<OfferData> => {
   const offerDataRes = await axios({
     method: 'get',
     maxBodyLength: Infinity,

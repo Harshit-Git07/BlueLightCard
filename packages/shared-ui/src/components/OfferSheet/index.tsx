@@ -1,60 +1,26 @@
-import { SharedProps, PlatformVariant, AmplitudeEvent } from '../../types';
-import { FC, useEffect } from 'react';
+import { SharedProps, PlatformVariant } from '../../types';
+import { FC, useEffect, useRef, useState } from 'react';
 import DynamicSheet from '../DynamicSheet';
-import { useSetAtom } from 'jotai';
 import { offerSheetAtom } from './store';
-import { OfferDetails, OfferMeta, OfferStatus, RedemptionType } from './types';
 import OfferSheetControler from './components/OfferSheetControler';
 import events from '../../utils/amplitude/events';
+import { useAtomValue } from 'jotai';
 
 export type Props = SharedProps & {
-  isOpen?: boolean;
-  offerMeta: OfferMeta | undefined;
-  offerDetails: OfferDetails | undefined;
-  offerStatus: OfferStatus;
-  onClose: () => void;
   height?: string;
-  cdnUrl: string;
-  isMobileHybrid?: boolean;
-  amplitudeEvent: AmplitudeEvent;
-  BRAND: string;
-  redemptionType?: RedemptionType;
 };
 
-const OfferSheet: FC<Props> = ({
-  platform = PlatformVariant.MobileHybrid,
-  isOpen = false,
-  onClose,
-  height,
-  offerMeta,
-  offerDetails,
-  offerStatus,
-  cdnUrl,
-  isMobileHybrid,
-  amplitudeEvent,
-  BRAND,
-  redemptionType,
-}) => {
-  const setOfferSheetData = useSetAtom(offerSheetAtom);
+const OfferSheet: FC<Props> = () => {
+  const { isOpen, offerMeta, offerDetails, amplitudeEvent, isMobileHybrid, redemptionType } =
+    useAtomValue(offerSheetAtom);
+
+  const componentMounted = useRef(false);
 
   useEffect(() => {
-    if (!offerMeta && !offerDetails) return;
-    setOfferSheetData((prev) => ({
-      ...prev,
-      isOpen,
-      onClose,
-      platform,
-      cdnUrl,
-      offerDetails: { ...offerDetails },
-      offerMeta: { ...offerMeta },
-      isMobileHybrid: isMobileHybrid || false,
-      amplitudeEvent,
-      BRAND,
-    }));
-  }, [offerMeta, offerDetails, isMobileHybrid]);
-
-  useEffect(() => {
-    if (isOpen && offerMeta && offerDetails && amplitudeEvent) {
+    // componentMounted is needed to prevent the amplitude event from firing multiple times
+    // Root cause seems to be in the ViewOfferProvider component, but was not able to find it.
+    // This is a workaround for now that prevents the amplitude event from firing multiple times
+    if (componentMounted.current && isOpen && offerMeta && offerDetails && amplitudeEvent) {
       amplitudeEvent({
         event: events.OFFER_VIEWED,
         params: {
@@ -68,10 +34,11 @@ const OfferSheet: FC<Props> = ({
         },
       });
     }
-  }, [isOpen, offerMeta, offerDetails]);
+  }, [componentMounted.current]);
 
   // Manage scrollbar when offer sheet opens/closes
   useEffect(() => {
+    componentMounted.current = true;
     if (isOpen) {
       // Disable scrollbar when offer sheet opens
       document.body.style.overflow = 'hidden';
@@ -83,13 +50,9 @@ const OfferSheet: FC<Props> = ({
 
   return (
     <>
-      <DynamicSheet
-        platform={platform}
-        showCloseButton
-        containerClassName="flex flex-col justify-between"
-        height={height}
-      >
-        <OfferSheetControler offerStatus={offerStatus} />
+      {/* TODO remove unnecessary props that exist on Jotai like platform and height */}
+      <DynamicSheet showCloseButton containerClassName="flex flex-col justify-between">
+        <OfferSheetControler />
       </DynamicSheet>
     </>
   );

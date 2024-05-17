@@ -1,6 +1,5 @@
 import { ThemeVariant } from '../../types';
 import { FC, PropsWithChildren } from 'react';
-import { usePlatformAdapter } from '../../adapters';
 
 export type Props = PropsWithChildren & {
   variant?: ThemeVariant.Primary | ThemeVariant.Secondary | 'primary' | 'secondary';
@@ -19,12 +18,11 @@ const MagicButton: FC<Props> = ({
   clickable = true,
   onClick = undefined,
   className = '',
-  transitionDurationMs = 10000,
+  transitionDurationMs = 1000,
   children,
 }) => {
-  const platformAdapter = usePlatformAdapter();
   // This isn't whitelabelled. Designs dont have variables for this to be whitelabelled yet.
-  const blcAnimatedBg = 'bg-gradient-to-b from-[#020369] from-25% to-75% to-[#98E5FF]';
+  const blcAnimatedBg = 'bg-gradient-to-r from-[#98E5FF] from-5% via-[#020369] to-95% to-[#98E5FF]';
   const bodyStyles = {
     primary: {
       animated:
@@ -43,7 +41,7 @@ const MagicButton: FC<Props> = ({
 
   return (
     <button
-      className={`${className} relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] ${
+      className={`${className} z-10 relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] ${
         disabled ? '' : clickable ? 'cursor-pointer' : 'cursor-default'
       }`}
       disabled={disabled}
@@ -51,7 +49,10 @@ const MagicButton: FC<Props> = ({
     >
       {!disabled && animate && (
         <div className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex">
-          <div className={`${blcAnimatedBg} h-full w-full animate-spin`}></div>
+          <div
+            className={`${blcAnimatedBg} z-0 h-full w-full animate-magicButtonGradient`}
+            style={{ backgroundSize: '400% 400%' }}
+          />
         </div>
       )}
       <div

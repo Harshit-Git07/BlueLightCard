@@ -7,10 +7,15 @@ import { PlatformVariant } from '../../../../../types';
 const mockPlatformAdapter = {
   getAmplitudeFeatureFlag: () => 'control',
   invokeV5Api: () =>
-    Promise.resolve({ statusCode: 200, body: "{ data: { redemptionType: 'vault' } }" }),
+    Promise.resolve({ status: 200, data: "{ data: { redemptionType: 'vault' } }" }),
   logAnalyticsEvent: () => {},
   navigate: () => {},
   navigateExternal: () => {},
+  endpoints: {
+    REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
+    REDEEM_OFFER: '/eu/redemptions/member/redeem',
+    OFFER_DETAILS: '/eu/offers/offers',
+  },
   writeTextToClipboard: () => Promise.resolve(),
   platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;

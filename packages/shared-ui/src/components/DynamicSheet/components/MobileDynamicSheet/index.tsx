@@ -7,12 +7,8 @@ import { offerSheetAtom } from '../../../OfferSheet/store';
 
 export type Props = PropsWithChildren & {
   showCloseButton?: boolean;
-  onClose?: () => void;
   outsideClickClose?: boolean;
-  isOpen?: boolean;
   containerClassName?: string;
-  width?: string;
-  height?: string;
 };
 
 const MobileDynamicSheet: FC<Props> = ({
@@ -20,9 +16,8 @@ const MobileDynamicSheet: FC<Props> = ({
   outsideClickClose = true,
   showCloseButton = false,
   containerClassName = '',
-  height = '90%',
 }) => {
-  const { isOpen, onClose } = useAtomValue(offerSheetAtom);
+  const { isOpen, onClose, height } = useAtomValue(offerSheetAtom);
 
   const containerDynCss = useCSSConditional({
     'opacity-100': isOpen,

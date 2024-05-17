@@ -13,20 +13,30 @@ import { useEffect } from 'react';
 import { sleep } from '../../../../../utils/sleep';
 
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
-  const { offerDetails: offerData, offerMeta, isMobileHybrid } = useAtomValue(offerSheetAtom);
+  const {
+    offerDetails: offerData,
+    offerMeta,
+    isMobileHybrid,
+    amplitudeEvent,
+  } = useAtomValue(offerSheetAtom);
   const labels = useLabels(offerData);
   const platformAdapter = usePlatformAdapter();
 
   const logCodeView = () => {
-    platformAdapter.logAnalyticsEvent(events.VAULT_CODE_USE_CODE_CLICKED, {
-      company_id: offerMeta.companyId,
-      company_name: offerMeta.companyName,
-      offer_id: offerData.id,
-      offer_name: offerData.name,
-      source: 'sheet',
-      origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
-      design_type: 'modal_popup',
-    });
+    if (amplitudeEvent) {
+      amplitudeEvent({
+        event: events.VAULT_CODE_USE_CODE_CLICKED,
+        params: {
+          company_id: offerMeta.companyId,
+          company_name: offerMeta.companyName,
+          offer_id: offerData.id,
+          offer_name: offerData.name,
+          source: 'sheet',
+          origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
+          design_type: 'modal_popup',
+        },
+      });
+    }
   };
 
   async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {

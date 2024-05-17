@@ -1,5 +1,5 @@
 import { getRedemptionDetails, redeemOffer } from '../redemptions';
-import { useMockPlatformAdapter } from '../../adapters';
+import { EndpointsKeys, useMockPlatformAdapter } from '../../adapters';
 
 describe('getRedemptionDetails', () => {
   test('getRedemptionDetails calls the redemption details endpoint', async () => {
@@ -8,10 +8,10 @@ describe('getRedemptionDetails', () => {
     const result = await getRedemptionDetails(mockPlatformAdapter, 123);
 
     expect(result).toEqual({ data: { redemptionType: 'vault' } });
-    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
-      '/eu/redemptions/member/redemptionDetails',
-      { method: 'GET', queryParameters: { offerId: '123' } },
-    );
+    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(EndpointsKeys.REDEMPTION_DETAILS, {
+      method: 'GET',
+      queryParameters: { offerId: '123' },
+    });
   });
 
   test('getRedemptionDetails throws an error if the redemption details endpoint does not return a 200', async () => {
@@ -40,7 +40,7 @@ describe('redeemOffer', () => {
     const result = await redeemOffer(mockPlatformAdapter, 123, 'offerName', 'companyName');
 
     expect(result).toEqual(mockedResponseData);
-    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/eu/redemptions/member/redeem', {
+    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(EndpointsKeys.REDEEM_OFFER, {
       method: 'POST',
       body: JSON.stringify({ offerId: 123, offerName: 'offerName', companyName: 'companyName' }),
     });

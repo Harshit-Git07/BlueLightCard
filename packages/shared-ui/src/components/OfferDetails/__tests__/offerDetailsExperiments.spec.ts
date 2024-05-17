@@ -1,3 +1,4 @@
+import { RedemptionType } from '../../../components/OfferSheet/types';
 import { useMockPlatformAdapter } from '../../../adapters';
 import { PlatformVariant } from '../../../types';
 import { getPlatformExperimentForRedemptionType } from '../offerDetailsExperiments';
@@ -14,7 +15,7 @@ describe('getPlatformExperimentForRedemptionType', () => {
     ({ redemptionType, platform }) => {
       const mockPlatformAdapter = useMockPlatformAdapter(200, {}, platform);
 
-      getPlatformExperimentForRedemptionType(mockPlatformAdapter, redemptionType);
+      getPlatformExperimentForRedemptionType(mockPlatformAdapter, redemptionType as RedemptionType);
 
       const experimentName = mockPlatformAdapter.getAmplitudeFeatureFlag.mock.calls[0][0];
       expect(experimentName).toMatchSnapshot();

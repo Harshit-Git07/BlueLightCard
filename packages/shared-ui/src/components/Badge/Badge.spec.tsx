@@ -12,7 +12,7 @@ describe('Badge component', () => {
 
     render(<Badge {...args} />);
     expect(screen.getByText('Online')).toBeTruthy();
-    expect(screen.getByText('Online')).toHaveStyle('background-color: #BCA5F7');
+    expect(screen.getByText('Online')).toHaveClass('bg-[#BCA5F7]');
   });
 
   it('Should render Badge component with no color class if color has unexpected value', () => {
@@ -56,6 +56,7 @@ describe('Badge component', () => {
     };
     render(<Badge {...args} />);
     const badge = screen.getByText('Gift card');
-    expect(badge).toHaveClass('badge-rounded-corners');
+    expect(badge).toHaveClass('rounded-tl-lg');
+    expect(badge).toHaveClass('rounded-br-lg');
   });
 });

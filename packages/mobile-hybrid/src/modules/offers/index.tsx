@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { useOfferDetails } from '@bluelightcard/shared-ui';
+import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import useOffers from '@/hooks/useOffers';
 import Heading from '@/components/Heading/Heading';
 import CardCarousel from '@/components/Carousel/CardCarousel';
@@ -11,8 +11,6 @@ import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
-import { useAtomValue } from 'jotai';
-import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -20,7 +18,6 @@ const analytics = new InvokeNativeAnalytics();
 const Offers: FC = () => {
   const { is } = useAmplitude();
   const { flexible, groups } = useOffers();
-  const amplitudeExperiment = useAtomValue(experimentsAndFeatureFlags);
   const { viewOffer } = useOfferDetails();
 
   /**
@@ -78,7 +75,16 @@ const Offers: FC = () => {
       },
     });
 
-    await viewOffer(id, compid, companyname);
+    await viewOffer({
+      offerId: id,
+      companyId: compid,
+      companyName: companyname,
+      platform: PlatformVariant.MobileHybrid,
+      cdnUrl: 'https://cdn.bluelightcard.co.uk',
+      BRAND: 'blc-uk',
+      isMobileHybrid: true,
+      height: '90%',
+    });
   };
   const onSlideChange = (carouselName: string) => {
     analytics.logAnalyticsEvent({

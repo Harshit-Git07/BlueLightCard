@@ -7,7 +7,7 @@ import React, { useContext, useEffect } from 'react';
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { makeQuery } from 'src/graphql/makeQuery';
 
-import { BRAND } from '@/global-vars';
+import { BRAND, CDN_URL } from '@/global-vars';
 import { advertQuery } from 'src/graphql/advertQuery';
 
 import Image from '@/components/Image/Image';
@@ -38,9 +38,9 @@ import {
   useAmplitudeExperiment,
   useAmplitudeExperimentComponent,
 } from '@/context/AmplitudeExperiment';
-import { useOfferSheetControls } from '@/context/OfferSheet/hooks';
+import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import Container from '@/components/Container/Container';
-import { getRedemptionDetails } from '../common/utils/API/getRedemptionDetails';
+import AmplitudeContext from '../common/context/AmplitudeContext';
 
 const he = require('he');
 
@@ -99,9 +99,10 @@ const Search: NextPage = () => {
 
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
+  const amplitude = useContext(AmplitudeContext);
 
   const searchExperiment = useAmplitudeExperiment('category_level_three_search', 'control');
-  const offerSheetControls = useOfferSheetControls();
+  const { viewOffer } = useOfferDetails();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -215,20 +216,18 @@ const Search: NextPage = () => {
               if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
                 hasLink = false;
                 onOfferCardClick = async () => {
-                  const getRedemptionType = await getRedemptionDetails(
-                    Number(result.ID),
-                    authCtx.authState.idToken
-                  );
                   onTrackSearchAnalytics();
-                  if (getRedemptionType === 'vault') {
-                    offerSheetControls.open({
-                      offerId: result.ID as unknown as string,
-                      companyId: result.CompID as unknown as string,
-                      companyName: result.CompanyName,
-                    });
-                  } else {
-                    router.push(`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`);
-                  }
+                  await viewOffer({
+                    offerId: result.ID as unknown as number,
+                    companyId: result.CompID as unknown as number,
+                    companyName: result.CompanyName,
+                    platform: PlatformVariant.Web,
+                    cdnUrl: CDN_URL,
+                    BRAND: 'blc-uk',
+                    isMobileHybrid: false,
+                    height: '80%',
+                    amplitudeCtx: amplitude,
+                  });
                 };
               } else {
                 onOfferCardClick = () => {
@@ -249,8 +248,8 @@ const Search: NextPage = () => {
                     offerLink={`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`}
                     offerTag={result.OfferType}
                     withBorder
-                    offerId={result.ID.toString()}
-                    companyId={result.CompID.toString()}
+                    offerId={result.ID}
+                    companyId={result.CompID}
                     id={'_offer_card_' + index}
                     onClick={onOfferCardClick}
                     hasLink={hasLink}

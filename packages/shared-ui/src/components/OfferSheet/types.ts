@@ -15,6 +15,7 @@ export interface OfferDetails {
   terms?: string | undefined;
   type?: string | undefined;
 }
+export interface OfferData extends OfferDetails, OfferMeta {}
 
 export type OfferStatus = 'pending' | 'error' | 'success';
 

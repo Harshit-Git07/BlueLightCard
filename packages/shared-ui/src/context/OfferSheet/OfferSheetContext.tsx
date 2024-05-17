@@ -2,8 +2,8 @@ import _noop from 'lodash/noop';
 import React from 'react';
 
 export type OfferMeta = {
-  offerId: string;
-  companyId: string;
+  offerId: number;
+  companyId: number;
   companyName: string;
 };
 

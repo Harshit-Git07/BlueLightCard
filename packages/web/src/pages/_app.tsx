@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useContext } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { datadogRum } from '@datadog/browser-rum';
 import flagsmith from 'flagsmith';
@@ -25,6 +25,9 @@ import { NextPageWithLayout } from '@/page-types/layout';
 import Head from 'next/head';
 import AmplitudeProvider from '@/utils/amplitude/provider';
 import { FlagsmithProvider } from 'flagsmith/react';
+import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
+import AmplitudeContext from '../common/context/AmplitudeContext';
+import { WebPlatformAdapter } from '../common/utils/WebPlatformAdapter';
 
 config.autoAddCss = false;
 
@@ -49,10 +52,11 @@ if (DATADOG_APP_ID && DATADOG_CLIENT_TOKEN) {
 const queryClient = new QueryClient();
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
+  const amplitude = useContext(AmplitudeContext);
   // Use the layout defined at the page level, if available
   const getLayout = (Component as NextPageWithLayout).getLayout || ((page: ReactElement) => page);
 
-  const renderedPageWithLayout = getLayout(<Component {...pageProps} />);
+  const renderedPageWithLayout = getLayout(<Component {...pageProps} />) || null;
 
   return (
     <>
@@ -95,7 +99,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           }}
           flagsmith={flagsmith}
         >
-          <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
+          <PlatformAdapterProvider adapter={new WebPlatformAdapter()}>
+            <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
+          </PlatformAdapterProvider>
         </FlagsmithProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

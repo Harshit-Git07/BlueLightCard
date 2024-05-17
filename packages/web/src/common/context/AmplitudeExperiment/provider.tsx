@@ -6,9 +6,16 @@ import { useContext } from 'react';
 import UserContext, { User } from '@/context/User/UserContext';
 import getDeviceFingerprint from '../../utils/amplitude/getDeviceFingerprint';
 import AmplitudeDeviceExperimentClient from '../../utils/amplitude/AmplitudeDeviceExperimentClient';
+import { createStore } from 'jotai';
+import { experimentsAndFeatureFlags } from '../../utils/amplitude/store';
+import { transformObjVariants } from '../../utils/amplitude/transformObjVariants';
 
+export const amplitudeStore = createStore();
 async function _initExperimentClient(user: User): Promise<ExperimentClient> {
   await amplitudeExperimentClient.start({ user_id: user.uuid });
+
+  const variants = transformObjVariants(amplitudeExperimentClient.all());
+  amplitudeStore.set(experimentsAndFeatureFlags, variants);
 
   return amplitudeExperimentClient;
 }
@@ -44,6 +51,9 @@ export function AuthedAmplitudeExperimentProvider({
 
 async function _initExperimentClientLoggedOut(deviceId: string): Promise<ExperimentClient> {
   const client = await AmplitudeDeviceExperimentClient.Instance();
+
+  const variants = transformObjVariants(amplitudeExperimentClient.all());
+  amplitudeStore.set(experimentsAndFeatureFlags, variants);
 
   return client;
 }

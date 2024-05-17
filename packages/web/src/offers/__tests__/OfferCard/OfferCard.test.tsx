@@ -11,7 +11,7 @@ describe('OfferCard component', () => {
     offerLink: 'https://www.bluelightcard.co.uk/offerdetails.php',
     showFindOutMore: true,
     id: '123',
-    offerId: '123',
+    offerId: 123,
     source: 'homepage',
   };
   describe('offer card smoke test', () => {

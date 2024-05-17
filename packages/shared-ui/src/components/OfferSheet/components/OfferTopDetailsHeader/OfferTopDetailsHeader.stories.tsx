@@ -1,5 +1,7 @@
 import { Meta } from '@storybook/react';
 import OfferTopDetailsHeaderComponent, { Props } from './index';
+import { IPlatformAdapter, PlatformAdapterProvider } from 'src/adapters';
+import { PlatformVariant } from 'src/types';
 
 const props: Props = {
   showOfferDescription: true,
@@ -17,10 +19,28 @@ const meta: Meta<typeof OfferTopDetailsHeaderComponent> = {
   },
 };
 
+const mockPlatformAdapter = {
+  getAmplitudeFeatureFlag: () => 'control',
+  invokeV5Api: () =>
+    Promise.resolve({ status: 200, data: "{ data: { redemptionType: 'vault' } }" }),
+  logAnalyticsEvent: () => {},
+  navigate: () => {},
+  navigateExternal: () => {},
+  endpoints: {
+    REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
+    REDEEM_OFFER: '/eu/redemptions/member/redeem',
+    OFFER_DETAILS: '/eu/offers/offers',
+  },
+  writeTextToClipboard: () => Promise.resolve(),
+  platform: PlatformVariant.MobileHybrid,
+} satisfies IPlatformAdapter;
+
 const renderTemplate = (args: Partial<Props>) => (
   // This represents the width of the parent container
   <div style={{ width: '24rem' }}>
-    <OfferTopDetailsHeaderComponent {...props} {...args} />
+    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+      <OfferTopDetailsHeaderComponent {...props} {...args} />
+    </PlatformAdapterProvider>
   </div>
 );
 

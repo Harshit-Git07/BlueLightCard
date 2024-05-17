@@ -1,5 +1,5 @@
 import { getOffer } from '../offers';
-import { useMockPlatformAdapter } from 'src/adapters';
+import { EndpointsKeys, useMockPlatformAdapter } from 'src/adapters';
 
 describe('getOffer', () => {
   test('getOffer calls the offer endpoint', async () => {
@@ -18,8 +18,9 @@ describe('getOffer', () => {
     const result = await getOffer(mockPlatformAdapter, 123);
 
     expect(result).toEqual(mockOffer);
-    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/eu/offers/offers/123', {
+    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(EndpointsKeys.OFFER_DETAILS, {
       method: 'GET',
+      pathParameter: '123',
     });
   });
 

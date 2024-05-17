@@ -6,9 +6,9 @@ import { useRouter } from 'next/router';
 import { useCallback, useContext } from 'react';
 
 export type UseLogVaultCodeRequestClickedParams = {
-  offerId: string;
+  offerId: number;
   offerName?: string;
-  companyId: string;
+  companyId: number;
   companyName: string;
 };
 

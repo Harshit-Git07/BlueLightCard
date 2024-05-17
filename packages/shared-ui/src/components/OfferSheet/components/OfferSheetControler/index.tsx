@@ -1,21 +1,35 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import LoadingSpinner from '../../../LoadingSpinner';
 import OfferSheetDetailsPage from '../OfferSheetDetailsPage';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
-import { OfferStatus } from '../../types';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { exhaustiveCheck } from '../../../../utils/exhaustiveCheck';
+import { useOfferDetails } from '../../../../hooks/useOfferDetails';
+import { OfferDetails } from '../../types';
 
-export type Props = {
-  offerStatus: OfferStatus;
-};
-
-const OfferSheetControler: FC<Props> = ({ offerStatus }) => {
-  const { offerDetails, showRedemptionPage } = useAtomValue(offerSheetAtom);
+const OfferSheetControler: FC = () => {
+  const { offerDetails, showRedemptionPage, offerMeta } = useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
-  switch (offerStatus) {
-    case 'pending': {
+  const offerQuery = useOfferDetails({
+    offerId: offerMeta.offerId!,
+  });
+
+  useEffect(() => {
+    if (offerQuery.status === 'success') {
+      setOfferSheetAtom((prev) => ({
+        ...prev,
+        offerDetails: offerQuery.data as OfferDetails,
+        offerMeta: {
+          offerId: offerMeta.offerId,
+          companyId: offerMeta.companyId,
+          companyName: offerMeta.companyName,
+        },
+      }));
+    }
+  }, [offerQuery.status]);
+  switch (offerQuery.status) {
+    case 'pending':
       if (showRedemptionPage) {
         // set OfferSheet to initial screen
         setOfferSheetAtom((prev) => ({ ...prev, showRedemptionPage: false }));
@@ -23,7 +37,6 @@ const OfferSheetControler: FC<Props> = ({ offerStatus }) => {
       return (
         <LoadingSpinner containerClassName="text-palette-primary" spinnerClassName="text-[5em]" />
       );
-    }
     case 'error':
       return <OfferDetailsErrorPage />;
     case 'success':

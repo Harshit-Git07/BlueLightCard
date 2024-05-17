@@ -1,17 +1,27 @@
-import { Context, FC, createContext, useContext, useState } from 'react';
-import { PlatformVariant } from '../../types';
+import { Context, FC, createContext, useContext } from 'react';
 import { useOfferDetailsComponent } from './useOfferDetailsComponent';
-import { usePlatformAdapter } from '../../adapters';
-import { OfferDetails, OfferMeta, OfferStatus } from '../OfferSheet/types';
+import { Amplitude, usePlatformAdapter } from '../../adapters';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { offerSheetAtom } from '../OfferSheet/store';
-import { getOffer } from '../../api/offers';
+import { initializeOfferSheetAtom, offerSheetAtom } from '../OfferSheet/store';
+import { PlatformVariant } from '../../types';
+
+type OfferData = {
+  offerId: number;
+  companyId: number;
+  companyName: string;
+  platform: PlatformVariant;
+  cdnUrl: string;
+  BRAND: string;
+  isMobileHybrid: boolean;
+  height: string;
+  amplitudeCtx?: Amplitude | null | undefined;
+};
 
 type IOfferDetailsContext = {
-  viewOffer: (offerId: number, companyId: number, companyName: string) => Promise<void>;
+  viewOffer: (offerData: OfferData) => Promise<void>;
 };
 const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
-  viewOffer: (offerId: number, companyId: number, companyName: string) => Promise.resolve(),
+  viewOffer: (offerData: OfferData) => Promise.resolve(),
 });
 export const useOfferDetails = () => useContext(OfferDetailsContext);
 
@@ -26,55 +36,28 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
   const { OfferDetailsComponent, updateOfferDetailsComponent } =
     useOfferDetailsComponent(platformAdapter);
 
-  const [offerMeta, setOfferMeta] = useState<OfferMeta | undefined>();
-  const [offerDetails, setOfferDetails] = useState<OfferDetails | undefined>();
-  const [offerStatus, setOfferStatus] = useState<OfferStatus>('pending');
+  async function viewOffer(offerData: OfferData): Promise<void> {
+    const onClose = () => {
+      setOfferAtom((prev) => ({ ...prev, isOpen: false }));
+      // Delay the reset of the offer details to allow the animation to complete
+      setTimeout(() => {
+        setTimeout(() => setOfferAtom(initializeOfferSheetAtom()), 300);
+      }, 300);
+    };
 
-  const viewOffer = async (offerId: number, companyId: number, companyName: string) => {
-    /*
-    Run the V5 api call when the experiment is active
-    Similar logic to useOfferDetailsComponent.tsx
-    */
-    try {
-      const data = await getOffer(platformAdapter, offerId);
-
-      setOfferDetails(data as OfferDetails);
-      setOfferMeta({
-        offerId: data.id,
-        companyId: data.companyId,
-        companyName: companyName,
-      });
-      setOfferStatus('success');
-    } catch (err) {
-      setOfferDetails({
-        id: offerId,
-        companyId,
-        companyLogo: undefined,
-        description: undefined,
-        expiry: undefined,
-        name: undefined,
-        terms: undefined,
-        type: undefined,
-      });
-      setOfferMeta({
-        companyId: companyId,
-        companyName: companyName,
-        offerId: offerId,
-      });
-      setOfferStatus('error');
-    }
-
-    await updateOfferDetailsComponent(offerId);
-    setOfferAtom((prev) => ({ ...prev, isOpen: true }));
-  };
-
-  const onClose = () => {
-    setOfferAtom((prev) => ({ ...prev, isOpen: false }));
-    // Delay the reset of the offer details to allow the animation to complete
-    setTimeout(() => {
-      setOfferAtom((prev) => ({ ...prev, showRedemptionPage: false }));
-    }, 300);
-  };
+    await updateOfferDetailsComponent({
+      offerId: offerData.offerId,
+      companyId: offerData.companyId,
+      companyName: offerData.companyName,
+      platform: offerData.platform,
+      cdnUrl: offerData.cdnUrl,
+      BRAND: offerData.BRAND,
+      isMobileHybrid: offerData.isMobileHybrid,
+      height: offerData.height,
+      amplitudeCtx: offerData.amplitudeCtx,
+    });
+    setOfferAtom((prev) => ({ ...prev, isOpen: true, onClose }));
+  }
 
   return (
     <OfferDetailsContext.Provider value={{ viewOffer }}>
@@ -84,20 +67,7 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
           isOpen ? 'visible' : 'invisible'
         }`}
       >
-        <OfferDetailsComponent
-          amplitudeEvent={({ event, params }) => {
-            platformAdapter.logAnalyticsEvent(event, params);
-          }}
-          BRAND="blc-uk"
-          cdnUrl="https://cdn.bluelightcard.co.uk"
-          isMobileHybrid={platformAdapter.platform === PlatformVariant.MobileHybrid}
-          isOpen={isOpen}
-          offerStatus={offerStatus}
-          offerDetails={offerDetails}
-          offerMeta={offerMeta}
-          onClose={onClose}
-          platform={platformAdapter.platform}
-        />
+        <OfferDetailsComponent />
       </div>
     </OfferDetailsContext.Provider>
   );

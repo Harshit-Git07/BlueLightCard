@@ -14,8 +14,8 @@ const ResponsiveOfferCardTemplate: StoryFn<typeof ResponsiveOfferCard> = (args) 
 export const VerticalDefault = ResponsiveOfferCardTemplate.bind({});
 
 VerticalDefault.args = {
-  id: '123',
-  companyId: '4016',
+  id: 123,
+  companyId: 4016,
   companyName: 'Samsung',
   type: 'Online',
   name: 'Get 10% off and free Galaxy Buds2 with any Galaxy Tab S9 Series tablet',
@@ -25,8 +25,8 @@ VerticalDefault.args = {
 export const Horizontal = ResponsiveOfferCardTemplate.bind({});
 
 Horizontal.args = {
-  id: '123',
-  companyId: '4016',
+  id: 123,
+  companyId: 4016,
   companyName: 'Samsung',
   type: 'In-store',
   name: 'Get 10% off and free Galaxy Buds2 with any Galaxy Tab S9 Series tablet',

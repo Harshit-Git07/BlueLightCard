@@ -3,6 +3,8 @@ import { FC, PropsWithChildren } from 'react';
 import MobileDynamicSheet from './components/MobileDynamicSheet';
 import DesktopDynamicSheet from './components/DesktopDynamicSheet';
 import { useCSSMerge, useCSSConditional } from '../../hooks/useCSS';
+import { useAtomValue } from 'jotai';
+import { offerSheetAtom } from '../OfferSheet/store';
 
 export type Props = SharedProps &
   PropsWithChildren & {
@@ -11,7 +13,9 @@ export type Props = SharedProps &
     height?: string;
   };
 
-const DynamicSheet: FC<Props> = ({ platform = PlatformVariant.MobileHybrid, ...props }) => {
+const DynamicSheet: FC<Props> = ({ ...props }) => {
+  const { platform } = useAtomValue(offerSheetAtom);
+
   const dynCss = useCSSConditional({
     'w-full h-full': platform === PlatformVariant.MobileHybrid,
   });

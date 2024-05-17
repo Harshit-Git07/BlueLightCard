@@ -10,8 +10,8 @@ export type DealsOfTheWeekType = {
   image?: string;
   logos?: string;
   href: string;
-  compid: string;
-  id: string;
+  compid: number;
+  id: number;
 };
 
 export type MarketPlaceItemType = {
@@ -19,8 +19,8 @@ export type MarketPlaceItemType = {
     offername: string;
     companyname: string;
     image: string;
-    compid: string;
-    offerId: string;
+    compid: number;
+    offerId: number;
     logos: string;
   };
 };
@@ -42,8 +42,8 @@ export type FeaturedOffersType = {
   companyname: string;
   image?: string;
   logos?: string;
-  compid: string;
-  id: string;
+  compid: number;
+  id: number;
 };
 
 export type CompanyType = {

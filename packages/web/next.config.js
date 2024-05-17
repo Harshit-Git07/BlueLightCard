@@ -57,7 +57,7 @@ const nextConfig = {
     }
     return config;
   },
-  transpilePackages: ['../api/core/'],
+  transpilePackages: ['../api/core/', '@bluelightcard/shared-ui'],
 };
 
 module.exports = nextConfig;

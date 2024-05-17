@@ -6,7 +6,6 @@ import { offerSheetAtom } from '../../../OfferSheet/store';
 
 export type Props = PropsWithChildren & {
   showCloseButton?: boolean;
-  onClose?: () => void;
   outsideClickClose?: boolean;
   containerClassName?: string;
   width?: string;

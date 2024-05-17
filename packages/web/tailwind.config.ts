@@ -22,7 +22,7 @@ const fonts = Object.keys(themeTokens.font.family).reduce((acc, familyKey) => {
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
   darkMode: 'class', // TODO: change class to media, or just remove this line, to reenable dark mode
-  content: ['./src/**/*.{js,ts,tsx,mdx}'],
+  content: ['./src/**/*.{js,ts,tsx,mdx}', '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: themeTokens.color,

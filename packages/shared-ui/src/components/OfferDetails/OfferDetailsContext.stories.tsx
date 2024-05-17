@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { within } from '@storybook/testing-library';
 import { ViewOfferProvider, useOfferDetails } from './OfferDetailsContext';
 import { StorybookPlatformAdapterDecorator } from '../../adapters/StorybookPlatformAdapter';
+import { PlatformVariant } from 'src/types';
 
 const invokeV5Api = (path: string) => {
   if (path.includes('/offers/')) {
@@ -48,7 +49,16 @@ const ViewOfferChild = () => {
   const { viewOffer } = useOfferDetails();
 
   const onClick = () => {
-    viewOffer(1, 2, 'test-company');
+    viewOffer({
+      offerId: 1,
+      companyId: 1,
+      companyName: 'companyName',
+      platform: PlatformVariant.MobileHybrid,
+      cdnUrl: 'CDN_URL',
+      BRAND: 'blc-uk',
+      isMobileHybrid: true,
+      height: '90%',
+    });
   };
 
   return <button onClick={onClick}>View Offer</button>;

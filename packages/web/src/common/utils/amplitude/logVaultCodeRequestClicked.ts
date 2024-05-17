@@ -6,9 +6,9 @@ export type VaultCodeRequestClickedParams = {
   userUuid: string | undefined;
   eventSource: string;
   origin: string;
-  offerId: string;
+  offerId: number;
   offerName?: string;
-  companyId?: string;
+  companyId?: number;
   companyName?: string;
 };
 

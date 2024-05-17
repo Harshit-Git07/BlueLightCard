@@ -11,11 +11,11 @@ import { useOfferSheetControls } from '../../context/OfferSheet/hooks';
 export type BgColorString = `bg-${string}`;
 
 export type Props = SharedProps & {
-  id: string;
+  id: number;
   type: OfferTypeStrLiterals;
   name: string;
   image: string;
-  companyId: string;
+  companyId: number;
   companyName: string;
   variant?: 'vertical' | 'horizontal';
   quality?: number;

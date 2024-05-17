@@ -4,8 +4,8 @@ import ResponsiveOfferCard, { Props } from '.';
 
 describe('ResponsiveOfferCard component', () => {
   const args: Props = {
-    id: '123',
-    companyId: '4016',
+    id: 123,
+    companyId: 4016,
     companyName: 'Samsung',
     type: 'Online',
     name: 'Get 10% off and free Galaxy Buds2 with any Galaxy Tab S9 Series tablet',

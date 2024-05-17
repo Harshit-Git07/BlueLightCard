@@ -3,19 +3,19 @@ import { LayoutProps } from './types';
 import AuthProvider from '@/context/Auth/AuthProvider';
 import UserProvider from '@/context/User/UserProvider';
 import BaseLayout from '../BaseLayout/BaseLayout';
-import OfferSheetProvider from '@/context/OfferSheet/OfferSheetProvider';
 import {
   LoggedOutAmplitudeExperimentProvider,
   AuthedAmplitudeExperimentProvider,
 } from '@/context/AmplitudeExperiment';
 import requireAuth from '../../hoc/requireAuth';
+import { ViewOfferProvider } from '@bluelightcard/shared-ui';
 
 const BaseLayoutWrapperAuth: React.FC<LayoutProps> = (props) => (
   <UserProvider>
     <AuthedAmplitudeExperimentProvider>
-      <OfferSheetProvider>
+      <ViewOfferProvider>
         <BaseLayout {...props}>{props.children}</BaseLayout>
-      </OfferSheetProvider>
+      </ViewOfferProvider>
     </AuthedAmplitudeExperimentProvider>
   </UserProvider>
 );

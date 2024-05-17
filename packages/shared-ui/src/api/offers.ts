@@ -1,4 +1,4 @@
-import { IPlatformAdapter } from '../adapters';
+import { IPlatformAdapter, EndpointsKeys } from '../adapters';
 import { z } from 'zod';
 
 export const OfferDataSchema = z.object({
@@ -17,13 +17,15 @@ export async function getOffer(
   platformAdapter: IPlatformAdapter,
   offerId: number,
 ): Promise<OfferData> {
-  const result = await platformAdapter.invokeV5Api(`/eu/offers/offers/${offerId}`, {
+  const result = await platformAdapter.invokeV5Api(EndpointsKeys.OFFER_DETAILS, {
     method: 'GET',
+    pathParameter: offerId.toString(),
   });
 
-  if (result.statusCode !== 200) {
+  if (result.status !== 200) {
     throw new Error('Unable to retrieve offer details');
   }
 
-  return OfferDataSchema.parse(JSON.parse(result.body).data);
+  const resultData = typeof result.data === 'string' ? JSON.parse(result.data) : result.data;
+  return OfferDataSchema.parse(resultData.data);
 }

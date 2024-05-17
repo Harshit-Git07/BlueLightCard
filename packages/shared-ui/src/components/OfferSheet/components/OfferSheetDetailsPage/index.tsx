@@ -1,6 +1,6 @@
 import { useCSSMerge, useCSSConditional } from '../../../../hooks/useCSS';
 import { PlatformVariant } from '../../../../types';
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton from '../../../MagicButton';
@@ -9,28 +9,17 @@ import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
 import { RedemptionPageController } from '../RedemptionPage/RedemptionPageController';
 
-import { getRedemptionDetails } from '../../../../api';
-import { usePlatformAdapter } from '../../../../adapters';
-import { RedemptionType } from '../../types';
-
 const OfferSheetDetailsPage: FC = () => {
-  const { offerDetails: offerData, showRedemptionPage, offerMeta } = useAtomValue(offerSheetAtom);
+  const {
+    offerDetails: offerData,
+    showRedemptionPage,
+    offerMeta,
+    redemptionType,
+    platform,
+  } = useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
-  const platformAdapter = usePlatformAdapter();
-  const [redemptionType, setRedemptionType] = useState<RedemptionType | undefined>(undefined);
-
-  useEffect(() => {
-    // TODO: Fix offer sheet state to not have empty object
-    const checkIfOfferDataIsNotEmpty = Object.keys(offerData).length;
-    if (checkIfOfferDataIsNotEmpty && offerData.id) {
-      getRedemptionDetails(platformAdapter, offerData.id).then((data) => {
-        setRedemptionType(data.data.redemptionType);
-      });
-    }
-  }, [offerData]);
 
   const labels = useLabels(offerData);
-  const { platform } = useAtomValue(offerSheetAtom);
 
   const dynCss = useCSSConditional({
     'w-full': platform === PlatformVariant.Web,
@@ -61,6 +50,7 @@ const OfferSheetDetailsPage: FC = () => {
         <MagicButton
           variant="primary"
           className="w-full"
+          transitionDurationMs={200}
           onClick={() => setOfferSheetAtom((prev) => ({ ...prev, showRedemptionPage: true }))}
         >
           <span className="leading-10 font-bold text-md">Get Discount</span>

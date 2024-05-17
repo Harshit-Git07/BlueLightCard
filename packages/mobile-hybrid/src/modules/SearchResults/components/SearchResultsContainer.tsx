@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect } from 'react';
 import { useAtomValue, useAtom, useSetAtom } from 'jotai';
-import { useOfferDetails } from '@bluelightcard/shared-ui';
+import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import { APIUrl, V5_API_URL } from '@/globals';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import SearchResultsPresenter from './SearchResultsPresenter';
@@ -66,7 +66,16 @@ const SearchResultsContainer: FC = () => {
       },
     });
 
-    await viewOffer(offerId, companyId, companyName);
+    await viewOffer({
+      offerId,
+      companyId,
+      companyName,
+      platform: PlatformVariant.MobileHybrid,
+      cdnUrl: 'https://cdn.bluelightcard.co.uk',
+      BRAND: 'blc-uk',
+      isMobileHybrid: true,
+      height: '90%',
+    });
   };
 
   useEffect(() => {

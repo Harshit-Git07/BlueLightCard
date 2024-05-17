@@ -37,12 +37,8 @@ const PillButtons: FC<Props> = ({
     'bg-white border-[#DCDCDC] border-[1px] border-solid': !!outline,
   });
 
-  // Custom style classes for tailwind purged classes on web or mobile-hybrid
-  const customStyleClasses = 'min-w-54';
-
   const css = useCSSMerge(
-    "font-['MuseoSans'] text-[#202125] font-light rounded-full px-3 whitespace-nowrap text-base",
-    customStyleClasses,
+    "font-['MuseoSans'] text-[#202125] font-light rounded-full px-3 whitespace-nowrap text-base min-w-[54px]",
     dynCss,
   );
 

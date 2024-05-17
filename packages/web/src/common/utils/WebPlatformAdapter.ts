@@ -3,6 +3,8 @@ import {
   Endpoints,
   EndpointsKeys,
   IPlatformAdapter,
+  IPlatformWindowHandle,
+  NavigationOptions,
   PlatformVariant,
   V5RequestOptions,
   V5Response,
@@ -58,9 +60,19 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     Router.push(path);
   }
 
-  navigateExternal(path: string): void {
-    // window.open - if it fails to open in new tab, we should redirect in same tab as a fallback
-    window.open(path, '_blank');
+  navigateExternal(path: string, options: NavigationOptions): IPlatformWindowHandle {
+    switch (options.target) {
+      case 'blank':
+        const windowHandle = window.open(path, '_blank');
+        return {
+          isOpen: () => windowHandle?.closed === false,
+        };
+      case 'self':
+        window.location.href = path;
+        return {
+          isOpen: () => true,
+        };
+    }
   }
 
   writeTextToClipboard(text: string): Promise<void> {

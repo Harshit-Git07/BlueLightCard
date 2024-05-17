@@ -10,6 +10,7 @@ import {
   Endpoints,
   EndpointsKeys,
   IPlatformAdapter,
+  IPlatformWindowHandle,
   PlatformVariant,
   V5RequestOptions,
   V5Response,
@@ -109,8 +110,11 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
     navigation.navigate(path);
   }
 
-  navigateExternal(path: string): void {
+  navigateExternal(path: string): IPlatformWindowHandle {
     navigation.navigateExternal(path);
+    return {
+      isOpen: () => true,
+    };
   }
 
   writeTextToClipboard(text: string): Promise<void> {

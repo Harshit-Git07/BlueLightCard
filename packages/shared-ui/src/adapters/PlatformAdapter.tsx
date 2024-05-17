@@ -44,6 +44,24 @@ export type Endpoints = {
   [key in EndpointsKeys]?: string;
 };
 
+export type NavigationOptions = {
+  /**
+   * The target of the navigation. If set to `blank`, the URL will be opened in a new tab in web. On mobile platforms,
+   * this option is ignored.
+   *
+   * @default 'self'
+   */
+  target: 'blank' | 'self';
+};
+
+export interface IPlatformWindowHandle {
+  /**
+   * Indicates if the window is open. Will return `false` if the window failed to open, or was closed. On mobile, this
+   * method will always return `true`.
+   */
+  isOpen(): boolean;
+}
+
 export interface IPlatformAdapter {
   /**
    * The endpoints that the platform can use to make API requests - enumerated in EndpointsKeys
@@ -77,7 +95,7 @@ export interface IPlatformAdapter {
   /**
    * Navigate to an external URL
    */
-  navigateExternal(url: string): void;
+  navigateExternal(url: string, options?: NavigationOptions): IPlatformWindowHandle;
   /**
    * Write text to the clipboard
    */

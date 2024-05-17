@@ -45,7 +45,13 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
     }
     await sleep(1500);
     if (url) {
-      platformAdapter.navigateExternal(url);
+      // Attempt to open the window in a new tab
+      const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
+
+      // If the window failed to open, navigate in the same tab
+      if (!windowHandle.isOpen()) {
+        platformAdapter.navigateExternal(url, { target: 'self' });
+      }
     }
   }
 

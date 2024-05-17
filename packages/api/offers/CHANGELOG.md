@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.28.0...bluelightcard/offers-v1.28.1) (2024-05-16)
+
+
+### Bug Fixes
+
+* [TR-547]: Remove duplicate firehose logs ([#1328](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1328)) ([14068a0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/14068a08d24749c419e465c0b586cd41723bdee7))
+
 ## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.27.0...bluelightcard/offers-v1.28.0) (2024-04-26)
 
 

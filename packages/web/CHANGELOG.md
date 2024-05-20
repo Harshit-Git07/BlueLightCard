@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.56.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.55.0...bluelightcard/web-v1.56.0) (2024-05-20)
+
+
+### Features
+
+* [TR-543]: Implement platform adapter and mobile hybrid clipboard ([#1344](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1344)) ([774b964](https://github.com/bluelightcard/BlueLightCard-2.0/commit/774b9646c87ec69ff49aa3e57a1f68403c039ed8))
+* TO-698 offer sheet web version ([#1356](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1356)) ([527b961](https://github.com/bluelightcard/BlueLightCard-2.0/commit/527b961e7892f54355ad3b9255f59f1592d39830))
+
+
+### Bug Fixes
+
+* implement fallback to redirect in same tab ([#1376](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1376)) ([eaa3d22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eaa3d22fdc53f65dfdb3bab0217acb5f5aa61f2e))
+
+
+### Other Changes
+
+* **deps:** bump next from 13.4.12 to 14.1.1 in /packages/web ([#1353](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1353)) ([fe29bc4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fe29bc4ded22af6bb882c7a8eace25abe154988b))
+
 ## [1.55.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.54.0...bluelightcard/web-v1.55.0) (2024-05-14)
 
 

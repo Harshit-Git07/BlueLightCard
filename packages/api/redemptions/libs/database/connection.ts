@@ -3,12 +3,11 @@ import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { z } from 'zod';
 
-// import { WELL_KNOWN_PORTS_SCHEMA } from '@blc-mono/core/schemas/common';
+import { WELL_KNOWN_PORTS_SCHEMA } from '@blc-mono/core/schemas/common';
 import { getEnv, getEnvOrDefaultValidated } from '@blc-mono/core/utils/getEnv';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 import { DEFAULT_POSTGRES_PORT } from './database';
-export const WELL_KNOWN_PORTS_SCHEMA = z.coerce.number().int().min(1024).max(65535);
 
 /**
  * These keys may be provided to AWS resources to configure the database connection.

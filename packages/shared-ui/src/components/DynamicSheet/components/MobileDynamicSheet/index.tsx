@@ -24,27 +24,27 @@ const MobileDynamicSheet: FC<Props> = ({
     'hidden opacity-0': !isOpen,
   });
   const containerCss = useCSSMerge(
-    'absolute w-full h-full transition-opacity duration-1000 bg-[#00000088]',
+    'absolute w-[100vw] h-[100vh] transition-opacity duration-1000 bg-[#00000088]',
     containerDynCss,
   );
 
   const animatedDynCss = useCSSConditional({
     'translate-y-[-100%]': isOpen,
-    'translate-y-0': !isOpen,
+    'hidden translate-y-0': !isOpen,
   });
   const animatedCss = useCSSMerge(
-    'absolute w-full flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-white',
+    'fixed w-[100vw] flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-white',
     animatedDynCss,
   );
 
   return (
-    <div className="absolute w-full h-full bg-transparent">
+    <div className="absolute h-100 bg-transparent">
       <div className={containerCss} onClick={() => outsideClickClose && onClose && onClose()}></div>
       <div
         className={animatedCss}
         // We use styles here as we want to enable the value to be dynamic.
         // Tailwind cleans up unused values and therefore dynamic values are likely to be removed.
-        style={{ height: height, bottom: `-${height}` }}
+        style={{ height: height, top: '100%' }}
       >
         {showCloseButton && (
           <div className="w-full flex justify-end p-4">

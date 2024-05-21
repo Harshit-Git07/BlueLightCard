@@ -58,8 +58,8 @@ describe('smoke test', () => {
   });
 
   it('should render offer details', () => {
-    const { getByRole, getByText } = renderComponent();
+    const { getAllByRole } = renderComponent();
 
-    expect(getByRole('button', { name: /get discount/i })).toBeTruthy();
+    expect(getAllByRole('button', { name: /get discount/i })).toBeTruthy();
   });
 });

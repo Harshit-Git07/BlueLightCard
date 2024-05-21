@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.56.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.56.0...bluelightcard/web-v1.56.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* TR-592 Resolve issues with Next update ([#1390](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1390)) ([d2b41c1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d2b41c183791910ed859915bc3b964ed05a21daf))
+
 ## [1.56.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.55.0...bluelightcard/web-v1.56.0) (2024-05-20)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.69.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.2...bluelightcard/identity-v1.69.3) (2024-05-21)
+
+
+### Bug Fixes
+
+* existing empty spares ([#1379](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1379)) ([426886a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/426886aca56e5dabfb38585cfa8a86ea6f077132))
+
 ## [1.69.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.1...bluelightcard/identity-v1.69.2) (2024-05-16)
 
 

@@ -12,6 +12,7 @@ export const initializeOfferSheetAtom = () => {
     cdnUrl: '',
     isMobileHybrid: false,
     showRedemptionPage: false,
+    // TODO: Remove this (use platform adapter directly)
     amplitudeEvent: ((arg: AmplitudeArg) => {}) as AmplitudeEvent | null,
     BRAND: '',
     redemptionType: '' as RedemptionType | undefined,

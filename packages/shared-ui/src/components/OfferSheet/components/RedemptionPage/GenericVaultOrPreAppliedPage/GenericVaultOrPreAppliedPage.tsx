@@ -9,8 +9,7 @@ import { offerSheetAtom } from '../../../store';
 import { useLabels } from '../../../../../hooks/useLabels';
 import { PlatformVariant } from '../../../../../types';
 import { Label, MagicButton, usePlatformAdapter } from '../../../../../index';
-import { useEffect } from 'react';
-import { sleep } from '../../../../../utils/sleep';
+import { useRef } from 'react';
 
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   const {
@@ -21,29 +20,43 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   } = useAtomValue(offerSheetAtom);
   const labels = useLabels(offerData);
   const platformAdapter = usePlatformAdapter();
+  const loggedCodeView = useRef(false);
 
-  const logCodeView = () => {
-    if (amplitudeEvent) {
-      amplitudeEvent({
-        event: events.VAULT_CODE_USE_CODE_CLICKED,
-        params: {
-          company_id: offerMeta.companyId,
-          company_name: offerMeta.companyName,
-          offer_id: offerData.id,
-          offer_name: offerData.name,
-          source: 'sheet',
-          origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
-          design_type: 'modal_popup',
-        },
-      });
+  const logCodeClicked = () => {
+    if (!amplitudeEvent) {
+      return;
     }
+
+    // Prevent duplicate logs if the user clicks the button multiple times
+    if (loggedCodeView.current) {
+      return;
+    }
+
+    amplitudeEvent({
+      event: events.VAULT_CODE_USE_CODE_CLICKED,
+      params: {
+        company_id: offerMeta.companyId,
+        company_name: offerMeta.companyName,
+        offer_id: offerData.id,
+        offer_name: offerData.name,
+        source: 'sheet',
+        origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
+        design_type: 'modal_popup',
+      },
+    });
   };
 
   async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
+    // Ensure that state is success to log since this component mounts multiple times
+    if (props.state !== 'success') {
+      return;
+    }
+
+    logCodeClicked();
+
     if (code) {
       await platformAdapter.writeTextToClipboard(code);
     }
-    await sleep(1500);
     if (url) {
       // Attempt to open the window in a new tab
       const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
@@ -52,25 +65,15 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
       if (!windowHandle.isOpen()) {
         platformAdapter.navigateExternal(url, { target: 'self' });
       }
+
+      // Check if the window was closed by an adblocker and fallback to navigating in the same tab
+      setTimeout(() => {
+        if (!windowHandle.isOpen()) {
+          platformAdapter.navigateExternal(url, { target: 'self' });
+        }
+      }, 50);
     }
   }
-
-  async function onSuccess(props: Props) {
-    // Ensure that state is success to log since this component mounts multiple times
-    if (props.state !== 'success') {
-      return;
-    }
-
-    const data = props.redeemData.data;
-
-    logCodeView();
-
-    await copyCodeAndRedirect(data?.redemptionDetails?.code, data?.redemptionDetails?.url);
-  }
-
-  useEffect(() => {
-    onSuccess(props);
-  }, [props.state]);
 
   if (props.state === 'error') {
     return <OfferDetailsErrorPage />;
@@ -115,11 +118,9 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
                 <FontAwesomeIcon icon={faWandMagicSparkles} />
                 {props.redemptionType === 'preApplied'
                   ? 'Discount automatically applied'
-                  : 'Code copied!'}
+                  : 'Copy code!'}
               </div>
-              <div className="text-sm text-[#616266] font-medium">
-                Redirecting to partner website
-              </div>
+              <div className="text-sm text-[#616266] font-medium">Go to partner website</div>
             </div>
           </MagicButton>
         )}

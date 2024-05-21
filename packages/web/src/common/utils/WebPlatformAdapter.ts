@@ -53,6 +53,8 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     parameters: AmplitudeLogParams,
     amplitude: Amplitude | null | undefined
   ): void {
+    // TODO: Refactor this - should not need to pass native amplitude context
+    //                       otherwise platform adapter serves no purpose
     if (amplitude) amplitude.trackEventAsync(event, parameters);
   }
 

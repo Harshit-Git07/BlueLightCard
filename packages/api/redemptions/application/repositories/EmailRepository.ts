@@ -9,12 +9,13 @@ import {
 } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import { encodeBase64 } from '@blc-mono/redemptions/application/helpers/encodeBase64';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
+import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
   BrazeEmailClientProvider,
   IBrazeEmailClientProvider,
 } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
 
-export type VaultRedemptionTransactionalEmailParams = {
+export type VaultOrGenericTransactionalEmailParams = {
   brazeExternalUserId: string;
   memberId: string;
   offerId: string;
@@ -27,7 +28,10 @@ export type VaultRedemptionTransactionalEmailParams = {
 };
 
 export interface IEmailRepository {
-  sendVaultRedemptionTransactionalEmail: (payload: VaultRedemptionTransactionalEmailParams) => Promise<void>;
+  sendVaultOrGenericTransactionalEmail: (
+    payload: VaultOrGenericTransactionalEmailParams,
+    redemptionType: RedemptionType,
+  ) => Promise<void>;
 }
 
 export class EmailRepository implements IEmailRepository {
@@ -121,7 +125,33 @@ export class EmailRepository implements IEmailRepository {
     });
   }
 
-  async sendVaultRedemptionTransactionalEmail(params: VaultRedemptionTransactionalEmailParams): Promise<void> {
+  async sendVaultOrGenericTransactionalEmail(
+    params: VaultOrGenericTransactionalEmailParams,
+    redemptionType: RedemptionType,
+  ): Promise<void> {
+    /**
+     * check redemptionType to set the Braze campaign ID
+     * currently the vault and generic email templates are identical, with exactly the same parameters
+     * so, instead of creating 2 functions with exactly the same code (apart from the Braze campaign ID)
+     * we use this 1 function
+     * this may require breaking out to separate functions if the Braze email template parameters are differed
+     * in the future
+     */
+    let campaignId = null;
+    if (redemptionType === 'vault') {
+      campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID);
+    }
+    if (redemptionType === 'generic') {
+      campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID);
+    }
+    if (!campaignId) {
+      this.logger.info({
+        message: `redemption type is incorrect for this email template: ${redemptionType}`,
+        context: params,
+      });
+      throw new Error('RedemptionType error, expects vault/generic');
+    }
+
     const emailClient = await this.getClient();
 
     const emailUrl = this.generateEmailUrl({
@@ -136,7 +166,7 @@ export class EmailRepository implements IEmailRepository {
     });
 
     const emailPayload: CampaignsTriggerSendObject = {
-      campaign_id: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID),
+      campaign_id: campaignId,
       recipients: [
         {
           external_user_id: params.brazeExternalUserId,

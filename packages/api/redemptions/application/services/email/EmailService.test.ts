@@ -8,35 +8,38 @@ import { EmailService } from './EmailService';
 
 describe('EmailService', () => {
   describe('sendRedemptionTransactionEmail', () => {
-    it('should send email for redemption events', async () => {
-      // Arrange
-      const logger = createTestLogger();
-      const emailRepository = {
-        sendVaultRedemptionTransactionalEmail: jest.fn(),
-      } satisfies IEmailRepository;
-      const service = new EmailService(logger, emailRepository);
-      const event = memberRedemptionEventFactory.build({
-        detail: {
-          redemptionDetails: {
-            redemptionType: 'vault',
+    it.each([['vault'], ['generic']] satisfies [RedemptionType][])(
+      'should send email for redemption events',
+      async (redemptionType) => {
+        // Arrange
+        const logger = createTestLogger();
+        const emailRepository = {
+          sendVaultOrGenericTransactionalEmail: jest.fn(),
+        } satisfies IEmailRepository;
+        const service = new EmailService(logger, emailRepository);
+        const event = memberRedemptionEventFactory.build({
+          detail: {
+            redemptionDetails: {
+              redemptionType: redemptionType,
+            },
           },
-        },
-      });
+        });
 
-      // Act
-      await service.sendRedemptionTransactionEmail(event);
+        // Act
+        await service.sendRedemptionTransactionEmail(event);
 
-      // Assert
-      expect(emailRepository.sendVaultRedemptionTransactionalEmail).toHaveBeenCalled();
-    });
+        // Assert
+        expect(emailRepository.sendVaultOrGenericTransactionalEmail).toHaveBeenCalled();
+      },
+    );
 
-    it.each([['generic'], ['preApplied'], ['showCard'], ['vaultQR']] satisfies [RedemptionType][])(
+    it.each([['preApplied'], ['showCard'], ['vaultQR']] satisfies [RedemptionType][])(
       'should throw error for unhandled redemption type',
       async (redemptionType) => {
         // Arrange
         const logger = createSilentLogger();
         const emailRepository = {
-          sendVaultRedemptionTransactionalEmail: jest.fn(),
+          sendVaultOrGenericTransactionalEmail: jest.fn(),
         } satisfies IEmailRepository;
         const service = new EmailService(logger, emailRepository);
         const event = memberRedemptionEventFactory.build({
@@ -52,7 +55,7 @@ describe('EmailService', () => {
 
         // Assert
         await expect(act).rejects.toThrow('Unhandled redemption type');
-        expect(emailRepository.sendVaultRedemptionTransactionalEmail).not.toHaveBeenCalled();
+        expect(emailRepository.sendVaultOrGenericTransactionalEmail).not.toHaveBeenCalled();
       },
     );
   });

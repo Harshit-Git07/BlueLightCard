@@ -16,6 +16,7 @@ export type RedemptionsStackConfig = {
   redemptionsLambdaScriptsCodeAmountIssuedPath: string;
   apiDefaultAllowedOrigins: string[];
   brazeVaultRedemptionVaultCampaignId: string;
+  brazeGenericCodeRedemptionCampaignId: string;
   brazeApiUrl: string;
   redemptionsWebHost: string;
 };
@@ -50,6 +51,8 @@ export class RedemptionsStackConfigResolver {
       ],
       brazeVaultRedemptionVaultCampaignId:
         getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID) ?? '',
+      brazeGenericCodeRedemptionCampaignId:
+        getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID) ?? '',
       brazeApiUrl: getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_API_URL) ?? '',
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
     };
@@ -71,6 +74,7 @@ export class RedemptionsStackConfigResolver {
         'http://localhost:3000',
       ],
       brazeVaultRedemptionVaultCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
+      brazeGenericCodeRedemptionCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
     };
@@ -87,6 +91,7 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
       apiDefaultAllowedOrigins: ['*'],
       brazeVaultRedemptionVaultCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
+      brazeGenericCodeRedemptionCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
     };
@@ -119,6 +124,9 @@ export class RedemptionsStackConfigResolver {
       ),
       brazeVaultRedemptionVaultCampaignId: getEnv(
         RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID,
+      ),
+      brazeGenericCodeRedemptionCampaignId: getEnv(
+        RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID,
       ),
       brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
       redemptionsWebHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST),

@@ -68,7 +68,7 @@ export class RedeemService implements IRedeemService {
 
     const result = await redeemStrategy.redeem(redemption, params);
 
-    if (result.kind === 'Ok' && result.redemptionType === 'vault') {
+    if (result.kind === 'Ok' && (result.redemptionType === 'vault' || result.redemptionType === 'generic')) {
       const affiliateConfig = AffiliateHelper.getAffiliateConfig(result.redemptionDetails.url);
 
       await this.redemptionsEventsRepository

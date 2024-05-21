@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
-import { VaultRedemptionTransactionalEmailParams } from '@blc-mono/redemptions/application/repositories/EmailRepository';
+import { VaultOrGenericTransactionalEmailParams } from '@blc-mono/redemptions/application/repositories/EmailRepository';
 
-export const redemptionTransactionalEmailPayloadFactory = Factory.define<VaultRedemptionTransactionalEmailParams>(
+export const redemptionTransactionalEmailPayloadFactory = Factory.define<VaultOrGenericTransactionalEmailParams>(
   () => ({
     brazeExternalUserId: faker.string.uuid(),
     memberId: faker.string.uuid(),

@@ -97,11 +97,8 @@ describe('RedeemService', () => {
     const redemption = redemptionFactory.build();
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
-      redemptionType: 'generic',
-      redemptionDetails: {
-        url: faker.internet.url(),
-        code: faker.string.alphanumeric(6),
-      },
+      redemptionType: 'preApplied',
+      redemptionDetails: '',
     };
     const redemptionsRepository = {
       findOneByOfferId: jest.fn().mockResolvedValue(redemption),
@@ -132,12 +129,12 @@ describe('RedeemService', () => {
     // Assert
     expect(result).toEqual({
       kind: 'Ok',
-      redemptionType: 'generic',
+      redemptionType: 'preApplied',
       redemptionDetails: redeemedResult.redemptionDetails,
     });
   });
 
-  it('should send data for DWH to event bus', async () => {
+  it('should send data for DWH (logRedemptionAttempt, logVaultRedemption) and vault Braze email to event bus', async () => {
     // Arrange
     const redemption = redemptionFactory.build({
       offerId: defaultOfferId,
@@ -209,18 +206,87 @@ describe('RedeemService', () => {
     });
   });
 
-  it('should complete successfully when logRedemptionAttempt fails', async () => {
+  it('should send data for DWH (logRedemptionAttempt) and generic code Braze email to event bus', async () => {
+    // Arrange
+    const redemption = redemptionFactory.build({
+      offerId: defaultOfferId,
+      affiliate: 'awin',
+    });
+    const redeemedResult: RedeemedStrategyResult = {
+      kind: 'Ok',
+      redemptionType: 'generic',
+      redemptionDetails: {
+        url: 'https://www.awin1.com',
+        code: faker.string.alphanumeric(6),
+      },
+    };
+    const redemptionsRepository = {
+      findOneByOfferId: jest.fn().mockResolvedValue(redemption),
+      updateManyByOfferId: jest.fn(),
+      updateOneByOfferId: jest.fn(),
+      createRedemption: jest.fn(),
+      withTransaction: jest.fn(),
+    } satisfies IRedemptionsRepository;
+    const redeemStrategy = {
+      redeem: jest.fn().mockResolvedValue(redeemedResult),
+    } satisfies IRedeemStrategy;
+    const redeemStrategyResolver = {
+      getRedemptionStrategy: jest.fn().mockReturnValue(redeemStrategy),
+    } satisfies IRedeemStrategyResolver;
+    const redemptionEventsRepository = {
+      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
+      publishMemberRedeemIntentEvent: jest.fn().mockResolvedValue(undefined),
+      publishRedemptionEvent: jest.fn().mockResolvedValue(undefined),
+    } satisfies RedemptionsEventsRepository;
+
+    // Act
+    await callRedeemMethod(defaultOfferId, {
+      redemptionsRepository,
+      redeemStrategyResolver,
+      redemptionEventsRepository,
+    });
+
+    // Assert
+    expect(redemptionEventsRepository.publishMemberRedeemIntentEvent).toHaveBeenCalledWith({
+      memberDetails: {
+        memberId: defaultParams.memberId,
+      },
+      redemptionDetails: {
+        clientType: defaultParams.clientType,
+        companyId: redemption.companyId,
+        offerId: defaultOfferId,
+        redemptionType: redemption.redemptionType,
+      },
+    });
+    expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+      memberDetails: {
+        memberId: defaultParams.memberId,
+        brazeExternalUserId: defaultParams.brazeExternalUserId,
+      },
+      redemptionDetails: {
+        redemptionId: redemption.id,
+        redemptionType: redemption.redemptionType,
+        companyId: redemption.companyId,
+        companyName: defaultParams.companyName,
+        offerId: redemption.offerId,
+        offerName: defaultParams.offerName,
+        code: redeemedResult.redemptionDetails.code,
+        affiliate: redemption.affiliate,
+        url: redeemedResult.redemptionDetails.url,
+        clientType: defaultParams.clientType,
+      },
+    });
+  });
+
+  it('should complete successfully when publishMemberRedeemIntentEvent (DWH - logRedemptionAttempt) fails', async () => {
     // Arrange
     const redemption = redemptionFactory.build({
       offerId: defaultOfferId,
     });
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
-      redemptionType: 'generic',
-      redemptionDetails: {
-        url: faker.internet.url(),
-        code: faker.string.alphanumeric(6),
-      },
+      redemptionType: 'preApplied',
+      redemptionDetails: '',
     };
     const silentLogger = createSilentLogger();
     const redemptionsRepository = {
@@ -253,19 +319,19 @@ describe('RedeemService', () => {
     // Assert
     expect(result).toEqual({
       kind: 'Ok',
-      redemptionType: 'generic',
+      redemptionType: 'preApplied',
       redemptionDetails: redeemedResult.redemptionDetails,
     });
   });
 
-  it('should complete successfully when logVaultRedemption fails', async () => {
+  it('should complete successfully when publishRedemptionEvent (DWH - logVaultRedemption, Braze email) fails', async () => {
     // Arrange
     const redemption = redemptionFactory.build({
       offerId: defaultOfferId,
     });
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
-      redemptionType: 'generic',
+      redemptionType: 'vault',
       redemptionDetails: {
         url: faker.internet.url(),
         code: faker.string.alphanumeric(6),
@@ -302,7 +368,7 @@ describe('RedeemService', () => {
     // Assert
     expect(result).toEqual({
       kind: 'Ok',
-      redemptionType: 'generic',
+      redemptionType: 'vault',
       redemptionDetails: redeemedResult.redemptionDetails,
     });
   });

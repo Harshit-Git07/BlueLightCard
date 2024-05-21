@@ -18,18 +18,22 @@ export class EmailService implements IEmailService {
     const redemptionType = event.detail.redemptionDetails.redemptionType;
 
     switch (redemptionType) {
+      case 'generic':
       case 'vault': {
-        await this.emailRepository.sendVaultRedemptionTransactionalEmail({
-          affiliate: event.detail.redemptionDetails.affiliate,
-          brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
-          code: event.detail.redemptionDetails.code,
-          companyId: event.detail.redemptionDetails.companyId.toString(),
-          companyName: event.detail.redemptionDetails.companyName,
-          memberId: event.detail.memberDetails.memberId,
-          offerId: event.detail.redemptionDetails.offerId.toString(),
-          offerName: event.detail.redemptionDetails.offerName,
-          url: event.detail.redemptionDetails.url,
-        });
+        await this.emailRepository.sendVaultOrGenericTransactionalEmail(
+          {
+            affiliate: event.detail.redemptionDetails.affiliate,
+            brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
+            code: event.detail.redemptionDetails.code,
+            companyId: event.detail.redemptionDetails.companyId.toString(),
+            companyName: event.detail.redemptionDetails.companyName,
+            memberId: event.detail.memberDetails.memberId,
+            offerId: event.detail.redemptionDetails.offerId.toString(),
+            offerName: event.detail.redemptionDetails.offerName,
+            url: event.detail.redemptionDetails.url,
+          },
+          redemptionType,
+        );
         break;
       }
       default:

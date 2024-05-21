@@ -27,6 +27,7 @@ export function createRedemptionTransactionalEmailRule(
     deadLetterQueue: queue.cdk.queue,
     environment: {
       BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID: config.brazeVaultRedemptionVaultCampaignId,
+      BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID: config.brazeGenericCodeRedemptionCampaignId,
       BRAZE_API_URL: config.brazeApiUrl,
       REDEMPTIONS_WEB_HOST: config.redemptionsWebHost,
     },
@@ -38,7 +39,7 @@ export function createRedemptionTransactionalEmailRule(
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: ['vault'],
+          redemptionType: ['vault', 'generic'],
         },
       },
     },

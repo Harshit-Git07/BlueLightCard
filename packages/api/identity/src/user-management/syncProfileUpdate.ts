@@ -81,6 +81,7 @@ export const handler = async (event: any, context: any) => {
   };
   let profileUuid = null;
   let action = 'created';
+  let spareEmail = 'NA';
     const result = await dynamodb.send(new QueryCommand(queryParams));
     if(result.Items === null || result.Items?.length === 0){
       logger.debug('user profile data not found, will be created', event);
@@ -89,8 +90,8 @@ export const handler = async (event: any, context: any) => {
         const user = result.Items?.at(0) as Record<string, string>;
         profileUuid = user.sk;
         action = 'updated';
+        spareEmail = user?.spare_email ? user.spare_email.replace(/\s/g, '') === '' ? 'NA' : user.spare_email.replace(/\s/g, '') : 'NA';
     }
-    
 
     let updateExp = '';
   
@@ -105,6 +106,10 @@ export const handler = async (event: any, context: any) => {
         expAttrValues[`:${key}`] = detail[key];
     });
     updateExp = updateExp.slice(0, -1);
+    if(!updateExp.includes('spare_email')){
+      updateExp += ', spare_email = :spare_email';
+      expAttrValues[':spare_email'] = spareEmail;
+    }
 
     const updateParams: UpdateCommandInput = {  
         TableName: tableName,

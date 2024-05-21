@@ -63,7 +63,7 @@
     "cross-env": "^7.0.3",
     "dedent-js": "^1.0.1",
     "dotenv-cli": "7.3.0",
-    "drizzle-kit": "0.20.13",
+    "drizzle-kit": "0.21.2",
     "esbuild": "0.20.2",
     "eslint": "^8.31.0",
     "eslint-config-airbnb": "^19.0.4",

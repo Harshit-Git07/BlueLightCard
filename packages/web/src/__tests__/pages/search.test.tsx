@@ -6,7 +6,7 @@ import { NetworkStatus } from '@apollo/client';
 import AuthContext, { AuthContextType } from '../../common/context/Auth/AuthContext';
 import UserContext, { UserContextType } from '../../common/context/User/UserContext';
 import { NextRouter } from 'next/router';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import userEvent from '@testing-library/user-event';
 import { makeQuery } from '../../graphql/makeQuery';
 import { AuthedAmplitudeExperimentProvider } from '../../common/context/AmplitudeExperiment';

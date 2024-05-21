@@ -2,7 +2,7 @@ import React from 'react';
 import { act, fireEvent, render } from '@testing-library/react';
 import { ClipboardCard } from '@/page-components/ClipbaordCard/ClipboardCard';
 import '@testing-library/jest-dom/extend-expect';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { NextRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
 import { mocked } from 'jest-mock';

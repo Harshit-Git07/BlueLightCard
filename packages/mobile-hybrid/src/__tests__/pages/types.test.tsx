@@ -1,5 +1,4 @@
 import TypesPage from '@/pages/types';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
@@ -20,6 +19,10 @@ let mockRouter: Partial<NextRouter> = {
 };
 let userServiceValue: string | undefined;
 let user: UserEvent;
+
+jest.mock('next/router', () => ({
+  useRouter: () => mockRouter,
+}));
 
 describe('Types Page', () => {
   afterEach(() => {
@@ -173,10 +176,8 @@ const givenTypeQueryParamIs = (queryParam?: string) => {
 };
 const whenTypesPageIsRendered = () => {
   render(
-    <RouterContext.Provider value={mockRouter as NextRouter}>
-      <JotaiTestProvider initialValues={[[userService, userServiceValue]]}>
-        <TypesPageWithSpinner />
-      </JotaiTestProvider>
-    </RouterContext.Provider>,
+    <JotaiTestProvider initialValues={[[userService, userServiceValue]]}>
+      <TypesPageWithSpinner />
+    </JotaiTestProvider>,
   );
 };

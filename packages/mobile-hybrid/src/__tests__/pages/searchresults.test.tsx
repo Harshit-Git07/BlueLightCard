@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { NextRouter } from 'next/router';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
 import '@testing-library/jest-dom/extend-expect';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import InvokeNativeAPICall from '@/invoke/apiCall';
@@ -20,6 +19,10 @@ const mockRouter: Partial<NextRouter> = {
     search: searchValue,
   },
 };
+
+jest.mock('next/router', () => ({
+  useRouter: () => mockRouter,
+}));
 
 describe('Search Results', () => {
   describe('Feature Flags', () => {
@@ -75,12 +78,10 @@ const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
 
 const whenPageIsRenderedWithFlags = (featureFlags: any) => {
   render(
-    <RouterContext.Provider value={mockRouter as NextRouter}>
-      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
-        <WithSpinner>
-          <SearchResultsPage />
-        </WithSpinner>
-      </JotaiTestProvider>
-    </RouterContext.Provider>,
+    <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
+      <WithSpinner>
+        <SearchResultsPage />
+      </WithSpinner>
+    </JotaiTestProvider>,
   );
 };

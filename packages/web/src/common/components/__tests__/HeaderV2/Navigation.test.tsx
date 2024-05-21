@@ -4,7 +4,7 @@ import React from 'react';
 import Navigation from '@/components/HeaderV2/Navigation';
 import { NavProp } from '@/components/Header/types';
 import { NextRouter } from 'next/router';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { redirect } from '@/utils/externalRedirect';
 import { act } from '@testing-library/react';

@@ -1,5 +1,4 @@
 import { NextRouter } from 'next/router';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { render, screen } from '@testing-library/react';
 import SearchPage from '@/pages/search';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
@@ -11,6 +10,10 @@ let mockRouter: Partial<NextRouter>;
 
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(),
+}));
+
+jest.mock('next/router', () => ({
+  useRouter: () => mockRouter,
 }));
 
 describe('Search', () => {
@@ -153,19 +156,13 @@ const givenDeeplinkQueryParamIs = (deeplink?: string) => {
 };
 
 const whenSearchPageIsRendered = () => {
-  render(
-    <RouterContext.Provider value={mockRouter as NextRouter}>
-      <SearchPage />
-    </RouterContext.Provider>,
-  );
+  render(<SearchPage />);
 };
 
 const whenSearchPageIsRenderedWithFlags = (featureFlags: any) => {
   render(
-    <RouterContext.Provider value={mockRouter as NextRouter}>
-      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
-        <SearchPage />
-      </JotaiTestProvider>
-    </RouterContext.Provider>,
+    <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
+      <SearchPage />
+    </JotaiTestProvider>,
   );
 };

@@ -131,8 +131,7 @@ function getPrimaryButtonText(redemptionType: RedemptionType) {
     case 'preApplied':
       return 'Discount automatically applied';
     default:
-      // Attempt to detect touch devices to show the correct message
-      return 'ontouchstart' in window ? 'Tap to copy code' : 'Click to copy code';
+      return 'Continue to partner website';
   }
 }
 
@@ -141,6 +140,6 @@ function getSecondaryButtonText(redemptionType: RedemptionType) {
     case 'preApplied':
       return 'Go to partner website';
     default:
-      return 'Paste it at checkout';
+      return 'Code will be copied - paste it at checkout';
   }
 }

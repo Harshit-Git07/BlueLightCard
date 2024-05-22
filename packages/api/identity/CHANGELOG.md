@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.70.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.3...bluelightcard/identity-v1.70.0) (2024-05-22)
+
+
+### Features
+
+* set cognito account recovery option to email only ([#1398](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1398)) ([8cdedea](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8cdedea3feaab19f3cdf086b0228475ccee3491f))
+
 ## [1.69.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.2...bluelightcard/identity-v1.69.3) (2024-05-21)
 
 

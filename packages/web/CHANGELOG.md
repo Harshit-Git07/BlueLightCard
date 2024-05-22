@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.56.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.56.2...bluelightcard/web-v1.56.3) (2024-05-22)
+
+
+### Other Changes
+
+* [TR-581]: Move shared-ui config to provider ([#1395](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1395)) ([ef4f7b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ef4f7b0525b44ec9238fdc892a77ca481fece6ef))
+
 ## [1.56.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.56.1...bluelightcard/web-v1.56.2) (2024-05-21)
 
 

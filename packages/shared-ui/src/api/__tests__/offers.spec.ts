@@ -1,5 +1,5 @@
 import { getOffer } from '../offers';
-import { EndpointsKeys, useMockPlatformAdapter } from 'src/adapters';
+import { useMockPlatformAdapter } from 'src/adapters';
 
 describe('getOffer', () => {
   test('getOffer calls the offer endpoint', async () => {
@@ -15,13 +15,15 @@ describe('getOffer', () => {
     };
     const mockPlatformAdapter = useMockPlatformAdapter(200, { data: mockOffer });
 
-    const result = await getOffer(mockPlatformAdapter, 123);
+    const result = await getOffer(mockPlatformAdapter, mockOffer.id);
 
     expect(result).toEqual(mockOffer);
-    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(EndpointsKeys.OFFER_DETAILS, {
-      method: 'GET',
-      pathParameter: '123',
-    });
+    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
+      `/eu/offers/offers/${mockOffer.id.toString()}`,
+      {
+        method: 'GET',
+      },
+    );
   });
 
   test('getOffer throws an error if the API request fails', async () => {

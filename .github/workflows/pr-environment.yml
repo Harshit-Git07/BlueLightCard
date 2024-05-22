@@ -183,6 +183,7 @@ jobs:
     #   - backend-offers
     #   - backend-redemptions
     env:
+      NEXT_PUBLIC_API_PROXY_URL: https://staging-api.bluelightcard.workers.dev
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_LOGOUT_ROUTE: /mock-login
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://staging-offers.blcshine.io/graphql
@@ -199,8 +200,6 @@ jobs:
       NEXT_PUBLIC_FLAGSMITH_KEY: ${{ secrets.FLAGSMITH_KEY }}
       NEXT_PUBLIC_COGNITO_LOGIN_URL: https://staging-auth.blcshine.io/login?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
-      NEXT_PUBLIC_REDEMPTION_DETAILS_ENDPOINT: https://staging-redemptions.blcshine.io/member/redemptionDetails
-      NEXT_PUBLIC_REDEEM_ENDPOINT: https://staging-redemptions.blcshine.io/member/redeem
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
     steps:

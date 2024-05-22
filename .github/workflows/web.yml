@@ -187,25 +187,18 @@ jobs:
             region: 'eu-west-2'
             cognito_client_id: 'BLC_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
-            redemption_details_endpoint: 'https://staging-redemptions.blcshine.io/member/redemptionDetails'
-            redeem_endpoint: 'https://staging-redemptions.blcshine.io/member/redeem'
           - brand: 'blc-au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
             cognito_client_id: 'BLC_AU_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_AU_COGNITO_CLIENT_SECRET'
             region: 'ap-southeast-2'
-            # TODO(TR-391): Add appropriate endpoints once we have a redemptions staging deployment for BLC Australia
-            redemption_details_endpoint: 'TODO'
-            redeem_endpoint: 'TODO'
           - brand: 'dds-uk'
             identity_brand: 'dds_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
             region: 'eu-west-2'
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
-            redemption_details_endpoint: 'https://staging-redemptions.blcshine.io/member/redemptionDetails'
-            redeem_endpoint: 'https://staging-redemptions.blcshine.io/member/redeem'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -214,6 +207,7 @@ jobs:
       - lint-styles
       - changelog
     env:
+      NEXT_PUBLIC_API_PROXY_URL: https://staging-api.bluelightcard.workers.dev
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql
@@ -240,8 +234,6 @@ jobs:
       NEXT_PUBLIC_FLAGSMITH_KEY: ${{ secrets.FLAGSMITH_KEY }}
       NEXT_PUBLIC_COGNITO_LOGIN_URL: https://staging-auth.blcshine.io/login?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
-      NEXT_PUBLIC_REDEMPTION_DETAILS_ENDPOINT: ${{ matrix.redemption_details_endpoint }}
-      NEXT_PUBLIC_REDEEM_ENDPOINT: ${{ matrix.redeem_endpoint }}
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
     steps:
@@ -277,24 +269,18 @@ jobs:
             region: 'eu-west-2'
             cognito_client_id: 'BLC_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
-            redemption_details_endpoint: 'https://redemptions.blcshine.io/member/redemptionDetails'
-            redeem_endpoint: 'https://redemptions.blcshine.io/member/redeem'
           - brand: 'blc-au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
             region: 'ap-southeast-2'
             cognito_client_id: 'BLC_AU_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_AU_COGNITO_CLIENT_SECRET'
-            redemption_details_endpoint: 'https://o0xv8r20og.execute-api.ap-southeast-2.amazonaws.com/v1/member/redemptionDetails'
-            redeem_endpoint: 'https://o0xv8r20og.execute-api.ap-southeast-2.amazonaws.com/v1/member/redeem'
           - brand: 'dds-uk'
             identity_brand: 'dds_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
             region: 'eu-west-2'
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
-            redemption_details_endpoint: 'https://redemptions.blcshine.io/member/redemptionDetails'
-            redeem_endpoint: 'https://redemptions.blcshine.io/member/redeem'
     environment: Production
     runs-on: ubuntu-latest
     needs:
@@ -305,6 +291,7 @@ jobs:
       - changelog
       - staging
     env:
+      NEXT_PUBLIC_API_PROXY_URL: https://api.bluelightcard.workers.dev
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: https://27d2m22mtvac5cvilrvb7kviyi.appsync-api.eu-west-2.amazonaws.com/graphql
@@ -327,8 +314,6 @@ jobs:
       NEXT_PUBLIC_FLAGSMITH_KEY: ${{ secrets.FLAGSMITH_KEY }}
       NEXT_PUBLIC_COGNITO_LOGIN_URL: https://auth.blcshine.io/login?client_id=7b854of9jqjte75vglfnm1gd3t&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.bluelightcard.co.uk%2Fauth%2Fcallback.php
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://auth.blcshine.io/logout?client_id=7b854of9jqjte75vglfnm1gd3t&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.bluelightcard.co.uk%2Flogout.php
-      NEXT_PUBLIC_REDEMPTION_DETAILS_ENDPOINT: ${{ matrix.redemption_details_endpoint }}
-      NEXT_PUBLIC_REDEEM_ENDPOINT: ${{ matrix.redeem_endpoint }}
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
     steps:

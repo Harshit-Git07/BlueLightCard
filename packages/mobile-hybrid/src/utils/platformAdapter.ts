@@ -7,14 +7,11 @@ import InvokeNativeClipboard from '@/invoke/clipboard';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import {
   AmplitudeLogParams,
-  Endpoints,
-  EndpointsKeys,
   IPlatformAdapter,
   IPlatformWindowHandle,
   PlatformVariant,
   V5RequestOptions,
   V5Response,
-  urlResolver,
 } from '@bluelightcard/shared-ui';
 import { z } from 'zod';
 import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
@@ -26,13 +23,6 @@ const navigation = new InvokeNativeNavigation();
 const clipboard = new InvokeNativeClipboard();
 
 export class MobilePlatformAdapter implements IPlatformAdapter {
-  // Do not end the endpoint with a slash
-  endpoints: Endpoints = {
-    REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
-    REDEEM_OFFER: '/eu/redemptions/member/redeem',
-    OFFER_DETAILS: '/eu/offers/offers',
-  };
-
   private invokeNativeAPICall = new InvokeNativeAPICall();
 
   platform = PlatformVariant.MobileHybrid;
@@ -43,11 +33,7 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
     return amplitudeExperiments[featureFlagName];
   }
 
-  invokeV5Api(endpointKey: EndpointsKeys, options: V5RequestOptions): Promise<V5Response> {
-    const endpoint = urlResolver(endpointKey, this.endpoints, {
-      pathParameter: options.pathParameter,
-    });
-
+  invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response> {
     const v5ApiFeatureFlag = this.getAmplitudeFeatureFlag(FeatureFlags.V5_API_INTEGRATION);
 
     if (v5ApiFeatureFlag !== 'on') {
@@ -67,7 +53,7 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
       unsubscribe = eventBus.on(Channels.API_RESPONSE, (pathWithQuery, data): void => {
         // Ignore events that are not for this path
         const [incomingPath, _] = pathWithQuery.split('?');
-        if (endpoint !== incomingPath) {
+        if (path !== incomingPath) {
           return;
         }
 
@@ -97,7 +83,7 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
     });
 
     // Send the API request to the native app
-    this.invokeNativeAPICall.requestDataV5(endpoint, options);
+    this.invokeNativeAPICall.requestDataV5(path, options);
 
     return responsePromise;
   }

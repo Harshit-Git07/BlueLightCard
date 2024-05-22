@@ -25,12 +25,9 @@ const mockPlatformAdapter = {
     Promise.resolve({ status: 200, data: "{ data: { redemptionType: 'vault' } }" }),
   logAnalyticsEvent: () => {},
   navigate: () => {},
-  navigateExternal: () => ({ isOpen: () => true }),
-  endpoints: {
-    REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
-    REDEEM_OFFER: '/eu/redemptions/member/redeem',
-    OFFER_DETAILS: '/eu/offers/offers',
-  },
+  navigateExternal: () => ({
+    isOpen: () => true,
+  }),
   writeTextToClipboard: () => Promise.resolve(),
   platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;

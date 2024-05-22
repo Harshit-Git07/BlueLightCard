@@ -1,51 +1,40 @@
 import {
   AmplitudeLogParams,
-  Endpoints,
-  EndpointsKeys,
   IPlatformAdapter,
   IPlatformWindowHandle,
   NavigationOptions,
   PlatformVariant,
   V5RequestOptions,
   V5Response,
-  urlResolver,
 } from '@bluelightcard/shared-ui';
-import axios from 'axios';
 import { Amplitude } from './amplitude/amplitude';
 import Router from 'next/router';
-import {
-  REDEEM_ENDPOINT,
-  REDEMPTION_DETAILS_ENDPOINT,
-  RETRIEVE_OFFER_ENDPOINT,
-} from '@/global-vars';
 import { experimentsAndFeatureFlags } from './amplitude/store';
 import { amplitudeStore } from '../context/AmplitudeExperiment';
+import { API_PROXY_URL } from '@/root/global-vars';
 
 export class WebPlatformAdapter implements IPlatformAdapter {
-  endpoints: Endpoints = {
-    REDEMPTION_DETAILS: REDEMPTION_DETAILS_ENDPOINT,
-    REDEEM_OFFER: REDEEM_ENDPOINT,
-    OFFER_DETAILS: RETRIEVE_OFFER_ENDPOINT,
-  };
-
   platform = PlatformVariant.Web;
 
-  invokeV5Api(endpoint: EndpointsKeys, options: V5RequestOptions): Promise<V5Response> {
+  async invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response> {
     const idToken = localStorage.getItem('idToken');
-
-    return axios({
+    const endpoint = `${API_PROXY_URL}${path}`;
+    const queryParameters = options.queryParameters
+      ? '?' + new URLSearchParams(options.queryParameters).toString()
+      : '';
+    const response = await fetch(endpoint + queryParameters, {
       method: options.method,
-      maxBodyLength: Infinity,
-      url: urlResolver(endpoint, this.endpoints, {
-        pathParameter: options.pathParameter,
-        queryParameters: options.queryParameters,
-      }),
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${idToken}`,
       },
-      data: options.body ? JSON.parse(options.body) : null,
-      params: options.queryParameters,
+      body: options.body,
     });
+
+    return {
+      status: response.status,
+      data: await response.text(),
+    };
   }
 
   logAnalyticsEvent(

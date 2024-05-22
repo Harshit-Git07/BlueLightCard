@@ -1,9 +1,9 @@
 import { z } from 'zod';
-import { EndpointsKeys, IPlatformAdapter } from '../adapters';
+import { IPlatformAdapter } from '../adapters';
 import { RedemptionTypeSchema } from '../components/OfferSheet/types';
 
 export async function getRedemptionDetails(platformAdapter: IPlatformAdapter, offerId: number) {
-  const result = await platformAdapter.invokeV5Api(EndpointsKeys.REDEMPTION_DETAILS, {
+  const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redemptionDetails', {
     method: 'GET',
     queryParameters: {
       offerId: offerId.toString(),
@@ -14,7 +14,7 @@ export async function getRedemptionDetails(platformAdapter: IPlatformAdapter, of
     throw new Error('Unable to retrieve redemption details');
   }
 
-  return typeof result.data === 'string' ? JSON.parse(result.data) : result.data;
+  return JSON.parse(result.data);
 }
 
 export const RedeemDataSchema = z.object({
@@ -37,7 +37,7 @@ export async function redeemOffer(
   offerName: string,
   companyName: string,
 ) {
-  const result = await platformAdapter.invokeV5Api(EndpointsKeys.REDEEM_OFFER, {
+  const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redeem', {
     method: 'POST',
     body: JSON.stringify({
       offerId,
@@ -50,6 +50,6 @@ export async function redeemOffer(
     throw new Error('Unable to redeem offer');
   }
 
-  const resultData = typeof result.data === 'string' ? JSON.parse(result.data) : result.data;
+  const resultData = JSON.parse(result.data);
   return RedeemResponseSchema.parse(resultData);
 }

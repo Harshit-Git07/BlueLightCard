@@ -32,9 +32,6 @@ jest.mock('@/utils/amplitude', () => ({
   logSearchTermEvent: jest.fn(),
   logSerpSearchStarted: jest.fn(),
 }));
-jest.mock('@/utils/API/getRedemptionDetails', () => ({
-  getRedemptionDetails: jest.fn(),
-}));
 const makeSearchMock = jest.mocked(makeSearch);
 const makeQueryMock = jest.mocked(makeQuery);
 const mockRouter: Partial<NextRouter> = {

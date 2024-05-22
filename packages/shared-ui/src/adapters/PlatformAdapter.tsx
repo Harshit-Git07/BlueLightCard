@@ -3,12 +3,6 @@ import { AmplitudeLogParams, PlatformVariant } from '../types';
 
 export type Amplitude = {
   isInitialised: boolean;
-  initialise: (apiKey: string) => void;
-  setUserId: (userId: string) => void;
-  setSessionId: (sessionId: string) => void;
-  _isAmplitudeInitialised: () => void;
-  trackEventAsync: (event: string, data: any) => void;
-  trackEvent: (event: string, data: any) => void;
 };
 
 export type HttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'TRACE';
@@ -25,23 +19,12 @@ export type V5RequestOptions = {
   cachePolicy?: 'never' | 'auto';
   method: HttpMethod;
   queryParameters?: Record<string, string>;
-  pathParameter?: string;
   body?: string;
 };
 
 export type V5Response = {
   status: number;
   data: string;
-};
-
-export enum EndpointsKeys {
-  REDEMPTION_DETAILS = 'REDEMPTION_DETAILS',
-  REDEEM_OFFER = 'REDEEM_OFFER',
-  OFFER_DETAILS = 'OFFER_DETAILS',
-}
-
-export type Endpoints = {
-  [key in EndpointsKeys]?: string;
 };
 
 export type NavigationOptions = {
@@ -64,10 +47,6 @@ export interface IPlatformWindowHandle {
 
 export interface IPlatformAdapter {
   /**
-   * The endpoints that the platform can use to make API requests - enumerated in EndpointsKeys
-   */
-  endpoints: Endpoints;
-  /**
    * Can be used by the shared-ui to introspect which platform it is running in
    */
   platform: PlatformVariant;
@@ -79,7 +58,7 @@ export interface IPlatformAdapter {
   /**
    * Invokes a v5 API endpoint
    */
-  invokeV5Api(endpointKey: EndpointsKeys, options: V5RequestOptions): Promise<V5Response>;
+  invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response>;
   /**
    * Logs analytics events
    */

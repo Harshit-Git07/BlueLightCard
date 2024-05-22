@@ -20,11 +20,6 @@ export const useMockPlatformAdapter = (
     logAnalyticsEvent,
     navigate,
     navigateExternal,
-    endpoints: {
-      REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
-      REDEEM_OFFER: '/eu/redemptions/member/redeem',
-      OFFER_DETAILS: '/eu/offers/offers',
-    },
     writeTextToClipboard,
   } satisfies IPlatformAdapter;
 

@@ -290,6 +290,11 @@ jobs:
               ${{ needs.backend-redemptions.outputs.redemptions-api-endpoint }}
             </a>
             </td></tr>
+            <tr><td><strong>Discovery API URL:</strong></td><td>
+            <a href='${{ needs.backend-discovery.outputs.discovery-api-endpoint }}'>
+              ${{ needs.backend-discovery.outputs.discovery-api-endpoint }}
+            </a>
+            </td></tr>
             </table>
 
   e2e-redemptions:

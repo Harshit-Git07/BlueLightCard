@@ -76,7 +76,8 @@ export async function Discovery({ stack, app }: StackContext) {
   });
 
   stack.addOutputs({
-    SearchApiEndpoint: api.url,
+    DiscoveryApiEndpoint: api.url,
+    DiscoveryApiCustomDomain: api.customDomainUrl,
   });
 
   return {

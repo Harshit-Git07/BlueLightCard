@@ -28,6 +28,7 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
       return;
     }
 
+    loggedCodeView.current = true;
     amplitudeEvent({
       event: events.VAULT_CODE_USE_CODE_CLICKED,
       params: {

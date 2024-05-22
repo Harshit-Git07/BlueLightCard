@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.28.1...bluelightcard/offers-v1.29.0) (2024-05-22)
+
+
+### Features
+
+* [DISCO-246] Create new 'menus' bucket ready for globalisation ([#1391](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1391)) ([ea1be6c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ea1be6cab851a630e4c1324e7759b8b2c8f037ae))
+
+
+### Bug Fixes
+
+* TR-572-Upgrade-drizzle ([#1371](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1371)) ([fa9adab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fa9adab20828e75f9fbb2b6b3b1b06cb937f9067))
+
 ## [1.28.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.28.0...bluelightcard/offers-v1.28.1) (2024-05-16)
 
 

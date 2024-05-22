@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.15.0...bluelightcard/mobile-hybrid-v1.16.0) (2024-05-22)
+
+
+### Features
+
+* [DISCO-126] Add v5 search API and amplitude experiment ([#1294](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1294)) ([9cc153e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9cc153e3f7ac19749af4d8c491ac06da0ebadf0b))
+* [TR-543]: Implement platform adapter and mobile hybrid clipboard ([#1344](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1344)) ([774b964](https://github.com/bluelightcard/BlueLightCard-2.0/commit/774b9646c87ec69ff49aa3e57a1f68403c039ed8))
+* TO-698 offer sheet web version ([#1356](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1356)) ([527b961](https://github.com/bluelightcard/BlueLightCard-2.0/commit/527b961e7892f54355ad3b9255f59f1592d39830))
+* TR-478 Show offer sheet for generic offers in mobile hybrid ([#1351](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1351)) ([44c9a90](https://github.com/bluelightcard/BlueLightCard-2.0/commit/44c9a90fec3ddaa7699278966165b1a417bdc562))
+
+
+### Bug Fixes
+
+* implement fallback to redirect in same tab ([#1376](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1376)) ([eaa3d22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eaa3d22fdc53f65dfdb3bab0217acb5f5aa61f2e))
+* TR-592 Resolve issues with Next update ([#1390](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1390)) ([d2b41c1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d2b41c183791910ed859915bc3b964ed05a21daf))
+
+
+### Other Changes
+
+* [TR-581]: Move shared-ui config to provider ([#1395](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1395)) ([ef4f7b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ef4f7b0525b44ec9238fdc892a77ca481fece6ef))
+
 ## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.14.0...bluelightcard/mobile-hybrid-v1.15.0) (2024-05-13)
 
 

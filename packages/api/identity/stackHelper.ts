@@ -1,5 +1,5 @@
 import { Cognito, Config, EventBus, Function, Queue, Table } from 'sst/constructs';
-import { BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
+import { AccountRecovery, BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
 import { Duration } from 'aws-cdk-lib'
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2'
@@ -438,6 +438,7 @@ export function createNewCognito(
           requireDigits: false,
           requireSymbols: false,
         },
+        accountRecovery: AccountRecovery.EMAIL_ONLY,
         selfSignUpEnabled: false,
       },
     },
@@ -645,6 +646,7 @@ export function createNewCognitoDDS(
           requireDigits: false,
           requireSymbols: false,
         },
+        accountRecovery: AccountRecovery.EMAIL_ONLY,
         selfSignUpEnabled: false,
       },
     },

@@ -5,11 +5,13 @@ import { SqsDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Queues } from "./queues";
 
 export class Buckets {
+  menusBucket: Bucket;
   blcUKBucket: Bucket;
   blcAUSBucket: Bucket;
   ddsUKBucket: Bucket;
 
   constructor(private stack: Stack, private stage: string, private queues: Queues) {
+    this.menusBucket = this.createMenusBucket();
     this.blcUKBucket = this.createBlcUKBucket();
     this.blcAUSBucket = this.createBlcAUSBucket();
     this.ddsUKBucket = this.createDdsUKBucket();
@@ -20,6 +22,17 @@ export class Buckets {
     this.addNotification(this.blcUKBucket);
     this.addNotification(this.blcAUSBucket);
     this.addNotification(this.ddsUKBucket);
+  }
+
+  private createMenusBucket(): Bucket {
+    return new Bucket(this.stack, 'menusBucket', {
+      name: `menus-${this.stage}-${this.stack.region}-${this.stack.account}`,
+      cdk: {
+        bucket: {
+          blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+        },
+      },
+    });
   }
 
   private createBlcUKBucket(): Bucket {

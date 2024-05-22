@@ -28,11 +28,11 @@ export class S3MenusBucketEventQueueListenerLambda extends LambdaAbstract {
     return s3BucketListener;
   }
 
-  protected grantPermissions(lambdaFunciton: NodejsFunction): void {
-    this.tables.offerHomepageTable.cdk.table.grantReadWriteData(lambdaFunciton);
-    this.buckets.blcUKBucket.cdk.bucket.grantRead(lambdaFunciton);
-    this.buckets.blcAUSBucket.cdk.bucket.grantRead(lambdaFunciton);
-    this.buckets.ddsUKBucket.cdk.bucket.grantRead(lambdaFunciton);
+  protected grantPermissions(lambdaFunction: NodejsFunction): void {
+    this.tables.offerHomepageTable.cdk.table.grantReadWriteData(lambdaFunction);
+    this.buckets.blcUKBucket.cdk.bucket.grantRead(lambdaFunction);
+    this.buckets.blcAUSBucket.cdk.bucket.grantRead(lambdaFunction);
+    this.buckets.ddsUKBucket.cdk.bucket.grantRead(lambdaFunction);
   }
 
   private addEventSource(lambdaFunction: NodejsFunction): void {

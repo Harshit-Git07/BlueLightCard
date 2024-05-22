@@ -6,7 +6,7 @@ export type Props = {
   showOfferDescription: boolean;
   showShareFavorite: boolean;
   showTerms: boolean;
-  redemptionType: RedemptionType | 'legacy';
+  redemptionType: RedemptionType;
 } & (
   | {
       state: 'loading';

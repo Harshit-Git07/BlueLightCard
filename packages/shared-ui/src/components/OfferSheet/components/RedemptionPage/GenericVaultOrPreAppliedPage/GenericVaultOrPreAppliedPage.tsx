@@ -10,6 +10,7 @@ import { useLabels } from '../../../../../hooks/useLabels';
 import { PlatformVariant } from '../../../../../types';
 import { Label, MagicButton, usePlatformAdapter } from '../../../../../index';
 import { useRef } from 'react';
+import { RedemptionType } from '../../../types';
 
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   const {
@@ -116,11 +117,11 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
             <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
               <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
                 <FontAwesomeIcon icon={faWandMagicSparkles} />
-                {props.redemptionType === 'preApplied'
-                  ? 'Discount automatically applied'
-                  : 'Copy code!'}
+                {getPrimaryButtonText(props.redemptionType)}
               </div>
-              <div className="text-sm text-[#616266] font-medium">Go to partner website</div>
+              <div className="text-sm text-[#616266] font-medium">
+                {getSecondaryButtonText(props.redemptionType)}
+              </div>
             </div>
           </MagicButton>
         )}
@@ -128,3 +129,22 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
     </>
   );
 });
+
+function getPrimaryButtonText(redemptionType: RedemptionType) {
+  switch (redemptionType) {
+    case 'preApplied':
+      return 'Discount automatically applied';
+    default:
+      // Attempt to detect touch devices to show the correct message
+      return 'ontouchstart' in window ? 'Tap to copy code' : 'Click to copy code';
+  }
+}
+
+function getSecondaryButtonText(redemptionType: RedemptionType) {
+  switch (redemptionType) {
+    case 'preApplied':
+      return 'Go to partner website';
+    default:
+      return 'You can paste it at checkout';
+  }
+}

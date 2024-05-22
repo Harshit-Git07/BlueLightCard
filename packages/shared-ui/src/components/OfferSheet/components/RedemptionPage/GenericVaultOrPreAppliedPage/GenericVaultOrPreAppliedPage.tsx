@@ -141,6 +141,6 @@ function getSecondaryButtonText(redemptionType: RedemptionType) {
     case 'preApplied':
       return 'Go to partner website';
     default:
-      return 'You can paste it at checkout';
+      return 'Paste it at checkout';
   }
 }

@@ -11,21 +11,24 @@ import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { searchResults, searchTerm } from '@/modules/SearchResults/store';
 import SearchResultsContainer from '@/modules/SearchResults/components/SearchResultsContainer';
 import { OfferListItemModel } from '@/models/offer';
-import { offerListItemFactory } from '@/modules/List/__mocks__/factory';
+import { offerListItemFactory, searchResultV5Factory } from '@/modules/List/__mocks__/factory';
 import '@testing-library/jest-dom';
-import { SearchResult, SearchResults } from '@/modules/SearchResults/types';
+import { SearchResult, SearchResults, SearchResultsV5 } from '@/modules/SearchResults/types';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
+import { userProfile } from '@/components/UserProfileProvider/store';
 
 jest.mock('@/invoke/apiCall');
 jest.mock('@/invoke/analytics');
+
+let testData: OfferListItemModel[];
+let testDataV5: SearchResultsV5;
 
 describe('Search results', () => {
   const searchTermValue = 'pizza';
   let analyticsMock: jest.SpyInstance<void, [properties: NativeAnalytics.Parameters], any>;
   let user: UserEvent;
-
-  let testData: OfferListItemModel[];
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -36,6 +39,9 @@ describe('Search results', () => {
     testData = offerListItemFactory.buildList(2);
     testData[1].companyname = 'Test Company';
     testData[1].offername = 'Test Offer';
+    testDataV5 = searchResultV5Factory.buildList(2);
+    testDataV5[1].CompanyName = 'Test Company';
+    testDataV5[1].OfferName = 'Test Offer';
   });
 
   describe('spinner', () => {
@@ -46,6 +52,16 @@ describe('Search results', () => {
 
       const spinner = screen.queryByRole('progressbar');
       expect(spinner).toBeFalsy();
+    });
+    it('should hide spinner on receiving api response when category level three search experiment is on', async () => {
+      const mockPlatformAdapter = useGivenSearchResultsAreReturnedFromTheAPI();
+
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment', mockPlatformAdapter, 'on');
+
+      await waitFor(() => {
+        const spinner = screen.queryByRole('progressbar');
+        expect(spinner).toBeFalsy();
+      });
     });
   });
 
@@ -59,9 +75,9 @@ describe('Search results', () => {
       expect(results).toHaveLength(2);
     });
     it('should render list of results when category level three search experiment is on', async () => {
-      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment');
+      const mockPlatformAdapter = useGivenSearchResultsAreReturnedFromTheAPI();
 
-      givenSearchResultsAreReturnedFromV5API();
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment', mockPlatformAdapter, 'on');
 
       const results = await screen.findAllByRole('listitem');
       expect(results).toHaveLength(2);
@@ -73,10 +89,29 @@ describe('Search results', () => {
 
       await screen.findByText('No results found.');
     });
+    it('should show no results found when nothing found and category level three search experiment is on', async () => {
+      const mockPlatformAdapter = useGivenSearchResultsAreReturnedFromTheAPI([]);
+
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment', mockPlatformAdapter);
+
+      await screen.findByText('No results found.');
+    });
     it('should show no results found when nothing found but a previous search was successful', async () => {
       whenSearchResultsPageIsRendered(searchTermValue, [buildSearchResult()]);
 
       givenSearchResultsAreReturnedFromTheAPI([]);
+
+      await screen.findByText('No results found.');
+    });
+    it('should show no results found when nothing found but a previous search was successful and category level three search experiment is on', async () => {
+      const mockPlatformAdapter = useGivenSearchResultsAreReturnedFromTheAPI([]);
+
+      whenSearchResultsPageIsRendered(
+        searchTermValue,
+        [buildSearchResult()],
+        'treatment',
+        mockPlatformAdapter,
+      );
 
       await screen.findByText('No results found.');
     });
@@ -95,19 +130,33 @@ describe('Search results', () => {
       expect(requestDataMock).toHaveBeenCalledWith(APIUrl.Search, { term: searchTermValue });
     });
     it('should request data from experimental search API when search term is set', async () => {
-      const requestDataMock = jest
-        .spyOn(InvokeNativeAPICall.prototype, 'requestDataV5')
-        .mockImplementation(() => jest.fn());
-      givenSearchResultsAreReturnedFromV5API();
+      const mockPlatformAdapter = useGivenSearchResultsAreReturnedFromTheAPI();
 
-      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment');
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment', mockPlatformAdapter, 'on');
+
+      await waitFor(() => {
+        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledTimes(1);
+        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(V5_API_URL.Search, {
+          method: 'GET',
+          queryParameters: {
+            query: searchTermValue,
+            organisation: 'DEN',
+            isAgeGated: 'false',
+          },
+          cachePolicy: 'auto',
+        });
+      });
+    });
+    it('should request data from v4 endpoint when search experiment is on but v5 integration is off', async () => {
+      const requestDataMock = jest
+        .spyOn(InvokeNativeAPICall.prototype, 'requestData')
+        .mockImplementation(() => jest.fn());
+      givenSearchResultsAreReturnedFromTheAPI();
+
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment', mockPlatformAdapter, 'off');
 
       expect(requestDataMock).toHaveBeenCalledTimes(1);
-      expect(requestDataMock).toHaveBeenCalledWith(V5_API_URL.Search, {
-        method: 'GET',
-        queryParameters: { query: searchTermValue, organisation: '' },
-        cachePolicy: 'auto',
-      });
+      expect(requestDataMock).toHaveBeenCalledWith(APIUrl.Search, { term: searchTermValue });
     });
   });
 
@@ -116,6 +165,21 @@ describe('Search results', () => {
       whenSearchResultsPageIsRendered(searchTermValue);
 
       givenSearchResultsAreReturnedFromTheAPI();
+
+      await waitFor(() =>
+        expect(analyticsMock).toHaveBeenCalledWith({
+          event: AmplitudeEvents.SEARCH_RESULTS_LIST_VIEWED,
+          parameters: {
+            search_term: searchTermValue,
+            number_of_results: 2,
+          },
+        }),
+      );
+    });
+    it('should log analytics event on results returned when category level three search experiment is on', async () => {
+      const mockPlatformAdapter = useGivenSearchResultsAreReturnedFromTheAPI();
+
+      whenSearchResultsPageIsRendered(searchTermValue, [], 'treatment', mockPlatformAdapter, 'on');
 
       await waitFor(() =>
         expect(analyticsMock).toHaveBeenCalledWith({
@@ -161,11 +225,9 @@ describe('Search results', () => {
     });
   };
 
-  const givenSearchResultsAreReturnedFromV5API = (data: OfferListItemModel[] = testData) => {
-    act(() => {
-      bus.emit(Channels.API_RESPONSE, V5_API_URL.Search, {
-        data,
-      });
+  const useGivenSearchResultsAreReturnedFromTheAPI = (data: SearchResultsV5 = testDataV5) => {
+    return useMockPlatformAdapter(200, {
+      data: testDataV5,
     });
   };
 
@@ -175,29 +237,6 @@ describe('Search results', () => {
         {children}
         <Spinner />
       </div>
-    );
-  };
-
-  const whenSearchResultsPageIsRendered = (
-    term: string = '',
-    existingSearchResults: SearchResults = [],
-    categoryLevelThreeSearchExperiment = 'control',
-  ) => {
-    return render(
-      <JotaiTestProvider
-        initialValues={[
-          [searchTerm, term],
-          [searchResults, existingSearchResults],
-          [
-            experimentsAndFeatureFlags,
-            { [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: categoryLevelThreeSearchExperiment },
-          ],
-        ]}
-      >
-        <WithSpinner>
-          <SearchResultsContainer />
-        </WithSpinner>
-      </JotaiTestProvider>,
     );
   };
 
@@ -214,4 +253,37 @@ describe('Search results', () => {
       s3logos: '',
     };
   };
+
+  const whenSearchResultsPageIsRendered = (
+    term: string = '',
+    existingSearchResults: SearchResults = [],
+    categoryLevelThreeSearchExperiment = 'control',
+    platformAdapter = mockPlatformAdapter,
+    v5EndpointsFlag = 'off',
+  ) => {
+    return render(
+      <PlatformAdapterProvider adapter={platformAdapter}>
+        <JotaiTestProvider
+          initialValues={[
+            [searchTerm, term],
+            [searchResults, existingSearchResults],
+            [
+              experimentsAndFeatureFlags,
+              {
+                [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: categoryLevelThreeSearchExperiment,
+                [FeatureFlags.V5_API_INTEGRATION]: v5EndpointsFlag,
+              },
+            ],
+            [userProfile, { service: 'DEN' }],
+          ]}
+        >
+          <WithSpinner>
+            <SearchResultsContainer />
+          </WithSpinner>
+        </JotaiTestProvider>
+      </PlatformAdapterProvider>,
+    );
+  };
+
+  const mockPlatformAdapter = useMockPlatformAdapter();
 });

@@ -1,11 +1,16 @@
-import { museoFont, sourceSansPro } from "@/font";
-import { Decorator } from "@storybook/react";
+import { museoFont, sourceSansPro } from '@/font';
+import { Decorator } from '@storybook/react';
 
 import mockResolvers from './mockResolvers';
 
 import '@/nativeReceive';
-import Spinner from "@/modules/Spinner";
-import UserServiceProvider from "@/components/UserServiceProvider/UserServiceProvider";
+import Spinner from '@/modules/Spinner';
+import UserProfileProvider from '@/components/UserProfileProvider/UserProfileProvider';
+import {
+  IPlatformAdapter,
+  PlatformAdapterProvider,
+  PlatformVariant
+} from '@bluelightcard/shared-ui';
 
 const pageDecorator: Decorator = (Story) => {
   const globalState = window as GlobalState;
@@ -20,13 +25,26 @@ const pageDecorator: Decorator = (Story) => {
     }, {} as typeof globalState.webkit.messageHandlers)
   };
   return (
-    <UserServiceProvider>
-      <main className={`${museoFont.variable} ${sourceSansPro.variable} font-museo dark:bg-neutral-black`}>
-        <Story />
-        <Spinner />
-      </main>
-    </UserServiceProvider>
+    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+      <UserProfileProvider>
+        <main className={`${museoFont.variable} ${sourceSansPro.variable} font-museo dark:bg-neutral-black`}>
+          <Story />
+          <Spinner />
+        </main>
+      </UserProfileProvider>
+    </PlatformAdapterProvider>
   );
 };
+
+const mockPlatformAdapter = {
+  getAmplitudeFeatureFlag: () => 'control',
+  invokeV5Api: () =>
+    Promise.resolve({ statusCode: 200, body: "{ data: {} }" }),
+  logAnalyticsEvent: () => {},
+  navigate: () => {},
+  navigateExternal: () => {},
+  writeTextToClipboard: () => Promise.resolve(),
+  platform: PlatformVariant.MobileHybrid,
+} satisfies IPlatformAdapter;
 
 export default pageDecorator;

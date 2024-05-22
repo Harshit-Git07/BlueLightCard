@@ -1,23 +1,24 @@
 import TypesPage from '@/pages/types';
+import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { APIUrl, Channels } from '@/globals';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
-import { userService } from '@/components/UserServiceProvider/store';
 import Spinner from '@/modules/Spinner';
 import { FC, PropsWithChildren } from 'react';
 import { offerListItemFactory } from '@/modules/List/__mocks__/factory';
 import '@testing-library/jest-dom';
 import BrowseTypesData from '@/data/BrowseTypes';
 import eventBus from '@/eventBus';
+import { userProfile, UserProfile } from '@/components/UserProfileProvider/store';
 
 jest.mock('@/invoke/apiCall');
 let mockRouter: Partial<NextRouter> = {
   query: {},
 };
-let userServiceValue: string | undefined;
+let userProfileValue: UserProfile | undefined;
 let user: UserEvent;
 
 jest.mock('next/router', () => ({
@@ -30,7 +31,7 @@ describe('Types Page', () => {
   });
 
   beforeEach(() => {
-    userServiceValue = 'NHS';
+    userProfileValue = { service: 'NHS' };
     user = userEvent.setup();
     mockRouter = {
       push: jest.fn(),
@@ -59,7 +60,7 @@ describe('Types Page', () => {
         expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
           typeid: typeId.toString(),
           page: '1',
-          service: userServiceValue,
+          service: userProfileValue?.service,
         });
       },
     );
@@ -176,8 +177,10 @@ const givenTypeQueryParamIs = (queryParam?: string) => {
 };
 const whenTypesPageIsRendered = () => {
   render(
-    <JotaiTestProvider initialValues={[[userService, userServiceValue]]}>
-      <TypesPageWithSpinner />
-    </JotaiTestProvider>,
+    <RouterContext.Provider value={mockRouter as NextRouter}>
+      <JotaiTestProvider initialValues={[[userProfile, userProfileValue]]}>
+        <TypesPageWithSpinner />
+      </JotaiTestProvider>
+    </RouterContext.Provider>,
   );
 };

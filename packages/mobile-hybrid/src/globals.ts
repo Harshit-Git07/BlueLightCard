@@ -19,6 +19,7 @@ export enum APIUrl {
 
 export const V5_API_URL = {
   Search: `/${V5_REGION}/discovery/search`,
+  User: `/${V5_REGION}/identity/user`,
 } as const;
 
 export const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcard.co.uk';

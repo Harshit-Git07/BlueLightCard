@@ -11,11 +11,11 @@ import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { SharedUIConfigProvider, ViewOfferProvider } from '@bluelightcard/shared-ui';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
-import UserServiceProvider from '@/components/UserServiceProvider/UserServiceProvider';
 import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
 import { MobilePlatformAdapter } from '@/utils/platformAdapter';
 import { QueryClient } from '@tanstack/react-query';
 import { QueryClientProvider } from '@tanstack/react-query';
+import UserProfileProvider from '@/components/UserProfileProvider/UserProfileProvider';
 
 dayjs.extend(CustomParseFormat);
 
@@ -38,14 +38,14 @@ export default function App({ Component, pageProps }: AppProps) {
             AmplitudeProvider uses a custom Jotai store so all providers that use the default store should be
             added as children of the AmplitudeProvider.
           */}
-            <UserServiceProvider>
+            <UserProfileProvider>
               <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
                 <ViewOfferProvider>
                   <Component {...pageProps} />
                 </ViewOfferProvider>
                 <Spinner />
               </main>
-            </UserServiceProvider>
+            </UserProfileProvider>
           </AmplitudeProvider>
         </PlatformAdapterProvider>
       </SharedUIConfigProvider>

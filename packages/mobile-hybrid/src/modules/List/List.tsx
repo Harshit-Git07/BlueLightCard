@@ -14,7 +14,7 @@ import { PAGE_SIZE } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { useAtomValue } from 'jotai';
-import { userService } from '@/components/UserServiceProvider/store';
+import { userProfile } from '@/components/UserProfileProvider/store';
 
 const analytics = new InvokeNativeAnalytics();
 const navigation = new InvokeNativeNavigation();
@@ -22,7 +22,7 @@ const request = new InvokeNativeAPICall();
 
 const List: FC<ListProps> = ({ listVariant, entityId }) => {
   const setSpinner = useSetAtom(spinner);
-  const userServiceValue = useAtomValue(userService);
+  const userProfileValue = useAtomValue(userProfile);
   const [results, setResults] = useState<OfferListItemModel[]>([]);
   const [page, setPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -56,15 +56,15 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
   );
 
   useEffect(() => {
-    if (userServiceValue) {
+    if (userProfileValue) {
       request.requestData(apiUrl, {
         [queryParamName]: entityId.toString(),
         page: page.toString(),
-        service: userServiceValue,
+        service: userProfileValue.service,
       });
       setIsLoadingMore(true);
     }
-  }, [apiUrl, entityId, queryParamName, page, userServiceValue]);
+  }, [apiUrl, entityId, queryParamName, page, userProfileValue]);
 
   useEffect(() => {
     if (listResponse?.data) {

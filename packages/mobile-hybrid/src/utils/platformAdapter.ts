@@ -22,6 +22,8 @@ const analytics = new InvokeNativeAnalytics();
 const navigation = new InvokeNativeNavigation();
 const clipboard = new InvokeNativeClipboard();
 
+const V5_REGION = process.env.NEXT_PUBLIC_APP_BRAND === 'blc-au' ? 'au' : 'eu';
+
 export class MobilePlatformAdapter implements IPlatformAdapter {
   private invokeNativeAPICall = new InvokeNativeAPICall();
 

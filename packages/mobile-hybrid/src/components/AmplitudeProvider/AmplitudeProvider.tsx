@@ -23,7 +23,9 @@ const AmplitudeProvider: FC<AmplitudeProviderProps> = ({
   useEffect(() => {
     eventBus.on(Channels.EXPERIMENTS, (variants) => {
       if (variants) {
-        amplitudeStore.set(experimentsAndFeatureFlags, variants);
+        amplitudeStore.set(experimentsAndFeatureFlags, {
+          ...variants,
+        });
         setExperimentsAndFeatureFlags(variants);
       }
     });

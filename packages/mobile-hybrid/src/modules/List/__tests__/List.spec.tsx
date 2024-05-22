@@ -8,7 +8,7 @@ import Spinner from '@/modules/Spinner';
 import { FC, PropsWithChildren } from 'react';
 import { offerListItemFactory } from '../__mocks__/factory';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
-import { userService } from '@/components/UserServiceProvider/store';
+import { UserProfile, userProfile } from '@/components/UserProfileProvider/store';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
@@ -33,7 +33,7 @@ jest.mock('@/invoke/apiCall');
 describe('ListModule', () => {
   let props: ListProps;
   let user: UserEvent;
-  let userServiceValue: string | undefined;
+  let userProfileValue: UserProfile | undefined;
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -45,7 +45,7 @@ describe('ListModule', () => {
       listVariant: ListVariant.Types,
     };
     user = userEvent.setup();
-    userServiceValue = 'NHS';
+    userProfileValue = { service: 'NHS' };
   });
 
   describe('smoke test', () => {
@@ -74,7 +74,7 @@ describe('ListModule', () => {
       .mockImplementation(() => jest.fn());
 
     it('should not make request to api when "service" value is "undefined"', () => {
-      userServiceValue = undefined;
+      userProfileValue = undefined;
 
       whenListWithSpinnerIsRendered(props);
 
@@ -90,14 +90,14 @@ describe('ListModule', () => {
       });
 
       it('should make request to api when "service" value is set', () => {
-        userServiceValue = 'NHS';
+        userProfileValue = { organisation: 'NHS' };
 
         whenListWithSpinnerIsRendered(props);
 
         expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
           typeid: '0',
           page: '1',
-          service: userServiceValue,
+          service: userProfileValue.service,
         });
       });
     });
@@ -111,14 +111,14 @@ describe('ListModule', () => {
       });
 
       it('should make request to api when "service" value is set', () => {
-        userServiceValue = 'NHS';
+        userProfileValue = { organisation: 'NHS' };
 
         whenListWithSpinnerIsRendered(props);
 
         expect(requestDataMock).toHaveBeenCalledWith(APIUrl.List, {
           catid: '0',
           page: '1',
-          service: userServiceValue,
+          service: userProfileValue.service,
         });
       });
     });
@@ -319,7 +319,7 @@ describe('ListModule', () => {
 
   const whenListWithSpinnerIsRendered = (props: ListProps): void => {
     render(
-      <JotaiTestProvider initialValues={[[userService, userServiceValue]]}>
+      <JotaiTestProvider initialValues={[[userProfile, userProfileValue]]}>
         <ListWithSpinner {...props} />
       </JotaiTestProvider>,
     );

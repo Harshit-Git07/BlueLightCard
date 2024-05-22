@@ -9,7 +9,7 @@ exports[`ViewOfferProvider it renders the given children 1`] = `
       View Offer
     </button>
     <div
-      class="absolute z-50 w-full h-full transition-visibility duration-1000 invisible"
+      class="absolute z-50 top-0 w-full h-full transition-visibility duration-1000 hidden"
     />
   </div>
 </DocumentFragment>
@@ -24,7 +24,7 @@ exports[`ViewOfferProvider it renders the offer link 1`] = `
       View Offer
     </button>
     <div
-      class="absolute z-50 w-full h-full transition-visibility duration-1000 invisible"
+      class="absolute z-50 top-0 w-full h-full transition-visibility duration-1000 hidden"
     />
   </div>
 </DocumentFragment>
@@ -39,7 +39,7 @@ exports[`ViewOfferProvider it renders the offer sheet 1`] = `
       View Offer
     </button>
     <div
-      class="absolute z-50 w-full h-full transition-visibility duration-1000 invisible"
+      class="absolute z-50 top-0 w-full h-full transition-visibility duration-1000 hidden"
     />
   </div>
 </DocumentFragment>

@@ -55,8 +55,8 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
     <OfferDetailsContext.Provider value={{ viewOffer }}>
       {children}
       <div
-        className={`absolute z-50 w-full h-full transition-visibility duration-1000 ${
-          isOpen ? 'visible' : 'invisible'
+        className={`absolute z-50 top-0 w-full h-full transition-visibility duration-1000 ${
+          isOpen ? 'block' : 'hidden'
         }`}
       >
         <OfferDetailsComponent />

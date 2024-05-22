@@ -9,7 +9,7 @@ import '@/nativeReceive';
 import { museoFont, sourceSansPro } from '@/font';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
-import { ViewOfferProvider } from '@bluelightcard/shared-ui';
+import { SharedUIConfigProvider, ViewOfferProvider } from '@bluelightcard/shared-ui';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
 import UserServiceProvider from '@/components/UserServiceProvider/UserServiceProvider';
 import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
@@ -24,22 +24,31 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PlatformAdapterProvider adapter={new MobilePlatformAdapter()}>
-        <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
-          {/*
+      <SharedUIConfigProvider
+        value={{
+          globalConfig: {
+            cdnUrl: 'https://cdn.bluelightcard.co.uk',
+            brand: 'blc-uk',
+          },
+        }}
+      >
+        <PlatformAdapterProvider adapter={new MobilePlatformAdapter()}>
+          <AmplitudeProvider experimentKeys={experimentKeys} featureFlagKeys={featureFlagKeys}>
+            {/*
             AmplitudeProvider uses a custom Jotai store so all providers that use the default store should be
             added as children of the AmplitudeProvider.
           */}
-          <UserServiceProvider>
-            <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
-              <ViewOfferProvider>
-                <Component {...pageProps} />
-              </ViewOfferProvider>
-              <Spinner />
-            </main>
-          </UserServiceProvider>
-        </AmplitudeProvider>
-      </PlatformAdapterProvider>
+            <UserServiceProvider>
+              <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
+                <ViewOfferProvider>
+                  <Component {...pageProps} />
+                </ViewOfferProvider>
+                <Spinner />
+              </main>
+            </UserServiceProvider>
+          </AmplitudeProvider>
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>
     </QueryClientProvider>
   );
 }

@@ -13,6 +13,7 @@ import {
   DATADOG_DEFAULT_SERVICE,
   DATADOG_SITE,
   FLAGSMITH_KEY,
+  CDN_URL,
 } from '@/global-vars';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -25,7 +26,7 @@ import { NextPageWithLayout } from '@/page-types/layout';
 import Head from 'next/head';
 import AmplitudeProvider from '@/utils/amplitude/provider';
 import { FlagsmithProvider } from 'flagsmith/react';
-import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
+import { PlatformAdapterProvider, SharedUIConfigProvider } from '@bluelightcard/shared-ui';
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { WebPlatformAdapter } from '../common/utils/WebPlatformAdapter';
 
@@ -99,9 +100,18 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           }}
           flagsmith={flagsmith}
         >
-          <PlatformAdapterProvider adapter={new WebPlatformAdapter()}>
-            <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
-          </PlatformAdapterProvider>
+          <SharedUIConfigProvider
+            value={{
+              globalConfig: {
+                cdnUrl: CDN_URL,
+                brand: 'blc-uk',
+              },
+            }}
+          >
+            <PlatformAdapterProvider adapter={new WebPlatformAdapter()}>
+              <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
+            </PlatformAdapterProvider>
+          </SharedUIConfigProvider>
         </FlagsmithProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

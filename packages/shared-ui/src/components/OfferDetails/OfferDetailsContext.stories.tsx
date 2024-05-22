@@ -54,10 +54,6 @@ const ViewOfferChild = () => {
       companyId: 1,
       companyName: 'companyName',
       platform: PlatformVariant.MobileHybrid,
-      cdnUrl: 'CDN_URL',
-      BRAND: 'blc-uk',
-      isMobileHybrid: true,
-      height: '90%',
     });
   };
 

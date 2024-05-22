@@ -17,7 +17,7 @@ const MobileDynamicSheet: FC<Props> = ({
   showCloseButton = false,
   containerClassName = '',
 }) => {
-  const { isOpen, onClose, height } = useAtomValue(offerSheetAtom);
+  const { isOpen, onClose } = useAtomValue(offerSheetAtom);
 
   const containerDynCss = useCSSConditional({
     'opacity-100': isOpen,
@@ -40,12 +40,7 @@ const MobileDynamicSheet: FC<Props> = ({
   return (
     <div className="absolute h-100 bg-transparent">
       <div className={containerCss} onClick={() => outsideClickClose && onClose && onClose()}></div>
-      <div
-        className={animatedCss}
-        // We use styles here as we want to enable the value to be dynamic.
-        // Tailwind cleans up unused values and therefore dynamic values are likely to be removed.
-        style={{ height: height, top: '100%' }}
-      >
+      <div className={`${animatedCss} h-[80%] bottom-[-80%]`}>
         {showCloseButton && (
           <div className="w-full flex justify-end p-4">
             <FontAwesomeIcon

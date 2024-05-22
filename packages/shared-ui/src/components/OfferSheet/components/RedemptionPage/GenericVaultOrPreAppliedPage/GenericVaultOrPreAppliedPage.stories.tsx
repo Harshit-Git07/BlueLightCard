@@ -10,7 +10,7 @@ const mockPlatformAdapter = {
     Promise.resolve({ status: 200, data: "{ data: { redemptionType: 'vault' } }" }),
   logAnalyticsEvent: () => {},
   navigate: () => {},
-  navigateExternal: () => {},
+  navigateExternal: () => ({ isOpen: () => true }),
   endpoints: {
     REDEMPTION_DETAILS: '/eu/redemptions/member/redemptionDetails',
     REDEEM_OFFER: '/eu/redemptions/member/redeem',

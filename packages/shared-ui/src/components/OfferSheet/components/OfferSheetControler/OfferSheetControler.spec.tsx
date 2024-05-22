@@ -4,6 +4,8 @@ import OfferSheetControler from '.';
 import { render, waitFor } from '@testing-library/react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { useOfferDetails } from '../../../../hooks/useOfferDetails';
+import { SharedUIConfigProvider } from 'src/providers';
+import { MockSharedUiConfig } from 'src/test';
 
 jest.mock('next/router', () => ({
   useRouter: () => ({
@@ -20,12 +22,13 @@ const mockQueryClient = new QueryClient();
 
 function renderComponent() {
   return render(
-    <QueryClientProvider client={mockQueryClient}>
-      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <OfferSheetControler />
-      </PlatformAdapterProvider>
-      ,
-    </QueryClientProvider>,
+    <SharedUIConfigProvider value={MockSharedUiConfig}>
+      <QueryClientProvider client={mockQueryClient}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheetControler />
+        </PlatformAdapterProvider>
+      </QueryClientProvider>
+    </SharedUIConfigProvider>,
   );
 }
 

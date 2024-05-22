@@ -2,14 +2,14 @@ import { IPlatformAdapter } from '../../adapters';
 import { PlatformVariant } from '../../types';
 import { RedemptionType } from '../OfferSheet/types';
 
-export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, string>> = {
+export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, string | null>> = {
   vault: {
-    web: 'offer-sheet-redeem-vault-search-and-homepage',
-    'mobile-hybrid': 'offer-sheet-redeem-vault-app',
+    [PlatformVariant.Web]: 'offer-sheet-redeem-vault-search-and-homepage',
+    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-vault-app',
   },
   generic: {
-    web: '',
-    'mobile-hybrid': 'offer-sheet-redeem-generic-app',
+    [PlatformVariant.Web]: null,
+    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-generic-app',
   },
 };
 
@@ -19,10 +19,16 @@ export const getPlatformExperimentForRedemptionType = (
   platformAdapter: IPlatformAdapter,
   redemptionType: RedemptionType | undefined,
 ) => {
-  const experimentName =
-    redemptionTypeExperiments[redemptionType ?? '']?.[
-      platformAdapter.platform as PlatformVariant
-    ] ?? '';
+  if (!redemptionType) {
+    return 'control';
+  }
+
+  const experimentName = redemptionTypeExperiments[redemptionType]?.[platformAdapter.platform];
+
+  if (!experimentName) {
+    return 'control';
+  }
+
   const experiment = platformAdapter.getAmplitudeFeatureFlag(experimentName) ?? 'control';
 
   return experiment as Experiment;

@@ -105,23 +105,12 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
     }
   };
 
-  function cleanText(text: string) {
-    return text
-      .replace(/&nbsp;/g, ' ') // Might not matter, but just in case
-      .replace(/&amp;/g, '&')
-      .replace(/&pound;/g, '£');
-  }
-
   async function onSelectOffer(offerId: number, companyId: number, companyName: string) {
     await viewOffer({
       offerId: offerId,
       companyId: companyId,
       companyName: companyName,
       platform: PlatformVariant.Web,
-      cdnUrl: CDN_URL,
-      BRAND: 'blc-uk',
-      isMobileHybrid: false,
-      height: '80%',
       amplitudeCtx: amplitude,
     });
   }

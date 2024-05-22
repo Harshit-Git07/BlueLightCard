@@ -64,6 +64,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:watch": "jest --watch",
+    "format": "prettier --ignore-unknown --write .",
     "format:staged": "prettier --ignore-unknown --write",
     "lint:staged": "eslint --fix"
   },

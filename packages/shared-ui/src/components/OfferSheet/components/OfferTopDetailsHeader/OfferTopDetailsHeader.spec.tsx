@@ -5,6 +5,8 @@ import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../adapters';
+import { SharedUIConfigProvider } from 'src/providers';
+import { MockSharedUiConfig } from 'src/test';
 
 const HydrateAtoms = ({ initialValues, children }: any) => {
   useHydrateAtoms(initialValues);
@@ -53,18 +55,22 @@ describe('smoke test', () => {
   it('should render component without error', () => {
     const platformAdapter = useMockPlatformAdapter();
     render(
-      <PlatformAdapterProvider adapter={platformAdapter}>
-        <OfferTopDetailsHeader />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={platformAdapter}>
+          <OfferTopDetailsHeader />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
   });
 
   it('should render offer details correctly with jotai state management', () => {
     const platformAdapter = useMockPlatformAdapter();
     const { getByRole, getByText } = render(
-      <PlatformAdapterProvider adapter={platformAdapter}>
-        <OfferTopDetailsHeaderProvider />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={platformAdapter}>
+          <OfferTopDetailsHeaderProvider />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
     expect(getByRole('img', { name: /some dummy alt text here/i })).toBeTruthy();
     expect(getByRole('heading', { name: /save with seat/i })).toBeTruthy();
@@ -78,9 +84,11 @@ describe('smoke test', () => {
   it('should render share offer button', () => {
     const platformAdapter = useMockPlatformAdapter();
     const { getByRole } = render(
-      <PlatformAdapterProvider adapter={platformAdapter}>
-        <OfferTopDetailsHeaderProvider />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={platformAdapter}>
+          <OfferTopDetailsHeaderProvider />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
 
     expect(getByRole('button', { name: /terms & conditions/i })).toBeTruthy();
@@ -89,9 +97,11 @@ describe('smoke test', () => {
   it('should render terms & conditions accordion correctly', () => {
     const platformAdapter = useMockPlatformAdapter();
     const { getByRole, getByText } = render(
-      <PlatformAdapterProvider adapter={platformAdapter}>
-        <OfferTopDetailsHeaderProvider />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={platformAdapter}>
+          <OfferTopDetailsHeaderProvider />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
 
     const tcAccordion = getByRole('button', { name: /terms & conditions/i });

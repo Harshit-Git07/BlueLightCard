@@ -38,18 +38,7 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   const [experiment, setExperiment] = useState('control');
 
   function getOfferDetailsComponent(redemptionType: RedemptionType | undefined) {
-    const supportedRedemptionTypes = ['vault', 'generic'];
-    // Redemptions team added this but when redemption type
-    // does not exist it should open legacy page
-    // if (!redemptionType) {
-    //   return EmptyOfferDetails;
-    // }
-
-    if (
-      !experiment ||
-      experiment === 'control' ||
-      !supportedRedemptionTypes.includes(redemptionType || '')
-    ) {
+    if (!experiment || experiment === 'control') {
       return OfferDetailsLink;
     }
 
@@ -81,10 +70,6 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
     companyId: number;
     companyName: string;
     platform: PlatformVariant;
-    cdnUrl: string;
-    BRAND: string;
-    isMobileHybrid: boolean;
-    height: string;
     amplitudeCtx?: Amplitude | null | undefined;
   }): Promise<void> {
     const redemptionType = await setRedemptionsDetails(offerData.offerId);
@@ -98,10 +83,6 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
         companyName: offerData.companyName,
       },
       platform: offerData.platform,
-      isMobileHybrid: offerData.isMobileHybrid,
-      BRAND: offerData.BRAND,
-      cdnUrl: offerData.cdnUrl,
-      height: offerData.height,
       amplitudeEvent: ({ event, params }) => {
         platformAdapter.logAnalyticsEvent(event, params, offerData?.amplitudeCtx);
       },

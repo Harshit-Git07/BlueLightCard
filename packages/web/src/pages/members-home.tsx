@@ -143,10 +143,6 @@ const HomePage: NextPage<any> = () => {
       companyId: companyId,
       companyName: companyName,
       platform: PlatformVariant.Web,
-      cdnUrl: CDN_URL,
-      BRAND: 'blc-uk',
-      isMobileHybrid: false,
-      height: '80%',
       amplitudeCtx: amplitude,
     });
   }

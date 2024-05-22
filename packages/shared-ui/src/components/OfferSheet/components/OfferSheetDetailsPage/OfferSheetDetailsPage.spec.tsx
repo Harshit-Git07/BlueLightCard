@@ -5,6 +5,8 @@ import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
+import { SharedUIConfigProvider } from 'src/providers';
+import { MockSharedUiConfig } from 'src/test';
 
 const mockPlatformAdapter = useMockPlatformAdapter(200, {
   data: {
@@ -66,17 +68,21 @@ describe('smoke test', () => {
 
   it('should render component without error', () => {
     render(
-      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <OfferSheetDetailsPage />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheetDetailsPage />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
   });
 
   it('should render Share button', () => {
     const { getByRole } = render(
-      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <OfferSheetDetailsPage />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheetDetailsPage />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
 
     expect(getByRole('button', { name: /share offer/i })).toBeTruthy();
@@ -84,9 +90,11 @@ describe('smoke test', () => {
 
   it('should render Get discount button', () => {
     const { getByRole } = render(
-      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <OfferSheetDetailsPage />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheetDetailsPage />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
 
     expect(getByRole('button', { name: /get discount/i })).toBeTruthy();
@@ -105,9 +113,11 @@ describe('smoke test', () => {
 
   it('should display labels with jotai state management', () => {
     const { getByText } = render(
-      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <OfferSheetDetailsPageProvider />
-      </PlatformAdapterProvider>,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheetDetailsPageProvider />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
     );
 
     const label1 = getByText(/online/i);

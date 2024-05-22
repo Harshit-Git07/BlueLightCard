@@ -9,6 +9,7 @@ import ShareButton from '../../../ShareButton';
 import Accordion from '../../../Accordion';
 import Markdown from 'markdown-to-jsx';
 import amplitudeEvents from '../../../../utils/amplitude/events';
+import { useSharedUIConfig } from '../../../../providers';
 
 export type Props = {
   showOfferDescription?: boolean;
@@ -23,11 +24,12 @@ const OfferTopDetailsHeader: FC<Props> = ({
   showTerms = true,
   showExclusions = true,
 }) => {
-  const { offerDetails: offerData, cdnUrl, offerMeta, BRAND } = useAtomValue(offerSheetAtom);
+  const config = useSharedUIConfig();
+  const { offerDetails: offerData, offerMeta } = useAtomValue(offerSheetAtom);
   const [imageSource, setImageSource] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
   // TODO CDN URL could be replaced with global var?
-  const finalFallbackImage = `${cdnUrl}/misc/Logo_coming_soon.jpg`;
+  const finalFallbackImage = `${config.globalConfig.cdnUrl}/misc/Logo_coming_soon.jpg`;
 
   const handleSeeMore = () => {
     setExpanded(!expanded);
@@ -109,7 +111,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                     company_name: offerMeta.companyName,
                     offer_id: offerMeta.offerId,
                     offer_name: offerData.name,
-                    brand: BRAND,
+                    brand: config.globalConfig.brand,
                   },
                 },
               }}
@@ -159,7 +161,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   company_name: offerMeta.companyName,
                   offer_id: offerMeta.offerId,
                   offer_name: offerData.name,
-                  brand: BRAND,
+                  brand: config.globalConfig.brand,
                 },
               }}
             >

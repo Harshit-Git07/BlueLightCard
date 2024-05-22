@@ -111,7 +111,9 @@ export async function fetch(
   return fetchRewriter(platform)(input, options);
 }
 
-// takes in an extra argument - platform
+/**
+ * @deprecated use [`usePlatformAdapter`](packages/shared-ui/src/adapters/PlatformAdapter.tsx) instead.
+ */
 export function useRouter(platform: PlatformVariant = PlatformVariant.Web) {
   return useRouterRewriter(platform);
 }

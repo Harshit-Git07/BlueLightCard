@@ -3,13 +3,13 @@ import { FC } from 'react';
 import Button from '../../../Button';
 import Heading from '../../../Heading';
 import { offerSheetAtom } from '../../store';
-import { useRouter } from '../../../../lib/rewriters';
 import { ThemeVariant } from '../../../../types';
 import amplitudeEvents from '../../../../utils/amplitude/events';
+import { usePlatformAdapter } from '../../../../adapters';
 
 const OfferDetailsErrorPage: FC = () => {
-  const { isMobileHybrid, offerMeta, platform, amplitudeEvent } = useAtomValue(offerSheetAtom);
-  const router = useRouter(platform);
+  const platformAdapter = usePlatformAdapter();
+  const { offerMeta, amplitudeEvent } = useAtomValue(offerSheetAtom);
 
   const onButtonClick = () => {
     if (amplitudeEvent) {
@@ -23,19 +23,14 @@ const OfferDetailsErrorPage: FC = () => {
       });
     }
 
-    if (!isMobileHybrid) {
-      router.push(`/offerdetails.php?cid=${offerMeta?.companyId}&oid=${offerMeta?.offerId}`);
-    } else {
-      router.pushNative(
-        `/offerdetails.php?cid=${offerMeta?.companyId}&oid=${offerMeta?.offerId}`,
-        'home',
-      );
-    }
+    platformAdapter.navigate(
+      `/offerdetails.php?cid=${offerMeta?.companyId}&oid=${offerMeta?.offerId}`,
+    );
   };
 
   return (
     <div className="text-[#000099] text-center mx-4 space-y-4">
-      <Heading headingLevel={'h2'} className=" text-black">
+      <Heading headingLevel="h2" className="text-black">
         Error loading offer
       </Heading>
       <p className="text-base">You can still get to your offer by clicking the button below.</p>

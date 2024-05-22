@@ -13,12 +13,7 @@ import { useRef } from 'react';
 import { RedemptionType } from '../../../types';
 
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
-  const {
-    offerDetails: offerData,
-    offerMeta,
-    isMobileHybrid,
-    amplitudeEvent,
-  } = useAtomValue(offerSheetAtom);
+  const { offerDetails: offerData, offerMeta, amplitudeEvent } = useAtomValue(offerSheetAtom);
   const labels = useLabels(offerData);
   const platformAdapter = usePlatformAdapter();
   const loggedCodeView = useRef(false);
@@ -41,7 +36,7 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
         offer_id: offerData.id,
         offer_name: offerData.name,
         source: 'sheet',
-        origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
+        origin: platformAdapter.platform,
         design_type: 'modal_popup',
       },
     });

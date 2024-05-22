@@ -222,10 +222,6 @@ const Search: NextPage = () => {
                     companyId: result.CompID as unknown as number,
                     companyName: result.CompanyName,
                     platform: PlatformVariant.Web,
-                    cdnUrl: CDN_URL,
-                    BRAND: 'blc-uk',
-                    isMobileHybrid: false,
-                    height: '80%',
                     amplitudeCtx: amplitude,
                   });
                 };

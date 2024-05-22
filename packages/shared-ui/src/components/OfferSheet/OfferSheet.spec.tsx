@@ -3,6 +3,8 @@ import OfferSheet, { Props } from '.';
 import { render } from '@testing-library/react';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../adapters';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SharedUIConfigProvider } from 'src/providers';
+import { MockSharedUiConfig } from 'src/test';
 
 const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
 const mockQueryClient = new QueryClient();
@@ -30,10 +32,11 @@ jest.mock('../../hooks/useOfferDetails', () => ({
 function renderComponent() {
   return render(
     <QueryClientProvider client={mockQueryClient}>
-      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <OfferSheet {...props} />
-      </PlatformAdapterProvider>
-      ,
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheet {...props} />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>
     </QueryClientProvider>,
   );
 }

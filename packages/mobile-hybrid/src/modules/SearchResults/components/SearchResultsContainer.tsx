@@ -71,10 +71,6 @@ const SearchResultsContainer: FC = () => {
       companyId,
       companyName,
       platform: PlatformVariant.MobileHybrid,
-      cdnUrl: 'https://cdn.bluelightcard.co.uk',
-      BRAND: 'blc-uk',
-      isMobileHybrid: true,
-      height: '90%',
     });
   };
 

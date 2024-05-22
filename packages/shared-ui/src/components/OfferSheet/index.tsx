@@ -5,13 +5,15 @@ import { offerSheetAtom } from './store';
 import OfferSheetControler from './components/OfferSheetControler';
 import events from '../../utils/amplitude/events';
 import { useAtomValue } from 'jotai';
+import { usePlatformAdapter } from '../../adapters';
 
 export type Props = SharedProps & {
   height?: string;
 };
 
 const OfferSheet: FC<Props> = () => {
-  const { isOpen, offerMeta, offerDetails, amplitudeEvent, isMobileHybrid, redemptionType } =
+  const platformAdapter = usePlatformAdapter();
+  const { isOpen, offerMeta, offerDetails, amplitudeEvent, redemptionType } =
     useAtomValue(offerSheetAtom);
 
   const componentMounted = useRef(false);
@@ -29,7 +31,7 @@ const OfferSheet: FC<Props> = () => {
           offer_id: String(offerMeta.offerId),
           offer_name: offerDetails.name,
           source: 'sheet',
-          origin: isMobileHybrid ? PlatformVariant.MobileHybrid : PlatformVariant.Web,
+          origin: platformAdapter.platform,
           redemption_type: redemptionType,
         },
       });

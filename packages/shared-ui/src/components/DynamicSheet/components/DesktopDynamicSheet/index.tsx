@@ -27,7 +27,7 @@ const DesktopDynamicSheet: FC<Props> = ({
           !isOpen ? 'hidden opacity-0' : 'opacity-100'
         } absolute w-[100vw] h-[100vh] bg-[#00000088] transition-opacity duration-1000`}
         onClick={() => outsideClickClose && onClose && onClose()}
-      ></div>
+      />
       <div
         className={`absolute h-[100vh] bg-white flex flex-col space-y-2 ${
           isOpen ? 'translate-x-[-100%]' : 'translate-x-0'

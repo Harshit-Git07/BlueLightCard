@@ -80,10 +80,6 @@ const Offers: FC = () => {
       companyId: compid,
       companyName: companyname,
       platform: PlatformVariant.MobileHybrid,
-      cdnUrl: 'https://cdn.bluelightcard.co.uk',
-      BRAND: 'blc-uk',
-      isMobileHybrid: true,
-      height: '90%',
     });
   };
   const onSlideChange = (carouselName: string) => {

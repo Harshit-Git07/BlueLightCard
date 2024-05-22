@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
 import OfferDetailsErrorPage from '.';
 import { render } from '@testing-library/react';
 
@@ -14,11 +15,21 @@ jest.mock('next/router', () => ({
 
 describe('smoke test', () => {
   it('should render component without error', () => {
-    render(<OfferDetailsErrorPage />);
+    const mockPlatformAdapter = useMockPlatformAdapter();
+    render(
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <OfferDetailsErrorPage />
+      </PlatformAdapterProvider>,
+    );
   });
 
   it('should render component correctly', () => {
-    const { getByRole, getByText } = render(<OfferDetailsErrorPage />);
+    const mockPlatformAdapter = useMockPlatformAdapter();
+    const { getByRole, getByText } = render(
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <OfferDetailsErrorPage />
+      </PlatformAdapterProvider>,
+    );
 
     expect(getByRole('heading', { name: /error loading offer/i })).toBeTruthy();
     expect(getByText(/you can still get to your offer by clicking the button below\./i));

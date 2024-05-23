@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.1.0...bluelightcard/discovery-v1.2.0) (2024-05-22)
+
+
+### Features
+
+* [DISCO-240] Add custom domain name output and update PR comment for discovery ([#1337](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1337)) ([5c6b4b5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5c6b4b5ef521c65e12f59d56eb08c3eee4c8a502))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.0.0...bluelightcard/discovery-v1.1.0) (2024-05-14)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.57.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.56.4...bluelightcard/web-v1.57.0) (2024-05-23)
+
+
+### Features
+
+* [TR-603]: Updated experiment name in search page. ([#1418](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1418)) ([997b98a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/997b98acda21b1d08c7322c32f1555bb49dd158f))
+
 ## [1.56.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.56.3...bluelightcard/web-v1.56.4) (2024-05-23)
 
 

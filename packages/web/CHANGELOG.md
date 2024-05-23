@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.56.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.56.3...bluelightcard/web-v1.56.4) (2024-05-23)
+
+
+### Bug Fixes
+
+* TR-581 tidy up leaky abstractions ([#1396](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1396)) ([46e6c55](https://github.com/bluelightcard/BlueLightCard-2.0/commit/46e6c559c8ff86292435557622c85c2b58521254))
+
 ## [1.56.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.56.2...bluelightcard/web-v1.56.3) (2024-05-22)
 
 

@@ -26,8 +26,8 @@ export function createRedemptionTransactionalEmailRule(
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,
     environment: {
-      BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID: config.brazeVaultRedemptionVaultCampaignId,
-      BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID: config.brazeGenericCodeRedemptionCampaignId,
+      BRAZE_VAULT_EMAIL_CAMPAIGN_ID: config.brazeVaultEmailCampaignId,
+      BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: config.brazeGenericEmailCampaignId,
       BRAZE_API_URL: config.brazeApiUrl,
       REDEMPTIONS_WEB_HOST: config.redemptionsWebHost,
     },

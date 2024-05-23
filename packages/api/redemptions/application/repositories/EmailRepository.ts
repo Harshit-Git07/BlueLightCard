@@ -139,10 +139,10 @@ export class EmailRepository implements IEmailRepository {
      */
     let campaignId = null;
     if (redemptionType === 'vault') {
-      campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID);
+      campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID);
     }
     if (redemptionType === 'generic') {
-      campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID);
+      campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID);
     }
     if (!campaignId) {
       this.logger.info({

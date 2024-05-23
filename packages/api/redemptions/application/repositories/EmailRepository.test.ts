@@ -14,14 +14,14 @@ import { EmailRepository } from './EmailRepository';
 jest.mock('../helpers/encodeBase64');
 describe('EmailRepository', () => {
   beforeEach(() => {
-    process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID] = 'test';
-    process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID] = 'test';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID] = 'test';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST] = 'https://staging.bluelightcard.co.uk';
   });
 
   afterEach(() => {
-    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID];
-    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST];
   });
 

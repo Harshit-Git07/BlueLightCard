@@ -185,9 +185,9 @@ jobs:
       - name: Deploy
         env:
           # TODO(TR-383): Get braze keys dynamically later
-          BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID: '${{ vars.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID_STAGING }}'
-          BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID_STAGING }}'
-          BRAZE_API_URL: '${{ vars.BRAZE_API_URL_STAGING }}'
+          BRAZE_VAULT_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_VAULT_EMAIL_CAMPAIGN_ID }}'
+          BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID }}'
+          BRAZE_API_URL: '${{ vars.BRAZE_API_URL }}'
         run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging
       - name: Deploy Spec
         env:
@@ -289,9 +289,9 @@ jobs:
       - name: Deploy
         env:
           # TODO(TR-383): Get braze keys dynamically later
-          BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID: '${{ vars.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID_PROD }}'
-          BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_CODE_REDEMPTION_CAMPAIGN_ID_PROD }}'
-          BRAZE_API_URL: '${{ vars.BRAZE_API_URL_PROD }}'
+          BRAZE_VAULT_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_VAULT_EMAIL_CAMPAIGN_ID }}'
+          BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID }}'
+          BRAZE_API_URL: '${{ vars.BRAZE_API_URL }}'
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy redemptions --stage production --region ${{matrix.region}}
       - name: Deploy Spec
         env:

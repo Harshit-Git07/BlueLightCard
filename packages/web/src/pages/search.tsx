@@ -175,7 +175,7 @@ const Search: NextPage = () => {
 
   // Offer Sheet Experiment
   const searchOfferSheetExperiment = useAmplitudeExperiment(
-    'offer-sheet-redeem-vault-search-and-homepage',
+    'offer-sheet-redeem-vault-search-and-homepage-web',
     'control'
   );
 

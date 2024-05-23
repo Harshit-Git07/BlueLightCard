@@ -22,6 +22,16 @@ const OfferSheet: FC<Props> = () => {
     // componentMounted is needed to prevent the amplitude event from firing multiple times
     // Root cause seems to be in the ViewOfferProvider component, but was not able to find it.
     // This is a workaround for now that prevents the amplitude event from firing multiple times
+    console.log('testing conditions for event to run on useEffect', {
+      componentMountedBool: componentMounted.current,
+      isOpen,
+      offerMeta,
+      offerDetails,
+      amplitudeEvent,
+      amplitudeEventBool: !!amplitudeEvent,
+      conditionResult:
+        componentMounted.current && isOpen && offerMeta && offerDetails && amplitudeEvent,
+    });
     if (componentMounted.current && isOpen && offerMeta && offerDetails && amplitudeEvent) {
       amplitudeEvent({
         event: events.OFFER_VIEWED,
@@ -39,12 +49,14 @@ const OfferSheet: FC<Props> = () => {
   }, [componentMounted.current]);
 
   // Manage scrollbar when offer sheet opens/closes
+  // Manage componentMounted to prevent amplitude event from firing multiple times
   useEffect(() => {
-    componentMounted.current = true;
     if (isOpen) {
+      componentMounted.current = true;
       // Disable scrollbar when offer sheet opens
       document.body.style.overflow = 'hidden';
     } else {
+      componentMounted.current = false;
       // Re-enable scrollbar when offer sheet closes
       document.body.style.overflow = 'visible';
     }

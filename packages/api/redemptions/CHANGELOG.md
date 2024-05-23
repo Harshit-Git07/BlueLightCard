@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.14.2...bluelightcard/redemptions-v1.15.0) (2024-05-23)
+
+
+### Features
+
+* Feat/tr 418 generic code emails ([#1378](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1378)) ([78b8c18](https://github.com/bluelightcard/BlueLightCard-2.0/commit/78b8c185db496984ececda026c54ec071dd888af))
+
+
+### Bug Fixes
+
+* TR-572-Upgrade-drizzle ([#1371](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1371)) ([fa9adab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fa9adab20828e75f9fbb2b6b3b1b06cb937f9067))
+* update env names to be same ([#1409](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1409)) ([1345efc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1345efca471562b60003103b47c186d9637cf7ae))
+
+
+### Other Changes
+
+* tidy up commented import ([#1377](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1377)) ([c644690](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c6446902e504a4e2159bc19507b32184bbffdad1))
+
 ## [1.14.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.14.1...bluelightcard/redemptions-v1.14.2) (2024-05-17)
 
 

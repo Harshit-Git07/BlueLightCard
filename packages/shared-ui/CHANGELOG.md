@@ -1,5 +1,38 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.1.0...shared-ui-v1.2.0) (2024-05-23)
+
+
+### Features
+
+* [TR-543]: Implement platform adapter and mobile hybrid clipboard ([#1344](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1344)) ([774b964](https://github.com/bluelightcard/BlueLightCard-2.0/commit/774b9646c87ec69ff49aa3e57a1f68403c039ed8))
+* [TR-603]: Updated broken snapshot ([#1416](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1416)) ([c8904c6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c8904c69e6394c8b506d8465dad04c8e03e0bcb8))
+* add offer sheet to mobile hybrid for generic/vault/pre applied offers ([#1234](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1234)) ([f9ffcf1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f9ffcf1058b8480bbcbdb525c63c7f4f256c1403))
+* Feature/disco 126 update v5 search result handling ([#1384](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1384)) ([e8faa06](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8faa060a65dd4e48f30049eb2365c7aa306789e))
+* move company page components to shared-ui package ([#1197](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1197)) ([71a2a36](https://github.com/bluelightcard/BlueLightCard-2.0/commit/71a2a3655d81c5368014967e80cb8aabba1fb9ae))
+* TO-698 offer sheet web version ([#1356](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1356)) ([527b961](https://github.com/bluelightcard/BlueLightCard-2.0/commit/527b961e7892f54355ad3b9255f59f1592d39830))
+* TR-478 Show offer sheet for generic offers in mobile hybrid ([#1351](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1351)) ([44c9a90](https://github.com/bluelightcard/BlueLightCard-2.0/commit/44c9a90fec3ddaa7699278966165b1a417bdc562))
+* use new web offer sheet experiment ([#1414](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1414)) ([7d08d20](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d08d20959a9e9f98ed1dbec5f8807f11705ee88))
+
+
+### Bug Fixes
+
+* copy changes ([#1411](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1411)) ([8262882](https://github.com/bluelightcard/BlueLightCard-2.0/commit/82628829844d39a20b2a1f389311272c99590600))
+* implement fallback to redirect in same tab ([#1376](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1376)) ([eaa3d22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eaa3d22fdc53f65dfdb3bab0217acb5f5aa61f2e))
+* offer not opening on mobile-hybrid legacy ([#1315](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1315)) ([d80e9c9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d80e9c9e7060ca381b72734ad0937c2ed166c0d5))
+* prevent double logging events ([#1402](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1402)) ([4b8c8a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b8c8a134d9e24b9c0134d5d2c1ecc55dc60808b))
+* TR-534 company name missing ([#1334](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1334)) ([ed1431e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed1431e9ea5e02e9fa17b42f01f34c5cc1fd1677))
+* TR-581 tidy up leaky abstractions ([#1396](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1396)) ([46e6c55](https://github.com/bluelightcard/BlueLightCard-2.0/commit/46e6c559c8ff86292435557622c85c2b58521254))
+* TR-590 Fixed offer sheet styling for mobile ([#1386](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1386)) ([6b84883](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6b848838dc86d5acc6919facb40f0f9584e3ac1c))
+* TR-601 Fixed offer sheet styling to be correctly hidden in DOM when not visible ([#1404](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1404)) ([3a2cc4e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a2cc4e9ded25b928e2e1273d38532b2572014ae))
+* update paste at checkout wording ([#1403](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1403)) ([375f5e2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/375f5e2e00f337ed8129518e9a893db1fe62528d))
+* web issues ([#1397](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1397)) ([2195122](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2195122b4ecf36d7085be2377c5766c1540d42ad))
+
+
+### Other Changes
+
+* [TR-581]: Move shared-ui config to provider ([#1395](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1395)) ([ef4f7b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ef4f7b0525b44ec9238fdc892a77ca481fece6ef))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.0.2...shared-ui-v1.1.0) (2024-05-08)
 
 ### Features

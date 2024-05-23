@@ -6,6 +6,10 @@ import { offerSheetAtom } from './store';
 import { useEffect } from 'react';
 import { IPlatformAdapter, PlatformAdapterProvider } from '../../adapters';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import OfferSheetDetailsPage from './components/OfferSheetDetailsPage';
+import { SharedUIConfigProvider } from 'src/providers';
+import OfferDetailsErrorPage from './components/OfferDetailsErrorPage';
+import LoadingSpinner from '../LoadingSpinner';
 
 const componentMeta: Meta<typeof OfferSheet> = {
   title: 'Component System/Offer Sheet',
@@ -26,7 +30,10 @@ const mockPlatformAdapter = {
   platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;
 
-const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
+type OfferSheetProps = {
+  status: 'success' | 'pending' | 'error';
+};
+const DefaultTemplate: StoryFn<OfferSheetProps> = (args) => {
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
   useEffect(() => {
     setOfferSheetAtom((prev) => ({
@@ -53,29 +60,44 @@ const DefaultTemplate: StoryFn<typeof OfferSheet> = (args) => {
 
   return (
     <div style={{ minHeight: 250 }}>
-      <QueryClientProvider client={mockQueryClient}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheet {...args} />
-        </PlatformAdapterProvider>
-      </QueryClientProvider>
+      <SharedUIConfigProvider
+        value={{
+          globalConfig: {
+            brand: 'blc-uk',
+            cdnUrl: 'https://cdn.bluelightcard.co.uk',
+          },
+        }}
+      >
+        <QueryClientProvider client={mockQueryClient}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+            {args.status === 'success' && <OfferSheetDetailsPage />}
+            {args.status === 'pending' && (
+              <LoadingSpinner
+                containerClassName="text-palette-primary"
+                spinnerClassName="text-[5em]"
+              />
+            )}
+            {args.status === 'error' && <OfferDetailsErrorPage />}
+          </PlatformAdapterProvider>
+        </QueryClientProvider>
+      </SharedUIConfigProvider>
     </div>
   );
 };
 
-// TODO: Search a way to mock react-query hooks to test the different states
 export const PendingStatus = DefaultTemplate.bind({});
 PendingStatus.args = {
-  height: '250px',
+  status: 'pending',
 };
 
 export const ErrorStatus = DefaultTemplate.bind({});
 ErrorStatus.args = {
-  height: '250px',
+  status: 'error',
 };
 
 export const SuccessStatus = DefaultTemplate.bind({});
 SuccessStatus.args = {
-  height: '250px',
+  status: 'success',
 };
 
 export default componentMeta;

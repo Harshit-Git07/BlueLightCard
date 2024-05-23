@@ -3,6 +3,7 @@ import { GenericVaultOrPreAppliedPage } from './GenericVaultOrPreAppliedPage';
 import { Props } from 'src/components/OfferSheet/components/RedemptionPage/RedemptionPage';
 import { IPlatformAdapter, PlatformAdapterProvider } from '../../../../../adapters';
 import { PlatformVariant } from '../../../../../types';
+import { SharedUIConfigProvider } from '../../../../../providers';
 
 const mockPlatformAdapter = {
   getAmplitudeFeatureFlag: () => 'control',
@@ -43,25 +44,52 @@ const meta: Meta = {
 
 export const Success = () => {
   return (
-    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-      <GenericVaultOrPreAppliedPage {...props} state="success" />
-    </PlatformAdapterProvider>
+    <SharedUIConfigProvider
+      value={{
+        globalConfig: {
+          brand: 'blc-uk',
+          cdnUrl: 'https://cdn.bluelightcard.co.uk',
+        },
+      }}
+    >
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <GenericVaultOrPreAppliedPage {...props} state="success" />
+      </PlatformAdapterProvider>
+    </SharedUIConfigProvider>
   );
 };
 
 export const Loading = () => {
   return (
-    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-      <GenericVaultOrPreAppliedPage {...props} state="loading" />
-    </PlatformAdapterProvider>
+    <SharedUIConfigProvider
+      value={{
+        globalConfig: {
+          brand: 'blc-uk',
+          cdnUrl: 'https://cdn.bluelightcard.co.uk',
+        },
+      }}
+    >
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <GenericVaultOrPreAppliedPage {...props} state="loading" />
+      </PlatformAdapterProvider>
+    </SharedUIConfigProvider>
   );
 };
 
 export const Error = () => {
   return (
-    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-      <GenericVaultOrPreAppliedPage {...props} state="error" />
-    </PlatformAdapterProvider>
+    <SharedUIConfigProvider
+      value={{
+        globalConfig: {
+          brand: 'blc-uk',
+          cdnUrl: 'https://cdn.bluelightcard.co.uk',
+        },
+      }}
+    >
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <GenericVaultOrPreAppliedPage {...props} state="error" />
+      </PlatformAdapterProvider>
+    </SharedUIConfigProvider>
   );
 };
 

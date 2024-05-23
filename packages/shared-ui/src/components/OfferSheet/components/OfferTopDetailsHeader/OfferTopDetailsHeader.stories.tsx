@@ -1,7 +1,8 @@
 import { Meta } from '@storybook/react';
 import OfferTopDetailsHeaderComponent, { Props } from './index';
-import { IPlatformAdapter, PlatformAdapterProvider } from 'src/adapters';
-import { PlatformVariant } from 'src/types';
+import { IPlatformAdapter, PlatformAdapterProvider } from '../../../../adapters';
+import { PlatformVariant } from '../../../../types';
+import { SharedUIConfigProvider } from '../../../../providers';
 
 const props: Props = {
   showOfferDescription: true,
@@ -35,9 +36,18 @@ const mockPlatformAdapter = {
 const renderTemplate = (args: Partial<Props>) => (
   // This represents the width of the parent container
   <div style={{ width: '24rem' }}>
-    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-      <OfferTopDetailsHeaderComponent {...props} {...args} />
-    </PlatformAdapterProvider>
+    <SharedUIConfigProvider
+      value={{
+        globalConfig: {
+          brand: 'blc-uk',
+          cdnUrl: 'https://cdn.bluelightcard.co.uk',
+        },
+      }}
+    >
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <OfferTopDetailsHeaderComponent {...props} {...args} />
+      </PlatformAdapterProvider>
+    </SharedUIConfigProvider>
   </div>
 );
 

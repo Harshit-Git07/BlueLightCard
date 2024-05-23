@@ -1,14 +1,18 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { within } from '@storybook/testing-library';
-import { ViewOfferProvider, useOfferDetails } from './OfferDetailsContext';
+import { SharedUIConfigProvider } from 'src/providers';
 import { StorybookPlatformAdapterDecorator } from '../../adapters/StorybookPlatformAdapter';
 import { PlatformVariant } from 'src/types';
+import { ViewOfferProvider, useOfferDetails } from './OfferDetailsContext';
+
+const mockQueryClient = new QueryClient();
 
 const invokeV5Api = (path: string) => {
   if (path.includes('/offers/')) {
     return Promise.resolve({
-      statusCode: 200,
-      body: JSON.stringify({
+      status: 200,
+      data: JSON.stringify({
         data: {
           id: 1,
           companyId: 2,
@@ -26,12 +30,12 @@ const invokeV5Api = (path: string) => {
 
   if (path.includes('/redemptions/')) {
     return Promise.resolve({
-      statusCode: 200,
-      body: JSON.stringify({ data: { redemptionType: 'vault' } }),
+      status: 200,
+      data: JSON.stringify({ data: { redemptionType: 'vault' } }),
     });
   }
 
-  return Promise.resolve({ statusCode: 200, body: '{}' });
+  return Promise.resolve({ status: 200, body: '{}' });
 };
 
 const componentMeta: Meta<typeof ViewOfferProvider> = {
@@ -63,9 +67,20 @@ const ViewOfferChild = () => {
 const DefaultTemplate: StoryFn<typeof ViewOfferProvider> = (args) => {
   return (
     <div style={{ minHeight: 250 }}>
-      <ViewOfferProvider>
-        <ViewOfferChild />
-      </ViewOfferProvider>
+      <SharedUIConfigProvider
+        value={{
+          globalConfig: {
+            brand: 'blc-uk',
+            cdnUrl: 'https://cdn.bluelightcard.co.uk',
+          },
+        }}
+      >
+        <QueryClientProvider client={mockQueryClient}>
+          <ViewOfferProvider>
+            <ViewOfferChild />
+          </ViewOfferProvider>
+        </QueryClientProvider>
+      </SharedUIConfigProvider>
     </div>
   );
 };

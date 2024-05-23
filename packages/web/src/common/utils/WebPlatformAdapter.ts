@@ -67,7 +67,7 @@ export class WebPlatformAdapter implements IPlatformAdapter {
   }
 
   writeTextToClipboard(text: string): Promise<void> {
-    return Promise.resolve(navigator.clipboard.writeText(text));
+    return navigator.clipboard.writeText(text);
   }
 
   getAmplitudeFeatureFlag(featureFlagName: string): string | undefined {

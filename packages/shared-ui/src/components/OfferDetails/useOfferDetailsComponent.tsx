@@ -34,10 +34,9 @@ export const OfferDetailsLink: FC<OfferDetailsComponentProps> = () => {
 
 export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
-  const { redemptionType } = useAtomValue(offerSheetAtom);
   const [experiment, setExperiment] = useState('control');
 
-  function getOfferDetailsComponent(redemptionType: RedemptionType | undefined) {
+  function getOfferDetailsComponent() {
     if (!experiment || experiment === 'control') {
       return OfferDetailsLink;
     }
@@ -82,14 +81,14 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
         companyId: offerData.companyId,
         companyName: offerData.companyName,
       },
-      platform: offerData.platform,
+      platform: platformAdapter.platform,
       amplitudeEvent: ({ event, params }) => {
         platformAdapter.logAnalyticsEvent(event, params, offerData?.amplitudeCtx);
       },
     }));
   }
 
-  const OfferDetailsComponent = getOfferDetailsComponent(redemptionType);
+  const OfferDetailsComponent = getOfferDetailsComponent();
 
   return { OfferDetailsComponent, updateOfferDetailsComponent };
 };

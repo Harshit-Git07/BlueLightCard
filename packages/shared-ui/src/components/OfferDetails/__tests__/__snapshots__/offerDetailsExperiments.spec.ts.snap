@@ -4,4 +4,4 @@ exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experim
 
 exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the vault redemption type 1`] = `"offer-sheet-redeem-vault-app"`;
 
-exports[`getPlatformExperimentForRedemptionType checks the web experiment for the vault redemption type 1`] = `"offer-sheet-redeem-vault-search-and-homepage"`;
+exports[`getPlatformExperimentForRedemptionType checks the web experiment for the vault redemption type 1`] = `"offer-sheet-redeem-vault-search-and-homepage-web"`;

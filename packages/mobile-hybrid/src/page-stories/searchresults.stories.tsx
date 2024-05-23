@@ -5,6 +5,7 @@ import { useSetAtom } from 'jotai/index';
 import { useEffect } from 'react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/src/adapters/StorybookPlatformAdapter';
 
 const componentMeta: Meta<typeof SearchResultsPage> = {
   title: 'Pages/SearchResultsPage',
@@ -19,7 +20,7 @@ const componentMeta: Meta<typeof SearchResultsPage> = {
       },
     },
   },
-  decorators: [pageDecorator],
+  decorators: [pageDecorator, StorybookPlatformAdapterDecorator],
 };
 
 const DefaultTemplate: StoryFn<typeof SearchResultsPage> = (args) => {

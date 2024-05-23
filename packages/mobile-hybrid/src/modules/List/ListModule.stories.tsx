@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import List from './List';
 import pageDecorator from '@storybook/pageDecorator';
 import { ListVariant } from './types';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/src/adapters/StorybookPlatformAdapter';
 
 const componentMeta: Meta<typeof List> = {
   title: 'Modules/List',
@@ -9,7 +10,7 @@ const componentMeta: Meta<typeof List> = {
   parameters: {
     layout: 'fullscreen',
   },
-  decorators: [pageDecorator],
+  decorators: [pageDecorator, StorybookPlatformAdapterDecorator],
 };
 
 const Template: StoryFn<typeof List> = (args) => <List {...args} />;

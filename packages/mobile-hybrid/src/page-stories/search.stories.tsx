@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import SearchPage from '@/pages/search';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/src/adapters/StorybookPlatformAdapter';
 
 const componentMeta: Meta<typeof SearchPage> = {
   title: 'Pages/SearchPage',
@@ -12,7 +13,7 @@ const componentMeta: Meta<typeof SearchPage> = {
   parameters: {
     layout: 'fullscreen',
   },
-  decorators: [pageDecorator],
+  decorators: [pageDecorator, StorybookPlatformAdapterDecorator],
 };
 
 const DefaultTemplate: StoryFn<typeof SearchPage> = (args) => {

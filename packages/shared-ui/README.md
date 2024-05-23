@@ -6,6 +6,7 @@ This package holds all the shareable UI elements and utility code that can be us
 
 - [Get Started](#get-started)
 - [Usage](#usage)
+- [Env](#env)
 - [VSCode Snippets](#vscode-snippets)
 - [Components](#components)
 - [Hooks](#hooks)
@@ -62,6 +63,32 @@ const Page = () => {
     </div>
   );
 };
+```
+
+## Env
+
+Environment variables for Nextjs apps can be shared from this package by importing the `env` constant into your Nextjs app:
+
+```ts
+import { env } from '@bluelightcard/shared-ui';
+
+const brand = env.APP_BRAND;
+```
+
+Any new shared environment variables can be added into `src/env/schema.ts`.
+
+To merge/extend environment vars per Nextjs app, simply use the `envMerge` utility function:
+
+```ts
+...
+import { envMerge } from '@bluelightcard/shared-ui';
+
+const env = envMerge({
+  NEW_ENV_VAR: {
+    value: process.env.NEXT_PUBLIC_NEW_ENV_VAR, // env var value
+    schema: z.string() // validation schema for this env variable
+  }
+});
 ```
 
 ## VSCode Snippets

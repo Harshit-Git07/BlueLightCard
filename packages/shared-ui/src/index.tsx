@@ -32,4 +32,6 @@ export * from './context/OfferSheet/hooks';
 export * from './providers';
 export * from './test';
 
+export * from './env';
+
 import './styles/styles.css';

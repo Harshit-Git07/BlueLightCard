@@ -23,15 +23,15 @@ import {
   AmplitudeExperimentState,
   AmplitudeFeatureFlagState,
 } from '@/components/AmplitudeProvider/types';
-import { useAtom } from 'jotai';
-import HomeV2 from './_v2/_index';
-import { env } from '@bluelightcard/shared-ui';
+import { useAtom, useSetAtom } from 'jotai';
+import { spinner } from '@/modules/Spinner/store';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
+  const setSpinner = useSetAtom(spinner);
   const brands = useFavouritedBrands();
   const { is } = useAmplitude();
   const [seeAllNews, setSeeAllNews] = useAtom(newsPanelStore);
@@ -65,6 +65,7 @@ const Home: NextPage<any> = () => {
   }, []);
 
   useEffect(() => {
+    setSpinner(false);
     request();
   }, [request]);
 
@@ -101,4 +102,4 @@ const Home: NextPage<any> = () => {
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? HomeV2 : Home;
+export default Home;

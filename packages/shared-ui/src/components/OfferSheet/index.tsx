@@ -52,10 +52,13 @@ const OfferSheet: FC<Props> = () => {
   // Manage componentMounted to prevent amplitude event from firing multiple times
   useEffect(() => {
     if (isOpen) {
+      console.log('this should run and set componentMounted.current to true');
       componentMounted.current = true;
+      console.log('componentMounted.current', componentMounted.current);
       // Disable scrollbar when offer sheet opens
       document.body.style.overflow = 'hidden';
     } else {
+      console.log('componentMounted.current to false when OfferSheet closes');
       componentMounted.current = false;
       // Re-enable scrollbar when offer sheet closes
       document.body.style.overflow = 'visible';

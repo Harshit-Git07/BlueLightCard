@@ -1,11 +1,12 @@
 import { RedemptionType } from '../../types';
-import { RedeemResponse } from '../../../../api/redemptions';
+import { RedeemData } from '../../../../api';
 
 export type Props = {
   showExclusions: boolean;
   showOfferDescription: boolean;
   showShareFavorite: boolean;
   showTerms: boolean;
+  errorState?: string;
   redemptionType: RedemptionType;
 } & (
   | {
@@ -16,7 +17,7 @@ export type Props = {
     }
   | {
       state: 'success';
-      redeemData: RedeemResponse;
+      redeemData: RedeemData;
     }
 );
 export type OfferRedemptionPageComponent = React.FC<Props>;

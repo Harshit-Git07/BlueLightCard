@@ -158,6 +158,7 @@ describe('POST /member/redeem', () => {
     const body = await result.json();
     expect(body).toEqual({
       data: {
+        kind: 'Ok',
         redemptionType: redemption.redemptionType,
         redemptionDetails: {
           url: redemption.url,
@@ -225,6 +226,7 @@ describe('POST /member/redeem', () => {
     const body = await result.json();
     expect(body).toEqual({
       data: {
+        kind: 'Ok',
         redemptionType: redemption.redemptionType,
         redemptionDetails: {
           url: redemption.url,

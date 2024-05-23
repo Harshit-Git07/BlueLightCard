@@ -8,8 +8,14 @@ import events from '../../../../../utils/amplitude/events';
 import { offerSheetAtom } from '../../../store';
 import { useLabels } from '../../../../../hooks/useLabels';
 import { PlatformVariant } from '../../../../../types';
-import { Label, MagicButton, usePlatformAdapter } from '../../../../../index';
-import { useRef } from 'react';
+import {
+  isRedeemDataMessage,
+  Label,
+  MagicButton,
+  RedeemResultKind,
+  usePlatformAdapter,
+} from '../../../../../index';
+import { useRef, useEffect } from 'react';
 import { RedemptionType } from '../../../types';
 
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
@@ -17,6 +23,7 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   const labels = useLabels(offerData);
   const platformAdapter = usePlatformAdapter();
   const loggedCodeView = useRef(false);
+  const loggedVaultRedirect = useRef(false);
 
   const logCodeClicked = () => {
     if (!amplitudeEvent) {
@@ -42,6 +49,39 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
       },
     });
   };
+
+  useEffect(() => {
+    if (props.errorState === RedeemResultKind.MaxPerUserReached) {
+      /**
+       * Redirect to the vault after 3 seconds if the user has reached the code limit
+       */
+      setTimeout(() => {
+        if (!amplitudeEvent) {
+          return;
+        }
+
+        // Prevent duplicate logs if the user clicks the button multiple times
+        if (loggedVaultRedirect.current) {
+          return;
+        }
+
+        amplitudeEvent({
+          event: events.VAULT_CODE_REDIRECT_TO_VAULT,
+          params: {
+            company_id: offerMeta.companyId,
+            company_name: offerMeta.companyName,
+            offer_id: offerData.id,
+            offer_name: offerData.name,
+            source: 'sheet',
+            origin: platformAdapter.platform,
+            design_type: 'modal_popup',
+          },
+        });
+        loggedVaultRedirect.current = true;
+        platformAdapter.navigate('/vaultcodes.php');
+      }, 3000);
+    }
+  }, [props.state, props.errorState]);
 
   async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
     // Ensure that state is success to log since this component mounts multiple times
@@ -72,10 +112,6 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
     }
   }
 
-  if (props.state === 'error') {
-    return <OfferDetailsErrorPage />;
-  }
-
   return (
     <>
       <OfferTopDetailsHeader
@@ -100,12 +136,14 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
 
         {props.state === 'success' && (
           <MagicButton
-            onClick={() =>
-              copyCodeAndRedirect(
-                props.redeemData.data?.redemptionDetails?.code,
-                props.redeemData.data?.redemptionDetails?.url,
-              )
-            }
+            onClick={() => {
+              if (!isRedeemDataMessage(props.redeemData)) {
+                copyCodeAndRedirect(
+                  props.redeemData?.redemptionDetails?.code,
+                  props.redeemData?.redemptionDetails?.url,
+                );
+              }
+            }}
             variant="secondary"
             className="w-full"
             animate
@@ -117,6 +155,20 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
               </div>
               <div className="text-sm text-[#616266] font-medium">
                 {getSecondaryButtonText(props.redemptionType)}
+              </div>
+            </div>
+          </MagicButton>
+        )}
+
+        {props.errorState === RedeemResultKind.MaxPerUserReached && (
+          <MagicButton variant="secondary" className="w-full" animate>
+            <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
+              <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
+                <FontAwesomeIcon icon={faWandMagicSparkles} />
+                Taking you to the vault
+              </div>
+              <div className="text-sm text-[#616266] font-medium">
+                You have reached the code limit for this offer
               </div>
             </div>
           </MagicButton>

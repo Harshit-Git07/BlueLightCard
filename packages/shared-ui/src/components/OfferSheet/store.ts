@@ -17,3 +17,4 @@ export const initializeOfferSheetAtom = () => {
 };
 
 export const offerSheetAtom = atom(initializeOfferSheetAtom());
+export type OfferSheetAtom = ReturnType<typeof initializeOfferSheetAtom>;

@@ -3,12 +3,14 @@ import { GenericVaultOrPreAppliedPage } from './GenericVaultOrPreAppliedPage/Gen
 import { OfferRedemptionPageComponent } from './RedemptionPage';
 import { useRedeemOffer } from '../../../../hooks/useRedeemOffer';
 import { exhaustiveCheck } from '../../../../utils/exhaustiveCheck';
+import { RedeemResultKind } from '../../../../api';
 
 export type Props = {
   redemptionType: RedemptionType;
   offerId: number;
   offerName: string;
   companyName: string;
+  errorState?: string;
 };
 
 export function RedemptionPageController(props: Props) {
@@ -17,45 +19,79 @@ export function RedemptionPageController(props: Props) {
     companyName: props.companyName,
     offerName: props.offerName,
   });
+
   const RedemptionPageComponent = getPageComponent(props.redemptionType);
-  switch (redeemQuery.status) {
-    case 'pending':
-      return (
-        <RedemptionPageComponent
-          showExclusions={true}
-          showOfferDescription={true}
-          showShareFavorite={true}
-          showTerms={true}
-          redemptionType={props.redemptionType}
-          state="loading"
-        />
-      );
-    case 'error':
-      return (
-        <RedemptionPageComponent
-          showExclusions={true}
-          showOfferDescription={true}
-          showShareFavorite={true}
-          showTerms={true}
-          redemptionType={props.redemptionType}
-          state="error"
-        />
-      );
-    case 'success':
-      return (
-        <RedemptionPageComponent
-          showExclusions={true}
-          showOfferDescription={true}
-          showShareFavorite={true}
-          showTerms={true}
-          redemptionType={props.redemptionType}
-          state="success"
-          redeemData={redeemQuery.data}
-        />
-      );
-    default:
-      exhaustiveCheck(redeemQuery);
+  const queryData = redeemQuery.data;
+  const { status } = redeemQuery;
+
+  if (status === 'pending') {
+    return (
+      <RedemptionPageComponent
+        showExclusions={true}
+        showOfferDescription={true}
+        showShareFavorite={true}
+        showTerms={true}
+        redemptionType={props.redemptionType}
+        state="loading"
+      />
+    );
   }
+  if (status === 'error') {
+    return (
+      <RedemptionPageComponent
+        showExclusions={true}
+        showOfferDescription={true}
+        showShareFavorite={true}
+        showTerms={true}
+        redemptionType={props.redemptionType}
+        state="error"
+      />
+    );
+  }
+
+  if (queryData && status === 'success') {
+    const data = redeemQuery.data;
+    const { state } = queryData;
+    switch (state) {
+      case RedeemResultKind.OK:
+        return (
+          <RedemptionPageComponent
+            showExclusions={true}
+            showOfferDescription={true}
+            showShareFavorite={true}
+            showTerms={true}
+            redemptionType={props.redemptionType}
+            state="success"
+            redeemData={data.data}
+          />
+        );
+      case RedeemResultKind.MaxPerUserReached:
+        return (
+          <RedemptionPageComponent
+            showExclusions={true}
+            showOfferDescription={true}
+            showShareFavorite={true}
+            showTerms={true}
+            redemptionType={props.redemptionType}
+            state="error"
+            errorState={redeemQuery.data.state}
+          />
+        );
+      default:
+        exhaustiveCheck(state, 'Unhandled redemption state');
+    }
+  }
+
+  return (
+    <RedemptionPageComponent
+      showExclusions={true}
+      showOfferDescription={true}
+      showShareFavorite={true}
+      showTerms={true}
+      redemptionType={props.redemptionType}
+      state="error"
+    />
+  );
 }
 
 function getPageComponent(redemptionType: RedemptionType): OfferRedemptionPageComponent {

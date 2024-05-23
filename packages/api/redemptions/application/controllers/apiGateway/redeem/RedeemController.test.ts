@@ -42,6 +42,7 @@ describe('RedeemController', () => {
     // Assert
     expect(result.statusCode).toEqual(200);
     expect(result.data).toEqual({
+      kind: 'Ok',
       redemptionType: 'generic',
       redemptionDetails: {
         url: 'https://www.blcshine.com',
@@ -81,6 +82,7 @@ describe('RedeemController', () => {
     // Assert
     expect(result.statusCode).toEqual(404);
     expect(result.data).toEqual({
+      kind: 'RedemptionNotFound',
       message: 'No redemption found for the given offerId',
     });
   });

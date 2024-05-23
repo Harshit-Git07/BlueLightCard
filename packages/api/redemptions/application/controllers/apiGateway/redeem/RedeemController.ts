@@ -70,6 +70,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         return {
           statusCode: 200,
           data: {
+            kind: result.kind,
             redemptionType: result.redemptionType,
             redemptionDetails: result.redemptionDetails,
           },
@@ -78,6 +79,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         return {
           statusCode: 404,
           data: {
+            kind: result.kind,
             message: 'No redemption found for the given offerId',
           },
         };
@@ -86,6 +88,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         return {
           statusCode: 500,
           data: {
+            kind: result.kind,
             message: 'No generic found for the given offerId',
           },
         };
@@ -94,6 +97,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         return {
           statusCode: 500,
           data: {
+            kind: result.kind,
             message: 'No vault found for the given offerId',
           },
         };
@@ -101,6 +105,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         return {
           statusCode: 403,
           data: {
+            kind: result.kind,
             message: 'Max per user reached for the given offerId',
           },
         };
@@ -114,6 +119,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         return {
           statusCode: 500,
           data: {
+            kind: result.kind,
             message: 'Error while redeeming vault for the given offerId',
           },
         };

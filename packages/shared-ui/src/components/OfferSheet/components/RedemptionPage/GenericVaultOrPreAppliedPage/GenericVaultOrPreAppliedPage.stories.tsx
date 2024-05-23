@@ -25,14 +25,11 @@ const props: Props = {
   state: 'success',
   redemptionType: 'generic',
   redeemData: {
-    data: {
-      redemptionType: 'generic',
-      redemptionDetails: {
-        url: 'https://www.example.com',
-        code: 'EXAMPLE',
-      },
+    redemptionType: 'generic',
+    redemptionDetails: {
+      url: 'https://www.example.com',
+      code: 'EXAMPLE',
     },
-    statusCode: 200,
   },
 };
 

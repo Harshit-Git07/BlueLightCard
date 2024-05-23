@@ -17,6 +17,11 @@ export async function getRedemptionDetails(platformAdapter: IPlatformAdapter, of
   return JSON.parse(result.data);
 }
 
+export const RedeemResultKind = {
+  MaxPerUserReached: 'MaxPerUserReached',
+  OK: 'Ok',
+} as const;
+
 export const RedeemDataSchema = z.object({
   redemptionType: RedemptionTypeSchema,
   redemptionDetails: z.object({
@@ -24,19 +29,44 @@ export const RedeemDataSchema = z.object({
     code: z.string().optional(),
   }),
 });
+export const RedeemDataMessage = z.object({
+  message: z.string().optional(),
+});
+export const RedeemData = z.union([RedeemDataSchema, RedeemDataMessage]);
+export const RedeemResponseDataSchema = z.object({
+  kind: z.string(),
+  ...RedeemDataSchema.shape,
+});
+
+export const RedeemResponseWithMessage = z.object({
+  kind: z.string(),
+  message: z.string(),
+});
+
 export const RedeemResponseSchema = z.object({
-  data: RedeemDataSchema,
+  data: z.union([RedeemResponseDataSchema, RedeemResponseWithMessage]),
   statusCode: z.number(),
 });
-export type RedeemData = z.infer<typeof RedeemDataSchema>;
-export type RedeemResponse = z.infer<typeof RedeemResponseSchema>;
 
+export type RedeemResponse = z.infer<typeof RedeemResponseSchema>;
+export type RedeemData = z.infer<typeof RedeemData>;
+export type RedeemDataMessage = z.infer<typeof RedeemDataMessage>;
+
+export type RedeemDataStateData = {
+  state: (typeof RedeemResultKind)[keyof typeof RedeemResultKind];
+  data: RedeemData
+};
+
+export const isRedeemDataMessage = (data: RedeemData): data is RedeemDataMessage => {
+  return 'message' in data;
+};
 export async function redeemOffer(
   platformAdapter: IPlatformAdapter,
   offerId: number,
   offerName: string,
   companyName: string,
-) {
+): Promise<RedeemDataStateData| Error> {
+
   const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redeem', {
     method: 'POST',
     body: JSON.stringify({
@@ -46,10 +76,29 @@ export async function redeemOffer(
     }),
   });
 
-  if (result.status !== 200) {
+
+  const resultData = JSON.parse(result.data);
+  const body = RedeemResponseSchema.safeParse(resultData);
+
+  if(!body.success) {
     throw new Error('Unable to redeem offer');
   }
 
-  const resultData = JSON.parse(result.data);
-  return RedeemResponseSchema.parse(resultData);
+  const { kind } = body.data.data;
+  const { data: { data} } = body;
+
+  switch (kind) {
+    case RedeemResultKind.MaxPerUserReached:
+      return {
+        state: RedeemResultKind.MaxPerUserReached,
+        data,
+      };
+    case RedeemResultKind.OK:
+      return {
+        state: RedeemResultKind.OK,
+        data,
+      };
+    default:
+      throw new Error('Unable to redeem offer');
+  }
 }

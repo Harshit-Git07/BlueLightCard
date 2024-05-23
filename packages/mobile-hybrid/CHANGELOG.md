@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.17.0...bluelightcard/mobile-hybrid-v1.17.1) (2024-05-23)
+
+
+### Bug Fixes
+
+* [DISCO-21] Fix storybook build error ([#1420](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1420)) ([7ba7936](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7ba7936cffa5c1f8df8717fffbc3b12483edd6e5))
+
 ## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.16.0...bluelightcard/mobile-hybrid-v1.17.0) (2024-05-23)
 
 

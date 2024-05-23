@@ -2,7 +2,6 @@ import { useMockPlatformAdapter } from '../../adapters';
 import { getRedemptionDetails, redeemOffer, RedeemResultKind } from '../redemptions';
 import { undefined } from 'zod';
 
-
 describe('getRedemptionDetails', () => {
   test('getRedemptionDetails calls the redemption details endpoint', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
@@ -43,10 +42,9 @@ describe('redeemOffer', () => {
     };
 
     const expectedResponse = {
-      data:mockedResponseData.data,
-      state: RedeemResultKind.OK
-    }
-
+      data: mockedResponseData.data,
+      state: RedeemResultKind.OK,
+    };
 
     const mockPlatformAdapter = useMockPlatformAdapter(200, mockedResponseData);
 
@@ -67,9 +65,9 @@ describe('redeemOffer', () => {
     };
 
     const expectedResponse = {
-      data:mockResponseData.data,
-      state: RedeemResultKind.MaxPerUserReached
-    }
+      data: mockResponseData.data,
+      state: RedeemResultKind.MaxPerUserReached,
+    };
 
     const mockPlatformAdapter = useMockPlatformAdapter(403, mockResponseData);
     const result = await redeemOffer(mockPlatformAdapter, 123, 'offerName', 'companyName');

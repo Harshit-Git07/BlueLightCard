@@ -54,7 +54,7 @@ export type RedeemDataMessage = z.infer<typeof RedeemDataMessage>;
 
 export type RedeemDataStateData = {
   state: (typeof RedeemResultKind)[keyof typeof RedeemResultKind];
-  data: RedeemData
+  data: RedeemData;
 };
 
 export const isRedeemDataMessage = (data: RedeemData): data is RedeemDataMessage => {
@@ -65,8 +65,7 @@ export async function redeemOffer(
   offerId: number,
   offerName: string,
   companyName: string,
-): Promise<RedeemDataStateData| Error> {
-
+): Promise<RedeemDataStateData | Error> {
   const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redeem', {
     method: 'POST',
     body: JSON.stringify({
@@ -76,16 +75,17 @@ export async function redeemOffer(
     }),
   });
 
-
   const resultData = JSON.parse(result.data);
   const body = RedeemResponseSchema.safeParse(resultData);
 
-  if(!body.success) {
+  if (!body.success) {
     throw new Error('Unable to redeem offer');
   }
 
   const { kind } = body.data.data;
-  const { data: { data} } = body;
+  const {
+    data: { data },
+  } = body;
 
   switch (kind) {
     case RedeemResultKind.MaxPerUserReached:

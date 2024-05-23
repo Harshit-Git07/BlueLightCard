@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.16.0...bluelightcard/mobile-hybrid-v1.17.0) (2024-05-23)
+
+
+### Features
+
+* Feature/disco 126 update v5 search result handling ([#1384](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1384)) ([e8faa06](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8faa060a65dd4e48f30049eb2365c7aa306789e))
+
+
+### Bug Fixes
+
+* TR-581 tidy up leaky abstractions ([#1396](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1396)) ([46e6c55](https://github.com/bluelightcard/BlueLightCard-2.0/commit/46e6c559c8ff86292435557622c85c2b58521254))
+
 ## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.15.0...bluelightcard/mobile-hybrid-v1.16.0) (2024-05-22)
 
 

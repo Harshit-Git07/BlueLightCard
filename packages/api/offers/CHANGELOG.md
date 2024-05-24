@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.29.0...bluelightcard/offers-v1.30.0) (2024-05-24)
+
+
+### Features
+
+* DISCO-246 Accept S3 events from new regional menus bucket ([#1405](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1405)) ([9a7461f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9a7461f29f0eb569953c23c792ddf4a85508633c))
+
 ## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.28.1...bluelightcard/offers-v1.29.0) (2024-05-22)
 
 

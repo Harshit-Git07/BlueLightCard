@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.15.0...bluelightcard/redemptions-v1.16.0) (2024-05-24)
+
+
+### Features
+
+* add kinds to response ([#1383](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1383)) ([f50ec92](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f50ec9263cfd5c667f41d5ec3db8947868e98c24))
+* add vault redirect for when user have no codes. ([f50ec92](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f50ec9263cfd5c667f41d5ec3db8947868e98c24))
+
+
+### Bug Fixes
+
+* strict validation on environment variables in production ([#1431](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1431)) ([07b3748](https://github.com/bluelightcard/BlueLightCard-2.0/commit/07b3748f8d8373f8efbbcf0352b7d2c4283a7549))
+
 ## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.14.2...bluelightcard/redemptions-v1.15.0) (2024-05-23)
 
 

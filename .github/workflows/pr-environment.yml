@@ -25,11 +25,70 @@ jobs:
           restore_cache: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  backend-shared:
-    name: Deploy Backend for PR (global & identity)
-    if: github.actor != 'dependabot[bot]'
+  changes:
     runs-on: ubuntu-latest
-    needs: install
+    permissions:
+      pull-requests: read
+    outputs:
+      backend-shared: ${{ steps.filter.outputs.backend-shared }}
+      backend-offers: ${{ steps.filter.outputs.backend-offers }}
+      backend-redemptions: ${{ steps.filter.outputs.backend-redemptions }}
+      backend-discovery: ${{ steps.filter.outputs.backend-discovery }}
+      frontend-web: ${{ steps.filter.outputs.frontend-web }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend-shared:
+              - packages/api/discovery/**
+              - packages/api/offers/**
+              - packages/api/redemptions/**
+              - packages/api/identity/**
+              - packages/api/core/**
+              - stacks/**
+              - .github/workflows/pr-environment.yml
+              - package-lock.json
+              - sst.config.ts
+              - package.json
+            backend-offers:
+              - packages/api/offers/**
+              - packages/api/core/**
+              - stacks/**
+              - .github/workflows/pr-environment.yml
+              - package-lock.json
+              - sst.config.ts
+              - package.json
+            backend-redemptions:
+              - packages/api/redemptions/**
+              - packages/api/core/**
+              - stacks/**
+              - .github/workflows/pr-environment.yml
+              - package-lock.json
+              - sst.config.ts
+              - package.json
+            backend-discovery:
+              - packages/api/discovery/**
+              - packages/api/core/**
+              - stacks/**
+              - .github/workflows/pr-environment.yml
+              - package-lock.json
+              - sst.config.ts
+              - package.json
+            frontend-web:
+              - packages/web/**
+              - packages/shared-ui/**
+              - .github/workflows/pr-environment.yml
+              - package-lock.json
+              - package.json
+
+  backend-shared:
+    needs:
+      - changes
+      - install
+    name: Deploy Backend for PR (global & identity)
+    if: ${{ needs.changes.outputs.backend-shared == 'true' && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
     outputs:
       identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
     steps:
@@ -59,12 +118,13 @@ jobs:
           echo ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
 
   backend-offers:
-    name: Deploy Backend for PR (offers)
-    if: github.actor != 'dependabot[bot]'
-    runs-on: ubuntu-latest
     needs:
+      - changes
       - install
       - backend-shared
+    name: Deploy Backend for PR (offers)
+    if: ${{ needs.changes.outputs.backend-offers == 'true' && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
     env:
       DEV_BASE_URL: http://localhost:8080
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
@@ -96,12 +156,13 @@ jobs:
           echo ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
 
   backend-redemptions:
-    name: Deploy Backend for PR (redemptions)
-    if: github.actor != 'dependabot[bot]'
-    runs-on: ubuntu-latest
     needs:
+      - changes
       - install
       - backend-shared
+    name: Deploy Backend for PR (redemptions)
+    if: ${{ needs.changes.outputs.backend-redemptions == 'true' && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
     outputs:
       redemptions-api-endpoint: ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
     steps:
@@ -128,15 +189,16 @@ jobs:
           echo ${{ steps.sst-redemptions-outputs.outputs.redemptionsApiUrl }}
 
   backend-discovery:
+    needs:
+      - changes
+      - install
+      - backend-shared
     name: Deploy Backend for PR (discovery)
-    if: github.actor != 'dependabot[bot]'
+    if: ${{ needs.changes.outputs.backend-discovery == 'true' && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         region: ['eu-west-2']
-    needs:
-      - install
-      - backend-shared
     outputs:
       discovery-api-endpoint: ${{ steps.sst-discovery-outputs.outputs.discoveryApiUrl }}
     steps:
@@ -165,8 +227,11 @@ jobs:
   # Deploy the frontend
   frontend:
     name: Deploy Frontend BLC UK for PR
+    needs:
+      - changes
+      - install
     environment: Staging
-    if: github.actor!= 'dependabot[bot]'
+    if: ${{ needs.changes.outputs.frontend-web == 'true' && github.actor != 'dependabot[bot]' }}
     strategy:
       matrix:
         include:
@@ -179,7 +244,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.cloudflare-publish.outputs.url }}
-    needs: install
     # TODO: Does this need to depend on the backend - it seems to be using the staging API...
     #   - backend-shared
     #   - backend-offers
@@ -247,6 +311,7 @@ jobs:
       - backend-shared
       - backend-offers
       - backend-redemptions
+      - backend-discovery
       - frontend
     steps:
       - name: Find Comment

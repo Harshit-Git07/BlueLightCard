@@ -94,6 +94,8 @@ jobs:
     env:
       STAGING_BASE_URL: https://staging.bluelightcard.co.uk
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
+      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: blc-uk
+      USE_REGIONAL_MENUS_BUCKET: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -122,6 +124,8 @@ jobs:
     env:
       PROD_BASE_URL: https://www.bluelightcard.co.uk
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
+      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: blc-uk
+      USE_REGIONAL_MENUS_BUCKET: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4

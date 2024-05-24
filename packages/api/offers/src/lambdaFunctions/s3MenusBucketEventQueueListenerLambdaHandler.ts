@@ -1,14 +1,14 @@
 import 'reflect-metadata';
 import { Logger } from "@aws-lambda-powertools/logger";
-import { BLC_UK, BLC_AUS, DDS_UK, TYPE_KEYS, OFFER_MENUS_FILE_NAMES } from "../utils/global-constants";
+import { TYPE_KEYS, OFFER_MENUS_FILE_NAMES } from "../utils/global-constants";
 import { Convertor } from "../utils/convertor";
 import { S3Helper } from "../../../core/src/aws/s3/s3Helper";
 import { OfferHomepageRepository } from "../repositories/offersHomepageRepository";
+import { S3Event } from 'aws-lambda'
 
 const logger = new Logger({ serviceName: `S3MenusBucketEventQueueListenerLambdaHandler` });
 const offerHomepageTableName = process.env.OFFER_HOMEPAGE_TABLE as string;
 const offerHomePageRepository = new OfferHomepageRepository(offerHomepageTableName);
-
 
 interface DataType {
   key: string;
@@ -25,51 +25,49 @@ const dataType: DataType[] = [
   { key: OFFER_MENUS_FILE_NAMES.MARKETPLACE, value: TYPE_KEYS.MARKETPLACE }
 ];
 
+const shouldEventBeProcessed = (s3EventSource: string): boolean => {
+  if (process.env.USE_REGIONAL_MENUS_BUCKET === 'true') {
+    return s3EventSource === process.env.REGIONAL_MENUS_BUCKET;
+  } else {
+    return s3EventSource === process.env.LEGACY_MENUS_BUCKET;
+  }
+};
+
 export const handler = async (event: any) => {
   logger.info("event", { event });
 
   for (const record of event.Records) {
-    const s3Event = JSON.parse(record.body);
+    const s3Event = JSON.parse(record.body) as S3Event;
     if (!s3Event.Records) {
       logger.warn("no records found in S3 event", { s3Event });
       return;
     }
     const s3Record = s3Event.Records[0];
-    const bucket = s3Record.s3.bucket.name;
+    const s3EventSource = s3Record.s3.bucket.name;
     const key = s3Record.s3.object.key;
 
-    let id;
-    if (bucket.includes(BLC_UK)) {
-      id = BLC_UK;
-    } else if (bucket.includes(BLC_AUS)) {
-      id = BLC_AUS;
-    } else if (bucket.includes(DDS_UK)) {
-      id = DDS_UK;
-    } else {
-      logger.warn("error getting valid bucket name", { bucket });
-      return;
+    if (shouldEventBeProcessed(s3EventSource)) {
+      let type = dataType.find((data) => key.includes(data.key));
+
+      if (!type) {
+        logger.warn("error getting valid key", { key });
+        return;
+      }
+
+      let fileData = await getFileData(s3EventSource, key);
+
+      if (type.key === OFFER_MENUS_FILE_NAMES.MARKETPLACE) {
+        const regex = new RegExp('"id"', 'g');
+        fileData = fileData.replace(regex, '"offerId"');
+      }
+
+      const item = {
+        id: process.env.OFFERS_HOMEPAGE_MENU_BRAND_PREFIX,
+        type: type?.value,
+        json: fileData
+      };
+      await offerHomePageRepository.save(item);
     }
-
-    let type = dataType.find((data) => key.includes(data.key));
-
-    if (!type) {
-      logger.warn("error getting valid key", { key });
-      return;
-    }
-
-    let fileData = await getFileData(bucket, key);
-
-    if (type.key === OFFER_MENUS_FILE_NAMES.MARKETPLACE) {
-      const regex = new RegExp('"id"', 'g');
-      fileData = fileData.replace(regex, '"offerId"');
-    }
-
-    const item = {
-      id,
-      type: type?.value,
-      json: fileData
-    };
-    await offerHomePageRepository.save(item);
   }
 };
 

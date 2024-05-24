@@ -22,6 +22,7 @@ export class Buckets {
     this.addNotification(this.blcUKBucket);
     this.addNotification(this.blcAUSBucket);
     this.addNotification(this.ddsUKBucket);
+    this.addNotification(this.menusBucket);
   }
 
   private createMenusBucket(): Bucket {

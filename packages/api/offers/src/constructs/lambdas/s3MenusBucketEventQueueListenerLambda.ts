@@ -21,6 +21,10 @@ export class S3MenusBucketEventQueueListenerLambda extends LambdaAbstract {
       deadLetterQueueEnabled: true,
       environment: {
         OFFER_HOMEPAGE_TABLE: this.tables.offerHomepageTable.tableName,
+        USE_REGIONAL_MENUS_BUCKET: process.env.USE_REGIONAL_MENUS_BUCKET as string,
+        OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: process.env.OFFERS_HOMEPAGE_MENU_BRAND_PREFIX as string,
+        REGIONAL_MENUS_BUCKET: this.buckets.menusBucket.bucketName,
+        LEGACY_MENUS_BUCKET: this.buckets.blcUKBucket.bucketName,
       },
     });
     this.grantPermissions(s3BucketListener);
@@ -33,6 +37,7 @@ export class S3MenusBucketEventQueueListenerLambda extends LambdaAbstract {
     this.buckets.blcUKBucket.cdk.bucket.grantRead(lambdaFunction);
     this.buckets.blcAUSBucket.cdk.bucket.grantRead(lambdaFunction);
     this.buckets.ddsUKBucket.cdk.bucket.grantRead(lambdaFunction);
+    this.buckets.menusBucket.cdk.bucket.grantRead(lambdaFunction);
   }
 
   private addEventSource(lambdaFunction: NodejsFunction): void {

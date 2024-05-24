@@ -1,8 +1,8 @@
 import { Config } from 'tailwindcss';
 import { createBrandedPreset } from '@bluelightcard/shared-ui/tailwind';
-import { defaultPreset } from './src/constants';
+import { defaultPreset } from './src/defaultPreset';
 import { BRAND } from './env';
-import { env } from '@bluelightcard/shared-ui';
+import { env } from '@bluelightcard/shared-ui/env';
 
 const preset = createBrandedPreset(BRAND);
 

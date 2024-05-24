@@ -1,3 +1,11 @@
 {
-  "tokenSetOrder": ["Global", "Semantic/DDS", "Semantic/BLC", "Semantic/System"]
+  "tokenSetOrder": [
+    "Global",
+    "Semantic/BLC",
+    "Semantic/DDS",
+    "Semantic/Surface",
+    "Semantic/System",
+    "Component/Surface",
+    "Component/Button"
+  ]
 }

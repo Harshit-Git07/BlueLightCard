@@ -1,22 +1,84 @@
 {
-  "error": {
-    "light": {
-      "type": "color",
-      "value": "{global.colour.system.red-500}"
+  "colour": {
+    "error": {
+      "light": {
+        "value": "{colour.system.red-500}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.system.red-500}",
+        "type": "color"
+      }
     },
-    "dark": {
-      "type": "color",
-      "value": "{global.colour.system.red-300}"
-    }
-  },
-  "success": {
-    "light": {
-      "type": "color",
-      "value": "{global.colour.system.green-500}"
+    "onError": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      }
     },
-    "dark": {
-      "type": "color",
-      "value": "{global.colour.system.green-300}"
+    "success": {
+      "light": {
+        "value": "{colour.system.green-500}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.system.green-500}",
+        "type": "color"
+      }
+    },
+    "onSuccess": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      }
+    },
+    "warning": {
+      "light": {
+        "value": "{colour.system.amber-500}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.system.amber-500}",
+        "type": "color"
+      }
+    },
+    "onWarning": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      }
+    },
+    "info": {
+      "light": {
+        "value": "{colour.system.blue-500}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.system.blue-500}",
+        "type": "color"
+      }
+    },
+    "onInfo": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      }
     }
   }
 }

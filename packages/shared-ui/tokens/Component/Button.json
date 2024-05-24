@@ -1,0 +1,30 @@
+{
+  "button-primary-background-colour": {
+    "light": {
+      "value": "{colour.primary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
+  },
+  "button-onPrimary-label-colour": {
+    "light": {
+      "value": "{colour.onPrimary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onPrimary.dark}",
+      "type": "color"
+    }
+  },
+  "button-label-font": {
+    "value": "{typography.button}",
+    "type": "typography"
+  },
+  "button-border-radius": {
+    "value": "{border-radius.small}",
+    "type": "borderRadius"
+  }
+}

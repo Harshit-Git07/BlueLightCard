@@ -59,7 +59,8 @@
   },
   "exports": {
     ".": "./src/index.tsx",
-    "./tailwind": "./src/tailwind/index.ts"
+    "./tailwind": "./src/tailwind/index.ts",
+    "./env": "./src/env/index.ts"
   },
   "scripts": {
     "test": "jest",

@@ -1,7 +1,7 @@
 import { Stack } from 'sst/constructs';
 
 import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
-import { getEnv, getEnvRaw, getEnvValidated } from '@blc-mono/core/utils/getEnv';
+import { getEnv, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
@@ -49,9 +49,9 @@ export class RedemptionsStackConfigResolver {
         'https://www.bluelightcard.com.au',
         'https://www.defencediscountservice.co.uk',
       ],
-      brazeVaultEmailCampaignId: getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID) ?? '',
-      brazeGenericEmailCampaignId: getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID) ?? '',
-      brazeApiUrl: getEnvRaw(RedemptionsStackEnvironmentKeys.BRAZE_API_URL) ?? '',
+      brazeVaultEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID),
+      brazeGenericEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID),
+      brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
     };
   }

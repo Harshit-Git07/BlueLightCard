@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.17.1...bluelightcard/mobile-hybrid-v1.17.2) (2024-05-23)
+
+
+### Other Changes
+
+* disco 295 setup migration structure ([#1417](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1417)) ([d5abde6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d5abde6dafaa9e31e5b92cc69e261bba5fca5988))
+
 ## [1.17.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.17.0...bluelightcard/mobile-hybrid-v1.17.1) (2024-05-23)
 
 

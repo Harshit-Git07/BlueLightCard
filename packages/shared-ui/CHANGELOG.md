@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.2.0...shared-ui-v1.3.0) (2024-05-23)
+
+
+### Features
+
+* add kinds to response ([#1383](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1383)) ([f50ec92](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f50ec9263cfd5c667f41d5ec3db8947868e98c24))
+* add vault redirect for when user have no codes. ([f50ec92](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f50ec9263cfd5c667f41d5ec3db8947868e98c24))
+
+
+### Bug Fixes
+
+* event offer viewed ([#1423](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1423)) ([4c92900](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4c92900930eafd3394b0db5e18f03b507f932ab8))
+* event offer viewed ([#1426](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1426)) ([6da9012](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6da901226c145cf7806f02c6c922f850396391a9))
+* Offer viewed amplitude event not triggering correctly on prod ([#1406](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1406)) ([ac2e733](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ac2e7335a6fdf55d32c3bfe4a3be5f28a63d94d8))
+* tr 602 general fixes ([#1410](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1410)) ([4d43ce2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4d43ce243686cae73b42872202e94ac532c1c414))
+
+
+### Other Changes
+
+* disco 295 setup migration structure ([#1417](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1417)) ([d5abde6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d5abde6dafaa9e31e5b92cc69e261bba5fca5988))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.1.0...shared-ui-v1.2.0) (2024-05-23)
 
 

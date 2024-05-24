@@ -10,6 +10,5 @@ const newTokensActive = env.FLAG_NEW_TOKENS;
 
 export default {
   presets: newTokensActive ? [preset] : [defaultPreset],
-  darkMode: 'class',
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}'],
 } satisfies Config;

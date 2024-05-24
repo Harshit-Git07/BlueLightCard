@@ -16,7 +16,9 @@ export function getTokenSourcePaths(brand: BrandToken) {
     readFileSync(join(TOKENS_ROOT_DIR, '$metadata.json')).toString(),
   ) as TokenStudioMetadata;
 
-  const theme = themes.find((theme) => theme.group === brand.toUpperCase());
+  const theme = themes.find(
+    (theme) => theme.group === brand.toUpperCase() || theme.name === brand.toUpperCase(),
+  );
 
   const sources: string[] = [];
 
@@ -31,7 +33,9 @@ export function getTokenSourcePaths(brand: BrandToken) {
   if (metadata?.tokenSetOrder) {
     metadata.tokenSetOrder.forEach((tokenSet) => {
       // check if token set is a theme
-      const isTheme = !!themes.find((theme) => tokenSet.includes(theme.group));
+      const isTheme = !!themes.find(
+        (theme) => tokenSet.includes(theme.group) || tokenSet.includes(theme.name),
+      );
       // check the token set is already in the sources array
       const existsInSources = !!sources.find((source) => source.includes(tokenSet));
 

@@ -1,0 +1,488 @@
+{
+  "global": {
+    "colour": {
+      "greyscale": {
+        "white": {
+          "value": "#FFFFFF",
+          "type": "color",
+          "description": "White"
+        },
+        "grey-50": {
+          "value": "#FAFAFA",
+          "type": "color"
+        },
+        "grey-100": {
+          "value": "#ECEFF2",
+          "type": "color"
+        },
+        "grey-200": {
+          "value": "#E8E9ED",
+          "type": "color"
+        },
+        "grey-300": {
+          "value": "#DCDCDC",
+          "type": "color"
+        },
+        "grey-400": {
+          "value": "#99A0A6",
+          "type": "color"
+        },
+        "grey-500": {
+          "value": "#7F848A",
+          "type": "color"
+        },
+        "grey-600": {
+          "value": "#616266",
+          "type": "color"
+        },
+        "grey-700": {
+          "value": "#474747",
+          "type": "color"
+        },
+        "grey-800": {
+          "value": "#303135",
+          "type": "color"
+        },
+        "grey-900": {
+          "value": "#202125",
+          "type": "color"
+        },
+        "black": {
+          "value": "#000000",
+          "type": "color"
+        }
+      },
+      "system": {
+        "red-300": {
+          "value": "#F68992",
+          "type": "color"
+        },
+        "red-300-20%": {
+          "value": "{global.colour.system.red-300}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.2",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "red-500": {
+          "value": "#D41121",
+          "type": "color"
+        },
+        "red-500-30%": {
+          "value": "{global.colour.system.red-500}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "blue-300": {
+          "value": "#62B3DF",
+          "type": "color"
+        },
+        "blue-300-30%": {
+          "value": "#62B3DF",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "blue-500": {
+          "value": "#1B5D82",
+          "type": "color"
+        },
+        "blue-500-30%": {
+          "value": "#1B5D82",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "green-300": {
+          "value": "#88C3AC",
+          "type": "color"
+        },
+        "green-300-30%": {
+          "value": "#88C3AC",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "lighten",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "green-500": {
+          "value": "#166F4E",
+          "type": "color"
+        },
+        "green-500-30%": {
+          "value": "#166F4E",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "amber-300": {
+          "value": "#FFBD80",
+          "type": "color"
+        },
+        "amber-300-30%": {
+          "value": "#FFBD80",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "amber-500": {
+          "value": "#E66E00",
+          "type": "color"
+        },
+        "amber-500-30%": {
+          "value": "#E66E00",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        }
+      },
+      "blc": {
+        "duke-50": {
+          "value": "#E5EBFF",
+          "type": "color"
+        },
+        "duke-100": {
+          "value": "#B3CCFF",
+          "type": "color"
+        },
+        "duke-200": {
+          "value": "#80ABFF",
+          "type": "color"
+        },
+        "duke-200-30%": {
+          "value": "{global.colour.blc.duke-200}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "duke-300": {
+          "value": "#4D89FF",
+          "type": "color"
+        },
+        "duke-300-40%": {
+          "value": "{global.colour.blc.duke-300}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.4",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "duke-400": {
+          "value": "#1A49FF",
+          "type": "color"
+        },
+        "duke-500": {
+          "value": "#2929CC",
+          "type": "color"
+        },
+        "duke-600": {
+          "value": "#2020A1",
+          "type": "color"
+        },
+        "duke-700": {
+          "value": "#001B80",
+          "type": "color"
+        },
+        "duke-700-30%": {
+          "value": "{global.colour.blc.duke-700}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "duke-800": {
+          "value": "#00104D",
+          "type": "color"
+        },
+        "duke-900": {
+          "value": "#09092A",
+          "type": "color"
+        },
+        "oxford-500": {
+          "value": "#4D4D70",
+          "type": "color"
+        },
+        "oxford-700": {
+          "value": "#000033",
+          "type": "color"
+        },
+        "sky-400": {
+          "value": "#33CCFF",
+          "type": "color"
+        },
+        "sky-400-20%": {
+          "value": "{global.colour.blc.sky-400}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "lighten",
+                "value": "0.2",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "lilac-500": {
+          "value": "#996699",
+          "type": "color"
+        },
+        "lilac-500-20%": {
+          "value": "{global.colour.blc.lilac-500}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.2",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "rose-200": {
+          "value": "#E59AB3",
+          "type": "color"
+        },
+        "rose-200-30%": {
+          "value": "{global.colour.blc.rose-200}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "lighten",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "rose-500": {
+          "value": "#CC3366",
+          "type": "color"
+        },
+        "rose-500-30%": {
+          "value": "{global.colour.blc.rose-500}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "lighten",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "lemon-300": {
+          "value": "#FFFC3B",
+          "type": "color"
+        },
+        "lemon-400": {
+          "value": "#F7EF37",
+          "type": "color"
+        },
+        "lemon-600": {
+          "value": "#E7C137",
+          "type": "color"
+        }
+      },
+      "dds": {
+        "denim-200": {
+          "value": "#80C6FF",
+          "type": "color"
+        },
+        "denim-400": {
+          "value": "#1577D4",
+          "type": "color"
+        },
+        "denim-500": {
+          "value": "#0073CF",
+          "type": "color"
+        },
+        "denim-700": {
+          "value": "#00437A",
+          "type": "color"
+        },
+        "denim-200-30%": {
+          "value": "{global.colour.dds.denim-200}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "denim-400-20%": {
+          "value": "{global.colour.dds.denim-400}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.2",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "denim-500-30%": {
+          "value": "{global.colour.dds.denim-500}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "navy-700": {
+          "value": "#002442",
+          "type": "color"
+        },
+        "navy-700-20%": {
+          "value": "{global.colour.dds.navy-700}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.2",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "mustard-200": {
+          "value": "#E8CF96",
+          "type": "color"
+        },
+        "mustard-200-30%": {
+          "value": "{global.colour.dds.mustard-200}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "mustard-500": {
+          "value": "#D2A02D",
+          "type": "color"
+        },
+        "mustard-500-30%": {
+          "value": "{global.colour.dds.mustard-500}",
+          "type": "color",
+          "$extensions": {
+            "studio.tokens": {
+              "modify": {
+                "type": "alpha",
+                "value": "0.3",
+                "space": "lch"
+              }
+            }
+          }
+        },
+        "berry-500": {
+          "value": "#C93B3B",
+          "type": "color"
+        },
+        "moss-500": {
+          "value": "#697953",
+          "type": "color"
+        },
+        "grape-500": {
+          "value": "#876884",
+          "type": "color"
+        },
+        "aqua-500": {
+          "value": "#1A9E9F",
+          "type": "color"
+        }
+      }
+    }
+  }
+}

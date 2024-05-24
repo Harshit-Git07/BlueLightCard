@@ -4,7 +4,7 @@ import SearchResultsModule from '@/modules/SearchResults';
 import pageDecorator from '@storybook/pageDecorator';
 import { useEffect } from 'react';
 import { searchTerm } from './store';
-import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/src/adapters/StorybookPlatformAdapter';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
 
 const componentMeta: Meta<typeof SearchResultsModule> = {
   title: 'Modules/SearchResults',

@@ -5,7 +5,7 @@ import { APIUrl, V5_API_URL } from '@/globals';
 import { usePlatformAdapter } from '@bluelightcard/shared-ui';
 import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { isUnder18 } from '@bluelightcard/shared-ui/src/utils/ageUtils';
+import { isUnder18 } from '@bluelightcard/shared-ui';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import useUserService from '@/hooks/useUserService';
 

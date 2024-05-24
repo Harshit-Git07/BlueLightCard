@@ -1,0 +1,22 @@
+{
+  "error": {
+    "light": {
+      "type": "color",
+      "value": "{global.colour.system.red-500}"
+    },
+    "dark": {
+      "type": "color",
+      "value": "{global.colour.system.red-300}"
+    }
+  },
+  "success": {
+    "light": {
+      "type": "color",
+      "value": "{global.colour.system.green-500}"
+    },
+    "dark": {
+      "type": "color",
+      "value": "{global.colour.system.green-300}"
+    }
+  }
+}

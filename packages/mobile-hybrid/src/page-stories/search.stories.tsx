@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import SearchPage from '@/pages/search';
-import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/src/adapters/StorybookPlatformAdapter';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
 
 const componentMeta: Meta<typeof SearchPage> = {
   title: 'Pages/SearchPage',

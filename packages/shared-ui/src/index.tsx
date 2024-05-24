@@ -23,6 +23,7 @@ export * from './hooks/useCSS';
 export * from './utils/cssUtil';
 export * from './utils/storyUtils';
 export * from './utils/getCDNUrl';
+export * from './utils/ageUtils';
 export * from './lib/rewriters';
 export * from './lib/invoke';
 export * from './types';
@@ -31,7 +32,4 @@ export * from './context/OfferSheet/OfferSheetContext';
 export * from './context/OfferSheet/hooks';
 export * from './providers';
 export * from './test';
-
 export * from './env';
-
-import './styles/styles.css';

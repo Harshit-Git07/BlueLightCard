@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.71.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.70.0...bluelightcard/identity-v1.71.0) (2024-05-25)
+
+
+### Features
+
+* Feat/ps 570 ([#1442](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1442)) ([900711e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/900711ef2de0fbcdb72662d8ae1620fc0122e677))
+
 ## [1.70.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.69.3...bluelightcard/identity-v1.70.0) (2024-05-22)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.74.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.73.0...bluelightcard/identity-v1.74.0) (2024-05-25)
+
+
+### Features
+
+* fix copy ([#1450](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1450)) ([1b3362b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1b3362b2ae684419b4b7444b2204b3b44fd56df5))
+
 ## [1.73.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.72.0...bluelightcard/identity-v1.73.0) (2024-05-25)
 
 

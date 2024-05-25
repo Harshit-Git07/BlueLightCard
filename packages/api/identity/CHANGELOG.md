@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.72.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.71.0...bluelightcard/identity-v1.72.0) (2024-05-25)
+
+
+### Features
+
+* Add comment to trigger build ([#1445](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1445)) ([f2e8240](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f2e82404289596c9eeff2476fcff2ea5e88391eb))
+* Trigger build ([#1444](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1444)) ([e4bdbf2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4bdbf202bd0994cb0730e3d53e17e812b6e5f75))
+
 ## [1.71.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.70.0...bluelightcard/identity-v1.71.0) (2024-05-25)
 
 

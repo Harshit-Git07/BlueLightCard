@@ -10,6 +10,7 @@ const TABLE_NAME = process.env.TABLE_NAME ?? "";
 const API_AUTHORISER_USER = process.env.API_AUTHORISER_USER ?? "";
 const API_AUTHORISER_PASSWORD = process.env.API_AUTHORISER_PASSWORD ?? "";
 const RESET_PASSWORD_API_URL = process.env.RESET_PASSWORD_API_URL ?? "";
+// This env var has been dropped to 1 in production
 const WRONG_PASSWORD_ENTER_LIMIT:number = Number(process.env.WRONG_PASSWORD_ENTER_LIMIT) ?? 2;
 const WRONG_PASSWORD_RESET_TRIGGER_MINUTES:number = Number(process.env.WRONG_PASSWORD_RESET_TRIGGER_MINUTES) ?? 30;
 

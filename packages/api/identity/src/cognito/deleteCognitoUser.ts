@@ -30,14 +30,14 @@ const deleteCognitoUser = async (cognito: CognitoIdentityServiceProvider, poolId
           Username: username
       }).promise();
 
-    logger.info("user successfully deleted from Cognito ");
+    logger.info("user successfully deleted from Cognito");
   } catch (e: any) {
     logger.debug("user not found on cognito");
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: `User ${username} not found.`
+        message: `User ${username} not found on Cognito.`
       })
     };
   }

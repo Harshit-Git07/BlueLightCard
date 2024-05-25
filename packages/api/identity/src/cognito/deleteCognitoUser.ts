@@ -32,7 +32,7 @@ const deleteCognitoUser = async (cognito: CognitoIdentityServiceProvider, poolId
 
     logger.info("user successfully deleted from Cognito ");
   } catch (e: any) {
-    logger.debug("user not found");
+    logger.debug("user not found on cognito");
 
     return {
       statusCode: 200,

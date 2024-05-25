@@ -158,4 +158,9 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy
+        env:
+          # TODO(TR-383): Get braze keys dynamically later
+          BRAZE_VAULT_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_VAULT_EMAIL_CAMPAIGN_ID }}'
+          BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID }}'
+          BRAZE_API_URL: '${{ vars.BRAZE_API_URL }}'
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy identity --stage production --region ${{matrix.region}}

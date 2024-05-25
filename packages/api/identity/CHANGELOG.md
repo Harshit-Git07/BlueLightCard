@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.73.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.72.0...bluelightcard/identity-v1.73.0) (2024-05-25)
+
+
+### Features
+
+* Ps 570 add missing env vars in workflow ([#1448](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1448)) ([12428e2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/12428e295ce2ce8634800de62935fd47067747e0))
+
 ## [1.72.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.71.0...bluelightcard/identity-v1.72.0) (2024-05-25)
 
 

@@ -17,9 +17,9 @@ const WRONG_PASSWORD_RESET_TRIGGER_MINUTES:number = Number(process.env.WRONG_PAS
 const UNSUCCESSFUL_ATTEMPTS_CUSTOM_ERROR_MESSAGE = `:
 It looks like the email or password you entered is incorrect.
 
-Please check your email address. If it matches our records, we'll send you a password reset email.
+Please check your email address. If it matches our records, we will send you a password reset email.
 
-If you remember your password, you can try logging in again.`;
+If you remember your password, you can try logging in again`;
 const SYSTEM_DOWN_ERROR_MESSAGE = ":\n Unable to process your request.\nPlease contact customer service";
 
 const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);

@@ -15,11 +15,11 @@ const WRONG_PASSWORD_RESET_TRIGGER_MINUTES:number = Number(process.env.WRONG_PAS
 
 // const UNSUCCESSFUL_ATTEMPTS_CUSTOM_ERROR_MESSAGE = ":\n You previously had " + WRONG_PASSWORD_ENTER_LIMIT + " unsuccessful login attempts for this email in the last " + WRONG_PASSWORD_RESET_TRIGGER_MINUTES +" minutes.\n\nAs a precaution, your current login attempt has been blocked.\n\nIf your email exists in our system, you will receive a password reset email in your inbox";
 const UNSUCCESSFUL_ATTEMPTS_CUSTOM_ERROR_MESSAGE = `:
-It looks like you have entered an incorrect email address or password.
+It looks like the email or password you entered is incorrect.
 
-If your email exists in our system you will receive a password reset email in your inbox.
+Please check your email address. If it matches our records, we'll send you a password reset email.
 
-If you remember your password you can always retry without resetting`;
+If you remember your password, you can try logging in again.`;
 const SYSTEM_DOWN_ERROR_MESSAGE = ":\n Unable to process your request.\nPlease contact customer service";
 
 const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);

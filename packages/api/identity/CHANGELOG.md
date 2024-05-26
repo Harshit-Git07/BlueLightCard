@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.75.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.74.0...bluelightcard/identity-v1.75.0) (2024-05-26)
+
+
+### Features
+
+* Update copy for encoding ([#1454](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1454)) ([7f2bfc9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7f2bfc9d286b11ee6256171990286fd672539ea1))
+* Update login failed copy ([#1452](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1452)) ([5183377](https://github.com/bluelightcard/BlueLightCard-2.0/commit/51833778a1b85bcfc984c26bf2ef0d925a65d6b8))
+
 ## [1.74.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.73.0...bluelightcard/identity-v1.74.0) (2024-05-25)
 
 

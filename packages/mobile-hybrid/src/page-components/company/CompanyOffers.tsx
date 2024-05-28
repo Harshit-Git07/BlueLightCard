@@ -23,7 +23,12 @@ const CompanyOffers: FC = () => {
   const onClickEvent = (offerId: number) => {
     if (companyId) {
       try {
-        viewOffer('treatment', offerId, companyId);
+        viewOffer({
+          offerId: offerId,
+          companyId: companyId,
+          companyName: companyName || '',
+          platform: PlatformVariant.MobileHybrid,
+        });
       } catch (e) {
         return;
       }
@@ -37,12 +42,12 @@ const CompanyOffers: FC = () => {
           return (
             <div key={index} className="pb-2">
               <ResponsiveOfferCard
-                id={offer.id.toString()}
+                id={offer.id}
                 name={offer.name}
                 image={offer.image}
                 type={offer.type}
-                platform={PlatformVariant.Mobile}
-                companyId={companyId?.toString() || ''}
+                platform={PlatformVariant.MobileHybrid}
+                companyId={companyId || 0}
                 companyName={companyName || ''}
                 variant={'horizontal'}
                 onClick={() => onClickEvent(offer.id)}

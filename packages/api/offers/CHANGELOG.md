@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.30.0...bluelightcard/offers-v1.31.0) (2024-05-28)
+
+
+### Features
+
+* Trigger build ([#1444](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1444)) ([e4bdbf2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4bdbf202bd0994cb0730e3d53e17e812b6e5f75))
+
 ## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.29.0...bluelightcard/offers-v1.30.0) (2024-05-24)
 
 

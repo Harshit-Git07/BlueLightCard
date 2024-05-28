@@ -112,6 +112,10 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
     }
   }
 
+  if (props.state === 'error' && props.errorState !== RedeemResultKind.MaxPerUserReached) {
+    return <OfferDetailsErrorPage />;
+  }
+
   return (
     <>
       <OfferTopDetailsHeader

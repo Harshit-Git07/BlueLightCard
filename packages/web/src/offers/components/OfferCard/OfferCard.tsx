@@ -75,7 +75,8 @@ const OfferCard: FC<OfferCardProps> = ({
         <OfferCardDetails
           offerName={offerName}
           companyName={companyName}
-          offerLink={showFindOutMore ? offerLink : undefined}
+          offerLink={onClick ? undefined : offerLink}
+          showFindOutMore={showFindOutMore}
           variant={variant}
           xPaddingClassName={'px-5'}
           offerTag={offerTag}

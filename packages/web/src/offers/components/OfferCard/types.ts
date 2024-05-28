@@ -21,6 +21,7 @@ export interface OfferCardProps {
 export interface OfferCardDetailsProps {
   offerName: string;
   offerLink?: string;
+  showFindOutMore?: boolean;
   companyName: string;
   variant?: string;
   id?: string;

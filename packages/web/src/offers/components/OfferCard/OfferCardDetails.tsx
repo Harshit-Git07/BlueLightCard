@@ -7,6 +7,7 @@ const OfferCardDetails: FC<OfferCardDetailsProps> = ({
   offerName,
   companyName,
   offerLink,
+  showFindOutMore = false,
   variant = 'standard',
   xPaddingClassName = 'px-5',
   offerTag,
@@ -45,7 +46,8 @@ const OfferCardDetails: FC<OfferCardDetailsProps> = ({
         </p>
       </div>
       <div className={`${xPaddingClassName} pt-2`}>
-        {offerLink && <Link href={offerLink}>Find out more...</Link>}
+        {offerLink && showFindOutMore && <Link href={offerLink}>Find out more...</Link>}
+        {!offerLink && showFindOutMore && <Link>Find out more...</Link>}
       </div>
     </>
   );

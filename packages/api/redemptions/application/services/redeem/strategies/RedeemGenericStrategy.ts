@@ -28,7 +28,7 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
           redemptionId: redemption.id,
         },
       });
-      return { kind: 'GenericNotFound' };
+      throw new Error('Generic code not found');
     }
     return {
       kind: 'Ok',

@@ -9,18 +9,14 @@ export type RedeemedStrategyResult =
   | RedeemVaultQrStrategyResult
   | RedeemVaultStrategyResult;
 
-export type RedeemGenericStrategyResult =
-  | {
-      kind: 'Ok';
-      redemptionType: 'generic';
-      redemptionDetails: {
-        url: string;
-        code: string;
-      };
-    }
-  | {
-      kind: 'GenericNotFound';
-    };
+export type RedeemGenericStrategyResult = {
+  kind: 'Ok';
+  redemptionType: 'generic';
+  redemptionDetails: {
+    url: string;
+    code: string;
+  };
+};
 
 // TODO: This is a placeholder for the future implementation
 export type RedeemPreAppliedStrategyResult = {
@@ -52,9 +48,7 @@ export type RedeemVaultStrategyResult =
         code: string;
       };
     }
-  | { kind: 'VaultNotFound' }
-  | { kind: 'MaxPerUserReached' }
-  | { kind: 'ErrorWhileRedeemingVault' };
+  | { kind: 'MaxPerUserReached' };
 
 export type RedeemParams = {
   memberId: string;

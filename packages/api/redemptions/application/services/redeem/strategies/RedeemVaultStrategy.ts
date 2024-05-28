@@ -47,9 +47,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
           redemptionId: redemption.id,
         },
       });
-      return {
-        kind: 'VaultNotFound',
-      };
+      throw new Error('Vault not found');
     }
 
     switch (vault.vaultType) {
@@ -92,9 +90,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
           memberId,
         },
       });
-      return {
-        kind: 'ErrorWhileRedeemingVault',
-      };
+      throw new Error('No vault code found');
     }
 
     const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, memberId);

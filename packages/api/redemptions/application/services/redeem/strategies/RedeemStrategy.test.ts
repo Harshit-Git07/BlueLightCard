@@ -81,16 +81,16 @@ describe('Redemption Strategies', () => {
       await database?.down?.();
     });
 
-    it('Should return kind equals to "GenericNotFound" when no generic is found', async () => {
+    it('Should throw when no generic is found', async () => {
       // Arrange
       const redemptionCreated = redemption.build();
       await connection.db.insert(redemptionsTable).values(redemptionCreated);
 
       // Act
-      const result = await callGenericRedeemStrategy(connection, redemptionCreated, { silent: true });
+      const result = callGenericRedeemStrategy(connection, redemptionCreated, { silent: true });
 
       // Assert
-      expect(result.kind).toBe('GenericNotFound');
+      await expect(result).rejects.toThrow();
     });
 
     it('Should return kind equals to "Ok" when a generic is found', async () => {
@@ -244,21 +244,21 @@ describe('Redemption Strategies', () => {
       await database?.down?.();
     });
 
-    it('Should return kind equals to "VaultNotFound" when no vault is found', async () => {
+    it('Should throw when no vault is found', async () => {
       // Arrange
       const redemptionCreated = redemption.build();
       await connection.db.insert(redemptionsTable).values(redemptionCreated);
 
       // Act
-      const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+      const result = callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
         silent: true,
       });
 
       // Assert
-      expect(result.kind).toBe('VaultNotFound');
+      await expect(result).rejects.toThrow();
     });
     describe('Standard vault flow', () => {
-      it('Should return kind equals to "VaultNotFound" when no matching active vault exists', async () => {
+      it('Should throw when no matching active vault exists', async () => {
         // Arrange
         const redemptionCreated = redemption.build();
         const vaultCreated = vault(redemptionCreated.id, 'standard', 'in-active', 3).build();
@@ -266,14 +266,14 @@ describe('Redemption Strategies', () => {
         await connection.db.insert(vaultsTable).values(vaultCreated);
 
         // Act
-        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+        const result = callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
           silent: true,
         });
 
         // Assert
-        expect(result.kind).toBe('VaultNotFound');
+        await expect(result).rejects.toThrow();
       });
-      it('Should return kind equals to "ErrorWhileRedeemingVault" when no vault code is found', async () => {
+      it('Should throw when no vault code is found', async () => {
         // Arrange
         const redemptionCreated = redemption.build();
         const vaultCreated = vault(redemptionCreated.id, 'standard', 'active', 3).build();
@@ -281,12 +281,12 @@ describe('Redemption Strategies', () => {
         await connection.db.insert(vaultsTable).values(vaultCreated);
 
         // Act
-        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+        const result = callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
           silent: true,
         });
 
         // Assert
-        expect(result.kind).toBe('ErrorWhileRedeemingVault');
+        await expect(result).rejects.toThrow();
       });
       it('Should return kind equals to "MaxPerUserReached" when max per user is reached', async () => {
         // Arrange
@@ -373,7 +373,7 @@ describe('Redemption Strategies', () => {
           });
 
         // Assert
-        expect(act).rejects.toThrow('Error checking number of codes issued');
+        await expect(act).rejects.toThrow('Error checking number of codes issued');
       });
       it('Should return kind "MaxPerUserReached" when amountIssued is greater than or equal to vault maxPerUser', async () => {
         // Arrange
@@ -416,7 +416,7 @@ describe('Redemption Strategies', () => {
           });
 
         // Assert
-        expect(act).rejects.toThrow('Error assigning code');
+        await expect(act).rejects.toThrow('Error assigning code');
       });
       it('Should return kind equals to "Ok" when a vault code is found', async () => {
         // Arrange

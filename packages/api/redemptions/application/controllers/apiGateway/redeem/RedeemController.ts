@@ -83,44 +83,12 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
             message: 'No redemption found for the given offerId',
           },
         };
-      // Generic redemption
-      case 'GenericNotFound':
-        return {
-          statusCode: 500,
-          data: {
-            kind: result.kind,
-            message: 'No generic found for the given offerId',
-          },
-        };
-      // Vault redemption
-      case 'VaultNotFound':
-        return {
-          statusCode: 500,
-          data: {
-            kind: result.kind,
-            message: 'No vault found for the given offerId',
-          },
-        };
       case 'MaxPerUserReached':
         return {
           statusCode: 403,
           data: {
             kind: result.kind,
             message: 'Max per user reached for the given offerId',
-          },
-        };
-      case 'ErrorWhileRedeemingVault':
-        this.logger.error({
-          message: `Error while redeeming vault for the given offerId`,
-          context: {
-            kind: result.kind,
-          },
-        });
-        return {
-          statusCode: 500,
-          data: {
-            kind: result.kind,
-            message: 'Error while redeeming vault for the given offerId',
           },
         };
       default:

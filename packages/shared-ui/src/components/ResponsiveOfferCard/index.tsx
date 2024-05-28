@@ -19,6 +19,7 @@ export type Props = SharedProps & {
   companyName: string;
   variant?: 'vertical' | 'horizontal';
   quality?: number;
+  onClick?: () => void;
 };
 
 export type BgColorTagParser = {
@@ -36,6 +37,7 @@ const ResponsiveOfferCard: FC<Props> = ({
   image,
   variant = 'vertical',
   platform,
+  onClick = undefined,
   quality = 75,
 }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
@@ -74,7 +76,7 @@ const ResponsiveOfferCard: FC<Props> = ({
       data-testid={`offer-card-${id}`}
     >
       <div
-        onClick={openOfferSheet}
+        onClick={onClick ? onClick : openOfferSheet}
         className={`rounded-t-lg overflow-hidden ${
           variant === 'vertical'
             ? ''
@@ -106,7 +108,7 @@ const ResponsiveOfferCard: FC<Props> = ({
         className={`font-['MuseoSans'] text-[#202125] line-clamp-2 ${
           variant === 'vertical'
             ? 'mt-2 text-xl laptop:text-2xl font-semibold'
-            : 'mt-0.5 text-base font-light justify-self-start self-end'
+            : 'mt-0.5 text-base font-regular justify-self-start self-end'
         }`}
       >
         {name}

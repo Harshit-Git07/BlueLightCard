@@ -38,7 +38,7 @@ const PillButtons: FC<Props> = ({
   });
 
   const css = useCSSMerge(
-    "font-['MuseoSans'] text-[#202125] font-light rounded-full px-3 whitespace-nowrap text-base min-w-[54px]",
+    "font-['MuseoSans'] text-[#202125] font-regular rounded-full px-3 whitespace-nowrap text-base min-w-[54px]",
     dynCss,
   );
 

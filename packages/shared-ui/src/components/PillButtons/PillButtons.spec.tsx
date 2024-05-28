@@ -43,7 +43,7 @@ describe('PillButtons component', () => {
       fireEvent.click(getByRole('button'));
 
       expect(getByRole('button')).toHaveClass(
-        `font-['MuseoSans'] text-[#202125] font-light rounded-full px-3 whitespace-nowrap text-base bg-[#ECEFF2]`,
+        `font-['MuseoSans'] text-[#202125] font-regular rounded-full px-3 whitespace-nowrap text-base min-w-[54px]`,
       );
     });
 

@@ -96,6 +96,8 @@ const buildUserFromAPI = () => {
       mobile: '+47772345678',
       uuid: '123',
       service: '',
+      email: 'test@gmail.com',
+      emailValidated: 1,
       spareEmail: '',
       spareEmailValidated: 0,
       twoFactorAuthentication: false,

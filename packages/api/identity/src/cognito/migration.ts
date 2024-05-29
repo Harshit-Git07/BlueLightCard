@@ -207,6 +207,8 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 dob: dob,
                 gender: data.gender,
                 mobile: formatPhoneNumber(data.mobile),
+                email: data.email === '' ? 'NA' : data.email ?? 'NA',
+                emailValidated: data.emailValidated,
                 spareemail: data.spareemail === '' ? 'NA' : data.spareemail ?? 'NA',
                 spareemailvalidated: data.spareemailvalidated,
                 service: data.service,

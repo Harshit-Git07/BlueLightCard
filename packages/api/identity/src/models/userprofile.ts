@@ -8,9 +8,11 @@ export const UserProfileModel = z.object({
     ga_key: z.string().nullish(),
     gender: z.string().nullish(),
     merged_time: z.string().nullish(),
-    merged_uid: z.boolean().nullish(),
+    merged_uid: z.number().nullish(),
     mobile: z.string().nullish(),
     organisation: z.string().optional(),
+    email: z.string().nullish(),
+    email_validated: z.number().nullish(),
     spare_email: z.string().nullish(),
     spare_email_validated: z.number().nullish(),
     surname: z.string().optional()

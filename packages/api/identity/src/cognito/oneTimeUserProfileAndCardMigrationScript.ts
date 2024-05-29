@@ -12,6 +12,8 @@ import { setDate } from './../../../core/src/utils/setDate';
 
 interface RowData {
     id: number;
+    email: string;
+    emailValidated: number;
     spareemail: string;
     spareemailvalidated: number;
     name: string;
@@ -201,6 +203,8 @@ export async function migrate(): Promise<{status: string, message: string}> {
           sk: oldProfileUuid !== null ? oldProfileUuid : `PROFILE#${profileUuid}`,
           firstname: row.name,
           surname: row.surname,
+          email: row.email ?? ' ',
+          email_validated: row.emailValidated ?? '0',
           spare_email: row.spareemail ?? ' ',
           spare_email_validated: row.spareemailvalidated ?? '0',
           organisation: row.service ?? ' ',

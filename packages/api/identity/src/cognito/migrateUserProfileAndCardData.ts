@@ -110,6 +110,8 @@ export const handler = async (event: any, context: any) => {
         sk: oldProfileUuid !== null ? oldProfileUuid : `PROFILE#${profileUuid}`,
         firstname: event.detail.name,
         surname: event.detail.surname,
+        email: event.detail.email,
+        email_validated: event.detail.emailValidated,
         spare_email: event.detail.spareemail === "" ? "NA" : event.detail.spareemail ?? "NA",
         spare_email_validated: event.detail.spareemailvalidated,
         organisation: event.detail.service,

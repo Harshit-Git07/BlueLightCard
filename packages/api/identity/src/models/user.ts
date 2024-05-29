@@ -13,6 +13,8 @@ export const UserModel = createZodNamedType(
     mobile: z.string().nullable(),
     uuid: z.string().optional(),
     service: z.string().optional(),
+    email: z.string().optional(),
+    emailValidated: z.number().optional().default(0),
     spareEmail: z.string().optional(),
     spareEmailValidated: z.number().optional().default(0),
     twoFactorAuthentication: z.boolean().optional().default(false),

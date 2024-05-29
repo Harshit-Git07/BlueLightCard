@@ -30,11 +30,13 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
                 "likeType": "Like",
           },
           {
+              "email": "rlimbu+work1@bluelightcard.co.uk",
               "spare_email": "rlimbu+work1@bluelightcard.co.uk",
               "merged_uid": false,
               "organisation": "AMBU",
               "employer_id": "0",
               "gender": "F",
+              "email_validated": 1,
               "spare_email_validated": 1,
               "mobile": "+447915507274",
               "surname": "limbu",
@@ -65,7 +67,7 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
       expect(dynamoMock.calls()).toHaveLength(1);
       expect(res).toEqual({
         statusCode: 200,
-        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":\"1987-12-27\",\"gender\":\"F\",\"mobile\":\"+447915507274\",\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":\"1695220641\"}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\",\"brand\":\"BLC_UK\"}}",
+        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":\"1987-12-27\",\"gender\":\"F\",\"mobile\":\"+447915507274\",\"email\":\"rlimbu+work1@bluelightcard.co.uk\",\"emailValidated\":0,\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":\"1695220641\"}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\",\"brand\":\"BLC_UK\"}}",
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
@@ -152,6 +154,8 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
               "organisation": "AMBU",
               "employer_id": "0",
               "gender": null,
+              "email": "rlimbu+work1@bluelightcard.co.uk",
+              "email_validated": 1,
               "spare_email_validated": 1,
               "mobile": null,
               "surname": "limbu",
@@ -175,7 +179,7 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
 
       expect(res).toEqual({
         statusCode: 200,
-        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":null,\"gender\":null,\"mobile\":null,\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":null}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\",\"brand\":\"BLC_UK\"}}",
+        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":null,\"gender\":null,\"mobile\":null,\"email\":\"rlimbu+work1@bluelightcard.co.uk\",\"emailValidated\":0,\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":null}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\",\"brand\":\"BLC_UK\"}}",
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
@@ -209,6 +213,8 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
               "organisation": "AMBU",
               "employer_id": "0",
               "gender": null,
+              "email": "rlimbu+work1@bluelightcard.co.uk",
+              "email_validated": 1,
               "spare_email_validated": 1,
               "mobile": null,
               "surname": "limbu",
@@ -232,7 +238,7 @@ jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid':
 
       expect(res).toEqual({
         statusCode: 200,
-        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":null,\"gender\":null,\"mobile\":null,\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":null}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\",\"brand\":\"BLC_UK\"}}",
+        body: "{\"message\":\"User Found\",\"data\":{\"profile\":{\"firstname\":\"rubi\",\"surname\":\"limbu\",\"organisation\":\"AMBU\",\"dob\":null,\"gender\":null,\"mobile\":null,\"email\":\"rlimbu+work1@bluelightcard.co.uk\",\"emailValidated\":0,\"spareEmailValidated\":0,\"twoFactorAuthentication\":false},\"cards\":[{\"cardId\":\"3470584\",\"expires\":\"1758365897\",\"cardStatus\":\"PHYSICAL_CARD\",\"datePosted\":null}],\"companies_follows\":[{\"companyId\":\"123\",\"likeType\":\"Like\"}],\"legacyId\":2853201,\"uuid\":\"068385bb-b370-4153-9474-51dd0bfac9dc\",\"brand\":\"BLC_UK\"}}",
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'

@@ -49,9 +49,9 @@ export class RedemptionsStackConfigResolver {
         'https://www.bluelightcard.com.au',
         'https://www.defencediscountservice.co.uk',
       ],
-      brazeVaultEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID),
-      brazeGenericEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID),
-      brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
+      brazeVaultEmailCampaignId: '23555377-445a-838a-74a0-0c274c8ae2f8',
+      brazeGenericEmailCampaignId: '091d0923-b2a8-4884-9955-df72b8993e64',
+      brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
     };
   }

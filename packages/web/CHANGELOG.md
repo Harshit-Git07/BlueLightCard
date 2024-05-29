@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.58.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.58.0...bluelightcard/web-v1.58.1) (2024-05-29)
+
+
+### Bug Fixes
+
+* parametrise vault redemption experiment id and store as environment variable ([#1478](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1478)) ([d9f56fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9f56fb99bfef5e17aeee49d367590defc2f483b))
+
 ## [1.58.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.57.1...bluelightcard/web-v1.58.0) (2024-05-29)
 
 

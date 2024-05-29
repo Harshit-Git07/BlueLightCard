@@ -22,7 +22,7 @@ function createUserData({ uuid, brand, name, legacyUserId }: UserData) {
     dob: '2002-04-10',
     gender: '',
     mobile: '',
-    email: 'test@gmail.com',
+    email: '',
     emailValidated: 1,
     spareemail: '',
     spareemailvalidated: true,

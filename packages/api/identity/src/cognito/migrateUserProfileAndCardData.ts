@@ -8,7 +8,7 @@ import { getCardStatus } from './../../../core/src/utils/getCardStatus';
 const service: string = process.env.SERVICE as string;
 const tableName = process.env.TABLE_NAME;
 const idMappingtableName = process.env.ID_MAPPING_TABLE_NAME;
-const logger = new Logger({ serviceName: `${service}-migrateUserProfileAndCardData` });
+const logger = new Logger({ serviceName: `${service}-migrateUserProfileAndCardData`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 const sqs = new SQS();
 
 // Function to send a message to SQS Queue
@@ -110,7 +110,7 @@ export const handler = async (event: any, context: any) => {
         sk: oldProfileUuid !== null ? oldProfileUuid : `PROFILE#${profileUuid}`,
         firstname: event.detail.name,
         surname: event.detail.surname,
-        email: event.detail.email,
+        email: event.detail.email === "" ? "NA" : event.detail.email ?? "NA",
         email_validated: event.detail.emailValidated,
         spare_email: event.detail.spareemail === "" ? "NA" : event.detail.spareemail ?? "NA",
         spare_email_validated: event.detail.spareemailvalidated,

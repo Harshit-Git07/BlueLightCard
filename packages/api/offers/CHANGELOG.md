@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.32.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.31.0...bluelightcard/offers-v1.32.0) (2024-05-29)
+
+
+### Features
+
+* [DISCO-266] Remove redundant comment ([#1476](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1476)) ([c65f433](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c65f4334948e9120c7f0d3a28fb04fe87375dfad))
+
 ## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.30.0...bluelightcard/offers-v1.31.0) (2024-05-28)
 
 

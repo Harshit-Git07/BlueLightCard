@@ -26,11 +26,7 @@ const dataType: DataType[] = [
 ];
 
 const shouldEventBeProcessed = (s3EventSource: string): boolean => {
-  if (process.env.USE_REGIONAL_MENUS_BUCKET === 'true') {
-    return s3EventSource === process.env.REGIONAL_MENUS_BUCKET;
-  } else {
-    return s3EventSource === process.env.LEGACY_MENUS_BUCKET;
-  }
+  return s3EventSource === process.env.REGIONAL_MENUS_BUCKET;
 };
 
 export const handler = async (event: any) => {

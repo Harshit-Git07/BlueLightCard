@@ -129,7 +129,6 @@ jobs:
       DEV_BASE_URL: http://localhost:8080
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: blc-uk
-      USE_REGIONAL_MENUS_BUCKET: true
     outputs:
       offers-api-endpoint: ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
     steps:

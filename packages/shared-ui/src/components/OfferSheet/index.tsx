@@ -1,5 +1,5 @@
-import { SharedProps } from '../../types';
-import { FC, useEffect } from 'react';
+import { PlatformVariant, SharedProps } from '../../types';
+import { FC, useEffect, useState } from 'react';
 import DynamicSheet from '../DynamicSheet';
 import { offerSheetAtom } from './store';
 import OfferSheetControler from './components/OfferSheetControler';
@@ -13,8 +13,9 @@ export type Props = SharedProps & {
 
 const OfferSheet: FC<Props> = () => {
   const platformAdapter = usePlatformAdapter();
-  const { isOpen, offerMeta, offerDetails, amplitudeEvent, redemptionType } =
+  const { isOpen, offerMeta, offerDetails, amplitudeEvent, redemptionType, responsiveWeb } =
     useAtomValue(offerSheetAtom);
+  const [currentScrollPos, setCurrentScrollPos] = useState(0);
 
   useEffect(() => {
     if (
@@ -41,12 +42,18 @@ const OfferSheet: FC<Props> = () => {
 
   // Manage scrollbar when offer sheet opens/closes
   useEffect(() => {
+    if (responsiveWeb && window.scrollY > 0) setCurrentScrollPos(window.scrollY);
     if (isOpen) {
       // Disable scrollbar when offer sheet opens
       document.body.style.overflow = 'hidden';
+      if (responsiveWeb) document.body.style.position = 'fixed';
     } else {
       // Re-enable scrollbar when offer sheet closes
       document.body.style.overflow = 'visible';
+      if (responsiveWeb) {
+        document.body.style.position = 'relative';
+        window.scrollTo({ top: currentScrollPos, behavior: 'instant' as ScrollBehavior });
+      }
     }
   }, [isOpen]);
 

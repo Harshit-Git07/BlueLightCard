@@ -13,6 +13,7 @@ export const initializeOfferSheetAtom = () => {
     // TODO: Remove this (use platform adapter directly)
     amplitudeEvent: ((arg: AmplitudeArg) => {}) as AmplitudeEvent | null,
     redemptionType: '' as RedemptionType | undefined,
+    responsiveWeb: false as boolean | undefined,
   };
 };
 

@@ -11,6 +11,7 @@ type OfferData = {
   companyName: string;
   platform: PlatformVariant;
   amplitudeCtx?: Amplitude | null | undefined;
+  responsiveWeb?: boolean;
 };
 
 type IOfferDetailsContext = {
@@ -47,6 +48,7 @@ export const ViewOfferProvider: FC<ViewOfferProviderProps> = ({ children }) => {
       companyName: offerData.companyName,
       platform: offerData.platform,
       amplitudeCtx: offerData.amplitudeCtx,
+      responsiveWeb: offerData.responsiveWeb,
     });
     setOfferAtom((prev) => ({ ...prev, isOpen: true, onClose }));
   }

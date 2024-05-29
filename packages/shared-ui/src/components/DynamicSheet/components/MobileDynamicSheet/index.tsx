@@ -40,7 +40,7 @@ const MobileDynamicSheet: FC<Props> = ({
   return (
     <div className="absolute h-100 bg-transparent">
       <div className={containerCss} onClick={() => outsideClickClose && onClose && onClose()}></div>
-      <div className={`${animatedCss} h-[80%] bottom-[-80%]`}>
+      <div className={`${animatedCss} h-[90%] bottom-[-90%]`}>
         {showCloseButton && (
           <div className="w-full flex justify-end p-4">
             <FontAwesomeIcon

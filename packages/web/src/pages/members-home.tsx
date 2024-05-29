@@ -38,6 +38,7 @@ import { useRouter } from 'next/router';
 import { useBrazeContentCards } from '@/hooks/useBrazeContentCards';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeContext from '../common/context/AmplitudeContext';
+import { useMedia } from 'react-use';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -78,6 +79,7 @@ const HomePage: NextPage<any> = () => {
 
   const contentCards = useBrazeContentCards();
   const router = useRouter();
+  const isMobile = useMedia('(max-width: 500px)');
 
   const brazeContentCardsEnabled = useAmplitudeExperiment(
     AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
@@ -144,6 +146,7 @@ const HomePage: NextPage<any> = () => {
       companyName: companyName,
       platform: PlatformVariant.Web,
       amplitudeCtx: amplitude,
+      responsiveWeb: isMobile,
     });
   }
 

@@ -70,6 +70,7 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
     companyName: string;
     platform: PlatformVariant;
     amplitudeCtx?: Amplitude | null | undefined;
+    responsiveWeb?: boolean | undefined;
   }): Promise<void> {
     const redemptionType = await setRedemptionsDetails(offerData.offerId);
     const experiment = getPlatformExperimentForRedemptionType(platformAdapter, redemptionType);
@@ -85,6 +86,7 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
       amplitudeEvent: ({ event, params }) => {
         platformAdapter.logAnalyticsEvent(event, params, offerData?.amplitudeCtx);
       },
+      responsiveWeb: offerData.responsiveWeb,
     }));
   }
 

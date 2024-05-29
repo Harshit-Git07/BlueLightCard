@@ -5,7 +5,8 @@ import { RedemptionType } from '../OfferSheet/types';
 export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, string | null>> = {
   vault: {
     [PlatformVariant.Web]:
-      process.env.NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB ?? null,
+      process.env.NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB ??
+      'offer-sheet-redeem-vault-search-and-homepage-web',
     [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-vault-app',
   },
   generic: {

@@ -126,9 +126,6 @@ jobs:
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: blc-uk
       USE_REGIONAL_MENUS_BUCKET: true
-      BRAZE_VAULT_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_VAULT_EMAIL_CAMPAIGN_ID }}'
-      BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID }}'
-      BRAZE_API_URL: '${{ vars.BRAZE_API_URL }}'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

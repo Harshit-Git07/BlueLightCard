@@ -26,6 +26,7 @@ const dataType: DataType[] = [
 ];
 
 const shouldEventBeProcessed = (s3EventSource: string): boolean => {
+  // Validate that the correct bucket is being referenced
   if (process.env.USE_REGIONAL_MENUS_BUCKET === 'true') {
     return s3EventSource === process.env.REGIONAL_MENUS_BUCKET;
   } else {

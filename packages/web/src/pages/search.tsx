@@ -7,7 +7,7 @@ import React, { useContext, useEffect } from 'react';
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { makeQuery } from 'src/graphql/makeQuery';
 
-import { BRAND, CDN_URL } from '@/global-vars';
+import { AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB, BRAND, CDN_URL } from '@/global-vars';
 import { advertQuery } from 'src/graphql/advertQuery';
 
 import Image from '@/components/Image/Image';
@@ -41,6 +41,7 @@ import {
 import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import Container from '@/components/Container/Container';
 import AmplitudeContext from '../common/context/AmplitudeContext';
+import { z } from 'zod';
 
 const he = require('he');
 
@@ -175,7 +176,7 @@ const Search: NextPage = () => {
 
   // Offer Sheet Experiment
   const searchOfferSheetExperiment = useAmplitudeExperiment(
-    'offer-sheet-redeem-vault-search-and-homepage-web',
+    z.string().parse(AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB),
     'control'
   );
 

@@ -35,7 +35,7 @@ const PillsController: FC = () => {
                   pillType !== 'All' &&
                   !offers?.find((offer: OfferModel) => offer.type === pillType)
                 }
-                platform={PlatformVariant.Mobile}
+                platform={PlatformVariant.MobileHybrid}
               />
             </div>
           );

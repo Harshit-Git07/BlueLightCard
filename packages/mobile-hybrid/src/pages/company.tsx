@@ -62,8 +62,8 @@ const Company: NextPage<any> = () => {
           method: 'GET',
         });
 
-        const company = companyResponseModel.parse(JSON.parse(companyResponse.body));
-        const offers = offerResponseModel.parse(JSON.parse(offersResponse.body));
+        const company = companyResponseModel.parse(JSON.parse(companyResponse.data));
+        const offers = offerResponseModel.parse(JSON.parse(offersResponse.data));
 
         setCompany({
           companyId: company.data.id,
@@ -89,7 +89,7 @@ const Company: NextPage<any> = () => {
         <CompanyAbout
           CompanyName={`About ${company?.companyName ?? ''}`}
           CompanyDescription={company?.companyDescription ?? ''}
-          platform={PlatformVariant.Mobile}
+          platform={PlatformVariant.MobileHybrid}
         />
       </div>
     </div>

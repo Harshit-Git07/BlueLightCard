@@ -227,7 +227,7 @@ describe('Search results', () => {
 
   const useGivenSearchResultsAreReturnedFromTheAPI = (data: SearchResultsV5 = testDataV5) => {
     return useMockPlatformAdapter(200, {
-      data: testDataV5,
+      data,
     });
   };
 
@@ -266,7 +266,7 @@ describe('Search results', () => {
         <JotaiTestProvider
           initialValues={[
             [searchTerm, term],
-            [searchResults, existingSearchResults],
+            [searchResults, { results: existingSearchResults, term: undefined }],
             [
               experimentsAndFeatureFlags,
               {

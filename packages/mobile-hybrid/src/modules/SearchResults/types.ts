@@ -31,5 +31,9 @@ export interface OfferListItem {
 }
 export type SearchResults = SearchResult[];
 export type SearchResultsV5 = SearchResultV5[];
+export type SearchResultsWrapper = {
+  results: SearchResults;
+  term: string | undefined;
+};
 
 export type SearchQuery = NativeAPICall.Parameters['parameters'];

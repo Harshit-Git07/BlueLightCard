@@ -1,8 +1,8 @@
 import { atom } from 'jotai';
-import { SearchResults } from './types';
+import { SearchResultsWrapper } from './types';
 
 // store search results
-export const searchResults = atom<SearchResults>([]);
+export const searchResults = atom<SearchResultsWrapper>({ results: [], term: undefined });
 
 // store search term
 export const searchTerm = atom<string | undefined>(undefined);

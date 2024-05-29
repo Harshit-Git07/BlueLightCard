@@ -96,7 +96,7 @@ describe('Search Results', () => {
     it('should show the spinner when search is made', async () => {
       whenPageIsRenderedWithFlags({ [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'control' });
 
-      const spinner = screen.queryByRole('progressbar');
+      const spinner = screen.findByRole('progressbar');
       expect(spinner).toBeTruthy();
     });
 
@@ -111,7 +111,7 @@ describe('Search Results', () => {
       );
 
       await waitFor(() => {
-        const spinner = screen.queryByRole('progressbar');
+        const spinner = screen.findByRole('progressbar');
         expect(spinner).toBeTruthy();
       });
     });

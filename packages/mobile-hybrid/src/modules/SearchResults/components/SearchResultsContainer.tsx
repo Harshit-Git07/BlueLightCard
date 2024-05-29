@@ -16,7 +16,7 @@ const analytics = new InvokeNativeAnalytics();
  */
 const SearchResultsContainer: FC = () => {
   const { viewOffer } = useOfferDetails();
-  const results = useAtomValue(searchResults);
+  const resultsWrapper = useAtomValue(searchResults);
   const term = useAtomValue(searchTerm);
   const setSpinner = useSetAtom(spinner);
 
@@ -49,7 +49,7 @@ const SearchResultsContainer: FC = () => {
         company_name: companyName,
         offer_id: offerId,
         offer_name: offerName,
-        number_of_results: results.length,
+        number_of_results: resultsWrapper.results.length,
         search_term: term,
         search_result_number: searchResultNumber,
       },
@@ -64,14 +64,14 @@ const SearchResultsContainer: FC = () => {
   };
 
   useEffect(() => {
-    if (results && results.length > 0) {
-      logSearchResultsListViewedAnalytic(results.length);
+    if (resultsWrapper && resultsWrapper.results.length > 0) {
+      logSearchResultsListViewedAnalytic(resultsWrapper.results.length);
     }
     setSpinner(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [results, setSpinner]);
+  }, [resultsWrapper.term, resultsWrapper.results, setSpinner]);
 
-  return <SearchResultsPresenter results={results} onOfferClick={onOfferClick} />;
+  return <SearchResultsPresenter results={resultsWrapper.results} onOfferClick={onOfferClick} />;
 };
 
 export default SearchResultsContainer;

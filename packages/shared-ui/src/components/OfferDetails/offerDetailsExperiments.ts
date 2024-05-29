@@ -6,7 +6,7 @@ export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, s
   vault: {
     [PlatformVariant.Web]:
       process.env.NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB ??
-      'offer-sheet-redeem-vault-search-and-homepage-web',
+      'offer-sheet-redeem-vault-search-and-homepage-web-2',
     [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-vault-app',
   },
   generic: {

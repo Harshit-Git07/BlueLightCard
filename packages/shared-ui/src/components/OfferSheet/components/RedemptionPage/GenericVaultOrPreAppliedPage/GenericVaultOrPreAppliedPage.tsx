@@ -158,7 +158,7 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
             onClick={() => {
               if (
                 !isRedeemDataErrorResponse(props.redeemData) &&
-                platformAdapter.platform === PlatformVariant.MobileHybrid
+                platformAdapter.platform === PlatformVariant.Web
               ) {
                 copyCodeAndRedirect(
                   props.redeemData?.redemptionDetails?.code,

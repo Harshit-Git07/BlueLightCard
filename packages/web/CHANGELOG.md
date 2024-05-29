@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.58.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.57.1...bluelightcard/web-v1.58.0) (2024-05-29)
+
+
+### Features
+
+* Trigger build ([#1444](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1444)) ([e4bdbf2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4bdbf202bd0994cb0730e3d53e17e812b6e5f75))
+
+
+### Bug Fixes
+
+* Find out more on OfferCard redirected user instead of triggering onClick ([3baca74](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3baca748438c56cac495b1b947e66902df56f9f9))
+* parametrise vault redemption experiment id and store as environment variable ([#1470](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1470)) ([10c9416](https://github.com/bluelightcard/BlueLightCard-2.0/commit/10c9416d96e1790b5871234a90e09ef34468e381))
+
 ## [1.57.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.57.0...bluelightcard/web-v1.57.1) (2024-05-23)
 
 

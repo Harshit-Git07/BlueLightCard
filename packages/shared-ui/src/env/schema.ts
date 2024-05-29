@@ -8,7 +8,7 @@ export const sharedEnvVars: EnvVarObject = {
 };
 
 export const envSchema = z.object({
-  APP_BRAND: z.enum(['blc-uk', 'blc-au', 'dds-uk']).default('blc-uk'),
+  APP_BRAND: z.enum(['blc-uk-current', 'blc-uk', 'blc-au', 'dds-uk']).default('blc-uk'),
   FLAG_NEW_TOKENS: z
     .enum(['true', 'false'])
     .transform((value) => value === 'true')

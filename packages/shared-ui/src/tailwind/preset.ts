@@ -1,10 +1,11 @@
 import StyleDictionary from 'style-dictionary';
+import { registerTransforms, transforms } from '@tokens-studio/sd-transforms';
+import { Config } from 'tailwindcss';
 import baseConfig from './baseConfig';
 import { BrandToken, PresetOptions } from './types';
 import { getTokenSourcePaths } from './utils/tokens';
 import { tailwindCSSTransform } from './utils/tailwind';
-import { registerTransforms, transforms } from '@tokens-studio/sd-transforms';
-import { Config } from 'tailwindcss';
+import { EnvSchemaType } from '../env/types';
 
 registerTransforms(StyleDictionary);
 
@@ -15,11 +16,15 @@ StyleDictionary.registerTransformGroup({
 
 /**
  * Injects brand tokens
- * @param brand brand token name
+ * @param brand global brand name
  */
-export function createBrandedPreset(brand: BrandToken, options?: PresetOptions) {
+export function createBrandedPreset(
+  globalBrand: EnvSchemaType['APP_BRAND'],
+  options?: PresetOptions,
+) {
   const baseTailwindConfig = baseConfig as typeof baseConfig & Pick<Config, 'darkMode'>;
-  const sources = getTokenSourcePaths(brand);
+  const toBrandToken = globalBrand.split('-')[0] as BrandToken;
+  const sources = getTokenSourcePaths(toBrandToken);
 
   const styleDictionary = StyleDictionary.extend({
     source: sources,

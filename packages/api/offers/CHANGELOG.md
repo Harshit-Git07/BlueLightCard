@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.32.0...bluelightcard/offers-v1.33.0) (2024-05-29)
+
+
+### Features
+
+* Feature/disco 246 remove legacy menu buckets ([#1482](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1482)) ([633f061](https://github.com/bluelightcard/BlueLightCard-2.0/commit/633f0614192836b954570f001f8e386cbe7f16c4))
+
 ## [1.32.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.31.0...bluelightcard/offers-v1.32.0) (2024-05-29)
 
 

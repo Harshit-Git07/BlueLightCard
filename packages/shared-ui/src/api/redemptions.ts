@@ -57,7 +57,7 @@ export type RedeemDataStateData = {
   data: RedeemData;
 };
 
-export const isRedeemDataErrorResponse = (data: RedeemData): data is RedeemDataMessage => {
+export const isRedeemDataMessage = (data: RedeemData): data is RedeemDataMessage => {
   return 'message' in data;
 };
 export async function redeemOffer(

@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.17.2...bluelightcard/mobile-hybrid-v1.18.0) (2024-05-30)
+
+
+### Features
+
+* added preset to mobile-hybird with new tokens ([#1394](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1394)) ([5d3d3f3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5d3d3f3cd5d4ebdef8d19299220ad4c43917704e))
+* Mobile Hybrid Company Page ([#1368](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1368)) ([d83cec0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d83cec0486b403cecfacfdd9ffe8c72d2961bf29))
+* resolve build issue and added new tokens ([#1434](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1434)) ([d893d38](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d893d38fc7c28117b36f777ef643f8de4ee85f5b))
+* TR-605 add one click back to mobile ([8b9c15e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b9c15ebc0777dfc114d5207b1764426e965196d))
+* TR-605 add one click back to mobile ([#1464](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1464)) ([8b9c15e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b9c15ebc0777dfc114d5207b1764426e965196d))
+* Trigger build ([#1444](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1444)) ([e4bdbf2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4bdbf202bd0994cb0730e3d53e17e812b6e5f75))
+
+
+### Bug Fixes
+
+* Company page offer sheet controller ([#1465](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1465)) ([2ea169f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ea169fa183ec8011ccce6e0c1b14a043e669afa))
+* Company page Platform adapter usage update ([#1471](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1471)) ([372f511](https://github.com/bluelightcard/BlueLightCard-2.0/commit/372f511f293a6863d8b3eddd8521878640546d9f))
+* disco 315 empty search results not clearing spinner ([#1469](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1469)) ([225f787](https://github.com/bluelightcard/BlueLightCard-2.0/commit/225f78746973c8b54143381962c11556a7b7fa80))
+* fix issue with brand preset ([#1437](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1437)) ([7cb4893](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7cb48933cba40c4b308a7f8c14fccbfa9de02e59))
+* trigger build reverting mobile one tap ([3a3279b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a3279bda80ea79b66f04ba3be0e2dd7cbdab24e))
+* trigger build reverting mobile one tap ([3a3279b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a3279bda80ea79b66f04ba3be0e2dd7cbdab24e))
+* update env vars ([#1481](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1481)) ([fe23b2f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fe23b2f680656817cc5c6abc97302740fa74a8e4))
+
+
+### Other Changes
+
+* disco 314 handle switching off tailwind directives ([#1474](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1474)) ([09aaea1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/09aaea171e36a318eeba33fee9595378de25b1d7))
+
 ## [1.17.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.17.1...bluelightcard/mobile-hybrid-v1.17.2) (2024-05-23)
 
 

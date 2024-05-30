@@ -111,7 +111,7 @@ export const handler = async (event: any, context: any) => {
         firstname: event.detail.name,
         surname: event.detail.surname,
         email: event.detail.email === "" ? "NA" : event.detail.email ?? "NA",
-        email_validated: event.detail.emailValidated,
+        email_validated: event.detail.emailValidated ?? 0,
         spare_email: event.detail.spareemail === "" ? "NA" : event.detail.spareemail ?? "NA",
         spare_email_validated: event.detail.spareemailvalidated,
         organisation: event.detail.service,

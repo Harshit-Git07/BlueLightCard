@@ -16,7 +16,7 @@ const oldClientSecret = process.env.OLD_CLIENT_SECRET
 const oldUserPoolId = process.env.OLD_USER_POOL_ID
 const apiUrl = process.env.API_URL
 const apiAuth = process.env.API_AUTH
-const logger = new Logger({ serviceName: `${service}-migration` });
+const logger = new Logger({ serviceName: `${service}-migration`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 const sqs = new SQS();
 
 const accountStatusErrors: { [key: string]: string} = {

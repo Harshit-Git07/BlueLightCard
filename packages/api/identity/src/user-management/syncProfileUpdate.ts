@@ -13,7 +13,7 @@ import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
 
 const service: string = process.env.SERVICE as string
 const tableName = process.env.TABLE_NAME;
-const logger = new Logger({ serviceName: `${service}-syncProfileStatusUpdate` })
+const logger = new Logger({ serviceName: `${service}-syncProfileStatusUpdate`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' })
 const sqs = new SQSClient({ region: process.env.REGION ?? 'eu-west-2'});
 
 const client = new DynamoDBClient({region: process.env.REGION ?? 'eu-west-2'});
@@ -25,6 +25,7 @@ const validateFormData = (data: UserProfile) => {
     data.ga_key === undefined && data.gender === undefined && 
     data.merged_time === undefined && data.merged_uid === undefined && 
     data.mobile === undefined && data.organisation === undefined && 
+    data.email === undefined && data.email_validated === undefined && 
     data.spare_email === undefined && data.spare_email_validated === undefined){
             return false;
     }

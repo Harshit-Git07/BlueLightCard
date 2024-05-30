@@ -1,5 +1,11 @@
-import '@/styles/globals.css';
-import '@/styles/carousel.css';
+if (process.env.NEXT_PUBLIC_FLAG_NEW_TOKENS === 'true') {
+  require('@/styles/v2/globals.css');
+  require('@/styles/v2/carousel.css');
+} else {
+  require('@/styles/globals.css');
+  require('@/styles/carousel.css');
+}
+
 import type { AppProps } from 'next/app';
 import dayjs from 'dayjs';
 import CustomParseFormat from 'dayjs/plugin/customParseFormat';

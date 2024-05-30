@@ -14,9 +14,9 @@ export const UserModel = createZodNamedType(
     uuid: z.string().optional(),
     service: z.string().optional(),
     email: z.string().optional(),
-    emailValidated: z.number().optional().default(0),
-    spareEmail: z.string().optional(),
-    spareEmailValidated: z.number().optional().default(0),
+    email_validated: z.number().optional().default(0),
+    spare_email: z.string().optional(),
+    spare_email_validated: z.number().optional().default(0),
     twoFactorAuthentication: z.boolean().optional().default(false),
   }).transform(user => ({
     ...user,

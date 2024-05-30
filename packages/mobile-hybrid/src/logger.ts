@@ -9,7 +9,6 @@ export class Logger {
 
   /**
    * @description Creates a singleton
-   * @param options
    * @returns
    */
   public static getInstance(): Logger {

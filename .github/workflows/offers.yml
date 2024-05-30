@@ -97,7 +97,7 @@ jobs:
             stagingBaseUrl_dds: https://ddsstaging.bluelightcard.tech
             legacyApiRetrieveOffersEndpoint_dds: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix_dds: dds-uk
-            ddsEnabled: 'true'
+            ddsEnabled: 'false'
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             stagingBaseUrl: https://develop.bluelightcard.com.au

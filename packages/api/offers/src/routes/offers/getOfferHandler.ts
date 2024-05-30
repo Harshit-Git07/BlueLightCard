@@ -4,13 +4,13 @@ import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda'
 import { Response } from '../../../../core/src/utils/restResponse/response';
 import { HttpStatusCode } from '../../../../core/src/types/http-status-code.enum';
 import { LegacyCompanyOffersResponse } from '../../models/legacy/legacyCompanyOffers';
-import { getLegacyUserId } from '../../utils/getLegacyUserIdFromToken';
 import { CompanyOffersService, ICompanyOffersService } from '../../services/CompanyOffersService';
 import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { getEnvRaw } from '../../../../core/src/utils/getEnv';
 import { checkIfEnvironmentVariablesExist } from '../../utils/validation';
 import { Logger } from '../../../../core/src/utils/logger/logger';
 import { DI_KEYS } from '../../utils/diTokens';
+import { decodeJWT } from '../../utils/decodeJWT';
 
 let isEnvironmentVariableExist = false;
 const service = getEnvRaw('SERVICE');
@@ -36,19 +36,27 @@ export const handler = async (event: APIGatewayEvent) => {
     return Response.Error(Error('Environment variables not set'));
   }
 
+  // Get Offer data
   const offerId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
-  const authToken = event.headers.Authorization ?? '';
-  const uid = getLegacyUserId(authToken);
-  const source = event.headers.source ?? '';
-
-  if (!authToken) {
-    logger.error({ message: 'Authorization token not set' });
-    return Response.Unauthorized({ message: 'Authorization token not set' });
-  }
 
   if (!offerId) {
     logger.error({ message: 'offerId not set' });
     return Response.BadRequest({ message: 'offerId not set' });
+  }
+
+  const authToken = event.headers.Authorization as string;
+  let decodedToken;
+
+  try {
+    decodedToken = decodeJWT(authToken, logger);
+  } catch (error: any) {
+    return Response.Unauthorized({ message: error.message });
+  }
+
+  const { "custom:blc_old_uuid": uid} = decodedToken;
+  if(!uid) {
+    logger.error({message: 'UID missing from JWT when required.'});
+    return Response.Unauthorized({ message: "Missing required information" });
   }
 
   const queryParams = `id=${offerId}&uid=${uid}`;

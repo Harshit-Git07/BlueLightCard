@@ -1,6 +1,9 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import { faker } from '@faker-js/faker';
 
+
+const mockJWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJMYW1iZGEgRXZlbnQgTW9jayIsImlhdCI6MTcxNjkwNDk4MiwiZXhwIjoxODkzNDU2MDAwLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiY3VzdG9tOmJsY19vbGRfdXVpZCI6IjEyMzQifQ.hQyXGQHtk_ofluESJbVY_hWrFE5xiGIl9DQVTS6qr-E';
+
 export function mockLambdaEvent(
   path: string,
   method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE',
@@ -12,7 +15,7 @@ export function mockLambdaEvent(
     body: '',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${faker.string.alphanumeric(20)}`,
+      Authorization: `Bearer ${mockJWT}`,
     },
     multiValueHeaders: {},
     httpMethod: method,

@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
 import { Response } from '@blc-mono/core/src/utils/restResponse/response';
 import { LegacyCompanyOffersResponse } from '../../../models/legacy/legacyCompanyOffers';
-import { getLegacyUserId } from '../../../utils/getLegacyUserIdFromToken';
 import { getEnvRaw } from '../../../../../core/src/utils/getEnv';
 import {
   CompanyOffersService,
@@ -13,6 +12,7 @@ import { checkIfEnvironmentVariablesExist } from '../../../utils/validation';
 import { DI_KEYS } from '../../../utils/diTokens';
 import { Logger } from '../../../../../core/src/utils/logger/logger';
 import { container } from 'tsyringe';
+import { decodeJWT } from '../../../utils/decodeJWT';
 
 let isEnvironmentVariableExist = false;
 const service = getEnvRaw('SERVICE');
@@ -35,20 +35,26 @@ export const handler = async (event: APIGatewayEvent) => {
     return Response.Error(Error('Environment variables not set'));
   }
   //process API gateway event
-  const companyId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
+
+  // Validate Authentication
   const authToken = event.headers.Authorization as string;
-  const uid = getLegacyUserId(authToken);
+  let decodedToken;
 
-  if (!authToken) {
-    logger.error({ message: 'Authorization token not set' });
-    return Response.Unauthorized({ message: 'Authorization token not set' });
+  try {
+    decodedToken = decodeJWT(authToken, logger);
+  } catch (error: any) {
+    return Response.Unauthorized({ message: error.message });
   }
+  const { "custom:blc_old_uuid": uid} = decodedToken;
 
-  if (!uid) {
-    logger.error({ message: 'uid not set' });
-    return Response.Unauthorized({ message: 'uid not set' });
+  if(!uid) {
+    logger.error({message: 'UID missing from JWT when required.'});
+    return Response.Unauthorized({ message: "Missing required information" });
   }
-
+  
+  // Get company id
+  const companyId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
+  
   if (!companyId) {
     logger.error({ message: 'companyId not set' });
     return Response.BadRequest({ message: 'companyId not set' });

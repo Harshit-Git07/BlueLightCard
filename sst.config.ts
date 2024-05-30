@@ -6,6 +6,7 @@ import { Shared } from './stacks/stack';
 import { Redemptions } from './packages/api/redemptions/infrastructure/stack';
 import { MemberServicesHub } from './packages/member-services-hub/stack';
 import { Discovery } from "./packages/api/discovery/infrastructure/stack";
+import { DDS_UK } from '@blc-mono/offers/src/utils/global-constants';
 
 export default {
   config(_input) {
@@ -22,6 +23,9 @@ export default {
         JWT_SECRET: process.env.JWT_SECRET ?? 'secret',
       },
     });
+
+    const isDDSEnabled = process.env.DDS_ENABLED === 'true';
+
     // Remove all resources in the stack for preview environments
     if (app.stage !== 'production' && app.stage !== 'staging') {
       app.setDefaultRemovalPolicy('destroy');
@@ -32,6 +36,7 @@ export default {
       // Add async stacks here https://docs.sst.dev/constructs/Stack#async-stacks
       app.stack(Redemptions, { id: 'redemptions' }),
       app.stack(Offers, { id: 'offers' }),
+      isDDSEnabled ? app.stack(Offers, { stackName: `${app.stage}-${DDS_UK}-offers` }) : undefined,
       app.stack(Discovery, { id: 'discovery' }),
     ]);
 

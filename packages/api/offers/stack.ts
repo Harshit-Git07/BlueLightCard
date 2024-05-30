@@ -18,6 +18,7 @@ import { EC2Manager } from './src/constructs/ec2-manager';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { IDatabaseAdapter } from './src/constructs/database/IDatabaseAdapter';
 import { DatabaseAdapter } from './src/constructs/database/adapter';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 export async function Offers({ stack, app }: StackContext) {
   new Tags(stack);
@@ -54,8 +55,8 @@ export async function Offers({ stack, app }: StackContext) {
   new EventBridge(stack, stack.stage, tables, queues);
 
   stack.addOutputs({
-    OffersApiEndpoint: offersApi.api.graphqlUrl,
-    OffersApiGatewayEndpoint: offersApiGateway.restApi.url,
+    [generateConstructId('OffersApiEndpoint', stack.stackName)]: offersApi.api.graphqlUrl,
+    [generateConstructId('OffersApiGatewayEndpoint', stack.stackName)]: offersApiGateway.restApi.url,
   });
 
   return {

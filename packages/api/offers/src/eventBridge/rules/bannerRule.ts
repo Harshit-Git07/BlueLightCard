@@ -1,7 +1,8 @@
 import { IQueue } from 'aws-cdk-lib/aws-sqs';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
-export const bannerRule = (tableName: string, queue: IQueue) => ({
-  bannerRule: {
+export const bannerRule = (tableName: string, queue: IQueue, stackName: string) => ({
+  [`${generateConstructId('bannerRule', stackName)}`]: {
     pattern: { source: ['banner.created', 'banner.updated', 'banner.deleted'] },
     targets: {
       bannerFunction: {

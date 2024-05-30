@@ -1,6 +1,7 @@
 import { CfnApiCache, GraphqlApi } from "aws-cdk-lib/aws-appsync";
 import { Duration, Stack } from "aws-cdk-lib";
 import { isDev } from "../../../core/src/utils/checkEnvironment";
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 export class AppsyncCache {
 
@@ -12,7 +13,7 @@ export class AppsyncCache {
   }
 
   private createApiCache(): CfnApiCache {
-    return  new CfnApiCache(this.stack, `${this.stage}-OffersApiCache`, {
+    return  new CfnApiCache(this.stack, generateConstructId(`${this.stage}-OffersApiCache`, this.stack.stackName), {
       apiCachingBehavior: 'PER_RESOLVER_CACHING',
       type: 'LARGE',
       ttl: Duration.minutes(5).toSeconds(),

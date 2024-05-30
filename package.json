@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm -ws run --if-present pre:dev && sst dev",
+    "dev-aus": "npm -ws run --if-present pre:dev && sst dev --region ap-southeast-2",
     "build": "sst build",
     "deploy": "sst deploy",
     "remove": "sst remove",

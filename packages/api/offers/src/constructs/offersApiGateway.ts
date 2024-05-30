@@ -8,6 +8,7 @@ import { ENVIRONMENTS, OFFERS_DOMAIN_NAME } from '../utils/global-constants';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { REGIONS } from '@blc-mono/core/types/regions.enum';
 import { Tables } from './tables';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 /**
  * Sets up and configures the API Gateway for the offers application, including defining routes and authorizers.
@@ -57,7 +58,7 @@ export class OffersApiGateway {
       [REGIONS.AP_SOUTHEAST_2]: OFFERS_DOMAIN_NAME.AUS,
     };
 
-    return new ApiGatewayV1Api(this.stack, 'offers', {
+    return new ApiGatewayV1Api(this.stack, generateConstructId('offers', this.stack.stackName), {
       authorizers: {
         offersAuthorizer: ApiGatewayAuthorizer(this.stack, 'ApiGatewayAuthorizer', this.authorizer),
       },

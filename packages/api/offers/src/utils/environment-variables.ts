@@ -15,13 +15,17 @@ export enum EnvironmentVariablesKeys {
   BANNERS_TABLE_NAME = 'BANNERS_TABLE_NAME'
 }
 
-export const getBLCBaseUrlFromEnv = (stage: string): string => {
+export const getBLCBaseUrlFromEnv = (stage: string, stackName: string): string => {
   switch (stage) {
     case ENVIRONMENTS.PRODUCTION:
-      return process.env.PROD_BASE_URL!;
+      return process.env[getBrandSpecificEnvVar('PROD_BASE_URL', stackName)]!;
     case ENVIRONMENTS.STAGING:
-      return process.env.STAGING_BASE_URL!;
+      return process.env[getBrandSpecificEnvVar('STAGING_BASE_URL', stackName)]!;
     default:
-      return process.env.DEV_BASE_URL!;
+      return process.env[getBrandSpecificEnvVar('DEV_BASE_URL', stackName)]!;
   }
+}
+
+export const getBrandSpecificEnvVar = (envVar: string, stackName: string) => {
+  return stackName.includes('dds') ? `${envVar}_DDS` : envVar;
 }

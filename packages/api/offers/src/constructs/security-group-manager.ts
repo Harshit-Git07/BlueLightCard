@@ -1,7 +1,8 @@
 import { Stack } from 'sst/constructs';
 import { IVpc, Peer, Port, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
-import { DATABASE_PROPS, ENVIRONMENTS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
-import { isDev, isStaging } from '../../../core/src/utils/checkEnvironment';
+import { DATABASE_PROPS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
+import { isStaging } from '../../../core/src/utils/checkEnvironment';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 /**
  * Defines the interface for managing various security groups within the application.
@@ -77,7 +78,7 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    * @return {SecurityGroup} the Aurora Serverless V2 security group
    */
   private createAuroraServerlessV2SecurityGroup(): SecurityGroup {
-    const sg: SecurityGroup = this.builder('AuroraServerlessV2SG', 'Allow MySQL Traffic');
+    const sg: SecurityGroup = this.builder(generateConstructId('AuroraServerlessV2SG', this.stack.stackName), 'Allow MySQL Traffic');
     sg.addIngressRule(
       this.lambdaToRdsSecurityGroup!,
       Port.tcp(DATABASE_PROPS.PORT.valueOf()),
@@ -91,7 +92,7 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    * @return {SecurityGroup} the PR database security group
    */
   private createEphemeralDatabaseSecurityGroup(): SecurityGroup {
-    const sg: SecurityGroup = this.builder('PrDatabaseSG', 'Allow MySQL access from local machine');
+    const sg: SecurityGroup = this.builder(generateConstructId('PrDatabaseSG', this.stack.stackName), 'Allow MySQL access from local machine');
     sg.addIngressRule(
       this.lambdaToRdsSecurityGroup!,
       Port.tcp(DATABASE_PROPS.PORT.valueOf()),
@@ -108,7 +109,7 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    * @return {SecurityGroup} the bastion host security group
    */
   private createBastionHostSecurityGroup(): SecurityGroup {
-    const sg: SecurityGroup = this.builder('BastionHostSG', 'Allow SSH Traffic');
+    const sg: SecurityGroup = this.builder(generateConstructId('BastionHostSG', this.stack.stackName), 'Allow SSH Traffic');
     sg.addIngressRule(sg, Port.tcp(22), 'Allow SSH Port 22');
     return sg;
   }
@@ -119,7 +120,7 @@ export class SecurityGroupManager implements ISecurityGroupManager {
    * @return {SecurityGroup} the Lambda to RDS Proxy security group
    */
   private createLambdaToRdsSecurityGroup(): SecurityGroup {
-    return this.builder('LambdaToRdsSG', 'Allow Lambda to Rds Proxy Connection');
+    return this.builder(generateConstructId('LambdaToRdsSG', this.stack.stackName), 'Allow Lambda to Rds Proxy Connection');
   }
 
   /**

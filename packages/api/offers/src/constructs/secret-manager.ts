@@ -1,6 +1,7 @@
 import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Stack } from 'sst/constructs';
 import { DATABASE_PROPS, ENVIRONMENTS, EPHEMERAL_PR_REGEX } from '../utils/global-constants';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 /**
  * The ISecretManager interface provides the necessary methods for managing secrets.
@@ -29,9 +30,13 @@ export class SecretManager implements ISecretManager {
 
     if ([ENVIRONMENTS.STAGING.valueOf()].includes(this.stack.stage)) {
       // Todo: Add Production Environment After DB setup
-      this._databaseSecret = this.createDatabaseSecret('OffersDatabaseSecret', 'offers-database-secret');
+      this._databaseSecret =
+        this.createDatabaseSecret(generateConstructId('OffersDatabaseSecret', this.stack.stackName),
+          generateConstructId('offers-database-secret', this.stack.stackName));
     } else if (EPHEMERAL_PR_REGEX.test(this.stack.stage)) {
-      this._databaseSecret = this.createDatabaseSecret('OffersPrDatabaseSecret', 'offers-Pr-database-secret');
+      this._databaseSecret =
+        this.createDatabaseSecret(generateConstructId('OffersPrDatabaseSecret', this.stack.stackName),
+          generateConstructId('offers-Pr-database-secret', this.stack.stackName));
     }
   }
 

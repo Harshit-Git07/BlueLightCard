@@ -3,6 +3,7 @@ import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExten
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { OffersFunction } from 'src/constructs/sst/OffersFunction';
 import { EnvironmentVariablesKeys } from 'src/utils/environment-variables';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 export class BannerRoutes {
   constructor(private readonly routeProps: RouteProps) {}
@@ -15,7 +16,7 @@ export class BannerRoutes {
   private get(): ApiGatewayV1ApiRouteProps<any> {
     return {
       cdk: {
-        function: new OffersFunction(this.routeProps.stack, 'BannersHandler', {
+        function: new OffersFunction(this.routeProps.stack, generateConstructId('BannersHandler', this.routeProps.stack.stackName), {
           handler: 'packages/api/offers/src/routes/banners/getBannersHandler.handler',
           environment: {
             [EnvironmentVariablesKeys.BANNERS_TABLE_NAME]: this.routeProps.dynamoTables!.bannersTable.tableName,

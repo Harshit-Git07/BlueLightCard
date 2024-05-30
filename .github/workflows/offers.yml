@@ -86,15 +86,37 @@ jobs:
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - deployment: 'blc-uk-staging'
+            region: 'eu-west-2'
+            stagingBaseUrl: https://staging.bluelightcard.co.uk
+            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix: blc-uk
+            stagingBaseUrl_dds: https://ddsstaging.bluelightcard.tech
+            legacyApiRetrieveOffersEndpoint_dds: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix_dds: dds-uk
+            ddsEnabled: 'true'
+          - deployment: 'blc-aus-staging'
+            region: 'ap-southeast-2'
+            stagingBaseUrl: https://develop.bluelightcard.com.au
+            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix: blc-aus
+            ddsEnabled: 'false'
     needs:
       - install
       - test
       - build
       - changelog
     env:
-      STAGING_BASE_URL: https://staging.bluelightcard.co.uk
-      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
-      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: blc-uk
+      STAGING_BASE_URL: ${{matrix.stagingBaseUrl}}
+      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: ${{matrix.legacyApiRetrieveOffersEndpoint}}
+      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
+      STAGING_BASE_URL_DDS: ${{matrix.stagingBaseUrl_dds}}
+      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT_DDS: ${{matrix.legacyApiRetrieveOffersEndpoint_dds}}
+      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX_DDS: ${{matrix.offersHomepageMenuBrandPrefix_dds}}
+      DDS_ENABLED: ${{matrix.ddsEnabled}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -104,16 +126,34 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-          aws-region: eu-west-2
+          aws-region: ${{matrix.region}}
       - name: Build
         run: npm run build
       - name: Deploy Stack
-        run: npx sst deploy global --stage staging && npx sst deploy offers --stage staging
+        run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy offers --stage staging --region ${{matrix.region}}
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release
     environment: Production
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - namespace: 'blc-uk-production'
+            region: 'eu-west-2'
+            prodBaseUrl: https://www.bluelightcard.co.uk
+            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix: blc-uk
+            prodBaseUrl_dds: https://www.defencediscountservice.co.uk
+            legacyApiRetrieveOffersEndpoint_dds: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix_dds: dds-uk
+            ddsEnabled: 'false'
+          - namespace: 'blc-aus-production'
+            region: 'ap-southeast-2'
+            prodBaseUrl: https://www.bluelightcard.com.au
+            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix: blc-aus
+            ddsEnabled: 'false'
     needs:
       - install
       - test
@@ -121,9 +161,13 @@ jobs:
       - changelog
       - build
     env:
-      PROD_BASE_URL: https://www.bluelightcard.co.uk
-      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
-      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: blc-uk
+      PROD_BASE_URL: ${{matrix.prodBaseUrl}}
+      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: ${{matrix.legacyApiRetrieveOffersEndpoint}}
+      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
+      PROD_BASE_URL_DDS: ${{matrix.prodBaseUrl_dds}}
+      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT_DDS: ${{matrix.legacyApiRetrieveOffersEndpoint_dds}}
+      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX_DDS: ${{matrix.offersHomepageMenuBrandPrefix_dds}}
+      DDS_ENABLED: ${{matrix.ddsEnabled}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -132,9 +176,9 @@ jobs:
       - name: Configure Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: eu-west-2
+          aws-region: ${{matrix.region}}
           role-to-assume: arn:aws:iam::676719682338:role/github-action-role
       - name: Build
         run: npm run build
       - name: Deploy Stack
-        run: npx sst deploy global --stage production && npx sst deploy offers --stage production
+        run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy offers --stage production --region ${{matrix.region}}

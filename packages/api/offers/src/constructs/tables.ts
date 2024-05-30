@@ -1,5 +1,6 @@
 import { Table } from 'sst/constructs';
 import { Stack } from 'aws-cdk-lib';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 /**
  *  This class creates all the tables for the Offers API
@@ -41,7 +42,7 @@ export class Tables {
   }
 
   private createOfferHomepageTable(): Table {
-    return new Table(this.stack, 'offersHomepage', {
+    return new Table(this.stack, generateConstructId('offersHomepage', this.stack.stackName), {
       fields: {
         id: 'string',
         type: 'string',
@@ -55,7 +56,7 @@ export class Tables {
   }
 
   private createBrandTable(): Table {
-    return new Table(this.stack, 'brand', {
+    return new Table(this.stack, generateConstructId('brand', this.stack.stackName), {
       fields: {
         id: 'string',
       },
@@ -66,7 +67,7 @@ export class Tables {
   }
 
   private createOfferTable(): Table {
-    return new Table(this.stack, 'offersTable', {
+    return new Table(this.stack, generateConstructId('offersTable', this.stack.stackName), {
       fields: {
         legacyId: 'string',
         id: 'string',
@@ -83,7 +84,7 @@ export class Tables {
   }
 
   private createCompanyTable(): Table {
-    return new Table(this.stack, 'companies', {
+    return new Table(this.stack, generateConstructId('companies', this.stack.stackName), {
       fields: {
         legacyId: 'string', // Value: Brand#legacyID - ex: blc-uk#1209
         id: 'string',
@@ -100,7 +101,7 @@ export class Tables {
   }
 
   private createCategoryTable(): Table {
-    return new Table(this.stack, 'categories', {
+    return new Table(this.stack, generateConstructId('categories', this.stack.stackName), {
       fields: {
         id: 'string',
         legacyId: 'string', // Value: Brand#legacyID - ex: blc-uk#1209
@@ -128,7 +129,7 @@ export class Tables {
   }
 
   private createOfferTypeTable(): Table {
-    return new Table(this.stack, 'offerTypes', {
+    return new Table(this.stack, generateConstructId('offerTypes', this.stack.stackName), {
       fields: {
         id: 'string',
         legacyId: 'number', // OfferId Column in the legacy DB
@@ -145,7 +146,7 @@ export class Tables {
   }
 
   private createTagsTable(): Table {
-    return new Table(this.stack, 'tags', {
+    return new Table(this.stack, generateConstructId('tags', this.stack.stackName), {
       fields: {
         id: 'string',
         name: 'string',
@@ -162,7 +163,7 @@ export class Tables {
   }
 
   private createOfferBrandConnectionTable(): Table {
-    return new Table(this.stack, 'offerBrandsConnection', {
+    return new Table(this.stack, generateConstructId('offerBrandsConnection', this.stack.stackName), {
       fields: {
         offerId: 'string',
         brandId: 'string',
@@ -181,7 +182,7 @@ export class Tables {
   }
 
   private createOfferCategoryConnectionTable(): Table {
-    return new Table(this.stack, 'offerCategoriesConnection', {
+    return new Table(this.stack, generateConstructId('offerCategoriesConnection', this.stack.stackName), {
       fields: {
         offerId: 'string',
         categoryId: 'string',
@@ -200,7 +201,7 @@ export class Tables {
   }
 
   private createOfferTypeConnectionTable(): Table {
-    return new Table(this.stack, 'offerTypesConnection', {
+    return new Table(this.stack, generateConstructId('offerTypesConnection', this.stack.stackName), {
       fields: {
         offerId: 'string',
         offerTypeId: 'string',
@@ -219,7 +220,7 @@ export class Tables {
   }
 
   private createOfferTagConnectionTable(): Table {
-    return new Table(this.stack, 'offerTagsConnection', {
+    return new Table(this.stack, generateConstructId('offerTagsConnection', this.stack.stackName), {
       fields: {
         offerId: 'string',
         tagId: 'string',
@@ -232,7 +233,7 @@ export class Tables {
   }
 
   private createCompanyTagConnectionTable(): Table {
-    return new Table(this.stack, 'companyTagsConnection', {
+    return new Table(this.stack, generateConstructId('companyTagsConnection', this.stack.stackName), {
       fields: {
         companyId: 'string',
         tagId: 'string',
@@ -245,7 +246,7 @@ export class Tables {
   }
 
   private createCompanyCategoryConnectionTable(): Table {
-    return new Table(this.stack, 'companyCategoriesConnection', {
+    return new Table(this.stack, generateConstructId('companyCategoriesConnection', this.stack.stackName), {
       fields: {
         companyId: 'string',
         categoryId: 'string',
@@ -264,7 +265,7 @@ export class Tables {
   }
 
   private createCompanyBrandConnectionTable(): Table {
-    return new Table(this.stack, 'companyBrandsConnection', {
+    return new Table(this.stack, generateConstructId('companyBrandsConnection', this.stack.stackName), {
       fields: {
         companyId: 'string',
         brandId: 'string',
@@ -283,7 +284,7 @@ export class Tables {
   }
 
   private createBannersTable(): Table {
-    return new Table(this.stack, 'banners', {
+    return new Table(this.stack, generateConstructId('banners', this.stack.stackName), {
       fields: {
         id: 'string',
         legacyId: 'number',

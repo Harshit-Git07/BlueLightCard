@@ -2,6 +2,7 @@ import { MethodResponses } from '../../../../core/src/extensions/apiGatewayExten
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { OffersFunction } from '../../constructs/sst/OffersFunction';
 import { RouteProps } from '../routeProps';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 export class DatabaseRoute {
   constructor(private readonly props: RouteProps) {}
@@ -15,7 +16,7 @@ export class DatabaseRoute {
   private get(): ApiGatewayV1ApiRouteProps<any> {
     return {
       cdk: {
-        function: new OffersFunction(this.props.stack, 'DatabaseHandler', {
+        function: new OffersFunction(this.props.stack, generateConstructId('DatabaseHandler', this.props.stack.stackName), {
           handler: 'packages/api/offers/src/routes/database/databaseHandler.handler',
           database: this.props.dbAdapter,
         }),

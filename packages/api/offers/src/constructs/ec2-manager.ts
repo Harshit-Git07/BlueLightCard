@@ -1,6 +1,5 @@
 import {
   BastionHostLinux,
-  Instance,
   InstanceClass,
   InstanceSize,
   InstanceType,
@@ -11,7 +10,8 @@ import {
 import { Stack } from 'sst/constructs';
 import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import { SecurityGroupManager } from './security-group-manager';
-import { isDev, isProduction, isStaging } from '../../../core/src/utils/checkEnvironment';
+import { isStaging } from '../../../core/src/utils/checkEnvironment';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 /**
  * The IEC2 interface provides a centralized way to manage all EC2 instances for the application.
@@ -49,8 +49,8 @@ export class EC2Manager implements IEC2 {
    * @returns {BastionHostLinux} the bastion host instance
    */
   private createBastionHost(): BastionHostLinux {
-    const host = new BastionHostLinux(this.stack, 'bastion-host', {
-      instanceName: `${this.stack.stage}-bastion-host-offers`,
+    const host = new BastionHostLinux(this.stack, generateConstructId('bastion-host', this.stack.stackName), {
+      instanceName: generateConstructId(`${this.stack.stage}-bastion-host-offers`, this.stack.stackName),
       instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL),
       vpc: this.vpc,
       subnetSelection: {

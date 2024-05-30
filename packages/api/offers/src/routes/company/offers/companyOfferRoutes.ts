@@ -2,8 +2,9 @@ import { RouteProps } from '../../routeProps';
 import { MethodResponses } from '../../../../../core/src/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 import { Model, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
-import { EnvironmentVariablesKeys, getBLCBaseUrlFromEnv } from 'src/utils/environment-variables';
+import { EnvironmentVariablesKeys, getBLCBaseUrlFromEnv, getBrandSpecificEnvVar } from 'src/utils/environment-variables';
 import { OffersFunction } from 'src/constructs/sst/OffersFunction';
+import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId'
 
 export class CompanyOfferRoutes {
   constructor(private readonly routeProps: RouteProps) {}
@@ -15,12 +16,12 @@ export class CompanyOfferRoutes {
 
   private get(): ApiGatewayV1ApiRouteProps<any> {
     return {
-      function: new OffersFunction(this.routeProps.stack, 'CompanyOffersHandler', {
+      function: new OffersFunction(this.routeProps.stack, generateConstructId('CompanyOffersHandler', this.routeProps.stack.stackName), {
         handler: 'packages/api/offers/src/routes/company/offers/getCompanyOffersHandler.handler',
         environment: {
-          [EnvironmentVariablesKeys.BASE_URL]: getBLCBaseUrlFromEnv(this.routeProps.stack.stage),
-          [EnvironmentVariablesKeys.LEGACY_OFFERS_API_ENDPOINT]: process.env
-            .LEGACY_API_RETRIEVE_OFFERS_ENDPOINT as string,
+          [EnvironmentVariablesKeys.BASE_URL]: getBLCBaseUrlFromEnv(this.routeProps.stack.stage, this.routeProps.stack.stackName),
+          [EnvironmentVariablesKeys.LEGACY_OFFERS_API_ENDPOINT]:
+            process.env[getBrandSpecificEnvVar('LEGACY_API_RETRIEVE_OFFERS_ENDPOINT', this.routeProps.stack.stackName)] as string,
         },
       }),
       cdk: {
@@ -30,7 +31,7 @@ export class CompanyOfferRoutes {
             this.routeProps.apiGatewayModelGenerator.getError404(),
             this.routeProps.apiGatewayModelGenerator.getError500(),
           ]),
-          requestValidator: new RequestValidator(this.routeProps.stack, 'GetCompanyOffersValidator', {
+          requestValidator: new RequestValidator(this.routeProps.stack, generateConstructId('GetCompanyOffersValidator', this.routeProps.stack.stackName), {
             restApi: this.routeProps.api.cdk.restApi,
             validateRequestBody: false,
             validateRequestParameters: false,

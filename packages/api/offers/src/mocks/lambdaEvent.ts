@@ -2,8 +2,7 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { faker } from '@faker-js/faker';
 
 
-const mockJWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJMYW1iZGEgRXZlbnQgTW9jayIsImlhdCI6MTcxNjkwNDk4MiwiZXhwIjoxODkzNDU2MDAwLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiY3VzdG9tOmJsY19vbGRfdXVpZCI6IjEyMzQifQ.hQyXGQHtk_ofluESJbVY_hWrFE5xiGIl9DQVTS6qr-E';
-
+const mockJWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJMYW1iZGEgRXZlbnQgTW9jayIsImlhdCI6MTcxNzA2MjEwOSwiZXhwIjoxOTA2MzY0NTA5LCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiY3VzdG9tOmJsY19vbGRfdXVpZCI6IjEyMzQiLCJjdXN0b206YmxjX29sZF9pZCI6IjEyMzQifQ.-IaKB0trbXOH33MifsMsy4-Cf4E6UD0KcdzsNfo_EhI';
 export function mockLambdaEvent(
   path: string,
   method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE',

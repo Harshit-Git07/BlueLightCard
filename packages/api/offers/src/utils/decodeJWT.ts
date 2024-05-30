@@ -6,6 +6,7 @@ import { z } from 'zod';
 // Expand this model as and when more fields are needed
 const DecodedTokenModel = z.object({
   "custom:blc_old_uuid": z.optional(z.string()),
+  "custom:blc_old_id": z.optional(z.string()),
 });
 
 

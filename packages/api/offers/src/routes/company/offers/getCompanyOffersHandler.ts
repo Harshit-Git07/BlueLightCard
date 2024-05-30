@@ -45,7 +45,7 @@ export const handler = async (event: APIGatewayEvent) => {
   } catch (error: any) {
     return Response.Unauthorized({ message: error.message });
   }
-  const { "custom:blc_old_uuid": uid} = decodedToken;
+  const { "custom:blc_old_id": uid} = decodedToken;
 
   if(!uid) {
     logger.error({message: 'UID missing from JWT when required.'});

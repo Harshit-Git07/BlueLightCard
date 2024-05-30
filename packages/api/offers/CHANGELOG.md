@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.33.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.33.0...bluelightcard/offers-v1.33.1) (2024-05-30)
+
+
+### Bug Fixes
+
+* Relayed request using the wrong Id ([#1493](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1493)) ([8c8acc5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8c8acc5a1eea091bcd8adad24925ac493a557a61))
+* Updated Offers API handlers to include checks for Bearer prefix and handle response correctly ([#1460](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1460)) ([c8fe829](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c8fe8290c5b5bff6911f3fe073e6eb122855386c))
+
 ## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.32.0...bluelightcard/offers-v1.33.0) (2024-05-29)
 
 

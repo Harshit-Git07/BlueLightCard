@@ -5,7 +5,12 @@
     "Semantic/DDS",
     "Semantic/Surface",
     "Semantic/System",
-    "Component/Surface",
-    "Component/Button"
+    "Component/Button",
+    "Component/Card",
+    "Component/BannerCarousel",
+    "Component/Heading",
+    "Component/SearchBar",
+    "Component/Spinner",
+    "Component/ListItem"
   ]
 }

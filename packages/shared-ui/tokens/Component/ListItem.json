@@ -1,0 +1,44 @@
+{
+  "listItem-title-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "listItem-text-font": {
+    "value": "{typography.body-small}",
+    "type": "typography"
+  },
+  "listItem-title-font": {
+    "value": "{typography.body-semibold}",
+    "type": "typography"
+  },
+  "image-border-radius": {
+    "value": "{border-radius.small}",
+    "type": "borderRadius"
+  },
+  "listItem-text-colour": {
+    "light": {
+      "value": "{colour.onSurface-subtle.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-subtle.dark}",
+      "type": "color"
+    }
+  },
+  "listItem-divider-colour": {
+    "light": {
+      "value": "{colour.onSurface-outline-subtle.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-outline-subtle.dark}",
+      "type": "color"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "heading-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "heading-link-font": {
+    "value": "{typography.button}",
+    "type": "typography"
+  },
+  "heading-font": {
+    "value": "{typography.headline-bold}",
+    "type": "typography"
+  },
+  "heading-link-colour": {
+    "light": {
+      "value": "{colour.primary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
+  }
+}

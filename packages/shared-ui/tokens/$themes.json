@@ -8,7 +8,13 @@
       "Semantic/BLC": "enabled",
       "Semantic/Surface": "enabled",
       "Semantic/System": "enabled",
-      "Component/Button": "enabled"
+      "Component/Button": "enabled",
+      "Component/SearchBar": "enabled",
+      "Component/Spinner": "enabled",
+      "Component/ListItem": "enabled",
+      "Component/BannerCarousel": "enabled",
+      "Component/Card": "enabled",
+      "Component/Heading": "enabled"
     }
   },
   {
@@ -20,7 +26,13 @@
       "Semantic/DDS": "enabled",
       "Semantic/Surface": "enabled",
       "Semantic/System": "enabled",
-      "Component/Button": "enabled"
+      "Component/Button": "enabled",
+      "Component/SearchBar": "enabled",
+      "Component/Spinner": "enabled",
+      "Component/ListItem": "enabled",
+      "Component/BannerCarousel": "enabled",
+      "Component/Card": "enabled",
+      "Component/Heading": "enabled"
     }
   }
 ]

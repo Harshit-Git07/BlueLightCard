@@ -20,6 +20,16 @@
         "type": "color"
       }
     },
+    "surface-bright": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-800}",
+        "type": "color"
+      }
+    },
     "onSurface": {
       "light": {
         "value": "{colour.greyscale.grey-900}",

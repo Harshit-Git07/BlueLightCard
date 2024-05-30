@@ -1,5 +1,5 @@
 {
-  "button-primary-background-colour": {
+  "button-primary-bg-colour": {
     "light": {
       "value": "{colour.primary.light}",
       "type": "color"

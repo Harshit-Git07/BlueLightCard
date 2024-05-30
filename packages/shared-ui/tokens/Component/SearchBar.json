@@ -1,0 +1,50 @@
+{
+  "searchBar-bg-colour": {
+    "light": {
+      "value": "{colour.surface-bright.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface-bright.dark}",
+      "type": "color"
+    }
+  },
+  "searchBar-outline-colour": {
+    "light": {
+      "value": "{colour.onSurface-outline.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-outline.dark}",
+      "type": "color"
+    }
+  },
+  "searchBar-label-font": {
+    "value": "{typography.body}",
+    "type": "typography"
+  },
+  "searchBar-border-radius": {
+    "value": "{border-radius.round}",
+    "type": "borderRadius"
+  },
+  "searchBar-label-colour": {
+    "light": {
+      "value": "{colour.onSurface-subtle.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-subtle.dark}",
+      "type": "color"
+    }
+  },
+  "searchBar-icon-colour": {
+    "light": {
+      "value": "{colour.onSurface-subtle.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-subtle.dark}",
+      "type": "color"
+    }
+  }
+}

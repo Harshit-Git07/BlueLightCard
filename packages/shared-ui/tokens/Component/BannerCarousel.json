@@ -1,0 +1,26 @@
+{
+  "card-title-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "card-pagination-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "card-title-font": {
+    "value": "{typography.blc.body}",
+    "type": "typography"
+  }
+}

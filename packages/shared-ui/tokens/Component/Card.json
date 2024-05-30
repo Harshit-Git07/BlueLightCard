@@ -1,0 +1,44 @@
+{
+  "card-bg-colour": {
+    "light": {
+      "value": "{colour.surface-bright.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface-bright.dark}",
+      "type": "color"
+    }
+  },
+  "card-text-colour": {
+    "light": {
+      "value": "{colour.onSurface-subtle.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-subtle.dark}",
+      "type": "color"
+    }
+  },
+  "card-title-font": {
+    "value": "{typography.body-semibold}",
+    "type": "typography"
+  },
+  "card-text-font": {
+    "value": "{typography.blc.body-small}",
+    "type": "typography"
+  },
+  "card-border-radius": {
+    "value": "{border-radius.small}",
+    "type": "borderRadius"
+  },
+  "card-title-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  }
+}

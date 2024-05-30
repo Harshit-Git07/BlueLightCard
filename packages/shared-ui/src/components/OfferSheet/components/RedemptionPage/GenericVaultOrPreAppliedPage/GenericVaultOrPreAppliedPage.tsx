@@ -30,7 +30,6 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
       return;
     }
 
-    // Prevent duplicate logs if the user clicks the button multiple times
     if (loggedCodeView.current) {
       return;
     }

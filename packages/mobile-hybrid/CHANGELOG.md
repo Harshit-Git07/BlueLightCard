@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.18.0...bluelightcard/mobile-hybrid-v1.18.1) (2024-05-31)
+
+
+### Bug Fixes
+
+* [DISCO-337] dark mode on android ([#1513](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1513)) ([b3d6a4d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b3d6a4d90f88747734fd099c589f67f3568e3925))
+
 ## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.17.2...bluelightcard/mobile-hybrid-v1.18.0) (2024-05-30)
 
 

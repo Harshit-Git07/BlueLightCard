@@ -19,11 +19,19 @@ export const UserModel = createZodNamedType(
     spare_email_validated: z.number().optional().default(0),
     twoFactorAuthentication: z.boolean().optional().default(false),
   }).transform(user => ({
-    ...user,
+    firstname: user.firstname,
+    surname: user.surname,
+    organisation: user.organisation,
+    dob: transformDateToFormatYYYYMMDD(user.dob),
+    gender: user.gender,
+    mobile: user.mobile,
+    uuid: user.uuid,
+    service: user.service,
+    email: user.email,
+    emailValidated: user.email_validated,
     spareEmail: user.spare_email,
     spareEmailValidated: user.spare_email_validated,
-    emailValidated: user.email_validated,
-    dob: transformDateToFormatYYYYMMDD(user.dob)
+    twoFactorAuthentication: user.twoFactorAuthentication,
   })),
 );
 

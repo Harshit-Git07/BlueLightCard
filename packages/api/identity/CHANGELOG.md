@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.76.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.75.0...bluelightcard/identity-v1.76.0) (2024-05-31)
+
+
+### Features
+
+* add email and email validated data in dynamo during signup even… ([#1435](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1435)) ([35a7ac7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/35a7ac71f7c9e7c389f6b6cbe0c4f34a829d4c7a))
+* Ti 1201 handle email and email validated during signup ([#1488](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1488)) ([5febf1c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5febf1c071c75189c884d9a24bbd32f14a6965d4))
+* Ti 1201 handle email and email validated during signup ([#1495](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1495)) ([8b59b76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b59b7622e7f9befaa031e5cc986626533df0cf1))
+* Ti 1201 handle email and email validated during signup ([#1501](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1501)) ([938d333](https://github.com/bluelightcard/BlueLightCard-2.0/commit/938d3336a574e69f31ce28dffa768ef2da1d6819))
+* Ti 1201 handle email and email validated during signup ([#1510](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1510)) ([3de4bef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3de4bef4e8e0246584a0029285ce9504eb925ab0))
+* Ti 1201 handle email and email validated during signup ([#1511](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1511)) ([af7bc4c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/af7bc4c2b60d48777643cf5c126409c0622ef233))
+
 ## [1.75.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.74.0...bluelightcard/identity-v1.75.0) (2024-05-26)
 
 

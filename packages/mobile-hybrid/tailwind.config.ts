@@ -8,6 +8,7 @@ const preset = createBrandedPreset(env.APP_BRAND);
 const newTokensActive = env.FLAG_NEW_TOKENS;
 
 export default {
+  darkMode: 'class',
   presets: newTokensActive ? [preset] : [defaultPreset],
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}'],
 } satisfies Config;

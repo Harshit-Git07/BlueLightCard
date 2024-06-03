@@ -3,20 +3,20 @@ import { Props, RedemptionPage } from '../RedemptionPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import { useAtomValue } from 'jotai';
-import OfferDetailsErrorPage from '../../OfferDetailsErrorPage';
 import events from '../../../../../utils/amplitude/events';
 import { offerSheetAtom } from '../../../store';
 import { useLabels } from '../../../../../hooks/useLabels';
-
 import {
-  isRedeemDataMessage,
+  isRedeemDataErrorResponse,
   Label,
   MagicButton,
   RedeemResultKind,
   usePlatformAdapter,
+  PlatformVariant,
 } from '../../../../../index';
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { RedemptionType } from '../../../types';
+import OfferDetailsErrorPage from '../../OfferDetailsErrorPage';
 
 export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   const { offerDetails: offerData, offerMeta, amplitudeEvent } = useAtomValue(offerSheetAtom);
@@ -25,11 +25,28 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   const loggedCodeView = useRef(false);
   const loggedVaultRedirect = useRef(false);
 
+  const handleRedirect = (url: string) => {
+    const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
+
+    // If the window failed to open, navigate in the same tab
+    if (!windowHandle.isOpen()) {
+      platformAdapter.navigateExternal(url, { target: 'blank' });
+    } else {
+      // Check if the window was closed by an adblocker and fallback to navigating in the same tab
+      setTimeout(() => {
+        if (!windowHandle.isOpen()) {
+          platformAdapter.navigateExternal(url, { target: 'self' });
+        }
+      }, 50);
+    }
+  };
+
   const logCodeClicked = () => {
     if (!amplitudeEvent) {
       return;
     }
 
+    // Prevent duplicate logs if the user clicks the button multiple times
     if (loggedCodeView.current) {
       return;
     }
@@ -49,7 +66,36 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
     });
   };
 
+  async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
+    if (props.state !== 'success') {
+      return;
+    }
+    logCodeClicked();
+
+    if (code) {
+      await platformAdapter.writeTextToClipboard(code);
+    }
+    if (url) {
+      handleRedirect(url);
+    }
+  }
+
   useEffect(() => {
+    if (props.state === 'success' && platformAdapter.platform === PlatformVariant.MobileHybrid) {
+      if (loggedCodeView.current) {
+        return;
+      }
+      logCodeClicked();
+      setTimeout(() => {
+        if (!isRedeemDataErrorResponse(props.redeemData)) {
+          copyCodeAndRedirect(
+            props.redeemData.redemptionDetails.code,
+            props.redeemData?.redemptionDetails.url,
+          );
+        }
+      }, 1000);
+    }
+
     if (props.errorState === RedeemResultKind.MaxPerUserReached) {
       /**
        * Redirect to the vault after 3 seconds if the user has reached the code limit
@@ -82,35 +128,6 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
     }
   }, [props.state, props.errorState]);
 
-  async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
-    // Ensure that state is success to log since this component mounts multiple times
-    if (props.state !== 'success') {
-      return;
-    }
-
-    logCodeClicked();
-
-    if (code) {
-      await platformAdapter.writeTextToClipboard(code);
-    }
-    if (url) {
-      // Attempt to open the window in a new tab
-      const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
-
-      // If the window failed to open, navigate in the same tab
-      if (!windowHandle.isOpen()) {
-        platformAdapter.navigateExternal(url, { target: 'self' });
-      }
-
-      // Check if the window was closed by an adblocker and fallback to navigating in the same tab
-      setTimeout(() => {
-        if (!windowHandle.isOpen()) {
-          platformAdapter.navigateExternal(url, { target: 'self' });
-        }
-      }, 50);
-    }
-  }
-
   if (props.state === 'error' && props.errorState !== RedeemResultKind.MaxPerUserReached) {
     return <OfferDetailsErrorPage />;
   }
@@ -140,7 +157,10 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
         {props.state === 'success' && (
           <MagicButton
             onClick={() => {
-              if (!isRedeemDataMessage(props.redeemData)) {
+              if (
+                !isRedeemDataErrorResponse(props.redeemData) &&
+                platformAdapter.platform === PlatformVariant.Web
+              ) {
                 copyCodeAndRedirect(
                   props.redeemData?.redemptionDetails?.code,
                   props.redeemData?.redemptionDetails?.url,
@@ -154,10 +174,10 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
             <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
               <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
                 <FontAwesomeIcon icon={faWandMagicSparkles} />
-                {getPrimaryButtonText(props.redemptionType)}
+                {getPrimaryButtonText(props.redemptionType, platformAdapter.platform)}
               </div>
               <div className="text-sm text-[#616266] font-medium">
-                {getSecondaryButtonText(props.redemptionType)}
+                {getSecondaryButtonText(props.redemptionType, platformAdapter.platform)}
               </div>
             </div>
           </MagicButton>
@@ -181,20 +201,24 @@ export const GenericVaultOrPreAppliedPage = RedemptionPage((props: Props) => {
   );
 });
 
-function getPrimaryButtonText(redemptionType: RedemptionType) {
+function getPrimaryButtonText(redemptionType: RedemptionType, currentPlatform: PlatformVariant) {
   switch (redemptionType) {
     case 'preApplied':
       return 'Discount automatically applied';
     default:
-      return 'Continue to partner website';
+      return currentPlatform === PlatformVariant.Web
+        ? 'Continue to partner website'
+        : 'Code copied!';
   }
 }
 
-function getSecondaryButtonText(redemptionType: RedemptionType) {
+function getSecondaryButtonText(redemptionType: RedemptionType, currentPlatform: PlatformVariant) {
   switch (redemptionType) {
     case 'preApplied':
       return 'Go to partner website';
     default:
-      return 'Code will be copied - paste it at checkout';
+      return currentPlatform === PlatformVariant.Web
+        ? 'Code will be copied - paste it at checkout'
+        : 'Redirecting to partner website';
   }
 }

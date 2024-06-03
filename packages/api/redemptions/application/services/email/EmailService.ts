@@ -36,6 +36,16 @@ export class EmailService implements IEmailService {
         );
         break;
       }
+      case 'preApplied': {
+        await this.emailRepository.sendPreAppliedTransactionalEmail({
+          brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
+          memberId: event.detail.memberDetails.memberId,
+          companyName: event.detail.redemptionDetails.companyName,
+          offerName: event.detail.redemptionDetails.offerName,
+          url: event.detail.redemptionDetails.url,
+        });
+        break;
+      }
       default:
         this.logger.error({
           message: 'Unhandled redemption type',

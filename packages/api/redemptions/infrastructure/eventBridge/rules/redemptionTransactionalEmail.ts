@@ -28,6 +28,7 @@ export function createRedemptionTransactionalEmailRule(
     environment: {
       BRAZE_VAULT_EMAIL_CAMPAIGN_ID: config.brazeVaultEmailCampaignId,
       BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: config.brazeGenericEmailCampaignId,
+      BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID: config.brazePreAppliedEmailCampaignId,
       BRAZE_API_URL: config.brazeApiUrl,
       REDEMPTIONS_WEB_HOST: config.redemptionsWebHost,
     },
@@ -39,7 +40,7 @@ export function createRedemptionTransactionalEmailRule(
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: ['vault', 'generic'],
+          redemptionType: ['vault', 'generic', 'preApplied'],
         },
       },
     },

@@ -17,6 +17,7 @@ export type RedemptionsStackConfig = {
   apiDefaultAllowedOrigins: string[];
   brazeVaultEmailCampaignId: string;
   brazeGenericEmailCampaignId: string;
+  brazePreAppliedEmailCampaignId: string;
   brazeApiUrl: string;
   redemptionsWebHost: string;
 };
@@ -51,6 +52,7 @@ export class RedemptionsStackConfigResolver {
       ],
       brazeVaultEmailCampaignId: '23555377-445a-838a-74a0-0c274c8ae2f8',
       brazeGenericEmailCampaignId: '091d0923-b2a8-4884-9955-df72b8993e64',
+      brazePreAppliedEmailCampaignId: 'da993fac-5fac-44ec-a703-c1f4c8fa8547',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
     };
@@ -73,6 +75,7 @@ export class RedemptionsStackConfigResolver {
       ],
       brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
       brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
+      brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
     };
@@ -90,6 +93,7 @@ export class RedemptionsStackConfigResolver {
       apiDefaultAllowedOrigins: ['*'],
       brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
       brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
+      brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
     };
@@ -122,6 +126,7 @@ export class RedemptionsStackConfigResolver {
       ),
       brazeVaultEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID),
       brazeGenericEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID),
+      brazePreAppliedEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID),
       brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
       redemptionsWebHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST),
     };

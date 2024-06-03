@@ -27,11 +27,20 @@ export type VaultOrGenericTransactionalEmailParams = {
   code: string;
 };
 
+export type PreAppliedTransactionalEmailParams = {
+  brazeExternalUserId: string;
+  memberId: string;
+  companyName: string;
+  offerName: string;
+  url: string;
+};
+
 export interface IEmailRepository {
   sendVaultOrGenericTransactionalEmail: (
     payload: VaultOrGenericTransactionalEmailParams,
     redemptionType: RedemptionType,
   ) => Promise<void>;
+  sendPreAppliedTransactionalEmail: (payload: PreAppliedTransactionalEmailParams) => Promise<void>;
 }
 
 export class EmailRepository implements IEmailRepository {
@@ -183,14 +192,50 @@ export class EmailRepository implements IEmailRepository {
 
     if (!emailServiceResponse.message.includes('success')) {
       this.logger.info({
-        message: 'Failed to send email',
+        message: `Failed to send ${redemptionType} email`,
         context: emailServiceResponse,
       });
-      throw new Error('Failed to send email');
+      throw new Error(`Failed to send ${redemptionType} email`);
     }
 
     this.logger.info({
-      message: 'successfully sent email',
+      message: `successfully sent ${redemptionType} email`,
+      context: emailServiceResponse,
+    });
+  }
+
+  async sendPreAppliedTransactionalEmail(params: PreAppliedTransactionalEmailParams): Promise<void> {
+    const emailClient = await this.getClient();
+
+    const affiliateConfig = AffiliateHelper.getTrackingUrl(params.memberId, params.url);
+    const emailLinkUrl = affiliateConfig.kind === AffiliateResultsKinds.Error ? params.url : affiliateConfig.data.url;
+
+    const emailPayload: CampaignsTriggerSendObject = {
+      campaign_id: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID),
+      recipients: [
+        {
+          external_user_id: params.brazeExternalUserId,
+        },
+      ],
+      trigger_properties: {
+        companyName: params.companyName,
+        offerName: params.offerName,
+        url: emailLinkUrl,
+      },
+    };
+
+    const emailServiceResponse = await emailClient.campaigns.trigger.send(emailPayload);
+
+    if (!emailServiceResponse.message.includes('success')) {
+      this.logger.info({
+        message: 'Failed to send preApplied email',
+        context: emailServiceResponse,
+      });
+      throw new Error('Failed to send preApplied email');
+    }
+
+    this.logger.info({
+      message: 'successfully sent preApplied email',
       context: emailServiceResponse,
     });
   }

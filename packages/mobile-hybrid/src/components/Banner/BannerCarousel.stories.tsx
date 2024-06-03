@@ -1,12 +1,20 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { env } from '@bluelightcard/shared-ui';
 import BannerCarousel from './BannerCarousel';
+import BannerCarouselV2 from './v2';
+import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 
-const componentMeta: Meta<typeof BannerCarousel> = {
+const BannerCarouselComponent = env.FLAG_NEW_TOKENS ? BannerCarouselV2 : BannerCarousel;
+
+const componentMeta: Meta<typeof BannerCarouselComponent> = {
   title: 'BannerCarousel',
-  component: BannerCarousel,
+  component: BannerCarouselComponent,
+  decorators: [tokenMigrationDecorator],
 };
 
-const DefaultTemplate: StoryFn<typeof BannerCarousel> = (args) => <BannerCarousel {...args} />;
+const DefaultTemplate: StoryFn<typeof BannerCarouselComponent> = (args) => (
+  <BannerCarouselComponent {...args} />
+);
 
 export const Default = DefaultTemplate.bind({});
 

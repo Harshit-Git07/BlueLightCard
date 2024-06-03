@@ -1,4 +1,4 @@
-name: 'Mobile Hybrid'
+name: "Mobile Hybrid"
 on:
   push:
     paths:
@@ -99,6 +99,8 @@ jobs:
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-pages
+        env:
+          NEXT_PUBLIC_FLAG_NEW_TOKENS: true
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -119,7 +121,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.number }}
-          body-includes: '🚀 Successfully deployed storybook'
+          body-includes: "🚀 Successfully deployed storybook"
 
       - name: Create Comment
         uses: peter-evans/create-or-update-comment@v3
@@ -170,7 +172,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ needs.dev-env-mapping.outputs.devEnv }}
-          branch: 'main'
+          branch: "main"
           directory: packages/mobile-hybrid/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
@@ -181,18 +183,18 @@ jobs:
     strategy:
       matrix:
         include:
-          - brand: 'blc-uk-current'
-            cloudflare_pages_name: 'mobile-hybrid-poc'
-            branch: 'main'
-          - brand: 'blc-uk'
-            cloudflare_pages_name: 'mobile-hybrid-blc-uk'
-            branch: 'staging'
-          - brand: 'blc-au'
-            cloudflare_pages_name: 'mobile-hybrid-blc-au'
-            branch: 'staging'
-          - brand: 'dds-uk'
-            cloudflare_pages_name: 'mobile-hybrid-dds'
-            branch: 'staging'
+          - brand: "blc-uk-current"
+            cloudflare_pages_name: "mobile-hybrid-poc"
+            branch: "main"
+          - brand: "blc-uk"
+            cloudflare_pages_name: "mobile-hybrid-blc-uk"
+            branch: "staging"
+          - brand: "blc-au"
+            cloudflare_pages_name: "mobile-hybrid-blc-au"
+            branch: "staging"
+          - brand: "dds-uk"
+            cloudflare_pages_name: "mobile-hybrid-dds"
+            branch: "staging"
     runs-on: ubuntu-latest
     needs:
       - install
@@ -222,14 +224,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - brand: 'blc-uk-current'
-            cloudflare_pages_name: 'mobile-hybrid'
-          - brand: 'blc-uk'
-            cloudflare_pages_name: 'mobile-hybrid-blc-uk'
-          - brand: 'blc-au'
-            cloudflare_pages_name: 'mobile-hybrid-blc-au'
-          - brand: 'dds-uk'
-            cloudflare_pages_name: 'mobile-hybrid-dds'
+          - brand: "blc-uk-current"
+            cloudflare_pages_name: "mobile-hybrid"
+          - brand: "blc-uk"
+            cloudflare_pages_name: "mobile-hybrid-blc-uk"
+          - brand: "blc-au"
+            cloudflare_pages_name: "mobile-hybrid-blc-au"
+          - brand: "dds-uk"
+            cloudflare_pages_name: "mobile-hybrid-dds"
     runs-on: ubuntu-latest
     needs:
       - install
@@ -250,5 +252,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ matrix.cloudflare_pages_name }}
           directory: packages/mobile-hybrid/dist
-          branch: 'main'
+          branch: "main"
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

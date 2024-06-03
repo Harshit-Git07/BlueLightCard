@@ -1,14 +1,15 @@
-if (process.env.NEXT_PUBLIC_FLAG_NEW_TOKENS === 'true') {
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { Preview } from '@storybook/react';
+import fontDecorator from './fontDecorator';
+import { env } from '@bluelightcard/shared-ui/env';
+
+if (env.FLAG_NEW_TOKENS) {
   require('../src/styles/v2/globals.css');
   require('../src/styles/v2/carousel.css');
 } else {
   require('../src/styles/globals.css');
   require('../src/styles/carousel.css');
 }
-
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import { Preview } from '@storybook/react';
-import fontDecorator from './fontDecorator';
 
 const preview: Preview = {
   decorators: [fontDecorator],

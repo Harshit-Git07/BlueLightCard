@@ -87,6 +87,8 @@ jobs:
     outputs:
       url: ${{ steps.cloudflare-pages.outputs.url }}
     needs: install
+    env:
+      NEXT_PUBLIC_FLAG_NEW_TOKENS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4

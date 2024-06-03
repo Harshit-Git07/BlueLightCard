@@ -21,14 +21,14 @@
 .control-dots .dot {
   @apply opacity-100 !important;
   @apply scale-125;
-  /* @apply border border-gray-900 dark:border-neutral-white; */
+  @apply border border-gray-900 dark:border-neutral-white;
   @apply bg-transparent !important;
   @apply shadow-none !important;
   @apply mx-1 !important;
 }
 
 .control-dots .dot.selected {
-  /* @apply bg-gray-900 dark:bg-neutral-white !important; */
+  @apply bg-gray-900 dark:bg-neutral-white !important;
 }
 
 .carousel .slider-wrapper {

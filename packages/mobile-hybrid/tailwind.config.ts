@@ -6,7 +6,9 @@ import { env } from '@bluelightcard/shared-ui/env';
 const newBrandedTokensPreset = createBrandedPreset(env.APP_BRAND);
 const presets: Partial<Config>[] = [defaultPreset];
 
-const isStorybookLifecycle = process.env.npm_lifecycle_event === 'storybook';
+const isStorybookLifecycle =
+  process.env.npm_lifecycle_event === 'storybook' ||
+  process.env.npm_lifecycle_event === 'build-storybook';
 
 if (env.FLAG_NEW_TOKENS) {
   presets.push(newBrandedTokensPreset);

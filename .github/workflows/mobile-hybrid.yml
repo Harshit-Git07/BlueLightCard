@@ -34,17 +34,6 @@ jobs:
           restore_cache: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  dev-env-mapping:
-    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
-    name: Dev env mapping
-    runs-on: ubuntu-latest
-    outputs:
-      devEnv: ${{ steps.dev-env.outputs[github.actor] }}
-    steps:
-      - uses: actions/checkout@v4
-      - id: dev-env
-        run: echo $(grep "${{ github.actor }}=" packages/mobile-hybrid/dev-env-mapping.txt) >> "$GITHUB_OUTPUT"
-
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -88,7 +77,7 @@ jobs:
       url: ${{ steps.cloudflare-pages.outputs.url }}
     needs: install
     env:
-      NEXT_PUBLIC_FLAG_NEW_TOKENS: true
+      STORYBOOK_FLAG_NEW_TOKENS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -96,11 +85,14 @@ jobs:
         uses: ./.github/actions/setup
       - name: Build
         run: npm run build-storybook -w packages/mobile-hybrid
+      - name: Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: storybook-build
+          path: packages/mobile-hybrid/storybook-static
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-pages
-        env:
-          NEXT_PUBLIC_FLAG_NEW_TOKENS: true
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -151,32 +143,6 @@ jobs:
           monorepo-tags: true
           package-name: bluelightcard/mobile-hybrid
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
-
-  dev:
-    if: github.event_name == 'push' && github.ref != 'refs/heads/main' && needs.dev-env-mapping.outputs.devEnv
-    name: Deploy Dev
-    runs-on: ubuntu-latest
-    env:
-      NEXT_PUBLIC_FLAG_NEW_TOKENS: false
-    needs:
-      - install
-      - dev-env-mapping
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-      - name: Build
-        run: npm run build -w packages/mobile-hybrid
-      - name: Publishing env ${{ needs.dev-env-mapping.outputs.devEnv }}
-        uses: cloudflare/pages-action@1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ needs.dev-env-mapping.outputs.devEnv }}
-          branch: 'main'
-          directory: packages/mobile-hybrid/dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   staging:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

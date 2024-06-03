@@ -4,7 +4,7 @@ import { EnvVarObject } from './types';
 // shared env vars
 export const sharedEnvVars: EnvVarObject = {
   APP_BRAND: process.env.NEXT_PUBLIC_APP_BRAND,
-  FLAG_NEW_TOKENS: process.env.NEXT_PUBLIC_FLAG_NEW_TOKENS,
+  FLAG_NEW_TOKENS: process.env.NEXT_PUBLIC_FLAG_NEW_TOKENS ?? process.env.STORYBOOK_FLAG_NEW_TOKENS,
 };
 
 export const envSchema = z.object({

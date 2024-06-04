@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.2.0...bluelightcard/chrome-extension-v1.2.1) (2024-06-04)
+
+
+### Bug Fixes
+
+* force release ([#1530](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1530)) ([ebf3652](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ebf3652aea46f5f29a6a53f0732b02434a0e1d82))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.0.0...bluelightcard/chrome-extension-v1.2.0) (2024-06-04)
 
 

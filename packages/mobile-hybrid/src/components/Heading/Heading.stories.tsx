@@ -1,9 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Heading from './Heading';
+import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 
 const componentMeta: Meta<typeof Heading> = {
   title: 'Heading',
   component: Heading,
+  decorators: [tokenMigrationDecorator],
   argTypes: { title: { control: 'text' }, size: { control: 'radio' } },
 };
 

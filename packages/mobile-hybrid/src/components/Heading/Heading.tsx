@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { HeadingProps } from './types';
+import { env } from '@bluelightcard/shared-ui';
+import HeadingV2 from './v2';
 
 const Heading: FC<HeadingProps> = ({ title, size, onClickSeeAll }) => {
   return (
@@ -18,4 +20,4 @@ const Heading: FC<HeadingProps> = ({ title, size, onClickSeeAll }) => {
   );
 };
 
-export default Heading;
+export default env.FLAG_NEW_TOKENS ? HeadingV2 : Heading;

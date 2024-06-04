@@ -29,7 +29,7 @@ import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { Route } from './routes/route';
 
 export async function Redemptions({ app, stack }: StackContext) {
-  const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams } = use(Shared);
+  const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams, bastionHost } = use(Shared);
   const { authorizer } = use(Identity);
 
   // set tag service identity to all resources
@@ -47,7 +47,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   });
 
   // Create Database
-  const database = await new RedemptionsDatabase(app, stack, vpc).setup();
+  const database = await new RedemptionsDatabase(app, stack, vpc, bastionHost).setup();
 
   const api = new ApiGatewayV1Api(stack, 'redemptions', {
     authorizers: {
@@ -210,14 +210,6 @@ export async function Redemptions({ app, stack }: StackContext) {
   });
   new Config.Parameter(stack, 'REDEMPTIONS_DATABASE_READ_WRITE_HOST', {
     value: databaseReadWriteHost,
-  });
-
-  // To avoid TypeScript errors, we set the instance ID to 'DISABLED' if there
-  // is no bastion host
-  const bastionHost = database.getBastionHost();
-  const instanceId = bastionHost ? bastionHost.instanceId : 'DISABLED';
-  new Config.Parameter(stack, 'REDEMPTIONS_BASTION_HOST_INSTANCE', {
-    value: instanceId,
   });
 
   // To avoid TypeScript errors, we set the secret name to 'DISABLED' if the

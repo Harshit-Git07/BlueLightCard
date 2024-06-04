@@ -112,7 +112,6 @@ export class LocalDatabaseSetupStrategy extends AbstractDatabaseSetupStrategy<Lo
           ...props.environment,
         },
       }),
-      getBastionHost: () => null,
     };
   }
 }

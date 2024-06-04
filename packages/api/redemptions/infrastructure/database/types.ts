@@ -13,3 +13,10 @@ export type DatabaseIngressSecurityGroup = InferMarkedType<typeof DatabaseIngres
 const databaseEgressSecurityGroupMarker = Symbol('egress');
 export const DatabaseEgressSecurityGroup = createMarkedType<SecurityGroup, typeof databaseEgressSecurityGroupMarker>();
 export type DatabaseEgressSecurityGroup = InferMarkedType<typeof DatabaseEgressSecurityGroup>;
+
+const bastionHostDefaultSecurityGroupMarker = Symbol('egress');
+export const BastionHostDefaultSecurityGroup = createMarkedType<
+  SecurityGroup,
+  typeof bastionHostDefaultSecurityGroupMarker
+>();
+export type BastionHostDefaultSecurityGroup = InferMarkedType<typeof BastionHostDefaultSecurityGroup>;

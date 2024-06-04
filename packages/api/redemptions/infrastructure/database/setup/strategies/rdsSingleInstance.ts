@@ -1,14 +1,5 @@
 import { Duration } from 'aws-cdk-lib';
-import {
-  BastionHostLinux,
-  InstanceClass,
-  InstanceSize,
-  InstanceType,
-  Port,
-  SecurityGroup,
-  SubnetType,
-} from 'aws-cdk-lib/aws-ec2';
-import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
+import { InstanceClass, InstanceSize, InstanceType, Port, SecurityGroup, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import {
   DatabaseInstance,
   DatabaseInstanceEngine,
@@ -29,7 +20,11 @@ import { DatabaseType, RdsPgSingleInstanceDatabaseConfig } from '../../../config
 import { RedemptionsStackEnvironmentKeys } from '../../../constants/environment';
 import { PRODUCTION_STAGE, STAGING_STAGE } from '../../../constants/sst';
 import { IDatabase } from '../../adapter';
-import { DatabaseEgressSecurityGroup, DatabaseIngressSecurityGroup } from '../../types';
+import {
+  BastionHostDefaultSecurityGroup,
+  DatabaseEgressSecurityGroup,
+  DatabaseIngressSecurityGroup,
+} from '../../types';
 import { MIGRATIONS_PATH } from '../migrations/migrationsScriptHandler';
 
 import { AbstractDatabaseSetupStrategy } from './abstract';
@@ -43,9 +38,9 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     this.ensureAllowedStage();
     const egressSecurityGroup = this.createEgressSecurityGroup();
     const ingressSecurityGroup = this.createIngressSecurityGroup();
-    this.configureSecurityGroupRules(egressSecurityGroup, ingressSecurityGroup);
+    const bastionHostDefaultSecurityGroup = this.getBastionHostDefaultSecurityGroup();
+    this.configureSecurityGroupRules(egressSecurityGroup, ingressSecurityGroup, bastionHostDefaultSecurityGroup);
     const databaseInstance = this.createInstance(ingressSecurityGroup);
-    const bastionHost = this.createBastionHost(egressSecurityGroup);
     const databaseCredentialsSecret = this.getDatabaseCredentialsSecret(databaseInstance);
     const databaseConnectionConfig = this.createDatabaseConnectionConfig(databaseInstance, databaseCredentialsSecret);
     const migrationsScript = this.createMigrationsScript(
@@ -56,7 +51,6 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
     );
     const awsDatabaseAdapter = this.createDatabaseAdapter(
       databaseInstance,
-      bastionHost,
       databaseConnectionConfig,
       egressSecurityGroup,
       databaseCredentialsSecret,
@@ -115,6 +109,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
   private configureSecurityGroupRules(
     egressSecurityGroup: DatabaseEgressSecurityGroup,
     ingressSecurityGroup: DatabaseIngressSecurityGroup,
+    bastionHostDefaultSecurityGroup: BastionHostDefaultSecurityGroup | undefined,
   ): void {
     egressSecurityGroup.addEgressRule(
       ingressSecurityGroup,
@@ -127,6 +122,20 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
       Port.tcp(this.config.port),
       'Allow inbound to Postgres from the egress security group',
     );
+
+    if (bastionHostDefaultSecurityGroup) {
+      ingressSecurityGroup.addIngressRule(
+        bastionHostDefaultSecurityGroup,
+        Port.tcp(this.config.port),
+        'Allow inbound to Postgres from the bastion host default security group',
+      );
+
+      bastionHostDefaultSecurityGroup?.addEgressRule(
+        ingressSecurityGroup,
+        Port.tcp(this.config.port),
+        'Allow outbound to Postgres from the ingress security group',
+      );
+    }
   }
 
   private createInstance(ingressSecurityGroup: DatabaseIngressSecurityGroup): DatabaseInstance {
@@ -137,7 +146,7 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
      */
     const version = PostgresEngineVersion.of('15.5', '15', { s3Import: true, s3Export: true });
 
-    return new DatabaseInstance(this.stack, 'RedemptionsDatabase', {
+    const database = new DatabaseInstance(this.stack, 'RedemptionsDatabase', {
       engine: DatabaseInstanceEngine.postgres({ version }),
       instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.MICRO),
       allocatedStorage: 20,
@@ -162,17 +171,13 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
         },
       }),
     });
-  }
 
-  private createBastionHost(databaseEgressSecurityGroup: DatabaseEgressSecurityGroup): BastionHostLinux {
-    const host = new BastionHostLinux(this.stack, 'bastion-host-redemptions', {
-      instanceName: `${this.stack.stage}-bastion-host-redemptions`,
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.NANO),
-      vpc: this.vpc,
-      securityGroup: databaseEgressSecurityGroup,
+    this.stack.addOutputs({
+      redemptionsDatabaseInstanceEndpointHostname: database.instanceEndpoint.hostname,
+      redemptionsDatabaseInstanceEndpointPort: database.instanceEndpoint.port.toString(),
     });
-    host.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore'));
-    return host;
+
+    return database;
   }
 
   private getDatabaseCredentialsSecret(database: DatabaseInstance): ISecret {
@@ -230,7 +235,6 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
 
   private createDatabaseAdapter(
     database: DatabaseInstance,
-    bastionHost: BastionHostLinux,
     connectionConfig: DatabaseConnectionConfig,
     egressSecurityGroup: DatabaseEgressSecurityGroup,
     databaseCredentialsSecret: ISecret,
@@ -255,7 +259,6 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
           ...props.environment,
         },
       }),
-      getBastionHost: () => bastionHost,
     };
   }
 }

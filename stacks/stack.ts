@@ -50,7 +50,7 @@ export function Shared({ stack, app }: StackContext) {
    * It is not intended for use in development environments.
    * It is used to access Production and Staging database inside the VPC from the outside.
    */
-  const bastionHost = new BastionHost(stack, app, network.vpc);
+  const bastionHost = new BastionHost(stack, network.vpc).setup();
 
   stack.addOutputs({
     EventBusName: bus.eventBusName,

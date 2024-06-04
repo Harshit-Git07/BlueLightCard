@@ -69,7 +69,7 @@ export class E2EDatabaseConnectionManager {
       getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_DATABASE_NAME),
     );
 
-    const bastianHostInstanceId = Config.REDEMPTIONS_BASTION_HOST_INSTANCE;
+    const bastianHostInstanceId = Config.SHARED_BASTION_HOST_INSTANCE;
     const remoteHost =
       connectionType === DatabaseConnectionType.READ_ONLY
         ? Config.REDEMPTIONS_DATABASE_READ_ONLY_HOST

@@ -1,6 +1,8 @@
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { App, Stack } from 'sst/constructs';
 
+import { IBastionHostAdapter } from '@blc-mono/shared/infra/bastionHost/adapter';
+
 import { DatabaseSeedMethod, DatabaseType, RedemptionsDatabaseConfigResolver } from '../config/database';
 
 import { IDatabase } from './adapter';
@@ -12,9 +14,10 @@ import { RdsPgSingleInstanceSetupStrategy } from './setup/strategies/rdsSingleIn
 
 export class RedemptionsDatabase {
   constructor(
-    private app: App,
-    private stack: Stack,
+    private readonly app: App,
+    private readonly stack: Stack,
     public readonly vpc: IVpc,
+    public readonly sharedBastionHost: IBastionHostAdapter | undefined,
     public readonly config = RedemptionsDatabaseConfigResolver.for(stack),
   ) {}
 
@@ -32,11 +35,32 @@ export class RedemptionsDatabase {
     const databaseType = this.config.databaseType;
     switch (databaseType) {
       case DatabaseType.LOCAL:
-        return new LocalDatabaseSetupStrategy(this.app, this.stack, this.vpc, seedStrategy, this.config);
+        return new LocalDatabaseSetupStrategy(
+          this.app,
+          this.stack,
+          this.vpc,
+          seedStrategy,
+          this.sharedBastionHost,
+          this.config,
+        );
       case DatabaseType.RDS_PG_SINGLE_INSTANCE:
-        return new RdsPgSingleInstanceSetupStrategy(this.app, this.stack, this.vpc, seedStrategy, this.config);
+        return new RdsPgSingleInstanceSetupStrategy(
+          this.app,
+          this.stack,
+          this.vpc,
+          seedStrategy,
+          this.sharedBastionHost,
+          this.config,
+        );
       case DatabaseType.AURORA_PG_CLUSTER:
-        return new AuroraPgClusterSetupStrategy(this.app, this.stack, this.vpc, seedStrategy, this.config);
+        return new AuroraPgClusterSetupStrategy(
+          this.app,
+          this.stack,
+          this.vpc,
+          seedStrategy,
+          this.sharedBastionHost,
+          this.config,
+        );
       default:
         throw new Error(`Unknown database type: ${databaseType}`);
     }

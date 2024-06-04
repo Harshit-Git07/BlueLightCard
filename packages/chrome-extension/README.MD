@@ -58,20 +58,20 @@ We use the `terser-webpack-plugin` package to uglify the production code.
 ```javascript
 const TerserPlugin = require('terser-webpack-plugin');
 optimization: {
-    minimize: true,
-    minimizer
-    [
-      new TerserPlugin({
-        terserOptions: {
-          compress: {
-            drop_console: true,
-          },
-          format: {
-            comments: false,
-          },
+  minimize: true,
+  minimizer
+  [
+    new TerserPlugin({
+      terserOptions: {
+        compress: {
+          drop_console: true,
         },
-        extractComments: false,
-      })
-    ]
-  }
+        format: {
+          comments: false,
+        },
+      },
+      extractComments: false,
+    })
+  ]
+}
 ```

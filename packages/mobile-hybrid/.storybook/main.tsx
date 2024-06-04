@@ -1,4 +1,5 @@
 import { StorybookConfig } from '@storybook/nextjs';
+import { DefinePlugin } from 'webpack';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -18,8 +19,19 @@ const config: StorybookConfig = {
     {
       from: './mocks',
       to: '/mocks',
-    }
+    },
   ],
+  webpack(config) {
+    if (!config.plugins) {
+      config.plugins = [];
+    }
+    config.plugins.push(
+      new DefinePlugin({
+        'process.env.STORYBOOK_FLAG_NEW_TOKENS': process.env.STORYBOOK_FLAG_NEW_TOKENS,
+      }),
+    );
+    return config;
+  },
   framework: {
     name: '@storybook/nextjs',
     options: {},

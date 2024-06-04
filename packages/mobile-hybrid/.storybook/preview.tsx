@@ -1,9 +1,8 @@
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { Preview } from '@storybook/react';
-import { env } from '@bluelightcard/shared-ui/env';
 import fontDecorator from './fontDecorator';
 
-if (env.FLAG_NEW_TOKENS) {
+if (process.env.STORYBOOK_FLAG_NEW_TOKENS === 'true') {
   require('../src/styles/v2/globals.css');
   require('../src/styles/v2/carousel.css');
 } else {

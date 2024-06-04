@@ -2,7 +2,7 @@ import { spinner } from '@/modules/Spinner/store';
 import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CompanyAbout, PlatformVariant } from '@bluelightcard/shared-ui';
 import { companyDataAtom } from '@/page-components/company/atoms';
 import CompanyPageHeader from '@/page-components/company/CompanyPageHeader';
@@ -11,6 +11,11 @@ import CompanyOffers from '@/page-components/company/CompanyOffers';
 import { MobilePlatformAdapter } from '@/utils/platformAdapter';
 import { z } from 'zod';
 import { OfferModel } from '@/page-components/company/types';
+import AmplitudeProvider, {
+  amplitudeStore,
+} from '@/components/AmplitudeProvider/AmplitudeProvider';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const companyModel = z.object({
   description: z.string(),
@@ -47,11 +52,15 @@ const Company: NextPage<any> = () => {
   const setSpinner = useSetAtom(spinner);
   const [company, setCompany] = useAtom(companyDataAtom);
 
+  const [retries, setRetries] = useState<number>(0);
+  const maxRetries = 3;
+
   useEffect(() => {
     const getOffers = async () => {
-      if (cid) {
+      const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
+      const v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
+      if (cid && v5FlagOn) {
         const platformAdapter = new MobilePlatformAdapter();
-
         const offersResponse = await platformAdapter.invokeV5Api(
           `/eu/offers/company/${cid}/offers`,
           {
@@ -73,11 +82,14 @@ const Company: NextPage<any> = () => {
         });
 
         setSpinner(false);
+      } else if (retries < maxRetries) {
+        setTimeout(getOffers, 500);
+        setRetries(retries + 1);
       }
     };
 
     getOffers();
-  }, [cid, setSpinner, setCompany]);
+  }, [cid, setSpinner, setCompany, retries]);
 
   return (
     <div className="px-4">

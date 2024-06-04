@@ -85,11 +85,6 @@ jobs:
         uses: ./.github/actions/setup
       - name: Build
         run: npm run build-storybook -w packages/mobile-hybrid
-      - name: Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: storybook-build
-          path: packages/mobile-hybrid/storybook-static
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-pages

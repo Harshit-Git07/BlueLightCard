@@ -46,7 +46,7 @@ const footerConfig: FooterProps = {
         { label: 'Manage Cookies', url: '/managecookies.php#' },
         {
           label: 'Modern Slavery Act Statement',
-          url: 'https://d37evuhq9ypzia.cloudfront.net/BLC%20Modern%20Slavery%20Statement%20JAN%2023%20FINAL.pdf',
+          url: '/modern-slavery-act.php',
         },
       ],
     },

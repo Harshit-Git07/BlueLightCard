@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.18.1...bluelightcard/mobile-hybrid-v1.19.0) (2024-06-05)
+
+
+### Features
+
+* [DISCO-255] tokenise list panel ([#1535](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1535)) ([abb3335](https://github.com/bluelightcard/BlueLightCard-2.0/commit/abb3335d9128475cd49b66d4f0a264441d6aab8e))
+* add mobile one tap for redemption ([#1520](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1520)) ([5225b56](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5225b56c4b947470f7d219b589546b21f01f4885))
+* DISCO-247 Tokenise `BannerCarousel` ([#1515](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1515)) ([35bbab7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/35bbab7721638ecc1ba3f461567db9552a54fb53))
+* DISCO-249 Added tokenised V2 `Heading` component ([#1524](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1524)) ([4b1e002](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b1e00233aed61009a14802d121330442af14c5f))
+* DISCO-250 tokenise Card component ([#1537](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1537)) ([022e97a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/022e97af5561731635902ce45e5db8aecb2a2ced))
+* DISCO-254 tokenise List Item component ([#1534](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1534)) ([ee36a4e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ee36a4eba530af253c298c4255cafcd1ab814df0))
+* DISCO-344 Removed `BannerCarousel` slide indicators ([#1541](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1541)) ([3288434](https://github.com/bluelightcard/BlueLightCard-2.0/commit/32884342a38be21a41d0d9f0653d81e058505026))
+* tokenise of NewsLayout component ([#1512](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1512)) ([f4fc304](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4fc304b5a45765923190d57b4c5db79751368c5))
+
+
+### Bug Fixes
+
+* fixes env vars ([#1529](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1529)) ([fec3270](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fec32704416a926eae447b6f861e2892291dc7dd))
+* V5 api calls on hybrid company page ([#1533](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1533)) ([c96a6e7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c96a6e766d158be0f98e30b84b4da8bc9e0120d7))
+
+
+### Other Changes
+
+* fix flag storybook ci ([#1525](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1525)) ([8ab99b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8ab99b0a4252bfddf92d2269f26f9c35e74c945a))
+* migration improvements ([#1519](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1519)) ([14d880e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/14d880e43ae4d68ff226a05e70a467a672952d67))
+
 ## [1.18.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.18.0...bluelightcard/mobile-hybrid-v1.18.1) (2024-05-31)
 
 

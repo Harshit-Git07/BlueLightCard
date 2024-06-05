@@ -1,9 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { env } from '@bluelightcard/shared-ui/env';
+import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 import ListPanel from './ListPanel';
 
 const componentMeta: Meta<typeof ListPanel> = {
-  title: 'ListPanel',
+  title: 'Layouts/ListPanel',
   component: ListPanel,
+  decorators: [tokenMigrationDecorator],
 };
 
 const DefaultTemplate: StoryFn<typeof ListPanel> = (args) => <ListPanel {...args} />;

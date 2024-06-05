@@ -24,7 +24,7 @@ const NewsLayout: FC<NewsLayoutProps> = ({
             const classes = cssUtil([
               'py-3',
               index < news.length - 1
-                ? 'border-b border-colour-greyscale-grey-100 dark:border-colour-greyscale-grey-700'
+                ? 'border-b border-listItem-divider-colour-light dark:border-listItem-divider-colour-dark'
                 : '',
             ]);
             return (

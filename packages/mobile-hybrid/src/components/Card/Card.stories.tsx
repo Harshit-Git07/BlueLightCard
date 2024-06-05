@@ -1,9 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Card from './Card';
+import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 
 const componentMeta: Meta<typeof Card> = {
   title: 'Card',
   component: Card,
+  decorators: [tokenMigrationDecorator],
 };
 
 const DefaultTemplate: StoryFn<typeof Card> = (args) => <Card {...args} />;

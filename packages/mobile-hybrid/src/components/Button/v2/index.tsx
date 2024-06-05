@@ -9,7 +9,7 @@ const Button: FC<ButtonProps> = ({ text, variant = ThemeVariant.Primary, onClick
   const buttonClasses = cssUtil([
     disabled ? 'opacity-25 cursor-not-allowed' : '',
     'm-2 px-4 py-2 rounded-lg font-semibold ',
-    'shadow-md bg-button-primary-bg-colour text-button-onPrimary-label-colour dark:bg-button-primary-bg-colour-dark dark:button-onPrimary-label-colour-dark',
+    'shadow-md bg-button-primary-bg-colour text-button-onPrimary-label-colour dark:bg-button-primary-bg-colour-dark dark:text-button-onPrimary-label-colour-dark',
   ]);
 
   return (

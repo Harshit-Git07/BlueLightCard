@@ -9,6 +9,7 @@ import { useSetAtom } from 'jotai/react';
 import { spinner } from '../Spinner/store';
 import ListItem from '@/components/ListItem/ListItem';
 import Button from '@/components/Button/Button';
+import Heading from '@/components/Heading/Heading';
 import { offerListDataMap } from '@/data/index';
 import { PAGE_SIZE } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
@@ -89,11 +90,7 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
 
   return (
     <div>
-      {heading && (
-        <h1 className="text-2xl font-museo font-semibold text-neutral-grey-900 dark:text-primary-vividskyblue-700">
-          {heading}
-        </h1>
-      )}
+      {heading && <Heading title={heading} />}
       <div className="py-4">
         {!results.length && <p className="text-center py-4 dark:text-white">No results found.</p>}
         {results.map((offer) => (

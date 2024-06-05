@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.59.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.58.1...bluelightcard/web-v1.59.0) (2024-06-05)
+
+
+### Features
+
+* add email and email validated data in dynamo during signup even… ([#1435](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1435)) ([35a7ac7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/35a7ac71f7c9e7c389f6b6cbe0c4f34a829d4c7a))
+* add mobile one tap for redemption ([a3eb5ce](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a3eb5ce04bd704c56f5140100823e3cde9cbb6f8))
+* add mobile one tap for redemption ([a3eb5ce](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a3eb5ce04bd704c56f5140100823e3cde9cbb6f8))
+* TR-605 add one click back to mobile ([8b9c15e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b9c15ebc0777dfc114d5207b1764426e965196d))
+* TR-605 add one click back to mobile ([#1464](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1464)) ([8b9c15e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b9c15ebc0777dfc114d5207b1764426e965196d))
+
+
+### Bug Fixes
+
+* Revert/tr-605 mobile one tap ([#1494](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1494)) ([519e7de](https://github.com/bluelightcard/BlueLightCard-2.0/commit/519e7de91295a384647a380e40e679610d6668f2))
+* **TI-1308:** updated link for Modern slavery footer link ([#1538](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1538)) ([65d10d4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/65d10d4475591bdfa18a99cc8821d20a39f20de0))
+* TO-767 scroll offersheet backdrop ([#1484](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1484)) ([2bb0c45](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2bb0c45940611545a07a039e499c865d8a5347f3))
+
 ## [1.58.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.58.0...bluelightcard/web-v1.58.1) (2024-05-29)
 
 

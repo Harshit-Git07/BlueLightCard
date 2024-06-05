@@ -22,10 +22,9 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
       showThumbs={false}
       autoPlay={true}
       infiniteLoop={true}
-      showIndicators={true}
+      showIndicators={false}
       showArrows={false}
       selectedItem={currentSlide}
-      className="mb-6"
       onChange={(index) => {
         if (isSwiping) {
           setIsSwiping(false);

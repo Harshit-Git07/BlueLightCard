@@ -36,8 +36,14 @@ const OfferTopDetailsHeader: FC<Props> = ({
   };
 
   useEffect(() => {
-    setImageSource(offerData?.companyLogo ?? finalFallbackImage);
-  }, []);
+    const urlContainsImage = /\.(jpe?g|png|gif|bmp)$/i.test(offerData.companyLogo ?? '');
+    if (offerData.companyLogo && urlContainsImage) {
+      setImageSource(offerData.companyLogo);
+    } else if (offerData.companyId) {
+      const imageUrl = `${config.globalConfig.cdnUrl}/companyimages/complarge/retina/${offerData.companyId}.jpg`;
+      setImageSource(imageUrl);
+    }
+  }, [offerData?.companyLogo]);
 
   return (
     <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-museo">

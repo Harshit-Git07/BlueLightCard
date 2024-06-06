@@ -8,6 +8,8 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
 import { RedemptionPageController } from '../RedemptionPage/RedemptionPageController';
+import events from '../../../../utils/amplitude/events';
+import { usePlatformAdapter } from '../../../../index';
 
 const OfferSheetDetailsPage: FC = () => {
   const {
@@ -15,16 +17,36 @@ const OfferSheetDetailsPage: FC = () => {
     showRedemptionPage,
     offerMeta,
     redemptionType,
-    platform,
+    amplitudeEvent,
   } = useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
+  const platformAdapter = usePlatformAdapter();
 
   const labels = useLabels(offerData);
 
   const dynCss = useCSSConditional({
-    'w-full': platform === PlatformVariant.Web,
+    'w-full': platformAdapter.platform === PlatformVariant.Web,
   });
   const css = useCSSMerge('', dynCss);
+
+  const getDiscountClickHandler = () => {
+    setOfferSheetAtom((prev) => ({ ...prev, showRedemptionPage: true }));
+
+    if (platformAdapter.platform === PlatformVariant.Web && amplitudeEvent) {
+      amplitudeEvent({
+        event: events.VAULT_CODE_REQUEST_CODE_CLICKED,
+        params: {
+          company_id: offerMeta.companyId,
+          company_name: offerMeta.companyName,
+          offer_id: offerData.id,
+          offer_name: offerData.name,
+          source: 'sheet',
+          origin: platformAdapter.platform,
+          design_type: 'modal_popup',
+        },
+      });
+    }
+  };
 
   if (showRedemptionPage && redemptionType) {
     return (
@@ -51,7 +73,7 @@ const OfferSheetDetailsPage: FC = () => {
           variant="primary"
           className="w-full"
           transitionDurationMs={200}
-          onClick={() => setOfferSheetAtom((prev) => ({ ...prev, showRedemptionPage: true }))}
+          onClick={getDiscountClickHandler}
         >
           <span className="leading-10 font-bold text-md">Get Discount</span>
         </MagicButton>

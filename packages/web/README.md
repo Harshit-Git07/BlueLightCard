@@ -136,4 +136,3 @@ c. World hooks contain
 Ensure that you have created a `.env` in the `packages/web/e2e` folder based on the `.env.example`
 
 For further information please see https://bluelightcard.atlassian.net/wiki/spaces/BTB/pages/2095611905/Guide+for+Playwright+and+Cucumber
-

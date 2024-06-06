@@ -95,7 +95,7 @@ jobs:
     name: Storybook Preview
     runs-on: ubuntu-latest
     outputs:
-      url: ${{ steps.cloudflare-pages.outputs.url }}
+      url: ${{ steps.storybook-publish.outputs.url }}
     needs:
       - install
       - changes
@@ -107,44 +107,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
-      - name: Build
-        run: npm run build-storybook -w packages/web
       - name: Publish
-        uses: cloudflare/pages-action@1
-        id: cloudflare-pages
+        uses: ./.github/actions/storybook
+        id: storybook-publish
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: web-storybook
-          directory: packages/web/storybook-static
-          branch: ${{ github.ref_name }}
+          cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflareAccountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageName: web
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-
-  comment:
-    name: Comment on PR
-    runs-on: ubuntu-latest
-    needs:
-      - storybook
-    steps:
-      - name: Find Comment
-        uses: peter-evans/find-comment@v2
-        if: success() && github.event.number
-        id: fc
-        with:
-          issue-number: ${{ github.event.number }}
-          body-includes: '🚀 Successfully deployed storybook'
-
-      - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v3
-        if: success() && github.event.number
-        with:
-          issue-number: ${{ github.event.number }}
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          edit-mode: replace
-          body: |
-            ## 🚀 Successfully deployed storybook
-
-            <p><b>Storybook Url:</b> <a href="${{ needs.storybook.outputs.url }}">${{ needs.storybook.outputs.url }}</a></p>
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

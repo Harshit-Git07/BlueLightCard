@@ -1,0 +1,57 @@
+name: 'Storybook'
+description: 'Deploy a Storybook instance for workflows'
+inputs:
+  packageName:
+    description: 'Name of the package to build Storybook for'
+    required: true
+  cloudflareApiToken:
+    description: 'API token to deploy to CloudFlare Pages'
+    required: true
+  cloudflareAccountId:
+    description: 'ID of CloudFlare account to deploy to'
+    required: true
+  gitHubToken:
+    description: 'GitHub API token for triggering GitHub Deployments'
+    required: true
+outputs:
+  url:
+    description: 'CloudFlare Pages URL that the Storybook instance was deployed to'
+    value: ${{ steps.cloudflare-pages.outputs.url }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Build
+      shell: 'bash'
+      run: npm run build-storybook -w packages/${{ inputs.packageName }}
+
+    - name: Publish
+      uses: cloudflare/pages-action@1
+      id: cloudflare-pages
+      with:
+        apiToken: ${{ inputs.cloudflareApiToken }}
+        accountId: ${{ inputs.cloudflareAccountId }}
+        projectName: ${{ inputs.packageName }}-storybook
+        directory: packages/${{ inputs.packageName }}/storybook-static
+        branch: ${{ github.ref_name }}
+        gitHubToken: ${{ inputs.gitHubToken }}
+
+    - name: Find PR Comment
+      uses: peter-evans/find-comment@v2
+      if: success() && github.event.number
+      id: find-pr-comment
+      with:
+        issue-number: ${{ github.event.number }}
+        body-includes: |
+          🚀 Successfully deployed storybook: ${{ inputs.packageName }}
+
+    - name: Create PR Comment
+      uses: peter-evans/create-or-update-comment@v3
+      if: success() && github.event.number
+      with:
+        issue-number: ${{ github.event.number }}
+        comment-id: ${{ steps.find-pr-comment.outputs.comment-id }}
+        edit-mode: replace
+        body: |
+          ## 🚀 Successfully deployed storybook: ${{ inputs.packageName }}
+
+          <p><b>Storybook Url:</b> <a href="${{ steps.cloudflare-pages.outputs.url }}">${{ steps.cloudflare-pages.outputs.url }}</a></p>

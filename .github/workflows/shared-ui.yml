@@ -17,8 +17,6 @@ on:
 
 env:
   PKG_NAME: shared-ui
-  STORYBOOK_PROJECT_NAME: shared-ui-storybook
-  STORYBOOK_BUILD_OUTPUT: storybook-static
 
 jobs:
   install:
@@ -72,12 +70,11 @@ jobs:
         run: npm run typecheck -w packages/shared-ui
 
   storybook:
-    if: github.event_name == 'pull_request'
     name: Storybook Preview
     runs-on: ubuntu-latest
     needs: install
     outputs:
-      url: ${{ steps.cloudflare-pages.outputs.url }}
+      url: ${{ steps.storybook-publish.outputs.url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
@@ -85,43 +82,14 @@ jobs:
           node-version: 18
       - name: Setup
         uses: ./.github/actions/setup
-      - name: Build
-        run: npm run build-storybook -w packages/${{ env.PKG_NAME }}
       - name: Publish
-        uses: cloudflare/pages-action@1
-        id: cloudflare-pages
+        uses: ./.github/actions/storybook
+        id: storybook-publish
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ env.STORYBOOK_PROJECT_NAME }}
-          directory: packages/${{ env.PKG_NAME }}/${{ env.STORYBOOK_BUILD_OUTPUT }}
-          branch: ${{ github.ref_name }}
+          cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflareAccountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageName: ${{ env.PKG_NAME }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-  comment:
-    name: Storybook Link
-    runs-on: ubuntu-latest
-    needs:
-      - storybook
-    steps:
-      - name: Find Comment
-        uses: peter-evans/find-comment@v2
-        if: success() && github.event.number
-        id: fc
-        with:
-          issue-number: ${{ github.event.number }}
-          body-includes: '🚀 Successfully deployed storybook'
-
-      - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v3
-        if: success() && github.event.number
-        with:
-          issue-number: ${{ github.event.number }}
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          edit-mode: replace
-          body: |
-            ## 🚀 Successfully deployed storybook
-
-            <p><b>Storybook Url:</b> <a href="${{ needs.storybook.outputs.url }}">${{ needs.storybook.outputs.url }}</a></p>
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

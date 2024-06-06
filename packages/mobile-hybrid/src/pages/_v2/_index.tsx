@@ -9,7 +9,7 @@ import trackScrollDepth from '@/utils/scrollDepth';
 import Offers from '@/modules/offers';
 import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import LegacySearch from '@/components/LegacySearch/LegacySearch';
+import Search from '@/components/Search/Search';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import FavouritedBrandsSlider from '@/modules/favouritedbrands';
 import useFavouritedBrands from '@/hooks/useFavouritedBrands';
@@ -78,13 +78,16 @@ const Home: NextPage<any> = () => {
           keyName={Experiments.HOMEPAGE_SEARCHBAR}
           value={AmplitudeExperimentState.Treatment}
         >
-          <LegacySearch
-            onSearch={(searchTerm) =>
-              navigation.navigate(
-                `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
-              )
-            }
-          />
+          <div className="my-2 mx-2">
+            <Search
+              onSearch={(searchTerm) =>
+                navigation.navigate(
+                  `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
+                )
+              }
+              placeholderText="Search stores or brands"
+            />
+          </div>
         </Amplitude>
         <PromoBanner />
         {showFavouritedBrands && <FavouritedBrandsSlider />}

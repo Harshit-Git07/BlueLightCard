@@ -18,6 +18,11 @@
     ],
     "DDS": [
       {
+        "partnersName": "UK Reward Gateway",
+        "callBackUrl": "https://accounts.rewardgateway.com/callback.php",
+        "signoutUrl": "https://defencediscountservice.rewardgateway.co.uk/Authentication/Logout"
+      },
+      {
         "partnersName": "UK Yalson",
         "callBackUrl": "https://secure.yalsoncc.co.uk/dds_callback",
         "signoutUrl": "https://secure.yalsoncc.co.uk/dds_signout"

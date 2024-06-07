@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.59.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.59.0...bluelightcard/web-v1.59.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* Updated readme to trigger web release ([#1556](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1556)) ([c81a8d3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c81a8d3f1eadbf251250586072b90f6f9dc44f93))
+
 ## [1.59.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.58.1...bluelightcard/web-v1.59.0) (2024-06-05)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.77.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.76.0...bluelightcard/identity-v1.77.0) (2024-06-07)
+
+
+### Features
+
+* add reward gateway client for DDS ([#1550](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1550)) ([7437f5e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7437f5e7cabb415f46e78b082dee81b6858423a5))
+
 ## [1.76.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.75.0...bluelightcard/identity-v1.76.0) (2024-05-31)
 
 

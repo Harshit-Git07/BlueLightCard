@@ -2,8 +2,7 @@ import { FC, PropsWithChildren } from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import Spinner from '@/modules/Spinner';
-import bus from '@/eventBus';
-import { APIUrl, Channels, V5_API_URL } from '@/globals';
+import { APIUrl, V5_API_URL } from '@/globals';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
@@ -13,14 +12,16 @@ import SearchResultsContainer from '@/modules/SearchResults/components/SearchRes
 import { OfferListItemModel } from '@/models/offer';
 import { offerListItemFactory, searchResultV5Factory } from '@/modules/List/__mocks__/factory';
 import '@testing-library/jest-dom';
-import { SearchResult, SearchResults, SearchResultsV5 } from '@/modules/SearchResults/types';
+import { SearchResults, SearchResultsV5 } from '@/modules/SearchResults/types';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import { userProfile } from '@/components/UserProfileProvider/store';
+import useAPI from '@/hooks/useAPI';
 
 jest.mock('@/invoke/apiCall');
 jest.mock('@/invoke/analytics');
+jest.mock('@/hooks/useAPI');
 
 let testData: OfferListItemModel[];
 let testDataV5: SearchResultsV5;
@@ -29,12 +30,14 @@ describe('Search results', () => {
   const searchTermValue = 'pizza';
   let analyticsMock: jest.SpyInstance<void, [properties: NativeAnalytics.Parameters], any>;
   let user: UserEvent;
+  let useAPIMock: jest.Mock;
 
   beforeEach(() => {
     jest.resetAllMocks();
     analyticsMock = jest
       .spyOn(InvokeNativeAnalytics.prototype, 'logAnalyticsEvent')
       .mockImplementation(() => jest.fn());
+    useAPIMock = jest.mocked(useAPI);
     user = userEvent.setup();
     testData = offerListItemFactory.buildList(2);
     testData[1].companyname = 'Test Company';
@@ -67,9 +70,9 @@ describe('Search results', () => {
 
   describe('render results', () => {
     it('should render list of results', async () => {
-      whenSearchResultsPageIsRendered(searchTermValue);
-
       givenSearchResultsAreReturnedFromTheAPI();
+
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       const results = await screen.findAllByRole('listitem');
       expect(results).toHaveLength(2);
@@ -97,7 +100,7 @@ describe('Search results', () => {
       await screen.findByText('No results found.');
     });
     it('should show no results found when nothing found but a previous search was successful', async () => {
-      whenSearchResultsPageIsRendered(searchTermValue, [buildSearchResult()]);
+      whenSearchResultsPageIsRendered(searchTermValue, testData);
 
       givenSearchResultsAreReturnedFromTheAPI([]);
 
@@ -106,12 +109,7 @@ describe('Search results', () => {
     it('should show no results found when nothing found but a previous search was successful and category level three search experiment is on', async () => {
       const mockPlatformAdapter = useGivenSearchResultsAreReturnedFromTheAPI([]);
 
-      whenSearchResultsPageIsRendered(
-        searchTermValue,
-        [buildSearchResult()],
-        'treatment',
-        mockPlatformAdapter,
-      );
+      whenSearchResultsPageIsRendered(searchTermValue, testData, 'treatment', mockPlatformAdapter);
 
       await screen.findByText('No results found.');
     });
@@ -162,9 +160,9 @@ describe('Search results', () => {
 
   describe('log analytics events', () => {
     it('should log analytics event on results returned', async () => {
-      whenSearchResultsPageIsRendered(searchTermValue);
-
       givenSearchResultsAreReturnedFromTheAPI();
+
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       await waitFor(() =>
         expect(analyticsMock).toHaveBeenCalledWith({
@@ -192,9 +190,9 @@ describe('Search results', () => {
       );
     });
     it('should log analytics event when list item is clicked', async () => {
-      whenSearchResultsPageIsRendered(searchTermValue);
-
       givenSearchResultsAreReturnedFromTheAPI();
+
+      whenSearchResultsPageIsRendered(searchTermValue);
 
       const listItems = await screen.findAllByRole('button');
 
@@ -218,10 +216,8 @@ describe('Search results', () => {
   });
 
   const givenSearchResultsAreReturnedFromTheAPI = (data: OfferListItemModel[] = testData) => {
-    act(() => {
-      bus.emit(Channels.API_RESPONSE, APIUrl.Search, {
-        data,
-      });
+    useAPIMock.mockReturnValue({
+      data,
     });
   };
 
@@ -238,20 +234,6 @@ describe('Search results', () => {
         <Spinner />
       </div>
     );
-  };
-
-  const buildSearchResult = (): SearchResult => {
-    return {
-      id: 123,
-      catid: 123,
-      compid: 123,
-      typeid: 5,
-      offername: 'Offer 1',
-      companyname: 'Company 1',
-      logos: '',
-      absoluteLogos: '',
-      s3logos: '',
-    };
   };
 
   const whenSearchResultsPageIsRendered = (

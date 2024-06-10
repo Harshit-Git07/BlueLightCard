@@ -30,7 +30,6 @@ const SearchResultsPage: NextPage = () => {
   useEffect(() => {
     if (searchQueryValue) {
       setTerm(searchQueryValue);
-      setSpinner(true);
       return;
     }
   }, [searchQueryValue, setTerm, setSpinner]);

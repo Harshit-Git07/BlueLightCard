@@ -8,6 +8,7 @@ import { SearchResults, SearchResultsV5, SearchResultV5 } from '@/modules/Search
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { searchResults } from '@/modules/SearchResults/store';
+import { spinner } from '@/modules/Spinner/store';
 import { userProfile } from '@/components/UserProfileProvider/store';
 
 const request = new InvokeNativeAPICall();
@@ -16,6 +17,7 @@ const useSearchResults = (term?: string) => {
   const amplitudeExperiment = useAtomValue(experimentsAndFeatureFlags);
   const userProfileValue = useAtomValue(userProfile);
   const platformAdapter = usePlatformAdapter();
+  const setSpinner = useSetAtom(spinner);
   const [searchResultsDataV5, setSearchResultsDataV5] = useState<
     APIResponse<SearchResultsV5> | undefined
   >();
@@ -49,9 +51,11 @@ const useSearchResults = (term?: string) => {
         }
       }
     };
-
+    if (term) {
+      setSpinner(true);
+    }
     fetchSearchResults();
-  }, [term, categoryTreeExperimentEnabled, platformAdapter, userProfileValue]);
+  }, [term, categoryTreeExperimentEnabled, platformAdapter, userProfileValue, setSpinner]);
 
   useEffect(() => {
     let searchResults: SearchResults | undefined = undefined;
@@ -67,6 +71,10 @@ const useSearchResults = (term?: string) => {
       }
     }
 
+    if (searchResultsData || searchResultsDataV5) {
+      setSpinner(false);
+    }
+
     if (searchResults) {
       if (searchResults.length > 0) {
         setResultsWrapper({ results: searchResults, term });
@@ -74,7 +82,6 @@ const useSearchResults = (term?: string) => {
       }
     }
     setResultsWrapper({ results: [], term });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchResultsData, searchResultsDataV5, setResultsWrapper]);
 };

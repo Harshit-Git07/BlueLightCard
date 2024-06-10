@@ -67,7 +67,6 @@ const SearchResultsContainer: FC = () => {
     if (resultsWrapper && resultsWrapper.results.length > 0) {
       logSearchResultsListViewedAnalytic(resultsWrapper.results.length);
     }
-    setSpinner(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultsWrapper.term, resultsWrapper.results, setSpinner]);
 

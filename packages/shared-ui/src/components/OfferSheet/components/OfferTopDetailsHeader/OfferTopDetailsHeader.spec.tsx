@@ -72,7 +72,7 @@ describe('smoke test', () => {
         </PlatformAdapterProvider>
       </SharedUIConfigProvider>,
     );
-    expect(getByRole('img', { name: /some dummy alt text here/i })).toBeTruthy();
+    expect(getByRole('img', { name: /SEAT logo/i })).toBeTruthy();
     expect(getByRole('heading', { name: /save with seat/i })).toBeTruthy();
     expect(
       getByText(

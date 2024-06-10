@@ -53,7 +53,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
           {imageSource && (
             <Image
               src={imageSource}
-              alt="Some dummy alt text here"
+              alt={`${offerMeta.companyName ?? 'company'} logo`}
               responsive={false}
               width={100}
               height={64}

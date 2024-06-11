@@ -18,7 +18,6 @@ import { RedeemStrategyResolver } from '../../../services/redeem/RedeemStrategyR
 import { RedeemGenericStrategy } from '../../../services/redeem/strategies/RedeemGenericStrategy';
 import { RedeemPreAppliedStrategy } from '../../../services/redeem/strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from '../../../services/redeem/strategies/RedeemShowCardStrategy';
-import { RedeemVaultQrStrategy } from '../../../services/redeem/strategies/RedeemVaultQrStrategy';
 import { RedeemVaultStrategy } from '../../../services/redeem/strategies/RedeemVaultStrategy';
 
 const service: string = getEnvRaw('SERVICE_NAME') ?? 'redemptions';
@@ -41,7 +40,6 @@ const controller = createInjector()
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)
   .provideClass(RedeemShowCardStrategy.key, RedeemShowCardStrategy)
-  .provideClass(RedeemVaultQrStrategy.key, RedeemVaultQrStrategy)
   .provideClass(RedeemVaultStrategy.key, RedeemVaultStrategy)
   .provideClass(RedeemStrategyResolver.key, RedeemStrategyResolver)
   // API Service

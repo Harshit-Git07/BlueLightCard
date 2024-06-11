@@ -5,11 +5,10 @@ import { IRedeemStrategy } from './strategies/IRedeemStrategy';
 import { RedeemGenericStrategy } from './strategies/RedeemGenericStrategy';
 import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
-import { RedeemVaultQrStrategy } from './strategies/RedeemVaultQrStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
 
 type RedemptionType = (typeof redemptionTypeEnum.enumValues)[number];
-const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED] = redemptionTypeEnum.enumValues;
+export const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED] = redemptionTypeEnum.enumValues;
 export type RedeemStrategies = Record<RedemptionType, IRedeemStrategy>;
 
 export interface IRedeemStrategyResolver {
@@ -22,7 +21,6 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
     RedeemGenericStrategy.key,
     RedeemPreAppliedStrategy.key,
     RedeemShowCardStrategy.key,
-    RedeemVaultQrStrategy.key,
     RedeemVaultStrategy.key,
   ] as const;
 
@@ -30,7 +28,6 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
     private readonly redeemGenericStrategy: RedeemGenericStrategy,
     private readonly redeemPreAppliedStrategy: RedeemPreAppliedStrategy,
     private readonly redeemShowCardStrategy: RedeemShowCardStrategy,
-    private readonly redeemVaultQrStrategy: RedeemVaultQrStrategy,
     private readonly redeemVaultStrategy: RedeemVaultStrategy,
   ) {}
 
@@ -43,9 +40,8 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
       case SHOWCARD:
         return this.redeemShowCardStrategy;
       case VAULT:
-        return this.redeemVaultStrategy;
       case VAULTQR:
-        return this.redeemVaultQrStrategy;
+        return this.redeemVaultStrategy;
       default:
         exhaustiveCheck(redemptionType, 'Unhandled redemptionType');
     }

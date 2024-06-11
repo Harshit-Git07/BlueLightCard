@@ -7,8 +7,8 @@ import {
 } from '../../repositories/RedemptionsEventsRepository';
 import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
-import { IRedeemStrategyResolver, RedeemStrategyResolver } from './RedeemStrategyResolver';
-import { RedeemedStrategyResult, RedeemParams } from './strategies/IRedeemStrategy';
+import { GENERIC, IRedeemStrategyResolver, RedeemStrategyResolver, VAULT, VAULTQR } from './RedeemStrategyResolver';
+import { isVaultStrategyResultWithDetails, RedeemedStrategyResult, RedeemParams } from './strategies/IRedeemStrategy';
 
 export type RedeemResult =
   | RedeemedStrategyResult
@@ -67,10 +67,10 @@ export class RedeemService implements IRedeemService {
     const redeemStrategy = this.redeemStrategyResolver.getRedemptionStrategy(redemption.redemptionType);
 
     const result = await redeemStrategy.redeem(redemption, params);
+    const acceptedRedemptionTypes = new Set([GENERIC, VAULT, VAULTQR]);
 
-    if (result.kind === 'Ok' && (result.redemptionType === 'vault' || result.redemptionType === 'generic')) {
-      const affiliateConfig = AffiliateHelper.getAffiliateConfig(result.redemptionDetails.url);
-
+    if (isVaultStrategyResultWithDetails(result) && acceptedRedemptionTypes.has(result.redemptionType)) {
+      const affiliateConfig = AffiliateHelper.getAffiliateConfig(result.redemptionDetails.url ?? '');
       await this.redemptionsEventsRepository
         .publishRedemptionEvent({
           memberDetails: {
@@ -86,7 +86,7 @@ export class RedeemService implements IRedeemService {
             offerName: params.offerName,
             code: result.redemptionDetails.code,
             affiliate: affiliateConfig?.affiliate ?? null,
-            url: result.redemptionDetails.url,
+            url: result.redemptionDetails.url ?? '',
             clientType: params.clientType,
           },
         })

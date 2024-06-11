@@ -63,6 +63,9 @@ export class AffiliateHelper {
   }
 
   public static getAffiliateConfig(affiliateUrl: string): AffiliateConfiguration | null {
+    if (!affiliateUrl) {
+      return null;
+    }
     return new AffiliateConfigurationHelper(affiliateUrl).getConfig();
   }
 

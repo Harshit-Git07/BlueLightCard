@@ -1,4 +1,11 @@
 import { ClientType } from '@blc-mono/core/schemas/domain';
+import {
+  GENERIC,
+  PREAPPLIED,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/redemptions/application/services/redeem/RedeemStrategyResolver';
 
 import { Redemption } from '../../../repositories/RedemptionsRepository';
 
@@ -6,12 +13,13 @@ export type RedeemedStrategyResult =
   | RedeemGenericStrategyResult
   | RedeemPreAppliedStrategyResult
   | RedeemShowCardStrategyResult
-  | RedeemVaultQrStrategyResult
   | RedeemVaultStrategyResult;
+
+export type RedeemVaultRedemptionType = typeof VAULTQR | typeof VAULT;
 
 export type RedeemGenericStrategyResult = {
   kind: 'Ok';
-  redemptionType: 'generic';
+  redemptionType: typeof GENERIC;
   redemptionDetails: {
     url: string;
     code: string;
@@ -21,34 +29,28 @@ export type RedeemGenericStrategyResult = {
 // TODO: This is a placeholder for the future implementation
 export type RedeemPreAppliedStrategyResult = {
   kind: 'Ok';
-  redemptionType: 'preApplied';
+  redemptionType: typeof PREAPPLIED;
   redemptionDetails: string;
 };
 
 // TODO: This is a placeholder for the future implementation
 export type RedeemShowCardStrategyResult = {
   kind: 'Ok';
-  redemptionType: 'showCard';
+  redemptionType: typeof SHOWCARD;
   redemptionDetails: string;
 };
 
-// TODO: This is a placeholder for the future implementation
-export type RedeemVaultQrStrategyResult = {
+export type VaultStrategyResultWithDetails = {
   kind: 'Ok';
-  redemptionType: 'vaultQR';
-  redemptionDetails: string;
+  redemptionType: RedeemVaultRedemptionType;
+  redemptionDetails: {
+    url?: string;
+    code: string;
+  };
 };
+export type VaultStrategyResultMaxPerUser = { kind: 'MaxPerUserReached' };
 
-export type RedeemVaultStrategyResult =
-  | {
-      kind: 'Ok';
-      redemptionType: 'vault';
-      redemptionDetails: {
-        url: string;
-        code: string;
-      };
-    }
-  | { kind: 'MaxPerUserReached' };
+export type RedeemVaultStrategyResult = VaultStrategyResultWithDetails | VaultStrategyResultMaxPerUser;
 
 export type RedeemParams = {
   memberId: string;
@@ -60,4 +62,10 @@ export type RedeemParams = {
 
 export interface IRedeemStrategy {
   redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemedStrategyResult>;
+}
+
+export function isVaultStrategyResultWithDetails(
+  object: RedeemedStrategyResult,
+): object is VaultStrategyResultWithDetails {
+  return object.kind === 'Ok';
 }

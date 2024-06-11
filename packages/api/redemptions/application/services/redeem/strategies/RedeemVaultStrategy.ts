@@ -65,8 +65,16 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     redemption: Redemption,
     memberId: string,
   ): Promise<RedeemVaultStrategyResult> {
-    if (!redemption.url) {
+    if (redemption.redemptionType === 'vault' && !redemption.url) {
       throw new Error('Invalid redemption for redemption type "vault" (missing url)');
+    }
+
+    const { redemptionType } = redemption;
+
+    const isVaultRedemptionType = redemptionType === 'vault' || redemptionType === 'vaultQR';
+
+    if (!isVaultRedemptionType) {
+      throw new Error('Unexpected redemption type');
     }
 
     const reachedMaxCodeClaimed = await this.vaultCodesRepository.checkIfMemberReachedMaxCodeClaimed(
@@ -93,15 +101,23 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
       throw new Error('No vault code found');
     }
 
-    const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, memberId);
-    return {
-      kind: 'Ok',
-      redemptionType: 'vault',
-      redemptionDetails: {
-        url: parsedUrl,
-        code: claimedCode.code,
-      },
+    const redemptionDetails = {
+      code: claimedCode.code,
     };
+    const vaultResponse: RedeemVaultStrategyResult = {
+      kind: 'Ok',
+      redemptionType,
+      redemptionDetails,
+    };
+
+    if (redemptionType != 'vaultQR' && redemption.url) {
+      const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, memberId);
+      return {
+        ...vaultResponse,
+        redemptionDetails: { ...redemptionDetails, url: parsedUrl },
+      };
+    }
+    return vaultResponse;
   }
 
   private async handleRedeemLegacyVault(
@@ -109,8 +125,14 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     redemption: Redemption,
     memberId: string,
   ): Promise<RedeemVaultStrategyResult> {
-    if (!redemption.url) {
+    if (redemption.redemptionType === 'vault' && !redemption.url) {
       throw new Error('Invalid redemption for redemption type "vault" (missing url)');
+    }
+    const { redemptionType } = redemption;
+    const isVaultRedemptionType = redemptionType == 'vault' || redemptionType === 'vaultQR';
+
+    if (!isVaultRedemptionType) {
+      throw new Error('Unexpected redemption type');
     }
 
     // AWS Key setup
@@ -132,14 +154,23 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
       'BLC_UK',
     );
 
-    const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, memberId);
-    return {
-      kind: 'Ok',
-      redemptionType: 'vault',
-      redemptionDetails: {
-        url: parsedUrl,
-        code: assignCodeResponse.code,
-      },
+    const redemptionDetails = {
+      code: assignCodeResponse.code,
     };
+    const vaultResponse: RedeemVaultStrategyResult = {
+      kind: 'Ok',
+      redemptionType,
+      redemptionDetails,
+    };
+
+    if (redemptionType != 'vaultQR' && redemption.url) {
+      const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, memberId);
+      return {
+        ...vaultResponse,
+        redemptionDetails: { ...redemptionDetails, url: parsedUrl },
+      };
+    }
+
+    return vaultResponse;
   }
 }

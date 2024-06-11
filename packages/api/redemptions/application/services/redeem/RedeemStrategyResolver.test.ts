@@ -13,7 +13,6 @@ import { RedeemStrategyResolver } from './RedeemStrategyResolver';
 import { RedeemGenericStrategy } from './strategies/RedeemGenericStrategy';
 import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
-import { RedeemVaultQrStrategy } from './strategies/RedeemVaultQrStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
 
 jest.mock('../../../../core/src/utils/getEnv', () => ({
@@ -40,7 +39,7 @@ describe('RedeemStrategyResolver', () => {
     ['preApplied', RedeemPreAppliedStrategy],
     ['showCard', RedeemShowCardStrategy],
     ['vault', RedeemVaultStrategy],
-    ['vaultQR', RedeemVaultQrStrategy],
+    ['vaultQR', RedeemVaultStrategy],
   ] satisfies [RedemptionType, unknown][])(
     'should return the correct strategy for each redemption type (%s)',
     (redemptionType, strategy) => {
@@ -49,7 +48,6 @@ describe('RedeemStrategyResolver', () => {
         new RedeemGenericStrategy(genericsRepo, mockedLogger),
         new RedeemPreAppliedStrategy(),
         new RedeemShowCardStrategy(),
-        new RedeemVaultQrStrategy(),
         new RedeemVaultStrategy(vaultsRepo, vaultCodesRepo, legacyVaultApiRepo, mockedLogger),
       );
 
@@ -67,7 +65,6 @@ describe('RedeemStrategyResolver', () => {
       new RedeemGenericStrategy(genericsRepo, mockedLogger),
       new RedeemPreAppliedStrategy(),
       new RedeemShowCardStrategy(),
-      new RedeemVaultQrStrategy(),
       new RedeemVaultStrategy(vaultsRepo, vaultCodesRepo, legacyVaultApiRepo, mockedLogger),
     );
 

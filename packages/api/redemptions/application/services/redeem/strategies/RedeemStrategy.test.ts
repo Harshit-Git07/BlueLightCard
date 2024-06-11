@@ -290,7 +290,9 @@ describe('Redemption Strategies', () => {
       });
       it('Should return kind equals to "MaxPerUserReached" when max per user is reached', async () => {
         // Arrange
-        const redemptionCreated = redemption.build();
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
         const vaultCreated = vault(redemptionCreated.id, 'standard', 'active', 3).build();
         const vaultBatchCreated = vaultBatches(vaultCreated.id).build();
         const vaultCodesCreated = [
@@ -328,7 +330,9 @@ describe('Redemption Strategies', () => {
         // Arrange
         const recentDate = faker.date.recent();
         const futureDate = faker.date.future();
-        const redemptionCreated = redemption.build();
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
         const vaultCreated = vault(redemptionCreated.id, 'standard', 'active', 3).build();
         const vaultBatchCreated = vaultBatches(vaultCreated.id).build();
         const vaultCodesCreated = [
@@ -361,7 +365,9 @@ describe('Redemption Strategies', () => {
           assignCodeToMember: jest.fn(),
           getCodesRedeemed: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
-        const redemptionCreated = redemption.build();
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
         const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
         await connection.db.insert(redemptionsTable).values(redemptionCreated);
         await connection.db.insert(vaultsTable).values(vaultCreated);
@@ -383,7 +389,9 @@ describe('Redemption Strategies', () => {
           assignCodeToMember: jest.fn().mockResolvedValue(undefined),
           getCodesRedeemed: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
-        const redemptionCreated = redemption.build();
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
         const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
         await connection.db.insert(redemptionsTable).values(redemptionCreated);
         await connection.db.insert(vaultsTable).values(vaultCreated);
@@ -404,7 +412,9 @@ describe('Redemption Strategies', () => {
           assignCodeToMember: jest.fn().mockRejectedValue(new Error('Error assigning code')),
           getCodesRedeemed: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
-        const redemptionCreated = redemption.build();
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
         const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
         await connection.db.insert(redemptionsTable).values(redemptionCreated);
         await connection.db.insert(vaultsTable).values(vaultCreated);
@@ -431,7 +441,9 @@ describe('Redemption Strategies', () => {
           }),
           getCodesRedeemed: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
-        const redemptionCreated = redemption.build();
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
         const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
         await connection.db.insert(redemptionsTable).values(redemptionCreated);
         await connection.db.insert(vaultsTable).values(vaultCreated);

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.2.1...bluelightcard/chrome-extension-v1.2.2) (2024-06-11)
+
+
+### Bug Fixes
+
+* TO-756 Chrome extension incorrect links - Chore/dist not created after previous merge ([#1565](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1565)) ([0562b4d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0562b4d2479423bc7b3ee4f29537e0415b5b4f1c))
+* TO-756 Chrome extension incorrect links - More company url's fixed ([#1544](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1544)) ([3349f7c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3349f7c2320be8644a7a1679a52908bc0b2b1663))
+* TO-756 Chrome extension incorrect links - More company url's fixed ([#1563](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1563)) ([0c8ca55](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0c8ca555217e7ea2d447a6a558c6850ac527f29d))
+
 ## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.2.0...bluelightcard/chrome-extension-v1.2.1) (2024-06-04)
 
 

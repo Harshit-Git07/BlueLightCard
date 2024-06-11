@@ -8,13 +8,18 @@
       "Semantic/BLC": "enabled",
       "Semantic/Surface": "enabled",
       "Semantic/System": "enabled",
-      "Component/Button": "enabled",
-      "Component/SearchBar": "enabled",
-      "Component/Spinner": "enabled",
-      "Component/ListItem": "enabled",
-      "Component/BannerCarousel": "enabled",
-      "Component/Card": "enabled",
-      "Component/Heading": "enabled"
+      "Hybrid-Components/BannerCarousel": "enabled",
+      "Hybrid-Components/Heading": "enabled",
+      "Hybrid-Components/Spinner": "enabled",
+      "Hybrid-Components/ListItem": "enabled",
+      "Shared-Components/SearchBar": "enabled",
+      "Shared-Components/Card": "enabled",
+      "Shared-Components/Button": "enabled",
+      "Shared-Components/CardCarousel": "enabled",
+      "Web-Components/Footer": "enabled",
+      "Hybrid-Components/HybridCard": "enabled",
+      "Shared-Components/Badge": "enabled",
+      "Web-Components/NavBar": "enabled"
     }
   },
   {
@@ -26,13 +31,18 @@
       "Semantic/DDS": "enabled",
       "Semantic/Surface": "enabled",
       "Semantic/System": "enabled",
-      "Component/Button": "enabled",
-      "Component/SearchBar": "enabled",
-      "Component/Spinner": "enabled",
-      "Component/ListItem": "enabled",
-      "Component/BannerCarousel": "enabled",
-      "Component/Card": "enabled",
-      "Component/Heading": "enabled"
+      "Hybrid-Components/BannerCarousel": "enabled",
+      "Hybrid-Components/Heading": "enabled",
+      "Hybrid-Components/Spinner": "enabled",
+      "Hybrid-Components/ListItem": "enabled",
+      "Shared-Components/SearchBar": "enabled",
+      "Shared-Components/Card": "enabled",
+      "Shared-Components/Button": "enabled",
+      "Shared-Components/CardCarousel": "enabled",
+      "Web-Components/Footer": "enabled",
+      "Hybrid-Components/HybridCard": "enabled",
+      "Shared-Components/Badge": "enabled",
+      "Web-Components/NavBar": "enabled"
     }
   }
 ]

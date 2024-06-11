@@ -1,0 +1,12 @@
+{
+  "card-pagination-colour": {
+    "light": {
+      "value": "{colour.primary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
+  }
+}

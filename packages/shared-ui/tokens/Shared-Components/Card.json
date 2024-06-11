@@ -1,0 +1,29 @@
+{
+  "card-vertical-large-text-font": {
+    "value": "{typography.title-large}",
+    "type": "typography"
+  },
+  "card-vertical-small-text-font": {
+    "value": "{typography.title-small}",
+    "type": "typography"
+  },
+  "card-horizontal-text-font": {
+    "value": "{typography.body}",
+    "type": "typography"
+  },
+  "card-border-radius": {
+    "value": "{border-radius.medium}",
+    "type": "borderRadius",
+    "description": "only to be applied to top left and top rigth corners of card"
+  },
+  "card-text-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  }
+}

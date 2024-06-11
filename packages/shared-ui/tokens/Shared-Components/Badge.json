@@ -1,0 +1,62 @@
+{
+  "badge-large-label-font": {
+    "value": "{typography.title-small}",
+    "type": "typography",
+    "description": "also used for Xsmall badge font"
+  },
+  "badge-small-label-font": {
+    "value": "{typography.label-semibold}",
+    "type": "typography",
+    "description": "also used for Xsmall badge font"
+  },
+  "badge-large-border-radius": {
+    "value": "{border-radius.medium}",
+    "type": "borderRadius",
+    "description": "only applied to opposite corners. i.e top left and bottom right"
+  },
+  "badge-small-border-radius": {
+    "value": "{border-radius.small}",
+    "type": "borderRadius",
+    "description": "only applied to opposite corners. i.e top left and bottom right. Also used for Xsmall badge border radius"
+  },
+  "badge-instore-bg-colour": {
+    "light": {
+      "value": "{colour.highlight1.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.highlight1.dark}",
+      "type": "color"
+    }
+  },
+  "badge-online-bg-colour": {
+    "light": {
+      "value": "{colour.highlight2.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.highlight2.dark}",
+      "type": "color"
+    }
+  },
+  "badge-giftcard-bg-colour": {
+    "light": {
+      "value": "{colour.highlight3.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.highlight3.dark}",
+      "type": "color"
+    }
+  },
+  "badge-label-colour": {
+    "light": {
+      "value": "{colour.onHighlight-fixed.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onHighlight-fixed.dark}",
+      "type": "color"
+    }
+  }
+}

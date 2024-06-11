@@ -5,12 +5,17 @@
     "Semantic/DDS",
     "Semantic/Surface",
     "Semantic/System",
-    "Component/Button",
-    "Component/Card",
-    "Component/BannerCarousel",
-    "Component/Heading",
-    "Component/SearchBar",
-    "Component/Spinner",
-    "Component/ListItem"
+    "Shared-Components/Button",
+    "Shared-Components/Card",
+    "Shared-Components/CardCarousel",
+    "Shared-Components/Badge",
+    "Shared-Components/SearchBar",
+    "Hybrid-Components/HybridCard",
+    "Hybrid-Components/BannerCarousel",
+    "Hybrid-Components/Heading",
+    "Hybrid-Components/Spinner",
+    "Hybrid-Components/ListItem",
+    "Web-Components/Footer",
+    "Web-Components/NavBar"
   ]
 }

@@ -1,0 +1,46 @@
+{
+  "NavBar-bg-colour": {
+    "light": {
+      "value": "{colour.surface-brand.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface.dark}",
+      "type": "color"
+    }
+  },
+  "NavBar-link-colour": {
+    "light": {
+      "value": "{colour.onPrimary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "NavBar-link-font": {
+    "value": "{typography.body}",
+    "type": "typography"
+  },
+  "NavBar-bell-icon-colour": {
+    "light": {
+      "value": "{colour.onPrimary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
+  },
+  "NavBar-chevron-icon-colour": {
+    "light": {
+      "value": "{colour.onPrimary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  }
+}

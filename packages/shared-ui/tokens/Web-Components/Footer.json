@@ -1,0 +1,54 @@
+{
+  "footer-bg-colour": {
+    "light": {
+      "value": "{colour.surface-brand.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface.dark}",
+      "type": "color"
+    }
+  },
+  "footer-text-colour": {
+    "light": {
+      "value": "{colour.onPrimary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "footer-sectionHeading-font": {
+    "value": "{typography.title-medium-semibold}",
+    "type": "typography"
+  },
+  "footer-text-font": {
+    "value": "{typography.body-light}",
+    "type": "typography"
+  },
+  "footer-copyright-font": {
+    "value": "{typography.body-small}",
+    "type": "typography"
+  },
+  "footer-social-icon-colour": {
+    "light": {
+      "value": "{colour.onPrimary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "footer-divider-colour": {
+    "light": {
+      "value": "{colour.onPrimary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  }
+}

@@ -28,7 +28,7 @@ const Card: FC<CardProps> = ({
     [layout === CardLayout.ImageTop && !fixedWidthHeight, 'pb-[50%]'],
   ]);
   const cardClasses = cssUtil([
-    'rounded overflow-hidden shadow-md flex w-full bg-card-bg-colour-light dark:bg-card-bg-colour-dark',
+    'rounded overflow-hidden shadow-md flex w-full bg-hybridCard-bg-colour-light dark:bg-hybridCard-bg-colour-dark',
     cardLayout ?? 'flex-col',
     onClick ? 'cursor-pointer' : '',
   ]);
@@ -49,11 +49,11 @@ const Card: FC<CardProps> = ({
   };
 
   const cardTitleClasses = cssUtil([
-    'text-lg font-medium text-card-title-colour-light dark:text-card-title-colour-dark line-clamp-1',
+    'text-lg font-medium text-hybridCard-title-colour-light dark:text-hybridCard-title-colour-dark line-clamp-1',
   ]);
 
   const cardParagraphClasses = cssUtil([
-    'text-sm font-light text-card-text-colour-light dark:text-card-text-colour-dark',
+    'text-sm font-light text-hybridCard-text-colour-light dark:text-hybridCard-text-colour-dark',
     'line-clamp-1',
   ]);
 

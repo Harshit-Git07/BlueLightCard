@@ -1,5 +1,5 @@
 {
-  "card-bg-colour": {
+  "hybridCard-bg-colour": {
     "light": {
       "value": "{colour.surface-bright.light}",
       "type": "color"
@@ -9,29 +9,29 @@
       "type": "color"
     }
   },
-  "card-text-colour": {
-    "light": {
-      "value": "{colour.onSurface-subtle.light}",
-      "type": "color"
-    },
-    "dark": {
-      "value": "{colour.onSurface-subtle.dark}",
-      "type": "color"
-    }
-  },
-  "card-title-font": {
+  "hybridCard-title-font": {
     "value": "{typography.body-semibold}",
     "type": "typography"
   },
-  "card-text-font": {
-    "value": "{typography.blc.body-small}",
+  "hybridCard-text-font": {
+    "value": "{typography.body-small}",
     "type": "typography"
   },
-  "card-border-radius": {
+  "hybridCard-border-radius": {
     "value": "{border-radius.small}",
     "type": "borderRadius"
   },
-  "card-title-colour": {
+  "hybridCard-text-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "hybridCard-title-colour": {
     "light": {
       "value": "{colour.onSurface.light}",
       "type": "color"

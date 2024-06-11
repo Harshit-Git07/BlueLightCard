@@ -1,0 +1,47 @@
+main = "src/worker.ts"
+compatibility_date = "2024-04-19"
+
+# The worker defaults to staging URL's unless you include --var in your cli command
+[vars]
+ENVIRONMENT = "localhost"
+# Naming convention <domain>_API_<brand> or <region>
+AUTH_API_BLC_UK = "https://staging-auth.blcshine.io"
+AUTH_API_BLC_AU = "https://staging-auth-au.blcshine.io"
+AUTH_API_DDS_UK = "https://staging-auth-dds.blcshine.io"
+IDENTITY_API_BLC_UK = "https://staging-identity.blcshine.io"
+IDENTITY_API_BLC_AU = "https://staging-identity-au.blcshine.io"
+OFFERS_API_BLC_UK = "https://staging-offers.blcshine.io"
+REDEMPTIONS_API_UK = "https://staging-redemptions.blcshine.io"
+DISCOVERY_API_UK = "https://staging-discovery.blcshine.io"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
+# Naming convention <domain>_API_<brand> or <region>
+AUTH_API_BLC_UK = "https://staging-auth.blcshine.io"
+AUTH_API_BLC_AU = "https://staging-auth-au.blcshine.io"
+AUTH_API_DDS_UK = "https://staging-auth-dds.blcshine.io"
+IDENTITY_API_BLC_UK = "https://staging-identity.blcshine.io"
+IDENTITY_API_BLC_AU = "https://staging-identity-au.blcshine.io"
+OFFERS_API_BLC_UK = "https://staging-offers.blcshine.io"
+REDEMPTIONS_API_UK = "https://staging-redemptions.blcshine.io"
+DISCOVERY_API_UK = "https://staging-discovery.blcshine.io"
+
+[env.production.vars]
+ENVIRONMENT = "production"
+# Naming convention <domain>_API_<brand> or <region>
+AUTH_API_BLC_UK = "https://auth.blcshine.io"
+AUTH_API_BLC_AU = "https://auth-au.blcshine.io"
+AUTH_API_DDS_UK = "https://auth-dds.blcshine.io"
+IDENTITY_API_BLC_UK = "https://identity.blcshine.io"
+IDENTITY_API_BLC_AU = "https://identity-au.blcshine.io"
+OFFERS_API_BLC_UK = "https://offers.blcshine.io"
+REDEMPTIONS_API_UK = "https://redemptions.blcshine.io"
+DISCOVERY_API_UK = "https://discovery.blcshine.io"
+
+[env.staging]
+name = "staging-api"
+workers_dev = true
+
+[env.production]
+name = "api"
+workers_dev = true

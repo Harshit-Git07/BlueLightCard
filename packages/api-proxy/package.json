@@ -1,0 +1,18 @@
+{
+  "name": "api-proxy",
+  "version": "1.0.0",
+  "main": "src.worker.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test:unit": "vitest run"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20240502.0",
+    "@types/node": "20.12.8",
+    "nock": "14.0.0-beta.5",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0",
+    "wrangler": "3.53.1"
+  }
+}

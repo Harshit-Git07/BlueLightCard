@@ -1,0 +1,5 @@
+# Define code owners for specific folders
+# Each line represents a file pattern followed by the GitHub username or team name
+
+# Code owners for the "api-proxy" folder
+/packages/api-proxy/*   @k0vacs

@@ -1,0 +1,107 @@
+name: API Proxy
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/api-proxy/**
+      - .github/workflows/api-proxy.yml
+      - package-lock.json
+      - package.json
+  pull_request:
+    paths:
+      - packages/api-proxy/**
+      - .github/workflows/api-proxy.yml
+      - package-lock.json
+      - package.json
+
+permissions: write-all
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Test
+        run: npm run test:unit -w packages/api-proxy
+
+  # TODO: Add formatting check
+  # TODO: Add linting check
+  # TODO: Add types check
+
+  changelog:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/api-proxy
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/api-proxy
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
+  staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Staging
+    environment: Staging
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - test
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build & Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: npm run deploy -- --env staging
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - test
+      - staging
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build & Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: npm run deploy -- --env production

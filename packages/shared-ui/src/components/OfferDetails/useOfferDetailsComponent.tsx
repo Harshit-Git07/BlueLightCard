@@ -41,7 +41,7 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
       return OfferDetailsLink;
     }
 
-    if (experiment === 'treatment') {
+    if (experiment === 'treatment' || experiment === 'on') {
       return OfferSheet;
     }
 

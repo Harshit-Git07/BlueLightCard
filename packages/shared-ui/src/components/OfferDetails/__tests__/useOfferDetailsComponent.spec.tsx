@@ -65,6 +65,28 @@ describe('useOfferDetailsComponent', () => {
     },
   );
 
+  test.each(supportedRedemptionTypes)(
+    'it returns the offer sheet for the %s offer with flag on',
+    async (redemptionType) => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType } });
+      mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('on');
+
+      const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+
+      await act(async () => {
+        await result.current.updateOfferDetailsComponent({
+          offerId: 1,
+          companyId: 1,
+          companyName: 'companyName',
+          platform: PlatformVariant.MobileHybrid,
+          amplitudeCtx: null,
+        });
+      });
+
+      expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
+    },
+  );
+
   test('it returns the offer details link for an unsupported redemption type', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, {
       data: { redemptionType: 'unsupported-redemption-type' },
@@ -107,6 +129,26 @@ describe('useOfferDetailsComponent', () => {
   test('it returns the offer sheet for the treatment and a vault offer', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
     mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
+
+    const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+
+    await act(async () => {
+      await result.current.updateOfferDetailsComponent({
+        offerId: 1,
+        companyId: 1,
+        companyName: 'companyName',
+        platform: PlatformVariant.MobileHybrid,
+        amplitudeCtx: null,
+      });
+    });
+
+    expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
+  });
+  test('it returns the offer sheet for the on flag and a generic offer', async () => {
+    const mockPlatformAdapter = useMockPlatformAdapter(200, {
+      data: { redemptionType: 'generic' },
+    });
+    mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('on');
 
     const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
 

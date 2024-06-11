@@ -6,6 +6,7 @@ import { getPlatformExperimentForRedemptionType } from '../offerDetailsExperimen
 const testTable = [
   { redemptionType: 'vault', platform: PlatformVariant.Web },
   { redemptionType: 'vault', platform: PlatformVariant.MobileHybrid },
+  { redemptionType: 'generic', platform: PlatformVariant.Web },
   { redemptionType: 'generic', platform: PlatformVariant.MobileHybrid },
 ];
 

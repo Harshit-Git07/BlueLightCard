@@ -10,7 +10,7 @@ export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, s
     [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-vault-app',
   },
   generic: {
-    [PlatformVariant.Web]: null,
+    [PlatformVariant.Web]: 'offer-sheet-redeem-generic-web',
     [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-generic-app',
   },
 };

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.19.0...bluelightcard/mobile-hybrid-v1.20.0) (2024-06-11)
+
+
+### Features
+
+* added new card hybrid styles to Card on mobile hybrid ([#1558](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1558)) ([f47d153](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f47d1535069ef14d4f85880f18ba4a57707843d9))
+* Disco-346 Tokenise Spinner ([#1552](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1552)) ([e0c2ec3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e0c2ec349a107165b11f4174e0d0ece36cb4641b))
+* replace LegacySearch for Search component ([#1543](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1543)) ([d9614e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9614e47b7a229bfecf31d0a6e0fd1d3d5173f8b))
+
+
+### Bug Fixes
+
+* [DISCO-342] show search results spinner ([#1559](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1559)) ([026110c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/026110c1c66e65b0f379f3035e4cd2e6f427255d))
+
 ## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.18.1...bluelightcard/mobile-hybrid-v1.19.0) (2024-06-05)
 
 

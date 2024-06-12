@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.20.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.20.0...bluelightcard/mobile-hybrid-v1.20.1) (2024-06-11)
+
+
+### Bug Fixes
+
+* force release ([#1577](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1577)) ([cf0fab5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cf0fab5deb83d04b18f5985d571bf67cef2fccb1))
+* force release ([#1577](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1577)) ([cf0fab5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cf0fab5deb83d04b18f5985d571bf67cef2fccb1))
+
 ## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.19.0...bluelightcard/mobile-hybrid-v1.20.0) (2024-06-11)
 
 

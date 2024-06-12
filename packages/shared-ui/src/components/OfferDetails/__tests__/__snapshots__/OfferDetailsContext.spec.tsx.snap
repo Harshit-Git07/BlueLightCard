@@ -112,7 +112,7 @@ exports[`ViewOfferProvider it renders the offer sheet 1`] = `
             class="fixed w-[100vw] flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-white translate-y-[-100%] h-[90%] bottom-[-90%]"
           >
             <div
-              class="w-full flex justify-end p-4"
+              class="w-full flex justify-end p-4 text-black"
             >
               <svg
                 aria-hidden="true"

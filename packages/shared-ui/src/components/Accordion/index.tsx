@@ -47,7 +47,7 @@ const Accordion: FC<Props> = ({ title, children, amplitudeDetails }) => {
       <div
         className={`duration-200 ease-in-out ${
           active ? 'block' : 'hidden'
-        } font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap`}
+        } font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap text-black`}
       >
         {children}
       </div>

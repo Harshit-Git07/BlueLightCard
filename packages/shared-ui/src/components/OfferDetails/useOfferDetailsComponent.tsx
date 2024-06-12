@@ -7,6 +7,8 @@ import { offerSheetAtom } from '../OfferSheet/store';
 import { RedemptionType } from '../OfferSheet/types';
 import { PlatformVariant } from '../../types';
 import { getPlatformExperimentForRedemptionType } from './offerDetailsExperiments';
+import { useOfferDetails } from '../../hooks/useOfferDetails';
+import { getOffer } from '../../api';
 
 type OfferDetailsComponentProps = React.ComponentProps<typeof OfferSheet>;
 
@@ -15,19 +17,22 @@ export const EmptyOfferDetails: FC<OfferDetailsComponentProps> = () => <></>;
 export const OfferDetailsLink: FC<OfferDetailsComponentProps> = () => {
   const platformAdapter = usePlatformAdapter();
   const { isOpen, onClose, offerMeta } = useAtomValue(offerSheetAtom);
+  const offerQuery = useOfferDetails({
+    offerId: offerMeta.offerId!,
+  });
 
   const onOpen = () => {
     platformAdapter.navigate(
-      `/offerdetails.php?cid=${offerMeta?.companyId}&oid=${offerMeta?.offerId}`,
+      `/offerdetails.php?cid=${offerMeta?.companyId}${offerQuery?.data ? `&oid=${offerMeta.offerId}` : ''}`,
     );
     onClose();
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && offerQuery.isFetched) {
       onOpen();
     }
-  }, [isOpen, onOpen]);
+  }, [isOpen, onOpen, offerQuery]);
 
   return null;
 };

@@ -6,19 +6,13 @@ import {userStatusUpdatedRule} from './src/eventRules/userStatusUpdated';
 import {emailUpdateRule} from './src/eventRules/emailUpdateRule';
 import {ApiGatewayModelGenerator} from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
 import {UserModel} from './src/models/user';
-import {EcFormOutputDataModel} from './src/models/ecFormOutputDataModel';
 import {GetUserByIdRoute} from './src/routes/getUserByIdRoute';
 import {userSignInMigratedRule} from './src/eventRules/userSignInMigratedRule';
 import {cardStatusUpdatedRule} from './src/eventRules/cardStatusUpdatedRule';
 import {userProfileUpdatedRule} from './src/eventRules/userProfileUpdatedRule';
 import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 import {companyFollowsUpdatedRule} from "./src/eventRules/companyFollowsUpdatedRule";
-import {AddEcFormOutputDataRoute} from './src/routes/addEcFormOutputDataRoute';
-import {Buckets} from './src/eligibility/constructs/buckets';
-import {Lambda} from './src/common/lambda';
 import {userGdprRule} from './src/eventRules/userGdprRule';
-import {Rule, Schedule} from 'aws-cdk-lib/aws-events';
-import {LambdaFunction} from 'aws-cdk-lib/aws-events-targets';
 import getAllowedDomains from './src/utils/getAllowedDomains';
 import { STAGES } from '@blc-mono/core/types/stages.enum';
 import { REGIONS } from '@blc-mono/core/types/regions.enum';
@@ -26,7 +20,6 @@ import { createNewCognito, createNewCognitoDDS, createOldCognito, createOldCogni
 import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { EcFormOutputDataTable } from './src/eligibility/constructs/tables';
 import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
 
 export function Identity({ stack }: StackContext) {
@@ -39,9 +32,7 @@ export function Identity({ stack }: StackContext) {
   //Region
   const region = stack.region;
 
-  const ecFormOutputDataTable = new EcFormOutputDataTable(stack);
   const unsuccessfulLoginAttemptsTable = new UnsuccessfulLoginAttemptsTables(stack);
-  const buckets = new Buckets(stack, stack.stage);
 
   const stageSecret = stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING ? stack.stage : STAGES.STAGING;
   const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
@@ -115,16 +106,14 @@ export function Identity({ stack }: StackContext) {
         timeout: 20,
         environment: {
           identityTableName: identityTable.tableName,
-          ecFormOutputDataTableName: ecFormOutputDataTable.table.tableName,
           service: 'identity',
           allowedDomains: getAllowedDomains(stack.stage),
           REGION: stack.region,
         },
-        permissions: [identityTable, ecFormOutputDataTable.table],
+        permissions: [identityTable],
       },
     },
     routes: {
-      'ANY /eligibility': 'packages/api/identity/src/eligibility/lambda.handler',
       'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
       'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
     },
@@ -146,14 +135,9 @@ export function Identity({ stack }: StackContext) {
 
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(identityApi.cdk.restApi);
   const agUserModel = apiGatewayModelGenerator.generateModelFromZodEffect(UserModel);
-  const agEcFormOutputDataModel = apiGatewayModelGenerator.generateModel(EcFormOutputDataModel);
 
   identityApi.addRoutes(stack, {
-    'GET /user': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
-    'POST /{brand}/formOutputData': new AddEcFormOutputDataRoute(
-      apiGatewayModelGenerator,
-      agEcFormOutputDataModel,
-    ).getRouteDetails(),
+    'GET /user': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails()
   });
 
   stack.addOutputs({
@@ -189,19 +173,6 @@ export function Identity({ stack }: StackContext) {
     CognitoUserPoolWebClient: cognito.userPoolId,
     CognitoDdsUserPoolWebClient: cognito_dds.userPoolId,
   });
-
-  //Eligiblity checker Form output lambda rule schedule
-  const eligibilityCheckerScheduleRule = new Rule(stack, 'ecOutputLambdaScheduleRule', {
-    schedule: Schedule.cron({
-      day: '28',
-      hour: '00',
-      minute: '00',
-    }),
-  });
-
-  const lambdas = new Lambda(stack, ecFormOutputDataTable, buckets, stack.stage);
-
-  eligibilityCheckerScheduleRule.addTarget(new LambdaFunction(lambdas.ecFormOutrputDataLambda));
 
   //add event bridge rules
   bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));

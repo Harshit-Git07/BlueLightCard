@@ -41,8 +41,6 @@ export const generateSecretHash = async (username: string, clientId: string, cli
 }
 
 export const handler = async (event: any, context: any) => {
-    logger.debug("event", {event})
-
     if (event.triggerSource == "UserMigration_Authentication") {
       try {
         // Authenticate the user with the old user pool
@@ -66,7 +64,7 @@ export const handler = async (event: any, context: any) => {
           throw new Error(":\n" + mappedAccountStatusError);
         } else {
           let errorMessage = error.message;
-          
+
           if (errorMessage.length > 0 && errorMessage[errorMessage.length-1] === ".") {
             errorMessage = errorMessage.slice(0,-1);
           }
@@ -136,7 +134,7 @@ const authenticateUser = async (username: string, password: string) => {
                 "Authorization": `Basic ${apiAuth}`
             }
         })
-        
+
         logger.debug("old login response", { response })
         if (response && response.data) {
             if (!response.data.success && response.data.code !== 1013) {

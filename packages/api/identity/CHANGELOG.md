@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.77.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.77.0...bluelightcard/identity-v1.77.1) (2024-06-13)
+
+
+### Other Changes
+
+* Remove some unused resources from Identity stack ([#1580](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1580)) ([5541fec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5541fec92b47ae0e4c0a8e35c1125ace97c49d13))
+
 ## [1.77.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.76.0...bluelightcard/identity-v1.77.0) (2024-06-07)
 
 

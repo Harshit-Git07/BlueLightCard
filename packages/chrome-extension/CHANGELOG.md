@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.2.3...bluelightcard/chrome-extension-v1.2.4) (2024-06-12)
+
+
+### Bug Fixes
+
+* TO-810 Chrome extension url fix - New url batch fixed after QA test ([#1583](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1583)) ([6b0b800](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6b0b800a1ecf068e93587988e1d8bac48102b8e0))
+
 ## [1.2.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/chrome-extension-v1.2.2...bluelightcard/chrome-extension-v1.2.3) (2024-06-11)
 
 

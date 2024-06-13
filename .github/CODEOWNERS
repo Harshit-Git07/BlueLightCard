@@ -3,3 +3,6 @@
 
 # Code owners for the "api-proxy" folder
 /packages/api-proxy/*   @k0vacs
+
+# Code owners for the bastion host access user
+stacks/infra/bastionHost/BastionHostAccessUser.ts @K0vacs @shahzaibbutt-blc

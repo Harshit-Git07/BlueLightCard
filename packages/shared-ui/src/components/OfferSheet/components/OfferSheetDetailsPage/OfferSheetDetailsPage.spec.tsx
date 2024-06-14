@@ -3,10 +3,39 @@ import OfferSheetDetailsPage from './';
 import { render } from '@testing-library/react';
 import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
-import { offerSheetAtom } from '../../store';
+import { OfferSheetAtom, offerSheetAtom } from '../../store';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
+import { PlatformVariant } from 'src/types';
+import { RedemptionType } from '../../types';
+
+function createFactoryMethod<T>(defaults: T) {
+  return (overrides?: Partial<T>): T => ({
+    ...defaults,
+    ...overrides,
+  });
+}
+
+const createOfferSheetAtom = createFactoryMethod<OfferSheetAtom>({
+  offerDetails: {
+    companyId: 4016,
+    companyLogo: 'companyimages/complarge/retina/',
+    description:
+      'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
+    expiry: '2030-06-30T23:59:59.000Z',
+    id: 3802,
+    name: 'Save with SEAT',
+    terms: 'Must be a Blue Light Card member in order to receive the discount.',
+    type: 'Online',
+  },
+  offerMeta: {
+    companyId: 4016,
+    companyName: 'SEAT',
+    offerId: 3802,
+  },
+  redemptionType: 'vault',
+} as OfferSheetAtom);
 
 const mockPlatformAdapter = useMockPlatformAdapter(200, {
   data: {
@@ -18,44 +47,36 @@ const mockPlatformAdapter = useMockPlatformAdapter(200, {
   },
 });
 
-const HydrateAtoms = ({ initialValues, children }: any) => {
+const HydrateAtoms = ({
+  initialValues,
+  children,
+}: {
+  initialValues: any;
+  children: React.ReactNode;
+}) => {
   useHydrateAtoms(initialValues);
   return children;
 };
 
-const TestProvider = ({ initialValues, children }: any) => (
+const TestProvider = ({
+  initialValues,
+  children,
+}: {
+  initialValues: any;
+  children: React.ReactNode;
+}) => (
   <Provider>
     <HydrateAtoms initialValues={initialValues}>{children}</HydrateAtoms>
   </Provider>
 );
 
-const OfferSheetDetailsPageProvider = () => {
+const OfferSheetDetailsPageProvider = ({
+  offerSheetAtomData,
+}: {
+  offerSheetAtomData: OfferSheetAtom;
+}) => {
   return (
-    <TestProvider
-      initialValues={[
-        [
-          offerSheetAtom,
-          {
-            offerDetails: {
-              companyId: 4016,
-              companyLogo: 'companyimages/complarge/retina/',
-              description:
-                'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
-              expiry: '2030-06-30T23:59:59.000Z',
-              id: 3802,
-              name: 'Save with SEAT',
-              terms: 'Must be a Blue Light Card member in order to receive the discount.',
-              type: 'Online',
-            },
-            offerMeta: {
-              companyId: '4016',
-              companyName: 'SEAT',
-              offerId: '3802',
-            },
-          },
-        ],
-      ]}
-    >
+    <TestProvider initialValues={[[offerSheetAtom, offerSheetAtomData]]}>
       <OfferSheetDetailsPage />
     </TestProvider>
   );
@@ -115,7 +136,9 @@ describe('smoke test', () => {
     const { getByText } = render(
       <SharedUIConfigProvider value={MockSharedUiConfig}>
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheetDetailsPageProvider />
+          <OfferSheetDetailsPageProvider
+            offerSheetAtomData={createOfferSheetAtom({ redemptionType: 'vault' })}
+          />
         </PlatformAdapterProvider>
       </SharedUIConfigProvider>,
     );
@@ -125,5 +148,25 @@ describe('smoke test', () => {
 
     expect(label1).toBeTruthy();
     expect(label2).toBeTruthy();
+  });
+
+  it.each<[string, RedemptionType]>([
+    ['Copy discount code', 'generic'],
+    ['Get Discount', 'preApplied'],
+    ['Get Discount', 'showCard'],
+    ['Get Discount', 'vault'],
+    ['Get Discount', 'vaultQR'],
+  ])('should show the text "%s" for redemption type "%s"', (buttonText, redemptionType) => {
+    const { getByRole } = render(
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <OfferSheetDetailsPageProvider
+            offerSheetAtomData={createOfferSheetAtom({ redemptionType })}
+          />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
+    );
+
+    expect(getByRole('button', { name: buttonText })).toBeTruthy();
   });
 });

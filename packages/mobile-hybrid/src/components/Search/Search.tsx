@@ -10,8 +10,6 @@ import React, {
 import { SearchProps } from './types';
 import { faSearch, faCircleXmark, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { env } from '@bluelightcard/shared-ui';
-import SearchV2 from './v2';
 
 const Search: FC<SearchProps> = ({
   onSearch,
@@ -88,7 +86,7 @@ const Search: FC<SearchProps> = ({
       <FontAwesomeIcon
         icon={faArrowLeft}
         size="xl"
-        className="text-neutral-grey-800 dark:text-neutral-white"
+        className="text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
         aria-hidden="true"
       />
     </button>
@@ -98,7 +96,7 @@ const Search: FC<SearchProps> = ({
     <FontAwesomeIcon
       icon={faSearch}
       size="xl"
-      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-neutral-grey-600 dark:text-neutral-white"
+      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
       aria-hidden="true"
     />
   );
@@ -108,7 +106,7 @@ const Search: FC<SearchProps> = ({
         icon={faCircleXmark}
         size="xl"
         onClick={clearSearch}
-        className="absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-neutral-grey-600 dark:text-neutral-white"
+        className="absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
         aria-hidden="true"
       />
     </button>
@@ -127,13 +125,13 @@ const Search: FC<SearchProps> = ({
           placeholder={placeholderText}
           type="search"
           enterKeyHint="search"
-          className="new-search pl-14 pr-12 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-neutral-white border-neutral-grey-200 border dark:text-white dark:border-neutral-700 dark:bg-neutral-grey-800 focus:outline-none"
+          className="new-search pl-14 pr-12 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none"
         />
         {searchTerm && clearIcon}
       </div>
-      {errorMessage && <div className="font-museo text-red-500">{errorMessage}</div>}
+      {errorMessage && <div className="font-museo text-colour-system-red-500">{errorMessage}</div>}
     </form>
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? SearchV2 : Search;
+export default Search;

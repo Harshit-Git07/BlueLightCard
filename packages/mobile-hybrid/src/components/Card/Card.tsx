@@ -4,8 +4,6 @@ import Image from '@/components/Image/Image';
 import { decider } from '@/utils/decider';
 import { CardLayout, CardProps } from '@/components/Card/types';
 import decodeEntities from '@/utils/decodeEntities';
-import { env } from '@bluelightcard/shared-ui';
-import CardV2 from './v2';
 
 const Card: FC<CardProps> = ({
   title,
@@ -30,7 +28,7 @@ const Card: FC<CardProps> = ({
     [layout === CardLayout.ImageTop && !fixedWidthHeight, 'pb-[50%]'],
   ]);
   const cardClasses = cssUtil([
-    'rounded overflow-hidden shadow-md flex w-full dark:bg-neutral-grey-800',
+    'rounded overflow-hidden shadow-md flex w-full bg-hybridCard-bg-colour-light dark:bg-hybridCard-bg-colour-dark',
     cardLayout ?? 'flex-col',
     onClick ? 'cursor-pointer' : '',
   ]);
@@ -50,10 +48,12 @@ const Card: FC<CardProps> = ({
     }
   };
 
-  const cardTitleClasses = cssUtil(['text-lg font-medium dark:text-neutral-white line-clamp-1']);
+  const cardTitleClasses = cssUtil([
+    'text-lg font-medium text-hybridCard-title-colour-light dark:text-hybridCard-title-colour-dark line-clamp-1',
+  ]);
 
   const cardParagraphClasses = cssUtil([
-    'text-sm font-light dark:text-neutral-white',
+    'text-sm font-light text-hybridCard-text-colour-light dark:text-hybridCard-text-colour-dark',
     'line-clamp-1',
   ]);
 
@@ -84,4 +84,4 @@ const Card: FC<CardProps> = ({
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? CardV2 : Card;
+export default Card;

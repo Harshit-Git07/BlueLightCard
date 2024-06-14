@@ -24,8 +24,6 @@ import {
   AmplitudeFeatureFlagState,
 } from '@/components/AmplitudeProvider/types';
 import { useAtom } from 'jotai';
-import HomeV2 from './_v2/_index';
-import { env } from '@bluelightcard/shared-ui';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -104,4 +102,4 @@ const Home: NextPage<any> = () => {
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? HomeV2 : Home;
+export default Home;

@@ -1,9 +1,7 @@
 import { FC, SetStateAction, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { BannerCarouselProps } from '@/components/Banner/types';
-import { env } from '@bluelightcard/shared-ui';
-import BannerCarouselV2 from './v2';
+import { BannerCarouselProps } from './types';
 import Image from '@/components/Image/Image';
 import decodeEntities from '@/utils/decodeEntities';
 
@@ -24,10 +22,9 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
       showThumbs={false}
       autoPlay={true}
       infiniteLoop={true}
-      showIndicators={true}
+      showIndicators={false}
       showArrows={false}
       selectedItem={currentSlide}
-      className="mb-6"
       onChange={(index) => {
         if (isSwiping) {
           setIsSwiping(false);
@@ -54,7 +51,7 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
               />
             </div>
           </div>
-          <p className="pt-2 px-2 font-museo dark:text-neutral-white line-clamp-2">
+          <p className="pt-2 px-2 font-card-title-font text-card-title-colour-light dark:text-card-title-colour-dark line-clamp-2 font-museo">
             {decodeEntities(slide.text)}
           </p>
         </div>
@@ -63,4 +60,4 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? BannerCarouselV2 : BannerCarousel;
+export default BannerCarousel;

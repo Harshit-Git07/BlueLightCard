@@ -1,19 +1,17 @@
 import { FC } from 'react';
-import { ListPanelProps } from './types';
+import { ListPanelProps } from '@/components/ListPanel/types';
 import { cssUtil } from '@/utils/cssUtil';
-import { env } from '@bluelightcard/shared-ui';
-import ListPanelV2 from './v2';
 
 const ListPanel: FC<ListPanelProps> = ({ visible, children, onClose }) => {
   const rootClass = cssUtil([
     'w-full h-full fixed transition-all duration-500 ease-in-out z-50 top-0 pb-5 pt-5',
-    'overflow-y-scroll bg-white dark:bg-neutral-black',
-    visible ? 'visible opacity-100' : 'invisible opacity-0',
+    'overflow-y-scroll bg-colour-surface-light dark:bg-colour-surface-dark',
+    visible ? 'visible opacity-100 ' : 'invisible opacity-0',
   ]);
   return (
     <div className={rootClass}>
       <button
-        className="text-primary-dukeblue-700 dark:text-primary-vividskyblue-700 absolute top-3 right-5 font-museo font-semibold"
+        className="text-heading-link-colour-light dark:text-heading-link-colour-dark absolute top-3 right-5"
         onClick={onClose}
       >
         Close
@@ -23,4 +21,4 @@ const ListPanel: FC<ListPanelProps> = ({ visible, children, onClose }) => {
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? ListPanelV2 : ListPanel;
+export default ListPanel;

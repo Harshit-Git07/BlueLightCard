@@ -1,10 +1,13 @@
 import { FC } from 'react';
-import { env } from '@bluelightcard/shared-ui';
-import SpinnerV2 from './v2';
+import { cssUtil } from '@/utils/cssUtil';
 
 const Spinner: FC = () => {
+  const spinnerClass = cssUtil([
+    'path',
+    'stroke-spinner-colour-light dark:stroke-spinner-colour-dark',
+  ]);
   return (
-    <div role="progressbar" className="p-3 rounded bg-white dark:bg-gray-700 shadow-lg">
+    <div role="progressbar" className="p-3 rounded shadow-lg">
       <svg
         className="spinner"
         width="60px"
@@ -13,7 +16,7 @@ const Spinner: FC = () => {
         xmlns="http://www.w3.org/2000/svg"
       >
         <circle
-          className="path"
+          className={spinnerClass}
           fill="none"
           strokeWidth="6"
           strokeLinecap="round"
@@ -26,4 +29,4 @@ const Spinner: FC = () => {
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? SpinnerV2 : Spinner;
+export default Spinner;

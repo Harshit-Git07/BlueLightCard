@@ -1,5 +1,5 @@
-import BannerCarousel from '../';
-import { BannerCarouselProps } from '../types';
+import BannerCarousel from '@/components/Banner/BannerCarousel';
+import { BannerCarouselProps } from '@/components/Banner/types';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 

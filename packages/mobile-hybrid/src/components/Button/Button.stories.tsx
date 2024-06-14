@@ -1,10 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { env } from '@bluelightcard/shared-ui/env';
 import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
-import _Button from './Button';
-import _ButtonV2 from './v2';
-
-const Button = env.FLAG_NEW_TOKENS ? _ButtonV2 : _Button;
+import Button from './Button';
 
 const componentMeta: Meta<typeof Button> = {
   title: 'Button',

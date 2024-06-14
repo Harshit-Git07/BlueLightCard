@@ -4,8 +4,6 @@ import Image from '@/components/Image/Image';
 import { cssUtil } from '@/utils/cssUtil';
 import decodeEntities from '@/utils/decodeEntities';
 import { fallbackImage } from '@/constants';
-import { env } from '@bluelightcard/shared-ui';
-import ListItemV2 from './v2';
 
 const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, className, onClick }) => {
   const rootClass = cssUtil(['flex', className ?? '', onClick ? 'cursor-pointer' : '']);
@@ -21,11 +19,11 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
         />
       </div>
       <div className="flex flex-col justify-center pl-3 w-full">
-        <h4 className="dark:text-neutral-white text-md mb-1 font-semibold font-museo leading-5 line-clamp-1 md:line-clamp-2">
+        <h4 className="text-listItem-title-colour-light dark:text-listItem-title-colour-dark text-md mb-1 font-semibold font-museo leading-5 line-clamp-1 md:line-clamp-2">
           {decodeEntities(title)}
         </h4>
         {text && (
-          <p className="text-neutral-grey-600 dark:text-neutral-grey-200 font-museo text-sm lg:text-lg">
+          <p className="text-listItem-text-colour-light dark:text-listItem-text-colour-dark font-museo text-listItem-text-font lg:text-lg">
             {decodeEntities(text)}
           </p>
         )}
@@ -34,4 +32,4 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? ListItemV2 : ListItem;
+export default ListItem;

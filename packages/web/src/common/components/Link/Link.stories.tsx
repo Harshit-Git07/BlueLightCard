@@ -2,10 +2,12 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import Link from './Link';
 import { LinkProps } from './types';
+import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 
 export default {
   title: 'Component System/Link',
   component: Link,
+  decorators: [tokenMigrationDecorator],
 } as Meta;
 
 const Template: StoryFn<LinkProps> = (args) => <Link {...args}>View details</Link>;

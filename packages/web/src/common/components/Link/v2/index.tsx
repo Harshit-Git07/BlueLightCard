@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { default as NextLink } from 'next/link'; // Aliased Link to NextLink to avoid conflict
 import { LinkProps } from './types';
-import { env } from '@bluelightcard/shared-ui';
-import LinkV2 from './v2';
 
 const Link: FC<LinkProps> = ({
   useLegacyRouting = true,
@@ -26,7 +24,7 @@ const Link: FC<LinkProps> = ({
   } else if (onClickLink && !href) {
     return (
       <div
-        className="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-[#001B80] my-1"
+        className="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-blc-duke-700 dark:text-colour-greyscale-white my-1"
         data-testid="on-click-link"
         onClick={onClickLink}
       >
@@ -48,4 +46,4 @@ const Link: FC<LinkProps> = ({
   }
 };
 
-export default env.FLAG_NEW_TOKENS ? LinkV2 : Link;
+export default Link;

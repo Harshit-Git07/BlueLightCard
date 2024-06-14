@@ -91,7 +91,6 @@ jobs:
         run: npm run lint:style -w packages/web
 
   storybook:
-    if: github.event_name == 'pull_request' && needs.changes.outputs.components == 'true'
     name: Storybook Preview
     runs-on: ubuntu-latest
     outputs:
@@ -102,6 +101,8 @@ jobs:
       - test
       - lint
       - lint-styles
+    env:
+      STORYBOOK_FLAG_NEW_TOKENS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4

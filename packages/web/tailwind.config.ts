@@ -1,9 +1,11 @@
 import { Config } from 'tailwindcss';
 import plugin from 'tailwindcss/plugin';
-import { fontFamily } from 'tailwindcss/defaultTheme';
 import { BRAND } from './global-vars';
 import { buildTokens } from './scripts/dict';
 import { addFontStyles } from './scripts/plugins';
+import { env } from '@bluelightcard/shared-ui/env';
+import { createBrandedPreset } from '@bluelightcard/shared-ui/tailwind';
+import { defaultPreset } from './src/defaultPreset';
 
 // Check if we are running in storybook env or nextjs env
 const staticFolderPrefix = !process.env.STORYBOOK_ENV ? '/_next/static' : '';
@@ -11,54 +13,22 @@ const staticFolderPrefix = !process.env.STORYBOOK_ENV ? '/_next/static' : '';
 // only use the configured brand
 const themeTokens = buildTokens([BRAND]);
 
-const fonts = Object.keys(themeTokens.font.family).reduce((acc, familyKey) => {
-  acc[familyKey] = [
-    ...themeTokens.font.family[familyKey],
-    ...(fontFamily[familyKey as keyof typeof fontFamily] || []),
-  ];
-  return acc;
-}, {} as any);
+const newBrandedTokensPreset = createBrandedPreset(env.APP_BRAND);
+const presets: Partial<Config>[] = [defaultPreset];
+
+const isStorybookLifecycle =
+  process.env.npm_lifecycle_event === 'storybook' ||
+  process.env.npm_lifecycle_event === 'build-storybook';
+
+if (env.FLAG_NEW_TOKENS) {
+  presets.push(newBrandedTokensPreset);
+}
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
-  darkMode: 'class', // TODO: change class to media, or just remove this line, to reenable dark mode
+  darkMode: isStorybookLifecycle ? 'media' : 'class',
   content: ['./src/**/*.{js,ts,tsx,mdx}', '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}'],
-  theme: {
-    extend: {
-      colors: themeTokens.color,
-      borderRadius: themeTokens.borderRadius,
-      borderWidth: themeTokens.borderWidth,
-      spacing: themeTokens.spacing,
-      fontSize: themeTokens.font.size,
-      animation: {
-        spin: 'spin 3s linear infinite',
-        magicButtonGradient: 'magicButtonGradient 3s linear infinite',
-      },
-      keyframes: {
-        magicButtonGradient: {
-          '0%, 100%': { 'background-position': '0% 0%' },
-          '50%': { 'background-position': '75% 0%' },
-        },
-      },
-      boxShadow: {
-        offerSheetTop: '0 -2px 8px rgba(0, 0, 0, 0.1)',
-      },
-    },
-    screens: {
-      mobile: '280px',
-      'mobile-xl': '500px',
-      tablet: '768px',
-      laptop: '1024px',
-      desktop: '1200px',
-      landscapebf: {
-        raw: '((min-device-width: 650px) and (max-height: 750px))',
-      },
-      landscapebfsm: {
-        raw: '((min-device-width: 650px) and (max-height: 380px))',
-      },
-    },
-    fontFamily: fonts,
-  },
+  presets,
   plugins: [
     plugin(({ addBase }) =>
       addFontStyles({ font: themeTokens.asset.font, baseSrcUrl: staticFolderPrefix, addBase })

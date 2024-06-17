@@ -7,6 +7,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import { UpdateCognitoUiProperties } from '../cognito/customizeHostedUI';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 export interface CognitoUICustomizationProps {
   userPool: cognito.IUserPool;
@@ -23,11 +24,13 @@ export class CognitoUICustomizationAttachment extends Construct {
       description: 'No op waiting for domain to come up',
       entry: './packages/api/identity/src/cognito/customizeHostedUI.ts',
       handler: 'eventHandler',
+      runtime: Runtime.NODEJS_18_X,
     });
     const completeFn = new NodejsFunction(this, `${id}-customizeHostedUI`, {
       description: 'Update Cognito Hosted UI Style',
       entry: './packages/api/identity/src/cognito/customizeHostedUI.ts',
       handler: 'handler',
+      runtime: Runtime.NODEJS_18_X,
     });
 
     const policy = new iam.PolicyStatement({

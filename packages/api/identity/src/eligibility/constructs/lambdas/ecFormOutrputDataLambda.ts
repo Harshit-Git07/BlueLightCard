@@ -29,6 +29,7 @@ export class EcFormOutrputDataLambda extends LambdaAbstract {
 		    EC_FORM_OUTPUT_DATA_REPORT_RECEIPIENTS: this.getEmailRecipients(),
         REGION: this.stack.region,
       },
+      runtime: this.lambdaRunTime,
     });
     this.grantPermissions(ecFormOutputData);
 

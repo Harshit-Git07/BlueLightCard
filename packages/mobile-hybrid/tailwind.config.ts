@@ -17,6 +17,19 @@ if (env.FLAG_NEW_TOKENS) {
 export default {
   darkMode: isStorybookLifecycle ? 'media' : 'class',
   presets,
+  theme: {
+    extend: {
+      fontFamily: {
+        museo: ['var(--font-museo)'],
+        sourcesans: ['var(--font-sourcesans)'],
+      },
+      screens: {
+        sm: '330px',
+        md: '560px',
+        lg: '768px',
+      },
+    },
+  },
   content: [
     './.storybook/**/*.{js,ts,jsx,tsx,mdx}',
     './src/**/*.{js,ts,jsx,tsx,mdx}',

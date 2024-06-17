@@ -1,4 +1,6 @@
 import React, { FC } from 'react';
+import HeadingV2 from './v2';
+import { env } from '@bluelightcard/shared-ui';
 
 interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   headingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -33,4 +35,5 @@ const Heading: FC<HeadingProps> = ({ headingLevel, children, className }) => {
   const classes = `${size} ${defaultStyles} ${className} `;
   return <Heading className={classes}>{children}</Heading>;
 };
-export default Heading;
+
+export default env.FLAG_NEW_TOKENS ? HeadingV2 : Heading;

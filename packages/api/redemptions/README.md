@@ -1,5 +1,20 @@
 # Redemptions
 
+## Automated Tests
+
+### E2E Tests
+
+End-to-end tests can be run with:
+
+```sh
+npm run dev # The stack needs to be running to run E2E tests
+npm run test -w packages/api/redemptions
+```
+
+Note that you may need to [install the Session Manager plugin for the AWS CLI](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
+if you intend to run tests against a DB hosted in AWS. This is not required when
+running a local DB instance.
+
 ## Test Users
 
 ### Generating Testing Tokens
@@ -27,70 +42,6 @@ npm run -w packages/api/redemptions deleteTestUser
 Alternatively, if you don't need the user to be removed in cognito, you can delete the file `.redemptionsTestUserDetails.json` instead.
 
 Please note that to run any of the above commands, you will need to be running the backend locally with `npm run dev`.
-
-## Database
-
-### Accessing the DB via the Bastion Host
-
-#### Architecture
-
-For security reasons, our database is deployed to a private subnet in our VPC. This means it is not directly accessible via the public internet. To access databases deployed in a private subnet, there are two commonly used strategies:
-
-- Deploying a bastion host to a public subnet and connecting via SSH
-- Deploying a bastion host to a private subnet and connecting via AWS SSM Session Manager
-
-Connecting via AWS SSM Session Manager has the following benefits over SSH:
-
-- Our bastion host does not need to be publicly accessible
-- We can limit access via IAM
-- We do not need to handle SSH keys (which could easily be leaked)
-
-In order to connect via SSM, we can use the AWS CLI to set up a port forwarding session to the remote database host. This will expose the DB connection on local host via a user specified port. We can then connect to the database via localhost, using any PostgreSQL compatible database client.
-
-![SSM Bastion Host Architecture](./.assets/SSM-bastion-host-architecture.png)
-
-#### Getting Started
-
-Pre-requisites:
-
-- [AWS CLI](https://aws.amazon.com/cli/)
-- [Session Manager Plugin for AWS CLI](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
-
-Connecting to the database:
-
-1. Locate the Instance ID of the bastion host
-   1. Open the AWS Console
-   2. Navigate to EC2 / Instances
-   3. Locate the bastion host instance (in staging this is called `staging-bastion-host-redemptions`)
-   4. Take note of the Instance ID
-2. Locate the RDS endpoint and port you wish to connect to
-   1. Open the AWS Console
-   2. Navigate to RDS / Databases
-   3. Locate the DB instance (in staging this will be one of the instances in `redemptions-db-cluster-staging`)
-   4. Click on the instance (to avoid disasters in production, please **only use the reader instance** unless you require write access)
-   5. Take note of the database instance endpoint and port (shown under the "Connectivity & security / Endpoint & port" heading)
-3. Establish a port forwarding session:
-   ```sh
-    aws ssm start-session \
-      --target "<bastion-host-instance-id>" \
-      --document-name AWS-StartPortForwardingSessionToRemoteHost \
-      --parameters '
-        {
-          "portNumber": ["<database-port>"],
-          "localPortNumber": ["<some-local-port>"],
-          "host": ["<database-host>"]
-        }' \
-      --reason <reason-for-session>
-   ```
-4. Locate the database credentials
-   1. Open the AWS Console
-   2. Navigate to Secrets Manager
-   3. Locate the database credentials secret (in staging this is called `RedemptionsDatabaseSecret`)
-   4. Click on the secret and select "Retrieve secret value"
-   5. Take a note of the username and password
-5. Connect to the database
-   1. Use host and port `localhost:<some-local-port>`
-   2. Use the username and password from the database credentials secret
 
 ### Granting Resources DB Access
 

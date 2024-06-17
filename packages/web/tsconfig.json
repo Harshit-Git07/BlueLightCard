@@ -72,11 +72,13 @@
       "@core/*": [
         "../api/core/src/*"
       ],
+      "@storybook/*": ["./.storybook/*"],
 
       // TODO: Remove once data is pulled in via GQL and data folder is no longer needed.
       "@/data/*": [
         "data/*"
-      ]
+      ],
+      "@bluelightcard/shared-ui/*": ["../shared-ui/src/*"]
     }
   },
   "ts-node": {

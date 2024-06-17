@@ -4,6 +4,7 @@ import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
   DwhLoggingService,
   IDwhLoggingService,
+  MemberRedemptionParamsDto,
 } from '@blc-mono/redemptions/application/services/DWH/dwhLoggingService';
 
 import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeController';
@@ -23,12 +24,7 @@ export class DwhMemberRedemptionController extends EventBridgeController<MemberR
   }
 
   protected async handle(event: MemberRedemptionEvent): Promise<void> {
-    await this.dwhMemberRetrievedRedemptionService.logMemberRedemption({
-      code: event.detail.redemptionDetails.code,
-      companyId: event.detail.redemptionDetails.companyId,
-      memberId: event.detail.memberDetails.memberId,
-      offerId: event.detail.redemptionDetails.offerId,
-      redemptionType: event.detail.redemptionDetails.redemptionType,
-    });
+    const dto = MemberRedemptionParamsDto.fromMemberRedemptionEvent(event);
+    await this.dwhMemberRetrievedRedemptionService.logMemberRedemption(dto);
   }
 }

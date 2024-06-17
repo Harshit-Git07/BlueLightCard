@@ -16,6 +16,7 @@ export class CustomAuthenticatorLambda extends LambdaAbstract {
       retryAttempts: 2,
       deadLetterQueueEnabled: true,
       environment: {},
+      runtime: this.lambdaRunTime,
     });
 
     return customAuthenticator;

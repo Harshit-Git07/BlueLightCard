@@ -23,9 +23,7 @@ const OfferDetailsErrorPage: FC = () => {
       });
     }
 
-    platformAdapter.navigate(
-      `/offerdetails.php?cid=${offerMeta?.companyId}&oid=${offerMeta?.offerId}`,
-    );
+    platformAdapter.navigate(`/offerdetails.php?cid=${offerMeta?.companyId}`);
   };
 
   return (

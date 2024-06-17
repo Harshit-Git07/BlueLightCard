@@ -1,3 +1,5 @@
+import { DefinePlugin } from 'webpack';
+
 const { resolve } = require('path');
 const { BRAND } = require('../global-vars');
 module.exports = {
@@ -24,6 +26,11 @@ module.exports = {
       stream: false,
       zlib: false,
     };
+    config.plugins.push(
+      new DefinePlugin({
+        'process.env.STORYBOOK_FLAG_NEW_TOKENS': process.env.STORYBOOK_FLAG_NEW_TOKENS,
+      })
+    );
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'));
     config.module.rules.push(
       {

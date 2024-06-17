@@ -59,6 +59,8 @@ const OfferSheetDetailsPage: FC = () => {
     );
   }
 
+  const buttonText = redemptionType === 'generic' ? 'Copy Discount Code' : 'Get Discount';
+
   return (
     <div className={css}>
       <OfferTopDetailsHeader />
@@ -75,7 +77,7 @@ const OfferSheetDetailsPage: FC = () => {
           transitionDurationMs={200}
           onClick={getDiscountClickHandler}
         >
-          <span className="leading-10 font-bold text-md">Get Discount</span>
+          <span className="leading-10 font-bold text-md">{buttonText}</span>
         </MagicButton>
       </div>
     </div>

@@ -1,11 +1,10 @@
 import { as } from '@blc-mono/core/utils/testing';
-import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
-import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { GenericsRepository } from '../../repositories/GenericsRepository';
 import { LegacyVaultApiRepository } from '../../repositories/LegacyVaultApiRepository';
+import { RedemptionsEventsRepositoryMock } from '../../repositories/RedemptionsEventsRepositoryMock';
 import { VaultCodesRepository } from '../../repositories/VaultCodesRepository';
 import { VaultsRepository } from '../../repositories/VaultsRepository';
 
@@ -24,15 +23,16 @@ describe('RedeemStrategyResolver', () => {
     db: {
       select: jest.fn(),
     },
-  } as unknown as DatabaseConnection;
+  };
   const mockedLogger = createTestLogger();
-  const mockedSecretsManager = {
+  const mockedRedemptionsEventsRepository = new RedemptionsEventsRepositoryMock();
+  const mockedSecretsManager = as({
     getSecretValueJson: jest.fn(),
-  } as unknown as ISecretsManager;
-  const genericsRepo = new GenericsRepository(mockedConnection);
-  const vaultsRepo = new VaultsRepository(mockedConnection);
-  const vaultCodesRepo = new VaultCodesRepository(mockedConnection);
-  const legacyVaultApiRepo = new LegacyVaultApiRepository(mockedLogger, mockedSecretsManager);
+  });
+  const genericsRepo = new GenericsRepository(as(mockedConnection));
+  const vaultsRepo = new VaultsRepository(as(mockedConnection));
+  const vaultCodesRepo = new VaultCodesRepository(as(mockedConnection));
+  const legacyVaultApiRepo = new LegacyVaultApiRepository(mockedLogger, as(mockedSecretsManager));
 
   it.each([
     ['generic', RedeemGenericStrategy],
@@ -45,10 +45,16 @@ describe('RedeemStrategyResolver', () => {
     (redemptionType, strategy) => {
       // Arrange
       const resolver = new RedeemStrategyResolver(
-        new RedeemGenericStrategy(genericsRepo, mockedLogger),
-        new RedeemPreAppliedStrategy(),
-        new RedeemShowCardStrategy(),
-        new RedeemVaultStrategy(vaultsRepo, vaultCodesRepo, legacyVaultApiRepo, mockedLogger),
+        new RedeemGenericStrategy(genericsRepo, mockedRedemptionsEventsRepository, mockedLogger),
+        new RedeemPreAppliedStrategy(mockedRedemptionsEventsRepository, mockedLogger),
+        new RedeemShowCardStrategy(mockedRedemptionsEventsRepository, mockedLogger),
+        new RedeemVaultStrategy(
+          vaultsRepo,
+          vaultCodesRepo,
+          legacyVaultApiRepo,
+          mockedRedemptionsEventsRepository,
+          mockedLogger,
+        ),
       );
 
       // Act
@@ -62,10 +68,16 @@ describe('RedeemStrategyResolver', () => {
   it('should throw when an unknown redemption type is provided', () => {
     // Arrange
     const resolver = new RedeemStrategyResolver(
-      new RedeemGenericStrategy(genericsRepo, mockedLogger),
-      new RedeemPreAppliedStrategy(),
-      new RedeemShowCardStrategy(),
-      new RedeemVaultStrategy(vaultsRepo, vaultCodesRepo, legacyVaultApiRepo, mockedLogger),
+      new RedeemGenericStrategy(genericsRepo, mockedRedemptionsEventsRepository, mockedLogger),
+      new RedeemPreAppliedStrategy(mockedRedemptionsEventsRepository, mockedLogger),
+      new RedeemShowCardStrategy(mockedRedemptionsEventsRepository, mockedLogger),
+      new RedeemVaultStrategy(
+        vaultsRepo,
+        vaultCodesRepo,
+        legacyVaultApiRepo,
+        mockedRedemptionsEventsRepository,
+        mockedLogger,
+      ),
     );
 
     // Act

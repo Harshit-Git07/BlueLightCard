@@ -64,6 +64,9 @@ export function Shared({ stack, app }: StackContext) {
     webACL,
     vpc: network.vpc,
     dwhKenisisFirehoseStreams,
+    /**
+     * @deprecated IMPORTANT: Please read the note in stacks/infra/bastionHost/adapter.ts
+     */
     bastionHost,
   };
 }

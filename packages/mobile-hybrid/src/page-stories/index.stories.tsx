@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import IndexPage from '@/pages/index';
 
 import pageDecorator from '@storybook/pageDecorator';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
 
 const componentMeta: Meta<typeof IndexPage> = {
   title: 'Pages/IndexPage',
@@ -9,7 +10,7 @@ const componentMeta: Meta<typeof IndexPage> = {
   parameters: {
     layout: 'fullscreen',
   },
-  decorators: [pageDecorator],
+  decorators: [pageDecorator, StorybookPlatformAdapterDecorator],
 };
 
 const DefaultTemplate: StoryFn<typeof IndexPage> = (args) => <IndexPage {...args} />;

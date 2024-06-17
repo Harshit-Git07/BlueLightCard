@@ -6,6 +6,10 @@ import {
   LegacyVaultApiRepository,
 } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import {
+  IRedemptionsEventsRepository,
+  RedemptionsEventsRepository,
+} from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
+import {
   IVaultCodesRepository,
   VaultCodesRepository,
 } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
@@ -17,6 +21,7 @@ import {
 
 import { Redemption } from '../../../repositories/RedemptionsRepository';
 
+import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemParams, RedeemVaultStrategyResult } from './IRedeemStrategy';
 
 export class RedeemVaultStrategy implements IRedeemStrategy {
@@ -25,6 +30,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     VaultsRepository.key,
     VaultCodesRepository.key,
     LegacyVaultApiRepository.key,
+    RedemptionsEventsRepository.key,
     Logger.key,
   ] as const;
 
@@ -32,6 +38,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     private readonly vaultsRepository: IVaultsRepository,
     private readonly vaultCodesRepository: IVaultCodesRepository,
     private readonly legacyVaultApiRepository: ILegacyVaultApiRepository,
+    private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
     private readonly logger: ILogger,
   ) {}
 
@@ -50,14 +57,33 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
       throw new Error('Vault not found');
     }
 
+    let result: RedeemVaultStrategyResult;
     switch (vault.vaultType) {
       case 'standard':
-        return this.handleRedeemStandardVault(vault, redemption, params.memberId);
+        result = await this.handleRedeemStandardVault(vault, redemption, params.memberId);
+        break;
       case 'legacy':
-        return this.handleRedeemLegacyVault(vault, redemption, params.memberId);
+        result = await this.handleRedeemLegacyVault(vault, redemption, params.memberId);
+        break;
       default:
         exhaustiveCheck(vault.vaultType, 'Invalid vault type');
     }
+
+    if (result.kind === 'Ok') {
+      const event = createMemberRedemptionEvent(redemption, params, {
+        redemptionType: redemption.redemptionType,
+        code: result.redemptionDetails.code,
+        url: result.redemptionDetails.url ?? '',
+      });
+      await this.redemptionsEventsRepository.publishRedemptionEvent(event).catch((error) => {
+        this.logger.error({
+          message: '[UNHANDLED ERROR] Error while publishing member redeem intent event',
+          error,
+        });
+      });
+    }
+
+    return result;
   }
 
   private async handleRedeemStandardVault(

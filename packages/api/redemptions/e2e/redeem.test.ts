@@ -102,43 +102,19 @@ describe('POST /member/redeem', () => {
     });
   });
 
-  test('should redeem a standard vault offer', async () => {
+  test('rejects a redemption request with invalid parameters', async () => {
     // Arrange
     const redemption = redemptionFactory.build({
       id: createRedemptionsIdE2E(),
-      redemptionType: 'vault',
+      redemptionType: 'preApplied',
       connection: 'direct',
       url: faker.internet.url(),
     });
-    const vault = vaultFactory.build({
-      id: createVaultIdE2E(),
-      redemptionId: redemption.id,
-      status: 'active',
-      vaultType: 'standard',
-    });
-    const vaultBatch = vaultBatchFactory.build({
-      id: createVaultBatchesIdE2E(),
-      vaultId: vault.id,
-    });
-    const vaultCode = vaultCodeFactory.build({
-      id: createVaultCodesIdE2E(),
-      batchId: vaultBatch.id,
-      expiry: faker.date.future({ years: 1 }),
-      vaultId: vault.id,
-      memberId: null,
-    });
-    const companyName = faker.company.name();
-    const offerName = faker.commerce.productName();
+
     onTestFinished(async () => {
-      await connectionManager.connection.db.delete(vaultCodesTable).where(eq(vaultCodesTable.id, vaultCode.id));
-      await connectionManager.connection.db.delete(vaultBatchesTable).where(eq(vaultBatchesTable.id, vaultBatch.id));
-      await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, vault.id));
       await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
     });
     await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
-    await connectionManager.connection.db.insert(vaultsTable).values(vault);
-    await connectionManager.connection.db.insert(vaultBatchesTable).values(vaultBatch);
-    await connectionManager.connection.db.insert(vaultCodesTable).values(vaultCode);
 
     // Act
     const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
@@ -148,26 +124,14 @@ describe('POST /member/redeem', () => {
         Authorization: `Bearer ${testUserTokens.idToken}`,
       },
       body: JSON.stringify({
-        offerId: redemption.offerId,
-        companyName,
-        offerName,
+        offerId: String(redemption.offerId), // invalid (should be number)
+        companyName: faker.company.name(),
+        offerName: faker.commerce.productName(),
       }),
     });
 
     // Assert
-    const body = await result.json();
-    expect(body).toEqual({
-      data: {
-        kind: 'Ok',
-        redemptionType: redemption.redemptionType,
-        redemptionDetails: {
-          url: redemption.url,
-          code: vaultCode.code,
-        },
-      },
-      statusCode: 200,
-    });
-    expect(result.status).toBe(200);
+    expect(result.status).toBe(400);
   });
 
   test('should redeem a standard vault offer', async () => {
@@ -236,6 +200,119 @@ describe('POST /member/redeem', () => {
       statusCode: 200,
     });
     expect(result.status).toBe(200);
+  });
+
+  test('should redeem a preApplied offer', async () => {
+    // Arrange
+    const redemption = redemptionFactory.build({
+      id: createRedemptionsIdE2E(),
+      redemptionType: 'preApplied',
+      connection: 'direct',
+      url: faker.internet.url(),
+    });
+
+    onTestFinished(async () => {
+      await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+    });
+    await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+
+    // Act
+    const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${testUserTokens.idToken}`,
+      },
+      body: JSON.stringify({
+        offerId: redemption.offerId,
+        companyName: faker.company.name(),
+        offerName: faker.commerce.productName(),
+      }),
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toEqual({
+      data: {
+        kind: 'Ok',
+        redemptionType: redemption.redemptionType,
+        redemptionDetails: {
+          url: redemption.url,
+        },
+      },
+      statusCode: 200,
+    });
+    expect(result.status).toBe(200);
+  });
+
+  test('should redeem a show card offer', async () => {
+    // Arrange
+    const redemption = redemptionFactory.build({
+      id: createRedemptionsIdE2E(),
+      redemptionType: 'showCard',
+      connection: 'direct',
+      url: undefined,
+    });
+
+    onTestFinished(async () => {
+      await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+    });
+    await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+
+    // Act
+    const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${testUserTokens.idToken}`,
+      },
+      body: JSON.stringify({
+        offerId: redemption.offerId,
+        companyName: faker.company.name(),
+        offerName: faker.commerce.productName(),
+      }),
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toEqual({
+      data: {
+        kind: 'Ok',
+        redemptionType: redemption.redemptionType,
+        redemptionDetails: {
+          url: redemption.url,
+        },
+      },
+      statusCode: 200,
+    });
+    expect(result.status).toBe(200);
+  });
+
+  test('fails to redeem using an invalid offer ID', async () => {
+    // Act
+    const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${testUserTokens.idToken}`,
+      },
+      body: JSON.stringify({
+        offerId: 1337, // offer ID does not exist in the DB
+        companyName: faker.company.name(),
+        offerName: faker.commerce.productName(),
+      }),
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toStrictEqual({
+      data: {
+        kind: 'RedemptionNotFound',
+        message: expect.any(String),
+      },
+      statusCode: 404,
+    });
+    expect(result.status).toBe(404);
   });
 
   test(
@@ -464,4 +541,45 @@ describe('POST /member/redeem', () => {
       expect(compVaultClickRecord.whenrequested).toBeDefined();
     },
   );
+
+  test('fails to redeem if configured without a URL', async () => {
+    // Arrange
+    const redemption = redemptionFactory.build({
+      id: createRedemptionsIdE2E(),
+      redemptionType: 'preApplied',
+      connection: 'direct',
+      url: '',
+    });
+
+    const companyName = faker.company.name();
+    const offerName = faker.commerce.productName();
+    onTestFinished(async () => {
+      await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+    });
+    await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+
+    // Act
+    const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${testUserTokens.idToken}`,
+      },
+      body: JSON.stringify({
+        offerId: redemption.offerId,
+        companyName,
+        offerName,
+      }),
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toStrictEqual({
+      message: 'Internal Server Error',
+      meta: expect.objectContaining({
+        tracingId: expect.any(String),
+      }),
+    });
+    expect(result.status).toBe(500);
+  });
 });

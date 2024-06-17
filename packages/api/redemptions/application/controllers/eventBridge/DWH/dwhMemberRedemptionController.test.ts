@@ -35,8 +35,13 @@ describe('DwhMemberRedemptionController', () => {
             brazeExternalUserId: faker.string.uuid(),
           },
           redemptionDetails: {
-            redemptionId: faker.string.uuid(),
-            redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
+            redemptionId: String(
+              faker.number.int({
+                min: 1,
+                max: 1_000_000,
+              }),
+            ),
+            redemptionType: 'vault',
             companyId: faker.number.int({
               min: 1,
               max: 1_000_000,
@@ -66,12 +71,27 @@ describe('DwhMemberRedemptionController', () => {
       // Assert
       expect(service.logMemberRedemption).toHaveBeenCalledTimes(1);
       expect(service.logMemberRedemption).toHaveBeenCalledWith({
-        redemptionType: mockEvent.detail.redemptionDetails.redemptionType,
-        offerId: mockEvent.detail.redemptionDetails.offerId,
-        companyId: mockEvent.detail.redemptionDetails.companyId,
-        memberId: mockEvent.detail.memberDetails.memberId,
-        code: mockEvent.detail.redemptionDetails.code,
+        data: {
+          // clientType: mockEvent.detail.redemptionDetails.clientType,
+          code: mockEvent.detail.redemptionDetails.code,
+          companyId: mockEvent.detail.redemptionDetails.companyId,
+          offerId: mockEvent.detail.redemptionDetails.offerId,
+          memberId: mockEvent.detail.memberDetails.memberId,
+          redemptionType: mockEvent.detail.redemptionDetails.redemptionType,
+        },
       });
+
+      expect(service.logMemberRedemption).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            code: mockEvent.detail.redemptionDetails.code,
+            companyId: mockEvent.detail.redemptionDetails.companyId,
+            offerId: mockEvent.detail.redemptionDetails.offerId,
+            memberId: mockEvent.detail.memberDetails.memberId,
+            redemptionType: mockEvent.detail.redemptionDetails.redemptionType,
+          },
+        }),
+      );
     });
     it('should return error if request is invalid', async () => {
       // Arrange

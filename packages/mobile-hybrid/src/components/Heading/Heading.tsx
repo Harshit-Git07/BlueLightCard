@@ -1,18 +1,21 @@
 import { FC } from 'react';
 import { HeadingProps } from './types';
-import { env } from '@bluelightcard/shared-ui';
-import HeadingV2 from './v2';
 
 const Heading: FC<HeadingProps> = ({ title, size, onClickSeeAll }) => {
   return (
-    <div className="flex w-full content-center my-2 px-4 text-primary-dukeblue-700 dark:text-primary-vividskyblue-700">
+    <div className="flex w-full content-center my-2 px-4">
       <h2
-        className={`${size === 'small' ? 'text-lg' : 'text-2xl'} font-museo font-extrabold flex-1`}
+        className={`${
+          size === 'small' ? 'text-lg' : 'text-2xl'
+        } font-heading-font font-extrabold flex-1 text-heading-colour-light dark:text-heading-colour-dark`}
       >
         {title}
       </h2>
       {onClickSeeAll && (
-        <button className="font-museo font-semibold" onClick={onClickSeeAll}>
+        <button
+          className="font-heading-link-font font-semibold text-heading-link-colour-light dark:text-heading-link-colour-dark"
+          onClick={onClickSeeAll}
+        >
           See all
         </button>
       )}
@@ -20,4 +23,4 @@ const Heading: FC<HeadingProps> = ({ title, size, onClickSeeAll }) => {
   );
 };
 
-export default env.FLAG_NEW_TOKENS ? HeadingV2 : Heading;
+export default Heading;

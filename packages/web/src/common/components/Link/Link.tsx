@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { default as NextLink } from 'next/link'; // Aliased Link to NextLink to avoid conflict
 import { LinkProps } from './types';
+import { env } from '@bluelightcard/shared-ui';
+import LinkV2 from './v2';
 
 const Link: FC<LinkProps> = ({
   useLegacyRouting = true,
@@ -46,4 +48,4 @@ const Link: FC<LinkProps> = ({
   }
 };
 
-export default Link;
+export default env.FLAG_NEW_TOKENS ? LinkV2 : Link;

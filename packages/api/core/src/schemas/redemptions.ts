@@ -35,18 +35,41 @@ export const MemberRedemptionEventDetailSchema = z.object({
     memberId: z.string(),
     brazeExternalUserId: z.string(),
   }),
-  redemptionDetails: z.object({
-    redemptionId: z.string(),
-    redemptionType: RedemptionTypeSchema,
-    companyId: z.number(),
-    companyName: z.string(),
-    offerId: z.number(),
-    offerName: z.string(),
-    code: z.string(),
-    affiliate: z.string().nullable(),
-    url: z.string(),
-    clientType: ClientTypeSchema,
-  }),
+  redemptionDetails: z.intersection(
+    z.object({
+      redemptionId: z.string(),
+      companyId: z.number(),
+      companyName: z.string(),
+      offerId: z.number(),
+      offerName: z.string(),
+      affiliate: z.string().nullable(),
+      clientType: ClientTypeSchema,
+    }),
+    z.union([
+      z.object({
+        redemptionType: z.literal('vaultQR'),
+        code: z.string(),
+        url: z.string().optional()
+      }),
+      z.object({
+        redemptionType: z.literal('vault'),
+        code: z.string(),
+        url: z.string(),
+      }),
+      z.object({
+        redemptionType: z.literal('generic'),
+        code: z.string(),
+        url: z.string(),
+      }),
+      z.object({
+        redemptionType: z.literal('showCard'),
+      }),
+      z.object({
+        redemptionType: z.literal('preApplied'),
+        url: z.string(),
+      }),
+    ])
+  ),
 });
 export type MemberRedemptionEventDetail = z.infer<typeof MemberRedemptionEventDetailSchema>;
 export const MemberRedemptionEventSchema = eventSchema(

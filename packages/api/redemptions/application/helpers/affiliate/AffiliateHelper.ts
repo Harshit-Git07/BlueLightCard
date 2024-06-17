@@ -74,6 +74,7 @@ export class AffiliateHelper {
    * Else, return the url as is
    */
   public static checkAffiliateAndGetTrackingUrl(url: string, memberId: string): string {
+    // TODO: Use the affiliate stored in the DB instead of parsing from the URL
     const checkAffiliate = AffiliateHelper.getAffiliateConfig(url);
     if (!checkAffiliate) {
       return url;

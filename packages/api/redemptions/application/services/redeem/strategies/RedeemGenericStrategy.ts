@@ -4,17 +4,23 @@ import {
   GenericsRepository,
   IGenericsRepository,
 } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
+import {
+  IRedemptionsEventsRepository,
+  RedemptionsEventsRepository,
+} from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 
 import { Redemption } from '../../../repositories/RedemptionsRepository';
 
+import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemGenericStrategyResult, RedeemParams } from './IRedeemStrategy';
 
 export class RedeemGenericStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemGenericStrategy' as const;
-  static readonly inject = [GenericsRepository.key, Logger.key] as const;
+  static readonly inject = [GenericsRepository.key, RedemptionsEventsRepository.key, Logger.key] as const;
 
   constructor(
     private readonly genericsRepository: IGenericsRepository,
+    private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
     private readonly logger: ILogger,
   ) {}
 
@@ -30,6 +36,19 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
       });
       throw new Error('Generic code not found');
     }
+
+    const event = createMemberRedemptionEvent(redemption, params, {
+      redemptionType: 'generic',
+      code: generic.code,
+      url: parsedUrl,
+    });
+    await this.redemptionsEventsRepository.publishRedemptionEvent(event).catch((error) => {
+      this.logger.error({
+        message: '[UNHANDLED ERROR] Error while publishing member redeem intent event',
+        error,
+      });
+    });
+
     return {
       kind: 'Ok',
       redemptionType: 'generic',

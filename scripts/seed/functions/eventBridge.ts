@@ -25,7 +25,7 @@ function createUserData({ uuid, brand, name, legacyUserId }: UserData) {
     email: '',
     emailValidated: 1,
     spareemail: '',
-    spareemailvalidated: true,
+    spareemailvalidated: 1,
     service: 'nhs',
     county: '',
     trustId: '0',

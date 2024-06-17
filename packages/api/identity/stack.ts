@@ -21,6 +21,7 @@ import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
+import { userEmailUpdatedRule } from 'src/eventRules/userEmailUpdated';
 
 export function Identity({ stack }: StackContext) {
   const { certificateArn } = use(Shared);
@@ -183,7 +184,7 @@ export function Identity({ stack }: StackContext) {
   bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region));
   bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId));
-
+  bus.addRules(stack, userEmailUpdatedRule(cognito.userPoolId, cognito_dds.userPoolId, region, oldCognito.userPoolId, oldCognitoDds.userPoolId));
   return {
     identityApi,
     newCognito: cognito,

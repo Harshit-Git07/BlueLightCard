@@ -151,7 +151,7 @@ describe('smoke test', () => {
   });
 
   it.each<[string, RedemptionType]>([
-    ['Copy discount code', 'generic'],
+    ['Copy Discount Code', 'generic'],
     ['Get Discount', 'preApplied'],
     ['Get Discount', 'showCard'],
     ['Get Discount', 'vault'],

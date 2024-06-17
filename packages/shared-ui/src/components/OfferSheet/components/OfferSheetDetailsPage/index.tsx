@@ -59,7 +59,7 @@ const OfferSheetDetailsPage: FC = () => {
     );
   }
 
-  const buttonText = redemptionType === 'generic' ? 'Copy discount code' : 'Get Discount';
+  const buttonText = redemptionType === 'generic' ? 'Copy Discount Code' : 'Get Discount';
 
   return (
     <div className={css}>

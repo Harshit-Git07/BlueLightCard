@@ -9,7 +9,7 @@ import { Stack } from "sst/constructs";
  * be used to access the database in production if necessary. This user does not
  * have console access. The Access Key is stored in Secrets Manager, and rotated
  * on each deployment.
- * 
+ *
  * IMPORTANT: When accessing this user, handle the Access Key carefully.
  */
 export class BastionHostAccessUser {
@@ -25,7 +25,7 @@ export class BastionHostAccessUser {
   }
 
   private get userName() {
-    return `${this.stack.stage}-RdmDbAccessUser`;
+    return `${this.stack.stage}-${this.stack.region}-BastionHostDbAccessUser`;
   }
 
   private createUser(): User {

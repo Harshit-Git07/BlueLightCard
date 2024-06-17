@@ -21,7 +21,7 @@ import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
-import { userEmailUpdatedRule } from 'src/eventRules/userEmailUpdated';
+import { userEmailUpdatedRule } from './src/eventRules/userEmailUpdated';
 
 export function Identity({ stack }: StackContext) {
   const { certificateArn } = use(Shared);

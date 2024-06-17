@@ -1,26 +1,30 @@
 import { useCSSMerge, useCSSConditional } from '../../../../hooks/useCSS';
 import { PlatformVariant } from '../../../../types';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton from '../../../MagicButton';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
-import { RedemptionPageController } from '../RedemptionPage/RedemptionPageController';
 import events from '../../../../utils/amplitude/events';
-import { usePlatformAdapter } from '../../../../index';
+import { isRedeemDataErrorResponse, redeemOffer, usePlatformAdapter } from '../../../../index';
+import { useRedeemOffer } from '../../../../hooks/useRedeemOffer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
+import { RedemptionType } from '../../types';
+import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
 
 const OfferSheetDetailsPage: FC = () => {
   const {
     offerDetails: offerData,
-    showRedemptionPage,
     offerMeta,
     redemptionType,
     amplitudeEvent,
   } = useAtomValue(offerSheetAtom);
-  const setOfferSheetAtom = useSetAtom(offerSheetAtom);
   const platformAdapter = usePlatformAdapter();
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [showErrorPage, setShowErrorPage] = useState(false);
 
   const labels = useLabels(offerData);
 
@@ -29,57 +33,180 @@ const OfferSheetDetailsPage: FC = () => {
   });
   const css = useCSSMerge('', dynCss);
 
-  const getDiscountClickHandler = () => {
-    setOfferSheetAtom((prev) => ({ ...prev, showRedemptionPage: true }));
-
-    if (platformAdapter.platform === PlatformVariant.Web && amplitudeEvent) {
-      amplitudeEvent({
-        event: events.VAULT_CODE_REQUEST_CODE_CLICKED,
-        params: {
-          company_id: offerMeta.companyId,
-          company_name: offerMeta.companyName,
-          offer_id: offerData.id,
-          offer_name: offerData.name,
-          source: 'sheet',
-          origin: platformAdapter.platform,
-          design_type: 'modal_popup',
-        },
-      });
+  const logCodeClicked = (event: string) => {
+    if (!amplitudeEvent) {
+      return;
     }
+    amplitudeEvent({
+      event: event,
+      params: {
+        company_id: String(offerMeta.companyId),
+        company_name: offerMeta.companyName,
+        offer_id: String(offerData.id),
+        offer_name: offerData.name,
+        source: 'sheet',
+        origin: platformAdapter.platform,
+        design_type: 'modal_popup',
+      },
+    });
   };
 
-  if (showRedemptionPage && redemptionType) {
-    return (
-      <RedemptionPageController
-        redemptionType={redemptionType}
-        companyName={offerMeta?.companyName || ''}
-        offerId={Number(offerData.id)}
-        offerName={offerData.name || ''}
-      />
-    );
+  const getRedemptionData = async () => {
+    const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redeem', {
+      method: 'POST',
+      body: JSON.stringify({
+        offerId: Number(offerData.id),
+        companyName: offerMeta?.companyName || '',
+        offerName: offerData.name || '',
+      }),
+    });
+
+    return JSON.parse(result.data);
+  };
+
+  const getDiscountClickHandler = async () => {
+    const redeemData = await getRedemptionData();
+
+    if (redeemData.statusCode == 200) {
+      switch (redemptionType) {
+        case 'generic':
+        case 'vault':
+        case 'preApplied':
+          logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
+          setTimeout(() => {
+            if (!isRedeemDataErrorResponse(redeemData.data)) {
+              copyCodeAndRedirect(
+                redeemData.data.redemptionDetails.code,
+                redeemData.data.redemptionDetails.url,
+              );
+            }
+          }, 0);
+          break;
+        // TODO: Implement this page
+        case 'showCard':
+          return <></>;
+        // TODO: Implement this page
+        case 'vaultQR':
+          return <></>;
+        default:
+          return <></>;
+      }
+    } else {
+      setShowErrorPage(true);
+    }
+  };
+  async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
+    if (code) {
+      await platformAdapter.writeTextToClipboard(code);
+    }
+    if (url) {
+      handleRedirect(url);
+    }
   }
 
-  const buttonText = redemptionType === 'generic' ? 'Copy Discount Code' : 'Get Discount';
+  const handleRedirect = (url: string) => {
+    const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
 
+    // Check if the window was closed by an adblocker and fallback to navigating in the same tab
+    setTimeout(() => {
+      if (!windowHandle.isOpen()) {
+        platformAdapter.navigateExternal(url, { target: 'self' });
+      }
+    }, 50);
+  };
+
+  const buttonText = (redemptionType?: RedemptionType) => {
+    let primaryButtonTextValue = '';
+    let secondaryButtonTextValue = '';
+    let secondaryButtonSubtextValue = '';
+    switch (redemptionType) {
+      case 'generic':
+        primaryButtonTextValue = 'Copy discount code';
+        secondaryButtonTextValue = 'Continue to partner website';
+        secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
+        break;
+      case 'vault':
+        primaryButtonTextValue = 'Get discount';
+        secondaryButtonTextValue = 'Continue to partner website';
+        secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
+        break;
+      case 'preApplied':
+        primaryButtonTextValue = 'Get discount';
+        secondaryButtonTextValue = 'No code needed!';
+        secondaryButtonSubtextValue = 'Special pricing applied to on partner website.';
+        break;
+      // TODO: Implement this page
+      case 'showCard':
+        primaryButtonTextValue = 'Show your Blue Light Card in store';
+        break;
+      // TODO: Implement this page
+      case 'vaultQR':
+        primaryButtonTextValue = 'Get QR code';
+        break;
+      default:
+        primaryButtonTextValue = 'Get discount';
+        secondaryButtonTextValue = 'Continue to partner website';
+        secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
+    }
+
+    console.log(primaryButtonTextValue);
+    return {
+      primaryText: primaryButtonTextValue,
+      secondaryText: secondaryButtonTextValue,
+      secondarySubtext: secondaryButtonSubtextValue,
+    };
+  };
+
+  const primaryButton = (
+    <MagicButton
+      variant={'primary'}
+      className="w-full"
+      transitionDurationMs={200}
+      onClick={() => {
+        getDiscountClickHandler();
+        setButtonClicked(true);
+      }}
+    >
+      <span className="leading-10 font-bold text-md">{buttonText(redemptionType).primaryText}</span>
+    </MagicButton>
+  );
+
+  const secondaryButton = (
+    <MagicButton variant="secondary" className="w-full" animate>
+      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
+        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
+          {buttonText(redemptionType).secondaryText}
+        </div>
+        <div className="text-sm text-[#616266] font-medium">
+          {buttonText(redemptionType).secondarySubtext}
+        </div>
+      </div>
+    </MagicButton>
+  );
+
+  const renderButton = () => {
+    if (buttonClicked) {
+      return secondaryButton;
+    }
+    return primaryButton;
+  };
   return (
     <div className={css}>
-      <OfferTopDetailsHeader />
-      <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
-        <div className="w-full flex flex-wrap mb-2 justify-center">
-          {labels.map((label) => (
-            <Label key={label} type="normal" text={label} className="m-1" />
-          ))}
-        </div>
-
-        <MagicButton
-          variant="primary"
-          className="w-full"
-          transitionDurationMs={200}
-          onClick={getDiscountClickHandler}
-        >
-          <span className="leading-10 font-bold text-md">{buttonText}</span>
-        </MagicButton>
-      </div>
+      {showErrorPage && <OfferDetailsErrorPage />}
+      {!showErrorPage && (
+        <>
+          <OfferTopDetailsHeader />
+          <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
+            <div className="w-full flex flex-wrap mb-2 justify-center">
+              {labels.map((label) => (
+                <Label key={label} type="normal" text={label} className="m-1" />
+              ))}
+            </div>
+            {renderButton()}
+          </div>
+        </>
+      )}
     </div>
   );
 };

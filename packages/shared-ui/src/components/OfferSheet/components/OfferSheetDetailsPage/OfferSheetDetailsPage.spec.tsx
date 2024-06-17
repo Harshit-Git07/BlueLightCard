@@ -118,7 +118,7 @@ describe('smoke test', () => {
       </SharedUIConfigProvider>,
     );
 
-    expect(getByRole('button', { name: /get discount/i })).toBeTruthy();
+    expect(getByRole('button', { name: /Get discount/i })).toBeTruthy();
   });
 
   // TODO: Fix this test, fire event is not working as expected (not rendering the redemption page)
@@ -151,11 +151,11 @@ describe('smoke test', () => {
   });
 
   it.each<[string, RedemptionType]>([
-    ['Copy Discount Code', 'generic'],
-    ['Get Discount', 'preApplied'],
-    ['Get Discount', 'showCard'],
-    ['Get Discount', 'vault'],
-    ['Get Discount', 'vaultQR'],
+    ['Copy discount code', 'generic'],
+    ['Get discount', 'preApplied'],
+    ['Show your Blue Light Card in store', 'showCard'],
+    ['Get discount', 'vault'],
+    ['Get QR code', 'vaultQR'],
   ])('should show the text "%s" for redemption type "%s"', (buttonText, redemptionType) => {
     const { getByRole } = render(
       <SharedUIConfigProvider value={MockSharedUiConfig}>

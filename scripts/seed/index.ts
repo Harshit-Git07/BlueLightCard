@@ -1,6 +1,7 @@
 import { v5 } from 'uuid';
 import {
   DOTENV_WEB,
+  REGION,
   SEARCH_MOCK_DATA_ENDPOINT,
   STACK_COGNITO_POOL_CLIENT,
   cliArgs,
@@ -15,6 +16,9 @@ import MockServer from './server';
 
 type BrandsEnumKey = keyof typeof BRANDS;
 
+// This is the dev account id and only account script will need to use.
+const ACCOUNT_ID = '314658777488';
+
 async function main() {
   const devName = cliArgs[0];
   const brand = getFlagValue('brand') ?? BRANDS.BLC_UK;
@@ -23,7 +27,7 @@ async function main() {
   const uuid = v5(devName, v5.URL);
   const legacyUserId = 12345;
 
-  const s3MenusBucket = `${devName}-menus-${brand}-bucket`;
+  const s3MenusBucket = `menus-${devName}-${REGION}-${ACCOUNT_ID}`;
 
   logger.info({ message: 'Started to seed environment' });
 

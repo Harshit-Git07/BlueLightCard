@@ -10,6 +10,7 @@ import Accordion from '../../../Accordion';
 import Markdown from 'markdown-to-jsx';
 import amplitudeEvents from '../../../../utils/amplitude/events';
 import { useSharedUIConfig } from '../../../../providers';
+import decodeEntities from '../../../../utils/decodeEntities';
 
 export type Props = {
   showOfferDescription?: boolean;
@@ -64,7 +65,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
         </div>
         {/* Offer Name */}
         <Heading headingLevel={'h2'} className={'leading-8 mt-4 !text-black'}>
-          {offerData.name}
+          {decodeEntities(offerData.name || '')}
         </Heading>
         {/* Offer description */}
         {showOfferDescription && (
@@ -76,7 +77,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   : ''
               }`}
             >
-              {offerData.description}
+              {decodeEntities(offerData.description || '')}
             </p>
 
             {/* Show more/less button for description */}

@@ -23,7 +23,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       offerType: 'online',
       platform: 'BLC_UK',
       redemptionType: 'vault',
-      url: 'https://awin1.com/',
+      url: 'https://www.awin1.com/',
     },
     {
       id: `${redemptionsPrefix}-8s7a3c8-13a8-4cf3-a072-9b08ecd9d534`,
@@ -34,7 +34,18 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       offerType: 'online',
       platform: 'BLC_UK',
       redemptionType: 'vault',
-      url: 'https://awin1.com/',
+      url: 'https://www.awin1.com/',
+    },
+    {
+      id: `${redemptionsPrefix}-1s245ga-13a8-4cf3-a072-c8anm8sl0dm6`,
+      affiliate: 'awin',
+      companyId: 9179,
+      connection: 'affiliate',
+      offerId: 8724,
+      offerType: 'online',
+      platform: 'BLC_UK',
+      redemptionType: 'preApplied',
+      url: 'https://www.awin1.com/',
     },
   ] satisfies (typeof redemptionsTable.$inferInsert)[];
   await db.insert(redemptionsTable).values(redemptionsData).onConflictDoNothing();

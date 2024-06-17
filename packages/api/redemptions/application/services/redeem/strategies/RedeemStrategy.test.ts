@@ -1,12 +1,22 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
+import { as } from '@blc-mono/core/utils/testing';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
+import { RedemptionsEventsRepositoryMock } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepositoryMock';
 import { Redemption } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
 import { VaultBatch } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
-import { VaultCode, VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
-import { Vault, VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
+import {
+  IVaultCodesRepository,
+  VaultCode,
+  VaultCodesRepository,
+} from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
+import {
+  IVaultsRepository,
+  Vault,
+  VaultsRepository,
+} from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import {
   genericsTable,
@@ -15,25 +25,32 @@ import {
   vaultCodesTable,
   vaultsTable,
 } from '@blc-mono/redemptions/libs/database/schema';
+import { redemptionFactory } from '@blc-mono/redemptions/libs/test/factories/redemption.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { RedeemParams } from './IRedeemStrategy';
 import { RedeemGenericStrategy } from './RedeemGenericStrategy';
+import { RedeemPreAppliedStrategy } from './RedeemPreAppliedStrategy';
+import { RedeemShowCardStrategy } from './RedeemShowCardStrategy';
 import { RedeemVaultStrategy } from './RedeemVaultStrategy';
 
 describe('Redemption Strategies', () => {
   describe('RedeemGenericStrategy', () => {
     const mockedLogger = createTestLogger();
     const mockedSilentLogger = createSilentLogger();
-
+    const mockedRedemptionsEventsRepository = new RedemptionsEventsRepositoryMock();
     function callGenericRedeemStrategy(
       connection: IDatabaseConnection,
       redemption: Redemption,
       options: { silent?: boolean } = {},
     ) {
       const genericsRepository = new GenericsRepository(connection);
-      const service = new RedeemGenericStrategy(genericsRepository, options.silent ? mockedSilentLogger : mockedLogger);
+      const service = new RedeemGenericStrategy(
+        genericsRepository,
+        mockedRedemptionsEventsRepository,
+        options.silent ? mockedSilentLogger : mockedLogger,
+      );
       const defaultParams: RedeemParams = {
         brazeExternalUserId: faker.string.uuid(),
         companyName: faker.company.name(),
@@ -113,14 +130,143 @@ describe('Redemption Strategies', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  describe('RedeemPreAppliedStrategy (TODO)', () => {
-    it.todo('Add tests for RedeemPreAppliedStrategy');
+  describe('RedeemPreAppliedStrategy', () => {
+    it('fails to redeem if no redemption URL is configured', async () => {
+      const redemption = redemptionFactory.build({
+        redemptionType: 'preApplied',
+        offerId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        affiliate: 'awin',
+        url: undefined,
+      });
+
+      const params: RedeemParams = {
+        brazeExternalUserId: faker.string.uuid(),
+        clientType: faker.helpers.arrayElement(['mobile', 'web']),
+        companyName: faker.company.name(),
+        memberId: faker.number
+          .int({
+            min: 1,
+            max: 1_000_000,
+          })
+          .toString(),
+        offerName: faker.commerce.productName(),
+      };
+
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+      const mockLogger = createSilentLogger();
+      const strategy = new RedeemPreAppliedStrategy(redemptionEventsRepository, mockLogger);
+
+      // Act
+      await expect(() => strategy.redeem(redemption, params)).rejects.toThrow(
+        'Redemption URL was missing but required for pre-applied redemption',
+      );
+      expect(redemptionEventsRepository.publishRedemptionEvent).not.toHaveBeenCalled();
+    });
+
+    it('should publish member redemption event', async () => {
+      // Arrange
+      const redemption = redemptionFactory.build({
+        redemptionType: 'preApplied', //
+        offerId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        affiliate: 'awin',
+      });
+      const params: RedeemParams = {
+        brazeExternalUserId: faker.string.uuid(),
+        clientType: faker.helpers.arrayElement(['mobile', 'web']),
+        companyName: faker.company.name(),
+        memberId: faker.number
+          .int({
+            min: 1,
+            max: 1_000_000,
+          })
+          .toString(),
+        offerName: faker.commerce.productName(),
+      };
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+      const mockLogger = createSilentLogger();
+      const strategy = new RedeemPreAppliedStrategy(redemptionEventsRepository, mockLogger);
+
+      // Act
+      const redeemedResult = await strategy.redeem(redemption, params);
+
+      // Assert
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+        memberDetails: {
+          memberId: params.memberId,
+          brazeExternalUserId: params.brazeExternalUserId,
+        },
+        redemptionDetails: {
+          redemptionId: redemption.id,
+          redemptionType: redemption.redemptionType,
+          companyId: redemption.companyId,
+          companyName: params.companyName,
+          offerId: redemption.offerId,
+          offerName: params.offerName,
+          affiliate: redemption.affiliate,
+          url: redeemedResult.redemptionDetails.url,
+          clientType: params.clientType,
+        },
+      });
+    });
   });
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  describe('RedeemShowCardStrategy (TODO)', () => {
-    it.todo('Add tests for RedeemShowCardStrategy');
+  describe('RedeemShowCardStrategy', () => {
+    it('should publish member redemption event', async () => {
+      // Arrange
+      const redemption = redemptionFactory.build({
+        redemptionType: 'showCard',
+        offerId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        affiliate: undefined,
+        url: undefined,
+      });
+
+      const params: RedeemParams = {
+        brazeExternalUserId: faker.string.uuid(),
+        clientType: faker.helpers.arrayElement(['mobile', 'web']),
+        companyName: faker.company.name(),
+        memberId: faker.number
+          .int({
+            min: 1,
+            max: 1_000_000,
+          })
+          .toString(),
+        offerName: faker.commerce.productName(),
+      };
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+      const mockLogger = createSilentLogger();
+      const strategy = new RedeemShowCardStrategy(redemptionEventsRepository, mockLogger);
+
+      // Act
+      await strategy.redeem(redemption, params);
+
+      // Assert
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+        memberDetails: {
+          memberId: params.memberId,
+          brazeExternalUserId: params.brazeExternalUserId,
+        },
+        redemptionDetails: {
+          redemptionId: redemption.id,
+          redemptionType: redemption.redemptionType,
+          companyId: redemption.companyId,
+          companyName: params.companyName,
+          offerId: redemption.offerId,
+          offerName: params.offerName,
+          affiliate: redemption.affiliate,
+          clientType: params.clientType,
+        },
+      });
+    });
   });
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -164,6 +310,7 @@ describe('Redemption Strategies', () => {
         vaultsRepository,
         vaultCodesRepository,
         mockedLegacyVaultApiRepository,
+        new RedemptionsEventsRepositoryMock(),
         options.silent ? mockedSilentLogger : mockedLogger,
       );
       return service.redeem(redemption, params);
@@ -354,6 +501,74 @@ describe('Redemption Strategies', () => {
           expect(result.redemptionDetails.url).toEqual(redemptionCreated.url);
           // expect(result.redemptionDetails.code).toEqual('RECENT_CODE'); // TODO: Check if this is necessary
         }
+      });
+      it('publishes a redemption event', async () => {
+        // Arrange
+        const vaultCode = faker.string.alphanumeric(16);
+        const mockVaultRepository = {
+          findOneByRedemptionId: jest.fn().mockResolvedValue(vault('1', 'standard', 'active', 3).build()),
+        } satisfies Partial<IVaultsRepository>;
+        const mockVaultCodesRepository = {
+          checkIfMemberReachedMaxCodeClaimed: jest.fn().mockResolvedValue(false),
+          claimVaultCode: jest.fn().mockResolvedValue({ code: vaultCode }),
+        } satisfies Partial<IVaultCodesRepository>;
+
+        const redemption = redemptionFactory.build({
+          redemptionType: 'vault',
+          offerId: faker.number.int({
+            min: 1,
+            max: 1_000_000,
+          }),
+          affiliate: 'awin',
+        });
+        const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+        const defaultParams: RedeemParams = {
+          brazeExternalUserId: faker.string.uuid(),
+          companyName: faker.company.name(),
+          memberId: faker.string.sample(8),
+          offerName: faker.lorem.words(3),
+          clientType: faker.helpers.arrayElement(['web', 'mobile']),
+        };
+        const strategy = new RedeemVaultStrategy(
+          as(mockVaultRepository),
+          as(mockVaultCodesRepository),
+          as(jest.fn()),
+          redemptionEventsRepository,
+          mockedLogger,
+        );
+
+        // Act
+        const redeemedResult = await strategy.redeem(redemption, defaultParams);
+
+        // Assert
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+          memberDetails: {
+            memberId: defaultParams.memberId,
+            brazeExternalUserId: defaultParams.brazeExternalUserId,
+          },
+          redemptionDetails: {
+            redemptionId: redemption.id,
+            redemptionType: 'vault',
+            companyId: redemption.companyId,
+            companyName: defaultParams.companyName,
+            offerId: redemption.offerId,
+            offerName: defaultParams.offerName,
+            code: vaultCode,
+            affiliate: redemption.affiliate,
+            url: redemption.url,
+            clientType: defaultParams.clientType,
+          },
+        });
+
+        expect(redeemedResult).toStrictEqual({
+          kind: 'Ok',
+          redemptionType: 'vault',
+          redemptionDetails: {
+            url: redemption.url,
+            code: vaultCode,
+          },
+        });
       });
     });
     describe('Legacy vault flow', () => {

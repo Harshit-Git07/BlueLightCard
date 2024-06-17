@@ -30,14 +30,17 @@ export type RedeemGenericStrategyResult = {
 export type RedeemPreAppliedStrategyResult = {
   kind: 'Ok';
   redemptionType: typeof PREAPPLIED;
-  redemptionDetails: string;
+  redemptionDetails: {
+    url: string;
+    code?: never;
+  };
 };
 
 // TODO: This is a placeholder for the future implementation
 export type RedeemShowCardStrategyResult = {
   kind: 'Ok';
   redemptionType: typeof SHOWCARD;
-  redemptionDetails: string;
+  redemptionDetails: Record<never, never>;
 };
 
 export type VaultStrategyResultWithDetails = {

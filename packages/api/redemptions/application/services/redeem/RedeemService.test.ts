@@ -98,7 +98,7 @@ describe('RedeemService', () => {
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
       redemptionType: 'preApplied',
-      redemptionDetails: '',
+      redemptionDetails: { url: faker.internet.url() },
     };
     const redemptionsRepository = {
       findOneByOfferId: jest.fn().mockResolvedValue(redemption),
@@ -134,7 +134,7 @@ describe('RedeemService', () => {
     });
   });
 
-  it('should send data for DWH (logRedemptionAttempt, logVaultRedemption) and vault Braze email to event bus', async () => {
+  it('should publish member redeem intent event', async () => {
     // Arrange
     const redemption = redemptionFactory.build({
       offerId: defaultOfferId,
@@ -184,24 +184,6 @@ describe('RedeemService', () => {
         companyId: redemption.companyId,
         offerId: defaultOfferId,
         redemptionType: redemption.redemptionType,
-      },
-    });
-    expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
-      memberDetails: {
-        memberId: defaultParams.memberId,
-        brazeExternalUserId: defaultParams.brazeExternalUserId,
-      },
-      redemptionDetails: {
-        redemptionId: redemption.id,
-        redemptionType: redemption.redemptionType,
-        companyId: redemption.companyId,
-        companyName: defaultParams.companyName,
-        offerId: redemption.offerId,
-        offerName: defaultParams.offerName,
-        code: redeemedResult.redemptionDetails.code,
-        affiliate: redemption.affiliate,
-        url: redeemedResult.redemptionDetails.url,
-        clientType: defaultParams.clientType,
       },
     });
   });
@@ -258,24 +240,6 @@ describe('RedeemService', () => {
         redemptionType: redemption.redemptionType,
       },
     });
-    expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
-      memberDetails: {
-        memberId: defaultParams.memberId,
-        brazeExternalUserId: defaultParams.brazeExternalUserId,
-      },
-      redemptionDetails: {
-        redemptionId: redemption.id,
-        redemptionType: redemption.redemptionType,
-        companyId: redemption.companyId,
-        companyName: defaultParams.companyName,
-        offerId: redemption.offerId,
-        offerName: defaultParams.offerName,
-        code: redeemedResult.redemptionDetails.code,
-        affiliate: redemption.affiliate,
-        url: redeemedResult.redemptionDetails.url,
-        clientType: defaultParams.clientType,
-      },
-    });
   });
 
   it('should complete successfully when publishMemberRedeemIntentEvent (DWH - logRedemptionAttempt) fails', async () => {
@@ -286,7 +250,9 @@ describe('RedeemService', () => {
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
       redemptionType: 'preApplied',
-      redemptionDetails: '',
+      redemptionDetails: {
+        url: faker.internet.url(),
+      },
     };
     const silentLogger = createSilentLogger();
     const redemptionsRepository = {

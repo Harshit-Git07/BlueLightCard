@@ -73,14 +73,12 @@ const OfferSheetDetailsPage: FC = () => {
         case 'vault':
         case 'preApplied':
           logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
-          setTimeout(() => {
-            if (!isRedeemDataErrorResponse(redeemData.data)) {
-              copyCodeAndRedirect(
-                redeemData.data.redemptionDetails.code,
-                redeemData.data.redemptionDetails.url,
-              );
-            }
-          }, 0);
+          if (!isRedeemDataErrorResponse(redeemData.data)) {
+            copyCodeAndRedirect(
+              redeemData.data.redemptionDetails.code,
+              redeemData.data.redemptionDetails.url,
+            );
+          }
           break;
         // TODO: Implement this page
         case 'showCard':
@@ -106,27 +104,16 @@ const OfferSheetDetailsPage: FC = () => {
   }
 
   const handleRedirect = (url: string) => {
-    console.log('handleRedirect url running', url);
     const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
-    console.log('windowHandle.isOpen()', windowHandle.isOpen());
-    // This "double" navigation is in place to handle iOS not opening on the first attempt
-    if (!windowHandle.isOpen()) {
-      console.log('double navigation running');
-      platformAdapter.navigateExternal(url, { target: 'blank' });
-    }
 
     // If the window failed to open, navigate in the same tab
     if (!windowHandle.isOpen()) {
-      console.log('second if running');
       platformAdapter.navigateExternal(url, { target: 'blank' });
     } else {
-      console.log('else running to redirect on the same tab');
       // Check if the window was closed by an adblocker and fallback to navigating in the same tab
-      setTimeout(() => {
-        if (!windowHandle.isOpen()) {
-          platformAdapter.navigateExternal(url, { target: 'self' });
-        }
-      }, 0);
+      if (!windowHandle.isOpen()) {
+        platformAdapter.navigateExternal(url, { target: 'self' });
+      }
     }
   };
 

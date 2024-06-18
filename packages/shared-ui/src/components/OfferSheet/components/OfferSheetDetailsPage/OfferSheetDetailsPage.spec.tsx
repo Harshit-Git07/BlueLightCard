@@ -154,7 +154,7 @@ describe('smoke test', () => {
     ['Copy discount code', 'generic'],
     ['Get discount', 'preApplied'],
     ['Show your Blue Light Card in store', 'showCard'],
-    ['Get discount', 'vault'],
+    ['Copy discount code', 'vault'],
     ['Get QR code', 'vaultQR'],
   ])('should show the text "%s" for redemption type "%s"', (buttonText, redemptionType) => {
     const { getByRole } = render(

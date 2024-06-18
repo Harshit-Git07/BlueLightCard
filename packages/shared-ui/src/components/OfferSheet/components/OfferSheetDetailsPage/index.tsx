@@ -111,12 +111,17 @@ const OfferSheetDetailsPage: FC = () => {
       platformAdapter.navigateExternal(url, { target: 'blank' });
     }
 
-    // Check if the window was closed by an adblocker and fallback to navigating in the same tab
-    setTimeout(() => {
-      if (!windowHandle.isOpen()) {
-        platformAdapter.navigateExternal(url, { target: 'self' });
-      }
-    }, 50);
+    // If the window failed to open, navigate in the same tab
+    if (!windowHandle.isOpen()) {
+      platformAdapter.navigateExternal(url, { target: 'blank' });
+    } else {
+      // Check if the window was closed by an adblocker and fallback to navigating in the same tab
+      setTimeout(() => {
+        if (!windowHandle.isOpen()) {
+          platformAdapter.navigateExternal(url, { target: 'self' });
+        }
+      }, 50);
+    }
   };
 
   const buttonText = (redemptionType?: RedemptionType) => {
@@ -130,9 +135,9 @@ const OfferSheetDetailsPage: FC = () => {
         secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
         break;
       case 'vault':
-        primaryButtonTextValue = 'Get discount';
-        secondaryButtonTextValue = 'Continue to partner website';
-        secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
+        primaryButtonTextValue = 'Copy discount code';
+        secondaryButtonTextValue = 'Code copied!';
+        secondaryButtonSubtextValue = 'Redirecting to partner website';
         break;
       case 'preApplied':
         primaryButtonTextValue = 'Get discount';
@@ -153,7 +158,6 @@ const OfferSheetDetailsPage: FC = () => {
         secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
     }
 
-    console.log(primaryButtonTextValue);
     return {
       primaryText: primaryButtonTextValue,
       secondaryText: secondaryButtonTextValue,
@@ -167,8 +171,8 @@ const OfferSheetDetailsPage: FC = () => {
       className="w-full"
       transitionDurationMs={200}
       onClick={() => {
-        getDiscountClickHandler();
         setButtonClicked(true);
+        getDiscountClickHandler();
       }}
     >
       <span className="leading-10 font-bold text-md">{buttonText(redemptionType).primaryText}</span>

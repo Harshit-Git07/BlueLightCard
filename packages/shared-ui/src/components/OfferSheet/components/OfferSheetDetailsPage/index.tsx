@@ -8,7 +8,12 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
 import events from '../../../../utils/amplitude/events';
-import { isRedeemDataErrorResponse, redeemOffer, usePlatformAdapter } from '../../../../index';
+import {
+  isRedeemDataErrorResponse,
+  redeemOffer,
+  usePlatformAdapter,
+  V5Response,
+} from '../../../../index';
 import { useRedeemOffer } from '../../../../hooks/useRedeemOffer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
@@ -94,7 +99,6 @@ const OfferSheetDetailsPage: FC = () => {
     }
   };
   async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
-    console.log('copyCodeAndRedirect values', { code, url });
     if (code) {
       await platformAdapter.writeTextToClipboard(code);
     }
@@ -104,17 +108,7 @@ const OfferSheetDetailsPage: FC = () => {
   }
 
   const handleRedirect = (url: string) => {
-    const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
-
-    // If the window failed to open, navigate in the same tab
-    if (!windowHandle.isOpen()) {
-      platformAdapter.navigateExternal(url, { target: 'blank' });
-    } else {
-      // Check if the window was closed by an adblocker and fallback to navigating in the same tab
-      if (!windowHandle.isOpen()) {
-        platformAdapter.navigateExternal(url, { target: 'self' });
-      }
-    }
+    window.open(url, '_blank');
   };
 
   const buttonText = (redemptionType?: RedemptionType) => {

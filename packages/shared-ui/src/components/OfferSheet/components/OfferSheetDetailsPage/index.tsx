@@ -106,6 +106,10 @@ const OfferSheetDetailsPage: FC = () => {
 
   const handleRedirect = (url: string) => {
     const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
+    // This "double" navigation is in place to handle iOS not opening on the first attempt
+    if (!windowHandle.isOpen()) {
+      platformAdapter.navigateExternal(url, { target: 'blank' });
+    }
 
     // Check if the window was closed by an adblocker and fallback to navigating in the same tab
     setTimeout(() => {

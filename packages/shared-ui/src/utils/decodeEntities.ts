@@ -5,7 +5,6 @@ const decodeEntitiesElementId = 'decode-entities-element';
 
 const decodeCharEntities = (text: string) => {
   let _text = text;
-  console.log(text);
   Object.keys(CharacterEntities).forEach((char) => {
     _text = _text.replaceAll(char, CharacterEntities[char]);
   });

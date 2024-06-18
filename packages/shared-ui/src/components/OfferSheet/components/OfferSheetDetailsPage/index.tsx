@@ -120,7 +120,7 @@ const OfferSheetDetailsPage: FC = () => {
         if (!windowHandle.isOpen()) {
           platformAdapter.navigateExternal(url, { target: 'self' });
         }
-      }, 50);
+      }, 0);
     }
   };
 

@@ -103,6 +103,7 @@ jobs:
       - lint-styles
     env:
       STORYBOOK_FLAG_NEW_TOKENS: true
+      NEXT_PUBLIC_FLAG_NEW_TOKENS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -200,6 +201,7 @@ jobs:
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
+      NEXT_PUBLIC_FLAG_NEW_TOKENS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -279,6 +281,7 @@ jobs:
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
+      NEXT_PUBLIC_FLAG_NEW_TOKENS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4

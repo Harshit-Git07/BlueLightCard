@@ -32,8 +32,8 @@ const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouse
             elementsPerPageLaptop={itemsToShow}
             elementsPerPageTablet={2}
             elementsPerPageMobile={1}
-            autoPlay
-            autoPlayIntervalMs={5000}
+            navigation
+            pagination
           >
             {offers.length > 0
               ? offers.map((offer, index) => (

@@ -1,7 +1,6 @@
 import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { CarouselProps } from './types';
 
 jest.mock('../../hooks/useIsDarkMode', () => ({
@@ -24,44 +23,57 @@ jest.mock('swiper/modules', () => ({
 
 jest.mock('swiper/css', () => jest.fn());
 
-describe('SwiperCarousel component', () => {
-  const props = {
-    elementsPerPageDesktop: 5,
-    elementsPerPageLaptop: 3,
-    elementsPerPageTablet: 2,
-    elementsPerPageMobile: 1,
-    autoPlay: true,
-    autoPlayIntervalMs: 5000,
-  };
-
-  it('renders without crashing', () => {
-    render(
-      <SwiperCarousel {...props}>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
+describe('SwiperCarousel.tsx', () => {
+  it('renders', () => {
+    const { container } = render(
+      <SwiperCarousel>
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>
       </SwiperCarousel>
     );
+    expect(container).toMatchSnapshot();
   });
 
-  it('matches snapshot', () => {
-    const component = renderer.create(
-      <SwiperCarousel {...props}>
+  it('should not render with navigation or pagination by default', () => {
+    const { container } = render(
+      <SwiperCarousel>
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>
       </SwiperCarousel>
     );
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+    expect(container.querySelector('.swiper-button-prev')).toBeNull();
+    expect(container.querySelector('.swiper-button-next')).toBeNull();
+    expect(container.querySelector('.swiper-pagination')).toBeNull();
+  });
+
+  it('should render with navigation when configured', () => {
+    const { container } = render(
+      <SwiperCarousel navigation>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+      </SwiperCarousel>
+    );
+    expect(container.getElementsByClassName('.swiper-button-prev')).toBeDefined();
+    expect(container.getElementsByClassName('.swiper-button-next')).toBeDefined();
+  });
+
+  it('should render with pagination when configured', () => {
+    const { container } = render(
+      <SwiperCarousel>
+        <div>Item</div>
+        <div>Item</div>
+        <div>Item</div>
+      </SwiperCarousel>
+    );
+    expect(container.getElementsByClassName('.swiper-pagination')).toBeDefined();
   });
 
   it('displays correct number of elements on screen size', () => {
     render(
-      <SwiperCarousel {...props}>
+      <SwiperCarousel>
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>

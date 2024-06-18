@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BannerCarousel.tsx renders 1`] = `
+<div>
+  <div
+    class="swiper swiper-initialized swiper-horizontal"
+  >
+    <div
+      class="swiper-wrapper"
+      style="cursor: grab; transition-duration: 0ms; transition-delay: 0ms; transform: translate3d(NaNpx, 0px, 0px);"
+    >
+      <div
+        class="swiper-slide"
+        data-swiper-slide-index="0"
+      >
+        <div
+          class="relative w-full h-[440px]"
+        >
+          <a
+            class="dark:text-palette-secondary"
+            data-testid="anchor-link"
+            href="https://google.com"
+          >
+            <img
+              alt="Mock Banner One banner"
+              class="w-full h-auto object-contain"
+              data-nimg="fill"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+              src="https://picsum.photos/seed/picsum/200/300?width=3840&quality=75"
+              srcset="https://picsum.photos/seed/picsum/200/300?width=640&quality=75 640w, https://picsum.photos/seed/picsum/200/300?width=750&quality=75 750w, https://picsum.photos/seed/picsum/200/300?width=828&quality=75 828w, https://picsum.photos/seed/picsum/200/300?width=1080&quality=75 1080w, https://picsum.photos/seed/picsum/200/300?width=1200&quality=75 1200w, https://picsum.photos/seed/picsum/200/300?width=1920&quality=75 1920w, https://picsum.photos/seed/picsum/200/300?width=2048&quality=75 2048w, https://picsum.photos/seed/picsum/200/300?width=3840&quality=75 3840w"
+              style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        class="swiper-slide"
+        data-swiper-slide-index="1"
+      >
+        <div
+          class="relative w-full h-[440px]"
+        >
+          <a
+            class="dark:text-palette-secondary"
+            data-testid="anchor-link"
+            href="https://google.com"
+          >
+            <img
+              alt="Mock Banner Two banner"
+              class="w-full h-auto object-contain"
+              data-nimg="fill"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+              src="https://picsum.photos/seed/picsum/200/300?width=3840&quality=75"
+              srcset="https://picsum.photos/seed/picsum/200/300?width=640&quality=75 640w, https://picsum.photos/seed/picsum/200/300?width=750&quality=75 750w, https://picsum.photos/seed/picsum/200/300?width=828&quality=75 828w, https://picsum.photos/seed/picsum/200/300?width=1080&quality=75 1080w, https://picsum.photos/seed/picsum/200/300?width=1200&quality=75 1200w, https://picsum.photos/seed/picsum/200/300?width=1920&quality=75 1920w, https://picsum.photos/seed/picsum/200/300?width=2048&quality=75 2048w, https://picsum.photos/seed/picsum/200/300?width=3840&quality=75 3840w"
+              style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      class="swiper-button-prev"
+    />
+    <div
+      class="swiper-button-next"
+    />
+  </div>
+</div>
+`;

@@ -82,7 +82,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy -- --env staging
+          command: deploy --env staging
           workingDirectory: "packages/api-proxy"
 
   release:
@@ -105,5 +105,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy -- --env production
+          command: deploy --env production
           workingDirectory: "packages/api-proxy"

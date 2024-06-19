@@ -1,5 +1,63 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.3.0...shared-ui-v1.4.0) (2024-06-19)
+
+
+### Features
+
+* [DISCO-312] Try out change identifier to limit stack deploys ([#1428](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1428)) ([55a845c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/55a845c8499988a8fcf3c7cf340dd6b984173e92))
+* add mobile one tap for redemption ([a3eb5ce](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a3eb5ce04bd704c56f5140100823e3cde9cbb6f8))
+* add mobile one tap for redemption ([a3eb5ce](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a3eb5ce04bd704c56f5140100823e3cde9cbb6f8))
+* added new card hybrid styles to Card on mobile hybrid ([#1558](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1558)) ([f47d153](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f47d1535069ef14d4f85880f18ba4a57707843d9))
+* added preset to mobile-hybird with new tokens ([#1394](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1394)) ([5d3d3f3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5d3d3f3cd5d4ebdef8d19299220ad4c43917704e))
+* adds offer-sheet-redeem-generic-web flag for generic offers to run new OfferSheet flow ([#1560](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1560)) ([898360b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/898360b7ec906bb8a2611c851a8451bd547f4356))
+* Mobile Hybrid Company Page ([#1368](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1368)) ([d83cec0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d83cec0486b403cecfacfdd9ffe8c72d2961bf29))
+* resolve build issue and added new tokens ([#1434](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1434)) ([d893d38](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d893d38fc7c28117b36f777ef643f8de4ee85f5b))
+* TO-859 show copy code text for generic offers ([#1598](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1598)) ([d7ba7e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d7ba7e4de5a70c88a1b71185aab296bcacd53c3b))
+* TR-605 add one click back to mobile ([8b9c15e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b9c15ebc0777dfc114d5207b1764426e965196d))
+* TR-605 add one click back to mobile ([#1464](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1464)) ([8b9c15e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b9c15ebc0777dfc114d5207b1764426e965196d))
+* Trigger build ([#1444](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1444)) ([e4bdbf2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4bdbf202bd0994cb0730e3d53e17e812b6e5f75))
+
+
+### Bug Fixes
+
+* add error state back for 500s ([#1461](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1461)) ([8b030e3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b030e3edb91a59684a585110eb30f05f95246ed))
+* adds double button journey on web platform in OfferSheet ([#1618](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1618)) ([62365b9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/62365b92c01cd2a329540d798d7c70d5ca3e1c27))
+* bump version control ([#1500](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1500)) ([4973fda](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4973fda1d9f322c5082d7444dc86617865819297))
+* change redirect method ([d6a22c1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d6a22c112eaa49ed5c26904863e9012752c85879))
+* edit timeout ([85fe7db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85fe7db925537bbbf359b83c36d7106015860833))
+* ensure company logo shows on state update ([#1536](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1536)) ([53b7605](https://github.com/bluelightcard/BlueLightCard-2.0/commit/53b7605a0a63d996fb3b8e9cd9a20017563c9f8a))
+* ensure description text is visible ([#1621](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1621)) ([0f70c81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0f70c81755fd15fd2874829d091e9762b97514b8))
+* first letter of 'Copy Discount Code' changed to upper case ([#1604](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1604)) ([8a8ef7e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8a8ef7eb78eae695e57967e52f9294637eb93c35))
+* fix issue with brand preset ([#1437](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1437)) ([7cb4893](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7cb48933cba40c4b308a7f8c14fccbfa9de02e59))
+* Offer pop up close button is not visible in the Dark mode ([#1579](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1579)) ([c408bc0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c408bc04e92f98d4f98be1c6c589d2965e70e8de))
+* Offer sheet handle redirect ([#1611](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1611)) ([f32dca7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f32dca73789fa2d3d6c75c76203523f62050e6a9))
+* Offer sheet handle redirect ([#1612](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1612)) ([85fe7db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85fe7db925537bbbf359b83c36d7106015860833))
+* offer sheet redirect ([#1614](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1614)) ([bb1ae91](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bb1ae91fbc82826c48281ce478071d9d226b34e2))
+* OfferSheet different logic for onClick handlers on mobile hybrid and web ([#1620](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1620)) ([3bf2134](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3bf213490594d9617b8f3cf68daf01d7b3888a09))
+* parametrise vault redemption experiment id and store as environment variable ([#1470](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1470)) ([10c9416](https://github.com/bluelightcard/BlueLightCard-2.0/commit/10c9416d96e1790b5871234a90e09ef34468e381))
+* parametrise vault redemption experiment id and store as environment variable ([#1478](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1478)) ([d9f56fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9f56fb99bfef5e17aeee49d367590defc2f483b))
+* Refactor offer sheet ([#1605](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1605)) ([45e7588](https://github.com/bluelightcard/BlueLightCard-2.0/commit/45e75889728073d676b4045ab69de7e50dba98f0))
+* Reinstate the 'double' navigation call to handle odd iOS behaviour ([#1610](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1610)) ([586ea2a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/586ea2accc80b78a1690058da31f6e72348e334f))
+* Revert/tr-605 mobile one tap ([#1494](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1494)) ([519e7de](https://github.com/bluelightcard/BlueLightCard-2.0/commit/519e7de91295a384647a380e40e679610d6668f2))
+* TO 781 company cta redirects to non existent offer page when offer not found ([#1587](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1587)) ([078a747](https://github.com/bluelightcard/BlueLightCard-2.0/commit/078a74707f6d358d370294ea65d7025376a3b51c))
+* TO-767 scroll offersheet backdrop ([#1484](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1484)) ([2bb0c45](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2bb0c45940611545a07a039e499c865d8a5347f3))
+* TO-774 homepage offer redirect url ([#1549](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1549)) ([f3ce990](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f3ce99047507dc7b1e3280e2452523f9006c8a78))
+* TR-605: redirecting fix for url ([efc4078](https://github.com/bluelightcard/BlueLightCard-2.0/commit/efc4078d4c113ae6c1263310afbc67f9dbafbd2c))
+* TR-605: redirecting fix for url ([#1487](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1487)) ([efc4078](https://github.com/bluelightcard/BlueLightCard-2.0/commit/efc4078d4c113ae6c1263310afbc67f9dbafbd2c))
+* update alt text on header image ([#1562](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1562)) ([428f8eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/428f8ebcb5853aee421c7594cb85c688b9336470))
+* update env vars ([#1481](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1481)) ([fe23b2f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fe23b2f680656817cc5c6abc97302740fa74a8e4))
+
+
+### Other Changes
+
+* adds logs to debug redirect on offersheet ([#1613](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1613)) ([97f175e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/97f175e815e29af32b7ccec8d93363e6ef9c882d))
+* disco 392 setup tailwind config in the shared UI package ([#1623](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1623)) ([fff5e9d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fff5e9daff7e9de0d91e8809ddf58c42433f293d))
+* fix flag storybook ci ([#1525](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1525)) ([8ab99b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8ab99b0a4252bfddf92d2269f26f9c35e74c945a))
+* remove timeout ([cd229cc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd229cc09c8abb456f03b0270261d3a755c85c76))
+* remove timeout ([#1616](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1616)) ([cd229cc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd229cc09c8abb456f03b0270261d3a755c85c76))
+* updated tokens ([#1491](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1491)) ([73edb98](https://github.com/bluelightcard/BlueLightCard-2.0/commit/73edb9827adb64df581bd6eedb6ae24d72f964b3))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.2.0...shared-ui-v1.3.0) (2024-05-23)
 
 ### Features

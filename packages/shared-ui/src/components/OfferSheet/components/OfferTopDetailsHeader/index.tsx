@@ -70,7 +70,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
         {showOfferDescription && (
           <>
             <p
-              className={`text-base font-light font-museo leading-5 mt-2 ${
+              className={`text-base font-light font-museo leading-5 mt-2 text-black ${
                 offerData.description && offerData.description.length > 300 && !expanded
                   ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
                   : ''

@@ -95,7 +95,8 @@
     "vite-tsconfig-paths": "4.3.2",
     "vitest": "1.4.0",
     "zod": "3.22.3",
-    "zod-to-json-schema": "3.21.3"
+    "zod-to-json-schema": "3.21.3",
+    "@types/qr-image": "3.2.9"
   },
   "workspaces": [
     "packages/api/*",
@@ -135,6 +136,7 @@
     "pkcs7": "^1.0.4",
     "postgres": "3.4.3",
     "react-content-loader": "^6.2.1",
+    "qr-image": "3.2.0",
     "react-use": "17.5.0",
     "ts-jest": "^29.1.0",
     "tsafe": "1.6.6",

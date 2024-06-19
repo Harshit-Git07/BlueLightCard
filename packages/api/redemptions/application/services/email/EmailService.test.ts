@@ -57,7 +57,7 @@ describe('EmailService', () => {
       expect(emailRepository.sendPreAppliedTransactionalEmail).toHaveBeenCalled();
     });
 
-    it.each(['showCard', 'vaultQR'] satisfies RedemptionType[])(
+    it.each(['showCard'] satisfies RedemptionType[])(
       'should throw error for unhandled redemption type',
       async (redemptionType) => {
         // Arrange

@@ -1,4 +1,3 @@
-
 const path = require('path');
 
 module.exports = {
@@ -9,29 +8,30 @@ module.exports = {
     rules: [
       {
         test: /\.ts?$/,
-        use: [{
-          loader: 'ts-loader',
-          options: {
-            configFile: "tsconfig-build.json"
-          }
-        }],
-        exclude:/node_modules/,
-        include: path.resolve(__dirname, './worker.ts')
-
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: 'tsconfig-build.json',
+            },
+          },
+        ],
+        exclude: /node_modules/,
+        include: path.resolve(__dirname, './worker.ts'),
       },
     ],
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
     filename: 'worker.js',
     path: path.resolve(__dirname, './'),
   },
   optimization: {
-    minimize: false
+    minimize: false,
   },
   performance: {
-    hints: false
-  }
+    hints: false,
+  },
 };

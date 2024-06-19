@@ -82,7 +82,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: npm run deploy -- --env staging
+          command: deploy -- --env staging
+          workingDirectory: "packages/api-proxy"
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -104,4 +105,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: npm run deploy -- --env production
+          command: deploy -- --env production
+          workingDirectory: "packages/api-proxy"

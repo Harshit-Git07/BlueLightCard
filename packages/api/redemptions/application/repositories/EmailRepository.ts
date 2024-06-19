@@ -103,6 +103,7 @@ export class EmailRepository implements IEmailRepository {
     url: url,
     affiliate,
     code,
+    redemptionType,
   }: {
     memberId: string;
     offerId: string;
@@ -112,7 +113,8 @@ export class EmailRepository implements IEmailRepository {
     url: string;
     code: string;
     affiliate: string | null;
-  }): string {
+    redemptionType: RedemptionType;
+  }): string | undefined {
     const payload: OfferData = {
       userUID,
       offerId,
@@ -120,6 +122,9 @@ export class EmailRepository implements IEmailRepository {
       companyName,
       offerName,
     };
+    if (redemptionType === 'vaultQR') {
+      return;
+    }
 
     const jsonString = JSON.stringify(payload);
     const base64Payload = encodeBase64(jsonString);
@@ -153,6 +158,10 @@ export class EmailRepository implements IEmailRepository {
     if (redemptionType === 'generic') {
       campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID);
     }
+    if (redemptionType === 'vaultQR') {
+      campaignId = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID);
+    }
+
     if (!campaignId) {
       this.logger.info({
         message: `redemption type is incorrect for this email template: ${redemptionType}`,
@@ -172,6 +181,7 @@ export class EmailRepository implements IEmailRepository {
       url: params.url,
       affiliate: params.affiliate,
       code: params.code,
+      redemptionType,
     });
 
     const emailPayload: CampaignsTriggerSendObject = {
@@ -185,6 +195,7 @@ export class EmailRepository implements IEmailRepository {
         companyName: params.companyName,
         offerName: params.offerName,
         url: emailUrl,
+        code: params.code,
       },
     };
 

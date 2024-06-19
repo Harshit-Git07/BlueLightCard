@@ -21,6 +21,7 @@ describe('EmailRepository', () => {
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID] = 'preApplied_env_val';
     process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST] = 'https://staging.bluelightcard.co.uk';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID] = 'test';
   });
 
   afterEach(() => {
@@ -28,10 +29,11 @@ describe('EmailRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID];
   });
 
   describe('sendVaultOrGenericTransactionalEmail', () => {
-    it.each(['vault', 'generic'] satisfies RedemptionType[])(
+    it.each(['vault', 'generic', 'vaultQR'] satisfies RedemptionType[])(
       'should send an email with the braze email client',
       async (redemptionType) => {
         const logger = createTestLogger();
@@ -112,7 +114,7 @@ describe('EmailRepository', () => {
       });
     });
 
-    it.each(['showCard', 'vaultQR'] satisfies RedemptionType[])(
+    it.each(['showCard', 'preApplied'] satisfies RedemptionType[])(
       'should throw error for unhandled redemption type',
       async (redemptionType) => {
         // Arrange

@@ -19,6 +19,8 @@
     "format:check": "npm -ws run --if-present format:check",
     "test": "npm -ws run --if-present test",
     "test:watch": "npm -ws run --if-present test:watch",
+    "test:cloudflare": "npm -ws run --if-present test:cloudflare",
+    "deploy:cloudflare": "npm -w packages/api/  run --if-present deploy:cloudflare:worker --environment=$npm_config_stage",
     "oas": "npm -ws run --if-present oas",
     "e2e:identity": "npm -ws run --if-present e2e:identity",
     "prepare": "husky install",

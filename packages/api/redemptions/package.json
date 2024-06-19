@@ -13,6 +13,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:staged": "eslint --fix",
+    "deploy:cloudflare:worker": "npm run deploy -prefix ./cloudflare/QRImageGenerator --env=$npm_config_environment",
+    "test:cloudflare": "npm run test -prefix ./cloudflare/QRImageGenerator",
     "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain redemptions",
     "db:up": "dotenv -e ../../../.env -- docker compose up -d",
     "db:down": "dotenv -e ../../../.env -- docker compose down",
@@ -26,5 +28,6 @@
   "license": "ISC",
   "devDependencies": {
     "prettier": "3.2.5"
-  }
+  },
+  "dependencies": {}
 }

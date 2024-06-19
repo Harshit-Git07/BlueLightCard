@@ -19,6 +19,7 @@ export class EmailService implements IEmailService {
 
     switch (redemptionType) {
       case 'generic':
+      case 'vaultQR':
       case 'vault': {
         await this.emailRepository.sendVaultOrGenericTransactionalEmail(
           {

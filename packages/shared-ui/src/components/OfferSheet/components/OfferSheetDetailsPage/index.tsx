@@ -25,7 +25,7 @@ const OfferSheetDetailsPage: FC = () => {
   const platformAdapter = usePlatformAdapter();
   const [buttonClicked, setButtonClicked] = useState(false);
   const [showErrorPage, setShowErrorPage] = useState(false);
-  const [redeemData, setRedeemData] = useState<any | null>(null);
+  const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
 
   const labels = useLabels(offerData);
 
@@ -62,11 +62,13 @@ const OfferSheetDetailsPage: FC = () => {
       }),
     });
 
-    setRedeemData(JSON.parse(result.data));
-    // return JSON.parse(result.data);
+    return JSON.parse(result.data);
   };
 
-  const getDiscountClickHandler = () => {
+  // ----- Mobile Hybrid single button click handler
+  const hybridDiscountClickHandler = async () => {
+    const redeemData = await getRedemptionData();
+
     if (redeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
@@ -74,10 +76,10 @@ const OfferSheetDetailsPage: FC = () => {
         case 'preApplied':
           logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
           if (!isRedeemDataErrorResponse(redeemData.data)) {
-            if (redeemData.data.redemptionDetails.code)
-              copyCode(redeemData.data.redemptionDetails.code);
-            if (redeemData.data.redemptionDetails.url)
-              handleRedirect(redeemData.data.redemptionDetails.url);
+            copyCodeAndRedirect(
+              redeemData.data.redemptionDetails.code,
+              redeemData.data.redemptionDetails.url,
+            );
           }
           break;
         // TODO: Implement this page
@@ -94,6 +96,53 @@ const OfferSheetDetailsPage: FC = () => {
     }
   };
 
+  async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
+    // async function for code and redirect on mobile hybrid only
+    if (code) {
+      await platformAdapter.writeTextToClipboard(code);
+    }
+    if (url) {
+      handleRedirect(url);
+    }
+  }
+  // ----- END of Mobile Hybrid single button click handler
+
+  // Web first button click handler
+  const webDiscountClickHandler = async () => {
+    const redeemData = await getRedemptionData();
+    setWebRedeemData(redeemData);
+  };
+
+  // Web second button click handler
+  const getDiscountClickHandler = () => {
+    if (webRedeemData.statusCode == 200) {
+      switch (redemptionType) {
+        case 'generic':
+        case 'vault':
+        case 'preApplied':
+          logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
+          if (!isRedeemDataErrorResponse(webRedeemData.data)) {
+            if (webRedeemData.data.redemptionDetails.code)
+              copyCode(webRedeemData.data.redemptionDetails.code);
+            if (webRedeemData.data.redemptionDetails.url)
+              handleRedirect(webRedeemData.data.redemptionDetails.url);
+          }
+          break;
+        // TODO: Implement this page
+        case 'showCard':
+          return <></>;
+        // TODO: Implement this page
+        case 'vaultQR':
+          return <></>;
+        default:
+          return <></>;
+      }
+    } else {
+      setShowErrorPage(true);
+    }
+  };
+
+  // ---- Separate functions for code and redirect on Web to extract window.open logic from outside an async function ----
   async function copyCode(code: string) {
     await platformAdapter.writeTextToClipboard(code);
   }
@@ -113,6 +162,7 @@ const OfferSheetDetailsPage: FC = () => {
       }, 0);
     }
   };
+  // ---- End of separate functions for code and redirect on Web ----
 
   const buttonText = (redemptionType?: RedemptionType) => {
     let primaryButtonTextValue = '';
@@ -164,8 +214,8 @@ const OfferSheetDetailsPage: FC = () => {
         setButtonClicked(true);
         if (platformAdapter.platform === PlatformVariant.Web)
           logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
-        await getRedemptionData();
-        if (platformAdapter.platform === PlatformVariant.MobileHybrid) getDiscountClickHandler();
+        if (platformAdapter.platform === PlatformVariant.MobileHybrid) hybridDiscountClickHandler();
+        if (platformAdapter.platform === PlatformVariant.Web) webDiscountClickHandler();
       }}
     >
       <span className="leading-10 font-bold text-md">{buttonText(redemptionType).primaryText}</span>

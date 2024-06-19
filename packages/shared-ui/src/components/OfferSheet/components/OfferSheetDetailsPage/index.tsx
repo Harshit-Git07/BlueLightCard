@@ -4,16 +4,11 @@ import { FC, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton from '../../../MagicButton';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
 import events from '../../../../utils/amplitude/events';
-import {
-  isRedeemDataErrorResponse,
-  redeemOffer,
-  usePlatformAdapter,
-  V5Response,
-} from '../../../../index';
+import { isRedeemDataErrorResponse, usePlatformAdapter } from '../../../../index';
 import { useRedeemOffer } from '../../../../hooks/useRedeemOffer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
@@ -30,6 +25,7 @@ const OfferSheetDetailsPage: FC = () => {
   const platformAdapter = usePlatformAdapter();
   const [buttonClicked, setButtonClicked] = useState(false);
   const [showErrorPage, setShowErrorPage] = useState(false);
+  const [redeemData, setRedeemData] = useState<any | null>(null);
 
   const labels = useLabels(offerData);
 
@@ -66,12 +62,11 @@ const OfferSheetDetailsPage: FC = () => {
       }),
     });
 
-    return JSON.parse(result.data);
+    setRedeemData(JSON.parse(result.data));
+    // return JSON.parse(result.data);
   };
 
-  const getDiscountClickHandler = async () => {
-    const redeemData = await getRedemptionData();
-
+  const getDiscountClickHandler = () => {
     if (redeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
@@ -79,10 +74,10 @@ const OfferSheetDetailsPage: FC = () => {
         case 'preApplied':
           logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
           if (!isRedeemDataErrorResponse(redeemData.data)) {
-            copyCodeAndRedirect(
-              redeemData.data.redemptionDetails.code,
-              redeemData.data.redemptionDetails.url,
-            );
+            if (redeemData.data.redemptionDetails.code)
+              copyCode(redeemData.data.redemptionDetails.code);
+            if (redeemData.data.redemptionDetails.url)
+              handleRedirect(redeemData.data.redemptionDetails.url);
           }
           break;
         // TODO: Implement this page
@@ -98,17 +93,25 @@ const OfferSheetDetailsPage: FC = () => {
       setShowErrorPage(true);
     }
   };
-  async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
-    if (code) {
-      await platformAdapter.writeTextToClipboard(code);
-    }
-    if (url) {
-      handleRedirect(url);
-    }
+
+  async function copyCode(code: string) {
+    await platformAdapter.writeTextToClipboard(code);
   }
 
   const handleRedirect = (url: string) => {
-    window.open(url, '_blank');
+    const windowHandle = platformAdapter.navigateExternal(url, { target: 'blank' });
+
+    // If the window failed to open, navigate in the same tab
+    if (!windowHandle.isOpen()) {
+      platformAdapter.navigateExternal(url, { target: 'blank' });
+    } else {
+      // Check if the window was closed by an adblocker and fallback to navigating in the same tab
+      setTimeout(() => {
+        if (!windowHandle.isOpen()) {
+          platformAdapter.navigateExternal(url, { target: 'self' });
+        }
+      }, 0);
+    }
   };
 
   const buttonText = (redemptionType?: RedemptionType) => {
@@ -157,9 +160,12 @@ const OfferSheetDetailsPage: FC = () => {
       variant={'primary'}
       className="w-full"
       transitionDurationMs={200}
-      onClick={() => {
+      onClick={async () => {
         setButtonClicked(true);
-        getDiscountClickHandler();
+        if (platformAdapter.platform === PlatformVariant.Web)
+          logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
+        await getRedemptionData();
+        if (platformAdapter.platform === PlatformVariant.MobileHybrid) getDiscountClickHandler();
       }}
     >
       <span className="leading-10 font-bold text-md">{buttonText(redemptionType).primaryText}</span>
@@ -180,9 +186,48 @@ const OfferSheetDetailsPage: FC = () => {
     </MagicButton>
   );
 
+  const webSecondaryButton = (
+    <MagicButton
+      onClick={() => {
+        getDiscountClickHandler();
+      }}
+      variant="secondary"
+      className="w-full"
+      animate
+    >
+      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
+        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
+          {getWebSecondaryButtonText()}
+        </div>
+        <div className="text-sm text-[#616266] font-medium">{getWebSecondaryButtonSubText()}</div>
+      </div>
+    </MagicButton>
+  );
+
+  function getWebSecondaryButtonText() {
+    switch (redemptionType) {
+      case 'preApplied':
+        return 'Discount automatically applied';
+      default:
+        return 'Continue to partner website';
+    }
+  }
+
+  function getWebSecondaryButtonSubText() {
+    switch (redemptionType) {
+      case 'preApplied':
+        return 'Go to partner website';
+      default:
+        return 'Code will be copied - paste it at checkout';
+    }
+  }
+
   const renderButton = () => {
-    if (buttonClicked) {
+    if (buttonClicked && platformAdapter.platform === PlatformVariant.MobileHybrid) {
       return secondaryButton;
+    } else if (buttonClicked && platformAdapter.platform === PlatformVariant.Web) {
+      return webSecondaryButton;
     }
     return primaryButton;
   };

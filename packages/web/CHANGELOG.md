@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.60.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.59.1...bluelightcard/web-v1.60.0) (2024-06-19)
+
+
+### Features
+
+* Configure Tailwind and Storybook to use new tokens ([#1554](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1554)) ([3f02731](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3f02731b7ef90f3ae32e6d79ef3c044cb0a8dc2d))
+
 ## [1.59.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.59.0...bluelightcard/web-v1.59.1) (2024-06-06)
 
 

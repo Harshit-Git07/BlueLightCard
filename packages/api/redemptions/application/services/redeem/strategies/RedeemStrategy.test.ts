@@ -4,6 +4,7 @@ import { Factory } from 'fishery';
 import { as } from '@blc-mono/core/utils/testing';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
+import { IRedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 import { RedemptionsEventsRepositoryMock } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepositoryMock';
 import { Redemption } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
 import { VaultBatch } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
@@ -39,25 +40,34 @@ describe('Redemption Strategies', () => {
   describe('RedeemGenericStrategy', () => {
     const mockedLogger = createTestLogger();
     const mockedSilentLogger = createSilentLogger();
-    const mockedRedemptionsEventsRepository = new RedemptionsEventsRepositoryMock();
+    const defaultParams: RedeemParams = {
+      brazeExternalUserId: faker.string.uuid(),
+      companyName: faker.company.name(),
+      memberId: faker.string.sample(8),
+      offerName: faker.lorem.words(3),
+      clientType: faker.helpers.arrayElement(['web', 'mobile']),
+    };
+
     function callGenericRedeemStrategy(
       connection: IDatabaseConnection,
       redemption: Redemption,
-      options: { silent?: boolean } = {},
+      options: {
+        silent?: boolean;
+        overrides?: {
+          redemptionEventsRepository?: IRedemptionsEventsRepository;
+        };
+      } = {},
     ) {
+      const mockedRedemptionsEventsRepository =
+        options.overrides?.redemptionEventsRepository || new RedemptionsEventsRepositoryMock();
+
       const genericsRepository = new GenericsRepository(connection);
       const service = new RedeemGenericStrategy(
         genericsRepository,
         mockedRedemptionsEventsRepository,
         options.silent ? mockedSilentLogger : mockedLogger,
       );
-      const defaultParams: RedeemParams = {
-        brazeExternalUserId: faker.string.uuid(),
-        companyName: faker.company.name(),
-        memberId: faker.string.sample(8),
-        offerName: faker.lorem.words(3),
-        clientType: faker.helpers.arrayElement(['web', 'mobile']),
-      };
+
       return service.redeem(redemption, defaultParams);
     }
 
@@ -127,6 +137,45 @@ describe('Redemption Strategies', () => {
         expect(result.redemptionDetails.code).toEqual(genericCreated.code);
         expect(result.redemptionDetails.url).toEqual(redemptionCreated.url);
       }
+    });
+
+    it('publishes a redemption event', async () => {
+      // Arrange
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+
+      const redemptionCreated = redemption.build();
+      const genericCreated = generic(redemptionCreated.id).build();
+      await connection.db.insert(redemptionsTable).values(redemptionCreated);
+      await connection.db.insert(genericsTable).values(genericCreated);
+
+      // Act
+      const result = await callGenericRedeemStrategy(connection, redemptionCreated, {
+        overrides: {
+          redemptionEventsRepository,
+        },
+      });
+
+      // Assert
+      expect(result.kind).toBe('Ok');
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+        memberDetails: {
+          memberId: defaultParams.memberId,
+          brazeExternalUserId: defaultParams.brazeExternalUserId,
+        },
+        redemptionDetails: {
+          redemptionId: redemptionCreated.id,
+          redemptionType: 'generic',
+          companyId: redemptionCreated.companyId,
+          companyName: defaultParams.companyName,
+          offerId: redemptionCreated.offerId,
+          offerName: defaultParams.offerName,
+          code: genericCreated.code,
+          affiliate: redemptionCreated.affiliate,
+          url: redemptionCreated.url,
+          clientType: defaultParams.clientType,
+        },
+      });
     });
   });
 
@@ -216,7 +265,6 @@ describe('Redemption Strategies', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('RedeemShowCardStrategy', () => {
     it('should publish member redemption event', async () => {
       // Arrange
@@ -269,11 +317,6 @@ describe('Redemption Strategies', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  describe('RedeemVaultQrStrategy (TODO)', () => {
-    it.todo('Add tests for RedeemVaultQrStrategy');
-  });
-
   describe('RedeemVaultStrategy', () => {
     const mockedLogger = createTestLogger();
     const mockedSilentLogger = createSilentLogger();
@@ -292,6 +335,7 @@ describe('Redemption Strategies', () => {
       options: {
         overrides?: {
           legacyVaultApiRepository?: ILegacyVaultApiRepository;
+          redemptionEventsRepository?: IRedemptionsEventsRepository;
         };
         silent?: boolean;
       } = {},
@@ -310,7 +354,7 @@ describe('Redemption Strategies', () => {
         vaultsRepository,
         vaultCodesRepository,
         mockedLegacyVaultApiRepository,
-        new RedemptionsEventsRepositoryMock(),
+        options.overrides?.redemptionEventsRepository || new RedemptionsEventsRepositoryMock(),
         options.silent ? mockedSilentLogger : mockedLogger,
       );
       return service.redeem(redemption, params);
@@ -675,6 +719,58 @@ describe('Redemption Strategies', () => {
           expect(result.redemptionDetails.url).toEqual(redemptionCreated.url);
           expect(result.redemptionDetails.code).toEqual(desiredCode);
         }
+      });
+      it('publishes a redemption event', async () => {
+        // Arrange
+        const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+
+        const desiredCode = faker.string.sample(10);
+        const mockedLegacyVaultApiRepository = {
+          findVaultsRelatingToLinkId: jest.fn(),
+          getNumberOfCodesIssued: jest.fn().mockResolvedValue(0),
+          assignCodeToMember: jest.fn().mockResolvedValue({
+            linkId: faker.string.uuid(),
+            vaultId: faker.string.uuid(),
+            code: desiredCode,
+          }),
+          getCodesRedeemed: jest.fn(),
+        } satisfies ILegacyVaultApiRepository;
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
+
+        // Act
+        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+          overrides: {
+            legacyVaultApiRepository: mockedLegacyVaultApiRepository,
+            redemptionEventsRepository,
+          },
+        });
+
+        // Assert
+        expect(result.kind).toBe('Ok');
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+          memberDetails: {
+            memberId: defaultStrategyParams.memberId,
+            brazeExternalUserId: defaultStrategyParams.brazeExternalUserId,
+          },
+          redemptionDetails: {
+            redemptionId: redemptionCreated.id,
+            redemptionType: 'vault',
+            companyId: redemptionCreated.companyId,
+            companyName: defaultStrategyParams.companyName,
+            offerId: redemptionCreated.offerId,
+            offerName: defaultStrategyParams.offerName,
+            code: desiredCode,
+            affiliate: redemptionCreated.affiliate,
+            url: redemptionCreated.url,
+            clientType: defaultStrategyParams.clientType,
+          },
+        });
       });
     });
   });

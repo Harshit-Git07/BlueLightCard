@@ -4,15 +4,16 @@ import { defaultPreset } from './src/defaultPreset';
 import { env } from '@bluelightcard/shared-ui/env';
 
 const newBrandedTokensPreset = createBrandedPreset(env.APP_BRAND);
-const presets: Partial<Config>[] = [defaultPreset];
+
+/**
+ * Kept both old and new since shared ui components e.g Offer Sheet are dependent on the legacy tokens
+ * @TODO Remove 'defaultPreset' once all components in shared ui have been tokenised
+ */
+const presets: Partial<Config>[] = [defaultPreset, newBrandedTokensPreset];
 
 const isStorybookLifecycle =
   process.env.npm_lifecycle_event === 'storybook' ||
   process.env.npm_lifecycle_event === 'build-storybook';
-
-if (env.FLAG_NEW_TOKENS) {
-  presets.push(newBrandedTokensPreset);
-}
 
 export default {
   darkMode: isStorybookLifecycle ? 'media' : 'class',

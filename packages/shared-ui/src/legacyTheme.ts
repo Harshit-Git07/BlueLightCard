@@ -1,6 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-const config = {
-  content: ['./src/**/*.{tsx,js}'],
+import { Config } from 'tailwindcss';
+
+const config: Partial<Config> = {
   theme: {
     extend: {
       screens: {
@@ -32,7 +32,6 @@ const config = {
       },
     },
   },
-  plugins: [],
 };
 
 export default config;

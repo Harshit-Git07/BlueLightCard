@@ -1,0 +1,14 @@
+main = "worker.js"
+compatibility_date = "2024-04-19"
+
+node_compat = true
+[build]
+command = "npm run build"
+
+[env.staging]
+name = "staging-qr-code"
+workers_dev = true
+
+[env.production]
+name = "qr-code"
+workers_dev = true

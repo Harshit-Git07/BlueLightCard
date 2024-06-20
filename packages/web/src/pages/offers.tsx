@@ -48,7 +48,7 @@ const OffersPage: NextPage<OffersPageProps> = () => {
             <>
               <Heading headingLevel={'h2'}>Featured Offers</Heading>
               <hr className="mb-6" />
-              <SwiperCarousel autoPlay loop>
+              <SwiperCarousel>
                 {featuredOffers.map((offer, index) => (
                   <OfferCard
                     key={index}

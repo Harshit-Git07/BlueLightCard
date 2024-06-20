@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.20.1...bluelightcard/mobile-hybrid-v1.21.0) (2024-06-19)
+
+
+### Features
+
+* replace v1 compoents with new tokens and delete v2 ([#1594](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1594)) ([d29cdb0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d29cdb05b7deea8f422301756f1adc4fc0a0c7c6))
+
+
+### Other Changes
+
+* disco 392 setup tailwind config in the shared UI package ([#1623](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1623)) ([fff5e9d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fff5e9daff7e9de0d91e8809ddf58c42433f293d))
+
 ## [1.20.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.20.0...bluelightcard/mobile-hybrid-v1.20.1) (2024-06-11)
 
 

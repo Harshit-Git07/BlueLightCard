@@ -1,28 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SwiperCarousel component matches snapshot 1`] = `
-<div
-  data-testid="swiper-testid"
->
+exports[`SwiperCarousel.tsx renders 1`] = `
+<div>
   <div
-    data-testid="swiper-slide-testid"
+    data-testid="swiper-testid"
   >
-    <div>
-      Item
+    <div
+      data-testid="swiper-slide-testid"
+    >
+      <div>
+        Item
+      </div>
     </div>
-  </div>
-  <div
-    data-testid="swiper-slide-testid"
-  >
-    <div>
-      Item
+    <div
+      data-testid="swiper-slide-testid"
+    >
+      <div>
+        Item
+      </div>
     </div>
-  </div>
-  <div
-    data-testid="swiper-slide-testid"
-  >
-    <div>
-      Item
+    <div
+      data-testid="swiper-slide-testid"
+    >
+      <div>
+        Item
+      </div>
     </div>
   </div>
 </div>

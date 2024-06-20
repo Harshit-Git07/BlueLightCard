@@ -19,55 +19,30 @@ const DefaultTemplate: StoryFn = (args) => (
 export const Default = DefaultTemplate.bind({});
 
 Default.args = {
-  hidePillButtons: false,
-  loop: false,
-  autoPlay: false,
-  hideArrows: false,
+  navigation: false,
+  pagination: false,
 };
 
-export const hiddenArrows = DefaultTemplate.bind({});
+export const withNavigation = DefaultTemplate.bind({});
 
-hiddenArrows.args = {
-  hidePillButtons: false,
-  loop: true,
-  autoPlay: false,
-  hideArrows: true,
+withNavigation.args = {
+  navigation: true,
+  pagination: false,
+  elementsPerPageDesktop: 2,
+  elementsPerPageLaptop: 2,
+  elementsPerPageTablet: 2,
+  elementsPerPageMobile: 2,
 };
 
-export const autoLoop = DefaultTemplate.bind({});
+export const withPagination = DefaultTemplate.bind({});
 
-autoLoop.args = {
-  hidePillButtons: false,
-  loop: true,
-  autoPlay: true,
-  hideArrows: false,
-};
-
-export const autoSlide = DefaultTemplate.bind({});
-
-autoSlide.args = {
-  hidePillButtons: false,
-  loop: false,
-  autoPlay: true,
-  hideArrows: false,
-};
-
-export const hiddenPills = DefaultTemplate.bind({});
-
-hiddenPills.args = {
-  hidePillButtons: true,
-  loop: true,
-  autoPlay: false,
-  hideArrows: false,
-};
-
-export const hiddenPillsAuto = DefaultTemplate.bind({});
-
-hiddenPillsAuto.args = {
-  hidePillButtons: true,
-  loop: true,
-  autoPlay: true,
-  hideArrows: false,
+withPagination.args = {
+  navigation: false,
+  pagination: true,
+  elementsPerPageDesktop: 2,
+  elementsPerPageLaptop: 2,
+  elementsPerPageTablet: 2,
+  elementsPerPageMobile: 2,
 };
 
 export default componentMeta;

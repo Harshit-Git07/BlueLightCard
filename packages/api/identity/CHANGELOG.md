@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.78.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.77.1...bluelightcard/identity-v1.78.0) (2024-06-17)
+
+
+### Features
+
+* add handler for email updates ([#1415](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1415)) ([a80d933](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a80d933a7ebb674bda72d4afbc51b3cb46b8209f))
+
+
+### Bug Fixes
+
+* Adding region into user name to allow user to deployed cross regions ([#1601](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1601)) ([7b0284e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7b0284ea46599c62f7e2443683da9d8544476af0))
+
+
+### Other Changes
+
+* updated lambda runtime from node 16 to 18 ([#1564](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1564)) ([54c8755](https://github.com/bluelightcard/BlueLightCard-2.0/commit/54c8755a549c0a1fff81fe823fbde818e327dde3))
+
 ## [1.77.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.77.0...bluelightcard/identity-v1.77.1) (2024-06-13)
 
 

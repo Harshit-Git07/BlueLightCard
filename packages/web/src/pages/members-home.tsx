@@ -201,12 +201,11 @@ const HomePage: NextPage<any> = () => {
       {(banners.length > 0 || !hasLoaded) && (
         <Container className="py-5" data-testid="homepage-sponsor-banners" addBottomHorizontalLine>
           <SwiperCarousel
-            autoPlay
             elementsPerPageLaptop={1}
             elementsPerPageDesktop={1}
             elementsPerPageTablet={1}
             elementsPerPageMobile={1}
-            hidePillButtons
+            navigation
           >
             {banners.length > 0 ? (
               banners.map((banner: any, index: number) => (
@@ -228,12 +227,11 @@ const HomePage: NextPage<any> = () => {
       {brazeContentCardsEnabled.data?.variantName === 'treatment' && (
         <Container className="py-5" data-testid="example-braze-carousel" addBottomHorizontalLine>
           <SwiperCarousel
-            autoPlay
             elementsPerPageLaptop={1}
             elementsPerPageDesktop={1}
             elementsPerPageTablet={1}
             elementsPerPageMobile={1}
-            hidePillButtons
+            navigation
           >
             {contentCards.length > 0 ? (
               contentCards

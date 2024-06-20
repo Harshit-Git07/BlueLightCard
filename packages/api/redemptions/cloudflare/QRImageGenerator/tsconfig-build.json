@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "esnext",
+    "lib": ["es2015", "webworker"],
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "moduleResolution": "node"
+  },
+  "exclude": ["worker.test.ts"]
+}

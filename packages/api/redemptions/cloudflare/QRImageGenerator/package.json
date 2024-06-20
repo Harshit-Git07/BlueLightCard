@@ -1,0 +1,18 @@
+{
+  "name": "cloudflare-worker-image-qr",
+  "version": "1.0.0",
+  "main": "src/worker.ts",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "vitest worker.test.ts",
+    "deploy": "wrangler deploy --env $npm_config_env",
+    "test:unit": "vitest run",
+    "build": "npx webpack"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20240502.0",
+    "wrangler": "3.53.1",
+    "wranglerjs-compat-webpack-plugin": "^0.0.8"
+  }
+}

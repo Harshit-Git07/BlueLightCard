@@ -15,31 +15,18 @@ const SwiperCarousel: React.FC<CarouselProps> = ({
   elementsPerPageLaptop = 5,
   elementsPerPageTablet = 3,
   elementsPerPageMobile = 1,
-  autoPlay = false,
-  autoPlayIntervalMs = 2000,
-  loop = false,
-  hideArrows = false,
-  hidePillButtons = false,
+  navigation,
+  pagination,
 }) => {
-  const autoPlayConfig = autoPlay
-    ? { delay: autoPlayIntervalMs, disableOnInteraction: false }
-    : false;
-
-  const paginationConfig = !hidePillButtons ? { dynamicBullets: true, clickable: true } : false;
-
-  const navigation = !hideArrows ? true : false;
-
-  const className = paginationConfig ? `swiper-pagination-enabled` : '';
-
   return (
     <Swiper
       modules={[Navigation, Pagination, Autoplay]}
-      loop={loop}
-      autoplay={autoPlayConfig}
+      loop
+      autoplay={{ delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }}
       spaceBetween={5}
       slidesPerView={elementsPerPageMobile}
-      pagination={paginationConfig}
-      navigation={navigation}
+      pagination={pagination ? { dynamicBullets: true, clickable: true } : undefined}
+      navigation={navigation ?? undefined}
       grabCursor={true}
       breakpoints={{
         // when window width is >= 768px
@@ -58,7 +45,7 @@ const SwiperCarousel: React.FC<CarouselProps> = ({
           spaceBetween: 20,
         },
       }}
-      className={className}
+      className={pagination ? 'swiper-pagination-enabled' : ''}
     >
       {React.Children.map(children, (child, index) => (
         <SwiperSlide key={index}>{child}</SwiperSlide>

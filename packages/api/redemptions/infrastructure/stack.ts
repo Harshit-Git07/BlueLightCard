@@ -7,8 +7,8 @@ import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
+import { Shared } from '@blc-mono/shared/stack';
 
-import { Shared } from '../../../../stacks/stack';
 import { Identity } from '../../identity/stack';
 import { DatabaseConnectionType, SecretsManagerDatabaseCredentials } from '../libs/database/connection';
 
@@ -113,7 +113,10 @@ export async function Redemptions({ app, stack }: StackContext) {
   });
 
   // functionName is automatically appended with the stage name
+
   api.addRoutes(stack, {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     'GET /member/redemptionDetails': Route.createRoute({
       apiGatewayModelGenerator,
       stack,
@@ -130,6 +133,8 @@ export async function Redemptions({ app, stack }: StackContext) {
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
       },
     }),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     'POST /member/redeem': Route.createRoute({
       model: postRedeemModel,
       apiGatewayModelGenerator,
@@ -165,6 +170,8 @@ export async function Redemptions({ app, stack }: StackContext) {
         getSecretValueSecretsManager,
       ],
     }),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     'POST /member/connection/affiliate': Route.createRoute({
       model: postAffiliateModel,
       apiGatewayModelGenerator,
@@ -175,6 +182,8 @@ export async function Redemptions({ app, stack }: StackContext) {
       requestValidatorName: 'PostAffiliateValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     'POST /member/online/single-use/custom/spotify': Route.createRoute({
       apiGatewayModelGenerator,
       stack,

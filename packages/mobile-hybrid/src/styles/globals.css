@@ -37,6 +37,7 @@ input[type='search'].new-search::-webkit-search-results-decoration {
   stroke-dasharray: 187;
   stroke-dashoffset: 0;
   transform-origin: center;
+  /* @apply stroke-primary-dukeblue-700 dark:stroke-primary-vividskyblue-700; */
   animation: dash 1.4s ease-in-out infinite;
 }
 

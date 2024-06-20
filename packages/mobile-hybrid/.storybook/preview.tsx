@@ -1,14 +1,9 @@
+import '../src/styles/globals.css';
+import '../src/styles/carousel.css';
+
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { Preview } from '@storybook/react';
 import fontDecorator from './fontDecorator';
-
-if (process.env.STORYBOOK_FLAG_NEW_TOKENS === 'true') {
-  require('../src/styles/v2/globals.css');
-  require('../src/styles/v2/carousel.css');
-} else {
-  require('../src/styles/globals.css');
-  require('../src/styles/carousel.css');
-}
 
 const preview: Preview = {
   decorators: [fontDecorator],

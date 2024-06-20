@@ -1,3 +1,11 @@
+if (process.env.NEXT_PUBLIC_FLAG_NEW_TOKENS === 'true') {
+  require('@/styles/v2/globals.css');
+  require('@/styles/v2/swiper.css');
+} else {
+  require('@/styles/globals.css');
+  require('@/styles/swiper.css');
+}
+
 import type { AppProps } from 'next/app';
 import { FC, ReactElement, useContext } from 'react';
 import { appWithTranslation } from 'next-i18next';
@@ -5,7 +13,6 @@ import { datadogRum } from '@datadog/browser-rum';
 import flagsmith from 'flagsmith';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import '../styles/globals.css';
 import {
   DATADOG_APP_ID,
   DATADOG_CLIENT_TOKEN,

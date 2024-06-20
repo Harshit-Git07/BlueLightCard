@@ -13,6 +13,18 @@ export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, s
     [PlatformVariant.Web]: 'offer-sheet-redeem-generic-web',
     [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-generic-app',
   },
+  preApplied: {
+    [PlatformVariant.Web]: 'offer-sheet-redeem-preapplied-web',
+    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-preapplied-app',
+  },
+  showCard: {
+    [PlatformVariant.Web]: 'offer-sheet-redeem-show-card-web',
+    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-show-card-app',
+  },
+  vaultQR: {
+    [PlatformVariant.Web]: 'offer-sheet-redeem-qr-web',
+    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-qr-app',
+  },
 };
 
 type Experiment = 'control' | 'treatment' | string;

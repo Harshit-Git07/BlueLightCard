@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,63 +17,28 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/root/*": [
-        "./*"
-      ],
-      "@/services/*": [
-        "src/services/*",
-      ],
-      "@/components/*": [
-        "src/common/components/*",
-      ],
-      "@/context/*": [
-        "src/common/context/*",
-      ],
-      "@/hoc/*": [
-        "src/common/hoc/*",
-      ],
-      "@/offers/components/*": [
-        "src/offers/components/*"
-      ],
-      "@/pages/*": [
-        "src/pages/*"
-      ],
-      "@/hooks/*": [
-        "src/common/hooks/*"
-      ],
-      "@/utils/*": [
-        "src/common/utils/*"
-      ],
-      "@/layouts/*": [
-        "src/common/layouts/*"
-      ],
-      "@/types/*": [
-        "src/common/types/*"
-      ],
-      "@/global-vars": [
-        "global-vars"
-      ],
-      "@/globals/*": [
-        "src/common/globals/*"
-      ],
-      "@/page-types/*": [
-        "src/common/page-types/*"
-      ],
-      "@/page-components/*": [
-        "src/page-components/*"
-      ],
-      "@/scripts/*": [
-        "./scripts/*"
-      ],
-      "@core/*": [
-        "../api/core/src/*"
-      ],
+      "@/root/*": ["./*"],
+      "@/services/*": ["src/services/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/components/*": ["src/common/components/*"],
+      "@/context/*": ["src/common/context/*"],
+      "@/hoc/*": ["src/common/hoc/*"],
+      "@/offers/components/*": ["src/offers/components/*"],
+      "@/pages/*": ["src/pages/*"],
+      "@/hooks/*": ["src/common/hooks/*"],
+      "@/utils/*": ["src/common/utils/*"],
+      "@/layouts/*": ["src/common/layouts/*"],
+      "@/types/*": ["src/common/types/*"],
+      "@/global-vars": ["global-vars"],
+      "@/globals/*": ["src/common/globals/*"],
+      "@/page-types/*": ["src/common/page-types/*"],
+      "@/page-components/*": ["src/page-components/*"],
+      "@/scripts/*": ["./scripts/*"],
+      "@core/*": ["../api/core/src/*"],
       "@storybook/*": ["./.storybook/*"],
 
       // TODO: Remove once data is pulled in via GQL and data folder is no longer needed.
-      "@/data/*": [
-        "data/*"
-      ],
+      "@/data/*": ["data/*"],
       "@bluelightcard/shared-ui/*": ["../shared-ui/src/*"]
     }
   },
@@ -88,13 +49,6 @@
     },
     "files": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-  ],
-  "exclude": [
-    "node_modules",
-    "stack.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "stack.ts"]
 }

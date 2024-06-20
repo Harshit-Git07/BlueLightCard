@@ -28,6 +28,7 @@ export type RouteOptions = {
   bind?: SSTConstruct[];
   defaultAllowedOrigins: string[];
   permissions?: PolicyStatement[];
+  authorizer?: 'redemptionsAuthorizer' | 'none' | string;
 };
 
 export class Route {
@@ -43,7 +44,8 @@ export class Route {
     database,
     defaultAllowedOrigins,
     permissions,
-  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'redemptionsAuthorizer'> {
+    authorizer,
+  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'redemptionsAuthorizer' | 'none' | string> {
     const requestModels = model ? { 'application/json': model.getModel() } : undefined;
     const methodResponses = MethodResponses.toMethodResponses(
       [
@@ -54,6 +56,7 @@ export class Route {
     );
 
     return {
+      authorizer: authorizer ? authorizer : 'redemptionsAuthorizer',
       cdk: {
         function: new SSTFunction(stack, functionName, {
           permissions,

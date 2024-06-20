@@ -19,6 +19,7 @@ export class EmailService implements IEmailService {
 
     switch (redemptionType) {
       case 'generic':
+      case 'vaultQR':
       case 'vault': {
         await this.emailRepository.sendVaultOrGenericTransactionalEmail(
           {
@@ -30,7 +31,7 @@ export class EmailService implements IEmailService {
             memberId: event.detail.memberDetails.memberId,
             offerId: event.detail.redemptionDetails.offerId.toString(),
             offerName: event.detail.redemptionDetails.offerName,
-            url: event.detail.redemptionDetails.url,
+            url: event.detail.redemptionDetails.url ?? '',
           },
           redemptionType,
         );

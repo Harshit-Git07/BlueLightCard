@@ -15,5 +15,6 @@
       "@blc-mono/core/*": ["../core/src/*"],
       "@blc-mono/redemptions/*": ["./*"]
     }
-  }
+  },
+  "exclude": ["cloudflare/QRImageGenerator"]
 }

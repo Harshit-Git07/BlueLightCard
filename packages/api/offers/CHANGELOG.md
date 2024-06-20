@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.33.1...bluelightcard/offers-v1.34.0) (2024-06-19)
+
+
+### Features
+
+* [DISCO-266] Add initial DDS and Australia config for offers stack ([#1490](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1490)) ([4141dcc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4141dccb440518605018c0aaa4be5ae7aa65a28c))
+
 ## [1.33.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.33.0...bluelightcard/offers-v1.33.1) (2024-05-30)
 
 

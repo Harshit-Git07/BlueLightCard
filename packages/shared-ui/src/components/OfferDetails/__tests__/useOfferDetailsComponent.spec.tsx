@@ -144,9 +144,73 @@ describe('useOfferDetailsComponent', () => {
 
     expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
   });
+
   test('it returns the offer sheet for the on flag and a generic offer', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, {
       data: { redemptionType: 'generic' },
+    });
+    mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('on');
+
+    const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+
+    await act(async () => {
+      await result.current.updateOfferDetailsComponent({
+        offerId: 1,
+        companyId: 1,
+        companyName: 'companyName',
+        platform: PlatformVariant.MobileHybrid,
+        amplitudeCtx: null,
+      });
+    });
+
+    expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
+  });
+
+  test('it returns the offer sheet for the on flag and a preApplied offer', async () => {
+    const mockPlatformAdapter = useMockPlatformAdapter(200, {
+      data: { redemptionType: 'preApplied' },
+    });
+    mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('on');
+
+    const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+
+    await act(async () => {
+      await result.current.updateOfferDetailsComponent({
+        offerId: 1,
+        companyId: 1,
+        companyName: 'companyName',
+        platform: PlatformVariant.MobileHybrid,
+        amplitudeCtx: null,
+      });
+    });
+
+    expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
+  });
+
+  test('it returns the offer sheet for the on flag and a showCard offer', async () => {
+    const mockPlatformAdapter = useMockPlatformAdapter(200, {
+      data: { redemptionType: 'showCard' },
+    });
+    mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('on');
+
+    const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+
+    await act(async () => {
+      await result.current.updateOfferDetailsComponent({
+        offerId: 1,
+        companyId: 1,
+        companyName: 'companyName',
+        platform: PlatformVariant.MobileHybrid,
+        amplitudeCtx: null,
+      });
+    });
+
+    expect(result.current.OfferDetailsComponent).toBe(OfferSheet);
+  });
+
+  test('it returns the offer sheet for the on flag and a vaultQR offer', async () => {
+    const mockPlatformAdapter = useMockPlatformAdapter(200, {
+      data: { redemptionType: 'vaultQR' },
     });
     mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('on');
 

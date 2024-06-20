@@ -8,6 +8,12 @@ const testTable = [
   { redemptionType: 'vault', platform: PlatformVariant.MobileHybrid },
   { redemptionType: 'generic', platform: PlatformVariant.Web },
   { redemptionType: 'generic', platform: PlatformVariant.MobileHybrid },
+  { redemptionType: 'preApplied', platform: PlatformVariant.Web },
+  { redemptionType: 'preApplied', platform: PlatformVariant.MobileHybrid },
+  { redemptionType: 'showCard', platform: PlatformVariant.Web },
+  { redemptionType: 'showCard', platform: PlatformVariant.MobileHybrid },
+  { redemptionType: 'vaultQR', platform: PlatformVariant.Web },
+  { redemptionType: 'vaultQR', platform: PlatformVariant.MobileHybrid },
 ];
 
 describe('getPlatformExperimentForRedemptionType', () => {

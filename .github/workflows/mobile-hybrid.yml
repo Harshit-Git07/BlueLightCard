@@ -4,17 +4,21 @@ on:
     paths:
       - packages/mobile-hybrid/**
       - packages/shared-ui/**
+      - scripts/**
       - package-lock.json
       - sst.config.ts
       - package.json
+      - .github/actions/**
       - .github/workflows/mobile-hybrid.yml
   pull_request:
     paths:
       - packages/mobile-hybrid/**
       - packages/shared-ui/**
+      - scripts/**
       - package-lock.json
       - sst.config.ts
       - package.json
+      - .github/actions/**
       - .github/workflows/mobile-hybrid.yml
 
 jobs:
@@ -84,6 +88,7 @@ jobs:
           cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cloudflareAccountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageName: mobile-hybrid
+          brandDeployments: true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   changelog:

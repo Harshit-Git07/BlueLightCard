@@ -1,8 +1,9 @@
 # BLC Monorepo
 
-## Stack Specific Documentation
+## Documentation
 
-- [Redemptions](packages/api/redemptions/README.md)
+- [Redemptions Stack](packages/api/redemptions/README.md)
+- [Storybook deployments](docs/StorybookDeployments.md)
 
 ## Components
 

@@ -6,6 +6,7 @@ on:
     paths:
       - packages/web/**
       - packages/shared-ui/**
+      - .github/actions/**
       - package-lock.json
       - sst.config.ts
       - package.json
@@ -14,6 +15,7 @@ on:
     paths:
       - packages/web/**
       - packages/shared-ui/**
+      - .github/actions/**
       - package-lock.json
       - sst.config.ts
       - package.json

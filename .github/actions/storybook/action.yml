@@ -4,6 +4,9 @@ inputs:
   packageName:
     description: 'Name of the package to build Storybook for'
     required: true
+  brandDeployments:
+    description: 'Deploy with brands'
+    required: false
   cloudflareApiToken:
     description: 'API token to deploy to CloudFlare Pages'
     required: true
@@ -22,7 +25,14 @@ runs:
   steps:
     - name: Build
       shell: 'bash'
-      run: npm run build-storybook -w packages/${{ inputs.packageName }}
+      run: |
+        bash scripts/storybookDeployments.sh ${{ inputs.packageName }} ${{ inputs.brandDeployments }}
+
+    - name: Configure Redirects
+      if: inputs.brandDeployments
+      shell: 'bash'
+      run: |
+        cp .github/actions/storybook/_redirects packages/${{ inputs.packageName }}/.brands
 
     - name: Publish
       uses: cloudflare/pages-action@1
@@ -31,7 +41,7 @@ runs:
         apiToken: ${{ inputs.cloudflareApiToken }}
         accountId: ${{ inputs.cloudflareAccountId }}
         projectName: ${{ inputs.packageName }}-storybook
-        directory: packages/${{ inputs.packageName }}/storybook-static
+        directory: packages/${{ inputs.packageName }}/${{ inputs.brandDeployments && '.brands' || 'storybook-static' }}
         branch: ${{ github.ref_name }}
         gitHubToken: ${{ inputs.gitHubToken }}
 

@@ -9,16 +9,23 @@ const throttleFetch = async (promise: ReturnType<typeof fetch>): Promise<Respons
 
 async function DataRequest(
   globalState: GlobalState & {
-    onResponse: NativeReceive.WebViewAPIResponse['onResponse']
+    onResponse: NativeReceive.WebViewAPIResponse['onResponse'];
   },
-  { parameters }: MessageArgument
+  { parameters }: MessageArgument,
 ) {
   const params = parameters as NativeAPICall.Parameters;
-  const queryParamsString = (params.parameters && Object.keys(params.parameters).length) ? `?${Object.keys(params.parameters).map((key) => `${key}=${params.parameters?.[key]}`).join('&')}` : '';
-  const encodedUrl = Buffer.from(`${params.path}${queryParamsString}`).toString('base64').replace(/\//g, '');
+  const queryParamsString =
+    params.parameters && Object.keys(params.parameters).length
+      ? `?${Object.keys(params.parameters)
+          .map((key) => `${key}=${params.parameters?.[key]}`)
+          .join('&')}`
+      : '';
+  const encodedUrl = Buffer.from(`${params.path}${queryParamsString}`)
+    .toString('base64')
+    .replace(/\//g, '');
   const chunkSize = 10;
 
-  const mockDataRequestUrl = `/mocks/DataRequest/${params.method.toLowerCase()}/${encodedUrl}.json`;
+  const mockDataRequestUrl = `mocks/DataRequest/${params.method.toLowerCase()}/${encodedUrl}.json`;
 
   try {
     console.info('Resolve(DataRequest) Requesting mock data for url %s', params.path);
@@ -49,7 +56,7 @@ const resolvers: Record<string, (globalState: any, payload: MessageArgument) => 
   DataRequest,
   NavigationRequest,
   AnalyticsRequest,
-  ExperimentRequest
+  ExperimentRequest,
 };
 
 export default resolvers;

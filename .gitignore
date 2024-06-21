@@ -12,6 +12,7 @@ cdk.context.json
 
 # misc
 .DS_Store
+.brands
 
 # local env files
 .env*.local

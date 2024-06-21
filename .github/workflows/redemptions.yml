@@ -199,13 +199,6 @@ jobs:
         env:
           REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
         run: npm run -s oas -w packages/api/redemptions  --region=eu-west-2 --stage=staging --api-version=v1
-      - name: Deploy Cloudflare
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env staging
-          workingDirectory: "packages/api/redemptions/cloudflare/QRImageGenerator"
 
   e2e-redemptions:
     name: Run E2E tests (redemptions)
@@ -305,11 +298,3 @@ jobs:
         env:
           REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
         run: npm run -s oas -w packages/api/redemptions --region=${{matrix.region}} --stage=production --api-version=v1
-      - name: Deploy Cloudflare
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env production
-          workingDirectory: "packages/api/redemptions/cloudflare/QRImageGenerator"
-

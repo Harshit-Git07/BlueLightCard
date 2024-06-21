@@ -48,6 +48,7 @@ const OfferSheetDetailsPage: FC = () => {
         source: 'sheet',
         origin: platformAdapter.platform,
         design_type: 'modal_popup',
+        redemption_type: redemptionType,
       },
     });
   };
@@ -72,6 +73,14 @@ const OfferSheetDetailsPage: FC = () => {
     if (redeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
+          logCodeClicked(events.USE_CODE_CLICKED);
+          if (!isRedeemDataErrorResponse(redeemData.data)) {
+            copyCodeAndRedirect(
+              redeemData.data.redemptionDetails.code,
+              redeemData.data.redemptionDetails.url,
+            );
+          }
+          break;
         case 'vault':
         case 'preApplied':
           logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
@@ -118,6 +127,14 @@ const OfferSheetDetailsPage: FC = () => {
     if (webRedeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
+          logCodeClicked(events.USE_CODE_CLICKED);
+          if (!isRedeemDataErrorResponse(webRedeemData.data)) {
+            if (webRedeemData.data.redemptionDetails.code)
+              copyCode(webRedeemData.data.redemptionDetails.code);
+            if (webRedeemData.data.redemptionDetails.url)
+              handleRedirect(webRedeemData.data.redemptionDetails.url);
+          }
+          break;
         case 'vault':
         case 'preApplied':
           logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
@@ -212,8 +229,11 @@ const OfferSheetDetailsPage: FC = () => {
       transitionDurationMs={200}
       onClick={async () => {
         setButtonClicked(true);
-        if (platformAdapter.platform === PlatformVariant.Web)
+        if (platformAdapter.platform === PlatformVariant.Web && redemptionType === 'vault')
           logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
+        if (platformAdapter.platform === PlatformVariant.Web && redemptionType === 'generic') {
+          logCodeClicked(events.REQUEST_CODE_CLICKED);
+        }
         if (platformAdapter.platform === PlatformVariant.MobileHybrid) hybridDiscountClickHandler();
         if (platformAdapter.platform === PlatformVariant.Web) webDiscountClickHandler();
       }}

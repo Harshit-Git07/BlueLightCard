@@ -6,6 +6,8 @@ const events = {
   VAULT_CODE_USE_CODE_CLICKED: 'vault_code_use_code_clicked',
   VAULT_CODE_REDIRECT_TO_VAULT: 'vault_code_redirect_to_vault',
   VAULT_CODE_REQUEST_CODE_CLICKED: 'vault_code_request_code_clicked',
+  REQUEST_CODE_CLICKED: 'request_code_clicked',
+  USE_CODE_CLICKED: 'use_code_clicked',
 };
 
 export default events;

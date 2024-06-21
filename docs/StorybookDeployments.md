@@ -37,3 +37,17 @@ To deploy storybook for multiple brands, set `brandDeployments` to `true`. This 
 This helps to keep Cloudflare page projects minimised, it also makes switching between brands a lot easier by keeping it under the single domain.
 
 When `brandDeployments` is `false`, a single storybook instance is deployed (no subpath).
+
+## Local brand testing
+
+To spin up the storybook dev server for a specific brand, set the environment variable `NEXT_PUBLIC_APP_BRAND` in your env file to the brand you want, for example on mobile hybrid (`packages/mobile-hybrid/.env`):
+
+```sh
+NEXT_PUBLIC_APP_BRAND=dds-uk
+```
+
+Then run the storybook dev server
+
+```sh
+npm run storybook -w packages/mobile-hybrid
+```

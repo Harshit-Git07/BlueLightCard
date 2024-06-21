@@ -326,10 +326,10 @@ const OfferSheetDetailsPage: FC = () => {
   }
 
   const renderButton = () => {
-    if (buttonClicked && platformAdapter.platform === PlatformVariant.MobileHybrid) {
-      return secondaryButton;
-    } else if (buttonClicked && maxPerUserReached) {
+    if (buttonClicked && maxPerUserReached) {
       return maxPerUserReachedSecondaryButton;
+    } else if (buttonClicked && platformAdapter.platform === PlatformVariant.MobileHybrid) {
+      return secondaryButton;
     } else if (buttonClicked && platformAdapter.platform === PlatformVariant.Web) {
       return webSecondaryButton;
     }

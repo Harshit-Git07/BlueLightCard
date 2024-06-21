@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import useNews from '@/hooks/useNews';
-import NewsLayout from './components/NewsLayout/NewsLayout';
 import { newsPanelStore } from './store';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import { useSetAtom } from 'jotai';
+import NewsLayout from '@/components/NewsLayout/NewsLayout';
 
 const navigation = new InvokeNativeNavigation();
 

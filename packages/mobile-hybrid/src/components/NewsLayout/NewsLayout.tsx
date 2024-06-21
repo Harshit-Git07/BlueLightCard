@@ -1,11 +1,11 @@
-import { FC } from 'react';
 import dayjs from 'dayjs';
 import { NewsLayoutProps } from './types';
 import Heading from '@/components/Heading/Heading';
 import { cssUtil } from '@/utils/cssUtil';
 import ListItem from '@/components/ListItem/ListItem';
+import { FC } from 'react';
 
-const formatDate = (date: string) => {
+export const formatDate = (date: string) => {
   return dayjs(date, 'YYYY-MM-DD HH:mm:ss').format('ddd DD MMM, YYYY');
 };
 
@@ -23,7 +23,9 @@ const NewsLayout: FC<NewsLayoutProps> = ({
           {news.map((article, index) => {
             const classes = cssUtil([
               'py-3',
-              index < news.length - 1 ? 'border-b dark:border-neutral-grey-100' : '',
+              index < news.length - 1
+                ? 'border-b border-listItem-divider-colour-light dark:border-listItem-divider-colour-dark'
+                : '',
             ]);
             return (
               <li className={classes} key={article.newsId}>

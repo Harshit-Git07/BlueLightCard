@@ -8,8 +8,7 @@ import { useAtomValue } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
 import events from '../../../../utils/amplitude/events';
-import { isRedeemDataErrorResponse, usePlatformAdapter } from '../../../../index';
-import { useRedeemOffer } from '../../../../hooks/useRedeemOffer';
+import { isRedeemDataErrorResponse, usePlatformAdapter, RedeemResultKind } from '../../../../index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import { RedemptionType } from '../../types';
@@ -26,6 +25,7 @@ const OfferSheetDetailsPage: FC = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
+  const [maxPerUserReached, setMaxPerUserReached] = useState(false);
 
   const labels = useLabels(offerData);
 
@@ -51,6 +51,14 @@ const OfferSheetDetailsPage: FC = () => {
         redemption_type: redemptionType,
       },
     });
+  };
+
+  const handleMaxPerUserReached = () => {
+    setMaxPerUserReached(true);
+    setTimeout(() => {
+      logCodeClicked(events.VAULT_CODE_REDIRECT_TO_VAULT);
+      platformAdapter.navigate('/vaultcodes.php');
+    }, 3000);
   };
 
   const getRedemptionData = async () => {
@@ -100,6 +108,8 @@ const OfferSheetDetailsPage: FC = () => {
         default:
           return <></>;
       }
+    } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
+      handleMaxPerUserReached();
     } else {
       setShowErrorPage(true);
     }
@@ -119,7 +129,14 @@ const OfferSheetDetailsPage: FC = () => {
   // Web first button click handler
   const webDiscountClickHandler = async () => {
     const redeemData = await getRedemptionData();
-    setWebRedeemData(redeemData);
+
+    if (redeemData.statusCode == 200) {
+      setWebRedeemData(redeemData);
+    } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
+      handleMaxPerUserReached();
+    } else {
+      setShowErrorPage(true);
+    }
   };
 
   // Web second button click handler
@@ -228,14 +245,15 @@ const OfferSheetDetailsPage: FC = () => {
       className="w-full"
       transitionDurationMs={200}
       onClick={async () => {
-        setButtonClicked(true);
         if (platformAdapter.platform === PlatformVariant.Web && redemptionType === 'vault')
           logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
         if (platformAdapter.platform === PlatformVariant.Web && redemptionType === 'generic') {
           logCodeClicked(events.REQUEST_CODE_CLICKED);
         }
-        if (platformAdapter.platform === PlatformVariant.MobileHybrid) hybridDiscountClickHandler();
-        if (platformAdapter.platform === PlatformVariant.Web) webDiscountClickHandler();
+        if (platformAdapter.platform === PlatformVariant.MobileHybrid)
+          await hybridDiscountClickHandler();
+        if (platformAdapter.platform === PlatformVariant.Web) await webDiscountClickHandler();
+        setButtonClicked(true);
       }}
     >
       <span className="leading-10 font-bold text-md">{buttonText(redemptionType).primaryText}</span>
@@ -251,6 +269,20 @@ const OfferSheetDetailsPage: FC = () => {
         </div>
         <div className="text-sm text-[#616266] font-medium">
           {buttonText(redemptionType).secondarySubtext}
+        </div>
+      </div>
+    </MagicButton>
+  );
+
+  const maxPerUserReachedSecondaryButton = (
+    <MagicButton variant="secondary" className="w-full" animate>
+      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
+        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
+          Taking you to the vault
+        </div>
+        <div className="text-sm text-[#616266] font-medium">
+          You have reached the code limit for this offer
         </div>
       </div>
     </MagicButton>
@@ -296,6 +328,8 @@ const OfferSheetDetailsPage: FC = () => {
   const renderButton = () => {
     if (buttonClicked && platformAdapter.platform === PlatformVariant.MobileHybrid) {
       return secondaryButton;
+    } else if (buttonClicked && maxPerUserReached) {
+      return maxPerUserReachedSecondaryButton;
     } else if (buttonClicked && platformAdapter.platform === PlatformVariant.Web) {
       return webSecondaryButton;
     }

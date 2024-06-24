@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.60.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.60.0...bluelightcard/web-v1.60.1) (2024-06-24)
+
+
+### Bug Fixes
+
+* updated logo for default ([#1642](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1642)) ([f425ecd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f425ecda4dd76f7061cfc4b40c2375e92c3c1625))
+
 ## [1.60.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.59.1...bluelightcard/web-v1.60.0) (2024-06-19)
 
 

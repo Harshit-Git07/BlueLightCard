@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.21.0...bluelightcard/mobile-hybrid-v1.22.0) (2024-06-24)
+
+
+### Features
+
+* Disco-265 Storybook Examples - News Layout needed adding ([#1626](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1626)) ([9da9981](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9da99814d63f79e325bc6114f93dd119523ca324))
+
+
+### Other Changes
+
+* disco 389 setup storybook matrix to deploy dds ([#1628](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1628)) ([9a8ed21](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9a8ed2165386c14eb328a6b26032bfa3fefbcf1d))
+
 ## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.20.1...bluelightcard/mobile-hybrid-v1.21.0) (2024-06-19)
 
 

@@ -5,7 +5,7 @@ import InputSelectFieldWithRef from '../InputSelectField/InputSelectField';
 import InputTextFieldWithRef from '../InputTextField/InputTextField';
 import { SearchProps } from './types';
 import { CategoryType, CompanyType } from '@/page-types/members-home';
-import { BRAND } from '@/global-vars';
+import { OFFERS_BRAND } from '@/global-vars';
 import { companiesCategoriesQuery } from '../../../graphql/homePageQueries';
 import { makeNavbarQueryWithDislikeRestrictions, makeQuery } from '../../../graphql/makeQuery';
 import { redirectToLogin } from '@/hoc/requireAuth';
@@ -78,7 +78,7 @@ const Search: FC<SearchProps> = ({
       try {
         setIsLoading(true);
         const companiesCategoriesQueryPromise = makeNavbarQueryWithDislikeRestrictions(
-          companiesCategoriesQuery(BRAND, userCtx.isAgeGated),
+          companiesCategoriesQuery(OFFERS_BRAND, userCtx.isAgeGated),
           userCtx.dislikes
         );
 

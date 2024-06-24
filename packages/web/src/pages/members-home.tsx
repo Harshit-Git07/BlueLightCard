@@ -6,7 +6,7 @@ import getCDNUrl from '@/utils/getCDNUrl';
 import {
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
   BLACK_FRIDAY_TIME_LOCK_END_DATE,
-  BRAND,
+  OFFERS_BRAND,
   CDN_URL,
 } from '@/global-vars';
 import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
@@ -106,7 +106,11 @@ const HomePage: NextPage<any> = () => {
 
       try {
         const homePageData = await makeHomePageQueryWithDislikeRestrictions(
-          homePageQuery(BRAND, userCtx.isAgeGated ?? true, user?.profile.organisation ?? 'NHS'),
+          homePageQuery(
+            OFFERS_BRAND,
+            userCtx.isAgeGated ?? true,
+            user?.profile.organisation ?? 'NHS'
+          ),
           userCtx.dislikes
         );
         homePage = homePageData.data;

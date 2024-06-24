@@ -156,6 +156,7 @@ jobs:
             region: 'eu-west-2'
             offers_graphql_endpoint: 'https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://staging-offers.blcshine.io'
+            offers_brand: 'blc-uk'
           - brand: 'blc-au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
@@ -165,6 +166,7 @@ jobs:
             region: 'ap-southeast-2'
             offers_graphql_endpoint: 'https://nmgjfvhy5vdhjgngzxtuomgbdi.appsync-api.ap-southeast-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://staging-offers-au.blcshine.io'
+            offers_brand: 'blc-aus'
           - brand: 'dds-uk'
             identity_brand: 'dds_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
@@ -174,6 +176,7 @@ jobs:
             region: 'eu-west-2'
             offers_graphql_endpoint: '' #TODO: Add once DDS Offers stack deployed in AWS
             offers_api_gateway_endpoint: 'https://staging-offers-dds.blcshine.io'
+            offers_brand: 'dds-uk'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -187,6 +190,7 @@ jobs:
       NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
       NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}
+      NEXT_PUBLIC_OFFERS_BRAND: ${{matrix.offers_brand}}
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
       NEXT_PUBLIC_IDENTITY_API_URL: ${{matrix.identity_api_url}}
@@ -247,6 +251,7 @@ jobs:
             cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
             offers_graphql_endpoint: 'https://27d2m22mtvac5cvilrvb7kviyi.appsync-api.eu-west-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://offers.blcshine.io'
+            offers_brand: 'blc-uk'
           - brand: 'blc-au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
@@ -256,6 +261,7 @@ jobs:
             cognito_client_secret: 'BLC_AU_COGNITO_CLIENT_SECRET'
             offers_graphql_endpoint: 'https://rbwzvcibffepbhnfndd5xam6l4.appsync-api.ap-southeast-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://offers-au.blcshine.io'
+            offers_brand: 'blc-aus'
           - brand: 'dds-uk'
             identity_brand: 'dds_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
@@ -265,6 +271,7 @@ jobs:
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
             offers_graphql_endpoint: '' #TODO: Add once DDS Offers stack deployed in AWS
             offers_api_gateway_endpoint: 'https://offers-dds.blcshine.io'
+            offers_brand: 'dds-uk'
     environment: Production
     runs-on: ubuntu-latest
     needs:
@@ -280,6 +287,7 @@ jobs:
       NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
       NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}
+      NEXT_PUBLIC_OFFERS_BRAND: ${{matrix.offers_brand}}
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-24T01:00:00'
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
       NEXT_PUBLIC_IDENTITY_API_URL: ${{matrix.identity_api_url}}

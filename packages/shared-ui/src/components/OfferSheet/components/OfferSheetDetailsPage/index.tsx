@@ -42,9 +42,9 @@ const OfferSheetDetailsPage: FC = () => {
       event: event,
       params: {
         company_id: String(offerMeta.companyId),
-        company_name: offerMeta.companyName,
+        company_name: String(offerMeta.companyName),
         offer_id: String(offerData.id),
-        offer_name: offerData.name,
+        offer_name: String(offerData.name),
         source: 'sheet',
         origin: platformAdapter.platform,
         design_type: 'modal_popup',
@@ -216,7 +216,7 @@ const OfferSheetDetailsPage: FC = () => {
       case 'preApplied':
         primaryButtonTextValue = 'Get discount';
         secondaryButtonTextValue = 'No code needed!';
-        secondaryButtonSubtextValue = 'Special pricing applied to on partner website.';
+        secondaryButtonSubtextValue = 'Special pricing applied on partner website.';
         break;
       // TODO: Implement this page
       case 'showCard':
@@ -245,14 +245,15 @@ const OfferSheetDetailsPage: FC = () => {
       className="w-full"
       transitionDurationMs={200}
       onClick={async () => {
-        if (platformAdapter.platform === PlatformVariant.Web && redemptionType === 'vault')
-          logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
-        if (platformAdapter.platform === PlatformVariant.Web && redemptionType === 'generic') {
-          logCodeClicked(events.REQUEST_CODE_CLICKED);
-        }
-        if (platformAdapter.platform === PlatformVariant.MobileHybrid)
+        if (platformAdapter.platform === PlatformVariant.MobileHybrid) {
           await hybridDiscountClickHandler();
-        if (platformAdapter.platform === PlatformVariant.Web) await webDiscountClickHandler();
+        } else if (platformAdapter.platform === PlatformVariant.Web) {
+          if (redemptionType === 'vault') logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
+          if (redemptionType === 'generic' || redemptionType === 'preApplied') {
+            logCodeClicked(events.REQUEST_CODE_CLICKED);
+          }
+          await webDiscountClickHandler();
+        }
         setButtonClicked(true);
       }}
     >
@@ -310,7 +311,7 @@ const OfferSheetDetailsPage: FC = () => {
   function getWebSecondaryButtonText() {
     switch (redemptionType) {
       case 'preApplied':
-        return 'Discount automatically applied';
+        return 'No code needed!';
       default:
         return 'Continue to partner website';
     }
@@ -319,19 +320,17 @@ const OfferSheetDetailsPage: FC = () => {
   function getWebSecondaryButtonSubText() {
     switch (redemptionType) {
       case 'preApplied':
-        return 'Go to partner website';
+        return 'Special pricing applied on partner website';
       default:
         return 'Code will be copied - paste it at checkout';
     }
   }
 
   const renderButton = () => {
-    if (buttonClicked && maxPerUserReached) {
-      return maxPerUserReachedSecondaryButton;
-    } else if (buttonClicked && platformAdapter.platform === PlatformVariant.MobileHybrid) {
-      return secondaryButton;
-    } else if (buttonClicked && platformAdapter.platform === PlatformVariant.Web) {
-      return webSecondaryButton;
+    if (buttonClicked) {
+      if (maxPerUserReached) return maxPerUserReachedSecondaryButton;
+      if (platformAdapter.platform === PlatformVariant.MobileHybrid) return secondaryButton;
+      if (platformAdapter.platform === PlatformVariant.Web) return webSecondaryButton;
     }
     return primaryButton;
   };

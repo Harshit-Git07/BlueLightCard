@@ -27,7 +27,7 @@ const Header: FC<HeaderProps> = ({
         data-testid="app-header"
       >
         <div className="laptop:container laptop:mx-auto flex justify-between items-center">
-          <div className="flex-1">
+          <div className="flex-1 text-surface-brand">
             <Logo url={links.homeUrl} />
           </div>
           {loggedIn ? <BellIcon url={links.notificationsUrl} /> : <SelectCountry />}

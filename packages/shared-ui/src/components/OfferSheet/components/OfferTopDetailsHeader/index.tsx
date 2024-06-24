@@ -106,7 +106,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   description: offerData.description,
                   url: `${
                     typeof window !== 'undefined'
-                      ? `${window.location.protocol}/${window.location.hostname}`
+                      ? `${window.location.protocol}//${window.location.hostname}`
                       : ''
                   }/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
                 },

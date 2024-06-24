@@ -2,13 +2,16 @@ import { Heading } from '@bluelightcard/shared-ui';
 import { FC } from 'react';
 import { companyDataAtom } from './atoms';
 import { useAtom } from 'jotai';
+import InvokeNativeNavigation from '@/invoke/navigation';
+
+const navigation = new InvokeNativeNavigation();
 
 const CompanyPageHeader: FC = () => {
   const [company] = useAtom(companyDataAtom);
   const companyName = company?.companyName;
   const backEvent = () => {
     try {
-      window.location.href = '/members-home';
+      navigation.navigate('/members-home');
     } catch (e) {
       console.error(e);
     }

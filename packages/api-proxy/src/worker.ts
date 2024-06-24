@@ -10,6 +10,7 @@ export interface Env {
   IDENTITY_API_BLC_UK: string;
   IDENTITY_API_BLC_AU: string;
   OFFERS_API_BLC_UK: string;
+  OFFERS_API_BLC_AU: string;
   REDEMPTIONS_API_UK: string;
   DISCOVERY_API_UK: string;
 }
@@ -41,6 +42,7 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
     '/eu/identity': env.IDENTITY_API_BLC_UK,
     '/au/identity': env.IDENTITY_API_BLC_AU,
     '/eu/offers': env.OFFERS_API_BLC_UK,
+    '/au/offers': env.OFFERS_API_BLC_AU,
     '/eu/redemptions': env.REDEMPTIONS_API_UK,
     '/eu/discovery': env.DISCOVERY_API_UK,
   };

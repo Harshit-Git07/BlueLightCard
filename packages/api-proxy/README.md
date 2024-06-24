@@ -19,6 +19,7 @@ npx wrangler dev --var \
     IDENTITY_API_BLC_UK:<your-api> \
     IDENTITY_API_BLC_AU:<your-api> \
     OFFERS_API_BLC_UK:<your-api> \
+    OFFERS_API_BLC_AU:<your-api> \
     REDEMPTIONS_API_UK:<your-api> \
     DISCOVERY_API_UK:<your-api> \
 ```

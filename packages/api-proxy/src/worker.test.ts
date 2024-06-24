@@ -11,6 +11,7 @@ const testEnv: Env = {
   IDENTITY_API_BLC_UK: 'https://identity.blcshine.io',
   IDENTITY_API_BLC_AU: 'https://identity-au.blcshine.io',
   OFFERS_API_BLC_UK: 'https://offers.blcshine.io',
+  OFFERS_API_BLC_AU: 'https://offers-au.blcshine.io',
   REDEMPTIONS_API_UK: 'https://redemptions.blcshine.io',
 	DISCOVERY_API_UK: 'https://discovery.blcshine.io',
 };
@@ -22,6 +23,7 @@ test.each([
 	{ api: testEnv.IDENTITY_API_BLC_UK, pathPart: '/member', route: '/eu/identity/member' },
 	{ api: testEnv.IDENTITY_API_BLC_AU, pathPart: '/member', route: '/au/identity/member' },
 	{ api: testEnv.OFFERS_API_BLC_UK, pathPart: '/company', route: '/eu/offers/company' },
+	{ api: testEnv.OFFERS_API_BLC_AU, pathPart: '/company', route: '/au/offers/company' },
 	{ api: testEnv.REDEMPTIONS_API_UK, pathPart: '/redeem', route: '/eu/redemptions/redeem' }
 ])(`(POST) Proxy API: $api, Route:  $route`, (async (testParams): Promise<void> => {
 

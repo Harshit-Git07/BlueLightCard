@@ -8,7 +8,7 @@ const CompanyPageHeader: FC = () => {
   const companyName = company?.companyName;
   const backEvent = () => {
     try {
-      window.history.back();
+      window.location.href = '/members-home';
     } catch (e) {
       console.error(e);
     }

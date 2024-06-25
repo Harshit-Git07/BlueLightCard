@@ -214,9 +214,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                 name: companyData.name,
                 description: companyData.description,
                 // adds check on ENVIRONMENT so we can pass the port on localhost:3000 for the share URL. Otherwise it will not show port in the url
-                url: `${window.location.protocol}/${window.location.hostname}${
+                url: `${window.location.protocol}//${window.location.hostname}${
                   ENVIRONMENT === 'local' && window.location.port ? `:${window.location.port}` : ''
-                }/company/${companyId}`,
+                }/company?cid=${companyId}`,
               }}
             />
           </div>

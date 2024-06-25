@@ -44,7 +44,7 @@ export function Identity({ stack }: StackContext) {
     fields: {
       pk: 'string',
       sk: 'string',
-      spare_email: 'string'
+      spare_email: 'string',
     },
     primaryIndex: { partitionKey: 'pk', sortKey: 'sk' },
     globalIndexes: {

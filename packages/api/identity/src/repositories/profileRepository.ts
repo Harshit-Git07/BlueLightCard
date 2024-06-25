@@ -29,5 +29,22 @@ export class ProfileRepository implements IProfileRepository{
     };
     return await this.dynamodb.send(new QueryCommand(params));
   }
+
+  public async findByEmail(email: string) {
+    const params: QueryCommandInput = {
+      TableName: this.tableName,
+      IndexName: 'gsi3',
+      KeyConditionExpression: '#pk = :pk And begins_with(#sk, :sk)',
+      ExpressionAttributeNames: {
+        '#pk': 'email',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `${email}`,
+        ':sk': 'PROFILE#',
+      }
+    };
+    return await this.dynamodb.send(new QueryCommand(params));
+  }
   
 }

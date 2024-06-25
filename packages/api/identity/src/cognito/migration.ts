@@ -8,6 +8,8 @@ import { transformDateToFormatYYYYMMDD } from './../../../core/src/utils/date';
 import { setDate } from './../../../core/src/utils/setDate';
 import * as process from 'process'
 import { createHmac } from 'crypto';
+import { ProfileService } from 'src/services/ProfileService';
+import { BrandService } from 'src/services/BrandService';
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
@@ -16,6 +18,7 @@ const oldClientSecret = process.env.OLD_CLIENT_SECRET
 const oldUserPoolId = process.env.OLD_USER_POOL_ID
 const apiUrl = process.env.API_URL
 const apiAuth = process.env.API_AUTH
+const tableName = process.env.IDENTITY_TABLE_NAME
 const logger = new Logger({ serviceName: `${service}-migration`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 const sqs = new SQS();
 
@@ -72,7 +75,27 @@ export const handler = async (event: any, context: any) => {
           throw new Error(":\n" + errorMessage);
         }
       }
-    }
+    }else if (event.triggerSource == "UserMigration_ForgotPassword") {
+      const profileService = new ProfileService(`${tableName}`, process.env.REGION as string);
+      const uuid = await profileService.getUuidByEmail(event.userName);
+      if (uuid.length > 0 ) {
+        const brandService = new BrandService(`${tableName}`, process.env.REGION as string);
+        const userId = await brandService.getUserIdByUuid(uuid);
+        if(userId.length > 0) {
+          event.response.userAttributes = {
+            email: event.userName,
+            'custom:blc_old_id': userId,
+            'custom:blc_old_uuid': uuid,
+            email_verified: "true",
+          };
+          event.response.messageAction = "SUPPRESS";
+        }else {
+          throw new Error(":\nUser Not Found.");
+        }
+      }else {
+        throw new Error(":\nUser Not Found.");
+      }
+    } 
 
     return event;
 }

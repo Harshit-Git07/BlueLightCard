@@ -4,10 +4,11 @@ import { ProfileRepository } from "src/repositories/profileRepository";
 export interface IProfileService {
     isSpareEmail(uuid: string, email: string): Promise<boolean>;
     getData(uuid: string): Promise<UserProfile>;
+    getUuidByEmail(email: string): Promise<string>;
 }
 
 export class ProfileService implements IProfileService{
-    private profile: ProfileRepository;
+    public profile: ProfileRepository;
   
     constructor(private readonly tableName: string, private readonly region: string) {
       this.profile = new ProfileRepository(tableName, region);
@@ -20,6 +21,14 @@ export class ProfileService implements IProfileService{
         }
         return false;
     }
+
+    public async getUuidByEmail(email: string) {
+      const data = await this.profile.findByEmail(email);
+      if(data && data.Items && data.Items.length > 0){
+        return data.Items[0].pk.replace("MEMBER#","");
+      }
+      return "";
+  }
 
     public async getData(uuid: string): Promise<UserProfile> {
       const data = await this.profile.findByUuid(uuid);

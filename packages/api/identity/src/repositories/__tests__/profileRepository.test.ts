@@ -20,6 +20,7 @@ describe('ProfileRepository', () => {
                 sk: 'PROFILE#0000005',
                 spare_email: 'other@bluelightcard.co.uk',
                 gender: 'O',
+                email: 'test@bluelightcard.co.uk'
                 }
             ],
             });
@@ -27,8 +28,6 @@ describe('ProfileRepository', () => {
 
     it('should find profile by uuid', async () => {
         
-
-        // Call the findBySpareEmail method
         const result = await profileRepository.findByUuid('0000005');
 
         // Assert that the result is correct
@@ -38,8 +37,26 @@ describe('ProfileRepository', () => {
             sk: 'PROFILE#0000005',
             spare_email: 'other@bluelightcard.co.uk',
             gender: 'O',
+            email: 'test@bluelightcard.co.uk'
         }]
     });
 
+    
     });
+
+    it('should find profile by email', async () => {
+        
+      const result = await profileRepository.findByEmail('test@bluelightcard.co.uk');
+
+      // Assert that the result is correct
+      expect(result).toEqual({
+          Items: [{
+          pk: 'MEMBER#0000005',
+          sk: 'PROFILE#0000005',
+          spare_email: 'other@bluelightcard.co.uk',
+          gender: 'O',
+          email:'test@bluelightcard.co.uk'
+      }]
+    });
+  });
 });

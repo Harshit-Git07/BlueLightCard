@@ -339,7 +339,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         {/* Adverts (ONLY ON MOBILE RESPONSIVE - since it is positioned after the company about section) */}
         {isMobile && !isLoading && adverts && adverts.length > 0 && (
           <>
-            <div className="w-full mb-7 mt-14">
+            <div className="w-full mb-5 mt-4">
               <div className="grid gap-2">
                 {adverts.slice(0, 2).map((advert, index) => {
                   return (

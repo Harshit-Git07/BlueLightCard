@@ -142,9 +142,12 @@ const OfferSheetDetailsPage: FC = () => {
   // Web second button click handler
   const getDiscountClickHandler = () => {
     if (webRedeemData.statusCode == 200) {
+      redemptionType === 'vault'
+        ? logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED)
+        : logCodeClicked(events.USE_CODE_CLICKED);
+
       switch (redemptionType) {
         case 'generic':
-          logCodeClicked(events.USE_CODE_CLICKED);
           if (!isRedeemDataErrorResponse(webRedeemData.data)) {
             if (webRedeemData.data.redemptionDetails.code)
               copyCode(webRedeemData.data.redemptionDetails.code);
@@ -154,12 +157,11 @@ const OfferSheetDetailsPage: FC = () => {
           break;
         case 'vault':
         case 'preApplied':
-          logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
-          if (!isRedeemDataErrorResponse(webRedeemData.data)) {
-            if (webRedeemData.data.redemptionDetails.code)
-              copyCode(webRedeemData.data.redemptionDetails.code);
-            if (webRedeemData.data.redemptionDetails.url)
-              handleRedirect(webRedeemData.data.redemptionDetails.url);
+          if (
+            !isRedeemDataErrorResponse(webRedeemData.data) &&
+            webRedeemData.data.redemptionDetails.url
+          ) {
+            handleRedirect(webRedeemData.data.redemptionDetails.url);
           }
           break;
         // TODO: Implement this page
@@ -215,8 +217,8 @@ const OfferSheetDetailsPage: FC = () => {
         break;
       case 'preApplied':
         primaryButtonTextValue = 'Get discount';
-        secondaryButtonTextValue = 'No code needed!';
-        secondaryButtonSubtextValue = 'Special pricing applied on partner website.';
+        secondaryButtonTextValue = 'No code needed';
+        secondaryButtonSubtextValue = 'Special pricing applied on partner site';
         break;
       // TODO: Implement this page
       case 'showCard':
@@ -261,20 +263,6 @@ const OfferSheetDetailsPage: FC = () => {
     </MagicButton>
   );
 
-  const secondaryButton = (
-    <MagicButton variant="secondary" className="w-full" animate>
-      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
-        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
-          <FontAwesomeIcon icon={faWandMagicSparkles} />
-          {buttonText(redemptionType).secondaryText}
-        </div>
-        <div className="text-sm text-[#616266] font-medium">
-          {buttonText(redemptionType).secondarySubtext}
-        </div>
-      </div>
-    </MagicButton>
-  );
-
   const maxPerUserReachedSecondaryButton = (
     <MagicButton variant="secondary" className="w-full" animate>
       <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
@@ -284,6 +272,20 @@ const OfferSheetDetailsPage: FC = () => {
         </div>
         <div className="text-sm text-[#616266] font-medium">
           You have reached the code limit for this offer
+        </div>
+      </div>
+    </MagicButton>
+  );
+
+  const mobileHybridSecondaryButton = (
+    <MagicButton variant="secondary" className="w-full" animate>
+      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
+        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
+          {buttonText(redemptionType).secondaryText}
+        </div>
+        <div className="text-sm text-[#616266] font-medium">
+          {buttonText(redemptionType).secondarySubtext}
         </div>
       </div>
     </MagicButton>
@@ -311,7 +313,7 @@ const OfferSheetDetailsPage: FC = () => {
   function getWebSecondaryButtonText() {
     switch (redemptionType) {
       case 'preApplied':
-        return 'No code needed!';
+        return 'No code needed';
       default:
         return 'Continue to partner website';
     }
@@ -320,7 +322,7 @@ const OfferSheetDetailsPage: FC = () => {
   function getWebSecondaryButtonSubText() {
     switch (redemptionType) {
       case 'preApplied':
-        return 'Special pricing applied on partner website';
+        return 'Special pricing applied on partner site';
       default:
         return 'Code will be copied - paste it at checkout';
     }
@@ -329,7 +331,8 @@ const OfferSheetDetailsPage: FC = () => {
   const renderButton = () => {
     if (buttonClicked) {
       if (maxPerUserReached) return maxPerUserReachedSecondaryButton;
-      if (platformAdapter.platform === PlatformVariant.MobileHybrid) return secondaryButton;
+      if (platformAdapter.platform === PlatformVariant.MobileHybrid)
+        return mobileHybridSecondaryButton;
       if (platformAdapter.platform === PlatformVariant.Web) return webSecondaryButton;
     }
     return primaryButton;

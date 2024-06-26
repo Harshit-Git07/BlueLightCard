@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.79.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.78.0...bluelightcard/identity-v1.79.0) (2024-06-25)
+
+
+### Features
+
+* add script to add email and email validated data to dynamodb us… ([#1539](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1539)) ([92a719f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/92a719f7f4e86516937f86f5e1ede51de6bcd399))
+* ti-1198 support forgot password ([#1639](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1639)) ([0123823](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0123823b946d6bd3b7babd9031cf2f234c25348b))
+
 ## [1.78.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.77.1...bluelightcard/identity-v1.78.0) (2024-06-17)
 
 

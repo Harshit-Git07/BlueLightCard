@@ -199,7 +199,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       >
         {/* About page (ONLY ON WEB), ShareButton and FavouriteButton */}
         <div className="flex justify-between desktop:items-start mobile:items-center">
-          {isMobile && <Link onClickLink={() => void 0}>Back</Link>}
+          {isMobile && <Link href="/members-home">Back</Link>}
           <Heading
             headingLevel={'h1'}
             className="!text-black tablet:!text-5xl mobile:!text-xl tablet:!leading-[56px] mobile:!leading-5 tablet:font-bold mobile:font-semibold"

@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.16.0...bluelightcard/redemptions-v1.17.0) (2024-06-27)
+
+
+### Features
+
+* [TR-618]: Remove Braze variables from workflow ([#1467](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1467)) ([f550a9c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f550a9cae6962b0269442a011f1f3ad3f014d860))
+* add IAM user with DB access ([#1468](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1468)) ([1fa1c75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1fa1c756162f8bdc5c96e41365a021c6b1f98a8c))
+* added QR support for braze emails ([3d0afc4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3d0afc472ab1b1cc3f73032a50738fab67ceb356))
+* fix pipelines ([791e5e5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/791e5e5112c9bd1e4cf130f4ab8d7a10bcec6337))
+* merge vault and vaulQR into one ([48caac2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/48caac225912744ecb4d51ba32f38866a768cea4))
+* Pre-Applied and Show Card Redemption Strategy (TR-420) ([#1528](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1528)) ([e3f73a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e3f73a107166617b42458c042bc581bb29c5f336))
+* **redemptions:** [TR-456]: Use shared bastion host ([#1463](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1463)) ([30732a8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/30732a8afd84aac365247757d18bba179ff50fdd))
+* TR-421-pre-applied-emails ([#1518](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1518)) ([2ec6c75](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ec6c75d5d10db79ecf7ece8a8cdcd191c95afdb))
+* TR-422 vault  and vault qr redeem endpoint merge ([#1517](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1517)) ([48caac2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/48caac225912744ecb4d51ba32f38866a768cea4))
+* TR-424 qr code generate for braze ([#1553](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1553)) ([3d0afc4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3d0afc472ab1b1cc3f73032a50738fab67ceb356))
+* Trigger build ([#1444](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1444)) ([e4bdbf2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4bdbf202bd0994cb0730e3d53e17e812b6e5f75))
+* Write to Firehose on Redemption (TR-614) ([#1622](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1622)) ([efa6ddd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/efa6dddb7b1d09dfe9238f391ecf05cd2e1d9d30))
+
+
+### Bug Fixes
+
+* api proxy pipeline and redemptions ([#1624](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1624)) ([791e5e5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/791e5e5112c9bd1e4cf130f4ab8d7a10bcec6337))
+* deployment api proxy workers ([#1625](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1625)) ([0e7a7a2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0e7a7a2c8706fff180aafe0e40d3be12b4358c8a))
+* Duplicate publish event when redeeming (TR-420) ([#1615](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1615)) ([6e58b00](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6e58b0059f6bccd4fb44633255c0debc7009a712))
+* package.json to resolved pipeline isuses. ([0e7a7a2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0e7a7a2c8706fff180aafe0e40d3be12b4358c8a))
+* tidy-up redeem responses ([#1455](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1455)) ([c4febc2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c4febc25d744e06f53f1254aade299e97231c0a9))
+
 ## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.15.0...bluelightcard/redemptions-v1.16.0) (2024-05-24)
 
 

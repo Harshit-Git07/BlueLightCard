@@ -20,6 +20,7 @@ const OfferSheetDetailsPage: FC = () => {
     offerMeta,
     redemptionType,
     amplitudeEvent,
+    onClose,
   } = useAtomValue(offerSheetAtom);
   const platformAdapter = usePlatformAdapter();
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -99,9 +100,10 @@ const OfferSheetDetailsPage: FC = () => {
             );
           }
           break;
-        // TODO: Implement this page
         case 'showCard':
-          return <></>;
+          logCodeClicked(events.REQUEST_CODE_CLICKED);
+          platformAdapter.navigate('/highstreetcard.php'); // TODO change with env/config for globalisation
+          break;
         // TODO: Implement this page
         case 'vaultQR':
           return <></>;
@@ -128,6 +130,11 @@ const OfferSheetDetailsPage: FC = () => {
 
   // Web first button click handler
   const webDiscountClickHandler = async () => {
+    if (redemptionType === 'showCard') {
+      onClose();
+      return;
+    }
+
     const redeemData = await getRedemptionData();
 
     if (redeemData.statusCode == 200) {
@@ -250,13 +257,22 @@ const OfferSheetDetailsPage: FC = () => {
         if (platformAdapter.platform === PlatformVariant.MobileHybrid) {
           await hybridDiscountClickHandler();
         } else if (platformAdapter.platform === PlatformVariant.Web) {
-          if (redemptionType === 'vault') logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
-          if (redemptionType === 'generic' || redemptionType === 'preApplied') {
-            logCodeClicked(events.REQUEST_CODE_CLICKED);
+          switch (redemptionType) {
+            case 'vault':
+              logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
+              break;
+            case 'generic':
+            case 'preApplied':
+            case 'showCard':
+              logCodeClicked(events.REQUEST_CODE_CLICKED);
+              break;
+            default:
+              break;
           }
           await webDiscountClickHandler();
         }
-        setButtonClicked(true);
+        // For showCard redemption type, there is no magic button displayed after the click
+        if (redemptionType !== 'showCard') setButtonClicked(true);
       }}
     >
       <span className="leading-10 font-bold text-md">{buttonText(redemptionType).primaryText}</span>

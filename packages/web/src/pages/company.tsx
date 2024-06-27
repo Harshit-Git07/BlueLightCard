@@ -122,7 +122,16 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       // Banner Data
       try {
         let bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
-        setAdverts(shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[]);
+        const banners = shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[];
+        const modifyLinksArray: BannerDataType[] = [];
+        banners.map((advert: BannerDataType, index: number) => {
+          const splitLink = advert.link.split('cid=');
+          const cidSplit = splitLink[1].split('&');
+          const cid = cidSplit[0];
+          const link = 'https://www.bluelightcard.co.uk/company?cid=' + cid;
+          modifyLinksArray[index] = { ...advert, link };
+        });
+        setAdverts(modifyLinksArray);
       } catch (error) {
         setAdverts([]);
       }

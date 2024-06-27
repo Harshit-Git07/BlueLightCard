@@ -16,7 +16,7 @@ const Filter: FC<FilterProps> = ({ onClick, filterCount }) => {
 
   const icon =
     filterCount > 0 ? (
-      <div className="w-6 h-6 rounded-full bg-primary-dukeblue-600 text-neutral-white dark:text-primary-dukeblue-600 dark:bg-primary-vividskyblue-700 text-[10px] absolute left-[54px] top-[5px] flex items-center font-museo justify-center">
+      <div className="w-6 h-6 rounded-full bg-primary-dukeblue-600 text-neutral-white dark:text-primary-dukeblue-600 dark:bg-primary-vividskyblue-700 text-[10px] absolute left-[54px] top-[5px] flex items-center justify-center">
         {_filters?.length}
       </div>
     ) : (
@@ -32,7 +32,7 @@ const Filter: FC<FilterProps> = ({ onClick, filterCount }) => {
     <div>
       <button
         onClick={onFilterClick}
-        className="relative w-[86px] h-[36px] z-10 font-museo dark:text-primary-vividskyblue-700 text-primary-dukeblue-600 rounded pr-8 pl-2"
+        className="relative w-[86px] h-[36px] z-10 dark:text-primary-vividskyblue-700 text-primary-dukeblue-600 rounded pr-8 pl-2"
       >
         Filter
         {icon}

@@ -88,7 +88,7 @@ const FilterPanel: FC = () => {
                 onSelected={onSelectedFilters}
                 onDeselected={onDeselectedFilters}
               />
-              <h3 className="text-2xl ml-2 mt-6 mb-2 font-museo font-extrabold dark:text-primary-vividskyblue-700">
+              <h3 className="text-2xl ml-2 mt-6 mb-2 font-extrabold dark:text-primary-vividskyblue-700">
                 Offer types
               </h3>
               <FilterPillButton

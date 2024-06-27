@@ -5,7 +5,7 @@ import { faClockRotateLeft } from '@fortawesome/pro-regular-svg-icons';
 
 const RecentSearchButton: FC<RecentSearchButtonProps> = ({ text, onClick }) => {
   return (
-    <div className="inline-block m-1 font-museo">
+    <div className="inline-block m-1">
       <button
         className="relative inline-block dark:text-neutral-300 text-neutral-grey-600 border rounded-full pl-9 h-[36px] pr-2 dark:border"
         onClick={onClick}

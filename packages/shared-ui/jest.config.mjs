@@ -7,6 +7,7 @@ const config = {
     '^src/(.*)$': '<rootDir>/src/$1',
     '\\.(scss|sass|css)$': 'identity-obj-proxy',
   },
+  testMatch: ['**/__tests__/**/*.(spec|test).[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   testPathIgnorePatterns: ['.rollup.cache', 'dist'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };

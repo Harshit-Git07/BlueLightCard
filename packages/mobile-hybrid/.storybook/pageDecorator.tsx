@@ -1,4 +1,3 @@
-import { museoFont, sourceSansPro } from '@/font';
 import { Decorator } from '@storybook/react';
 
 import mockResolvers from './mockResolvers';
@@ -17,11 +16,11 @@ const pageDecorator: Decorator = (Story) => {
         },
       };
       return acc;
-    }, {} as typeof globalState.webkit.messageHandlers)
+    }, {} as typeof globalState.webkit.messageHandlers),
   };
   return (
     <UserProfileProvider>
-      <main className={`${museoFont.variable} ${sourceSansPro.variable} font-museo dark:bg-neutral-black`}>
+      <main className="dark:bg-neutral-black">
         <Story />
         <Spinner />
       </main>

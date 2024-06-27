@@ -21,7 +21,6 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        museo: ['var(--font-museo)'],
         sourcesans: ['var(--font-sourcesans)'],
       },
       screens: {

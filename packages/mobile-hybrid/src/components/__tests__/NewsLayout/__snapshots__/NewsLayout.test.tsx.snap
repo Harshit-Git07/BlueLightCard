@@ -39,12 +39,12 @@ exports[`NewsLayout.tsx renders, showing the heading by default 1`] = `
           class="flex flex-col justify-center pl-3 w-full"
         >
           <h4
-            class="text-listItem-title-colour-light dark:text-listItem-title-colour-dark text-md mb-1 font-semibold font-museo leading-5 line-clamp-1 md:line-clamp-2"
+            class="text-listItem-title-colour-light dark:text-listItem-title-colour-dark text-md mb-1 font-semibold leading-5 line-clamp-1 md:line-clamp-2"
           >
             News Title
           </h4>
           <p
-            class="text-listItem-text-colour-light dark:text-listItem-text-colour-dark font-museo text-listItem-text-font lg:text-lg"
+            class="text-listItem-text-colour-light dark:text-listItem-text-colour-dark text-listItem-text-font lg:text-lg"
           >
             Fri 09 Dec, 2022
           </p>

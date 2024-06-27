@@ -10,9 +10,13 @@ const config: StorybookConfig = {
   ],
   staticDirs: [
     {
+      from: '../fonts',
+      to: '/fonts',
+    },
+    {
       from: './mocks',
       to: '/mocks',
-    }
+    },
   ],
   framework: {
     name: '@storybook/nextjs',

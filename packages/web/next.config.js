@@ -44,7 +44,10 @@ const nextConfig = {
     };
     config.plugins.push(
       new CopyPlugin({
-        patterns: [{ from: assetsFolder, to: 'static/assets' }],
+        patterns: [
+          { from: assetsFolder, to: 'static/assets' },
+          { from: '../shared-ui/fonts', to: 'static/fonts' },
+        ],
       })
     );
     if (process.env.NODE_ENV === 'production') {

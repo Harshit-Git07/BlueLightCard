@@ -125,11 +125,11 @@ const Search: FC<SearchProps> = ({
           placeholder={placeholderText}
           type="search"
           enterKeyHint="search"
-          className="new-search pl-14 pr-12 py-3 text-lg font-museo rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none"
+          className="new-search pl-14 pr-12 py-3 text-lg rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none"
         />
         {searchTerm && clearIcon}
       </div>
-      {errorMessage && <div className="font-museo text-colour-system-red-500">{errorMessage}</div>}
+      {errorMessage && <div className="text-colour-system-red-500">{errorMessage}</div>}
     </form>
   );
 };

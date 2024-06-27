@@ -13,3 +13,7 @@ export const CharacterEntities: Record<string, string> = {
   '': '\u{0000}',
   "' for '": "'",
 };
+
+export const IS_STORYBOOK_LIFECYCLE =
+  process.env.npm_lifecycle_event === 'storybook' ||
+  process.env.npm_lifecycle_event === 'build-storybook';

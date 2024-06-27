@@ -1,5 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { TransformedToken } from 'style-dictionary';
+import { checkAndEvaluateMath, transformLetterSpacingForCSS } from '@tokens-studio/sd-transforms';
 import { BrandToken, TokenStudioMetadata, TokenStudioTheme } from '../types';
 import { TOKENS_ROOT_DIR } from '../../constants';
 
@@ -34,17 +36,50 @@ export function getTokenSourcePaths(brand: BrandToken) {
     metadata.tokenSetOrder.forEach((tokenSet) => {
       // check if token set is a theme
       const isTheme = !!themes.find(
-        (theme) => tokenSet.includes(theme.group) || tokenSet.includes(theme.name),
+        (theme) => (theme.group && tokenSet.includes(theme.group)) || tokenSet.includes(theme.name),
       );
       // check the token set is already in the sources array
       const existsInSources = !!sources.find((source) => source.includes(tokenSet));
 
+      const isEnabled = theme?.selectedTokenSets[tokenSet] !== 'disabled';
+
       // if both are falsey push the token set into sources
-      if (!isTheme && !existsInSources) {
+      if (!isTheme && !existsInSources && isEnabled) {
         sources.push(join(TOKENS_ROOT_DIR, `${tokenSet}.json`));
       }
     });
   }
 
   return sources;
+}
+
+/**
+ * Custom typography token transformer for transforming typography subset tokens e.g font size px -> ems etc
+ * @param token
+ * @returns
+ */
+export function tsTypographyTransformer(token: TransformedToken) {
+  const transformed: Record<string, string> = {};
+
+  for (const tokenValueKey in token.value) {
+    transformed[tokenValueKey] = String(checkAndEvaluateMath(token.value[tokenValueKey]));
+
+    switch (tokenValueKey) {
+      case 'letterSpacing':
+        transformed[tokenValueKey] = String(
+          transformLetterSpacingForCSS(token.value[tokenValueKey]),
+        );
+        break;
+      case 'fontSize': {
+        const tokenValue = String(transformed[tokenValueKey]);
+        const convert = (value: number) => `${(value / 16).toFixed(2)}rem`;
+
+        transformed[tokenValueKey] = tokenValue.endsWith('px')
+          ? convert(Number(tokenValue.slice(0, -2)))
+          : convert(Number(tokenValue));
+        break;
+      }
+    }
+  }
+  return transformed;
 }

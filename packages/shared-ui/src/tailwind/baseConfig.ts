@@ -4,6 +4,10 @@ export default {
   content: ['./src/**/*.{js,ts,tsx,mdx}'],
   theme: {
     extend: {
+      fontFamily: {},
+      fontSize: {},
+      lineHeight: {},
+      fontWeight: {},
       colors: {},
       screens: {
         mobile: '280px',

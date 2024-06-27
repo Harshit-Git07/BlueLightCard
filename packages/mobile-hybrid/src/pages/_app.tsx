@@ -7,7 +7,6 @@ import CustomParseFormat from 'dayjs/plugin/customParseFormat';
 
 import '@/nativeReceive';
 
-import { museoFont, sourceSansPro } from '@/font';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { SharedUIConfigProvider, ViewOfferProvider } from '@bluelightcard/shared-ui';
@@ -40,7 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
             added as children of the AmplitudeProvider.
           */}
             <UserProfileProvider>
-              <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
+              <main className="mb-4">
                 <ViewOfferProvider>
                   <Component {...pageProps} />
                 </ViewOfferProvider>

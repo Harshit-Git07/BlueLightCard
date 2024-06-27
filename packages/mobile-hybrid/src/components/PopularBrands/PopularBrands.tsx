@@ -30,7 +30,7 @@ const PopularBrands: FC<PopularBrandsProps> = ({
   return (
     <div className="mb-6">
       <Heading title={title} />
-      <p className="px-4 mb-3 font-museo dark:text-neutral-white">{text}</p>
+      <p className="px-4 mb-3 dark:text-neutral-white">{text}</p>
       <div className="ml-2 flex overflow-x-auto items-center h-[100px]" onScroll={throttle}>
         <div className="flex">
           {brands.map((brand) => (

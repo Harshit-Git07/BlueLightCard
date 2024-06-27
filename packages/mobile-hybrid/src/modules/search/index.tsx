@@ -60,7 +60,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
         <Amplitude keyName={FeatureFlags.SEARCH_RECENT_SEARCHES} value={'on'}>
           <div className="h-full w-full fixed bg-neutral-white dark:bg-neutral-black left-0 top-0 z-[5]">
             <div className="mx-2 absolute top-24">
-              <h3 className="mx-2 mb-2 text-2xl font-museo font-bold text-neutral-grey-900 dark:text-primary-vividskyblue-700">
+              <h3 className="mx-2 mb-2 text-2xl font-bold text-neutral-grey-900 dark:text-primary-vividskyblue-700">
                 Your recent searches
               </h3>
               {recentSearchesData.map((searchTerm, index) => (

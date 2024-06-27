@@ -9,6 +9,9 @@ BRAND_DEPLOYMENTS=$2
 
 if [ "$BRAND_DEPLOYMENTS" = "true" ]
 then
+  mkdir -p packages/"$PACKAGE_NAME"/.brands/fonts
+  cp -r packages/shared-ui/fonts/* packages/"$PACKAGE_NAME"/.brands/fonts
+
   for brand in "${APP_BRANDS[@]}"
   do
     mkdir -p packages/"$PACKAGE_NAME"/.brands/"$brand"

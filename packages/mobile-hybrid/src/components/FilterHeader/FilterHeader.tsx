@@ -11,7 +11,7 @@ const FilterHeader: FC<FilterHeaderProps> = ({ onDoneClick, onResetClick, resetE
   ]);
 
   return (
-    <div className="rounded-t-3xl h-[56px] bg-neutral-white dark:bg-neutral-grey-800 font-museo flex justify-between">
+    <div className="rounded-t-3xl h-[56px] bg-neutral-white dark:bg-neutral-grey-800 flex justify-between">
       <button disabled={!resetEnabled} onClick={onResetClick} className={resetButtonClasses}>
         Reset
       </button>

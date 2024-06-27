@@ -21,7 +21,7 @@ const FilterPillButton: FC<FilterPillButtonProps> = ({
   const getButtonClasses = (value: string) => {
     const isSelected = selectedPills.includes(value);
     const baseClasses = cssUtil([
-      'transition rounded-full m-1 h-[36px] px-4 py-2 min-w-btn focus:outline-none font-museo',
+      'transition rounded-full m-1 h-[36px] px-4 py-2 min-w-btn focus:outline-none',
       isSelected
         ? 'bg-primary-dukeblue-400/30 text-primary-dukeblue-600 dark:text-primary-vividskyblue-700'
         : 'bg-neutral-grey-100/50 text-neutral-grey-600 dark:bg-neutral-800 dark:text-neutral-white',

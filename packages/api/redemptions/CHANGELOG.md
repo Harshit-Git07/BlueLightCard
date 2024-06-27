@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.17.0...bluelightcard/redemptions-v1.17.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* (revert of) Write to Firehose on Redemption (TR-614) ([#1622](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1622)) ([#1671](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1671)) ([784fe4f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/784fe4f5e9cecc60b9a3b05a93cbb9ec9caae24e))
+
 ## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.16.0...bluelightcard/redemptions-v1.17.0) (2024-06-27)
 
 

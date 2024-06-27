@@ -102,7 +102,7 @@ const OfferSheetDetailsPage: FC = () => {
           break;
         case 'showCard':
           logCodeClicked(events.REQUEST_CODE_CLICKED);
-          platformAdapter.navigate('/highstreetcard.php'); // TODO change with env/config for globalisation
+          platformAdapter.navigate('/highstreetcard.php');
           break;
         // TODO: Implement this page
         case 'vaultQR':

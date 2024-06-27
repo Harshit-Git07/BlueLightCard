@@ -1,6 +1,10 @@
 import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
-import { RedemptionEventDetailType, REDEMPTIONS_EVENT_SOURCE } from '@blc-mono/core/constants/redemptions';
+import {
+  REDEMPTION_TYPES,
+  RedemptionEventDetailType,
+  REDEMPTIONS_EVENT_SOURCE,
+} from '@blc-mono/core/constants/redemptions';
 
 import { DwhKenisisFirehoseStreams } from '../../../../../../stacks/infra/firehose/DwhKenisisFirehoseStreams';
 import { RedemptionsStackEnvironmentKeys } from '../../constants/environment';
@@ -24,8 +28,13 @@ export function createDwhMemberRedemptionRule(
       // Data Warehouse
       [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME]:
         dwhKenisisFirehoseStreams.vaultStream.getStreamName(),
+      [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_REDEMPTIONS_STREAM_NAME]:
+        dwhKenisisFirehoseStreams.redemptionTypeStream.getStreamName(),
     },
-    permissions: [dwhKenisisFirehoseStreams.vaultStream.getPutRecordPolicyStatement()],
+    permissions: [
+      dwhKenisisFirehoseStreams.vaultStream.getPutRecordPolicyStatement(),
+      dwhKenisisFirehoseStreams.redemptionTypeStream.getPutRecordPolicyStatement(),
+    ],
   });
   return {
     pattern: {
@@ -33,7 +42,7 @@ export function createDwhMemberRedemptionRule(
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: ['vault'],
+          redemptionType: REDEMPTION_TYPES,
         },
       },
     },

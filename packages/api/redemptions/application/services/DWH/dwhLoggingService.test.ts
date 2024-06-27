@@ -152,13 +152,50 @@ describe('DwhLoggingService', () => {
   });
 
   describe('logMemberRedemption', () => {
+    it('logs all redemptions to the data warehouse', async () => {
+      // Arrange
+      const repository = {
+        logVaultRedemption: jest.fn(),
+        logRedemption: jest.fn(),
+      };
+      const service = new DwhLoggingService(as(repository));
+      const params = new MemberRedemptionParamsDto({
+        clientType: 'web',
+        redemptionType: 'generic',
+        offerId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        companyId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        memberId: faker.number
+          .int({
+            min: 1,
+            max: 1_000_000,
+          })
+          .toString(),
+        code: faker.string.alphanumeric(),
+      });
+
+      // Act
+      await service.logMemberRedemption(params);
+
+      // Assert
+      expect(repository.logRedemption).toHaveBeenCalledTimes(1);
+      expect(repository.logRedemption).toHaveBeenCalledWith(params);
+    });
+
     it('should call DwhRepository.logVaultRedemption correctly if the redemption type is vault', async () => {
       // Arrange
       const repository = {
         logVaultRedemption: jest.fn(),
+        logRedemption: jest.fn(),
       };
       const service = new DwhLoggingService(as(repository));
       const params = new MemberRedemptionParamsDto({
+        clientType: 'web',
         redemptionType: 'vault',
         offerId: faker.number.int({
           min: 1,
@@ -196,10 +233,12 @@ describe('DwhLoggingService', () => {
       // Arrange
       const repository = {
         logVaultRedemption: jest.fn(),
+        logRedemption: jest.fn(),
       };
       const service = new DwhLoggingService(as(repository));
       const params = new MemberRedemptionParamsDto({
-        redemptionType: as('not-vault'),
+        clientType: 'web',
+        redemptionType: 'generic',
         offerId: faker.number.int({
           min: 1,
           max: 1_000_000,
@@ -228,9 +267,11 @@ describe('DwhLoggingService', () => {
       // Arrange
       const repository = {
         logVaultRedemption: jest.fn().mockRejectedValue(new Error('Test error')),
+        logRedemption: jest.fn(),
       };
       const service = new DwhLoggingService(as(repository));
       const params = new MemberRedemptionParamsDto({
+        clientType: 'mobile',
         redemptionType: 'vault',
         offerId: faker.number.int({
           min: 1,

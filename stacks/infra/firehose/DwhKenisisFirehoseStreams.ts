@@ -17,7 +17,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly compAppViewStream: IFirehoseStreamAdapter;
   public readonly compAppClickStream: IFirehoseStreamAdapter;
   public readonly vaultStream: IFirehoseStreamAdapter;
-
+  public readonly redemptionTypeStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compView').setup();
@@ -25,7 +25,7 @@ export class DwhKenisisFirehoseStreams {
     this.compAppViewStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compAppView').setup();
     this.compAppClickStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compAppClick').setup();
     this.vaultStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-vault').setup();
-
+    this.redemptionTypeStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-redemption').setup();
   }
 }
 

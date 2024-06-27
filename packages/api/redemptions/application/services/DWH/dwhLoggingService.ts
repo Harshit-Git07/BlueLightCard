@@ -1,3 +1,4 @@
+import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
@@ -24,43 +25,50 @@ export interface IDwhLoggingService {
   logMemberRedemption(event: MemberRedemptionParamsDto): Promise<void>;
 }
 
+interface MemberRedemptionBaseParams {
+  redemptionType: (typeof REDEMPTION_TYPES)[number];
+  clientType: ClientType;
+  offerId: number;
+  companyId: number;
+  memberId: string;
+}
+
+type MemberRedemptionParams = MemberRedemptionBaseParams &
+  (
+    | {
+        redemptionType: 'generic' | 'vault' | 'vaultQR';
+        code: string;
+      }
+    | {
+        redemptionType: 'showCard' | 'preApplied';
+        code?: never;
+      }
+  );
+
 export class MemberRedemptionParamsDto {
-  constructor(
-    public readonly data:
-      | {
-          redemptionType: 'vault' | 'vaultQR';
-          offerId: number;
-          companyId: number;
-          memberId: string;
-          code: string;
-        }
-      | {
-          redemptionType: 'generic';
-        }
-      | {
-          redemptionType: 'showCard';
-        }
-      | {
-          redemptionType: 'preApplied';
-        },
-  ) {}
+  constructor(public readonly data: MemberRedemptionParams) {}
 
   public static fromMemberRedemptionEvent(event: MemberRedemptionEvent) {
     const redemptionDetails = event.detail.redemptionDetails;
+    const baseParams = {
+      clientType: redemptionDetails.clientType,
+      companyId: redemptionDetails.companyId,
+      memberId: event.detail.memberDetails.memberId,
+      offerId: redemptionDetails.offerId,
+    };
     switch (redemptionDetails.redemptionType) {
+      case 'generic':
       case 'vault':
       case 'vaultQR':
         return new MemberRedemptionParamsDto({
-          code: redemptionDetails.code,
-          companyId: redemptionDetails.companyId,
-          memberId: event.detail.memberDetails.memberId,
-          offerId: redemptionDetails.offerId,
+          ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
+          code: redemptionDetails.code,
         });
-      case 'generic':
       case 'showCard':
       case 'preApplied':
         return new MemberRedemptionParamsDto({
+          ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
         });
       default:
@@ -92,5 +100,7 @@ export class DwhLoggingService implements IDwhLoggingService {
         dto.data.code,
       );
     }
+
+    await this.dwhRepository.logRedemption(dto);
   }
 }

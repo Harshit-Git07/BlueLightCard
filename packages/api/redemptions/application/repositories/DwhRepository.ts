@@ -3,12 +3,14 @@ import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { MemberRedemptionParamsDto } from '@blc-mono/redemptions/application/services/DWH/dwhLoggingService';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 export interface IDwhRepository {
   logOfferView(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
   logRedemptionAttempt(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
   logVaultRedemption(offerId: number, companyId: number, memberId: string, code: string): Promise<void>;
+  logRedemption(dto: MemberRedemptionParamsDto): Promise<void>;
 }
 
 const EVENT_ORIGIN_OFFER_SHEET = 'offer_sheet';
@@ -107,5 +109,26 @@ export class DwhRepository implements IDwhRepository {
       },
     });
     await this.client.send(command);
+  }
+
+  async logRedemption(dto: MemberRedemptionParamsDto) {
+    const firehoseClient = new FirehoseClient();
+    const firehoseCommand = new PutRecordCommand({
+      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_REDEMPTIONS_STREAM_NAME),
+      Record: {
+        Data: Buffer.from(
+          JSON.stringify({
+            companyId: dto.data.companyId.toString(),
+            code: dto.data.code ?? '',
+            memberId: dto.data.memberId,
+            actionTime: new Date().toISOString(),
+            offerId: dto.data.offerId.toString(),
+            redemptionType: dto.data.redemptionType,
+            clientType: dto.data.clientType,
+          }),
+        ),
+      },
+    });
+    await firehoseClient.send(firehoseCommand);
   }
 }

@@ -3,6 +3,14 @@
     "value": "{typography.title-large}",
     "type": "typography"
   },
+  "card-hybrid-title-font": {
+    "value": "{typography.body-semibold}",
+    "type": "typography"
+  },
+  "card-hybrid-description-font": {
+    "value": "{typography.body-small}",
+    "type": "typography"
+  },
   "card-vertical-small-text-font": {
     "value": "{typography.title-small}",
     "type": "typography"
@@ -11,12 +19,36 @@
     "value": "{typography.body}",
     "type": "typography"
   },
-  "card-border-radius": {
+  "card-web-border-radius": {
     "value": "{border-radius.medium}",
     "type": "borderRadius",
     "description": "only to be applied to top left and top rigth corners of card"
   },
-  "card-text-colour": {
+  "card-hybrid-border-radius": {
+    "value": "{border-radius.small}",
+    "type": "borderRadius"
+  },
+  "card-description-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "card-bg-colour": {
+    "light": {
+      "value": "{colour.surface-bright.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface-bright.dark}",
+      "type": "color"
+    }
+  },
+  "card-title-colour": {
     "light": {
       "value": "{colour.onSurface.light}",
       "type": "color"

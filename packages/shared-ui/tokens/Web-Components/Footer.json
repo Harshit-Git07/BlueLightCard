@@ -5,13 +5,13 @@
       "type": "color"
     },
     "dark": {
-      "value": "{colour.surface.dark}",
+      "value": "{colour.surface-brand.dark}",
       "type": "color"
     }
   },
   "footer-text-colour": {
     "light": {
-      "value": "{colour.onPrimary.light}",
+      "value": "{colour.onSurface.light}",
       "type": "color"
     },
     "dark": {
@@ -33,7 +33,7 @@
   },
   "footer-social-icon-colour": {
     "light": {
-      "value": "{colour.onPrimary.light}",
+      "value": "{colour.onSurface.light}",
       "type": "color"
     },
     "dark": {
@@ -43,11 +43,21 @@
   },
   "footer-divider-colour": {
     "light": {
-      "value": "{colour.onPrimary.light}",
+      "value": "{colour.onSurface-outline.light}",
       "type": "color"
     },
     "dark": {
-      "value": "{colour.onSurface.dark}",
+      "value": "{colour.onSurface-outline.dark}",
+      "type": "color"
+    }
+  },
+  "footer-link-hover-colour": {
+    "light": {
+      "value": "{colour.primary-hover.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary-hover.dark}",
       "type": "color"
     }
   }

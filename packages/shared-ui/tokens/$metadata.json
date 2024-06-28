@@ -3,12 +3,14 @@
     "Global",
     "Semantic/BLC",
     "Semantic/DDS",
-    "Semantic/Surface",
+    "Semantic/SurfaceNeutral",
     "Semantic/System",
     "Shared-Components/Button",
+    "Shared-Components/Logo",
     "Shared-Components/Card",
     "Shared-Components/CardCarousel",
     "Shared-Components/Badge",
+    "Shared-Components/Pill",
     "Shared-Components/SearchBar",
     "Hybrid-Components/HybridCard",
     "Hybrid-Components/BannerCarousel",
@@ -16,6 +18,8 @@
     "Hybrid-Components/Spinner",
     "Hybrid-Components/ListItem",
     "Web-Components/Footer",
+    "Web-Components/DropDownItem",
+    "Web-Components/DropDownList",
     "Web-Components/NavBar"
   ]
 }

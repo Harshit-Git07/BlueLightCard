@@ -1,0 +1,86 @@
+{
+  "dropDownItem-bg-colour": {
+    "light": {
+      "value": "{colour.surface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface.dark}",
+      "type": "color"
+    }
+  },
+  "dropDownItem-label-font": {
+    "value": "{typography.body}",
+    "type": "typography"
+  },
+  "dropDownItem-text-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "dropDownItem-bg-hover-colour": {
+    "light": {
+      "value": "{colour.surface-container.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface-container.dark}",
+      "type": "color"
+    }
+  },
+  "dropDownItem-text-hover-colour": {
+    "light": {
+      "value": "{colour.primary-hover.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary-hover.dark}",
+      "type": "color"
+    }
+  },
+  "dropDownItem-divider-hover-colour": {
+    "light": {
+      "value": "{colour.onSurface-outline-subtle.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-outline-subtle.dark}",
+      "type": "color"
+    }
+  },
+  "dropDownItem-subitem-bg-colour": {
+    "light": {
+      "value": "{colour.surface-container.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface-container.dark}",
+      "type": "color"
+    }
+  },
+  "dropDownItem-text-active-colour": {
+    "light": {
+      "value": "{colour.primary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
+  },
+  "dropDownItem-border-active-colour": {
+    "light": {
+      "value": "{colour.primary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "logo-colour": {
+    "light": {
+      "value": "{colour.onSurface-brand.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-brand.dark}",
+      "type": "color"
+    }
+  }
+}

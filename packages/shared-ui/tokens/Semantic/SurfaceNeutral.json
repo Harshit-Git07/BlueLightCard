@@ -1,0 +1,134 @@
+{
+  "colour": {
+    "surface": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "the default surface colour used for page backgrounds on light mode"
+      },
+      "dark": {
+        "value": "{colour.greyscale.black}",
+        "type": "color",
+        "description": "the default surface colour used for page backgrounds on dark mode"
+      }
+    },
+    "surface-container": {
+      "light": {
+        "value": "{colour.greyscale.grey-50}",
+        "type": "color",
+        "description": "one level darker on light mode to elevate containers sitting on top of default light surface of white"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-900}",
+        "type": "color",
+        "description": "one level lighter on dark mode to elevate containers sitting on top of default dark surface of black "
+      }
+    },
+    "surface-bright": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "two levels lighter on dark mode for containers sitting on top of default surface of black and/or surface container for a high contrast but maintains default surface colour of white on light mode - e.g usage could be fill for search bar."
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-800}",
+        "type": "color",
+        "description": "two levels lighter on dark mode for containers sitting on top of default surface of black and/or surface container for a high contrast but maintains default surface colour of white on light mode - e.g usage could be fill for search bar."
+      }
+    },
+    "surface-dim": {
+      "light": {
+        "value": "{colour.greyscale.grey-100}",
+        "type": "color",
+        "description": "two levels darker on light mode for containers sitting on top of default surface of white and/or surface container but maintains default surface colour of black on dark mode - e.g usage could be fill for a item that needs less precedence."
+      },
+      "dark": {
+        "value": "{colour.greyscale.black}",
+        "type": "color",
+        "description": "two levels darker on light mode for containers sitting on top of default surface of white and/or surface container but maintains default surface colour of black on dark mode - e.g usage could be fill for a item that needs less precedence."
+      }
+    },
+    "surface-interactive": {
+      "light": {
+        "value": "{colour.greyscale.grey-100}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-700}",
+        "type": "color"
+      }
+    },
+    "onSurface": {
+      "light": {
+        "value": "{colour.greyscale.grey-900}",
+        "type": "color",
+        "description": "default text colour for text sitting on most surfaces"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "default text colour for text sitting on most surfaces"
+      }
+    },
+    "onSurface-subtle": {
+      "light": {
+        "value": "{colour.greyscale.grey-600}",
+        "type": "color",
+        "description": "text colour for text that needs less presence sitting on most surfaces"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-300}",
+        "type": "color",
+        "description": "text colour for text that needs less presence sitting on most surfaces"
+      }
+    },
+    "onSurface-outline": {
+      "light": {
+        "value": "{colour.greyscale.grey-300}",
+        "type": "color",
+        "description": "default colour used for system elements like borders and dividers"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-500}",
+        "type": "color",
+        "description": "default colour used for system elements like borders and dividers"
+      }
+    },
+    "onSurface-outline-subtle": {
+      "light": {
+        "value": "{colour.greyscale.grey-100}",
+        "type": "color",
+        "description": "colour used for system elements like borders and dividers that need less presence"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-700}",
+        "type": "color",
+        "description": "colour used for system elements like borders and dividers that need less presence"
+      }
+    },
+    "onSurface-disabled": {
+      "light": {
+        "value": "{colour.greyscale.grey-100}",
+        "type": "color",
+        "description": "colour used for any disabled elements that do not use brand specific colours"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-700}",
+        "type": "color",
+        "description": "colour used for any disabled elements that do not use brand specific colours"
+      }
+    },
+    "onSurface-fixed": {
+      "light": {
+        "value": "{colour.greyscale.grey-900}",
+        "type": "color",
+        "description": "dark text colour fixed on both light and dark mode. For use cases where text sits on top of a highlight / fixed accent colour"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-900}",
+        "type": "color",
+        "description": "dark text colour fixed on both light and dark mode. For use cases where text sits on top of a highlight / fixed accent colour"
+      }
+    }
+  }
+}

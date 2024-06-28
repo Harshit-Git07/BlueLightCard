@@ -1,0 +1,6 @@
+{
+  "dropDownList-border-radius": {
+    "value": "{badge-small-border-radius}",
+    "type": "borderRadius"
+  }
+}

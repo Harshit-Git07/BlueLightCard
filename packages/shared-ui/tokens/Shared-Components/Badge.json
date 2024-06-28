@@ -21,41 +21,41 @@
   },
   "badge-instore-bg-colour": {
     "light": {
-      "value": "{colour.highlight1.light}",
+      "value": "{colour.primary-highlight-fixed.light}",
       "type": "color"
     },
     "dark": {
-      "value": "{colour.highlight1.dark}",
+      "value": "{colour.primary-highlight-fixed.dark}",
       "type": "color"
     }
   },
   "badge-online-bg-colour": {
     "light": {
-      "value": "{colour.highlight2.light}",
+      "value": "{colour.secondary-highlight-fixed.light}",
       "type": "color"
     },
     "dark": {
-      "value": "{colour.highlight2.dark}",
+      "value": "{colour.secondary-highlight-fixed.dark}",
       "type": "color"
     }
   },
   "badge-giftcard-bg-colour": {
     "light": {
-      "value": "{colour.highlight3.light}",
+      "value": "{colour.tertiary-highlight-fixed.light}",
       "type": "color"
     },
     "dark": {
-      "value": "{colour.highlight3.dark}",
+      "value": "{colour.tertiary-highlight-fixed.dark}",
       "type": "color"
     }
   },
   "badge-label-colour": {
     "light": {
-      "value": "{colour.onHighlight-fixed.light}",
+      "value": "{colour.onSurface-fixed.light}",
       "type": "color"
     },
     "dark": {
-      "value": "{colour.onHighlight-fixed.dark}",
+      "value": "{colour.onSurface-fixed.dark}",
       "type": "color"
     }
   }

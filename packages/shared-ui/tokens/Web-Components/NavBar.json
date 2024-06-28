@@ -5,13 +5,13 @@
       "type": "color"
     },
     "dark": {
-      "value": "{colour.surface.dark}",
+      "value": "{colour.surface-brand.dark}",
       "type": "color"
     }
   },
-  "NavBar-link-colour": {
+  "NavBar-item-text-colour": {
     "light": {
-      "value": "{colour.onPrimary.light}",
+      "value": "{colour.onSurface.light}",
       "type": "color"
     },
     "dark": {
@@ -23,23 +23,33 @@
     "value": "{typography.body}",
     "type": "typography"
   },
-  "NavBar-bell-icon-colour": {
+  "NavBar-icon-colour": {
     "light": {
-      "value": "{colour.onPrimary.light}",
-      "type": "color"
-    },
-    "dark": {
-      "value": "{colour.primary.dark}",
-      "type": "color"
-    }
-  },
-  "NavBar-chevron-icon-colour": {
-    "light": {
-      "value": "{colour.onPrimary.light}",
+      "value": "{colour.onSurface.light}",
       "type": "color"
     },
     "dark": {
       "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "NavBar-link-hover-colour": {
+    "light": {
+      "value": "{colour.primary-hover.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary-hover.dark}",
+      "type": "color"
+    }
+  },
+  "NavBar-item-bg-hover-colour": {
+    "light": {
+      "value": "{colour.surface-container.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface-container.dark}",
       "type": "color"
     }
   }

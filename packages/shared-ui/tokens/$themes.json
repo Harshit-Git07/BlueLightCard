@@ -2,11 +2,9 @@
   {
     "id": "17eda2c4053a5a1a1b5266e58acd327223ff21b0",
     "name": "BLC",
-    "$figmaStyleReferences": {},
     "selectedTokenSets": {
       "Global": "enabled",
       "Semantic/BLC": "enabled",
-      "Semantic/Surface": "enabled",
       "Semantic/System": "enabled",
       "Hybrid-Components/BannerCarousel": "enabled",
       "Hybrid-Components/Heading": "enabled",
@@ -19,17 +17,21 @@
       "Web-Components/Footer": "enabled",
       "Hybrid-Components/HybridCard": "enabled",
       "Shared-Components/Badge": "enabled",
-      "Web-Components/NavBar": "enabled"
-    }
+      "Web-Components/NavBar": "enabled",
+      "Shared-Components/Pill": "enabled",
+      "Web-Components/DropDownItem": "enabled",
+      "Web-Components/DropDownList": "enabled",
+      "Semantic/SurfaceNeutral": "enabled",
+      "Shared-Components/Logo": "enabled"
+    },
+    "$figmaStyleReferences": {}
   },
   {
     "id": "80426cc1a9ea663473c4706167de67553ea8e574",
     "name": "DDS",
-    "$figmaStyleReferences": {},
     "selectedTokenSets": {
       "Global": "enabled",
       "Semantic/DDS": "enabled",
-      "Semantic/Surface": "enabled",
       "Semantic/System": "enabled",
       "Hybrid-Components/BannerCarousel": "enabled",
       "Hybrid-Components/Heading": "enabled",
@@ -42,7 +44,13 @@
       "Web-Components/Footer": "enabled",
       "Hybrid-Components/HybridCard": "enabled",
       "Shared-Components/Badge": "enabled",
-      "Web-Components/NavBar": "enabled"
-    }
+      "Web-Components/NavBar": "enabled",
+      "Shared-Components/Pill": "enabled",
+      "Web-Components/DropDownItem": "enabled",
+      "Web-Components/DropDownList": "enabled",
+      "Semantic/SurfaceNeutral": "enabled",
+      "Shared-Components/Logo": "enabled"
+    },
+    "$figmaStyleReferences": {}
   }
 ]

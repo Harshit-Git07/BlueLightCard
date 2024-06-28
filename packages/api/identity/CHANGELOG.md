@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.80.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.79.0...bluelightcard/identity-v1.80.0) (2024-06-28)
+
+
+### Features
+
+* Send config param to include dynamic value in email template for rese… ([#1658](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1658)) ([eb6cb93](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eb6cb93f1a3fdd165c73caaefae7adb6af4f54ca))
+
 ## [1.79.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.78.0...bluelightcard/identity-v1.79.0) (2024-06-25)
 
 

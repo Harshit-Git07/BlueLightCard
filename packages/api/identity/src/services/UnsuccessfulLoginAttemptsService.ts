@@ -38,10 +38,13 @@ export class UnsuccessfulLoginAttemptsService {
   }
 
   public async sendEmailtoUser(emailAddress: string, resetPasswordApiUrl: string, 
-                                apiAuthoriserUserBlc: string, apiAuthoriserPasswordBlc: string): Promise<any> {
+                                apiAuthoriserUserBlc: string, apiAuthoriserPasswordBlc: string,
+                              wrongPasswordLimit: string, wrongPasswordTriggerMinutes: string): Promise<any> {
     let formdata = new FormData();
     formdata.append('email', btoa(emailAddress));
     formdata.append('manual_trigger','true');
+    formdata.append('unsuccessfulAttemptsCount',wrongPasswordLimit);
+    formdata.append('passwordResetTriggerMinutes',wrongPasswordTriggerMinutes);
 
     const response = await fetch(
       resetPasswordApiUrl,

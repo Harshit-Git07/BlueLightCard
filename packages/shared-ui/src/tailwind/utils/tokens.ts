@@ -72,6 +72,12 @@ export function tsTypographyTransformer(token: TransformedToken) {
         break;
       case 'fontSize': {
         const tokenValue = String(transformed[tokenValueKey]);
+
+        // check to see if any aliases have been converted to rem's, if so we can skip the conversion for this token
+        if (tokenValue.endsWith('rem')) {
+          break;
+        }
+
         const convert = (value: number) => `${(value / 16).toFixed(2)}rem`;
 
         transformed[tokenValueKey] = tokenValue.endsWith('px')

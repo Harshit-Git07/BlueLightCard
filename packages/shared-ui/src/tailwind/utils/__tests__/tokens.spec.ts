@@ -67,6 +67,24 @@ describe('Tokens', () => {
       expect(transformed).toEqual({ fontSize: '2.19rem' });
     });
 
+    it('should skip transform if typography subset token "fontSize" is already converted to rems', () => {
+      const transformed = tsTypographyTransformer({
+        type: 'typography',
+        name: 'font-token',
+        path: ['font-token'],
+        original: {
+          value: {},
+        },
+        filePath: '',
+        isSource: true,
+        value: {
+          fontSize: '2.19rem',
+        },
+      });
+
+      expect(transformed).toEqual({ fontSize: '2.19rem' });
+    });
+
     it('should transform typography subset token "letterSpacing" to use ems', () => {
       const transformed = tsTypographyTransformer({
         type: 'typography',

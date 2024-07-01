@@ -118,6 +118,7 @@ jobs:
           cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cloudflareAccountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageName: web
+          brandDeployments: true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   changelog:

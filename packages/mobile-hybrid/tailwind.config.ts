@@ -20,9 +20,6 @@ export default {
   presets,
   theme: {
     extend: {
-      fontFamily: {
-        sourcesans: ['var(--font-sourcesans)'],
-      },
       screens: {
         sm: '330px',
         md: '560px',

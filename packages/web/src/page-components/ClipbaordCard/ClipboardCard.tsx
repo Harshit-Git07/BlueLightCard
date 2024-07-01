@@ -1,6 +1,6 @@
 'use client';
 import { JSX } from 'react';
-import BrandLogo from '@brandasset/blclogo-blue.svg';
+import BrandLogo from '@brandasset/logo.svg';
 import { cssUtil } from '@/utils/cssUtil';
 import { ThemeColorTokens, ThemeVariant } from '@/types/theme';
 

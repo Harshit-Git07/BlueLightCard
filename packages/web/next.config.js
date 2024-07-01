@@ -1,8 +1,9 @@
 const { resolve } = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { BRAND } = require('./global-vars');
 const { existsSync } = require('fs');
+
+const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
 
 const assetsFolder = resolve(__dirname, `./assets`);
 const brandAssetFolder = resolve(__dirname, `./assets/brands/${BRAND}`);

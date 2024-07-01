@@ -1,7 +1,13 @@
-import { DefinePlugin } from 'webpack';
+import 'dotenv/config';
 
-const { resolve } = require('path');
-const { BRAND } = require('../global-vars');
+import { DefinePlugin } from 'webpack';
+import { existsSync } from 'fs';
+import { resolve } from 'path';
+
+const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
+
+const brandAssetFolder = resolve(__dirname, `../assets/brands/${BRAND}`);
+
 module.exports = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -48,7 +54,9 @@ module.exports = {
     fileLoaderRule.exclude = /\.svg$/i;
     config.resolve.alias = {
       '@assets': resolve(__dirname, '../assets/'),
-      '@brandasset': resolve(__dirname, `../assets/brands/${BRAND}`),
+      '@brandasset': !existsSync(brandAssetFolder)
+        ? resolve(__dirname, '../assets')
+        : brandAssetFolder,
       '@/components': resolve(__dirname, '../src/common/components'),
       '@/components/offers': resolve(__dirname, '../src/offers/components'),
       '@/hooks': resolve(__dirname, '../src/common/hooks'),

@@ -105,7 +105,7 @@ const ResponsiveOfferCard: FC<Props> = ({
         />
       )}
       <p
-        className={`font-['MuseoSans'] text-[#202125] line-clamp-2 ${
+        className={`font-['MuseoSans'] font-museo text-[#202125] line-clamp-2 ${
           variant === 'vertical'
             ? 'mt-2 text-xl laptop:text-2xl font-semibold'
             : 'mt-0.5 text-base font-regular justify-self-start self-end'

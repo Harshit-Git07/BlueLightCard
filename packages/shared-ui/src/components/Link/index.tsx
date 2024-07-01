@@ -21,7 +21,7 @@ const Link: FC<Props> = ({ useLegacyRouting = true, href, children, onClickLink,
   } else if (onClickLink && !href) {
     return (
       <div
-        className="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-[#001B80] my-1"
+        className="font-['MuseoSans'] font-museo text-xs font-semibold cursor-pointer text-[#001B80] my-1"
         data-testid="on-click-link"
         onClick={onClickLink}
       >

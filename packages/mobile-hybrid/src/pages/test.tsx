@@ -5,6 +5,7 @@ import FilterPanel from '@/modules/filterpanel';
 import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 import { spinner } from '@/modules/Spinner/store';
+import { Badge } from '@bluelightcard/shared-ui';
 
 const TestPage: NextPage<any> = () => {
   const setSpinner = useSetAtom(spinner);
@@ -20,6 +21,7 @@ const TestPage: NextPage<any> = () => {
         <meta name="description" />
       </Head>
       <SearchModule placeholder="Search for offers" />
+      <Badge label="Online" color="bg-[#BCA5F7]" size="small" />
       {/* <BrowseCategories /> */}
       <FilterPanel />
     </div>

@@ -1,4 +1,4 @@
-const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
+const BRAND = process.env.NEXT_PUBLIC_APP_BRAND || 'blc-uk';
 const LEGACY_MICROSERVICE_BRAND = process.env.NEXT_PUBLIC_APP_MICROSERVICE_BRAND ?? 'BLC';
 const REGION = process.env.NEXT_PUBLIC_APP_REGION ?? 'GB';
 const DEFAULT_LANG = process.env.NEXT_PUBLIC_APP_LANG ?? 'en';

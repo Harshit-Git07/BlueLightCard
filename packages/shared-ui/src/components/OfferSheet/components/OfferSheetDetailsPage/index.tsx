@@ -82,17 +82,13 @@ const OfferSheetDetailsPage: FC = () => {
     if (redeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
-          logCodeClicked(events.USE_CODE_CLICKED);
-          if (!isRedeemDataErrorResponse(redeemData.data)) {
-            copyCodeAndRedirect(
-              redeemData.data.redemptionDetails.code,
-              redeemData.data.redemptionDetails.url,
-            );
-          }
-          break;
         case 'vault':
         case 'preApplied':
-          logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
+          logCodeClicked(
+            redemptionType === 'vault'
+              ? events.VAULT_CODE_USE_CODE_CLICKED
+              : events.USE_CODE_CLICKED,
+          );
           if (!isRedeemDataErrorResponse(redeemData.data)) {
             copyCodeAndRedirect(
               redeemData.data.redemptionDetails.code,

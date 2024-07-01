@@ -82,7 +82,7 @@ const Navigation: FC<NavigationProps> = ({
               aria-label="Link to Blue Light Card home page"
             >
               <div className="text-palette-primary-base dark:text-palette-primary-dark ">
-                <BrandLogo className=" mobile:w-[160px] mobile:h-[28px] tablet:w-[226px] tablet:h-[40px]" />
+                <BrandLogo className="fill-onPrimary mobile:w-[160px] mobile:h-[28px] tablet:w-[226px] tablet:h-[40px]" />
               </div>
             </a>
           </div>

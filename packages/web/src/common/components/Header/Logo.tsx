@@ -15,7 +15,7 @@ const Logo: React.FC<LogoProps> = ({ url = '/', className }) => {
       data-testid="brandLogo"
       aria-label="Navigate Home"
     >
-      <BrandLogo alt="Navigate Home" />
+      <BrandLogo className="fill-colour-onPrimary" alt="Navigate Home" />
     </Link>
   );
 };

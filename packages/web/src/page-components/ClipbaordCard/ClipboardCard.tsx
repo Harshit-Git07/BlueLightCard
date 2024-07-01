@@ -55,7 +55,7 @@ export const ClipboardCard = ({
       <div className={'flex flex-row justify-center items-center'}>
         <BrandLogo
           className={
-            'flex flex-col justify-center text-palette-primary-base dark:text-palette-primary-dark'
+            'fill-colour-onPrimary flex flex-col justify-center text-palette-primary-base dark:text-palette-primary-dark'
           }
         />
       </div>

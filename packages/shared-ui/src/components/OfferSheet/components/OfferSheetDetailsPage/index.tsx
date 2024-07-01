@@ -210,8 +210,8 @@ const OfferSheetDetailsPage: FC = () => {
     switch (redemptionType) {
       case 'generic':
         primaryButtonTextValue = 'Copy discount code';
-        secondaryButtonTextValue = 'Continue to partner website';
-        secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
+        secondaryButtonTextValue = 'Code copied!';
+        secondaryButtonSubtextValue = 'Redirecting to partner website';
         break;
       case 'vault':
         primaryButtonTextValue = 'Copy discount code';
@@ -220,7 +220,7 @@ const OfferSheetDetailsPage: FC = () => {
         break;
       case 'preApplied':
         primaryButtonTextValue = 'Get discount';
-        secondaryButtonTextValue = 'No code needed';
+        secondaryButtonTextValue = 'No code needed!';
         secondaryButtonSubtextValue = 'Special pricing applied on partner site';
         break;
       // TODO: Implement this page
@@ -325,7 +325,7 @@ const OfferSheetDetailsPage: FC = () => {
   function getWebSecondaryButtonText() {
     switch (redemptionType) {
       case 'preApplied':
-        return 'No code needed';
+        return 'No code needed!';
       default:
         return 'Continue to partner website';
     }

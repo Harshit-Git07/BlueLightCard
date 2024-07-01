@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.22.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.22.0...bluelightcard/mobile-hybrid-v1.22.1) (2024-07-01)
+
+
+### Bug Fixes
+
+* Added redemption type feature flag keys to mobile-hybrid ([63ba16b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63ba16b63150aada35e74d7bd30681d8a9338790))
+* TO-883 Change "Back" button company hybrid - Now "navigation.navigate" ([#1646](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1646)) ([1c00f00](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1c00f0096d686cb538458c27fffc721f3662a4c0))
+
+
+### Other Changes
+
+* disco 291 spike use typography tokens in tailwind ([#1649](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1649)) ([5b28bcf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b28bcf3dc9e0d43b21c81d6d6d8cdecba362080))
+* globalisation changes ([#1676](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1676)) ([7280e33](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7280e332335d7575ed3c3b9f125ba05d96172de3))
+
 ## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.21.0...bluelightcard/mobile-hybrid-v1.22.0) (2024-06-24)
 
 

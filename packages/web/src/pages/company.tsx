@@ -241,7 +241,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         )}
 
         {/* Filters */}
-        <div className="py-6 flex gap-3">
+        <div className="py-6 flex gap-3 overflow-x-auto">
           {filterArray.map((pillType, index) => {
             return (
               <div key={index}>

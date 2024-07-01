@@ -257,3 +257,5 @@ npm update -w packages/shared-ui
 This will make sure the packages and the dependencies are up to date, and will update your lockfile.
 
 Then commit and push up the lockfile, and this should fix this error.
+
+.

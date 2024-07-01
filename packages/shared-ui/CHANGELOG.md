@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.5.0...shared-ui-v1.5.1) (2024-07-01)
+
+
+### Bug Fixes
+
+* fix bug with already converted font size ([#1683](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1683)) ([1b424f1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1b424f136a3f0af3f148e65322d3c98e7a0655f7))
+* Updated readme to trigger web/shared chore ([#1687](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1687)) ([8dd4f15](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8dd4f1591f77a96ed2d095a7d9eacd99cdfda388))
+
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.4.0...shared-ui-v1.5.0) (2024-07-01)
 
 

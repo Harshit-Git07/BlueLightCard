@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.61.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.60.1...bluelightcard/web-v1.61.0) (2024-07-01)
+
+
+### Features
+
+* [DISCO-410] Add offers brand variable to ensure correct brand used in Australia ([#1644](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1644)) ([dde0bb6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dde0bb6f74ad3701ce03e029640bedf44a7ba80c))
+
+
+### Bug Fixes
+
+* decrease margin around campaign cards on company page ([#1655](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1655)) ([aeb1da1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aeb1da13b011a2e45038e59b4e2b24c9e1c243c9))
+* ensure back button takes user to members-home ([#1663](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1663)) ([231e666](https://github.com/bluelightcard/BlueLightCard-2.0/commit/231e666c8bdb692b29f293c8c221e290f635b403))
+* Fix/modified deep link for share button on modern company page ([#1651](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1651)) ([f395246](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f3952469207c69c8310e186649d85ce504604527))
+
+
+### Other Changes
+
+* disco 291 spike use typography tokens in tailwind ([#1649](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1649)) ([5b28bcf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b28bcf3dc9e0d43b21c81d6d6d8cdecba362080))
+* globalisation changes ([#1676](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1676)) ([7280e33](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7280e332335d7575ed3c3b9f125ba05d96172de3))
+
 ## [1.60.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.60.0...bluelightcard/web-v1.60.1) (2024-06-24)
 
 

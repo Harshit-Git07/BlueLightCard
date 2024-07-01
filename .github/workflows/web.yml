@@ -152,6 +152,7 @@ jobs:
             datadog_app_id: 'DATADOG_BLC_UK_APP_ID'
             datadog_client_token: 'DATADOG_BLC_UK_CLIENT_TOKEN'
             datadog_default_service: 'web'
+            amplitude_deployment_key: 'BLC_UK_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'BLC_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
             region: 'eu-west-2'
@@ -162,6 +163,7 @@ jobs:
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
             identity_api_url: 'https://staging-identity-au.blcshine.io'
+            amplitude_deployment_key: 'BLC_AU_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'BLC_AU_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_AU_COGNITO_CLIENT_SECRET'
             region: 'ap-southeast-2'
@@ -172,6 +174,7 @@ jobs:
             identity_brand: 'dds_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
             identity_api_url: 'https://staging-identity-dds.blcshine.io'
+            amplitude_deployment_key: 'DDS_UK_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
             region: 'eu-west-2'
@@ -187,7 +190,7 @@ jobs:
       - changelog
     env:
       NEXT_PUBLIC_API_PROXY_URL: https://staging-api.bluelightcard.workers.dev
-      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
+      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.[matrix.amplitude_deployment_key] }}
       NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
       NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}
@@ -248,6 +251,7 @@ jobs:
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
             identity_api_url: 'https://identity.blcshine.io'
             region: 'eu-west-2'
+            amplitude_deployment_key: 'BLC_UK_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'BLC_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
             offers_graphql_endpoint: 'https://27d2m22mtvac5cvilrvb7kviyi.appsync-api.eu-west-2.amazonaws.com/graphql'
@@ -258,6 +262,7 @@ jobs:
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
             identity_api_url: 'https://identity-au.blcshine.io'
             region: 'ap-southeast-2'
+            amplitude_deployment_key: 'BLC_AU_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'BLC_AU_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_AU_COGNITO_CLIENT_SECRET'
             offers_graphql_endpoint: 'https://rbwzvcibffepbhnfndd5xam6l4.appsync-api.ap-southeast-2.amazonaws.com/graphql'
@@ -268,6 +273,7 @@ jobs:
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
             identity_api_url: 'https://identity-dds.blcshine.io'
             region: 'eu-west-2'
+            amplitude_deployment_key: 'DDS_UK_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
             offers_graphql_endpoint: '' #TODO: Add once DDS Offers stack deployed in AWS
@@ -284,7 +290,7 @@ jobs:
       - staging
     env:
       NEXT_PUBLIC_API_PROXY_URL: https://api.bluelightcard.workers.dev
-      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
+      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.[matrix.amplitude_deployment_key] }}
       NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
       NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}

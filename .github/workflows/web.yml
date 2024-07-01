@@ -190,8 +190,8 @@ jobs:
       - changelog
     env:
       NEXT_PUBLIC_API_PROXY_URL: https://staging-api.bluelightcard.workers.dev
-      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.[matrix.amplitude_deployment_key] }}
-      NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
+      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
+      NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets[matrix.amplitude_deployment_key] }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
       NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}
       NEXT_PUBLIC_OFFERS_BRAND: ${{matrix.offers_brand}}
@@ -290,8 +290,8 @@ jobs:
       - staging
     env:
       NEXT_PUBLIC_API_PROXY_URL: https://api.bluelightcard.workers.dev
-      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.[matrix.amplitude_deployment_key] }}
-      NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
+      NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
+      NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets[matrix.amplitude_deployment_key] }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
       NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}
       NEXT_PUBLIC_OFFERS_BRAND: ${{matrix.offers_brand}}

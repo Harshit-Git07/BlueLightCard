@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.61.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.61.0...bluelightcard/web-v1.61.1) (2024-07-01)
+
+
+### Bug Fixes
+
+* adds verify-logo to dds brand for now to fix pipelines ([#1682](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1682)) ([90f36fd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/90f36fd571bd67a66031a03005c722389dfab77d))
+* Updated readme to trigger web/shared chore ([#1687](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1687)) ([8dd4f15](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8dd4f1591f77a96ed2d095a7d9eacd99cdfda388))
+
 ## [1.61.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.60.1...bluelightcard/web-v1.61.0) (2024-07-01)
 
 

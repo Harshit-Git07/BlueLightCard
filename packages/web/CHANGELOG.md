@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.62.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.61.1...bluelightcard/web-v1.62.0) (2024-07-02)
+
+
+### Features
+
+* DISCO-403 Updated search to use PHP for Aus ([#1652](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1652)) ([faa0a2c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/faa0a2c3ec68e222796ccddefcd1eff6dfb4ca05))
+
+
+### Bug Fixes
+
+* adds link in offer cards for accessibility ([#1678](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1678)) ([2dff195](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2dff1953191473d5c43980aefc0c39c089e42e43))
+* Fix/to 782 share link modifications for app 2 ([#1679](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1679)) ([03dd055](https://github.com/bluelightcard/BlueLightCard-2.0/commit/03dd0557f5b387f48745cfc7b2e52c67f9fdde24))
+* For deep link for the 'share' CTA on the offer sheet ([03dd055](https://github.com/bluelightcard/BlueLightCard-2.0/commit/03dd0557f5b387f48745cfc7b2e52c67f9fdde24))
+* logo colour ([#1694](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1694)) ([ad9e4e5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ad9e4e53a196a9a266bbd78344aa8c7de561a5f9))
+* sets overflow-x-auto so we can scroll through the filters ([#1689](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1689)) ([2634e49](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2634e49d34bdfe87c02c9b834d6dab871d086f01))
+* Updated env with hardcoded brand url for now.  ([#1704](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1704)) ([e93382b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e93382b380259c7a54d5627652c8775e922f32d1))
+
 ## [1.61.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.61.0...bluelightcard/web-v1.61.1) (2024-07-01)
 
 

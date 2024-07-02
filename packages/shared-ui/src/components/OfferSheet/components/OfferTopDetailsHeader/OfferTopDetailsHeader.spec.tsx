@@ -3,7 +3,7 @@ import OfferTopDetailsHeader from '.';
 import { fireEvent, render } from '@testing-library/react';
 import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
-import { offerSheetAtom } from '../../store';
+import { OfferSheetAtom, offerSheetAtom } from '../../store';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../adapters';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
@@ -19,7 +19,11 @@ const TestProvider = ({ initialValues, children }: any) => (
   </Provider>
 );
 
-const OfferTopDetailsHeaderProvider = () => {
+type OfferTopDetailsHeaderProviderProps = {
+  value?: Partial<OfferSheetAtom>;
+};
+
+const OfferTopDetailsHeaderProvider = (props: OfferTopDetailsHeaderProviderProps) => {
   return (
     <TestProvider
       initialValues={[
@@ -42,6 +46,7 @@ const OfferTopDetailsHeaderProvider = () => {
               companyName: 'SEAT',
               offerId: '3802',
             },
+            ...props.value,
           },
         ],
       ]}
@@ -113,5 +118,32 @@ describe('smoke test', () => {
     expect(
       getByText(/must be a blue light card member in order to receive the discount\./i),
     ).toBeTruthy();
+  });
+
+  it('should display a QR code if state provides value', () => {
+    const platformAdapter = useMockPlatformAdapter();
+    const { getByRole, getByText, getByLabelText } = render(
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={platformAdapter}>
+          <OfferTopDetailsHeaderProvider value={{ qrCodeValue: '123456' }} />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
+    );
+
+    expect(getByLabelText(/QR code/i)).toBeTruthy();
+    expect(getByText(/123456/i)).toBeTruthy();
+  });
+
+  it('should not display a QR code if no value is provided', () => {
+    const platformAdapter = useMockPlatformAdapter();
+    const { queryByLabelText } = render(
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={platformAdapter}>
+          <OfferTopDetailsHeaderProvider />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
+    );
+
+    expect(queryByLabelText(/QR code/i)).toBeNull();
   });
 });

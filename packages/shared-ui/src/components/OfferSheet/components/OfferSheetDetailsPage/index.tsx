@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton from '../../../MagicButton';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
 import events from '../../../../utils/amplitude/events';
@@ -22,6 +22,7 @@ const OfferSheetDetailsPage: FC = () => {
     amplitudeEvent,
     onClose,
   } = useAtomValue(offerSheetAtom);
+  const setOfferSheetAtom = useSetAtom(offerSheetAtom);
   const platformAdapter = usePlatformAdapter();
   const [buttonClicked, setButtonClicked] = useState(false);
   const [showErrorPage, setShowErrorPage] = useState(false);
@@ -102,7 +103,12 @@ const OfferSheetDetailsPage: FC = () => {
           break;
         // TODO: Implement this page
         case 'vaultQR':
-          return <></>;
+          setOfferSheetAtom((v) => ({
+            ...v,
+            qrCodeValue: redeemData.data.redemptionDetails.code,
+          }));
+
+          break;
         default:
           return <></>;
       }
@@ -135,6 +141,13 @@ const OfferSheetDetailsPage: FC = () => {
 
     if (redeemData.statusCode == 200) {
       setWebRedeemData(redeemData);
+
+      if (redemptionType === 'vaultQR') {
+        setOfferSheetAtom((v) => ({
+          ...v,
+          qrCodeValue: redeemData.data.redemptionDetails.code,
+        }));
+      }
     } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
       handleMaxPerUserReached();
     } else {
@@ -230,6 +243,8 @@ const OfferSheetDetailsPage: FC = () => {
       // TODO: Implement this page
       case 'vaultQR':
         primaryButtonTextValue = 'Get QR code';
+        secondaryButtonTextValue = 'QR code ready';
+        secondaryButtonSubtextValue = 'Show the above code to get discount';
         break;
       default:
         primaryButtonTextValue = 'Get discount';
@@ -259,6 +274,7 @@ const OfferSheetDetailsPage: FC = () => {
               break;
             case 'generic':
             case 'preApplied':
+            case 'vaultQR':
             case 'showCard':
               logCodeClicked(events.REQUEST_CODE_CLICKED);
               break;
@@ -326,6 +342,8 @@ const OfferSheetDetailsPage: FC = () => {
     switch (redemptionType) {
       case 'preApplied':
         return 'No code needed!';
+      case 'vaultQR':
+        return 'QR code ready';
       default:
         return 'Continue to partner website';
     }
@@ -335,6 +353,8 @@ const OfferSheetDetailsPage: FC = () => {
     switch (redemptionType) {
       case 'preApplied':
         return 'Special pricing applied on partner site';
+      case 'vaultQR':
+        return 'Show the above code to get discount';
       default:
         return 'Code will be copied - paste it at checkout';
     }

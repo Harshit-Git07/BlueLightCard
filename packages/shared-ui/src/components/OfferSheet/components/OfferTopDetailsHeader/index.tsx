@@ -1,10 +1,10 @@
 import Image from '../../../Image';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import Heading from '../../../Heading';
 import { useAtomValue } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import Button from '../../../Button';
-import { ThemeVariant } from '../../../../types';
+import { PlatformVariant, ThemeVariant } from '../../../../types';
 import ShareButton from '../../../ShareButton';
 import Accordion from '../../../Accordion';
 import Markdown from 'markdown-to-jsx';
@@ -12,6 +12,7 @@ import amplitudeEvents from '../../../../utils/amplitude/events';
 import { useSharedUIConfig } from '../../../../providers';
 import decodeEntities from '../../../../utils/decodeEntities';
 import { usePlatformAdapter } from '../../../../adapters';
+import QRCode from 'react-qr-code';
 
 export type Props = {
   showOfferDescription?: boolean;
@@ -26,16 +27,15 @@ const OfferTopDetailsHeader: FC<Props> = ({
   showTerms = true,
   showExclusions = true,
 }) => {
+  const adapter = usePlatformAdapter();
   const config = useSharedUIConfig();
-  const { offerDetails: offerData, offerMeta } = useAtomValue(offerSheetAtom);
+  const { offerDetails: offerData, offerMeta, qrCodeValue } = useAtomValue(offerSheetAtom);
   const [imageSource, setImageSource] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
   // TODO CDN URL could be replaced with global var?
   const finalFallbackImage = `${config.globalConfig.cdnUrl}/misc/Logo_coming_soon.jpg`;
 
-  const platform = usePlatformAdapter();
-
-  const hostname = platform.getBrandURL();
+  const hostname = adapter.getBrandURL();
 
   const handleSeeMore = () => {
     setExpanded(!expanded);
@@ -49,7 +49,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
       const imageUrl = `${config.globalConfig.cdnUrl}/companyimages/complarge/retina/${offerData.companyId}.jpg`;
       setImageSource(imageUrl);
     }
-  }, [offerData?.companyLogo]);
+  }, [offerData?.companyLogo, offerData.companyId, config.globalConfig.cdnUrl]);
 
   return (
     <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-museo">
@@ -72,62 +72,67 @@ const OfferTopDetailsHeader: FC<Props> = ({
         <Heading headingLevel={'h2'} className={'leading-8 mt-4 !text-black'}>
           {decodeEntities(offerData.name || '')}
         </Heading>
-        {/* Offer description */}
-        {showOfferDescription && (
-          <>
-            <p
-              className={`text-base font-light font-museo leading-5 mt-2 text-black ${
-                offerData.description && offerData.description.length > 300 && !expanded
-                  ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
-                  : ''
-              }`}
-            >
-              {decodeEntities(offerData.description || '')}
-            </p>
 
-            {/* Show more/less button for description */}
-            {offerData.description && offerData.description.length > 300 && (
-              <Button
-                variant={ThemeVariant.Tertiary}
-                slim
-                withoutHover
-                className="w-fit"
-                onClick={handleSeeMore}
-                borderless
+        {/* Offer description */}
+        {showOfferDescription &&
+          !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
+            <>
+              <p
+                className={`text-base font-light font-museo leading-5 mt-2 text-black ${
+                  offerData.description && offerData.description.length > 300 && !expanded
+                    ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
+                    : ''
+                }`}
               >
-                {expanded ? 'See less' : 'See more...'}
-              </Button>
-            )}
-          </>
-        )}
+                {decodeEntities(offerData.description || '')}
+              </p>
+
+              {/* Show more/less button for description */}
+              {offerData.description && offerData.description.length > 300 && (
+                <Button
+                  variant={ThemeVariant.Tertiary}
+                  slim
+                  withoutHover
+                  className="w-fit"
+                  onClick={handleSeeMore}
+                  borderless
+                >
+                  {expanded ? 'See less' : 'See more...'}
+                </Button>
+              )}
+            </>
+          )}
 
         {/* Share & Favorite */}
-        {showShareFavorite && (
-          <div className="flex flex-wrap justify-center mt-4">
-            <ShareButton
-              {...{
-                shareDetails: {
-                  name: offerData.name,
-                  description: offerData.description,
-                  url: `${
-                    typeof window !== 'undefined' ? `${window.location.protocol}//${hostname}` : ''
-                  }/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
-                },
-                shareLabel: 'Share offer',
-                amplitudeDetails: {
-                  event: amplitudeEvents.OFFER_SHARE_CLICKED,
-                  params: {
-                    company_id: offerMeta.companyId,
-                    company_name: offerMeta.companyName,
-                    offer_id: offerMeta.offerId,
-                    offer_name: offerData.name,
-                    brand: config.globalConfig.brand,
+        {showShareFavorite &&
+          !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
+            <div className="flex flex-wrap justify-center mt-4">
+              <ShareButton
+                {...{
+                  shareDetails: {
+                    name: offerData.name,
+                    description: offerData.description,
+                    url: `${
+                      typeof window !== 'undefined'
+                        ? `${window.location.protocol}//${hostname}`
+                        : ''
+                    }/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
                   },
-                },
-              }}
-            />
-          </div>
-        )}
+                  shareLabel: 'Share offer',
+                  amplitudeDetails: {
+                    event: amplitudeEvents.OFFER_SHARE_CLICKED,
+                    params: {
+                      company_id: offerMeta.companyId,
+                      company_name: offerMeta.companyName,
+                      offer_id: offerMeta.offerId,
+                      offer_name: offerData.name,
+                      brand: config.globalConfig.brand,
+                    },
+                  },
+                }}
+              />
+            </div>
+          )}
 
         {/* Exclusions */}
         {/* --- Uncomment when Exclusions API is ready --- */}
@@ -160,26 +165,35 @@ const OfferTopDetailsHeader: FC<Props> = ({
           )} */}
 
         {/* Offer Terms & Conditions */}
-        {showTerms && offerData.terms && (
-          <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
-            <Accordion
-              title="Terms & Conditions"
-              amplitudeDetails={{
-                event: amplitudeEvents.OFFER_TERMS_CLICKED,
-                params: {
-                  company_id: offerMeta.companyId,
-                  company_name: offerMeta.companyName,
-                  offer_id: offerMeta.offerId,
-                  offer_name: offerData.name,
-                  brand: config.globalConfig.brand,
-                },
-              }}
-            >
-              <Markdown>{offerData.terms}</Markdown>
-            </Accordion>
-          </div>
-        )}
+        {showTerms &&
+          offerData.terms &&
+          !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
+            <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
+              <Accordion
+                title="Terms & Conditions"
+                amplitudeDetails={{
+                  event: amplitudeEvents.OFFER_TERMS_CLICKED,
+                  params: {
+                    company_id: offerMeta.companyId,
+                    company_name: offerMeta.companyName,
+                    offer_id: offerMeta.offerId,
+                    offer_name: offerData.name,
+                    brand: config.globalConfig.brand,
+                  },
+                }}
+              >
+                <Markdown>{offerData.terms}</Markdown>
+              </Accordion>
+            </div>
+          )}
       </div>
+
+      {qrCodeValue && (
+        <div className={'transition-all flex items-center flex-col p-12'}>
+          <QRCode value={qrCodeValue} size={200} aria-label="QR code" />
+          <h1 className="text-2xl font-bold tracking-[0.2em] pt-4 pb-2">{qrCodeValue}</h1>
+        </div>
+      )}
 
       {/* --- Uncomment when Exclusions API is ready ---
         <OfferExclusions

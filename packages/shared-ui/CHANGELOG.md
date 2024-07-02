@@ -2,40 +2,36 @@
 
 ## [1.5.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.5.0...shared-ui-v1.5.1) (2024-07-01)
 
-
 ### Bug Fixes
 
-* fix bug with already converted font size ([#1683](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1683)) ([1b424f1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1b424f136a3f0af3f148e65322d3c98e7a0655f7))
-* Updated readme to trigger web/shared chore ([#1687](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1687)) ([8dd4f15](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8dd4f1591f77a96ed2d095a7d9eacd99cdfda388))
+- fix bug with already converted font size ([#1683](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1683)) ([1b424f1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1b424f136a3f0af3f148e65322d3c98e7a0655f7))
+- Updated readme to trigger web/shared chore ([#1687](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1687)) ([8dd4f15](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8dd4f1591f77a96ed2d095a7d9eacd99cdfda388))
 
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.4.0...shared-ui-v1.5.0) (2024-07-01)
 
-
 ### Features
 
-* adds feature flags check for preApplied, showCard and vaultQR ([#1629](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1629)) ([557bc22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/557bc22c18b033847c6b302bca3214cd0762db9c))
-* implements OfferSheet flow for showCard with single button click and button copy ([#1662](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1662)) ([dd895f0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd895f0c959dd62def5602063f26bcfd726ddba5))
-* TO-776 Create Amplitude events for Shared-UI ([#1591](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1591)) ([9bef4ee](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9bef4eefad788dce51dc13eb56e84258792e626c))
-* TO-869 implement offer sheet for pre applied discount offers ([#1631](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1631)) ([fc4fa6a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fc4fa6aef2a918cca8d346af2c3bf5e7d1fe3c80))
-
+- adds feature flags check for preApplied, showCard and vaultQR ([#1629](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1629)) ([557bc22](https://github.com/bluelightcard/BlueLightCard-2.0/commit/557bc22c18b033847c6b302bca3214cd0762db9c))
+- implements OfferSheet flow for showCard with single button click and button copy ([#1662](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1662)) ([dd895f0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd895f0c959dd62def5602063f26bcfd726ddba5))
+- TO-776 Create Amplitude events for Shared-UI ([#1591](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1591)) ([9bef4ee](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9bef4eefad788dce51dc13eb56e84258792e626c))
+- TO-869 implement offer sheet for pre applied discount offers ([#1631](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1631)) ([fc4fa6a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fc4fa6aef2a918cca8d346af2c3bf5e7d1fe3c80))
 
 ### Bug Fixes
 
-* added forward slash to base url for ShareButton component ([63db07c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63db07ccfa7acd3444866ce4ab5b8ca082654fd1))
-* ensure preApplied offer on mobile sends correct event ([#1670](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1670)) ([451d702](https://github.com/bluelightcard/BlueLightCard-2.0/commit/451d70259caa3e43286fa2d97db40855a371eaf0))
-* Fix/added local port to share btn deep link ([#1653](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1653)) ([a222a17](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a222a173675de785eb09682e9586299537e7fc36))
-* TO-779 sets blue outline as important to fix yellow color on android ([#1669](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1669)) ([699f672](https://github.com/bluelightcard/BlueLightCard-2.0/commit/699f672adc73c42e8f2c6f0c93e77bbc2ac36946))
-* TO-869 small changes to correct implementation ([#1657](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1657)) ([b1d7a52](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b1d7a529a2a823d24057892fb14c17ab1c379efe))
-* TO-887 max per user reached error ([#1637](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1637)) ([2eb46a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2eb46a9e72aa1fc7056037297c4ec16fadfa957f))
-* TO-887 max per user reached error app button text ([#1641](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1641)) ([f3d5e1c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f3d5e1c63dd5c35ba0582da4e755449b94d4592a))
-* TO-901 Copy changes for non-vault redemption flows ([#1680](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1680)) ([333c333](https://github.com/bluelightcard/BlueLightCard-2.0/commit/333c333cd284d24a430f2e206474421d57a52157))
-
+- added forward slash to base url for ShareButton component ([63db07c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/63db07ccfa7acd3444866ce4ab5b8ca082654fd1))
+- ensure preApplied offer on mobile sends correct event ([#1670](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1670)) ([451d702](https://github.com/bluelightcard/BlueLightCard-2.0/commit/451d70259caa3e43286fa2d97db40855a371eaf0))
+- Fix/added local port to share btn deep link ([#1653](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1653)) ([a222a17](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a222a173675de785eb09682e9586299537e7fc36))
+- TO-779 sets blue outline as important to fix yellow color on android ([#1669](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1669)) ([699f672](https://github.com/bluelightcard/BlueLightCard-2.0/commit/699f672adc73c42e8f2c6f0c93e77bbc2ac36946))
+- TO-869 small changes to correct implementation ([#1657](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1657)) ([b1d7a52](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b1d7a529a2a823d24057892fb14c17ab1c379efe))
+- TO-887 max per user reached error ([#1637](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1637)) ([2eb46a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2eb46a9e72aa1fc7056037297c4ec16fadfa957f))
+- TO-887 max per user reached error app button text ([#1641](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1641)) ([f3d5e1c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f3d5e1c63dd5c35ba0582da4e755449b94d4592a))
+- TO-901 Copy changes for non-vault redemption flows ([#1680](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1680)) ([333c333](https://github.com/bluelightcard/BlueLightCard-2.0/commit/333c333cd284d24a430f2e206474421d57a52157))
 
 ### Other Changes
 
-* cleans unnecessary comment from code ([#1668](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1668)) ([5b84f81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b84f81b1898ac7359d8fdd965453219474421f4))
-* disco 291 spike use typography tokens in tailwind ([#1649](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1649)) ([5b28bcf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b28bcf3dc9e0d43b21c81d6d6d8cdecba362080))
-* globalisation changes ([#1676](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1676)) ([7280e33](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7280e332335d7575ed3c3b9f125ba05d96172de3))
+- cleans unnecessary comment from code ([#1668](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1668)) ([5b84f81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b84f81b1898ac7359d8fdd965453219474421f4))
+- disco 291 spike use typography tokens in tailwind ([#1649](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1649)) ([5b28bcf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b28bcf3dc9e0d43b21c81d6d6d8cdecba362080))
+- globalisation changes ([#1676](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1676)) ([7280e33](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7280e332335d7575ed3c3b9f125ba05d96172de3))
 
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.3.0...shared-ui-v1.4.0) (2024-06-19)
 

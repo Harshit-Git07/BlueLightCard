@@ -8,7 +8,7 @@ import { exhaustiveCheck } from '../../../../utils/exhaustiveCheck';
 import { useOfferDetails } from '../../../../hooks/useOfferDetails';
 import { OfferDetails } from '../../types';
 
-const OfferSheetControler: FC = () => {
+const OfferSheetController: FC = () => {
   const { offerDetails, showRedemptionPage, offerMeta } = useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
   const offerQuery = useOfferDetails({
@@ -46,4 +46,4 @@ const OfferSheetControler: FC = () => {
   }
 };
 
-export default OfferSheetControler;
+export default OfferSheetController;

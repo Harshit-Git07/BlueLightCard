@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
-import { AmplitudeArg, AmplitudeEvent, PlatformVariant } from '../../types';
-import { OfferDetails, OfferMeta, RedemptionType } from './types';
+import { type AmplitudeArg, type AmplitudeEvent, PlatformVariant } from '../../types';
+import type { OfferDetails, OfferMeta, RedemptionType } from './types';
 
 export const initializeOfferSheetAtom = () => {
   return {
@@ -14,6 +14,7 @@ export const initializeOfferSheetAtom = () => {
     amplitudeEvent: ((arg: AmplitudeArg) => {}) as AmplitudeEvent | null,
     redemptionType: '' as RedemptionType | undefined,
     responsiveWeb: false as boolean | undefined,
+    qrCodeValue: undefined as string | undefined,
   };
 };
 

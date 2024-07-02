@@ -21,6 +21,7 @@ import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
+import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config'
 import { userEmailUpdatedRule } from './src/eventRules/userEmailUpdated';
 
 export function Identity({ stack }: StackContext) {
@@ -32,6 +33,8 @@ export function Identity({ stack }: StackContext) {
 
   //Region
   const region = stack.region;
+
+  const globalConfig = GlobalConfigResolver.for(stack.stage);
 
   const unsuccessfulLoginAttemptsTable = new UnsuccessfulLoginAttemptsTables(stack);
 
@@ -120,6 +123,7 @@ export function Identity({ stack }: StackContext) {
     },
     cdk: {
       restApi: {
+        endpointTypes: globalConfig.apiGatewayEndpointTypes,
         ...([STAGES.PRODUCTION, STAGES.STAGING].includes(stack.stage as STAGES) &&
           certificateArn && {
             domainName: {

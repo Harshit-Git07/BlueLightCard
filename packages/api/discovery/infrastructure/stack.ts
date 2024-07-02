@@ -1,6 +1,7 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
 
+import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { Identity } from '@blc-mono/identity/stack';
@@ -17,6 +18,7 @@ export async function Discovery({ stack, app }: StackContext) {
   stack.tags.setTag('service', 'discovery');
 
   const config = DiscoveryStackConfigResolver.for(stack, app.region as DiscoveryStackRegion);
+  const globalConfig = GlobalConfigResolver.for(stack.stage);
 
   stack.setDefaultFunctionProps({
     timeout: 20,
@@ -44,6 +46,7 @@ export async function Discovery({ stack, app }: StackContext) {
         deployOptions: {
           stageName: 'v1',
         },
+        endpointTypes: globalConfig.apiGatewayEndpointTypes,
         defaultCorsPreflightOptions: {
           allowOrigins: config.apiDefaultAllowedOrigins,
           allowHeaders: ['*'],

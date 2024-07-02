@@ -2,6 +2,7 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1Api, Config, StackContext, use } from 'sst/constructs';
 
+import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
@@ -38,6 +39,7 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   // Config
   const config = RedemptionsStackConfigResolver.for(stack);
+  const globalConfig = GlobalConfigResolver.for(stack.stage);
 
   stack.setDefaultFunctionProps({
     timeout: 20,
@@ -58,6 +60,7 @@ export async function Redemptions({ app, stack }: StackContext) {
     },
     cdk: {
       restApi: {
+        endpointTypes: globalConfig.apiGatewayEndpointTypes,
         ...(['production', 'staging'].includes(stack.stage) &&
           certificateArn && {
             domainName: {

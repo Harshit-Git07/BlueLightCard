@@ -151,6 +151,7 @@ const OfferSheetDetailsPage: FC = () => {
 
       switch (redemptionType) {
         case 'generic':
+        case 'vault':
           if (!isRedeemDataErrorResponse(webRedeemData.data)) {
             if (webRedeemData.data.redemptionDetails.code)
               copyCode(webRedeemData.data.redemptionDetails.code);
@@ -158,7 +159,6 @@ const OfferSheetDetailsPage: FC = () => {
               handleRedirect(webRedeemData.data.redemptionDetails.url);
           }
           break;
-        case 'vault':
         case 'preApplied':
           if (
             !isRedeemDataErrorResponse(webRedeemData.data) &&

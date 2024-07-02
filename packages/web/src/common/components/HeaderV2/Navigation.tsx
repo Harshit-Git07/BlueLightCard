@@ -11,6 +11,7 @@ import DesktopNavigation from '../Header/DesktopNavigation';
 import { NavProp } from './types';
 import SearchInputField from '../SearchInputField/SearchInputField';
 import { getNavItems } from '@/data/headerConfig';
+import { getOffersBySearchTermUrl } from '../../utils/externalPageUrls';
 import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks';
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 import getDeviceFingerprint from '../../utils/amplitude/getDeviceFingerprint';
@@ -46,6 +47,11 @@ const Navigation: FC<NavProp> = ({ authenticated }) => {
   );
   const menu = authenticated ? loggedIn : loggedOut;
 
+  const onSearch = (query: string) => {
+    const searchRoute = getOffersBySearchTermUrl(query, 'serp');
+    router.push(searchRoute);
+  };
+
   return (
     <>
       <nav className="border-b border-slate-100 bg-shade-greyscale-white" data-testid="navigation">
@@ -63,7 +69,7 @@ const Navigation: FC<NavProp> = ({ authenticated }) => {
             <SearchInputField
               iconLocation={'left'}
               icon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
-              onSubmit={(query: string) => router.push(`/search?issuer=serp&q=${query}`)}
+              onSubmit={onSearch}
               prefillData={searchTerm}
             />
           </div>

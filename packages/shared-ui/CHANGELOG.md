@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.5.1...shared-ui-v1.6.0) (2024-07-02)
+
+
+### Features
+
+* TO-871 vaultqr codes in offer sheet ([#1664](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1664)) ([b842a5a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b842a5affad8286892b6a4282c722a5994da0471))
+
+
+### Bug Fixes
+
+* Fix/to 782 share link modifications for app 2 ([#1679](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1679)) ([03dd055](https://github.com/bluelightcard/BlueLightCard-2.0/commit/03dd0557f5b387f48745cfc7b2e52c67f9fdde24))
+* For deep link for the 'share' CTA on the offer sheet ([03dd055](https://github.com/bluelightcard/BlueLightCard-2.0/commit/03dd0557f5b387f48745cfc7b2e52c67f9fdde24))
+* vault codes were not being copied ([#1697](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1697)) ([2741ddb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2741ddbed18cfd9f205f53dba5eb83e517153734))
+
 ## [1.5.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.5.0...shared-ui-v1.5.1) (2024-07-01)
 
 ### Bug Fixes

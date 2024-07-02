@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.34.0...bluelightcard/offers-v1.35.0) (2024-07-02)
+
+
+### Features
+
+* [DISCO-279] Add region to banner handler lambda ([#1667](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1667)) ([2630831](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2630831f722f27f4a051397ad2d82f66595ebe53))
+
+
+### Other Changes
+
+* Adjusting API Gateway endpoint types to be regional for developers and PRs ([#1581](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1581)) ([962d759](https://github.com/bluelightcard/BlueLightCard-2.0/commit/962d75909c47bc154e74127736ece26a4ddc15bf))
+
 ## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.33.1...bluelightcard/offers-v1.34.0) (2024-06-19)
 
 

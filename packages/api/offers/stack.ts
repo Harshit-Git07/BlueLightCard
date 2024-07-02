@@ -52,7 +52,7 @@ export async function Offers({ stack, app }: StackContext) {
   const dataSources = new DataSource(offersApi.api, tables, lambdas);
   const resolvers = new Resolver(dataSources);
   resolvers.initialise();
-  new EventBridge(stack, stack.stage, tables, queues);
+  new EventBridge(stack, tables, queues);
 
   stack.addOutputs({
     [generateConstructId('OffersApiEndpoint', stack.stackName)]: offersApi.api.graphqlUrl,

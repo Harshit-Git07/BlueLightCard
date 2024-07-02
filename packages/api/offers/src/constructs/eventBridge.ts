@@ -8,13 +8,21 @@ import { Queues } from "./queues";
 export class EventBridge {
   private bus: EventBus;
 
-  constructor(private stack: Stack, private stage: string, private tables: Tables,  private queues: Queues) {
+  constructor(private stack: Stack, private tables: Tables,  private queues: Queues) {
     const { bus } = use(Shared);
     this.bus = bus;
     this.createRules();
   }
 
   private createRules() {
-    this.bus.addRules(this.stack, bannerRule(this.tables.bannersTable.tableName, this.queues.bannerDlq.cdk.queue, this.stack.stackName));
+    this.bus.addRules(
+      this.stack,
+      bannerRule(
+        this.tables.bannersTable.tableName,
+        this.queues.bannerDlq.cdk.queue,
+        this.stack.stackName,
+        this.stack.region,
+      )
+    );
   }
 }

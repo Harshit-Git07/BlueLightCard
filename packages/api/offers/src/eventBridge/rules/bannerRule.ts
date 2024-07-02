@@ -1,7 +1,7 @@
 import { IQueue } from 'aws-cdk-lib/aws-sqs';
 import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
-export const bannerRule = (tableName: string, queue: IQueue, stackName: string) => ({
+export const bannerRule = (tableName: string, queue: IQueue, stackName: string, region: string) => ({
   [`${generateConstructId('bannerRule', stackName)}`]: {
     pattern: { source: ['banner.created', 'banner.updated', 'banner.deleted'] },
     targets: {
@@ -12,6 +12,7 @@ export const bannerRule = (tableName: string, queue: IQueue, stackName: string) 
           environment: {
             SERVICE: 'offers',
             TABLE_NAME: tableName,
+            REGION: region,
             PRODUCTION_CDN_URL: 'https://cdn.bluelightcard.co.uk',
             STAGING_CDN_URL: 'https://blcimg-dev.img.bluelightcard.co.uk'
           },

@@ -77,6 +77,11 @@ const LANGUAGE = `${DEFAULT_LANG}-${REGION}`;
  */
 const BRANDS = ['blc-uk', 'blc-au', 'dds-uk'];
 
+/**
+ * URL for the current brand, used to determine the URL in the 'Share link' button
+ */
+const BRAND_URL = process.env.NEXT_PUBLIC_BRAND_URL;
+
 module.exports = {
   BRAND,
   LEGACY_MICROSERVICE_BRAND,
@@ -120,4 +125,5 @@ module.exports = {
   OFFERS_BRAND,
   BRAZE_SDK_ENDPOINT,
   BRAZE_SDK_API_KEY,
+  BRAND_URL,
 };

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.22.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.22.2...bluelightcard/mobile-hybrid-v1.22.3) (2024-07-02)
+
+
+### Bug Fixes
+
+* Fix/to 782 share link modifications for app 2 ([#1679](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1679)) ([03dd055](https://github.com/bluelightcard/BlueLightCard-2.0/commit/03dd0557f5b387f48745cfc7b2e52c67f9fdde24))
+* For deep link for the 'share' CTA on the offer sheet ([03dd055](https://github.com/bluelightcard/BlueLightCard-2.0/commit/03dd0557f5b387f48745cfc7b2e52c67f9fdde24))
+
 ## [1.22.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.22.1...bluelightcard/mobile-hybrid-v1.22.2) (2024-07-01)
 
 

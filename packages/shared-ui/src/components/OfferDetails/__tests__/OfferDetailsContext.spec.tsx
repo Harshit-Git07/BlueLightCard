@@ -1,6 +1,7 @@
 import { act, render } from '@testing-library/react';
 import { composeStories } from '@storybook/react';
 import * as stories from '../OfferDetailsContext.stories';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
 
 const { View, ShowOfferSheet, ShowOfferLink } = composeStories(stories);
 
@@ -25,7 +26,13 @@ describe('ViewOfferProvider', () => {
   });
 
   test('it renders the offer link', async () => {
-    const screen = render(<ShowOfferLink />);
+    const mockPlatformAdapter = useMockPlatformAdapter();
+
+    const screen = render(
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <ShowOfferLink />
+      </PlatformAdapterProvider>,
+    );
 
     await act(async () => {
       await ShowOfferLink.play({ canvasElement: screen.container });

@@ -12,6 +12,7 @@ import Router from 'next/router';
 import { experimentsAndFeatureFlags } from './amplitude/store';
 import { amplitudeStore } from '../context/AmplitudeExperiment';
 import { API_PROXY_URL } from '@/root/global-vars';
+import assert from 'assert';
 
 export class WebPlatformAdapter implements IPlatformAdapter {
   platform = PlatformVariant.Web;
@@ -74,5 +75,10 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
 
     return amplitudeExperiments[featureFlagName];
+  }
+
+  getBrandURL(): string {
+    assert(process.env.NEXT_PUBLIC_BRAND_URL !== undefined, 'NEXT_PUBLIC_BRAND_URL is not defined');
+    return process.env.NEXT_PUBLIC_BRAND_URL;
   }
 }

@@ -15,6 +15,7 @@ const mockPlatformAdapter = {
     isOpen: () => true,
   }),
   writeTextToClipboard: () => Promise.resolve(),
+  getBrandURL: () => 'https://bluelightcard.co.uk',
   platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;
 

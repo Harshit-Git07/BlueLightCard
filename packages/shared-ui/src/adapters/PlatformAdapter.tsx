@@ -79,6 +79,8 @@ export interface IPlatformAdapter {
    * Write text to the clipboard
    */
   writeTextToClipboard(text: string): Promise<void>;
+
+  getBrandURL(): string;
 }
 
 const PlatfromAdapterContext = createContext<IPlatformAdapter | null>(null);

@@ -11,6 +11,7 @@ import Markdown from 'markdown-to-jsx';
 import amplitudeEvents from '../../../../utils/amplitude/events';
 import { useSharedUIConfig } from '../../../../providers';
 import decodeEntities from '../../../../utils/decodeEntities';
+import { usePlatformAdapter } from '../../../../adapters';
 
 export type Props = {
   showOfferDescription?: boolean;
@@ -31,6 +32,10 @@ const OfferTopDetailsHeader: FC<Props> = ({
   const [expanded, setExpanded] = useState(false);
   // TODO CDN URL could be replaced with global var?
   const finalFallbackImage = `${config.globalConfig.cdnUrl}/misc/Logo_coming_soon.jpg`;
+
+  const platform = usePlatformAdapter();
+
+  const hostname = platform.getBrandURL();
 
   const handleSeeMore = () => {
     setExpanded(!expanded);
@@ -105,9 +110,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   name: offerData.name,
                   description: offerData.description,
                   url: `${
-                    typeof window !== 'undefined'
-                      ? `${window.location.protocol}//${window.location.hostname}${window.location.hostname === 'localhost' ? ':8080' : ''}`
-                      : ''
+                    typeof window !== 'undefined' ? `${window.location.protocol}//${hostname}` : ''
                   }/offerdetails.php?cid=${offerData.companyId}&oid=${offerData.id}`,
                 },
                 shareLabel: 'Share offer',

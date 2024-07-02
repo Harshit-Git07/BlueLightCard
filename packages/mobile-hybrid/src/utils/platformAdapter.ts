@@ -17,6 +17,7 @@ import { z } from 'zod';
 import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import assert from 'assert';
 
 const analytics = new InvokeNativeAnalytics();
 const navigation = new InvokeNativeNavigation();
@@ -107,5 +108,10 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
 
   writeTextToClipboard(text: string): Promise<void> {
     return Promise.resolve(clipboard.writeText(text));
+  }
+
+  getBrandURL(): string {
+    assert(process.env.NEXT_PUBLIC_BRAND_URL !== undefined, 'NEXT_PUBLIC_BRAND_URL is not defined');
+    return process.env.NEXT_PUBLIC_BRAND_URL;
   }
 }

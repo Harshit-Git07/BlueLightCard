@@ -12,6 +12,7 @@ export const useMockPlatformAdapter = (
   const navigate = jest.fn();
   const navigateExternal = jest.fn();
   const writeTextToClipboard = jest.fn().mockReturnValue(Promise.resolve());
+  const getBrandURL = jest.fn().mockReturnValue('https://bluelightcard.co.uk');
 
   const mockPlatformAdapter = {
     platform,
@@ -21,6 +22,7 @@ export const useMockPlatformAdapter = (
     navigate,
     navigateExternal,
     writeTextToClipboard,
+    getBrandURL,
   } satisfies IPlatformAdapter;
 
   return mockPlatformAdapter;

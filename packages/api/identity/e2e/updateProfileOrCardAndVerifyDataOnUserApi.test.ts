@@ -1,6 +1,6 @@
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { CognitoIdentityProviderClient, InitiateAuthCommand } from '@aws-sdk/client-cognito-identity-provider';
+import { CognitoIdentityProviderClient, InitiateAuthCommand, InitiateAuthCommandInput } from '@aws-sdk/client-cognito-identity-provider';
 import { createHmac } from 'crypto';
 
 import { describe, expect, test } from '@jest/globals';
@@ -65,14 +65,13 @@ async function setupTest() {
 async function loginUserAPI() {
   const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
   hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
-  const input = {
+  const input: InitiateAuthCommandInput = {
     AuthFlow : 'USER_PASSWORD_AUTH', 
     AuthParameters: {
-    USERNAME : `${process.env.E2E_USER_EMAIL}`,
-    PASSWORD : `${process.env.E2E_USER_PASS}`,
-    SECRET_HASH: `${hasher.digest('base64')}`
+      USERNAME : `${process.env.E2E_USER_EMAIL}`,
+      PASSWORD : `${process.env.E2E_USER_PASS}`,
+      SECRET_HASH: `${hasher.digest('base64')}`
     },
-    UserPoolId : `${process.env.E2E_COGNITO_USER_POOL_ID}`,
     ClientId : `${process.env.E2E_COGNITO_APP_CLIENT_ID}`
   };
 

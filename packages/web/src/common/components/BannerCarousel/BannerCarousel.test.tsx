@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import BannerCarousel from './BannerCarousel';
-import { CampaignCardProps } from '../CampaignCard/types';
+import { CampaignCardProps } from './types';
 
 const mockBanners: CampaignCardProps[] = [
   {

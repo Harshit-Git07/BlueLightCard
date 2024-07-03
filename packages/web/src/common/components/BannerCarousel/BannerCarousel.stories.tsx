@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import BannerCarousel from './BannerCarousel';
-import { CampaignCardProps } from '../CampaignCard/types';
+import { CampaignCardProps } from './types';
 
 const componentMeta: Meta = {
   title: 'Component System/BannerCarousel',

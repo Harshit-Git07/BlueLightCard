@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import CampaignCard from '.';
 
 const componentMeta: Meta<typeof CampaignCard> = {
-  title: 'Component System/Campaign Card',
+  title: 'Component System/CampaignCard',
   component: CampaignCard,
   argTypes: {},
 };

@@ -54,9 +54,12 @@ const ResponsiveOfferCard: FC<Props> = ({
   };
 
   const tagBackground: BgColorTagParser = {
-    [offerTypeParser.Online.type]: 'bg-[#BCA5F7]',
-    [offerTypeParser['In-store'].type]: 'bg-[#E9C46A]',
-    [offerTypeParser.Giftcards.type]: 'bg-[#EC779E]',
+    [offerTypeParser.Online.type]:
+      'bg-badge-online-bg-colour-light dark:bg-badge-online-bg-colour-dark',
+    [offerTypeParser['In-store'].type]:
+      'bg-badge-instore-bg-colour-light dark:bg-badge-instore-bg-colour-dark',
+    [offerTypeParser.Giftcards.type]:
+      'bg-badge-giftcard-bg-colour-light dark:bg-badge-giftcard-bg-colour-dark',
   } as const;
 
   useEffect(() => {
@@ -105,10 +108,10 @@ const ResponsiveOfferCard: FC<Props> = ({
         />
       )}
       <p
-        className={`font-['MuseoSans'] font-museo text-[#202125] line-clamp-2 ${
+        className={`font-museo text-card-description-colour-light dark:text-card-description-colour-dark line-clamp-2 ${
           variant === 'vertical'
-            ? 'mt-2 text-xl laptop:text-2xl font-semibold'
-            : 'mt-0.5 text-base font-regular justify-self-start self-end'
+            ? 'mt-2 text-card-vertical-small-text-font laptop:text-card-vertical-large-text-font'
+            : 'mt-0.5 text-card-horizontal-text-font font-regular justify-self-start self-end'
         }`}
       >
         {name}

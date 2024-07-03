@@ -8,12 +8,19 @@ const componentMeta: Meta<typeof Badge> = {
 
 const BadgeTemplate: StoryFn<typeof Badge> = (args) => <Badge {...args} />;
 
-export const Default = BadgeTemplate.bind({});
+export const Large = BadgeTemplate.bind({});
 
-Default.args = {
+Large.args = {
   label: 'Online',
-  color: 'bg-[#BCA5F7]',
+  color: 'bg-badge-online-bg-colour-light',
   size: 'large',
+};
+export const Small = BadgeTemplate.bind({});
+
+Small.args = {
+  label: 'In-store',
+  color: 'bg-badge-instore-bg-colour-light',
+  size: 'small',
 };
 
 export default componentMeta;

@@ -68,6 +68,19 @@ declare namespace NativeAnalytics {
   }
 }
 
+declare namespace NativeLifecycle {
+  function lifecycleEvent(event: string, meta?: string): void;
+
+  export abstract class Lifecycle {
+    static lifecycleEvent(event: string, meta?: string): void;
+  }
+
+  export interface Parameters {
+    message: string;
+    parameters: Record<string, any>;
+  }
+}
+
 declare namespace NativeExperiment {
   function experiment(keys: string[]): void;
 
@@ -105,7 +118,8 @@ declare type NativeCallParameters =
   | NativeAPICall.Parameters
   | NativeClipboard.Parameters
   | NativeAnalytics.Parameters
-  | NativeExperiment.Parameters;
+  | NativeExperiment.Parameters
+  | NativeLifecycle.Parameters;
 
 interface MessageArgument {
   message: string;

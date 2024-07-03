@@ -3,15 +3,18 @@ import { FC } from 'react';
 import { companyDataAtom } from './atoms';
 import { useAtom } from 'jotai';
 import InvokeNativeNavigation from '@/invoke/navigation';
+import InvokeNativeLifecycle from '@/invoke/lifecycle';
 
 const navigation = new InvokeNativeNavigation();
+const lifecycleEvent = new InvokeNativeLifecycle();
 
 const CompanyPageHeader: FC = () => {
   const [company] = useAtom(companyDataAtom);
   const companyName = company?.companyName;
   const backEvent = () => {
     try {
-      navigation.navigate('/members-home');
+      console.log('working');
+      lifecycleEvent.lifecycleEvent('onBackPressed');
     } catch (e) {
       console.error(e);
     }

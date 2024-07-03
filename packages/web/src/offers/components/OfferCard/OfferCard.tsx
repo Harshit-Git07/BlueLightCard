@@ -104,17 +104,7 @@ const OfferCard: FC<OfferCardProps> = ({
           {body}
         </Link>
       )}
-      {!hasLink && (
-        <Link
-          href="#"
-          onClick={(e: React.MouseEvent<HTMLElement>) => {
-            e.preventDefault(); // prevents page from scrolling to the top
-            if (onClick) onClick();
-          }}
-        >
-          {body}
-        </Link>
-      )}
+      {!hasLink && body}
     </div>
   );
 };

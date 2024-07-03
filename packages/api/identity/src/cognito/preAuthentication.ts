@@ -69,7 +69,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent, context: any
             API_AUTHORISER_PASSWORD,
             String(WRONG_PASSWORD_ENTER_LIMIT),
             String(WRONG_PASSWORD_RESET_TRIGGER_MINUTES)
-          )
+          );
         logger.debug(sendResetPwdEmailApiResponse.json());
         if (!sendResetPwdEmailApiResponse.ok) {    
             throw new Error(SYSTEM_DOWN_ERROR_MESSAGE);

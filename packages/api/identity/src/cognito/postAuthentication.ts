@@ -56,7 +56,8 @@ export const handler = async (event: PostAuthenticationTriggerEvent, context: an
     action: 'logEmailType',
     memberUuid : event.request.userAttributes['custom:blc_old_uuid'],
     clientId: event.callerContext.clientId,
-    emailType: await isSpareEmail(event.request.userAttributes['custom:blc_old_uuid'], email) ? 'spare' : 'primary'
+    emailType: await isSpareEmail(event.request.userAttributes['custom:blc_old_uuid'], email) ? 'spare' : 'primary',
+    username: email
 });
 
   return event;

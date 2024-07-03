@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.81.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.80.0...bluelightcard/identity-v1.81.0) (2024-07-03)
+
+
+### Features
+
+* **TI-1423:** trigger deployment of previous change ([#1718](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1718)) ([4b20346](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b203462cd235e793395b5149caa72649837ee75))
+
+
+### Other Changes
+
+* Adjusting API Gateway endpoint types to be regional for developers and PRs ([#1581](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1581)) ([962d759](https://github.com/bluelightcard/BlueLightCard-2.0/commit/962d75909c47bc154e74127736ece26a4ddc15bf))
+
 ## [1.80.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.79.0...bluelightcard/identity-v1.80.0) (2024-06-28)
 
 

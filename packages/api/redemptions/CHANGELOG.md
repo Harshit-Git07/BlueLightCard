@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.17.1...bluelightcard/redemptions-v1.17.2) (2024-07-02)
+
+
+### Other Changes
+
+* Adjusting API Gateway endpoint types to be regional for developers and PRs ([#1581](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1581)) ([962d759](https://github.com/bluelightcard/BlueLightCard-2.0/commit/962d75909c47bc154e74127736ece26a4ddc15bf))
+
 ## [1.17.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.17.0...bluelightcard/redemptions-v1.17.1) (2024-06-27)
 
 

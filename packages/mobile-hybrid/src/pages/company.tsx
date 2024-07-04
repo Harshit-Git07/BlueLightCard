@@ -3,7 +3,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { CompanyAbout, Heading, PlatformVariant } from '@bluelightcard/shared-ui';
+import { Button, CompanyAbout, Heading, PlatformVariant } from '@bluelightcard/shared-ui';
 import { companyDataAtom } from '@/page-components/company/atoms';
 import CompanyPageHeader from '@/page-components/company/CompanyPageHeader';
 import PillsController from '@/page-components/company/PillsController';
@@ -11,12 +11,12 @@ import CompanyOffers from '@/page-components/company/CompanyOffers';
 import { MobilePlatformAdapter } from '@/utils/platformAdapter';
 import { z } from 'zod';
 import { OfferModel } from '@/page-components/company/types';
-import AmplitudeProvider, {
-  amplitudeStore,
-} from '@/components/AmplitudeProvider/AmplitudeProvider';
+import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
-import Head from 'next/head';
+import InvokeNativeLifecycle from '@/invoke/lifecycle';
+
+const lifecycleEvent = new InvokeNativeLifecycle();
 
 const companyModel = z.object({
   description: z.string(),
@@ -54,7 +54,7 @@ const Company: NextPage<any> = () => {
   const [company, setCompany] = useAtom(companyDataAtom);
 
   const [retries, setRetries] = useState<number>(0);
-  // const maxRetries = 50;
+  const maxRetries = 150; // maxRetries * 100ms is the timeout for the page load
 
   const [hasError, setHasError] = useState<boolean>(false);
 
@@ -84,6 +84,12 @@ const Company: NextPage<any> = () => {
     const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
     let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
 
+    if (retries > maxRetries) {
+      setHasError(true);
+      setSpinner(false);
+      return;
+    }
+
     if (!cid) {
       return;
     }
@@ -102,9 +108,14 @@ const Company: NextPage<any> = () => {
   return (
     <div className="px-4">
       {hasError && (
-        <Heading headingLevel={'h1'} className="text-red-500 pt-8">
-          Something went wrong. Please try again later
-        </Heading>
+        <>
+          <Heading headingLevel={'h2'} className="dark:text-white text-black pt-8">
+            Something went wrong. Please try again later
+          </Heading>
+          <Button onClick={() => lifecycleEvent.lifecycleEvent('onBackPressed')}>
+            Return Home
+          </Button>
+        </>
       )}
       {!hasError && (
         <>

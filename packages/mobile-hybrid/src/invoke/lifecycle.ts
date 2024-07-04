@@ -25,8 +25,6 @@ export default class InvokeNativeLifecycle extends Facade implements NativeLifec
       },
     };
 
-    console.log(properties);
-
     this.logger.debug(
       `logging event lifecycleEvent with data ${JSON.stringify(properties)}`,
       this.TAG,

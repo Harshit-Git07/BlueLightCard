@@ -13,7 +13,6 @@ const CompanyPageHeader: FC = () => {
   const companyName = company?.companyName;
   const backEvent = () => {
     try {
-      console.log('working');
       lifecycleEvent.lifecycleEvent('onBackPressed');
     } catch (e) {
       console.error(e);

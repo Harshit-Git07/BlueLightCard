@@ -83,13 +83,7 @@ const OfferSheetDetailsPage: FC = () => {
     if (redeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
-        case 'vault':
-        case 'preApplied':
-          logCodeClicked(
-            redemptionType === 'vault'
-              ? events.VAULT_CODE_USE_CODE_CLICKED
-              : events.USE_CODE_CLICKED,
-          );
+          logCodeClicked(events.REQUEST_CODE_CLICKED);
           if (!isRedeemDataErrorResponse(redeemData.data)) {
             copyCodeAndRedirect(
               redeemData.data.redemptionDetails.code,
@@ -97,12 +91,27 @@ const OfferSheetDetailsPage: FC = () => {
             );
           }
           break;
+        case 'vault':
+          logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
+          if (!isRedeemDataErrorResponse(redeemData.data)) {
+            copyCodeAndRedirect(
+              redeemData.data.redemptionDetails.code,
+              redeemData.data.redemptionDetails.url,
+            );
+          }
+          break;
+        case 'preApplied':
+          logCodeClicked(events.REQUEST_CODE_CLICKED);
+          if (!isRedeemDataErrorResponse(redeemData.data)) {
+            handleRedirect(redeemData.data.redemptionDetails.url);
+          }
+          break;
         case 'showCard':
           logCodeClicked(events.REQUEST_CODE_CLICKED);
           platformAdapter.navigate('/highstreetcard.php');
           break;
-        // TODO: Implement this page
         case 'vaultQR':
+          logCodeClicked(events.REQUEST_CODE_CLICKED);
           setOfferSheetAtom((v) => ({
             ...v,
             qrCodeValue: redeemData.data.redemptionDetails.code,
@@ -140,6 +149,10 @@ const OfferSheetDetailsPage: FC = () => {
     const redeemData = await getRedemptionData();
 
     if (redeemData.statusCode == 200) {
+      if (!isRedeemDataErrorResponse(redeemData.data) && redemptionType === 'preApplied') {
+        handleRedirect(redeemData.data.redemptionDetails.url);
+        return;
+      }
       setWebRedeemData(redeemData);
 
       if (redemptionType === 'vaultQR') {
@@ -157,40 +170,24 @@ const OfferSheetDetailsPage: FC = () => {
 
   // Web second button click handler
   const getDiscountClickHandler = () => {
-    if (webRedeemData.statusCode == 200) {
-      redemptionType === 'vault'
-        ? logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED)
-        : logCodeClicked(events.USE_CODE_CLICKED);
-
-      switch (redemptionType) {
-        case 'generic':
-        case 'vault':
-          if (!isRedeemDataErrorResponse(webRedeemData.data)) {
-            if (webRedeemData.data.redemptionDetails.code)
-              copyCode(webRedeemData.data.redemptionDetails.code);
-            if (webRedeemData.data.redemptionDetails.url)
-              handleRedirect(webRedeemData.data.redemptionDetails.url);
-          }
-          break;
-        case 'preApplied':
-          if (
-            !isRedeemDataErrorResponse(webRedeemData.data) &&
-            webRedeemData.data.redemptionDetails.url
-          ) {
-            handleRedirect(webRedeemData.data.redemptionDetails.url);
-          }
-          break;
-        // TODO: Implement this page
-        case 'showCard':
-          return <></>;
-        // TODO: Implement this page
-        case 'vaultQR':
-          return <></>;
-        default:
-          return <></>;
+    if (redemptionType === 'generic' || redemptionType === 'vault') {
+      if (webRedeemData.statusCode !== 200) {
+        setShowErrorPage(true);
+        return;
       }
-    } else {
-      setShowErrorPage(true);
+
+      if (redemptionType === 'vault') {
+        logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
+      } else {
+        logCodeClicked(events.USE_CODE_CLICKED);
+      }
+
+      if (!isRedeemDataErrorResponse(webRedeemData.data)) {
+        if (webRedeemData.data.redemptionDetails.code)
+          copyCode(webRedeemData.data.redemptionDetails.code);
+        if (webRedeemData.data.redemptionDetails.url)
+          handleRedirect(webRedeemData.data.redemptionDetails.url);
+      }
     }
   };
 

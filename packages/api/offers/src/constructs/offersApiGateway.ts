@@ -1,14 +1,13 @@
 import { ApiGatewayV1Api, Stack } from 'sst/constructs';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { RouteRegistry } from '../routes/routeRegistry';
-import { ApiGatewayAuthorizer, SharedAuthorizer } from '../../../core/src/identity/authorizer';
+import { ApiGatewayAuthorizer, SharedAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { IDatabaseAdapter } from './database/IDatabaseAdapter';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ENVIRONMENTS, OFFERS_DOMAIN_NAME } from '../utils/global-constants';
-import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
-import { REGIONS } from '@blc-mono/core/types/regions.enum';
+import { ENVIRONMENTS } from '../utils/global-constants';
 import { Tables } from './tables';
 import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
+import { generateOffersCustomDomainName } from '@blc-mono/core/offers/generateOffersCustomDomainName'
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config'
 
 /**
@@ -54,11 +53,6 @@ export class OffersApiGateway {
    * for handling authentication and authorization.
    */
   private createApi(): ApiGatewayV1Api<any> {
-    const customDomainNameLookUp: Record<string, string> = {
-      [REGIONS.EU_WEST_2]: OFFERS_DOMAIN_NAME.UK,
-      [REGIONS.AP_SOUTHEAST_2]: OFFERS_DOMAIN_NAME.AUS,
-    };
-
     const globalConfig = GlobalConfigResolver.for(this.stack.stage);
 
     return new ApiGatewayV1Api(this.stack, generateConstructId('offers', this.stack.stackName), {
@@ -77,9 +71,7 @@ export class OffersApiGateway {
           ...([ENVIRONMENTS.STAGING, ENVIRONMENTS.PRODUCTION].includes(this.stack.stage as ENVIRONMENTS) &&
             this.certificateArn && {
               domainName: {
-                domainName: isProduction(this.stack.stage)
-                  ? customDomainNameLookUp[this.stack.region]
-                  : `${this.stack.stage}-${customDomainNameLookUp[this.stack.region]}`,
+                domainName: generateOffersCustomDomainName(this.stack),
                 certificate: Certificate.fromCertificateArn(this.stack, 'DomainCertificate', this.certificateArn),
               },
             }),

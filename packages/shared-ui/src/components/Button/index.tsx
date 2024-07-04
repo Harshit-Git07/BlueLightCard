@@ -40,7 +40,7 @@ const color: ThemeColorTokens = {
   [ThemeVariant.Tertiary]: {
     base: {
       hover: 'hover:bg-[#F3F3FF] dark:hover:bg-[#3333CCFF]',
-      focus: 'focus:!outline-[#2EB8E6] dark:focus:!outline-[#FFFF00]',
+      focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
       text: 'text-[#000099] dark:text-[#2EB8E6]',
       border: '!border-transparent',
     },

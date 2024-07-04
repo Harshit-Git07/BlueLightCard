@@ -2,7 +2,7 @@
 
 exports[`ShareButton component Should render ShareButton component with no errors 1`] = `
 <button
-  className=" py-1 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-[#000099] dark:text-[#2EB8E6]  focus:!outline-[#2EB8E6] dark:focus:!outline-[#FFFF00]  !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit"
+  className=" py-1 px-5 rounded-md transition border-2   text-[#000099] dark:text-[#2EB8E6]  focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit"
   onClick={[Function]}
   type="button"
 >

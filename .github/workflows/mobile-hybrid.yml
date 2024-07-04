@@ -132,7 +132,7 @@ jobs:
       - install
       - test
       - lint
-    env: 
+    env:
       NEXT_PUBLIC_APP_BRAND: ${{ matrix.brand }}
       NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
     steps:

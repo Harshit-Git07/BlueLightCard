@@ -4,6 +4,7 @@ import { newsPanelStore } from './store';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import { useSetAtom } from 'jotai';
 import NewsLayout from '@/components/NewsLayout/NewsLayout';
+import { NAVIGATE_NEWS_URL } from '@/globals';
 
 const navigation = new InvokeNativeNavigation();
 
@@ -24,9 +25,7 @@ const NewsPreview: FC = () => {
     <NewsLayout
       news={news}
       onClickSeeAll={onSeeAllClick}
-      onArticleClick={(articleId) =>
-        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`)
-      }
+      onArticleClick={(articleId) => navigation.navigate(`${NAVIGATE_NEWS_URL}?id=${articleId}`)}
     />
   );
 };
@@ -41,9 +40,7 @@ const NewsList: FC = () => {
     <NewsLayout
       news={news}
       showHeading={false}
-      onArticleClick={(articleId) =>
-        navigation.navigate(`/bluelightcardnewsdetails.php?id=${articleId}`)
-      }
+      onArticleClick={(articleId) => navigation.navigate(`${NAVIGATE_NEWS_URL}?id=${articleId}`)}
     />
   );
 };

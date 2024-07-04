@@ -17,6 +17,11 @@ export enum APIUrl {
   UserService = '/api/4/user/profile/service/retrieve.php',
 }
 
+export const NAVIGATE_NEWS_URL =
+  process.env.NEXT_PUBLIC_APP_BRAND === 'dds-uk'
+    ? '/defencediscountservicenewsdetails.php'
+    : '/bluelightcardnewsdetails.php';
+
 export const V5_API_URL = {
   Search: `/${V5_REGION}/discovery/search`,
   User: `/${V5_REGION}/identity/user`,

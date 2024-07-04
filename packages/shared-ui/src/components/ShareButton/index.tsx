@@ -74,8 +74,6 @@ const ShareButton: FC<Props> = ({
       // Open native share drawer on mobile
       if (platformAdapter.platform === PlatformVariant.Web && navigator.share) {
         navigator.share({
-          title: shareDetails.name,
-          text: shareDetails.description,
           url: shareDetails.url,
         });
       } else {

@@ -132,13 +132,16 @@ jobs:
       - install
       - test
       - lint
+    env: 
+      NEXT_PUBLIC_APP_BRAND=${{matrix.brand}}
+      NEXT_PUBLIC_BRAND_URL=staging.bluelightcard.co.uk
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Build
-        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} NEXT_PUBLIC_BRAND_URL=${{matrix.brand_url}} npm run build -w packages/mobile-hybrid
+        run: npm run build -w packages/mobile-hybrid
       - name: Publish
         uses: cloudflare/pages-action@1
         with:
@@ -179,7 +182,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Build
-        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} NEXT_PUBLIC_BRAND_URL=bluelightcard.co.uk npm run build -w packages/mobile-hybrid
+        run: npm run build -w packages/mobile-hybrid
       - name: Publish
         uses: cloudflare/pages-action@1
         with:

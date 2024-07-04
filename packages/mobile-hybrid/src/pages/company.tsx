@@ -54,12 +54,9 @@ const Company: NextPage<any> = () => {
   const [company, setCompany] = useAtom(companyDataAtom);
 
   const [retries, setRetries] = useState<number>(0);
-  const maxRetries = 50;
+  // const maxRetries = 50;
 
   const [hasError, setHasError] = useState<boolean>(false);
-
-  const rand = Math.random().toString(36).substring(2, 15);
-  console.log('dbg: rand', rand);
 
   useEffect(() => {
     const getOffers = async () => {
@@ -87,18 +84,13 @@ const Company: NextPage<any> = () => {
     const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
     let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
 
-    if (retries > maxRetries) {
-      setHasError(true);
-      setSpinner(false);
-      return;
-    }
-
     if (!cid) {
       return;
     }
 
     if (!v5FlagOn) {
       setTimeout(() => {
+        // Update retry after timeout to retrigger the useEffect
         setRetries(retries + 1);
       }, 100);
       return;

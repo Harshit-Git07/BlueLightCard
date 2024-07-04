@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.63.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.62.0...bluelightcard/web-v1.63.0) (2024-07-03)
+
+
+### Features
+
+* applied tokens on the responsive offer card component  ([#1666](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1666)) ([951af13](https://github.com/bluelightcard/BlueLightCard-2.0/commit/951af13ed47f57907411fb3a49c4ac41e57553f3))
+
+
+### Bug Fixes
+
+* reverts accessibility feature to avoid firing double amplitude events ([#1709](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1709)) ([6617c2f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6617c2fef1203d86653b46b7284fd043019a1570))
+
 ## [1.62.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.61.1...bluelightcard/web-v1.62.0) (2024-07-02)
 
 

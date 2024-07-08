@@ -1,13 +1,15 @@
 import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { config } from 'dotenv';
-import { SEARCH_MOCK_DATA_FILE, SST_OUTPUT_JSON, TEST_DATA_DIR, cliArgs } from './constants';
+import { SST_OUTPUT_JSON, TEST_DATA_DIR, cliArgs } from './constants';
 import { logger } from './instances';
 import { EOL } from 'os';
 
 type SSTOutput = Record<string, unknown>;
 type SSTValues = Record<string, string>;
 type EnvValues = Record<string, string>;
+
+const testFileExcludes = ['searchMockData.json', 'banners.json'];
 
 function getSSTOutput() {
   return JSON.parse(readFileSync(SST_OUTPUT_JSON).toString()) as SSTOutput;
@@ -45,7 +47,7 @@ export function getTestDataFiles() {
       key: fileName,
       content: readFileSync(resolve(TEST_DATA_DIR, fileName)),
     }))
-    .filter((file) => file.key !== SEARCH_MOCK_DATA_FILE);
+    .filter((file) => !testFileExcludes.includes(file.key));
 
   return files;
 }

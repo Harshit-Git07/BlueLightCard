@@ -2,6 +2,7 @@
   "extends": "@tsconfig/node16/tsconfig.json",
   "exclude": ["packages"],
   "compilerOptions": {
+    "resolveJsonModule": true,
     "paths": {
       "@blc-mono/core/*": ["./packages/api/core/src/*"]
     }

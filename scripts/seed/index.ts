@@ -10,7 +10,7 @@ import { logger } from './instances';
 import { getFlagValue, getValues, updateEnvFile } from './utils';
 import { createUser, getUserPoolClient, getUserPoolClientSecret } from './functions/cognito';
 import { uploadTestFilesS3 } from './functions/s3';
-import { triggerCognitoMigration } from './functions/eventBridge';
+import { triggerBannersEvent, triggerCognitoMigration } from './functions/eventBridge';
 import { BRANDS } from '@blc-mono/core/types/brands.enum';
 import MockServer from './server';
 
@@ -66,6 +66,8 @@ async function main() {
     brand: toBrandEnumKey ?? 'BLC_UK',
     legacyUserId,
   });
+
+  await triggerBannersEvent(sst.EventBusName, brand);
 
   // upload test data files to the s3 bucket
   await uploadTestFilesS3(s3MenusBucket);

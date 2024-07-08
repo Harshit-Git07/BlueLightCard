@@ -21,3 +21,4 @@ export const BLC_EMAIL_DOMAIN = 'bluelightcard.co.uk';
 
 export const STACK_COGNITO_POOL_CLIENT = 'cognitoNewUserPoolwebClient';
 export const EVENT_SOURCE_USER_MIGRATED = 'user.signin.migrated';
+export const EVENT_SOURCE_BANNERS_CREATE = 'banner.created';

@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1581,
+    "brand": "blc-uk",
+    "end": 1698763856,
+    "cid": 13571,
+    "link": "https://www.bluelightcard.co.uk/offerdetails.php?cid=423&oid=10700",
+    "bannername": "Menu Banner",
+    "name": "Menu Banner",
+    "start": 1696171858,
+    "status": 1,
+    "promotiontype": 12
+  },
+  {
+    "id": 1583,
+    "brand": "blc-uk",
+    "end": 1734117660,
+    "cid": 1,
+    "link": "https://www.staging.bluelightcard.co.uk/p-out.php?lid=1582",
+    "bannername": "Test2 Takeover",
+    "name": "Test2 Takeover",
+    "start": 1696178959,
+    "status": 1,
+    "promotiontype": 13
+  },
+  {
+    "id": 1579,
+    "brand": "blc-uk",
+    "end": 1704117660,
+    "cid": 16519,
+    "link": "https://www.staging.bluelightcard.co.uk/p-out.php?lid=1582",
+    "bannername": "Luke",
+    "name": "Luke",
+    "start": 1696171637,
+    "status": 1,
+    "promotiontype": 13
+  },
+  {
+    "id": 1582,
+    "brand": "blc-uk",
+    "end": 1698763971,
+    "cid": 11499,
+    "link": "https://www.bluelightcard.co.uk/offerdetails.php?cid=423&oid=10700",
+    "bannername": "sposor banner",
+    "name": "sposor banner",
+    "start": 1664449378,
+    "status": 1,
+    "promotiontype": 13
+  },
+  {
+    "id": 1586,
+    "brand": "blc-uk",
+    "end": 1698486737,
+    "cid": 1,
+    "link": "https://www.bluelightcard.co.uk",
+    "bannername": "Luke staging banner11",
+    "name": "Luke staging banner11",
+    "start": 1697363526,
+    "status": 1,
+    "promotiontype": 10
+  },
+  {
+    "id": 1585,
+    "brand": "blc-uk",
+    "end": 1704117660,
+    "cid": 423,
+    "link": "https://www.staging.bluelightcard.co.uk/p-out.php?lid=1582",
+    "bannername": "Taz Updated",
+    "name": "Taz Updated",
+    "start": 1695996038,
+    "status": 1,
+    "promotiontype": 13
+  },
+  {
+    "id": 1591,
+    "brand": "blc-uk",
+    "end": 1709220965,
+    "cid": 4016,
+    "link": "https://www.bluelightcard.co.uk",
+    "bannername": "test banner",
+    "name": "test banner",
+    "start": 1708961763,
+    "status": 1,
+    "promotiontype": 14
+  },
+  {
+    "id": 1580,
+    "brand": "blc-uk",
+    "end": 1735689569,
+    "cid": 13571,
+    "link": "https://www.bluelightcard.co.uk/offerdetails.php?cid=423&oid=10700",
+    "bannername": "Bottom test",
+    "name": "Bottom test",
+    "start": 1696171832,
+    "status": 1,
+    "promotiontype": 11
+  },
+  {
+    "id": 1582,
+    "brand": "blc-uk",
+    "end": 1735689569,
+    "cid": 11499,
+    "link": "https://www.bluelightcard.co.uk/offerdetails.php?cid=423&oid=10700",
+    "bannername": "sposor banner",
+    "name": "sposor banner",
+    "start": 1,
+    "status": 1,
+    "promotiontype": 13
+  }
+]

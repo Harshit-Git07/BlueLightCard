@@ -51,7 +51,7 @@ const BannerCarousel: FC<BannerCarouselProps> = ({ slides, onSlideItemClick, onS
               />
             </div>
           </div>
-          <p className="pt-2 px-2 font-card-title-font text-card-title-colour-light dark:text-card-title-colour-dark line-clamp-2">
+          <p className="pt-2 px-2 font-card-title-font text-card-title-font font-card-title-font-weight tracking-card-title-font leading-card-title-font text-card-title-colour dark:text-card-title-colour-dark line-clamp-2">
             {decodeEntities(slide.text)}
           </p>
         </div>

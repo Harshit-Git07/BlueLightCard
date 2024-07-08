@@ -9,6 +9,7 @@ export default {
       lineHeight: {},
       fontWeight: {},
       colors: {},
+      letterSpacing: {},
       screens: {
         mobile: '280px',
         'mobile-xl': '500px',

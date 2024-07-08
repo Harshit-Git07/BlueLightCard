@@ -71,6 +71,7 @@ export function createBrandedPreset(
   baseTailwindConfig.theme.extend.fontSize = themeTokens.fontSize;
   baseTailwindConfig.theme.extend.fontWeight = themeTokens.fontWeight;
   baseTailwindConfig.theme.extend.lineHeight = themeTokens.lineHeight;
+  baseTailwindConfig.theme.extend.letterSpacing = themeTokens.letterSpacing;
 
   // inject brand tokens for typography
   baseTailwindConfig.plugins = [plugin((api) => fontCSSPlugin(fonts, api))];

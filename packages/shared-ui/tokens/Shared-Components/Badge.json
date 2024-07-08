@@ -1,8 +1,7 @@
 {
   "badge-large-label-font": {
     "value": "{typography.title-small}",
-    "type": "typography",
-    "description": "also used for Xsmall badge font"
+    "type": "typography"
   },
   "badge-small-label-font": {
     "value": "{typography.label-semibold}",

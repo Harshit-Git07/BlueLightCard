@@ -52,5 +52,15 @@
       "value": "{colour.surface-container.dark}",
       "type": "color"
     }
+  },
+  "NavBar-item-text-active-colour": {
+    "light": {
+      "value": "{colour.primary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
   }
 }

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.82.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.81.0...bluelightcard/identity-v1.82.0) (2024-07-09)
+
+
+### Features
+
+* [TI-1450] Removing Migration Lambda from the Old User Pool ([#1738](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1738)) ([de6dbe3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/de6dbe366861267372fb4f59eacf9f229a099850))
+
 ## [1.81.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.80.0...bluelightcard/identity-v1.81.0) (2024-07-03)
 
 

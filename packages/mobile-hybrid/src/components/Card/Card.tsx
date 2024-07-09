@@ -49,11 +49,11 @@ const Card: FC<CardProps> = ({
   };
 
   const cardTitleClasses = cssUtil([
-    'text-lg font-medium text-hybridCard-title-colour-light dark:text-hybridCard-title-colour-dark line-clamp-1',
+    'text-hybridCard-title-font font-hybridCard-title-font font-hybridCard-title-font-weight tracking-hybridCard-title-font leading-hybridCard-title-font text-hybridCard-title-colour-light dark:text-hybridCard-title-colour-dark line-clamp-1',
   ]);
 
   const cardParagraphClasses = cssUtil([
-    'text-sm font-light text-hybridCard-text-colour-light dark:text-hybridCard-text-colour-dark',
+    'text-hybridCard-text-font font-hybridCard-text-font font-hybridCard-text-font-weight tracking-hybridCard-text-font leading-hybridCard-text-font text-hybridCard-text-colour-light dark:text-hybridCard-text-colour-dark',
     'line-clamp-1',
   ]);
 

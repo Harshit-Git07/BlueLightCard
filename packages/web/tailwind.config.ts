@@ -14,15 +14,11 @@ const staticFolderPrefix = !process.env.STORYBOOK_ENV ? '/_next/static' : '';
 const themeTokens = buildTokens([BRAND]);
 
 const newBrandedTokensPreset = createBrandedPreset(env.APP_BRAND);
-const presets: Partial<Config>[] = [defaultPreset];
+const presets: Partial<Config>[] = [defaultPreset, newBrandedTokensPreset];
 
 const isStorybookLifecycle =
   process.env.npm_lifecycle_event === 'storybook' ||
   process.env.npm_lifecycle_event === 'build-storybook';
-
-if (env.FLAG_NEW_TOKENS) {
-  presets.push(newBrandedTokensPreset);
-}
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {

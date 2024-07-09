@@ -19,11 +19,11 @@ const ListItem: FC<ListItemProps> = ({ title, text, imageSrc, imageAlt, classNam
         />
       </div>
       <div className="flex flex-col justify-center pl-3 w-full">
-        <h4 className="text-listItem-title-colour-light dark:text-listItem-title-colour-dark text-md mb-1 font-semibold leading-5 line-clamp-1 md:line-clamp-2">
+        <h4 className="text-listItem-title-colour-light dark:text-listItem-title-colour-dark text-listItem-title-font font-listItem-title-font font-listItem-title-font-weight mb-1 tracking-listItem-title-font leading-listItem-title-font line-clamp-1 md:line-clamp-2">
           {decodeEntities(title)}
         </h4>
         {text && (
-          <p className="text-listItem-text-colour-light dark:text-listItem-text-colour-dark text-listItem-text-font lg:text-lg">
+          <p className="text-listItem-text-colour-light dark:text-listItem-text-colour-dark text-listItem-text-font font-listItem-text-font font-listItem-text-font-weight tracking-listItem-text-font leading-listItem-text-font lg:text-lg">
             {decodeEntities(text)}
           </p>
         )}

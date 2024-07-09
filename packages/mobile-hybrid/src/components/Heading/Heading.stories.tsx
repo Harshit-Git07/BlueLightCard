@@ -17,13 +17,6 @@ export const Default = DefaultTemplate.bind({});
 
 Default.args = {
   title: 'Heading Text',
-  size: 'small',
-};
-
-export const Medium = DefaultTemplate.bind({});
-Medium.args = {
-  title: 'Heading Text',
-  size: 'medium',
 };
 
 export default componentMeta;

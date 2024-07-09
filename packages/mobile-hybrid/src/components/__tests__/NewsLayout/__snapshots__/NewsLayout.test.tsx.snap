@@ -6,12 +6,12 @@ exports[`NewsLayout.tsx renders, showing the heading by default 1`] = `
     class="flex w-full content-center my-2 px-4"
   >
     <h2
-      class="text-2xl font-heading-font font-extrabold flex-1 text-heading-colour-light dark:text-heading-colour-dark"
+      class="font-heading-font font-heading-font-weight text-heading-font tracking-heading-font leading-heading-font flex-1 text-heading-colour-light dark:text-heading-colour-dark"
     >
       Latest news
     </h2>
     <button
-      class="font-heading-link-font font-semibold text-heading-link-colour-light dark:text-heading-link-colour-dark"
+      class="font-heading-link-font font-heading-link-font-weight text-heading-link-font tracking-heading-link-font leading-heading-link-font text-heading-link-colour dark:text-heading-link-colour-dark"
     >
       See all
     </button>

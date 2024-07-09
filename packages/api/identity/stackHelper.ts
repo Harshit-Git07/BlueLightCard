@@ -54,20 +54,6 @@ export function createOldCognito(
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
     triggers: {
-      userMigration: {
-        handler: 'packages/api/identity/src/cognito/migration.handler',
-        environment: {
-          SERVICE: 'identity',
-          API_URL: appSecret.secretValueFromJson('blc_url').toString(),
-          API_AUTH: appSecret.secretValueFromJson('blc_auth').toString(),
-          EVENT_BUS: bus.eventBusName,
-          EVENT_SOURCE: 'user.signin.migrated',
-          DLQ_URL: dlq.queueUrl,
-          REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName,
-        },
-        permissions: [bus],
-      },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
@@ -212,20 +198,6 @@ export function createOldCognitoDDS(
   const cognito_dds = new Cognito(stack, 'cognito_dds', {
     login: ['email'],
     triggers: {
-      userMigration: {
-        handler: 'packages/api/identity/src/cognito/migration.handler',
-        environment: {
-          SERVICE: 'identity',
-          API_URL: appSecret.secretValueFromJson('dds_url').toString(),
-          API_AUTH: appSecret.secretValueFromJson('dds_auth').toString(),
-          EVENT_BUS: bus.eventBusName,
-          EVENT_SOURCE: 'user.signin.migrated',
-          DLQ_URL: dlq.queueUrl,
-          REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName,
-        },
-        permissions: [bus],
-      },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
@@ -756,7 +728,7 @@ export function createNewCognitoDDS(
       destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
-    
+
     createExternalClient(stack, cognito_dds, true);
   }
 

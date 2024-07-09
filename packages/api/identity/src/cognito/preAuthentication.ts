@@ -36,7 +36,7 @@ export const handler = async (event: PreAuthenticationTriggerEvent, context: any
 
     logger.info('audit', {
         audit: true,
-        action: 'resetPasswordCognitoHostedUI',
+        action: event.triggerSource,
         email : email,
         userPoolId: userPoolId
     });
@@ -47,13 +47,13 @@ export const handler = async (event: PreAuthenticationTriggerEvent, context: any
         await unsuccessfulLoginAttemptsService.addOrUpdateRecord(email, userPoolId, 1)
         return event;
     }
-    
+
     // gets first item from results array
     const [record] = results;
-    
+
     // destructure record
     const { count, timestamp } = record;
-    
+
     // is timestamp within last 30 minutes
     const isTimeStampWithinConfiguredMins =  isTimeStampWithinConfiguredMinutes(timestamp);
 
@@ -63,15 +63,15 @@ export const handler = async (event: PreAuthenticationTriggerEvent, context: any
     } else if (count === WRONG_PASSWORD_ENTER_LIMIT && isTimeStampWithinConfiguredMins) {
         logger.debug("Limit exceeded for user with email: " + email + ", sending reset password email");
         const sendResetPwdEmailApiResponse = await unsuccessfulLoginAttemptsService.sendEmailtoUser(
-            email, 
-            RESET_PASSWORD_API_URL, 
-            API_AUTHORISER_USER, 
+            email,
+            RESET_PASSWORD_API_URL,
+            API_AUTHORISER_USER,
             API_AUTHORISER_PASSWORD,
             String(WRONG_PASSWORD_ENTER_LIMIT),
             String(WRONG_PASSWORD_RESET_TRIGGER_MINUTES)
           );
         logger.debug(sendResetPwdEmailApiResponse.json());
-        if (!sendResetPwdEmailApiResponse.ok) {    
+        if (!sendResetPwdEmailApiResponse.ok) {
             throw new Error(SYSTEM_DOWN_ERROR_MESSAGE);
         }
         await unsuccessfulLoginAttemptsService.deleteRecord(email, userPoolId);

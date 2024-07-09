@@ -2,6 +2,7 @@ import { Logger } from '@aws-lambda-powertools/logger'
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge'
 import { v4 } from 'uuid';
 import { CognitoIdentityServiceProvider, SQS } from 'aws-sdk'
+import { UserMigrationTriggerEvent } from "aws-lambda";
 import axios from 'axios';
 import parsePhoneNumber from 'libphonenumber-js';
 import { transformDateToFormatYYYYMMDD } from './../../../core/src/utils/date';
@@ -13,9 +14,9 @@ import { BrandService } from 'src/services/BrandService';
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
-const oldClientId = process.env.OLD_CLIENT_ID
-const oldClientSecret = process.env.OLD_CLIENT_SECRET
-const oldUserPoolId = process.env.OLD_USER_POOL_ID
+const oldClientId = process.env.OLD_CLIENT_ID as string
+const oldClientSecret = process.env.OLD_CLIENT_SECRET as string
+const oldUserPoolId = process.env.OLD_USER_POOL_ID as string
 const apiUrl = process.env.API_URL
 const apiAuth = process.env.API_AUTH
 const tableName = process.env.IDENTITY_TABLE_NAME
@@ -43,7 +44,7 @@ export const generateSecretHash = async (username: string, clientId: string, cli
     .digest('base64');
 }
 
-export const handler = async (event: any, context: any) => {
+export const handler = async (event: UserMigrationTriggerEvent) => {
     if (event.triggerSource == "UserMigration_Authentication") {
       try {
         // Authenticate the user with the old user pool
@@ -95,58 +96,63 @@ export const handler = async (event: any, context: any) => {
       }else {
         throw new Error(":\nUser Not Found.");
       }
-    } 
+    }
 
     return event;
 }
 
 const authenticateUserOldPool = async (username: string, password: string) => {
-    //check on an old user pool
-    if (oldClientId && oldUserPoolId && oldClientSecret) {
-      logger.debug('trying to look old user pool');
-      const cognitoISP = new CognitoIdentityServiceProvider();
-      try {
-        const cognitoResponse = await cognitoISP.adminInitiateAuth({
-          AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
-          AuthParameters: {
-            PASSWORD: password,
-            USERNAME: username,
-            SECRET_HASH: await generateSecretHash(username, oldClientId, oldClientSecret)
-          },
-          UserPoolId: oldUserPoolId,
-          ClientId: oldClientId
-        }).promise();
-        if (cognitoResponse) {
-          const accessToken= cognitoResponse.AuthenticationResult?.AccessToken
+    // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+    logger.info('Attempting to authenticate user against old user pool', { username })
+    const cognitoISP = new CognitoIdentityServiceProvider()
+    try {
+      const cognitoResponse = await cognitoISP.adminInitiateAuth({
+        AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
+        AuthParameters: {
+          PASSWORD: password,
+          USERNAME: username,
+          SECRET_HASH: await generateSecretHash(username, oldClientId, oldClientSecret)
+        },
+        UserPoolId: oldUserPoolId,
+        ClientId: oldClientId
+      }).promise()
+      if (cognitoResponse) {
+        const accessToken = cognitoResponse.AuthenticationResult?.AccessToken
 
-          if (accessToken) {
-            try {
-              const user = await cognitoISP.getUser({ AccessToken: accessToken }).promise();
+        if (accessToken) {
+          try {
+            // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+            logger.info('Attempting to get user from old user pool', { username })
+            const user = await cognitoISP.getUser({ AccessToken: accessToken }).promise()
 
-              if (user) {
-                const attributesObject = user.UserAttributes.reduce((acc: { [key: string]: any }, attr) => {
-                  if (attr.Name !== 'sub') { // Continue to skip 'sub' attribute
-                    // @ts-ignore
-                    acc[attr.Name] = attr.Value; // Keep the attribute name unchanged, including 'custom:' prefix
-                  }
-                  return acc;
-                }, {});
+            if (user) {
+              const attributesObject = user.UserAttributes.reduce((acc: { [key: string]: any }, attr) => {
+                if (attr.Name !== 'sub') { // Continue to skip 'sub' attribute
+                  // @ts-ignore
+                  acc[attr.Name] = attr.Value // Keep the attribute name unchanged, including 'custom:' prefix
+                }
+                return acc
+              }, {})
 
-                attributesObject['custom:migrated_old_pool'] = true;
-                return attributesObject;
-              }
-            } catch (e: any) {
-              logger.debug("user not found on old cognito: ",  {e} );
+              attributesObject['custom:migrated_old_pool'] = true
+              // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+              logger.info('Successfully migrated user from old user pool', { username })
+              return attributesObject
             }
+          } catch (e: any) {
+            logger.debug("user not found on old cognito: ",  {e} );
           }
         }
-      } catch (err) {
-        logger.debug('user not authenticated on old cognito', {err} )
       }
+    } catch (err) {
+      // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+      logger.info('User not found in old user pool', { username })
     }
 }
 
 const authenticateUser = async (username: string, password: string) => {
+    // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+    logger.info('Attempting to authenticate user against legacy', { username })
     try {
         const response = await axios({
             method: 'get',
@@ -158,11 +164,12 @@ const authenticateUser = async (username: string, password: string) => {
             }
         })
 
-        logger.debug("old login response", { response })
         if (response && response.data) {
             if (!response.data.success && response.data.code !== 1013) {
               throw new Error(response.data.message)
             }
+            // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+            logger.info('User successfully authenticated and fetched from legacy', { username })
             //add to event bus
             await addUserSignInMigratedEvent(response.data.data);
             return {
@@ -175,7 +182,7 @@ const authenticateUser = async (username: string, password: string) => {
             }
         }
     } catch (error: any) {
-        logger.error('error during old login', { error, username })
+        logger.error('Error during legacy login', { error, username })
         throw new Error(error.message)
     }
 }
@@ -246,15 +253,17 @@ const addUserSignInMigratedEvent = async (data: any) => {
             }),
             },
         ],
-        };
-        const client = new EventBridgeClient({ region: process.env.REGION });
-        try{
+    };
+    const client = new EventBridgeClient({ region: process.env.REGION });
+    try {
         const command = new PutEventsCommand(input);
         await client.send(command);
-        }catch(err: any) {
+        // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+        logger.info('Successfully sent legacy migrated user to eventbus to be processed', { username: data.email })
+    } catch(err: any) {
         logger.error("error adding user sign in migrated event", { uuid, err });
         await sendToDLQ(data);
-        throw new Error(`Error adding user sign in migrated event${data} : ${err.message}.`)
+        throw new Error(`Error adding user sign in migrated event: ${err.message}.`)
     }
 
 }

@@ -2,7 +2,7 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { PostAuthenticationTriggerEvent } from 'aws-lambda';
 import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { UnsuccessfulLoginAttemptsService } from '../../src/services/UnsuccessfulLoginAttemptsService';
-import { IProfileService, ProfileService } from '../../src/services/ProfileService';
+import { ProfileService } from '../../src/services/ProfileService';
 
 const oldUserPoolId = process.env.OLD_USER_POOL_ID;
 const service: string = process.env.SERVICE as string;
@@ -46,7 +46,7 @@ export const handler = async (event: PostAuthenticationTriggerEvent, context: an
       logger.error("failed to set attribute 'custom:migrated_old_pool' to 'false'",  {e} );
     }
   }
-  
+
   if (isNewPool(oldUserPoolId, userPoolId)) {
     await deleteDBRecordIfExists(email, userPoolId);
   }

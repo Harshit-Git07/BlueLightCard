@@ -1,6 +1,5 @@
 import {Logger} from "@aws-lambda-powertools/logger";
 import { PreTokenGenerationTriggerEvent } from 'aws-lambda'
-import { UserProfile } from "src/models/userprofile";
 import { PreTokenGenerateService } from "src/services/PreTokenGenerateService";
 import { ProfileService } from "src/services/ProfileService";
 

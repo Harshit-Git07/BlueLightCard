@@ -1,6 +1,6 @@
 import { useCSSMerge, useCSSConditional } from '../../../../hooks/useCSS';
 import { PlatformVariant } from '../../../../types';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton from '../../../MagicButton';
@@ -28,6 +28,21 @@ const OfferSheetDetailsPage: FC = () => {
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
   const [maxPerUserReached, setMaxPerUserReached] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      if (
+        redemptionType === 'preApplied' &&
+        offerData?.id &&
+        offerData?.name &&
+        offerMeta?.companyName
+      ) {
+        const data = await getRedemptionData();
+        setWebRedeemData(data);
+      }
+    };
+    getData();
+  }, [platformAdapter, offerData, offerMeta]);
 
   const labels = useLabels(offerData);
 
@@ -146,13 +161,16 @@ const OfferSheetDetailsPage: FC = () => {
       return;
     }
 
+    if (redemptionType === 'preApplied') {
+      if (webRedeemData && !isRedeemDataErrorResponse(webRedeemData.data)) {
+        handleRedirect(webRedeemData.data.redemptionDetails.url);
+      }
+      return;
+    }
+
     const redeemData = await getRedemptionData();
 
-    if (redeemData.statusCode == 200) {
-      if (!isRedeemDataErrorResponse(redeemData.data) && redemptionType === 'preApplied') {
-        handleRedirect(redeemData.data.redemptionDetails.url);
-        return;
-      }
+    if (redeemData.statusCode === 200) {
       setWebRedeemData(redeemData);
 
       if (redemptionType === 'vaultQR') {
@@ -366,6 +384,7 @@ const OfferSheetDetailsPage: FC = () => {
     }
     return primaryButton;
   };
+
   return (
     <div className={css}>
       {showErrorPage && <OfferDetailsErrorPage />}

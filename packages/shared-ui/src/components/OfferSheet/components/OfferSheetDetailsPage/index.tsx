@@ -83,7 +83,7 @@ const OfferSheetDetailsPage: FC = () => {
     if (redeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
-          logCodeClicked(events.REQUEST_CODE_CLICKED);
+          logCodeClicked(events.USE_CODE_CLICKED);
           if (!isRedeemDataErrorResponse(redeemData.data)) {
             copyCodeAndRedirect(
               redeemData.data.redemptionDetails.code,

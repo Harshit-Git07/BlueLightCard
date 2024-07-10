@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.17.2...bluelightcard/redemptions-v1.18.0) (2024-07-08)
+
+
+### Features
+
+* added campgain id to envs ([#1736](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1736)) ([e7ec501](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e7ec501007afee2091b608df4278ad499a57a6f2))
+
 ## [1.17.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.17.1...bluelightcard/redemptions-v1.17.2) (2024-07-02)
 
 

@@ -1,29 +1,17 @@
-import { IPlatformAdapter } from '../../adapters';
+import type { IPlatformAdapter } from '../../adapters';
 import { PlatformVariant } from '../../types';
-import { RedemptionType } from '../OfferSheet/types';
+import type { RedemptionType } from '../OfferSheet/types';
 
-export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, string | null>> = {
+export const redemptionTypeExperiments: Record<string, Record<PlatformVariant, string>> = {
   vault: {
     [PlatformVariant.Web]:
       process.env.NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB ??
       'offer-sheet-redeem-vault-search-and-homepage-web-2',
     [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-vault-app',
   },
-  generic: {
-    [PlatformVariant.Web]: 'offer-sheet-redeem-generic-web',
-    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-generic-app',
-  },
-  preApplied: {
-    [PlatformVariant.Web]: 'offer-sheet-redeem-preapplied-web',
-    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-preapplied-app',
-  },
-  showCard: {
-    [PlatformVariant.Web]: 'offer-sheet-redeem-show-card-web',
-    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-show-card-app',
-  },
-  vaultQR: {
-    [PlatformVariant.Web]: 'offer-sheet-redeem-qr-web',
-    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-qr-app',
+  nonVault: {
+    [PlatformVariant.Web]: 'offer-sheet-redeem-non-vault-web',
+    [PlatformVariant.MobileHybrid]: 'offer-sheet-redeem-non-vault-app',
   },
 };
 
@@ -37,7 +25,10 @@ export const getPlatformExperimentForRedemptionType = (
     return 'control';
   }
 
-  const experimentName = redemptionTypeExperiments[redemptionType]?.[platformAdapter.platform];
+  const experimentName =
+    redemptionTypeExperiments[redemptionType === 'vault' ? redemptionType : 'nonVault']?.[
+      platformAdapter.platform
+    ];
 
   if (!experimentName) {
     return 'control';

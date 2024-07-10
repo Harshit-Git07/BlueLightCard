@@ -3,7 +3,6 @@ import OfferSheet from '../../OfferSheet';
 import { OfferDetailsLink, useOfferDetailsComponent } from '../useOfferDetailsComponent';
 import { useMockPlatformAdapter } from '../../../adapters';
 import { PlatformVariant } from 'src/types';
-import { getPlatformExperimentForRedemptionType } from '../offerDetailsExperiments';
 
 const supportedRedemptionTypes = ['vault', 'generic'];
 

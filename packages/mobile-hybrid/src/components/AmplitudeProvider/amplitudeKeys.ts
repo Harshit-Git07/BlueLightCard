@@ -21,6 +21,7 @@ export enum Experiments {
   HOMEPAGE_POSITIONING = 'homepage-positioning',
   BF_FLEXI = 'bf-flexi',
   OFFER_SHEET_VAULT = 'offer-sheet-redeem-vault-app',
+  OFFER_SHEET_NON_VAULT = 'offer-sheet-redeem-non-vault-app',
   CATEGORY_LEVEL_THREE_SEARCH = 'category_level_three_search_hybrid',
 }
 

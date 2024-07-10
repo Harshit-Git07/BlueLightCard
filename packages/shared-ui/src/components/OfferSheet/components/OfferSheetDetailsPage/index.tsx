@@ -92,7 +92,7 @@ const OfferSheetDetailsPage: FC = () => {
           }
           break;
         case 'vault':
-          logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
+          logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
           if (!isRedeemDataErrorResponse(redeemData.data)) {
             copyCodeAndRedirect(
               redeemData.data.redemptionDetails.code,

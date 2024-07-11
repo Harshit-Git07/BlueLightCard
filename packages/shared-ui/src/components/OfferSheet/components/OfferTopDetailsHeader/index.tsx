@@ -191,7 +191,9 @@ const OfferTopDetailsHeader: FC<Props> = ({
       {qrCodeValue && (
         <div className={'transition-all flex items-center flex-col p-12'}>
           <QRCode value={qrCodeValue} size={200} aria-label="QR code" />
-          <h1 className="text-2xl font-bold tracking-[0.2em] pt-4 pb-2">{qrCodeValue}</h1>
+          <h1 className="text-2xl font-bold tracking-[0.2em] pt-4 pb-2 dark:text-black">
+            {qrCodeValue}
+          </h1>
         </div>
       )}
 

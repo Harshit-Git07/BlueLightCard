@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.83.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.82.0...bluelightcard/identity-v1.83.0) (2024-07-11)
+
+
+### Features
+
+* Show forgotten password link again. ([#1754](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1754)) ([362f5b4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/362f5b4515aebf1c3242740d93a3c7ba0748f254))
+
 ## [1.82.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.81.0...bluelightcard/identity-v1.82.0) (2024-07-09)
 
 

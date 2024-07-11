@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import SwiperCarousel from './SwiperCarousel';
+import SwiperCarousel from '.';
 
 const componentMeta: Meta<typeof SwiperCarousel> = {
   title: 'Component System/SwiperCarousel',

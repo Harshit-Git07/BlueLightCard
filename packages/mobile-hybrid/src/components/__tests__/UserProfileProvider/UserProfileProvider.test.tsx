@@ -15,6 +15,21 @@ jest.mock('@/hooks/useUserService');
 
 const useUserServiceMock = jest.mocked(useUserService);
 
+jest.mock('swiper/react', () => ({
+  Swiper: () => null,
+  SwiperSlide: () => null,
+}));
+
+jest.mock('swiper/modules', () => ({
+  Navigation: () => null,
+  Pagination: () => null,
+  Autoplay: () => null,
+}));
+
+jest.mock('swiper/css', () => jest.fn());
+jest.mock('swiper/css/pagination', () => jest.fn());
+jest.mock('swiper/css/navigation', () => jest.fn());
+
 describe('User Profile Provider component', () => {
   const mockPlatformAdapter = useMockPlatformAdapter();
   const defaultAmplitudeStore = {

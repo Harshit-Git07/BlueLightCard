@@ -2,6 +2,21 @@ import { MobilePlatformAdapter } from '../platformAdapter';
 import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 
+jest.mock('swiper/react', () => ({
+  Swiper: () => null,
+  SwiperSlide: () => null,
+}));
+
+jest.mock('swiper/modules', () => ({
+  Navigation: () => null,
+  Pagination: () => null,
+  Autoplay: () => null,
+}));
+
+jest.mock('swiper/css', () => jest.fn());
+jest.mock('swiper/css/pagination', () => jest.fn());
+jest.mock('swiper/css/navigation', () => jest.fn());
+
 describe('MobilePlatformAdapter', () => {
   describe('getAmplitudeFeatureFlag', () => {
     test('it returns the experiment value from the amplitude store', () => {

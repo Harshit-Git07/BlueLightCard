@@ -1,6 +1,5 @@
-import { CampaignCard } from '@bluelightcard/shared-ui';
+import { CampaignCard, SwiperCarousel } from '@bluelightcard/shared-ui';
 import React from 'react';
-import SwiperCarousel from '../SwiperCarousel/SwiperCarousel';
 import { BannerCarouselPropers } from './types';
 
 const BannerCarousel = ({ banners }: BannerCarouselPropers) => {

@@ -11,3 +11,18 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+
+jest.mock('swiper/react', () => ({
+  Swiper: () => null,
+  SwiperSlide: () => null,
+}));
+
+jest.mock('swiper/modules', () => ({
+  Navigation: () => null,
+  Pagination: () => null,
+  Autoplay: () => null,
+}));
+
+jest.mock('swiper/css', () => jest.fn());
+jest.mock('swiper/css/pagination', () => jest.fn());
+jest.mock('swiper/css/navigation', () => jest.fn());

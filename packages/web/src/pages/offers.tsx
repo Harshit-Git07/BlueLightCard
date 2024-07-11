@@ -2,7 +2,7 @@ import getOffersStaticProps from '@/utils/getProps/getOffersProps';
 import Heading from '@/components/Heading/Heading';
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import Image from '@/components/Image/Image';
-import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
+import { SwiperCarousel } from '@bluelightcard/shared-ui';
 import Link from '@/components/Link/Link';
 import { NextPage } from 'next';
 import Container from '@/components/Container/Container';

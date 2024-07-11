@@ -9,6 +9,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
+import '../../styles/swiper.css';
+
 const SwiperCarousel: React.FC<CarouselProps> = ({
   children,
   elementsPerPageDesktop = 5,

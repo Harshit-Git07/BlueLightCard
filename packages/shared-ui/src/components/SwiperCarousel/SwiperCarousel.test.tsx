@@ -1,9 +1,9 @@
-import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+import SwiperCarousel from '../SwiperCarousel';
+import { render, screen } from '@testing-library/react';
 import { CarouselProps } from './types';
 
-jest.mock('../../hooks/useIsDarkMode', () => ({
+jest.mock('../../hooks/useIsDarkMode.tsx', () => ({
   __esModule: true,
   default: () => true,
 }));
@@ -30,7 +30,7 @@ describe('SwiperCarousel.tsx', () => {
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>
-      </SwiperCarousel>
+      </SwiperCarousel>,
     );
     expect(container).toMatchSnapshot();
   });
@@ -41,7 +41,7 @@ describe('SwiperCarousel.tsx', () => {
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>
-      </SwiperCarousel>
+      </SwiperCarousel>,
     );
     expect(container.querySelector('.swiper-button-prev')).toBeNull();
     expect(container.querySelector('.swiper-button-next')).toBeNull();
@@ -54,7 +54,7 @@ describe('SwiperCarousel.tsx', () => {
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>
-      </SwiperCarousel>
+      </SwiperCarousel>,
     );
     expect(container.getElementsByClassName('.swiper-button-prev')).toBeDefined();
     expect(container.getElementsByClassName('.swiper-button-next')).toBeDefined();
@@ -66,7 +66,7 @@ describe('SwiperCarousel.tsx', () => {
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>
-      </SwiperCarousel>
+      </SwiperCarousel>,
     );
     expect(container.getElementsByClassName('.swiper-pagination')).toBeDefined();
   });
@@ -77,7 +77,7 @@ describe('SwiperCarousel.tsx', () => {
         <div>Item</div>
         <div>Item</div>
         <div>Item</div>
-      </SwiperCarousel>
+      </SwiperCarousel>,
     );
     const slides = screen.getAllByTestId('swiper-slide-testid');
     expect(slides.length).toBe(3);

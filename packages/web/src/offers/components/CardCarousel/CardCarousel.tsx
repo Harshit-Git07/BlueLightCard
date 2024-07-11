@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { CardCarouselProps } from './types';
 import OfferCardPlaceholder from '../OfferCard/OfferCardPlaceholder';
-import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
+import { SwiperCarousel } from '@bluelightcard/shared-ui';
 
 const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);

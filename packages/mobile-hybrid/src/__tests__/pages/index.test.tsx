@@ -14,6 +14,21 @@ jest.mock('@/modules/popularbrands/brands');
 jest.mock('@/hooks/useOffers');
 jest.mock('@/hooks/useFavouritedBrands');
 
+jest.mock('swiper/react', () => ({
+  Swiper: () => null,
+  SwiperSlide: () => null,
+}));
+
+jest.mock('swiper/modules', () => ({
+  Navigation: () => null,
+  Pagination: () => null,
+  Autoplay: () => null,
+}));
+
+jest.mock('swiper/css', () => jest.fn());
+jest.mock('swiper/css/pagination', () => jest.fn());
+jest.mock('swiper/css/navigation', () => jest.fn());
+
 const useOffersMock = jest.mocked(useOffers);
 const useFavouritedBrandsMock = jest.mocked(useFavouritedBrands);
 

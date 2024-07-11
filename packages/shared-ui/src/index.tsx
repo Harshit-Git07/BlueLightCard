@@ -14,6 +14,7 @@ export { default as Link } from './components/Link';
 export { default as OfferSheet } from './components/OfferSheet';
 export { default as MagicButton } from './components/MagicButton';
 export { default as Label } from './components/Label';
+export { default as SwiperCarousel } from './components/SwiperCarousel';
 export { default as EventBus } from './lib/eventBus';
 
 export * from './adapters';

@@ -23,7 +23,7 @@ import { logMembersHomePage } from '@/utils/amplitude';
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
 import AlertBox from '@/components/AlertBox/AlertBox';
 import Container from '@/components/Container/Container';
-import SwiperCarousel from '@/components/SwiperCarousel/SwiperCarousel';
+import { SwiperCarousel } from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 

@@ -1,0 +1,52 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import * as OfferCardCarousel from './OfferCardCarousel.stories';
+
+<Meta of={OfferCardCarousel} />
+
+# OfferCardCarousel
+
+- [Overview](#overview)
+- [Props](#props)
+- [Usage](#usage)
+
+## Overview
+
+- This component renders a OfferCardCarousel.
+- It renders 2 Cards for "Deals of the week" case and 3 cards for the remaining cases on desktop.
+- It renders one card for mobile and two cards for tablet.
+
+## Props
+
+<Controls />
+
+## Usage
+
+```js
+<OfferCardCarousel offers={[]} />
+```
+
+## Styling Issues
+
+- Although you may see all styles being applied correctly in storybook stories, **once you incorporate this component in other packages, the rendering of the styles may not be applied correctly**.
+
+- The shared-ui library may present some Tailwind issues while using this component in other packages, like web or mobile-hybrid.
+  Some classes with **arbitrary values** or native get purged by tailwind since they don't exist in the web/mobile-hybrid packages.
+
+#### **Solution:**
+
+- The classes that don't apply correctly with tailwind must be **converted to css classes or inline styling**.
+- For static styles, you can add new css classes in `./styles/style.css` file (make sure to add the component name at the start of the class name).
+- For dynamic styles, you can use inline styling, like the background color for the Badge component.
+
+## Variants
+
+List of variants can be shown below here.
+
+### DealsOfTheWeek
+
+<Canvas of={OfferCardCarousel.DealsOfTheWeek} />
+
+### CommonWeb
+
+<Canvas of={OfferCardCarousel.CommonWeb} />

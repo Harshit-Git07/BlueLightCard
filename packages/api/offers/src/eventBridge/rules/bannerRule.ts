@@ -13,8 +13,7 @@ export const bannerRule = (tableName: string, queue: IQueue, stackName: string, 
             SERVICE: 'offers',
             TABLE_NAME: tableName,
             REGION: region,
-            PRODUCTION_CDN_URL: 'https://cdn.bluelightcard.co.uk',
-            STAGING_CDN_URL: 'https://blcimg-dev.img.bluelightcard.co.uk'
+            CDN_URL: process.env.CDN_URL ?? 'https://cdn.bluelightcard.co.uk'
           },
           deadLetterQueueEnabled: true,
           deadLetterQueue: queue,

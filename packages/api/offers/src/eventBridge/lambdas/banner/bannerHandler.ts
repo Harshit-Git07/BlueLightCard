@@ -6,9 +6,7 @@ import { v4 } from 'uuid';
 import { BannerModel, Banner } from '../../../models/banner';
 import { convertDateUnix } from '../../../../../core/src/utils/date';
 
-const PRODUCTION_ENV = 'production';
-const PRODUCTION_CDN_URL = process.env.PRODUCTION_CDN_URL;
-const STAGING_CDN_URL = process.env.STAGING_CDN_URL;
+const CDN_URL = process.env.CDN_URL ?? 'https://cdn.bluelightcard.co.uk';
 
 type BannerDetails = {
   bannerType: string;
@@ -80,10 +78,8 @@ export class BannerHandler {
   }
 
   private getBannerDetails(): BannerDetails {
-    const stage = this.event.detail.stage;
-
     let bannerType;
-    let imageLocationPrefix = `${stage === PRODUCTION_ENV ? PRODUCTION_CDN_URL : STAGING_CDN_URL}`;
+    let imageLocationPrefix = CDN_URL;
     let companyId = this.event.detail.cid;
 
     const bannerTypeMapping: { [key: number]: { bannerType: string; imageLocationSuffix: string } } = {

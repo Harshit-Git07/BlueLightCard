@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.63.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.63.0...bluelightcard/web-v1.63.1) (2024-07-10)
+
+
+### Other Changes
+
+* merge new tokens with legacy ([#1741](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1741)) ([7b82d16](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7b82d16daf74ee9ebbfd10ba7c42e904fb790572))
+* updated seed script with dynamodb banner table ([#1729](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1729)) ([9661923](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96619233b9b2b6d5749c4a11cae3069d0cc56bc5))
+
 ## [1.63.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.62.0...bluelightcard/web-v1.63.0) (2024-07-03)
 
 

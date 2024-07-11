@@ -104,8 +104,9 @@
 }
 /* forgot password button */
 .redirect-customizable {
-  text-align: center;
-  display: none;
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: center;
 }
 
 .passwordCheck-notValid-customizable {

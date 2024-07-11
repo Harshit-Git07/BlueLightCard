@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.6.0...shared-ui-v1.7.0) (2024-07-10)
+
+
+### Features
+
+* added typography tokens to banner component ([#1735](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1735)) ([0512959](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0512959cf190bf330b4e5517b08be5d298e483ab))
+* applied tokens on the responsive offer card component  ([#1666](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1666)) ([951af13](https://github.com/bluelightcard/BlueLightCard-2.0/commit/951af13ed47f57907411fb3a49c4ac41e57553f3))
+
+
+### Bug Fixes
+
+* ensure redeem data for preApplied is pre-fetched ([#1748](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1748)) ([9b8b6e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9b8b6e45153dddf3ca694bbd24a966ed1de7d0d4))
+* generic event on CTA click for mobile app ([#1749](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1749)) ([181328f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/181328fda1241450670b4bae713d2499495b794c))
+* Removed title and description from navigator.share, fixes copy on mobi ([#1712](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1712)) ([5521f26](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5521f268403d666ab3ac4a28ba4e5b4d03c3ef49))
+* To 897 change the redemption flows magic button click ([#1714](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1714)) ([1ab7a70](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1ab7a70b32cf4b8daffa1cca9f96e231dc30cc55))
+* TO-779 sets the ShareButton to be borderless ([#1717](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1717)) ([f50cce6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f50cce6ffbe726e5277932428afd200e538190a8))
+* vault event on CTA click for mobile app ([#1752](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1752)) ([8fc35cd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8fc35cde2b7f859f842d2dd1f69859056020abf0))
+
+
+### Other Changes
+
+* consolidate non vault flags ([#1727](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1727)) ([ff8e131](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ff8e1310c584bfb5ee936c33b208628672718425))
+* updated tokens ([#1731](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1731)) ([a30440d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a30440db02f072639e802016ae99cca547db7844))
+
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.5.1...shared-ui-v1.6.0) (2024-07-02)
 
 

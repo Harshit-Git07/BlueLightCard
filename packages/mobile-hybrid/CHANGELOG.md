@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.22.3...bluelightcard/mobile-hybrid-v1.23.0) (2024-07-10)
+
+
+### Features
+
+* added heading typography tokens ([#1740](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1740)) ([bea4c43](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bea4c43e43d2f5fd7b590d45d40b77e2b70fe920))
+* added new typography tokens for ListItem component ([#1742](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1742)) ([68bf79c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/68bf79c01c7a8adb2f837d35d1fc8d4743e97323))
+* added new typography tokens to hybrid card ([#1739](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1739)) ([022016e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/022016e3b2e3d885d8b1a94abd83625530348983))
+* added typography tokens to banner component ([#1735](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1735)) ([0512959](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0512959cf190bf330b4e5517b08be5d298e483ab))
+* lifecycle event ([#1715](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1715)) ([3caa0af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3caa0af1e06679caaa5cfc4784b66e256a753cae))
+
+
+### Bug Fixes
+
+* [DISCO-449] Update DDS News links to navigate to correct URL in mobile hybrid ([#1723](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1723)) ([983b5a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/983b5a970c795091e3850a50e04c599f9f541e12))
+* Cleaned up company page and lifecycle event. Increased timeout and re-added timeout ([#1725](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1725)) ([400b791](https://github.com/bluelightcard/BlueLightCard-2.0/commit/400b79187e91b420229189398df63afcbeb35e5d))
+* Removed retry cap from company page queries ([#1721](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1721)) ([1777794](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1777794ebe65c1f7295b921985412a7ff848b428))
+
+
+### Other Changes
+
+* consolidate non vault flags ([#1727](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1727)) ([ff8e131](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ff8e1310c584bfb5ee936c33b208628672718425))
+
 ## [1.22.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.22.2...bluelightcard/mobile-hybrid-v1.22.3) (2024-07-02)
 
 

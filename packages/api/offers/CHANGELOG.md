@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.35.0...bluelightcard/offers-v1.36.0) (2024-07-11)
+
+
+### Features
+
+* [DISCO-447] Add DDS custom domain name to offers stack ([#1699](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1699)) ([96ba77d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96ba77db2a31c916c7ae85b0c786b6a0e532d60a))
+* [DISCO-476] Add brand specific CDN URLs to banner rule ([#1746](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1746)) ([5f4fd66](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5f4fd66611123a02ce9fa8cda81343042e751095))
+
 ## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.34.0...bluelightcard/offers-v1.35.0) (2024-07-02)
 
 

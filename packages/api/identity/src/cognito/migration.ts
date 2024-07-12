@@ -45,6 +45,12 @@ export const generateSecretHash = async (username: string, clientId: string, cli
 }
 
 export const handler = async (event: UserMigrationTriggerEvent) => {
+    logger.info('audit', {
+      audit: true,
+      action: event.triggerSource,
+      clientId: event.callerContext.clientId,
+    });
+
     if (event.triggerSource == "UserMigration_Authentication") {
       try {
         // Authenticate the user with the old user pool

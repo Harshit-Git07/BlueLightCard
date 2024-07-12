@@ -13,6 +13,12 @@ const IDENTITY_TABLE_NAME = process.env.IDENTITY_TABLE_NAME ?? "";
 const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);
 
 export const handler = async (event: PostAuthenticationTriggerEvent, context: any) => {
+  logger.info('audit', {
+    audit: true,
+    action: event.triggerSource,
+    clientId: event.callerContext.clientId,
+  });
+
   const email = event.request.userAttributes.email;
   const userPoolId = event.userPoolId;
   const migratedFromOldPool = event.request.userAttributes['custom:migrated_old_pool'];

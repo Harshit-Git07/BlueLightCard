@@ -122,9 +122,9 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   amplitudeDetails: {
                     event: amplitudeEvents.OFFER_SHARE_CLICKED,
                     params: {
-                      company_id: offerMeta.companyId,
+                      company_id: String(offerMeta.companyId),
                       company_name: offerMeta.companyName,
-                      offer_id: offerMeta.offerId,
+                      offer_id: String(offerMeta.offerId),
                       offer_name: offerData.name,
                       brand: config.globalConfig.brand,
                     },
@@ -174,9 +174,9 @@ const OfferTopDetailsHeader: FC<Props> = ({
                 amplitudeDetails={{
                   event: amplitudeEvents.OFFER_TERMS_CLICKED,
                   params: {
-                    company_id: offerMeta.companyId,
+                    company_id: String(offerMeta.companyId),
                     company_name: offerMeta.companyName,
-                    offer_id: offerMeta.offerId,
+                    offer_id: String(offerMeta.offerId),
                     offer_name: offerData.name,
                     brand: config.globalConfig.brand,
                   },

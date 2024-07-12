@@ -7,7 +7,7 @@ import { useMedia } from 'react-use';
 import { advertQuery } from 'src/graphql/advertQuery';
 import { makeQuery } from 'src/graphql/makeQuery';
 import { shuffle } from 'lodash';
-import { BRAND, CDN_URL } from '@/global-vars';
+import { BRAND } from '@/global-vars';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
 import {
@@ -30,6 +30,7 @@ import amplitudeEvents from '@/utils/amplitude/events';
 import { logCompanyView } from '@/utils/amplitude/logCompanyView';
 import { usePathname } from 'next/navigation';
 import { useOfferDetails } from '@bluelightcard/shared-ui';
+import { BRANDS } from '../common/types/brands.enum';
 
 type CompanyPageProps = {};
 
@@ -85,6 +86,16 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   const [offerData, setOfferData] = useState<OfferData[] | null>([]);
 
   const { viewOffer } = useOfferDetails();
+
+  const getBrand = () => {
+    switch (BRAND) {
+      case BRANDS.BLC_UK:
+      case BRANDS.BLC_AU:
+        return 'Blue Light Card';
+      case BRANDS.DDS_UK:
+        return 'Defense Discount Service';
+    }
+  };
 
   const handleCompanyView = (eventSource: string, companyId: string, companyName: string) => {
     logCompanyView({
@@ -191,7 +202,13 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   return (
     <>
       <Head>
-        <title>{companyData.name} offers | Blue Light Card</title>
+        <title>
+          {companyData.name} offers | {getBrand()}
+        </title>
+        <meta
+          name="description"
+          content={`Some of the latest discount offers from ${companyData.name}`}
+        />
       </Head>
       <Container
         className="desktop:mt-16 mobile:mt-[14px]"
@@ -372,11 +389,4 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
 export const getStaticProps = getI18nStaticProps;
 
-const layoutProps = {
-  seo: {
-    title: 'company.seo.title',
-    description: 'company.seo.description',
-  },
-};
-
-export default withAuthProviderLayout(CompanyPage, layoutProps);
+export default withAuthProviderLayout(CompanyPage, {});

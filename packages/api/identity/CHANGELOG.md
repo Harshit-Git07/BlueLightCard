@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.85.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.84.0...bluelightcard/identity-v1.85.0) (2024-07-15)
+
+
+### Features
+
+* Added new Login state for Reward gateway & Yalson ([#1773](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1773)) ([46218e3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/46218e315a6fee1fe6359b0b5d212ba1bc5f842c))
+
 ## [1.84.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.83.0...bluelightcard/identity-v1.84.0) (2024-07-12)
 
 

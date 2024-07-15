@@ -3,29 +3,34 @@
       {
           "partnersName": "UK Reward Gateway",
           "callBackUrl": "https://accounts.rewardgateway.com/callback.php",
-          "signoutUrl": "https://bluelightcard.rewardgateway.co.uk/Authentication/Logout"
+          "signoutUrl": "https://bluelightcard.rewardgateway.co.uk/Authentication/Logout",
+          "partnerUniqueId": "REWARD_GATEWAY"
       },
       {
           "partnersName": "UK Yalson",
           "callBackUrl": "https://secure.yalsoncc.co.uk/blc_callback",
-          "signoutUrl": "https://secure.yalsoncc.co.uk/blc_signout"
+          "signoutUrl": "https://secure.yalsoncc.co.uk/blc_signout",
+          "partnerUniqueId": "YALSON"
       },
       {
           "partnersName": "UK Creditec",
           "callBackUrl": "https://localhost",
-          "signoutUrl": "https://localhost"
+          "signoutUrl": "https://localhost",
+          "partnerUniqueId": "CREDITEC"
       }
     ],
     "DDS": [
       {
         "partnersName": "UK Reward Gateway",
         "callBackUrl": "https://accounts.rewardgateway.com/callback.php",
-        "signoutUrl": "https://defencediscountservice.rewardgateway.co.uk/Authentication/Logout"
+        "signoutUrl": "https://defencediscountservice.rewardgateway.co.uk/Authentication/Logout",
+        "partnerUniqueId": "REWARD_GATEWAY"
       },
       {
         "partnersName": "UK Yalson",
         "callBackUrl": "https://secure.yalsoncc.co.uk/dds_callback",
-        "signoutUrl": "https://secure.yalsoncc.co.uk/dds_signout"
+        "signoutUrl": "https://secure.yalsoncc.co.uk/dds_signout",
+        "partnerUniqueId": "YALSON"
       }
     ]
 }

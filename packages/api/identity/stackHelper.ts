@@ -15,6 +15,7 @@ import { REGIONS } from  '@blc-mono/core/types/regions.enum'
 import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
 import externalClientProvidersUk from "../identity/src/cognito/resources/externalCognitoPartners-eu-west-2.json";
 import externalClientProvidersAus from "../identity/src/cognito/resources/externalCognitoPartners-ap-southeast-2.json";
+import { LOGIN_CLIENT_TYPE } from 'src/models/loginAudits';
 
 const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
 const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
@@ -39,6 +40,10 @@ const getAuthCustomDomainName = (brandName: BRANDS = BRANDS.BLC_UK, stage: STAGE
 
   return customDomainName;
 };
+
+
+
+let loginClientIdMap:any = {};
 
 export function createOldCognito(
   stack: Stack,
@@ -532,8 +537,12 @@ export function createNewCognito(
       destination: new LambdaDestination(blcAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
-
     createExternalClient(stack, cognito, false);
+    // add extra env parameter to already created function.
+    loginClientIdMap[webClient.userPoolClientId] = LOGIN_CLIENT_TYPE.WEB_HOSTEDUI;
+    loginClientIdMap[mobileClient.userPoolClientId] = LOGIN_CLIENT_TYPE.APP_HOSTEDUI;
+    blcAuditLogFunction.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
+    blcAuditLogFunctionPre.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
   }
 
   return cognito;
@@ -728,8 +737,12 @@ export function createNewCognitoDDS(
       destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
-
     createExternalClient(stack, cognito_dds, true);
+    // add extra env parameter to already created function.
+    loginClientIdMap[webClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.WEB_HOSTEDUI;
+    loginClientIdMap[mobileClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.APP_HOSTEDUI;
+    ddsAuditLogFunction.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
+    ddsAuditLogFunctionPre.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
   }
 
   return cognito_dds;
@@ -755,7 +768,7 @@ const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean) =>
   const providerList = stack.region === REGIONS.AP_SOUTHEAST_2 ? externalClientProvidersAus: externalClientProvidersUk
   const providers = isDds? providerList.DDS : providerList.BLC;
 
-  providers.map((clients: { partnersName: string; callBackUrl: string; signoutUrl: string; }) => {
+  providers.map((clients: { partnersName: string; callBackUrl: string; signoutUrl: string; partnerUniqueId: string }) => {
         const externalClient = cognito.cdk.userPool.addClient(clients.partnersName, {
           authFlows: {
             userPassword: true,
@@ -779,6 +792,8 @@ const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean) =>
         isDds? ddsHostedUiCSSPath : blcHostedUiCSSPath,
         isDds? ddsLogoPath : blcLogoPath,
       );
+      // partnerUniqueId key should match with LOGIN_CLIENT_TYPE
+      loginClientIdMap[externalClient.userPoolClientId] = clients.partnerUniqueId;
     })
 
 

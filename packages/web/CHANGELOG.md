@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.64.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.63.1...bluelightcard/web-v1.64.0) (2024-07-12)
+
+
+### Features
+
+* built and tokenise Offer card carousel ([#1706](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1706)) ([81e9b58](https://github.com/bluelightcard/BlueLightCard-2.0/commit/81e9b58726498886d6f06e590ec9574c8f53c1aa))
+* TO-808 whitelabel company seo ([#1768](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1768)) ([77f3388](https://github.com/bluelightcard/BlueLightCard-2.0/commit/77f33883b074773a819e7dee71b1fe85740b4043))
+
 ## [1.63.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.63.0...bluelightcard/web-v1.63.1) (2024-07-10)
 
 

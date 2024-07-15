@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.18.0...bluelightcard/redemptions-v1.19.0) (2024-07-15)
+
+
+### Features
+
+* TR-714 fix DWH vaultQR ([#1770](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1770)) ([4f5707f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4f5707f9a11f4c11054b51b61fc47cc8346a0500))
+* TR-716 Updated pre-applied campaignId ([#1780](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1780)) ([66b69e6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/66b69e6c8db26b2c32de4a2fe7a46949243fb368))
+
 ## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.17.2...bluelightcard/redemptions-v1.18.0) (2024-07-08)
 
 

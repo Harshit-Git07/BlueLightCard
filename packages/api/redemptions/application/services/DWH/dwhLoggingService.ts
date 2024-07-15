@@ -84,7 +84,9 @@ export class DwhLoggingService implements IDwhLoggingService {
   }
 
   public async logMemberRedemption(dto: MemberRedemptionParamsDto): Promise<void> {
-    if (dto.data.redemptionType === 'vault') {
+    const isVaultRedemptionType = dto.data.redemptionType == 'vault' || dto.data.redemptionType === 'vaultQR';
+
+    if (isVaultRedemptionType) {
       await this.dwhRepository.logVaultRedemption(
         dto.data.offerId,
         dto.data.companyId,

@@ -33,7 +33,7 @@ export function createDwhMemberRedemptionRule(
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: ['vault'],
+          redemptionType: ['vault', 'vaultQR'],
         },
       },
     },

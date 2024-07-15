@@ -152,45 +152,49 @@ describe('DwhLoggingService', () => {
   });
 
   describe('logMemberRedemption', () => {
-    it('should call DwhRepository.logVaultRedemption correctly if the redemption type is vault', async () => {
-      // Arrange
-      const repository = {
-        logVaultRedemption: jest.fn(),
-      };
-      const service = new DwhLoggingService(as(repository));
-      const params = new MemberRedemptionParamsDto({
-        redemptionType: 'vault',
-        offerId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
-        memberId: faker.number
-          .int({
+    it.each(['vault', 'vaultQR'])(
+      'should call DwhRepository.logVaultRedemption correctly if the redemption type is %s',
+      async (redemptionType) => {
+        // Arrange
+        const repository = {
+          logVaultRedemption: jest.fn(),
+        };
+
+        const service = new DwhLoggingService(as(repository));
+        const params = new MemberRedemptionParamsDto({
+          redemptionType: as(redemptionType),
+          offerId: faker.number.int({
             min: 1,
             max: 1_000_000,
-          })
-          .toString(),
-        code: faker.string.alphanumeric(),
-      });
+          }),
+          companyId: faker.number.int({
+            min: 1,
+            max: 1_000_000,
+          }),
+          memberId: faker.number
+            .int({
+              min: 1,
+              max: 1_000_000,
+            })
+            .toString(),
+          code: faker.string.alphanumeric(),
+        });
 
-      // Act
-      await service.logMemberRedemption(params);
+        // Act
+        await service.logMemberRedemption(params);
 
-      // Assert
-      expect(repository.logVaultRedemption).toHaveBeenCalledTimes(1);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = params.data as any;
-      expect(repository.logVaultRedemption).toHaveBeenCalledWith(
-        data.offerId,
-        data.companyId,
-        data.memberId,
-        data.code,
-      );
-    });
+        // Assert
+        expect(repository.logVaultRedemption).toHaveBeenCalledTimes(1);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data = params.data as any;
+        expect(repository.logVaultRedemption).toHaveBeenCalledWith(
+          data.offerId,
+          data.companyId,
+          data.memberId,
+          data.code,
+        );
+      },
+    );
 
     it('should not call DwhRepository.logVaultRedemption if the redemption type is not vault', async () => {
       // Arrange

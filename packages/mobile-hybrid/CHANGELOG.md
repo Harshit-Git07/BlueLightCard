@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.23.0...bluelightcard/mobile-hybrid-v1.24.0) (2024-07-15)
+
+
+### Features
+
+* built and tokenise Offer card carousel ([#1706](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1706)) ([81e9b58](https://github.com/bluelightcard/BlueLightCard-2.0/commit/81e9b58726498886d6f06e590ec9574c8f53c1aa))
+
 ## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.22.3...bluelightcard/mobile-hybrid-v1.23.0) (2024-07-10)
 
 

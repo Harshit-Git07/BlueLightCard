@@ -18,7 +18,7 @@ const RedeemRequestModel = z.object({
     Authorization: z.string(),
   }),
 });
-type ParsedRequest = z.infer<typeof RedeemRequestModel> & { memberId: string; brazeExternalUserId: string };
+export type ParsedRequest = z.infer<typeof RedeemRequestModel> & { memberId: string; brazeExternalUserId: string };
 
 export class RedeemController extends APIGatewayController<ParsedRequest> {
   static readonly inject = [Logger.key, RedeemService.key] as const;
@@ -39,6 +39,8 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
 
     const parsedBearerToken = TokenHelper.removeBearerPrefix(parsedRequest.value.headers.Authorization);
     const tokenPayloadResult = TokenHelper.unsafeExtractDataFromToken(parsedBearerToken);
+    //todo: update this when identity's api is available
+    const allowedStatuses = ['PHYSICAL_CARD', 'ADDED_TO_BATCH', 'USER_BATCHED'];
 
     if (tokenPayloadResult.isFailure) {
       this.logger.error({
@@ -50,8 +52,11 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
 
     const memberId = tokenPayloadResult.value['custom:blc_old_id'];
     const brazeExternalUserId = tokenPayloadResult.value['custom:blc_old_uuid'];
+    const cardStatus = tokenPayloadResult.value['card_status'];
     if (typeof memberId !== 'string') return Result.err({ message: 'Invalid memberId in token' });
     if (typeof brazeExternalUserId !== 'string') return Result.err({ message: 'Invalid brazeExternalUserId in token' });
+    if (typeof cardStatus !== 'string' || !allowedStatuses.includes(cardStatus))
+      return Result.err({ message: 'Ineligible card status' });
 
     return Result.ok({ ...parsedRequest.value, memberId, brazeExternalUserId });
   }

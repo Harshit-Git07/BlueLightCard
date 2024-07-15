@@ -1,32 +1,32 @@
 import { faker } from '@faker-js/faker';
 import { eq } from 'drizzle-orm';
+import jwtDecode from 'jwt-decode';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { afterAll, beforeAll, describe, expect, onTestFinished, test } from 'vitest';
 
 import { DatabaseConnectionType } from '../libs/database/connection';
 import { createRedemptionsIdE2E, redemptionsTable } from '../libs/database/schema';
 import { redemptionFactory } from '../libs/test/factories/redemption.factory';
-import { TestUser, TestUserTokens } from '../libs/test/helpers/identity';
+import { TestAccount, TestUser, TestUserTokens } from '../libs/test/helpers/identity';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
 import { DwhTestHelper } from './helpers/DwhTestHelper';
 
 describe('GET /member/redemptionDetails', () => {
   let connectionManager: E2EDatabaseConnectionManager;
-  let testUser: TestUser;
   let testUserTokens: TestUserTokens;
+  let testUserAccount: TestAccount;
 
   beforeAll(async () => {
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
-    // TODO: Prevent emails being sent out
-    testUser = await TestUser.create();
-    testUserTokens = await testUser.authenticate();
+    testUserTokens = await TestUser.authenticate();
+    testUserAccount = jwtDecode(testUserTokens.idToken);
+
     // Set a conservative timeout
   }, 60_000);
 
   afterAll(async () => {
     await connectionManager?.cleanup();
-    await testUser?.delete();
   });
 
   test('should return unauthorized when called with invalid token', async () => {
@@ -140,7 +140,7 @@ describe('GET /member/redemptionDetails', () => {
       const compClickRecord = await new DwhTestHelper().findCompViewRecordByOfferId(redemption.offerId);
       expect(compClickRecord.cid).toBe(redemption.companyId.toString());
       expect(compClickRecord.oid_).toBe(redemption.offerId);
-      expect(compClickRecord.mid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.mid).toBe(testUserAccount['custom:blc_old_id']);
       expect(compClickRecord.timedate).toBeDefined();
       expect(compClickRecord.type).toBe(1); // Type of 1 corresponds to the web application
       expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
@@ -176,7 +176,7 @@ describe('GET /member/redemptionDetails', () => {
     const compClickRecord = await new DwhTestHelper().findCompViewRecordByOfferId(redemption.offerId);
     expect(compClickRecord.cid).toBe(redemption.companyId.toString());
     expect(compClickRecord.oid_).toBe(redemption.offerId);
-    expect(compClickRecord.mid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+    expect(compClickRecord.mid).toBe(testUserAccount['custom:blc_old_id']);
     expect(compClickRecord.timedate).toBeDefined();
     expect(compClickRecord.type).toBe(1); // Type of 1 corresponds to the web application
     expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
@@ -211,7 +211,7 @@ describe('GET /member/redemptionDetails', () => {
     const compClickRecord = await new DwhTestHelper().findCompAppViewRecordByOfferId(redemption.offerId);
     expect(compClickRecord.cid).toBe(redemption.companyId.toString());
     expect(compClickRecord.oid_).toBe(redemption.offerId);
-    expect(compClickRecord.mid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+    expect(compClickRecord.mid).toBe(testUserAccount['custom:blc_old_id']);
     expect(compClickRecord.timedate).toBeDefined();
     expect(compClickRecord.type).toBe(5); // Type of 5 corresponds to the mobile application
     expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet

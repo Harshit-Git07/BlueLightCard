@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { eq } from 'drizzle-orm';
+import jwtDecode from 'jwt-decode';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { afterAll, beforeAll, describe, expect, onTestFinished, test } from 'vitest';
 
@@ -18,27 +19,27 @@ import { redemptionFactory } from '../libs/test/factories/redemption.factory';
 import { vaultFactory } from '../libs/test/factories/vault.factory';
 import { vaultBatchFactory } from '../libs/test/factories/vaultBatches.factory';
 import { vaultCodeFactory } from '../libs/test/factories/vaultCode.factory';
-import { TestUser, TestUserTokens } from '../libs/test/helpers/identity';
+import { TestAccount, TestUser, TestUserTokens } from '../libs/test/helpers/identity';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
 import { DwhTestHelper } from './helpers/DwhTestHelper';
 
 describe('POST /member/redeem', () => {
   let connectionManager: E2EDatabaseConnectionManager;
-  let testUser: TestUser;
+  let testUserAccount: TestAccount;
   let testUserTokens: TestUserTokens;
 
   beforeAll(async () => {
     // eslint-disable-next-line no-console
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
-    testUser = await TestUser.create();
-    testUserTokens = await testUser.authenticate();
+    testUserTokens = await TestUser.authenticate();
+    testUserAccount = jwtDecode(testUserTokens.idToken);
+
     // Set a conservative timeout
   }, 60_000);
 
   afterAll(async () => {
     await connectionManager?.cleanup();
-    await testUser?.delete();
   });
 
   test('should return unauthorized when called with invalid token', async () => {
@@ -376,7 +377,7 @@ describe('POST /member/redeem', () => {
       const compClickRecord = await new DwhTestHelper().findCompClickRecordByOfferId(redemption.offerId);
       expect(compClickRecord.company_id).toBe(redemption.companyId.toString());
       expect(compClickRecord.offer_id).toBe(redemption.offerId);
-      expect(compClickRecord.member_id).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.member_id).toBe(testUserAccount['custom:blc_old_id']);
       expect(compClickRecord.timedate).toBeDefined();
       expect(compClickRecord.type).toBe(2); // Type of 2 corresponds to the web application
       expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
@@ -385,7 +386,7 @@ describe('POST /member/redeem', () => {
       expect(compVaultClickRecord.compid).toBe(redemption.companyId.toString());
       expect(compVaultClickRecord.code).toBe(vaultCode.code);
       expect(compVaultClickRecord.offer_id).toBe(redemption.offerId.toString());
-      expect(compVaultClickRecord.uid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compVaultClickRecord.uid).toBe(testUserAccount['custom:blc_old_id']);
       expect(compVaultClickRecord.whenrequested).toBeDefined();
     },
   );
@@ -452,7 +453,7 @@ describe('POST /member/redeem', () => {
       const compClickRecord = await new DwhTestHelper().findCompClickRecordByOfferId(redemption.offerId);
       expect(compClickRecord.company_id).toBe(redemption.companyId.toString());
       expect(compClickRecord.offer_id).toBe(redemption.offerId);
-      expect(compClickRecord.member_id).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.member_id).toBe(testUserAccount['custom:blc_old_id']);
       expect(compClickRecord.timedate).toBeDefined();
       expect(compClickRecord.type).toBe(2); // Type of 2 corresponds to the web application
       expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
@@ -461,7 +462,7 @@ describe('POST /member/redeem', () => {
       expect(compVaultClickRecord.compid).toBe(redemption.companyId.toString());
       expect(compVaultClickRecord.code).toBe(vaultCode.code);
       expect(compVaultClickRecord.offer_id).toBe(redemption.offerId.toString());
-      expect(compVaultClickRecord.uid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compVaultClickRecord.uid).toBe(testUserAccount['custom:blc_old_id']);
       expect(compVaultClickRecord.whenrequested).toBeDefined();
     },
   );
@@ -528,7 +529,7 @@ describe('POST /member/redeem', () => {
       const compClickRecord = await new DwhTestHelper().findCompAppClickRecordByOfferId(redemption.offerId);
       expect(compClickRecord.company_id).toBe(redemption.companyId.toString());
       expect(compClickRecord.offer_id).toBe(redemption.offerId);
-      expect(compClickRecord.member_id).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compClickRecord.member_id).toBe(testUserAccount['custom:blc_old_id']);
       expect(compClickRecord.timedate).toBeDefined();
       expect(compClickRecord.type).toBe(4); // Type of 4 corresponds to the mobile application
       expect(compClickRecord.origin).toBe('offer_sheet'); // Currently this API is only used by the offer sheet
@@ -537,7 +538,7 @@ describe('POST /member/redeem', () => {
       expect(compVaultClickRecord.compid).toBe(redemption.companyId.toString());
       expect(compVaultClickRecord.code).toBe(vaultCode.code);
       expect(compVaultClickRecord.offer_id).toBe(redemption.offerId.toString());
-      expect(compVaultClickRecord.uid).toBe(testUser.userDetail.attributes.blcOldId.toString());
+      expect(compVaultClickRecord.uid).toBe(testUserAccount['custom:blc_old_id']);
       expect(compVaultClickRecord.whenrequested).toBeDefined();
     },
   );
@@ -582,4 +583,52 @@ describe('POST /member/redeem', () => {
     });
     expect(result.status).toBe(500);
   });
+
+  // removed test until identity api is ready
+  // test('should return bad request when called with token with invalid card status', async () => {
+  //   // Arrange
+  //   const testUser = await TestUser.create({
+  //     cardStatus: 'DECLINED',
+  //   });
+  //   onTestFinished(async () => {
+  //     await testUser.delete();
+  //   });
+  //   const testUserTokens = await testUser.authenticate();
+  //   const redemption = redemptionFactory.build({
+  //     id: createRedemptionsIdE2E(),
+  //     redemptionType: 'preApplied',
+  //     connection: 'direct',
+  //     url: faker.internet.url(),
+  //   });
+  //   const companyName = faker.company.name();
+  //   const offerName = faker.commerce.productName();
+  //   onTestFinished(async () => {
+  //     await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+  //   });
+  //   await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+  //
+  //   // Act
+  //   const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redeem`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'X-Client-Type': 'mobile',
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${testUserTokens.idToken}`,
+  //     },
+  //     body: JSON.stringify({
+  //       offerId: redemption.offerId,
+  //       companyName,
+  //       offerName,
+  //     }),
+  //   });
+  //   const body = await result.json();
+  //
+  //   // Assert
+  //   expect(body).toMatchObject({
+  //     error: {
+  //       message: 'Ineligible card status',
+  //     },
+  //   });
+  //   expect(result.status).toBe(400);
+  // });
 });

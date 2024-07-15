@@ -1,9 +1,20 @@
 import jwtDecode from 'jwt-decode';
+import z from 'zod';
 
 import { JsonObject } from '@blc-mono/core/types/json';
 import { Result } from '@blc-mono/core/types/result';
 
 const BEARER_PREFIX = 'Bearer ';
+
+const tokenPayloadSchema = z
+  .object({
+    'custom:blc_old_id': z.string(),
+    'custom:blc_old_uuid': z.string(),
+    card_status: z.string(),
+  })
+  .nonstrict();
+
+type TokenPayload = z.infer<typeof tokenPayloadSchema>;
 
 export class TokenHelper {
   /**
@@ -15,6 +26,17 @@ export class TokenHelper {
     } else {
       // If no Bearer prefix, assume the full header is the token
       return authorizationHeader;
+    }
+  }
+
+  static extractDataFromToken(token: string): Result<TokenPayload, unknown> {
+    try {
+      const decodedToken = jwtDecode(token);
+
+      const parsedToken = tokenPayloadSchema.parse(decodedToken);
+      return Result.ok(parsedToken);
+    } catch (err) {
+      return Result.err(err);
     }
   }
 

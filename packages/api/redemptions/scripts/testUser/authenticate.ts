@@ -1,10 +1,10 @@
-import { readFile } from 'node:fs/promises';
+// import { readFile } from 'node:fs/promises';
 
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
 
-import { TestUser, TestUserDetailsSchema } from '../../libs/test/helpers/identity';
+import { TestUser } from '../../libs/test/helpers/identity';
 
-import { TEST_USER_FILE } from './constants';
+/* import { TEST_USER_FILE } from './constants'; */
 
 const logger = new CliLogger();
 
@@ -13,9 +13,9 @@ async function main() {
     message: 'Reading test user details from disk',
   });
 
-  let testUserData: string;
+  // let testUserData: string;
   try {
-    testUserData = await readFile(TEST_USER_FILE, 'utf8');
+    // testUserData = await readFile(TEST_USER_FILE, 'utf8');
   } catch {
     logger.error({
       message:
@@ -28,14 +28,11 @@ async function main() {
     message: 'Validating test user details',
   });
 
-  const testUserDetails = TestUserDetailsSchema.parse(JSON.parse(testUserData));
-  const testUser = new TestUser(testUserDetails);
-
   logger.info({
     message: 'Authenticating test user',
   });
 
-  const tokens = await testUser.authenticate();
+  const tokens = await TestUser.authenticate();
 
   logger.info({
     message: 'Test user authenticated',

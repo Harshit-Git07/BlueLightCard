@@ -108,10 +108,10 @@ const ResponsiveOfferCard: FC<Props> = ({
         />
       )}
       <p
-        className={`font-museo text-card-description-colour-light dark:text-card-description-colour-dark line-clamp-2 ${
+        className={`text-card-description-colour-light dark:text-card-description-colour-dark line-clamp-2 ${
           variant === 'vertical'
-            ? 'mt-2 text-card-vertical-small-text-font laptop:text-card-vertical-large-text-font'
-            : 'mt-0.5 text-card-horizontal-text-font font-regular justify-self-start self-end'
+            ? 'mt-2 text-card-vertical-small-text-font font-card-vertical-small-text-font font-card-vertical-small-text-font-weight tracking-card-vertical-small-text-font leading-card-vertical-small-text-font laptop:text-card-vertical-large-text-font laptop:font-card-vertical-large-text-font laptop:font-card-vertical-large-text-font-weight laptop:leading-font-card-vertical-large-text-font laptop:tracking-font-card-vertical-large-text-font'
+            : 'mt-0.5 text-card-horizontal-text-font font-card-horizontal-text-font font-card-horizontal-text-font-weight tracking-card-horizontal-text-font leading-card-horizontal-text-font justify-self-start self-end'
         }`}
       >
         {name}

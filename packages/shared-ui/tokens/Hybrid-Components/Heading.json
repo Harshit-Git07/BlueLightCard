@@ -14,7 +14,7 @@
     "type": "typography"
   },
   "heading-font": {
-    "value": "{typography.headline-bold}",
+    "value": "{typography.headline-small-bold}",
     "type": "typography"
   },
   "heading-link-colour": {

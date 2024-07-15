@@ -1,0 +1,64 @@
+{
+  "magicButton-default-label-colour": {
+    "light": {
+      "value": "{colour.onGradient.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onGradient.dark}",
+      "type": "color"
+    }
+  },
+  "magicButton-pressed-label-colour": {
+    "light": {
+      "value": "{colour.primary.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary.dark}",
+      "type": "color"
+    }
+  },
+  "magicButton-label-font": {
+    "value": "{typography.button}",
+    "type": "typography"
+  },
+  "magicButton-description-font": {
+    "value": "{typography.body-small-semibold}",
+    "type": "typography"
+  },
+  "magicButton-border-radius": {
+    "value": "{border-radius.round}",
+    "type": "borderRadius"
+  },
+  "magicButton-pressed-description-colour": {
+    "light": {
+      "value": "{colour.onSurface-subtle.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-subtle.dark}",
+      "type": "color"
+    }
+  },
+  "magicButton-disabled-label-colour": {
+    "light": {
+      "value": "{colour.onPrimary-disabled.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onPrimary-disabled.dark}",
+      "type": "color"
+    }
+  },
+  "magicButton-disabled-bg-colour": {
+    "light": {
+      "value": "{colour.primary-disabled.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.primary-disabled.dark}",
+      "type": "color"
+    }
+  }
+}

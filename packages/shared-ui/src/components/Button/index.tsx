@@ -4,14 +4,19 @@ import { ThemeColorTokens, ThemeVariant } from '../../types';
 import { cssUtil } from '../../utils/cssUtil';
 import { ButtonProps, ColorToken } from './types';
 
+// Note: as part of Globalisation tokens, inverted buttons and outline style element are out of scope.
+
 const color: ThemeColorTokens = {
   [ThemeVariant.Primary]: {
     base: {
-      bg: 'bg-[#000099] dark:bg-[#2EB8E6]',
-      hover: 'hover:bg-[#3333AD] dark:hover:bg-[#33CCFF]',
+      bg: 'bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark',
+      hover:
+        'hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark',
       focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
-      text: 'text-[#FAFAFA] dark:text-[#000099]',
+      text: 'text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark',
       border: 'border-transparent',
+      disabled:
+        'disabled:bg-button-primary-disabled-bg-colour-light disabled:dark:bg-button-primary-disabled-bg-colour-dark disabled:text-button-primary-disabled-label-colour-light disabled:dark:text-button-primary-disabled-label-colour',
     },
     invert: {
       bg: 'bg-[#FAFAFA]',
@@ -23,11 +28,15 @@ const color: ThemeColorTokens = {
   },
   [ThemeVariant.Secondary]: {
     base: {
-      bg: 'bg-[rgba(0, 0, 0, 0)]',
-      hover: 'hover:bg-[#F3F3FF] dark:hover:bg-[#3333CCFF]',
+      bg: '',
+      hover:
+        'hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark',
       focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
-      text: 'text-[#000099] dark:text-[#2EB8E6]',
-      border: 'border-[#000099] dark:border-[#2EB8E6]',
+      text: 'text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark',
+      border:
+        'border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark',
+      disabled:
+        'disabled:text-button-secondary-disabled-label-colour-light disabled:dark:text-button-secondary-disabled-label-colour-dark disabled:border-button-secondary-disabled-border-colour-light dark:disabled:border-button-secondary-disabled-border-colour-dark',
     },
     invert: {
       bg: 'bg-[rgba(0, 0, 0, 0)]',
@@ -39,10 +48,13 @@ const color: ThemeColorTokens = {
   },
   [ThemeVariant.Tertiary]: {
     base: {
-      hover: 'hover:bg-[#F3F3FF] dark:hover:bg-[#3333CCFF]',
+      hover:
+        'hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark',
       focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
-      text: 'text-[#000099] dark:text-[#2EB8E6]',
+      text: 'text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark',
       border: '!border-transparent',
+      disabled:
+        'disabled:text-button-tertiary-disabled-label-colour-light disabled:dark:text-button-tertiary-disabled-label-colour-dark',
     },
   },
 };
@@ -72,7 +84,7 @@ const Button: FC<ButtonProps> = ({
     slim ? 'py-1' : 'py-1.5',
     'px-5 rounded-md transition border-2',
     borderless ? '' : 'focus:outline outline-2 outline-offset-2',
-    disabled ? 'opacity-25' : '',
+    disabled ? colorToken.disabled : '',
     colorToken.text,
     !disabled && !withoutHover ? colorToken.hover : '',
     !withoutFocus ? colorToken.focus : '',
@@ -89,7 +101,7 @@ const Button: FC<ButtonProps> = ({
         href={href}
         type={type !== 'link' ? type : undefined}
         disabled={type !== 'link' ? disabled : undefined}
-        className={classes}
+        className={`${classes}, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font`}
         onClick={type !== 'link' ? onClick : undefined}
       >
         {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}

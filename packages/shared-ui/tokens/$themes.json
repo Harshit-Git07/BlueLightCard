@@ -22,7 +22,10 @@
       "Web-Components/DropDownItem": "enabled",
       "Web-Components/DropDownList": "enabled",
       "Semantic/SurfaceNeutral": "enabled",
-      "Shared-Components/Logo": "enabled"
+      "Shared-Components/Logo": "enabled",
+      "Shared-Components/Accordion": "enabled",
+      "Shared-Components/Tag": "enabled",
+      "Shared-Components/MagicButton": "enabled"
     },
     "$figmaStyleReferences": {}
   },
@@ -49,7 +52,10 @@
       "Web-Components/DropDownItem": "enabled",
       "Web-Components/DropDownList": "enabled",
       "Semantic/SurfaceNeutral": "enabled",
-      "Shared-Components/Logo": "enabled"
+      "Shared-Components/Logo": "enabled",
+      "Shared-Components/Accordion": "enabled",
+      "Shared-Components/Tag": "enabled",
+      "Shared-Components/MagicButton": "enabled"
     },
     "$figmaStyleReferences": {}
   }

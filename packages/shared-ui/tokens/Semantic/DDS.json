@@ -16,7 +16,7 @@
         "type": "color"
       },
       "dark": {
-        "value": "{colour.greyscale.white}",
+        "value": "{colour.greyscale.grey-900}",
         "type": "color"
       }
     },
@@ -199,6 +199,66 @@
         "value": "{colour.greyscale.white}",
         "type": "color"
       }
+    },
+    "primary-gradient-dim-fixed": {
+      "light": {
+        "value": "{colour.dds.denim-700}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.dds.denim-700}",
+        "type": "color"
+      }
+    },
+    "secondary-gradient-bright-fixed": {
+      "light": {
+        "value": "{colour.dds.aqua-300}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.dds.aqua-300}",
+        "type": "color"
+      }
+    },
+    "secondary-gradient-centre-fixed": {
+      "light": {
+        "value": "{colour.dds.denim-500}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.dds.denim-500}",
+        "type": "color"
+      }
+    },
+    "secondary-gradient-dim-fixed": {
+      "light": {
+        "value": "{colour.dds.denim-900}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.dds.denim-900}",
+        "type": "color"
+      }
+    },
+    "primary-gradient-bright-fixed": {
+      "light": {
+        "value": "{colour.dds.denim-300}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.dds.denim-300}",
+        "type": "color"
+      }
+    },
+    "onGradient": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      }
     }
   },
   "typography": {
@@ -248,6 +308,16 @@
         "fontWeight": "{fontweight.dds.bold}",
         "fontSize": "{fontsize.32px}",
         "lineHeight": "{fontsize.32px} + {lineheight.loose}",
+        "letterSpacing": "{letterspacing.small}"
+      },
+      "type": "typography"
+    },
+    "headline-small-bold": {
+      "value": {
+        "fontFamily": "{fontfamily.dds}",
+        "fontWeight": "{fontweight.dds.bold}",
+        "fontSize": "{fontsize.28px}",
+        "lineHeight": "{fontsize.28px} + {lineheight.tight}",
         "letterSpacing": "{letterspacing.small}"
       },
       "type": "typography"
@@ -305,7 +375,7 @@
     "body-light": {
       "value": {
         "fontFamily": "{fontfamily.dds}",
-        "fontWeight": "{fontweight.dds.regular}",
+        "fontWeight": "{fontweight.dds.light}",
         "fontSize": "{fontsize.base}",
         "lineHeight": "{fontsize.base} + {lineheight.loose}",
         "letterSpacing": "{letterspacing.default}"

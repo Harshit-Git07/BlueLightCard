@@ -1,0 +1,30 @@
+{
+  "tag-label-font": {
+    "value": "{typography.label-semibold}",
+    "type": "typography"
+  },
+  "tag-small-border-radius": {
+    "value": "{border-radius.round}",
+    "type": "borderRadius"
+  },
+  "tag-bg-colour": {
+    "light": {
+      "value": "{colour.surface-interactive.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.surface-interactive.dark}",
+      "type": "color"
+    }
+  },
+  "tag-label-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  }
+}

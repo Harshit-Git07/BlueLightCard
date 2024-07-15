@@ -926,6 +926,11 @@
       "type": "fontSizes",
       "description": "24px = 1.5rem"
     },
+    "28px": {
+      "value": "28",
+      "type": "fontSizes",
+      "description": "28px = 1.75rem"
+    },
     "32px": {
       "value": "32",
       "type": "fontSizes",
@@ -969,6 +974,10 @@
     "dds": {
       "regular": {
         "value": "Regular",
+        "type": "fontWeights"
+      },
+      "light": {
+        "value": "Light",
         "type": "fontWeights"
       },
       "semibold": {

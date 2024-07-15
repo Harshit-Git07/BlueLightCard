@@ -8,6 +8,7 @@ export type ColorToken = {
   focus: string;
   text: string;
   border: string;
+  disabled: string;
 };
 
 export type ButtonProps = PropsWithChildren & {

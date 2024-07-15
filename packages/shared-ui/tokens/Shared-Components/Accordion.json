@@ -1,0 +1,50 @@
+{
+  "accordion-divider-colour": {
+    "light": {
+      "value": "{colour.onSurface-outline.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface-outline.dark}",
+      "type": "color"
+    }
+  },
+  "accordion-label-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "accordion-label-font": {
+    "value": "{typography.body}",
+    "type": "typography"
+  },
+  "accordion-text-font": {
+    "value": "{typography.body-light}",
+    "type": "typography"
+  },
+  "accordion-text-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  },
+  "accordion-icon-colour": {
+    "light": {
+      "value": "{colour.onSurface.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onSurface.dark}",
+      "type": "color"
+    }
+  }
+}

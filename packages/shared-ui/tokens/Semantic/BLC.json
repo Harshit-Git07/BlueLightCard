@@ -65,7 +65,7 @@
         "value": "{colour.blc.duke-700-30%}",
         "type": "color"
       },
-      "light-copy": {
+      "dark": {
         "value": "{colour.blc.duke-300-40%}",
         "type": "color"
       }
@@ -199,6 +199,66 @@
         "value": "{colour.blc.duke-200}",
         "type": "color"
       }
+    },
+    "primary-gradient-bright-fixed": {
+      "light": {
+        "value": "{colour.blc.duke-400}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.blc.duke-400}",
+        "type": "color"
+      }
+    },
+    "primary-gradient-dim-fixed": {
+      "light": {
+        "value": "{colour.blc.duke-700}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.blc.duke-700}",
+        "type": "color"
+      }
+    },
+    "secondary-gradient-bright-fixed": {
+      "light": {
+        "value": "{colour.blc.sky-100}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.blc.sky-100}",
+        "type": "color"
+      }
+    },
+    "secondary-gradient-centre-fixed": {
+      "light": {
+        "value": "{colour.blc.duke-700}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.blc.duke-700}",
+        "type": "color"
+      }
+    },
+    "secondary-gradient-dim-fixed": {
+      "light": {
+        "value": "{colour.blc.duke-900}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.blc.duke-900}",
+        "type": "color"
+      }
+    },
+    "onGradient": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color"
+      }
     }
   },
   "typography": {
@@ -238,6 +298,16 @@
         "fontWeight": "{fontweight.blc.semibold}",
         "fontSize": "{fontsize.32px}",
         "lineHeight": "{fontsize.32px} + {lineheight.loose}",
+        "letterSpacing": "{letterspacing.small}"
+      },
+      "type": "typography"
+    },
+    "headline-small-bold": {
+      "value": {
+        "fontFamily": "{fontfamily.blc}",
+        "fontWeight": "{fontweight.blc.bold}",
+        "fontSize": "{fontsize.28px}",
+        "lineHeight": "{fontsize.28px} + {lineheight.tight}",
         "letterSpacing": "{letterspacing.small}"
       },
       "type": "typography"

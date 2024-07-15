@@ -18,7 +18,10 @@ const Search: FC<Props> = ({
     'w-full p-3': platform === PlatformVariant.Web,
     'p-2': platform === PlatformVariant.MobileHybrid,
   });
-  const css = useCSSMerge('border rounded-sm ring-offset-2 focus:outline-none focus:ring', dynCss);
+  const css = useCSSMerge(
+    'bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border border-searchBar-outline-colour-light dark:border-searchBar-outline-colour-dark text-searchBar-label-font font-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font text-searchBar-label-colour dark:text-searchBar-label-colour-dark rounded-sm ring-offset-2 focus:outline-none focus:ring',
+    dynCss,
+  );
 
   return (
     <input

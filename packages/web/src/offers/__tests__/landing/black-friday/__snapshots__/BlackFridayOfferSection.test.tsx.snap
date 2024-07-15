@@ -13,7 +13,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
         >
           Fashion & clothing
         </h1>
@@ -770,7 +770,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
         >
           Food & drink
         </h1>
@@ -1527,7 +1527,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
         >
           Footwear & streetwear
         </h1>
@@ -2224,7 +2224,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
         >
           Gifting & toys
         </h1>
@@ -2921,7 +2921,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
         >
           Health & beauty
         </h1>
@@ -3618,7 +3618,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
         >
           Holidays & days out
         </h1>
@@ -4375,7 +4375,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
         >
           Home & electricals
         </h1>
@@ -5132,7 +5132,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#FFFFFF] !font-black text-center mb-5 "
         >
           Sports & fitness
         </h1>
@@ -5889,7 +5889,7 @@ exports[`BlackFridayOfferSection should match snapshot 1`] = `
         className="px-5 laptop:container laptop:mx-auto  "
       >
         <h1
-          className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
+          className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] font-bold !text-[#000033] !font-black text-center mb-5 "
         >
           Tech & mobile
         </h1>

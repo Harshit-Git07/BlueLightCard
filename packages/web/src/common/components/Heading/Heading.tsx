@@ -1,6 +1,4 @@
 import React, { FC } from 'react';
-import HeadingV2 from './v2';
-import { env } from '@bluelightcard/shared-ui';
 
 interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   headingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -9,7 +7,7 @@ interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
 const Heading: FC<HeadingProps> = ({ headingLevel, children, className }) => {
   const Heading = headingLevel;
   const defaultStyles =
-    'text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"]';
+    'text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"]';
   let size;
   switch (Heading) {
     case 'h1':
@@ -35,5 +33,4 @@ const Heading: FC<HeadingProps> = ({ headingLevel, children, className }) => {
   const classes = `${size} ${defaultStyles} ${className} `;
   return <Heading className={classes}>{children}</Heading>;
 };
-
-export default env.FLAG_NEW_TOKENS ? HeadingV2 : Heading;
+export default Heading;

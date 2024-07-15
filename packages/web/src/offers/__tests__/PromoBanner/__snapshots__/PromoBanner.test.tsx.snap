@@ -5,7 +5,7 @@ exports[`Promo Banner should render with the correct link and image url 1`] = `
   className="w-full relative"
 >
   <a
-    className="dark:text-palette-secondary"
+    className="text-colour-primary dark:text-colour-primary-dark"
     data-testid="anchor-link"
     href="test.com"
   >

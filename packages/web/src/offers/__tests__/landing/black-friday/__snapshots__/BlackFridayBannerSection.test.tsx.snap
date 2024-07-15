@@ -42,12 +42,12 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
         </div>
         <div>
           <h1
-            className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] !text-[#1C1C1C] !font-black landscapebfsm:text-xl landscapebf:text-4xl text-8xl mobile:text-5xl tablet:text-6xl laptop:text-8xl desktop:text-8xl font-bold "
+            className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] !text-[#1C1C1C] !font-black landscapebfsm:text-xl landscapebf:text-4xl text-8xl mobile:text-5xl tablet:text-6xl laptop:text-8xl desktop:text-8xl font-bold "
           >
             SAVE UP TO 40%
           </h1>
           <h1
-            className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] landscapebf:text-sm !text-[#1C1C1C] text-4xl mobile:text-2xl tablet:text-3xl laptop:text-3xl desktop:text-4xl "
+            className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] landscapebf:text-sm !text-[#1C1C1C] text-4xl mobile:text-2xl tablet:text-3xl laptop:text-3xl desktop:text-4xl "
           >
             ON BRANDS YOU LOVE
           </h1>

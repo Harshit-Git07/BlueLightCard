@@ -10,7 +10,11 @@ const componentMeta: Meta<typeof Heading> = {
 };
 
 const HeadingTemplate: StoryFn<typeof Heading> = (args) => {
-  return <Heading {...args}>Storyboard Heading</Heading>;
+  return (
+    <div className="dark:bg-colour-surface-dark p-3">
+      <Heading {...args}>Storyboard Heading</Heading>
+    </div>
+  );
 };
 
 export const H1 = HeadingTemplate.bind({});

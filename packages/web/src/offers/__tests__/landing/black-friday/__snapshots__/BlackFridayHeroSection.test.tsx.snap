@@ -12,12 +12,12 @@ exports[`BlackFridayHeroSection should match snapshot 1`] = `
       className="px-5 laptop:container laptop:mx-auto  "
     >
       <h1
-        className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] !text-[#FFFF00] mt-20 mb-4 !font-black text-6xl text-center "
+        className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] !text-[#FFFF00] mt-20 mb-4 !font-black text-6xl text-center "
       >
         BIGGER DISCOUNTS
       </h1>
       <h1
-        className="text-3xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] text-white text-center "
+        className="text-3xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] text-white text-center "
       >
         IN OUR BLACK FRIDAY SALE
       </h1>

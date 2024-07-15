@@ -5,7 +5,7 @@ exports[`MobileOffersPage renders correctly 1`] = `
   class="flex flex-col p-4"
 >
   <h3
-    class="text-xl text-palette-primary dark:text-palette-secondary mb-2 font-bold font-["MuseoSans"] undefined "
+    class="text-xl text-colour-onSurface dark:text-colour-onSurface-dark mb-2 font-bold font-["MuseoSans"] undefined "
   >
     Popular Offers
   </h3>

@@ -12,6 +12,12 @@ then
   mkdir -p packages/"$PACKAGE_NAME"/.brands/fonts
   cp -r packages/shared-ui/fonts/* packages/"$PACKAGE_NAME"/.brands/fonts
 
+  if [ "$PACKAGE_NAME" = "web" ]
+  then
+    mkdir -p packages/web/.brands/assets
+    cp -r packages/web/assets/* packages/web/.brands/assets
+  fi
+
   for brand in "${APP_BRANDS[@]}"
   do
     mkdir -p packages/"$PACKAGE_NAME"/.brands/"$brand"

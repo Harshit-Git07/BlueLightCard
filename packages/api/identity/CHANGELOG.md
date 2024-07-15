@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.85.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.85.0...bluelightcard/identity-v1.85.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* TI-1349-rewardagateway-fix deployment issue fix. Commented DDS code. ([#1778](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1778)) ([be5d36e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/be5d36e8077f86f975fee8ea0179203a4b3f1e69))
+
 ## [1.85.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.84.0...bluelightcard/identity-v1.85.0) (2024-07-15)
 
 

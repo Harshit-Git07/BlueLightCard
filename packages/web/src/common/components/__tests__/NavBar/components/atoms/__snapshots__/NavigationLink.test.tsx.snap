@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationLink renders 1`] = `
+<div>
+  <a
+    class="flex justify-between items-center gap-1 cursor-pointer border border-NavBar-bg-colour dark:border-NavBar-bg-colour-dark hover:text-NavBar-link-hover-colour hover:border-b-header-NavBar-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+    data-testid="next-link"
+    href="/mockUrl"
+    tabindex="0"
+  >
+    Label
+  </a>
+</div>
+`;

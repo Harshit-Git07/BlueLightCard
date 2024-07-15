@@ -5,10 +5,10 @@ import BellIcon from './BellIcon';
 import { HeaderProps } from './types';
 
 import Navigation from './Navigation';
-import Search from './Search';
 import SelectCountry from './SelectCountry';
 
 import { navLinks } from '@/data/headerConfig';
+import Search from './Search';
 
 const Header: FC<HeaderProps> = ({
   loggedIn = false,

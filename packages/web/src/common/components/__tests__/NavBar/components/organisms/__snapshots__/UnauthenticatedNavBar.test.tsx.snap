@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UnauthenticaedNavBar renders 1`] = `
+<div>
+  <div
+    data-testid="unauthenticated-navbar"
+  >
+    UnauthenticatedNavBar
+  </div>
+</div>
+`;

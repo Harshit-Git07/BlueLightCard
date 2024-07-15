@@ -1,18 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Logo should render without error 1`] = `
-<a
-  aria-label="Navigate Home"
-  className="hover:opacity-100"
-  data-testid="brandLogo"
-  href="/"
-  onClick={[Function]}
-  onMouseEnter={[Function]}
-  onTouchStart={[Function]}
->
-  <img
-    alt="Navigate Home"
-    className="fill-logo-colour dark:fill-logo-colour-dark"
-  />
-</a>
+<div>
+  <a
+    aria-label="Navigate Home"
+    class="undefined hover:opacity-100"
+    data-testid="brandLogo"
+    href="/"
+  >
+    <img
+      alt="Navigate Home"
+      class="fill-logo-colour dark:fill-logo-colour-dark h-full"
+    />
+  </a>
+</div>
 `;

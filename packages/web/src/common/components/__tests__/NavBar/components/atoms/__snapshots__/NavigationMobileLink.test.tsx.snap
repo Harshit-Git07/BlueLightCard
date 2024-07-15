@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationMobileLink renders 1`] = `
+<div>
+  <a
+    class="flex w-full border border-dropDownItem-bg-colour dark:border-dropDownItem-bg-colour-dark items-center px-5 h-10"
+    data-testid="anchor-link"
+    href="#"
+  >
+    Label
+  </a>
+</div>
+`;

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply font-typography-body text-typography-body;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   appearance: none;

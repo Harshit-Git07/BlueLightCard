@@ -1,10 +1,5 @@
-if (process.env.NEXT_PUBLIC_FLAG_NEW_TOKENS === 'true') {
-  require('@/styles/v2/globals.css');
-  require('@/styles/v2/swiper.css');
-} else {
-  require('@/styles/globals.css');
-  require('@/styles/swiper.css');
-}
+import '@/styles/globals.css';
+import '@/styles/swiper.css';
 
 import type { AppProps } from 'next/app';
 import { FC, ReactElement, useContext } from 'react';

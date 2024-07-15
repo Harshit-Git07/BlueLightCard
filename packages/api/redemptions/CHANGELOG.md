@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.19.0...bluelightcard/redemptions-v1.20.0) (2024-07-15)
+
+
+### Features
+
+* [TR-237] eligibility check ([#1523](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1523)) ([3bef9b9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3bef9b920be85ca8686a21be8a64ae57b2126412))
+* eligibility check for redeems ([3bef9b9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3bef9b920be85ca8686a21be8a64ae57b2126412))
+
 ## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.18.0...bluelightcard/redemptions-v1.19.0) (2024-07-15)
 
 

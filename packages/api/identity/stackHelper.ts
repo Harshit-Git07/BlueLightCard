@@ -15,7 +15,7 @@ import { REGIONS } from  '@blc-mono/core/types/regions.enum'
 import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
 import externalClientProvidersUk from "../identity/src/cognito/resources/externalCognitoPartners-eu-west-2.json";
 import externalClientProvidersAus from "../identity/src/cognito/resources/externalCognitoPartners-ap-southeast-2.json";
-import { LOGIN_CLIENT_TYPE } from 'src/models/loginAudits';
+import { LOGIN_CLIENT_TYPE } from '../identity/src/models/loginAudits';
 
 const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
 const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
@@ -739,10 +739,10 @@ export function createNewCognitoDDS(
     });
     createExternalClient(stack, cognito_dds, true);
     // add extra env parameter to already created function.
-    loginClientIdMap[webClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.WEB_HOSTEDUI;
-    loginClientIdMap[mobileClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.APP_HOSTEDUI;
-    ddsAuditLogFunction.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
-    ddsAuditLogFunctionPre.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
+    // loginClientIdMap[webClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.WEB_HOSTEDUI;
+    // loginClientIdMap[mobileClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.APP_HOSTEDUI;
+    // ddsAuditLogFunction.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
+    // ddsAuditLogFunctionPre.addEnvironment('LOGIN_CLIENT_IDS', JSON.stringify(loginClientIdMap));
   }
 
   return cognito_dds;
@@ -792,8 +792,10 @@ const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean) =>
         isDds? ddsHostedUiCSSPath : blcHostedUiCSSPath,
         isDds? ddsLogoPath : blcLogoPath,
       );
-      // partnerUniqueId key should match with LOGIN_CLIENT_TYPE
-      loginClientIdMap[externalClient.userPoolClientId] = clients.partnerUniqueId;
+      if (!isDds) {
+        // partnerUniqueId key should match with LOGIN_CLIENT_TYPE
+        loginClientIdMap[externalClient.userPoolClientId] = clients.partnerUniqueId;
+      }
     })
 
 

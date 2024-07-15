@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.84.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.83.0...bluelightcard/identity-v1.84.0) (2024-07-12)
+
+
+### Features
+
+* [TI-1453] Log Client ID in Cognito User Pool Triggers ([#1756](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1756)) ([5b03538](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b035386d47eba2acc7a128a7dee87f315374180))
+
 ## [1.83.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.82.0...bluelightcard/identity-v1.83.0) (2024-07-11)
 
 

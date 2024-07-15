@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.85.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.85.1...bluelightcard/identity-v1.85.2) (2024-07-15)
+
+
+### Bug Fixes
+
+* reverting Dynamic Login State code COT-101 ([#1786](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1786)) ([3609e03](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3609e03c11f87c8cca71bba8b5556d7411291493))
+
 ## [1.85.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.85.0...bluelightcard/identity-v1.85.1) (2024-07-15)
 
 

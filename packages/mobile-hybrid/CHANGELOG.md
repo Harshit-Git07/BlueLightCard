@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.24.0...bluelightcard/mobile-hybrid-v1.24.1) (2024-07-16)
+
+
+### Other Changes
+
+* added fonts to storybook ([#1783](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1783)) ([779cd76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/779cd763ea2c34035671d1333faa2162c98ae551))
+
 ## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.23.0...bluelightcard/mobile-hybrid-v1.24.0) (2024-07-15)
 
 

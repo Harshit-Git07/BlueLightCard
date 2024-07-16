@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.8.0...shared-ui-v1.8.1) (2024-07-16)
+
+
+### Other Changes
+
+* added fonts to storybook ([#1783](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1783)) ([779cd76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/779cd763ea2c34035671d1333faa2162c98ae551))
+
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.7.0...shared-ui-v1.8.0) (2024-07-16)
 
 

@@ -24,11 +24,11 @@ const NavigationMobileDropdown = ({ item }: NavigationItemProps) => {
         aria-label="Toggle dropdown"
         aria-haspopup="true"
         aria-expanded={showDropdown}
-        className="flex items-center px-5 h-10 w-full border border-dropDownItem-bg-colour dark:border-dropDownItem-bg-colour-dark cursor-pointer"
+        className="flex items-center px-5 h-10 w-full border border-dropDownItem-bg-colour font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font dark:border-dropDownItem-bg-colour-dark cursor-pointer"
         onClick={handleClick}
       >
         <Link
-          className={`flex h-full justify-center items-center gap-1 ${
+          className={`flex h-full justify-center items-center gap-1 font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font ${
             showDropdown
               ? 'text-dropDownItem-text-active-colour dark:text-dropDownItem-text-active-colour-dark'
               : ''
@@ -48,7 +48,7 @@ const NavigationMobileDropdown = ({ item }: NavigationItemProps) => {
               <Link
                 href={url}
                 onClick={() => onSubItemClick(id, onClick)}
-                className="text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark"
+                className="text-dropDownItem-text-colour font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font dark:text-dropDownItem-text-colour-dark"
               >
                 {label}
               </Link>

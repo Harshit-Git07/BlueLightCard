@@ -182,7 +182,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   },
                 }}
               >
-                <Markdown>{offerData.terms}</Markdown>
+                <Markdown>{decodeEntities(offerData.terms || '')}</Markdown>
               </Accordion>
             </div>
           )}

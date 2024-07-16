@@ -12,6 +12,10 @@ export const CharacterEntities: Record<string, string> = {
   â: "'", //Butlin's - Enjoy the best of Butlin's, plus an extra £20 off
   '': '\u{0000}',
   "' for '": "'",
+  'Ã©': '\u{00e8}',
+  'Â®': '\u{00ae}',
+  'Â·': '\u{00b7}',
+  "' ": '–',
 };
 
 export const IS_STORYBOOK_LIFECYCLE =

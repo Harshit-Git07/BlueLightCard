@@ -32,7 +32,7 @@ const OfferDetailsErrorPage: FC = () => {
         Error loading offer
       </Heading>
       <p className="text-base">You can still get to your offer by clicking the button below.</p>
-      <Button variant={ThemeVariant.Primary} onClick={onButtonClick}>
+      <Button variant={ThemeVariant.Primary} onClick={onButtonClick} borderless>
         {offerMeta?.companyName}
       </Button>
     </div>

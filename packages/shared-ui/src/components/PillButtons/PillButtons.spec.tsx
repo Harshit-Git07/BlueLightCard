@@ -43,7 +43,7 @@ describe('PillButtons component', () => {
       fireEvent.click(getByRole('button'));
 
       expect(getByRole('button')).toHaveClass(
-        `font-['MuseoSans'] font-museo text-[#202125] font-regular rounded-full px-3 whitespace-nowrap text-base min-w-[54px]`,
+        `font-pill-label-font text-pill-label-font font-pill-label-font-weight tracking-pill-label-font leading-pill-label-font rounded-full px-3 whitespace-nowrap min-w-[54px]`,
       );
     });
 

@@ -28,22 +28,26 @@ const PillButtons: FC<Props> = ({
     }
   };
 
-  const dynCss = useCSSConditional({
+  const dynamicCss = useCSSConditional({
     'py-3': platform === PlatformVariant.Web,
     'py-2': platform === PlatformVariant.MobileHybrid,
-    'bg-[#001B80] text-white': !!isSelected,
-    'bg-[#ECEFF2]': !isSelected,
-    'cursor-not-allowed bg-white text-[#DCDCDC] border-[#DCDCDC] border-[1px]': !!disabled,
-    'bg-white border-[#DCDCDC] border-[1px] border-solid': !!outline,
+    'bg-pill-default-bg-colour-light dark:bg-pill-default-bg-colour-dark text-pill-default-label-colour-light dark:text-pill-default-label-colour-dark':
+      !isSelected && !disabled && !outline,
+    'bg-pill-selected-bg-colour-light dark:bg-pill-selected-bg-colour-dark text-pill-selected-label-colour-light dark:text-pill-selected-label-colour-dark':
+      !!isSelected,
+    'cursor-not-allowed text-pill-disabled-label-colour-light dark:text-pill-disabled-label-colour-dark border-pill-disabled-border-colour-light dark:border-pill-disabled-border-colour-dark border-[1px]':
+      !!disabled,
+    'border-pill-outline-border-colour-light dark:border-pill-outline-border-colour-dark text-pill-outline-label-colour-light dark:text-pill-outline-label-colour-dark border-[1px] border-solid':
+      !!outline,
   });
 
-  const css = useCSSMerge(
-    "font-['MuseoSans'] font-museo text-[#202125] font-regular rounded-full px-3 whitespace-nowrap text-base min-w-[54px]",
-    dynCss,
+  const generalCss = useCSSMerge(
+    'font-pill-label-font text-pill-label-font font-pill-label-font-weight tracking-pill-label-font leading-pill-label-font rounded-full px-3 whitespace-nowrap min-w-[54px]',
+    dynamicCss,
   );
 
   return (
-    <button className={css} onClick={() => handleClick()} disabled={disabled}>
+    <button className={generalCss} onClick={() => handleClick()} disabled={disabled}>
       {iconLeft && <span className="mr-1">{iconLeft}</span>}
       {text}
       {iconRight && <span className="ml-1">{iconRight}</span>}

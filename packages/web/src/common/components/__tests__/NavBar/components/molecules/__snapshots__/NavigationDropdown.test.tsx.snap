@@ -13,12 +13,10 @@ exports[`NavigationDropdown renders 1`] = `
       class="h-full w-full"
     >
       <a
-        class="flex h-full justify-center items-center gap-1 border border-NavBar-bg-colour dark:border-NavBar-bg-colour-dark cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+        class="flex h-full justify-center items-center gap-1 border border-NavBar-bg-colour font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font dark:border-NavBar-bg-colour-dark cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
         data-testid="anchor-link"
       >
-        <p
-          class="font-['MuseoSans'] font-normal"
-        >
+        <p>
           Mock Top Label
         </p>
         <svg

@@ -7,7 +7,7 @@ const NavigationMobileLink = ({ item }: NavigationItemProps) => {
   const { trackNavigationEvent } = useNavigationTracking();
   return (
     <Link
-      className="flex w-full border border-dropDownItem-bg-colour dark:border-dropDownItem-bg-colour-dark items-center px-5 h-10"
+      className="flex w-full border border-dropDownItem-bg-colour font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font dark:border-dropDownItem-bg-colour-dark items-center px-5 h-10"
       href={item?.url}
       onClickLink={() => {
         if (item.onClick) {

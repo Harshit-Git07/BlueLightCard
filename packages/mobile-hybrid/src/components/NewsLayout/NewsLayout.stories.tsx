@@ -1,12 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
-import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 import NewsLayout, { formatDate } from './NewsLayout';
 import { NewsModel } from '@/models/news';
 
 const componentMeta: Meta = {
   title: 'Layouts/NewsLayout',
   component: NewsLayout,
-  decorators: [tokenMigrationDecorator],
   argTypes: {
     newsOne: {
       name: 'Show News Item One',

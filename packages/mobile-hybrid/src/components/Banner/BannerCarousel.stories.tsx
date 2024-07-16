@@ -1,11 +1,9 @@
 import { Meta, StoryFn } from '@storybook/react';
 import BannerCarousel from './BannerCarousel';
-import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 
 const componentMeta: Meta<typeof BannerCarousel> = {
   title: 'BannerCarousel',
   component: BannerCarousel,
-  decorators: [tokenMigrationDecorator],
 };
 
 const DefaultTemplate: StoryFn<typeof BannerCarousel> = (args) => <BannerCarousel {...args} />;

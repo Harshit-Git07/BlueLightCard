@@ -20,6 +20,10 @@ module.exports = {
   ],
   staticDirs: [
     {
+      from: '../../shared-ui/fonts',
+      to: '/fonts',
+    },
+    {
       from: '../assets',
       to: '/assets',
     },

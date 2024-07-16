@@ -1,12 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Heading from './Heading';
-import tokenMigrationDecorator from '@storybook/tokenMigrationDecorator';
 
 const componentMeta: Meta<typeof Heading> = {
   title: 'Component System/Common/Heading',
   component: Heading,
   argTypes: {},
-  decorators: [tokenMigrationDecorator],
 };
 
 const HeadingTemplate: StoryFn<typeof Heading> = (args) => {

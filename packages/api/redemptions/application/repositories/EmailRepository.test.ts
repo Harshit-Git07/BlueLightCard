@@ -22,6 +22,7 @@ describe('EmailRepository', () => {
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID] = 'preApplied_env_val';
     process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST] = 'https://staging.bluelightcard.co.uk';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID] = 'test';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID] = 'test';
   });
 
   afterEach(() => {
@@ -30,6 +31,7 @@ describe('EmailRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID];
   });
 
   describe('sendVaultOrGenericTransactionalEmail', () => {
@@ -154,26 +156,6 @@ describe('EmailRepository', () => {
       });
     });
 
-    it.each(['showCard', 'preApplied'] satisfies RedemptionType[])(
-      'should throw error for unhandled redemption type',
-      async (redemptionType) => {
-        // Arrange
-        const logger = createTestLogger();
-        const mockEmailClient = {};
-        const emailClientProvider: IBrazeEmailClientProvider = {
-          getClient: () => Promise.resolve(as(mockEmailClient)),
-        };
-        const repository = new EmailRepository(logger, emailClientProvider);
-        const payload = vaultOrGenericEmailPayloadFactory.build();
-
-        // Act
-        const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
-
-        // Assert
-        await expect(act).rejects.toThrow('RedemptionType error, expects vault/generic');
-      },
-    );
-
     it('should throw when success is not returned by Braze for vault or generic emails', async () => {
       // Arrange
       const logger = createTestLogger();
@@ -226,5 +208,85 @@ describe('EmailRepository', () => {
       // Assert
       await expect(act).rejects.toThrow();
     });
+
+    it('should send an email with type is showCard', async () => {
+      // Arrange
+      const logger = createTestLogger();
+      const mockEmailClient = {
+        campaigns: {
+          trigger: {
+            send: jest.fn().mockResolvedValue({
+              message: 'success',
+            }),
+          },
+        },
+      };
+
+      const emailClientProvider: IBrazeEmailClientProvider = {
+        getClient: () => Promise.resolve(as(mockEmailClient)),
+      };
+      const repository = new EmailRepository(logger, emailClientProvider);
+      const payload = {
+        brazeExternalUserId: 'test',
+        companyName: 'test',
+        redemptionType: 'showCard' as RedemptionType,
+      };
+
+      // Act
+      await repository.sendShowCardEmail(payload);
+      expect(mockEmailClient.campaigns.trigger.send).toHaveBeenCalled();
+      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('test');
+      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
+        payload.brazeExternalUserId,
+      );
+
+      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
+        companyName: payload.companyName,
+      });
+    });
+
+    it.each(['vault', 'preApplied'] satisfies RedemptionType[])(
+      'should throw error for unhandled redemption type',
+      async (redemptionType) => {
+        // Arrange
+        const logger = createTestLogger();
+        const mockEmailClient = {};
+        const emailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockEmailClient)),
+        };
+        const repository = new EmailRepository(logger, emailClientProvider);
+        const payload = {
+          brazeExternalUserId: 'test',
+          companyName: 'test',
+          redemptionType: redemptionType,
+        };
+
+        // Act
+        const act = () => repository.sendShowCardEmail(payload);
+
+        // Assert
+        await expect(act).rejects.toThrow('RedemptionType error, expects showCard');
+      },
+    );
+
+    it.each(['showCard', 'preApplied'] satisfies RedemptionType[])(
+      'should throw error for unhandled redemption type',
+      async (redemptionType) => {
+        // Arrange
+        const logger = createTestLogger();
+        const mockEmailClient = {};
+        const emailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockEmailClient)),
+        };
+        const repository = new EmailRepository(logger, emailClientProvider);
+        const payload = vaultOrGenericEmailPayloadFactory.build();
+
+        // Act
+        const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
+
+        // Assert
+        await expect(act).rejects.toThrow('RedemptionType error, expects vault/generic');
+      },
+    );
   });
 });

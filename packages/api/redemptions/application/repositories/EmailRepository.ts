@@ -35,12 +35,19 @@ export type PreAppliedTransactionalEmailParams = {
   url: string;
 };
 
+export type ShowCardTransactionalEmailParams = {
+  brazeExternalUserId: string;
+  companyName: string;
+  redemptionType: RedemptionType;
+};
+
 export interface IEmailRepository {
   sendVaultOrGenericTransactionalEmail: (
     payload: VaultOrGenericTransactionalEmailParams,
     redemptionType: RedemptionType,
   ) => Promise<void>;
   sendPreAppliedTransactionalEmail: (payload: PreAppliedTransactionalEmailParams) => Promise<void>;
+  sendShowCardEmail: (payload: ShowCardTransactionalEmailParams) => Promise<void>;
 }
 
 export class EmailRepository implements IEmailRepository {
@@ -136,6 +143,46 @@ export class EmailRepository implements IEmailRepository {
       code: codeBase64,
       url,
       userUID,
+    });
+  }
+
+  async sendShowCardEmail(params: ShowCardTransactionalEmailParams): Promise<void> {
+    const emailClient = await this.getClient();
+
+    const { brazeExternalUserId, companyName, redemptionType } = params;
+    if (redemptionType !== 'showCard') {
+      this.logger.info({
+        message: `redemption type is incorrect for this email template: ${redemptionType}`,
+        context: params,
+      });
+      throw new Error('RedemptionType error, expects showCard');
+    }
+
+    const emailPayload: CampaignsTriggerSendObject = {
+      campaign_id: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID),
+      recipients: [
+        {
+          external_user_id: brazeExternalUserId,
+        },
+      ],
+      trigger_properties: {
+        companyName: companyName,
+      },
+    };
+
+    const emailServiceResponse = await emailClient.campaigns.trigger.send(emailPayload);
+
+    if (!emailServiceResponse.message.includes('success')) {
+      this.logger.info({
+        message: `Failed to send ${redemptionType} email`,
+        context: emailServiceResponse,
+      });
+      throw new Error(`Failed to send ${redemptionType} email`);
+    }
+
+    this.logger.info({
+      message: `successfully sent ${redemptionType} email`,
+      context: emailServiceResponse,
     });
   }
 

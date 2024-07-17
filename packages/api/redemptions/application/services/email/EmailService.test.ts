@@ -1,6 +1,6 @@
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import { memberRedemptionEventFactory } from '@blc-mono/redemptions/libs/test/factories/memberRedemptionEvent.factory';
-import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { IEmailRepository } from '../../repositories/EmailRepository';
 
@@ -16,6 +16,7 @@ describe('EmailService', () => {
         const emailRepository = {
           sendVaultOrGenericTransactionalEmail: jest.fn(),
           sendPreAppliedTransactionalEmail: jest.fn(),
+          sendShowCardEmail: jest.fn(),
         } satisfies IEmailRepository;
         const service = new EmailService(logger, emailRepository);
         const event = memberRedemptionEventFactory.build({
@@ -40,6 +41,7 @@ describe('EmailService', () => {
       const emailRepository = {
         sendVaultOrGenericTransactionalEmail: jest.fn(),
         sendPreAppliedTransactionalEmail: jest.fn(),
+        sendShowCardEmail: jest.fn(),
       } satisfies IEmailRepository;
       const service = new EmailService(logger, emailRepository);
       const event = memberRedemptionEventFactory.build({
@@ -57,31 +59,28 @@ describe('EmailService', () => {
       expect(emailRepository.sendPreAppliedTransactionalEmail).toHaveBeenCalled();
     });
 
-    it.each(['showCard'] satisfies RedemptionType[])(
-      'should throw error for unhandled redemption type',
-      async (redemptionType) => {
-        // Arrange
-        const logger = createSilentLogger();
-        const emailRepository = {
-          sendVaultOrGenericTransactionalEmail: jest.fn(),
-          sendPreAppliedTransactionalEmail: jest.fn(),
-        } satisfies IEmailRepository;
-        const service = new EmailService(logger, emailRepository);
-        const event = memberRedemptionEventFactory.build({
-          detail: {
-            redemptionDetails: {
-              redemptionType,
-            },
+    it('should send email for showCard redemption events', async () => {
+      // Arrange
+      const logger = createTestLogger();
+      const emailRepository = {
+        sendVaultOrGenericTransactionalEmail: jest.fn(),
+        sendPreAppliedTransactionalEmail: jest.fn(),
+        sendShowCardEmail: jest.fn(),
+      } satisfies IEmailRepository;
+      const service = new EmailService(logger, emailRepository);
+      const event = memberRedemptionEventFactory.build({
+        detail: {
+          redemptionDetails: {
+            redemptionType: 'showCard',
           },
-        });
+        },
+      });
 
-        // Act
-        const act = () => service.sendRedemptionTransactionEmail(event);
+      // Act
+      await service.sendRedemptionTransactionEmail(event);
 
-        // Assert
-        await expect(act).rejects.toThrow('Unhandled redemption type');
-        expect(emailRepository.sendVaultOrGenericTransactionalEmail).not.toHaveBeenCalled();
-      },
-    );
+      // Assert
+      expect(emailRepository.sendShowCardEmail).toHaveBeenCalled();
+    });
   });
 });

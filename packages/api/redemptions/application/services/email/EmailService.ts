@@ -1,6 +1,7 @@
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { EmailRepository, IEmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
+import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
 
 export interface IEmailService {
   sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void>;
@@ -16,11 +17,12 @@ export class EmailService implements IEmailService {
 
   async sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void> {
     const redemptionType = event.detail.redemptionDetails.redemptionType;
+    const [generic, vault, vaultQR, showCard, preApplied] = redemptionTypeEnum.enumValues;
 
     switch (redemptionType) {
-      case 'generic':
-      case 'vaultQR':
-      case 'vault': {
+      case generic:
+      case vaultQR:
+      case vault: {
         await this.emailRepository.sendVaultOrGenericTransactionalEmail(
           {
             affiliate: event.detail.redemptionDetails.affiliate,
@@ -37,7 +39,7 @@ export class EmailService implements IEmailService {
         );
         break;
       }
-      case 'preApplied': {
+      case preApplied: {
         await this.emailRepository.sendPreAppliedTransactionalEmail({
           brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
           memberId: event.detail.memberDetails.memberId,
@@ -47,6 +49,15 @@ export class EmailService implements IEmailService {
         });
         break;
       }
+      case showCard:
+        {
+          await this.emailRepository.sendShowCardEmail({
+            brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
+            companyName: event.detail.redemptionDetails.companyName,
+            redemptionType: redemptionType,
+          });
+        }
+        break;
       default:
         this.logger.error({
           message: 'Unhandled redemption type',

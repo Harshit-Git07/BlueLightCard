@@ -19,6 +19,7 @@ export type RedemptionsStackConfig = {
   brazeGenericEmailCampaignId: string;
   brazePreAppliedEmailCampaignId: string;
   brazeVaultQrCodeEmailCampaignId: string;
+  brazeShowCardEmailCampaignId: string;
   brazeApiUrl: string;
   redemptionsWebHost: string;
 };
@@ -55,6 +56,7 @@ export class RedemptionsStackConfigResolver {
       brazeGenericEmailCampaignId: '091d0923-b2a8-4884-9955-df72b8993e64',
       brazePreAppliedEmailCampaignId: 'ab5691a2-0504-4099-88ef-56ac7ef5f03c',
       brazeVaultQrCodeEmailCampaignId: '31172aa1-2e31-4a77-b9ac-43896f511beb',
+      brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
     };
@@ -79,6 +81,7 @@ export class RedemptionsStackConfigResolver {
       brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
       brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
       brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
+      brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
     };
@@ -98,6 +101,7 @@ export class RedemptionsStackConfigResolver {
       brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
       brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
       brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
+      brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
     };
@@ -132,6 +136,7 @@ export class RedemptionsStackConfigResolver {
       brazeGenericEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID),
       brazePreAppliedEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID),
       brazeVaultQrCodeEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID),
+      brazeShowCardEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID),
       brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
       redemptionsWebHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST),
     };

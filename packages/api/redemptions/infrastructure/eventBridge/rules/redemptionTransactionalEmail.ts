@@ -32,6 +32,7 @@ export function createRedemptionTransactionalEmailRule(
       BRAZE_API_URL: config.brazeApiUrl,
       REDEMPTIONS_WEB_HOST: config.redemptionsWebHost,
       BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID: config.brazeVaultQrCodeEmailCampaignId,
+      BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID: config.brazeShowCardEmailCampaignId,
     },
     permissions: [getSecretValueSecretsManager],
   });
@@ -41,7 +42,7 @@ export function createRedemptionTransactionalEmailRule(
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: ['vault', 'generic', 'preApplied', 'vaultQR'],
+          redemptionType: ['vault', 'generic', 'preApplied', 'vaultQR', 'showCard'],
         },
       },
     },

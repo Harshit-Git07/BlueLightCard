@@ -1,5 +1,5 @@
 type SocialMediaIconProps = {
-  iconName: 'facebook' | 'instagram' | 'twitter';
+  iconName: 'facebook' | 'instagram' | 'linkedin' | 'x-twitter' | 'tiktok';
   link: string;
   helpText: string;
   id?: string;

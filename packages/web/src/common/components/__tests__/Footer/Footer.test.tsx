@@ -1,8 +1,7 @@
 import Footer from '@/components/Footer/Footer';
-import { FooterNavigationSection, FooterProps } from '@/components/Footer/types';
+import { FooterNavigationSection } from '@/components/Footer/types';
 import SocialMediaIconProps from '@/components/SocialMediaIcon/types';
 import { render, screen } from '@testing-library/react';
-import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom';
 
 jest.mock('../../../context/AmplitudeExperiment/hooks', () => ({
@@ -44,7 +43,7 @@ const socialLinks: SocialMediaIconProps[] = [
     helpText: 'Blue light card on Facebook',
   },
   {
-    iconName: 'twitter',
+    iconName: 'x-twitter',
     link: 'https://twitter.com',
     helpText: 'Blue light card on Twitter',
   },

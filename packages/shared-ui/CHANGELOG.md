@@ -2,26 +2,23 @@
 
 ## [1.8.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.8.0...shared-ui-v1.8.1) (2024-07-16)
 
-
 ### Other Changes
 
-* added fonts to storybook ([#1783](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1783)) ([779cd76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/779cd763ea2c34035671d1333faa2162c98ae551))
+- added fonts to storybook ([#1783](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1783)) ([779cd76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/779cd763ea2c34035671d1333faa2162c98ae551))
 
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.7.0...shared-ui-v1.8.0) (2024-07-16)
 
-
 ### Features
 
-* added tokens to button component ([#1772](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1772)) ([dca0992](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dca09921f1c05d7783fe3e20aba09c949cc403f6))
-* added typography to Badge component ([#1762](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1762)) ([fb984a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fb984a1d9de4cd7a3162bc30a7afee1d8893911e))
-* added typography to Pill component ([#1766](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1766)) ([44aa4ba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/44aa4bacae373a38170e33f9f66fe8fc2bebe222))
-* built and tokenise Offer card carousel ([#1706](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1706)) ([81e9b58](https://github.com/bluelightcard/BlueLightCard-2.0/commit/81e9b58726498886d6f06e590ec9574c8f53c1aa))
-
+- added tokens to button component ([#1772](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1772)) ([dca0992](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dca09921f1c05d7783fe3e20aba09c949cc403f6))
+- added typography to Badge component ([#1762](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1762)) ([fb984a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fb984a1d9de4cd7a3162bc30a7afee1d8893911e))
+- added typography to Pill component ([#1766](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1766)) ([44aa4ba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/44aa4bacae373a38170e33f9f66fe8fc2bebe222))
+- built and tokenise Offer card carousel ([#1706](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1706)) ([81e9b58](https://github.com/bluelightcard/BlueLightCard-2.0/commit/81e9b58726498886d6f06e590ec9574c8f53c1aa))
 
 ### Bug Fixes
 
-* converted companyId and offerId sent to amplitude for offersheets share cta and terms cta to string to remove the decimal part ([#1767](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1767)) ([263dc79](https://github.com/bluelightcard/BlueLightCard-2.0/commit/263dc79972877b9facce0fc55dfbb8435b874325))
-* ensure code is visible in dark mode ([#1765](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1765)) ([421c9e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/421c9e4b478177347dabe64cd59c196b32c6494a))
+- converted companyId and offerId sent to amplitude for offersheets share cta and terms cta to string to remove the decimal part ([#1767](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1767)) ([263dc79](https://github.com/bluelightcard/BlueLightCard-2.0/commit/263dc79972877b9facce0fc55dfbb8435b874325))
+- ensure code is visible in dark mode ([#1765](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1765)) ([421c9e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/421c9e4b478177347dabe64cd59c196b32c6494a))
 
 ## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.6.0...shared-ui-v1.7.0) (2024-07-10)
 

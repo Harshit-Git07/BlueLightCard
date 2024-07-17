@@ -1,17 +1,29 @@
 import { FC } from 'react';
 import SocialMediaIconProps from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import {
+  faFacebookF,
+  faInstagram,
+  faLinkedinIn,
+  faTiktok,
+  faXTwitter,
+} from '@fortawesome/free-brands-svg-icons';
 import Link from 'next/link';
 
 const SocialMediaIcon: FC<SocialMediaIconProps> = ({ iconName, link, helpText, id }) => {
   let icon;
   switch (iconName.toLowerCase()) {
     case 'facebook':
-      icon = faFacebook;
+      icon = faFacebookF;
       break;
-    case 'twitter':
-      icon = faTwitter;
+    case 'x-twitter':
+      icon = faXTwitter;
+      break;
+    case 'tiktok':
+      icon = faTiktok;
+      break;
+    case 'linkedin':
+      icon = faLinkedinIn;
       break;
     case 'instagram':
       icon = faInstagram;
@@ -23,12 +35,12 @@ const SocialMediaIcon: FC<SocialMediaIconProps> = ({ iconName, link, helpText, i
   return (
     icon && (
       <Link href={link}>
-        <div
-          className="aspect-square w-6 h-6 rounded-md flex bg-font-cta-standard-secondary-dark"
-          title={helpText}
-          data-testid={id}
-        >
-          <FontAwesomeIcon icon={icon} className="text-palette-primary-base m-auto" size="xl" />
+        <div title={helpText} data-testid={id}>
+          <FontAwesomeIcon
+            icon={icon}
+            className="text-footer-social-icon-colour dark:text-footer-social-icon-colour-dark hover:text-footer-link-hover-colour dark:hover:text-footer-link-hover-colour-dark"
+            size="lg"
+          />
         </div>
       </Link>
     )

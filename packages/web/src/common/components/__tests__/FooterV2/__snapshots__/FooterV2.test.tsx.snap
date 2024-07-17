@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FooterV2 component Render tests should render navigation items and copyright text 1`] = `
+<div>
+  <div
+    class="bg-footer-bg-colour-light dark:bg-footer-bg-colour-dark text-footer-text-colour dark:text-footer-text-colour-dark pt-11 px-5 w-auto"
+  >
+    <div
+      class="desktop:container desktop:mx-auto grid grid-cols-3 items-center justify-items-center"
+    >
+      <div
+        class="col-span-3 laptop:justify-self-start laptop:col-span-1 laptop:order-1 h-12 mobile-xl:h-16"
+      >
+        <a
+          aria-label="Navigate Home"
+          class="h-full hover:opacity-100"
+          data-testid="brandLogo"
+          href="/"
+        >
+          <img
+            alt="Navigate Home"
+            class="fill-logo-colour dark:fill-logo-colour-dark h-full"
+          />
+        </a>
+      </div>
+      <div
+        class="col-span-3 order-5 justify-self-center laptop:col-span-1 laptop:order-2"
+      />
+      <div
+        class="col-span-3 order-4 my-4 mb-6 laptop:justify-self-end laptop:mb-0 laptop:my-0 laptop:col-span-1 laptop:order-3 flex gap-[23px]"
+        data-testid="download-links"
+      />
+      <hr
+        class="col-span-3 order-2 w-full laptop:order-4 tablet:mb-11 mb-[28px] mt-6 border-footer-divider-colour dark:border-footer-divider-colour-dark"
+      />
+      <div
+        class="col-span-3 order-3 laptop:order-5 desktop:container desktop:gap-x-44 flex laptop:gap-x-12 laptop:flex w-full desktop:mx-auto mx-6"
+      >
+        <div
+          class="desktop:flex laptop:grid-cols-3 grid grid-cols-1 mobile-xl:grid-cols-2 laptop:flex-row flex-col flex-auto flex-1 justify-between"
+          data-testid="footer-nav-links"
+        >
+          <div
+            class="pb-6 min-w-34 flex-col flex space-y-2"
+          >
+            <h2
+              class="text-xl mb-2 font-footer-sectionHeading-font text-footer-text-colour dark:text-footer-text-colour-dark"
+            >
+              Mock Nav Item
+            </h2>
+            <a
+              class="text-footer-text-colour hover:opacity-100 text-md dark:text-footer-text-colour-dark font-footer-text-font hover:text-footer-link-hover-colour dark:hover:text-footer-link-hover-colour-dark font-light"
+              href="/mock-sub-item"
+            >
+              Sub Item One
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-span-3 order-6 py-10 laptop:pt-6 w-full text-center"
+      >
+        <p
+          class="desktop:mx-auto text-sm font-footer-copyright-font text-footer-text-colour dark:text-footer-text-colour-dark"
+        >
+          mock copyright text
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

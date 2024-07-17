@@ -23,7 +23,7 @@ then
     mkdir -p packages/"$PACKAGE_NAME"/.brands/"$brand"
     echo "Created brand directory for brand '$brand'"
 
-    NEXT_PUBLIC_APP_BRAND="$brand" npm run build-storybook -w packages/"$PACKAGE_NAME"
+    NEXT_PUBLIC_APP_BRAND="$brand" STORYBOOK_APP_BRAND="$brand" npm run build-storybook -w packages/"$PACKAGE_NAME"
     echo "Built storybook assets for brand '$brand'"
 
     cp -r packages/"$PACKAGE_NAME"/storybook-static/* packages/"$PACKAGE_NAME"/.brands/"$brand"

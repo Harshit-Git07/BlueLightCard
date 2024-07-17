@@ -4,6 +4,9 @@ import Link from 'next/link';
 import Image from '../Image/Image';
 import SocialMediaIcon from '../SocialMediaIcon/SocialMediaIcon';
 import SocialMediaIconProps from '../SocialMediaIcon/types';
+import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks';
+import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
+import { ZENDESK_V1_BLC_UK_URL } from '@/root/global-vars';
 
 /**
  ** Modular Footer component
@@ -19,6 +22,14 @@ const Footer: FC<FooterProps> = ({
   loggedIn,
 }) => {
   const horizPadding = 'mobile:px-4 laptop:px-0 laptop:container laptop:mx-auto';
+
+  // Calling amplitude experiment to check if zendesk is enabled
+  const zendeskExperiment = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.ZENDESK_V1_BLCUK,
+    'off'
+  );
+
+  const isZendeskV1BlcUkEnabled = zendeskExperiment.data?.variantName === 'on';
 
   return (
     <div className="bg-components-footer-primary w-full text-white" data-testid="app-footer">
@@ -36,6 +47,18 @@ const Footer: FC<FooterProps> = ({
                   <div key={index} className="p-2 flex flex-col space-y-2 grow">
                     <h1 className="text-3xl font-semibold">{section.title}</h1>
                     {section.navLinks.map((navLink: FooterNavigationLink, navLinkIndex) => {
+                      if (navLink.label === 'Contact Us') {
+                        return (
+                          <Link
+                            key={navLinkIndex}
+                            href={isZendeskV1BlcUkEnabled ? ZENDESK_V1_BLC_UK_URL : navLink.url}
+                            data-testid={navLink.label + '-link'}
+                            className="text-components-footer-text hover:opacity-100 hover:underline"
+                          >
+                            {navLink.label}
+                          </Link>
+                        );
+                      }
                       return (
                         <Link
                           key={navLinkIndex}

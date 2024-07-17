@@ -64,6 +64,10 @@ const OFFERS_BRAND = process.env.NEXT_PUBLIC_OFFERS_BRAND ?? '';
 const BRAZE_SDK_ENDPOINT = process.env.NEXT_PUBLIC_BRAZE_SDK_ENDPOINT ?? '';
 const BRAZE_SDK_API_KEY = process.env.NEXT_PUBLIC_BRAZE_SDK_API_KEY ?? '';
 
+// zendesk
+const ZENDESK_V1_BLC_UK_URL =
+  process.env.NEXT_ZENDESK_V1_BLC_UK_URL ?? 'https://bluelightcard.zendesk.com/hc/en-gb';
+
 /*
  * Language is made up of the lng and region
  * Example: [lng]-[region]
@@ -126,4 +130,5 @@ module.exports = {
   BRAZE_SDK_ENDPOINT,
   BRAZE_SDK_API_KEY,
   BRAND_URL,
+  ZENDESK_V1_BLC_UK_URL,
 };

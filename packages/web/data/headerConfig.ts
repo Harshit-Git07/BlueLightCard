@@ -4,6 +4,7 @@ import {
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
   COGNITO_LOGIN_URL,
   COGNITO_LOGOUT_URL,
+  ZENDESK_V1_BLC_UK_URL,
 } from '@/global-vars';
 import { redirect } from '@/utils/externalRedirect';
 
@@ -26,7 +27,8 @@ export const getNavItems = (
   logOffersClicked: (navigationTarget: string) => Promise<void>,
   logBrowseCategoriesClicked: (navigationTarget: string) => Promise<void>,
   logMyCardClicked: () => Promise<void>,
-  logMyAccountClicked: () => Promise<void>
+  logMyAccountClicked: () => Promise<void>,
+  isZendeskV1BlcUkEnabled: boolean = false
 ): NavItems => ({
   loggedOut: [
     {
@@ -46,7 +48,7 @@ export const getNavItems = (
     },
     {
       text: 'FAQs',
-      link: '/contactblc.php',
+      link: isZendeskV1BlcUkEnabled ? ZENDESK_V1_BLC_UK_URL : '/contactblc.php',
     },
     {
       text: 'Register now',
@@ -170,7 +172,7 @@ export const getNavItems = (
     },
     {
       text: 'FAQs',
-      link: '/support.php#questions',
+      link: isZendeskV1BlcUkEnabled ? ZENDESK_V1_BLC_UK_URL : '/support.php#questions',
     },
     {
       text: 'Logout',

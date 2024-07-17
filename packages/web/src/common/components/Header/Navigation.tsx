@@ -22,6 +22,13 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
     getDeviceFingerprint()
   );
 
+  const zendeskExperiment = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.ZENDESK_V1_BLCUK,
+    'off'
+  );
+
+  const isZendeskV1BlcUkEnabled = zendeskExperiment.data?.variantName === 'on';
+
   const isCognitoUIEnabled = cognitoUIExperiment.data?.variantName === 'treatment';
 
   function dropdownMenuHandler() {
@@ -39,7 +46,8 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
     logOffersClicked,
     logBrowseCategoriesClicked,
     logMyCardClicked,
-    logMyAccountClicked
+    logMyAccountClicked,
+    isZendeskV1BlcUkEnabled
   );
   const menu = authenticated ? loggedIn : loggedOut;
 

@@ -156,6 +156,7 @@ jobs:
             offers_graphql_endpoint: 'https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://staging-offers.blcshine.io'
             offers_brand: 'blc-uk'
+            zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb'
           - brand: 'blc-au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
@@ -218,6 +219,8 @@ jobs:
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
       NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
+      NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -254,6 +257,7 @@ jobs:
             offers_graphql_endpoint: 'https://27d2m22mtvac5cvilrvb7kviyi.appsync-api.eu-west-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://offers.blcshine.io'
             offers_brand: 'blc-uk'
+            zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb'
           - brand: 'blc-au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
@@ -314,6 +318,7 @@ jobs:
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
       NEXT_PUBLIC_BRAND_URL: bluelightcard.co.uk
+      NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

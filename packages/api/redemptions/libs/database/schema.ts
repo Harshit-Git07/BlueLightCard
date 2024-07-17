@@ -2,7 +2,7 @@ import { sql } from 'drizzle-orm';
 import { boolean, index, integer, pgEnum, pgTable, ReferenceConfig, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { v4 as uuidv4 } from 'uuid';
 
-import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
+import { REDEMPTION_TYPES } from '../../../core/src/constants/redemptions';
 
 const DEFAULT_FOREIGN_KEY_ACTIONS: ReferenceConfig['actions'] = {
   onDelete: 'restrict',

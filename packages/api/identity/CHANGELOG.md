@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.86.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.85.2...bluelightcard/identity-v1.86.0) (2024-07-17)
+
+
+### Features
+
+* Feat/cot-101 fix Prod Deployment error.  ([#1804](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1804)) ([1a454d5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1a454d51ef539b7bcfec262e5889141ea1105d4d))
+
 ## [1.85.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.85.1...bluelightcard/identity-v1.85.2) (2024-07-15)
 
 

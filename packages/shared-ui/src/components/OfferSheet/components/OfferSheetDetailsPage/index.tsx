@@ -1,6 +1,6 @@
 import { useCSSMerge, useCSSConditional } from '../../../../hooks/useCSS';
 import { PlatformVariant } from '../../../../types';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton from '../../../MagicButton';
@@ -28,21 +28,6 @@ const OfferSheetDetailsPage: FC = () => {
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
   const [maxPerUserReached, setMaxPerUserReached] = useState(false);
-
-  useEffect(() => {
-    const getData = async () => {
-      if (
-        redemptionType === 'preApplied' &&
-        offerData?.id &&
-        offerData?.name &&
-        offerMeta?.companyName
-      ) {
-        const data = await getRedemptionData();
-        setWebRedeemData(data);
-      }
-    };
-    getData();
-  }, [platformAdapter, offerData, offerMeta]);
 
   const labels = useLabels(offerData);
 
@@ -161,16 +146,9 @@ const OfferSheetDetailsPage: FC = () => {
       return;
     }
 
-    if (redemptionType === 'preApplied') {
-      if (webRedeemData && !isRedeemDataErrorResponse(webRedeemData.data)) {
-        handleRedirect(webRedeemData.data.redemptionDetails.url);
-      }
-      return;
-    }
-
     const redeemData = await getRedemptionData();
 
-    if (redeemData.statusCode === 200) {
+    if (redeemData.statusCode == 200) {
       setWebRedeemData(redeemData);
 
       if (redemptionType === 'vaultQR') {
@@ -188,7 +166,11 @@ const OfferSheetDetailsPage: FC = () => {
 
   // Web second button click handler
   const getDiscountClickHandler = () => {
-    if (redemptionType === 'generic' || redemptionType === 'vault') {
+    if (
+      redemptionType === 'generic' ||
+      redemptionType === 'vault' ||
+      redemptionType === 'preApplied'
+    ) {
       if (webRedeemData.statusCode !== 200) {
         setShowErrorPage(true);
         return;
@@ -201,7 +183,7 @@ const OfferSheetDetailsPage: FC = () => {
       }
 
       if (!isRedeemDataErrorResponse(webRedeemData.data)) {
-        if (webRedeemData.data.redemptionDetails.code)
+        if (redemptionType !== 'preApplied' && webRedeemData.data.redemptionDetails.code)
           copyCode(webRedeemData.data.redemptionDetails.code);
         if (webRedeemData.data.redemptionDetails.url)
           handleRedirect(webRedeemData.data.redemptionDetails.url);
@@ -356,7 +338,7 @@ const OfferSheetDetailsPage: FC = () => {
   function getWebSecondaryButtonText() {
     switch (redemptionType) {
       case 'preApplied':
-        return 'No code needed!';
+        return 'Continue to partner website';
       case 'vaultQR':
         return 'QR code ready';
       default:
@@ -367,7 +349,7 @@ const OfferSheetDetailsPage: FC = () => {
   function getWebSecondaryButtonSubText() {
     switch (redemptionType) {
       case 'preApplied':
-        return 'Special pricing applied on partner site';
+        return 'Special pricing applied automatically';
       case 'vaultQR':
         return 'Show the above code to get discount';
       default:
@@ -384,7 +366,6 @@ const OfferSheetDetailsPage: FC = () => {
     }
     return primaryButton;
   };
-
   return (
     <div className={css}>
       {showErrorPage && <OfferDetailsErrorPage />}

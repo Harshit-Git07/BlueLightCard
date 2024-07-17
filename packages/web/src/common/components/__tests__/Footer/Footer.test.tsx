@@ -5,6 +5,11 @@ import { render, screen } from '@testing-library/react';
 import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom';
 
+jest.mock('../../../context/AmplitudeExperiment/hooks', () => ({
+  ...jest.requireActual('../../../context/AmplitudeExperiment/hooks'), // This retains other exports
+  useAmplitudeExperiment: jest.fn().mockResolvedValue({ data: { variantName: 'off' } }),
+}));
+
 const oneNavSection = [
   {
     title: 'Company Info',

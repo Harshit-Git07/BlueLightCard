@@ -3,7 +3,7 @@ import {FirehoseClient, PutRecordCommand, PutRecordInput} from '@aws-sdk/client-
 import {type CloudWatchLogsEvent, type Context} from 'aws-lambda';
 import zlib from 'fast-zlib';
 import {PutRecordCommandInput} from "@aws-sdk/client-firehose/dist-types/commands/PutRecordCommand";
-import { LoginAudit } from 'src/models/loginAudits';
+import { LoginAudit, CLIENT_NAME_LOGIN_AUDIT_MAP } from 'src/models/loginAudits';
 
 const service = process.env.SERVICE;
 const webClientId = process.env.WEB_CLIENT_ID;
@@ -43,22 +43,14 @@ export const handler = async (event: CloudWatchLogsEvent, context: Context): Pro
 
 function getLoginState(parsed: any) {
     let state = 0;
-    // const loginClientKey = loginClientIdMap[parsed.clientId];
-    // if (parsed.action === 'TokenGeneration_Authentication'){
-    //     state = parsed.clientId == webClientId ? LoginAudit.WEB_LOGIN : LoginAudit.APP_LOGIN;
-    // } else if(parsed.action === 'TokenGeneration_HostedAuth'){
-    //     state = CLIENT_NAME_LOGIN_AUDIT_MAP[`${loginClientKey}_LOGIN`] ?? LoginAudit.WEB_HOSTEDUI_LOGIN;
-    // }
-    // else if(parsed.action === 'TokenGeneration_RefreshTokens'){
-    //     state = CLIENT_NAME_LOGIN_AUDIT_MAP[`${loginClientKey}_REFRESH_TOKEN`] ?? LoginAudit.WEB_REFRESH_TOKEN;
-    // }
+    const loginClientKey = loginClientIdMap[parsed.clientId];
     if (parsed.action === 'TokenGeneration_Authentication'){
         state = parsed.clientId == webClientId ? LoginAudit.WEB_LOGIN : LoginAudit.APP_LOGIN;
     } else if(parsed.action === 'TokenGeneration_HostedAuth'){
-        state = parsed.clientId == webClientId ? LoginAudit.WEB_HOSTEDUI_LOGIN : LoginAudit.APP_HOSTEDUI_LOGIN;
+        state = CLIENT_NAME_LOGIN_AUDIT_MAP[`${loginClientKey}_LOGIN`] ?? LoginAudit.WEB_HOSTEDUI_LOGIN;
     }
     else if(parsed.action === 'TokenGeneration_RefreshTokens'){
-        state = parsed.clientId == webClientId ? LoginAudit.WEB_REFRESH_TOKEN : LoginAudit.APP_REFRESH_TOKEN;
+        state = CLIENT_NAME_LOGIN_AUDIT_MAP[`${loginClientKey}_REFRESH_TOKEN`] ?? LoginAudit.WEB_REFRESH_TOKEN;
     }
     return state;
   }

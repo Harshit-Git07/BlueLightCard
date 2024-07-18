@@ -5,7 +5,6 @@ import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Buckets } from "../buckets";
 import { Queues } from "../queues";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
-import {getBrandSpecificEnvVar} from "../../utils/environment-variables";
 
 export class S3MenusBucketEventQueueListenerLambda extends LambdaAbstract {
   constructor(private stack: Stack, private tables: Tables, private buckets: Buckets, private queues: Queues) {
@@ -22,8 +21,7 @@ export class S3MenusBucketEventQueueListenerLambda extends LambdaAbstract {
       deadLetterQueueEnabled: true,
       environment: {
         OFFER_HOMEPAGE_TABLE: this.tables.offerHomepageTable.tableName,
-        OFFERS_HOMEPAGE_MENU_BRAND_PREFIX:
-          process.env[getBrandSpecificEnvVar('OFFERS_HOMEPAGE_MENU_BRAND_PREFIX', this.stack.stackName)] as string,
+        OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: process.env.OFFERS_HOMEPAGE_MENU_BRAND_PREFIX as string,
         REGIONAL_MENUS_BUCKET: this.buckets.menusBucket.bucketName,
       },
     });

@@ -6,7 +6,6 @@ import { IDatabaseAdapter } from './database/IDatabaseAdapter';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ENVIRONMENTS } from '../utils/global-constants';
 import { Tables } from './tables';
-import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 import { generateOffersCustomDomainName } from '@blc-mono/core/offers/generateOffersCustomDomainName'
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config'
 
@@ -55,7 +54,7 @@ export class OffersApiGateway {
   private createApi(): ApiGatewayV1Api<any> {
     const globalConfig = GlobalConfigResolver.for(this.stack.stage);
 
-    return new ApiGatewayV1Api(this.stack, generateConstructId('offers', this.stack.stackName), {
+    return new ApiGatewayV1Api(this.stack, 'offers', {
       authorizers: {
         offersAuthorizer: ApiGatewayAuthorizer(this.stack, 'ApiGatewayAuthorizer', this.authorizer),
       },

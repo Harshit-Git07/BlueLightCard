@@ -94,17 +94,12 @@ jobs:
             stagingBaseUrl: https://staging.bluelightcard.co.uk
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-uk
-            stagingBaseUrl_dds: https://ddsstaging.bluelightcard.tech
-            legacyApiRetrieveOffersEndpoint_dds: api/4/offer/retrieve.php
-            offersHomepageMenuBrandPrefix_dds: dds-uk
-            ddsEnabled: 'false'
             cdnUrl: 'https://blcimg-dev.img.bluelightcard.co.uk'
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             stagingBaseUrl: https://develop.bluelightcard.com.au
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-aus
-            ddsEnabled: 'false'
             cdnUrl: 'https://cdn.bluelightcard.com.au'
     needs:
       - install
@@ -115,10 +110,6 @@ jobs:
       STAGING_BASE_URL: ${{matrix.stagingBaseUrl}}
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: ${{matrix.legacyApiRetrieveOffersEndpoint}}
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
-      STAGING_BASE_URL_DDS: ${{matrix.stagingBaseUrl_dds}}
-      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT_DDS: ${{matrix.legacyApiRetrieveOffersEndpoint_dds}}
-      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX_DDS: ${{matrix.offersHomepageMenuBrandPrefix_dds}}
-      DDS_ENABLED: ${{matrix.ddsEnabled}}
       CDN_URL: ${{matrix.cdnUrl}}
     steps:
       - name: Checkout
@@ -147,17 +138,12 @@ jobs:
             prodBaseUrl: https://www.bluelightcard.co.uk
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-uk
-            prodBaseUrl_dds: https://www.defencediscountservice.co.uk
-            legacyApiRetrieveOffersEndpoint_dds: api/4/offer/retrieve.php
-            offersHomepageMenuBrandPrefix_dds: dds-uk
-            ddsEnabled: 'false'
             cdnUrl: 'https://cdn.bluelightcard.co.uk'
           - namespace: 'blc-aus-production'
             region: 'ap-southeast-2'
             prodBaseUrl: https://www.bluelightcard.com.au
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-aus
-            ddsEnabled: 'false'
             cdnUrl: 'https://cdn.bluelightcard.com.au'
     needs:
       - install
@@ -169,10 +155,6 @@ jobs:
       PROD_BASE_URL: ${{matrix.prodBaseUrl}}
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: ${{matrix.legacyApiRetrieveOffersEndpoint}}
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
-      PROD_BASE_URL_DDS: ${{matrix.prodBaseUrl_dds}}
-      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT_DDS: ${{matrix.legacyApiRetrieveOffersEndpoint_dds}}
-      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX_DDS: ${{matrix.offersHomepageMenuBrandPrefix_dds}}
-      DDS_ENABLED: ${{matrix.ddsEnabled}}
       CDN_URL: ${{matrix.cdnUrl}}
     steps:
       - name: Checkout

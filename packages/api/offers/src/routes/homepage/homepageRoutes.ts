@@ -4,7 +4,6 @@ import { OffersFunction } from 'src/constructs/sst/OffersFunction';
 import { RouteProps } from '../routeProps';
 import { CategoryMenuModel, CompanyMenuModel, OffersHomepageModel } from '../../models/offersHomepage';
 import { Model } from 'aws-cdk-lib/aws-apigateway';
-import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 export class OffersHomepageRoutes {
   private readonly model: Record<string, Model>;
@@ -23,7 +22,7 @@ export class OffersHomepageRoutes {
   private getCompanies(): ApiGatewayV1ApiRouteProps<any> {
     return {
       cdk: {
-        function: new OffersFunction(this.routeProps.stack, generateConstructId('CompaniesMenuHandler', this.routeProps.stack.stackName), {
+        function: new OffersFunction(this.routeProps.stack, 'CompaniesMenuHandler', {
           handler: 'packages/api/offers/src/routes/homepage/getCompaniesHandler.handler',
           environment: {
             OFFER_HOMEPAGE_TABLE_NAME: this.routeProps.dynamoTables!.offerHomepageTable.tableName,
@@ -46,7 +45,7 @@ export class OffersHomepageRoutes {
   private getCategories(): ApiGatewayV1ApiRouteProps<any> {
     return {
       cdk: {
-        function: new OffersFunction(this.routeProps.stack, generateConstructId('CategoriesMenuHandler', this.routeProps.stack.stackName), {
+        function: new OffersFunction(this.routeProps.stack, 'CategoriesMenuHandler', {
           handler: 'packages/api/offers/src/routes/homepage/getCategoriesHandler.handler',
           environment: {
             OFFER_HOMEPAGE_TABLE_NAME: this.routeProps.dynamoTables!.offerHomepageTable.tableName,
@@ -67,7 +66,7 @@ export class OffersHomepageRoutes {
   private getOfferMenus(): ApiGatewayV1ApiRouteProps<any> {
     return {
       cdk: {
-        function: new OffersFunction(this.routeProps.stack, generateConstructId('OfferMenusHandler', this.routeProps.stack.stackName), {
+        function: new OffersFunction(this.routeProps.stack, 'OfferMenusHandler', {
           handler: 'packages/api/offers/src/routes/homepage/getOffersMenusHandler.handler',
           environment: {
             OFFER_HOMEPAGE_TABLE_NAME: this.routeProps.dynamoTables!.offerHomepageTable.tableName,

@@ -1,6 +1,5 @@
 import { Queue } from "sst/constructs";
 import { Stack } from "aws-cdk-lib";
-import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 export class Queues {
   s3MenusBucketEventQueue: Queue;
@@ -14,14 +13,14 @@ export class Queues {
   }
 
   private createS3MenusBucketEventQueue (): Queue {
-    return new Queue(this.stack, generateConstructId('s3MenusBucketEventQueue', this.stack.stackName));
+    return new Queue(this.stack, 's3MenusBucketEventQueue');
   }
 
   private createBannerDlq (): Queue {
-    return new Queue(this.stack, generateConstructId('BannerDLQ', this.stack.stackName));
+    return new Queue(this.stack, 'BannerDLQ');
   }
 
   private createCompaniesDlq (): Queue {
-    return new Queue(this.stack, generateConstructId('CompaniesDLQ', this.stack.stackName));
+    return new Queue(this.stack, 'CompaniesDLQ');
   }
 }

@@ -22,7 +22,6 @@ import { SecretManager } from '../secret-manager';
 import { SecurityGroupManager } from '../security-group-manager';
 import { EC2Manager } from '../ec2-manager';
 import { DATABASE_PROPS, EPHEMERAL_PR_REGEX } from '../../utils/global-constants';
-import { generateConstructId } from '@blc-mono/core/utils/generateConstuctId';
 
 /**
  * Manages the creation and configuration of database resources, including Aurora Serverless V2 clusters,
@@ -91,21 +90,21 @@ export class Database {
     }
 
     // Create Writer instance
-    const writerInstance: IClusterInstance = ClusterInstance.serverlessV2(generateConstructId('Writer', this.stack.stackName), {
+    const writerInstance: IClusterInstance = ClusterInstance.serverlessV2('Writer', {
       autoMinorVersionUpgrade: true,
       scaleWithWriter: true,
     });
     // Create Reader instances
     const readerInstances: IClusterInstance[] = [
-      ClusterInstance.serverlessV2(generateConstructId('Reader', this.stack.stackName), {
+      ClusterInstance.serverlessV2('Reader', {
         autoMinorVersionUpgrade: true,
         scaleWithWriter: true,
       }),
     ];
 
     // Create cluster
-    const cluster = new DatabaseCluster(this.stack, generateConstructId('ServerlessDatabaseOffers', this.stack.stackName), {
-      clusterIdentifier: generateConstructId(`offers-database-cluster-${this.stack.stage}`, this.stack.stackName),
+    const cluster = new DatabaseCluster(this.stack, 'ServerlessDatabaseOffers', {
+      clusterIdentifier: `offers-database-cluster-${this.stack.stage}`,
       engine: DatabaseClusterEngine.auroraMysql({
         version: AuroraMysqlEngineVersion.of('8.0.mysql_aurora.3.05.2', '8.0'),
       }),
@@ -148,8 +147,8 @@ export class Database {
 
     if (this.database instanceof DatabaseCluster) {
       // Create proxy
-      return new DatabaseProxy(this.stack, generateConstructId('OffersDataBaseProxy', this.stack.stackName), {
-        dbProxyName: generateConstructId(`${this.stack.stage}-offers-database-proxy`, this.stack.stackName),
+      return new DatabaseProxy(this.stack, 'OffersDataBaseProxy', {
+        dbProxyName: `${this.stack.stage}-offers-database-proxy`,
         proxyTarget: ProxyTarget.fromCluster(this.database),
         secrets: [this.database.secret!],
         vpc: this.iVpc,
@@ -167,8 +166,8 @@ export class Database {
    * @return {DatabaseInstance} the database instance
    */
   private createEphemeralDatabase(): DatabaseInstance {
-    return new DatabaseInstance(this.stack, generateConstructId('EphemeralDB', this.stack.stackName), {
-      instanceIdentifier: generateConstructId(`${this.stack.stage}-offers-ephemeral-db`, this.stack.stackName),
+    return new DatabaseInstance(this.stack, 'EphemeralDB', {
+      instanceIdentifier: `${this.stack.stage}-offers-ephemeral-db`,
       engine: DatabaseInstanceEngine.mysql({ version: MysqlEngineVersion.VER_8_0_32 }),
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
       credentials: Credentials.fromSecret(this.secretManager.databaseSecret),

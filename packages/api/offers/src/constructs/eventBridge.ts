@@ -20,7 +20,6 @@ export class EventBridge {
       bannerRule(
         this.tables.bannersTable.tableName,
         this.queues.bannerDlq.cdk.queue,
-        this.stack.stackName,
         this.stack.region,
       )
     );

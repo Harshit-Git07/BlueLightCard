@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.65.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.64.2...bluelightcard/web-v1.65.0) (2024-07-18)
+
+
+### Features
+
+* [DISCO-323] create and tokenise new footer web ([#1744](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1744)) ([19f79c4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/19f79c470ba91925ae3f3ec04c107863c8a575da))
+* **COT-166:** redirecting FAQs and contact us for logged in user to zendesk url link based on feature flag value from amplitude ([#1774](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1774)) ([40c5e60](https://github.com/bluelightcard/BlueLightCard-2.0/commit/40c5e60ad096f2df9b6915b41bd778337e1a533f))
+* **COT-166:** resolved the footer unit test cases fail by mocking amplitude experiment. ([#1808](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1808)) ([9f3ba64](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9f3ba64a82d872182c3f54a0937528e49b4caf69))
+* Disco 322-Create Header Bar & Dropdown Module ([#1724](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1724)) ([7a1cb9d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7a1cb9d4166145f2272c3545190c14a9bbb95ba6))
+* disco 474 tokenise nav bar typography ([#1795](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1795)) ([98f5ec3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/98f5ec362e486a55e337ba166470582c8f332782))
+* disco-472 Dropdown typography ([#1800](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1800)) ([304b27e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/304b27e8d4a53c48c88b9e2acf84e74b1decd306))
+
+
+### Other Changes
+
+* added fonts to storybook ([#1783](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1783)) ([779cd76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/779cd763ea2c34035671d1333faa2162c98ae551))
+
 ## [1.64.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.64.1...bluelightcard/web-v1.64.2) (2024-07-15)
 
 

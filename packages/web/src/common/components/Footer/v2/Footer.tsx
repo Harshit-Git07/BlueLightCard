@@ -23,7 +23,7 @@ const Footer: FC<FooterProps> = ({ isAuthenticated }) => {
   } = getFooterDetails(BRAND as BRANDS, isAuthenticated);
 
   const footerLinkTextClasses =
-    'text-footer-text-colour hover:opacity-100 text-md dark:text-footer-text-colour-dark font-footer-text-font hover:text-footer-link-hover-colour dark:hover:text-footer-link-hover-colour-dark font-light';
+    'text-footer-text-colour hover:opacity-100 dark:text-footer-text-colour-dark hover:text-footer-link-hover-colour dark:hover:text-footer-link-hover-colour-dark font-footer-text-font text-footer-text-font font-footer-text-font-weight tracking-footer-text-font leading-footer-text-font';
 
   // Calling amplitude experiment to check if zendesk is enabled
   const zendeskExperiment = useAmplitudeExperiment(
@@ -78,7 +78,7 @@ const Footer: FC<FooterProps> = ({ isAuthenticated }) => {
           {textBlock && (
             <div
               data-testid="desktop-text-block"
-              className="hidden laptop:inline-block leading-7 w-1/2 tablet:w-96 pb-6 text-footer-text-colour dark:text-footer-text-colour-dark font-footer-text-font"
+              className="hidden laptop:inline-block w-1/2 tablet:w-96 pb-6 text-footer-text-colour dark:text-footer-text-colour-dark font-footer-text-font text-footer-text-font font-footer-text-font-weight tracking-footer-text-font leading-footer-text-font"
             >
               {textBlock}
             </div>
@@ -93,7 +93,7 @@ const Footer: FC<FooterProps> = ({ isAuthenticated }) => {
                 navigationItems.map((section: FooterNavigationSection, index) => {
                   return (
                     <div key={index} className="pb-6 min-w-34 flex-col flex space-y-2">
-                      <h2 className="text-xl mb-2 font-footer-sectionHeading-font text-footer-text-colour dark:text-footer-text-colour-dark">
+                      <h2 className="mb-2 font-footer-sectionHeading-font text-footer-text-colour dark:text-footer-text-colour-dark font-footer-sectionHeading-font font-footer-sectionHeading-font-weight text-footer-sectionHeading-font tracking-footer-sectionHeading-font leading-footer-sectionHeading-font">
                         {section.title}
                       </h2>
                       {section.navLinks.map((navLink: FooterNavigationLink, navLinkIndex) => {
@@ -122,12 +122,12 @@ const Footer: FC<FooterProps> = ({ isAuthenticated }) => {
           {textBlock && (
             <div
               data-testid="mobile-text-block"
-              className="text-center laptop:hidden mx-auto leading-7 pb-6 text-footer-text-colour dark:text-footer-text-colour-dark font-footer-text-font"
+              className="text-center laptop:hidden mx-auto pb-6 text-footer-text-colour dark:text-footer-text-colour-dark font-footer-text-font text-footer-text-font font-footer-text-font-weight tracking-footer-text-font leading-footer-text-font"
             >
               {textBlock}
             </div>
           )}
-          <p className="desktop:mx-auto text-sm font-footer-copyright-font text-footer-text-colour dark:text-footer-text-colour-dark">
+          <p className="desktop:mx-auto text-footer-text-colour dark:text-footer-text-colour-dark font-footer-copyright-font font-footer-copyright-font-weight text-footer-copyright-font tracking-footer-copyright-font leading-footer-copyright-font">
             {copyrightText}
           </p>
         </div>

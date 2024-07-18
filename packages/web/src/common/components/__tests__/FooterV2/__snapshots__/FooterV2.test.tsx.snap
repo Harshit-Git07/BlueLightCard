@@ -44,12 +44,12 @@ exports[`FooterV2 component Render tests should render navigation items and copy
             class="pb-6 min-w-34 flex-col flex space-y-2"
           >
             <h2
-              class="text-xl mb-2 font-footer-sectionHeading-font text-footer-text-colour dark:text-footer-text-colour-dark"
+              class="mb-2 font-footer-sectionHeading-font text-footer-text-colour dark:text-footer-text-colour-dark font-footer-sectionHeading-font font-footer-sectionHeading-font-weight text-footer-sectionHeading-font tracking-footer-sectionHeading-font leading-footer-sectionHeading-font"
             >
               Mock Nav Item
             </h2>
             <a
-              class="text-footer-text-colour hover:opacity-100 text-md dark:text-footer-text-colour-dark font-footer-text-font hover:text-footer-link-hover-colour dark:hover:text-footer-link-hover-colour-dark font-light"
+              class="text-footer-text-colour hover:opacity-100 dark:text-footer-text-colour-dark hover:text-footer-link-hover-colour dark:hover:text-footer-link-hover-colour-dark font-footer-text-font text-footer-text-font font-footer-text-font-weight tracking-footer-text-font leading-footer-text-font"
               href="/mock-sub-item"
             >
               Sub Item One
@@ -61,7 +61,7 @@ exports[`FooterV2 component Render tests should render navigation items and copy
         class="col-span-3 order-6 py-10 laptop:pt-6 w-full text-center"
       >
         <p
-          class="desktop:mx-auto text-sm font-footer-copyright-font text-footer-text-colour dark:text-footer-text-colour-dark"
+          class="desktop:mx-auto text-footer-text-colour dark:text-footer-text-colour-dark font-footer-copyright-font font-footer-copyright-font-weight text-footer-copyright-font tracking-footer-copyright-font leading-footer-copyright-font"
         >
           mock copyright text
         </p>

@@ -1,29 +1,9 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Footer from './Footer';
 import { AuthedAmplitudeExperimentProvider } from '../../../context/AmplitudeExperiment';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { FC } from 'react';
-import { FooterProps } from './types';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const mockQueryClient = new QueryClient();
-
-// const FooterTemplate: FC<FooterProps> = ({ ...args }) => {
-//   const mockClientQuery = useQuery({
-//     queryKey: ['amplitudeExperimentClient'],
-//     queryFn: () =>
-//       ({
-//         variant: () => ({}),
-//       } as any),
-//     enabled: true,
-//     refetchOnWindowFocus: false,
-//     refetchOnReconnect: false,
-//   });
-//   return (
-//     <AmplitudeExperimentContext.Provider value={mockClientQuery}>
-//       <Footer {...args} />
-//     </AmplitudeExperimentContext.Provider>
-//   );
-// };
 
 const componentMeta: Meta<typeof Footer> = {
   title: 'Component System/v2/Footer',

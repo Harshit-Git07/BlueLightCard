@@ -9,6 +9,9 @@ import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
 import { PlatformVariant } from 'src/types';
 import { RedemptionType } from '../../types';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function createFactoryMethod<T>(defaults: T) {
   return (overrides?: Partial<T>): T => ({
@@ -89,21 +92,25 @@ describe('smoke test', () => {
 
   it('should render component without error', () => {
     render(
-      <SharedUIConfigProvider value={MockSharedUiConfig}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheetDetailsPage />
-        </PlatformAdapterProvider>
-      </SharedUIConfigProvider>,
+      <QueryClientProvider client={queryClient}>
+        <SharedUIConfigProvider value={MockSharedUiConfig}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+            <OfferSheetDetailsPage />
+          </PlatformAdapterProvider>
+        </SharedUIConfigProvider>
+      </QueryClientProvider>,
     );
   });
 
   it('should render Share button', () => {
     const { getByRole } = render(
-      <SharedUIConfigProvider value={MockSharedUiConfig}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheetDetailsPage />
-        </PlatformAdapterProvider>
-      </SharedUIConfigProvider>,
+      <QueryClientProvider client={queryClient}>
+        <SharedUIConfigProvider value={MockSharedUiConfig}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+            <OfferSheetDetailsPage />
+          </PlatformAdapterProvider>
+        </SharedUIConfigProvider>
+      </QueryClientProvider>,
     );
 
     expect(getByRole('button', { name: /share offer/i })).toBeTruthy();
@@ -111,11 +118,13 @@ describe('smoke test', () => {
 
   it('should render Get discount button', () => {
     const { getByRole } = render(
-      <SharedUIConfigProvider value={MockSharedUiConfig}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheetDetailsPage />
-        </PlatformAdapterProvider>
-      </SharedUIConfigProvider>,
+      <QueryClientProvider client={queryClient}>
+        <SharedUIConfigProvider value={MockSharedUiConfig}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+            <OfferSheetDetailsPage />
+          </PlatformAdapterProvider>
+        </SharedUIConfigProvider>
+      </QueryClientProvider>,
     );
 
     expect(getByRole('button', { name: /Get discount/i })).toBeTruthy();
@@ -134,13 +143,15 @@ describe('smoke test', () => {
 
   it('should display labels with jotai state management', () => {
     const { getByText } = render(
-      <SharedUIConfigProvider value={MockSharedUiConfig}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheetDetailsPageProvider
-            offerSheetAtomData={createOfferSheetAtom({ redemptionType: 'vault' })}
-          />
-        </PlatformAdapterProvider>
-      </SharedUIConfigProvider>,
+      <QueryClientProvider client={queryClient}>
+        <SharedUIConfigProvider value={MockSharedUiConfig}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+            <OfferSheetDetailsPageProvider
+              offerSheetAtomData={createOfferSheetAtom({ redemptionType: 'vault' })}
+            />
+          </PlatformAdapterProvider>
+        </SharedUIConfigProvider>
+      </QueryClientProvider>,
     );
 
     const label1 = getByText(/online/i);
@@ -158,13 +169,15 @@ describe('smoke test', () => {
     ['Get QR code', 'vaultQR'],
   ])('should show the text "%s" for redemption type "%s"', (buttonText, redemptionType) => {
     const { getByRole } = render(
-      <SharedUIConfigProvider value={MockSharedUiConfig}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheetDetailsPageProvider
-            offerSheetAtomData={createOfferSheetAtom({ redemptionType })}
-          />
-        </PlatformAdapterProvider>
-      </SharedUIConfigProvider>,
+      <QueryClientProvider client={queryClient}>
+        <SharedUIConfigProvider value={MockSharedUiConfig}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+            <OfferSheetDetailsPageProvider
+              offerSheetAtomData={createOfferSheetAtom({ redemptionType })}
+            />
+          </PlatformAdapterProvider>
+        </SharedUIConfigProvider>
+      </QueryClientProvider>,
     );
 
     expect(getByRole('button', { name: buttonText })).toBeTruthy();

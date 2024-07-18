@@ -13,6 +13,77 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import { RedemptionType } from '../../types';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
+import { z } from 'zod';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+
+const profileModel = z.object({
+  firstname: z.string(),
+  surname: z.string(),
+  organisation: z.string(),
+  dob: z.string(),
+  gender: z.string(),
+  mobile: z.string(),
+  emailValidated: z.number(),
+  spareEmail: z.string(),
+  spareEmailValidated: z.number(),
+  twoFactorAuthentication: z.boolean(),
+});
+
+const cardModel = z.object({
+  cardId: z.string(),
+  expires: z.string(),
+  cardStatus: z.string(),
+  datePosted: z.string(),
+});
+
+const userResponseModel = z.object({
+  profile: profileModel,
+  cards: z.array(cardModel),
+});
+
+const VALID_CARD_STATUSES = ['ADDED_TO_BATCH', 'USER_BATCHED', 'PHYSICAL_CARD'];
+
+function getIsRedemptionButtonDisabled() {
+  const platformAdapter = usePlatformAdapter();
+
+  return queryOptions({
+    queryKey: ['userStatus'],
+    queryFn: async () => {
+      const result = await platformAdapter.invokeV5Api('/eu/identity/user', {
+        method: 'GET',
+      });
+
+      return userResponseModel.parse(JSON.parse(result.data).data);
+    },
+    select: (data) => {
+      if (data.cards.length === 0) {
+        return true;
+      }
+
+      const latestCard = data.cards.reduce((max, card) =>
+        max.expires > card.expires ? max : card,
+      );
+
+      if (VALID_CARD_STATUSES.includes(latestCard.cardStatus)) {
+        return false;
+      }
+
+      if (latestCard.cardStatus === 'CARD_EXPIRED') {
+        const expirationDate = new Date(Number(latestCard.expires));
+        expirationDate.setDate(expirationDate.getDate() + 30);
+
+        if (new Date() <= expirationDate) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    },
+    staleTime: Infinity,
+  });
+}
 
 const OfferSheetDetailsPage: FC = () => {
   const {
@@ -28,6 +99,7 @@ const OfferSheetDetailsPage: FC = () => {
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
   const [maxPerUserReached, setMaxPerUserReached] = useState(false);
+  const isRedemptionButtonDisabled = useQuery(getIsRedemptionButtonDisabled());
 
   const labels = useLabels(offerData);
 
@@ -217,6 +289,7 @@ const OfferSheetDetailsPage: FC = () => {
     let primaryButtonTextValue = '';
     let secondaryButtonTextValue = '';
     let secondaryButtonSubtextValue = '';
+
     switch (redemptionType) {
       case 'generic':
         primaryButtonTextValue = 'Copy discount code';
@@ -261,6 +334,7 @@ const OfferSheetDetailsPage: FC = () => {
       variant={'primary'}
       className="w-full"
       transitionDurationMs={200}
+      disabled={isRedemptionButtonDisabled.data}
       onClick={async () => {
         if (platformAdapter.platform === PlatformVariant.MobileHybrid) {
           await hybridDiscountClickHandler();
@@ -364,7 +438,18 @@ const OfferSheetDetailsPage: FC = () => {
         return mobileHybridSecondaryButton;
       if (platformAdapter.platform === PlatformVariant.Web) return webSecondaryButton;
     }
-    return primaryButton;
+    return (
+      <div>
+        {primaryButton}
+        {isRedemptionButtonDisabled.data && (
+          <center>
+            <span className="text-colour-onSurface-subtle font-body-light text-body-light font-body-light-weight leading-body-light tracking-body-light">
+              This offer is for active card holders only. Please check the status of your account.
+            </span>
+          </center>
+        )}
+      </div>
+    );
   };
   return (
     <div className={css}>

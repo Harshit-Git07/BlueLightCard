@@ -100,7 +100,7 @@ jobs:
             stagingBaseUrl: https://develop.bluelightcard.com.au
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-aus
-            cdnUrl: 'https://cdn.bluelightcard.com.au'
+            cdnUrl: 'https://blc-au-img-dev.s3.ap-southeast-2.amazonaws.com'
     needs:
       - install
       - test

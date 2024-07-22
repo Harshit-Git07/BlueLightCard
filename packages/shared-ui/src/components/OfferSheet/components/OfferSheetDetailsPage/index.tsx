@@ -8,7 +8,12 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
 import events from '../../../../utils/amplitude/events';
-import { isRedeemDataErrorResponse, usePlatformAdapter, RedeemResultKind } from '../../../../index';
+import {
+  isRedeemDataErrorResponse,
+  usePlatformAdapter,
+  RedeemResultKind,
+  offerTypeParser,
+} from '../../../../index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import { RedemptionType } from '../../types';
@@ -285,47 +290,111 @@ const OfferSheetDetailsPage: FC = () => {
   };
   // ---- End of separate functions for code and redirect on Web ----
 
-  const buttonText = (redemptionType?: RedemptionType) => {
+  const primaryButtonText = (redemptionType?: RedemptionType) => {
+    // ****
+    //  Sets the text for the primary button that is displayed when we open the offer sheet, based on the redemption type
+    // ****
     let primaryButtonTextValue = '';
+
+    switch (redemptionType) {
+      case 'generic':
+        primaryButtonTextValue = 'Copy discount code';
+        break;
+      case 'vault':
+        primaryButtonTextValue = 'Copy discount code';
+        break;
+      case 'preApplied':
+        if (offerData.type === offerTypeParser.Giftcards.type) {
+          primaryButtonTextValue = 'Get voucher';
+        } else {
+          primaryButtonTextValue = 'Get discount';
+        }
+        break;
+      case 'showCard':
+        primaryButtonTextValue = 'Show your Blue Light Card in store';
+        break;
+      case 'vaultQR':
+        primaryButtonTextValue = 'Get QR code';
+        break;
+      default:
+        primaryButtonTextValue = 'Get discount';
+    }
+
+    return primaryButtonTextValue;
+  };
+
+  const mobileHybridButtonText = (redemptionType?: RedemptionType) => {
+    // ****
+    //  Sets the text for the magic button that is displayed on mobile hybrid, based on the redemption type
+    // ****
     let secondaryButtonTextValue = '';
     let secondaryButtonSubtextValue = '';
 
     switch (redemptionType) {
       case 'generic':
-        primaryButtonTextValue = 'Copy discount code';
         secondaryButtonTextValue = 'Code copied!';
         secondaryButtonSubtextValue = 'Redirecting to partner website';
         break;
       case 'vault':
-        primaryButtonTextValue = 'Copy discount code';
         secondaryButtonTextValue = 'Code copied!';
         secondaryButtonSubtextValue = 'Redirecting to partner website';
         break;
       case 'preApplied':
-        primaryButtonTextValue = 'Get discount';
-        secondaryButtonTextValue = 'No code needed!';
-        secondaryButtonSubtextValue = 'Special pricing applied on partner site';
+        // TODO ADD if statement for giftcards offer type that are pre-applied redemption type
+        if (offerData.type === offerTypeParser.Giftcards.type) {
+          secondaryButtonTextValue = 'Get instant savings';
+          secondaryButtonSubtextValue = 'Redirecting to voucher shop';
+        } else {
+          secondaryButtonTextValue = 'No code needed!';
+          secondaryButtonSubtextValue = 'Special pricing applied on partner site';
+        }
         break;
-      // TODO: Implement this page
       case 'showCard':
-        primaryButtonTextValue = 'Show your Blue Light Card in store';
         break;
-      // TODO: Implement this page
       case 'vaultQR':
-        primaryButtonTextValue = 'Get QR code';
         secondaryButtonTextValue = 'QR code ready';
         secondaryButtonSubtextValue = 'Show the above code to get discount';
         break;
       default:
-        primaryButtonTextValue = 'Get discount';
         secondaryButtonTextValue = 'Continue to partner website';
         secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
     }
 
     return {
-      primaryText: primaryButtonTextValue,
       secondaryText: secondaryButtonTextValue,
       secondarySubtext: secondaryButtonSubtextValue,
+    };
+  };
+
+  const webSecondaryButtonText = (redemptionType?: RedemptionType) => {
+    // ****
+    //  Sets the text for the magic button that is displayed on web, based on the redemption type
+    // ****
+    let webSecondaryButtonTextValue = '';
+    let webSecondaryButtonSubtextValue = '';
+
+    switch (redemptionType) {
+      case 'preApplied':
+        if (offerData.type === offerTypeParser.Giftcards.type) {
+          webSecondaryButtonTextValue = 'Continue to voucher shop';
+          webSecondaryButtonSubtextValue = 'Get instant savings';
+        } else {
+          webSecondaryButtonTextValue = 'Continue to partner website';
+          webSecondaryButtonSubtextValue = 'Special pricing applied automatically';
+        }
+        break;
+      case 'vaultQR':
+        webSecondaryButtonTextValue = 'QR code ready';
+        webSecondaryButtonSubtextValue = 'Show the above code to get discount';
+        break;
+      default:
+        webSecondaryButtonTextValue = 'Continue to partner website';
+        webSecondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
+    }
+
+    return {
+      webSecondaryText: webSecondaryButtonTextValue,
+      webSecondarySubtext: webSecondaryButtonSubtextValue,
     };
   };
 
@@ -358,7 +427,7 @@ const OfferSheetDetailsPage: FC = () => {
         if (redemptionType !== 'showCard') setButtonClicked(true);
       }}
     >
-      <span className="leading-10 font-bold text-md">{buttonText(redemptionType).primaryText}</span>
+      <span className="leading-10 font-bold text-md">{primaryButtonText(redemptionType)}</span>
     </MagicButton>
   );
 
@@ -381,10 +450,10 @@ const OfferSheetDetailsPage: FC = () => {
       <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
         <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
           <FontAwesomeIcon icon={faWandMagicSparkles} />
-          {buttonText(redemptionType).secondaryText}
+          {mobileHybridButtonText(redemptionType).secondaryText}
         </div>
         <div className="text-sm text-[#616266] font-medium">
-          {buttonText(redemptionType).secondarySubtext}
+          {mobileHybridButtonText(redemptionType).secondarySubtext}
         </div>
       </div>
     </MagicButton>
@@ -402,34 +471,14 @@ const OfferSheetDetailsPage: FC = () => {
       <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
         <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
           <FontAwesomeIcon icon={faWandMagicSparkles} />
-          {getWebSecondaryButtonText()}
+          {webSecondaryButtonText(redemptionType)?.webSecondaryText}
         </div>
-        <div className="text-sm text-[#616266] font-medium">{getWebSecondaryButtonSubText()}</div>
+        <div className="text-sm text-[#616266] font-medium">
+          {webSecondaryButtonText(redemptionType)?.webSecondarySubtext}
+        </div>
       </div>
     </MagicButton>
   );
-
-  function getWebSecondaryButtonText() {
-    switch (redemptionType) {
-      case 'preApplied':
-        return 'Continue to partner website';
-      case 'vaultQR':
-        return 'QR code ready';
-      default:
-        return 'Continue to partner website';
-    }
-  }
-
-  function getWebSecondaryButtonSubText() {
-    switch (redemptionType) {
-      case 'preApplied':
-        return 'Special pricing applied automatically';
-      case 'vaultQR':
-        return 'Show the above code to get discount';
-      default:
-        return 'Code will be copied - paste it at checkout';
-    }
-  }
 
   const renderButton = () => {
     if (buttonClicked) {
@@ -451,6 +500,7 @@ const OfferSheetDetailsPage: FC = () => {
       </div>
     );
   };
+
   return (
     <div className={css}>
       {showErrorPage && <OfferDetailsErrorPage />}
@@ -460,7 +510,12 @@ const OfferSheetDetailsPage: FC = () => {
           <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
             <div className="w-full flex flex-wrap mb-2 justify-center">
               {labels.map((label) => (
-                <Label key={label} type="normal" text={label} className="m-1" />
+                <Label
+                  key={label}
+                  type="normal"
+                  text={label === offerTypeParser.Giftcards.type ? 'Voucher' : label}
+                  className="m-1"
+                />
               ))}
             </div>
             {renderButton()}

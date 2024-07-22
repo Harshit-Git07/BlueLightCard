@@ -118,15 +118,19 @@ jobs:
           - brand: 'blc-uk-current'
             cloudflare_pages_name: 'mobile-hybrid-poc'
             branch: 'main'
+            brand_url: 'staging.bluelightcard.co.uk'
           - brand: 'blc-uk'
             cloudflare_pages_name: 'mobile-hybrid-blc-uk'
             branch: 'staging'
+            brand_url: 'staging.bluelightcard.co.uk'
           - brand: 'blc-au'
             cloudflare_pages_name: 'mobile-hybrid-blc-au'
             branch: 'staging'
+            brand_url: 'develop.bluelightcard.com.au'
           - brand: 'dds-uk'
             cloudflare_pages_name: 'mobile-hybrid-dds'
             branch: 'staging'
+            brand_url: 'ddsstaging.bluelightcard.tech'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -134,7 +138,7 @@ jobs:
       - lint
     env:
       NEXT_PUBLIC_APP_BRAND: ${{ matrix.brand }}
-      NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
+      NEXT_PUBLIC_BRAND_URL: ${{matrix.brand_url}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -160,12 +164,16 @@ jobs:
       matrix:
         include:
           - brand: 'blc-uk-current'
+            brand_url: 'bluelightcard.co.uk'
             cloudflare_pages_name: 'mobile-hybrid'
           - brand: 'blc-uk'
+            brand_url: 'bluelightcard.co.uk'
             cloudflare_pages_name: 'mobile-hybrid-blc-uk'
           - brand: 'blc-au'
+            brand_url: 'bluelightcard.com.au'
             cloudflare_pages_name: 'mobile-hybrid-blc-au'
           - brand: 'dds-uk'
+            brand_url: 'defencediscountservice.co.uk'
             cloudflare_pages_name: 'mobile-hybrid-dds'
     runs-on: ubuntu-latest
     needs:
@@ -175,7 +183,7 @@ jobs:
       - staging
     env:
       NEXT_PUBLIC_APP_BRAND: ${{ matrix.brand }}
-      NEXT_PUBLIC_BRAND_URL: bluelightcard.co.uk
+      NEXT_PUBLIC_BRAND_URL: ${{matrix.brand_url}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

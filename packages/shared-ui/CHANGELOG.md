@@ -2,21 +2,18 @@
 
 ## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.8.1...shared-ui-v1.9.0) (2024-07-18)
 
-
 ### Features
 
-* [DISCO-323] create and tokenise new footer web ([#1744](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1744)) ([19f79c4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/19f79c470ba91925ae3f3ec04c107863c8a575da))
-* TO-922 Disable Redeem button if user has invalid card ([#1793](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1793)) ([cc09de3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cc09de3cabebff7a987d4e3ea8a7e61fbb5eee2f))
-
+- [DISCO-323] create and tokenise new footer web ([#1744](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1744)) ([19f79c4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/19f79c470ba91925ae3f3ec04c107863c8a575da))
+- TO-922 Disable Redeem button if user has invalid card ([#1793](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1793)) ([cc09de3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cc09de3cabebff7a987d4e3ea8a7e61fbb5eee2f))
 
 ### Bug Fixes
 
-* removes border from OfferSheet error page company name CTA ([#1794](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1794)) ([ca65140](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ca65140761d7105575c2bc454b3fe39293d4b0c0))
-
+- removes border from OfferSheet error page company name CTA ([#1794](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1794)) ([ca65140](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ca65140761d7105575c2bc454b3fe39293d4b0c0))
 
 ### Other Changes
 
-* TO-959 implement 2 click for pre applied web placeholder ([#1803](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1803)) ([400d3f2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/400d3f26c552fc77698ef414d240f1466fcc6d9a))
+- TO-959 implement 2 click for pre applied web placeholder ([#1803](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1803)) ([400d3f2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/400d3f26c552fc77698ef414d240f1466fcc6d9a))
 
 ## [1.8.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.8.0...shared-ui-v1.8.1) (2024-07-16)
 

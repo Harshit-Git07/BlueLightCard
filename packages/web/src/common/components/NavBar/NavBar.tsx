@@ -5,6 +5,8 @@ import { getNavigationItems } from './helpers/getNavigationItems';
 import { BRAND } from '@/global-vars';
 import { BRANDS } from '../../types/brands.enum';
 import { NavBarProps } from './types';
+import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
+import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 
 const NavBar = ({
   isAuthenticated,
@@ -27,7 +29,18 @@ const NavBar = ({
     };
   }, []);
 
-  const navigationItems = getNavigationItems(BRAND as BRANDS, isAuthenticated);
+  const zendeskExperiment = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.ZENDESK_V1_BLCUK,
+    'off'
+  );
+
+  const isZendeskV1BlcUkEnabled = zendeskExperiment.data?.variantName === 'on';
+
+  const navigationItems = getNavigationItems(
+    BRAND as BRANDS,
+    isAuthenticated,
+    isZendeskV1BlcUkEnabled
+  );
 
   return (
     <header className="sticky top-0 z-10">

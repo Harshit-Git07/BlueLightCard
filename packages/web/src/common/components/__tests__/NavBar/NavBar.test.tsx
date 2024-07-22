@@ -11,6 +11,11 @@ jest.mock('../../NavBar/helpers/getNavigationItems', () => {
   };
 });
 
+jest.mock('../../../context/AmplitudeExperiment/hooks', () => ({
+  ...jest.requireActual('../../../context/AmplitudeExperiment/hooks.ts'), // This retains other exports
+  useAmplitudeExperiment: jest.fn().mockResolvedValue({ data: { variantName: 'off' } }),
+}));
+
 describe('Navbar', () => {
   it('renders the authenticatedNavBar correctly when isAuthenticated is true', () => {
     const { container } = render(

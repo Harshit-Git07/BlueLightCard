@@ -53,8 +53,12 @@ const componentMeta: Meta = {
 
 export default componentMeta;
 
-const HeaderTemplate: StoryFn = ({ isAuthenticated, isSticky }) => {
-  const navigationItems = getNavigationItems(BRAND as BRANDS, isAuthenticated);
+const HeaderTemplate: StoryFn = ({ isAuthenticated, isSticky, isZendeskV1BlcUkEnabled }) => {
+  const navigationItems = getNavigationItems(
+    BRAND as BRANDS,
+    isAuthenticated,
+    isZendeskV1BlcUkEnabled
+  );
   return (
     <div className="border">
       <header className="sticky top-0 z-10">

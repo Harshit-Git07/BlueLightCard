@@ -1,6 +1,8 @@
 // components/Layout.tsx
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import Footerv2 from '../../components/Footer/v2/Footer';
+import NavBar from '@/components/NavBar/NavBar';
 import {
   logSearchCompanyEvent,
   logSearchCategoryEvent,
@@ -19,6 +21,8 @@ import AuthContext from '@/context/Auth/AuthContext';
 import MetaData from '@/components/MetaData/MetaData';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
+import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
 
 const BaseLayout: React.FC<LayoutProps> = ({
   seo,
@@ -47,20 +51,45 @@ const BaseLayout: React.FC<LayoutProps> = ({
     window.location.href = getOffersBySearchTermUrl(searchTerm);
   };
 
-  return (
-    <div>
-      {seo && <MetaData seo={seo} translationNamespace={translationNamespace} />}
+  const showNewHeaderAndFooter = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.ENABLE_NEW_HEADER_AND_FOOTER,
+    'off'
+  );
 
-      {headerOverride ? (
-        headerOverride
-      ) : (
+  const switchOldWithNewHeader = () => {
+    if (showNewHeaderAndFooter.data?.variantName === 'on') {
+      return (
+        <NavBar
+          isAuthenticated
+          onSearchCompanyChange={onSearchCompanyChange}
+          onSearchCategoryChange={onSearchCategoryChange}
+          onSearchTerm={onSearchTerm}
+        />
+      );
+    } else {
+      return (
         <Header
           loggedIn={loggedIn}
           onSearchCompanyChange={onSearchCompanyChange}
           onSearchCategoryChange={onSearchCategoryChange}
           onSearchTerm={onSearchTerm}
         />
-      )}
+      );
+    }
+  };
+  const switchOldWithNewFooter = () => {
+    if (showNewHeaderAndFooter.data?.variantName === 'on') {
+      return <Footerv2 isAuthenticated />;
+    } else {
+      return <Footer {...footerConfig} loggedIn={loggedIn} />;
+    }
+  };
+
+  return (
+    <div>
+      {seo && <MetaData seo={seo} translationNamespace={translationNamespace} />}
+
+      {headerOverride ? headerOverride : switchOldWithNewHeader()}
       <div>{children}</div>
       <ToastContainer
         transition={Slide}
@@ -70,7 +99,7 @@ const BaseLayout: React.FC<LayoutProps> = ({
         toastClassName="!bg-[#202125] !text-white !font-['MuseoSans'] !text-base !font-normal !rounded !px-4 !py-3.5"
         pauseOnHover={false}
       />
-      {footerOverride ? footerOverride : <Footer {...footerConfig} loggedIn={loggedIn} />}
+      {footerOverride ? footerOverride : switchOldWithNewFooter()}
     </div>
   );
 };

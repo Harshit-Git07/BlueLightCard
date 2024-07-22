@@ -8,8 +8,11 @@ import { vaultCodesTable } from '@blc-mono/redemptions/libs/database/schema';
 import { Repository } from './Repository';
 
 export type VaultCode = typeof vaultCodesTable.$inferSelect;
+export type NewVaultCode = typeof vaultCodesTable.$inferInsert;
 
 export interface IVaultCodesRepository {
+  create(vaultCode: NewVaultCode): Promise<Pick<VaultCode, 'id'>>;
+  createMany(vaultCodes: NewVaultCode[]): Promise<Pick<VaultCode, 'id'>[]>;
   checkIfMemberReachedMaxCodeClaimed(vaultId: string, memberId: string, maxPerUser: number): Promise<boolean>;
   claimVaultCode(vaultId: string, memberId: string): Promise<Pick<VaultCode, 'code'> | undefined>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultCodesRepository;
@@ -30,7 +33,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
       .execute()
       .then((result) => {
         const numOfCodesClaimed = result[0].numOfCodesClaimed;
-        return numOfCodesClaimed >= maxPerUser ? true : false;
+        return numOfCodesClaimed >= maxPerUser;
       });
   }
 
@@ -72,6 +75,24 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
     }
 
     return undefined;
+  }
+
+  public async create(vaultCode: NewVaultCode): Promise<Pick<VaultCode, 'id'>> {
+    return this.exactlyOne(
+      await this.connection.db
+        .insert(vaultCodesTable)
+        .values(vaultCode)
+        .returning({ id: vaultCodesTable.id })
+        .execute(),
+    );
+  }
+
+  public async createMany(vaultCodes: NewVaultCode[]): Promise<Pick<VaultCode, 'id'>[]> {
+    return await this.connection.db
+      .insert(vaultCodesTable)
+      .values(vaultCodes)
+      .returning({ id: vaultCodesTable.id })
+      .execute();
   }
 
   public withTransaction(transaction: DatabaseTransactionConnection): VaultCodesRepository {

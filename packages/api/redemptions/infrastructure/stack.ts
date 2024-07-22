@@ -26,8 +26,11 @@ import {
 import { createDwhMemberRedeemIntentRule } from './eventBridge/rules/dwhMemberRedeemIntentRule';
 import { createDwhMemberRedemptionRule } from './eventBridge/rules/dwhMemberRedemptionRule';
 import { createDwhMemberRetrievedRedemptionDetailsRule } from './eventBridge/rules/dwhMemberRetrievedRedemptionDetailsRule';
+import { createVaultBatchCreatedRule } from './eventBridge/rules/vaultBatchCreatedRule';
+import { createVaultCodesUploadRule } from './eventBridge/rules/vaultCodesUploadRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { Route } from './routes/route';
+import { VaultCodesUpload } from './s3/vaultCodesUpload';
 
 export async function Redemptions({ app, stack }: StackContext) {
   const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams, bastionHost } = use(Shared);
@@ -90,17 +93,28 @@ export async function Redemptions({ app, stack }: StackContext) {
   const postAffiliateModel = apiGatewayModelGenerator.generateModel(PostAffiliateModel);
   const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
 
-  new EventBridge(stack, {
-    vaultCreatedRule: createVaultCreatedRule(stack, database),
-    vaultUpdatedRule: createVaultUpdatedRule(stack, database),
-    promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),
-    offerCreatedRule: createOfferRule(stack, database),
-    emailTransactionalRule: createRedemptionTransactionalEmailRule(stack, config),
-    offerUpdatedRule: updateOfferRule(stack, database),
-    dwhMemberRedemptionDetails: createDwhMemberRetrievedRedemptionDetailsRule(stack, dwhKenisisFirehoseStreams),
-    dwhMemberRedeemIntentRule: createDwhMemberRedeemIntentRule(stack, dwhKenisisFirehoseStreams),
-    dwhMemberRedemptionRule: createDwhMemberRedemptionRule(stack, dwhKenisisFirehoseStreams),
-  });
+  //set up S3 bucket for vault code files uploaded to S3
+  const vaultCodesUpload = new VaultCodesUpload(stack);
+
+  //params: stack, custom EventBus rule sets, default EventBus rule sets
+  new EventBridge(
+    stack,
+    {
+      vaultCreatedRule: createVaultCreatedRule(stack, database),
+      vaultUpdatedRule: createVaultUpdatedRule(stack, database),
+      promotionUpdatedRule: createPromotionUpdatedRule(stack, database, config),
+      offerCreatedRule: createOfferRule(stack, database),
+      emailTransactionalRule: createRedemptionTransactionalEmailRule(stack, config),
+      offerUpdatedRule: updateOfferRule(stack, database),
+      dwhMemberRedemptionDetails: createDwhMemberRetrievedRedemptionDetailsRule(stack, dwhKenisisFirehoseStreams),
+      dwhMemberRedeemIntentRule: createDwhMemberRedeemIntentRule(stack, dwhKenisisFirehoseStreams),
+      dwhMemberRedemptionRule: createDwhMemberRedemptionRule(stack, dwhKenisisFirehoseStreams),
+      vaultBatchCreatedRule: createVaultBatchCreatedRule(stack),
+    },
+    {
+      vaultCodesUploadRule: createVaultCodesUploadRule(stack, vaultCodesUpload, database),
+    },
+  );
 
   // Create permissions
   // TODO: Specify the resource for the secrets manager from Secret.fromSecretCompleteArn (It was not getting the final 6 characters as expected, need to investigate further)

@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const env = z
   .object({
     AWS_REGION: z.string().optional(),
+    CI: z.string().optional(),
   })
   .parse(process.env);
 
@@ -16,6 +17,7 @@ export const SEARCH_MOCK_DATA_FILE = './data/searchMockData.json';
 export const SEARCH_MOCK_DATA_ENDPOINT = 'http://localhost:3001';
 
 export const REGION = env.AWS_REGION ?? 'eu-west-2';
+export const RUN_IN_CI = env.CI;
 
 export const BLC_EMAIL_DOMAIN = 'bluelightcard.co.uk';
 

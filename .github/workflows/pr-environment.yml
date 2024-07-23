@@ -89,7 +89,7 @@ jobs:
       - changes
       - install
     name: Deploy Backend for PR (global & identity)
-    if: ${{ needs.changes.outputs.backend-shared == 'true' && github.actor != 'dependabot[bot]' }}
+    if: ${{ (needs.changes.outputs.backend-shared == 'true' || needs.changes.outputs.backend-discovery == 'true' || needs.changes.outputs.backend-offers == 'true' || needs.changes.outputs.backend-redemptions == 'true' ) && github.actor != 'dependabot[bot]'}}
     runs-on: ubuntu-latest
     outputs:
       identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
@@ -236,25 +236,68 @@ jobs:
           echo ${{ steps.sst-discovery-outputs.outputs.discoveryApiUrl }}
 
   # Deploy the frontend
+  # Matrix Deployment for each brand does not allow dynamic outputs which is needed to be able to create the comment
+  # By nesting the comment it allows us to be able to use the values within the matrix steps
   frontend:
-    name: Deploy Frontend BLC UK for PR
+    name: Deploy Frontend for PR ${{matrix.brand}}
+    if: ${{ needs.changes.outputs.frontend-web == 'true' && github.actor != 'dependabot[bot]' }}
     needs:
       - changes
       - install
     environment: Staging
-    if: ${{ needs.changes.outputs.frontend-web == 'true' && github.actor != 'dependabot[bot]' }}
     strategy:
       matrix:
         include:
           - brand: 'blc-uk'
             identity_brand: 'blc_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
-            region: 'eu-west-2'
+            identity_api_url: 'https://staging-identity.blcshine.io'
+            datadog_app_id: 'DATADOG_BLC_UK_APP_ID'
+            datadog_client_token: 'DATADOG_BLC_UK_CLIENT_TOKEN'
+            datadog_default_service: 'web'
+            amplitude_deployment_key: 'BLC_UK_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'BLC_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
+            region: 'eu-west-2'
+            offers_graphql_endpoint: 'https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql'
+            offers_api_gateway_endpoint: 'https://staging-offers.blcshine.io'
+            offers_brand: 'blc-uk'
+            zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb'
+            # Brand Specific Variables needed for Seeding of QA Environment
+            event_bus_name: staging-blc-mono-eventBus
+            cognito_web_pool_client: eu-west-2_Ow2L8azIb
+            stack_cognito_web_pool_client: cognitoNewUserPoolwebClient
+          - brand: 'blc-au'
+            identity_brand: 'blc_au'
+            identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
+            identity_api_url: 'https://staging-identity-au.blcshine.io'
+            amplitude_deployment_key: 'BLC_AU_AMPLITUDE_DEPLOYMENT_KEY'
+            cognito_client_id: 'BLC_AU_COGNITO_CLIENT_ID'
+            cognito_client_secret: 'BLC_AU_COGNITO_CLIENT_SECRET'
+            region: 'ap-southeast-2'
+            offers_graphql_endpoint: 'https://nmgjfvhy5vdhjgngzxtuomgbdi.appsync-api.ap-southeast-2.amazonaws.com/graphql'
+            offers_api_gateway_endpoint: 'https://staging-offers-au.blcshine.io'
+            offers_brand: 'blc-aus'
+            # Brand Specific Variables needed for Seeding of QA Environment
+            event_bus_name: staging-blc-mono-eventBus
+            cognito_web_pool_client: ap-southeast-2_CDHxjtsV3
+            stack_cognito_web_pool_client: cognitoNewUserPoolwebClient
+          - brand: 'dds-uk'
+            identity_brand: 'dds_uk'
+            identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
+            identity_api_url: 'https://staging-identity-dds.blcshine.io'
+            amplitude_deployment_key: 'DDS_UK_AMPLITUDE_DEPLOYMENT_KEY'
+            cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
+            cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
+            region: 'eu-west-2'
+            offers_graphql_endpoint: 'blank_url_to_test_deployment' #TODO: Add once DDS Offers stack deployed in AWS
+            offers_api_gateway_endpoint: 'https://staging-offers-dds.blcshine.io'
+            offers_brand: 'dds-uk'
+            # Brand Specific Variables needed for Seeding of QA Environment
+            event_bus_name: staging-blc-mono-eventBus
+            cognito_web_pool_client: eu-west-2_VdsvVVUrI
+            stack_cognito_web_pool_client: cognitoddsNewUserPoolwebClient
     runs-on: ubuntu-latest
-    outputs:
-      url: ${{ steps.cloudflare-publish.outputs.url }}
     # TODO: Does this need to depend on the backend - it seems to be using the staging API...
     #   - backend-shared
     #   - backend-offers
@@ -262,15 +305,26 @@ jobs:
     env:
       NEXT_PUBLIC_API_PROXY_URL: https://staging-api.bluelightcard.workers.dev
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
-      NEXT_PUBLIC_LOGOUT_ROUTE: /mock-login
-      NEXT_PUBLIC_OFFERS_ENDPOINT: https://staging-offers.blcshine.io/graphql
+      NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets[matrix.amplitude_deployment_key] }}
+      NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
+      NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}
+      NEXT_PUBLIC_OFFERS_BRAND: ${{matrix.offers_brand}}
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
-      NEXT_PUBLIC_IDENTITY_API_URL: https://staging-identity.blcshine.io
+      NEXT_PUBLIC_IDENTITY_API_URL: ${{matrix.identity_api_url}}
       NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
       NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
       NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
       NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
+      NEXT_PUBLIC_DATADOG_APP_ID: ${{ secrets[matrix.datadog_app_id] }}
+      NEXT_PUBLIC_DATADOG_CLIENT_TOKEN: ${{ secrets[matrix.datadog_client_token] }}
+      NEXT_PUBLIC_DATADOG_DEFAULT_SERVICE: ${{ matrix.datadog_default_service }}
+      NEXT_PUBLIC_DATADOG_ENV: staging_stage
+      NEXT_PUBLIC_SEARCH_ENDPOINT: https://lcsn8cd6i6.execute-api.eu-west-2.amazonaws.com/develop
+      NEXT_PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT: https://hmkt7fpodd.execute-api.eu-west-2.amazonaws.com/develop/Favourites/retrieve
+      NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT: https://hmkt7fpodd.execute-api.eu-west-2.amazonaws.com/develop/Favourites/update
+      NEXT_PUBLIC_RETRIEVE_OFFER_ENDPOINT: https://6sz52oo9ud.execute-api.eu-west-2.amazonaws.com/v1/offers/
+      NEXT_PUBLIC_APP_MICROSERVICE_BRAND: BLC
       NEXT_PUBLIC_COGNITO_CLIENT_REGION: ${{matrix.region}}
       NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets[matrix.cognito_client_id] }}
       NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets[matrix.cognito_client_secret] }}
@@ -279,11 +333,36 @@ jobs:
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
+      NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
+      NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
+      NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
+      # ENV VARIABLES NEEDED TO CREATE USERNAME & PASSWORD FOR QA ENVIRONMENT
+      PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono
+      IDENTITY_API_URL: ${{matrix.identity_api_url}}
+      COGNITO_POOL_WEB_CLIENT: ${{matrix.cognito_web_pool_client}}
+      OFFERS_API_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
+      EVENT_BUS_NAME: ${{matrix.event_bus_name}}
+      STACK_COGNITO_POOL_CLIENT: ${{matrix.stack_cognito_web_pool_client}}
+      # TO-DO Configure these variables to be using the correct values TBC - DISCO-500
+      BACKEND_SHARED_DEPLOYED: false
+      BACKEND_DISCOVERY_DEPLOYED: false
+      BACKEND_REDEMPTIONS_DEPLOYED: false
+      BACKEND_OFFERS_DEPLOYED: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: ${{matrix.region}}
+      - name: Create Username & Password For QA Environment
+        id: seeding-script-outputs
+        if: ${{ github.event.label.name == 'seed-credentials' || contains(github.event.pull_request.labels.*.name, 'seed-credentials')}}
+        run: |
+          npm run seed -- $PR_PREFIX
       - name: Cache NextJS Build
         uses: actions/cache@v3
         with:
@@ -291,14 +370,14 @@ jobs:
             ~/.npm
             ${{ github.workspace }}/packages/web/.next/cache
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('packages/web/**/*.[jt]s', 'packages/web/**/*.[jt]sx') }}
+          key: ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('packages/web/**/*.[jt]s', 'packages/web/**/*.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+            ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
         env:
-          NEXT_PUBLIC_IDENTITY_API_URL: https://staging-identity.blcshine.io
+          NEXT_PUBLIC_IDENTITY_API_URL: ${{matrix.identity_api_url}}
           NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
           NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
           NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
@@ -310,20 +389,59 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{matrix.brand}}
+          branch: pr-${{ github.event.pull_request.number }}
           directory: packages/web/out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully deployed preview environment for ${{matrix.brand}}'
+
+      - name: Create Comment for Frontend ${{matrix.brand}}
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully deployed preview environment for ${{matrix.brand}}
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
+            </td></tr>
+            <tr><td><strong>Status:</strong></td><td>&nbsp;✅&nbsp; Deploy successful!</td></tr>
+            <tr><td><strong>PR Preview URL:</strong></td><td>
+            <a href='https://pr-${{ github.event.pull_request.number }}.${{matrix.brand}}.pages.dev'>pr-${{ github.event.pull_request.number }}.${{matrix.brand}}.pages.dev</a>
+            </td></tr>
+            <tr><td><strong>Specific Commit Preview URL:</strong></td><td>
+            <a href='${{ steps.cloudflare-publish.outputs.url }}'>${{ steps.cloudflare-publish.outputs.url }}</a>
+            </td></tr>
+            <tr><td><strong>QA Test Environment Login Username</strong></td><td>
+            <p>
+              ${{ steps.seeding-script-outputs.outputs.testUsername}}
+            </p>
+            </td></tr>
+            <tr><td><strong>QA Test Environment Login Password</strong></td><td>
+            <p>
+            ${{ steps.seeding-script-outputs.outputs.testPassword }}
+            </p>
+            </td></tr>
+            </table>
+
   # Put comment on PR
-  comment:
-    name: Comment on PR
+  # This comment will only run if all environments are deployed which with the current implementation hardly every happens
+  # Therefore the comment block will be separated to allow the separate comments to apply
+  commentBackendShared:
+    name: Comment Backend Shared on PR
     if: github.actor!= 'dependabot[bot]'
     runs-on: ubuntu-latest
     needs:
       - backend-shared
-      - backend-offers
-      - backend-redemptions
-      - backend-discovery
-      - frontend
     steps:
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -331,7 +449,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.number }}
-          body-includes: '🚀 Successfully deployed preview environment'
+          body-includes: '🚀 Successfully Backend Shared Preview Environment'
 
       - name: Create Comment
         uses: peter-evans/create-or-update-comment@v3
@@ -341,29 +459,113 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           edit-mode: replace
           body: |
-            ## 🚀 Successfully deployed preview environment
+            ## 🚀 Successfully Backend Shared Preview Environment
 
             <table><tr><td><strong>Latest commit:</strong> </td><td>
             <code>${{ github.sha }}</code>
-            </td></tr>
-            <tr><td><strong>Status:</strong></td><td>&nbsp;✅&nbsp; Deploy successful!</td></tr>
-            <tr><td><strong>Preview URL:</strong></td><td>
-            <a href='${{ needs.frontend.outputs.url }}'>${{ needs.frontend.outputs.url }}</a>
-            </td></tr>
             <tr><td><strong>Identity API URL:</strong></td><td>
             <a href='${{ needs.backend-shared.outputs.identity-api-endpoint }}'>
               ${{ needs.backend-shared.outputs.identity-api-endpoint }}
             </a>
             </td></tr>
+            </table>
+
+  commentBackendOffers:
+    name: Comment Backend Offers on PR
+    if: github.actor!= 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - backend-offers
+    steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully Backend Offers Preview Environment'
+
+      - name: Create Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully Backend Offers Preview Environment
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
             <tr><td><strong>Offers API URL:</strong></td><td>
             <a href='${{ needs.backend-offers.outputs.offers-api-endpoint }}'>
               ${{ needs.backend-offers.outputs.offers-api-endpoint }}
             </a>
             </td></tr>
+            </table>
+
+  commentBackendRedemptions:
+    name: Comment Backend Redemptions on PR
+    if: github.actor!= 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - backend-redemptions
+    steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully Backend Redemptions Preview Environment'
+
+      - name: Create Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully Backend Redemptions Preview Environment
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
+            </td></tr>
             <tr><td><strong>Redemptions API URL:</strong></td><td>
             <a href='${{ needs.backend-redemptions.outputs.redemptions-api-endpoint }}'>
               ${{ needs.backend-redemptions.outputs.redemptions-api-endpoint }}
             </a>
+            </td></tr>
+            </table>
+
+  commentBackendDiscovery:
+    name: Comment Backend Discovery on PR
+    if: github.actor!= 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - backend-discovery
+    steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully Backend Discovery Preview Environment'
+
+      - name: Create Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully Backend Discovery Preview Environment
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
             </td></tr>
             <tr><td><strong>Discovery API URL:</strong></td><td>
             <a href='${{ needs.backend-discovery.outputs.discovery-api-endpoint }}'>

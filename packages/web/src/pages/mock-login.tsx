@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { useRouter } from 'next/router';
 import AuthContext from '@/context/Auth/AuthContext';
-import { COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET } from '@/global-vars';
+import { COGNITO_CLIENT_ID, COGNITO_CLIENT_REGION, COGNITO_CLIENT_SECRET } from '@/global-vars';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import withAuthProviderLayout from '../common/hoc/withAuthProviderLayout';
 
@@ -37,7 +37,7 @@ function MockLogin() {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://cognito-idp.eu-west-2.amazonaws.com',
+      url: `https://cognito-idp.${COGNITO_CLIENT_REGION}.amazonaws.com`,
       headers: {
         'Content-Type': 'application/x-amz-json-1.1',
         'X-Amz-Target': 'AWSCognitoIdentityProviderService.InitiateAuth',

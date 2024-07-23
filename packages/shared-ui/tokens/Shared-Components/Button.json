@@ -79,7 +79,7 @@
       "type": "color"
     }
   },
-  "button-primary-diabled-label-colour": {
+  "button-primary-disabled-label-colour": {
     "light": {
       "value": "{colour.onPrimary-disabled.light}",
       "type": "color"
@@ -109,7 +109,7 @@
       "type": "color"
     }
   },
-  "button-secondary-diabled-label-colour": {
+  "button-secondary-disabled-label-colour": {
     "light": {
       "value": "{colour.primary-disabled.light}",
       "type": "color"
@@ -139,7 +139,7 @@
       "type": "color"
     }
   },
-  "button-tertiary-diabled-label-colour": {
+  "button-tertiary-disabled-label-colour": {
     "light": {
       "value": "{colour.primary-disabled.light}",
       "type": "color"
@@ -167,7 +167,7 @@
       "type": "color"
     }
   },
-  "button-primary-diabled-icon-colour": {
+  "button-primary-disabled-icon-colour": {
     "light": {
       "value": "{colour.onPrimary-disabled.light}",
       "type": "color"
@@ -207,7 +207,7 @@
       "type": "color"
     }
   },
-  "button-secondary-diabled-icon-colour": {
+  "button-secondary-disabled-icon-colour": {
     "light": {
       "value": "{colour.primary-disabled.light}",
       "type": "color"
@@ -227,7 +227,7 @@
       "type": "color"
     }
   },
-  "button-tertiary-diabled-icon-colour": {
+  "button-tertiary-disabled-icon-colour": {
     "light": {
       "value": "{colour.primary-disabled.light}",
       "type": "color"

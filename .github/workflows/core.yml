@@ -38,6 +38,8 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
         run: npx sst types --stage staging
       - name: Test
         run: npm run test -w packages/api/core
@@ -52,6 +54,8 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
         run: npx sst types --stage staging
       - name: Check Types
         run: npm run typecheck -w packages/api/core

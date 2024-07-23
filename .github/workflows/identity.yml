@@ -87,7 +87,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        region: ['eu-west-2', 'ap-southeast-2']
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+          - brand: BLC_AU
+            region: ap-southeast-2
+            stage: staging
+          # TODO: Uncomment when Global stack ready to deploy to DDS
+          # - brand: DDS_UK
+          #   region: eu-west-2
+          #   stage: staging-dds
+          #   blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
+          #   blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
+          #   ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
+          #   ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
+          #   blcUkIdentityApiId: 'tr1afrar24'
     needs:
       - install
       - test
@@ -102,11 +117,18 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-          aws-region: eu-west-2
+          aws-region: ${{ matrix.deployment.region }}
       - name: Build
         run: npm run build
       - name: Deploy
-        run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy identity --stage staging --region ${{matrix.region}}
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.deployment.blcUkCognitoUserPoolId }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.blcUkOldCognitoUserPoolId }}
+          DDS_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsCognitoUserPoolId }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
+          BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
+        run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy identity --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
 
   e2e-test:
     name: End to End Test
@@ -137,7 +159,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        region: ['eu-west-2', 'ap-southeast-2']
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: production
+          - brand: BLC_AU
+            region: ap-southeast-2
+            stage: production
+          # TODO: Uncomment when Global stack ready to deploy to DDS
+          # - brand: DDS_UK
+          #   region: eu-west-2
+          #   stage: production-dds
+          #   blcUkCognitoUserPoolId: 'eu-west-2_D3aAVuWHo'
+          #   blcUkOldCognitoUserPoolId: 'eu-west-2_jrwTfFRgM'
+          #   ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
+          #   ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
+          #   blcUkIdentityApiId: 'ue8dcieh75'
     needs:
       - install
       - test
@@ -153,9 +190,16 @@ jobs:
       - name: Configure Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: eu-west-2
           role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+          aws-region: ${{ matrix.deployment.region }}
       - name: Build
         run: npm run build
       - name: Deploy
-        run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy identity --stage production --region ${{matrix.region}}
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.deployment.blcUkCognitoUserPoolId }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.blcUkOldCognitoUserPoolId }}
+          DDS_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsCognitoUserPoolId }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
+          BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
+        run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy identity --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}

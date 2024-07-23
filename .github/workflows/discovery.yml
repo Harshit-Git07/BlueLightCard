@@ -46,6 +46,8 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
         run: npx sst types --stage staging
       - name: Test
         run: npm run test:unit -w packages/api/discovery
@@ -84,6 +86,8 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
         run: npx sst types --stage staging
       - name: Check Types
         run: npm run typecheck -w packages/api/discovery
@@ -145,6 +149,8 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy
+        env:
+          BRAND: BLC_UK
         run: npx sst deploy global --stage staging && npx sst deploy discovery --stage staging
 
   release:
@@ -174,4 +180,6 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy
+        env:
+          BRAND: BLC_UK
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy discovery --stage production --region ${{matrix.region}}

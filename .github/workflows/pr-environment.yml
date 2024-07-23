@@ -106,8 +106,12 @@ jobs:
       # TODO: Should the build be cached?
       - run: npm run build
       - name: Deploy Global
+        env:
+          BRAND: BLC_UK
         run: npx sst deploy global --stage $PR_PREFIX
       - name: Deploy Identity
+        env:
+          BRAND: BLC_UK
         run: npx sst deploy identity --stage $PR_PREFIX
       - name: Extract Identity URL
         id: sst-identity-outputs
@@ -145,6 +149,8 @@ jobs:
           aws-region: eu-west-2
       - run: npm run build
       - name: Deploy Offers
+        env:
+          BRAND: BLC_UK
         run: npx sst deploy offers --stage $PR_PREFIX
       - name: Extract Api URL and set output
         id: sst-offers-outputs
@@ -178,6 +184,8 @@ jobs:
           aws-region: eu-west-2
       - run: npm run build
       - name: Deploy Redemptions
+        env:
+          BRAND: BLC_UK
         run: npx sst deploy redemptions --stage $PR_PREFIX
       - name: Extract Api URL and set output
         id: sst-redemptions-outputs
@@ -214,6 +222,8 @@ jobs:
           aws-region: ${{matrix.region}}
       - run: npm run build
       - name: Deploy Discovery
+        env:
+          BRAND: BLC_UK
         run: npx sst deploy discovery --stage $PR_PREFIX --region ${{matrix.region}}
       - name: Extract Api URL and set output
         id: sst-discovery-outputs
@@ -385,6 +395,7 @@ jobs:
       - name: Run E2E tests
         working-directory: packages/api/redemptions
         env:
+          BRAND: BLC_UK
           REDEMPTIONS_DATABASE_PORT: 5432
           REDEMPTIONS_DATABASE_NAME: redemptions
           REDEMPTIONS_DATABASE_TYPE: RDS_PG_SINGLE_INSTANCE

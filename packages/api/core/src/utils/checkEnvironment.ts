@@ -1,15 +1,15 @@
 const EPHEMERAL_REGEX = /^pr-\d+-blc-mono$/;
 
 export function isDev(stage: string): boolean {
-  return stage !== 'production' && stage !== 'staging';
+  return !isProduction(stage) && !isStaging(stage);
 }
 
 export function isProduction(stage: string): boolean {
-  return stage === 'production';
+  return stage === 'production' || stage === 'production-dds';
 }
 
 export function isStaging(stage: string): boolean {
-  return stage === 'staging';
+  return stage === 'staging' || stage === 'staging-dds';
 }
 
 export function isEphemeral(stage: string): boolean {

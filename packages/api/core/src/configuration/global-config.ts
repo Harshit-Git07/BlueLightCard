@@ -1,5 +1,5 @@
 import { EndpointType } from 'aws-cdk-lib/aws-apigateway';
-import { STAGES } from '../types/stages.enum';
+import { isProduction, isStaging } from '../utils/checkEnvironment';
 
 type GlobalConfig = {
   apiGatewayEndpointTypes: EndpointType[];
@@ -7,13 +7,12 @@ type GlobalConfig = {
 
 export class GlobalConfigResolver {
   public static for(stage: string): GlobalConfig {
-    switch (stage as STAGES) {
-      case STAGES.PRODUCTION:
-        return this.forProductionStage()
-      case STAGES.STAGING:
-        return this.forStagingStage()
-      default:
-        return this.forDevelopmentStage()
+    if (isProduction(stage)) {
+      return this.forProductionStage();
+    } else if (isStaging(stage)) {
+      return this.forStagingStage();
+    } else {
+      return this.forDevelopmentStage();
     }
   }
 

@@ -38,8 +38,8 @@ export async function Offers({ stack, app }: StackContext) {
   //Need to be removed once the ApiGateway is ready to support the Offers API functionality
   const offersApi: OffersApi = new OffersApi(
     stack,
-    cognito.cdk.userPool,
-    newCognito.cdk.userPool,
+    cognito,
+    newCognito,
     secretsManger,
     './packages/api/offers/schema.graphql',
   );

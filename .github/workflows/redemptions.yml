@@ -198,6 +198,7 @@ jobs:
           BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID }}'
           BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID }}'
           BRAZE_API_URL: '${{ vars.BRAZE_API_URL }}'
+          BRAND: BLC_UK
         run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging
       - name: Deploy Spec
         env:
@@ -230,6 +231,7 @@ jobs:
           REDEMPTIONS_DATABASE_PORT: 5432
           REDEMPTIONS_DATABASE_NAME: redemptions
           REDEMPTIONS_DATABASE_TYPE: AURORA_PG_CLUSTER
+          BRAND: BLC_UK
         run: npx sst bind --stage staging vitest
 
   release:
@@ -239,7 +241,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        region: ['eu-west-2', 'ap-southeast-2']
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: production
+          - brand: BLC_AU
+            region: ap-southeast-2
+            stage: production
     needs:
       - install
       - test
@@ -254,7 +262,7 @@ jobs:
       - name: Configure Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: eu-west-2
+          aws-region: ${{ matrix.deployment.region }}
           role-to-assume: arn:aws:iam::676719682338:role/github-action-role
       - name: Get secret
         run: |
@@ -297,8 +305,10 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy
-        run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy redemptions --stage production --region ${{matrix.region}}
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+        run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy redemptions --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
       - name: Deploy Spec
         env:
           REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
-        run: npm run -s oas -w packages/api/redemptions --region=${{matrix.region}} --stage=production --api-version=v1
+        run: npm run -s oas -w packages/api/redemptions --region=${{matrix.deployment.region}} --stage=${{matrix.deployment.stage}} --api-version=v1

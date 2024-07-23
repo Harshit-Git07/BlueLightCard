@@ -95,12 +95,14 @@ jobs:
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-uk
             cdnUrl: 'https://blcimg-dev.img.bluelightcard.co.uk'
+            brand: BLC_UK
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             stagingBaseUrl: https://develop.bluelightcard.com.au
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-aus
             cdnUrl: 'https://blc-au-img-dev.s3.ap-southeast-2.amazonaws.com'
+            brand: BLC_AU
     needs:
       - install
       - test
@@ -111,6 +113,7 @@ jobs:
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: ${{matrix.legacyApiRetrieveOffersEndpoint}}
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
       CDN_URL: ${{matrix.cdnUrl}}
+      BRAND: ${{matrix.brand}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -139,12 +142,14 @@ jobs:
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-uk
             cdnUrl: 'https://cdn.bluelightcard.co.uk'
+            brand: BLC_UK
           - namespace: 'blc-aus-production'
             region: 'ap-southeast-2'
             prodBaseUrl: https://www.bluelightcard.com.au
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-aus
             cdnUrl: 'https://cdn.bluelightcard.com.au'
+            brand: BLC_AU
     needs:
       - install
       - test
@@ -156,6 +161,7 @@ jobs:
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: ${{matrix.legacyApiRetrieveOffersEndpoint}}
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
       CDN_URL: ${{matrix.cdnUrl}}
+      BRAND: ${{matrix.brand}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

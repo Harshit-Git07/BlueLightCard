@@ -38,7 +38,7 @@ const cardModel = z.object({
   cardId: z.string(),
   expires: z.string(),
   cardStatus: z.string(),
-  datePosted: z.string(),
+  datePosted: z.string().optional(),
 });
 
 const userResponseModel = z.object({

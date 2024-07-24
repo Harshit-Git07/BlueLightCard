@@ -28,6 +28,8 @@ jobs:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
           aws-region: eu-west-2
       - name: Destroy Global
+        env:
+          BRAND: BLC_UK
         run: npx sst remove --stage $PR_PREFIX
       - name: Notify
         if: failure()

@@ -1,6 +1,10 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthedAmplitudeExperimentProvider } from '../src/common/context/AmplitudeExperiment';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import '../src/styles/globals.css';
 import '../src/styles/swiper.css';
+
+const queryClient = new QueryClient();
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -23,3 +27,13 @@ export const parameters = {
     },
   },
 };
+
+const withProviders = (Story) => (
+  <QueryClientProvider client={queryClient}>
+    <AuthedAmplitudeExperimentProvider>
+      <Story />
+    </AuthedAmplitudeExperimentProvider>
+  </QueryClientProvider>
+);
+
+export const decorators = [withProviders];

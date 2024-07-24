@@ -53,8 +53,10 @@ describe('smoke test', () => {
     });
     const { getByRole, getByText } = renderComponent();
 
-    expect(getByRole('heading', { name: /error loading offer/i })).toBeTruthy();
-    expect(getByText(/you can still get to your offer by clicking the button below\./i));
+    expect(
+      getByRole('heading', { name: /sorry, we couldn’t load your offer at the moment\./i }),
+    ).toBeTruthy();
+    expect(getByText(/don’t worry, you can access it by clicking the button below\./i));
     expect(getByRole('button')).toBeTruthy();
   });
 

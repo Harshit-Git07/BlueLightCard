@@ -27,11 +27,16 @@ const OfferDetailsErrorPage: FC = () => {
   };
 
   return (
-    <div className="text-[#000099] text-center mx-4 space-y-4">
-      <Heading headingLevel="h2" className="text-black">
-        Error loading offer
+    <div className="text-colour-onSurface dark:text-colour-onSurface-dark text-center mx-4 space-y-4">
+      <Heading
+        headingLevel="h2"
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-title-large font-typography-title-large-weight text-typography-title-large tracking-typography-title-large leading-typography-title-large"
+      >
+        Sorry, we couldn’t load your offer at the moment.
       </Heading>
-      <p className="text-base">You can still get to your offer by clicking the button below.</p>
+      <p className="font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light">
+        Don’t worry, you can access it by clicking the button below.
+      </p>
       <Button variant={ThemeVariant.Primary} onClick={onButtonClick} borderless>
         {offerMeta?.companyName}
       </Button>

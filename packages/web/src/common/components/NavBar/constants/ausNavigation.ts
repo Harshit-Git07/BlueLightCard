@@ -33,7 +33,7 @@ export const AUTHENTICATED_NAVIGATION_AUS: NavigationItem[] = [
       {
         id: 'deals-of-the-week',
         label: 'Deals of the week',
-        url: '/memhome.php',
+        url: '/members-home',
       },
     ],
   },

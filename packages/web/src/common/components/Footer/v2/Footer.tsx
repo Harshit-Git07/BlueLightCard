@@ -37,7 +37,7 @@ const Footer: FC<FooterProps> = ({ isAuthenticated }) => {
     <div className="bg-footer-bg-colour-light dark:bg-footer-bg-colour-dark text-footer-text-colour dark:text-footer-text-colour-dark pt-11 px-5 w-auto">
       <div className="desktop:container desktop:mx-auto grid grid-cols-3 items-center justify-items-center">
         <div className="col-span-3 laptop:justify-self-start laptop:col-span-1 laptop:order-1 h-12 mobile-xl:h-16">
-          <Logo url={navLinks.homeUrl} className="h-full" />
+          <Logo url={isAuthenticated ? '/members-home' : '/'} className="h-full" />
         </div>
         <div className="col-span-3 order-5 justify-self-center laptop:col-span-1 laptop:order-2">
           {socialLinks && (

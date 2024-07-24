@@ -22,7 +22,7 @@ export const AUS_FOOTER_CONFIG_AUTHENTICATED: FooterConfig = {
         { label: 'Competitions', url: '/blccompetitions.php' },
         { label: 'Sitemap', url: '/sitemap.php' },
         { label: 'Local businesses', url: '/localbusinesses.php' },
-        { label: 'FAQs', url: 'localbusinesses.php' },
+        { label: 'FAQs', url: '/contactblc.php' },
       ],
     },
     {

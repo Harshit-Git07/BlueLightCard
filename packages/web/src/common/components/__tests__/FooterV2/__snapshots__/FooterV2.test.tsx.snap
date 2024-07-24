@@ -15,7 +15,7 @@ exports[`FooterV2 component Render tests should render navigation items and copy
           aria-label="Navigate Home"
           class="h-full hover:opacity-100"
           data-testid="brandLogo"
-          href="/"
+          href="/members-home"
         >
           <img
             alt="Navigate Home"

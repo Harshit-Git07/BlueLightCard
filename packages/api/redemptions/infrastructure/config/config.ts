@@ -22,6 +22,11 @@ export type RedemptionsStackConfig = {
   brazeShowCardEmailCampaignId: string;
   brazeApiUrl: string;
   redemptionsWebHost: string;
+  brazeRedemptionVaultPushNotificationCampaignId: string;
+  brazeRedemptionVaultQRPushNotificationCampaignId: string;
+  brazeRedemptionPreAppliedPushNotificationCampaignId: string;
+  brazeRedemptionGenericPushNotificationCampaignId: string;
+  brazeRedemptionShowCardPushNotificationCampaignId: string;
 };
 
 export class RedemptionsStackConfigResolver {
@@ -59,6 +64,11 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
+      brazeRedemptionVaultPushNotificationCampaignId: '4e9d8f9c-2a7e-4d9b-8f8b-5f7b1e8c8e3d',
+      brazeRedemptionVaultQRPushNotificationCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
+      brazeRedemptionPreAppliedPushNotificationCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
+      brazeRedemptionGenericPushNotificationCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
+      brazeRedemptionShowCardPushNotificationCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
     };
   }
 
@@ -84,6 +94,11 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
+      brazeRedemptionVaultPushNotificationCampaignId: '4e9d8f9c-2a7e-4d9b-8f8b-5f7b1e8c8e3d',
+      brazeRedemptionVaultQRPushNotificationCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
+      brazeRedemptionPreAppliedPushNotificationCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
+      brazeRedemptionGenericPushNotificationCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
+      brazeRedemptionShowCardPushNotificationCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
     };
   }
 
@@ -104,6 +119,11 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
+      brazeRedemptionVaultPushNotificationCampaignId: '4e9d8f9c-2a7e-4d9b-8f8b-5f7b1e8c8e3d',
+      brazeRedemptionVaultQRPushNotificationCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
+      brazeRedemptionPreAppliedPushNotificationCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
+      brazeRedemptionGenericPushNotificationCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
+      brazeRedemptionShowCardPushNotificationCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
     };
   }
 
@@ -139,6 +159,21 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID),
       brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
       redemptionsWebHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST),
+      brazeRedemptionVaultPushNotificationCampaignId: getEnv(
+        RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_PUSH_NOTIFICATION_CAMPAIGN_ID,
+      ),
+      brazeRedemptionVaultQRPushNotificationCampaignId: getEnv(
+        RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_QR_PUSH_NOTIFICATION_CAMPAIGN_ID,
+      ),
+      brazeRedemptionPreAppliedPushNotificationCampaignId: getEnv(
+        RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_PRE_APPLIED_PUSH_NOTIFICATION_CAMPAIGN_ID,
+      ),
+      brazeRedemptionGenericPushNotificationCampaignId: getEnv(
+        RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GENERIC_PUSH_NOTIFICATION_CAMPAIGN_ID,
+      ),
+      brazeRedemptionShowCardPushNotificationCampaignId: getEnv(
+        RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID,
+      ),
     };
   }
 }

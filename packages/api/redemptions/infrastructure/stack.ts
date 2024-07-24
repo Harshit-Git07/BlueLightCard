@@ -5,7 +5,6 @@ import { ApiGatewayV1Api, Config, StackContext, use } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
-import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 import { Shared } from '@blc-mono/shared/stack';
@@ -26,6 +25,8 @@ import {
 import { createDwhMemberRedeemIntentRule } from './eventBridge/rules/dwhMemberRedeemIntentRule';
 import { createDwhMemberRedemptionRule } from './eventBridge/rules/dwhMemberRedemptionRule';
 import { createDwhMemberRetrievedRedemptionDetailsRule } from './eventBridge/rules/dwhMemberRetrievedRedemptionDetailsRule';
+import { createRedemptionPushNotificationRule } from './eventBridge/rules/redemptionPushNotificationRule';
+import { createRedemptionTransactionalEmailRule } from './eventBridge/rules/redemptionTransactionalEmail';
 import { createVaultBatchCreatedRule } from './eventBridge/rules/vaultBatchCreatedRule';
 import { createVaultCodesUploadRule } from './eventBridge/rules/vaultCodesUploadRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
@@ -110,6 +111,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       dwhMemberRedeemIntentRule: createDwhMemberRedeemIntentRule(stack, dwhKenisisFirehoseStreams),
       dwhMemberRedemptionRule: createDwhMemberRedemptionRule(stack, dwhKenisisFirehoseStreams),
       vaultBatchCreatedRule: createVaultBatchCreatedRule(stack),
+      redemptionPushNotificationRule: createRedemptionPushNotificationRule(stack, config),
     },
     {
       vaultCodesUploadRule: createVaultCodesUploadRule(stack, vaultCodesUpload, database),

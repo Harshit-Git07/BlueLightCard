@@ -1,4 +1,5 @@
 export const REDEMPTION_TYPES = ['generic', 'vault', 'vaultQR', 'showCard', 'preApplied'] as const;
+export type RedemptionTypes = typeof REDEMPTION_TYPES[number];
 
 // Events
 export const REDEMPTIONS_EVENT_SOURCE = 'redemptions';

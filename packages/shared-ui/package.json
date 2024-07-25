@@ -1,6 +1,6 @@
 {
   "name": "@bluelightcard/shared-ui",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Shared UI package to easily share UI code across web based apps",
   "main": "src/index.tsx",
   "types": "src/index.tsx",

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.9.0...shared-ui-v1.10.0) (2024-07-24)
+
+
+### Features
+
+* added new browse categories component ([#1846](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1846)) ([e5e8004](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e5e800402d91094ffe1433374af13b5de34c606b))
+* TO-788 globalisation env variables ([#1826](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1826)) ([e11bed3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e11bed3173b10df62112d1a22857a63363fbf90b))
+* TO-946 Tokenises OfferSheet error page and updates copy for title and message ([#1838](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1838)) ([0927c51](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0927c510e0b7a7a286fe1defb3b2b25f619997aa))
+* TO-970 offer sheet giftcards ([#1824](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1824)) ([e39c082](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e39c08272f424a97c50bd1407dda2887536ce884))
+
 ## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.8.1...shared-ui-v1.9.0) (2024-07-18)
 
 ### Features

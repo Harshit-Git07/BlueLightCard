@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.87.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.86.0...bluelightcard/identity-v1.87.0) (2024-07-25)
+
+
+### Features
+
+* [DISCO-460] Allow Identity stack to handle DDS deployment ([#1817](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1817)) ([515485a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/515485a69de0716af85ccf44ad026350bbd6510f))
+
+
+### Other Changes
+
+* improved logging for migrations ([#1852](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1852)) ([6eafa72](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6eafa72facdb3c3e6dcba2918e3be56ede59f9a3))
+
 ## [1.86.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.85.2...bluelightcard/identity-v1.86.0) (2024-07-17)
 
 

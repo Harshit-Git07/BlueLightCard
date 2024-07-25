@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.24.1...bluelightcard/mobile-hybrid-v1.24.2) (2024-07-25)
+
+
+### Other Changes
+
+* removes lines from README to force chore on mobile-hybrid ([#1853](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1853)) ([c0db5b5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c0db5b51e6e62de19eba3e2c4b505bf27fb749c3))
+
 ## [1.24.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.24.0...bluelightcard/mobile-hybrid-v1.24.1) (2024-07-16)
 
 

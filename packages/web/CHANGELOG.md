@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.66.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.65.0...bluelightcard/web-v1.66.0) (2024-07-24)
+
+
+### Features
+
+* added zendesk exp to new navbar ([#1819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1819)) ([fd9747a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fd9747a0013b1e4803614a6fef2231453acd6754))
+* create a feature flag for footer and header ([#1815](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1815)) ([6ca20f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6ca20f69ca4dc1f472bd511f4bc997561ed79b42))
+* disco-500 Seeding Script Configuration for CI ([#1792](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1792)) ([b26d149](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b26d149df4e457f97b717d7dddcb22d30f835695))
+
+
+### Bug Fixes
+
+* [DISCO-519] add amplitude provider decorator web ([#1841](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1841)) ([178a32f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/178a32fa1b4575a3476bf96bac1f64ced7c42781))
+* disco-534 Change DOTW link for Web AUS ([#1845](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1845)) ([0bfde03](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0bfde0327d070cb670bb8e07da9ddc52c30d3f89))
+
 ## [1.65.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.64.2...bluelightcard/web-v1.65.0) (2024-07-18)
 
 

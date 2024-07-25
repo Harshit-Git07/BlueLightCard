@@ -11,6 +11,12 @@ import { IRedeemService, RedeemResult } from '../../../services/redeem/RedeemSer
 
 import { RedeemController } from './RedeemController';
 
+type parsedResults = {
+  data: {
+    kind: string;
+  };
+};
+
 describe('RedeemController', () => {
   beforeEach(() => {
     process.env.API_DEFAULT_ALLOWED_ORIGINS = '["*"]';
@@ -112,7 +118,12 @@ describe('RedeemController', () => {
       const controller = new RedeemController(logger, redeemService);
 
       const results = await controller.invoke(request as unknown as APIGatewayProxyEventV2);
-      expect(results.statusCode).toBe(400);
+      const body = results.body ?? '{}';
+      const parsedResults = JSON.parse(body) as parsedResults;
+      const kind = parsedResults.data.kind;
+
+      expect(kind).toBe('RequestValidationCardStatus');
+      expect(results.statusCode).toBe(403);
     });
 
     it('should return error for missing card status', async () => {
@@ -124,7 +135,12 @@ describe('RedeemController', () => {
 
       const controller = new RedeemController(logger, redeemService);
       const results = await controller.invoke(request as unknown as APIGatewayProxyEventV2);
-      expect(results.statusCode).toBe(400);
+      const body = results.body ?? '{}';
+      const parsedResults = JSON.parse(body) as parsedResults;
+      const kind = parsedResults.data.kind;
+
+      expect(kind).toBe('RequestValidationCardStatus');
+      expect(results.statusCode).toBe(403);
     });
   });
 });

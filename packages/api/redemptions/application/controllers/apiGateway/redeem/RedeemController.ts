@@ -9,7 +9,13 @@ import { TokenHelper } from '@blc-mono/redemptions/application/helpers/TokenHelp
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 
 import { IRedeemService, RedeemService } from '../../../services/redeem/RedeemService';
-import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../ApiGatewayController';
+import {
+  APIGatewayController,
+  APIGatewayResult,
+  ParseErrorKind,
+  ParseRequestError,
+  ParseRequestResult,
+} from '../ApiGatewayController';
 
 const RedeemRequestModel = z.object({
   body: JsonStringSchema.pipe(PostRedeemModel),
@@ -30,7 +36,9 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
     super(logger);
   }
 
-  protected parseRequest(request: APIGatewayProxyEventV2): Result<ParsedRequest, ParseRequestError> {
+  protected parseRequest(
+    request: APIGatewayProxyEventV2,
+  ): Result<ParsedRequest, ParseRequestResult | ParseRequestError> {
     const parsedRequest = this.zodParseRequest(request, RedeemRequestModel);
 
     if (parsedRequest.isFailure) {
@@ -53,10 +61,15 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
     const memberId = tokenPayloadResult.value['custom:blc_old_id'];
     const brazeExternalUserId = tokenPayloadResult.value['custom:blc_old_uuid'];
     const cardStatus = tokenPayloadResult.value['card_status'];
-    if (typeof memberId !== 'string') return Result.err({ message: 'Invalid memberId in token' });
-    if (typeof brazeExternalUserId !== 'string') return Result.err({ message: 'Invalid brazeExternalUserId in token' });
+    if (typeof memberId !== 'string')
+      return Result.err({ kind: ParseErrorKind.RequestValidationMemberId, message: 'Invalid memberId in token' });
+    if (typeof brazeExternalUserId !== 'string')
+      return Result.err({
+        kind: ParseErrorKind.RequestValidationBrazeExternalUserId,
+        message: 'Invalid brazeExternalUserId in token',
+      });
     if (typeof cardStatus !== 'string' || !allowedStatuses.includes(cardStatus))
-      return Result.err({ message: 'Ineligible card status' });
+      return Result.err({ kind: ParseErrorKind.RequestValidationCardStatus, message: 'Ineligible card status' });
 
     return Result.ok({ ...parsedRequest.value, memberId, brazeExternalUserId });
   }

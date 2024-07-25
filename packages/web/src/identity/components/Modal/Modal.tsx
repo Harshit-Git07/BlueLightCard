@@ -47,4 +47,5 @@ const Modal: FC<ModalProps> = ({ id, isVisible, type, onClose, onConfirm }) => {
     return null;
   }
 };
+
 export default Modal;

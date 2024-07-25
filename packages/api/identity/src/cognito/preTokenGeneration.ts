@@ -6,7 +6,7 @@ import { ProfileService } from "src/services/ProfileService";
 const service: string = process.env.SERVICE as string
 const TABLE_NAME = process.env.IDENTITY_TABLE_NAME ?? "";
 const REGION = process.env.REGION ?? "eu-west-2";
-const logger = new Logger({ serviceName: `${service}-preTokenGeneration`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
+const logger = new Logger({ serviceName: `${service}-preTokenGeneration`});
 
 const preTokenGenerateService = new PreTokenGenerateService(TABLE_NAME, REGION, logger);
 const profile = new ProfileService(TABLE_NAME, REGION);

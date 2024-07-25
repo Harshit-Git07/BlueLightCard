@@ -64,6 +64,7 @@ export function createOldCognito(
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['cognito-idp:AdminUpdateUserAttributes', identityTable]
       },
@@ -72,7 +73,8 @@ export function createOldCognito(
         environment: {
           SERVICE: 'identity',
           REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName
+          IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['dynamodb:*']
       }
@@ -208,6 +210,7 @@ export function createOldCognitoDDS(
           SERVICE: 'identity',
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['cognito-idp:AdminUpdateUserAttributes', identityTable]
       },
@@ -216,7 +219,8 @@ export function createOldCognitoDDS(
         environment: {
           SERVICE: 'identity',
           REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName
+          IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['dynamodb:*']
       }
@@ -364,6 +368,7 @@ export function createNewCognito(
           DLQ_URL: dlq.queueUrl,
           REGION: region,
           IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: [bus, 'cognito-idp:AdminInitiateAuth', 'cognito-idp:AdminGetUser',  'dynamodb:Query'],
       },
@@ -375,6 +380,7 @@ export function createNewCognito(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           REGION: region,
           OLD_USER_POOL_ID: oldCognito.userPoolId,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable, identityTable]
       },
@@ -383,14 +389,15 @@ export function createNewCognito(
         environment: {
           SERVICE: 'identity',
           REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName
+          IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['dynamodb:*', identityTable],
       },
       preAuthentication: {
         handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
         environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret, false),
-        permissions: [unsuccessfulLoginAttemptsTable]
+        permissions: [unsuccessfulLoginAttemptsTable],
       }
     },
     cdk: {
@@ -579,6 +586,7 @@ export function createNewCognitoDDS(
           DLQ_URL: dlq.queueUrl,
           REGION: region,
           IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: [bus, 'cognito-idp:AdminInitiateAuth', 'cognito-idp:AdminGetUser', 'dynamodb:Query'],
       },
@@ -589,6 +597,7 @@ export function createNewCognitoDDS(
           TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           OLD_USER_POOL_ID: oldCognito.userPoolId,
           IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable, identityTable]
       },
@@ -597,7 +606,8 @@ export function createNewCognitoDDS(
         environment: {
           SERVICE: 'identity',
           REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName
+          IDENTITY_TABLE_NAME: identityTable.tableName,
+          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
         permissions: ['dynamodb:*', identityTable],
       },

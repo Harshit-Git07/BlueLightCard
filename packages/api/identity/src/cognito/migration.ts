@@ -20,7 +20,7 @@ const oldUserPoolId = process.env.OLD_USER_POOL_ID as string
 const apiUrl = process.env.API_URL
 const apiAuth = process.env.API_AUTH
 const tableName = process.env.IDENTITY_TABLE_NAME
-const logger = new Logger({ serviceName: `${service}-migration`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
+const logger = new Logger({ serviceName: `${service}-preTokenGeneration`});
 const sqs = new SQS();
 
 const accountStatusErrors: { [key: string]: string} = {
@@ -28,7 +28,6 @@ const accountStatusErrors: { [key: string]: string} = {
   'Awaiting Staff Approval. Please see FAQs': "Your account is awaiting staff approval",
   'Please contact us about your account.': "Your account has been suspended.\nPlease contact us",
 };
-
 async function sendToDLQ(event: any) {
     const dlqUrl = process.env.DLQ_URL || '';
     const params = {
@@ -37,7 +36,6 @@ async function sendToDLQ(event: any) {
     };
     await sqs.sendMessage(params).promise();
 }
-
 export const generateSecretHash = async (username: string, clientId: string, clientSecret: string) => {
   return createHmac('SHA256', clientSecret)
     .update(username + clientId)
@@ -50,35 +48,29 @@ export const handler = async (event: UserMigrationTriggerEvent) => {
       action: event.triggerSource,
       clientId: event.callerContext.clientId,
     });
-
     if (event.triggerSource == "UserMigration_Authentication") {
       try {
         // Authenticate the user with the old user pool
         let user = await authenticateUserOldPool(event.userName, event.request.password);
-
         if (!user) {
           // Authenticate the user with your existing user directory service
           user = await authenticateUser(event.userName, event.request.password);
         }
-
         if (user) {
           event.response.userAttributes = user;
           event.response.finalUserStatus = "CONFIRMED";
           event.response.messageAction = "SUPPRESS";
         }
       } catch (error: any) {
-        logger.debug("error: ", { error });
+        logger.error("error:", { error: error });
         const mappedAccountStatusError = accountStatusErrors[error.message];
-
         if (mappedAccountStatusError) {
           throw new Error(":\n" + mappedAccountStatusError);
         } else {
           let errorMessage = error.message;
-
           if (errorMessage.length > 0 && errorMessage[errorMessage.length-1] === ".") {
             errorMessage = errorMessage.slice(0,-1);
           }
-
           throw new Error(":\n" + errorMessage);
         }
       }
@@ -96,17 +88,17 @@ export const handler = async (event: UserMigrationTriggerEvent) => {
             email_verified: "true",
           };
           event.response.messageAction = "SUPPRESS";
-        }else {
+        } else {
+          logger.debug('User not found when attempting to match UUID to the legacy ID', {user: event.userName, uuid: uuid});
           throw new Error(":\nUser Not Found.");
         }
-      }else {
+      } else {
+        logger.debug('User not found when searching for profile document', {user: event.userName});
         throw new Error(":\nUser Not Found.");
       }
     }
-
     return event;
 }
-
 const authenticateUserOldPool = async (username: string, password: string) => {
     // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
     logger.info('Attempting to authenticate user against old user pool', { username })
@@ -124,13 +116,11 @@ const authenticateUserOldPool = async (username: string, password: string) => {
       }).promise()
       if (cognitoResponse) {
         const accessToken = cognitoResponse.AuthenticationResult?.AccessToken
-
         if (accessToken) {
           try {
             // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
             logger.info('Attempting to get user from old user pool', { username })
             const user = await cognitoISP.getUser({ AccessToken: accessToken }).promise()
-
             if (user) {
               const attributesObject = user.UserAttributes.reduce((acc: { [key: string]: any }, attr) => {
                 if (attr.Name !== 'sub') { // Continue to skip 'sub' attribute
@@ -139,23 +129,32 @@ const authenticateUserOldPool = async (username: string, password: string) => {
                 }
                 return acc
               }, {})
-
               attributesObject['custom:migrated_old_pool'] = true
               // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
               logger.info('Successfully migrated user from old user pool', { username })
               return attributesObject
             }
           } catch (e: any) {
-            logger.debug("user not found on old cognito: ",  {e} );
+            logger.error("user not found on old cognito: ",  { error: e } );
+          }
+        } else {
+          logger.debug('No accessToken returned from Cognito for user and pool: ', {user: username, pool: oldUserPoolId});
+          // Check for challenges or sessions
+          const challenge = cognitoResponse.ChallengeName
+          if (challenge) {
+            logger.debug('Received a challenge: ', { challenge: challenge });
+            logger.debug('Challenge parameters: ', { parameters: cognitoResponse.ChallengeParameters });
+            logger.debug('Challenge session: ', { session: cognitoResponse.Session });
           }
         }
+      } else {
+        logger.debug('No cognitoResponse received for user and pool: ', {user: username, pool: oldUserPoolId});
       }
     } catch (err) {
       // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-      logger.info('User not found in old user pool', { username })
+      logger.error('User not found in old user pool', { username, error: err });
     }
 }
-
 const authenticateUser = async (username: string, password: string) => {
     // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
     logger.info('Attempting to authenticate user against legacy', { username })
@@ -169,7 +168,6 @@ const authenticateUser = async (username: string, password: string) => {
                 "Authorization": `Basic ${apiAuth}`
             }
         })
-
         if (response && response.data) {
             if (!response.data.success && response.data.code !== 1013) {
               throw new Error(response.data.message)
@@ -186,13 +184,14 @@ const authenticateUser = async (username: string, password: string) => {
                 "custom:blc_old_id": response.data.data.id,
                 "custom:blc_old_uuid": response.data.data.uuid,
             }
+        } else {
+          logger.debug('No response or response data when authenticating against legacy received for user: ', {user: username});
         }
     } catch (error: any) {
-        logger.error('Error during legacy login', { error, username })
+      logger.error('Error during legacy login', { error, username });
         throw new Error(error.message)
     }
 }
-
 const formatPhoneNumber = (unparsedPhoneNumber: string) => {
     const countryCode = process.env.REGION && process.env.REGION === 'ap-southeast-2' ? 'AU' : 'GB';
     const defaultNumber = countryCode === 'AU' ? '+610000000000' : '+440000000000';
@@ -201,13 +200,12 @@ const formatPhoneNumber = (unparsedPhoneNumber: string) => {
     }
     const phoneNumber = parsePhoneNumber(unparsedPhoneNumber, countryCode);
     if (phoneNumber && phoneNumber.isValid() && phoneNumber.number) {
-        logger.debug ("phoneNumber", phoneNumber.number);
+        logger.debug("phoneNumber", phoneNumber.number);
         return phoneNumber.number
     } else {
         return defaultNumber;
     }
 };
-
 const addUserSignInMigratedEvent = async (data: any) => {
     const profileUuid: string = v4();
     const uuid = data.uuid;
@@ -271,5 +269,4 @@ const addUserSignInMigratedEvent = async (data: any) => {
         await sendToDLQ(data);
         throw new Error(`Error adding user sign in migrated event: ${err.message}.`)
     }
-
 }

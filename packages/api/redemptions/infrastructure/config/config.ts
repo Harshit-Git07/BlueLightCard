@@ -14,6 +14,8 @@ export type RedemptionsStackConfig = {
   redemptionsLambdaScriptsCodeRedeemedPath: string;
   redemptionsLambdaScriptsAssignUserCodesRedeemedPath: string;
   redemptionsLambdaScriptsCodeAmountIssuedPath: string;
+  redemptionsLambdaScriptsViewVaultBatchesPath: string;
+  redemptionsLambdaScriptsCheckVaultStockPath: string;
   apiDefaultAllowedOrigins: string[];
   brazeVaultEmailCampaignId: string;
   brazeGenericEmailCampaignId: string;
@@ -22,6 +24,8 @@ export type RedemptionsStackConfig = {
   brazeShowCardEmailCampaignId: string;
   brazeApiUrl: string;
   redemptionsWebHost: string;
+  redemptionsEmailFrom: string;
+  redemptionsEmailDomain: string;
   brazeRedemptionVaultPushNotificationCampaignId: string;
   brazeRedemptionVaultQRPushNotificationCampaignId: string;
   brazeRedemptionPreAppliedPushNotificationCampaignId: string;
@@ -52,6 +56,8 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
       redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
+      redemptionsLambdaScriptsViewVaultBatchesPath: 'NewVault/viewBatches',
+      redemptionsLambdaScriptsCheckVaultStockPath: 'NewVault/checkVaultStock',
       apiDefaultAllowedOrigins: [
         'https://www.bluelightcard.co.uk',
         'https://www.bluelightcard.com.au',
@@ -64,6 +70,8 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
+      redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
+      redemptionsEmailDomain: 'bluelightcard.co.uk',
       brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',
       brazeRedemptionVaultQRPushNotificationCampaignId: '4805f70d-cdab-4eee-9d47-107b3bda0f61',
       brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
@@ -82,6 +90,8 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
       redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
+      redemptionsLambdaScriptsViewVaultBatchesPath: 'NewVault/viewBatches',
+      redemptionsLambdaScriptsCheckVaultStockPath: 'NewVault/checkVaultStock',
       apiDefaultAllowedOrigins: [
         // TODO: Configure origins for DDS and BLC AU
         'https://www.staging.bluelightcard.co.uk',
@@ -94,6 +104,8 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
+      redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
+      redemptionsEmailDomain: 'bluelightcard.co.uk',
       brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',
       brazeRedemptionVaultQRPushNotificationCampaignId: '4805f70d-cdab-4eee-9d47-107b3bda0f61',
       brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
@@ -111,6 +123,8 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCodeRedeemedPath: 'NewVault/codesRedeemed',
       redemptionsLambdaScriptsAssignUserCodesRedeemedPath: 'NewVault/assignUserCodes',
       redemptionsLambdaScriptsCodeAmountIssuedPath: 'NewVault/amountIssued',
+      redemptionsLambdaScriptsViewVaultBatchesPath: 'NewVault/viewBatches',
+      redemptionsLambdaScriptsCheckVaultStockPath: 'NewVault/checkVaultStock',
       apiDefaultAllowedOrigins: ['*'],
       brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
       brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
@@ -119,6 +133,8 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
       brazeApiUrl: 'https://rest.fra-02.braze.eu',
       redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
+      redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
+      redemptionsEmailDomain: 'bluelightcard.co.uk',
       brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',
       brazeRedemptionVaultQRPushNotificationCampaignId: '4805f70d-cdab-4eee-9d47-107b3bda0f61',
       brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
@@ -148,6 +164,12 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCodeAmountIssuedPath: getEnv(
         RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH,
       ),
+      redemptionsLambdaScriptsViewVaultBatchesPath: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_VIEW_VAULT_BATCHES_PATH,
+      ),
+      redemptionsLambdaScriptsCheckVaultStockPath: getEnv(
+        RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH,
+      ),
       apiDefaultAllowedOrigins: getEnvValidated(
         RedemptionsStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
         JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
@@ -159,6 +181,8 @@ export class RedemptionsStackConfigResolver {
       brazeShowCardEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID),
       brazeApiUrl: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL),
       redemptionsWebHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST),
+      redemptionsEmailFrom: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_FROM),
+      redemptionsEmailDomain: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_DOMAIN),
       brazeRedemptionVaultPushNotificationCampaignId: getEnv(
         RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_PUSH_NOTIFICATION_CAMPAIGN_ID,
       ),

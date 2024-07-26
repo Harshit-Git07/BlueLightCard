@@ -25,6 +25,9 @@ export function createMemberRedemptionEvent<TAdditionalRedemptionDetails extends
       offerName: params.offerName,
       affiliate: redemption.affiliate,
       clientType: params.clientType,
+      redemptionType: additionalRedemptionDetails.redemptionType,
+      code: additionalRedemptionDetails.code,
+      url: additionalRedemptionDetails.url,
     },
   };
 }

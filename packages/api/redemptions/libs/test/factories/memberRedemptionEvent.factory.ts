@@ -3,34 +3,35 @@ import { Factory } from 'fishery';
 
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 
-import { redemptionTypeEnum } from '../../database/schema';
+export const memberRedemptionEventDetailFactory = Factory.define<MemberRedemptionEvent['detail']>(() => ({
+  memberDetails: {
+    memberId: faker.string.uuid(),
+    brazeExternalUserId: faker.string.uuid(),
+  },
+  redemptionDetails: {
+    redemptionId: faker.string.uuid(),
+    affiliate: faker.company.name(),
+    companyId: faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+    companyName: faker.company.name(),
+    offerId: faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+    offerName: faker.commerce.productName(),
+    clientType: faker.helpers.arrayElement(['web', 'mobile']),
+    platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
+    redemptionType: 'vault',
+    code: faker.string.alphanumeric(5),
+    url: faker.internet.url(),
+  },
+}));
 
 export const memberRedemptionEventFactory = Factory.define<MemberRedemptionEvent>(() => ({
   account: faker.string.numeric(12),
-  detail: {
-    memberDetails: {
-      memberId: faker.string.uuid(),
-      brazeExternalUserId: faker.string.uuid(),
-    },
-    redemptionDetails: {
-      redemptionId: faker.string.uuid(),
-      affiliate: faker.company.name(),
-      redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
-      companyId: faker.number.int({
-        min: 1,
-        max: 1_000_000,
-      }),
-      companyName: faker.company.name(),
-      offerId: faker.number.int({
-        min: 1,
-        max: 1_000_000,
-      }),
-      offerName: faker.commerce.productName(),
-      code: faker.string.alphanumeric(5),
-      url: faker.internet.url(),
-      clientType: faker.helpers.arrayElement(['web', 'mobile']),
-    },
-  },
+  detail: memberRedemptionEventDetailFactory.build(),
   'detail-type': faker.helpers.arrayElement([
     'REDEEMED_GENERIC',
     'REDEEMED_PRE_APPLIED',

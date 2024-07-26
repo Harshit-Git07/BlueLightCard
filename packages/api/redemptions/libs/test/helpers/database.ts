@@ -92,8 +92,8 @@ export class RedemptionsTestDatabase {
   /**
    * Reset the database to a clean state (deletes the data from all tables)
    */
-  public async reset(): Promise<void> {
-    const connection = await this.getConnection();
+  public async reset(specificConnection?: DatabaseConnection): Promise<void> {
+    const connection = specificConnection ?? (await this.getConnection());
     // The order of deletion is important due to foreign key constraints
     await connection.db.delete(vaultCodesTable).execute();
     await connection.db.delete(vaultBatchesTable).execute();

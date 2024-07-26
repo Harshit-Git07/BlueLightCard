@@ -14,6 +14,8 @@ enum ApisLambdaScripts {
   CHECK_AMOUNT_ISSUED = 'CHECK_AMOUNT_ISSUED',
   ASSIGN_USER_CODES = 'ASSIGN_USER',
   CODES_REDEEMED = 'CODES_REDEEMED',
+  VIEW_VAULT_BATCHES = 'VIEW_VAULT_BATCHES',
+  CHECK_VAULT_STOCK = 'CHECK_VAULT_STOCK',
 }
 
 export const GetNumberOfCodesResponseSchema = z.object({
@@ -43,6 +45,29 @@ export type CodesRedeemedResponse = z.infer<typeof RedeemedCodesResponseSchema>;
 export type AssignCodeTeMemberSpotifyData = AssignCodeTeMemberData & {
   trackingUrl: string;
 };
+
+export const ViewVaultBatchesDataSchema = z.record(
+  z.object({
+    // Key of record = Batch Id
+    expires: z.string(), // 2024-01-01 23:59:59
+    dateAdded: z.string(), // 2024-01-01 23:59:59
+    filename: z.string(), // something.csv
+  }),
+);
+export const ViewVaultBatchesResponseSchema = z.object({
+  success: z.boolean(),
+  data: ViewVaultBatchesDataSchema,
+});
+export type ViewVaultBatchesData = z.infer<typeof ViewVaultBatchesDataSchema>;
+export type ViewVaultBatchesResponse = z.infer<typeof ViewVaultBatchesResponseSchema>;
+
+export const CheckVaultStockDataSchema = z.number(); // Number of codes remaining in the batch
+export const CheckVaultStockResponseSchema = z.object({
+  success: z.boolean(),
+  data: CheckVaultStockDataSchema,
+});
+export type CheckVaultStockData = z.infer<typeof CheckVaultStockDataSchema>;
+export type CheckVaultStockResponse = z.infer<typeof CheckVaultStockResponseSchema>;
 
 export const LegacyVaultDataSchema = z.object({
   companyId: z.any(),
@@ -75,6 +100,10 @@ export const VaultSecretsSchema = z.object({
   checkAmountIssuedPassword: z.string(),
   retrieveAllVaultsData: z.string(),
   retrieveAllVaultsPassword: z.string(),
+  viewVaultBatchesData: z.string(),
+  viewVaultBatchesPassword: z.string(),
+  checkVaultStockData: z.string(),
+  checkVaultStockPassword: z.string(),
 });
 export type VaultSecrets = z.infer<typeof VaultSecretsSchema>;
 
@@ -88,6 +117,13 @@ export interface ILegacyVaultApiRepository {
     offerId: number,
     platform: Platform,
   ): Promise<AssignCodeTeMemberData>;
+  viewVaultBatches(offerId: number, companyId: number, platform: Platform): Promise<ViewVaultBatchesData>;
+  checkVaultStock(
+    batchNo: string,
+    offerId: number,
+    companyId: number,
+    platform: Platform,
+  ): Promise<CheckVaultStockData>;
 }
 
 export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
@@ -108,6 +144,12 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     ),
     [ApisLambdaScripts.CODES_REDEEMED]: getEnv(
       RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH,
+    ),
+    [ApisLambdaScripts.VIEW_VAULT_BATCHES]: getEnv(
+      RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_VIEW_VAULT_BATCHES_PATH,
+    ),
+    [ApisLambdaScripts.CHECK_VAULT_STOCK]: getEnv(
+      RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH,
     ),
   };
 
@@ -238,6 +280,67 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
       memberId,
       companyId,
       offerId,
+    });
+  }
+
+  public async viewVaultBatches(offerId: number, companyId: number, platform: Platform): Promise<ViewVaultBatchesData> {
+    const brand = platformToBrandMap[platform];
+    const endpoint = this.getRequestEndpoint(ApisLambdaScripts.VIEW_VAULT_BATCHES);
+    const credentials = await this.getLegacyVaultCredentials();
+    const key = this.generateKey(credentials.viewVaultBatchesData, credentials.viewVaultBatchesPassword);
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify({
+        companyId,
+        offerId,
+        brand,
+      }),
+      headers: {
+        authorization: key,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return ViewVaultBatchesResponseSchema.parse(data).data;
+    }
+    return this.handleErrorResponse(response, 'Error while viewing vault batches', {
+      companyId,
+      offerId,
+      brand,
+    });
+  }
+
+  public async checkVaultStock(
+    batchNo: string,
+    offerId: number,
+    companyId: number,
+    platform: Platform,
+  ): Promise<CheckVaultStockData> {
+    const brand = platformToBrandMap[platform];
+    const endpoint = this.getRequestEndpoint(ApisLambdaScripts.CHECK_VAULT_STOCK);
+    const credentials = await this.getLegacyVaultCredentials();
+    const key = this.generateKey(credentials.checkVaultStockData, credentials.checkVaultStockPassword);
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify({
+        brand,
+        batchNo,
+        companyId,
+        offerId,
+      }),
+      headers: {
+        authorization: key,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return CheckVaultStockResponseSchema.parse(data).data;
+    }
+    return this.handleErrorResponse(response, 'Error while checking vault stock', {
+      batchNo,
+      offerId,
+      companyId,
+      brand,
     });
   }
 

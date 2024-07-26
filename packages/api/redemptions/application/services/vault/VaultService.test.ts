@@ -1,6 +1,10 @@
 import { faker } from '@faker-js/faker';
 
-import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
+import { as } from '@blc-mono/core/utils/testing';
+import {
+  ITransactionManager,
+  TransactionManager,
+} from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
@@ -10,8 +14,9 @@ import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { VaultCreatedEvent } from '../../controllers/eventBridge/vault/VaultCreatedController';
 import { VaultUpdatedEvent } from '../../controllers/eventBridge/vault/VaultUpdatedController';
 import { AffiliateConfigurationHelper } from '../../helpers/affiliate/AffiliateConfiguration';
-import { RedemptionsRepository } from '../../repositories/RedemptionsRepository';
-import { VaultsRepository } from '../../repositories/VaultsRepository';
+import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
+import { IVaultCodesRepository } from '../../repositories/VaultCodesRepository';
+import { IVaultsRepository, VaultsRepository } from '../../repositories/VaultsRepository';
 
 import { VaultService } from './VaultService';
 
@@ -28,11 +33,24 @@ describe('VaultService', () => {
     max: 1_000_000,
   });
 
-  function makeVaultService(connection: IDatabaseConnection) {
-    const redemptionRepository = new RedemptionsRepository(connection);
-    const vaultsRepository = new VaultsRepository(connection);
-    const transactionManager = new TransactionManager(connection);
-    const service = new VaultService(mockedLogger, redemptionRepository, vaultsRepository, transactionManager);
+  type MakeVaultServiceOptions = {
+    overrides: {
+      redemptionsRepository?: Partial<IRedemptionsRepository>;
+      vaultsRepository?: Partial<IVaultsRepository>;
+      vaultCodesRepository?: Partial<IVaultCodesRepository>;
+      transactionManager?: Partial<ITransactionManager>;
+    };
+  };
+  function makeVaultService(connection: IDatabaseConnection, options?: MakeVaultServiceOptions) {
+    const redemptionRepository = options?.overrides.redemptionsRepository ?? new RedemptionsRepository(connection);
+    const vaultsRepository = options?.overrides.vaultsRepository ?? new VaultsRepository(connection);
+    const transactionManager = options?.overrides.transactionManager ? null : new TransactionManager(connection);
+    const service = new VaultService(
+      mockedLogger,
+      as(redemptionRepository),
+      as(vaultsRepository),
+      as(transactionManager),
+    );
     return service;
   }
 
@@ -45,7 +63,7 @@ describe('VaultService', () => {
   }, 60_000);
 
   afterEach(async () => {
-    await database.reset();
+    await database.reset(connection);
   });
 
   afterAll(async () => {

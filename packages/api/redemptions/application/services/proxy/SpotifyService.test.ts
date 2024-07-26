@@ -20,6 +20,8 @@ describe('SpotifyService', () => {
       getNumberOfCodesIssued: jest.fn(),
       findVaultsRelatingToLinkId: jest.fn(),
       getCodesRedeemed: jest.fn(),
+      checkVaultStock: jest.fn(),
+      viewVaultBatches: jest.fn(),
     };
     const service = new SpotifyService(legacyVaultApiRepository ?? mockedLegacyVaultApiRepository, mockedLogger);
     return service.redeem(platform, companyId, offerId, memberId, url);
@@ -38,6 +40,8 @@ describe('SpotifyService', () => {
         assignCodeToMember: jest.fn(),
         getNumberOfCodesIssued: jest.fn(),
         findVaultsRelatingToLinkId: jest.fn(),
+        checkVaultStock: jest.fn(),
+        viewVaultBatches: jest.fn(),
       } satisfies ILegacyVaultApiRepository;
 
       // Act
@@ -68,6 +72,8 @@ describe('SpotifyService', () => {
         assignCodeToMember: jest.fn().mockResolvedValue({ code: 'bar' }),
         getNumberOfCodesIssued: jest.fn(),
         findVaultsRelatingToLinkId: jest.fn(),
+        checkVaultStock: jest.fn(),
+        viewVaultBatches: jest.fn(),
       } satisfies ILegacyVaultApiRepository;
 
       // Act

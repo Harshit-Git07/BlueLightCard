@@ -1,9 +1,9 @@
-import { and, asc, count, eq, isNull } from 'drizzle-orm';
+import { and, asc, count, eq, gte, isNull, or, sql } from 'drizzle-orm';
 import lodash from 'lodash';
 
 import { DatabaseTransactionConnection } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { vaultCodesTable } from '@blc-mono/redemptions/libs/database/schema';
+import { vaultCodesTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 import { Repository } from './Repository';
 
@@ -16,25 +16,27 @@ export interface IVaultCodesRepository {
   checkIfMemberReachedMaxCodeClaimed(vaultId: string, memberId: string, maxPerUser: number): Promise<boolean>;
   claimVaultCode(vaultId: string, memberId: string): Promise<Pick<VaultCode, 'code'> | undefined>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultCodesRepository;
+  checkVaultCodesRemaining(vaultId: string): Promise<number>;
 }
 
 export class VaultCodesRepository extends Repository implements IVaultCodesRepository {
   static readonly key = 'VaultCodesRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
 
-  public checkIfMemberReachedMaxCodeClaimed(vaultId: string, memberId: string, maxPerUser: number): Promise<boolean> {
-    return this.connection.db
+  public async checkIfMemberReachedMaxCodeClaimed(
+    vaultId: string,
+    memberId: string,
+    maxPerUser: number,
+  ): Promise<boolean> {
+    const result = await this.connection.db
       .select({
         numOfCodesClaimed: count(),
       })
       .from(vaultCodesTable)
       .where(and(eq(vaultCodesTable.vaultId, vaultId), eq(vaultCodesTable.memberId, memberId)))
-      .limit(maxPerUser)
-      .execute()
-      .then((result) => {
-        const numOfCodesClaimed = result[0].numOfCodesClaimed;
-        return numOfCodesClaimed >= maxPerUser;
-      });
+      .limit(maxPerUser);
+    const numOfCodesClaimed = result[0].numOfCodesClaimed;
+    return numOfCodesClaimed >= maxPerUser;
   }
 
   /**
@@ -97,5 +99,28 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
 
   public withTransaction(transaction: DatabaseTransactionConnection): VaultCodesRepository {
     return new VaultCodesRepository(transaction);
+  }
+
+  public async checkVaultCodesRemaining(vaultId: string): Promise<number> {
+    const result = await this.connection.db
+      .select({
+        unclaimedCodes: count(vaultCodesTable).as('unclaimedCodes'),
+        vaults: count(vaultsTable).as('vaults'),
+      })
+      .from(vaultsTable)
+      .where(eq(vaultsTable.id, vaultId))
+      .leftJoin(
+        vaultCodesTable,
+        and(
+          or(isNull(vaultCodesTable.memberId), eq(vaultCodesTable.memberId, '')),
+          gte(vaultCodesTable.expiry, sql`NOW()`),
+        ),
+      )
+      .execute();
+    const vaultCodesStatus = result.at(0);
+    if (!vaultCodesStatus || vaultCodesStatus.vaults === 0) {
+      throw new Error('Vault codes not found with given vault ID');
+    }
+    return Number(vaultCodesStatus.unclaimedCodes);
   }
 }

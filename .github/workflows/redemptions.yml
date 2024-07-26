@@ -55,8 +55,6 @@ jobs:
         working-directory: "packages/api/redemptions/cloudflare/QRImageGenerator"
         run: npm run test
 
-
-
   format:
     name: Check Formatting
     runs-on: ubuntu-latest
@@ -171,6 +169,10 @@ jobs:
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "viewVaultBatchesData":"${{ secrets.VIEW_VAULT_BATCHES_DATA }}",
+              "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
+              "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
+              "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
               "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Create Secret
@@ -187,6 +189,10 @@ jobs:
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "viewVaultBatchesData":"${{ secrets.VIEW_VAULT_BATCHES_DATA }}",
+              "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
+              "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
+              "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
               "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Build
@@ -284,6 +290,10 @@ jobs:
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "viewVaultBatchesData":"${{ secrets.VIEW_VAULT_BATCHES_DATA }}",
+              "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
+              "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
+              "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
               "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Create Secret
@@ -300,6 +310,10 @@ jobs:
               "checkAmountIssuedPassword":"${{ secrets.CHECK_AMOUNT_ISSUED_PASSWORD }}",
               "retrieveAllVaultsData":"${{ secrets.RETRIEVE_ALL_VAULTS_DATA }}",
               "retrieveAllVaultsPassword":"${{ secrets.RETRIEVE_ALL_VAULTS_PASSWORD }}",
+              "viewVaultBatchesData":"${{ secrets.VIEW_VAULT_BATCHES_DATA }}",
+              "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
+              "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
+              "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
               "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
             }'
       - name: Build

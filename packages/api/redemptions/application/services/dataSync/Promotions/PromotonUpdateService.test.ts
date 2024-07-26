@@ -18,6 +18,8 @@ describe('PromotionUpdateService', () => {
       findVaultsRelatingToLinkId: jest.fn(),
       getNumberOfCodesIssued: jest.fn(),
       getCodesRedeemed: jest.fn(),
+      checkVaultStock: jest.fn(),
+      viewVaultBatches: jest.fn(),
     } satisfies ILegacyVaultApiRepository;
     const redemptionsRepository = {
       createRedemption: jest.fn(),

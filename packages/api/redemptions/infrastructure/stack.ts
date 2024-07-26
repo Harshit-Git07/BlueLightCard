@@ -15,6 +15,7 @@ import { DatabaseConnectionType, SecretsManagerDatabaseCredentials } from '../li
 import { RedemptionsStackConfigResolver } from './config/config';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
 import { RedemptionsDatabase } from './database/database';
+import { createDomainEmailIdentity } from './email/createDomainEmailIdentity';
 import { EventBridge } from './eventBridge/eventBridge';
 import {
   createOfferRule,
@@ -30,6 +31,7 @@ import { createRedemptionTransactionalEmailRule } from './eventBridge/rules/rede
 import { createVaultBatchCreatedRule } from './eventBridge/rules/vaultBatchCreatedRule';
 import { createVaultCodesUploadRule } from './eventBridge/rules/vaultCodesUploadRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
+import { createVaultThresholdEmailRule } from './eventBridge/rules/VaultThresholdEmailRule';
 import { Route } from './routes/route';
 import { VaultCodesUpload } from './s3/vaultCodesUpload';
 
@@ -111,6 +113,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       dwhMemberRedeemIntentRule: createDwhMemberRedeemIntentRule(stack, dwhKenisisFirehoseStreams),
       dwhMemberRedemptionRule: createDwhMemberRedemptionRule(stack, dwhKenisisFirehoseStreams),
       vaultBatchCreatedRule: createVaultBatchCreatedRule(stack),
+      vaultThresholdEmailRule: createVaultThresholdEmailRule(stack, config, database),
       redemptionPushNotificationRule: createRedemptionPushNotificationRule(stack, config),
     },
     {
@@ -120,12 +123,12 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   // Create permissions
   // TODO: Specify the resource for the secrets manager from Secret.fromSecretCompleteArn (It was not getting the final 6 characters as expected, need to investigate further)
-  const getSecretValueSecretsManager = new PolicyStatement({
+  const getSecretValueSecretsManagerPolicy = new PolicyStatement({
     actions: ['secretsmanager:GetSecretValue'],
     effect: Effect.ALLOW,
     resources: ['*'],
   });
-  const publishRedemptionsEventBus = new PolicyStatement({
+  const publishRedemptionsEventBusPolicy = new PolicyStatement({
     actions: ['events:PutEvents'],
     effect: Effect.ALLOW,
     resources: [bus.eventBusArn],
@@ -146,7 +149,7 @@ export async function Redemptions({ app, stack }: StackContext) {
         'packages/api/redemptions/application/handlers/apiGateway/redemptionDetails/getRedemptionDetails.handler',
       requestValidatorName: 'GetRedemptionDetailsValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
-      permissions: [publishRedemptionsEventBus],
+      permissions: [publishRedemptionsEventBusPolicy],
       environment: {
         // Event Bus
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
@@ -178,15 +181,19 @@ export async function Redemptions({ app, stack }: StackContext) {
           config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
           config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_VIEW_VAULT_BATCHES_PATH]:
+          config.redemptionsLambdaScriptsViewVaultBatchesPath,
+        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH]:
+          config.redemptionsLambdaScriptsCheckVaultStockPath,
         // Event Bus
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [
         // Common
-        publishRedemptionsEventBus,
+        publishRedemptionsEventBusPolicy,
         // Legacy Vault Service
-        getSecretValueSecretsManager,
+        getSecretValueSecretsManagerPolicy,
       ],
     }),
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -227,7 +234,7 @@ export async function Redemptions({ app, stack }: StackContext) {
           config.redemptionsLambdaScriptsCodeAmountIssuedPath,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
-      permissions: [getSecretValueSecretsManager],
+      permissions: [getSecretValueSecretsManagerPolicy],
     }),
   });
 
@@ -249,6 +256,8 @@ export async function Redemptions({ app, stack }: StackContext) {
     value: databaseCredentialsSecretName,
   });
 
+  // Create domain email identity
+  await createDomainEmailIdentity(config.redemptionsEmailDomain, stack.region);
   stack.addOutputs({
     RedemptionsApiEndpoint: api.url,
   });

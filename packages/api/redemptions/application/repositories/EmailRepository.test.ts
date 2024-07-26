@@ -39,7 +39,7 @@ describe('EmailRepository', () => {
       'should send an email with the braze email client',
       async (redemptionType) => {
         const logger = createTestLogger();
-        const mockEmailClient = {
+        const mockBrazeEmailClient = {
           campaigns: {
             trigger: {
               send: jest.fn().mockResolvedValue({
@@ -48,8 +48,8 @@ describe('EmailRepository', () => {
             },
           },
         };
-        const emailClientProvider: IBrazeEmailClientProvider = {
-          getClient: () => Promise.resolve(as(mockEmailClient)),
+        const brazeEmailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
         };
 
         const mockBase64 = 'mockedBase64String';
@@ -58,20 +58,20 @@ describe('EmailRepository', () => {
 
         const host = 'https://staging.bluelightcard.co.uk';
 
-        const repository = new EmailRepository(logger, emailClientProvider);
+        const repository = new EmailRepository(logger, brazeEmailClientProvider);
         const payload = vaultOrGenericEmailPayloadFactory.build();
 
         // Act
         await repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
 
         // Assert
-        expect(mockEmailClient.campaigns.trigger.send).toHaveBeenCalled();
-        expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('test');
-        expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
+        expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalled();
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('test');
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
           payload.brazeExternalUserId,
         );
 
-        expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
           companyName: payload.companyName,
           offerName: payload.offerName,
           url: `${host}/copy-code?code=${mockBase64}&redirect=${mockBase64}&metaData=${mockBase64}`,
@@ -82,7 +82,7 @@ describe('EmailRepository', () => {
 
     it('should send an email with the braze email client for vaultQR redemption type', async () => {
       const logger = createTestLogger();
-      const mockEmailClient = {
+      const mockBrazeEmailClient = {
         campaigns: {
           trigger: {
             send: jest.fn().mockResolvedValue({
@@ -92,7 +92,7 @@ describe('EmailRepository', () => {
         },
       };
       const emailClientProvider: IBrazeEmailClientProvider = {
-        getClient: () => Promise.resolve(as(mockEmailClient)),
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
       };
 
       const mockBase64 = 'mockedBase64String';
@@ -106,13 +106,13 @@ describe('EmailRepository', () => {
       await repository.sendVaultOrGenericTransactionalEmail(payload, 'vaultQR');
 
       // Assert
-      expect(mockEmailClient.campaigns.trigger.send).toHaveBeenCalled();
-      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('test');
-      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
+      expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalled();
+      expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('test');
+      expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
         payload.brazeExternalUserId,
       );
 
-      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
+      expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
         companyName: payload.companyName,
         offerName: payload.offerName,
         code: payload.code,
@@ -123,7 +123,7 @@ describe('EmailRepository', () => {
       it('should send an email with the braze email client for preApplied redemption type', async () => {
         const logger = createTestLogger();
 
-        const mockEmailClient = {
+        const mockBrazeEmailClient = {
           campaigns: {
             trigger: {
               send: jest.fn().mockResolvedValue({
@@ -134,7 +134,7 @@ describe('EmailRepository', () => {
         };
 
         const emailClientProvider: IBrazeEmailClientProvider = {
-          getClient: () => Promise.resolve(as(mockEmailClient)),
+          getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
         };
 
         const repository = new EmailRepository(logger, emailClientProvider);
@@ -142,13 +142,13 @@ describe('EmailRepository', () => {
 
         await repository.sendPreAppliedTransactionalEmail(payload);
 
-        expect(mockEmailClient.campaigns.trigger.send).toHaveBeenCalled();
-        expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('preApplied_env_val');
-        expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
+        expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalled();
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('preApplied_env_val');
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
           payload.brazeExternalUserId,
         );
 
-        expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
           companyName: payload.companyName,
           offerName: payload.offerName,
           url: payload.url,
@@ -156,10 +156,31 @@ describe('EmailRepository', () => {
       });
     });
 
+    it.each(['showCard', 'preApplied'] satisfies RedemptionType[])(
+      'should throw error for unhandled redemption type',
+      async (redemptionType) => {
+        // Arrange
+        const logger = createTestLogger();
+        const mockBrazeEmailClient = {};
+        const emailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
+        };
+
+        const repository = new EmailRepository(logger, emailClientProvider);
+        const payload = vaultOrGenericEmailPayloadFactory.build();
+
+        // Act
+        const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
+
+        // Assert
+        await expect(act).rejects.toThrow('RedemptionType error, expects vault/generic');
+      },
+    );
+
     it('should throw when success is not returned by Braze for vault or generic emails', async () => {
       // Arrange
       const logger = createTestLogger();
-      const mockEmailClient = {
+      const mockBrazeEmailClient = {
         campaigns: {
           trigger: {
             send: jest.fn().mockResolvedValue({
@@ -169,7 +190,7 @@ describe('EmailRepository', () => {
         },
       };
       const emailClientProvider: IBrazeEmailClientProvider = {
-        getClient: () => Promise.resolve(as(mockEmailClient)),
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
       };
 
       const repository = new EmailRepository(logger, emailClientProvider);
@@ -186,7 +207,7 @@ describe('EmailRepository', () => {
     it('should throw when success is not returned by Braze for preApplied emails', async () => {
       // Arrange
       const logger = createTestLogger();
-      const mockEmailClient = {
+      const mockBrazeEmailClient = {
         campaigns: {
           trigger: {
             send: jest.fn().mockResolvedValue({
@@ -196,7 +217,7 @@ describe('EmailRepository', () => {
         },
       };
       const emailClientProvider: IBrazeEmailClientProvider = {
-        getClient: () => Promise.resolve(as(mockEmailClient)),
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
       };
 
       const repository = new EmailRepository(logger, emailClientProvider);

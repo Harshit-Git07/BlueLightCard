@@ -347,6 +347,8 @@ describe('Redemption Strategies', () => {
           assignCodeToMember: jest.fn(),
           findVaultsRelatingToLinkId: jest.fn(),
           getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
         } satisfies ILegacyVaultApiRepository);
       const vaultsRepository = new VaultsRepository(connection);
       const vaultCodesRepository = new VaultCodesRepository(connection);
@@ -623,6 +625,8 @@ describe('Redemption Strategies', () => {
           getNumberOfCodesIssued: jest.fn().mockRejectedValue(new Error('Error checking number of codes issued')),
           assignCodeToMember: jest.fn(),
           getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
         const redemptionCreated = redemption.build({
           redemptionType: 'vault',
@@ -647,6 +651,8 @@ describe('Redemption Strategies', () => {
           getNumberOfCodesIssued: jest.fn().mockResolvedValue(3),
           assignCodeToMember: jest.fn().mockResolvedValue(undefined),
           getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
         const redemptionCreated = redemption.build({
           redemptionType: 'vault',
@@ -670,6 +676,8 @@ describe('Redemption Strategies', () => {
           getNumberOfCodesIssued: jest.fn().mockResolvedValue(0),
           assignCodeToMember: jest.fn().mockRejectedValue(new Error('Error assigning code')),
           getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
         const redemptionCreated = redemption.build({
           redemptionType: 'vault',
@@ -699,6 +707,8 @@ describe('Redemption Strategies', () => {
             code: desiredCode,
           }),
           getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
         const redemptionCreated = redemption.build({
           redemptionType: 'vault',
@@ -734,6 +744,8 @@ describe('Redemption Strategies', () => {
             code: desiredCode,
           }),
           getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
         } satisfies ILegacyVaultApiRepository;
         const redemptionCreated = redemption.build({
           redemptionType: 'vault',

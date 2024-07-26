@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.87.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.87.0...bluelightcard/identity-v1.87.1) (2024-07-26)
+
+
+### Bug Fixes
+
+* TI-1517 - Logs & metrics for the Migration Lambda has stopped ([#1862](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1862)) ([e6a0995](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e6a099551d4089127506daa9c286a70e7ad325b6))
+
 ## [1.87.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.86.0...bluelightcard/identity-v1.87.0) (2024-07-25)
 
 

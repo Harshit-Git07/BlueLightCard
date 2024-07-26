@@ -20,7 +20,7 @@ const oldUserPoolId = process.env.OLD_USER_POOL_ID as string
 const apiUrl = process.env.API_URL
 const apiAuth = process.env.API_AUTH
 const tableName = process.env.IDENTITY_TABLE_NAME
-const logger = new Logger({ serviceName: `${service}-preTokenGeneration`});
+const logger = new Logger({ serviceName: `${service}-migration`});
 const sqs = new SQS();
 
 const accountStatusErrors: { [key: string]: string} = {

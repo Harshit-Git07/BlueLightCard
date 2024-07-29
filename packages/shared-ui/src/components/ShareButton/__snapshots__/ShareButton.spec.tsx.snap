@@ -7,7 +7,7 @@ exports[`ShareButton component Should render ShareButton component with no error
   type="button"
 >
   <div
-    className="false text-base font-museo font-bold leading-6 flex flex-row"
+    className="false flex flex-row"
   >
     <div
       className="my-auto"

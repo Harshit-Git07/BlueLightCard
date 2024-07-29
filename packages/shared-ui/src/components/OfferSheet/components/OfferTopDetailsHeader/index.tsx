@@ -52,7 +52,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
   }, [offerData?.companyLogo, offerData.companyId, config.globalConfig.cdnUrl]);
 
   return (
-    <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 font-museo">
+    <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 bg-colour-surface-light dark:bg-colour-surface-dark">
       <div>
         {/* Offer Image */}
         <div className="flex justify-center">
@@ -69,7 +69,12 @@ const OfferTopDetailsHeader: FC<Props> = ({
           )}
         </div>
         {/* Offer Name */}
-        <Heading headingLevel={'h2'} className={'leading-8 mt-4 !text-black'}>
+        <Heading
+          headingLevel={'h2'}
+          className={
+            'mt-4 text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-title-large font-typography-title-large-weight text-typography-title-large tracking-typography-title-large leading-typography-title-large'
+          }
+        >
           {decodeEntities(offerData.name || '')}
         </Heading>
 
@@ -78,7 +83,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
           !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
             <>
               <p
-                className={`text-base font-light font-museo leading-5 mt-2 text-black ${
+                className={`mt-2 text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light ${
                   offerData.description && offerData.description.length > 300 && !expanded
                     ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
                     : ''
@@ -189,9 +194,11 @@ const OfferTopDetailsHeader: FC<Props> = ({
       </div>
 
       {qrCodeValue && (
-        <div className={'transition-all flex items-center flex-col p-12'}>
-          <QRCode value={qrCodeValue} size={200} aria-label="QR code" />
-          <h1 className="text-2xl font-bold tracking-[0.2em] pt-4 pb-2 dark:text-black">
+        <div className="transition-all flex items-center flex-col p-4">
+          <div className="bg-colour-surface-light p-2">
+            <QRCode value={qrCodeValue} size={200} aria-label="QR code" />
+          </div>
+          <h1 className="pt-4 pb-2 text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold tracking-typography-body-semibold leading-typography-body-semibold">
             {qrCodeValue}
           </h1>
         </div>

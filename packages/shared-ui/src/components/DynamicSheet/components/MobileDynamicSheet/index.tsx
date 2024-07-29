@@ -42,7 +42,7 @@ const MobileDynamicSheet: FC<Props> = ({
       <div className={containerCss} onClick={() => outsideClickClose && onClose && onClose()}></div>
       <div className={`${animatedCss} h-[90%] bottom-[-90%]`}>
         {showCloseButton && (
-          <div className="w-full flex justify-end p-4 text-black">
+          <div className="w-full flex justify-end p-4 text-colour-onSurface-light dark:text-colour-onSurface-dark">
             <FontAwesomeIcon
               icon={faX}
               className="cursor-pointer"

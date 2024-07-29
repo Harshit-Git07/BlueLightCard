@@ -36,7 +36,7 @@ const DesktopDynamicSheet: FC<Props> = ({
         style={{ width: width, right: `-${width}` }}
       >
         {showCloseButton && (
-          <div className="w-full flex justify-end p-4">
+          <div className="w-full flex justify-end p-4 text-colour-onSurface-light dark:text-colour-onSurface-dark">
             <FontAwesomeIcon
               icon={faX}
               className="cursor-pointer"

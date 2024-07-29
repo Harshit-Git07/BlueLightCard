@@ -5,20 +5,20 @@ exports[`Accordion component should render an accordion with Markdown bold text 
   className="w-full leading-6"
 >
   <button
-    className="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-[#DCDCDC] border-solid"
+    className="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-accordion-divider-colour-light dark:border-b-accordion-divider-colour-dark border-solid"
     onClick={[Function]}
   >
     <div
       className="w-full"
     >
       <h4
-        className="font-museo text-base font-medium text-[#1C1D22]"
+        className="text-accordion-label-colour-light dark:text-accordion-label-colour-dark font-accordion-label-font text-accordion-label-font font-accordion-label-font-weight tracking-accordion-label-font leading-accordion-label-font"
       >
         Terms and Conditions
       </h4>
     </div>
     <div
-      className="flex max-w-[40px] items-center justify-end"
+      className="flex max-w-[40px] items-center justify-end text-accordion-icon-colour-light dark:text-accordion-icon-colour-dark"
     >
       <div
         style={
@@ -37,14 +37,14 @@ exports[`Accordion component should render an accordion with Markdown bold text 
         >
           <path
             d="M8.99999 1.33325H7.66666V7.33325H1.66666V8.66659H7.66666V14.6666H8.99999V8.66659H15V7.33325H8.99999V1.33325Z"
-            fill="#000033"
+            fill="currentColor"
           />
         </svg>
       </div>
     </div>
   </button>
   <div
-    className="duration-200 ease-in-out hidden font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap text-black"
+    className="duration-200 ease-in-out hidden py-3 break-words whitespace-pre-wrap text-accordion-text-colour-light dark:text-accordion-text-colour-dark font-accordion-text-font text-accordion-text-font font-accordion-text-font-weight tracking-accordion-text-font leading-accordion-text-font"
   >
     <span>
       This is an 
@@ -62,20 +62,20 @@ exports[`Accordion component should render an accordion with simple text 1`] = `
   className="w-full leading-6"
 >
   <button
-    className="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-[#DCDCDC] border-solid"
+    className="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-accordion-divider-colour-light dark:border-b-accordion-divider-colour-dark border-solid"
     onClick={[Function]}
   >
     <div
       className="w-full"
     >
       <h4
-        className="font-museo text-base font-medium text-[#1C1D22]"
+        className="text-accordion-label-colour-light dark:text-accordion-label-colour-dark font-accordion-label-font text-accordion-label-font font-accordion-label-font-weight tracking-accordion-label-font leading-accordion-label-font"
       >
         Simple accordion message
       </h4>
     </div>
     <div
-      className="flex max-w-[40px] items-center justify-end"
+      className="flex max-w-[40px] items-center justify-end text-accordion-icon-colour-light dark:text-accordion-icon-colour-dark"
     >
       <div
         style={
@@ -94,14 +94,14 @@ exports[`Accordion component should render an accordion with simple text 1`] = `
         >
           <path
             d="M8.99999 1.33325H7.66666V7.33325H1.66666V8.66659H7.66666V14.6666H8.99999V8.66659H15V7.33325H8.99999V1.33325Z"
-            fill="#000033"
+            fill="currentColor"
           />
         </svg>
       </div>
     </div>
   </button>
   <div
-    className="duration-200 ease-in-out hidden font-museo py-3 text-base break-words font-light leading-5 whitespace-pre-wrap text-black"
+    className="duration-200 ease-in-out hidden py-3 break-words whitespace-pre-wrap text-accordion-text-colour-light dark:text-accordion-text-colour-dark font-accordion-text-font text-accordion-text-font font-accordion-text-font-weight tracking-accordion-text-font leading-accordion-text-font"
   >
     This is a simple accordion message.
   </div>

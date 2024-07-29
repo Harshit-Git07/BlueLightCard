@@ -23,7 +23,7 @@ const deleteCognitoUser = async (cognito: CognitoIdentityServiceProvider, poolId
         Username: username
       }).promise();
 
-        logger.debug("user found on cognito");
+      logger.debug("user found on cognito");
 
       await cognito.adminDeleteUser({
           UserPoolId: poolId,
@@ -44,8 +44,20 @@ const deleteCognitoUser = async (cognito: CognitoIdentityServiceProvider, poolId
 }
 
 
-export const handler = async (event: any, context: any) => {
-  logger.info('event received', event);
+export const handler = async (event: any) => {
+  logger.info('event received', { event });
+
+  if (!event.detail.user_email) {
+    logger.info('user_email was not defined in request, not deleting any user', { event });
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'user_email was not defined in request, not deleting any user.'
+      })
+    };
+  }
+
   const cognito = new CognitoIdentityServiceProvider();
   const userPoolIdDds = process.env.USER_POOL_ID_DDS || '';
   const userPoolId = process.env.USER_POOL_ID || '';

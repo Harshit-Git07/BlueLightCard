@@ -1,4 +1,6 @@
-export const userSignInMigratedRule = (dlqUrl: string, table: string, idMappingTable: string, region: string) => ({
+import { Role } from "aws-cdk-lib/aws-iam";
+
+export const userSignInMigratedRule = (dlqUrl: string, table: string, idMappingTable: string, region: string, role: Role) => ({
     userSignInMigratedRule: {
         pattern: { 
             source: ['user.signin.migrated','user.signup']
@@ -6,7 +8,7 @@ export const userSignInMigratedRule = (dlqUrl: string, table: string, idMappingT
         targets: {
             userSignInMigrationFunction: {
                 function: {
-                    permissions: ["sqs:SendMessage", "dynamodb:PutItem", "dynamodb:Query"],
+                  role,
                     handler: 'packages/api/identity/src/cognito/migrateUserProfileAndCardData.handler',
                     environment: { 
                         SERVICE: 'identity',

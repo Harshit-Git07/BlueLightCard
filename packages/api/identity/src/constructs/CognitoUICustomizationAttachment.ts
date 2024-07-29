@@ -14,6 +14,7 @@ export interface CognitoUICustomizationProps {
   userPoolClient: cognito.IUserPoolClient;
   logoPath: string;
   cssPath: string;
+  role: iam.Role;
 }
 
 export class CognitoUICustomizationAttachment extends Construct {
@@ -31,23 +32,8 @@ export class CognitoUICustomizationAttachment extends Construct {
       entry: './packages/api/identity/src/cognito/customizeHostedUI.ts',
       handler: 'handler',
       runtime: Runtime.NODEJS_18_X,
+      role: props.role,
     });
-
-    const policy = new iam.PolicyStatement({
-      actions: ['cognito-idp:SetUICustomization', 'cognito-idp:DescribeUserPool'],
-      effect: iam.Effect.ALLOW,
-      resources: [props.userPool.userPoolArn],
-    });
-    completeFn.addToRolePolicy(policy);
-
-    // Note that the resource for DescribeUserPoolDomain needs to be "*" since we can't get an ARN for the cognitoDomain.
-    completeFn.addToRolePolicy(
-      new iam.PolicyStatement({
-        actions: ['cognito-idp:DescribeUserPoolDomain'],
-        effect: iam.Effect.ALLOW,
-        resources: ['*'],
-      }),
-    );
 
     const cssFileAsset = new s3_asset.Asset(this, 'Css', {
       path: props.cssPath,

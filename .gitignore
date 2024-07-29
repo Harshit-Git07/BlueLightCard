@@ -167,3 +167,6 @@ packages/chrome-extension/*dist.zip
 # ESLint settings
 .idea
 packages/web/public/local/newSearch
+
+# Vim config/session files
+**/*.vim

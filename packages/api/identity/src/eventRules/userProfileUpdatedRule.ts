@@ -1,4 +1,6 @@
-export const userProfileUpdatedRule = (dlqUrl: string, table: string, idMappingTable: string, region: string) => ({
+import { Role } from "aws-cdk-lib/aws-iam";
+
+export const userProfileUpdatedRule = (dlqUrl: string, table: string, idMappingTable: string, region: string, role: Role) => ({
     userProfileUpdatedRule: {
         pattern: { 
             source: ['user.profile.updated']
@@ -6,7 +8,7 @@ export const userProfileUpdatedRule = (dlqUrl: string, table: string, idMappingT
         targets: {
             userProfileUpdateFunction: {
                 function: {
-                    permissions: [ "dynamodb:Query", "dynamodb:UpdateItem", "sqs:SendMessage"],
+                  role,
                     handler: 'packages/api/identity/src/user-management/syncProfileUpdate.handler',
                     environment: {  
                         SERVICE: 'identity',

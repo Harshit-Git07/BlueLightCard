@@ -1,4 +1,6 @@
-export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string, oldUserPoolId: string, oldDdsUserPoolId: string) => ({
+import { Role } from "aws-cdk-lib/aws-iam";
+
+export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string, oldUserPoolId: string, oldDdsUserPoolId: string, role: Role) => ({
     userStatusUpdatedRule: {
         pattern: { 
             source: ['user.status.updated'],
@@ -9,7 +11,7 @@ export const userStatusUpdatedRule = (userPoolId: string, dlqUrl: string, ddsUse
         targets: {
             userStatusUpdateFunction: {
                 function: {
-                    permissions: ["cognito-idp:AdminDeleteUser", "cognito-idp:AdminGetUser", "sqs:SendMessage", "dynamodb:DeleteItem"],
+                  role,
                     handler: 'packages/api/identity/src/cognito/deleteCognitoUser.handler',
                     environment: { 
                         USER_POOL_ID: userPoolId, 

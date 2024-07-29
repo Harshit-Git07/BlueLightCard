@@ -1,6 +1,5 @@
 import { Cognito, Config, EventBus, Function, Queue, Table } from 'sst/constructs';
 import { AccountRecovery, BooleanAttribute, Mfa, OAuthScope, StringAttribute, UserPoolClient } from 'aws-cdk-lib/aws-cognito'
-import { Duration } from 'aws-cdk-lib'
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { CfnWebACLAssociation } from 'aws-cdk-lib/aws-wafv2'
 import { FilterPattern, ILogGroup } from 'aws-cdk-lib/aws-logs'
@@ -11,11 +10,12 @@ import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2'
 import path from 'path'
 import { BRANDS } from '@blc-mono/core/types/brands.enum'
 import { STAGES } from '@blc-mono/core/types/stages.enum'
-import { REGIONS } from  '@blc-mono/core/types/regions.enum'
+import { REGIONS } from '@blc-mono/core/types/regions.enum'
 import { CognitoHostedUICustomization } from './src/constructs/CognitoHostedUICustomization';
 import externalClientProvidersUk from "../identity/src/cognito/resources/externalCognitoPartners-eu-west-2.json";
 import externalClientProvidersAus from "../identity/src/cognito/resources/externalCognitoPartners-ap-southeast-2.json";
 import { LOGIN_CLIENT_TYPE } from '../identity/src/models/loginAudits';
+import { Effect, ManagedPolicy, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 
 const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
 const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
@@ -53,7 +53,8 @@ export function createOldCognito(
   region: string,
   webACL: CfnWebACL,
   identitySecret: ISecret,
-  identityTable: Table
+  identityTable: Table,
+  role: Role,
 ) {
   const cognito = new Cognito(stack, 'cognito', {
     login: ['email'],
@@ -66,7 +67,7 @@ export function createOldCognito(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', identityTable]
+        role,
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -76,7 +77,7 @@ export function createOldCognito(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['dynamodb:*']
+        role,
       }
     },
     cdk: {
@@ -180,7 +181,7 @@ export function createOldCognito(
     });
     const preTokenGenerationLogGroup: ILogGroup | undefined =
       cognito.getFunction('preTokenGeneration')?.logGroup;
-      preTokenGenerationLogGroup?.addSubscriptionFilter('auditLogSignInPre', {
+    preTokenGenerationLogGroup?.addSubscriptionFilter('auditLogSignInPre', {
       destination: new LambdaDestination(blcAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
@@ -198,7 +199,8 @@ export function createOldCognitoDDS(
   region: string,
   webACL: CfnWebACL,
   identitySecret: ISecret,
-  identityTable: Table
+  identityTable: Table,
+  role: Role,
 ) {
   //auth - DDS
   const cognito_dds = new Cognito(stack, 'cognito_dds', {
@@ -212,7 +214,7 @@ export function createOldCognitoDDS(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', identityTable]
+        role,
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -222,7 +224,7 @@ export function createOldCognitoDDS(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['dynamodb:*']
+        role,
       }
     },
     cdk: {
@@ -328,7 +330,7 @@ export function createOldCognitoDDS(
     });
     const preTokenGenerationLogGroupDds: ILogGroup | undefined =
       cognito_dds.getFunction('preTokenGeneration')?.logGroup;
-      preTokenGenerationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
+    preTokenGenerationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
       destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
@@ -348,7 +350,8 @@ export function createNewCognito(
   oldCognito: Cognito,
   oldCognitoWebClient: UserPoolClient,
   identitySecret: ISecret,
-  identityTable: Table
+  identityTable: Table,
+  adminRole: Role,
 ) {
 
   const cognito = new Cognito(stack, 'cognitoNew', {
@@ -370,7 +373,7 @@ export function createNewCognito(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: [bus, 'cognito-idp:AdminInitiateAuth', 'cognito-idp:AdminGetUser',  'dynamodb:Query'],
+        role: adminRole,
       },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
@@ -382,7 +385,7 @@ export function createNewCognito(
           OLD_USER_POOL_ID: oldCognito.userPoolId,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable, identityTable]
+        role: adminRole,
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -392,12 +395,12 @@ export function createNewCognito(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['dynamodb:*', identityTable],
+        role: adminRole,
       },
       preAuthentication: {
         handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
         environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret, false),
-        permissions: [unsuccessfulLoginAttemptsTable],
+        role: adminRole,
       }
     },
     cdk: {
@@ -414,7 +417,7 @@ export function createNewCognito(
         customAttributes: {
           blc_old_id: new StringAttribute({ mutable: true }),
           blc_old_uuid: new StringAttribute({ mutable: true }),
-          migrated_old_pool: new BooleanAttribute({mutable: true}),
+          migrated_old_pool: new BooleanAttribute({ mutable: true }),
           'e2e': new StringAttribute({ mutable: true }),
         },
         passwordPolicy: {
@@ -457,6 +460,31 @@ export function createNewCognito(
       logoutUrls: [appSecret.secretValueFromJson('blc_logout_web').toString()],
     },
   });
+
+  const uiCustomizationRole = new Role(stack, 'UICustomizationRole', {
+    assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+    managedPolicies: [
+      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+    ],
+    inlinePolicies: {
+      cognitoPolicy: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: ['cognito-idp:SetUICustomization', 'cognito-idp:DescribeUserPool'],
+            effect: Effect.ALLOW,
+            resources: [cognito.userPoolArn],
+          }),
+          // Note that the resource for DescribeUserPoolDomain needs to be "*" since we can't get an ARN for the cognitoDomain.
+          new PolicyStatement({
+            actions: ['cognito-idp:DescribeUserPoolDomain'],
+            effect: Effect.ALLOW,
+            resources: ['*'],
+          }),
+        ],
+      }),
+    },
+  });
+
 
   // For non-production stages, create a client for E2E testing. This client is
   // used to issue tokens. We don't want to use the web client for this as it
@@ -503,6 +531,7 @@ export function createNewCognito(
     [webClient, mobileClient],
     blcHostedUiCSSPath,
     blcLogoPath,
+    uiCustomizationRole,
   );
 
   // Associate WAF WebACL with cognito
@@ -543,7 +572,7 @@ export function createNewCognito(
       destination: new LambdaDestination(blcAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
-    let blcLoginClientIdMap = createExternalClient(stack, cognito, false);
+    let blcLoginClientIdMap = createExternalClient(stack, cognito, false, uiCustomizationRole)
     // add extra env parameter to already created function.
     blcLoginClientIdMap[webClient.userPoolClientId] = LOGIN_CLIENT_TYPE.WEB_HOSTEDUI;
     blcLoginClientIdMap[mobileClient.userPoolClientId] = LOGIN_CLIENT_TYPE.APP_HOSTEDUI;
@@ -565,7 +594,8 @@ export function createNewCognitoDDS(
   oldCognito: Cognito,
   oldCognitoWebClient: UserPoolClient,
   identitySecret: ISecret,
-  identityTable: Table
+  identityTable: Table,
+  adminRole: Role,
 ) {
 
   //auth - DDS
@@ -588,7 +618,7 @@ export function createNewCognitoDDS(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: [bus, 'cognito-idp:AdminInitiateAuth', 'cognito-idp:AdminGetUser', 'dynamodb:Query'],
+        role: adminRole,
       },
       postAuthentication: {
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
@@ -599,7 +629,7 @@ export function createNewCognitoDDS(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['cognito-idp:AdminUpdateUserAttributes', unsuccessfulLoginAttemptsTable, identityTable]
+        role: adminRole,
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
@@ -609,12 +639,12 @@ export function createNewCognitoDDS(
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
-        permissions: ['dynamodb:*', identityTable],
+        role: adminRole,
       },
       preAuthentication: {
         handler: 'packages/api/identity/src/cognito/preAuthentication.handler',
         environment: buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable, identitySecret, true),
-        permissions: [unsuccessfulLoginAttemptsTable]
+        role: adminRole,
       }
     },
     cdk: {
@@ -631,7 +661,7 @@ export function createNewCognitoDDS(
         customAttributes: {
           blc_old_id: new StringAttribute({ mutable: true }),
           blc_old_uuid: new StringAttribute({ mutable: true }),
-          migrated_old_pool: new BooleanAttribute({mutable: true})
+          migrated_old_pool: new BooleanAttribute({ mutable: true })
         },
         passwordPolicy: {
           minLength: 6,
@@ -643,6 +673,30 @@ export function createNewCognitoDDS(
         accountRecovery: AccountRecovery.EMAIL_ONLY,
         selfSignUpEnabled: false,
       },
+    },
+  });
+
+  const uiCustomizationRole = new Role(stack, 'UICustomizationRole-DDS', {
+    assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+    managedPolicies: [
+      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+    ],
+    inlinePolicies: {
+      cognitoPolicy: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: ['cognito-idp:SetUICustomization', 'cognito-idp:DescribeUserPool'],
+            effect: Effect.ALLOW,
+            resources: [cognito_dds.userPoolArn],
+          }),
+          // Note that the resource for DescribeUserPoolDomain needs to be "*" since we can't get an ARN for the cognitoDomain.
+          new PolicyStatement({
+            actions: ['cognito-idp:DescribeUserPoolDomain'],
+            effect: Effect.ALLOW,
+            resources: ['*'],
+          }),
+        ],
+      }),
     },
   });
 
@@ -704,6 +758,7 @@ export function createNewCognitoDDS(
     [webClientDds, mobileClientDds],
     ddsHostedUiCSSPath,
     ddsLogoPath,
+    uiCustomizationRole,
   );
 
   // Associate WAF WebACL with cognito
@@ -742,11 +797,11 @@ export function createNewCognitoDDS(
     });
     const preAuthenticationLogGroupDds: ILogGroup | undefined =
       cognito_dds.getFunction('preTokenGeneration')?.logGroup;
-      preAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
+    preAuthenticationLogGroupDds?.addSubscriptionFilter('auditLogDdsSignInPre', {
       destination: new LambdaDestination(ddsAuditLogFunctionPre),
       filterPattern: FilterPattern.booleanValue('$.audit', true),
     });
-    let ddsLoginClientIdMap = createExternalClient(stack, cognito_dds, true);
+    let ddsLoginClientIdMap = createExternalClient(stack, cognito_dds, true, uiCustomizationRole);
     // add extra env parameter to already created function.
     ddsLoginClientIdMap[webClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.WEB_HOSTEDUI;
     ddsLoginClientIdMap[mobileClientDds.userPoolClientId] = LOGIN_CLIENT_TYPE.APP_HOSTEDUI;
@@ -773,39 +828,40 @@ function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Ta
   }
 }
 
-const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean) => {
-  const providerList = stack.region === REGIONS.AP_SOUTHEAST_2 ? externalClientProvidersAus: externalClientProvidersUk
-  const providers = isDds? providerList.DDS : providerList.BLC;
-  let loginClientIdMap:any = {};
+const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean, uiCustomizationRole: Role) => {
+  const providerList = stack.region === REGIONS.AP_SOUTHEAST_2 ? externalClientProvidersAus : externalClientProvidersUk
+  const providers = isDds ? providerList.DDS : providerList.BLC;
+  let loginClientIdMap: any = {};
 
   providers.map((clients: { partnersName: string; callBackUrl: string; signoutUrl: string; partnerUniqueId: string }) => {
-        const externalClient = cognito.cdk.userPool.addClient(clients.partnersName, {
-          authFlows: {
-            userPassword: true,
-          },
-          generateSecret: true,
-          oAuth: {
-            flows: {
-              authorizationCodeGrant: true,
-            },
-            scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
-            callbackUrls: [clients.callBackUrl],
-            logoutUrls: [clients.signoutUrl],
-          },
-       });
-      new CognitoHostedUICustomization(
-        stack,
-        isDds? "dds" : "blc",
-        stack.region === REGIONS.AP_SOUTHEAST_2 ? BRANDS.BLC_AU : BRANDS.BLC_UK,
-        cognito.cdk.userPool,
-        [externalClient],
-        isDds? ddsHostedUiCSSPath : blcHostedUiCSSPath,
-        isDds? ddsLogoPath : blcLogoPath,
-      );
-      // partnerUniqueId key should match with LOGIN_CLIENT_TYPE
-      loginClientIdMap[externalClient.userPoolClientId] = clients.partnerUniqueId;
-    })
-    return loginClientIdMap;
+    const externalClient = cognito.cdk.userPool.addClient(clients.partnersName, {
+      authFlows: {
+        userPassword: true,
+      },
+      generateSecret: true,
+      oAuth: {
+        flows: {
+          authorizationCodeGrant: true,
+        },
+        scopes: [OAuthScope.EMAIL, OAuthScope.OPENID, OAuthScope.PROFILE, OAuthScope.COGNITO_ADMIN],
+        callbackUrls: [clients.callBackUrl],
+        logoutUrls: [clients.signoutUrl],
+      },
+    });
+    new CognitoHostedUICustomization(
+      stack,
+      isDds ? "dds" : "blc",
+      stack.region === REGIONS.AP_SOUTHEAST_2 ? BRANDS.BLC_AU : BRANDS.BLC_UK,
+      cognito.cdk.userPool,
+      [externalClient],
+      isDds ? ddsHostedUiCSSPath : blcHostedUiCSSPath,
+      isDds ? ddsLogoPath : blcLogoPath,
+      uiCustomizationRole,
+    );
+    // partnerUniqueId key should match with LOGIN_CLIENT_TYPE
+    loginClientIdMap[externalClient.userPoolClientId] = clients.partnerUniqueId;
+  })
+  return loginClientIdMap;
 
 
 }

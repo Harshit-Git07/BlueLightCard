@@ -1,4 +1,6 @@
-export const userGdprRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string, oldUserPoolId: string, oldDdsUserPoolId: string) => ({
+import { Role } from "aws-cdk-lib/aws-iam";
+
+export const userGdprRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string, oldUserPoolId: string, oldDdsUserPoolId: string, role: Role) => ({
     userGdprRule: {
         pattern: {
             source: ["user.gdpr.requested"]
@@ -6,7 +8,7 @@ export const userGdprRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: 
         targets: {
             userGdprFunction : {
               function: {
-                  permissions: ["cognito-idp:AdminDeleteUser", "cognito-idp:AdminGetUser", "sqs:SendMessage", "dynamodb:DeleteItem"],
+                role,
                   handler: "packages/api/identity/src/cognito/deleteCognitoUser.handler",
                   environment: {
                       USER_POOL_ID: userPoolId,

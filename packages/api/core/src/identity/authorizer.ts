@@ -1,5 +1,4 @@
 import { Stack, ApiGatewayV1ApiAuthorizer, Function } from 'sst/constructs';
-import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
 
 export interface SharedAuthorizer {
   functionArn: string;

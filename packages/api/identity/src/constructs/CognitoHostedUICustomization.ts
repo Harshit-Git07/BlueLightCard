@@ -3,6 +3,7 @@ import { IUserPool, IUserPoolClient } from 'aws-cdk-lib/aws-cognito';
 
 import { BRANDS } from '@blc-mono/core/types/brands.enum';
 import { CognitoUICustomizationAttachment } from './CognitoUICustomizationAttachment';
+import { Role } from 'aws-cdk-lib/aws-iam';
 
 /**
  *  This class creates all the tables for the Offers API
@@ -17,6 +18,7 @@ export class CognitoHostedUICustomization {
     private appClients: IUserPoolClient[],
     private cssPath: string,
     private logoPath: string,
+    private role: Role,
   ) {
     this.customizeHostedUI();
   }
@@ -28,6 +30,7 @@ export class CognitoHostedUICustomization {
         userPoolClient: client,
         cssPath: this.cssPath,
         logoPath: this.logoPath,
+        role: this.role,
       });
     }
   }

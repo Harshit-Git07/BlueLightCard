@@ -1,9 +1,12 @@
+import { Role } from "aws-cdk-lib/aws-iam";
+
 export const userEmailUpdatedRule = (
   userPoolId: string,
   ddsUserPoolId: string,
   region: string,
   oldUserPoolId: string,
   oldDdsUserPoolId: string,
+  role: Role,
 ) => ({
   userEmailUpdatedRule: {
     pattern: {
@@ -12,11 +15,7 @@ export const userEmailUpdatedRule = (
     targets: {
       userEmailUpdateFunction: {
         function: {
-          permissions: [
-            'cognito-idp:AdminDeleteUser',
-            'cognito-idp:AdminGetUser',
-            'cognito-idp:AdminUpdateUserAttributes',
-          ],
+          role,
           handler: 'packages/api/identity/src/eventRules/updateUserEmailHandler.handler',
           environment: {
             USER_POOL_ID: userPoolId,

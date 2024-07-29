@@ -27,6 +27,8 @@ export function createDwhMemberRetrievedRedemptionDetailsRule(
         dwhKenisisFirehoseStreams.compViewStream.getStreamName(),
       [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_VIEW_STREAM_NAME]:
         dwhKenisisFirehoseStreams.compAppViewStream.getStreamName(),
+      // Datadog unified service tracking
+      DD_SERVICE: 'redemptions',
     },
     permissions: [
       dwhKenisisFirehoseStreams.compViewStream.getPutRecordPolicyStatement(),

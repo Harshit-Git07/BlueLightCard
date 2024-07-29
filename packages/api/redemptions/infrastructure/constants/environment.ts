@@ -51,4 +51,14 @@ export enum RedemptionsStackEnvironmentKeys {
   // SES Email
   REDEMPTIONS_EMAIL_FROM = 'REDEMPTIONS_EMAIL_FROM',
   REDEMPTIONS_EMAIL_DOMAIN = 'REDEMPTIONS_EMAIL_DOMAIN',
+
+  // Datadog unified service tracking
+  DD_VERSION = 'DD_VERSION',
+  DD_ENV = 'DD_ENV',
+  DD_API_KEY = 'DD_API_KEY',
+  DD_GIT_COMMIT_SHA = 'DD_GIT_COMMIT_SHA',
+  DD_GIT_REPOSITORY_URL = 'DD_GIT_REPOSITORY_URL',
+
+  // Environment
+  USE_DATADOG_AGENT = 'USE_DATADOG_AGENT',
 }

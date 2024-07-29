@@ -1,8 +1,12 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
+import { datadog } from 'datadog-lambda-js';
+
 import { Result } from '@blc-mono/core/types/result';
+import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ContextAwareLogger, LoggerContext } from '@blc-mono/core/utils/logger/contextAwareLogger';
 import { ILogger, ILoggerDetail } from '@blc-mono/core/utils/logger/logger';
+import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 type RequestContext = LoggerContext;
 const INITIAL_REQUEST_CONTEXT: RequestContext = { logger: {} };
@@ -18,7 +22,19 @@ export abstract class Controller<
   protected readonly logger: ILogger;
 
   constructor(logger: ILogger) {
-    this.invoke = this.invoke.bind(this);
+    let USE_DATADOG_AGENT: string | null;
+
+    try {
+      USE_DATADOG_AGENT = getEnv(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT);
+    } catch (err) {
+      USE_DATADOG_AGENT = null;
+    }
+
+    if (USE_DATADOG_AGENT && USE_DATADOG_AGENT === 'true') {
+      this.invoke = datadog(this.invoke.bind(this));
+    } else {
+      this.invoke = this.invoke.bind(this);
+    }
 
     this.logger = new ContextAwareLogger(asyncRequestContext, logger);
   }

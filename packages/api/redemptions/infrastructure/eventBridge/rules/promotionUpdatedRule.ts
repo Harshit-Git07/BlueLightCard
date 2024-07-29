@@ -42,6 +42,8 @@ export function createPromotionUpdatedRule(
         config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
         config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+      // Datadog unified service tracking
+      DD_SERVICE: 'redemptions',
     },
   });
   return {

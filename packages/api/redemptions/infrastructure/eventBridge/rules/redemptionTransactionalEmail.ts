@@ -33,6 +33,8 @@ export function createRedemptionTransactionalEmailRule(
       REDEMPTIONS_WEB_HOST: config.redemptionsWebHost,
       BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID: config.brazeVaultQrCodeEmailCampaignId,
       BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID: config.brazeShowCardEmailCampaignId,
+      // Datadog unified service tracking
+      DD_SERVICE: 'redemptions',
     },
     permissions: [getSecretValueSecretsManager],
   });

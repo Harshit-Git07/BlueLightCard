@@ -26,6 +26,8 @@ export function createDwhMemberRedeemIntentRule(
         dwhKenisisFirehoseStreams.compClickStream.getStreamName(),
       [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME]:
         dwhKenisisFirehoseStreams.compAppClickStream.getStreamName(),
+      // Datadog unified service tracking
+      DD_SERVICE: 'redemptions',
     },
     permissions: [
       dwhKenisisFirehoseStreams.compClickStream.getPutRecordPolicyStatement(),

@@ -10,7 +10,6 @@ import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs
 import { UnknownEventBridgeEvent } from '../EventBridgeController';
 
 import { DwhMemberRetrievedRedemptionController } from './dwhMemberRetrievedRedemptionDetails';
-
 describe('DwhMemberRetrievedRedemptionDetails', () => {
   describe('invoke', () => {
     it('should call the service correctly', async () => {

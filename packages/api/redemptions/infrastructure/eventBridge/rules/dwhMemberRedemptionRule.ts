@@ -24,6 +24,8 @@ export function createDwhMemberRedemptionRule(
       // Data Warehouse
       [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME]:
         dwhKenisisFirehoseStreams.vaultStream.getStreamName(),
+      // Datadog unified service tracking
+      DD_SERVICE: 'redemptions',
     },
     permissions: [dwhKenisisFirehoseStreams.vaultStream.getPutRecordPolicyStatement()],
   });

@@ -4,12 +4,12 @@ import { PreTokenGenerateService } from "src/services/PreTokenGenerateService";
 import { ProfileService } from "src/services/ProfileService";
 
 const service: string = process.env.SERVICE as string
-const TABLE_NAME = process.env.IDENTITY_TABLE_NAME ?? "";
+const IDENTITY_TABLE_NAME = process.env.IDENTITY_TABLE_NAME ?? "";
 const REGION = process.env.REGION ?? "eu-west-2";
 const logger = new Logger({ serviceName: `${service}-preTokenGeneration`});
 
-const preTokenGenerateService = new PreTokenGenerateService(TABLE_NAME, REGION, logger);
-const profile = new ProfileService(TABLE_NAME, REGION);
+const preTokenGenerateService = new PreTokenGenerateService(IDENTITY_TABLE_NAME, REGION, logger);
+const profile = new ProfileService(IDENTITY_TABLE_NAME, REGION);
 
 export const handler = async (event: PreTokenGenerationTriggerEvent, context: any) => {
   logger.info('audit', {

@@ -1,7 +1,6 @@
-import {  ApiGatewayV1Api, Config, Function, Queue, Stack, StackContext, Table, use  } from 'sst/constructs'
+import { ApiGatewayV1Api, Config, Function, Queue, Stack, StackContext, Table, use } from 'sst/constructs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Shared } from '../../../stacks/stack';
-import { passwordResetRule } from './src/eventRules/passwordResetRule';
 import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
 import { emailUpdateRule } from './src/eventRules/emailUpdateRule';
 import { ApiGatewayModelGenerator } from '../core/src/extensions/apiGatewayExtension/agModelGenerator';
@@ -21,13 +20,13 @@ import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
 import { Effect, ManagedPolicy, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
-import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config'
+import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { userEmailUpdatedRule } from './src/eventRules/userEmailUpdated';
-import { UserPool } from 'aws-cdk-lib/aws-cognito'
-import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand'
+import { UserPool } from 'aws-cdk-lib/aws-cognito';
+import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 
-export function Identity({ stack, app }: StackContext) {
+export function Identity({ stack }: StackContext) {
   const globalConfig = GlobalConfigResolver.for(stack.stage);
   const { certificateArn, bus, webACL } = use(Shared);
 
@@ -48,66 +47,66 @@ export function Identity({ stack, app }: StackContext) {
     const appSecret = Secret.fromSecretNameV2(stack, 'app-secret', `blc-mono-identity/${stageSecret}/cognito`);
     const identitySecret = Secret.fromSecretNameV2(stack, 'identity-secret', `blc-mono-identity/${stageSecret}/secrets`);
 
-  // the role used for identity services to carry out admin actions
-  const identityAdministratorRole = new Role(stack, 'IdentityAdministrator', {
-    assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-    managedPolicies: [
-      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-    ],
-    inlinePolicies: {
-      xray: new PolicyDocument({
-        statements: [
-          new PolicyStatement({
-            actions: ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
-            resources: ["*"],
-            effect: Effect.ALLOW,
-          }),
-        ],
-      }),
-      cognito: new PolicyDocument({
-        statements: [
-          new PolicyStatement({
-            actions: ["cognito-idp:AdminInitiateAuth", "cognito-idp:AdminDeleteUser", "cognito-idp:AdminGetUser", "cognito-idp:AdminUpdateUserAttributes"],
-            // TODO: Restrict to Cognito User Pool for this stack
-            resources: ["*"],
-            effect: Effect.ALLOW,
-          }),
-        ],
-      }),
-      sqs: new PolicyDocument({
-        statements: [
-          new PolicyStatement({
-            actions: ["sqs:SendMessage"],
-            // TODO: Restrict to DLQ for this stack
-            resources: ["*"],
-            effect: Effect.ALLOW,
-          }),
-        ],
-      }),
-      dynamodb: new PolicyDocument({
-        statements: [
-          new PolicyStatement({
-            // TODO: Tighten up * role (from preTokenGeneration handler)
-            actions: ["dynamodb:*", "dynamodb:DeleteItem", "dynamodb:UpdateItem", "dynamodb:PutItem", "dynamodb:Query"],
-            // TODO: Restrict to tables from this stack
-            // `unsuccessfulLoginAttemptsTable.table.tableArn` is added as a resource for posterity
-            // This Policy grants access to all DynamoDB resources, it still needs to be restricted
-            resources: [unsuccessfulLoginAttemptsTable.table.tableArn, "*"],
-            effect: Effect.ALLOW,
-          }),
-        ],
-      }),
-      eventBridge: new PolicyDocument({
-        statements: [
-          new PolicyStatement({
-            actions: ["events:PutEvents"],
-            resources: [bus.eventBusArn],
-            effect: Effect.ALLOW,
-          }),
-        ],
-      }),
-    },
-  });
+    // the role used for identity services to carry out admin actions
+    const identityAdministratorRole = new Role(stack, 'IdentityAdministrator', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+      managedPolicies: [
+        ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+      ],
+      inlinePolicies: {
+        xray: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              actions: ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
+              resources: ["*"],
+              effect: Effect.ALLOW,
+            }),
+          ],
+        }),
+        cognito: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              actions: ["cognito-idp:AdminInitiateAuth", "cognito-idp:AdminDeleteUser", "cognito-idp:AdminGetUser", "cognito-idp:AdminUpdateUserAttributes"],
+              // TODO: Restrict to Cognito User Pool for this stack
+              resources: ["*"],
+              effect: Effect.ALLOW,
+            }),
+          ],
+        }),
+        sqs: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              actions: ["sqs:SendMessage"],
+              // TODO: Restrict to DLQ for this stack
+              resources: ["*"],
+              effect: Effect.ALLOW,
+            }),
+          ],
+        }),
+        dynamodb: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              // TODO: Tighten up * role (from preTokenGeneration handler)
+              actions: ["dynamodb:*", "dynamodb:DeleteItem", "dynamodb:UpdateItem", "dynamodb:PutItem", "dynamodb:Query"],
+              // TODO: Restrict to tables from this stack
+              // `unsuccessfulLoginAttemptsTable.table.tableArn` is added as a resource for posterity
+              // This Policy grants access to all DynamoDB resources, it still needs to be restricted
+              resources: [unsuccessfulLoginAttemptsTable.table.tableArn, "*"],
+              effect: Effect.ALLOW,
+            }),
+          ],
+        }),
+        eventBridge: new PolicyDocument({
+          statements: [
+            new PolicyStatement({
+              actions: ["events:PutEvents"],
+              resources: [bus.eventBusArn],
+              effect: Effect.ALLOW,
+            }),
+          ],
+        }),
+      },
+    });
 
     //db - identityTable
     const identityTable = new Table(stack, 'identityTable', {
@@ -124,10 +123,7 @@ export function Identity({ stack, app }: StackContext) {
     });
 
     const idMappingTable = new Table(stack, 'identityIdMappingTable', {
-      fields: {
-        uuid: 'string',
-        legacy_id: 'string',
-      },
+      fields: { uuid: 'string', legacy_id: 'string', },
       primaryIndex: { partitionKey: 'legacy_id', sortKey: 'uuid' },
     });
 
@@ -245,7 +241,6 @@ export function Identity({ stack, app }: StackContext) {
     });
 
     //add event bridge rules
-    bus.addRules(stack, passwordResetRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
     bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
     bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
     bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region, identityAdministratorRole));

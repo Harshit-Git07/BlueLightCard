@@ -25,7 +25,7 @@ export const userEmailUpdatedRule = (
             SERVICE: 'identity',
             REGION: region,
           },
-          retryAttepmts: 0,
+          retryAttempts: 0,
         },
       },
     },

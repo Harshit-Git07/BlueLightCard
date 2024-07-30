@@ -16,7 +16,7 @@ async function sendToDLQ(event: any) {
 }
 
 const service: string = process.env.SERVICE as string
-const tableName = process.env.TABLE_NAME as string;
+const identityTableName = process.env.IDENTITY_TABLE_NAME as string;
 const idMappingTableName = process.env.ID_MAPPING_TABLE_NAME as string;
 const logger = new Logger({serviceName: `${service}-companyFollowsUpdate`})
 const client = new DynamoDBClient({region: process.env.REGION ?? 'eu-west-2'});
@@ -29,7 +29,7 @@ async function updateCompanyFollows(user: Record<string, string>, input: Input, 
             sk: `COMPANYFOLLOWS#${input.company_id}`,
             likeType: input.likeType,
         },
-        TableName: tableName
+        TableName: identityTableName
     };
     try {
         const results = await dynamodb.send(new PutCommand(putParams));
@@ -46,7 +46,7 @@ async function deleteCompanyFollows(user: Record<string, string>, input: Input, 
             pk: `MEMBER#${user.uuid}`,
             sk: `COMPANYFOLLOWS#${input.company_id}`
         },
-        TableName: tableName
+        TableName: identityTableName
     };
     try {
         const results = await dynamodb.send(new DeleteCommand(deleteParams));

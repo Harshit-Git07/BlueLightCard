@@ -7,7 +7,7 @@ import { BRANDS } from './../../../core/src/types/brands.enum';
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
 import { setDate } from './../../../core/src/utils/setDate';
 const service: string = process.env.SERVICE as string
-const tableName = process.env.TABLE_NAME;
+const identityTableName = process.env.IDENTITY_TABLE_NAME as string;
 const logger = new Logger({ serviceName: `${service}-syncCardStatusUpdate` })
 const sqs = new SQSClient({ region: process.env.REGION ?? 'eu-west-2'});
 
@@ -49,7 +49,7 @@ export const handler = async (event: any, context: any) => {
   const newExpiry = event.detail.expires;
   const newPosted = event.detail.posted;
   const queryParams = {
-    TableName: tableName,
+    TableName: identityTableName,
     KeyConditionExpression: '#pk= :pk And #sk = :sk',
     ExpressionAttributeValues: {
       ':pk': `MEMBER#${uuid}`,
@@ -69,17 +69,17 @@ export const handler = async (event: any, context: any) => {
 
   try {
     const results = await dynamodb.send(new QueryCommand(queryParams));
-    if(results.Items !== null && results.Count !== 0) { 
+    if(results.Items !== null && results.Count !== 0) {
         const card = results.Items?.at(0) as Record<string, string>;
         Item['expires'] = (card.expires  === '0000000000000000' || (setDate(newExpiry) > card.expires)) ? `${setDate(newExpiry)}` : card.expires;
         Item['posted'] = card.posted === '0000000000000000' ? `${setDate(newPosted)}` : card.posted;
     }else {
         Item['expires'] = `${setDate(newExpiry)}`;
         Item['posted'] = `${setDate(newPosted)}`;
-    }   
+    }
     const cardParams = {
         Item,
-        TableName: tableName
+        TableName: identityTableName
     };
     try {
     const results = await dynamodb.send(new PutCommand(cardParams));
@@ -93,7 +93,7 @@ export const handler = async (event: any, context: any) => {
     logger.error("error querying user card data", { uuid, err });
     await sendToDLQ(event);
   }
-   
+
 };
 
 

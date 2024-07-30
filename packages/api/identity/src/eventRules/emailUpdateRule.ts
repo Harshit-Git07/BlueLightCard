@@ -1,6 +1,6 @@
 import { Role } from "aws-cdk-lib/aws-iam";
 
-export const emailUpdateRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, tableName: string, oldUserPoolId: string, oldDdsUserPoolId: string, role: Role) => ({
+export const emailUpdateRule = (userPoolId: string, dlqUrl: string, ddsUserPoolId: string, region: string, unsuccessfulLoginAttemptsTableName: string, oldUserPoolId: string, oldDdsUserPoolId: string, role: Role) => ({
   emailUpdateRule: {
     pattern: { source: ["user.email.updated"] },
     targets: {
@@ -16,9 +16,9 @@ export const emailUpdateRule = (userPoolId: string, dlqUrl: string, ddsUserPoolI
             SERVICE: 'identity',
             DLQ_URL: dlqUrl,
             REGION: region,
-            TABLE_NAME: tableName
+            UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME: unsuccessfulLoginAttemptsTableName
           },
-          retryAttepmts: 0
+          retryAttempts: 0
         }
       }
     }

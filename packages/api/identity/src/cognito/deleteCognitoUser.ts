@@ -68,14 +68,14 @@ export const handler = async (event: any) => {
   const oldPoolId =(!/DDS/i.test(event.detail.brand)) ? oldUserPoolId : oldUserPoolIdDds;
 
   const username = event.detail.user_email;
-  const table = process.env.TABLE_NAME;
+  const unsuccessfulLoginAttemptsTableName = process.env.UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME as string;
   const region = process.env.REGION;
   try {
     await deleteCognitoUser(cognito, poolId, username);
     await deleteCognitoUser(cognito, oldPoolId, username);
 
     const params = {
-      TableName: table,
+      TableName: unsuccessfulLoginAttemptsTableName,
       Key: {
         email: username,
         userPoolId: poolId,
@@ -87,7 +87,7 @@ export const handler = async (event: any) => {
     try {
       await dynamodb.send(new DeleteCommand(params));
     } catch (error) {
-      logger.debug(`Delete command execution failed for user ${username} from dynamoDB table ${table}`, { error });
+      logger.debug(`Delete command execution failed for user ${username} from dynamoDB table ${unsuccessfulLoginAttemptsTableName}`, { error });
       throw error;
     }
     return {
@@ -97,7 +97,7 @@ export const handler = async (event: any) => {
       })
     };
   } catch (error: any) {
-    logger.debug(`error deleting user ${username} from dynamoDB table ${table}`, { error });
+    logger.debug(`error deleting user ${username} from dynamoDB table ${unsuccessfulLoginAttemptsTableName}`, { error });
     await sendToDLQ(event);
     throw new Error(`Error deleting user : ${error.message}.`)
   }

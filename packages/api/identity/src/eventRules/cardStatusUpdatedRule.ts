@@ -1,6 +1,6 @@
 import { Role } from "aws-cdk-lib/aws-iam";
 
-export const cardStatusUpdatedRule = (dlqUrl: string, table: string, region: string, role: Role) => ({
+export const cardStatusUpdatedRule = (dlqUrl: string, identityTable: string, region: string, role: Role) => ({
   cardStatusUpdatedRule: {
     pattern: { source: ["user.card.status.updated"] },
     targets: {
@@ -11,10 +11,10 @@ export const cardStatusUpdatedRule = (dlqUrl: string, table: string, region: str
           environment: {
             SERVICE: 'identity',
             DLQ_URL: dlqUrl,
-            TABLE_NAME: table,
+            IDENTITY_TABLE_NAME: identityTable,
             REGION: region
           },
-          retryAttepmts: 0
+          retryAttempts: 0
         }
       }
     }

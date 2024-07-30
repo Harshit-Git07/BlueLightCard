@@ -1,4 +1,3 @@
-import { SQSClient } from '@aws-sdk/client-sqs';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand, UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
@@ -6,31 +5,28 @@ import { Response } from '../../../core/src/utils/restResponse/response'
 import { BRANDS } from '../../../core/src/types/brands.enum';
 import { UserProfileModel, UserProfile } from '../../src/models/userprofile';
 import { sendToDLQ } from '../../src/helpers/DLQ';
-import { ZodError } from 'zod';
 import { v4 } from 'uuid';
 import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
 
-
 const service: string = process.env.SERVICE as string
-const tableName = process.env.TABLE_NAME;
+const identityTableName = process.env.IDENTITY_TABLE_NAME as string;
 const logger = new Logger({ serviceName: `${service}-syncProfileStatusUpdate`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' })
-const sqs = new SQSClient({ region: process.env.REGION ?? 'eu-west-2'});
 
 const client = new DynamoDBClient({region: process.env.REGION ?? 'eu-west-2'});
 const dynamodb = DynamoDBDocumentClient.from(client);
 
 const validateFormData = (data: UserProfile) => {
-    if(data.dob === undefined && data.employer === undefined && data.employer_id === undefined && 
-    data.firstname === undefined && data.surname === undefined && 
-    data.ga_key === undefined && data.gender === undefined && 
-    data.merged_time === undefined && data.merged_uid === undefined && 
-    data.mobile === undefined && data.organisation === undefined && 
-    data.email === undefined && data.email_validated === undefined && 
+    if(data.dob === undefined && data.employer === undefined && data.employer_id === undefined &&
+    data.firstname === undefined && data.surname === undefined &&
+    data.ga_key === undefined && data.gender === undefined &&
+    data.merged_time === undefined && data.merged_uid === undefined &&
+    data.mobile === undefined && data.organisation === undefined &&
+    data.email === undefined && data.email_validated === undefined &&
     data.spare_email === undefined && data.spare_email_validated === undefined){
             return false;
     }
     return true;
-    
+
   };
 
 export const handler = async (event: any, context: any) => {
@@ -67,9 +63,9 @@ export const handler = async (event: any, context: any) => {
     logger.error('invalid data type', err.message);
     return Response.BadRequest({ message: 'Invalid data type' });
   }
-  
+
   const queryParams = {
-    TableName: tableName,
+    TableName: identityTableName,
     KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)',
     ExpressionAttributeValues: {
       ':pk': `MEMBER#${uuid}`,
@@ -95,7 +91,7 @@ export const handler = async (event: any, context: any) => {
     }
 
     let updateExp = '';
-  
+
     let expAttrValues: Record<string,any> = {};
     (Object.keys(detail) as (keyof typeof detail)[]).find((key) => {
       if(key === 'dob'){
@@ -112,25 +108,25 @@ export const handler = async (event: any, context: any) => {
       expAttrValues[':spare_email'] = spareEmail;
     }
 
-    const updateParams: UpdateCommandInput = {  
-        TableName: tableName,
+    const updateParams: UpdateCommandInput = {
+        TableName: identityTableName,
         Key: {
             "pk"   : `MEMBER#${uuid}`,
             "sk"  : `${profileUuid}`
 
         },
         UpdateExpression: `set ${updateExp}`,
-        ExpressionAttributeValues: expAttrValues, 
+        ExpressionAttributeValues: expAttrValues,
         ReturnValues: "UPDATED_NEW",
     };
-  
+
   try {
     const results = await dynamodb.send(new UpdateCommand(updateParams));
-    if(results.$metadata.httpStatusCode !== 200) { 
+    if(results.$metadata.httpStatusCode !== 200) {
         logger.error("error syncing user profile data", { uuid, results });
         await sendToDLQ(event);
         return Response.BadRequest({ message: 'error syncing user profile data' });
-    }   
+    }
     return Response.OK({ message: `user profile data ${action}` });
   } catch (err: any) {
     logger.error("error syncing user profile data", { uuid, err });

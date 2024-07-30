@@ -6,7 +6,7 @@ import { Response } from './../../../core/src/utils/restResponse/response';
 import { BRANDS } from './../../../core/src/types/brands.enum';
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
 const service: string = process.env.SERVICE as string;
-const tableName = process.env.TABLE_NAME;
+const identityTableName = process.env.IDENTITY_TABLE_NAME;
 const idMappingtableName = process.env.ID_MAPPING_TABLE_NAME;
 const logger = new Logger({ serviceName: `${service}-migrateUserProfileAndCardData`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 const sqs = new SQS();
@@ -58,7 +58,7 @@ export const handler = async (event: any, context: any) => {
       sk: `BRAND#${brand}`,
       legacy_id: legacyId,
     },
-    TableName: tableName,
+    TableName: identityTableName,
   };
   try {
     const results = await dynamodb.send(new PutCommand(userParams));
@@ -85,7 +85,7 @@ export const handler = async (event: any, context: any) => {
   }
 
   const queryParams = {
-    TableName: tableName,
+    TableName: identityTableName,
     KeyConditionExpression: '#pk= :pk And begins_with(#sk, :sk)',
     ExpressionAttributeValues: {
       ':pk': `MEMBER#${uuid}`,
@@ -124,7 +124,7 @@ export const handler = async (event: any, context: any) => {
         employer_id: event.detail.trustId,
         ga_key: event.detail.ga_key,
       },
-      TableName: tableName,
+      TableName: identityTableName,
     };
     try {
       const results = await dynamodb.send(new PutCommand(profileParams));
@@ -147,7 +147,7 @@ export const handler = async (event: any, context: any) => {
         expires: event.detail.cardExpires,
         posted: event.detail.cardPosted,
       },
-      TableName: tableName,
+      TableName: identityTableName,
     };
 
     try {

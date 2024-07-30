@@ -7,10 +7,10 @@ import { ProfileService } from '../../src/services/ProfileService';
 const oldUserPoolId = process.env.OLD_USER_POOL_ID;
 const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-postAuthentication`});
-const TABLE_NAME = process.env.TABLE_NAME ?? "";
+const UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME = process.env.UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME ?? "";
 const IDENTITY_TABLE_NAME = process.env.IDENTITY_TABLE_NAME ?? "";
 
-const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);
+const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME, logger);
 
 export const handler = async (event: PostAuthenticationTriggerEvent, context: any) => {
   logger.info('audit', {

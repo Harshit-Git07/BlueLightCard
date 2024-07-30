@@ -63,7 +63,7 @@ export function createOldCognito(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
@@ -210,7 +210,7 @@ export function createOldCognitoDDS(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
         },
@@ -379,7 +379,7 @@ export function createNewCognito(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           IDENTITY_TABLE_NAME: identityTable.tableName,
           REGION: region,
           OLD_USER_POOL_ID: oldCognito.userPoolId,
@@ -624,7 +624,7 @@ export function createNewCognitoDDS(
         handler: 'packages/api/identity/src/cognito/postAuthentication.handler',
         environment: {
           SERVICE: 'identity',
-          TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+          UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
           OLD_USER_POOL_ID: oldCognito.userPoolId,
           IDENTITY_TABLE_NAME: identityTable.tableName,
           POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
@@ -819,7 +819,7 @@ function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Ta
 
   return {
     SERVICE: 'identity',
-    TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
+    UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME: unsuccessfulLoginAttemptsTable.tableName,
     API_AUTHORISER_USER: identitySecret.secretValueFromJson(API_AUTHORISER_USER).toString(),
     API_AUTHORISER_PASSWORD: identitySecret.secretValueFromJson(API_AUTHORISER_PASSWORD).toString(),
     RESET_PASSWORD_API_URL: identitySecret.secretValueFromJson(RESET_PASSWORD_API_URL).toString(),

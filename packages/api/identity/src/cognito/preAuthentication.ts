@@ -6,7 +6,7 @@ import { UnsuccessfulLoginAttemptsService } from "../services/UnsuccessfulLoginA
 const service: string = process.env.SERVICE as string
 const logger = new Logger({ serviceName: `${service}-preAuthentication` })
 
-const TABLE_NAME = process.env.TABLE_NAME ?? "";
+const UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME = process.env.UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME ?? "";
 const API_AUTHORISER_USER = process.env.API_AUTHORISER_USER ?? "";
 const API_AUTHORISER_PASSWORD = process.env.API_AUTHORISER_PASSWORD ?? "";
 const RESET_PASSWORD_API_URL = process.env.RESET_PASSWORD_API_URL ?? "";
@@ -21,7 +21,7 @@ Please check your email address. If it matches our records, we will send you a p
 If you remember your password, you can try logging in again`;
 const SYSTEM_DOWN_ERROR_MESSAGE = ":\n Unable to process your request.\nPlease contact customer service";
 
-const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(TABLE_NAME, logger);
+const unsuccessfulLoginAttemptsService = new UnsuccessfulLoginAttemptsService(UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME, logger);
 
 /*
 - On 1st attempt, if email is not in DB for brand, create record for member id, email, brand, count = 1 and timestamp to now.

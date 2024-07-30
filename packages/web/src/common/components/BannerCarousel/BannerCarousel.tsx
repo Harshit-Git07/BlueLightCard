@@ -6,16 +6,16 @@ const BannerCarousel = ({ banners }: BannerCarouselPropers) => {
   return (
     <SwiperCarousel
       navigation
-      elementsPerPageDesktop={1}
-      elementsPerPageLaptop={1}
+      elementsPerPageDesktop={2}
+      elementsPerPageLaptop={2}
       elementsPerPageMobile={1}
-      elementsPerPageTablet={1}
+      elementsPerPageTablet={2}
     >
       {banners.map((banner, index) => (
         <CampaignCard
           {...banner}
           key={`banner-carousel-image-${index}-${banner.name}`}
-          className="h-[440px]"
+          className="h-[150px] desktop:h-[400px]"
         />
       ))}
     </SwiperCarousel>

@@ -42,3 +42,11 @@ ul {
     @apply opacity-75;
   }
 }
+
+select[size]::-webkit-scrollbar {
+  display: none;
+}
+
+select {
+  background: none !important;
+}

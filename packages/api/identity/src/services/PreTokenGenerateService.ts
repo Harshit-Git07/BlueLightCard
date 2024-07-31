@@ -33,4 +33,24 @@ export class PreTokenGenerateService {
       throw new Error('error while fetching data from DB');
     }
   }
+
+  public async findLatestCard(uuid: string): Promise<any> {
+    try {
+      this.cardDetails = [];
+      const cardStatusResponse = await this.userRepository.findItemsByUuid(uuid);
+      cardStatusResponse.Items?.map((i) => {
+        if (i.sk.includes('CARD') && CardModel.parse(i).cardId !== 'null') {
+          this.cardDetails.push(CardModel.parse(i));
+        }
+      });
+      if (this.cardDetails.length > 0) {
+        return this.cardDetails.reduce((prev, cur) => (prev.cardId > cur.cardId ? prev : cur));
+      } else {
+        this.log.debug('Unable to find card details for user uuid: ' + uuid);
+        return {};
+      }
+    } catch (error) {
+      throw new Error('error while fetching data from DB');
+    }
+  }
 }

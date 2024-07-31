@@ -87,4 +87,67 @@ describe('PreTokenGenerateService', () => {
     const latestCardStatus = await preTokenGenerateService.findLatestCardStatus(MOCK_MEMBER_ID);
     expect(latestCardStatus).toBe('');
   });
+
+  test('should find the latest card', async () => {
+    const latestCard = await preTokenGenerateService.findLatestCard(MOCK_MEMBER_ID);
+    expect(latestCard.cardStatus).toBe(CardStatus.AWAITING_ID_APPROVAL);
+    expect(latestCard.cardId).toBe("0000009");
+  });
+
+  test('should find the latest card details when there is just single card', async () => {
+    dynamoMock.on(QueryCommand).resolves({
+      Items: [
+        {
+          sk: 'CARD#0000001',
+          expires: '1758365897',
+          pk: `MEMBER#${MOCK_MEMBER_ID}`,
+          posted: '1695220641',
+          status: CardStatus.ID_APPROVED,
+        },
+      ],
+    });
+    const latestCard = await preTokenGenerateService.findLatestCard(MOCK_MEMBER_ID);
+    expect(latestCard.cardStatus).toBe(CardStatus.ID_APPROVED);
+    expect(latestCard.cardId).toBe("0000001");
+  });
+
+  test('should throw an error when fetching data from DB fails', async () => {
+    userRepository.findItemsByUuid = jest.fn().mockRejectedValue(new Error('DB error'));
+    await expect(preTokenGenerateService.findLatestCard(MOCK_MEMBER_ID)).rejects.toStrictEqual(
+      new Error('error while fetching data from DB'),
+    );
+  });
+
+  test('Test DB fails when returned card data is empty', async () => {
+    dynamoMock.on(QueryCommand).resolves({
+      Items: [],
+    });
+    userRepository.findItemsByUuid = jest.fn().mockRejectedValue(new Error('DB error'));
+    await expect(preTokenGenerateService.findLatestCard(MOCK_MEMBER_ID)).rejects.toStrictEqual(
+      new Error('error while fetching data from DB'),
+    );
+  });
+
+  test('Test returned CardDetails are empty when Card details are missing in DB', async () => {
+    dynamoMock.on(QueryCommand).resolves({
+      Items: [
+        {
+          sk: 'BRAND#BLC_UK',
+          legacy_id: '2853201',
+          pk: `MEMBER#${MOCK_MEMBER_ID}`,
+        },
+        {
+          pk: `MEMBER#${MOCK_MEMBER_ID}`,
+          sk: 'PROFILE#87e83fa1-36f6-4da2-8561-98681588b52d',
+          spare_email: 'gaurvabakshi@bluelightcard.co.uk',
+          merged_uid: false,
+          employer_id: '0',
+          organisation: 'AMBU',
+        },
+      ],
+    });
+    const latestCard = await preTokenGenerateService.findLatestCard(MOCK_MEMBER_ID);
+    expect(latestCard).toEqual({});
+  });
+
 });

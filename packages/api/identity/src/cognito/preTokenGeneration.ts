@@ -20,13 +20,20 @@ export const handler = async (event: PreTokenGenerationTriggerEvent, context: an
   });
 
   const uuid = event.request.userAttributes['custom:blc_old_uuid'];
-  const latestCardId = await preTokenGenerateService.findLatestCardStatus(uuid);
+  const latestCardData = await preTokenGenerateService.findLatestCard(uuid);
   const data = await profile.getData(uuid);
 
+  let cardStatus = '';
+  let cardNumber = '';
+  if (latestCardData && latestCardData.cardStatus) {
+    cardStatus = latestCardData.cardStatus;
+    cardNumber = latestCardData.cardId;
+  }
   event.response = {
     claimsOverrideDetails: {
       claimsToAddOrOverride: {
-        card_status: latestCardId,
+        card_status: cardStatus,
+        card_number: cardNumber,
         firstname: data.firstname ?? '',
         surname: data.surname ?? '',
       },

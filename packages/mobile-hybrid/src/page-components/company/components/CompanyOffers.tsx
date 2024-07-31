@@ -1,9 +1,8 @@
-import company from '@/pages/company';
 import { ResponsiveOfferCard, PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import { useAtom } from 'jotai';
 import { FC } from 'react';
-import { companyDataAtom, selectedFilter } from './atoms';
-import { OfferModel } from './types';
+import { companyDataAtom, selectedFilter } from '../atoms';
+import { OfferModel } from '../types';
 
 const CompanyOffers: FC = () => {
   const { viewOffer } = useOfferDetails();

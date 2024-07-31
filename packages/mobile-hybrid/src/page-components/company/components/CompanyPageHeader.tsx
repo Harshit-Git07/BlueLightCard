@@ -1,11 +1,9 @@
-import { Heading } from '@bluelightcard/shared-ui';
+import { Button, Heading, ThemeVariant } from '@bluelightcard/shared-ui';
 import { FC } from 'react';
-import { companyDataAtom } from './atoms';
+import { companyDataAtom } from '../atoms';
 import { useAtom } from 'jotai';
-import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeLifecycle from '@/invoke/lifecycle';
 
-const navigation = new InvokeNativeNavigation();
 const lifecycleEvent = new InvokeNativeLifecycle();
 
 const CompanyPageHeader: FC = () => {
@@ -20,9 +18,14 @@ const CompanyPageHeader: FC = () => {
   };
   return (
     <div className="py-2 flex flex-row justify-between">
-      <button onClick={backEvent} className="text-primary-dukeblue-700">
+      <Button
+        onClick={backEvent}
+        className="text-primary-dukeblue-700"
+        type="button"
+        variant={ThemeVariant.Tertiary}
+      >
         Back
-      </button>
+      </Button>
       <Heading headingLevel={'h2'} className="text-black w-full text-center">
         {companyName}
       </Heading>

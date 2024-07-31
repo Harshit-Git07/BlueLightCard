@@ -1,8 +1,8 @@
 import { offerTypeParser, PillButtons, PlatformVariant } from '@bluelightcard/shared-ui';
 import { useAtom } from 'jotai';
 import { FC } from 'react';
-import { selectedFilter, companyDataAtom } from './atoms';
-import { filtersType, OfferModel } from './types';
+import { selectedFilter, companyDataAtom } from '../atoms';
+import { filtersType, OfferModel } from '../types';
 
 const offerTypesArray = Object.keys(offerTypeParser) as Array<keyof typeof offerTypeParser>;
 const filterArray: filtersType[] = ['All', ...offerTypesArray];

@@ -3,48 +3,21 @@ import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Button, CompanyAbout, Heading, PlatformVariant } from '@bluelightcard/shared-ui';
+import { CompanyAbout, PlatformVariant } from '@bluelightcard/shared-ui';
 import { companyDataAtom } from '@/page-components/company/atoms';
-import CompanyPageHeader from '@/page-components/company/CompanyPageHeader';
-import PillsController from '@/page-components/company/PillsController';
-import CompanyOffers from '@/page-components/company/CompanyOffers';
+import CompanyPageHeader from '@/page-components/company/components/CompanyPageHeader';
+import PillsController from '@/page-components/company/components/PillsController';
+import CompanyOffers from '@/page-components/company/components/CompanyOffers';
 import { MobilePlatformAdapter } from '@/utils/platformAdapter';
-import { z } from 'zod';
-import { OfferModel } from '@/page-components/company/types';
+import {
+  OfferModel,
+  ZodCompanyResponseModel,
+  ZodOfferResponseModel,
+} from '@/page-components/company/types';
 import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
-import InvokeNativeLifecycle from '@/invoke/lifecycle';
-
-const lifecycleEvent = new InvokeNativeLifecycle();
-
-const companyModel = z.object({
-  description: z.string(),
-  name: z.string(),
-  id: z.number(),
-});
-
-const offerModel = z.object({
-  id: z.number(),
-  description: z.string(),
-  name: z.string(),
-  type: z.string(),
-  expiry: z.string(),
-  terms: z.string(),
-  image: z.string(),
-});
-
-const offerResponseModel = z.object({
-  message: z.string(),
-  data: z.object({
-    offers: z.array(offerModel),
-  }),
-});
-
-const companyResponseModel = z.object({
-  message: z.string(),
-  data: companyModel,
-});
+import CompanyPageError from '@/page-components/company/components/CompanyPageError';
 
 const Company: NextPage<any> = () => {
   const router = useRouter();
@@ -68,8 +41,15 @@ const Company: NextPage<any> = () => {
         method: 'GET',
       });
 
-      const company = companyResponseModel.parse(JSON.parse(companyResponse.data));
-      const offers = offerResponseModel.parse(JSON.parse(offersResponse.data));
+      // Offer probably doesnt exist or at least somethings gone wrong with the data
+      if (!companyResponse.data || !offersResponse.data) {
+        setHasError(true);
+        setSpinner(false);
+        return;
+      }
+
+      const company = ZodCompanyResponseModel.parse(JSON.parse(companyResponse.data));
+      const offers = ZodOfferResponseModel.parse(JSON.parse(offersResponse.data));
 
       setCompany({
         companyId: company.data.id,
@@ -84,6 +64,7 @@ const Company: NextPage<any> = () => {
     const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
     let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
 
+    // Give up trying to refetch the data from the hybrid event-bus after maxRetry count
     if (retries > maxRetries) {
       setHasError(true);
       setSpinner(false);
@@ -94,6 +75,7 @@ const Company: NextPage<any> = () => {
       return;
     }
 
+    // Waiting for the flag data to be pulled from mobile, it's a dependency of the offer sheet
     if (!v5FlagOn) {
       setTimeout(() => {
         // Update retry after timeout to retrigger the useEffect
@@ -107,16 +89,7 @@ const Company: NextPage<any> = () => {
 
   return (
     <div className="px-4">
-      {hasError && (
-        <>
-          <Heading headingLevel={'h2'} className="dark:text-white text-black pt-8">
-            Something went wrong. Please try again later
-          </Heading>
-          <Button onClick={() => lifecycleEvent.lifecycleEvent('onBackPressed')}>
-            Return Home
-          </Button>
-        </>
-      )}
+      {hasError && <CompanyPageError />}
       {!hasError && (
         <>
           <CompanyPageHeader />

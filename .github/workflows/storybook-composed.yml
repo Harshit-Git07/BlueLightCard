@@ -1,0 +1,82 @@
+name: 'Storybook Composed'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/storybook-composed/**
+      - .github/actions/**
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+      - .github/workflows/storybook-composed.yml
+  pull_request:
+    paths:
+      - packages/storybook-composed/**
+      - .github/actions/**
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+      - .github/workflows/storybook-composed.yml
+
+env:
+  CI: true
+  PKG_NAME: web-storybook
+
+permissions: write-all
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build Storybook
+        run: npm run build-storybook -w packages/storybook-composed
+
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        id: cloudflare-pages
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: web-storybook
+          directory: packages/storybook-composed/storybook-static
+          branch: ${{ github.ref_name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find PR Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: find-pr-comment
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: |
+            🚀 Successfully deployed Storybook Composed:
+
+      - name: Create PR Comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.find-pr-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully deployed Storybook Composed:
+
+            <p><b>Storybook Url:</b> <a href="${{ steps.cloudflare-pages.outputs.url }}">${{ steps.cloudflare-pages.outputs.url }}</a></p>

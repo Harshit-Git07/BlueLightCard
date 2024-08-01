@@ -111,6 +111,7 @@ dist
 
 # Storybook build output
 storybook-static
+*storybook.log
 
 # Gatsby files
 .cache/

@@ -34,6 +34,7 @@ import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { createVaultThresholdEmailRule } from './eventBridge/rules/VaultThresholdEmailRule';
 import { Route } from './routes/route';
 import { VaultCodesUpload } from './s3/vaultCodesUpload';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 export async function Redemptions({ app, stack }: StackContext) {
   const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams, bastionHost } = use(Shared);
@@ -254,6 +255,39 @@ export async function Redemptions({ app, stack }: StackContext) {
     databaseCredentials instanceof SecretsManagerDatabaseCredentials ? databaseCredentials.secretName : 'DISABLED';
   new Config.Parameter(stack, 'REDEMPTIONS_DATABASE_CREDENTIALS_SECRET_NAME', {
     value: databaseCredentialsSecretName,
+  });
+
+  // Datadog instrumentation
+  new Config.Parameter(stack, 'DD_VERSION', {
+    value: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_VERSION, ''),
+  });
+
+  new Config.Parameter(stack, 'DD_ENV', {
+    value: process.env?.SST_STAGE || 'undefined',
+  });
+
+  new Config.Parameter(stack, 'DD_API_KEY', {
+    value: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_API_KEY, ''),
+  });
+
+  new Config.Parameter(stack, 'DD_GIT_COMMIT_SHA', {
+    value: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_GIT_COMMIT_SHA, ''),
+  });
+
+  new Config.Parameter(stack, 'DD_GIT_REPOSITORY_URL', {
+    value: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_GIT_REPOSITORY_URL, ''),
+  });
+
+  new Config.Parameter(stack, 'USE_DATADOG_AGENT', {
+    value: getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, ''),
+  });
+
+  new Config.Parameter(stack, 'DATADOG_API_KEY_ARN', {
+    value: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DATADOG_API_KEY_ARN, ''),
+  });
+
+  new Config.Parameter(stack, 'DD_SERVICE', {
+    value: 'redemptions',
   });
 
   // Create domain email identity

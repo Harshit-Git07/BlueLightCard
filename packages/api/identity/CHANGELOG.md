@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.88.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.87.1...bluelightcard/identity-v1.88.0) (2024-07-31)
+
+
+### Features
+
+* [PE-83]  de-duplicate identity IAM roles ([#1835](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1835)) ([42f8a0f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/42f8a0f91872037389502f88e7539b9883a4d94e))
+* [TI-1414] Removing Eventbridge rule for password reset ([#1812](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1812)) ([e9c3cab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e9c3cabcc0bb5ab7a2273a93932ce8d3ee477bc1))
+* COT-74, aaded new method to retun object instead of card status ([#1847](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1847)) ([775535d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/775535dda61183ced47d4899804e3c822c1d4202))
+
+
+### Bug Fixes
+
+* Adjusting check around user_email before trying to delete a user ([#1871](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1871)) ([181f356](https://github.com/bluelightcard/BlueLightCard-2.0/commit/181f356e3aef9e3d8518ad975d6db092c8f5a969))
+
 ## [1.87.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.87.0...bluelightcard/identity-v1.87.1) (2024-07-26)
 
 

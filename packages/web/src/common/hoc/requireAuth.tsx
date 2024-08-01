@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
-import { LOGOUT_ROUTE, COGNITO_LOGOUT_URL } from '@/global-vars';
+import { COGNITO_LOGOUT_URL, LOGOUT_ROUTE } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
@@ -36,8 +36,7 @@ async function isAuthenticated(idToken: string, refreshToken: string) {
 
   if (currentTimeStamp >= tokenExpiryTimeStamp) {
     //refresh token and update storage and return true or false based on if it works
-    const authenticated = await reAuthFromRefreshToken(usernameFromToken, refreshToken);
-    return authenticated;
+    return await reAuthFromRefreshToken(usernameFromToken, refreshToken);
   }
 
   return true;
@@ -54,16 +53,17 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
         if (AuthTokensService.authTokensPresent()) {
           const refreshToken = AuthTokensService.getRefreshToken();
           const username = AuthTokensService.getUsername();
+          const idToken = AuthTokensService.getIdToken();
 
-          const isAuthed = await isAuthenticated(AuthTokensService.getIdToken(), refreshToken);
+          const isAuthed = await isAuthenticated(idToken, refreshToken);
 
-          authContext.authState.idToken = AuthTokensService.getIdToken();
+          authContext.authState.idToken = idToken;
           authContext.authState.accessToken = AuthTokensService.getAccessToken();
           authContext.authState.refreshToken = refreshToken;
           authContext.authState.username = username;
           authContext.isReady = isAuthed;
           authContext.isUserAuthenticated = () => isAuthed;
-          setIdToken(AuthTokensService.getIdToken());
+          setIdToken(idToken);
         }
 
         if (authContext.isReady && !authContext.isUserAuthenticated()) {

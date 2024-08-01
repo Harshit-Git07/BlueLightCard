@@ -11,6 +11,7 @@ import * as process from 'process'
 import { createHmac } from 'crypto';
 import { ProfileService } from 'src/services/ProfileService';
 import { BrandService } from 'src/services/BrandService';
+import { isValidEmail } from "./emailValidator";
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
@@ -49,6 +50,13 @@ export const handler = async (event: UserMigrationTriggerEvent) => {
       clientId: event.callerContext.clientId,
     });
     if (event.triggerSource == "UserMigration_Authentication") {
+
+      if (!isValidEmail(event.userName)) {
+        // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
+        logger.error('Invalid email entered', {userName: event.userName});
+        throw Error("\nThe email you have entered is invalid, please enter a valid email");
+      }
+
       try {
         // Authenticate the user with the old user pool
         let user = await authenticateUserOldPool(event.userName, event.request.password);

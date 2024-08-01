@@ -1,0 +1,51 @@
+{
+  "name": "playwright-typescript-playwright-test",
+  "version": "1.0.0",
+  "description": "Playwright Framework with Typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:single": "npx playwright test WFMLogin.test.ts --project=Chrome",
+    "test:parallel": "npx playwright test --grep @Smoke --project=Chrome",
+    "test:serial": "npx playwright test --grep @Smoke --workers=1 --project=Chrome",
+    "test:ui": "npx playwright test --grep @Smoke --ui",
+    "test:api": "npx playwright test --grep @API --workers=1 --project=Chrome",
+    "test:db": "npx playwright test DB.test.ts --project=DB",
+    "test:record": "npx playwright codegen",
+    "test:visual": "npx playwright test visualComparision.test.ts --project=Chrome",
+    "test:device": "npx playwright test Emulation.test.ts --project=Device",
+    "allureReport": "allure serve",
+    "lighthouse": "node tests/lighthouse/Lighthouse.js",
+    "test:accessibility": "npx playwright test Axe.test.ts --project=Chrome"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.9.0",
+    "@types/adm-zip": "^0.5.5",
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^20.12.12",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "adm-zip": "^0.5.12",
+    "allure-playwright": "^2.15.1",
+    "axios": "^1.7.2",
+    "chance": "^1.1.12",
+    "crypto-js": "^4.2.0",
+    "dotenv": "16.4.5",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "exceljs": "^4.4.0",
+    "node-fetch": "^3.3.2",
+    "npm": "^10.7.0",
+    "pdfjs-dist-es5": "^2.13.216",
+    "pg": "^8.11.5",
+    "typescript": "^5.4.5",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.2",
+    "@types/axios": "^0.14.0",
+    "@types/chance": "^1.1.6",
+    "@types/node": "^20.12.12",
+    "@types/node-fetch": "^2.6.11"
+  }
+}

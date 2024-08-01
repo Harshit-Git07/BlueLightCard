@@ -61,5 +61,4 @@ export enum RedemptionsStackEnvironmentKeys {
 
   // Environment
   USE_DATADOG_AGENT = 'USE_DATADOG_AGENT',
-  DATADOG_API_KEY_ARN = 'DATADOG_API_KEY_ARN',
 }

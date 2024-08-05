@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.88.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.88.0...bluelightcard/identity-v1.88.1) (2024-08-05)
+
+
+### Bug Fixes
+
+* [TI-1563] Add email validation on login ([#1881](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1881)) ([7928646](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7928646277c51f09eedea424ab2393a811e73e44))
+* repushing COT-235 changes to main ([#1900](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1900)) ([322c591](https://github.com/bluelightcard/BlueLightCard-2.0/commit/322c5916d7b6ff99c526448c7bbc91bd6c0ced29))
+
 ## [1.88.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.87.1...bluelightcard/identity-v1.88.0) (2024-07-31)
 
 

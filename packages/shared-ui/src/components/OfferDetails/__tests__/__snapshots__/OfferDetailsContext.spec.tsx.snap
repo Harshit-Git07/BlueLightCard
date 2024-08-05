@@ -42,7 +42,7 @@ exports[`ViewOfferProvider it renders the offer sheet 1`] = `
       class="absolute z-50 top-0 w-full h-full transition-visibility duration-1000 block"
     >
       <div
-        class="fixed top-0 left-0 hidden laptop:block z-50"
+        class="fixed top-0 left-0 right-0 bottom-0 hidden laptop:block z-50"
       >
         <div
           class="absolute w-[100vw] bg-transparent"
@@ -100,13 +100,13 @@ exports[`ViewOfferProvider it renders the offer sheet 1`] = `
         </div>
       </div>
       <div
-        class="fixed top-0 left-0 block laptop:hidden z-50"
+        class="fixed top-0 left-0 right-0 bottom-0 bg-[#00000088] block laptop:hidden z-50"
       >
         <div
           class="absolute h-100 bg-transparent"
         >
           <div
-            class="absolute w-[100vw] h-[100vh] transition-opacity duration-1000 bg-[#00000088] opacity-100"
+            class="absolute w-[100vw] h-[100vh] opacity-100"
           />
           <div
             class="fixed w-[100vw] flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-white translate-y-[-100%] h-[90%] bottom-[-90%]"

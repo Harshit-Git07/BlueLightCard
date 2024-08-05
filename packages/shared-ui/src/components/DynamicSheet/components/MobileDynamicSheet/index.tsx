@@ -23,10 +23,7 @@ const MobileDynamicSheet: FC<Props> = ({
     'opacity-100': isOpen,
     'hidden opacity-0': !isOpen,
   });
-  const containerCss = useCSSMerge(
-    'absolute w-[100vw] h-[100vh] transition-opacity duration-1000 bg-[#00000088]',
-    containerDynCss,
-  );
+  const containerCss = useCSSMerge('absolute w-[100vw] h-[100vh]', containerDynCss);
 
   const animatedDynCss = useCSSConditional({
     'translate-y-[-100%]': isOpen,

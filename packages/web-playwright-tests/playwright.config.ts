@@ -4,17 +4,19 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
 // Load environment variables from the correct .env file
-const ENV = process.env.npm_config_ENV || 'staging';
+const ENV = process.env.npm_config_ENV || 'live';
 const envFilePath = `.env.${ENV}`;
 
 if (fs.existsSync(envFilePath)) {
   dotenv.config({ path: envFilePath });
+  console.log(`Loaded environment variables from ${envFilePath}.`);
 } else {
   console.error(`No environment file found for ${ENV} environment.`);
   process.exit(1);
 }
+console.log(`Using Playwright configuration - running selected test/s against ${ENV} environment.`);
 
-console.log('Using Playwright configuration');
+const workers = 4;
 
 const config: PlaywrightTestConfig = {
   // Global Setup to run before all tests
@@ -32,6 +34,9 @@ const config: PlaywrightTestConfig = {
     ['allure-playwright'],
     ['html', { outputFolder: 'html-report', open: 'never' }],
   ],
+
+  // Number of parallel workers
+  workers,
 
   projects: [
     // {
@@ -140,7 +145,7 @@ const config: PlaywrightTestConfig = {
         browserName: `chromium`,
         channel: `msedge`,
         baseURL: testConfig[ENV],
-        headless: false,
+        headless: true,
         viewport: { width: 1500, height: 730 },
         ignoreHTTPSErrors: true,
         acceptDownloads: true,
@@ -153,24 +158,24 @@ const config: PlaywrightTestConfig = {
       },
     },
 
-    {
-      name: 'Uk Tests',
-      grep: /@Uk/,
-      use: {
-        browserName: 'chromium',
-        baseURL: testConfig[ENV],
-        headless: false,
-        viewport: { width: 1500, height: 730 },
-        ignoreHTTPSErrors: true,
-        acceptDownloads: true,
-        screenshot: 'only-on-failure',
-        video: 'retain-on-failure',
-        trace: 'retain-on-failure',
-        launchOptions: {
-          slowMo: 0,
-        },
-      },
-    },
+    // {
+    //   name: 'Uk Tests',
+    //   grep: /@Uk/,
+    //   use: {
+    //     browserName: 'chromium',
+    //     baseURL: testConfig[ENV],
+    //     headless: false,
+    //     viewport: { width: 1500, height: 730 },
+    //     ignoreHTTPSErrors: true,
+    //     acceptDownloads: true,
+    //     screenshot: 'only-on-failure',
+    //     video: 'retain-on-failure',
+    //     trace: 'retain-on-failure',
+    //     launchOptions: {
+    //       slowMo: 0,
+    //     },
+    //   },
+    // },
 
     // {
     //   name: `WebKit`,
@@ -218,5 +223,7 @@ const config: PlaywrightTestConfig = {
     // }
   ],
 };
+
+console.log(`Configured to use ${workers} parallel workers.`);
 
 export default config;

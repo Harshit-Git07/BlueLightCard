@@ -1,0 +1,74 @@
+name: Playwright Test
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Run every 10 minutes
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repo and setup node
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Cache Node.js modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: packages/web-playwright-tests/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      # Install dependencies if the cache not hit
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        working-directory: packages/web-playwright-tests
+        run: npm install
+
+      # Run specified Playwright test- UK Login test
+      - name: Run Playwright test - Login to UK
+        working-directory: packages/web-playwright-tests
+        id: playwright
+        run: npx playwright test -g "@Uk @Smoke @Web @NeedsTestCase - Login to uk home page"
+
+      # Persist failure count if the test fails
+      - name: Persist test failure count
+        if: failure()
+        id: persist_failure_count
+        run: |
+          if [ -f .failure-count ]; then
+            count=$(cat .failure-count)
+            count=$((count + 1))
+          else
+            count=1
+          fi
+          echo $count > .failure-count
+          echo "failure-count=$count" >> $GITHUB_ENV
+
+      # Read failure count if the test fails
+      - name: Read test failure count
+        if: failure()
+        id: read_failure_count
+        run: echo "failure_count=$(cat .failure-count)" >> $GITHUB_ENV
+
+      # Reset failure count on success
+      - name: Reset failure count on test success
+        if: success()
+        run: echo 0 > .failure-count
+
+      # Send Slack message if failure count reaches 3
+      - name: Send Slack message on fail
+        if: steps.read_failure_count.outputs.failure_count == '3'
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "*Playwright test `Login to uk home page has failed for the third consecutive time`*\n*Project:* $GITHUB_REPOSITORY\n*Triggered by:* $GITHUB_ACTOR\n\n<$GITHUB_RUN_URL|Job Details>",
+            "mrkdwn": true
+          }' ${{ vars.CI_NOTIFICATIONS_WEBHOOK }}

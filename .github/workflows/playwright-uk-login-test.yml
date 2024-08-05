@@ -1,4 +1,4 @@
-name: Playwright Test
+name: Playwright UK login Test
 
 on:
   schedule:
@@ -9,31 +9,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # Checkout repo and setup node
+      #Checkout repo and install dependencies
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Cache Node.js modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: packages/web-playwright-tests/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      # Install dependencies if the cache not hit
       - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         working-directory: packages/web-playwright-tests
         run: npm install
 
-      # Run specified Playwright test- UK Login test
+      # Run specified Playwright test - UK Login test
       - name: Run Playwright test - Login to UK
         working-directory: packages/web-playwright-tests
         id: playwright

@@ -1,4 +1,6 @@
 {
+  "id": "c36c05f3-76db-4573-93c9-5ec311a75957",
+  "prevId": "0f631078-9596-4bff-9603-7ace6098b36f",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -30,11 +32,11 @@
         "generics_redemptionId_redemptions_id_fk": {
           "name": "generics_redemptionId_redemptions_id_fk",
           "tableFrom": "generics",
-          "columnsFrom": ["redemptionId"],
           "tableTo": "redemptions",
+          "columnsFrom": ["redemptionId"],
           "columnsTo": ["id"],
-          "onUpdate": "cascade",
-          "onDelete": "restrict"
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -53,6 +55,7 @@
         "affiliate": {
           "name": "affiliate",
           "type": "affiliate",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -65,6 +68,7 @@
         "connection": {
           "name": "connection",
           "type": "connection",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -77,18 +81,21 @@
         "offerType": {
           "name": "offerType",
           "type": "offerType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "platform": {
           "name": "platform",
           "type": "platform",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "redemptionType": {
           "name": "redemptionType",
           "type": "redemptionType",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -125,6 +132,20 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "expiry": {
+          "name": "expiry",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created": {
+          "name": "created",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -132,11 +153,11 @@
         "vaultBatches_vaultId_vaults_id_fk": {
           "name": "vaultBatches_vaultId_vaults_id_fk",
           "tableFrom": "vaultBatches",
-          "columnsFrom": ["vaultId"],
           "tableTo": "vaults",
+          "columnsFrom": ["vaultId"],
           "columnsTo": ["id"],
-          "onUpdate": "cascade",
-          "onDelete": "restrict"
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -187,28 +208,55 @@
           "name": "memberId",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "NULL"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "vault_idx": {
+          "name": "vault_idx",
+          "columns": ["vaultId"],
+          "isUnique": false
+        },
+        "batch_idx": {
+          "name": "batch_idx",
+          "columns": ["batchId"],
+          "isUnique": false
+        },
+        "created_idx": {
+          "name": "created_idx",
+          "columns": ["created"],
+          "isUnique": false
+        },
+        "expiry_idx": {
+          "name": "expiry_idx",
+          "columns": ["expiry"],
+          "isUnique": false
+        },
+        "member_idx": {
+          "name": "member_idx",
+          "columns": ["memberId"],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "vaultCodes_vaultId_vaults_id_fk": {
           "name": "vaultCodes_vaultId_vaults_id_fk",
           "tableFrom": "vaultCodes",
-          "columnsFrom": ["vaultId"],
           "tableTo": "vaults",
+          "columnsFrom": ["vaultId"],
           "columnsTo": ["id"],
-          "onUpdate": "cascade",
-          "onDelete": "restrict"
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
         },
         "vaultCodes_batchId_vaultBatches_id_fk": {
           "name": "vaultCodes_batchId_vaultBatches_id_fk",
           "tableFrom": "vaultCodes",
-          "columnsFrom": ["batchId"],
           "tableTo": "vaultBatches",
+          "columnsFrom": ["batchId"],
           "columnsTo": ["id"],
-          "onUpdate": "cascade",
-          "onDelete": "restrict"
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -253,6 +301,7 @@
         "integration": {
           "name": "integration",
           "type": "integration",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -278,14 +327,17 @@
         "status": {
           "name": "status",
           "type": "status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
-        "terms": {
-          "name": "terms",
-          "type": "varchar",
+        "vaultType": {
+          "name": "vaultType",
+          "type": "vaultType",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'standard'"
         }
       },
       "indexes": {},
@@ -293,11 +345,11 @@
         "vaults_redemptionId_redemptions_id_fk": {
           "name": "vaults_redemptionId_redemptions_id_fk",
           "tableFrom": "vaults",
-          "columnsFrom": ["redemptionId"],
           "tableTo": "redemptions",
+          "columnsFrom": ["redemptionId"],
           "columnsTo": ["id"],
-          "onUpdate": "cascade",
-          "onDelete": "restrict"
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -352,14 +404,17 @@
       "name": "status",
       "schema": "public",
       "values": ["active", "in-active"]
+    },
+    "public.vaultType": {
+      "name": "vaultType",
+      "schema": "public",
+      "values": ["standard", "legacy"]
     }
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "4611b897-c63a-4be8-8a4b-bf8b62e039f0",
-  "prevId": "08230ba9-5e77-49a9-bfd2-eb7744f4c67d"
+    "tables": {}
+  }
 }

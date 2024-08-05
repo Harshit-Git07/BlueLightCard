@@ -37,6 +37,8 @@ describe('VaultBatchesRepository', () => {
 
       const vaultBatch = vaultBatchFactory.build({
         vaultId: vault.id,
+        created: new Date('2024-01-03T00:27:26.000Z'),
+        expiry: new Date('2025-01-26T19:07:53.000Z'),
       });
       const repository = new VaultBatchesRepository(connection);
       const result = await repository.create(vaultBatch);

@@ -5,6 +5,7 @@ import { ApiGatewayV1Api, Config, StackContext, use } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
+import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 import { Shared } from '@blc-mono/shared/stack';
@@ -12,6 +13,7 @@ import { Shared } from '@blc-mono/shared/stack';
 import { Identity } from '../../identity/stack';
 import { DatabaseConnectionType, SecretsManagerDatabaseCredentials } from '../libs/database/connection';
 
+import { createAdminApi } from './adminApi/createAdminApi';
 import { RedemptionsStackConfigResolver } from './config/config';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
 import { RedemptionsDatabase } from './database/database';
@@ -27,7 +29,6 @@ import { createDwhMemberRedeemIntentRule } from './eventBridge/rules/dwhMemberRe
 import { createDwhMemberRedemptionRule } from './eventBridge/rules/dwhMemberRedemptionRule';
 import { createDwhMemberRetrievedRedemptionDetailsRule } from './eventBridge/rules/dwhMemberRetrievedRedemptionDetailsRule';
 import { createRedemptionPushNotificationRule } from './eventBridge/rules/redemptionPushNotificationRule';
-import { createRedemptionTransactionalEmailRule } from './eventBridge/rules/redemptionTransactionalEmail';
 import { createVaultBatchCreatedRule } from './eventBridge/rules/vaultBatchCreatedRule';
 import { createVaultCodesUploadRule } from './eventBridge/rules/vaultCodesUploadRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
@@ -258,11 +259,16 @@ export async function Redemptions({ app, stack }: StackContext) {
 
   // Create domain email identity
   await createDomainEmailIdentity(config.redemptionsEmailDomain, stack.region);
+
+  const adminApi = createAdminApi(stack, globalConfig, certificateArn, database);
+
   stack.addOutputs({
     RedemptionsApiEndpoint: api.url,
+    RedemptionsAdminApiEndpoint: adminApi.url,
   });
 
   return {
     api,
+    adminApi,
   };
 }

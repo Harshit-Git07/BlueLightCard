@@ -90,6 +90,8 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       id: `${vaultBatchesPrefix}-e4dafac0-2ebf-479e-9936-8d75a4780be4`,
       vaultId: vaultsData[0].id,
       file: 'codes.csv',
+      expiry: new Date('2025-01-05T14:48:00.000Z'),
+      created: new Date('2024-01-05T14:48:00.000Z'),
     },
   ] satisfies (typeof vaultBatchesTable.$inferInsert)[];
   await db.insert(vaultBatchesTable).values(vaultBatchesData).onConflictDoNothing();

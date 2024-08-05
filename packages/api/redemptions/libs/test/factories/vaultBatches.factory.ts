@@ -7,4 +7,6 @@ export const vaultBatchFactory = Factory.define<typeof vaultBatchesTable.$inferS
   id: createVaultBatchesId(),
   file: faker.system.filePath(),
   vaultId: createVaultId(),
+  created: faker.date.past(),
+  expiry: faker.date.future(),
 }));

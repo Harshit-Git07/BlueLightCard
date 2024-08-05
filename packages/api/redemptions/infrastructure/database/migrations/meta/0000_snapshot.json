@@ -1,10 +1,8 @@
 {
-  "id": "5ddccf24-696c-40d8-95d3-bc7d281aa070",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "generics": {
+    "public.generics": {
       "name": "generics",
       "schema": "",
       "columns": {
@@ -32,17 +30,17 @@
         "generics_redemptionId_redemptions_id_fk": {
           "name": "generics_redemptionId_redemptions_id_fk",
           "tableFrom": "generics",
-          "tableTo": "redemptions",
           "columnsFrom": ["redemptionId"],
+          "tableTo": "redemptions",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "redemptions": {
+    "public.redemptions": {
       "name": "redemptions",
       "schema": "",
       "columns": {
@@ -106,7 +104,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "vaultBatches": {
+    "public.vaultBatches": {
       "name": "vaultBatches",
       "schema": "",
       "columns": {
@@ -134,17 +132,17 @@
         "vaultBatches_vaultId_vaults_id_fk": {
           "name": "vaultBatches_vaultId_vaults_id_fk",
           "tableFrom": "vaultBatches",
-          "tableTo": "vaults",
           "columnsFrom": ["vaultId"],
+          "tableTo": "vaults",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "vaultCodes": {
+    "public.vaultCodes": {
       "name": "vaultCodes",
       "schema": "",
       "columns": {
@@ -197,26 +195,26 @@
         "vaultCodes_vaultId_vaults_id_fk": {
           "name": "vaultCodes_vaultId_vaults_id_fk",
           "tableFrom": "vaultCodes",
-          "tableTo": "vaults",
           "columnsFrom": ["vaultId"],
+          "tableTo": "vaults",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         },
         "vaultCodes_batchId_vaultBatches_id_fk": {
           "name": "vaultCodes_batchId_vaultBatches_id_fk",
           "tableFrom": "vaultCodes",
-          "tableTo": "vaultBatches",
           "columnsFrom": ["batchId"],
+          "tableTo": "vaultBatches",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "vaults": {
+    "public.vaults": {
       "name": "vaults",
       "schema": "",
       "columns": {
@@ -295,11 +293,11 @@
         "vaults_redemptionId_redemptions_id_fk": {
           "name": "vaults_redemptionId_redemptions_id_fk",
           "tableFrom": "vaults",
-          "tableTo": "redemptions",
           "columnsFrom": ["redemptionId"],
+          "tableTo": "redemptions",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
@@ -307,72 +305,61 @@
     }
   },
   "enums": {
-    "affiliate": {
+    "public.affiliate": {
       "name": "affiliate",
-      "values": {
-        "awin": "awin",
-        "affiliateFuture": "affiliateFuture",
-        "rakuten": "rakuten",
-        "affilinet": "affilinet",
-        "webgains": "webgains",
-        "partnerize": "partnerize",
-        "impactRadius": "impactRadius",
-        "adtraction": "adtraction",
-        "affiliateGateway": "affiliateGateway",
-        "optimiseMedia": "optimiseMedia",
-        "commissionJunction": "commissionJunction",
-        "tradedoubler": "tradedoubler"
-      }
+      "schema": "public",
+      "values": [
+        "awin",
+        "affiliateFuture",
+        "rakuten",
+        "affilinet",
+        "webgains",
+        "partnerize",
+        "impactRadius",
+        "adtraction",
+        "affiliateGateway",
+        "optimiseMedia",
+        "commissionJunction",
+        "tradedoubler"
+      ]
     },
-    "connection": {
+    "public.connection": {
       "name": "connection",
-      "values": {
-        "affiliate": "affiliate",
-        "direct": "direct",
-        "spotify": "spotify"
-      }
+      "schema": "public",
+      "values": ["affiliate", "direct", "spotify"]
     },
-    "integration": {
+    "public.integration": {
       "name": "integration",
-      "values": {
-        "eagleeye": "eagleeye",
-        "uniqodo": "uniqodo"
-      }
+      "schema": "public",
+      "values": ["eagleeye", "uniqodo"]
     },
-    "offerType": {
+    "public.offerType": {
       "name": "offerType",
-      "values": {
-        "online": "online",
-        "in-store": "in-store"
-      }
+      "schema": "public",
+      "values": ["online", "in-store"]
     },
-    "platform": {
+    "public.platform": {
       "name": "platform",
-      "values": {
-        "BLC_UK": "BLC_UK",
-        "BLC_AU": "BLC_AU",
-        "DDS_UK": "DDS_UK"
-      }
+      "schema": "public",
+      "values": ["BLC_UK", "BLC_AU", "DDS_UK"]
     },
-    "redemptionType": {
+    "public.redemptionType": {
       "name": "redemptionType",
-      "values": {
-        "generic": "generic",
-        "vault": "vault"
-      }
+      "schema": "public",
+      "values": ["generic", "vault"]
     },
-    "status": {
+    "public.status": {
       "name": "status",
-      "values": {
-        "active": "active",
-        "in-active": "in-active"
-      }
+      "schema": "public",
+      "values": ["active", "in-active"]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "5ddccf24-696c-40d8-95d3-bc7d281aa070",
+  "prevId": "00000000-0000-0000-0000-000000000000"
 }

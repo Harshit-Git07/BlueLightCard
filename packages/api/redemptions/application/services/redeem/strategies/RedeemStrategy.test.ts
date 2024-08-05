@@ -27,6 +27,7 @@ import {
   vaultsTable,
 } from '@blc-mono/redemptions/libs/database/schema';
 import { redemptionFactory } from '@blc-mono/redemptions/libs/test/factories/redemption.factory';
+import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatches.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -402,11 +403,11 @@ describe('Redemption Strategies', () => {
         showQR: false,
       }));
     const vaultBatches = (vaultId: VaultBatch['vaultId']) =>
-      Factory.define<typeof vaultBatchesTable.$inferSelect>(() => ({
-        id: `vbt-${faker.string.uuid()}`,
-        vaultId,
-        file: faker.string.uuid(),
-      }));
+      Factory.define<typeof vaultBatchesTable.$inferSelect>(() =>
+        vaultBatchFactory.build({
+          vaultId: vaultId,
+        }),
+      );
     const vaultCodes = (
       vaultId: VaultCode['vaultId'],
       expiry: VaultCode['expiry'],

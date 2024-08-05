@@ -6,7 +6,8 @@ export interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
 
 const Heading: FC<Props> = ({ headingLevel, children, className }) => {
   const Heading = headingLevel;
-  const defaultStyles = 'text-[#FAFAFA] dark:text-[#32363C] mb-2 font-bold font-museo';
+  const defaultStyles =
+    'text-heading-colour dark:text-heading-colour-dark mb-2 font-typography-headline-weight font-typography-headline';
   let size;
   switch (Heading) {
     case 'h1':
@@ -29,7 +30,7 @@ const Heading: FC<Props> = ({ headingLevel, children, className }) => {
       break;
   }
 
-  const classes = `${size} ${defaultStyles} ${className} `;
+  const classes = `${size} ${defaultStyles} ${className}`;
   return <Heading className={classes}>{children}</Heading>;
 };
 

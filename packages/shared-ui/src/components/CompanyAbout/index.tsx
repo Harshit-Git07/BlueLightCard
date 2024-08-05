@@ -10,26 +10,35 @@ export type Props = SharedProps & {
 
 const CompanyAbout: FC<Props> = ({ CompanyName, CompanyDescription, platform }) => {
   const dynHeadingCss = useCSSConditional({
-    '!text-base !leading-5 font-regular': platform === PlatformVariant.MobileHybrid,
-    '!text-5xl !leading-[56px] font-bold': platform === PlatformVariant.Web,
+    '!text-typography-body-semibold !leading-typography-body-semibold !font-typography-body-semibold-weight !font-typography-body-semibold !tracking-typography-body-semibold':
+      platform === PlatformVariant.MobileHybrid,
+    '!text-typography-display-small !leading-typography-display-small !font-typography-display-small-weight !font-typography-display-small !tracking-typography-display-small':
+      platform === PlatformVariant.Web,
   });
 
   const dynDescriptionCss = useCSSConditional({
-    '!text-sm leading-5': platform === PlatformVariant.MobileHybrid,
-    '!text-base leading-6': platform === PlatformVariant.Web,
+    '!text-typography-body-light leading-typography-body-light !font-typography-body-light !font-typography-body-light-weight !tracking-typography-body-light':
+      platform === PlatformVariant.MobileHybrid,
+    '!text-typography-body !leading-typography-body !font-typography-body !font-typography-body-weight !tracking-typography-body':
+      platform === PlatformVariant.Web,
   });
 
-  const cssHeading = useCSSMerge(`!text-black`, dynHeadingCss);
+  const cssHeading = useCSSMerge(
+    `!text-colour-onSurface dark:!text-colour-onSurface-dark`,
+    dynHeadingCss,
+  );
   const cssDescription = useCSSMerge(
-    `text-[#1c1d22] font-['MuseoSans'] font-light`,
+    `text-colour-onSurface dark:text-colour-onSurface-dark`,
     dynDescriptionCss,
   );
 
   return (
     <div>
-      <Heading headingLevel={'h1'} className={cssHeading}>
-        {CompanyName}
-      </Heading>
+      {CompanyName && (
+        <Heading headingLevel={'h1'} className={cssHeading}>
+          {CompanyName}
+        </Heading>
+      )}
 
       <p className={cssDescription}>{CompanyDescription}</p>
     </div>

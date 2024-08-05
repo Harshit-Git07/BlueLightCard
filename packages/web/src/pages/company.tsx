@@ -219,7 +219,8 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           {isMobile && <Link href="/members-home">Back</Link>}
           <Heading
             headingLevel={'h1'}
-            className="!text-black tablet:!text-5xl mobile:!text-xl tablet:!leading-[56px] mobile:!leading-5 tablet:font-bold mobile:font-semibold"
+            className="!text-colour-onSurface dark:!text-colour-onSurface-dark !font-typography-title-medium-semibold !font-typography-title-medium-semibold-weight !text-typography-title-medium-semibold !tracking-typography-title-medium-semibold !leading-typography-title-medium-semibold 
+                        tablet:!text-colour-greyscale-onSurface tablet:!font-typography-display-small tablet:!font-typography-display-small-weight tablet:!text-typography-display-small tablet:!tracking-typography-display-small tablet:!leading-typography-display-small"
           >
             {companyData.name}
           </Heading>
@@ -251,7 +252,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           <div className="w-full">
             <CompanyAbout
               CompanyDescription={companyData.description}
-              CompanyName={''}
               platform={PlatformVariant.Web}
             />
           </div>

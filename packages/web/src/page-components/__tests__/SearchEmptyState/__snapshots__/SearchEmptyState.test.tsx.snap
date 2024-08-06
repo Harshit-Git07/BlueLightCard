@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchDropDown should match snapshot 1`] = `
+<div
+  className="w-full mb-8 tablet:mb-[100px]"
+>
+  <p
+    className="font-typography-title-large text-typography-title-large font-typography-title-large-weight tracking-typography-title-large leading-typography-title-large pb-[25px]"
+  >
+    No results found
+  </p>
+  <div
+    className="border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+  />
+  <div
+    className="mt-[25px]"
+  >
+    <div
+      className="w-full"
+    >
+      <p
+        className="py-1.5 mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark"
+      >
+        Browse Categories
+      </p>
+      <div
+        className="flex gap-[15px] flex-wrap"
+      />
+    </div>
+  </div>
+</div>
+`;

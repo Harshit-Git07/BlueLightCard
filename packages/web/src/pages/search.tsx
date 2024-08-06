@@ -260,7 +260,7 @@ const Search: NextPage = () => {
         </>
       ) : (
         <Container className="tablet:py-5 mt-3 tablet:mt-[72px]" addBottomHorizontalLine={false}>
-          <SearchEmptyState />
+          <SearchEmptyState onSearchCategoryChange={onSearchCategoryChange} />
         </Container>
       )}
 

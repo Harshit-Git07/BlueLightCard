@@ -1,0 +1,72 @@
+name: 'Datadog'
+description: 'Send deployment metrics to datadog'
+inputs:
+  environment:
+    description: 'Environment name'
+    required: true
+  service_name:
+    description: 'Service name'
+    required: true
+  workflow_run_id:
+    description: 'Workflow run ID'
+    required: true
+  GITHUB_TOKEN:
+    description: 'Github token'
+    required: true
+  DATADOG_DORA_METRICS_CLIENT_TOKEN:
+    description: 'Datadog token'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Prepare
+      shell: 'bash'
+      run: |
+        created_at=$(curl -s \
+        -H "Authorization: Bearer ${{ inputs.GITHUB_TOKEN }}" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ inputs.workflow_run_id }} \
+        | grep '"created_at":' | sed -E 's/.*"created_at": "(.*)",/\1/')
+        echo "created_at = $created_at"
+        WORKFLOW_CREATED_AT=$(date -u -d "${created_at}" +"%s%N")
+        
+        echo "=========="
+        echo "WORKFLOW_CREATED_AT = $WORKFLOW_CREATED_AT"
+        echo "=========="
+
+        echo "Sending deployment metrics to Datadog ( ${{ inputs.environment }} )"
+        JSON_PAYLOAD=$(cat <<EOF
+        {
+          "data": {
+            "attributes": {
+              "service": "${{ inputs.service_name }}",
+              "started_at": ${WORKFLOW_CREATED_AT},
+              "finished_at": $(date -u +"%s%N"),
+              "git": {
+                "commit_sha": "${{ github.sha }}",
+                "repository_url": "https://github.com/${{ github.repository }}"
+              },
+              "env": "${{ inputs.environment }}"
+            }
+          }
+        }
+        EOF
+        )
+        
+        echo "=========="
+        echo "JSON payload for deployment metrics:"
+        echo "$JSON_PAYLOAD"
+        echo "=========="
+        
+        echo "Datadog API call for deployment metrics in progress..."
+        RESPONSE=$(curl -X POST "https://api.datadoghq.eu/api/v2/dora/deployment" \
+        -H "Accept: application/json" \
+        -H "Content-Type: application/json" \
+        -H "DD-API-KEY: ${{ inputs.DATADOG_DORA_METRICS_CLIENT_TOKEN }}" \
+        -d "$JSON_PAYLOAD")
+        
+        echo "=========="
+        echo "Response from Datadog ( deployment metrics ) :"
+        echo "$RESPONSE"
+        echo "=========="

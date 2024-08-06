@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.67.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.66.0...bluelightcard/web-v1.67.0) (2024-08-06)
+
+
+### Features
+
+* added new component for search empty state ([#1851](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1851)) ([dd1bbb6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd1bbb682ea2d2f98edef609351247d3e90a1429))
+* created tokenised input type select ([#1879](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1879)) ([1823c85](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1823c85273491dceecd8038607e9c769e15462c9))
+* DISCO-351 Added storybook-composed package ([#1859](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1859)) ([f718c53](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f718c53253272189881b47ba09be4135cb8e5eaa))
+* Feat/to 825 whitelabel heading company about ([#1894](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1894)) ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+* QT-239 Implemented Playwright framework ([#1883](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1883)) ([9aec3fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9aec3fb292984d07b0238ef601e456033b5ea444))
+* replaced hard coded styles with tokens for colours and fonts in CompanyAbout component ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+
+
+### Bug Fixes
+
+* [TI-1563] Add email validation on login ([#1881](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1881)) ([7928646](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7928646277c51f09eedea424ab2393a811e73e44))
+* for CompanyAbout component description in dark mode ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+* for Incorrect font for CompanyAbout component description ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+
+
+### Other Changes
+
+* improved logging for migrations ([#1852](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1852)) ([6eafa72](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6eafa72facdb3c3e6dcba2918e3be56ede59f9a3))
+
 ## [1.66.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.65.0...bluelightcard/web-v1.66.0) (2024-07-24)
 
 

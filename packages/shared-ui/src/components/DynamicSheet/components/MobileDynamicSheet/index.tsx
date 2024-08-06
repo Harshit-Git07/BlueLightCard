@@ -30,7 +30,7 @@ const MobileDynamicSheet: FC<Props> = ({
     'hidden translate-y-0': !isOpen,
   });
   const animatedCss = useCSSMerge(
-    'fixed w-[100vw] flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-white',
+    'fixed w-[100vw] flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-colour-surface-light dark:bg-colour-surface-dark',
     animatedDynCss,
   );
 

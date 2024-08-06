@@ -21,7 +21,7 @@ const DesktopDynamicSheet: React.FC<DynamicSheetProps> = ({
         onClick={() => outsideClickClose && onClose && onClose()}
       ></div>
       <div
-        className={`absolute h-[100vh] bg-white flex flex-col space-y-2 ${
+        className={`absolute h-[100vh] bg-colour-surface-light dark:bg-colour-surface-dark flex flex-col space-y-2 ${
           isOpen ? 'translate-x-[-100%]' : 'translate-x-0'
         } transition-transform duration-300`}
         // We use styles here as we want to enable the value to be dynamic. Tailwind cleans up unused values and therefore dynamic values are likely to be removed.

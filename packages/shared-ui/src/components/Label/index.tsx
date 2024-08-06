@@ -10,12 +10,12 @@ export type Props = {
 const labelConfig: config = {
   //TODO::Not whitelabel with design tokens revisit
   normal: {
-    textColor: 'text-[#202125]',
-    backgroundColor: 'bg-[#ECEFF2]',
+    textColor: 'text-tag-label-colour-light dark:text-tag-label-colour-dark',
+    backgroundColor: 'bg-tag-bg-colour-light dark:bg-tag-bg-colour-dark',
   },
   alert: {
-    textColor: 'text-white',
-    backgroundColor: 'bg-[#D41121]',
+    textColor: 'text-shade-greyscale-white dark:text-shade-greyscale-white-dark',
+    backgroundColor: 'bg-colour-system-red-500 dark:bg-colour-system-red-500-dark',
   },
 };
 
@@ -24,7 +24,9 @@ const Label: FC<Props> = ({ text, type, className = '' }) => {
 
   return (
     <div className={`${backgroundColor} ${className} inline-flex rounded-full px-3 py-1`}>
-      <p className={`${textColor} font-museo flex items-center text-xs font-bold leading-4`}>
+      <p
+        className={`${textColor} font-tag-label-font text-tag-label-font font-tag-label-font-weight tracking-tag-label-font leading-tag-label-font rounded-full whitespace-nowrap flex items-center`}
+      >
         {text}
       </p>
     </div>

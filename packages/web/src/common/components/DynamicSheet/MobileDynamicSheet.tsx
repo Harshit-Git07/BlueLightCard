@@ -21,7 +21,7 @@ const MobileDynamicSheet: React.FC<DynamicSheetProps> = ({
         onClick={() => outsideClickClose && onClose && onClose()}
       ></div>
       <div
-        className={`fixed w-[100vw] bg-white flex flex-col space-y-2 rounded-t-3xl ${
+        className={`fixed w-[100vw] bg-colour-surface-light dark:bg-colour-surface-dark flex flex-col space-y-2 rounded-t-3xl ${
           isOpen ? 'translate-y-[-100%]' : 'hidden translate-y-0'
         } transition-transform duration-300`}
         // We use styles here as we want to enable the value to be dynamic.

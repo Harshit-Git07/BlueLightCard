@@ -2,10 +2,10 @@
 
 exports[`Label component should render normal label 1`] = `
 <div
-  className="bg-[#ECEFF2]  inline-flex rounded-full px-3 py-1"
+  className="bg-tag-bg-colour-light dark:bg-tag-bg-colour-dark  inline-flex rounded-full px-3 py-1"
 >
   <p
-    className="text-[#202125] font-museo flex items-center text-xs font-bold leading-4"
+    className="text-tag-label-colour-light dark:text-tag-label-colour-dark font-tag-label-font text-tag-label-font font-tag-label-font-weight tracking-tag-label-font leading-tag-label-font rounded-full whitespace-nowrap flex items-center"
   >
     Online
   </p>
@@ -14,10 +14,10 @@ exports[`Label component should render normal label 1`] = `
 
 exports[`Label component should render red label 1`] = `
 <div
-  className="bg-[#D41121]  inline-flex rounded-full px-3 py-1"
+  className="bg-colour-system-red-500 dark:bg-colour-system-red-500-dark  inline-flex rounded-full px-3 py-1"
 >
   <p
-    className="text-white font-museo flex items-center text-xs font-bold leading-4"
+    className="text-shade-greyscale-white dark:text-shade-greyscale-white-dark font-tag-label-font text-tag-label-font font-tag-label-font-weight tracking-tag-label-font leading-tag-label-font rounded-full whitespace-nowrap flex items-center"
   >
     0/3 codes remaining
   </p>

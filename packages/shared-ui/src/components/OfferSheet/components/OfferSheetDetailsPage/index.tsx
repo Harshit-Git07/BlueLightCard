@@ -47,6 +47,7 @@ const userResponseModel = z.object({
 });
 
 const VALID_CARD_STATUSES = ['ADDED_TO_BATCH', 'USER_BATCHED', 'PHYSICAL_CARD'];
+const GRACE_PERIOD_DAYS = 30;
 
 function getIsRedemptionButtonDisabled() {
   const platformAdapter = usePlatformAdapter();
@@ -75,7 +76,7 @@ function getIsRedemptionButtonDisabled() {
 
       if (latestCard.cardStatus === 'CARD_EXPIRED') {
         const expirationDate = new Date(Number(latestCard.expires));
-        expirationDate.setDate(expirationDate.getDate() + 30);
+        expirationDate.setDate(expirationDate.getDate() + GRACE_PERIOD_DAYS);
 
         if (new Date() <= expirationDate) {
           return false;
@@ -507,7 +508,7 @@ const OfferSheetDetailsPage: FC = () => {
       {!showErrorPage && (
         <>
           <OfferTopDetailsHeader />
-          <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-white">
+          <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-colour-surface-light dark:bg-colour-surface-dark">
             <div className="w-full flex flex-wrap mb-2 justify-center">
               {labels.map((label) => (
                 <Label

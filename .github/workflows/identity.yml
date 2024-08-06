@@ -129,6 +129,14 @@ jobs:
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
         run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy identity --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'staging'
+          service_name: 'identity'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
 
   e2e-test:
     name: End to End Test
@@ -203,3 +211,11 @@ jobs:
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
         run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy identity --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'production'
+          service_name: 'identity'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}

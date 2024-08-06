@@ -152,6 +152,14 @@ jobs:
         env:
           BRAND: BLC_UK
         run: npx sst deploy global --stage staging && npx sst deploy discovery --stage staging
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'staging'
+          service_name: 'discovery'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -183,3 +191,11 @@ jobs:
         env:
           BRAND: BLC_UK
         run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy discovery --stage production --region ${{matrix.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'production'
+          service_name: 'discovery'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}

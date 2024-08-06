@@ -5,6 +5,7 @@ import { ApiGatewayV1Api, Config, StackContext, use } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
@@ -39,9 +40,10 @@ import { VaultCodesUpload } from './s3/vaultCodesUpload';
 export async function Redemptions({ app, stack }: StackContext) {
   const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams, bastionHost } = use(Shared);
   const { authorizer } = use(Identity);
+  const SERVICE_NAME = 'redemptions';
 
   // set tag service identity to all resources
-  stack.tags.setTag('service', 'redemptions');
+  stack.tags.setTag('service', SERVICE_NAME);
   stack.tags.setTag('map-migrated', 'd-server-017zxazumgiycz');
 
   // Config
@@ -51,14 +53,21 @@ export async function Redemptions({ app, stack }: StackContext) {
   stack.setDefaultFunctionProps({
     timeout: 20,
     environment: {
-      service: 'redemptions',
+      service: SERVICE_NAME,
+      DD_VERSION: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_VERSION, ''),
+      DD_ENV: process.env?.SST_STAGE || 'undefined',
+      DD_API_KEY: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_API_KEY, ''),
+      DD_GIT_COMMIT_SHA: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_GIT_COMMIT_SHA, ''),
+      DD_GIT_REPOSITORY_URL: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_GIT_REPOSITORY_URL, ''),
+      USE_DATADOG_AGENT: getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false'),
+      DD_SERVICE: SERVICE_NAME,
     },
   });
 
   // Create Database
   const database = await new RedemptionsDatabase(app, stack, vpc, bastionHost).setup();
 
-  const api = new ApiGatewayV1Api(stack, 'redemptions', {
+  const api = new ApiGatewayV1Api(stack, SERVICE_NAME, {
     authorizers: {
       redemptionsAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
     },

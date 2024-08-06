@@ -1,9 +1,11 @@
+import 'dd-trace/init';
+
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 import { datadog } from 'datadog-lambda-js';
 
 import { Result } from '@blc-mono/core/types/result';
-import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { ContextAwareLogger, LoggerContext } from '@blc-mono/core/utils/logger/contextAwareLogger';
 import { ILogger, ILoggerDetail } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
@@ -22,13 +24,7 @@ export abstract class Controller<
   protected readonly logger: ILogger;
 
   constructor(logger: ILogger) {
-    let USE_DATADOG_AGENT: string | null;
-
-    try {
-      USE_DATADOG_AGENT = getEnv(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT);
-    } catch (err) {
-      USE_DATADOG_AGENT = null;
-    }
+    const USE_DATADOG_AGENT = getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
 
     if (USE_DATADOG_AGENT && USE_DATADOG_AGENT === 'true') {
       this.invoke = datadog(this.invoke.bind(this));

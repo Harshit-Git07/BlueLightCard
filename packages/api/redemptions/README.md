@@ -146,3 +146,22 @@ It's possible to inspect the database locally by running:
 ```sh
 npm run -w packages/api/redemptions drizzle:studio
 ```
+
+### Running locally and querying redemptions app
+
+Once the local app started ( `npm run dev` ), generate a token : `npm run -w packages/api/redemptions authenticateTestUser`
+
+Copy the _ID Token_ into the bearer token for any API call, e.g :
+
+```sh
+curl --location 'https://abcdef.execute-api.eu-west-2.amazonaws.com/v1/member/redeem' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: ••••••' \
+--data '{
+"offerId": 8724,
+"companyName": "foobar",
+"offerName": "barfoo"
+}'
+```
+
+( The URL for redemptions should show in the terminal when the app is launched )

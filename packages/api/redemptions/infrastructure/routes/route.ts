@@ -10,7 +10,7 @@ import {
   Model,
   ResponseModel,
 } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { SSTFunction } from '../constructs/SSTFunction';
@@ -56,15 +56,10 @@ export class Route {
       ].filter(Boolean),
     );
 
-    let layers: [string] | undefined;
-    try {
-      const USE_DATADOG_AGENT = getEnv(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT);
-      // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
-      layers =
-        USE_DATADOG_AGENT === 'true' ? ['arn:aws:lambda:eu-west-2:464622532012:layer:Datadog-Extension:60'] : undefined;
-    } catch (err) {
-      layers = undefined;
-    }
+    const USE_DATADOG_AGENT = getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
+    // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+    const layers =
+      USE_DATADOG_AGENT === 'true' ? ['arn:aws:lambda:eu-west-2:464622532012:layer:Datadog-Extension:60'] : undefined;
 
     return {
       authorizer: authorizer ? authorizer : 'redemptionsAuthorizer',

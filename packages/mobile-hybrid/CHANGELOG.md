@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.24.2...bluelightcard/mobile-hybrid-v1.25.0) (2024-08-06)
+
+
+### Features
+
+* Feat/to 825 whitelabel heading company about ([#1894](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1894)) ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+* replaced hard coded styles with tokens for colours and fonts in CompanyAbout component ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+
+
+### Bug Fixes
+
+* for CompanyAbout component description in dark mode ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+* for Incorrect font for CompanyAbout component description ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+* Updated Back button to use Button component ([#1878](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1878)) ([e146feb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e146febe9093cb115952304e2b3d99644fa23e91))
+
 ## [1.24.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.24.1...bluelightcard/mobile-hybrid-v1.24.2) (2024-07-25)
 
 

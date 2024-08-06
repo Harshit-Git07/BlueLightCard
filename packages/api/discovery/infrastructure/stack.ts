@@ -14,17 +14,30 @@ import { Route } from './routes/route';
 export async function Discovery({ stack, app }: StackContext) {
   const { certificateArn } = use(Shared);
   const { authorizer } = use(Identity);
-
-  stack.tags.setTag('service', 'discovery');
+  const SERVICE_NAME = 'discovery';
+  stack.tags.setTag('service', SERVICE_NAME);
 
   const config = DiscoveryStackConfigResolver.for(stack, app.region as DiscoveryStackRegion);
   const globalConfig = GlobalConfigResolver.for(stack.stage);
+  const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
+
+  // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+  const layers =
+    USE_DATADOG_AGENT === 'true' ? ['arn:aws:lambda:eu-west-2:464622532012:layer:Datadog-Extension:60'] : undefined;
 
   stack.setDefaultFunctionProps({
     timeout: 20,
     environment: {
-      service: 'discovery',
+      service: SERVICE_NAME,
+      DD_VERSION: process.env.DD_VERSION || '',
+      DD_ENV: process.env.SST_STAGE || 'undefined',
+      DD_API_KEY: process.env.DD_API_KEY || '',
+      DD_GIT_COMMIT_SHA: process.env.DD_GIT_COMMIT_SHA || '',
+      DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
+      USE_DATADOG_AGENT,
+      DD_SERVICE: SERVICE_NAME,
     },
+    layers,
   });
 
   const api = new ApiGatewayV1Api(stack, 'discovery', {

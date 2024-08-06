@@ -17,17 +17,14 @@ Default.args = {
   placeholder: 'Select company',
   options: [
     {
-      value: 1,
       id: '1',
       label: 'Option One',
     },
     {
-      value: 2,
       id: '2',
       label: 'Option Two',
     },
     {
-      value: 3,
       id: '3',
       label: 'Option Three',
     },

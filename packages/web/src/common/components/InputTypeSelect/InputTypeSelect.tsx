@@ -43,7 +43,7 @@ const InputTypeSelect: FC<InputTypeSelectProps> = ({
 
   const handleSelectOption = (option: KeyValue) => {
     handleSelect(option.label);
-    onSelect();
+    onSelect(option.id);
     setIsOpen(false);
   };
 
@@ -79,7 +79,7 @@ const InputTypeSelect: FC<InputTypeSelectProps> = ({
           {options.map((option, index) => (
             <option
               key={index}
-              value={option.value}
+              value={option.id}
               className={`flex h-7 items-center cursor-pointer focus:outline-none px-5 focus:text-dropDownItem-text-active-colour focus:border-b-dropDownItem-border-active-colour focus:border-b hover:border-b hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:focus:text-dropDownItem-text-active-colour-dark dark:focus:border-b-dropDownItem-border-active-colour-dark dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark  dark:hover:border-b-dropDownItem-divider-hover-colour-dark font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark ${
                 selected === option.label
                   ? 'border-b border-b-dropDownItem-bg-colour dark:border-b-dropDownItem-bg-colour-dark'

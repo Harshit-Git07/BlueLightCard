@@ -13,10 +13,10 @@ const PillGroup: React.FC<PillGroupProps> = ({ pillGroup, onSelectedPill, title 
 
   return (
     <div className="w-full">
-      <p className="tablet:px-4 py-1.5 mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark">
+      <p className="py-1.5 mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark">
         {title}
       </p>
-      <div className="tablet:px-3 flex gap-[15px] flex-wrap">
+      <div className="flex gap-[15px] flex-wrap">
         {pillGroup.map((pill: PillProps) => (
           <PillButtons
             key={pill.id}

@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchDropDown should match snapshot 1`] = `
+<div
+  className="mx-auto pt-[54px] pb-[100px] max-w-[1408px]"
+>
+  <div
+    className="flex gap-2 px-4 py-[10px]"
+  >
+    <a
+      className="text-colour-primary dark:text-colour-primary-dark"
+      data-testid="anchor-link"
+      href="/nearme.php"
+    >
+      <svg
+        aria-hidden="true"
+        className="svg-inline--fa fa-location-dot fa-lg mr-2"
+        data-icon="location-dot"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        style={{}}
+        viewBox="0 0 384 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+          fill="currentColor"
+          style={{}}
+        />
+      </svg>
+      <span
+        className="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body"
+      >
+        Offers near you
+      </span>
+    </a>
+  </div>
+  <div
+    className="my-[22px] px-4"
+  >
+    <div
+      className="w-full"
+    >
+      <p
+        className="py-1.5 mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark"
+      >
+        Browse categories
+      </p>
+      <div
+        className="flex gap-[15px] flex-wrap"
+      />
+    </div>
+  </div>
+  <div
+    className="px-4"
+  >
+    <p
+      className="mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark"
+    >
+      Browse companies
+    </p>
+    <div
+      className="relative inline-block w-full"
+    >
+      <div
+        className="rounded-[4px] bg-colour-surface-light dark:bg-colour-surface-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark border px-4 py-3 cursor-pointer flex justify-between items-center"
+        onClick={[Function]}
+      >
+        <span
+          className="font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark"
+        >
+          Select company
+        </span>
+        <svg
+          aria-hidden="true"
+          className="svg-inline--fa fa-chevron-down fa-sm text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+          data-icon="chevron-down"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          style={{}}
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+            fill="currentColor"
+            style={{}}
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+`;

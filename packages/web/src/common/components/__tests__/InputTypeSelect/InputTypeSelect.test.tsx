@@ -10,12 +10,10 @@ describe('InputSelectField component', () => {
     props = {
       options: [
         {
-          value: 1,
           label: 'Option One',
           id: '1',
         },
         {
-          value: 2,
           label: 'Option Two',
           id: '2',
         },

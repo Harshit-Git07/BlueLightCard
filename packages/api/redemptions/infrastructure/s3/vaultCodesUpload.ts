@@ -5,8 +5,6 @@ import { Stack } from 'sst/constructs';
 
 import { IVaultCodesUploadAdapter } from './adapter';
 
-const platform = 'blc-uk';
-
 export class VaultCodesUpload {
   public readonly setUp: IVaultCodesUploadAdapter;
 
@@ -20,7 +18,7 @@ export class VaultCodesUpload {
   }
 
   private createBucket(): Bucket {
-    const bucketName = `${this.stack.stage}-${platform}-vault-codes-upload`;
+    const bucketName = `${this.stack.stage}-${this.stack.region}-vault-codes-upload`;
     return new Bucket(this.stack, bucketName, {
       removalPolicy: RemovalPolicy.RETAIN_ON_UPDATE_OR_DELETE,
       autoDeleteObjects: false,

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.89.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.88.1...bluelightcard/identity-v1.89.0) (2024-08-07)
+
+
+### Features
+
+* feat/COT-239-v1, added zendesk app client and added 3 new api endpoints ([#1921](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1921)) ([8dbae18](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8dbae18ef7bee64438cc0265a153dba7b6fb4464))
+
 ## [1.88.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.88.0...bluelightcard/identity-v1.88.1) (2024-08-05)
 
 

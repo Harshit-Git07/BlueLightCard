@@ -4,10 +4,9 @@ import { Logger } from '@aws-lambda-powertools/logger'
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-zendeskLogout`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 
-
-const CLIENT_ID = process.env.ZENDESK_APP_CLIENT_ID;
-const USER_POOL_DOMAIN = process.env.USER_POOL_DOMAIN;
-const ZENDESK_SUBDOMAIN = process.env.ZENDESK_SUBDOMAIN;
+const CLIENT_ID = process.env.ZENDESK_APP_CLIENT_ID ?? "";
+const USER_POOL_DOMAIN = process.env.USER_POOL_DOMAIN ?? "";
+const ZENDESK_SUBDOMAIN = process.env.ZENDESK_SUBDOMAIN ?? "";
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<object> => {
   logger.info('input', { event });
@@ -29,6 +28,5 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       }
     }
   }
-
 
 };

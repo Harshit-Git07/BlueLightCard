@@ -8,11 +8,11 @@ import { Response } from './../../../../core/src/utils/restResponse/response'
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-zendeskCallback`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 
-const CLIENT_ID = process.env.ZENDESK_APP_CLIENT_ID;
-const REDIRECT_URI = process.env.ZENDESK_REDIRECT_URI;
-const USER_POOL_DOMAIN = process.env.USER_POOL_DOMAIN;
-const SECRET = process.env.ZENDESK_JWT_SECRET;
-const ZENDESK_SUBDOMAIN = process.env.ZENDESK_SUBDOMAIN;
+const CLIENT_ID = process.env.ZENDESK_APP_CLIENT_ID ?? "";
+const REDIRECT_URI = process.env.ZENDESK_REDIRECT_URI ?? "";
+const USER_POOL_DOMAIN = process.env.USER_POOL_DOMAIN ?? "";
+const SECRET = process.env.ZENDESK_JWT_SECRET ?? "";
+const ZENDESK_SUBDOMAIN = process.env.ZENDESK_SUBDOMAIN ?? "";
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<object> => {
   logger.info('input', { event });

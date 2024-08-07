@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.20.0...bluelightcard/redemptions-v1.21.0) (2024-08-07)
+
+
+### Features
+
+* [TR-463] added showCard emails ([#1790](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1790)) ([385ea53](https://github.com/bluelightcard/BlueLightCard-2.0/commit/385ea5314e7e4cf4081acb8d1ea35a0f035a631b))
+* [Tr-702] vault code batch upload infra ([#1832](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1832)) ([40c7f5a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/40c7f5a47fb6516c8688ebdd21ed57b632739af9))
+* add additional error handling for parseErrors ([#1806](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1806)) ([c77a65f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c77a65f6ceb467ac8ac87e446e96d257f9d07b58))
+* add kinds to parsing errors. ([c77a65f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c77a65f6ceb467ac8ac87e446e96d257f9d07b58))
+* added infra for vault code upload ([d663e45](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d663e452782f10c468fd024c7391904e1c2142a3))
+* showCard emails implemnted ([385ea53](https://github.com/bluelightcard/BlueLightCard-2.0/commit/385ea5314e7e4cf4081acb8d1ea35a0f035a631b))
+* Tr 627 vault code upload infrastructure ([#1654](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1654)) ([d663e45](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d663e452782f10c468fd024c7391904e1c2142a3))
+* TR-665 add braze push notifications ([#1830](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1830)) ([7f17aaf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7f17aafc3b9adee799b6774710d0e089a82fb8c2))
+* update braze keys ([#1856](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1856)) ([f46334d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f46334d4b882c5b1fcb5dc0b73000f2977822b74))
+* update braze keys ([#1923](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1923)) ([4c6fb81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4c6fb811cad71e8292770597d240f9d49433d116))
+* Vault code batch upload infra ([40c7f5a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/40c7f5a47fb6516c8688ebdd21ed57b632739af9))
+* vault threshold send email lambda ([#1692](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1692)) ([87b9644](https://github.com/bluelightcard/BlueLightCard-2.0/commit/87b96444acde711a7784f5dbf83076b404b99e03))
+
+
+### Bug Fixes
+
+* type issue with schema.ts ([#1810](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1810)) ([87ecd63](https://github.com/bluelightcard/BlueLightCard-2.0/commit/87ecd63b6124914c318c143a106e45cf659ea627))
+
+
+### Other Changes
+
+* PE-92: Adding datadog tracing to redemptions API ( staging only ) ([#1822](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1822)) ([68ad74b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/68ad74bc11c005967a51a5ea87ca874389235025))
+* PE-92: Updating datadog instrumentation ([#1889](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1889)) ([463f532](https://github.com/bluelightcard/BlueLightCard-2.0/commit/463f532c0437c91b0d8e7eb5f0d38e77d9d36154))
+
 ## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.19.0...bluelightcard/redemptions-v1.20.0) (2024-07-15)
 
 

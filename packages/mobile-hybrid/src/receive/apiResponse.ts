@@ -1,6 +1,7 @@
 import eventBus from '@/eventBus';
 import { Channels } from '@/globals';
 import { Logger } from '@/logger';
+import { decodeBase64 } from '@/utils/base64';
 
 /**
  * @description Used to receive api responses from the native app
@@ -26,7 +27,7 @@ export default class NativeReceiveAPIResponse implements NativeReceive.WebViewAP
 
     const joinedChunks = response.reduce((acc, chunk) => {
       try {
-        const decoded = atob(chunk);
+        const decoded = decodeBase64(chunk);
         acc += decoded;
       } catch {
         invalidBase64Chunks += 1;

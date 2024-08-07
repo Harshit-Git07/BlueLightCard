@@ -833,12 +833,12 @@ const createExternalClient = (stack: Stack, cognito: Cognito, isDds: boolean, ui
   const providers = isDds ? providerList.DDS : providerList.BLC;
   let loginClientIdMap: any = {};
 
-  providers.map((clients: { partnersName: string; callBackUrl: string; signoutUrl: string; partnerUniqueId: string }) => {
+  providers.map((clients: { partnersName: string; callBackUrl: string; signoutUrl: string; partnerUniqueId: string, generateSecret?: boolean }) => {
     const externalClient = cognito.cdk.userPool.addClient(clients.partnersName, {
       authFlows: {
         userPassword: true,
       },
-      generateSecret: true,
+      generateSecret: clients.generateSecret ?? true,
       oAuth: {
         flows: {
           authorizationCodeGrant: true,

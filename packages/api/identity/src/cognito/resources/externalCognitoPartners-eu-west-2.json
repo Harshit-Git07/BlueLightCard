@@ -17,7 +17,14 @@
           "callBackUrl": "https://localhost",
           "signoutUrl": "https://localhost",
           "partnerUniqueId": "CREDITEC"
-      }
+      },
+      {
+        "partnersName": "UK Zendesk",
+        "callBackUrl": "https://identity.blcshine.io/zendesk/callback",
+        "signoutUrl": "https://bluelightcard.zendesk.com/",
+        "generateSecret": false,
+        "partnerUniqueId": "ZENDESK"
+    }
     ],
     "DDS": [
       {

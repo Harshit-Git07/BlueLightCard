@@ -174,6 +174,11 @@ export function Identity({ stack }: StackContext) {
             service: 'identity',
             allowedDomains: getAllowedDomains(stack.stage),
             REGION: stack.region,
+            ZENDESK_JWT_SECRET: appSecret.secretValueFromJson('zendesk_jwt_secret').toString(),
+            ZENDESK_APP_CLIENT_ID: appSecret.secretValueFromJson('zendesk_app_client_id').toString(),
+            ZENDESK_REDIRECT_URI: appSecret.secretValueFromJson('zendesk_redirect_uri').toString(),
+            USER_POOL_DOMAIN: appSecret.secretValueFromJson('user_pool_domain').toString(),
+            ZENDESK_SUBDOMAIN: appSecret.secretValueFromJson('zendesk_subdomain').toString()
           },
           permissions: [identityTable],
         },
@@ -181,6 +186,9 @@ export function Identity({ stack }: StackContext) {
       routes: {
         'POST /{brand}/organisation': 'packages/api/identity/src/eligibility/listOrganisation.handler',
         'POST /{brand}/organisation/{organisationId}': 'packages/api/identity/src/eligibility/listService.handler',
+        'GET /zendesk/login' : 'packages/api/identity/src/external-provider/zendesk/login.handler',
+        'GET /zendesk/logout' : 'packages/api/identity/src/external-provider/zendesk/logout.handler',
+        'GET /zendesk/callback' : 'packages/api/identity/src/external-provider/zendesk/callback.handler',
       },
       cdk: {
         restApi: {

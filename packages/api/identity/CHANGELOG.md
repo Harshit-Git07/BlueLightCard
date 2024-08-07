@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.89.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.89.0...bluelightcard/identity-v1.89.1) (2024-08-07)
+
+
+### Bug Fixes
+
+* feat/COT-239-v2 repushing for env vars ([#1925](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1925)) ([a2fae8a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a2fae8a6121e9b328149588077181e96c5b21b72))
+
 ## [1.89.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.88.1...bluelightcard/identity-v1.89.0) (2024-08-07)
 
 

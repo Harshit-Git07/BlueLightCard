@@ -72,11 +72,11 @@ export class RedemptionsStackConfigResolver {
       redemptionsWebHost: 'https://www.bluelightcard.co.uk',
       redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
       redemptionsEmailDomain: 'bluelightcard.co.uk',
-      brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',
-      brazeRedemptionVaultQRPushNotificationCampaignId: '4805f70d-cdab-4eee-9d47-107b3bda0f61',
-      brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
-      brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
-      brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
+      brazeRedemptionVaultPushNotificationCampaignId: 'add3d84e-0ed2-447f-a2f8-a61fed443927',
+      brazeRedemptionVaultQRPushNotificationCampaignId: '9b123d2e-b73d-456c-99c4-377dcb1c9348',
+      brazeRedemptionPreAppliedPushNotificationCampaignId: 'f0e25e82-1436-4357-b198-c2b69fd98cf4',
+      brazeRedemptionGenericPushNotificationCampaignId: '378d0b0e-aa79-4b7e-a1a8-96459db8379a',
+      brazeRedemptionShowCardPushNotificationCampaignId: '90df7afd-5d1d-48d5-a4a5-a71c9279c1d0',
     };
   }
 

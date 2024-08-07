@@ -9,9 +9,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      #Checkout repo and install dependencies
+      # Checkout repo and install dependencies
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Setup
         uses: ./.github/actions/setup
 
@@ -50,11 +51,25 @@ jobs:
         if: success()
         run: echo 0 > .failure-count
 
+      # Generate Playwright report if the test fails
+      - name: Generate Playwright report
+        if: failure()
+        working-directory: packages/web-playwright-tests
+        run: npx playwright show-report
+
+      # Upload Playwright report if the test fails
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: packages/web-playwright-tests/playwright-report
+
       # Send Slack message if failure count reaches 3
       - name: Send Slack message on fail
         if: steps.read_failure_count.outputs.failure_count == '3'
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "*Playwright test `Login to uk home page has failed for the third consecutive time`*\n*Project:* $GITHUB_REPOSITORY\n*Triggered by:* $GITHUB_ACTOR\n\n<$GITHUB_RUN_URL|Job Details>",
+            "text": "*Playwright test `Login to uk home page` has failed for the third consecutive time*\n*Project:* $GITHUB_REPOSITORY\n*Triggered by:* $GITHUB_ACTOR\n\n<$GITHUB_RUN_URL|Job Details>",
             "mrkdwn": true
           }' ${{ vars.CI_NOTIFICATIONS_WEBHOOK }}

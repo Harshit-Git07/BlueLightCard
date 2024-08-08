@@ -139,7 +139,7 @@ jobs:
           DD_GIT_COMMIT_SHA: '${{ vars.DD_GIT_COMMIT_SHA }}'
           DD_GIT_REPOSITORY_URL: '${{ vars.DD_GIT_COMMIT_SHA }}'
           DD_API_KEY: '${{ secrets.DATADOG_BLC_UK_CLIENT_TOKEN }}'
-          USE_DATADOG_AGENT: 'false'
+          USE_DATADOG_AGENT: 'true'
         run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy identity --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog

@@ -30,13 +30,13 @@ const SERVICE_NAME = 'identity'
 
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
-// https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
-const layers =
-  USE_DATADOG_AGENT === 'true' ? ['arn:aws:lambda:eu-west-2:464622532012:layer:Datadog-Extension:60'] : undefined;
-
 export function Identity({ stack }: StackContext) {
   const globalConfig = GlobalConfigResolver.for(stack.stage);
   const { certificateArn, bus, webACL } = use(Shared);
+
+  // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+  const layers =
+    USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`] : undefined;
 
   //set tag service identity to all resources
   stack.tags.setTag('service', SERVICE_NAME);
@@ -295,6 +295,10 @@ function deployDdsSpecificResources(stack: Stack) {
   const DDS_COGNITO_USER_POOL_ID = process.env.DDS_COGNITO_USER_POOL_ID ?? '';
   const DDS_OLD_COGNITO_USER_POOL_ID = process.env.DDS_OLD_COGNITO_USER_POOL_ID ?? '';
   const BLC_UK_IDENTITY_API_ID = process.env.BLC_UK_IDENTITY_API_ID ?? '';
+
+  // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+  const layers =
+    USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`] : undefined;
 
   // DDS Cognito User Pools retrieved from BLC UK Identity stack
   const oldCognitoUserPool = UserPool.fromUserPoolId(stack, 'oldCognitoUserPool', DDS_OLD_COGNITO_USER_POOL_ID);

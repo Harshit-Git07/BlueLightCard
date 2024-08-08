@@ -59,7 +59,9 @@ export class Route {
     const USE_DATADOG_AGENT = getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
     // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
     const layers =
-      USE_DATADOG_AGENT === 'true' ? ['arn:aws:lambda:eu-west-2:464622532012:layer:Datadog-Extension:60'] : undefined;
+      USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
+        ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`]
+        : undefined;
 
     return {
       authorizer: authorizer ? authorizer : 'redemptionsAuthorizer',

@@ -31,7 +31,10 @@ jobs:
         id: playwright
         run: |
           for i in {1..3}; do
-            npx playwright test -g "@Uk @Smoke @Web @NeedsTestCase - Login to uk home page" && break
+            if npx playwright test -g "@Uk @Smoke @Web @NeedsTestCase - Login to uk home page"; then
+              echo "Test passed on attempt $i."
+              break
+            fi
             if [ $i -lt 3 ]; then
               echo "Test failed, retrying... ($i/3)"
             else
@@ -53,6 +56,6 @@ jobs:
         if: failure()
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "*Playwright test `Login to uk home page` has failed after 3 attempts*\n*Project:* $GITHUB_REPOSITORY\n*Triggered by:* $GITHUB_ACTOR\n\n<$GITHUB_RUN_URL|Job Details>",
+            "text": "*Playwright Web test `Login to UK home page`has failed after 3 attempts against production - Login functionality may not be functioning correctly - check the recent Playwright UK Login Test workflow report for further details*",
             "mrkdwn": true
           }' ${{ vars.CI_NOTIFICATIONS_WEBHOOK }}

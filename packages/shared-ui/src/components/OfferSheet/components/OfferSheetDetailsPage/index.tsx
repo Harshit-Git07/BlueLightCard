@@ -219,11 +219,6 @@ const OfferSheetDetailsPage: FC = () => {
 
   // Web first button click handler
   const webDiscountClickHandler = async () => {
-    if (redemptionType === 'showCard') {
-      onClose();
-      return;
-    }
-
     const redeemData = await getRedemptionData();
 
     if (redeemData.statusCode == 200) {
@@ -234,6 +229,8 @@ const OfferSheetDetailsPage: FC = () => {
           ...v,
           qrCodeValue: redeemData.data.redemptionDetails.code,
         }));
+      } else if (redemptionType === 'showCard') {
+        onClose();
       }
     } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
       handleMaxPerUserReached();

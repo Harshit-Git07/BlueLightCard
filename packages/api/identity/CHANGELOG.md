@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.91.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.0...bluelightcard/identity-v1.91.1) (2024-08-08)
+
+
+### Bug Fixes
+
+* TI-1564 - Add password validation to migration lambda ([#1938](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1938)) ([fb1dfab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fb1dfab66ab0958e18fc5a73b05a916d25da1d76))
+
 ## [1.91.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.90.0...bluelightcard/identity-v1.91.0) (2024-08-08)
 
 

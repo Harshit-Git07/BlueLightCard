@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.90.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.89.1...bluelightcard/identity-v1.90.0) (2024-08-08)
+
+
+### Features
+
+* [TI-1564] Add password validation ([#1890](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1890)) ([ee8fd00](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ee8fd00fa3de3965a51af6f6b29c750d75a8e76f))
+
 ## [1.89.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.89.0...bluelightcard/identity-v1.89.1) (2024-08-07)
 
 

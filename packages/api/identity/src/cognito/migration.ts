@@ -174,7 +174,7 @@ const authenticateUser = async (username: string, password: string) => {
 
   if (!isValidPasswordForLegacy(password)) {
     logger.error('Entered password does not match legacy regex', { username });
-    throw Error("The password you have entered is invalid, please enter a valid password");
+    throw new Error("The password you have entered is invalid, please enter a valid password");
   }
 
     try {

@@ -385,15 +385,18 @@ describe('Redemption Strategies', () => {
       vaultType: Vault['vaultType'],
       status: Vault['status'],
       maxPerUser: Vault['maxPerUser'],
+      id?: Vault['id'],
+      alertBelow?: Vault['alertBelow'],
+      email?: Vault['email'],
     ) =>
       Factory.define<typeof vaultsTable.$inferSelect>(() => ({
-        id: `vlt-${faker.string.uuid()}`,
+        id: id ?? `vlt-${faker.string.uuid()}`,
         redemptionId: redemptionId,
         vaultType: vaultType,
         status,
-        alertBelow: 10,
+        alertBelow: alertBelow ?? 10,
         created: faker.date.recent(),
-        email: faker.internet.email(),
+        email: email ?? faker.internet.email(),
         integrationId: faker.number.int({
           min: 1,
           max: 1_000_000,
@@ -553,7 +556,9 @@ describe('Redemption Strategies', () => {
         // Arrange
         const vaultCode = faker.string.alphanumeric(16);
         const mockVaultRepository = {
-          findOneByRedemptionId: jest.fn().mockResolvedValue(vault('1', 'standard', 'active', 3).build()),
+          findOneByRedemptionId: jest
+            .fn()
+            .mockResolvedValue(vault('1', 'standard', 'active', 3, 'vlt-1234', 100, 'any@mail.com').build()),
         } satisfies Partial<IVaultsRepository>;
         const mockVaultCodesRepository = {
           checkIfMemberReachedMaxCodeClaimed: jest.fn().mockResolvedValue(false),
@@ -605,6 +610,12 @@ describe('Redemption Strategies', () => {
             affiliate: redemption.affiliate,
             url: redemption.url,
             clientType: defaultParams.clientType,
+            vaultDetails: {
+              id: 'vlt-1234',
+              alertBelow: 100,
+              email: 'any@mail.com',
+              vaultType: 'standard',
+            },
           },
         });
 
@@ -751,7 +762,15 @@ describe('Redemption Strategies', () => {
         const redemptionCreated = redemption.build({
           redemptionType: 'vault',
         });
-        const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
+        const vaultCreated = vault(
+          redemptionCreated.id,
+          'legacy',
+          'active',
+          3,
+          'vlt-1234',
+          100,
+          'any@mail.com',
+        ).build();
         await connection.db.insert(redemptionsTable).values(redemptionCreated);
         await connection.db.insert(vaultsTable).values(vaultCreated);
 
@@ -782,6 +801,12 @@ describe('Redemption Strategies', () => {
             affiliate: redemptionCreated.affiliate,
             url: redemptionCreated.url,
             clientType: defaultStrategyParams.clientType,
+            vaultDetails: {
+              id: 'vlt-1234',
+              alertBelow: 100,
+              email: 'any@mail.com',
+              vaultType: 'legacy',
+            },
           },
         });
       });

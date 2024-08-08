@@ -74,6 +74,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
         redemptionType: redemption.redemptionType,
         code: result.redemptionDetails.code,
         url: result.redemptionDetails.url ?? '',
+        vaultDetails: result.redemptionDetails.vaultDetails,
       });
       await this.redemptionsEventsRepository.publishRedemptionEvent(event).catch((error) => {
         this.logger.error({
@@ -81,6 +82,14 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
           error,
         });
       });
+      return {
+        kind: result.kind,
+        redemptionType: result.redemptionType,
+        redemptionDetails: {
+          code: result.redemptionDetails.code,
+          url: result.redemptionDetails.url ?? '',
+        },
+      };
     }
 
     return result;
@@ -129,6 +138,12 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
 
     const redemptionDetails = {
       code: claimedCode.code,
+      vaultDetails: {
+        id: vault.id,
+        alertBelow: vault.alertBelow,
+        email: vault.email ?? '',
+        vaultType: vault.vaultType,
+      },
     };
     const vaultResponse: RedeemVaultStrategyResult = {
       kind: 'Ok',
@@ -182,6 +197,12 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
 
     const redemptionDetails = {
       code: assignCodeResponse.code,
+      vaultDetails: {
+        id: vault.id,
+        alertBelow: vault.alertBelow,
+        email: vault.email ?? '',
+        vaultType: vault.vaultType,
+      },
     };
     const vaultResponse: RedeemVaultStrategyResult = {
       kind: 'Ok',

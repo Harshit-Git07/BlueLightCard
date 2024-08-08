@@ -51,7 +51,12 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
         code: vaultCodesTable.code,
       })
       .from(vaultCodesTable)
-      .where(and(eq(vaultCodesTable.vaultId, vaultId), isNull(vaultCodesTable.memberId)))
+      .where(
+        and(
+          eq(vaultCodesTable.vaultId, vaultId),
+          or(isNull(vaultCodesTable.memberId), eq(vaultCodesTable.memberId, '')),
+        ),
+      )
       .limit(10)
       .orderBy(asc(vaultCodesTable.expiry))
       .groupBy(vaultCodesTable.id)
@@ -64,7 +69,12 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
       const claimCode = await this.connection.db
         .update(vaultCodesTable)
         .set({ memberId })
-        .where(and(eq(vaultCodesTable.id, codes[randomIndex].id), isNull(vaultCodesTable.memberId)))
+        .where(
+          and(
+            eq(vaultCodesTable.id, codes[randomIndex].id),
+            or(isNull(vaultCodesTable.memberId), eq(vaultCodesTable.memberId, '')),
+          ),
+        )
         .returning({
           code: vaultCodesTable.code,
         })

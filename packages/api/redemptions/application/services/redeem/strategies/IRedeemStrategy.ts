@@ -49,6 +49,12 @@ export type VaultStrategyResultWithDetails = {
   redemptionDetails: {
     url?: string;
     code: string;
+    vaultDetails?: {
+      id: string;
+      alertBelow: number;
+      vaultType: 'legacy' | 'standard';
+      email: string;
+    };
   };
 };
 export type VaultStrategyResultMaxPerUser = { kind: 'MaxPerUserReached' };

@@ -12,6 +12,7 @@ import { createHmac } from 'crypto';
 import { ProfileService } from 'src/services/ProfileService';
 import { BrandService } from 'src/services/BrandService';
 import { isValidEmail } from "./emailValidator";
+import { isValidPasswordForCognito, isValidPasswordForLegacy } from "./passwordValidator";
 var base64 = require('base-64');
 
 const service: string = process.env.SERVICE as string
@@ -166,6 +167,16 @@ const authenticateUserOldPool = async (username: string, password: string) => {
 const authenticateUser = async (username: string, password: string) => {
     // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
     logger.info('Attempting to authenticate user against legacy', { username })
+
+  if (!isValidPasswordForCognito(password)) {
+    logger.warn('Entered password does not match Cognito regex', { username })
+  }
+
+  if (!isValidPasswordForLegacy(password)) {
+    logger.error('Entered password does not match legacy regex', { username });
+    throw Error("The password you have entered is invalid, please enter a valid password");
+  }
+
     try {
         const response = await axios({
             method: 'get',

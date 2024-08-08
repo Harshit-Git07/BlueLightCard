@@ -26,13 +26,35 @@ import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 
+const SERVICE_NAME = 'identity'
+
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
+
+// https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+const layers =
+  USE_DATADOG_AGENT === 'true' ? ['arn:aws:lambda:eu-west-2:464622532012:layer:Datadog-Extension:60'] : undefined;
+
 export function Identity({ stack }: StackContext) {
   const globalConfig = GlobalConfigResolver.for(stack.stage);
   const { certificateArn, bus, webACL } = use(Shared);
 
   //set tag service identity to all resources
-  stack.tags.setTag('service', 'identity');
+  stack.tags.setTag('service', SERVICE_NAME);
   stack.tags.setTag('map-migrated', 'd-server-017zxazumgiycz');
+
+  stack.setDefaultFunctionProps({
+    environment: {
+      service: SERVICE_NAME,
+      DD_VERSION: process.env.DD_VERSION || '',
+      DD_ENV: process.env.SST_STAGE || 'undefined',
+      DD_API_KEY: process.env.DD_API_KEY || '',
+      DD_GIT_COMMIT_SHA: process.env.DD_GIT_COMMIT_SHA || '',
+      DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
+      USE_DATADOG_AGENT,
+      DD_SERVICE: SERVICE_NAME,
+    },
+    layers,
+  });
 
   if (isDdsUkBrand()) {
     // Resources able to be duplicated to DDS identity stack
@@ -162,7 +184,7 @@ export function Identity({ stack }: StackContext) {
     };
 
     //apis
-    const identityApi = new ApiGatewayV1Api(stack, 'identity', {
+    const identityApi = new ApiGatewayV1Api(stack, SERVICE_NAME, {
       authorizers: {
         identityAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', sharedAuthorizer),
       },
@@ -171,7 +193,7 @@ export function Identity({ stack }: StackContext) {
           timeout: 20,
           environment: {
             identityTableName: identityTable.tableName,
-            service: 'identity',
+            service: SERVICE_NAME,
             allowedDomains: getAllowedDomains(stack.stage),
             REGION: stack.region,
             ZENDESK_JWT_SECRET: appSecret.secretValueFromJson('zendesk_jwt_secret').toString(),
@@ -300,7 +322,7 @@ function deployDdsSpecificResources(stack: Stack) {
   };
 
   //apis
-  const identityApi = new ApiGatewayV1Api(stack, 'identity', {
+  const identityApi = new ApiGatewayV1Api(stack, SERVICE_NAME, {
     cdk: {
       restApi: RestApi.fromRestApiId(stack, 'IdentityApi', BLC_UK_IDENTITY_API_ID)
     }
@@ -309,6 +331,20 @@ function deployDdsSpecificResources(stack: Stack) {
   stack.addOutputs({
     CognitoUserPoolMembersClient: cognitoUserPool.userPoolId,
     IdentityApiEndpoint: identityApi.url,
+  });
+
+  stack.setDefaultFunctionProps({
+    environment: {
+      service: SERVICE_NAME,
+      DD_VERSION: process.env.DD_VERSION || '',
+      DD_ENV: process.env.SST_STAGE || 'undefined',
+      DD_API_KEY: process.env.DD_API_KEY || '',
+      DD_GIT_COMMIT_SHA: process.env.DD_GIT_COMMIT_SHA || '',
+      DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
+      USE_DATADOG_AGENT,
+      DD_SERVICE: SERVICE_NAME,
+    },
+    layers,
   });
 
   // Output the Cognito User Pool ID as a config parameter so that it can be

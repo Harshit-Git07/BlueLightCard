@@ -1,7 +1,10 @@
+import 'dd-trace/init';
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { type APIGatewayEvent, type APIGatewayProxyStructuredResultV2, type Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger'
+import { datadog } from 'datadog-lambda-js';
 import { BRANDS } from './../../../core/src/types/brands.enum'
 import { Response } from './../../../core/src/utils/restResponse/response'
 
@@ -12,8 +15,9 @@ const client = new DynamoDBClient({});
 const dynamodb = DynamoDBDocumentClient.from(client);
 const tableName = process.env.identityTableName;
 const apiKeyTableName = process.env.apiKeysTable;
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ? process.env.USE_DATADOG_AGENT.toLowerCase() : 'false';
 
-export const handler = async (event: APIGatewayEvent, context: Context): Promise<object> => {
+const handlerUnwrapped = async (event: APIGatewayEvent, context: Context): Promise<object> => {
   logger.info('input', { event });
   const brand = event.pathParameters != null ? event.pathParameters.brand?.toUpperCase() : null;
 
@@ -24,16 +28,16 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   if (!(brand in BRANDS)) {
     return Response.BadRequest({ message: 'Please provide a valid brand' });
   }
-  
+
   const data = event.body != null ? JSON.parse(event.body) : {employed: 1};
-  if(data != null  && (data.retired == undefined || data.retired == 0) && 
+  if(data != null  && (data.retired == undefined || data.retired == 0) &&
   (data.employed == undefined || data.employed == 0) && (data.volunteers == undefined || data.volunteers == 0)) {
     data.employed = 1;
   }
   let expAttrValues: Record<string,string> = {};
-  
+
   let attrName: Record<string,string> = {};
-  
+
   let filter = '';
   expAttrValues[':sk']= `BRAND#${brand}`;
   expAttrValues[':pk']= `ORGANISATION#`;
@@ -50,7 +54,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     filter += ` and #employed = :employed`;
   }
   if(data != null && data.volunteers != undefined && data.volunteers === 1) {
-    expAttrValues[':volunteers'] = `TRUE` ;  
+    expAttrValues[':volunteers'] = `TRUE` ;
     attrName['#volunteers']= 'volunteers';
     filter += ` and #volunteers = :volunteers`;
   }
@@ -81,9 +85,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }));
     logger.info('organisation found', brand);
     return Response.OK( {message: 'Success', data: apiResponse} );
-    
+
   } catch (error) {
     logger.error('error while fetching organisation ',{error});
     return Response.Error(error as Error);
   }
 };
+
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

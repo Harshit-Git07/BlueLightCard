@@ -8,11 +8,10 @@ describe('List organisation by brand', () => {
     beforeEach(() => {
         ddbMock.reset();
     });
-    
+
     test('Returns 400 with message when invalid brand', async () => {
-        
+
         const res = await handler(
-            // @ts-expect-error - We're not testing the event object
             {
                 headers: {},
                 pathParameters: { brand: 'test_brand_name' },
@@ -23,7 +22,7 @@ describe('List organisation by brand', () => {
         expect(res).toEqual({
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
+                'Access-Control-Allow-Origin': '*'
             },
             statusCode: 400, body: JSON.stringify({ message: 'Please provide a valid brand' })
         });
@@ -77,7 +76,6 @@ describe('List organisation by brand', () => {
             ],
         });
         const res = await handler(
-            // @ts-expect-error - We're not testing the event object
             {
                 headers: {},
                 pathParameters: { brand: 'blc_uk' },
@@ -86,18 +84,18 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, 
+            statusCode: 200,
             body: JSON.stringify({
                 message: 'Success',
                 data: [
-                    { id: "test_500", name: "test_HM C", retired: "false", volunteers: "false", employed: "true", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }, 
+                    { id: "test_500", name: "test_HM C", retired: "false", volunteers: "false", employed: "true", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" },
                 { description: "payslip within the last 3 months", id: "2", title: "Payslip", allowedFormats: "png/jpeg/jpg/pdf" }], maxUploads: "1", isTrusted: "false" },
                 { id: "test_600", name: "test_Mountain R", retired: "false", volunteers: "false", employed: "true", idRequirements: [{ description: "current work ID", title: "ID", id: "1", allowedFormats: "png/jpeg/jpg/pdf" }], "maxUploads": "1", isTrusted: "true" }
             ]
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
+                'Access-Control-Allow-Origin': '*'
             },
         });
     });
@@ -111,7 +109,6 @@ describe('List organisation by brand', () => {
             ],
         });
         const res = await handler(
-            // @ts-expect-error - We're not testing the event object
             {
                 headers:{},
                 pathParameters: { brand: 'blc_uk' },
@@ -120,15 +117,15 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, 
-            body: JSON.stringify({ 
+            statusCode: 200,
+            body: JSON.stringify({
                 message: 'Success',
-                data: [{ id: "test_100", name: "test_name", retired: "true", volunteers: "false", employed: "false" }] 
+                data: [{ id: "test_100", name: "test_name", retired: "true", volunteers: "false", employed: "false" }]
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
-            }, 
+                'Access-Control-Allow-Origin': '*'
+            },
         });
     });
 
@@ -141,7 +138,6 @@ describe('List organisation by brand', () => {
             ],
         });
         const res = await handler(
-            // @ts-expect-error - We're not testing the event object
             {
                 headers:{},
                 pathParameters: { brand: 'blc_uk' },
@@ -150,15 +146,15 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, 
-            body: JSON.stringify({ 
+            statusCode: 200,
+            body: JSON.stringify({
                 message: 'Success',
-                data: [{ id: "test_100", name: "test_name", retired: "false", volunteers: "false", employed: "true" }] 
+                data: [{ id: "test_100", name: "test_name", retired: "false", volunteers: "false", employed: "true" }]
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
-            }, 
+                'Access-Control-Allow-Origin': '*'
+            },
         });
     });
 
@@ -171,7 +167,6 @@ describe('List organisation by brand', () => {
             ],
         });
         const res = await handler(
-            // @ts-expect-error - We're not testing the event object
             {
                 headers:{},
                 pathParameters: { brand: 'blc_uk' },
@@ -180,15 +175,15 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, 
-            body: JSON.stringify({ 
+            statusCode: 200,
+            body: JSON.stringify({
                 message: 'Success',
-                data: [{ id: "test_100", name: "test_name", retired: "false", volunteers: "false", employed: "true"  }] 
+                data: [{ id: "test_100", name: "test_name", retired: "false", volunteers: "false", employed: "true"  }]
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
-            }, 
+                'Access-Control-Allow-Origin': '*'
+            },
         });
     });
 
@@ -201,7 +196,6 @@ describe('List organisation by brand', () => {
             ],
         });
         const res = await handler(
-            // @ts-expect-error - We're not testing the event object
             {
                 headers:{},
                 pathParameters: { brand: 'blc_uk' },
@@ -210,15 +204,15 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, 
-            body: JSON.stringify({ 
+            statusCode: 200,
+            body: JSON.stringify({
                 message: 'Success',
-                data: [{ id: "test_100", name: "test_name", retired: "false", volunteers: "true", employed: "false" }] 
+                data: [{ id: "test_100", name: "test_name", retired: "false", volunteers: "true", employed: "false" }]
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
-            }, 
+                'Access-Control-Allow-Origin': '*'
+            },
         });
     });
 
@@ -231,7 +225,6 @@ describe('List organisation by brand', () => {
             ],
         });
         const res = await handler(
-            // @ts-expect-error - We're not testing the event object
             {
                 headers:{},
                 pathParameters: { brand: 'blc_uk' },
@@ -240,15 +233,15 @@ describe('List organisation by brand', () => {
             {},
         );
         expect(res).toEqual({
-            statusCode: 200, 
-            body: JSON.stringify({ 
+            statusCode: 200,
+            body: JSON.stringify({
                 message: 'Success',
-                data: [{ id: "test_100", name: "test_name", retired: "TRUE", volunteers: "TRUE", employed: "TRUE"  }] 
+                data: [{ id: "test_100", name: "test_name", retired: "TRUE", volunteers: "TRUE", employed: "TRUE"  }]
             }),
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*' 
-            }, 
+                'Access-Control-Allow-Origin': '*'
+            },
         });
     });
 

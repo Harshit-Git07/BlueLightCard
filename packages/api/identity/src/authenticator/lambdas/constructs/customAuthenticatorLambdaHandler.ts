@@ -1,19 +1,26 @@
+import 'dd-trace/init';
+
 import { PolicyDocument } from 'aws-lambda';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import jwtDecode from 'jwt-decode';
 import { APIGatewayAuthorizerResult } from 'aws-lambda/trigger/api-gateway-authorizer';
 import { Logger } from '@aws-lambda-powertools/logger';
 
+import { datadog } from 'datadog-lambda-js';
+
 const BEARER_PREFIX = 'Bearer ';
 
 const logger = new Logger({ serviceName: `customAuthenticatorLambdaHandler` });
 
-export const handler = async function (event: any): Promise<APIGatewayAuthorizerResult> {
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ? process.env.USE_DATADOG_AGENT.toLowerCase() : 'false';
+
+
+const handlerUnwrapped = async function (event: any): Promise<APIGatewayAuthorizerResult> {
   const OLD_USER_POOL_ID = process.env.OLD_USER_POOL_ID ?? "";
   const OLD_USER_POOL_ID_DDS = process.env.OLD_USER_POOL_ID_DDS ?? "";
   const USER_POOL_ID = process.env.USER_POOL_ID ?? "";
   const USER_POOL_ID_DDS = process.env.USER_POOL_ID_DDS ?? "";
-  
+
   logger.debug(`event => ${JSON.stringify(event)}`);
 
   const authToken = getAuthenticationToken(event);
@@ -21,7 +28,7 @@ export const handler = async function (event: any): Promise<APIGatewayAuthorizer
   try {
     const decodedToken: any = jwtDecode(authToken);
     logger.debug(decodedToken);
-    
+
     const cognitoJwtVerifier = CognitoJwtVerifier.create([
       {
         userPoolId: OLD_USER_POOL_ID,
@@ -74,6 +81,8 @@ export const handler = async function (event: any): Promise<APIGatewayAuthorizer
     throw new Error('Unauthorized');
   }
 };
+
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;
 
 export function getAuthenticationToken(event: any) {
   let authToken = event.headers['Authorization'] || event.headers['authorization'] || '';

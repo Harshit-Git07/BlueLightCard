@@ -1,4 +1,4 @@
-name: Playwright UK login Test
+name: Playwright UK Login Test
 
 on:
   schedule:
@@ -19,6 +19,11 @@ jobs:
       - name: Install dependencies
         working-directory: packages/web-playwright-tests
         run: npm install
+
+      # Install Playwright browsers
+      - name: Install Playwright browsers
+        working-directory: packages/web-playwright-tests
+        run: npx playwright install
 
       # Run specified Playwright test - UK Login test
       - name: Run Playwright test - Login to UK

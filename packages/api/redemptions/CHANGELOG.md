@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.21.0...bluelightcard/redemptions-v1.22.0) (2024-08-08)
+
+
+### Features
+
+* tr 749 update vault code upload s3 bucket name try no 3 ([#1939](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1939)) ([ae8410a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae8410a4d185ae44d8f8ad287f35cf0e82019abc))
+
 ## [1.21.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.20.0...bluelightcard/redemptions-v1.21.0) (2024-08-07)
 
 

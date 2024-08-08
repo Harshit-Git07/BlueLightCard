@@ -18,6 +18,7 @@ export class VaultCodesUpload {
   }
 
   private createBucket(): Bucket {
+    //this comment can be removed, it is here just to trigger release PR, and again
     const bucketName = `${this.stack.stage}-${this.stack.region}-vault-codes-upload`;
     return new Bucket(this.stack, bucketName, {
       removalPolicy: RemovalPolicy.RETAIN_ON_UPDATE_OR_DELETE,

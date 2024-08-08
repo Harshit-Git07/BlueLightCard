@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # Checkout repo and install required dependencies
+      # Checkout repo and install dependencies
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -19,6 +19,11 @@ jobs:
       - name: Install dependencies
         working-directory: packages/web-playwright-tests
         run: npm install
+
+      # Install Playwright
+      - name: Install Playwright
+        working-directory: packages/web-playwright-tests
+        run: npx playwright install
 
       # Run specified Playwright test with retry logic
       - name: Run Playwright test - Login to UK
@@ -43,7 +48,7 @@ jobs:
           name: playwright-report
           path: packages/web-playwright-tests/html-report
 
-      # Send Slack message if test fails 3 times in a row
+      # Send Slack message if all retries fail
       - name: Send Slack message on fail
         if: failure()
         run: |

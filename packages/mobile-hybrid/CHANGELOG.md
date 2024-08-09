@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.25.1...bluelightcard/mobile-hybrid-v1.25.2) (2024-08-09)
+
+
+### Bug Fixes
+
+* spinner retry adjustment ([#1960](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1960)) ([620992b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/620992ba90831365f0d80c98af3deae788aa90ab))
+
 ## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.25.0...bluelightcard/mobile-hybrid-v1.25.1) (2024-08-09)
 
 

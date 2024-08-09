@@ -9,15 +9,16 @@ const SpinnerContainer: FC = () => {
   const loading = useAtomValue(spinner);
   const currentLoadingValue = useRef(loading);
 
-  useEffect(() => {
-    if (loading) {
-      setTimeout(() => {
-        if (currentLoadingValue.current) {
-          window.location.reload();
-        }
-      }, SPINNER_TIMEOUT);
-    }
-  }, [loading]);
+  // TODO: [HOTFIX_Spinner] Investigate
+  // useEffect(() => {
+  //   if (loading) {
+  //     setTimeout(() => {
+  //       if (currentLoadingValue.current) {
+  //         window.location.reload();
+  //       }
+  //     }, SPINNER_TIMEOUT);
+  //   }
+  // }, [loading]);
 
   useEffect(() => {
     currentLoadingValue.current = loading;

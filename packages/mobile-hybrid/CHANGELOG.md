@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.25.0...bluelightcard/mobile-hybrid-v1.25.1) (2024-08-09)
+
+
+### Bug Fixes
+
+* limit retry calls ([#1956](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1956)) ([c10d9dc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c10d9dc8bd0dae3ec83dbad1af0abc4f5e7d0696))
+* TO-952 foreign character is seen for some of the offers on prod ([#1902](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1902)) ([f568de9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f568de9323cd57b8bfda44e94a9f0256a2e371e6))
+
 ## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.24.2...bluelightcard/mobile-hybrid-v1.25.0) (2024-08-06)
 
 

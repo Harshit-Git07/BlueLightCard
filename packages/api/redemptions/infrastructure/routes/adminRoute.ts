@@ -4,7 +4,7 @@ import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1ApiFunctionRouteProps, Stack } from 'sst/constructs';
 
 import { ApiGatewayModelGenerator, MethodResponses } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { SSTFunction } from '../constructs/SSTFunction';
@@ -38,17 +38,13 @@ export class AdminRoute {
       [undefined, apiGatewayModelGenerator.getError404(), apiGatewayModelGenerator.getError500()].filter(Boolean),
     );
 
-    let layers: [string] | undefined;
-    try {
-      const USE_DATADOG_AGENT = getEnv(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT);
-      // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
-      const layers =
-        USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
-          ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`]
-          : undefined;
-    } catch (err) {
-      layers = undefined;
-    }
+    const USE_DATADOG_AGENT = getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
+
+    // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+    const layers =
+      USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
+        ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`]
+        : undefined;
 
     return {
       cdk: {

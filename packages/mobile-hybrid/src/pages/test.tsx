@@ -6,13 +6,14 @@ import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 import { spinner } from '@/modules/Spinner/store';
 import { Badge } from '@bluelightcard/shared-ui';
+import Spinner from '@/modules/Spinner';
 
 const TestPage: NextPage<any> = () => {
   const setSpinner = useSetAtom(spinner);
 
-  useEffect(() => {
-    setSpinner(false);
-  }, []);
+  // useEffect(() => {
+  //   setSpinner(false);
+  // }, []);
 
   return (
     <div>
@@ -20,8 +21,7 @@ const TestPage: NextPage<any> = () => {
         <title>Mobile Hybrid</title>
         <meta name="description" />
       </Head>
-      <SearchModule placeholder="Search for offers" />
-      <Badge label="Online" color="bg-[#BCA5F7]" size="small" />
+      <Spinner />
       {/* <BrowseCategories /> */}
       <FilterPanel />
     </div>

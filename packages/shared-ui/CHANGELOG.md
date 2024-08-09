@@ -2,22 +2,20 @@
 
 ## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.10.0...shared-ui-v1.11.0) (2024-08-05)
 
-
 ### Features
 
-* added new component for search empty state ([#1851](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1851)) ([dd1bbb6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd1bbb682ea2d2f98edef609351247d3e90a1429))
-* added text list item component ([#1860](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1860)) ([8c76be0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8c76be0be67f4b6c28f07cda2c3ce343e3dcf369))
-* Feat/to 825 whitelabel heading company about ([#1894](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1894)) ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
-* replaced hard coded styles with tokens for colours and fonts in CompanyAbout component ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
-* vault threshold send email lambda ([#1692](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1692)) ([87b9644](https://github.com/bluelightcard/BlueLightCard-2.0/commit/87b96444acde711a7784f5dbf83076b404b99e03))
-
+- added new component for search empty state ([#1851](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1851)) ([dd1bbb6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd1bbb682ea2d2f98edef609351247d3e90a1429))
+- added text list item component ([#1860](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1860)) ([8c76be0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8c76be0be67f4b6c28f07cda2c3ce343e3dcf369))
+- Feat/to 825 whitelabel heading company about ([#1894](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1894)) ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+- replaced hard coded styles with tokens for colours and fonts in CompanyAbout component ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+- vault threshold send email lambda ([#1692](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1692)) ([87b9644](https://github.com/bluelightcard/BlueLightCard-2.0/commit/87b96444acde711a7784f5dbf83076b404b99e03))
 
 ### Bug Fixes
 
-* for CompanyAbout component description in dark mode ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
-* for Incorrect font for CompanyAbout component description ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
-* Made background unclickable for offer sheet ([#1882](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1882)) ([72a3b98](https://github.com/bluelightcard/BlueLightCard-2.0/commit/72a3b9888c758e214690eef634e467aeb3ccb154))
-* make user schema `.nullable()` ([#1857](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1857)) ([9237012](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9237012848fddec9dc7120cd8a433e4535097b8f))
+- for CompanyAbout component description in dark mode ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+- for Incorrect font for CompanyAbout component description ([144aef6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/144aef6d312b55d04c98a278b5d2c9b43862ae7f))
+- Made background unclickable for offer sheet ([#1882](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1882)) ([72a3b98](https://github.com/bluelightcard/BlueLightCard-2.0/commit/72a3b9888c758e214690eef634e467aeb3ccb154))
+- make user schema `.nullable()` ([#1857](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1857)) ([9237012](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9237012848fddec9dc7120cd8a433e4535097b8f))
 
 ## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/shared-ui-v1.9.0...shared-ui-v1.10.0) (2024-07-24)
 

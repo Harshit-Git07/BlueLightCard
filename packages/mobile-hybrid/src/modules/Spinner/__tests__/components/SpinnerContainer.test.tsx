@@ -3,6 +3,13 @@ import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { spinner } from '../../store';
 import SpinnerContainer from '@/modules/Spinner/components/SpinnerContainer';
 import userEvent from '@testing-library/user-event';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+
+jest.mock('next/image', () => {
+  const NextImageMock = () => <></>;
+  return NextImageMock;
+});
 
 describe('Spinner', () => {
   it('should show the spinner when "loading" is true', () => {
@@ -20,7 +27,7 @@ describe('Spinner', () => {
   });
 
   describe('Timeout', () => {
-    const { location } = window;
+    const { location, localStorage } = window;
 
     beforeEach(() => {
       userEvent.setup({ delay: null });
@@ -30,6 +37,10 @@ describe('Spinner', () => {
         configurable: true,
         value: { reload: jest.fn() },
       });
+      Object.defineProperty(window, 'localStorage', {
+        configurable: true,
+        value: { getItem: jest.fn(), setItem: jest.fn(), removeItem: jest.fn() },
+      });
     });
 
     afterEach(() => {
@@ -37,18 +48,45 @@ describe('Spinner', () => {
         configurable: true,
         value: location,
       });
+      Object.defineProperty(window, 'localStorage', {
+        configurable: true,
+        value: { localStorage },
+      });
 
       jest.useRealTimers();
       jest.resetAllMocks();
     });
 
-    // TODO: [HOTFIX_Spinner] Reactivate
-    // it('should refresh the page on timeout when spinner is showing', () => {
-    //   whenTheSpinnerIsRenderedWithLoadingState(true);
-    //   andTimeoutHasPassed();
+    it('should display first message after first timeout', () => {
+      jest.mocked(window.localStorage.getItem).mockImplementation(() => '1');
+      whenTheSpinnerIsRenderedWithLoadingState(true, 'on');
+      andTimeoutHasPassed();
 
-    //   expect(window.location.reload).toHaveBeenCalled();
-    // });
+      const message = screen.queryByText(
+        'Hang tight! The page is just taking a little longer to load due to high demand. Thanks for your patience.',
+      );
+      const spinnerComponent = screen.queryByRole('progressbar');
+
+      expect(message).toBeTruthy();
+      expect(spinnerComponent).toBeTruthy();
+      expect(window.location.reload).toHaveBeenCalled();
+    });
+
+    it('should display final message after final timeout and hide spinner', () => {
+      jest.mocked(window.localStorage.getItem).mockImplementation(() => '2');
+      whenTheSpinnerIsRenderedWithLoadingState(true, 'on');
+      andTimeoutHasPassed();
+
+      const message = screen.queryByText(
+        'Oops! It looks this will still take us a little bit longer, we suggest you try again later.',
+      );
+      const spinnerComponent = screen.queryByRole('progressbar');
+
+      expect(message).toBeTruthy();
+      expect(spinnerComponent).toBeFalsy();
+      expect(window.location.reload).not.toHaveBeenCalled();
+      expect(window.localStorage.removeItem).toHaveBeenCalled();
+    });
 
     it('should not refresh the page on timeout when is spinner is not showing', () => {
       whenTheSpinnerIsRenderedWithLoadingState(false);
@@ -59,9 +97,22 @@ describe('Spinner', () => {
   });
 });
 
-const whenTheSpinnerIsRenderedWithLoadingState = (value: boolean) => {
-  render(
-    <JotaiTestProvider initialValues={[[spinner, value]]}>
+const whenTheSpinnerIsRenderedWithLoadingState = (
+  value: boolean,
+  spinnerIncrementalRetryFlag: string = 'off',
+) => {
+  return render(
+    <JotaiTestProvider
+      initialValues={[
+        [spinner, value],
+        [
+          experimentsAndFeatureFlags,
+          {
+            [FeatureFlags.SPINNER_INCREMENTAL_RETRY]: spinnerIncrementalRetryFlag,
+          },
+        ],
+      ]}
+    >
       <SpinnerContainer />
     </JotaiTestProvider>,
   );

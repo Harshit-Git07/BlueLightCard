@@ -9,6 +9,7 @@ export enum FeatureFlags {
   OFFER_SHEET_GENERIC = 'offer-sheet-redeem-generic-app',
   OFFER_SHEET_SHOW_CARD = 'offer-sheet-redeem-show-card-app',
   OFFER_SHEET_PREAPPLIED = 'offer-sheet-redeem-preapplied-app',
+  SPINNER_INCREMENTAL_RETRY = 'spinner-incremental-retry',
 }
 
 export enum Experiments {

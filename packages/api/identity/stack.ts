@@ -290,6 +290,7 @@ export function Identity({ stack }: StackContext) {
 }
 
 function deployDdsSpecificResources(stack: Stack) {
+  // All user pools currently in use until authorizer is split by brand
   const BLC_UK_COGNITO_USER_POOL_ID = process.env.BLC_UK_COGNITO_USER_POOL_ID ?? '';
   const BLC_UK_OLD_COGNITO_USER_POOL_ID = process.env.BLC_UK_OLD_COGNITO_USER_POOL_ID ?? '';
   const DDS_COGNITO_USER_POOL_ID = process.env.DDS_COGNITO_USER_POOL_ID ?? '';

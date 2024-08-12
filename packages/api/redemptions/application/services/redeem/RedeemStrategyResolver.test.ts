@@ -14,6 +14,9 @@ import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy'
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
 
+jest.mock('../../../../../api/core/src/utils/checkBrand', () => ({
+  getBrandFromEnv: jest.fn().mockReturnValue('BLC_UK'),
+}));
 jest.mock('../../../../core/src/utils/getEnv', () => ({
   getEnv: jest.fn(),
 }));

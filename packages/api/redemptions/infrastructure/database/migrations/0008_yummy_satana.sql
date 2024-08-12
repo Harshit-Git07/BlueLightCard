@@ -1,0 +1,1 @@
+ALTER TABLE "redemptions" DROP COLUMN IF EXISTS "platform";

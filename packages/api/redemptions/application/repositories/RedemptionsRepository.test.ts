@@ -74,7 +74,6 @@ describe('RedemptionsRepository', () => {
       const redemption = redemptionFactory.build({
         offerId: offerId,
         companyId: 123,
-        platform: 'BLC_UK',
         redemptionType: 'preApplied',
         connection: 'direct',
         offerType: 'online',
@@ -87,7 +86,6 @@ describe('RedemptionsRepository', () => {
       const redemptionUpdate = redemptionFactory.build({
         offerId: offerId,
         companyId: 123,
-        platform: 'DDS_UK',
         redemptionType: 'generic',
         connection: 'none',
         offerType: 'in-store',
@@ -102,7 +100,6 @@ describe('RedemptionsRepository', () => {
       expect(redemptionData[0].connection).toBe('none');
       expect(redemptionData[0].offerId).toBe(123);
       expect(redemptionData[0].offerType).toBe('in-store');
-      expect(redemptionData[0].platform).toBe('DDS_UK');
       expect(redemptionData[0].redemptionType).toBe('generic');
       expect(redemptionData[0].url).toBe(null);
     });

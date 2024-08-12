@@ -91,7 +91,6 @@ describe('VaultService', () => {
           id: defaultRedemptionId,
           connection: 'direct',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1234,
           offerId: defaultOfferId,
@@ -124,7 +123,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -158,7 +156,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -191,7 +188,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -225,7 +221,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -260,7 +255,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -295,7 +289,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -331,7 +324,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -366,7 +358,6 @@ describe('VaultService', () => {
           id: defaultRedemptionId,
           connection: 'direct',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vaultQR',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -398,7 +389,6 @@ describe('VaultService', () => {
           connection: 'affiliate',
           affiliate: 'awin',
           offerType: 'online',
-          platform: 'BLC_UK',
           redemptionType: 'vault',
           companyId: 1233,
           offerId: defaultOfferId,
@@ -439,7 +429,6 @@ describe('VaultService', () => {
           connection: 'direct',
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
         });
 
@@ -465,7 +454,6 @@ describe('VaultService', () => {
           connection: 'direct',
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
         });
 
@@ -490,7 +478,6 @@ describe('VaultService', () => {
           connection: 'direct',
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
         });
 
@@ -514,7 +501,6 @@ describe('VaultService', () => {
           connection: 'direct',
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
         });
 
@@ -538,7 +524,6 @@ describe('VaultService', () => {
           connection: 'direct',
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
         });
 
@@ -562,7 +547,6 @@ describe('VaultService', () => {
           connection: 'direct',
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
         });
 
@@ -588,7 +572,6 @@ describe('VaultService', () => {
           connection: 'direct',
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
         });
 
@@ -612,7 +595,6 @@ describe('VaultService', () => {
             connection: 'direct',
             offerId: event.detail.offerId,
             offerType: 'online',
-            platform: event.detail.platform,
             redemptionType: 'vault',
           })
           .returning({
@@ -686,7 +668,6 @@ describe('VaultService', () => {
           companyId: event.detail.companyId,
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
           // We expect these to be updated by the handler
           connection: 'direct',
@@ -719,7 +700,6 @@ describe('VaultService', () => {
           companyId: event.detail.companyId,
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
           // We expect these to be updated by the handler
           connection: 'affiliate',
@@ -752,7 +732,6 @@ describe('VaultService', () => {
           companyId: event.detail.companyId,
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           redemptionType: 'vault',
           // We expect these to be updated by the handler
           connection: 'affiliate',
@@ -785,7 +764,6 @@ describe('VaultService', () => {
           companyId: event.detail.companyId,
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           connection: 'direct',
           // We expect these to be updated by the handler
           redemptionType: 'generic',
@@ -811,7 +789,6 @@ describe('VaultService', () => {
           companyId: event.detail.companyId,
           offerId: event.detail.offerId,
           offerType: 'online',
-          platform: event.detail.platform,
           connection: 'direct',
           // We expect these to be updated by the handler
           redemptionType: 'generic',

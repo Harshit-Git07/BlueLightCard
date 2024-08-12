@@ -61,7 +61,6 @@ export class OfferUpdatedService implements IOfferUpdatedService {
         const redemptionData: NewRedemption = {
           offerId: detail.offerId,
           companyId: detail.companyId,
-          platform: detail.platform,
           redemptionType: parseRedemptionType(detail.offerUrl, detail.offerCode).redemptionType,
           connection: parseConnection(detail.offerUrl).connection,
           affiliate: parseAffiliate(detail.offerUrl).affiliate,
@@ -84,7 +83,6 @@ export class OfferUpdatedService implements IOfferUpdatedService {
         const updateRedemptionData: UpdateRedemption = {
           offerId: detail.offerId,
           companyId: detail.companyId,
-          platform: detail.platform,
           redemptionType: parseRedemptionType(detail.offerUrl, detail.offerCode).redemptionType,
           connection: parseConnection(detail.offerUrl).connection,
           affiliate: parseAffiliate(detail.offerUrl).affiliate,
@@ -129,7 +127,6 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             context: {
               offerId: detail.offerId,
               companyId: detail.companyId,
-              platform: detail.platform,
             },
           });
           return;
@@ -142,7 +139,6 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             context: {
               offerId: detail.offerId,
               companyId: detail.companyId,
-              platform: detail.platform,
             },
           });
           throw new Error(
@@ -172,7 +168,6 @@ export class OfferUpdatedService implements IOfferUpdatedService {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
                   redemptionId: existingRedemptionData.id,
-                  platform: detail.platform,
                 },
               });
               throw new Error(
@@ -194,7 +189,6 @@ export class OfferUpdatedService implements IOfferUpdatedService {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
                   redemptionId: existingRedemptionData.id,
-                  platform: detail.platform,
                 },
               });
               throw new Error('Offer Update - Generic insert failed: no generics were inserted');
@@ -213,7 +207,6 @@ export class OfferUpdatedService implements IOfferUpdatedService {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
                   redemptionId: existingRedemptionData.id,
-                  platform: detail.platform,
                 },
               });
               throw new Error(

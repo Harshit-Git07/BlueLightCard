@@ -7,6 +7,8 @@ import { Stack } from "sst/constructs";
 import { IFirehoseStreamAdapter } from './adapter';
 import { isProduction } from '@blc-mono/core/src/utils/checkEnvironment';
 import { Config } from 'sst/constructs';
+import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
+import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND } from '@blc-mono/core/constants/common';
 
 /**
  * Mocks of the production data-warehouse kenisis firehose streams.
@@ -17,21 +19,27 @@ export class DwhKenisisFirehoseStreams {
   public readonly compAppViewStream: IFirehoseStreamAdapter;
   public readonly compAppClickStream: IFirehoseStreamAdapter;
   public readonly vaultStream: IFirehoseStreamAdapter;
-
+  // TODO: Normalise the stream names with brands [blc-uk, dds-uk, blc-au] and stages [staging, production]
+  public platformMap =  {
+    [BLC_UK_BRAND] : 'blc',
+    [DDS_UK_BRAND] : 'dds',
+    [BLC_AU_BRAND] : 'blc-au',
+  };
 
   constructor(stack: Stack) {
-    this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compView').setup();
-    this.compClickStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compClick').setup();
-    this.compAppViewStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compAppView').setup();
-    this.compAppClickStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-compAppClick').setup();
-    this.vaultStream = new KenisisFirehoseStream(stack, 'dwh-blc-production-vault').setup();
-
+    const brandPrefix = this.platformMap[getBrandFromEnv()];
+    this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-compView', `dwh-${brandPrefix}-production-compView`).setup();
+    this.compClickStream = new KenisisFirehoseStream(stack, 'dwh-compClick', `dwh-${brandPrefix}-production-compClick`).setup();
+    this.compAppViewStream = new KenisisFirehoseStream(stack, 'dwh-compAppView', `dwh-${brandPrefix}-production-compAppView`).setup();
+    this.compAppClickStream = new KenisisFirehoseStream(stack, 'dwh-compAppClick', `dwh-${brandPrefix}-production-compAppClick`).setup();
+    this.vaultStream = new KenisisFirehoseStream(stack, 'dwh-vault', `dwh-${brandPrefix}-production-vault`).setup();
   }
 }
 
 class KenisisFirehoseStream {
   constructor(
     private readonly stack: Stack,
+    private readonly id: string,
     private readonly streamName: string,
   ) {}
 

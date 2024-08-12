@@ -1,11 +1,13 @@
 import { SSTConfig } from 'sst';
-import { Identity } from './packages/api/identity/stack';
-import { Offers } from './packages/api/offers/stack';
-import { Web } from './packages/web/stack';
+import { Identity } from '@blc-mono/identity/stack';
+import { Offers } from '@blc-mono/offers/stack';
+import { Web } from 'client/stack';
 import { Shared } from './stacks/stack';
-import { Redemptions } from './packages/api/redemptions/infrastructure/stack';
-import { MemberServicesHub } from './packages/member-services-hub/stack';
-import { Discovery } from "./packages/api/discovery/infrastructure/stack";
+import { Redemptions } from '@blc-mono/redemptions/infrastructure/stack';
+import { MemberServicesHub } from 'member-services-hub/stack';
+import { Discovery } from '@blc-mono/discovery/infrastructure/stack';;
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+
 
 export default {
   config(_input) {
@@ -24,7 +26,7 @@ export default {
     });
 
     // Remove all resources in the stack for preview environments
-    if (app.stage !== 'production' && app.stage !== 'staging') {
+    if (!isProduction(app.stage) && !isStaging(app.stage)) {
       app.setDefaultRemovalPolicy('destroy');
     }
     app.stack(Shared, { id: 'global' }).stack(Identity, { id: 'identity' });

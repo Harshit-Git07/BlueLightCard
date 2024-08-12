@@ -5,6 +5,8 @@ import { ApiGatewayV1Api, Config, StackContext, use } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
@@ -53,6 +55,7 @@ export async function Redemptions({ app, stack }: StackContext) {
   stack.setDefaultFunctionProps({
     timeout: 20,
     environment: {
+      BRAND: getBrandFromEnv(),
       service: SERVICE_NAME,
       DD_VERSION: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_VERSION, ''),
       DD_ENV: process.env?.SST_STAGE || 'undefined',
@@ -67,6 +70,13 @@ export async function Redemptions({ app, stack }: StackContext) {
   // Create Database
   const database = await new RedemptionsDatabase(app, stack, vpc, bastionHost).setup();
 
+  const domainNames = {
+    BLC_UK: 'redemptions.blcshine.io', // TODO: Update this later to follow below format (backward compatibility required)
+    DDS_UK: 'redemptions-dds-uk.blcshine.io',
+    BLC_AU: 'redemptions-blc-au.blcshine.io',
+  };
+
+  const brand = getBrandFromEnv();
   const api = new ApiGatewayV1Api(stack, SERVICE_NAME, {
     authorizers: {
       redemptionsAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
@@ -77,11 +87,10 @@ export async function Redemptions({ app, stack }: StackContext) {
     cdk: {
       restApi: {
         endpointTypes: globalConfig.apiGatewayEndpointTypes,
-        ...(['production', 'staging'].includes(stack.stage) &&
+        ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
-              domainName:
-                stack.stage === 'production' ? 'redemptions.blcshine.io' : `${stack.stage}-redemptions.blcshine.io`,
+              domainName: isProduction(stack.stage) ? domainNames[brand] : `${stack.stage}-${domainNames[brand]}`,
               certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
             },
           }),

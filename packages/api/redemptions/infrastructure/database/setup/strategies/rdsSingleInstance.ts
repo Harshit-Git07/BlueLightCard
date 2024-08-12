@@ -10,6 +10,7 @@ import {
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Function, Script } from 'sst/constructs';
 
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import {
   DatabaseConnectionConfig,
   DatabaseEndpoint,
@@ -18,7 +19,6 @@ import {
 
 import { DatabaseType, RdsPgSingleInstanceDatabaseConfig } from '../../../config/database';
 import { RedemptionsStackEnvironmentKeys } from '../../../constants/environment';
-import { PRODUCTION_STAGE, STAGING_STAGE } from '../../../constants/sst';
 import { IDatabase } from '../../adapter';
 import {
   BastionHostDefaultSecurityGroup,
@@ -64,14 +64,14 @@ export class RdsPgSingleInstanceSetupStrategy extends AbstractDatabaseSetupStrat
       return;
     }
 
-    const disallowedStages = [STAGING_STAGE, PRODUCTION_STAGE];
-    if (disallowedStages.includes(this.stack.stage)) {
+    const disallowedStage = isProduction(this.stack.stage) || isStaging(this.stack.stage);
+    if (disallowedStage) {
       throw new Error(
         [
           `This database setup strategy is not allowed in the ${this.stack.stage} stage.`,
           'It is intended for use in ephemeral environments such as those used for development and testing.',
           'It is not intended for use in production or production-like environments (such as staging).',
-          `The strategy is disallowed for these stages: ${disallowedStages.join(', ')}.`,
+          `The strategy is disallowed for staging and production environments.`,
         ].join(' '),
       );
     }

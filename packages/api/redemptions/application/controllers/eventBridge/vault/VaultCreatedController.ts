@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { NON_NEGATIVE_INT } from '@blc-mono/core/schemas/common';
-import { PLATFORM_SCHEMA } from '@blc-mono/core/schemas/domain';
 import { eventSchema } from '@blc-mono/core/schemas/event';
 import { OPTIONAL_URL_SCHEMA } from '@blc-mono/core/schemas/utility';
 import { Result } from '@blc-mono/core/types/result';
@@ -23,7 +22,6 @@ const VaultCreatedEventDetailSchema = z.object({
   managerId: NON_NEGATIVE_INT.nullable().optional(),
   maxPerUser: NON_NEGATIVE_INT,
   offerId: NON_NEGATIVE_INT,
-  platform: PLATFORM_SCHEMA,
   showQR: z.boolean(),
   ucCampaignId: NON_NEGATIVE_INT.nullable().optional(),
   vaultStatus: z.boolean(),

@@ -1,4 +1,3 @@
-import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 
 import { OfferCreatedEvent } from '../../../controllers/eventBridge/offer/OfferCreatedController';
@@ -18,15 +17,9 @@ export interface IOfferCreatedService {
 
 export class OfferCreatedService implements IOfferCreatedService {
   static readonly key = 'OfferService';
-  static readonly inject = [
-    Logger.key,
-    RedemptionsRepository.key,
-    GenericsRepository.key,
-    TransactionManager.key,
-  ] as const;
+  static readonly inject = [RedemptionsRepository.key, GenericsRepository.key, TransactionManager.key] as const;
 
   constructor(
-    private readonly logger: ILogger,
     private readonly redemptionsRepository: RedemptionsRepository,
     private readonly genericsRepository: GenericsRepository,
     private readonly transactionManager: TransactionManager,
@@ -38,7 +31,6 @@ export class OfferCreatedService implements IOfferCreatedService {
     const redemptionData: NewRedemption = {
       offerId: detail.offerId,
       companyId: detail.companyId,
-      platform: detail.platform,
       redemptionType: parseRedemptionType(detail.offerUrl, detail.offerCode).redemptionType,
       connection: parseConnection(detail.offerUrl).connection,
       affiliate: parseAffiliate(detail.offerUrl).affiliate,

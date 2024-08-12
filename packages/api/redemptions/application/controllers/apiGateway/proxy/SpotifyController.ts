@@ -31,8 +31,8 @@ export class SpotifyController extends APIGatewayController<SpotifyRequestModel>
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const { platform, companyId, offerId, memberId, url } = request.body;
-    const result = await this.spotifyService.redeem(platform, companyId, offerId, memberId, url);
+    const { companyId, offerId, memberId, url } = request.body;
+    const result = await this.spotifyService.redeem(companyId, offerId, memberId, url);
 
     switch (result.kind) {
       case 'Ok':

@@ -3,10 +3,11 @@ import { randomBytes } from 'crypto';
 import * as pkcs7 from 'pkcs7';
 import z from 'zod';
 
+import { Brand } from '@blc-mono/core/schemas/common';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
-import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 import { ISecretsManager, SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 enum ApisLambdaScripts {
@@ -85,7 +86,7 @@ export type VaultItem = {
   companyId: number;
 };
 
-const platformToBrandMap: Record<Platform, string> = {
+const platformToBrandMap: Record<Brand, string> = {
   BLC_UK: 'BLC',
   BLC_AU: 'BLC',
   DDS_UK: 'DDS',
@@ -108,22 +109,12 @@ export const VaultSecretsSchema = z.object({
 export type VaultSecrets = z.infer<typeof VaultSecretsSchema>;
 
 export interface ILegacyVaultApiRepository {
-  findVaultsRelatingToLinkId(linkId: number, platform: Platform): Promise<VaultItem[]>;
+  findVaultsRelatingToLinkId(linkId: number): Promise<VaultItem[]>;
   getNumberOfCodesIssued(memberId: string, companyId: number, offerId: number): Promise<number>;
-  getCodesRedeemed(companyId: number, offerId: number, memberId: string, platform: Platform): Promise<string[]>;
-  assignCodeToMember(
-    memberId: string,
-    companyId: number,
-    offerId: number,
-    platform: Platform,
-  ): Promise<AssignCodeTeMemberData>;
-  viewVaultBatches(offerId: number, companyId: number, platform: Platform): Promise<ViewVaultBatchesData>;
-  checkVaultStock(
-    batchNo: string,
-    offerId: number,
-    companyId: number,
-    platform: Platform,
-  ): Promise<CheckVaultStockData>;
+  getCodesRedeemed(companyId: number, offerId: number, memberId: string): Promise<string[]>;
+  assignCodeToMember(memberId: string, companyId: number, offerId: number): Promise<AssignCodeTeMemberData>;
+  viewVaultBatches(offerId: number, companyId: number): Promise<ViewVaultBatchesData>;
+  checkVaultStock(batchNo: string, offerId: number, companyId: number): Promise<CheckVaultStockData>;
 }
 
 export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
@@ -152,14 +143,15 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
       RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH,
     ),
   };
+  private brand: Brand = getBrandFromEnv();
 
   constructor(
     private readonly logger: ILogger,
     private readonly awsSecretsMangerClient: ISecretsManager,
   ) {}
 
-  public async findVaultsRelatingToLinkId(linkId: number, platform: Platform): Promise<VaultItem[]> {
-    const brand = platformToBrandMap[platform];
+  public async findVaultsRelatingToLinkId(linkId: number): Promise<VaultItem[]> {
+    const brand = platformToBrandMap[this.brand];
     const endpoint = this.getRequestEndpoint(ApisLambdaScripts.RETRIEVE_ALL_VAULTS);
     const credentials = await this.getLegacyVaultCredentials();
     const key = this.generateKey(credentials.retrieveAllVaultsData, credentials.retrieveAllVaultsPassword);
@@ -174,7 +166,7 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     if (!response.ok) {
       return this.handleErrorResponse(response, 'Error retrieving vaults', {
         linkId,
-        platform,
+        brand,
       });
     }
 
@@ -218,13 +210,8 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     return GetNumberOfCodesResponseSchema.parse(data).data;
   }
 
-  public async getCodesRedeemed(
-    companyId: number,
-    offerId: number,
-    memberId: string,
-    platform: Platform,
-  ): Promise<string[]> {
-    const brand = platformToBrandMap[platform];
+  public async getCodesRedeemed(companyId: number, offerId: number, memberId: string): Promise<string[]> {
+    const brand = platformToBrandMap[this.brand];
     const endpoint = this.getRequestEndpoint(ApisLambdaScripts.CODES_REDEEMED);
     const credentials = await this.getLegacyVaultCredentials();
     const key = this.generateKey(credentials.codeRedeemedData, credentials.codeRedeemedPassword);
@@ -242,7 +229,7 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
         memberId,
         companyId,
         offerId,
-        platform,
+        brand,
       });
     }
 
@@ -254,9 +241,8 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     memberId: string,
     companyId: number,
     offerId: number,
-    platform: Platform,
   ): Promise<AssignCodeTeMemberData> {
-    const brand = platformToBrandMap[platform];
+    const brand = platformToBrandMap[this.brand];
     const endpoint = this.getRequestEndpoint(ApisLambdaScripts.ASSIGN_USER_CODES);
     const credentials = await this.getLegacyVaultCredentials();
     const key = this.generateKey(credentials.assignUserCodesData, credentials.assignUserCodesPassword);
@@ -283,8 +269,8 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     });
   }
 
-  public async viewVaultBatches(offerId: number, companyId: number, platform: Platform): Promise<ViewVaultBatchesData> {
-    const brand = platformToBrandMap[platform];
+  public async viewVaultBatches(offerId: number, companyId: number): Promise<ViewVaultBatchesData> {
+    const brand = platformToBrandMap[this.brand];
     const endpoint = this.getRequestEndpoint(ApisLambdaScripts.VIEW_VAULT_BATCHES);
     const credentials = await this.getLegacyVaultCredentials();
     const key = this.generateKey(credentials.viewVaultBatchesData, credentials.viewVaultBatchesPassword);
@@ -310,13 +296,8 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     });
   }
 
-  public async checkVaultStock(
-    batchNo: string,
-    offerId: number,
-    companyId: number,
-    platform: Platform,
-  ): Promise<CheckVaultStockData> {
-    const brand = platformToBrandMap[platform];
+  public async checkVaultStock(batchNo: string, offerId: number, companyId: number): Promise<CheckVaultStockData> {
+    const brand = platformToBrandMap[this.brand];
     const endpoint = this.getRequestEndpoint(ApisLambdaScripts.CHECK_VAULT_STOCK);
     const credentials = await this.getLegacyVaultCredentials();
     const key = this.generateKey(credentials.checkVaultStockData, credentials.checkVaultStockPassword);

@@ -1,5 +1,4 @@
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
-import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 
 import { createTestLogger } from '../../../libs/test/helpers/logger';
 
@@ -7,7 +6,6 @@ import { SpotifyService } from './SpotifyService';
 
 describe('SpotifyService', () => {
   function callSpotifyRedeemService(
-    platform: Platform,
     companyId: number,
     offerId: number,
     memberId: string,
@@ -24,13 +22,12 @@ describe('SpotifyService', () => {
       viewVaultBatches: jest.fn(),
     };
     const service = new SpotifyService(legacyVaultApiRepository ?? mockedLegacyVaultApiRepository, mockedLogger);
-    return service.redeem(platform, companyId, offerId, memberId, url);
+    return service.redeem(companyId, offerId, memberId, url);
   }
 
   describe('redeem', () => {
     it('should return a tracking URL for an already redeemed code', async () => {
       // Arrange
-      const platform = 'BLC_UK';
       const companyId = 1;
       const offerId = 1;
       const memberId = 'memberId';
@@ -45,14 +42,7 @@ describe('SpotifyService', () => {
       } satisfies ILegacyVaultApiRepository;
 
       // Act
-      const result = await callSpotifyRedeemService(
-        platform,
-        companyId,
-        offerId,
-        memberId,
-        url,
-        mockedLegacyVaultApiRepository,
-      );
+      const result = await callSpotifyRedeemService(companyId, offerId, memberId, url, mockedLegacyVaultApiRepository);
 
       // Assert
       expect(result.kind).toBe('Ok');
@@ -62,7 +52,6 @@ describe('SpotifyService', () => {
 
     it('should assign a code when no code is already redeemed', async () => {
       // Arrange
-      const platform = 'BLC_UK';
       const companyId = 1;
       const offerId = 1;
       const memberId = 'memberId';
@@ -77,14 +66,7 @@ describe('SpotifyService', () => {
       } satisfies ILegacyVaultApiRepository;
 
       // Act
-      const result = await callSpotifyRedeemService(
-        platform,
-        companyId,
-        offerId,
-        memberId,
-        url,
-        mockedLegacyVaultApiRepository,
-      );
+      const result = await callSpotifyRedeemService(companyId, offerId, memberId, url, mockedLegacyVaultApiRepository);
 
       // Assert
       expect(result.kind).toBe('Ok');

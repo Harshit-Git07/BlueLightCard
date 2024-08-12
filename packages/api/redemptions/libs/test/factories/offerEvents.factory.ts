@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
+import { BRANDS } from '@blc-mono/core/constants/common';
 import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 
 import {
@@ -27,7 +28,7 @@ export const offerCreatedEventDetailFactory = Factory.define<OfferCreatedEventDe
     min: 0,
     max: 6,
   }),
-  platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
+  platform: faker.helpers.arrayElement(BRANDS),
 }));
 
 export const offerCreatedEventFactory = Factory.define<OfferCreatedEvent>(() => ({
@@ -57,7 +58,7 @@ export const offerUpdatedEventDetailFactory = Factory.define<OfferUpdatedEventDe
     min: 0,
     max: 6,
   }),
-  platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
+  platform: faker.helpers.arrayElement(BRANDS),
 }));
 
 export const offerUpdatedEventFactory = Factory.define<OfferUpdatedEvent>(() => ({

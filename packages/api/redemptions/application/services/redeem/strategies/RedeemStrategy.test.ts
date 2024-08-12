@@ -438,6 +438,7 @@ describe('Redemption Strategies', () => {
     });
 
     afterAll(async () => {
+      // delete process.env.BRAND;
       await database?.down?.();
     });
 

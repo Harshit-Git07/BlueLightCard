@@ -4,19 +4,23 @@ import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
 import { Network } from './infra/network';
 import { DwhKenisisFirehoseStreams } from './infra/firehose/DwhKenisisFirehoseStreams';
 import { BastionHost } from './infra/bastionHost/BastionHost';
+import { isDev } from '@blc-mono/core/utils/checkEnvironment';
+import { getEnv, getEnvRaw } from '@blc-mono/core/utils/getEnv';
+import { SharedStackEnvironmentKeys } from './infra/environment';
 
 interface ICertificate {
   certificateArn?: string;
 }
 
 export function Shared({ stack, app }: StackContext) {
+
   /**
    * The deployment is held until the certificate is verified.
    * To verify the certificate a new CNAME Record must be added to CloudFlare.
    * The CNAME name and value must match what is defined in AWS ACM.
    * This only needs to be done once.
    */
-  const { certificateArn }: ICertificate = ['production', 'staging'].includes(stack.stage)
+  const { certificateArn }: ICertificate = !isDev(stack.stage)
     ? new Certificate(stack, 'Certificate', {
         domainName: '*.blcshine.io',
         validation: CertificateValidation.fromDns(),
@@ -40,6 +44,7 @@ export function Shared({ stack, app }: StackContext) {
   });
 
   // Create VPC for production and staging
+  // Shared between brands to avoid Elastic IP quota limits
   const network = new Network(stack);
 
   // Create DWH Kinesis Firehose Streams

@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
+import { BRANDS } from '@blc-mono/core/constants/common';
 import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
 
 import {
@@ -46,7 +47,7 @@ export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDe
     min: 1,
     max: 1_000_000,
   }),
-  platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
+  platform: faker.helpers.arrayElement(BRANDS),
   showQR: faker.datatype.boolean(),
   ucCampaignId: faker.helpers.maybe(() =>
     faker.number.int({
@@ -104,7 +105,7 @@ export const vaultUpdatedEventDetailFactory = Factory.define<VaultUpdatedEventDe
     }),
   ),
   vaultStatus: faker.datatype.boolean(),
-  platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
+  platform: faker.helpers.arrayElement(BRANDS),
 }));
 export const vaultUpdatedEventFactory = Factory.define<VaultUpdatedEvent>(() => ({
   account: faker.string.numeric(12),

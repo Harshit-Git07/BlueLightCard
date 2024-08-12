@@ -1,8 +1,7 @@
 import { z } from 'zod';
+import { BRANDS } from '../constants/common';
 
-import { platformEnum } from '../../../redemptions/libs/database/schema';
-
-export const PLATFORM_SCHEMA = z.enum(platformEnum.enumValues);
+export const BRANDS_SCHEMA = z.enum(BRANDS);
 
 // This is the client type provided in the X-Client-Type header in API requests.
 export const ClientTypeSchema = z.enum(['web', 'mobile']);

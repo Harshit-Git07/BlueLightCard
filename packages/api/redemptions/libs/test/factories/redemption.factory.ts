@@ -1,12 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
-import {
-  affiliateEnum,
-  createRedemptionsId,
-  platformEnum,
-  redemptionsTable,
-} from '@blc-mono/redemptions/libs/database/schema';
+import { affiliateEnum, createRedemptionsId, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 export const redemptionFactory = Factory.define<typeof redemptionsTable.$inferSelect>(() => ({
   id: createRedemptionsId(),
@@ -21,7 +16,6 @@ export const redemptionFactory = Factory.define<typeof redemptionsTable.$inferSe
   connection: 'affiliate',
   affiliate: faker.helpers.arrayElement(affiliateEnum.enumValues),
   offerType: 'online',
-  platform: faker.helpers.arrayElement(platformEnum.enumValues),
   redemptionType: faker.helpers.arrayElement(redemptionsTable.redemptionType.enumValues),
   url: faker.internet.url(),
 }));

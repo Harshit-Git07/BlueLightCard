@@ -3,7 +3,6 @@ import { Factory } from 'fishery';
 
 import { PromotionUpdatedEvent } from '@blc-mono/redemptions/application/controllers/eventBridge/promotions/PromotionUpdateController';
 import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/datasync';
-import { platformEnum } from '@blc-mono/redemptions/libs/database/schema';
 
 function randomDateYYYYMMDD() {
   const date = faker.date.recent();
@@ -20,7 +19,6 @@ export const promotionUpdatedEventDetails = Factory.define<PromotionUpdatedEvent
   end: randomDateYYYYMMDD(),
   status: 1,
   link: faker.internet.url(),
-  platform: faker.helpers.arrayElement(platformEnum.enumValues),
   bannerName: faker.lorem.words(3),
   promotionType: faker.number.int(1),
   companyId: faker.number.int(4),

@@ -1,13 +1,24 @@
 import { IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
-import { isDev } from '@blc-mono/core/src/utils/checkEnvironment';
+import { isProduction, isStaging } from '@blc-mono/core/src/utils/checkEnvironment';
+import { isDdsUkBrand } from '@blc-mono/core/src/utils/checkBrand';
 import { SubnetConfiguration } from 'aws-cdk-lib/aws-ec2/lib/vpc';
 
 export class Network {
   private readonly _vpc: IVpc;
 
   constructor(private readonly stack: Stack) {
-    this._vpc = isDev(stack.stage) ? this.retrieveStagingVpc() : this.createVpc();
+    switch (true) {
+      case isProduction(stack.stage):
+        this._vpc = this.createProductionVpc();
+        break;
+      case isStaging(stack.stage):
+        this._vpc = this.createOrRetrieveStagingVpc();
+        break;
+      default:
+        this._vpc = this.retrieveStagingVpc();
+        break;
+    }
   }
 
   get vpc(): IVpc {
@@ -15,14 +26,46 @@ export class Network {
   }
 
   /**
-   * Creates a VPC.
+   * Creates a VPC for production.
    *
    * @return {Vpc} The created VPC.
    */
-  private createVpc(): Vpc {
+  private createProductionVpc(): IVpc {
+    return new Vpc(this.stack, 'vpc-shared', {
+      vpcName: isDdsUkBrand() ? 'vpc-shared-dds' : 'vpc-shared',
+      maxAzs: 3,
+      subnetConfiguration: this.subnetConfiguration(),
+    });
+  }
+
+  /**
+   * Creates or retrieves a VPC for staging.
+   *
+   * @return {Vpc} The created VPC.
+   */
+  private createOrRetrieveStagingVpc(): IVpc {
+    // DDS UK is deployed to the same AWS account as BLC UK and should use its VPC due to AWS limits on Elastic IPs.
+    if (isDdsUkBrand()) {
+      return this.retrieveStagingVpc();
+    }
+
     return new Vpc(this.stack, 'vpc-shared', {
       maxAzs: 3,
       subnetConfiguration: this.subnetConfiguration(),
+    });
+  }
+
+  /**
+   * Retrieves the staging VPC.
+   *
+   * The Dev environment uses the staging VPC.
+   * @return {Vpc} The staging VPC.
+   */
+  private retrieveStagingVpc(): IVpc {
+    return Vpc.fromLookup(this.stack, 'vpc-shared', {
+      tags: {
+        'sst:stage': 'staging',
+      },
     });
   }
 
@@ -51,19 +94,5 @@ export class Network {
         cidrMask: 24,
       },
     ];
-  }
-
-  /**
-   * Retrieves the staging VPC.
-   *
-   * The Dev environment uses the staging VPC.
-   * @return {Vpc} The staging VPC.
-   */
-  private retrieveStagingVpc(): IVpc {
-    return Vpc.fromLookup(this.stack, 'sharedVpc', {
-      tags: {
-        'sst:stage': 'staging',
-      },
-    });
   }
 }

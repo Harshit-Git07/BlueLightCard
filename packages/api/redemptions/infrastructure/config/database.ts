@@ -1,11 +1,12 @@
 import { Stack } from 'sst/constructs';
 
 import { WELL_KNOWN_PORTS_SCHEMA } from '@blc-mono/core/schemas/common';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnv, getEnvOrDefault, getEnvOrDefaultValidated, getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DEFAULT_POSTGRES_PORT } from '@blc-mono/redemptions/libs/database/database';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
-import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
+import { PR_STAGE_REGEX } from '../constants/sst';
 
 export enum DatabaseType {
   LOCAL = 'LOCAL',
@@ -43,8 +44,10 @@ export type DatabaseConfig = AuroraPgClusterDatabaseConfig | RdsPgSingleInstance
 
 export class RedemptionsDatabaseConfigResolver {
   public static for(stack: Stack): DatabaseConfig {
+    const isProductionLike = isProduction(stack.stage) || isStaging(stack.stage);
+
     switch (true) {
-      case [PRODUCTION_STAGE, STAGING_STAGE].includes(stack.stage):
+      case isProductionLike:
         return this.forProductionLikeStage();
       case PR_STAGE_REGEX.test(stack.stage):
         return this.forPrStage();

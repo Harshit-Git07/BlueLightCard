@@ -3,7 +3,6 @@ import nock from 'nock';
 
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
-import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -38,6 +37,7 @@ describe('LegacyVaultApiRepository', () => {
     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]: 'codesRedeemed',
     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_VIEW_VAULT_BATCHES_PATH]: 'viewBatches',
     [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH]: 'checkVaultStock',
+    ['BRAND']: 'BLC_UK',
   });
 
   beforeEach(() => {
@@ -52,7 +52,6 @@ describe('LegacyVaultApiRepository', () => {
     test('should return all of the affected vaults', async () => {
       // Arrange
       const linkId = faker.number.int(4);
-      const platform: Platform = 'BLC_UK';
       const logger = createTestLogger();
       const mockedSecretsManger = {
         getSecretValueJson: jest.fn().mockReturnValue({
@@ -78,7 +77,7 @@ describe('LegacyVaultApiRepository', () => {
       const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
 
       // Act
-      const response = await repository.findVaultsRelatingToLinkId(linkId, platform);
+      const response = await repository.findVaultsRelatingToLinkId(linkId);
 
       // Assert
       expect(response).toEqual([
@@ -96,7 +95,6 @@ describe('LegacyVaultApiRepository', () => {
     test('should return empty array if no vaults were found', async () => {
       // Arrange
       const linkId = faker.number.int(4);
-      const platform: Platform = 'BLC_UK';
       const logger = createTestLogger();
       const mockedSecretsManger = {
         getSecretValueJson: jest.fn().mockReturnValue({
@@ -122,7 +120,7 @@ describe('LegacyVaultApiRepository', () => {
       const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
 
       // Act
-      const response = await repository.findVaultsRelatingToLinkId(linkId, platform);
+      const response = await repository.findVaultsRelatingToLinkId(linkId);
 
       // Assert
       expect(response).toEqual([]);
@@ -134,7 +132,6 @@ describe('LegacyVaultApiRepository', () => {
   describe('viewVaultBatches', () => {
     const defaultOfferId = faker.number.int(4);
     const defaultCompanyId = faker.number.int(4);
-    const defaultPlatform = 'BLC_UK';
     const logger = createTestLogger();
     const mockedSecretsManger = {
       getSecretValueJson: jest.fn().mockReturnValue({
@@ -173,7 +170,7 @@ describe('LegacyVaultApiRepository', () => {
       const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
 
       // Act
-      const response = await repository.viewVaultBatches(defaultOfferId, defaultCompanyId, defaultPlatform);
+      const response = await repository.viewVaultBatches(defaultOfferId, defaultCompanyId);
 
       // Assert
       expect(response).toEqual(vaultBatches);
@@ -194,7 +191,7 @@ describe('LegacyVaultApiRepository', () => {
       const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
 
       // Act
-      const response = await repository.viewVaultBatches(defaultOfferId, defaultCompanyId, defaultPlatform);
+      const response = await repository.viewVaultBatches(defaultOfferId, defaultCompanyId);
 
       // Assert
       expect(response).toEqual({});
@@ -204,7 +201,6 @@ describe('LegacyVaultApiRepository', () => {
   describe('checkVaultStock', () => {
     const defaultOfferId = faker.number.int(4);
     const defaultCompanyId = faker.number.int(4);
-    const defaultPlatform = 'BLC_UK';
     const defaultBatchNo = faker.string.uuid();
     const logger = createTestLogger();
     const mockedSecretsManger = {
@@ -241,12 +237,7 @@ describe('LegacyVaultApiRepository', () => {
       const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
 
       // Act
-      const response = await repository.checkVaultStock(
-        defaultBatchNo,
-        defaultOfferId,
-        defaultCompanyId,
-        defaultPlatform,
-      );
+      const response = await repository.checkVaultStock(defaultBatchNo, defaultOfferId, defaultCompanyId);
 
       // Assert
       expect(response).toEqual(vaultStock);
@@ -268,12 +259,7 @@ describe('LegacyVaultApiRepository', () => {
       const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
 
       // Act
-      const response = await repository.checkVaultStock(
-        defaultBatchNo,
-        defaultOfferId,
-        defaultCompanyId,
-        defaultPlatform,
-      );
+      const response = await repository.checkVaultStock(defaultBatchNo, defaultOfferId, defaultCompanyId);
 
       // Assert
       expect(response).toEqual(0);

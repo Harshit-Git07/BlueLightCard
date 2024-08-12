@@ -1,12 +1,12 @@
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { App, Script, Stack } from 'sst/constructs';
 
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 
 import { RedemptionsStackEnvironmentKeys } from '../../constants/environment';
-import { PRODUCTION_STAGE, STAGING_STAGE } from '../../constants/sst';
 import { SSTFunction } from '../../constructs/SSTFunction';
 import { IDatabase } from '../adapter';
 
@@ -17,7 +17,9 @@ export interface IDatabaseSeedStrategy {
   createSeedScript(database: IDatabase, migrationsScript: Script): void;
 }
 
-const STAGES_WITHOUT_SEEDING = [STAGING_STAGE, PRODUCTION_STAGE];
+const isAllowedEnvironment = (stage: string) => {
+  return !isProduction(stage) && !isStaging(stage);
+};
 
 export abstract class AbstractDatabaseSeedStrategy implements IDatabaseSeedStrategy {
   constructor(
@@ -65,11 +67,11 @@ export class SyntheticDataSeedStrategy extends AbstractDatabaseSeedStrategy {
   }
 
   private ensureAllowedStage(): void {
-    if (STAGES_WITHOUT_SEEDING.includes(this.stack.stage)) {
+    if (!isAllowedEnvironment(this.stack.stage)) {
       throw new Error(
         [
           `Cannot seed database in stage ${this.stack.stage}.`,
-          `Database seeding is not allowed in these stages: ${STAGES_WITHOUT_SEEDING.join(', ')}`,
+          `Database seeding is not allowed in production or staging environments`,
         ].join(' '),
       );
     }
@@ -87,7 +89,7 @@ export class DisabledDatabaseSeedStrategy extends AbstractDatabaseSeedStrategy {
   }
 
   private logWarnings(): void {
-    if (!STAGES_WITHOUT_SEEDING.includes(this.stack.stage)) {
+    if (isAllowedEnvironment(this.stack.stage)) {
       this.logger.warn({
         message: [
           "Database seeding is disabled. If this is not intentional, please check you've that you've",

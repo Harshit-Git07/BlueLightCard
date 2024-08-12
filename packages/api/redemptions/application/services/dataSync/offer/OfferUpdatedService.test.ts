@@ -70,7 +70,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://non-exist-record.co.uk',
             offerCode: 'test123456',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -81,7 +80,6 @@ describe('OfferUpdatedService', () => {
         expect(redemptionData[0].connection).toBe('direct');
         expect(redemptionData[0].offerId).toBe(456);
         expect(redemptionData[0].offerType).toBe('online');
-        expect(redemptionData[0].platform).toBe('BLC_UK');
         expect(redemptionData[0].redemptionType).toBe('generic');
         expect(redemptionData[0].url).toBe('https://non-exist-record.co.uk');
 
@@ -96,7 +94,6 @@ describe('OfferUpdatedService', () => {
         const currentData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'vault',
           connection: 'affiliate',
           affiliate: 'awin',
@@ -113,7 +110,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://thevault.bluelightcard.co.uk',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -124,7 +120,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedData[0].affiliate).toBe('awin');
         expect(updatedData[0].offerId).toBe(456);
         expect(updatedData[0].offerType).toBe('online');
-        expect(updatedData[0].platform).toBe('BLC_UK');
         expect(updatedData[0].redemptionType).toBe('vault');
         expect(updatedData[0].url).toBe('https://www.awin1.com/');
       });
@@ -134,7 +129,6 @@ describe('OfferUpdatedService', () => {
         const currentData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'vault',
           connection: 'direct',
           offerType: 'online',
@@ -150,7 +144,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://thevault.bluelightcard.co.uk',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -161,7 +154,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedData[0].connection).toBe('direct');
         expect(updatedData[0].offerId).toBe(456);
         expect(updatedData[0].offerType).toBe('online');
-        expect(updatedData[0].platform).toBe('BLC_UK');
         expect(updatedData[0].redemptionType).toBe('vault');
         expect(updatedData[0].url).toBe('https://direct.co.uk');
       });
@@ -171,7 +163,6 @@ describe('OfferUpdatedService', () => {
         const currentRedemptionData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'generic',
           connection: 'direct',
           offerType: 'online',
@@ -193,7 +184,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://preApplied-offer.co.uk',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -204,7 +194,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedRedemptionData[0].connection).toBe('direct');
         expect(updatedRedemptionData[0].offerId).toBe(456);
         expect(updatedRedemptionData[0].offerType).toBe('online');
-        expect(updatedRedemptionData[0].platform).toBe('BLC_UK');
         expect(updatedRedemptionData[0].redemptionType).toBe('preApplied');
         expect(updatedRedemptionData[0].url).toBe('https://preApplied-offer.co.uk');
 
@@ -217,7 +206,6 @@ describe('OfferUpdatedService', () => {
         const currentRedemptionData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'generic',
           connection: 'direct',
           offerType: 'online',
@@ -239,7 +227,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: '',
             offerCode: 'test123-updated',
             offerType: 5,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -250,7 +237,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedRedemptionData[0].connection).toBe('none');
         expect(updatedRedemptionData[0].offerId).toBe(456);
         expect(updatedRedemptionData[0].offerType).toBe('in-store');
-        expect(updatedRedemptionData[0].platform).toBe('BLC_UK');
         expect(updatedRedemptionData[0].redemptionType).toBe('generic');
         expect(updatedRedemptionData[0].url).toBe(null);
 
@@ -265,7 +251,6 @@ describe('OfferUpdatedService', () => {
         const currentRedemptionData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'preApplied',
           connection: 'direct',
           offerType: 'online',
@@ -281,7 +266,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://generic-offer.co.uk',
             offerCode: 'test123',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -292,7 +276,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedRedemptionData[0].connection).toBe('direct');
         expect(updatedRedemptionData[0].offerId).toBe(456);
         expect(updatedRedemptionData[0].offerType).toBe('online');
-        expect(updatedRedemptionData[0].platform).toBe('BLC_UK');
         expect(updatedRedemptionData[0].redemptionType).toBe('generic');
         expect(updatedRedemptionData[0].url).toBe('https://generic-offer.co.uk');
 
@@ -307,7 +290,6 @@ describe('OfferUpdatedService', () => {
         const currentRedemptionData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'generic',
           connection: 'direct',
           offerType: 'online',
@@ -329,7 +311,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://www.awin1.com',
             offerCode: 'test123-updated',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -340,7 +321,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedRedemptionData[0].connection).toBe('affiliate');
         expect(updatedRedemptionData[0].offerId).toBe(456);
         expect(updatedRedemptionData[0].offerType).toBe('online');
-        expect(updatedRedemptionData[0].platform).toBe('BLC_UK');
         expect(updatedRedemptionData[0].redemptionType).toBe('generic');
         expect(updatedRedemptionData[0].url).toBe('https://www.awin1.com');
 
@@ -355,7 +335,6 @@ describe('OfferUpdatedService', () => {
         const currentRedemptionData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'preApplied',
           connection: 'direct',
           offerType: 'online',
@@ -371,7 +350,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: '',
             offerCode: '',
             offerType: 5,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -382,7 +360,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedRedemptionData[0].connection).toBe('none');
         expect(updatedRedemptionData[0].offerId).toBe(456);
         expect(updatedRedemptionData[0].offerType).toBe('in-store');
-        expect(updatedRedemptionData[0].platform).toBe('BLC_UK');
         expect(updatedRedemptionData[0].redemptionType).toBe('showCard');
         expect(updatedRedemptionData[0].url).toBe(null);
       });
@@ -392,7 +369,6 @@ describe('OfferUpdatedService', () => {
         const currentRedemptionData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'preApplied',
           connection: 'direct',
           offerType: 'online',
@@ -408,7 +384,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://www.spotify.com/uk/ppt/bluelightcard/?code=!!!CODE!!!',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -419,7 +394,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedRedemptionData[0].connection).toBe('spotify');
         expect(updatedRedemptionData[0].offerId).toBe(456);
         expect(updatedRedemptionData[0].offerType).toBe('online');
-        expect(updatedRedemptionData[0].platform).toBe('BLC_UK');
         expect(updatedRedemptionData[0].redemptionType).toBe('vault');
         expect(updatedRedemptionData[0].url).toBe('https://www.spotify.com/uk/ppt/bluelightcard/?code=!!!CODE!!!');
       });
@@ -429,7 +403,6 @@ describe('OfferUpdatedService', () => {
         const currentRedemptionData: NewRedemption = {
           offerId: 456,
           companyId: 123,
-          platform: 'BLC_UK',
           redemptionType: 'vault',
           connection: 'spotify',
           offerType: 'online',
@@ -445,7 +418,6 @@ describe('OfferUpdatedService', () => {
             offerUrl: 'https://preApplied-offer.co.uk',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callUpdateOffer(event);
@@ -456,7 +428,6 @@ describe('OfferUpdatedService', () => {
         expect(updatedRedemptionData[0].connection).toBe('direct');
         expect(updatedRedemptionData[0].offerId).toBe(456);
         expect(updatedRedemptionData[0].offerType).toBe('online');
-        expect(updatedRedemptionData[0].platform).toBe('BLC_UK');
         expect(updatedRedemptionData[0].redemptionType).toBe('preApplied');
         expect(updatedRedemptionData[0].url).toBe('https://preApplied-offer.co.uk');
       });

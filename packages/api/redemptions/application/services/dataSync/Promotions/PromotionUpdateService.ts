@@ -109,9 +109,9 @@ export class PromotionUpdateService implements IPromotionUpdateService {
   }
 
   public async handlePromotionUpdate(event: PromotionUpdatedEvent): Promise<PromotionUpdateResult> {
-    const { platform, link, id: linkId } = event.detail;
+    const { link, id: linkId } = event.detail;
 
-    const legacyVaults = await this.legacyVaultApiRepository.findVaultsRelatingToLinkId(linkId, platform);
+    const legacyVaults = await this.legacyVaultApiRepository.findVaultsRelatingToLinkId(linkId);
     if (legacyVaults.length === 0) {
       //this is possible if a link has been created that has not assigned to a vault, that is then updated
       return {

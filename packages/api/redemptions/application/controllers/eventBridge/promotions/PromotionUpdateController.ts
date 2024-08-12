@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { PLATFORM_SCHEMA } from '@blc-mono/core/schemas/domain';
 import { eventSchema } from '@blc-mono/core/schemas/event';
 import { Result } from '@blc-mono/core/types/result';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
@@ -26,7 +25,6 @@ export const PromotionUpdatedEventSchema = eventSchema(
     end: z.string(),
     status: z.number(),
     link: z.string().url(),
-    platform: PLATFORM_SCHEMA,
   }),
 );
 export type PromotionUpdatedEvent = z.infer<typeof PromotionUpdatedEventSchema>;

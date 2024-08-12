@@ -44,7 +44,6 @@ export class VaultService implements IVaultService {
         context: {
           offerId: detail.offerId,
           companyId: detail.companyId,
-          platform: detail.platform,
         },
       });
       throw new Error(
@@ -72,7 +71,6 @@ export class VaultService implements IVaultService {
             redemptionId: redemption.id,
             offerId: detail.offerId,
             companyId: detail.companyId,
-            platform: detail.platform,
           },
         });
         throw new Error(
@@ -100,7 +98,6 @@ export class VaultService implements IVaultService {
             context: {
               offerId: detail.offerId,
               companyId: detail.companyId,
-              platform: detail.platform,
             },
           });
           throw new Error('Vault Update - Vault create failed: No vaults were created');
@@ -126,7 +123,6 @@ export class VaultService implements IVaultService {
               redemptionId: redemption.id,
               offerId: detail.offerId,
               companyId: detail.companyId,
-              platform: detail.platform,
             },
           });
           throw new Error(`Vault Update - Vault create failed: No vaults were updated (redemptionId=${redemption.id})`);
@@ -145,7 +141,6 @@ export class VaultService implements IVaultService {
         context: {
           offerId: detail.offerId,
           companyId: detail.companyId,
-          platform: detail.platform,
         },
       });
       throw new Error(
@@ -166,7 +161,6 @@ export class VaultService implements IVaultService {
           context: {
             offerId: detail.offerId,
             companyId: detail.companyId,
-            platform: detail.platform,
           },
         });
         throw new Error(
@@ -192,7 +186,6 @@ export class VaultService implements IVaultService {
           context: {
             offerId: detail.offerId,
             companyId: detail.companyId,
-            platform: detail.platform,
           },
         });
         throw new Error('Vault Create - Vault create failed: No vaults were created');

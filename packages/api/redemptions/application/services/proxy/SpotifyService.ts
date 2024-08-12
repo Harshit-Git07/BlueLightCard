@@ -1,5 +1,4 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 
 import { ILegacyVaultApiRepository, LegacyVaultApiRepository } from '../../repositories/LegacyVaultApiRepository';
 
@@ -13,13 +12,7 @@ export type RedeemSpotifyResult = {
 };
 
 export interface ISpotifyService {
-  redeem(
-    platform: Platform,
-    companyId: number,
-    offerId: number,
-    memberId: string,
-    url: string,
-  ): Promise<RedeemSpotifyResult>;
+  redeem(companyId: number, offerId: number, memberId: string, url: string): Promise<RedeemSpotifyResult>;
 }
 
 export class SpotifyService implements ISpotifyService {
@@ -31,15 +24,9 @@ export class SpotifyService implements ISpotifyService {
     private readonly logger: ILogger,
   ) {}
 
-  public async redeem(
-    platform: Platform,
-    companyId: number,
-    offerId: number,
-    memberId: string,
-    url: string,
-  ): Promise<RedeemSpotifyResult> {
+  public async redeem(companyId: number, offerId: number, memberId: string, url: string): Promise<RedeemSpotifyResult> {
     // Check if user has already redeemed a code
-    const codesRedeemed = await this.legacyVaultApiRepository.getCodesRedeemed(companyId, offerId, memberId, platform);
+    const codesRedeemed = await this.legacyVaultApiRepository.getCodesRedeemed(companyId, offerId, memberId);
 
     // If so, return the tracking URL with the already redeemed code
     if (codesRedeemed.length) {
@@ -56,7 +43,7 @@ export class SpotifyService implements ISpotifyService {
     }
 
     // Otherwise, assign a new code to the user
-    const { code } = await this.legacyVaultApiRepository.assignCodeToMember(memberId, companyId, offerId, platform);
+    const { code } = await this.legacyVaultApiRepository.assignCodeToMember(memberId, companyId, offerId);
     const trackingUrl = this.getTrackingUrl(url, code);
 
     return {

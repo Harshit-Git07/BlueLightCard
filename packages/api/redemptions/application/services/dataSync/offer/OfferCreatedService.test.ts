@@ -4,7 +4,6 @@ import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/data
 
 import { offerCreatedEventFactory } from '../../../../libs/test/factories/offerEvents.factory';
 import { RedemptionsTestDatabase } from '../../../../libs/test/helpers/database';
-import { createTestLogger } from '../../../../libs/test/helpers/logger';
 import { OfferCreatedEvent } from '../../../controllers/eventBridge/offer/OfferCreatedController';
 import { GenericsRepository } from '../../../repositories/GenericsRepository';
 import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
@@ -12,13 +11,11 @@ import { RedemptionsRepository } from '../../../repositories/RedemptionsReposito
 import { OfferCreatedService } from './OfferCreatedService';
 
 describe('OfferCreatedService', () => {
-  const mockedLogger = createTestLogger();
-
   function makeOfferCreatedService(connection: IDatabaseConnection) {
     const redemptionsRepository = new RedemptionsRepository(connection);
     const genericsRepository = new GenericsRepository(connection);
     const transactionManager = new TransactionManager(connection);
-    return new OfferCreatedService(mockedLogger, redemptionsRepository, genericsRepository, transactionManager);
+    return new OfferCreatedService(redemptionsRepository, genericsRepository, transactionManager);
   }
 
   let database: RedemptionsTestDatabase;
@@ -52,7 +49,6 @@ describe('OfferCreatedService', () => {
             offerUrl: 'https://example.com/offer',
             offerCode: 'OFFER123',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -69,7 +65,6 @@ describe('OfferCreatedService', () => {
             offerUrl: '',
             offerCode: '',
             offerType: 5,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -87,7 +82,6 @@ describe('OfferCreatedService', () => {
             offerUrl: 'https://thevault.bluelightcard.co.uk',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -105,7 +99,6 @@ describe('OfferCreatedService', () => {
             offerUrl: 'https://thevault.bluelightcard.co.uk',
             offerCode: '',
             offerType: 5,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -123,7 +116,6 @@ describe('OfferCreatedService', () => {
             offerUrl: 'https://www.spotify.com/uk/ppt/bluelightcard/?code=!!!CODE!!!',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -142,7 +134,6 @@ describe('OfferCreatedService', () => {
             offerUrl: 'https://www.generic.com',
             offerCode: 'OFFER123',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -164,7 +155,6 @@ describe('OfferCreatedService', () => {
             offerUrl: '',
             offerCode: 'OFFER123',
             offerType: 5,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -186,7 +176,6 @@ describe('OfferCreatedService', () => {
             offerUrl: 'https://www.preApplied.com',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);
@@ -205,7 +194,6 @@ describe('OfferCreatedService', () => {
             offerUrl: 'https://www.awin1.com',
             offerCode: '',
             offerType: 1,
-            platform: 'BLC_UK',
           },
         });
         await callCreateOffer(event);

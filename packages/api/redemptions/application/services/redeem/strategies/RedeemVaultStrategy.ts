@@ -191,8 +191,6 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
       memberId,
       redemption.companyId,
       redemption.offerId,
-      // TODO: This should not be hard-coded to BLC_UK
-      'BLC_UK',
     );
 
     const redemptionDetails = {

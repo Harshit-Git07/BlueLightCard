@@ -9,6 +9,7 @@ import {
 import { ISecret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Function, Script } from 'sst/constructs';
 
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import {
   DatabaseConnectionConfig,
   DatabaseEndpoint,
@@ -17,7 +18,6 @@ import {
 
 import { AuroraPgClusterDatabaseConfig } from '../../../config/database';
 import { RedemptionsStackEnvironmentKeys } from '../../../constants/environment';
-import { PRODUCTION_STAGE, STAGING_STAGE } from '../../../constants/sst';
 import { IDatabase } from '../../adapter';
 import {
   BastionHostDefaultSecurityGroup,
@@ -64,14 +64,14 @@ export class AuroraPgClusterSetupStrategy extends AbstractDatabaseSetupStrategy<
       return;
     }
 
-    const allowedStages = [STAGING_STAGE, PRODUCTION_STAGE];
-    if (!allowedStages.includes(this.stack.stage) || this.app.mode == 'dev') {
+    const allowedStage = isProduction(this.stack.stage) || isStaging(this.stack.stage);
+    if (!allowedStage) {
       throw new Error(
         [
           `This database strategy is only intended for use in production and production-like environments (such as staging).`,
           'This is because it is expensive to run and slow to create. If you are certain you want to use this strategy,',
           `set the environment variable ${RedemptionsStackEnvironmentKeys.REDEMPTIONS_DANGEROUSLY_ALLOW_DATABASE_SETUP_STRATEGY} to true.`,
-          `By default, the strategy is allowed for these stages: ${allowedStages.join(', ')}.`,
+          `By default, the strategy is allowed for production and staging environments.`,
         ].join(' '),
       );
     }

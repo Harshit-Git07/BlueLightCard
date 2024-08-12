@@ -134,6 +134,18 @@ jobs:
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+#            stage: staging
+##          - brand: BLC_AU
+##            region: ap-southeast-2
+#          - brand: DDS_UK
+#            region: eu-west-2
+#            stage: staging-dds
     needs:
       - install
       - test
@@ -148,7 +160,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-          aws-region: eu-west-2
+          aws-region: ${{ matrix.deployment.region }}
       - name: Get secret
         run: |
           SECRET_NAME=$(aws secretsmanager describe-secret --secret-id blc-mono-redemptions/NewVaultSecrets --query Name --output text)
@@ -203,23 +215,22 @@ jobs:
         run: npm run build
       - name: Deploy
         env:
-          # TODO(TR-383): Get braze keys dynamically later
+          BRAND: ${{ matrix.deployment.brand }}
           BRAZE_VAULT_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_VAULT_EMAIL_CAMPAIGN_ID }}'
           BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID }}'
           BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID }}'
           BRAZE_API_URL: '${{ vars.BRAZE_API_URL }}'
-          BRAND: BLC_UK
-          DD_VERSION: '${{ env.DD_VERSION }}'
-          DD_ENV: '${{ env.DD_ENV }}'
-          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
-          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
+          DD_VERSION: '${{ vars.DD_VERSION }}'
+          DD_ENV: '${{ vars.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ vars.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ vars.DD_GIT_COMMIT_SHA }}'
           DD_API_KEY: '${{ secrets.DATADOG_BLC_UK_CLIENT_TOKEN }}'
           USE_DATADOG_AGENT: 'true'
-        run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging
+        run: npx sst deploy global --stage ${{ matrix.deployment.stage }} && npx sst deploy redemptions --stage ${{ matrix.deployment.stage }}
       - name: Deploy Spec
         env:
           REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
-        run: npm run -s oas -w packages/api/redemptions  --region=eu-west-2 --stage=staging --api-version=v1
+        run: npm run -s oas -w packages/api/redemptions  --region=${{ matrix.deployment.region }} --stage=${{matrix.deployment.stage}} --api-version=v1
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog
         with:
@@ -232,6 +243,18 @@ jobs:
   e2e-redemptions:
     name: Run E2E tests (redemptions)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+#          - brand: BLC_AU
+#            region: ap-southeast-2
+#            stage: staging
+#          - brand: DDS_UK
+#            region: eu-west-2
+#            stage: staging-dds
     needs:
       - install
       - staging
@@ -244,7 +267,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-          aws-region: eu-west-2
+          aws-region: ${{ matrix.deployment.region }}
       - name: Install Session Manager Plugin
         run: |
           curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
@@ -252,11 +275,11 @@ jobs:
       - name: Run E2E tests
         working-directory: packages/api/redemptions
         env:
+          BRAND: ${{ matrix.deployment.brand }}
           REDEMPTIONS_DATABASE_PORT: 5432
           REDEMPTIONS_DATABASE_NAME: redemptions
           REDEMPTIONS_DATABASE_TYPE: AURORA_PG_CLUSTER
-          BRAND: BLC_UK
-        run: npx sst bind --stage staging vitest
+        run: npx sst bind --stage ${{ matrix.deployment.stage }} vitest
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -272,6 +295,9 @@ jobs:
           - brand: BLC_AU
             region: ap-southeast-2
             stage: production
+          - brand: DDS_UK
+            region: eu-west-2
+            stage: production-dds
     needs:
       - install
       - test

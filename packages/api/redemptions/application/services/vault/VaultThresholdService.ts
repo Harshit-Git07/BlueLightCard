@@ -3,7 +3,6 @@ import { sum } from 'lodash';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { Platform } from '@blc-mono/redemptions/libs/database/schema';
 
 import { AdminEmailRepository, IAdminEmailRepository } from '../../repositories/AdminEmailRepository';
 import {
@@ -121,8 +120,6 @@ export class VaultThresholdService implements IVaultThresholdService {
           offerId: redemptionDetails.offerId,
           companyName: redemptionDetails.companyName,
           offerName: redemptionDetails.offerName,
-          // TODO: This should not be hard-coded to BLC_UK. Wait for further information on how to determine the platform
-          platform: 'BLC_UK',
           vaultAlertBelow: vaultDetails.alertBelow,
           vaultEmail: vaultDetails.email,
         });
@@ -139,13 +136,12 @@ export class VaultThresholdService implements IVaultThresholdService {
     offerId: number;
     companyName: string;
     offerName: string;
-    platform: Platform;
   }): Promise<void> {
-    const vaultBatches = await this.legacyVaultsApiRepo.viewVaultBatches(data.offerId, data.companyId, data.platform);
+    const vaultBatches = await this.legacyVaultsApiRepo.viewVaultBatches(data.offerId, data.companyId);
     const parsedVaultBatches = this.filterExpiredVaultBatches(vaultBatches);
     const remainingCodesArray = await Promise.all(
       parsedVaultBatches.map((vaultBatchId) =>
-        this.legacyVaultsApiRepo.checkVaultStock(vaultBatchId, data.offerId, data.companyId, data.platform),
+        this.legacyVaultsApiRepo.checkVaultStock(vaultBatchId, data.offerId, data.companyId),
       ),
     );
     const remainingCodes = sum(remainingCodesArray);

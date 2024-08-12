@@ -27,7 +27,6 @@ export const affiliateEnum = pgEnum('affiliate', [
 export const connectionEnum = pgEnum('connection', ['affiliate', 'direct', 'spotify', 'none']);
 export const integrationEnum = pgEnum('integration', ['eagleeye', 'uniqodo']);
 export const offerTypeEnum = pgEnum('offerType', ['online', 'in-store']);
-export const platformEnum = pgEnum('platform', ['BLC_UK', 'BLC_AU', 'DDS_UK']);
 export const redemptionTypeEnum = pgEnum('redemptionType', REDEMPTION_TYPES);
 export const statusEnum = pgEnum('status', ['active', 'in-active']);
 export const vaultTypeEnum = pgEnum('vaultType', ['standard', 'legacy']);
@@ -35,7 +34,6 @@ export const vaultTypeEnum = pgEnum('vaultType', ['standard', 'legacy']);
 export type Affiliate = (typeof affiliateEnum.enumValues)[number];
 export type Integration = (typeof integrationEnum.enumValues)[number];
 export type OfferType = (typeof offerTypeEnum.enumValues)[number];
-export type Platform = (typeof platformEnum.enumValues)[number];
 export type RedemptionType = (typeof redemptionTypeEnum.enumValues)[number];
 export type Status = (typeof statusEnum.enumValues)[number];
 export type VaultType = (typeof vaultTypeEnum.enumValues)[number];
@@ -55,7 +53,6 @@ export const redemptionsTable = pgTable('redemptions', {
   connection: connectionEnum('connection').notNull(),
   offerId: integer('offerId').notNull(),
   offerType: offerTypeEnum('offerType').notNull(),
-  platform: platformEnum('platform').notNull(),
   redemptionType: redemptionTypeEnum('redemptionType').notNull(),
   url: varchar('url'),
 });

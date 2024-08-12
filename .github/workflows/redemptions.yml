@@ -209,10 +209,10 @@ jobs:
           BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID: '${{ vars.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID }}'
           BRAZE_API_URL: '${{ vars.BRAZE_API_URL }}'
           BRAND: BLC_UK
-          DD_VERSION: '${{ vars.DD_VERSION }}'
-          DD_ENV: '${{ vars.DD_ENV }}'
-          DD_GIT_COMMIT_SHA: '${{ vars.DD_GIT_COMMIT_SHA }}'
-          DD_GIT_REPOSITORY_URL: '${{ vars.DD_GIT_COMMIT_SHA }}'
+          DD_VERSION: '${{ env.DD_VERSION }}'
+          DD_ENV: '${{ env.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
           DD_API_KEY: '${{ secrets.DATADOG_BLC_UK_CLIENT_TOKEN }}'
           USE_DATADOG_AGENT: 'true'
         run: npx sst deploy global --stage staging && npx sst deploy redemptions --stage staging

@@ -20,6 +20,25 @@ import { IDatabaseAdapter } from './src/constructs/database/IDatabaseAdapter';
 import { DatabaseAdapter } from './src/constructs/database/adapter';
 
 export async function Offers({ stack, app }: StackContext) {
+
+  const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
+  // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+  const layers =
+    USE_DATADOG_AGENT === 'true' ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`] : undefined;
+
+  stack.setDefaultFunctionProps({
+    environment: {
+      DD_VERSION: process.env.DD_VERSION || '',
+      DD_ENV: process.env.SST_STAGE || 'undefined',
+      DD_API_KEY: process.env.DD_API_KEY || '',
+      DD_GIT_COMMIT_SHA: process.env.DD_GIT_COMMIT_SHA || '',
+      DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
+      USE_DATADOG_AGENT,
+      DD_SERVICE: 'offers',
+    },
+    layers,
+  });
+
   new Tags(stack);
   const { authorizer, cognito, newCognito } = use(Identity);
   const { vpc, certificateArn } = use(Shared);

@@ -26,7 +26,7 @@ export abstract class Controller<
   constructor(logger: ILogger) {
     const USE_DATADOG_AGENT = getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
 
-    if (USE_DATADOG_AGENT && USE_DATADOG_AGENT === 'true') {
+    if (USE_DATADOG_AGENT && USE_DATADOG_AGENT.toLowerCase() === 'true') {
       this.invoke = datadog(this.invoke.bind(this));
     } else {
       this.invoke = this.invoke.bind(this);

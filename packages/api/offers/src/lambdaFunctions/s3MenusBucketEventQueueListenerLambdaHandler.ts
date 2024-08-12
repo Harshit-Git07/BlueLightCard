@@ -1,3 +1,5 @@
+import 'dd-trace/init.js';
+import { datadog } from 'datadog-lambda-js';
 import 'reflect-metadata';
 import { Logger } from "@aws-lambda-powertools/logger";
 import { TYPE_KEYS, OFFER_MENUS_FILE_NAMES } from "../utils/global-constants";
@@ -29,7 +31,7 @@ const shouldEventBeProcessed = (s3EventSource: string): boolean => {
   return s3EventSource === process.env.REGIONAL_MENUS_BUCKET;
 };
 
-export const handler = async (event: any) => {
+const unwrappedHandler = async (event: any) => {
   logger.info("event", { event });
 
   for (const record of event.Records) {
@@ -66,6 +68,11 @@ export const handler = async (event: any) => {
     }
   }
 };
+
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
+export const handler = USE_DATADOG_AGENT.toLowerCase() === 'true' ? datadog(unwrappedHandler) : unwrappedHandler
+
+
 
 /**
  * Retrieves data from an S3 bucket with the specified bucket and key.

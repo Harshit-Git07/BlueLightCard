@@ -37,7 +37,6 @@ jobs:
         with:
           restore_cache: false
           token: ${{ secrets.GITHUB_TOKEN }}
-
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -126,7 +125,20 @@ jobs:
           aws-region: ${{matrix.region}}
       - name: Build
         run: npm run build
+      - name: Get Service Tags
+        run: |
+          echo "DD_VERSION=$(date +%m-%d-%Y)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "DD_ENV=staging" >> $GITHUB_ENV
+          echo "DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "DD_GIT_REPOSITORY_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
       - name: Deploy Stack
+        env:
+          DD_VERSION: '${{ env.DD_VERSION }}'
+          DD_ENV: '${{ env.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
+          DD_API_KEY: '${{ secrets.DATADOG_BLC_UK_CLIENT_TOKEN }}'
+          USE_DATADOG_AGENT: 'true'
         run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy offers --stage staging --region ${{matrix.region}}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog

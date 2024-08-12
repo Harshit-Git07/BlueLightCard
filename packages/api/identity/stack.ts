@@ -197,10 +197,11 @@ export function Identity({ stack }: StackContext) {
             allowedDomains: getAllowedDomains(stack.stage),
             REGION: stack.region,
             ZENDESK_JWT_SECRET: appSecret.secretValueFromJson('zendesk_jwt_secret').toString(),
-            ZENDESK_APP_CLIENT_ID: appSecret.secretValueFromJson('zendesk_app_client_id').toString(),
             ZENDESK_REDIRECT_URI: appSecret.secretValueFromJson('zendesk_redirect_uri').toString(),
             USER_POOL_DOMAIN: appSecret.secretValueFromJson('user_pool_domain').toString(),
-            ZENDESK_SUBDOMAIN: appSecret.secretValueFromJson('zendesk_subdomain').toString()
+            ZENDESK_SUBDOMAIN: appSecret.secretValueFromJson('zendesk_subdomain').toString(),
+            ZENDESK_APP_CLIENT_ID: appSecret.secretValueFromJson('zendesk_app_client_id').toString(),
+            ZENDESK_APP_CLIENT_ID_TEST: appSecret.secretValueFromJson('zendesk_app_client_id').toString() // added for debugging, to be removed
           },
           permissions: [identityTable],
         },

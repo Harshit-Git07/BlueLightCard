@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.91.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.2...bluelightcard/identity-v1.91.3) (2024-08-12)
+
+
+### Bug Fixes
+
+* fix/COT-239, removed extr env,lastname mpping ([#1966](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1966)) ([3a9b61c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a9b61c77d80d13538e0d8c6406ea57f6aa33d1e))
+
 ## [1.91.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.1...bluelightcard/identity-v1.91.2) (2024-08-12)
 
 

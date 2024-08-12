@@ -1,51 +1,47 @@
 import { Meta, StoryFn } from '@storybook/react';
-import MagicButton from './';
-import { ThemeVariant } from 'src/types';
+import MagicButton, { MagicBtnVariant } from './';
+import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 
 const componentMeta: Meta<typeof MagicButton> = {
   title: 'Component System/Magic Button',
   component: MagicButton,
   argTypes: {
     variant: {
-      description: 'The button variant (primary or secondary). Primary is the default.',
-      options: [ThemeVariant.Primary, ThemeVariant.Secondary],
-    },
-    animate: {
-      description: 'Whether the button has an animated border. Is removed when disabled.',
-    },
-    disabled: {
-      description: 'Whether the button is disabled.',
+      description: 'The button variant (Primary, Pressed or Disabled). Primary is the default.',
+      options: [MagicBtnVariant.Primary, MagicBtnVariant.Pressed, MagicBtnVariant.Disabled],
     },
     clickable: {
       description: 'Whether the button is clickable. Overriden when disabled.',
     },
+    label: {
+      description: 'Button label text',
+    },
   },
 };
 
-const DefaultTemplate: StoryFn<typeof MagicButton> = (args) => (
-  <MagicButton {...args}>
-    <div className="py-4 px-16">Button</div>
-  </MagicButton>
-);
+const DefaultTemplate: StoryFn<typeof MagicButton> = (args) => <MagicButton {...args} />;
 
 export const Primary = DefaultTemplate.bind({});
 
 Primary.args = {
-  variant: ThemeVariant.Primary,
+  variant: MagicBtnVariant.Primary,
+  label: 'Magic Button',
 };
 
 export const Pressed = DefaultTemplate.bind({});
 
 Pressed.args = {
-  variant: ThemeVariant.Secondary,
-  animate: true,
+  variant: MagicBtnVariant.Pressed,
+  label: 'Magic Button',
+  description: 'Magic Button Pressed',
+  icon: faWandMagicSparkles,
 };
 
 export const Disabled = DefaultTemplate.bind({});
 
 Disabled.args = {
-  variant: ThemeVariant.Primary,
-  disabled: true,
+  variant: MagicBtnVariant.Disabled,
+  label: 'Magic Button',
 };
 
 export default componentMeta;

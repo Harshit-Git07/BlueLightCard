@@ -1,57 +1,114 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Button component snapshot Test renders a button that is diabled 1`] = `
-[
-  <button
-    className=" z-10 relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] "
-    disabled={true}
-    onClick={[Function]}
+exports[`MagicButton component snapshot test for component variants should render component on disabled variant 1`] = `
+<button
+  className=" z-10 relative w-fit rounded-full overflow-hidden p-1 h-[3.75rem] disabled"
+  disabled={true}
+  onClick={[Function]}
+>
+  <div
+    className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center text-magicButton-disabled-label-colour dark:text-magicButton-disabled-label-colour-dark bg-magicButton-disabled-bg-colour dark:bg-magicButton-disabled-bg-colour-dark opacity-30"
   >
-    <div
-      className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-museo text-base font-bold leading-6 text-white bg-[#001B80] opacity-30 disabled"
-      style={
-        {
-          "transitionDuration": "1000ms",
-        }
-      }
+    <span
+      className="text-magicButton-default-label-colour dark:text-magicButton-default-label-colour-dark font-magicButton-label-font font-magicButton-label-font-weight text-magicButton-label-font tracking-magicButton-label-font leading-magicButton-label-font"
     >
       Button
-    </div>
-  </button>,
-  ",",
-]
+    </span>
+  </div>
+</button>
 `;
 
-exports[`Button component snapshot Test renders a button with animated border 1`] = `
-[
-  <button
-    className=" z-10 relative text-blue-800 w-fit rounded-full overflow-hidden p-1 w-[21.4375] h-[3.75rem] cursor-pointer"
-    disabled={false}
-    onClick={[Function]}
+exports[`MagicButton component snapshot test for component variants should render component on pressed variant with icon 1`] = `
+<button
+  className=" z-10 relative w-fit rounded-full overflow-hidden p-1 h-[3.75rem] cursor-pointer"
+  disabled={false}
+  onClick={[Function]}
+>
+  <div
+    className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"
   >
     <div
-      className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"
-    >
-      <div
-        className="bg-gradient-to-r from-[#98E5FF] from-5% via-[#020369] to-95% to-[#98E5FF] z-0 h-full w-full animate-magicButtonGradient"
-        style={
-          {
-            "backgroundSize": "400% 400%",
-          }
-        }
-      />
-    </div>
-    <div
-      className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center transition-all font-museo text-base font-bold leading-6 text-[#020369] bg-white animated"
+      className="bg-gradient-to-r from-5% to-95% from-colour-secondary-gradient-bright-fixed dark:from-colour-secondary-gradient-bright-fixed via-colour-secondary-gradient-centre-fixed dark:via-colour-secondary-gradient-centre-fixed to-colour-secondary-gradient-dim-fixed dark:to-colour-secondary-gradient-dim-fixed z-0 h-full w-full animate-magicButtonGradient"
       style={
         {
-          "transitionDuration": "1000ms",
+          "backgroundSize": "400% 400%",
         }
       }
+    />
+  </div>
+  <div
+    className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center bg-colour-surface dark:bg-colour-surface-dark"
+  >
+    <div
+      className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center"
     >
-      Button
+      <div
+        className="text-magicButton-pressed-label-colour dark:text-magicButton-pressed-label-colour-dark font-magicButton-label-font font-magicButton-label-font-weight text-magicButton-label-font tracking-magicButton-label-font leading-magicButton-label-font text-center flex justify-center gap-2 items-center"
+      >
+        <svg
+          aria-hidden="true"
+          className="svg-inline--fa fa-wand-magic-sparkles "
+          data-icon="wand-magic-sparkles"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          style={{}}
+          viewBox="0 0 576 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M234.7 42.7L197 56.8c-3 1.1-5 4-5 7.2s2 6.1 5 7.2l37.7 14.1L248.8 123c1.1 3 4 5 7.2 5s6.1-2 7.2-5l14.1-37.7L315 71.2c3-1.1 5-4 5-7.2s-2-6.1-5-7.2L277.3 42.7 263.2 5c-1.1-3-4-5-7.2-5s-6.1 2-7.2 5L234.7 42.7zM46.1 395.4c-18.7 18.7-18.7 49.1 0 67.9l34.6 34.6c18.7 18.7 49.1 18.7 67.9 0L529.9 116.5c18.7-18.7 18.7-49.1 0-67.9L495.3 14.1c-18.7-18.7-49.1-18.7-67.9 0L46.1 395.4zM484.6 82.6l-105 105-23.3-23.3 105-105 23.3 23.3zM7.5 117.2C3 118.9 0 123.2 0 128s3 9.1 7.5 10.8L64 160l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L128 160l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L128 96 106.8 39.5C105.1 35 100.8 32 96 32s-9.1 3-10.8 7.5L64 96 7.5 117.2zm352 256c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 416l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 416l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 352l-21.2-56.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 352l-56.5 21.2z"
+            fill="currentColor"
+            style={{}}
+          />
+        </svg>
+        Button
+      </div>
+      <div
+        className="text-magicButton-pressed-description-colour dark:text-magicButton-pressed-description-colour-dark font-magicButton-description-font font-magicButton-description-font-weight text-magicButton-description-font tracking-magicButton-description-font leading-magicButton-description-font"
+      >
+        Button description
+      </div>
     </div>
-  </button>,
-  ",",
-]
+  </div>
+</button>
+`;
+
+exports[`MagicButton component snapshot test for component variants should render component on pressed variant with no icon 1`] = `
+<button
+  className=" z-10 relative w-fit rounded-full overflow-hidden p-1 h-[3.75rem] cursor-pointer"
+  disabled={false}
+  onClick={[Function]}
+>
+  <div
+    className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"
+  >
+    <div
+      className="bg-gradient-to-r from-5% to-95% from-colour-secondary-gradient-bright-fixed dark:from-colour-secondary-gradient-bright-fixed via-colour-secondary-gradient-centre-fixed dark:via-colour-secondary-gradient-centre-fixed to-colour-secondary-gradient-dim-fixed dark:to-colour-secondary-gradient-dim-fixed z-0 h-full w-full animate-magicButtonGradient"
+      style={
+        {
+          "backgroundSize": "400% 400%",
+        }
+      }
+    />
+  </div>
+  <div
+    className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center bg-colour-surface dark:bg-colour-surface-dark"
+  >
+    <div
+      className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center"
+    >
+      <div
+        className="text-magicButton-pressed-label-colour dark:text-magicButton-pressed-label-colour-dark font-magicButton-label-font font-magicButton-label-font-weight text-magicButton-label-font tracking-magicButton-label-font leading-magicButton-label-font text-center flex justify-center gap-2 items-center"
+      >
+        Button
+      </div>
+      <div
+        className="text-magicButton-pressed-description-colour dark:text-magicButton-pressed-description-colour-dark font-magicButton-description-font font-magicButton-description-font-weight text-magicButton-description-font tracking-magicButton-description-font leading-magicButton-description-font"
+      >
+        Button description
+      </div>
+    </div>
+  </div>
+</button>
 `;

@@ -1,23 +1,17 @@
 import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
-import MagicButton from './';
-import { Props } from './';
+import MagicButton, { MagicBtnVariant } from './';
 import { render, screen } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 
 const mockPlatformAdapter = useMockPlatformAdapter();
 
-describe('Button component', () => {
-  let props: Props;
-
-  beforeEach(() => {
-    props = {};
-  });
-
+describe('MagicButton component', () => {
   describe('smoke test', () => {
-    it('should render component without error', () => {
+    it('should render component without error on primary variant', () => {
       render(
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <MagicButton {...props} />
+          <MagicButton variant={MagicBtnVariant.Primary} label="Button" />
         </PlatformAdapterProvider>,
       );
 
@@ -27,27 +21,40 @@ describe('Button component', () => {
     });
   });
 
-  describe('snapshot Test', () => {
-    it('renders a button with animated border', () => {
+  describe('snapshot test for component variants', () => {
+    it('should render component on pressed variant with no icon', () => {
       const component = renderer.create(
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <MagicButton variant="secondary" animate>
-            Button
-          </MagicButton>
-          ,
+          <MagicButton
+            variant={MagicBtnVariant.Pressed}
+            label="Button"
+            description="Button description"
+          />
         </PlatformAdapterProvider>,
       );
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
 
-    it('renders a button that is diabled', () => {
+    it('should render component on pressed variant with icon', () => {
       const component = renderer.create(
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <MagicButton variant="primary" disabled>
-            Button
-          </MagicButton>
-          ,
+          <MagicButton
+            variant={MagicBtnVariant.Pressed}
+            label="Button"
+            description="Button description"
+            icon={faWandMagicSparkles}
+          />
+        </PlatformAdapterProvider>,
+      );
+      const tree = component.toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+
+    it('should render component on disabled variant', () => {
+      const component = renderer.create(
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <MagicButton variant={MagicBtnVariant.Disabled} label="Button" />
         </PlatformAdapterProvider>,
       );
       const tree = component.toJSON();

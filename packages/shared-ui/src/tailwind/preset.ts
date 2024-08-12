@@ -73,6 +73,17 @@ export function createBrandedPreset(
   baseTailwindConfig.theme.extend.lineHeight = themeTokens.lineHeight;
   baseTailwindConfig.theme.extend.letterSpacing = themeTokens.letterSpacing;
 
+  // inject animations for MagicButton component
+  baseTailwindConfig.theme.extend.animation = {
+    magicButtonGradient: 'magicButtonGradient 3s linear infinite',
+  };
+  baseTailwindConfig.theme.extend.keyframes = {
+    magicButtonGradient: {
+      '0%, 100%': { 'background-position': '0% 0%' },
+      '50%': { 'background-position': '75% 0%' },
+    },
+  };
+
   // inject brand tokens for typography
   baseTailwindConfig.plugins = [plugin((api) => fontCSSPlugin(fonts, api))];
 

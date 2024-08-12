@@ -3,7 +3,7 @@ import { PlatformVariant } from '../../../../types';
 import { FC, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
-import MagicButton from '../../../MagicButton';
+import MagicButton, { MagicBtnVariant } from '../../../MagicButton';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { useLabels } from '../../../../hooks/useLabels';
@@ -14,7 +14,6 @@ import {
   RedeemResultKind,
   offerTypeParser,
 } from '../../../../index';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import { RedemptionType } from '../../types';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
@@ -398,10 +397,8 @@ const OfferSheetDetailsPage: FC = () => {
 
   const primaryButton = (
     <MagicButton
-      variant={'primary'}
+      variant={isRedemptionButtonDisabled.data ? MagicBtnVariant.Disabled : MagicBtnVariant.Primary}
       className="w-full"
-      transitionDurationMs={200}
-      disabled={isRedemptionButtonDisabled.data}
       onClick={async () => {
         if (platformAdapter.platform === PlatformVariant.MobileHybrid) {
           await hybridDiscountClickHandler();
@@ -424,37 +421,28 @@ const OfferSheetDetailsPage: FC = () => {
         // For showCard redemption type, there is no magic button displayed after the click
         if (redemptionType !== 'showCard') setButtonClicked(true);
       }}
-    >
-      <span className="leading-10 font-bold text-md">{primaryButtonText(redemptionType)}</span>
-    </MagicButton>
+      label={primaryButtonText(redemptionType)}
+    />
   );
 
   const maxPerUserReachedSecondaryButton = (
-    <MagicButton variant="secondary" className="w-full" animate>
-      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
-        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
-          <FontAwesomeIcon icon={faWandMagicSparkles} />
-          Taking you to the vault
-        </div>
-        <div className="text-sm text-[#616266] font-medium">
-          You have reached the code limit for this offer
-        </div>
-      </div>
-    </MagicButton>
+    <MagicButton
+      variant={MagicBtnVariant.Pressed}
+      className="w-full"
+      icon={faWandMagicSparkles}
+      label="Taking you to the vault"
+      description="You have reached the code limit for this offer"
+    />
   );
 
   const mobileHybridSecondaryButton = (
-    <MagicButton variant="secondary" className="w-full" animate>
-      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
-        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
-          <FontAwesomeIcon icon={faWandMagicSparkles} />
-          {mobileHybridButtonText(redemptionType).secondaryText}
-        </div>
-        <div className="text-sm text-[#616266] font-medium">
-          {mobileHybridButtonText(redemptionType).secondarySubtext}
-        </div>
-      </div>
-    </MagicButton>
+    <MagicButton
+      variant={MagicBtnVariant.Pressed}
+      className="w-full"
+      icon={faWandMagicSparkles}
+      label={mobileHybridButtonText(redemptionType).secondaryText}
+      description={mobileHybridButtonText(redemptionType).secondarySubtext}
+    />
   );
 
   const webSecondaryButton = (
@@ -462,20 +450,12 @@ const OfferSheetDetailsPage: FC = () => {
       onClick={() => {
         getDiscountClickHandler();
       }}
-      variant="secondary"
+      variant={MagicBtnVariant.Pressed}
       className="w-full"
-      animate
-    >
-      <div className="flex-col w-full text-nowrap whitespace-nowrap flex-nowrap justify-center items-center">
-        <div className="text-md font-bold text-center flex justify-center gap-2 items-center">
-          <FontAwesomeIcon icon={faWandMagicSparkles} />
-          {webSecondaryButtonText(redemptionType)?.webSecondaryText}
-        </div>
-        <div className="text-sm text-[#616266] font-medium">
-          {webSecondaryButtonText(redemptionType)?.webSecondarySubtext}
-        </div>
-      </div>
-    </MagicButton>
+      icon={faWandMagicSparkles}
+      label={webSecondaryButtonText(redemptionType)?.webSecondaryText}
+      description={webSecondaryButtonText(redemptionType)?.webSecondarySubtext}
+    />
   );
 
   const renderButton = () => {

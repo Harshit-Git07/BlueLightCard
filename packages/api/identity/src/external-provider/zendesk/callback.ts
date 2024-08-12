@@ -57,7 +57,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
 function generateJWT(userObj: any): string {
   const firstName = (userObj.firstname && userObj.firstname != '') ? userObj.firstname : 'Zendesk';
-  const lastName = (userObj.surname && userObj.surname != '') ? userObj.firstname : 'User';
+  const lastName = (userObj.surname && userObj.surname != '') ? userObj.surname : 'User';
   const cardNumber = (userObj.card_number && userObj.card_number != '') ? userObj.card_number : '';
   const phoneNumber = (userObj.phone_number && userObj.phone_number != '') ? userObj.phone_number : '';
   const payload = {

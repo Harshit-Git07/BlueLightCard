@@ -1,10 +1,10 @@
 import { Stack } from 'sst/constructs';
 
 import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
+import { isEphemeral, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnv, getEnvOrDefault, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { DiscoveryStackEnvironmentKeys } from '../constants/environment';
-import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
 
 export type DiscoveryStackRegion = 'eu-west-2' | 'ap-southeast-2';
 
@@ -24,11 +24,11 @@ export type DiscoveryStackConfig = {
 export class DiscoveryStackConfigResolver {
   public static for(stack: Stack, region: DiscoveryStackRegion): DiscoveryStackConfig {
     switch (true) {
-      case PRODUCTION_STAGE === stack.stage:
+      case isProduction(stack.stage):
         return this.forProductionStage(region);
-      case STAGING_STAGE === stack.stage:
+      case isStaging(stack.stage):
         return this.forStagingStage(region);
-      case PR_STAGE_REGEX.test(stack.stage):
+      case isEphemeral(stack.stage):
         return this.forPrStage();
       default:
         return this.fromEnvironmentVariables();

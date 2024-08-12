@@ -16,9 +16,9 @@ const getValidOfferTypeReducer = (logger: Logger) => (accumulator: OfferType[], 
     if (err instanceof ZodError) {
       logger.error(err.message);
     }
-  } finally {
-    return accumulator;
   }
+
+  return accumulator;
 };
 
 export default getValidOfferTypeReducer;

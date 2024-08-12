@@ -66,7 +66,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   };
   const genCriteria = (criteria: string[]) => {
     //sort criteria string alphabetically
-    criteria.sort();
+    criteria.sort((a, b) => a.localeCompare(b));
     let criteriaString = 'This must show ';
     criteria.forEach((criterion, index) => {
       if (criteria.length > 2 && index != criteria.length - 1 && index != criteria.length - 2) {

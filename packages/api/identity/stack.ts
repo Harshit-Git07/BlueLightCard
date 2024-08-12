@@ -337,20 +337,6 @@ function deployDdsSpecificResources(stack: Stack) {
     IdentityApiEndpoint: identityApi.url,
   });
 
-  stack.setDefaultFunctionProps({
-    environment: {
-      service: SERVICE_NAME,
-      DD_VERSION: process.env.DD_VERSION || '',
-      DD_ENV: process.env.SST_STAGE || 'undefined',
-      DD_API_KEY: process.env.DD_API_KEY || '',
-      DD_GIT_COMMIT_SHA: process.env.DD_GIT_COMMIT_SHA || '',
-      DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
-      USE_DATADOG_AGENT,
-      DD_SERVICE: SERVICE_NAME,
-    },
-    layers,
-  });
-
   // Output the Cognito User Pool ID as a config parameter so that it can be
   // used in E2E tests.
   new Config.Parameter(stack, 'IDENTITY_COGNITO_USER_POOL_ID', {

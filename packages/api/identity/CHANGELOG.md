@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.91.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.1...bluelightcard/identity-v1.91.2) (2024-08-12)
+
+
+### Bug Fixes
+
+* feat/COT-239-v3 env var refresh issue ([#1931](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1931)) ([5aeabbf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5aeabbf00322d09880c1ea3bfcc38c99b07dc8bf))
+
+
+### Other Changes
+
+* Dynamically selecting Datadog agent layer's AWS zone ([#1946](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1946)) ([b1ad22d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b1ad22d70e67b433c3af67f98e7784f751340f98))
+* PE-92: Instrumenting identity ( Datadog ) STAGING ([#1917](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1917)) ([da98eff](https://github.com/bluelightcard/BlueLightCard-2.0/commit/da98effc141a2469ea7c58f1b238091a9ee4ea7b))
+
 ## [1.91.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.0...bluelightcard/identity-v1.91.1) (2024-08-08)
 
 

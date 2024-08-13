@@ -31,7 +31,7 @@ jobs:
         id: playwright
         run: |
           for i in {1..2}; do
-            if npx playwright test -g "@Uk @Smoke @Web @NeedsTestCase - Login to uk home page"; then
+            if npx playwright test -g "@Uk @SmokeTest @Web @NeedsTestCase - Login to uk home page"; then
               echo "Test passed on attempt $i."
               break
             fi

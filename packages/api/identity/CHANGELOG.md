@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.91.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.3...bluelightcard/identity-v1.91.4) (2024-08-12)
+
+
+### Bug Fixes
+
+* [TR-642] Add comment to trigger Identity deploy ([#1974](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1974)) ([c5418ee](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c5418ee35e3d7a7c672f2eaef360a626ff67ca07))
+* [TR-642] Remove duplicate default function props from DDS specific resources ([#1971](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1971)) ([946a050](https://github.com/bluelightcard/BlueLightCard-2.0/commit/946a05001d7d8a0009283d566c153a2a8bcd5c5c))
+
 ## [1.91.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.2...bluelightcard/identity-v1.91.3) (2024-08-12)
 
 

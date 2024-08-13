@@ -1,5 +1,4 @@
-import { FC, useEffect } from 'react';
-import { atom, useAtom } from 'jotai';
+import { FC, useEffect, useState } from 'react';
 import Image from '../Image';
 import Badge from '../Badge';
 import getCDNUrl from '../../utils/getCDNUrl';
@@ -26,8 +25,6 @@ export type BgColorTagParser = {
   [key in OfferTypeStrLiterals]: BgColorString;
 };
 
-const imageSourceAtom = atom<string>('');
-
 const ResponsiveOfferCard: FC<Props> = ({
   id,
   companyId,
@@ -43,7 +40,7 @@ const ResponsiveOfferCard: FC<Props> = ({
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
   const { open } = useOfferSheetControls();
-  const [imageSource, setImageSource] = useAtom(imageSourceAtom);
+  const [imageSource, setImageSource] = useState<string>(image ? getCDNUrl(image) : fallbackImage);
 
   const openOfferSheet = () => {
     open({
@@ -79,7 +76,6 @@ const ResponsiveOfferCard: FC<Props> = ({
       data-testid={`offer-card-${id}`}
     >
       <div
-        onClick={onClick ? onClick : openOfferSheet}
         className={`rounded-t-lg overflow-hidden ${
           variant === 'vertical'
             ? ''
@@ -87,6 +83,7 @@ const ResponsiveOfferCard: FC<Props> = ({
         }`}
       >
         <Image
+          onClick={onClick ?? openOfferSheet}
           src={imageSource}
           alt={`${name} offer`}
           width={0}

@@ -127,11 +127,8 @@ const ShareButton: FC<Props> = ({
         </div>
         {showShareLabel && (
           <span className="ml-2">
-            {shareBtnState === 'share'
-              ? shareLabel
-              : shareBtnState === 'success'
-                ? 'Link copied'
-                : 'Failed to copy'}
+            {(shareBtnState === 'share' && shareLabel) ||
+              (shareBtnState === 'success' ? 'Link copied' : 'Failed to copy')}
           </span>
         )}
       </div>

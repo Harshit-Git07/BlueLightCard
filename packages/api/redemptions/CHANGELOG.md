@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.22.0...bluelightcard/redemptions-v1.23.0) (2024-08-13)
+
+
+### Features
+
+* [TR-642]: Per brand deployments ([#1592](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1592)) ([6642193](https://github.com/bluelightcard/BlueLightCard-2.0/commit/664219354bf2890e6990e23dd166a464e8ebae94))
+* per brand deployments (disabled DDS and AU) ([6642193](https://github.com/bluelightcard/BlueLightCard-2.0/commit/664219354bf2890e6990e23dd166a464e8ebae94))
+
+
+### Bug Fixes
+
+* vault threshold fixes ([#1915](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1915)) ([05dcf18](https://github.com/bluelightcard/BlueLightCard-2.0/commit/05dcf18f7c2002ed40176e8771c54e6c7dfb89b3))
+
+
+### Other Changes
+
+* Dynamically selecting Datadog agent layer's AWS zone ([#1946](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1946)) ([b1ad22d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b1ad22d70e67b433c3af67f98e7784f751340f98))
+* Instrumenting offers and updating workflows ([#1963](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1963)) ([af195c0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/af195c08ab36dce4a65680cc1cdbf21a3c03a5d6))
+
 ## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.21.0...bluelightcard/redemptions-v1.22.0) (2024-08-08)
 
 

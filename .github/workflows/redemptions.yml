@@ -133,6 +133,7 @@ jobs:
   staging:
     name: Staging Deployment
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: Staging
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -292,12 +293,12 @@ jobs:
           - brand: BLC_UK
             region: eu-west-2
             stage: production
-          - brand: BLC_AU
-            region: ap-southeast-2
-            stage: production
-          - brand: DDS_UK
-            region: eu-west-2
-            stage: production-dds
+#          - brand: BLC_AU
+#            region: ap-southeast-2
+#            stage: production
+#          - brand: DDS_UK
+#            region: eu-west-2
+#            stage: production-dds
     needs:
       - install
       - test

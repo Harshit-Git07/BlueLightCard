@@ -1,6 +1,6 @@
 import test from "@lib/BaseTest";
 
-test(`@Uk @Smoke @Web @NeedsTestCase - Check Home screen options when not logged in`, async ({
+test(`@Uk @SmokeTest @Web @NeedsTestCase - Check Home screen options when not logged in`, async ({
   homePageUk,
 }) => {
   await test.step(`Navigating to BLC Uk`, async () => {
@@ -13,7 +13,7 @@ test(`@Uk @Smoke @Web @NeedsTestCase - Check Home screen options when not logged
   });
 });
 
-test(`@Uk @Smoke @Web @NeedsTestCase - Check Home screen options when logged in`, async ({
+test(`@Uk @SmokeTest @Web @NeedsTestCase - Check Home screen options when logged in`, async ({
   homePageUk,
 }) => {
   await test.step(`Logging in to BLC Uk`, async () => {

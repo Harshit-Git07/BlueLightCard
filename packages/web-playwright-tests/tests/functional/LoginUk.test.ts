@@ -1,6 +1,6 @@
 import test from "@lib/BaseTest";
 
-test(`@Uk @Smoke @Web @NeedsTestCase - Login to uk home page`, async ({
+test(`@Uk @SmokeTest @Web @NeedsTestCase - Login to uk home page`, async ({
   homePageUk,
 }) => {
   await test.step(`Logging in to BLC Uk`, async () => {

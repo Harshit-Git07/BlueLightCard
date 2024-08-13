@@ -4,8 +4,8 @@ Clone the repository:
 Navigate to the project folder and install npm packages:
 sh
 Copy code
-cd PlaywrightFramework
-npm install
+cd packages/web-playwright-tests
+npm ci
 For first time installation, download the required browsers:
 sh
 Copy code
@@ -114,5 +114,5 @@ with:
 
 json
 Copy code
-"@pages/*":["pageFactory/pageRepository/*"]
+"@pages/_":["pageFactory/pageRepository/_"]
 This will allow you to use @pages instead of the long import path in your files.

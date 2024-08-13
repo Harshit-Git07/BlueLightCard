@@ -3,7 +3,7 @@ import test from "@lib/BaseTest";
 //Test Case IOSDISCO-261
 
 //TC_001 - Home
-test(`@Aus @Smoke @Web Ensure all the Navigation links work on header`, async ({
+test(`@Aus @SmokeTest @Web Ensure all the Navigation links work on header`, async ({
   homePageAus,
   webActions,
 }) => {
@@ -80,7 +80,7 @@ test(`@Aus @Smoke @Web Ensure all the Navigation links work on header`, async ({
 });
 
 //TC_002 - Ensure all the Navigation links work on footer
-test(`@Aus @Smoke @Web Ensure all the Navigation links work on footer`, async ({
+test(`@Aus @SmokeTest @Web Ensure all the Navigation links work on footer`, async ({
   homePageAus,
   webActions,
 }) => {
@@ -195,7 +195,7 @@ test(`@Aus @Smoke @Web Ensure all the Navigation links work on footer`, async ({
 });
 
 //TC_003 - Ensure when clicking on an offer, user is directed to relevant offer
-test(`@Aus @Smoke @Web Ensure when clicking on an offer, user is directed to relevant offer`, async ({
+test(`@Aus @SmokeTest @Web Ensure when clicking on an offer, user is directed to relevant offer`, async ({
   homePageAus,
   webActions,
 }) => {
@@ -214,7 +214,7 @@ test(`@Aus @Smoke @Web Ensure when clicking on an offer, user is directed to rel
 
 //TC_005 - The flexi menu navigates to the offer list
 //anything in ways to save is the flexi menu - click any one and assert url includes flexi offers
-test(`@Aus @Smoke @Web @workingOn The flexi menu navigates to the offer list`, async ({
+test(`@Aus @SmokeTest @Web @workingOn The flexi menu navigates to the offer list`, async ({
   homePageAus,
   webActions,
 }) => {
@@ -232,7 +232,7 @@ test(`@Aus @Smoke @Web @workingOn The flexi menu navigates to the offer list`, a
 //TODO - There appears to be no news option in AU for the footer?
 
 //TC_007 - User should be able to search for an offer on home page via phrase (mobile and web) - url /search?issuer=&q=shoes
-test(`@Aus @Smoke @Web User should be able to search for an offer on home page via phrase (mobile and web)`, async ({
+test(`@Aus @SmokeTest @Web User should be able to search for an offer on home page via phrase (mobile and web)`, async ({
   homePageAus,
 }) => {
   await test.step(`Logging in to BLC Aus`, async () => {
@@ -251,7 +251,7 @@ test(`@Aus @Smoke @Web User should be able to search for an offer on home page v
 //OPODO
 
 //TC_009 - User should be able to search for an company on home page via category (Web)
-test(`@Aus @Smoke @Web User should be able to search for an company on home page via category`, async ({
+test(`@Aus @SmokeTest @Web User should be able to search for an company on home page via category`, async ({
   homePageAus,
 }) => {
   await test.step(`Logging in to BLC Aus`, async () => {
@@ -267,7 +267,7 @@ test(`@Aus @Smoke @Web User should be able to search for an company on home page
 });
 
 //The below is not mapped to a test case
-test(`@Aus @Smoke @Web Check 'Start Saving' button loads the 'Create account' screen`, async ({
+test(`@Aus @SmokeTest @Web Check 'Start Saving' button loads the 'Create account' screen`, async ({
   homePageAus,
   webActions,
 }) => {
@@ -284,7 +284,7 @@ test(`@Aus @Smoke @Web Check 'Start Saving' button loads the 'Create account' sc
 });
 
 //The below is not mapped to a test case
-test(`@Aus @Smoke @Web Click the 'Brand Partner - Partner with us' button and check redirected to the correct url `, async ({
+test(`@Aus @SmokeTest @Web Click the 'Brand Partner - Partner with us' button and check redirected to the correct url `, async ({
   homePageAus,
   webActions,
 }) => {
@@ -300,7 +300,7 @@ test(`@Aus @Smoke @Web Click the 'Brand Partner - Partner with us' button and ch
 });
 
 //The below is not mapped to a test case
-test(`@Aus @Smoke @Web Click the 'Reward your team - Get in touch with us' button and check redirected to the correct url `, async ({
+test(`@Aus @SmokeTest @Web Click the 'Reward your team - Get in touch with us' button and check redirected to the correct url `, async ({
   homePageAus,
   webActions,
 }) => {
@@ -316,7 +316,7 @@ test(`@Aus @Smoke @Web Click the 'Reward your team - Get in touch with us' butto
 });
 
 //The below is not mapped to a test case
-test(`@Aus @Smoke @Web Click the change country button - select UK and check the url the user is redirected to is correct`, async ({
+test(`@Aus @SmokeTest @Web Click the change country button - select UK and check the url the user is redirected to is correct`, async ({
   homePageAus,
   webActions,
 }) => {

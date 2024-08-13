@@ -5,21 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:single": "npx playwright test WFMLogin.test.ts --project=Chrome",
     "test:parallel": "npx playwright test --grep @Smoke --project=Chrome",
     "test:serial": "npx playwright test --grep @Smoke --workers=1 --project=Chrome",
     "test:ui": "npx playwright test --grep @Smoke --ui",
     "test:api": "npx playwright test --grep @API --workers=1 --project=Chrome",
-    "test:db": "npx playwright test DB.test.ts --project=DB",
     "test:record": "npx playwright codegen",
-    "test:visual": "npx playwright test visualComparision.test.ts --project=Chrome",
-    "test:device": "npx playwright test Emulation.test.ts --project=Device",
-    "allureReport": "allure serve",
-    "lighthouse": "node tests/lighthouse/Lighthouse.js",
-    "test:accessibility": "npx playwright test Axe.test.ts --project=Chrome"
+    "allureReport": "allure serve"
   },
   "dependencies": {
-    "@axe-core/playwright": "^4.9.0",
     "@types/adm-zip": "^0.5.5",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.12.12",

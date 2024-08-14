@@ -184,87 +184,87 @@ const Search: NextPage = () => {
     <>
       {/* Header */}
       {serpExperiment.data?.component ?? control()}
-
       {/* Search Results */}
-      {searchResults && searchResults.length > 0 ? (
-        <>
-          <Container className="py-5" addBottomHorizontalLine={false}>
-            <Heading headingLevel="h1">Search results for: {query}</Heading>
-            {error && (
-              <Heading headingLevel="h2" className="pt-5">
-                {error}
-              </Heading>
-            )}
-          </Container>
-          <Container className="py-5" addBottomHorizontalLine={false}>
-            <div className="grid laptop:grid-cols-3 tablet:grid-cols-2 grid-cols-1">
-              {isLoading && [...Array(6)].map((_, index) => <OfferCardPlaceholder key={index} />)}
-              {!isLoading &&
-                searchResults.map((result, index) => {
-                  const imageSrc = result.offerimg.replaceAll('\\/', '/');
-                  let hasLink = true;
-                  let onOfferCardClick = undefined;
-                  const onTrackSearchAnalytics = () => {
-                    onSearchCardClick(
-                      result.CompID,
-                      result.CompanyName,
-                      result.ID,
-                      result.OfferName,
-                      query,
-                      searchResults.length,
-                      index + 1
-                    );
-                  };
-                  if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
-                    hasLink = false;
-                    onOfferCardClick = async () => {
-                      onTrackSearchAnalytics();
-                      await viewOffer({
-                        offerId: result.ID as unknown as number,
-                        companyId: result.CompID as unknown as number,
-                        companyName: result.CompanyName,
-                        platform: PlatformVariant.Web,
-                        amplitudeCtx: amplitude,
-                      });
-                    };
-                  } else {
-                    onOfferCardClick = () => {
-                      onTrackSearchAnalytics();
-                    };
-                  }
-                  return (
-                    <div className="p-2 m-2" key={index}>
-                      <OfferCard
-                        companyName={result.CompanyName}
-                        offerName={he.decode(result.OfferName)}
-                        imageSrc={
-                          imageSrc !== ''
-                            ? imageSrc
-                            : getCDNUrl(`/companyimages/complarge/retina/${result.CompID}.jpg`)
-                        }
-                        alt={''}
-                        offerLink={`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`}
-                        offerTag={result.OfferType}
-                        withBorder
-                        offerId={result.ID}
-                        companyId={result.CompID}
-                        id={'_offer_card_' + index}
-                        onClick={onOfferCardClick}
-                        hasLink={hasLink}
-                      />
-                    </div>
-                  );
-                })}
-            </div>
-          </Container>
-        </>
-      ) : (
-        <Container className="tablet:py-5 mt-3 tablet:mt-[72px]" addBottomHorizontalLine={false}>
-          <SearchEmptyState onSearchCategoryChange={onSearchCategoryChange} />
+      <>
+        <Container className="py-5" addBottomHorizontalLine={false}>
+          <Heading headingLevel="h1">Search results for: {query}</Heading>
+          {error && (
+            <Heading headingLevel="h2" className="pt-5">
+              {error}
+            </Heading>
+          )}
         </Container>
-      )}
 
-      {/* Adverts */}
+        <Container className="py-5" addBottomHorizontalLine={false}>
+          {!isLoading && (!searchResults || searchResults.length === 0) && (
+            <SearchEmptyState onSearchCategoryChange={onSearchCategoryChange} />
+          )}
+
+          <div className="grid laptop:grid-cols-3 tablet:grid-cols-2 grid-cols-1">
+            {isLoading && [...Array(6)].map((_, index) => <OfferCardPlaceholder key={index} />)}
+
+            {!isLoading &&
+              searchResults &&
+              searchResults.length > 0 &&
+              searchResults.map((result, index) => {
+                const imageSrc = result.offerimg.replaceAll('\\/', '/');
+                let hasLink = true;
+                let onOfferCardClick = undefined;
+                const onTrackSearchAnalytics = () => {
+                  onSearchCardClick(
+                    result.CompID,
+                    result.CompanyName,
+                    result.ID,
+                    result.OfferName,
+                    query,
+                    searchResults.length,
+                    index + 1
+                  );
+                };
+                if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
+                  hasLink = false;
+                  onOfferCardClick = async () => {
+                    onTrackSearchAnalytics();
+                    await viewOffer({
+                      offerId: result.ID as unknown as number,
+                      companyId: result.CompID as unknown as number,
+                      companyName: result.CompanyName,
+                      platform: PlatformVariant.Web,
+                      amplitudeCtx: amplitude,
+                    });
+                  };
+                } else {
+                  onOfferCardClick = () => {
+                    onTrackSearchAnalytics();
+                  };
+                }
+                return (
+                  <div className="p-2 m-2" key={index}>
+                    <OfferCard
+                      companyName={result.CompanyName}
+                      offerName={he.decode(result.OfferName)}
+                      imageSrc={
+                        imageSrc !== ''
+                          ? imageSrc
+                          : getCDNUrl(`/companyimages/complarge/retina/${result.CompID}.jpg`)
+                      }
+                      alt={''}
+                      offerLink={`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`}
+                      offerTag={result.OfferType}
+                      withBorder
+                      offerId={result.ID}
+                      companyId={result.CompID}
+                      id={'_offer_card_' + index}
+                      onClick={onOfferCardClick}
+                      hasLink={hasLink}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+        </Container>
+      </>
+      ){/* Adverts */}
       {adverts.length > 0 && (
         <Container className="tablet:py-5 pb-[44px]" addBottomHorizontalLine={false}>
           <BannerCarousel

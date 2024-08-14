@@ -3,7 +3,10 @@ import ContentLoader from 'react-content-loader';
 
 function OfferCardPlaceholder() {
   return (
-    <div className="w-full h-fit rounded-lg relative shadow-md dark:bg-surface-secondary-dark pb mb-2 overflow-hidden">
+    <div
+      data-testid={'offer-card-placeholder'}
+      className="w-full h-fit rounded-lg relative shadow-md dark:bg-surface-secondary-dark pb mb-2 overflow-hidden"
+    >
       <ContentLoader
         speed={3}
         viewBox="0 0 300 250"

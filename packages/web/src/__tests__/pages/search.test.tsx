@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import '@testing-library/jest-dom';
 import { makeSearch } from '../../common/utils/API/makeSearch';
 import Search from '../../pages/search';
 import { render, screen } from '@testing-library/react';
@@ -64,6 +65,34 @@ describe('SearchPage', () => {
       networkStatus: NetworkStatus.ready,
     });
   });
+
+  it('Renders loading placeholders', async () => {
+    makeSearchMock.mockReturnValue(new Promise((resolve) => setTimeout(resolve, 2000)));
+    whenSearchPageIsRendered('control');
+
+    const [offerCardPlaceholder] = await screen.findAllByTestId('offer-card-placeholder');
+
+    expect(offerCardPlaceholder).toBeInTheDocument();
+  });
+
+  it('Renders no results message', async () => {
+    makeSearchMock.mockResolvedValue({ results: [] });
+    whenSearchPageIsRendered('control');
+
+    const noResults = await screen.findByText('No results found');
+
+    expect(noResults).toBeInTheDocument();
+  });
+
+  it('Renders results', async () => {
+    givenResultsAreReturned();
+    whenSearchPageIsRendered('control');
+
+    const offerCard = await screen.findByTestId('_offer_card_0');
+
+    expect(offerCard).toBeInTheDocument();
+  });
+
   describe('Analytics', () => {
     it.each(['treatment', 'control'])('should logSearchCardClicked event', async (variant) => {
       givenResultsAreReturned();

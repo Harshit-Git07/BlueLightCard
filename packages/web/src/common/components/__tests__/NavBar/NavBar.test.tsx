@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import NavBar from '../../NavBar/NavBar';
-import { NavigationItem } from '../../NavBar/types';
-import { BRANDS } from '../../../types/brands.enum';
+import { BRANDS } from '@/types/brands.enum';
+import '@testing-library/jest-dom';
 
 jest.mock('../../NavBar/helpers/getNavigationItems', () => {
   return {
@@ -11,9 +11,18 @@ jest.mock('../../NavBar/helpers/getNavigationItems', () => {
   };
 });
 
-jest.mock('../../../context/AmplitudeExperiment/hooks', () => ({
-  ...jest.requireActual('../../../context/AmplitudeExperiment/hooks.ts'), // This retains other exports
+jest.mock('@/context/AmplitudeExperiment/hooks', () => ({
+  ...jest.requireActual('@/context/AmplitudeExperiment/hooks.ts'), // This retains other exports
   useAmplitudeExperiment: jest.fn().mockResolvedValue({ data: { variantName: 'off' } }),
+}));
+
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    route: '/',
+    pathname: '',
+    query: '',
+    asPath: '',
+  }),
 }));
 
 describe('Navbar', () => {

@@ -3,7 +3,14 @@ import AuthenticatedNavBar from '../../../../NavBar/components/organisms/Authent
 import { NavigationItem } from '../../../../NavBar/types';
 import userEvent from '@testing-library/user-event';
 
-jest.mock('../../../../Header/Search');
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    route: '/',
+    pathname: '',
+    query: '',
+    asPath: '',
+  }),
+}));
 
 describe('AuthenticatedNavBar', () => {
   const mockNavigationItems: NavigationItem[] = [
@@ -17,7 +24,7 @@ describe('AuthenticatedNavBar', () => {
       label: 'Mock Navigation Item Two',
     },
   ];
-  it('renders', () => {
+  it('renders correctly without error', () => {
     const { container } = render(
       <AuthenticatedNavBar
         onSearchCategoryChange={jest.fn()}
@@ -48,33 +55,8 @@ describe('AuthenticatedNavBar', () => {
         navigationItems={mockNavigationItems}
       />
     );
-    const mobileNavButton = await screen.getByTestId('mobile-nav-toggle-button');
+    const mobileNavButton = screen.getByTestId('mobile-nav-toggle-button');
     await userEvent.click(mobileNavButton as HTMLButtonElement);
     expect(screen.queryByTestId('mobile-navigation')).toBeDefined();
-  });
-  it('should not show the search by default', () => {
-    render(
-      <AuthenticatedNavBar
-        onSearchCategoryChange={jest.fn()}
-        onSearchCompanyChange={jest.fn()}
-        onSearchTerm={jest.fn()}
-        navigationItems={mockNavigationItems}
-      />
-    );
-    expect(screen.queryByTestId('search')).toBeNull();
-  });
-
-  it('should show the search menu when the button is clicked', async () => {
-    render(
-      <AuthenticatedNavBar
-        onSearchCategoryChange={jest.fn()}
-        onSearchCompanyChange={jest.fn()}
-        onSearchTerm={jest.fn()}
-        navigationItems={mockNavigationItems}
-      />
-    );
-    const mobileNavButton = await screen.getByTestId('search-button');
-    await userEvent.click(mobileNavButton as HTMLButtonElement);
-    expect(screen.queryByTestId('search')).toBeDefined();
   });
 });

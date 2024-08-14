@@ -1,5 +1,8 @@
 import type { Preview } from '@storybook/react';
 import '../src/styles/styles.css';
+import mockRouterDecorator from './decorators/mockRouterDecorator';
+
+export const decorators = [mockRouterDecorator];
 
 const preview: Preview = {
   parameters: {

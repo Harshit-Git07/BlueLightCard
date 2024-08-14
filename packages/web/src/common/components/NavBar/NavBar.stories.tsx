@@ -14,6 +14,13 @@ const CUSTOM_VIEWPORTS = {
       height: '1024px',
     },
   },
+  laptop: {
+    name: 'Laptop',
+    styles: {
+      width: '1024px',
+      height: '1024px',
+    },
+  },
   tablet: {
     name: 'Tablet',
     styles: {

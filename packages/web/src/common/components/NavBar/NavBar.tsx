@@ -3,10 +3,10 @@ import AuthenticatedNavBar from './components/organisms/AuthenticatedNavBar';
 import UnauthenticatedNavBar from './components/organisms/UnauthenticatedNavBar';
 import { getNavigationItems } from './helpers/getNavigationItems';
 import { BRAND } from '@/global-vars';
-import { BRANDS } from '../../types/brands.enum';
+import { BRANDS } from '@/types/brands.enum';
 import { NavBarProps } from './types';
-import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
-import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
+import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
+import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 
 const NavBar = ({
   isAuthenticated,

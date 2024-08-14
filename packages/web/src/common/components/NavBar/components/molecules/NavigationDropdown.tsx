@@ -60,7 +60,7 @@ const NavigationDropdown = ({ item }: NavigationItemProps) => {
         className="h-full w-full"
       >
         <Link
-          className={`flex h-full justify-center items-center gap-1 border border-NavBar-bg-colour font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font dark:border-NavBar-bg-colour-dark cursor-pointer ${
+          className={`flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer ${
             showDropdown
               ? 'text-NavBar-item-text-active-colour dark:text-NavBar-item-text-active-colour-dark'
               : 'hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark'

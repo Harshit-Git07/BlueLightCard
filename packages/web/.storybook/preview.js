@@ -3,6 +3,7 @@ import { AuthedAmplitudeExperimentProvider } from '../src/common/context/Amplitu
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import '../src/styles/globals.css';
 import '../src/styles/swiper.css';
+import mockRouterDecorator from '@storybook/decorators/mockRouterDecorator';
 
 const queryClient = new QueryClient();
 
@@ -36,4 +37,4 @@ const withProviders = (Story) => (
   </QueryClientProvider>
 );
 
-export const decorators = [withProviders];
+export const decorators = [mockRouterDecorator, withProviders];

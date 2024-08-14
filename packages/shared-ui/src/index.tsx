@@ -1,5 +1,6 @@
 export { default as Button } from './components/Button';
 export { default as Search } from './components/Search';
+export { default as SearchBar } from './components/SearchBar';
 export { default as Iso } from './components/Iso';
 export { default as Container } from './components/Container';
 export { default as PillButtons } from './components/PillButtons';

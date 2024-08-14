@@ -136,7 +136,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       redemptionPushNotificationRule: createRedemptionPushNotificationRule(stack, config),
     },
     {
-      vaultCodesUploadRule: createVaultCodesUploadRule(stack, vaultCodesUpload, database),
+      vaultCodesUploadRule: createVaultCodesUploadRule(stack, database, vaultCodesUpload, bus.eventBusName),
     },
   );
 

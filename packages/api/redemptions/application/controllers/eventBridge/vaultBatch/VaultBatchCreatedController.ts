@@ -1,4 +1,4 @@
-import { string, z } from 'zod';
+import { z } from 'zod';
 
 import { eventSchema } from '@blc-mono/core/schemas/event';
 import { Result } from '@blc-mono/core/types/result';
@@ -19,12 +19,12 @@ import { RedemptionsVaultBatchEvents } from '../../../../infrastructure/eventBri
  * schema based on value currently echoed into legacy admin email when vault code batch is created
  */
 const VaultBatchCreatedDetailSchema = z.object({
-  adminEmail: z.string().email(), //send email to admin member that uploads codes
-  companyName: z.string(), //company name will require sending when vault codes are inserted
+  vaultId: z.string(),
+  batchId: z.string(),
   fileName: z.string(), //name of file that the admin uploads - this is not the same as file name uploaded to S3
   countCodeInsertSuccess: z.number(), //logged as codes are inserted
   countCodeInsertFail: z.number(), //logged as codes fail to insert (duplicates, if check is required)
-  codeInsertFailArray: z.array(string()), //array that is listed in email for admin info
+  codeInsertFailArray: z.array(z.string()), //array that is listed in email for admin info
 });
 
 const VaultBatchCreatedEventSchema = eventSchema(
@@ -34,6 +34,7 @@ const VaultBatchCreatedEventSchema = eventSchema(
 );
 
 export type VaultBatchCreatedEvent = z.infer<typeof VaultBatchCreatedEventSchema>;
+export type VaultBatchCreatedEventDetail = z.infer<typeof VaultBatchCreatedDetailSchema>;
 
 export class VaultBatchCreatedController extends EventBridgeController<VaultBatchCreatedEvent> {
   static readonly inject = [Logger.key, VaultBatchService.key] as const;

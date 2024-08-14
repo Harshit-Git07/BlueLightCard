@@ -5,38 +5,51 @@ import { IRedemptionsRepository } from '@blc-mono/redemptions/application/reposi
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
-import { RedemptionsEventsRepository } from '../../repositories/RedemptionsEventsRepository';
+import { IRedemptionsEventsRepository } from '../../repositories/RedemptionsEventsRepository';
 
 import { RedemptionDetailsService } from './RedemptionDetailsService';
 
 describe('RedemptionDetailsService', () => {
   const defaultClientType: ClientType = faker.helpers.arrayElement(['web', 'mobile']);
+  const defaultOfferId = faker.number.int({
+    min: 1,
+    max: 1_000_000,
+  });
+  const defaultMemberId = faker.string.numeric(8);
 
-  it('should return a RedemptionNotFound result if the redemption is not found', async () => {
-    // Arrange
-    const logger = createTestLogger();
-    const RedemptionsEventsRepository = {
+  function mockRedemptionsEventsRepository(): IRedemptionsEventsRepository {
+    return {
       publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
       publishMemberRedeemIntentEvent: jest.fn(),
       publishRedemptionEvent: jest.fn(),
-    } satisfies RedemptionsEventsRepository;
-    const redemptionsRepository = {
+      publishVaultBatchCreatedEvent: jest.fn(),
+    };
+  }
+
+  function mockRedemptionsRepository(): IRedemptionsRepository {
+    return {
       findOneByOfferId: jest.fn(),
       updateManyByOfferId: jest.fn(),
       updateOneByOfferId: jest.fn(),
       createRedemption: jest.fn(),
       withTransaction: jest.fn(),
-    } satisfies IRedemptionsRepository;
-    const service = new RedemptionDetailsService(logger, RedemptionsEventsRepository, redemptionsRepository);
-    redemptionsRepository.findOneByOfferId.mockResolvedValue(null);
-    const offerId = faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    });
-    const memberId = faker.string.numeric(8);
+    };
+  }
+
+  it('should return a RedemptionNotFound result if the redemption is not found', async () => {
+    // Arrange
+    const logger = createTestLogger();
+    const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
+    const mockedRedemptionsRepository = mockRedemptionsRepository();
+    mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
+    const service = new RedemptionDetailsService(
+      logger,
+      mockedRedemptionsEventsRepository,
+      mockedRedemptionsRepository,
+    );
 
     // Act
-    const result = await service.getRedemptionDetails(offerId, memberId, defaultClientType);
+    const result = await service.getRedemptionDetails(defaultOfferId, defaultMemberId, defaultClientType);
 
     // Assert
     expect(result).toEqual({
@@ -47,30 +60,21 @@ describe('RedemptionDetailsService', () => {
   it('should return an Ok result when the redemption is found', async () => {
     // Arrange
     const logger = createTestLogger();
-    const RedemptionsEventsRepository = {
-      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
-      publishMemberRedeemIntentEvent: jest.fn(),
-      publishRedemptionEvent: jest.fn(),
-    } satisfies RedemptionsEventsRepository;
-    const redemptionsRepository = {
-      findOneByOfferId: jest.fn(),
-      updateManyByOfferId: jest.fn(),
-      updateOneByOfferId: jest.fn(),
-      createRedemption: jest.fn(),
-      withTransaction: jest.fn(),
-    } satisfies IRedemptionsRepository;
-    const service = new RedemptionDetailsService(logger, RedemptionsEventsRepository, redemptionsRepository);
     const redemption = redemptionFactory.build();
-    redemptionsRepository.findOneByOfferId.mockResolvedValue(redemption);
-    RedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent.mockResolvedValue(undefined);
-    const offerId = faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    });
-    const memberId = faker.string.numeric(8);
+    const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
+    mockedRedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent = jest
+      .fn()
+      .mockResolvedValue(undefined);
+    const mockedRedemptionsRepository = mockRedemptionsRepository();
+    mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
+    const service = new RedemptionDetailsService(
+      logger,
+      mockedRedemptionsEventsRepository,
+      mockedRedemptionsRepository,
+    );
 
     // Act
-    const result = await service.getRedemptionDetails(offerId, memberId, defaultClientType);
+    const result = await service.getRedemptionDetails(defaultOfferId, defaultMemberId, defaultClientType);
 
     // Assert
     expect(result).toEqual({
@@ -84,39 +88,30 @@ describe('RedemptionDetailsService', () => {
   it('should send data for DWH to event bus', async () => {
     // Arrange
     const logger = createTestLogger();
-    const RedemptionsEventsRepository = {
-      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
-      publishMemberRedeemIntentEvent: jest.fn(),
-      publishRedemptionEvent: jest.fn(),
-    } satisfies RedemptionsEventsRepository;
-    const redemptionsRepository = {
-      findOneByOfferId: jest.fn(),
-      updateManyByOfferId: jest.fn(),
-      updateOneByOfferId: jest.fn(),
-      createRedemption: jest.fn(),
-      withTransaction: jest.fn(),
-    } satisfies IRedemptionsRepository;
-    const service = new RedemptionDetailsService(logger, RedemptionsEventsRepository, redemptionsRepository);
     const redemption = redemptionFactory.build();
-    redemptionsRepository.findOneByOfferId.mockResolvedValue(redemption);
-    RedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent.mockResolvedValue(undefined);
-    const offerId = faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    });
-    const memberId = faker.string.numeric(8);
+    const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
+    mockedRedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent = jest
+      .fn()
+      .mockResolvedValue(undefined);
+    const mockedRedemptionsRepository = mockRedemptionsRepository();
+    mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
+    const service = new RedemptionDetailsService(
+      logger,
+      mockedRedemptionsEventsRepository,
+      mockedRedemptionsRepository,
+    );
 
     // Act
-    await service.getRedemptionDetails(offerId, memberId, defaultClientType);
+    await service.getRedemptionDetails(defaultOfferId, defaultMemberId, defaultClientType);
 
     // Assert
-    expect(RedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent).toHaveBeenCalledWith({
+    expect(mockedRedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent).toHaveBeenCalledWith({
       memberDetails: {
-        memberId: memberId,
+        memberId: defaultMemberId,
       },
       redemptionDetails: {
         redemptionType: redemption.redemptionType,
-        offerId: offerId,
+        offerId: defaultOfferId,
         companyId: redemption.companyId,
         clientType: defaultClientType,
       },
@@ -126,30 +121,21 @@ describe('RedemptionDetailsService', () => {
   it('should return successfully if send data for DWH to event bus fails', async () => {
     // Arrange
     const logger = createSilentLogger();
-    const RedemptionsEventsRepository = {
-      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
-      publishMemberRedeemIntentEvent: jest.fn(),
-      publishRedemptionEvent: jest.fn(),
-    } satisfies RedemptionsEventsRepository;
-    const redemptionsRepository = {
-      findOneByOfferId: jest.fn(),
-      updateManyByOfferId: jest.fn(),
-      updateOneByOfferId: jest.fn(),
-      createRedemption: jest.fn(),
-      withTransaction: jest.fn(),
-    } satisfies IRedemptionsRepository;
-    const service = new RedemptionDetailsService(logger, RedemptionsEventsRepository, redemptionsRepository);
     const redemption = redemptionFactory.build();
-    redemptionsRepository.findOneByOfferId.mockResolvedValue(redemption);
-    RedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent.mockRejectedValue(new Error());
-    const offerId = faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    });
-    const memberId = faker.string.numeric(8);
+    const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
+    mockedRedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent = jest
+      .fn()
+      .mockRejectedValue(new Error());
+    const mockedRedemptionsRepository = mockRedemptionsRepository();
+    mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
+    const service = new RedemptionDetailsService(
+      logger,
+      mockedRedemptionsEventsRepository,
+      mockedRedemptionsRepository,
+    );
 
     // Act
-    const result = await service.getRedemptionDetails(offerId, memberId, defaultClientType);
+    const result = await service.getRedemptionDetails(defaultOfferId, defaultMemberId, defaultClientType);
 
     // Assert
     expect(result).toEqual({

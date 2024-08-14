@@ -1,3 +1,5 @@
+import { eq } from 'drizzle-orm';
+
 import { DatabaseTransactionConnection } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { vaultBatchesTable } from '@blc-mono/redemptions/libs/database/schema';
@@ -10,6 +12,7 @@ export type NewVaultBatch = typeof vaultBatchesTable.$inferInsert;
 export interface IVaultBatchesRepository {
   create(vaultBatch: NewVaultBatch): Promise<Pick<VaultBatch, 'id'>>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultBatchesRepository;
+  findOneByBatchId(batchId: string): Promise<VaultBatch | null>;
 }
 
 export class VaultBatchesRepository extends Repository implements IVaultBatchesRepository {
@@ -28,5 +31,11 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
 
   public withTransaction(transaction: DatabaseTransactionConnection): VaultBatchesRepository {
     return new VaultBatchesRepository(transaction);
+  }
+
+  public async findOneByBatchId(batchId: string): Promise<VaultBatch | null> {
+    return this.atMostOne(
+      await this.connection.db.select().from(vaultBatchesTable).where(eq(vaultBatchesTable.id, batchId)).execute(),
+    );
   }
 }

@@ -45,6 +45,6 @@ export class VaultCodesUploadController extends EventBridgeController<VaultCodes
   }
 
   protected async handle(event: VaultCodesUploadEvent): Promise<void> {
-    await this.vaultCodesUploadService.uploadCodes(event);
+    await this.vaultCodesUploadService.handle(event.detail.bucket.name, event.detail.object.key, 1000);
   }
 }

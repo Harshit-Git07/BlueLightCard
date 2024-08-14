@@ -8,12 +8,16 @@ import {
 } from '@blc-mono/core/schemas/redemptions';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
+import { RedemptionsVaultBatchEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/vaultBatch';
+
+import { VaultBatchCreatedEventDetail } from '../controllers/eventBridge/vaultBatch/VaultBatchCreatedController';
 
 // TODO: Detail should not be passed in directly, the methods should have a separate type owned by the repository
 export interface IRedemptionsEventsRepository {
   publishMemberRetrievedRedemptionDetailsEvent(detail: MemberRetrievedRedemptionDetailsEventDetail): Promise<void>;
   publishMemberRedeemIntentEvent(detail: MemberRedeemIntentEventDetail): Promise<void>;
   publishRedemptionEvent(detail: MemberRedemptionEventDetail): Promise<void>;
+  publishVaultBatchCreatedEvent(detail: VaultBatchCreatedEventDetail): Promise<void>;
 }
 
 export class RedemptionsEventsRepository implements IRedemptionsEventsRepository {
@@ -63,6 +67,22 @@ export class RedemptionsEventsRepository implements IRedemptionsEventsRepository
           Source: REDEMPTIONS_EVENT_SOURCE,
           DetailType: RedemptionEventDetailType.MEMBER_REDEMPTION,
           Detail: JSON.stringify(detail satisfies MemberRedemptionEventDetail),
+        },
+      ],
+    });
+    await client.send(command);
+  }
+
+  public async publishVaultBatchCreatedEvent(detail: VaultBatchCreatedEventDetail): Promise<void> {
+    const client = new EventBridgeClient();
+    const command = new PutEventsCommand({
+      Entries: [
+        {
+          Time: new Date(),
+          EventBusName: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME),
+          Source: RedemptionsVaultBatchEvents.BATCH_CREATED,
+          DetailType: RedemptionsVaultBatchEvents.BATCH_CREATED_DETAIL,
+          Detail: JSON.stringify(detail satisfies VaultBatchCreatedEventDetail),
         },
       ],
     });

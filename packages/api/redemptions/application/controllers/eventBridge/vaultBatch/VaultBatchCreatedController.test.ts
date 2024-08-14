@@ -30,8 +30,8 @@ describe('VaultBatchCreatedAdminEmailController', () => {
         resources: [],
         version: faker.string.numeric(),
         detail: {
-          adminEmail: faker.internet.email(),
-          companyName: faker.company.name(),
+          vaultId: `vlt-${faker.string.uuid()}`,
+          batchId: `vbt-${faker.string.uuid()}`,
           fileName: `test${UPLOAD_FILE_TYPE}`,
           countCodeInsertSuccess: 10,
           countCodeInsertFail: 2,

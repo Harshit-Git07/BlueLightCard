@@ -17,7 +17,7 @@ describe('VaultCodesUploadController', () => {
     it('should call the VaultCodesUploadService correctly', async () => {
       const testLogger = createTestLogger();
       const service = {
-        uploadCodes: jest.fn(),
+        handle: jest.fn(),
       } satisfies Partial<IVaultCodesUploadService>;
       const controller = new VaultCodesUploadController(testLogger, as(service));
       const mockEvent = {
@@ -31,17 +31,17 @@ describe('VaultCodesUploadController', () => {
         version: faker.string.numeric(),
         detail: {
           bucket: {
-            name: 'test-blc-uk--vault-codes-upload',
+            name: faker.system.commonFileName(),
           },
           object: {
-            key: `test-file${UPLOAD_FILE_TYPE}`,
+            key: `vlt-${faker.string.uuid()}/vbt-${faker.string.uuid()}/2024-07-30T13:29:51.740Z${UPLOAD_FILE_TYPE}`,
           },
         },
       } satisfies UnknownEventBridgeEvent;
 
       await controller.invoke(mockEvent);
 
-      expect(service.uploadCodes).toHaveBeenCalledTimes(1);
+      expect(service.handle).toHaveBeenCalledTimes(1);
     });
   });
 });

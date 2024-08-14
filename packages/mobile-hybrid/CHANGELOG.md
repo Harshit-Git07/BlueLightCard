@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.25.2...bluelightcard/mobile-hybrid-v1.26.0) (2024-08-14)
+
+
+### Features
+
+* Disco 545 remove homepage searchbar feature flag ([#1952](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1952)) ([92c980e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/92c980ec5b8f1da91bd4baafee23ee3f3d713832))
+
 ## [1.25.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.25.1...bluelightcard/mobile-hybrid-v1.25.2) (2024-08-09)
 
 

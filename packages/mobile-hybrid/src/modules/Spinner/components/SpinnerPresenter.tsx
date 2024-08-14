@@ -2,7 +2,7 @@ import NextImage from 'next/image';
 import Spinner from '@/components/Spinner/Spinner';
 import { FC } from 'react';
 
-type Props = {
+export type Props = {
   maxedRetries?: boolean;
   displayTimeoutMessage?: string | null;
 };
@@ -15,7 +15,13 @@ const SpinnerPresenter: FC<Props> = ({ displayTimeoutMessage, maxedRetries }) =>
       )}
       {!maxedRetries && <Spinner />}
       {maxedRetries && (
-        <NextImage src="/maintenance_plain.svg" alt="Maintenance" width={150} height={150} />
+        <NextImage
+          src="/maintenance_plain.svg"
+          alt="Maintenance"
+          width={150}
+          height={150}
+          fetchPriority="auto"
+        />
       )}
     </div>
   );

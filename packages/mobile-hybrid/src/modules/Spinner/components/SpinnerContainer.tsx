@@ -1,10 +1,7 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import SpinnerPresenter from './SpinnerPresenter';
 import { spinner } from '../store';
-import { useAmplitude } from '@/hooks/useAmplitude';
-import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
 
 const SPINNER_TIMEOUT = 30000;
 const SPINNER_TIMEOUT_INCREMENT = 30000;
@@ -31,40 +28,41 @@ const LOADING_RETRY_MESSAGES = [
   'Oops! It looks this will still take us a little bit longer, we suggest you try again later.',
 ];
 
-function getRetryCount() {
-  return Number(getLocalStorageItem(LOADING_RETRY_COUNT_KEY));
+let timeoutId: NodeJS.Timeout | null;
+
+function resetTimeout() {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+    timeoutId = null;
+  }
 }
 
-function getTimeout() {
-  return SPINNER_TIMEOUT + SPINNER_TIMEOUT_INCREMENT * getRetryCount();
-}
-
-function getLoadingRetryMessage() {
-  const retryCount = getRetryCount() - 1;
-  return retryCount > -1 ? LOADING_RETRY_MESSAGES[retryCount] : null;
-}
-
-function incrementRetryCount() {
-  const increment = getRetryCount() + 1;
-  setLocalStorageItem(LOADING_RETRY_COUNT_KEY, String(increment));
-}
-
-let timeoutId: NodeJS.Timeout;
-
-const SpinnerContainerWithFeature: FC = () => {
+const SpinnerContainer: FC = () => {
   const loading = useAtomValue(spinner);
   const [displayTimeoutMessage, setDisplayTimeoutMessage] = useState<string | null>();
   const [maxedRetries, setMaxedRetries] = useState(false);
   const currentLoadingValue = useRef(loading);
 
-  const timeout = getTimeout();
+  const getRetryCount = useCallback(() => {
+    return Number(getLocalStorageItem(LOADING_RETRY_COUNT_KEY));
+  }, []);
+
+  const getLoadingRetryMessage = useCallback(() => {
+    const retryCount = getRetryCount() - 1;
+    return retryCount > -1 ? LOADING_RETRY_MESSAGES[retryCount] : null;
+  }, [getRetryCount]);
+
+  const incrementRetryCount = useCallback(() => {
+    const increment = getRetryCount() + 1;
+    setLocalStorageItem(LOADING_RETRY_COUNT_KEY, String(increment));
+  }, [getRetryCount]);
+
+  const timeout = SPINNER_TIMEOUT + SPINNER_TIMEOUT_INCREMENT * getRetryCount();
   const lastRetry = getRetryCount() >= LOADING_RETRY_MESSAGES.length;
 
   useEffect(() => {
     if (loading) {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      resetTimeout();
 
       setDisplayTimeoutMessage(getLoadingRetryMessage());
 
@@ -77,7 +75,7 @@ const SpinnerContainerWithFeature: FC = () => {
         }
       }, timeout);
     }
-  }, [loading, timeout, lastRetry]);
+  }, [loading, timeout, lastRetry, getLoadingRetryMessage, incrementRetryCount]);
 
   useEffect(() => {
     currentLoadingValue.current = loading;
@@ -96,21 +94,6 @@ const SpinnerContainerWithFeature: FC = () => {
         />
       )}
     </>
-  );
-};
-
-const SpinnerContainerNoFeature: FC = () => {
-  const loading = useAtomValue(spinner);
-  return <>{loading && <SpinnerPresenter />}</>;
-};
-
-const SpinnerContainer: FC = () => {
-  const { is } = useAmplitude();
-
-  return is(FeatureFlags.SPINNER_INCREMENTAL_RETRY, AmplitudeFeatureFlagState.On) ? (
-    <SpinnerContainerWithFeature />
-  ) : (
-    <SpinnerContainerNoFeature />
   );
 };
 

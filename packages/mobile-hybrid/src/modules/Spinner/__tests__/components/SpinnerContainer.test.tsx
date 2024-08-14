@@ -3,8 +3,6 @@ import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { spinner } from '../../store';
 import SpinnerContainer from '@/modules/Spinner/components/SpinnerContainer';
 import userEvent from '@testing-library/user-event';
-import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 jest.mock('next/image', () => {
   const NextImageMock = () => <></>;
@@ -59,7 +57,7 @@ describe('Spinner', () => {
 
     it('should display first message after first timeout', () => {
       jest.mocked(window.localStorage.getItem).mockImplementation(() => '1');
-      whenTheSpinnerIsRenderedWithLoadingState(true, 'on');
+      whenTheSpinnerIsRenderedWithLoadingState(true);
       andTimeoutHasPassed();
 
       const message = screen.queryByText(
@@ -74,7 +72,7 @@ describe('Spinner', () => {
 
     it('should display final message after final timeout and hide spinner', () => {
       jest.mocked(window.localStorage.getItem).mockImplementation(() => '2');
-      whenTheSpinnerIsRenderedWithLoadingState(true, 'on');
+      whenTheSpinnerIsRenderedWithLoadingState(true);
       andTimeoutHasPassed();
 
       const message = screen.queryByText(
@@ -97,22 +95,9 @@ describe('Spinner', () => {
   });
 });
 
-const whenTheSpinnerIsRenderedWithLoadingState = (
-  value: boolean,
-  spinnerIncrementalRetryFlag: string = 'off',
-) => {
+const whenTheSpinnerIsRenderedWithLoadingState = (value: boolean) => {
   return render(
-    <JotaiTestProvider
-      initialValues={[
-        [spinner, value],
-        [
-          experimentsAndFeatureFlags,
-          {
-            [FeatureFlags.SPINNER_INCREMENTAL_RETRY]: spinnerIncrementalRetryFlag,
-          },
-        ],
-      ]}
-    >
+    <JotaiTestProvider initialValues={[[spinner, value]]}>
       <SpinnerContainer />
     </JotaiTestProvider>,
   );

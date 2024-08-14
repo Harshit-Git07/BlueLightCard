@@ -56,38 +56,19 @@ describe('Home', () => {
     });
 
     amplitudeFlagsAndExperiments = {
-      [Experiments.HOMEPAGE_SEARCHBAR]: 'control',
       [Experiments.FAVOURITED_BRANDS]: 'off',
       [Experiments.POPULAR_OFFERS]: 'control',
       [Experiments.STREAMLINED_HOMEPAGE]: 'off',
     };
   });
 
-  describe('Search Bar Experiment', () => {
+  describe('Search Bar', () => {
     const placeholderText = 'Search stores or brands';
-
-    it('should render when experiment enabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.HOMEPAGE_SEARCHBAR]: 'treatment',
-      };
-
+    it('should render when home page is rendered', () => {
       whenHomePageIsRendered();
 
       const searchBar = screen.queryByPlaceholderText(placeholderText);
       expect(searchBar).toBeInTheDocument();
-    });
-
-    it('should not render when experiment disabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.HOMEPAGE_SEARCHBAR]: 'control',
-      };
-
-      whenHomePageIsRendered();
-
-      const searchBar = screen.queryByPlaceholderText(placeholderText);
-      expect(searchBar).not.toBeInTheDocument();
     });
   });
 

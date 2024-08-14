@@ -13,7 +13,6 @@ export enum FeatureFlags {
 }
 
 export enum Experiments {
-  HOMEPAGE_SEARCHBAR = 'homepage-searchbar',
   NON_EXCLUSIVE_OFFERS = 'non-exclusive-offers',
   POPULAR_OFFERS = 'popular-offers',
   FAVOURITED_BRANDS = 'favourited-brands',

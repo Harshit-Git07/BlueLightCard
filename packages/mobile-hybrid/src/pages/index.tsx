@@ -71,21 +71,16 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
-        <Amplitude
-          keyName={Experiments.HOMEPAGE_SEARCHBAR}
-          value={AmplitudeExperimentState.Treatment}
-        >
-          <div className="my-2 mx-2">
-            <Search
-              onSearch={(searchTerm) =>
-                navigation.navigate(
-                  `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
-                )
-              }
-              placeholderText="Search stores or brands"
-            />
-          </div>
-        </Amplitude>
+        <div className="my-2 mx-2">
+          <Search
+            onSearch={(searchTerm) =>
+              navigation.navigate(
+                `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
+              )
+            }
+            placeholderText="Search stores or brands"
+          />
+        </div>
         <PromoBanner />
         {showFavouritedBrands && <FavouritedBrandsSlider />}
         {is(Experiments.POPULAR_OFFERS, AmplitudeExperimentState.Treatment) &&

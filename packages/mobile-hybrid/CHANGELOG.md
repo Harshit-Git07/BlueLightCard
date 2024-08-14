@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.26.1...bluelightcard/mobile-hybrid-v1.26.2) (2024-08-14)
+
+
+### Other Changes
+
+* removed amplitude flags and wrote presenter unit test ([#1992](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1992)) ([32515d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/32515d288098eae487a41e443026674dfee5d45b))
+
 ## [1.26.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.26.0...bluelightcard/mobile-hybrid-v1.26.1) (2024-08-14)
 
 

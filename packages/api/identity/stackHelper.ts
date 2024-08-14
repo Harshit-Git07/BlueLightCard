@@ -71,12 +71,7 @@ export function createOldCognito(
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
-        environment: {
-          SERVICE: 'identity',
-          REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName,
-          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
-        },
+        environment: buildEnvForPreTokenGenerationLambda(appSecret, stack.region as REGIONS, identityTable, false),
         role,
       }
     },
@@ -218,12 +213,7 @@ export function createOldCognitoDDS(
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
-        environment: {
-          SERVICE: 'identity',
-          REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName,
-          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
-        },
+        environment: buildEnvForPreTokenGenerationLambda(appSecret, stack.region as REGIONS, identityTable, true),
         role,
       }
     },
@@ -389,12 +379,7 @@ export function createNewCognito(
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
-        environment: {
-          SERVICE: 'identity',
-          REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName,
-          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
-        },
+        environment: buildEnvForPreTokenGenerationLambda(appSecret, stack.region as REGIONS, identityTable, false),
         role: adminRole,
       },
       preAuthentication: {
@@ -633,12 +618,7 @@ export function createNewCognitoDDS(
       },
       preTokenGeneration: {
         handler: 'packages/api/identity/src/cognito/preTokenGeneration.handler',
-        environment: {
-          SERVICE: 'identity',
-          REGION: region,
-          IDENTITY_TABLE_NAME: identityTable.tableName,
-          POWERTOOLS_LOG_LEVEL: process.env.POWERTOOLS_LOG_LEVEL || 'INFO',
-        },
+        environment: buildEnvForPreTokenGenerationLambda(appSecret, stack.region as REGIONS, identityTable, true),
         role: adminRole,
       },
       preAuthentication: {
@@ -810,6 +790,21 @@ export function createNewCognitoDDS(
   }
 
   return cognito_dds;
+}
+
+function buildEnvForPreTokenGenerationLambda(appSecret: ISecret, region: string, identityTable: Table, isDds: boolean) {
+  const AMPLITUDE_API_KEY = isDds ? appSecret.secretValueFromJson('dds_amplitude_api_key').toString() : appSecret.secretValueFromJson('blc_amplitude_api_key').toString();
+  const POOL_PREFIX = isDds ? 'dds-' : 'blc-';
+  const POOL_INFO = region === REGIONS.AP_SOUTHEAST_2  ? `${POOL_PREFIX}au`: `${POOL_PREFIX}uk`;
+  const logLevel = process.env.POWERTOOLS_LOG_LEVEL ?? 'INFO';
+  return {
+    SERVICE: 'identity',
+    REGION: region,
+    IDENTITY_TABLE_NAME: identityTable.tableName,
+    POWERTOOLS_LOG_LEVEL: logLevel,
+    AMPLITUDE_API_KEY,
+    POOL_INFO,
+  }
 }
 
 function buildEnvironmentVarsForPreAuthLambda(unsuccessfulLoginAttemptsTable: Table, identitySecret: ISecret, isDds: boolean) {

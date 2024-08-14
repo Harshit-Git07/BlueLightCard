@@ -17,6 +17,8 @@ export interface IVaultCodesRepository {
   claimVaultCode(vaultId: string, memberId: string): Promise<Pick<VaultCode, 'code'> | undefined>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultCodesRepository;
   checkVaultCodesRemaining(vaultId: string): Promise<number>;
+  findManyByBatchId(batchId: string): Promise<VaultCode[] | null>;
+  updateManyByBatchId(batchId: string, update: Partial<VaultCode>): Promise<Pick<VaultCode, 'id'>[] | null>;
 }
 
 export class VaultCodesRepository extends Repository implements IVaultCodesRepository {
@@ -132,5 +134,20 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
       throw new Error('Vault codes not found with given vault ID');
     }
     return Number(vaultCodesStatus.unclaimedCodes);
+  }
+
+  public findManyByBatchId(batchId: string): Promise<VaultCode[] | null> {
+    return this.connection.db.select().from(vaultCodesTable).where(eq(vaultCodesTable.batchId, batchId)).execute();
+  }
+
+  public updateManyByBatchId(batchId: string, update: Partial<VaultCode>): Promise<Pick<VaultCode, 'id'>[] | null> {
+    return this.connection.db
+      .update(vaultCodesTable)
+      .set(update)
+      .where(eq(vaultCodesTable.batchId, batchId))
+      .returning({
+        id: vaultCodesTable.id,
+      })
+      .execute();
   }
 }

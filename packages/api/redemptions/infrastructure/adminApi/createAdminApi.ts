@@ -71,8 +71,6 @@ export function createAdminApi(
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/createVaultBatchHandler.handler',
       requestValidatorName: 'CreateVaultBatchValidator',
     }),
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     'PATCH /batch': AdminRoute.createRoute({
       apiGatewayModelGenerator: adminApiGatewayModelGenerator,
       stack,

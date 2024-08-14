@@ -204,4 +204,95 @@ describe('VaultCodesRepository', () => {
       expect(createdVaultCodes).toEqual(codeBatch);
     });
   });
+
+  describe('findManyByBatchId', () => {
+    it('should find the vaultCodes by batchId', async () => {
+      // Arrange
+      const redemption = redemptionFactory.build();
+      const vault = vaultFactory.build({ redemptionId: redemption.id });
+      const vaultBatch = vaultBatchFactory.build({
+        vaultId: vault.id,
+      });
+      const vaultCodes = vaultCodeFactory.buildList(3, {
+        vaultId: vault.id,
+        batchId: vaultBatch.id,
+      });
+
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+      await connection.db.insert(vaultsTable).values(vault).execute();
+      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
+
+      const repository = new VaultCodesRepository(connection);
+
+      // Act
+      const result = await repository.findManyByBatchId(vaultBatch.id);
+
+      // Assert
+      expect(result).toEqual(vaultCodes);
+    });
+
+    it('should return an empty array if the vaultCodes dont exist', async () => {
+      // Arrange
+      const repository = new VaultCodesRepository(connection);
+
+      // Act
+      const result = await repository.findManyByBatchId('non-existing-id');
+
+      // Assert
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('updateManyByBatchId', () => {
+    it('should update vaultCodes', async () => {
+      // Arrange
+      const updatedData = {
+        memberId: 'new-member-id',
+        expiry: new Date('2025-08-02T16:20:52.000Z'),
+        created: new Date('2024-08-02T16:20:52.000Z'),
+      };
+      const redemption = redemptionFactory.build();
+      const vault = vaultFactory.build({ redemptionId: redemption.id });
+      const vaultBatch = vaultBatchFactory.build({
+        vaultId: vault.id,
+      });
+      const vaultCodes = vaultCodeFactory.buildList(3, {
+        vaultId: vault.id,
+        batchId: vaultBatch.id,
+        memberId: null,
+        created: new Date('2024-08-02T16:20:52.000Z'),
+        expiry: new Date('2024-08-02T16:20:52.000Z'),
+      });
+
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+      await connection.db.insert(vaultsTable).values(vault).execute();
+      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
+
+      const repository = new VaultCodesRepository(connection);
+
+      // Act
+      const result = await repository.updateManyByBatchId(vaultBatch.id, updatedData);
+
+      // Assert
+      expect(result).toEqual([{ id: vaultCodes[0].id }, { id: vaultCodes[1].id }, { id: vaultCodes[2].id }]);
+    });
+
+    it('should return an empty array if the vaultCodes dont exist', async () => {
+      // Arrange
+      const updatedData = {
+        memberId: 'new-member-id',
+        expiry: new Date('2025-08-02T16:20:52.000Z'),
+        created: new Date('2024-08-02T16:20:52.000Z'),
+      };
+      const repository = new VaultCodesRepository(connection);
+
+      // Act
+      const result = await repository.updateManyByBatchId('non-existing-id', updatedData);
+
+      // Assert
+      expect(result).toEqual([]);
+    });
+  });
 });

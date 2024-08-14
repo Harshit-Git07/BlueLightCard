@@ -79,12 +79,13 @@ describe('VaultCodesUploadService', () => {
   function mockVaultBatchesRepo(): IVaultBatchesRepository {
     return {
       create: jest.fn(),
-      findOneByBatchId: jest.fn().mockResolvedValue({
+      findOneById: jest.fn().mockResolvedValue({
         batchId: defaultBatchId,
         file: defaultFileName,
         vaultId: defaultVaultId,
       }),
       withTransaction: jest.fn(),
+      updateOneById: jest.fn(),
     };
   }
 
@@ -96,6 +97,8 @@ describe('VaultCodesUploadService', () => {
       claimVaultCode: jest.fn(),
       createMany: jest.fn(),
       withTransaction: jest.fn(),
+      findManyByBatchId: jest.fn(),
+      updateManyByBatchId: jest.fn(),
     };
   }
 

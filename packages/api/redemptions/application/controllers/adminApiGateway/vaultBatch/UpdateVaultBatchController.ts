@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
+import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
   IUpdateVaultBatchService,
@@ -35,29 +36,48 @@ export class UpdateVaultBatchController extends APIGatewayController<ParsedReque
       return parsedRequest;
     }
 
+    const expiryDateIsInvalid = isNaN(Date.parse(parsedRequest.value.body.expiry));
+    if (expiryDateIsInvalid) {
+      return Result.err({
+        statusCode: 400,
+        data: {
+          message: 'Invalid expiry date',
+        },
+      });
+    }
+
     return Result.ok({
       ...parsedRequest.value,
     });
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const result = await this.updateVaultBatchService.updateVaultBatch(request);
-    if (result.kind === 'Ok') {
-      return {
-        statusCode: 200,
-        data: {
-          vaultBatchId: result.data.vaultBatchId,
-          batchUpdated: result.data.batchUpdated,
-          service: result.data.service,
-        },
-      };
-    } else {
-      return {
-        statusCode: 404,
-        data: {
-          message: 'Vault Batch failed to be updated',
-        },
-      };
+    const { batchId, expiry } = request.body;
+    const result = await this.updateVaultBatchService.handle(batchId, new Date(expiry));
+
+    switch (result.kind) {
+      case 'NoContent':
+        return {
+          statusCode: 204,
+        };
+      case 'VaultBatchNotFound':
+      case 'VaultCodesNotFound':
+        return {
+          statusCode: 404,
+          data: {
+            message: result.message,
+          },
+        };
+      case 'ErrorUpdatingVaultBatch':
+      case 'ErrorUpdatingVaultCodes':
+        return {
+          statusCode: 400,
+          data: {
+            message: result.message,
+          },
+        };
+      default:
+        exhaustiveCheck(result, 'Unhandled result kind');
     }
   }
 }

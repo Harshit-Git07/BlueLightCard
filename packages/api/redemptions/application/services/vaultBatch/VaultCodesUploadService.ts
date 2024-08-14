@@ -43,7 +43,7 @@ export class VaultCodesUploadService implements IVaultCodesUploadService {
       throw new Error('Vault code upload - Empty file');
     }
 
-    const vaultBatch = await this.vaultBatchesRepo.findOneByBatchId(batchId);
+    const vaultBatch = await this.vaultBatchesRepo.findOneById(batchId);
     if (!vaultBatch) {
       throw new Error('Vault code upload - Vault batch not found');
     }

@@ -37,8 +37,6 @@ describe('VaultBatchesRepository', () => {
 
       const vaultBatch = vaultBatchFactory.build({
         vaultId: vault.id,
-        created: new Date('2024-01-03T00:27:26.000Z'),
-        expiry: new Date('2025-01-26T19:07:53.000Z'),
       });
       const repository = new VaultBatchesRepository(connection);
       const result = await repository.create(vaultBatch);
@@ -52,8 +50,59 @@ describe('VaultBatchesRepository', () => {
     });
   });
 
-  describe('findOneByBatchId', () => {
-    it('should find the vaultBatch by batchId', async () => {
+  describe('updateOneById', () => {
+    it('should update file and expiry of the vaultBatch ', async () => {
+      // Arrange
+      const updatedData = {
+        file: 'new-file',
+        expiry: new Date('2025-08-02T16:20:52.000Z'),
+      };
+      const redemption = redemptionFactory.build();
+      const vault = vaultFactory.build({ redemptionId: redemption.id });
+      const vaultBatch = vaultBatchFactory.build({
+        vaultId: vault.id,
+        file: 'old-file',
+      });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+      await connection.db.insert(vaultsTable).values(vault).execute();
+      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      const repository = new VaultBatchesRepository(connection);
+
+      // Act
+      const result = await repository.updateOneById(vaultBatch.id, updatedData);
+      const updatedVaultBatch = await connection.db
+        .select()
+        .from(vaultBatchesTable)
+        .where(eq(vaultBatchesTable.id, vaultBatch.id))
+        .execute();
+
+      // Assert
+      expect(result).toEqual({ id: vaultBatch.id });
+      expect(updatedVaultBatch[0]).toEqual({
+        id: vaultBatch.id,
+        vaultId: vault.id,
+        created: vaultBatch.created,
+        ...updatedData,
+      });
+    });
+
+    it('should return null if the vaultBatch does not exist', async () => {
+      // Arrange
+      const updatedData = {
+        file: 'new-file',
+      };
+      const repository = new VaultBatchesRepository(connection);
+
+      // Act
+      const result = await repository.updateOneById('non-existing-id', updatedData);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('findOneById', () => {
+    it('should find the vaultBatch by id', async () => {
       // Arrange
       const redemption = redemptionFactory.build();
       const vault = vaultFactory.build({ redemptionId: redemption.id });
@@ -68,7 +117,7 @@ describe('VaultBatchesRepository', () => {
       const repository = new VaultBatchesRepository(connection);
 
       // Act
-      const result = await repository.findOneByBatchId(vaultBatch.id);
+      const result = await repository.findOneById(vaultBatch.id);
 
       // Assert
       expect(result).toEqual(vaultBatch);
@@ -79,7 +128,7 @@ describe('VaultBatchesRepository', () => {
       const repository = new VaultBatchesRepository(connection);
 
       // Act
-      const result = await repository.findOneByBatchId('non-existent-batch-id');
+      const result = await repository.findOneById('non-existent-batch-id');
 
       // Assert
       expect(result).toBeNull();

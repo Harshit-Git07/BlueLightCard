@@ -8,11 +8,13 @@ import { Repository } from './Repository';
 
 export type VaultBatch = typeof vaultBatchesTable.$inferSelect;
 export type NewVaultBatch = typeof vaultBatchesTable.$inferInsert;
+export type UpdateVaultBatch = Partial<typeof vaultBatchesTable.$inferInsert>;
 
 export interface IVaultBatchesRepository {
   create(vaultBatch: NewVaultBatch): Promise<Pick<VaultBatch, 'id'>>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultBatchesRepository;
-  findOneByBatchId(batchId: string): Promise<VaultBatch | null>;
+  updateOneById(id: string, update: UpdateVaultBatch): Promise<Pick<VaultBatch, 'id'> | null>;
+  findOneById(id: string): Promise<VaultBatch | null>;
 }
 
 export class VaultBatchesRepository extends Repository implements IVaultBatchesRepository {
@@ -33,9 +35,22 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
     return new VaultBatchesRepository(transaction);
   }
 
-  public async findOneByBatchId(batchId: string): Promise<VaultBatch | null> {
+  public async findOneById(id: string): Promise<VaultBatch | null> {
     return this.atMostOne(
-      await this.connection.db.select().from(vaultBatchesTable).where(eq(vaultBatchesTable.id, batchId)).execute(),
+      await this.connection.db.select().from(vaultBatchesTable).where(eq(vaultBatchesTable.id, id)).execute(),
+    );
+  }
+
+  public async updateOneById(id: string, update: Partial<VaultBatch>): Promise<Pick<VaultBatch, 'id'> | null> {
+    return this.atMostOne(
+      await this.connection.db
+        .update(vaultBatchesTable)
+        .set(update)
+        .where(eq(vaultBatchesTable.id, id))
+        .returning({
+          id: vaultBatchesTable.id,
+        })
+        .execute(),
     );
   }
 }

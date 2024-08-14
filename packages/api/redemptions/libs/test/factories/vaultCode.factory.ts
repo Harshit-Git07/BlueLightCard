@@ -8,12 +8,20 @@ import {
   vaultCodesTable,
 } from '@blc-mono/redemptions/libs/database/schema';
 
-export const vaultCodeFactory = Factory.define<typeof vaultCodesTable.$inferSelect>(() => ({
-  id: createVaultCodesId(),
-  batchId: createVaultBatchesId(),
-  code: faker.string.alphanumeric(8),
-  created: new Date('2024-07-16T03:17:18.000Z'),
-  expiry: faker.date.future({ years: 1 }),
-  memberId: faker.string.uuid(),
-  vaultId: createVaultId(),
-}));
+export const vaultCodeFactory = Factory.define<typeof vaultCodesTable.$inferSelect>(() => {
+  const created = faker.date.past();
+  const expiry = faker.date.future({ years: 1 });
+
+  created.setMilliseconds(0);
+  expiry.setMilliseconds(0);
+
+  return {
+    id: createVaultCodesId(),
+    batchId: createVaultBatchesId(),
+    code: faker.string.alphanumeric(8),
+    created,
+    expiry,
+    memberId: faker.string.uuid(),
+    vaultId: createVaultId(),
+  };
+});

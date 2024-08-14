@@ -1,17 +1,15 @@
 import { TestInfo, test as baseTest } from "@playwright/test";
 import { WebActions } from "@lib/WebActions";
-import { HomePageUk } from "@pages/HomePageUk";
-import { RegistrationPageUk } from "@pages/RegistrationPageUk";
-import { HomePageDds } from "@pages/HomePageDds";
-import { HomePageAus } from "@pages/HomePageAus";
-import { MyAccountPageAus } from "@pages/MyAccountPageAus";
-import { OnlineDiscountsPageUk } from "@pages/OnlineDiscountsPageUk";
+import { HomePageUk } from "pageFactory/HomePageUk";
+import { HomePageDds } from "pageFactory/HomePageDds";
+import { HomePageAus } from "pageFactory/HomePageAus";
+import { MyAccountPageAus } from "pageFactory/MyAccountPageAus";
+import { OnlineDiscountsPageUk } from "pageFactory/OnlineDiscountsPageUk";
 
 const test = baseTest.extend<{
   webActions: WebActions;
   testInfo: TestInfo;
   homePageUk: HomePageUk;
-  registrationPageUk: RegistrationPageUk;
   onlineDiscountPageUk: OnlineDiscountsPageUk;
   homePageDds: HomePageDds;
   homePageAus: HomePageAus;
@@ -22,9 +20,6 @@ const test = baseTest.extend<{
   },
   homePageUk: async ({ page, context }, use) => {
     await use(new HomePageUk(page, context));
-  },
-  registrationPageUk: async ({ page, context }, use) => {
-    await use(new RegistrationPageUk(page, context));
   },
   onlineDiscountPageUk: async ({ page, context }, use) => {
     await use(new OnlineDiscountsPageUk(page, context));

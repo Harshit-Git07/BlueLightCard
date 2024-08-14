@@ -8,8 +8,6 @@ export class MyAccountPageAus {
   readonly context: BrowserContext;
 
   //Navbar top
-
-  // Blue Light Card logo
   readonly BLUELIGHT_NAVBAR: Locator;
   readonly HOME_NAVBAR: Locator;
   readonly OFFERS_NAVBAR: Locator;

@@ -1,46 +1,48 @@
 import { Page, BrowserContext, Locator, expect } from '@playwright/test';
 import { WebActions } from '@lib/WebActions';
 
-let webActions: WebActions;
-
 export class HomePageUk {
   readonly page: Page;
   readonly context: BrowserContext;
+  private webActions: WebActions;
 
   // Navbar top
-  readonly BLUELIGHTBUTTON_NAVBAR: Locator;
-  readonly HOME_NAVBAR: Locator;
-  readonly ABOUTUS_NAVBAR: Locator;
-  readonly ADDYOURBUSINESS_NAVBAR: Locator;
-  readonly FAQS_NAVBAR: Locator;
-  readonly REGISTERNOW_NAVBAR: Locator;
-  readonly LOGIN_NAVBAR: Locator;
-  readonly DISCOVERMORE_NAVBAR: Locator;
-  readonly BROWSECATEGORIES_NAVBAR: Locator;
-  readonly LOGOUT_NAVBAR: Locator;
+  private readonly BLUELIGHTBUTTON_NAVBAR: Locator;
+  private readonly HOME_NAVBAR: Locator;
+  private readonly ABOUTUS_NAVBAR: Locator;
+  private readonly ADDYOURBUSINESS_NAVBAR: Locator;
+  private readonly FAQS_NAVBAR: Locator;
+  private readonly REGISTERNOW_NAVBAR: Locator;
+  private readonly LOGIN_NAVBAR: Locator;
+  private readonly DISCOVERMORE_NAVBAR: Locator;
+  private readonly BROWSECATEGORIES_NAVBAR: Locator;
+  private readonly LOGOUT_NAVBAR: Locator;
 
   // Login options - Login screen
-  readonly LOGIN_BUTTON: Locator;
-  readonly LOGIN_TEXT: Locator;
-  readonly EMAIL_TEXTFIELD: Locator;
-  readonly PASSWORD_TEXTFIELD: Locator;
-  readonly SUBMIT_BUTTON: Locator;
+  private readonly LOGIN_BUTTON: Locator;
+  private readonly LOGIN_TEXT: Locator;
+  private readonly EMAIL_TEXTFIELD: Locator;
+  private readonly PASSWORD_TEXTFIELD: Locator;
+  private readonly SUBMIT_BUTTON: Locator;
 
   // Additional locators for assertions
-  readonly UK_FLAG_BUTTON: Locator;
-  readonly REGISTER_LINK: Locator;
-  readonly FORGOT_PASSWORD_LINK: Locator;
-  readonly OFFERS_HEADER_LINK: Locator;
-  readonly MY_CARD_LINK: Locator;
-  readonly MY_ACCOUNT_LINK: Locator;
-  readonly SEARCH_BUTTON: Locator;
-  readonly DEALS_OF_THE_WEEK_HEADING: Locator;
-  readonly PRIVACY_NOTICE_LINK: Locator;
+  private readonly UK_FLAG_BUTTON: Locator;
+  private readonly REGISTER_LINK: Locator;
+  private readonly FORGOT_PASSWORD_LINK: Locator;
+  private readonly OFFERS_HEADER_LINK: Locator;
+  private readonly MY_CARD_LINK: Locator;
+  private readonly MY_ACCOUNT_LINK: Locator;
+  private readonly SEARCH_BUTTON: Locator;
+  private readonly DEALS_OF_THE_WEEK_HEADING: Locator;
+  private readonly PRIVACY_NOTICE_LINK: Locator;
+
+  // Cookie handling
+  private readonly ACCEPT_COOKIES_BUTTON: Locator;
 
   constructor(page: Page, context: BrowserContext) {
     this.page = page;
     this.context = context;
-    webActions = new WebActions(this.page, this.context);
+    this.webActions = new WebActions(this.page, this.context);
 
     // Navbar top
     this.BLUELIGHTBUTTON_NAVBAR = page.locator('[data-testid="brandLogo"]');
@@ -75,11 +77,14 @@ export class HomePageUk {
     this.PRIVACY_NOTICE_LINK = page
       .getByRole('contentinfo')
       .getByRole('link', { name: 'Privacy Notice', exact: true });
+
+    // Cookie handling
+    this.ACCEPT_COOKIES_BUTTON = page.getByRole('button', { name: 'Agree to all' });
   }
 
   // Navigation methods
   async navigateToUrlUk(): Promise<void> {
-    await this.page.goto(process.env.BASE_URL_UK!, { waitUntil: 'load' });
+    await this.page.goto(process.env.BASE_URL_UK, { waitUntil: 'load' });
   }
 
   async navigateToUrlAndLogin(email: string, password: string): Promise<void> {
@@ -90,7 +95,7 @@ export class HomePageUk {
 
   // Cookie handling
   async acceptCookies(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Agree to all' }).click();
+    await this.ACCEPT_COOKIES_BUTTON.click();
   }
 
   // Login methods
@@ -121,7 +126,7 @@ export class HomePageUk {
   async assertElementsVisibleHomeScreenLoggedIn(): Promise<void> {
     await expect(this.BLUELIGHTBUTTON_NAVBAR).toBeVisible();
 
-    // TODO - The below if statements are a workaround - these need revisited as working like this to differentiate elements in environments is not ideal
+    // Handle environment-specific conditions
     if (process.env.ENVIRONMENT === 'live') {
       await expect(this.HOME_NAVBAR).toBeVisible();
     }
@@ -145,31 +150,5 @@ export class HomePageUk {
   async selectOptionFromTheOffersMenu(offersOption: string): Promise<void> {
     await this.DISCOVERMORE_NAVBAR.hover();
     await this.page.getByRole('link', { name: offersOption }).click();
-  }
-
-  async selectOptionFromTheDiscoverSavingsMenu(offersOption: string): Promise<void> {
-    await this.DISCOVERMORE_NAVBAR.hover();
-    await this.page.getByRole('link', { name: offersOption }).click();
-  }
-
-  async clickTheBlueLightCardLogoToReturnHome(): Promise<void> {
-    await this.BLUELIGHTBUTTON_NAVBAR.click();
-  }
-
-  async verifyLoginScreenAppears(): Promise<void> {
-    await expect(this.LOGIN_BUTTON).toBeVisible();
-  }
-
-  async selectOptionFromTheTopMenu(topBarOption: string): Promise<void> {
-    await this.page.getByRole('link', { name: topBarOption }).click();
-  }
-
-  // Footer methods
-  async selectOptionFromTheFooterMenu(footerOption: string): Promise<void> {
-    await this.page.getByRole('link', { name: footerOption, exact: true }).click();
-  }
-
-  async selectPrivacyNotice(): Promise<void> {
-    await this.PRIVACY_NOTICE_LINK.click();
   }
 }

@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
 // Load environment variables from the correct .env file
-const ENV = process.env.npm_config_ENV || 'live';
+const ENV = process.env.npm_config_ENV || 'production';
 const envFilePath = `.env.${ENV}`;
 
 if (fs.existsSync(envFilePath)) {

@@ -4,6 +4,7 @@ import AuthContext from '@/context/Auth/AuthContext';
 import requireAuth from '@/hoc/requireAuth';
 import { NextPage } from 'next';
 import React, { FC, useContext, useEffect } from 'react';
+import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 
 const futureJWT =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjEwMDAwMDAwMDAwMDAwMDAwfQ.SM2xcm771CPS2CqOCUS91SF9ntftQl6cvoOCA11qSJA';
@@ -36,6 +37,10 @@ jest.mock('next/router', () => ({
       prefetch: jest.fn(() => null),
     };
   },
+}));
+
+jest.mock('@/utils/reAuthFromRefreshToken', () => ({
+  reAuthFromRefreshToken: jest.fn(() => Promise.resolve(true)),
 }));
 
 describe('withAuth HOC', () => {
@@ -80,7 +85,7 @@ describe('withAuth HOC', () => {
     expect(displayText).toBeNull();
   });
 
-  it('should continue with expired token as refresh token authed, therefore not failing to show the component', () => {
+  it('should refresh id token when it is expired and then show the component', () => {
     const text = 'Hello World';
     const Comp: NextPage<any> = (props: any) => {
       return <h1>{text}</h1>;
@@ -92,6 +97,8 @@ describe('withAuth HOC', () => {
 
     localStorage.setItem('accessToken', pastJWT);
     localStorage.setItem('idToken', pastJWT);
+    localStorage.setItem('refreshToken', 'refreshToken');
+    localStorage.setItem('username', 'username');
 
     render(
       <AuthProvider isUserAuthenticated={() => true}>
@@ -100,6 +107,7 @@ describe('withAuth HOC', () => {
     );
 
     expect(screen.queryByText(text)).toBeTruthy();
+    expect(reAuthFromRefreshToken).toHaveBeenCalled();
   });
 
   // Success Cases

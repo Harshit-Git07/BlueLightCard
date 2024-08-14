@@ -13,12 +13,13 @@ import { experimentsAndFeatureFlags } from './amplitude/store';
 import { amplitudeStore } from '../context/AmplitudeExperiment';
 import { API_PROXY_URL, BRAND_URL } from '@/root/global-vars';
 import assert from 'assert';
+import { refreshIdTokenIfRequired } from '@/utils/refreshIdTokenIfRequired';
 
 export class WebPlatformAdapter implements IPlatformAdapter {
   platform = PlatformVariant.Web;
 
   async invokeV5Api(path: string, options: V5RequestOptions): Promise<V5Response> {
-    const idToken = localStorage.getItem('idToken');
+    const idToken = await refreshIdTokenIfRequired();
     const endpoint = `${API_PROXY_URL}${path}`;
     const queryParameters = options.queryParameters
       ? '?' + new URLSearchParams(options.queryParameters).toString()

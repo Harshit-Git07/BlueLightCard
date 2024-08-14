@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
 import { COGNITO_LOGOUT_URL, LOGOUT_ROUTE } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
@@ -9,6 +9,7 @@ import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 import AuthTokensService from '../services/authTokensService';
 import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeDeviceExperimentClient from '../utils/amplitude/AmplitudeDeviceExperimentClient';
+import { nowInSecondsSinceEpoch } from '@/utils/dates';
 
 export async function redirectToLogin(router: NextRouter) {
   const deviceExperimentClient = await AmplitudeDeviceExperimentClient.Instance();
@@ -30,11 +31,9 @@ export async function redirectToLogin(router: NextRouter) {
 }
 
 async function isAuthenticated(idToken: string, refreshToken: string) {
-  const { exp: tokenExpiryTimeStamp, sub: usernameFromToken } = unpackJWT(idToken);
+  const { exp: tokenExpiryInSecondsSinceEpoch, sub: usernameFromToken } = unpackJWT(idToken);
 
-  const currentTimeStamp = Math.ceil(Date.now() / 1000);
-
-  if (currentTimeStamp >= tokenExpiryTimeStamp) {
+  if (nowInSecondsSinceEpoch() >= tokenExpiryInSecondsSinceEpoch) {
     //refresh token and update storage and return true or false based on if it works
     return await reAuthFromRefreshToken(usernameFromToken, refreshToken);
   }
@@ -44,7 +43,6 @@ async function isAuthenticated(idToken: string, refreshToken: string) {
 
 const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
   const Component: React.FC<any> = (props: any) => {
-    const [, setIdToken] = useState<string>('');
     const authContext = useContext(AuthContext);
     const router = useRouter();
 
@@ -57,13 +55,13 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
 
           const isAuthed = await isAuthenticated(idToken, refreshToken);
 
-          authContext.authState.idToken = idToken;
+          // need to get the idToken again as it may have been refreshed
+          authContext.authState.idToken = AuthTokensService.getIdToken();
           authContext.authState.accessToken = AuthTokensService.getAccessToken();
           authContext.authState.refreshToken = refreshToken;
           authContext.authState.username = username;
           authContext.isReady = isAuthed;
           authContext.isUserAuthenticated = () => isAuthed;
-          setIdToken(idToken);
         }
 
         if (authContext.isReady && !authContext.isUserAuthenticated()) {

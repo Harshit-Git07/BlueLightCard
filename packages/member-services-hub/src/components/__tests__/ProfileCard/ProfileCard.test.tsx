@@ -1,10 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ProfileCardProps } from '../../ProfileCard/types';
 import ProfileCard from '../../ProfileCard/ProfileCard';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 
 describe('ProfileCard component', () => {
   let props: ProfileCardProps;

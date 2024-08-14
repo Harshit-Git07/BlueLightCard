@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 
-type JWT = {
+export type JWT = {
   sub: string;
   phone_number: string;
   exp: number;

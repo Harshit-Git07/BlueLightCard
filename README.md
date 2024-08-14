@@ -60,6 +60,12 @@ To start the front end run (in another terminal)
 ```sh
 npm run dev -w packages/web
 ```
+You need an AWS token and also WARP ( VPN ) turned on
+You also need values in your web .env file ( please ask a coworker )
+
+Go to : http://localhost:3000/mock-login
+
+Log in with your STAGING credentials
 
 ### Remove Stacks
 

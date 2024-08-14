@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.26.0...bluelightcard/mobile-hybrid-v1.26.1) (2024-08-14)
+
+
+### Bug Fixes
+
+* DISCO-517 Refactored search hook ([#1870](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1870)) ([99638fc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99638fcad40bc774a5be96f7b612bad1dc5bf162))
+
 ## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.25.2...bluelightcard/mobile-hybrid-v1.26.0) (2024-08-14)
 
 

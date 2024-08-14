@@ -1,20 +1,22 @@
 import { FC, useCallback, useState } from 'react';
 import { SearchModuleProps } from './types';
+import Amplitude from '@/components/Amplitude/Amplitude';
 import Search from '@/components/Search/Search';
 import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButton';
+import useSearch from '@/hooks/useSearch';
 import { recentSearchesData } from '@/constants';
-import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
-import { searchTerm } from '@/modules/SearchResults/store';
 import { backNavagationalPaths } from './paths';
 import { SearchProps } from '@/components/Search/types';
-import Amplitude from '@/components/Amplitude/Amplitude';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { usePlatformAdapter } from '../../../../shared-ui/src/adapters';
 
 const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
-  const [term, setTerm] = useAtom(searchTerm);
   const router = useRouter();
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
+
+  const platformAdapter = usePlatformAdapter();
+  const { searchTerm, resetSearch } = useSearch(platformAdapter);
 
   const canBackNav = backNavagationalPaths.includes(router.route) && !searchOverlayOpen;
 
@@ -30,18 +32,17 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   }, [canBackNav, router]);
 
   const onSearch = useCallback<SearchProps['onSearch']>(
-    (searchTerm) => {
+    (termInput) => {
       setSearchOverlayOpen(false);
-      setTerm('');
-      router.push(`/searchresults?search=${searchTerm}`);
+      router.push(`/searchresults?search=${termInput}`);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router],
   );
 
   const onClear = useCallback(() => {
-    setTerm('');
-  }, [setTerm]);
+    resetSearch();
+  }, [resetSearch]);
 
   return (
     <>
@@ -51,7 +52,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
           onBackButtonClick={onBack}
           onClear={onClear}
           placeholderText={placeholder}
-          value={term}
+          value={searchTerm}
           showBackArrow={canBackNav}
           onSearch={onSearch}
         />
@@ -63,13 +64,13 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
               <h3 className="mx-2 mb-2 text-2xl font-bold text-neutral-grey-900 dark:text-primary-vividskyblue-700">
                 Your recent searches
               </h3>
-              {recentSearchesData.map((searchTerm, index) => (
+              {recentSearchesData.map((term, index) => (
                 <RecentSearchButton
                   key={index}
                   onClick={() => {
-                    console.log(searchTerm);
+                    console.log(term);
                   }}
-                  text={searchTerm}
+                  text={term}
                 />
               ))}
             </div>

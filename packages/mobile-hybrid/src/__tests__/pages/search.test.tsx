@@ -5,6 +5,11 @@ import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import '@testing-library/jest-dom/extend-expect';
+import {
+  IPlatformAdapter,
+  PlatformAdapterProvider,
+  useMockPlatformAdapter,
+} from '../../../../shared-ui/src/adapters';
 
 let mockRouter: Partial<NextRouter>;
 
@@ -25,33 +30,37 @@ describe('Search', () => {
 
   describe('Redirect deeplinks', () => {
     it('should redirect to path when match found', () => {
+      const mockPlatformAdapter = useMockPlatformAdapter();
       givenDeeplinkQueryParamIs('/offers.php');
 
-      whenSearchPageIsRendered();
+      whenSearchPageIsRendered(mockPlatformAdapter);
 
       expect(mockRouter.push).toHaveBeenCalledWith('/search');
     });
 
     it('should append original query params to redirect when match found', () => {
+      const mockPlatformAdapter = useMockPlatformAdapter();
       givenDeeplinkQueryParamIs('/offers.php?exampleParam1=A');
 
-      whenSearchPageIsRendered();
+      whenSearchPageIsRendered(mockPlatformAdapter);
 
       expect(mockRouter.push).toHaveBeenCalledWith('/search?exampleParam1=A');
     });
 
     it('should not redirect when deeplink query parameter is not present', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter();
       givenDeeplinkQueryParamIs(undefined);
 
-      whenSearchPageIsRendered();
+      whenSearchPageIsRendered(mockPlatformAdapter);
 
       expect(mockRouter.push).not.toHaveBeenCalled();
     });
 
     it('should redirect to /search when no matching path found', () => {
+      const mockPlatformAdapter = useMockPlatformAdapter();
       givenDeeplinkQueryParamIs('/unknownPath');
 
-      whenSearchPageIsRendered();
+      whenSearchPageIsRendered(mockPlatformAdapter);
 
       expect(mockRouter.push).toHaveBeenCalledWith('/search');
     });
@@ -62,9 +71,10 @@ describe('Search', () => {
         ['/offers.php?type=5', '/types?type=5'],
         ['/offers.php?cat=true&type=8', '/categories?cat=true&type=8'],
       ])("should map deeplink '%s' to target URL '%s'", (deeplink, targetURL) => {
+        const mockPlatformAdapter = useMockPlatformAdapter();
         givenDeeplinkQueryParamIs(deeplink);
 
-        whenSearchPageIsRendered();
+        whenSearchPageIsRendered(mockPlatformAdapter);
 
         expect(mockRouter.push).toHaveBeenCalledWith(targetURL);
       });
@@ -73,7 +83,8 @@ describe('Search', () => {
 
   describe('"Search for brands" button', () => {
     it('should show "Search for brands" when feature enabled', () => {
-      whenSearchPageIsRenderedWithFlags({
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
         [FeatureFlags.SEARCH_START_PAGE_BRANDS_LINK]: 'on',
       });
 
@@ -81,7 +92,8 @@ describe('Search', () => {
     });
 
     it('should not show "Search for brands" when feature disabled', () => {
-      whenSearchPageIsRenderedWithFlags({
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
         [FeatureFlags.SEARCH_START_PAGE_BRANDS_LINK]: 'off',
       });
 
@@ -89,7 +101,8 @@ describe('Search', () => {
     });
 
     it('should not show "Search for brands" when feature flag not found', () => {
-      whenSearchPageIsRenderedWithFlags({});
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {});
 
       expect(screen.queryByText('Search for brands')).not.toBeInTheDocument();
     });
@@ -97,7 +110,8 @@ describe('Search', () => {
 
   describe('Categories links', () => {
     it('should show categories links when feature enabled', () => {
-      whenSearchPageIsRenderedWithFlags({
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
         [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'on',
       });
 
@@ -105,7 +119,8 @@ describe('Search', () => {
     });
 
     it('should not show categories links when feature disabled', () => {
-      whenSearchPageIsRenderedWithFlags({
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
         [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'off',
       });
 
@@ -113,7 +128,8 @@ describe('Search', () => {
     });
 
     it('should not show categories links when feature flag not found', () => {
-      whenSearchPageIsRenderedWithFlags({});
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {});
 
       expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
     });
@@ -121,7 +137,8 @@ describe('Search', () => {
 
   describe("'Offers near you' button", () => {
     it('should show "Offers near you" when feature enabled', () => {
-      whenSearchPageIsRenderedWithFlags({
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
         [FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK]: 'on',
       });
 
@@ -129,7 +146,8 @@ describe('Search', () => {
     });
 
     it('should not show "Offers near you" when feature disabled', () => {
-      whenSearchPageIsRenderedWithFlags({
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
         [FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK]: 'off',
       });
 
@@ -137,7 +155,8 @@ describe('Search', () => {
     });
 
     it('should not show "Offers near you" when feature flag not found', () => {
-      whenSearchPageIsRenderedWithFlags({});
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {});
 
       expect(screen.queryByText('Offers near you')).not.toBeInTheDocument();
     });
@@ -155,14 +174,24 @@ const givenDeeplinkQueryParamIs = (deeplink?: string) => {
   }
 };
 
-const whenSearchPageIsRendered = () => {
-  render(<SearchPage />);
+const whenSearchPageIsRendered = (mockPlatformAdapter: IPlatformAdapter) => {
+  render(
+    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+      <SearchPage />
+    </PlatformAdapterProvider>,
+  );
 };
 
-const whenSearchPageIsRenderedWithFlags = (featureFlags: any) => {
+const whenSearchPageIsRenderedWithFlags = (
+  mockPlatformAdapter: IPlatformAdapter,
+  featureFlags: any,
+) => {
   render(
-    <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
-      <SearchPage />
-    </JotaiTestProvider>,
+    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
+        <SearchPage />
+      </JotaiTestProvider>
+      ,
+    </PlatformAdapterProvider>,
   );
 };

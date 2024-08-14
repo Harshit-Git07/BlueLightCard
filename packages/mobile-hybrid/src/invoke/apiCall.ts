@@ -1,5 +1,8 @@
-import { Logger } from '@/logger';
+import eventBus from '@/eventBus';
 import Facade from './facade';
+import { Channels } from '@/globals';
+import { Logger } from '@/logger';
+import { Unsubscribe } from '@/dependencies/nanoevents';
 
 export type RequestOptions = {
   /**
@@ -40,6 +43,35 @@ export default class InvokeNativeAPICall extends Facade implements NativeAPICall
       parameters: queryParams ?? {},
       queries: queryParams ?? {},
     });
+  }
+
+  public async requestDataAsync<T>(
+    url: string,
+    queryParams?: NativeAPICall.Parameters['parameters'],
+  ): Promise<T> {
+    const responsePromise = new Promise<T>((resolve, reject) => {
+      let unsubscribe: Unsubscribe | null = null;
+
+      const timeout = setTimeout(() => {
+        unsubscribe?.();
+        reject(new Error('API call timed out'));
+      }, 30_000);
+
+      unsubscribe = eventBus.on(Channels.API_RESPONSE, (pathWithQuery, data): void => {
+        const [incomingPath, _] = pathWithQuery.split('?');
+        if (url !== incomingPath) {
+          return;
+        }
+
+        clearTimeout(timeout);
+
+        resolve(data as T);
+      });
+    });
+
+    this.requestData(url, queryParams);
+
+    return responsePromise;
   }
 
   public requestDataV5(path: string, options: RequestOptions): void {

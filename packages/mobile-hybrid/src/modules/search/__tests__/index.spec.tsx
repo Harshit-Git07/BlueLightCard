@@ -8,6 +8,11 @@ import { backNavagationalPaths } from '../paths';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import {
+  IPlatformAdapter,
+  PlatformAdapterProvider,
+  useMockPlatformAdapter,
+} from '../../../../../shared-ui/src/adapters';
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
@@ -29,7 +34,10 @@ describe('SearchModule', () => {
 
   describe('search overlay', () => {
     it('should display search overlay', async () => {
-      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+      });
 
       await whenSearchInputIsClicked(user);
 
@@ -37,7 +45,10 @@ describe('SearchModule', () => {
     });
 
     it('should not display search overlay when feature is off', async () => {
-      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'off' });
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'off',
+      });
 
       await whenSearchInputIsClicked(user);
 
@@ -45,7 +56,10 @@ describe('SearchModule', () => {
     });
 
     it('should hide search overlay', async () => {
-      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+      });
 
       await whenSearchInputIsClicked(user);
 
@@ -63,7 +77,10 @@ describe('SearchModule', () => {
       });
     });
     it('should navigate to searchresults on submit search', async () => {
-      givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+      });
 
       const searchInput = screen.getByRole('searchbox');
 
@@ -85,7 +102,10 @@ describe('SearchModule', () => {
           replace: replaceMockFn,
         });
 
-        givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
+        const mockPlatformAdapter = useMockPlatformAdapter();
+        givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        });
 
         const searchInput = screen.getByRole('searchbox');
 
@@ -108,7 +128,10 @@ describe('SearchModule', () => {
           replace: replaceMockFn,
         });
 
-        givenSearchModuleIsRenderedWith({ [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on' });
+        const mockPlatformAdapter = useMockPlatformAdapter();
+        givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        });
 
         const searchInput = screen.getByRole('searchbox');
 
@@ -124,11 +147,16 @@ describe('SearchModule', () => {
   });
 });
 
-const givenSearchModuleIsRenderedWith = (featureFlags: any) => {
+const givenSearchModuleIsRenderedWith = (
+  mockPlatformAdapter: IPlatformAdapter,
+  featureFlags: any,
+) => {
   render(
-    <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
-      <SearchModule />
-    </JotaiTestProvider>,
+    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
+        <SearchModule />
+      </JotaiTestProvider>
+    </PlatformAdapterProvider>,
   );
 };
 

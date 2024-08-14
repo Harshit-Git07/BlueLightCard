@@ -22,7 +22,7 @@ export enum Experiments {
   BF_FLEXI = 'bf-flexi',
   OFFER_SHEET_VAULT = 'offer-sheet-redeem-vault-app',
   OFFER_SHEET_NON_VAULT = 'offer-sheet-redeem-non-vault-app',
-  CATEGORY_LEVEL_THREE_SEARCH = 'category_level_three_search_hybrid',
+  CATEGORY_LEVEL_THREE_SEARCH = 'search-category-level-three-hybrid-v2',
 }
 
 export const featureFlagKeys = Object.values(FeatureFlags);

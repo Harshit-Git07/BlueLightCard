@@ -3,11 +3,13 @@ import SearchModule from './index';
 import { useSetAtom } from 'jotai/index';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { useEffect } from 'react';
+import { StorybookPlatformAdapterDecorator } from '../../../../shared-ui/src/adapters';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const componentMeta: Meta<typeof SearchModule> = {
   title: 'Modules/Search',
   component: SearchModule,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

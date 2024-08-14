@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.68.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.67.0...bluelightcard/web-v1.68.0) (2024-08-14)
+
+
+### Features
+
+* [TI-1576] Adding new logic to refresh token at api call level if token has expired ([#1982](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1982)) ([da428c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/da428c3475899b5a1b7b9af98b99560423b0c005))
+* added new search drop down for the search bar ([#1899](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1899)) ([73abc31](https://github.com/bluelightcard/BlueLightCard-2.0/commit/73abc316d98f340b5aa1f05a328295bc736f18d2))
+* added new search empty state with fetched data ([#1898](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1898)) ([dd9dae4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd9dae46e8651ef10b9e4262a4a4fc8fadbd4445))
+* TO-947 Whitelabel Offerdetails Page ([#1875](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1875)) ([ac2d996](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ac2d9965bed13e16a5e3ed600803f19ec5fa4215))
+
+
+### Bug Fixes
+
+* Company page image duplication fix ([#1970](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1970)) ([85ef1ac](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85ef1ac8d4296cd104b6b764cb5fb2ce49745493))
+* DISCO-638 Fixed web search loading state ([#1961](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1961)) ([49cdac6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/49cdac66c2e0e61ce9318d82fee39891be692ed3))
+
+
+### Other Changes
+
+* [PE-145] fix high level reliability issues ([#1962](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1962)) ([edd556e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/edd556ea65bce86eb56bb12983b7a0e8d5010888))
+
 ## [1.67.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.66.0...bluelightcard/web-v1.67.0) (2024-08-06)
 
 

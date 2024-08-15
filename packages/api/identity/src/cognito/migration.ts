@@ -168,6 +168,15 @@ const authenticateUser = async (username: string, password: string) => {
     // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
     logger.info('Attempting to authenticate user against legacy', { username })
 
+    if (!isValidPasswordForCognito(password)) {
+      logger.warn('Entered password does not match Cognito regex', { username })
+    }
+
+    if (!isValidPasswordForLegacy(password)) {
+      logger.error('Entered password does not match legacy regex', { username });
+      throw new Error("The password you have entered is invalid, please enter a valid password");
+    }
+
     try {
         const response = await axios({
             method: 'get',

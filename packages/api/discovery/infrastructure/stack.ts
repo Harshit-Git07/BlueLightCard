@@ -4,6 +4,7 @@ import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { Identity } from '@blc-mono/identity/stack';
 
 import { Shared } from '../../../../stacks/stack';
@@ -51,7 +52,7 @@ export async function Discovery({ stack, app }: StackContext) {
     },
     cdk: {
       restApi: {
-        ...(['production', 'staging'].includes(stack.stage) &&
+        ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
               domainName: getDomainName(stack.stage, app.region),
@@ -108,7 +109,7 @@ const getDomainName = (stage: string, region: string) => {
 };
 
 const getAustraliaDomainName = (stage: string) =>
-  stage === 'production' ? 'discovery-au.blcshine.io' : `${stage}-discovery-au.blcshine.io`;
+  isProduction(stage) ? 'discovery-au.blcshine.io' : `${stage}-discovery-au.blcshine.io`;
 
 const getUKDomainName = (stage: string) =>
-  stage === 'production' ? 'discovery.blcshine.io' : `${stage}-discovery.blcshine.io`;
+  isProduction(stage) ? 'discovery.blcshine.io' : `${stage}-discovery.blcshine.io`;

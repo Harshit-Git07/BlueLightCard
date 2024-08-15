@@ -237,10 +237,13 @@ export function Identity({ stack }: StackContext) {
     });
 
     stack.addOutputs({
-      CognitoUserPooMembersClient: cognito.userPoolId,
-      CognitoDdsUserPooMembersClient: cognito_dds.userPoolId,
+      BlcUkCognitoUserPoolId: cognito.userPoolId,
+      BlcUkOldCognitoUserPoolId: oldCognito.userPoolId,
+      DdsUkCognitoUserPoolId: cognito_dds.userPoolId,
+      DdsUkOldCognitoUserPoolId: oldCognitoDds.userPoolId,
       Table: identityTable.tableName,
       IdentityApiEndpoint: identityApi.url,
+      IdentityApiId: identityApi.cdk.restApi.restApiId
     });
 
     //API Key and Usage Plan

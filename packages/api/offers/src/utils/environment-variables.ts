@@ -1,4 +1,4 @@
-import { ENVIRONMENTS } from "./global-constants";
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 export enum EnvironmentVariablesKeys {
   OFFERS_DATABASE_ROOT_PASSWORD = 'OFFERS_DATABASE_ROOT_PASSWORD',
@@ -16,10 +16,10 @@ export enum EnvironmentVariablesKeys {
 }
 
 export const getBLCBaseUrlFromEnv = (stage: string): string => {
-  switch (stage) {
-    case ENVIRONMENTS.PRODUCTION:
+  switch (true) {
+    case isProduction(stage):
       return process.env.PROD_BASE_URL!;
-    case ENVIRONMENTS.STAGING:
+    case isStaging(stage):
       return process.env.STAGING_BASE_URL!;
     default:
       return process.env.DEV_BASE_URL!;

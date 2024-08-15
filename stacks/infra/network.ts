@@ -4,16 +4,21 @@ import { isProduction, isStaging } from '@blc-mono/core/src/utils/checkEnvironme
 import { isDdsUkBrand } from '@blc-mono/core/src/utils/checkBrand';
 import { SubnetConfiguration } from 'aws-cdk-lib/aws-ec2/lib/vpc';
 
+enum VpcName {
+  BLC = 'vpc-shared',
+  DDS = 'vpc-shared-dds',
+}
+
 export class Network {
   private readonly _vpc: IVpc;
 
   constructor(private readonly stack: Stack) {
     switch (true) {
       case isProduction(stack.stage):
-        this._vpc = this.createProductionVpc();
+        this._vpc = this.createVpc();
         break;
       case isStaging(stack.stage):
-        this._vpc = this.createOrRetrieveStagingVpc();
+        this._vpc = this.createVpc();
         break;
       default:
         this._vpc = this.retrieveStagingVpc();
@@ -26,30 +31,15 @@ export class Network {
   }
 
   /**
-   * Creates a VPC for production.
+   * Creates a VPC.
    *
    * @return {Vpc} The created VPC.
    */
-  private createProductionVpc(): IVpc {
-    return new Vpc(this.stack, 'vpc-shared', {
-      vpcName: isDdsUkBrand() ? 'vpc-shared-dds' : 'vpc-shared',
-      maxAzs: 3,
-      subnetConfiguration: this.subnetConfiguration(),
-    });
-  }
+  private createVpc(): IVpc {
+    const vpcName = isDdsUkBrand() ? VpcName.DDS : VpcName.BLC;
 
-  /**
-   * Creates or retrieves a VPC for staging.
-   *
-   * @return {Vpc} The created VPC.
-   */
-  private createOrRetrieveStagingVpc(): IVpc {
-    // DDS UK is deployed to the same AWS account as BLC UK and should use its VPC due to AWS limits on Elastic IPs.
-    if (isDdsUkBrand()) {
-      return this.retrieveStagingVpc();
-    }
-
-    return new Vpc(this.stack, 'vpc-shared', {
+    return new Vpc(this.stack, vpcName, {
+      vpcName: vpcName,
       maxAzs: 3,
       subnetConfiguration: this.subnetConfiguration(),
     });
@@ -62,7 +52,10 @@ export class Network {
    * @return {Vpc} The staging VPC.
    */
   private retrieveStagingVpc(): IVpc {
-    return Vpc.fromLookup(this.stack, 'vpc-shared', {
+    const vpcName = isDdsUkBrand() ? VpcName.DDS : VpcName.BLC;
+
+    // Add DDS VPC tag (staging-dds) once deployed to staging for local deployments
+    return Vpc.fromLookup(this.stack, vpcName, {
       tags: {
         'sst:stage': 'staging',
       },

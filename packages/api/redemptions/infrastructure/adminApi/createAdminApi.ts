@@ -4,6 +4,7 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ApiGatewayV1Api, Stack } from 'sst/constructs';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
 
 import { IDatabase } from '../database/adapter';
@@ -22,13 +23,12 @@ export function createAdminApi(
     cdk: {
       restApi: {
         endpointTypes: globalConfig.apiGatewayEndpointTypes,
-        ...(['production', 'staging'].includes(stack.stage) &&
+        ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
-              domainName:
-                stack.stage === 'production'
-                  ? 'redemptions-admin.blcshine.io'
-                  : `${stack.stage}-redemptions-admin.blcshine.io`,
+              domainName: isProduction(stack.stage)
+                ? 'redemptions-admin.blcshine.io'
+                : `${stack.stage}-redemptions-admin.blcshine.io`,
               certificate: Certificate.fromCertificateArn(stack, 'AdminDomainCertificate', certificateArn),
             },
           }),
@@ -43,7 +43,6 @@ export function createAdminApi(
   const adminApiKey = adminApi.cdk.restApi.addApiKey('redemptions-admin-api-key', {
     apiKeyName: `${stack.stage}-redemptions-admin`,
   });
-
   const adminApiUsagePlan = adminApi.cdk.restApi.addUsagePlan('redemptions-admin-api-usage-plan', {
     throttle: {
       rateLimit: 1,

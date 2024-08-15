@@ -4,10 +4,10 @@ import { RouteRegistry } from '../routes/routeRegistry';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { IDatabaseAdapter } from './database/IDatabaseAdapter';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ENVIRONMENTS } from '../utils/global-constants';
 import { Tables } from './tables';
 import { generateOffersCustomDomainName } from '@blc-mono/core/offers/generateOffersCustomDomainName'
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config'
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 /**
  * Sets up and configures the API Gateway for the offers application, including defining routes and authorizers.
@@ -67,7 +67,7 @@ export class OffersApiGateway {
             stageName: 'v1',
           },
           endpointTypes: globalConfig.apiGatewayEndpointTypes,
-          ...([ENVIRONMENTS.STAGING, ENVIRONMENTS.PRODUCTION].includes(this.stack.stage as ENVIRONMENTS) &&
+          ...((isProduction(this.stack.stage) || isStaging(this.stack.stage)) &&
             this.certificateArn && {
               domainName: {
                 domainName: generateOffersCustomDomainName(this.stack),

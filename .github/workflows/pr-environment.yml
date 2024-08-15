@@ -12,6 +12,7 @@ permissions:
 
 env:
   PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono
+  PR_PREFIX_DDS: pr-${{ github.event.pull_request.number }}-blc-mono-dds
 
 jobs:
   install:
@@ -93,6 +94,11 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
+      identity-api-id: ${{ steps.sst-identity-outputs.outputs.identityApiId }}
+      blc-uk-cognito-user-pool-id: ${{ steps.sst-identity-outputs.outputs.blcUkCognitoUserPoolId }}
+      blc-uk-old-cognito-user-pool-id: ${{ steps.sst-identity-outputs.outputs.blcUkOldCognitoUserPoolId }}
+      dds-cognito-user-pool-id: ${{ steps.sst-identity-outputs.outputs.ddsUkCognitoUserPoolId }}
+      dds-old-cognito-user-pool-id: ${{ steps.sst-identity-outputs.outputs.ddsUkOldCognitoUserPoolId }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -118,10 +124,63 @@ jobs:
         run: |
           cat .sst/outputs.json
           IDENTITY_URL=$(jq -r '.[].IdentityApiEndpoint | select(. != null)' .sst/outputs.json)
+          BLC_UK_IDENTITY_API_ID=$(jq -r '.[].IdentityApiId | select(. != null)' .sst/outputs.json)
+          BLC_UK_COGNITO_USER_POOL_ID=$(jq -r '.[].BlcUkCognitoUserPoolId | select(. != null)' .sst/outputs.json)
+          BLC_UK_OLD_COGNITO_USER_POOL_ID=$(jq -r '.[].BlcUkOldCognitoUserPoolId | select(. != null)' .sst/outputs.json)
+          DDS_COGNITO_USER_POOL_ID=$(jq -r '.[].DdsUkCognitoUserPoolId | select(. != null)' .sst/outputs.json)
+          DDS_OLD_COGNITO_USER_POOL_ID=$(jq -r '.[].DdsUkOldCognitoUserPoolId | select(. != null)' .sst/outputs.json)
           echo "identityApiUrl=$IDENTITY_URL" >> $GITHUB_OUTPUT
+          echo "identityApiId=$BLC_UK_IDENTITY_API_ID" >> $GITHUB_OUTPUT
+          echo "blcUkCognitoUserPoolId=$BLC_UK_COGNITO_USER_POOL_ID" >> $GITHUB_OUTPUT
+          echo "blcUkOldCognitoUserPoolId=$BLC_UK_OLD_COGNITO_USER_POOL_ID" >> $GITHUB_OUTPUT
+          echo "ddsUkCognitoUserPoolId=$DDS_COGNITO_USER_POOL_ID" >> $GITHUB_OUTPUT
+          echo "ddsUkOldCognitoUserPoolId=$DDS_OLD_COGNITO_USER_POOL_ID" >> $GITHUB_OUTPUT
       - name: Echo outputs
         run: |
           echo ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
+          echo ${{ steps.sst-identity-outputs.outputs.identityApiId }}
+          echo ${{ steps.sst-identity-outputs.outputs.blcUkCognitoUserPoolId }}
+          echo ${{ steps.sst-identity-outputs.outputs.blcUkOldCognitoUserPoolId }}
+          echo ${{ steps.sst-identity-outputs.outputs.ddsUkCognitoUserPoolId }}
+          echo ${{ steps.sst-identity-outputs.outputs.ddsUkOldCognitoUserPoolId }}
+
+  backend-shared-dds:
+    needs:
+      - changes
+      - install
+      - backend-shared
+    name: Deploy DDS Backend for PR (global & identity)
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'ready-for-test') && contains(github.event.pull_request.labels.*.name, 'dds-ready-for-test')}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - run: npm run build
+      - name: Deploy DDS Global
+        env:
+          BRAND: DDS_UK
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-cognito-user-pool-id }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-old-cognito-user-pool-id }}
+          DDS_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-cognito-user-pool-id }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-old-cognito-user-pool-id }}
+          BLC_UK_IDENTITY_API_ID: ${{ needs.backend-shared.outputs.identity-api-id }}
+        run: npx sst deploy global --stage $PR_PREFIX_DDS
+      - name: Deploy DDS Identity
+        env:
+          BRAND: DDS_UK
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-cognito-user-pool-id }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-old-cognito-user-pool-id }}
+          DDS_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-cognito-user-pool-id }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-old-cognito-user-pool-id }}
+          BLC_UK_IDENTITY_API_ID: ${{ needs.backend-shared.outputs.identity-api-id }}
+        run: npx sst deploy identity --stage $PR_PREFIX_DDS
 
   backend-offers:
     needs:

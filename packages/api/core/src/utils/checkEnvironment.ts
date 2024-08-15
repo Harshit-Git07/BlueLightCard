@@ -1,4 +1,4 @@
-const EPHEMERAL_REGEX = /^pr-\d+-blc-mono$/;
+const EPHEMERAL_REGEX = /^pr-\d+-blc-mono(-dds)?$/;
 
 export function isDev(stage: string): boolean {
   return !isProduction(stage) && !isStaging(stage);

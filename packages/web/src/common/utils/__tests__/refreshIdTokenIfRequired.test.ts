@@ -19,6 +19,7 @@ jest.useFakeTimers({ now: new Date('2023-01-11T09:15:18.000Z') });
 
 describe('refreshIdTokenIfRequired', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     AuthTokensService.getRefreshToken = jest.fn().mockReturnValue(refreshToken);
     AuthTokensService.getUsername = jest.fn().mockReturnValue(username);
   });
@@ -58,6 +59,19 @@ describe('refreshIdTokenIfRequired', () => {
 
     expect(result).toBe(idToken);
     expect(reAuthFromRefreshTokenMock).toHaveBeenCalledWith(username, refreshToken);
+    expect(AuthTokensService.getIdToken).toHaveBeenCalledTimes(1);
+  });
+
+  it('should return the existing id token if the JWT unpacking throws an error ', async () => {
+    mockedUnpackJWT.mockImplementation(() => {
+      throw new Error('Failed to unpack JWT');
+    });
+    AuthTokensService.getIdToken = jest.fn().mockReturnValueOnce(idToken);
+
+    const result = await refreshIdTokenIfRequired();
+
+    expect(result).toBe(idToken);
+    expect(reAuthFromRefreshTokenMock).not.toHaveBeenCalled();
     expect(AuthTokensService.getIdToken).toHaveBeenCalledTimes(1);
   });
 });

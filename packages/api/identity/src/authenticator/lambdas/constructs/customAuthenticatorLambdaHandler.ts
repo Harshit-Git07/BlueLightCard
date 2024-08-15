@@ -78,7 +78,8 @@ const handlerUnwrapped = async function (event: any): Promise<APIGatewayAuthoriz
     return response;
   } catch (err) {
     logger.error(`Invalid auth token. Error: ${err}`);
-    throw new Error(`Unauthorized with error: ${err}`);
+    // Do not change this 'Unauthorized' error message as this is how the authorizer knows to send a 401 back to the client
+    throw new Error('Unauthorized');
   }
 };
 

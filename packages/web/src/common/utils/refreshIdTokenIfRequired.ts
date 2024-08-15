@@ -7,16 +7,22 @@ export async function refreshIdTokenIfRequired(): Promise<string> {
   let idToken = AuthTokensService.getIdToken();
   const refreshToken = AuthTokensService.getRefreshToken();
 
-  const { exp: tokenExpiryInSecondsSinceEpoch, sub: usernameFromToken } = unpackJWT(idToken);
+  try {
+    const { exp: tokenExpiryInSecondsSinceEpoch, sub: usernameFromToken } = unpackJWT(idToken);
 
-  if (expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
-    // Token has expired so re-authentication is required
-    const refreshedSuccessfully = await reAuthFromRefreshToken(usernameFromToken, refreshToken);
-    if (refreshedSuccessfully) {
-      // Need to get the idToken again as it has been updated in local storage
-      idToken = AuthTokensService.getIdToken();
+    if (expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
+      // Token has expired so re-authentication is required
+      const refreshedSuccessfully = await reAuthFromRefreshToken(usernameFromToken, refreshToken);
+      if (refreshedSuccessfully) {
+        // Need to get the idToken again as it has been updated in local storage
+        idToken = AuthTokensService.getIdToken();
+      }
     }
+  } catch (error) {
+    // something went wrong refreshing or unpacking jwt - returning existing idToken
+    return idToken;
   }
+
   return idToken;
 }
 

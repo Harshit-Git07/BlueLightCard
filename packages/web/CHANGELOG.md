@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.69.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.68.0...bluelightcard/web-v1.69.0) (2024-08-15)
+
+
+### Features
+
+* [DISCO-383] add new search bar to nav ([#1930](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1930)) ([1323ed6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1323ed6b8d33d03da1d0c1cd3972563f613f9052))
+
+
+### Bug Fixes
+
+* Add try catch around token refresh ([#2007](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2007)) ([2c50dd1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c50dd112ee6fb960836e724ee1e43caab973353))
+
 ## [1.68.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.67.0...bluelightcard/web-v1.68.0) (2024-08-14)
 
 

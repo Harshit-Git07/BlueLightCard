@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.26.2...bluelightcard/mobile-hybrid-v1.26.3) (2024-08-15)
+
+
+### Bug Fixes
+
+* Readme edit to create chore for deploy ([#2014](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2014)) ([d4f54eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d4f54ebad1ff93c7f36e3064b35e14cdf26a8a91))
+
 ## [1.26.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.26.1...bluelightcard/mobile-hybrid-v1.26.2) (2024-08-14)
 
 

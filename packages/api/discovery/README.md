@@ -33,3 +33,5 @@ npm run lint
 ```shell
 npm run format
 ```
+
+<!-- trigger release TODO: Remove ( 1.3.0 ) -->

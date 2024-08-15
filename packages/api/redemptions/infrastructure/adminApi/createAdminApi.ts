@@ -40,7 +40,10 @@ export function createAdminApi(
     },
   });
 
-  const adminApiKey = adminApi.cdk.restApi.addApiKey('redemptions-admin-api-key');
+  const adminApiKey = adminApi.cdk.restApi.addApiKey('redemptions-admin-api-key', {
+    apiKeyName: `${stack.stage}-redemptions-admin`,
+  });
+
   const adminApiUsagePlan = adminApi.cdk.restApi.addUsagePlan('redemptions-admin-api-usage-plan', {
     throttle: {
       rateLimit: 1,

@@ -48,9 +48,11 @@ export class HomePageAus {
     this.webActions = new WebActions(this.page, this.context);
 
     // Navbar top
-    this.BLUELIGHTBUTTON_NAVBAR_AUS = page.getByRole('link', { name: 'Blue Light Card logo' });
-    this.HOME_NAVBAR_AUS = page.getByRole('link', { name: 'Home' });
-    this.OFFERS_NAVBAR_AUS = page.getByRole('link', { name: 'Offers' });
+    this.BLUELIGHTBUTTON_NAVBAR_AUS = page.locator('div.site-logo');
+    this.HOME_NAVBAR_AUS = page.getByRole('link', { name: 'Home', exact: true });
+    this.OFFERS_NAVBAR_AUS = page
+      .getByRole('navigation')
+      .getByRole('link', { name: 'Offers', exact: true });
     this.MYCARD_NAVBAR_AUS = page.getByRole('link', { name: 'My Card' });
     this.MYACCOUNT_NAVBAR_AUS = page.getByRole('link', { name: 'My Account' });
     this.FAQS_NAVBAR_AUS = page.getByRole('link', { name: 'FAQs' });
@@ -79,7 +81,9 @@ export class HomePageAus {
     this.ELIGIBILITY_LINK_AUS = page.getByRole('link', { name: 'Eligibility' });
     this.AUSTRALIA_FLAG_BUTTON_AUS = page.getByRole('button', { name: 'australia flag Australia' });
     this.START_SAVING_LINK_AUS = page.getByRole('link', { name: 'Start Saving' });
-    this.EXCLUSIVE_SAVINGS_HEADING_AUS = page.getByRole('heading', { name: 'Exclusive savings for' });
+    this.EXCLUSIVE_SAVINGS_HEADING_AUS = page.getByRole('heading', {
+      name: 'Exclusive savings for',
+    });
     this.SEARCH_BY_COMPANY_OR_PHRASE_TEXT_AUS = page.getByText('Search by company or phrase');
     this.DEALS_OF_THE_WEEK_HEADING_AUS = page.getByRole('heading', { name: 'Deals of the Week' });
   }

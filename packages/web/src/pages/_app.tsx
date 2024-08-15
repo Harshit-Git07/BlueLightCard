@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import '@/styles/swiper.css';
 
 import type { AppProps } from 'next/app';
-import { FC, ReactElement, useContext } from 'react';
+import { FC, ReactElement, useContext, lazy } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { datadogRum } from '@datadog/browser-rum';
 import flagsmith from 'flagsmith';
@@ -52,6 +52,11 @@ if (DATADOG_APP_ID && DATADOG_CLIENT_TOKEN) {
   console.warn('Datadog auth keys are missing.');
 }
 
+const ReactQueryDevtoolsPreview = lazy(() =>
+  import('@tanstack/react-query-devtools/build/modern/production.js').then((d) => ({
+    default: d.ReactQueryDevtools,
+  }))
+);
 const queryClient = new QueryClient();
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
@@ -62,62 +67,63 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   const renderedPageWithLayout = getLayout(<Component {...pageProps} />) || null;
 
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <Head>
-          {/* TODO: Remove this meta tag when dark mode is enabled */}
-          <meta name="color-scheme" content="light only" />
+    <QueryClientProvider client={queryClient}>
+      <Head>
+        {/* TODO: Remove this meta tag when dark mode is enabled */}
+        <meta name="color-scheme" content="light only" />
 
-          {/* Cache control - Cache for 1 day, could be more? 30days? 1yr? */}
-          <meta httpEquiv="cache-control" content="max-age=86400" />
+        {/* Cache control - Cache for 1 day, could be more? 30days? 1yr? */}
+        <meta httpEquiv="cache-control" content="max-age=86400" />
 
-          {/* Hard coded SEO data */}
-          {typeof document !== 'undefined' && document.location.hostname.includes('staging') && (
-            <meta name="robots" content="noindex" />
-          )}
+        {/* Hard coded SEO data */}
+        {typeof document !== 'undefined' && document.location.hostname.includes('staging') && (
+          <meta name="robots" content="noindex" />
+        )}
 
-          <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-          <meta property="og:site_name" content="Blue Light Card" />
-          <meta name="twitter:creator" content="@bluelightcard" />
-          <meta name="twitter:site" content="@bluelightcard" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta property="og:site_name" content="Blue Light Card" />
+        <meta name="twitter:creator" content="@bluelightcard" />
+        <meta name="twitter:site" content="@bluelightcard" />
 
-          {/* Google search console Meta */}
-          <meta
-            name="google-site-verification"
-            content="DTJzAOYbFZcd8ox4dqRtKjYqQyvHEeLssZvRcWi9TbE"
-          />
-          <meta name="facebook-domain-verification" content="8jv2lrney5b68pwbcllhikuza0khd6" />
+        {/* Google search console Meta */}
+        <meta
+          name="google-site-verification"
+          content="DTJzAOYbFZcd8ox4dqRtKjYqQyvHEeLssZvRcWi9TbE"
+        />
+        <meta name="facebook-domain-verification" content="8jv2lrney5b68pwbcllhikuza0khd6" />
 
-          {/* Mobile specific Metas */}
-          <meta
-            name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"
-          />
-          <meta name="format-detection" content="telephone=no" />
-        </Head>
-        <FlagsmithProvider
-          options={{
-            environmentID: FLAGSMITH_KEY,
-            cacheFlags: true,
+        {/* Mobile specific Metas */}
+        <meta
+          name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"
+        />
+        <meta name="format-detection" content="telephone=no" />
+      </Head>
+      <FlagsmithProvider
+        options={{
+          environmentID: FLAGSMITH_KEY,
+          cacheFlags: true,
+        }}
+        flagsmith={flagsmith}
+      >
+        <SharedUIConfigProvider
+          value={{
+            globalConfig: {
+              cdnUrl: CDN_URL,
+              brand: 'blc-uk',
+            },
           }}
-          flagsmith={flagsmith}
         >
-          <SharedUIConfigProvider
-            value={{
-              globalConfig: {
-                cdnUrl: CDN_URL,
-                brand: 'blc-uk',
-              },
-            }}
-          >
-            <PlatformAdapterProvider adapter={new WebPlatformAdapter()}>
-              <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
-            </PlatformAdapterProvider>
-          </SharedUIConfigProvider>
-        </FlagsmithProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </>
+          <PlatformAdapterProvider adapter={new WebPlatformAdapter()}>
+            <AmplitudeProvider>{renderedPageWithLayout}</AmplitudeProvider>
+          </PlatformAdapterProvider>
+        </SharedUIConfigProvider>
+      </FlagsmithProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+      {['staging', 'preview'].includes(process.env.NEXT_PUBLIC_ENV ?? '') && (
+        <ReactQueryDevtoolsPreview />
+      )}
+    </QueryClientProvider>
   );
 };
 

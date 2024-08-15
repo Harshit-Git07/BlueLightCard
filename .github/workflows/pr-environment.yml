@@ -335,6 +335,7 @@ jobs:
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
       NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
+      NEXT_PUBLIC_ENV: 'preview'
       NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
       # ENV VARIABLES NEEDED TO CREATE USERNAME & PASSWORD FOR QA ENVIRONMENT
       PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono

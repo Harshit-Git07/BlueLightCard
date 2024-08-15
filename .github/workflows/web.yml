@@ -223,6 +223,7 @@ jobs:
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
       NEXT_PUBLIC_BRAND_URL: ${{matrix.brand_url}}
       NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
+      NEXT_PUBLIC_ENV: 'staging'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

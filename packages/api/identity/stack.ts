@@ -57,7 +57,7 @@ export function Identity({ stack }: StackContext) {
   });
 
   if (isDdsUkBrand()) {
-    // Resources able to be duplicated to DDS identity stack
+    // Only specific resources allowed to deploy to DDS due to dependency with BLC UK Identity stack
     return deployDdsSpecificResources(stack);
   } else {
     //Region

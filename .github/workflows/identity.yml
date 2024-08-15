@@ -94,14 +94,14 @@ jobs:
           - brand: BLC_AU
             region: ap-southeast-2
             stage: staging
-#          - brand: DDS_UK
-#            region: eu-west-2
-#            stage: staging-dds
-#            blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
-#            blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
-#            ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
-#            ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
-#            blcUkIdentityApiId: 'tr1afrar24'
+          - brand: DDS_UK
+            region: eu-west-2
+            stage: staging-dds
+            blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
+            blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
+            ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
+            ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
+            blcUkIdentityApiId: 'tr1afrar24'
     needs:
       - install
       - test

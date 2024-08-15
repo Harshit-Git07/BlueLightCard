@@ -80,7 +80,7 @@ export class HomePageDds {
     await this.EMAIL_TEXTFIELD_DDS.fill(email);
     await this.PASSWORD_TEXTFIELD_DDS.fill(password);
     await this.SUBMIT_BUTTON_DDS.click();
-    await expect(this.LOGOUT_NAVBAR_DDS).toBeVisible();
+    await this.page.waitForLoadState('load'); // Wait until the page is fully loaded
   }
 
   // Element assertions

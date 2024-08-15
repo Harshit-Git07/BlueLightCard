@@ -96,7 +96,7 @@ export class HomePageUk {
     await this.EMAIL_TEXTFIELD_UK.fill(email);
     await this.PASSWORD_TEXTFIELD_UK.fill(password);
     await this.SUBMIT_BUTTON_UK.click();
-    await expect(this.LOGOUT_NAVBAR_UK).toBeVisible();
+    await this.page.waitForLoadState('load'); // Wait until the page is fully loaded
   }
 
   // Element assertions

@@ -26,7 +26,7 @@ jobs:
         run: npx playwright install
 
       # Run specified Playwright test with retry logic
-      - name: Run Playwright test - Login to UK
+      - name: Run Playwright test - Login to AUS
         working-directory: packages/web-playwright-tests
         id: playwright
         run: |

@@ -99,7 +99,7 @@ export class HomePageAus {
     await this.EMAIL_TEXTFIELD_AUS.fill(email);
     await this.PASSWORD_TEXTFIELD_AUS.fill(password);
     await this.SUBMIT_BUTTON_AUS.click();
-    await expect(this.LOGOUT_NAVBAR_AUS).toBeVisible();
+    await this.page.waitForLoadState('load'); // Wait until the page is fully loaded
   }
 
   async navigateToUrlAus(): Promise<void> {

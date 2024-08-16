@@ -10,4 +10,4 @@ yarn dev
 pnpm dev
 ```
 
-Please open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Please do open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

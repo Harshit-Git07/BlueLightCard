@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.26.3...bluelightcard/mobile-hybrid-v1.27.0) (2024-08-16)
+
+
+### Features
+
+* exhilarating change ([#2021](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2021)) ([f4adc4a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4adc4a868beaf439bf6b67b92130b1a010c2bd3))
+
 ## [1.26.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.26.2...bluelightcard/mobile-hybrid-v1.26.3) (2024-08-15)
 
 

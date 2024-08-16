@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.70.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.69.0...bluelightcard/web-v1.70.0) (2024-08-16)
+
+
+### Features
+
+* exhilarating change ([#2021](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2021)) ([f4adc4a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4adc4a868beaf439bf6b67b92130b1a010c2bd3))
+
 ## [1.69.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.68.0...bluelightcard/web-v1.69.0) (2024-08-15)
 
 

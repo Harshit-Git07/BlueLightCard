@@ -1,5 +1,5 @@
 import { useCSSMerge, useCSSConditional } from '../../../../hooks/useCSS';
-import { PlatformVariant, CardStatus, RedemptionTypeEnum, StatusCode } from '../../../../types';
+import { PlatformVariant } from '../../../../types';
 import { FC, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
@@ -45,14 +45,8 @@ const userResponseModel = z.object({
   cards: z.array(cardModel),
 });
 
-const VALID_CARD_STATUSES = [
-  CardStatus.ADDED_TO_BATCH.toString(),
-  CardStatus.USER_BATCHED.toString(),
-  CardStatus.PHYSICAL_CARD.toString(),
-];
-const MIN_UNIX_TIME = '0000000000000';
+const VALID_CARD_STATUSES = ['ADDED_TO_BATCH', 'USER_BATCHED', 'PHYSICAL_CARD'];
 const GRACE_PERIOD_DAYS = 30;
-const API_USER_ENDPOINT = '/eu/identity/user';
 
 function getIsRedemptionButtonDisabled() {
   const platformAdapter = usePlatformAdapter();
@@ -60,7 +54,7 @@ function getIsRedemptionButtonDisabled() {
   return queryOptions({
     queryKey: ['userStatus'],
     queryFn: async () => {
-      const result = await platformAdapter.invokeV5Api(API_USER_ENDPOINT, {
+      const result = await platformAdapter.invokeV5Api('/eu/identity/user', {
         method: 'GET',
       });
 
@@ -72,23 +66,18 @@ function getIsRedemptionButtonDisabled() {
       }
 
       const latestCard = data.cards.reduce((max, card) =>
-        (max.datePosted ?? MIN_UNIX_TIME) > (card.datePosted ?? MIN_UNIX_TIME) ? max : card,
+        max.expires > card.expires ? max : card,
       );
 
       if (VALID_CARD_STATUSES.includes(latestCard.cardStatus)) {
         return false;
       }
 
-      if (latestCard.cardStatus === CardStatus.CARD_EXPIRED) {
-        const expiryDate = new Date(Number(latestCard.expires));
+      if (latestCard.cardStatus === 'CARD_EXPIRED') {
+        const expirationDate = new Date(Number(latestCard.expires));
+        expirationDate.setDate(expirationDate.getDate() + GRACE_PERIOD_DAYS);
 
-        const nowDate = new Date();
-
-        const nowDateWithGracePeriod = new Date(
-          nowDate.setDate(nowDate.getDate() - GRACE_PERIOD_DAYS),
-        );
-
-        if (expiryDate >= nowDateWithGracePeriod) {
+        if (new Date() <= expirationDate) {
           return false;
         } else {
           return true;
@@ -234,7 +223,7 @@ const OfferSheetDetailsPage: FC = () => {
     if (redeemData.statusCode == 200) {
       setWebRedeemData(redeemData);
 
-      if (redemptionType === RedemptionTypeEnum.VAULT_QR) {
+      if (redemptionType === 'vaultQR') {
         setOfferSheetAtom((v) => ({
           ...v,
           qrCodeValue: redeemData.data.redemptionDetails.code,
@@ -252,26 +241,23 @@ const OfferSheetDetailsPage: FC = () => {
   // Web second button click handler
   const getDiscountClickHandler = () => {
     if (
-      redemptionType === RedemptionTypeEnum.GENERIC ||
-      redemptionType === RedemptionTypeEnum.VAULT ||
-      redemptionType === RedemptionTypeEnum.PRE_APPLIED
+      redemptionType === 'generic' ||
+      redemptionType === 'vault' ||
+      redemptionType === 'preApplied'
     ) {
-      if (webRedeemData.statusCode !== StatusCode.OK) {
+      if (webRedeemData.statusCode !== 200) {
         setShowErrorPage(true);
         return;
       }
 
-      if (redemptionType === RedemptionTypeEnum.VAULT) {
+      if (redemptionType === 'vault') {
         logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
       } else {
         logCodeClicked(events.USE_CODE_CLICKED);
       }
 
       if (!isRedeemDataErrorResponse(webRedeemData.data)) {
-        if (
-          redemptionType !== RedemptionTypeEnum.PRE_APPLIED &&
-          webRedeemData.data.redemptionDetails.code
-        )
+        if (redemptionType !== 'preApplied' && webRedeemData.data.redemptionDetails.code)
           copyCode(webRedeemData.data.redemptionDetails.code);
         if (webRedeemData.data.redemptionDetails.url)
           handleRedirect(webRedeemData.data.redemptionDetails.url);
@@ -308,23 +294,23 @@ const OfferSheetDetailsPage: FC = () => {
     let primaryButtonTextValue = '';
 
     switch (redemptionType) {
-      case RedemptionTypeEnum.GENERIC:
+      case 'generic':
         primaryButtonTextValue = 'Copy discount code';
         break;
-      case RedemptionTypeEnum.VAULT:
+      case 'vault':
         primaryButtonTextValue = 'Copy discount code';
         break;
-      case RedemptionTypeEnum.PRE_APPLIED:
+      case 'preApplied':
         if (offerData.type === offerTypeParser.Giftcards.type) {
           primaryButtonTextValue = 'Get voucher';
         } else {
           primaryButtonTextValue = 'Get discount';
         }
         break;
-      case RedemptionTypeEnum.SHOW_CARD:
+      case 'showCard':
         primaryButtonTextValue = 'Show your Blue Light Card in store';
         break;
-      case RedemptionTypeEnum.VAULT_QR:
+      case 'vaultQR':
         primaryButtonTextValue = 'Get QR code';
         break;
       default:
@@ -342,12 +328,15 @@ const OfferSheetDetailsPage: FC = () => {
     let secondaryButtonSubtextValue = '';
 
     switch (redemptionType) {
-      case RedemptionTypeEnum.GENERIC:
-      case RedemptionTypeEnum.VAULT:
+      case 'generic':
         secondaryButtonTextValue = 'Code copied!';
         secondaryButtonSubtextValue = 'Redirecting to partner website';
         break;
-      case RedemptionTypeEnum.PRE_APPLIED:
+      case 'vault':
+        secondaryButtonTextValue = 'Code copied!';
+        secondaryButtonSubtextValue = 'Redirecting to partner website';
+        break;
+      case 'preApplied':
         // TODO ADD if statement for giftcards offer type that are pre-applied redemption type
         if (offerData.type === offerTypeParser.Giftcards.type) {
           secondaryButtonTextValue = 'Get instant savings';
@@ -357,9 +346,9 @@ const OfferSheetDetailsPage: FC = () => {
           secondaryButtonSubtextValue = 'Special pricing applied on partner site';
         }
         break;
-      case RedemptionTypeEnum.SHOW_CARD:
+      case 'showCard':
         break;
-      case RedemptionTypeEnum.VAULT_QR:
+      case 'vaultQR':
         secondaryButtonTextValue = 'QR code ready';
         secondaryButtonSubtextValue = 'Show the above code to get discount';
         break;
@@ -382,7 +371,7 @@ const OfferSheetDetailsPage: FC = () => {
     let webSecondaryButtonSubtextValue = '';
 
     switch (redemptionType) {
-      case RedemptionTypeEnum.PRE_APPLIED:
+      case 'preApplied':
         if (offerData.type === offerTypeParser.Giftcards.type) {
           webSecondaryButtonTextValue = 'Continue to voucher shop';
           webSecondaryButtonSubtextValue = 'Get instant savings';
@@ -391,7 +380,7 @@ const OfferSheetDetailsPage: FC = () => {
           webSecondaryButtonSubtextValue = 'Special pricing applied automatically';
         }
         break;
-      case RedemptionTypeEnum.VAULT_QR:
+      case 'vaultQR':
         webSecondaryButtonTextValue = 'QR code ready';
         webSecondaryButtonSubtextValue = 'Show the above code to get discount';
         break;
@@ -415,13 +404,13 @@ const OfferSheetDetailsPage: FC = () => {
           await hybridDiscountClickHandler();
         } else if (platformAdapter.platform === PlatformVariant.Web) {
           switch (redemptionType) {
-            case RedemptionTypeEnum.VAULT:
+            case 'vault':
               logCodeClicked(events.VAULT_CODE_REQUEST_CODE_CLICKED);
               break;
-            case RedemptionTypeEnum.GENERIC:
-            case RedemptionTypeEnum.PRE_APPLIED:
-            case RedemptionTypeEnum.VAULT_QR:
-            case RedemptionTypeEnum.SHOW_CARD:
+            case 'generic':
+            case 'preApplied':
+            case 'vaultQR':
+            case 'showCard':
               logCodeClicked(events.REQUEST_CODE_CLICKED);
               break;
             default:
@@ -430,7 +419,7 @@ const OfferSheetDetailsPage: FC = () => {
           await webDiscountClickHandler();
         }
         // For showCard redemption type, there is no magic button displayed after the click
-        if (redemptionType !== RedemptionTypeEnum.SHOW_CARD) setButtonClicked(true);
+        if (redemptionType !== 'showCard') setButtonClicked(true);
       }}
       label={primaryButtonText(redemptionType)}
     />

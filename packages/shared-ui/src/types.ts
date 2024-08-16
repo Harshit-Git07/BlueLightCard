@@ -47,31 +47,3 @@ export type AmplitudeArg = {
 };
 
 export type AmplitudeEvent = (properties: AmplitudeArg) => void;
-
-export enum CardStatus {
-  AWAITING_ID_APPROVAL = 'AWAITING_ID_APPROVAL',
-  ID_APPROVED = 'ID_APPROVED',
-  ADDED_TO_BATCH = 'ADDED_TO_BATCH',
-  USER_BATCHED = 'USER_BATCHED',
-  PHYSICAL_CARD = 'PHYSICAL_CARD',
-  AWAITING_ACTIVATION = 'AWAITING_ACTIVATION',
-  CARD_LOST = 'CARD_LOST',
-  CARD_EXPIRED_BY_ADMIN = 'CARD_EXPIRED_BY_ADMIN',
-  CARD_EXPIRED = 'CARD_EXPIRED',
-  DECLINED = 'DECLINED',
-  PENDING_REFUND = 'PENDING_REFUND',
-  REFUNDED = 'REFUNDED',
-  AWAITING_ID = 'AWAITING_ID',
-}
-
-export enum RedemptionTypeEnum {
-  GENERIC = 'generic',
-  VAULT = 'vault',
-  VAULT_QR = 'vaultQR',
-  PRE_APPLIED = 'preApplied',
-  SHOW_CARD = 'showCard',
-}
-
-export enum StatusCode {
-  OK = 200,
-}

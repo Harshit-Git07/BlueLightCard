@@ -1,6 +1,6 @@
 import { useCSSMerge, useCSSConditional } from '../../../../hooks/useCSS';
 import { PlatformVariant } from '../../../../types';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import OfferTopDetailsHeader from '../OfferTopDetailsHeader';
 import Label from '../../../Label';
 import MagicButton, { MagicBtnVariant } from '../../../MagicButton';
@@ -15,7 +15,7 @@ import {
   offerTypeParser,
 } from '../../../../index';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
-import { RedemptionType } from '../../types';
+import type { RedemptionType } from '../../types';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
 import { z } from 'zod';
 import { queryOptions, useQuery } from '@tanstack/react-query';
@@ -34,7 +34,7 @@ const profileModel = z.object({
 });
 
 const cardModel = z.object({
-  cardId: z.string(),
+  cardId: z.coerce.number(),
   expires: z.string(),
   cardStatus: z.string(),
   datePosted: z.string().nullable(),
@@ -58,16 +58,16 @@ function getIsRedemptionButtonDisabled() {
         method: 'GET',
       });
 
-      return userResponseModel.parse(JSON.parse(result.data).data);
+      const data = userResponseModel.parse(JSON.parse(result.data).data);
+
+      return data;
     },
     select: (data) => {
       if (data.cards.length === 0) {
         return true;
       }
 
-      const latestCard = data.cards.reduce((max, card) =>
-        max.expires > card.expires ? max : card,
-      );
+      const latestCard = data.cards.reduce((max, card) => (max.cardId > card.cardId ? max : card));
 
       if (VALID_CARD_STATUSES.includes(latestCard.cardStatus)) {
         return false;
@@ -79,12 +79,10 @@ function getIsRedemptionButtonDisabled() {
 
         if (new Date() <= expirationDate) {
           return false;
-        } else {
-          return true;
         }
-      } else {
         return true;
       }
+      return true;
     },
     staleTime: Infinity,
   });

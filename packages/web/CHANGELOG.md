@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.70.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.70.0...bluelightcard/web-v1.70.1) (2024-08-16)
+
+
+### Bug Fixes
+
+* everything ([#2029](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2029)) ([2ae4637](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ae4637bf5178656545ec09f618ae134a9362cec))
+
 ## [1.70.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.69.0...bluelightcard/web-v1.70.0) (2024-08-16)
 
 

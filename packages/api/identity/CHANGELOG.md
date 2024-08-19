@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.92.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.92.0...bluelightcard/identity-v1.92.1) (2024-08-19)
+
+
+### Bug Fixes
+
+* Updating datadog site to EU ([#2042](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2042)) ([f4d2ec0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4d2ec0dfdffb33022daf32b964723f806853c76))
+
+
+### Other Changes
+
+* [PE-145] fix existing SonarCloud issues in main ([#2005](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2005)) ([e8a0d50](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8a0d50e416d40c2451dab97030e7b83ba6e24c3))
+
 ## [1.92.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.4...bluelightcard/identity-v1.92.0) (2024-08-15)
 
 

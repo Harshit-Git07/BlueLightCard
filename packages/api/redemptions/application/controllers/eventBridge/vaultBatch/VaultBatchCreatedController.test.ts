@@ -3,7 +3,7 @@ import { describe } from '@jest/globals';
 
 import { as } from '@blc-mono/core/utils/testing';
 import { UnknownEventBridgeEvent } from '@blc-mono/redemptions/application/controllers/eventBridge/EventBridgeController';
-import { IVaultBatchService } from '@blc-mono/redemptions/application/services/email/AdminEmailService';
+import { IVaultBatchCreatedService } from '@blc-mono/redemptions/application/services/vaultBatch/VaultBatchCreatedService';
 import {
   RedemptionsVaultBatchEvents,
   UPLOAD_FILE_TYPE,
@@ -12,13 +12,13 @@ import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger
 
 import { VaultBatchCreatedController } from './VaultBatchCreatedController';
 
-describe('VaultBatchCreatedAdminEmailController', () => {
+describe('VaultBatchCreatedController', () => {
   describe('invoke', () => {
-    it('should call the AdminEmailService correctly', async () => {
+    it('should call the VaultBatchCreatedService correctly', async () => {
       const testLogger = createTestLogger();
       const service = {
         vaultBatchCreated: jest.fn(),
-      } satisfies Partial<IVaultBatchService>;
+      } satisfies Partial<IVaultBatchCreatedService>;
       const controller = new VaultBatchCreatedController(testLogger, as(service));
       const mockEvent = {
         source: RedemptionsVaultBatchEvents.BATCH_CREATED,

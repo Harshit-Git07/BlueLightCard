@@ -25,6 +25,7 @@ describe('AdminEmailService', () => {
   }) {
     const mockAdminEmailRepo = override.adminEmailRepo ?? {
       sendVaultThresholdEmail: jest.fn(),
+      sendVaultBatchCreatedEmail: jest.fn(),
     };
     const mockLegacyVaultApiRepo = override.legacyVaultApiRepo ?? {
       assignCodeToMember: jest.fn(),
@@ -148,6 +149,7 @@ describe('AdminEmailService', () => {
         });
         const mockAdminEmailRepo: IAdminEmailRepository = {
           sendVaultThresholdEmail: jest.fn().mockResolvedValue(undefined),
+          sendVaultBatchCreatedEmail: jest.fn(),
         };
         const mockVaultCodesRepo: IVaultCodesRepository = {
           checkVaultCodesRemaining: jest.fn().mockResolvedValue(50),
@@ -210,6 +212,7 @@ describe('AdminEmailService', () => {
         });
         const mockAdminEmailRepo: IAdminEmailRepository = {
           sendVaultThresholdEmail: jest.fn().mockResolvedValue(undefined),
+          sendVaultBatchCreatedEmail: jest.fn(),
         };
         const mockVaultCodesRepo: IVaultCodesRepository = {
           checkVaultCodesRemaining: jest.fn().mockResolvedValue(51),

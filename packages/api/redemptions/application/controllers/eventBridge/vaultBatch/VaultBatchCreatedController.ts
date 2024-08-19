@@ -8,16 +8,12 @@ import {
   UnknownEventBridgeEvent,
 } from '@blc-mono/redemptions/application/controllers/eventBridge/EventBridgeController';
 import {
-  IVaultBatchService,
-  VaultBatchService,
-} from '@blc-mono/redemptions/application/services/email/AdminEmailService';
+  IVaultBatchCreatedService,
+  VaultBatchCreatedService,
+} from '@blc-mono/redemptions/application/services/vaultBatch/VaultBatchCreatedService';
 
 import { RedemptionsVaultBatchEvents } from '../../../../infrastructure/eventBridge/events/vaultBatch';
 
-/*
- * todo: this a stub and may require further dev: https://bluelightcard.atlassian.net/browse/TR-630
- * schema based on value currently echoed into legacy admin email when vault code batch is created
- */
 const VaultBatchCreatedDetailSchema = z.object({
   vaultId: z.string(),
   batchId: z.string(),
@@ -37,11 +33,11 @@ export type VaultBatchCreatedEvent = z.infer<typeof VaultBatchCreatedEventSchema
 export type VaultBatchCreatedEventDetail = z.infer<typeof VaultBatchCreatedDetailSchema>;
 
 export class VaultBatchCreatedController extends EventBridgeController<VaultBatchCreatedEvent> {
-  static readonly inject = [Logger.key, VaultBatchService.key] as const;
+  static readonly inject = [Logger.key, VaultBatchCreatedService.key] as const;
 
   constructor(
     logger: ILogger,
-    protected adminEmailService: IVaultBatchService,
+    protected vaultBatchCreatedService: IVaultBatchCreatedService,
   ) {
     super(logger);
   }
@@ -51,6 +47,6 @@ export class VaultBatchCreatedController extends EventBridgeController<VaultBatc
   }
 
   protected async handle(event: VaultBatchCreatedEvent): Promise<void> {
-    await this.adminEmailService.vaultBatchCreated(event);
+    await this.vaultBatchCreatedService.vaultBatchCreated(event);
   }
 }

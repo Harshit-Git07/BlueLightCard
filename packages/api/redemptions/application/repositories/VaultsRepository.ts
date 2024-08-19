@@ -17,6 +17,7 @@ export type VaultFilters = {
 
 export interface IVaultsRepository {
   findOneByRedemptionId(redemptionId: string, filters?: VaultFilters): Promise<Vault | null>;
+  findOneById(id: string): Promise<Vault | null>;
   updateOneById(id: string, vaultDataToUpdate: UpdateVault): Promise<Pick<Vault, 'id'> | undefined>;
   createMany(vaults: NewVault[]): Promise<Pick<Vault, 'id'>[]>;
   create(vault: NewVault): Promise<Pick<Vault, 'id'>>;
@@ -38,6 +39,11 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .execute();
 
     return this.atMostOne(results);
+  }
+
+  public async findOneById(id: string): Promise<Vault | null> {
+    const result = await this.connection.db.select().from(vaultsTable).where(eq(vaultsTable.id, id)).execute();
+    return this.atMostOne(result);
   }
 
   public updateOneById(id: string, vaultDataToUpdate: UpdateVault): Promise<Pick<Vault, 'id'> | undefined> {

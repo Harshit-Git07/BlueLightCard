@@ -82,6 +82,32 @@ describe('VaultsRepository', () => {
     });
   });
 
+  describe('findOneById', () => {
+    it('returns a vault when given a valid vaultId', async () => {
+      // Arrange
+      const repository = new VaultsRepository(connection);
+      const redemption = redemptionFactory.build();
+      const vault = vaultFactory.build({ redemptionId: redemption.id });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+      await connection.db.insert(vaultsTable).values(vault).execute();
+
+      // Act
+      const result = await repository.findOneById(vault.id);
+
+      // Assert
+      expect(result).toEqual(vault);
+    });
+
+    it('returns null when given a vaultId that does not exist', async () => {
+      // Arrange
+      const repository = new VaultsRepository(connection);
+      // Act
+      const result = await repository.findOneById('no-exist-vault-id');
+      // Assert
+      expect(result).toEqual(null);
+    });
+  });
+
   describe('updateOneById', () => {
     it('should update the vault when it exists', async () => {
       // Arrange

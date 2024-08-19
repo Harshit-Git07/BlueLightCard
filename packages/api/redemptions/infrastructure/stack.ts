@@ -132,7 +132,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       dwhMemberRedemptionDetails: createDwhMemberRetrievedRedemptionDetailsRule(stack, dwhKenisisFirehoseStreams),
       dwhMemberRedeemIntentRule: createDwhMemberRedeemIntentRule(stack, dwhKenisisFirehoseStreams),
       dwhMemberRedemptionRule: createDwhMemberRedemptionRule(stack, dwhKenisisFirehoseStreams),
-      vaultBatchCreatedRule: createVaultBatchCreatedRule(stack),
+      vaultBatchCreatedRule: createVaultBatchCreatedRule(stack, config, database),
       vaultThresholdEmailRule: createVaultThresholdEmailRule(stack, config, database),
       redemptionPushNotificationRule: createRedemptionPushNotificationRule(stack, config),
     },

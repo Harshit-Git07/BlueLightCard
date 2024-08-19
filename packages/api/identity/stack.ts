@@ -52,6 +52,7 @@ export function Identity({ stack }: StackContext) {
       DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
       USE_DATADOG_AGENT,
       DD_SERVICE: SERVICE_NAME,
+      DD_SITE: 'datadoghq.eu'
     },
     layers,
   });

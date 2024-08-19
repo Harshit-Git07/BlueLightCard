@@ -64,6 +64,7 @@ export async function Redemptions({ app, stack }: StackContext) {
       DD_GIT_REPOSITORY_URL: getEnvOrDefault(RedemptionsStackEnvironmentKeys.DD_GIT_REPOSITORY_URL, ''),
       USE_DATADOG_AGENT: getEnvOrDefault(RedemptionsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false'),
       DD_SERVICE: SERVICE_NAME,
+      DD_SITE: 'datadoghq.eu',
     },
   });
 

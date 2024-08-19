@@ -35,6 +35,7 @@ export async function Offers({ stack, app }: StackContext) {
       DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
       USE_DATADOG_AGENT,
       DD_SERVICE: 'offers',
+      DD_SITE: 'datadoghq.eu'
     },
     layers,
   });

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.92.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.4...bluelightcard/identity-v1.92.0) (2024-08-15)
+
+
+### Features
+
+* [TI-1576] Adding new logic to refresh token at api call level if token has expired ([#1982](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1982)) ([da428c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/da428c3475899b5a1b7b9af98b99560423b0c005))
+* [TR-642] Deploy DDS Global & Identity stacks ([#2018](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2018)) ([067bbe0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/067bbe0e3909d49bb6d5af2b80237c8b2376a35d))
+* add event logs ([#1986](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1986)) ([730d892](https://github.com/bluelightcard/BlueLightCard-2.0/commit/730d892a5c607032769d0280c6ff26166f340cd7))
+* TI-1564 - Add password validation to migration lambda ([#1994](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1994)) ([6724128](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6724128495d1107f4f3e51db127da5eb2d626980))
+
+
+### Bug Fixes
+
+* Add try catch around token refresh ([#2007](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2007)) ([2c50dd1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c50dd112ee6fb960836e724ee1e43caab973353))
+
 ## [1.91.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.91.3...bluelightcard/identity-v1.91.4) (2024-08-12)
 
 

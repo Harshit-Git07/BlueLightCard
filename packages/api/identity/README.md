@@ -1,3 +1,9 @@
+# Smoke test
+
+- Deploy the stack locally following the instructions in the root directory's README
+  - The bearer token to use is the same for the whole stack
+- make a GET request to /user. This could give you details of the currently logged in user
+
 ## Introduction
 
 ## Tech Stack

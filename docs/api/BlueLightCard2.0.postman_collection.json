@@ -1,0 +1,348 @@
+{
+	"info": {
+		"_postman_id": "e2f1b26d-7d0c-430b-bd49-6966ed2ffbd9",
+		"name": "BlueLightCard 2.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "62102"
+	},
+	"item": [
+		{
+			"name": "redemptions",
+			"item": [
+				{
+					"name": "members",
+					"item": [
+						{
+							"name": "Get redemption details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redemptions_host}}/redemption?offerId=1234",
+									"host": [
+										"{{redemptions_host}}"
+									],
+									"path": [
+										"redemption"
+									],
+									"query": [
+										{
+											"key": "offerId",
+											"value": "1234"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Redeem an offer",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"offerId\": \"1234\",\n  \"companyName\": \"Number Company\",\n  \"offerName\": \"50% off numbers\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redemptions_host}}/redemption",
+									"host": [
+										"{{redemptions_host}}"
+									],
+									"path": [
+										"redemption"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin",
+					"item": [
+						{
+							"name": "Get redemption",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redemptions_host}}/redemption",
+									"host": [
+										"{{redemptions_host}}"
+									],
+									"path": [
+										"redemption"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create redemption",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"offerId\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redemptions_host}}/redemption",
+									"host": [
+										"{{redemptions_host}}"
+									],
+									"path": [
+										"redemption"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update redemption",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"offerId\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redemptions_host}}/redemption",
+									"host": [
+										"{{redemptions_host}}"
+									],
+									"path": [
+										"redemption"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete redemption",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"offerId\": \"1234\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redemptions_host}}/redemption/1234",
+									"host": [
+										"{{redemptions_host}}"
+									],
+									"path": [
+										"redemption",
+										"1234"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Record redemption details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"event\": \"purchase\",\n  \"transactionId\": \"t-1234\",\n  \"dateTime\": \"2024-05-01T11:07:03Z\",\n  \"eventTime\": \"2024-05-01T11:07:03Z\",\n  \"tokenId\": \"t-4321\",\n  \"campaignId\": \"c-1234\",\n  \"cardNumber\": \"***3342\",\n  \"merchant\": \"paypal\",\n  \"location\": \"online\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redemptions_host}}/redemption/callback",
+									"host": [
+										"{{redemptions_host}}"
+									],
+									"path": [
+										"redemption",
+										"callback"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "identity",
+			"item": [
+				{
+					"name": "Get current user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{identity_host}}/user",
+							"host": [
+								"{{identity_host}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "redemptions_host",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "identity_host",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "discovery_host",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "offers_host",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

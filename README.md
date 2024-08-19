@@ -189,3 +189,15 @@ The solution is to retry the command - it will work eventually 🫣
 - SST - for managing Infrastructure-as-code
 - Hono - for API routing + middleware
 - NextJS - for the web application
+
+## Architecture and API contracts
+
+### Postman collection
+[Postman collection](docs/api/BlueLightCard2.0.postman_collection.json)
+
+### Contracts
+- Redemptions ( members ) : https://bluelightcard.atlassian.net/wiki/spaces/TR/pages/2556231774/API+Contracts
+- Redemptions ( admin ) : https://bluelightcard.atlassian.net/wiki/spaces/TR/pages/2559115446/Redemptions+Admin+API
+
+Architecture
+- https://miro.com/app/board/uXjVKXQLWLc=/

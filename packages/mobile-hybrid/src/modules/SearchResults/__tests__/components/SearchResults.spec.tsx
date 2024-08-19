@@ -43,14 +43,13 @@ describe('Search results', () => {
   const searchTermValue = 'pizza';
   let analyticsMock: jest.SpyInstance<void, [properties: NativeAnalytics.Parameters], any>;
   let user: UserEvent;
-  let useAPIMock: jest.Mock;
 
   beforeEach(() => {
     jest.resetAllMocks();
     analyticsMock = jest
       .spyOn(InvokeNativeAnalytics.prototype, 'logAnalyticsEvent')
       .mockImplementation(() => jest.fn());
-    useAPIMock = jest.mocked(useAPI);
+    jest.mocked(useAPI);
     user = userEvent.setup();
     testData = offerListItemFactory.buildList(2);
     testData[1].companyname = 'Test Company';

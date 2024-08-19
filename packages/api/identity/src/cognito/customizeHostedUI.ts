@@ -101,7 +101,7 @@ async function createCognitoUiSettings(
           Key: cssLocator.objectKey,
         }),
       )
-      .then(async ({ Body }) => getFileContents(Body as Readable)),
+      .then(({ Body }) => getFileContents(Body as Readable)),
     s3Client
       .send(
         new GetObjectCommand({
@@ -129,7 +129,7 @@ async function createCognitoUiSettings(
   };
 }
 
-async function getFileContents(readable: Readable): Promise<Buffer> {
+function getFileContents(readable: Readable): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const writable = new streamBuffers.WritableStreamBuffer();
     writable.on('error', (err) => reject(err));

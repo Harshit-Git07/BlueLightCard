@@ -1,5 +1,4 @@
 import SearchResultsPage from '@/pages/searchresults';
-import { useHydrateAtoms } from 'jotai/utils';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';

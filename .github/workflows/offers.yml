@@ -137,7 +137,7 @@ jobs:
           DD_ENV: '${{ env.DD_ENV }}'
           DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
           DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
-          DD_API_KEY: '${{ secrets.DATADOG_BLC_UK_CLIENT_TOKEN }}'
+          DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
           USE_DATADOG_AGENT: 'true'
         run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy offers --stage staging --region ${{matrix.region}}
       - name: Datadog deployment metrics

@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 import { UnsuccessfulLoginAttemptsService } from "../services/UnsuccessfulLoginAttemptsService";
 
 const service: string = process.env.SERVICE as string
-const logger = new Logger({ serviceName: `${service}-preAuthentication` })
+const logger = new Logger({ serviceName: `${service}-preAuthentication`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' })
 
 const UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME = process.env.UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME ?? "";
 const API_AUTHORISER_USER = process.env.API_AUTHORISER_USER ?? "";

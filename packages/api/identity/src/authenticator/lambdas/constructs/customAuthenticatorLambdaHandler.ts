@@ -1,21 +1,19 @@
 import 'dd-trace/init';
 
-import { PolicyDocument } from 'aws-lambda';
+import { APIGatewayAuthorizerResult, APIGatewayRequestAuthorizerEvent, PolicyDocument } from 'aws-lambda';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import jwtDecode from 'jwt-decode';
-import { APIGatewayAuthorizerResult } from 'aws-lambda/trigger/api-gateway-authorizer';
 import { Logger } from '@aws-lambda-powertools/logger';
 
 import { datadog } from 'datadog-lambda-js';
 
 const BEARER_PREFIX = 'Bearer ';
 
-const logger = new Logger({ serviceName: `customAuthenticatorLambdaHandler` });
+const logger = new Logger({ serviceName: `customAuthenticatorLambdaHandler`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
 
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ? process.env.USE_DATADOG_AGENT.toLowerCase() : 'false';
 
-
-const handlerUnwrapped = async function (event: any): Promise<APIGatewayAuthorizerResult> {
+const handlerUnwrapped = async function (event: APIGatewayRequestAuthorizerEvent): Promise<APIGatewayAuthorizerResult> {
   const OLD_USER_POOL_ID = process.env.OLD_USER_POOL_ID ?? "";
   const OLD_USER_POOL_ID_DDS = process.env.OLD_USER_POOL_ID_DDS ?? "";
   const USER_POOL_ID = process.env.USER_POOL_ID ?? "";
@@ -76,8 +74,8 @@ const handlerUnwrapped = async function (event: any): Promise<APIGatewayAuthoriz
     logger.debug(`response => ${JSON.stringify(response)}`);
 
     return response;
-  } catch (err) {
-    logger.error(`Invalid auth token. Error: ${err}`);
+  } catch (err: any) {
+    logger.error(`Invalid auth token at path: ${event.path} for method: ${event.httpMethod}`, err);
     // Do not change this 'Unauthorized' error message as this is how the authorizer knows to send a 401 back to the client
     throw new Error('Unauthorized');
   }

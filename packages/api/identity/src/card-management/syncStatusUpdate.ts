@@ -8,7 +8,7 @@ import { getCardStatus } from './../../../core/src/utils/getCardStatus';
 import { setDate } from './../../../core/src/utils/setDate';
 const service: string = process.env.SERVICE as string
 const identityTableName = process.env.IDENTITY_TABLE_NAME as string;
-const logger = new Logger({ serviceName: `${service}-syncCardStatusUpdate` })
+const logger = new Logger({ serviceName: `${service}-syncCardStatusUpdate`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO'})
 const sqs = new SQSClient({ region: process.env.REGION ?? 'eu-west-2'});
 
 // Function to send a message to SQS Queue

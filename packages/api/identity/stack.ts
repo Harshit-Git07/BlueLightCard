@@ -25,6 +25,7 @@ import { userEmailUpdatedRule } from './src/eventRules/userEmailUpdated';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { isProduction } from "@blc-mono/core/utils/checkEnvironment";
 
 const SERVICE_NAME = 'identity'
 
@@ -52,7 +53,8 @@ export function Identity({ stack }: StackContext) {
       DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
       USE_DATADOG_AGENT,
       DD_SERVICE: SERVICE_NAME,
-      DD_SITE: 'datadoghq.eu'
+      DD_SITE: 'datadoghq.eu',
+      DEBUG_LOGGING_ENABLED: `${!isProduction(stack.stage)}`,
     },
     layers,
   });

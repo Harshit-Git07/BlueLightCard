@@ -152,6 +152,18 @@ jobs:
   e2e-test:
     name: End to End Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+    #          - brand: BLC_AU
+    #            region: ap-southeast-2
+    #            stage: staging
+    #          - brand: DDS_UK
+    #            region: eu-west-2
+    #            stage: staging-dds
     needs:
       - install
       - test

@@ -96,14 +96,19 @@ jobs:
             cdnUrl: 'https://blcimg-dev.img.bluelightcard.co.uk'
             brand: BLC_UK
             stage: staging
-#          - deployment: 'dds-uk-staging'
-#            region: 'eu-west-2'
-#            stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
-#            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
-#            offersHomepageMenuBrandPrefix: dds-uk
-#            cdnUrl: 'https://ddsimgdev.s3.eu-west-2.amazonaws.com'
-#            brand: DDS_UK
-#            stage: staging-dds
+          - deployment: 'dds-uk-staging'
+            region: 'eu-west-2'
+            stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
+            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix: dds-uk
+            cdnUrl: 'https://ddsimgdev.s3.eu-west-2.amazonaws.com'
+            brand: DDS_UK
+            stage: staging-dds
+            blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
+            blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
+            ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
+            ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
+            blcUkIdentityApiId: 'tr1afrar24'
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             stagingBaseUrl: https://develop.bluelightcard.com.au
@@ -184,6 +189,11 @@ jobs:
 #            cdnUrl: 'https://cdn.defencediscountservice.co.uk'
 #            brand: DDS_UK
 #            stage: production-dds
+#            blcUkCognitoUserPoolId: 'eu-west-2_D3aAVuWHo'
+#            blcUkOldCognitoUserPoolId: 'eu-west-2_jrwTfFRgM'
+#            ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
+#            ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
+#            blcUkIdentityApiId: 'ue8dcieh75'
           - namespace: 'blc-aus-production'
             region: 'ap-southeast-2'
             prodBaseUrl: https://www.bluelightcard.com.au

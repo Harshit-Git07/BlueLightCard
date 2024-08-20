@@ -128,6 +128,11 @@ jobs:
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
       CDN_URL: ${{matrix.cdnUrl}}
       BRAND: ${{matrix.brand}}
+      BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.blcUkCognitoUserPoolId }}
+      BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.blcUkOldCognitoUserPoolId }}
+      DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
+      DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
+      BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -214,6 +219,11 @@ jobs:
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: ${{matrix.offersHomepageMenuBrandPrefix}}
       CDN_URL: ${{matrix.cdnUrl}}
       BRAND: ${{matrix.brand}}
+      BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.blcUkCognitoUserPoolId }}
+      BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.blcUkOldCognitoUserPoolId }}
+      DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
+      DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
+      BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

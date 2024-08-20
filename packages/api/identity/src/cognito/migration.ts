@@ -266,7 +266,7 @@ const addUserSignInMigratedEvent = async (data: any) => {
                 county: data.county,
                 trustId: data.employerdata.primarytrust ?? '0',
                 trustName: data.employerdata.employer ?? ' ',
-                merged_uid: data.merged_uid == null ?? '0',
+                merged_uid: data.merged_uid == null ?? 0,
                 merged_time: setDate(data.merged_time),
                 ga_key: data.GA_Key ?? ' ',
                 cardId: data.cardid,
@@ -289,3 +289,4 @@ const addUserSignInMigratedEvent = async (data: any) => {
         throw new Error(`Error adding user sign in migrated event: ${err.message}.`)
     }
 }
+

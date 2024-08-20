@@ -1,21 +1,19 @@
-import { PlaywrightTestConfig } from '@playwright/test';
+import { PlaywrightTestConfig, devices } from '@playwright/test';
+import { testConfig } from './testConfig';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
-// Determine the environment from the system's environment variables
-const ENV = process.env.ENV || 'production'; // Default to 'production' if ENV is not set
-
-// Load environment variables from the correct .env file if it exists
+// Load environment variables from the correct .env file
+const ENV = process.env.npm_config_ENV || 'production';
 const envFilePath = `.env.${ENV}`;
+
 if (fs.existsSync(envFilePath)) {
   dotenv.config({ path: envFilePath });
   console.log(`Loaded environment variables from ${envFilePath}.`);
 } else {
-  console.log(
-    `No environment file found for ${ENV} environment. Using system environment variables.`,
-  );
+  console.error(`No environment file found for ${ENV} environment.`);
+  process.exit(1);
 }
-
 console.log(`Using Playwright configuration - running selected test/s against ${ENV} environment.`);
 
 const workers = 4;
@@ -27,12 +25,13 @@ const config: PlaywrightTestConfig = {
   // Sets timeout for each test case - i.e., the maximum length a test can run
   timeout: 120000,
 
-  // Number of retries if a test case fails
+  // Number of retries if test case fails
   retries: 0,
 
   // Reporters
   reporter: [
     ['./CustomReporterConfig.ts'],
+    ['allure-playwright'],
     ['html', { outputFolder: 'html-report', open: 'never' }],
   ],
 
@@ -45,6 +44,7 @@ const config: PlaywrightTestConfig = {
       use: {
         browserName: `chromium`,
         channel: `msedge`,
+        baseURL: testConfig[ENV],
         headless: true,
         viewport: { width: 1500, height: 730 },
         ignoreHTTPSErrors: true,

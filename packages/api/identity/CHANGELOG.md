@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.93.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.92.1...bluelightcard/identity-v1.93.0) (2024-08-20)
+
+
+### Features
+
+* [DISCO-460] Deploy DDS offers stack to staging + PR environment ([#2035](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2035)) ([6514aa9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6514aa91c51ce1af75ae2a62d7f5343114cd202c))
+* [TI-1583] Adding sign up e2e tests for each brand ([#2024](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2024)) ([ee53b3e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ee53b3ef8d320419f91eacc10ca63a49b681261c))
+* [TI-1583] Update existing identity e2e tests ([#2054](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2054)) ([0ce9f97](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0ce9f97d16e2bcd3ee70fbca8d3890b97791e2d1))
+* feat/COT-374-signed added new key in user endpoint in identity ([#2051](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2051)) ([ca2487e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ca2487e26cc67c9387210735b1954cc843ae0004))
+
+
+### Bug Fixes
+
+* ti-1276 Handle zod validation errors ([#2046](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2046)) ([616b76c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/616b76c0ccf448bc2b5fd789ac17c645a74bb4ae))
+
+
+### Other Changes
+
+* Document local deployment + postman collection ([#2048](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2048)) ([2e1ce6b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2e1ce6bed5cd621ff428c25af1662e6c20509639))
+
 ## [1.92.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.92.0...bluelightcard/identity-v1.92.1) (2024-08-19)
 
 

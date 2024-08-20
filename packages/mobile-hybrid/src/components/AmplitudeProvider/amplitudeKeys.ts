@@ -13,9 +13,6 @@ export enum FeatureFlags {
 
 export enum Experiments {
   NON_EXCLUSIVE_OFFERS = 'non-exclusive-offers',
-  POPULAR_OFFERS = 'popular-offers',
-  FAVOURITED_BRANDS = 'favourited-brands',
-  STREAMLINED_HOMEPAGE = 'streamlined-homepage',
   FAVOURITE_SUBTITLE = 'favourite-subtitle',
   HOMEPAGE_POSITIONING = 'homepage-positioning',
   BF_FLEXI = 'bf-flexi',

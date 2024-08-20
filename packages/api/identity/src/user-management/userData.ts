@@ -9,6 +9,7 @@ import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { isEmpty } from 'lodash';
 import { unpackJWT } from './unpackJWT';
 import {CompanyFollowsModel} from "../models/companyFollows";
+import { CardStatus } from '../../../core/src/types/cardStatus.enum';
 
 const service: string = process.env.service as string;
 
@@ -20,7 +21,6 @@ const tableName = process.env.identityTableName;
 
 export const get = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
   logger.debug('input', { event });
-  
 
   let authorization_header = "";
   if (event.headers.Authorization != undefined || event.headers.Authorization != "") {
@@ -29,8 +29,8 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
 
   let jwtInfo = unpackJWT(authorization_header);
 
-  // @ts-ignore: Object is possibly 'null'. 
-  
+  // @ts-ignore: Object is possibly 'null'.
+
   const params_profile = {
     "TableName": tableName,
     "KeyConditionExpression": "#pk = :pk",
@@ -68,11 +68,15 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
     })
 
     if(!isEmpty(userDetails)) {
+      // Remove cards with null card ID
+      const cards = cardDetails.filter(card => card.cardId !== 'null');
+      const canRedeemOffer = getOfferRedeemStatus(cards);
       let responseModel = {
         profile: userDetails,
-        cards: cardDetails.filter(c => c.cardId !== 'null'), //remove objects with null card ID
+        cards: cards,
         companies_follows: companyFollowsDetails,
         ...brandDetails,
+        canRedeemOffer
       }
       logger.info("User Found", responseModel);
       return Response.OK({ message: 'User Found', data: responseModel });
@@ -88,4 +92,34 @@ export const get = async (event: APIGatewayEvent, context: Context): Promise<API
 type CompanyFollows = {
     companyId: string,
     likeType: string
+}
+
+function getOfferRedeemStatus(cards: CardModel[]): boolean {
+  if (cards.length === 0) return false;
+
+  // Sort cards by cardId descending
+  cards.sort((card, nextCard) => Number(nextCard.cardId) - Number(card.cardId));
+
+  const latestCard = cards[0];
+  const previousCard = cards.length > 1 ? cards[1] : null;
+
+  // Condition 1: Active Card Status
+  const activeStatuses: CardStatus[] = [CardStatus.PHYSICAL_CARD, CardStatus.ADDED_TO_BATCH, CardStatus.USER_BATCHED];
+  if (activeStatuses.includes(latestCard.cardStatus as CardStatus)) {
+    return true;
+  }
+
+  // Condition 2: Renewal in Progress
+  if (latestCard.cardStatus === CardStatus.AWAITING_ID_APPROVAL || latestCard.cardStatus === CardStatus.ID_APPROVED) {
+    if (previousCard && previousCard.cardStatus === CardStatus.CARD_EXPIRED) {
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
+      // Convert previousCard.expires from timestamp to Date
+      const previousCardExpiryDate = new Date(Number(previousCard.expires));
+      if (previousCardExpiryDate >= thirtyDaysAgo) {
+        return true;
+      }
+    }
+  }
+  return false;
 }

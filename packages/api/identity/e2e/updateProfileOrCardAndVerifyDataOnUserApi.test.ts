@@ -56,7 +56,7 @@ async function setupTest() {
   process.env.E2E_COGNITO_APP_CLIENT_ID = data.cognito_app_client_id;
   process.env.E2E_COGNITO_APP_CLIENT_SECRET = data.cognito_app_client_secret;
 
-  cognito = new CognitoIdentityProviderClient({ 
+  cognito = new CognitoIdentityProviderClient({
     apiVersion: '2016-04-18',
     region: process.env.E2E_AWS_REGION
   });
@@ -66,7 +66,7 @@ async function loginUserAPI() {
   const hasher = createHmac('sha256', `${process.env.E2E_COGNITO_APP_CLIENT_SECRET}`);
   hasher.update(`${process.env.E2E_USER_EMAIL}${process.env.E2E_COGNITO_APP_CLIENT_ID}`);
   const input: InitiateAuthCommandInput = {
-    AuthFlow : 'USER_PASSWORD_AUTH', 
+    AuthFlow : 'USER_PASSWORD_AUTH',
     AuthParameters: {
       USERNAME : `${process.env.E2E_USER_EMAIL}`,
       PASSWORD : `${process.env.E2E_USER_PASS}`,
@@ -81,7 +81,7 @@ async function loginUserAPI() {
     if(response && response.AuthenticationResult && (response.AuthenticationResult.IdToken !== undefined || response.AuthenticationResult.IdToken !== '')){
       try {
         const userApiResponse:any = await axios.get(
-          `${process.env.E2E_USER_API_URL}`, 
+          `${process.env.E2E_USER_API_URL}`,
           {
             headers: { "Authorization": `Bearer ${response.AuthenticationResult.IdToken}` }
           }
@@ -106,7 +106,7 @@ function generateString(length: number): string {
 
 describe('Fetch env variables', () => {
   beforeAll(async () => {
-    await setupTest();    
+    await setupTest();
   })
   afterEach(async () => {
     sum += timeOut + timeOut;
@@ -132,7 +132,7 @@ let dataToSend: Record<string, string | number> = {};
 
 describe('Send user profile update event, and test user api to match data', () => {
   beforeAll(async () => {
-    await setupTest();    
+    await setupTest();
   })
   beforeEach(async () => {
     res = {};
@@ -190,7 +190,7 @@ describe('Send user profile update event, and test user api to match data', () =
 
 describe('Send user card update event, and test user api to match data', () => {
   beforeAll(async () => {
-    await setupTest();    
+    await setupTest();
   })
   beforeEach(async () => {
     res = {};
@@ -284,6 +284,6 @@ describe('Send user card update event, and test user api to match data', () => {
       expect(res.data.data.cards[0].datePosted).not.toBe('0000000000000000');
     }
   }, 25000);
-  
+
 });
 

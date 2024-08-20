@@ -249,6 +249,14 @@ export function Identity({ stack }: StackContext) {
       IdentityApiId: identityApi.cdk.restApi.restApiId
     });
 
+    // Output the identity table names as config parameters so that they can be used in E2E tests.
+    new Config.Parameter(stack, 'IDENTITY_TABLE_NAME', {
+      value: identityTable.tableName,
+    });
+    new Config.Parameter(stack, 'ID_MAPPING_TABLE_NAME', {
+      value: idMappingTable.tableName,
+    });
+
     //API Key and Usage Plan
     const apikey = identityApi.cdk.restApi.addApiKey('identity-api-key');
 

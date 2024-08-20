@@ -5,7 +5,8 @@
     "typecheck": "tsc -noEmit",
     "test": "jest src/ --coverage",
     "migrate:userprofileandcarddata": "ts-node src/cognito/oneTimeUserProfileAndCardMigrationScript.ts",
-    "e2e:identity": "jest e2e/ --runInBand"
+    "e2e:identity": "jest e2e/ --runInBand",
+    "test:e2e": "npx sst bind vitest syncProfile.test.ts signUp.test.ts"
   },
   "devDependencies": {
     "@aws-sdk/client-firehose": "3.606.0",

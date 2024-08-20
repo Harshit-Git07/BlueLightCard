@@ -1,5 +1,5 @@
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
-import { EventBus, StackContext } from 'sst/constructs';
+import { Config, EventBus, StackContext } from 'sst/constructs';
 import { CfnWebACL } from 'aws-cdk-lib/aws-wafv2';
 import { Network } from './infra/network';
 import { DwhKenisisFirehoseStreams } from './infra/firehose/DwhKenisisFirehoseStreams';
@@ -29,6 +29,11 @@ export function Shared({ stack, app }: StackContext) {
 
   //common event bus
   const bus = new EventBus(stack, 'eventBus');
+
+  // Output the event bus name in config, so it can be used in E2E tests.
+  new Config.Parameter(stack, 'SHARED_EVENT_BUS_NAME', {
+    value: bus.eventBusName
+  });
 
   //waf
   const webACL = new CfnWebACL(stack, 'WebACL', {

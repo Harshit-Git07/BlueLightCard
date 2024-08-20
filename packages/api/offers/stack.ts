@@ -61,8 +61,8 @@ export async function Offers({ stack, app }: StackContext) {
   }
   const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, tables, dbAdapter, certificateArn);
 
-  // User pools imported directly via stack outputs instead of SST "use" function.
-  // This is due to DDS Identity stack retrieving pools from BLC UK Identity stack & not being able to handle cross stack dependency natively.
+  // User pools imported directly via stack outputs instead of SST "use" function
+  // This is due to DDS Identity stack retrieving pools from BLC UK Identity stack & not being able to handle cross stack dependency natively
   const cognitoUserPoolIdOutputName = getCognitoUserPoolIdStackOutputName(stack);
   const newCognitoUserPoolIdOutputName = getNewCognitoUserPoolIdStackOutputName(stack);
   const cognito = UserPool.fromUserPoolId(stack, 'cognitoUserPool', Fn.importValue(cognitoUserPoolIdOutputName));

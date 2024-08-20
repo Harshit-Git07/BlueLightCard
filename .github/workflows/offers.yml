@@ -96,14 +96,14 @@ jobs:
             cdnUrl: 'https://blcimg-dev.img.bluelightcard.co.uk'
             brand: BLC_UK
             stage: staging
-          - deployment: 'dds-uk-staging'
-            region: 'eu-west-2'
-            stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
-            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
-            offersHomepageMenuBrandPrefix: dds-uk
-            cdnUrl: 'https://ddsimgdev.s3.eu-west-2.amazonaws.com'
-            brand: DDS_UK
-            stage: staging-dds
+#          - deployment: 'dds-uk-staging'
+#            region: 'eu-west-2'
+#            stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
+#            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+#            offersHomepageMenuBrandPrefix: dds-uk
+#            cdnUrl: 'https://ddsimgdev.s3.eu-west-2.amazonaws.com'
+#            brand: DDS_UK
+#            stage: staging-dds
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             stagingBaseUrl: https://develop.bluelightcard.com.au

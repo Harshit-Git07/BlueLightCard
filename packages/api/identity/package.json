@@ -1,12 +1,11 @@
 {
   "name": "@blc-mono/identity",
-  "version": "1.92.1",
+  "version": "1.91.4",
   "scripts": {
     "typecheck": "tsc -noEmit",
     "test": "jest src/ --coverage",
     "migrate:userprofileandcarddata": "ts-node src/cognito/oneTimeUserProfileAndCardMigrationScript.ts",
-    "e2e:identity": "jest e2e/ --runInBand",
-    "test:e2e": "npx sst bind vitest syncProfile.test.ts signUp.test.ts"
+    "e2e:identity": "npx sst bind vitest e2e"
   },
   "devDependencies": {
     "@aws-sdk/client-firehose": "3.606.0",

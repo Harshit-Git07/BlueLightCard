@@ -167,9 +167,12 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-          aws-region: eu-west-2
-      - name: Run E2E Test
-        run: npm run e2e:identity -w packages/api/identity
+          aws-region: ${{ matrix.deployment.region }}
+      - name: Run E2E Tests
+        working-directory: packages/api/identity
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+        run: npx sst bind --stage ${{ matrix.deployment.stage }} vitest e2e
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created

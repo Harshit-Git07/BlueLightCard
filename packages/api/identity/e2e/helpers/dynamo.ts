@@ -1,5 +1,11 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DeleteCommand, DeleteCommandInput, DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DeleteCommand,
+  DeleteCommandInput,
+  DynamoDBDocumentClient, PutCommand, PutCommandInput,
+  QueryCommand, UpdateCommand,
+  UpdateCommandInput
+} from '@aws-sdk/lib-dynamodb';
 
 export async function getItemFromIdentityTable(memberUuid: string, sortKeyPrefix: string): Promise<Record<string, any> | undefined> {
   const dynamodb = createDynamoDbClient();
@@ -39,6 +45,44 @@ export async function getItemFromIdMappingTable(brand: string, legacyId: number,
   return result.Items?.[0];
 }
 
+export async function createProfileItemInIdentityTableFor(
+  memberUuid: string,
+  profileUuid: string
+): Promise<void> {
+  const dynamodb = createDynamoDbClient();
+  const updateParams = {
+    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    Key: {
+      pk: `MEMBER#${memberUuid}`,
+      sk: `PROFILE#${profileUuid}`
+    }
+  } as UpdateCommandInput;
+
+  await dynamodb.send(new UpdateCommand(updateParams));
+}
+
+export async function createCardItemInIdentityTableFor(
+  memberUuid: string,
+  cardId: number,
+  status: string,
+  expires: string,
+  posted: string
+): Promise<void> {
+  const dynamodb = createDynamoDbClient();
+  const updateParams = {
+    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    Item: {
+      pk: `MEMBER#${memberUuid}`,
+      sk: `CARD#${cardId}`,
+      status,
+      expires,
+      posted,
+    }
+  } as PutCommandInput;
+
+  await dynamodb.send(new PutCommand(updateParams));
+}
+
 export async function deleteProfileItemFromIdentityTableFor(
   memberUuid: string,
   profileSortKey: string
@@ -49,6 +93,22 @@ export async function deleteProfileItemFromIdentityTableFor(
     Key: {
       pk: `MEMBER#${memberUuid}`,
       sk: profileSortKey
+    }
+  } as DeleteCommandInput;
+
+  await dynamodb.send(new DeleteCommand(queryParams));
+}
+
+export async function deleteCardItemFromIdentityTableFor(
+  memberUuid: string,
+  cardId: number
+): Promise<void> {
+  const dynamodb = createDynamoDbClient();
+  const queryParams = {
+    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    Key: {
+      pk: `MEMBER#${memberUuid}`,
+      sk: `CARD#${cardId}`
     }
   } as DeleteCommandInput;
 

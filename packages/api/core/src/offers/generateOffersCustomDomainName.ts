@@ -1,20 +1,24 @@
-import { DDS_UK, OFFERS_DOMAIN_NAME } from '@blc-mono/offers/src/utils/global-constants'
+import { OFFERS_DOMAIN_NAME } from '@blc-mono/offers/src/utils/global-constants'
 import { REGIONS } from '../types/regions.enum'
 import { Stack } from 'sst/constructs/Stack'
-import { isProduction } from '../utils/checkEnvironment'
+import { isProduction, isStaging } from '../utils/checkEnvironment';
+import { isDdsUkBrand } from '../utils/checkBrand';
 
 export function generateOffersCustomDomainName(stack: Stack): string {
-  return isProduction(stack.stage)
-    ? buildCustomDomainName(stack)
-    : `${stack.stage}-${buildCustomDomainName(stack)}`;
+  switch(true) {
+    case isProduction(stack.stage):
+      return buildCustomDomainName(stack);
+    case isStaging(stack.stage):
+      return `staging-${buildCustomDomainName(stack)}`;
+    default:
+      return `${stack.stage}-${buildCustomDomainName(stack)}`;
+  }
 }
 
 const buildCustomDomainName = (stack: Stack): string => {
-  const isDds = stack.stackName.includes(DDS_UK);
-
   switch (stack.region) {
     case REGIONS.EU_WEST_2:
-      return isDds ? OFFERS_DOMAIN_NAME.DDS_UK : OFFERS_DOMAIN_NAME.BLC_UK;
+      return isDdsUkBrand() ? OFFERS_DOMAIN_NAME.DDS_UK : OFFERS_DOMAIN_NAME.BLC_UK;
     case REGIONS.AP_SOUTHEAST_2:
       return OFFERS_DOMAIN_NAME.BLC_AUS;
     default:

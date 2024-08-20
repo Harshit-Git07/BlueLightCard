@@ -9,6 +9,11 @@ enum VpcName {
   DDS = 'vpc-shared-dds',
 }
 
+enum TagName {
+  BLC = 'staging',
+  DDS = 'staging-dds',
+}
+
 export class Network {
   private readonly _vpc: IVpc;
 
@@ -53,11 +58,11 @@ export class Network {
    */
   private retrieveStagingVpc(): IVpc {
     const vpcName = isDdsUkBrand() ? VpcName.DDS : VpcName.BLC;
+    const tagName = isDdsUkBrand() ? TagName.DDS : TagName.BLC;
 
-    // Add DDS VPC tag (staging-dds) once deployed to staging for local deployments
     return Vpc.fromLookup(this.stack, vpcName, {
       tags: {
-        'sst:stage': 'staging',
+        'sst:stage': tagName,
       },
     });
   }

@@ -26,6 +26,10 @@ import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { isProduction } from "@blc-mono/core/utils/checkEnvironment";
+import {
+  getCognitoUserPoolIdStackOutputName,
+  getNewCognitoUserPoolIdStackOutputName,
+} from '@blc-mono/core/identity/identityStackOutputs';
 
 const SERVICE_NAME = 'identity'
 
@@ -284,6 +288,8 @@ export function Identity({ stack }: StackContext) {
       CognitoDdsUserPoolWebClient: cognito_dds.userPoolId,
     });
 
+    exportUserPoolIdsAsStackOutputs(stack, oldCognito.userPoolId, cognito.userPoolId);
+
     //add event bridge rules
     bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
     bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
@@ -296,8 +302,6 @@ export function Identity({ stack }: StackContext) {
 
     return {
       identityApi,
-      newCognito: cognito.cdk.userPool,
-      cognito: oldCognito.cdk.userPool,
       authorizer: sharedAuthorizer,
     };
   }
@@ -362,11 +366,19 @@ function deployDdsSpecificResources(stack: Stack) {
     CognitoUserPoolWebClient: cognitoUserPool.userPoolId,
   });
 
+  exportUserPoolIdsAsStackOutputs(stack, oldCognitoUserPool.userPoolId, cognitoUserPool.userPoolId);
+
   return {
     identityApi,
-    newCognito: cognitoUserPool,
-    cognito: oldCognitoUserPool,
     authorizer: sharedAuthorizer,
   };
 }
 
+function exportUserPoolIdsAsStackOutputs(stack: Stack, cognitoUserPoolId: string, cognitoUserPoolIdNew: string) {
+  stack.exportValue(cognitoUserPoolId, {
+    name: getCognitoUserPoolIdStackOutputName(stack)
+  });
+  stack.exportValue(cognitoUserPoolIdNew, {
+    name: getNewCognitoUserPoolIdStackOutputName(stack)
+  });
+}

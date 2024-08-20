@@ -194,6 +194,7 @@ jobs:
       DEV_BASE_URL: http://localhost:8080
       LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
       OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: blc-uk
+      CDN_URL: https://blcimg-dev.img.bluelightcard.co.uk
     outputs:
       offers-api-endpoint: ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
     steps:
@@ -220,6 +221,46 @@ jobs:
       - name: Echo outputs
         run: |
           echo ${{ steps.sst-offers-outputs.outputs.offersApiUrl }}
+
+  backend-offers-dds:
+    needs:
+      - changes
+      - install
+      - backend-shared-dds
+    name: Deploy DDS Backend for PR (offers)
+    if: ${{ needs.changes.outputs.backend-offers == 'true' && github.actor != 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'ready-for-test') && contains(github.event.pull_request.labels.*.name, 'dds-ready-for-test')}}
+    runs-on: ubuntu-latest
+    env:
+      DEV_BASE_URL: http://localhost:8080
+      LEGACY_API_RETRIEVE_OFFERS_ENDPOINT: api/4/offer/retrieve.php
+      OFFERS_HOMEPAGE_MENU_BRAND_PREFIX: dds-uk
+      CDN_URL: https://ddsimgdev.s3.eu-west-2.amazonaws.com
+    outputs:
+      offers-api-endpoint: ${{ steps.sst-offers-dds-outputs.outputs.ddsOffersApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: eu-west-2
+      - run: npm run build
+      - name: Deploy Offers
+        env:
+          BRAND: BLC_UK
+        run: npx sst deploy offers --stage $PR_PREFIX_DDS
+      - name: Extract Api URL and set output
+        id: sst-offers-dds-outputs
+        run: |
+          cat .sst/outputs.json
+          DDS_OFFERS_URL=$(jq -r '.[].OffersApiEndpoint | select(. != null)' .sst/outputs.json)
+          echo "ddsOffersApiUrl=$DDS_OFFERS_URL" >> $GITHUB_OUTPUT
+      - name: Echo outputs
+        run: |
+          echo ${{ steps.sst-offers-dds-outputs.outputs.ddsOffersApiUrl }}
 
   backend-redemptions:
     needs:

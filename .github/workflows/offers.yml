@@ -95,6 +95,15 @@ jobs:
             offersHomepageMenuBrandPrefix: blc-uk
             cdnUrl: 'https://blcimg-dev.img.bluelightcard.co.uk'
             brand: BLC_UK
+            stage: staging
+          - deployment: 'dds-uk-staging'
+            region: 'eu-west-2'
+            stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
+            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+            offersHomepageMenuBrandPrefix: dds-uk
+            cdnUrl: 'https://ddsimgdev.s3.eu-west-2.amazonaws.com'
+            brand: DDS_UK
+            stage: staging-dds
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             stagingBaseUrl: https://develop.bluelightcard.com.au
@@ -102,6 +111,7 @@ jobs:
             offersHomepageMenuBrandPrefix: blc-aus
             cdnUrl: 'https://blc-au-img-dev.s3.ap-southeast-2.amazonaws.com'
             brand: BLC_AU
+            stage: staging
     needs:
       - install
       - test
@@ -139,7 +149,7 @@ jobs:
           DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
           DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
           USE_DATADOG_AGENT: 'true'
-        run: npx sst deploy global --stage staging --region ${{matrix.region}} && npx sst deploy offers --stage staging --region ${{matrix.region}}
+        run: npx sst deploy global --stage ${{matrix.stage}} --region ${{matrix.region}} && npx sst deploy offers --stage ${{matrix.stage}} --region ${{matrix.region}}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog
         with:
@@ -164,6 +174,16 @@ jobs:
             offersHomepageMenuBrandPrefix: blc-uk
             cdnUrl: 'https://cdn.bluelightcard.co.uk'
             brand: BLC_UK
+            stage: production
+# Uncomment when ready to deploy dds offers stack to production
+#          - deployment: 'dds-uk-production'
+#            region: 'eu-west-2'
+#            prodBaseUrl: https://www.defencediscountservice.co.uk
+#            legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
+#            offersHomepageMenuBrandPrefix: dds-uk
+#            cdnUrl: 'https://cdn.defencediscountservice.co.uk'
+#            brand: DDS_UK
+#            stage: production-dds
           - namespace: 'blc-aus-production'
             region: 'ap-southeast-2'
             prodBaseUrl: https://www.bluelightcard.com.au
@@ -171,6 +191,7 @@ jobs:
             offersHomepageMenuBrandPrefix: blc-aus
             cdnUrl: 'https://cdn.bluelightcard.com.au'
             brand: BLC_AU
+            stage: production
     needs:
       - install
       - test
@@ -196,7 +217,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Deploy Stack
-        run: npx sst deploy global --stage production --region ${{matrix.region}} && npx sst deploy offers --stage production --region ${{matrix.region}}
+        run: npx sst deploy global --stage ${{matrix.stage}} --region ${{matrix.region}} && npx sst deploy offers --stage ${{matrix.stage}} --region ${{matrix.region}}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog
         with:

@@ -18,6 +18,12 @@ import { EC2Manager } from './src/constructs/ec2-manager';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { IDatabaseAdapter } from './src/constructs/database/IDatabaseAdapter';
 import { DatabaseAdapter } from './src/constructs/database/adapter';
+import { UserPool } from 'aws-cdk-lib/aws-cognito';
+import { Fn } from 'aws-cdk-lib';
+import {
+  getCognitoUserPoolIdStackOutputName,
+  getNewCognitoUserPoolIdStackOutputName,
+} from '@blc-mono/core/identity/identityStackOutputs';
 
 export async function Offers({ stack, app }: StackContext) {
 
@@ -41,7 +47,7 @@ export async function Offers({ stack, app }: StackContext) {
   });
 
   new Tags(stack);
-  const { authorizer, cognito, newCognito } = use(Identity);
+  const { authorizer } = use(Identity);
   const { vpc, certificateArn } = use(Shared);
   const secretsManger: SecretManager = new SecretManager(stack);
   const securityGroupManager: SecurityGroupManager = new SecurityGroupManager(stack, vpc);
@@ -54,6 +60,13 @@ export async function Offers({ stack, app }: StackContext) {
     dbAdapter = await new DatabaseAdapter(stack, app, vpc, secretsManger, securityGroupManager, ec2Manager).init();
   }
   const offersApiGateway: OffersApiGateway = new OffersApiGateway(stack, authorizer, tables, dbAdapter, certificateArn);
+
+  // User pools imported directly via stack outputs instead of SST "use" function.
+  // This is due to DDS Identity stack retrieving pools from BLC UK Identity stack & not being able to handle cross stack dependency natively.
+  const cognitoUserPoolIdOutputName = getCognitoUserPoolIdStackOutputName(stack);
+  const newCognitoUserPoolIdOutputName = getNewCognitoUserPoolIdStackOutputName(stack);
+  const cognito = UserPool.fromUserPoolId(stack, 'cognitoUserPool', Fn.importValue(cognitoUserPoolIdOutputName));
+  const newCognito = UserPool.fromUserPoolId(stack, 'cognitoUserPoolNew', Fn.importValue(newCognitoUserPoolIdOutputName));
 
   //Need to be removed once the ApiGateway is ready to support the Offers API functionality
   const offersApi: OffersApi = new OffersApi(

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.93.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.93.0...bluelightcard/identity-v1.93.1) (2024-08-21)
+
+
+### Other Changes
+
+* add code coverage reporting ([#2068](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2068)) ([ba6dbef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ba6dbef3b7acdebcc32a29c8861733df14b6b1d6))
+
 ## [1.93.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.92.1...bluelightcard/identity-v1.93.0) (2024-08-20)
 
 

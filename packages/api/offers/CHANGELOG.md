@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.36.0...bluelightcard/offers-v1.37.0) (2024-08-21)
+
+
+### Features
+
+* [DISCO-460] Allow Identity stack to handle DDS deployment ([#1817](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1817)) ([515485a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/515485a69de0716af85ccf44ad026350bbd6510f))
+* [DISCO-460] Deploy DDS offers stack to staging + PR environment ([#2035](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2035)) ([6514aa9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6514aa91c51ce1af75ae2a62d7f5343114cd202c))
+* [DISCO-460] Remove DDS specific resource naming on BLC UK deployment ([#1798](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1798)) ([0d250f2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0d250f2b9310d397318ef1f47d7f6f7920ad11c1))
+
+
+### Bug Fixes
+
+* [DISCO-460] Remove DDS offers stack temporarily ([#2055](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2055)) ([f625216](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f62521625ea873b19e88f9cb4919ccc617b1cf89))
+* Updating datadog site to EU ([#2042](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2042)) ([f4d2ec0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4d2ec0dfdffb33022daf32b964723f806853c76))
+
+
+### Other Changes
+
+* [PE-145] fix high level reliability issues ([#1962](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1962)) ([edd556e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/edd556ea65bce86eb56bb12983b7a0e8d5010888))
+* add code coverage reporting ([#2068](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2068)) ([ba6dbef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ba6dbef3b7acdebcc32a29c8861733df14b6b1d6))
+* Instrumenting offers and updating workflows ([#1963](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1963)) ([af195c0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/af195c08ab36dce4a65680cc1cdbf21a3c03a5d6))
+
 ## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.35.0...bluelightcard/offers-v1.36.0) (2024-07-11)
 
 

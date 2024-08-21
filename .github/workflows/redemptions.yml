@@ -43,6 +43,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup
         uses: ./.github/actions/setup
       - name: Generate SST Types
@@ -50,10 +52,17 @@ jobs:
           BRAND: BLC_UK
         run: npx sst types --stage staging
       - name: Test
-        run: npm run test:unit -w packages/api/redemptions
+        run: npm run test:coverage -w packages/api/redemptions
       - name: Test Cloud flare
         working-directory: "packages/api/redemptions/cloudflare/QRImageGenerator"
-        run: npm run test
+        run: npm run test:coverage
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: packages/api/redemptions
 
   format:
     name: Check Formatting

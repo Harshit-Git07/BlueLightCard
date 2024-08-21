@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup
         uses: ./.github/actions/setup
       - name: Generate SST Types
@@ -42,7 +44,14 @@ jobs:
           BRAND: BLC_UK
         run: npx sst types --stage staging
       - name: Test
-        run: npm run test -w packages/api/core
+        run: npm run test:coverage -w packages/api/core
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: packages/api/core
 
   typecheck:
     name: Check Types

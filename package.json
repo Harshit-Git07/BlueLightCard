@@ -63,6 +63,7 @@
     "@types/micromatch": "4.0.6",
     "@types/qr-image": "3.2.9",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@vitest/coverage-istanbul": "1.4.0",
     "aws-cdk-lib": "2.110.1",
     "aws-sdk-client-mock": "4.0.0",
     "aws-sdk-client-mock-jest": "4.0.0",

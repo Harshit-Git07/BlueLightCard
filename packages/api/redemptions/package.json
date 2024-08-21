@@ -4,6 +4,7 @@
   "scripts": {
     "pre:dev": "npm run db:up",
     "test": "npm run test:unit --",
+    "test:coverage": "npm run test --coverage",
     "test:unit": "jest",
     "test:e2e": "dotenv -e ../../../.env -- sst bind vitest run",
     "typecheck": "tsc --noEmit",
@@ -15,6 +16,7 @@
     "lint:staged": "eslint --fix",
     "deploy:cloudflare:worker": "npm run deploy -prefix ./cloudflare/QRImageGenerator --env=$npm_config_environment",
     "test:cloudflare": "npm run test -prefix ./cloudflare/QRImageGenerator",
+    "test:cloudflare:coverage": "npm run test:coverage -prefix ./cloudflare/QRImageGenerator",
     "oas": "../../../export-spec.sh --region $npm_config_region --stage $npm_config_stage --api-version $npm_config_api_version --domain redemptions",
     "db:up": "dotenv -e ../../../.env -- docker compose up -d",
     "db:down": "dotenv -e ../../../.env -- docker compose down",
@@ -28,7 +30,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "istanbul-merge": "2.0.0",
     "prettier": "3.2.5"
-  },
-  "dependencies": {}
+  }
 }

@@ -8,6 +8,7 @@
     "test": "vitest worker.test.ts",
     "deploy": "wrangler deploy --env $npm_config_env",
     "test:unit": "vitest run",
+    "test:coverage": "vitest run --coverage --coverage.provider istanbul",
     "build": "npx webpack"
   },
   "devDependencies": {

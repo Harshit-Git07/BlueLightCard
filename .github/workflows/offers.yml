@@ -44,10 +44,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run Tests
-        run: npm run test -w packages/api/offers
+        run: npm run test:coverage -w packages/api/offers
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: packages/api/offers
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

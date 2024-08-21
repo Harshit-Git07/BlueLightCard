@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "typecheck": "tsc -noEmit",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "devDependencies": {
     "@types/node": "^20.2.3",

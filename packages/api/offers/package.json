@@ -8,7 +8,8 @@
     "db:down": "dotenv -e ../../../.env -- docker compose down",
     "drizzle:generate": "dotenv -e ../../../.env -- drizzle-kit generate:mysql",
     "test": "jest --passWithNoTests",
-    "typecheck": "tsc -noEmit"
+    "typecheck": "tsc -noEmit",
+    "test:coverage": "npm run test --coverage"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",

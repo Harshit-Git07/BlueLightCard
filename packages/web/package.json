@@ -11,7 +11,7 @@
     "lint": "next lint && npm run typecheck",
     "lint:style": "npx stylelint '**/*.css'",
     "lint:fix": "eslint --fix .",
-    "test:coverage": "jest --coverage --coverageReporters json-summary",
+    "test:coverage": "jest --coverage",
     "test": "jest --silent --testPathIgnorePatterns=e2e/",
     "test:watch": "jest --watch --testPathIgnorePatterns=e2e/",
     "storybook": "STORYBOOK_ENV=true storybook dev -p 6006",

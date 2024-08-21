@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "scripts": {
     "test": "npm run test:unit",
+    "test:coverage": "npm run test:unit --coverage",
     "test:unit": "jest",
     "test:e2e": "dotenv -e ../../../.env -- sst bind vitest run",
     "typecheck": "tsc --noEmit",

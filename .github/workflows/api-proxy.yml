@@ -37,10 +37,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup
         uses: ./.github/actions/setup
       - name: Test
-        run: npm run test:unit -w packages/api-proxy
+        run: npm run test:unit:coverage -w packages/api-proxy
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: packages/api-proxy
 
   # TODO: Add formatting check
   # TODO: Add linting check

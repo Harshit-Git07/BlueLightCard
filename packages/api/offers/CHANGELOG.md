@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.37.0...bluelightcard/offers-v1.38.0) (2024-08-21)
+
+
+### Features
+
+* [DISCO-460] Trigger offers deployment ([#2077](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2077)) ([3cc57c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3cc57c3fff7dba53de404da8ed61f71b2710a2cf))
+
 ## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.36.0...bluelightcard/offers-v1.37.0) (2024-08-21)
 
 

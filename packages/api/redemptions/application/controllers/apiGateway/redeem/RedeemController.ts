@@ -5,6 +5,7 @@ import { JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
+import { CardStatusHelper, ICardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
 import { TokenHelper } from '@blc-mono/redemptions/application/helpers/TokenHelper';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 
@@ -27,18 +28,19 @@ const RedeemRequestModel = z.object({
 export type ParsedRequest = z.infer<typeof RedeemRequestModel> & { memberId: string; brazeExternalUserId: string };
 
 export class RedeemController extends APIGatewayController<ParsedRequest> {
-  static readonly inject = [Logger.key, RedeemService.key] as const;
+  static readonly inject = [Logger.key, RedeemService.key, CardStatusHelper.key] as const;
 
   constructor(
     logger: ILogger,
     private readonly redeemService: IRedeemService,
+    private readonly cardStatus: ICardStatusHelper,
   ) {
     super(logger);
   }
 
-  protected parseRequest(
+  protected async parseRequest(
     request: APIGatewayProxyEventV2,
-  ): Result<ParsedRequest, ParseRequestResult | ParseRequestError> {
+  ): Promise<Result<ParsedRequest, ParseRequestResult | ParseRequestError>> {
     const parsedRequest = this.zodParseRequest(request, RedeemRequestModel);
 
     if (parsedRequest.isFailure) {
@@ -47,8 +49,6 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
 
     const parsedBearerToken = TokenHelper.removeBearerPrefix(parsedRequest.value.headers.Authorization);
     const tokenPayloadResult = TokenHelper.unsafeExtractDataFromToken(parsedBearerToken);
-    //todo: update this when identity's api is available
-    const allowedStatuses = ['PHYSICAL_CARD', 'ADDED_TO_BATCH', 'USER_BATCHED'];
 
     if (tokenPayloadResult.isFailure) {
       this.logger.error({
@@ -60,7 +60,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
 
     const memberId = tokenPayloadResult.value['custom:blc_old_id'];
     const brazeExternalUserId = tokenPayloadResult.value['custom:blc_old_uuid'];
-    const cardStatus = tokenPayloadResult.value['card_status'];
+
     if (typeof memberId !== 'string')
       return Result.err({ kind: ParseErrorKind.RequestValidationMemberId, message: 'Invalid memberId in token' });
     if (typeof brazeExternalUserId !== 'string')
@@ -68,8 +68,12 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         kind: ParseErrorKind.RequestValidationBrazeExternalUserId,
         message: 'Invalid brazeExternalUserId in token',
       });
-    if (typeof cardStatus !== 'string' || !allowedStatuses.includes(cardStatus))
+
+    const isValidCardStatus = await this.cardStatus.validateCardStatus(parsedBearerToken);
+
+    if (!isValidCardStatus) {
       return Result.err({ kind: ParseErrorKind.RequestValidationCardStatus, message: 'Ineligible card status' });
+    }
 
     return Result.ok({ ...parsedRequest.value, memberId, brazeExternalUserId });
   }

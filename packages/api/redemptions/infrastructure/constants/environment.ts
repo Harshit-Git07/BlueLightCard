@@ -61,4 +61,6 @@ export enum RedemptionsStackEnvironmentKeys {
 
   // Environment
   USE_DATADOG_AGENT = 'USE_DATADOG_AGENT',
+  // User Identity
+  USER_IDENTITY_ENDPOINT = 'USER_IDENTITY_ENDPOINT',
 }

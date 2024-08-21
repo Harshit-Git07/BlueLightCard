@@ -40,7 +40,8 @@ export abstract class Controller<
       try {
         this.onRequest?.(request);
 
-        const parseRequestResult = this.parseRequest(request);
+        const parseRequestResult = await this.parseRequest(request);
+
         if (parseRequestResult.isFailure) {
           return await this.onParseError(request, parseRequestResult.error);
         }
@@ -62,7 +63,9 @@ export abstract class Controller<
    * @param request The incoming request
    */
   protected abstract onRequest(request: Request): void;
-  protected abstract parseRequest(request: Request): Result<ParsedRequest, ParseRequestError>;
+  protected abstract parseRequest(
+    request: Request,
+  ): Result<ParsedRequest, ParseRequestError> | Promise<Result<ParsedRequest, ParseRequestError>>;
   protected abstract handle(request: ParsedRequest): Promise<HandlerResult> | HandlerResult;
   protected abstract formatResponse(request: Request, result: HandlerResult): Response;
   protected abstract onUnhandledError(request: Request, err: unknown): Promise<Response>;

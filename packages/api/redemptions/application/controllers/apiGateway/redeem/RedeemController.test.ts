@@ -1,5 +1,6 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
+import { ICardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
 import {
   generateFakeJWT,
   redeemEventFactory,
@@ -17,9 +18,12 @@ type parsedResults = {
   };
 };
 
+jest.mock('@blc-mono/redemptions/application/helpers/cardStatus');
+
 describe('RedeemController', () => {
   beforeEach(() => {
     process.env.API_DEFAULT_ALLOWED_ORIGINS = '["*"]';
+    process.env.USER_IDENTITY_ENDPOINT = 'https://test-endpoint';
     jest.clearAllMocks();
   });
 
@@ -33,7 +37,12 @@ describe('RedeemController', () => {
     const redeemService = {
       redeem: jest.fn(),
     } satisfies IRedeemService;
-    const controller = new RedeemController(logger, redeemService);
+
+    const cardStatusHelper = {
+      validateCardStatus: jest.fn(),
+    } satisfies ICardStatusHelper;
+
+    const controller = new RedeemController(logger, redeemService, cardStatusHelper);
     redeemService.redeem.mockResolvedValue({
       kind: 'Ok',
       redemptionType: 'generic',
@@ -64,7 +73,12 @@ describe('RedeemController', () => {
     const redeemService = {
       redeem: jest.fn(),
     } satisfies IRedeemService;
-    const controller = new RedeemController(logger, redeemService);
+
+    const cardStatusHelper = {
+      validateCardStatus: jest.fn(),
+    } satisfies ICardStatusHelper;
+
+    const controller = new RedeemController(logger, redeemService, cardStatusHelper);
     redeemService.redeem.mockResolvedValue({
       kind: 'RedemptionNotFound',
     } satisfies RedeemResult);
@@ -86,10 +100,13 @@ describe('RedeemController', () => {
       redeem: jest.fn(),
     } satisfies IRedeemService;
 
-    const controller = new RedeemController(logger, redeemService);
-    const allowedStatuses = ['PHYSICAL_CARD', 'ADDED_TO_BATCH', 'USER_BATCHED'];
+    it('should allow card redeem when canRedeemOffer is true', async () => {
+      const request = requestFactory.build({
+        headers: {
+          Authorization: generateFakeJWT(),
+        },
+      });
 
-    it.each(allowedStatuses)('should succeed for allowed card status %s', async (status) => {
       redeemService.redeem.mockResolvedValue({
         kind: 'Ok',
         redemptionType: 'generic',
@@ -99,41 +116,41 @@ describe('RedeemController', () => {
         },
       } satisfies RedeemResult);
 
-      const request = requestFactory.build({
-        headers: {
-          Authorization: generateFakeJWT(status),
-        },
-      });
-      const results = await controller.invoke(request as unknown as APIGatewayProxyEventV2);
-      expect(results.statusCode).toBe(200);
-    });
+      const cardStatusHelper = {
+        validateCardStatus: jest.fn().mockResolvedValue(true),
+      } satisfies ICardStatusHelper;
 
-    it('should return error for ineligible card status', async () => {
-      const ineligibleStatus = 'INVALID_STATUS';
-      const request = requestFactory.build({
-        headers: {
-          Authorization: generateFakeJWT(ineligibleStatus),
-        },
-      });
-      const controller = new RedeemController(logger, redeemService);
+      const controller = new RedeemController(logger, redeemService, cardStatusHelper);
 
       const results = await controller.invoke(request as unknown as APIGatewayProxyEventV2);
       const body = results.body ?? '{}';
       const parsedResults = JSON.parse(body) as parsedResults;
       const kind = parsedResults.data.kind;
-
-      expect(kind).toBe('RequestValidationCardStatus');
-      expect(results.statusCode).toBe(403);
+      expect(results.statusCode).toEqual(200);
+      expect(kind).toBe('Ok');
     });
 
-    it('should return error for missing card status', async () => {
+    it('should return error when canRedeemOffer is false', async () => {
       const request = requestFactory.build({
         headers: {
-          Authorization: generateFakeJWT(undefined),
+          Authorization: generateFakeJWT(),
         },
       });
+      redeemService.redeem.mockResolvedValue({
+        kind: 'Ok',
+        redemptionType: 'generic',
+        redemptionDetails: {
+          url: 'https://www.blcshine.com',
+          code: '012345',
+        },
+      } satisfies RedeemResult);
 
-      const controller = new RedeemController(logger, redeemService);
+      const cardStatusHelper = {
+        validateCardStatus: jest.fn().mockResolvedValue(false),
+      } satisfies ICardStatusHelper;
+
+      const controller = new RedeemController(logger, redeemService, cardStatusHelper);
+
       const results = await controller.invoke(request as unknown as APIGatewayProxyEventV2);
       const body = results.body ?? '{}';
       const parsedResults = JSON.parse(body) as parsedResults;

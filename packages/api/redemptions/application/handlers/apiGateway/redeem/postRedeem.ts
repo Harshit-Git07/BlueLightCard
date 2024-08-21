@@ -3,6 +3,7 @@ import { createInjector } from 'typed-inject';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
+import { CardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { RedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
@@ -42,6 +43,9 @@ const controller = createInjector()
   .provideClass(RedeemShowCardStrategy.key, RedeemShowCardStrategy)
   .provideClass(RedeemVaultStrategy.key, RedeemVaultStrategy)
   .provideClass(RedeemStrategyResolver.key, RedeemStrategyResolver)
+  // card status helper
+  .provideClass(CardStatusHelper.key, CardStatusHelper)
+
   // API Service
   .provideClass(RedeemService.key, RedeemService)
   // Controller

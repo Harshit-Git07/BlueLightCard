@@ -6,7 +6,7 @@ import { ParsedRequest } from '@blc-mono/redemptions/application/controllers/api
 
 const allowedStatuses = ['PHYSICAL_CARD', 'ADDED_TO_BATCH', 'USER_BATCHED'];
 
-export const generateFakeJWT = (cardStatus: string | undefined) => {
+export const generateFakeJWT = (cardStatus?: string | undefined) => {
   const payload = {
     'custom:blc_old_id': faker.lorem.words(5),
     'custom:blc_old_uuid': faker.string.uuid(),

@@ -41,7 +41,7 @@ import { VaultCodesUpload } from './s3/vaultCodesUpload';
 
 export async function Redemptions({ app, stack }: StackContext) {
   const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams, bastionHost } = use(Shared);
-  const { authorizer } = use(Identity);
+  const { authorizer, identityApi } = use(Identity);
   const SERVICE_NAME = 'redemptions';
 
   // set tag service identity to all resources
@@ -207,6 +207,7 @@ export async function Redemptions({ app, stack }: StackContext) {
           config.redemptionsLambdaScriptsCheckVaultStockPath,
         // Event Bus
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
+        [RedemptionsStackEnvironmentKeys.USER_IDENTITY_ENDPOINT]: identityApi.url,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [

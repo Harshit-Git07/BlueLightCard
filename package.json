@@ -123,6 +123,7 @@
     "@aws-sdk/client-ses": "3.609.0",
     "@aws-sdk/lib-dynamodb": "3.606.0",
     "@fast-csv/parse": "^4.3.6",
+    "@opensearch-project/opensearch": "^2.11.0",
     "@playwright/test": "1.45.3",
     "@storybook/preset-scss": "^1.0.3",
     "aes-js": "^3.1.2",

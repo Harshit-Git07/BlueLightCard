@@ -324,6 +324,7 @@ jobs:
       - name: Deploy Discovery
         env:
           BRAND: BLC_UK
+          OPENSEARCH_CREATE_NEW_DOMAIN: ${{ github.event.label.name == 'createNewOpenSearchDomain' && 'true' || 'false' }}
         run: npx sst deploy discovery --stage $PR_PREFIX --region ${{matrix.region}}
       - name: Extract Api URL and set output
         id: sst-discovery-outputs

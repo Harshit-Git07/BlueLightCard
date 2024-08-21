@@ -14,6 +14,7 @@
 ```
 
 ## Getting started
+Take a copy of the .env.example file and save it as .env in the same directory.
 
 Install dependencies by running:
 
@@ -24,12 +25,15 @@ npm i
 Setup your aws access key by running:
 
 ```sh
-aws configure
+aws configure sso
 ```
 
 Alternatively, use Leapp - this tool can help you to assume roles.
 
+Make sure you have Docker up and running before trying to run the backend code.
+
 To start the backend run the following (this will deploy the backend to your aws account)
+
 
 ```sh
 npm run dev

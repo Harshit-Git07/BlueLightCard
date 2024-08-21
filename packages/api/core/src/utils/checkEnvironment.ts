@@ -19,3 +19,7 @@ export function isEphemeral(stage: string): boolean {
 export function isLocal(stage: string): boolean {
   return !isProduction(stage) && !isStaging(stage) && !isEphemeral(stage);
 }
+
+export function isCreateNewOpenSearchDomainTrue(): boolean {
+  return process.env.OPENSEARCH_CREATE_NEW_DOMAIN?.toLowerCase() === 'true'
+}

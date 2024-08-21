@@ -1,10 +1,11 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
+import { ApiGatewayV1Api, Function, StackContext, use } from 'sst/constructs';
 
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { OpenSearchDomain } from '@blc-mono/discovery/infrastructure/search/OpenSearchDomain';
 import { Identity } from '@blc-mono/identity/stack';
 
 import { Shared } from '../../../../stacks/stack';
@@ -13,7 +14,7 @@ import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastru
 import { Route } from './routes/route';
 
 export async function Discovery({ stack, app }: StackContext) {
-  const { certificateArn } = use(Shared);
+  const { certificateArn, vpc } = use(Shared);
   const { authorizer } = use(Identity);
   const SERVICE_NAME = 'discovery';
   stack.tags.setTag('service', SERVICE_NAME);
@@ -91,13 +92,27 @@ export async function Discovery({ stack, app }: StackContext) {
         SEARCH_LAMBDA_SCRIPTS_ENVIRONMENT: config.searchLambdaScriptsEnvironment,
         SEARCH_BRAND: config.searchBrand,
         SEARCH_AUTH_TOKEN_OVERRIDE: config.searchAuthTokenOverride,
+        OPENSEARCH_STAGING_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint,
       },
     }),
+  });
+
+  const openSearchDomain = await new OpenSearchDomain(stack, vpc).setup();
+  const createSearchIndex = new Function(stack, `${stack.stage}-createSearchIndex`, {
+    functionName: `${stack.stage}-createSearchIndex`,
+    handler: 'packages/api/discovery/application/handlers/search/createSearchIndex.handler',
+    memorySize: 512,
+    permissions: ['es'],
+    environment: {
+      SEARCH_DOMAIN_HOST: openSearchDomain,
+    },
+    vpc,
   });
 
   stack.addOutputs({
     DiscoveryApiEndpoint: api.url,
     DiscoveryApiCustomDomain: api.customDomainUrl,
+    CreateSearchIndex: createSearchIndex.functionArn,
   });
 
   return {

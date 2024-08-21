@@ -19,6 +19,7 @@ export type DiscoveryStackConfig = {
   searchBrand: string;
   searchAuthTokenOverride?: string;
   apiDefaultAllowedOrigins: string[];
+  openSearchDomainEndpoint: string;
 };
 
 export class DiscoveryStackConfigResolver {
@@ -42,6 +43,8 @@ export class DiscoveryStackConfigResolver {
         searchLambdaScriptsHost: 'https://jhf5yn6ap2.execute-api.ap-southeast-2.amazonaws.com',
         searchBrand: DiscoveryStackSearchBrand.BLC_UK,
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au'],
+        openSearchDomainEndpoint:
+          'https://search-hannah-mathews-search-6dflazrqjmfuschddan5lksynq.eu-west-2.es.amazonaws.com',
       };
     }
     return {
@@ -53,6 +56,8 @@ export class DiscoveryStackConfigResolver {
         'https://www.bluelightcard.com.au',
         'https://www.defencediscountservice.co.uk',
       ],
+      openSearchDomainEndpoint:
+        'https://search-hannah-mathews-search-6dflazrqjmfuschddan5lksynq.eu-west-2.es.amazonaws.com',
     };
   }
 
@@ -63,6 +68,8 @@ export class DiscoveryStackConfigResolver {
         searchLambdaScriptsHost: 'https://b2w93fcr0g.execute-api.ap-southeast-2.amazonaws.com',
         searchBrand: DiscoveryStackSearchBrand.BLC_UK,
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au', 'http://localhost:3000'],
+        openSearchDomainEndpoint:
+          'https://search-hannah-mathews-search-6dflazrqjmfuschddan5lksynq.eu-west-2.es.amazonaws.com',
       };
     }
     return {
@@ -75,6 +82,8 @@ export class DiscoveryStackConfigResolver {
         'https://www.ddsstaging.bluelightcard.tech',
         'http://localhost:3000',
       ],
+      openSearchDomainEndpoint:
+        'https://search-hannah-mathews-search-6dflazrqjmfuschddan5lksynq.eu-west-2.es.amazonaws.com',
     };
   }
 
@@ -84,6 +93,8 @@ export class DiscoveryStackConfigResolver {
       searchLambdaScriptsHost: 'https://lcsn8cd6i6.execute-api.eu-west-2.amazonaws.com',
       searchBrand: DiscoveryStackSearchBrand.BLC_UK,
       apiDefaultAllowedOrigins: ['*'],
+      openSearchDomainEndpoint:
+        'https://search-hannah-mathews-search-6dflazrqjmfuschddan5lksynq.eu-west-2.es.amazonaws.com',
     };
   }
 
@@ -97,6 +108,7 @@ export class DiscoveryStackConfigResolver {
         DiscoveryStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
         JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
       ),
+      openSearchDomainEndpoint: getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_STAGING_DOMAIN_ENDPOINT),
     };
   }
 }

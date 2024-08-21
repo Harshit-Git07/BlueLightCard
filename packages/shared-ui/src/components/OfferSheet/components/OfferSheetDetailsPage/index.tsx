@@ -17,76 +17,8 @@ import {
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import type { RedemptionType } from '../../types';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
-import { z } from 'zod';
-import { queryOptions, useQuery } from '@tanstack/react-query';
-
-const profileModel = z.object({
-  firstname: z.string(),
-  surname: z.string(),
-  organisation: z.string(),
-  dob: z.string(),
-  gender: z.string(),
-  mobile: z.string(),
-  emailValidated: z.number(),
-  spareEmail: z.string(),
-  spareEmailValidated: z.number(),
-  twoFactorAuthentication: z.boolean(),
-});
-
-const cardModel = z.object({
-  cardId: z.coerce.number(),
-  expires: z.string(),
-  cardStatus: z.string(),
-  datePosted: z.string().nullable(),
-});
-
-const userResponseModel = z.object({
-  profile: profileModel,
-  cards: z.array(cardModel),
-});
-
-const VALID_CARD_STATUSES = ['ADDED_TO_BATCH', 'USER_BATCHED', 'PHYSICAL_CARD'];
-const GRACE_PERIOD_DAYS = 30;
-
-function getIsRedemptionButtonDisabled() {
-  const platformAdapter = usePlatformAdapter();
-
-  return queryOptions({
-    queryKey: ['userStatus'],
-    queryFn: async () => {
-      const result = await platformAdapter.invokeV5Api('/eu/identity/user', {
-        method: 'GET',
-      });
-
-      const data = userResponseModel.parse(JSON.parse(result.data).data);
-
-      return data;
-    },
-    select: (data) => {
-      if (data.cards.length === 0) {
-        return true;
-      }
-
-      const latestCard = data.cards.reduce((max, card) => (max.cardId > card.cardId ? max : card));
-
-      if (VALID_CARD_STATUSES.includes(latestCard.cardStatus)) {
-        return false;
-      }
-
-      if (latestCard.cardStatus === 'CARD_EXPIRED') {
-        const expirationDate = new Date(Number(latestCard.expires));
-        expirationDate.setDate(expirationDate.getDate() + GRACE_PERIOD_DAYS);
-
-        if (new Date() <= expirationDate) {
-          return false;
-        }
-        return true;
-      }
-      return true;
-    },
-    staleTime: Infinity,
-  });
-}
+import { useQuery } from '@tanstack/react-query';
+import { userQuery } from '../../../../api/identity';
 
 const OfferSheetDetailsPage: FC = () => {
   const {
@@ -102,7 +34,8 @@ const OfferSheetDetailsPage: FC = () => {
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
   const [maxPerUserReached, setMaxPerUserReached] = useState(false);
-  const isRedemptionButtonDisabled = useQuery(getIsRedemptionButtonDisabled());
+
+  const user = useQuery(userQuery());
 
   const labels = useLabels(offerData);
 
@@ -395,7 +328,7 @@ const OfferSheetDetailsPage: FC = () => {
 
   const primaryButton = (
     <MagicButton
-      variant={isRedemptionButtonDisabled.data ? MagicBtnVariant.Disabled : MagicBtnVariant.Primary}
+      variant={user.data?.canRedeemOffer ? MagicBtnVariant.Primary : MagicBtnVariant.Disabled}
       className="w-full"
       onClick={async () => {
         if (platformAdapter.platform === PlatformVariant.MobileHybrid) {
@@ -466,7 +399,7 @@ const OfferSheetDetailsPage: FC = () => {
     return (
       <div>
         {primaryButton}
-        {isRedemptionButtonDisabled.data && (
+        {!user.data?.canRedeemOffer && (
           <center>
             <span className="text-colour-onSurface-subtle font-body-light text-body-light font-body-light-weight leading-body-light tracking-body-light">
               This offer is for active card holders only. Please check the status of your account.

@@ -74,7 +74,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
 
   lint:
     name: Linting
@@ -187,7 +186,7 @@ jobs:
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
             region: 'eu-west-2'
-            offers_graphql_endpoint: '' #TODO: Add once DDS Offers stack deployed in AWS
+            offers_graphql_endpoint: 'https://whrpak5b7vgk5ccqwmsc5geltm.appsync-api.eu-west-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://staging-offers-dds.blcshine.io'
             offers_brand: 'dds-uk'
     runs-on: ubuntu-latest

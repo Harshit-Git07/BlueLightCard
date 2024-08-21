@@ -18,7 +18,7 @@ export class OpenSearchDomain {
       return openSearchDomain.domainEndpoint;
     } else {
       const config = DiscoveryStackConfigResolver.for(this.stack, this.stack.region as DiscoveryStackRegion);
-      return config.openSearchDomainEndpoint;
+      return config.openSearchDomainEndpoint ?? '';
     }
   }
 

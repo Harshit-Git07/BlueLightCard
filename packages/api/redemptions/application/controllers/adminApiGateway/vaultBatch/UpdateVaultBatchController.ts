@@ -36,7 +36,9 @@ export class UpdateVaultBatchController extends APIGatewayController<ParsedReque
       return parsedRequest;
     }
 
-    const expiryDateIsInvalid = isNaN(Date.parse(parsedRequest.value.body.expiry));
+    const expiryDateIsInvalid =
+      z.string().datetime().safeParse(parsedRequest.value.body.expiry).success === false ||
+      new Date(parsedRequest.value.body.expiry) < new Date();
     if (expiryDateIsInvalid) {
       return Result.err({
         statusCode: 400,

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.70.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.70.1...bluelightcard/web-v1.70.2) (2024-08-22)
+
+
+### Other Changes
+
+* add code coverage reporting ([#2068](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2068)) ([ba6dbef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ba6dbef3b7acdebcc32a29c8861733df14b6b1d6))
+
 ## [1.70.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.70.0...bluelightcard/web-v1.70.1) (2024-08-16)
 
 

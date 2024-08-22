@@ -298,7 +298,7 @@ jobs:
             amplitude_deployment_key: 'DDS_UK_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
-            offers_graphql_endpoint: '' #TODO: Add once DDS Offers stack deployed in AWS
+            offers_graphql_endpoint: 'https://bseyuukkyrcnrmpbnpq5vehowy.appsync-api.eu-west-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://offers-dds.blcshine.io'
             offers_brand: 'dds-uk'
     environment: Production

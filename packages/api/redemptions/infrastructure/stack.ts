@@ -97,6 +97,7 @@ export async function Redemptions({ app, stack }: StackContext) {
           }),
         deployOptions: {
           stageName: 'v1',
+          metricsEnabled: true,
         },
         // IMPORTANT: If you need to update these settings, remember to also
         //            update them in APIGatewayController

@@ -34,6 +34,7 @@ export function createAdminApi(
           }),
         deployOptions: {
           stageName: 'v1',
+          metricsEnabled: true,
         },
         apiKeySourceType: ApiKeySourceType.HEADER,
       },

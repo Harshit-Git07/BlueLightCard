@@ -103,7 +103,7 @@ export class HomePageAus {
   }
 
   async navigateToUrlAus(): Promise<void> {
-    await this.webActions.navigateToURL(process.env.BASE_URL_AUS);
+    await this.page.goto(process.env.BASE_URL_AUS, { waitUntil: 'load' });
   }
 
   async navigateToUrlAndLogin(email: string, password: string): Promise<void> {

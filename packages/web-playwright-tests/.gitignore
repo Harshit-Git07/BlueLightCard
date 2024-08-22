@@ -1,4 +1,6 @@
 node_modules/
+
+#Reports
 test-results/
 allure-results/
 allure-report/
@@ -10,3 +12,7 @@ html-report.zip/
 /blob-report/
 /playwright/.cache/
 test-results/.last-run.json
+
+#env files
+.env.production
+.env.staging

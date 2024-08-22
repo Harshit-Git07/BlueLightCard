@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       # Checkout repo and install dependencies
       - name: Checkout repository
@@ -25,10 +26,44 @@ jobs:
         working-directory: packages/web-playwright-tests
         run: npx playwright install
 
-      # Run specified Playwright test with retry logic
+      # Check if secrets exist and throw error if any are missing
+      - name: Check Secrets Existence
+        env:
+          BASE_URL_UK: ${{ secrets.BASE_URL_UK }}
+          EMAIL_UK: ${{ secrets.EMAIL_UK }}
+          PASSWORD_UK: ${{ secrets.PASSWORD_UK }}
+        run: |
+          echo "Checking secrets existence..."
+
+          if [ -z "$BASE_URL_UK" ]; then
+            echo "Error: BASE_URL_UK secret is not set."
+            exit 1
+          else
+            echo "BASE_URL_UK secret is set."
+          fi
+
+          if [ -z "$EMAIL_UK" ]; then
+            echo "Error: EMAIL_UK secret is not set."
+            exit 1
+          else
+            echo "EMAIL_UK secret is set."
+          fi
+
+          if [ -z "$PASSWORD_UK" ]; then
+            echo "Error: PASSWORD_UK secret is not set."
+            exit 1
+          else
+            echo "PASSWORD_UK secret is set."
+          fi
+
+      # Run specified Playwright test with retry logic, using secrets for credentials
       - name: Run Playwright test - Login to UK
         working-directory: packages/web-playwright-tests
         id: playwright
+        env:
+          BASE_URL_UK: ${{ secrets.BASE_URL_UK }}
+          EMAIL_UK: ${{ secrets.EMAIL_UK }}
+          PASSWORD_UK: ${{ secrets.PASSWORD_UK }}
         run: |
           for i in {1..2}; do
             if npx playwright test -g "@Uk @SmokeTest @Web @NeedsTestCase - Login to uk home page"; then
@@ -51,7 +86,7 @@ jobs:
           name: playwright-report
           path: packages/web-playwright-tests/html-report
 
-      # Send Slack message if all retries fail
+        # Send Slack message if all retries fail
       - name: Send Slack message on fail
         if: failure()
         run: |

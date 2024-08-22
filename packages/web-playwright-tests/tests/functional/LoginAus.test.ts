@@ -2,7 +2,9 @@ import test from '@lib/BaseTest';
 
 test(`@Aus @SmokeTest @Web @NeedsTestCase - Login to aus home page`, async ({ homePageAus }) => {
   await test.step(`Logging in to BLC Aus`, async () => {
-    await homePageAus.navigateToUrlAndLogin(process.env.EMAIL_AUS, process.env.PASSWORD_AUS);
+    await homePageAus.navigateToUrlAndLogin(      
+      process.env.EMAIL_AUS,
+      process.env.PASSWORD_AUS);
   });
 
   await test.step(`Asserting the expected elements are visible on the Home screen`, async () => {

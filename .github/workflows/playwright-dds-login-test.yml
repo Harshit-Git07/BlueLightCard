@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       # Checkout repo and install dependencies
       - name: Checkout repository
@@ -25,10 +26,44 @@ jobs:
         working-directory: packages/web-playwright-tests
         run: npx playwright install
 
-      # Run specified Playwright test with retry logic
+      # Check if secrets exist and throw error if any are missing
+      - name: Check Secrets Existence
+        env:
+          BASE_URL_DDS: ${{ secrets.BASE_URL_DDS }}
+          EMAIL_DDS: ${{ secrets.EMAIL_DDS }}
+          PASSWORD_DDS: ${{ secrets.PASSWORD_DDS }}
+        run: |
+          echo "Checking secrets existence..."
+
+          if [ -z "$BASE_URL_DDS" ]; then
+            echo "Error: BASE_URL_DDS secret is not set."
+            exit 1
+          else
+            echo "BASE_URL_DDS secret is set."
+          fi
+
+          if [ -z "$EMAIL_DDS" ]; then
+            echo "Error: EMAIL_DDS secret is not set."
+            exit 1
+          else
+            echo "EMAIL_DDS secret is set."
+          fi
+
+          if [ -z "$PASSWORD_DDS" ]; then
+            echo "Error: PASSWORD_DDS secret is not set."
+            exit 1
+          else
+            echo "PASSWORD_DDS secret is set."
+          fi
+
+      # Run specified Playwright test with retry logic, using secrets for credentials
       - name: Run Playwright test - Login to DDS
         working-directory: packages/web-playwright-tests
         id: playwright
+        env:
+          BASE_URL_DDS: ${{ secrets.BASE_URL_DDS }}
+          EMAIL_DDS: ${{ secrets.EMAIL_DDS }}
+          PASSWORD_DDS: ${{ secrets.PASSWORD_DDS }}
         run: |
           for i in {1..2}; do
             if npx playwright test -g "@Dds @SmokeTest @Web @NeedsTestCase - Login to dds home page"; then

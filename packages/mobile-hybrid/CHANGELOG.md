@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.27.1...bluelightcard/mobile-hybrid-v1.28.0) (2024-08-21)
+
+
+### Features
+
+* Disco 546 remove feature flag dependencies on ordering of the homepage ([#2041](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2041)) ([c382490](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c3824907f64f48011a1d5617da97a14ec616e905))
+
+
+### Other Changes
+
+* [PE-145] fix existing SonarCloud issues in main ([#2005](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2005)) ([e8a0d50](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8a0d50e416d40c2451dab97030e7b83ba6e24c3))
+
 ## [1.27.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.27.0...bluelightcard/mobile-hybrid-v1.27.1) (2024-08-16)
 
 

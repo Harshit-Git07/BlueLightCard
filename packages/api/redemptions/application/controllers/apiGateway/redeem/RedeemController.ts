@@ -21,10 +21,11 @@ import {
 const RedeemRequestModel = z.object({
   body: JsonStringSchema.pipe(PostRedeemModel),
   headers: z.object({
-    'X-Client-Type': z.optional(z.enum(['web', 'mobile'])),
-    Authorization: z.string(),
+    'x-client-type': z.optional(z.enum(['web', 'mobile'])),
+    authorization: z.string(),
   }),
 });
+
 export type ParsedRequest = z.infer<typeof RedeemRequestModel> & { memberId: string; brazeExternalUserId: string };
 
 export class RedeemController extends APIGatewayController<ParsedRequest> {
@@ -41,13 +42,20 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
   protected async parseRequest(
     request: APIGatewayProxyEventV2,
   ): Promise<Result<ParsedRequest, ParseRequestResult | ParseRequestError>> {
-    const parsedRequest = this.zodParseRequest(request, RedeemRequestModel);
+    const requestWithLowercaseHeaders = {
+      ...request,
+      headers: Object.entries(request.headers).reduce((prev, [key, value]) => {
+        return { ...prev, [key.toLowerCase()]: value };
+      }, {}),
+    };
+
+    const parsedRequest = this.zodParseRequest(requestWithLowercaseHeaders, RedeemRequestModel);
 
     if (parsedRequest.isFailure) {
       return parsedRequest;
     }
 
-    const parsedBearerToken = TokenHelper.removeBearerPrefix(parsedRequest.value.headers.Authorization);
+    const parsedBearerToken = TokenHelper.removeBearerPrefix(parsedRequest.value.headers.authorization);
     const tokenPayloadResult = TokenHelper.unsafeExtractDataFromToken(parsedBearerToken);
 
     if (tokenPayloadResult.isFailure) {
@@ -84,7 +92,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
       brazeExternalUserId: request.brazeExternalUserId,
       companyName: request.body.companyName,
       offerName: request.body.offerName,
-      clientType: request.headers['X-Client-Type'] ?? 'web',
+      clientType: request.headers['x-client-type'] ?? 'web',
     });
 
     switch (result.kind) {

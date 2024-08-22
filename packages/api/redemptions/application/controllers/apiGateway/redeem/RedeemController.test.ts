@@ -7,7 +7,7 @@ import {
   requestFactory,
 } from '@blc-mono/redemptions/libs/test/factories/redeemRequest.factory';
 
-import { createTestLogger } from '../../../../libs/test/helpers/logger';
+import { createSilentLogger, createTestLogger } from '../../../../libs/test/helpers/logger';
 import { IRedeemService, RedeemResult } from '../../../services/redeem/RedeemService';
 
 import { RedeemController } from './RedeemController';
@@ -131,6 +131,8 @@ describe('RedeemController', () => {
     });
 
     it('should return error when canRedeemOffer is false', async () => {
+      const logger = createSilentLogger();
+
       const request = requestFactory.build({
         headers: {
           Authorization: generateFakeJWT(),
@@ -158,6 +160,15 @@ describe('RedeemController', () => {
 
       expect(kind).toBe('RequestValidationCardStatus');
       expect(results.statusCode).toBe(403);
+
+      expect(logger.error).toHaveBeenCalledTimes(1);
+      expect(logger.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          context: expect.objectContaining({
+            error: expect.objectContaining({ kind: 'RequestValidationCardStatus' }),
+          }),
+        }),
+      );
     });
   });
 });

@@ -17,7 +17,7 @@ export const generateFakeJWT = (cardStatus?: string | undefined) => {
 
 export const requestFactory = Factory.define(() => ({
   body: JSON.stringify({
-    offerId: faker.datatype.number({
+    offerId: faker.number.int({
       min: 1,
       max: 1000000,
     }),
@@ -42,7 +42,7 @@ export const redeemEventFactory = Factory.define<ParsedRequest>(() => ({
     offerName: faker.lorem.words(5),
   },
   headers: {
-    Authorization: 'Bearer token',
+    authorization: 'Bearer token',
   },
   memberId: faker.lorem.words(5),
   brazeExternalUserId: faker.string.uuid(),

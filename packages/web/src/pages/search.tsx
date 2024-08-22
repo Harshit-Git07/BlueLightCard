@@ -264,7 +264,7 @@ const Search: NextPage = () => {
           </div>
         </Container>
       </>
-      ){/* Adverts */}
+      {/* Adverts */}
       {adverts.length > 0 && (
         <Container className="tablet:py-5 pb-[44px]" addBottomHorizontalLine={false}>
           <BannerCarousel

@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 
+import { as } from '@blc-mono/core/utils/testing';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { IS3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
@@ -76,7 +77,7 @@ describe('VaultCodesUploadService', () => {
     };
   }
 
-  function mockVaultBatchesRepo(): IVaultBatchesRepository {
+  function mockVaultBatchesRepo(): Partial<IVaultBatchesRepository> {
     return {
       create: jest.fn(),
       findOneById: jest.fn().mockResolvedValue({
@@ -122,7 +123,7 @@ describe('VaultCodesUploadService', () => {
     const service = makeService({
       vaultCodesRepo: mockedVaultCodesRepo,
       redemptionsEventsRepo: mockedRedemptionsEventsRepo,
-      vaultBatchesRepo: mockedVaultBatchesRepo,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
       s3ClientProvider: mockedS3ClientProvider,
     });
 
@@ -202,7 +203,7 @@ describe('VaultCodesUploadService', () => {
     const service = makeService({
       vaultCodesRepo: mockedVaultCodesRepo,
       redemptionsEventsRepo: mockedRedemptionsEventsRepo,
-      vaultBatchesRepo: mockedVaultBatchesRepo,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
       s3ClientProvider: mockedS3ClientProvider,
     });
 

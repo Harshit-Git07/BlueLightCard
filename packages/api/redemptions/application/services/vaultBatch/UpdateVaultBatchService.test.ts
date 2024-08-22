@@ -1,3 +1,4 @@
+import { as } from '@blc-mono/core/utils/testing';
 import {
   ITransactionManager,
   TransactionManager,
@@ -47,7 +48,7 @@ describe('UpdateVaultBatchService', () => {
     return service.handle(defaultVaultBatch.id, new Date());
   }
 
-  function mockVaultBatchesRepo(): IVaultBatchesRepository {
+  function mockVaultBatchesRepo(): Partial<IVaultBatchesRepository> {
     return {
       findOneById: jest.fn().mockResolvedValue(defaultVaultBatch),
       create: jest.fn(),
@@ -89,7 +90,7 @@ describe('UpdateVaultBatchService', () => {
 
     // Act
     const result = await callUpdateVaultBatchService({
-      vaultBatchesRepo: mockedVaultBatchesRepo,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
 
@@ -105,7 +106,7 @@ describe('UpdateVaultBatchService', () => {
 
     // Act
     const result = await callUpdateVaultBatchService({
-      vaultBatchesRepo: mockedVaultBatchesRepo,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
 
@@ -123,7 +124,7 @@ describe('UpdateVaultBatchService', () => {
 
     // Act
     const result = await callUpdateVaultBatchService({
-      vaultBatchesRepo: mockedVaultBatchesRepo,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
 
@@ -143,7 +144,7 @@ describe('UpdateVaultBatchService', () => {
 
     // Act
     const result = await callUpdateVaultBatchService({
-      vaultBatchesRepo: mockedVaultBatchesRepo,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
 
@@ -167,7 +168,7 @@ describe('UpdateVaultBatchService', () => {
 
     // Act
     const result = await callUpdateVaultBatchService({
-      vaultBatchesRepo: mockedVaultBatchesRepo,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
 

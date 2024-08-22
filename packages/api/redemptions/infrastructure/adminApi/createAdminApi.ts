@@ -64,6 +64,17 @@ export function createAdminApi(
   adminApi.addRoutes(stack, {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
+    'GET /batch/{vaultId}': AdminRoute.createRoute({
+      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
+      stack,
+      functionName: 'GetVaultBatchHandler',
+      restApi: restAdminApi,
+      database,
+      handler: 'packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/getVaultBatchHandler.handler',
+      requestValidatorName: 'GetVaultBatchValidator',
+    }),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     'POST /batch': AdminRoute.createRoute({
       apiGatewayModelGenerator: adminApiGatewayModelGenerator,
       stack,

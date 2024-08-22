@@ -5,6 +5,8 @@ import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
+import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { OpenSearchDomain } from '@blc-mono/discovery/infrastructure/search/OpenSearchDomain';
 import { Identity } from '@blc-mono/identity/stack';
 
@@ -13,7 +15,7 @@ import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastru
 
 import { Route } from './routes/route';
 
-export async function Discovery({ stack, app }: StackContext) {
+async function DiscoveryStack({ stack, app }: StackContext) {
   const { certificateArn, vpc } = use(Shared);
   const { authorizer } = use(Identity);
   const SERVICE_NAME = 'discovery';
@@ -129,3 +131,6 @@ const getAustraliaDomainName = (stage: string) =>
 
 const getUKDomainName = (stage: string) =>
   isProduction(stage) ? 'discovery.blcshine.io' : `${stage}-discovery.blcshine.io`;
+
+export const Discovery =
+  getEnvRaw(DiscoveryStackEnvironmentKeys.SKIP_DISCOVERY_STACK) !== 'true' ? DiscoveryStack : () => Promise.resolve();

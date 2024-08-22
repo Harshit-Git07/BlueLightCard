@@ -7,7 +7,7 @@ import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayEx
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
@@ -39,7 +39,7 @@ import { createVaultThresholdEmailRule } from './eventBridge/rules/VaultThreshol
 import { Route } from './routes/route';
 import { VaultCodesUpload } from './s3/vaultCodesUpload';
 
-export async function Redemptions({ app, stack }: StackContext) {
+async function RedemptionsStack({ app, stack }: StackContext) {
   const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams, bastionHost } = use(Shared);
   const { authorizer, identityApi } = use(Identity);
   const SERVICE_NAME = 'redemptions';
@@ -293,3 +293,8 @@ export async function Redemptions({ app, stack }: StackContext) {
     adminApi,
   };
 }
+
+export const Redemptions =
+  getEnvRaw(RedemptionsStackEnvironmentKeys.SKIP_REDEMPTIONS_STACK) !== 'true'
+    ? RedemptionsStack
+    : () => Promise.resolve();

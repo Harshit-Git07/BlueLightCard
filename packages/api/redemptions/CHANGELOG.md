@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.23.0...bluelightcard/redemptions-v1.24.0) (2024-08-22)
+
+
+### Features
+
+* [TR 727] check user card via api ([#2001](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2001)) ([270c89d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/270c89dd3c0806b250cbb9caa63d18467d01b7d0))
+* added e2e tests back in. ([c533507](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c533507357ad581fccd8de48545fcbb40554408d))
+* Tr 630 vault batch created admin email ([#2036](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2036)) ([6e00d82](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6e00d82a52c6fc6b36fc17f5c6244203541a5315))
+* TR-629 vault code upload save codes lambda ([#1876](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1876)) ([8529d69](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8529d696d037a465fd20ac7677f6000a7b64d727))
+* TR-706 vault code upload batch lambda ([#1916](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1916)) ([a2a1189](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a2a1189d1b6a7194e3169b65ee417efa0679b533))
+
+
+### Bug Fixes
+
+* comment out vault batch tests ([d4b40d3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d4b40d34a381454e1b74c3ce2c72a90564327ee8))
+* e2e test fix ([#2017](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2017)) ([c533507](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c533507357ad581fccd8de48545fcbb40554408d))
+* Task/comment out vault batch e2e tests ([#2012](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2012)) ([d4b40d3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d4b40d34a381454e1b74c3ce2c72a90564327ee8))
+* Updating datadog site to EU ([#2042](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2042)) ([f4d2ec0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4d2ec0dfdffb33022daf32b964723f806853c76))
+
+
+### Other Changes
+
+* [PE-145] fix existing SonarCloud issues in main ([#2005](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2005)) ([e8a0d50](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e8a0d50e416d40c2451dab97030e7b83ba6e24c3))
+* add code coverage reporting ([#2068](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2068)) ([ba6dbef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ba6dbef3b7acdebcc32a29c8861733df14b6b1d6))
+* tr-706 fixes ([#2073](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2073)) ([baee352](https://github.com/bluelightcard/BlueLightCard-2.0/commit/baee3524f3fcfa96a4ea938eeec0e834a9a6490f))
+
 ## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.22.0...bluelightcard/redemptions-v1.23.0) (2024-08-13)
 
 

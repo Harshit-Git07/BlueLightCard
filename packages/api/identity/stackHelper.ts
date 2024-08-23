@@ -13,22 +13,22 @@ import {
   createClient,
   createRoleForHostedUi,
   createE2EClient,
-} from 'src/helpers/cognitoClients';
+} from '../identity/src/helpers/cognitoClients';
 import {
   buildCognitoCdkProps,
   buildEnvForMigrationLambda,
   buildEnvForPostAuthLambda,
   buildEnvForPreTokenGenerationLambda,
   buildEnvironmentVarsForPreAuthLambda,
-} from 'src/helpers/cognitoClientVars';
-import { createAuditLogFunction, createAuditLogFunctionPre } from 'src/helpers/cognitoLogsFilters';
+} from '../identity/src/helpers/cognitoClientVars';
+import { createAuditLogFunction, createAuditLogFunctionPre } from '../identity/src/helpers/cognitoLogsFilters';
 import {
   buildCognitoCdkPropsOld,
   buildEnvForPostAuthLambdaOld,
   createWebClientOld,
   logAndFilterPostAuthOld,
   logAndFilterPreTokenOld,
-} from 'src/helpers/cognitoClientHelperOld';
+} from '../identity/src/helpers/cognitoClientHelperOld';
 
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
   appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();

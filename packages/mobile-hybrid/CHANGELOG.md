@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.28.0...bluelightcard/mobile-hybrid-v1.28.1) (2024-08-23)
+
+
+### Bug Fixes
+
+* [DISCO-546] Revert removing feature flags commit ([#2091](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2091)) ([4ae5aea](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4ae5aea02a948b31c9cabe98bc6d594452d2d2fb))
+
 ## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.27.1...bluelightcard/mobile-hybrid-v1.28.0) (2024-08-21)
 
 

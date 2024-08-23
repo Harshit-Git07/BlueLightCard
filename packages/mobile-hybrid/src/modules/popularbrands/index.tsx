@@ -4,10 +4,23 @@ import brands from './brands';
 import PopularBrands from '@/components/PopularBrands/PopularBrands';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { useAmplitude } from '@/hooks/useAmplitude';
+import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
+
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const PopularBrandsSlider: FC = () => {
+  const { is } = useAmplitude();
+
+  /**
+   * @featureFlag streamlined-homepage
+   * @description Render the subtitle for popular brands if the feature flag is not on
+   * */
+  const controlSubtitle = is(Experiments.STREAMLINED_HOMEPAGE, AmplitudeFeatureFlagState.On)
+    ? undefined
+    : 'Explore popular brands with a swipe!';
   const onBrandItemClick = (compid: number) => {
     navigation.navigate(`/offerdetails.php?cid=${compid}`);
     analytics.logAnalyticsEvent({
@@ -28,6 +41,7 @@ const PopularBrandsSlider: FC = () => {
   };
   return (
     <PopularBrands
+      text={controlSubtitle}
       onBrandItemClick={onBrandItemClick}
       brands={brands}
       onInteracted={onCarouselInteracted}

@@ -6,6 +6,7 @@ import CardCarousel from '@/components/Carousel/CardCarousel';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
+import { NewsPreview } from '../news';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { useAmplitude } from '@/hooks/useAmplitude';
@@ -95,6 +96,10 @@ const Offers: FC = () => {
       {flexible && (
         <div className="mb-6">
           <Heading title={headingFeatureFlag ? 'Shop Black Friday' : flexible.title} />
+          {!is(Experiments.STREAMLINED_HOMEPAGE, AmplitudeFeatureFlagState.On) &&
+            flexible.subtitle.length && (
+              <p className="px-4 mb-3 dark:text-neutral-white">{flexible.subtitle}</p>
+            )}
           <CardCarousel
             slides={flexible.items
               .filter((offer) => offer.hide == false)
@@ -134,6 +139,7 @@ const Offers: FC = () => {
           />
         </section>
       )}
+      {!is(Experiments.STREAMLINED_HOMEPAGE, AmplitudeFeatureFlagState.On) && <NewsPreview />}
       <div className="mb-2">
         {offers.map((group, index) => (
           <section key={`${group.title}_${index}`} className="mb-6">

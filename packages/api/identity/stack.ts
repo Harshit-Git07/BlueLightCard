@@ -15,8 +15,8 @@ import { userGdprRule } from './src/eventRules/userGdprRule';
 import getAllowedDomains from './src/utils/getAllowedDomains';
 import { STAGES } from '@blc-mono/core/types/stages.enum';
 import { REGIONS } from '@blc-mono/core/types/regions.enum';
-import { createNewCognito, createNewCognitoDDS, createOldCognito, createOldCognitoDDS } from './stackHelper';
-import { IdentitySource } from 'aws-cdk-lib/aws-apigateway';
+import { createNewCognito, createOldCognito } from './stackHelper';
+import { IdentitySource, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayAuthorizer, SharedAuthorizer } from '../core/src/identity/authorizer';
 import { Effect, ManagedPolicy, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { UnsuccessfulLoginAttemptsTables } from './src/cognito/tables';
@@ -24,7 +24,6 @@ import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config
 import { userEmailUpdatedRule } from './src/eventRules/userEmailUpdated';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { isProduction } from "@blc-mono/core/utils/checkEnvironment";
 import {
   getCognitoUserPoolIdStackOutputName,
@@ -159,10 +158,10 @@ export function Identity({ stack }: StackContext) {
     //add dead letter queue
     const dlq = new Queue(stack, 'DLQ');
 
-    const { oldCognito, oldWebClient } = createOldCognito(stack, unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret, identityTable, identityAdministratorRole);
-    const { oldCognitoDds, oldWebClientDds } = createOldCognitoDDS(stack, unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, identitySecret, identityTable, identityAdministratorRole);
-    const cognito = createNewCognito(stack, unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, oldCognito, oldWebClient, identitySecret, identityTable, identityAdministratorRole);
-    const cognito_dds = createNewCognitoDDS(stack, unsuccessfulLoginAttemptsTable.table, appSecret, bus, dlq, region, webACL, oldCognitoDds, oldWebClientDds, identitySecret, identityTable, identityAdministratorRole);
+    const oldCognitoBlc = createOldCognito(stack, unsuccessfulLoginAttemptsTable.table, appSecret, webACL, identityTable, identityAdministratorRole);
+    const oldCognitoDds = createOldCognito(stack, unsuccessfulLoginAttemptsTable.table, appSecret, webACL, identityTable, identityAdministratorRole, true);
+    const cognito = createNewCognito([stack, bus, dlq ], [ unsuccessfulLoginAttemptsTable.table, identityTable], [appSecret, identitySecret], webACL, [oldCognitoBlc.cognito, oldCognitoBlc.webClient], identityAdministratorRole);
+    const cognito_dds = createNewCognito([stack,bus, dlq] ,[ unsuccessfulLoginAttemptsTable.table, identityTable], [appSecret, identitySecret], webACL, [oldCognitoDds.cognito, oldCognitoDds.webClient], identityAdministratorRole, true);
 
     const customDomainNameLookUp: Record<string, string> = {
       [REGIONS.EU_WEST_2]: 'identity.blcshine.io',
@@ -172,8 +171,8 @@ export function Identity({ stack }: StackContext) {
     const identityCustomAuthenticatorLambda = new Function(stack, 'Authorizer', {
       handler: './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
       environment: {
-        OLD_USER_POOL_ID: oldCognito.userPoolId,
-        OLD_USER_POOL_ID_DDS: oldCognitoDds.userPoolId,
+        OLD_USER_POOL_ID: oldCognitoBlc.cognito.userPoolId,
+        OLD_USER_POOL_ID_DDS: oldCognitoDds.cognito.userPoolId,
         USER_POOL_ID: cognito.userPoolId,
         USER_POOL_ID_DDS: cognito_dds.userPoolId,
       },
@@ -245,9 +244,9 @@ export function Identity({ stack }: StackContext) {
 
     stack.addOutputs({
       BlcUkCognitoUserPoolId: cognito.userPoolId,
-      BlcUkOldCognitoUserPoolId: oldCognito.userPoolId,
+      BlcUkOldCognitoUserPoolId: oldCognitoBlc.cognito.userPoolId,
       DdsUkCognitoUserPoolId: cognito_dds.userPoolId,
-      DdsUkOldCognitoUserPoolId: oldCognitoDds.userPoolId,
+      DdsUkOldCognitoUserPoolId: oldCognitoDds.cognito.userPoolId,
       Table: identityTable.tableName,
       IdentityApiEndpoint: identityApi.url,
       IdentityApiId: identityApi.cdk.restApi.restApiId
@@ -288,17 +287,17 @@ export function Identity({ stack }: StackContext) {
       CognitoDdsUserPoolWebClient: cognito_dds.userPoolId,
     });
 
-    exportUserPoolIdsAsStackOutputs(stack, oldCognito.userPoolId, cognito.userPoolId);
+    exportUserPoolIdsAsStackOutputs(stack, oldCognitoBlc.cognito.userPoolId, cognito.userPoolId);
 
     //add event bridge rules
-    bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
-    bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
+    bus.addRules(stack, emailUpdateRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognitoBlc.cognito.userPoolId, oldCognitoDds.cognito.userPoolId, identityAdministratorRole));
+    bus.addRules(stack, userStatusUpdatedRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognitoBlc.cognito.userPoolId, oldCognitoDds.cognito.userPoolId, identityAdministratorRole));
     bus.addRules(stack, userSignInMigratedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region, identityAdministratorRole));
     bus.addRules(stack, cardStatusUpdatedRule(dlq.queueUrl, identityTable.tableName, region, identityAdministratorRole));
     bus.addRules(stack, userProfileUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region, identityAdministratorRole));
     bus.addRules(stack, companyFollowsUpdatedRule(dlq.queueUrl, identityTable.tableName, idMappingTable.tableName, region, identityAdministratorRole));
-    bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
-    bus.addRules(stack, userEmailUpdatedRule(cognito.userPoolId, cognito_dds.userPoolId, region, oldCognito.userPoolId, oldCognitoDds.userPoolId, identityAdministratorRole));
+    bus.addRules(stack, userGdprRule(cognito.userPoolId, dlq.queueUrl, cognito_dds.userPoolId, region, unsuccessfulLoginAttemptsTable.table.tableName, oldCognitoBlc.cognito.userPoolId, oldCognitoDds.cognito.userPoolId, identityAdministratorRole));
+    bus.addRules(stack, userEmailUpdatedRule(cognito.userPoolId, cognito_dds.userPoolId, region, oldCognitoBlc.cognito.userPoolId, oldCognitoDds.cognito.userPoolId, identityAdministratorRole));
 
     return {
       identityApi,

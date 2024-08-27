@@ -21,7 +21,10 @@ import {
   buildEnvForPreTokenGenerationLambda,
   buildEnvironmentVarsForPreAuthLambda,
 } from '../identity/src/helpers/cognitoClientVars';
-import { createAuditLogFunction, createAuditLogFunctionPre } from '../identity/src/helpers/cognitoLogsFilters';
+import {
+  createAuditLogFunction,
+  createAuditLogFunctionPre,
+} from '../identity/src/helpers/cognitoLogsFilters';
 import {
   buildCognitoCdkPropsOld,
   buildEnvForPostAuthLambdaOld,
@@ -33,7 +36,7 @@ import {
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
   appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
 const getAuSuffix = (region: REGIONS) => (region === REGIONS.AP_SOUTHEAST_2 ? '-au' : '');
-const getBrandPrefix = (isDDS: boolean) => isDDS ? 'dds' : 'blc';
+const getBrandPrefix = (isDDS: boolean) => (isDDS ? 'dds' : 'blc');
 
 const getAuthCustomDomainName = (
   stage: STAGES,
@@ -121,8 +124,24 @@ export function createOldCognito(
     } else {
       dataStream = `dwh-${brandPrefix}-production-login`;
     }
-    logAndFilterPostAuthOld(stack, cognito, dataStream, webClient, mobileClient, `${brandPrefix}AuditLogSignInOldPool`, isDds);
-    logAndFilterPreTokenOld(stack, cognito, dataStream, webClient, mobileClient, `${brandPrefix}AuditLogSignInOldPoolPre`, isDds);
+    logAndFilterPostAuthOld(
+      stack,
+      cognito,
+      dataStream,
+      webClient,
+      mobileClient,
+      `${brandPrefix}AuditLogSignInOldPool`,
+      isDds,
+    );
+    logAndFilterPreTokenOld(
+      stack,
+      cognito,
+      dataStream,
+      webClient,
+      mobileClient,
+      `${brandPrefix}AuditLogSignInOldPoolPre`,
+      isDds,
+    );
   }
 
   return { cognito, webClient };
@@ -173,10 +192,11 @@ export function createNewCognito(
 
   //audit
   if (stack.stage === STAGES.PRODUCTION) {
-    const dataStream = isDDS ? 'dwh-dds-production-login' :
-      region === REGIONS.AP_SOUTHEAST_2
-        ? `dwh-${brandPrefix}-p1-production-login`
-        : `dwh-${brandPrefix}-production-login`;
+    const dataStream = isDDS
+      ? 'dwh-dds-production-login'
+      : region === REGIONS.AP_SOUTHEAST_2
+      ? `dwh-${brandPrefix}-p1-production-login`
+      : `dwh-${brandPrefix}-production-login`;
     const functionPost = createAuditLogFunction(
       stack,
       cognito,
@@ -216,7 +236,14 @@ export function createNewCognito(
   return cognito;
 }
 
-function createDomain(stack: Stack, cognito:Cognito, region: REGIONS, appSecret : ISecret, brand: BRANDS, prefix:string) {
+function createDomain(
+  stack: Stack,
+  cognito: Cognito,
+  region: REGIONS,
+  appSecret: ISecret,
+  brand: BRANDS,
+  prefix: string,
+) {
   if (stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING) {
     cognito.cdk.userPool.addDomain(`${prefix.toUpperCase()}CognitoCustomDomain`, {
       customDomain: {
@@ -261,8 +288,8 @@ function buildTriggers(
       environment: buildEnvForMigrationLambda(
         region,
         appSecret,
-        [ bus, dlq ],
-        [ oldCognito, oldCognitoWebClient ],
+        [bus, dlq],
+        [oldCognito, oldCognitoWebClient],
         identityTable,
         logLevel,
         isDDS,
@@ -302,4 +329,3 @@ function buildTriggers(
     },
   };
 }
-

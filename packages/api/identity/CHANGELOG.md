@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.94.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.94.0...bluelightcard/identity-v1.94.1) (2024-08-27)
+
+
+### Bug Fixes
+
+* Update hosted UI asset path ([#2105](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2105)) ([ba63cdb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ba63cdb621296cd93b199ee2b6b741c7ddd64160))
+
 ## [1.94.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.93.1...bluelightcard/identity-v1.94.0) (2024-08-27)
 
 

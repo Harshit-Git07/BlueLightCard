@@ -2,8 +2,12 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DeleteCommand,
   DeleteCommandInput,
-  DynamoDBDocumentClient, PutCommand, PutCommandInput,
-  QueryCommand, UpdateCommand,
+  DynamoDBDocumentClient,
+  NativeAttributeValue,
+  PutCommand,
+  PutCommandInput,
+  QueryCommand,
+  UpdateCommand,
   UpdateCommandInput
 } from '@aws-sdk/lib-dynamodb';
 
@@ -45,6 +49,28 @@ export async function getItemFromIdMappingTable(brand: string, legacyId: number,
   return result.Items?.[0];
 }
 
+export async function getUnsuccessfulLoginItemFor(
+  email: string
+): Promise<Record<string, NativeAttributeValue>[]> {
+  const dynamodb = createDynamoDbClient();
+  const params = {
+    ExpressionAttributeValues: {
+      ":email": email,
+      ":userPoolId": process.env.E2E_IDENTITY_COGNITO_USER_POOL_ID
+    },
+    ExpressionAttributeNames: {
+      "#email": "email",
+      "#userPoolId": "userPoolId"
+    },
+    TableName: process.env.E2E_UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME,
+    KeyConditionExpression: "#email = :email and #userPoolId = :userPoolId",
+    IndexName: 'gsi1',
+  }
+
+  const response = await dynamodb.send(new QueryCommand(params));
+  return response.Items ?? [];
+}
+
 export async function createProfileItemInIdentityTableFor(
   memberUuid: string,
   profileUuid: string
@@ -81,6 +107,24 @@ export async function createCardItemInIdentityTableFor(
   } as PutCommandInput;
 
   await dynamodb.send(new PutCommand(updateParams));
+}
+
+export async function createUnsuccessfulLoginItemFor(
+  email: string,
+  count: number = 1
+): Promise<void> {
+  const dynamodb = createDynamoDbClient();
+  const putParams = {
+    TableName: process.env.E2E_UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME,
+    Item: {
+      email: email,
+      userPoolId: process.env.E2E_IDENTITY_COGNITO_USER_POOL_ID,
+      count: count,
+      timestamp: Date.now(),
+    },
+  }
+
+  await dynamodb.send(new PutCommand(putParams));
 }
 
 export async function deleteProfileItemFromIdentityTableFor(

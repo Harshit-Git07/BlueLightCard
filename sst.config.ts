@@ -5,7 +5,7 @@ import { Web } from 'client/stack';
 import { Shared } from './stacks/stack';
 import { Redemptions } from '@blc-mono/redemptions/infrastructure/stack';
 import { MemberServicesHub } from 'member-services-hub/stack';
-import { Discovery } from '@blc-mono/discovery/infrastructure/stack';;
+import { Discovery } from '@blc-mono/discovery/infrastructure/stack';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 

@@ -16,8 +16,7 @@ import { REGIONS } from "../../core/src/types/regions.enum";
 import { getBrandFromEnv } from "../../core/src/utils/checkBrand";
 import { isLocal } from "../../core/src/utils/checkEnvironment";
 import { Config } from "sst/node/config";
-
-const e2eTestTimeout = 20 * 1000;
+import { E2E_TEST_TIMEOUT } from "./helpers/constants";
 
 describe('Identity: User Sign up and Migration', () => {
   beforeAll(async () => {
@@ -85,7 +84,7 @@ describe('Identity: User Sign up and Migration', () => {
 
         expect(result.$metadata.httpStatusCode).toEqual(200);
         await thenUserWasAddedSuccessfully();
-      }, e2eTestTimeout);
+      }, E2E_TEST_TIMEOUT);
 
       it('should add user to identity table when "user.signin.migrated" is sent', async () => {
         const userDetailsEntry = {
@@ -104,7 +103,7 @@ describe('Identity: User Sign up and Migration', () => {
 
         expect(result.$metadata.httpStatusCode).toEqual(200);
         await thenUserWasAddedSuccessfully();
-      }, e2eTestTimeout);
+      }, E2E_TEST_TIMEOUT);
     });
 
     async function thenUserWasAddedSuccessfully() {

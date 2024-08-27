@@ -259,6 +259,9 @@ export function Identity({ stack }: StackContext) {
     new Config.Parameter(stack, 'ID_MAPPING_TABLE_NAME', {
       value: idMappingTable.tableName,
     });
+    new Config.Parameter(stack, 'UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME', {
+      value: unsuccessfulLoginAttemptsTable.table.tableName,
+    });
 
     //API Key and Usage Plan
     const apikey = identityApi.cdk.restApi.addApiKey('identity-api-key');

@@ -15,8 +15,7 @@ import { isLocal } from "../../core/src/utils/checkEnvironment";
 import { Config } from "sst/node/config";
 import { CardStatus } from "../../core/src/types/cardStatus.enum";
 import { random } from "lodash";
-
-const e2eTestTimeout = 20 * 1000;
+import { E2E_TEST_TIMEOUT } from "./helpers/constants";
 
 describe('Identity: User Card Sync', () => {
   beforeAll(async () => {
@@ -64,7 +63,7 @@ describe('Identity: User Card Sync', () => {
 
         expect(result.$metadata.httpStatusCode).toEqual(200);
         await thenCardDetailsWereUpdatedSuccessfully();
-      }, e2eTestTimeout);
+      }, E2E_TEST_TIMEOUT);
 
       it('should update card item when "user.card.status.updated" is sent and card already exists with default values', async () => {
         const defaultDateValue = "0000000000000000"
@@ -85,7 +84,7 @@ describe('Identity: User Card Sync', () => {
 
         expect(result.$metadata.httpStatusCode).toEqual(200);
         await thenCardDetailsWereUpdatedSuccessfully();
-      }, e2eTestTimeout);
+      }, E2E_TEST_TIMEOUT);
 
       it('should update card dates when "user.card.status.updated" is sent and card already exists with older expiry date and default posted date', async () => {
         const defaultDateValue = "0000000000000000"
@@ -107,7 +106,7 @@ describe('Identity: User Card Sync', () => {
 
         expect(result.$metadata.httpStatusCode).toEqual(200);
         await thenCardDetailsWereUpdatedSuccessfully();
-      }, e2eTestTimeout);
+      }, E2E_TEST_TIMEOUT);
 
       async function thenCardDetailsWereUpdatedSuccessfully(): Promise<void> {
         await waitOn(async () => {

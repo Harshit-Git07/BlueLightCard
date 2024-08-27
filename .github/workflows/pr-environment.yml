@@ -703,7 +703,7 @@ jobs:
           REDEMPTIONS_DATABASE_PORT: 5432
           REDEMPTIONS_DATABASE_NAME: redemptions
           REDEMPTIONS_DATABASE_TYPE: RDS_PG_SINGLE_INSTANCE
-        run: npx sst bind --stage $PR_PREFIX vitest
+        run: npx sst bind --stage $PR_PREFIX --region eu-west-2 vitest
 
   e2e-identity:
     name: Run E2E tests (identity)

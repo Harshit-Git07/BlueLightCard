@@ -16,7 +16,7 @@ import {
 } from 'aws-cdk-lib/aws-iam';
 import path from 'path';
 
-const cognitoHostedUiAssets = path.join('..', '..', 'assets');
+const cognitoHostedUiAssets = path.join('packages', 'api', 'identity', 'assets');
 const blcHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'blc-hosted-ui.css');
 const blcLogoPath = path.join(cognitoHostedUiAssets, 'blc-logo.png');
 const ddsHostedUiCSSPath = path.join(cognitoHostedUiAssets, 'dds-hosted-ui.css');
@@ -157,3 +157,4 @@ export const createE2EClient = (stack: Stack, cognito: Cognito) => {
     value: e2eClient.userPoolClientId,
   });
 };
+

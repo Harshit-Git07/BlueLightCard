@@ -5,6 +5,8 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     include: ['./e2e/**/*.test.ts'],
+    globals: true,
+    testTimeout: 60000,
   },
   esbuild: {
     target: 'es2020',

@@ -24,12 +24,14 @@ export class RedemptionPushNotificationController extends EventBridgeController<
 
   public async handle(event: MemberRedemptionEvent): Promise<void> {
     const { memberDetails, redemptionDetails } = event.detail;
-    const redemptionDetailsUrl = redemptionDetails.redemptionType !== 'showCard' ? redemptionDetails.url : undefined;
-    await this.pushNotificationService.sendRedemptionPushNotification(
-      redemptionDetails.companyName,
-      memberDetails.brazeExternalUserId,
-      redemptionDetails.redemptionType,
-      redemptionDetailsUrl,
-    );
+    if (redemptionDetails.clientType === 'mobile') {
+      const redemptionDetailsUrl = redemptionDetails.redemptionType !== 'showCard' ? redemptionDetails.url : undefined;
+      await this.pushNotificationService.sendRedemptionPushNotification(
+        redemptionDetails.companyName,
+        memberDetails.brazeExternalUserId,
+        redemptionDetails.redemptionType,
+        redemptionDetailsUrl,
+      );
+    }
   }
 }

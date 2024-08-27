@@ -20,6 +20,7 @@ describe('RedemptionPushNotificationController', () => {
           redemptionDetails: {
             redemptionType: redemptionType as 'vault' | 'vaultQR' | 'generic' | 'preApplied' | 'showCard',
             url: defaultUrl,
+            clientType: 'mobile',
           },
         },
       });
@@ -37,4 +38,26 @@ describe('RedemptionPushNotificationController', () => {
       );
     },
   );
+
+  it('shouldnt send push notification if client type is web', async () => {
+    // Arrange
+    const logger = createTestLogger();
+    const mockPushNotificationService = {
+      sendRedemptionPushNotification: jest.fn(),
+    } satisfies IPushNotificationService;
+    const controller = new RedemptionPushNotificationController(logger, mockPushNotificationService);
+    const event = memberRedemptionEventFactory.build({
+      detail: {
+        redemptionDetails: {
+          clientType: 'web',
+        },
+      },
+    });
+
+    // Act
+    await controller.handle(event);
+
+    // Assert
+    expect(mockPushNotificationService.sendRedemptionPushNotification).not.toHaveBeenCalled();
+  });
 });

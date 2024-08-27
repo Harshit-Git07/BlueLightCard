@@ -9,13 +9,13 @@ describe('CardStatusHelper', () => {
 
   beforeEach(() => {
     logger = createSilentLogger();
-    process.env.USER_IDENTITY_ENDPOINT = 'https://test-endpoint';
+    process.env.IDENTITY_API_URL = 'https://test-endpoint';
     cardStatusHelper = new CardStatusHelper(logger);
   });
 
   afterEach(() => {
     jest.resetAllMocks();
-    delete process.env.USER_IDENTITY_ENDPOINT;
+    delete process.env.IDENTITY_API_URL;
   });
 
   it('should return true if the user can redeem offer', async () => {
@@ -54,6 +54,9 @@ describe('CardStatusHelper', () => {
 
     const result = await cardStatusHelper.validateCardStatus('test-token');
     expect(result).toBe(false);
+    expect(logger.warn).toHaveBeenCalledWith({
+      message: 'Warning User cannot redeem offer',
+    });
   });
 
   it('should return false and log an error if the response is not ok', async () => {
@@ -67,7 +70,8 @@ describe('CardStatusHelper', () => {
     const result = await cardStatusHelper.validateCardStatus('test-token');
     expect(result).toBe(false);
     expect(logger.error).toHaveBeenCalledWith({
-      message: 'fetch failed for user api',
+      error: TypeError("Cannot read properties of undefined (reading 'canRedeemOffer')"),
+      message: 'Error fetching user data from the User Identity Service',
     });
   });
 
@@ -87,8 +91,8 @@ describe('CardStatusHelper', () => {
     const result = await cardStatusHelper.validateCardStatus('test-token');
     expect(result).toBe(false);
     expect(logger.error).toHaveBeenCalledWith({
-      message: 'Error fetching user data from user identity service',
-      error: 'Some error occurred',
+      error: TypeError("Cannot read properties of null (reading 'canRedeemOffer')"),
+      message: 'Error fetching user data from the User Identity Service',
     });
   });
 
@@ -98,7 +102,8 @@ describe('CardStatusHelper', () => {
     const result = await cardStatusHelper.validateCardStatus('test-token');
     expect(result).toBe(false);
     expect(logger.error).toHaveBeenCalledWith({
-      message: 'Error fetching user data from user identity service',
+      error: Error('Fetch failed'),
+      message: 'Error fetching user data from the User Identity Service',
     });
   });
 });

@@ -19,38 +19,33 @@ export interface ICardStatusHelper {
 export class CardStatusHelper implements ICardStatusHelper {
   static readonly key = 'CardStatusHelper';
   static readonly inject = [Logger.key] as const;
-  private readonly userEndpoint: string;
+  private readonly identityApiUrl: string;
 
   constructor(private Logger: ILogger) {
-    this.userEndpoint = getEnv(RedemptionsStackEnvironmentKeys.USER_IDENTITY_ENDPOINT);
+    this.identityApiUrl = getEnv(RedemptionsStackEnvironmentKeys.IDENTITY_API_URL);
   }
 
   async validateCardStatus(userToken: string): Promise<boolean> {
     try {
-      const response = await fetch(`${this.userEndpoint}/user`, {
+      const response = await fetch(`${this.identityApiUrl}/user`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       });
 
-      if (response.ok) {
-        //todo: add zod parsing when "canRedeemOffer" is implemented
-        const userData: UserApiResponse = (await response.json()) as UserApiResponse;
-        const { message, data } = userData;
-        if (!data && message) {
-          this.Logger.error({ message: 'Error fetching user data from user identity service', error: message });
-          return false;
-        }
-        if (data?.canRedeemOffer) {
-          return data.canRedeemOffer;
-        }
-      }
-      this.Logger.error({ message: 'fetch failed for user api' });
+      const {
+        data: { canRedeemOffer },
+      } = (await response.json()) as UserApiResponse;
+
+      // NOTE: When canRedeemOffer is falsy we log a warning
+      !canRedeemOffer && this.Logger.warn({ message: 'Warning User cannot redeem offer' });
+
+      return canRedeemOffer;
     } catch (error) {
-      this.Logger.error({ message: 'Error fetching user data from user identity service' });
+      this.Logger.error({ message: 'Error fetching user data from the User Identity Service', error });
+
       return false;
     }
-    return false;
   }
 }

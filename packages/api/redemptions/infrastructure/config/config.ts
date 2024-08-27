@@ -34,6 +34,7 @@ export type RedemptionsStackConfig = {
   brazeRedemptionPreAppliedPushNotificationCampaignId: string;
   brazeRedemptionGenericPushNotificationCampaignId: string;
   brazeRedemptionShowCardPushNotificationCampaignId: string;
+  identityApiUrl: string;
 };
 
 export class RedemptionsStackConfigResolver {
@@ -83,6 +84,7 @@ export class RedemptionsStackConfigResolver {
         redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.co.uk'],
         redemptionsWebHost: 'https://www.bluelightcard.co.uk',
+        identityApiUrl: 'https://identity.blcshine.io',
         brazeVaultEmailCampaignId: '23555377-445a-838a-74a0-0c274c8ae2f8',
         brazeGenericEmailCampaignId: '091d0923-b2a8-4884-9955-df72b8993e64',
         brazePreAppliedEmailCampaignId: 'da993fac-5fac-44ec-a703-c1f4c8fa8547',
@@ -99,6 +101,7 @@ export class RedemptionsStackConfigResolver {
         redemptionsLambdaScriptsHost: 'https://ygauzrsxm4.execute-api.ap-southeast-2.amazonaws.com',
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au'],
         redemptionsWebHost: 'https://www.bluelightcard.com.au',
+        identityApiUrl: 'https://identity-au.blcshine.io',
         brazeVaultEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazeGenericEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazePreAppliedEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
@@ -115,6 +118,7 @@ export class RedemptionsStackConfigResolver {
         redemptionsLambdaScriptsHost: 'https://b8jvqg28p6.execute-api.eu-west-2.amazonaws.com',
         apiDefaultAllowedOrigins: ['https://www.defencediscountservice.co.uk'],
         redemptionsWebHost: 'https://www.defencediscountservice.co.uk',
+        identityApiUrl: 'https://identity.blcshine.io',
         brazeVaultEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazeGenericEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazePreAppliedEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
@@ -151,6 +155,7 @@ export class RedemptionsStackConfigResolver {
         redemptionsLambdaScriptsHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
         apiDefaultAllowedOrigins: ['https://www.staging.bluelightcard.co.uk', 'http://localhost:3000'],
         redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
+        identityApiUrl: 'https://staging-identity.blcshine.io',
         brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
         brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
         brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
@@ -167,6 +172,7 @@ export class RedemptionsStackConfigResolver {
         redemptionsLambdaScriptsHost: 'https://4x2w70ksji.execute-api.ap-southeast-2.amazonaws.com',
         apiDefaultAllowedOrigins: ['https://www.develop.bluelightcard.com.au', 'http://localhost:3000'],
         redemptionsWebHost: 'https://www.develop.bluelightcard.com.au',
+        identityApiUrl: 'https://staging-identity-au.blcshine.io',
         brazeVaultEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazeGenericEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazePreAppliedEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
@@ -183,6 +189,7 @@ export class RedemptionsStackConfigResolver {
         redemptionsLambdaScriptsHost: 'https://bbg71eiza6.execute-api.eu-west-2.amazonaws.com',
         apiDefaultAllowedOrigins: ['https://www.ddsstaging.bluelightcard.tech', 'http://localhost:3000'],
         redemptionsWebHost: 'https://www.ddsstaging.bluelightcard.tech',
+        identityApiUrl: 'https://staging-identity.blcshine.io',
         brazeVaultEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazeGenericEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
         brazePreAppliedEmailCampaignId: 'TODO', // TODO: Set up Braze email campaigns for brand
@@ -223,6 +230,7 @@ export class RedemptionsStackConfigResolver {
       brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
       brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
       brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
+      identityApiUrl: 'https://staging-identity.blcshine.io',
     };
   }
 
@@ -281,6 +289,7 @@ export class RedemptionsStackConfigResolver {
       brazeRedemptionShowCardPushNotificationCampaignId: getEnv(
         RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID,
       ),
+      identityApiUrl: getEnv(RedemptionsStackEnvironmentKeys.IDENTITY_API_URL),
     };
   }
 }

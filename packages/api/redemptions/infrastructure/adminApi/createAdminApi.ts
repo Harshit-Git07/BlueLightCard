@@ -7,6 +7,7 @@ import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayEx
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
 
+import { productionDomainNames, stagingDomainNames } from '../constants/domains';
 import { IDatabase } from '../database/adapter';
 
 type GlobalConfig = {
@@ -18,6 +19,7 @@ export function createAdminApi(
   globalConfig: GlobalConfig,
   certificateArn: string | undefined,
   database: IDatabase,
+  brand: 'BLC_UK' | 'BLC_AU' | 'DDS_UK',
 ): ApiGatewayV1Api<Record<string, never>> {
   const adminApi = new ApiGatewayV1Api(stack, 'redemptionsAdmin', {
     cdk: {
@@ -26,9 +28,7 @@ export function createAdminApi(
         ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
-              domainName: isProduction(stack.stage)
-                ? 'redemptions-admin.blcshine.io'
-                : `${stack.stage}-redemptions-admin.blcshine.io`,
+              domainName: isProduction(stack.stage) ? productionDomainNames[brand] : stagingDomainNames[brand],
               certificate: Certificate.fromCertificateArn(stack, 'AdminDomainCertificate', certificateArn),
             },
           }),

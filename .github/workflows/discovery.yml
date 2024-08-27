@@ -212,7 +212,7 @@ jobs:
         working-directory: packages/api/discovery
         env:
           BRAND: ${{ matrix.deployment.brand }}
-        run: npx sst bind --stage $PR_PREFIX vitest e2e
+        run: npx sst bind --stage ${{ matrix.deployment.stage }} vitest e2e
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created

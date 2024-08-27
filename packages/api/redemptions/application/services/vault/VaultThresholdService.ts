@@ -80,8 +80,9 @@ export class VaultThresholdService implements IVaultThresholdService {
      */
     const thresholds: Record<number, number> = this.acceptedThresholds.reduce(
       (accumulator, thresholdPercentage) => {
-        // Calculate the total unclaimed amount as a percentage of the threshold.
-        const totalUnclaimedPercentage = Math.floor((alertBelow / 100) * thresholdPercentage);
+        // Float precision is lost when dividing by 100 due to javascript, so we need to use a high precision divide
+        const highPrecisionDivide = Number(((alertBelow / 100) * thresholdPercentage).toFixed(3));
+        const totalUnclaimedPercentage = Math.floor(highPrecisionDivide);
         // Map the calculated unclaimed percentage to its corresponding threshold percentage.
         accumulator[totalUnclaimedPercentage] = thresholdPercentage;
         return accumulator;

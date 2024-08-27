@@ -23,7 +23,10 @@ const OfferDetailsErrorPage: FC = () => {
       });
     }
 
-    platformAdapter.navigate(`/offerdetails.php?cid=${offerMeta?.companyId}`);
+    const companyPageExperiment = platformAdapter.getAmplitudeFeatureFlag('app-new-company-page');
+
+    if (companyPageExperiment) platformAdapter.navigate(`/company?cid=${offerMeta?.companyId}`);
+    else platformAdapter.navigate(`/offerdetails.php?cid=${offerMeta?.companyId}`);
   };
 
   return (

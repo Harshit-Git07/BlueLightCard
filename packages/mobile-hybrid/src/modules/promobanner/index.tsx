@@ -6,13 +6,25 @@ import { OfferDataModel, OfferPromosModel } from '@/models/offer';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import useAPI, { APIResponse } from '@/hooks/useAPI';
 import { APIUrl } from '@/globals';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { useAmplitude } from '@/hooks/useAmplitude';
+import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const PromoBanner: FC = () => {
+  const { is } = useAmplitude();
+
   const onSlideItemClick = ({ compid, companyname, offername }: OfferPromosModel) => {
-    navigation.navigate(`/offerdetails.php?cid=${compid}`);
+    const companyPageExperiment = is(
+      Experiments.NEW_COMPANY_PAGE,
+      AmplitudeExperimentState.Treatment,
+    );
+
+    if (companyPageExperiment) navigation.navigate(`/company?cid=${compid}`);
+    else navigation.navigate(`/offerdetails.php?cid=${compid}`);
+
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {

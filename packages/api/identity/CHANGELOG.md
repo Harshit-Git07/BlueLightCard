@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.94.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.94.1...bluelightcard/identity-v1.94.2) (2024-08-27)
+
+
+### Bug Fixes
+
+* provide full path to audit handler ([#2109](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2109)) ([3676e01](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3676e01536d1086835e410bbc232cfa66c0ced7e))
+
 ## [1.94.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.94.0...bluelightcard/identity-v1.94.1) (2024-08-27)
 
 

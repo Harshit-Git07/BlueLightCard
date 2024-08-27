@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.94.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.93.1...bluelightcard/identity-v1.94.0) (2024-08-27)
+
+
+### Features
+
+* [TI-1583] Add e2e tests for update email ([#2093](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2093)) ([e35e8c6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e35e8c62573ab7f3c2cfddd3c6d800b04adf1d95))
+* ti 1586 stack helper reduce duplicates ([#2058](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2058)) ([6e46d25](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6e46d25e5241b588c3e95476ffc80f9b70681e9b))
+
+
+### Bug Fixes
+
+* ([#2096](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2096)) ([c046ba4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c046ba409f557b31f24a4f3aa744157f3e49d8db))
+
 ## [1.93.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.93.0...bluelightcard/identity-v1.93.1) (2024-08-21)
 
 

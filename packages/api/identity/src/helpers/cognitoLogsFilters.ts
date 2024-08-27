@@ -13,7 +13,7 @@ export const createAuditLogFunction = (
   isDDS: boolean,
 ) => {
   const auditLogFunction = new Function(stack, name, {
-    handler: '../audit/audit.handler',
+    handler: 'packages/api/identity/src/audit/audit.handler',
     environment: {
       SERVICE: 'identity',
       DATA_STREAM: dataStream,
@@ -41,7 +41,7 @@ export const createAuditLogFunctionPre = (
   isDDS: boolean,
 ) => {
   const auditLogFunctionPre = new Function(stack, name, {
-    handler: '../audit/audit.handler',
+    handler: 'packages/api/identity/src/audit/audit.handler',
     environment: {
       SERVICE: 'identity',
       DATA_STREAM: dataStream,

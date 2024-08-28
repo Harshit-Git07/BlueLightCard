@@ -14,6 +14,7 @@ export async function deleteUserFromCognito(
   username: string,
 ) {
   if (!cognito || !poolId || !username) {
+    logger.debug(`Cognito client, poolId or username not provided, poolId: ${poolId} | username: ${username} `);
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -31,6 +32,7 @@ export async function deleteUserFromCognito(
     if (response.$metadata.httpStatusCode === 200) {
       const command = new AdminDeleteUserCommand(input);
       await cognito.send(command);
+      logger.debug(`Successfully deleted user from poolId: ${poolId} | username: ${username} `);
       return {
         statusCode: 200,
         body: JSON.stringify({
@@ -38,6 +40,7 @@ export async function deleteUserFromCognito(
         }),
       };
     } else {
+      logger.debug(`Unable to delete user from poolId: ${poolId} | username: ${username} `);
       return {
         statusCode: response.$metadata.httpStatusCode,
         body: JSON.stringify({
@@ -46,6 +49,7 @@ export async function deleteUserFromCognito(
       };
     }
   } catch (e: any) {
+    logger.debug(`Error deleting user from poolId: ${poolId} | username: ${username} | error message: ${e.message} `);
     return {
       statusCode: 500,
       body: JSON.stringify({

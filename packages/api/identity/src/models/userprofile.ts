@@ -14,7 +14,15 @@ export const UserProfileModel = z.object({
     email: z.string().nullish(),
     email_validated: z.number().nullish(),
     spare_email: z.string().nullish(),
-    spare_email_validated: z.preprocess((a) => typeof a === 'string' ? parseInt(a, 10) : a, z.number()).nullable().optional(),
+    spare_email_validated: z.preprocess((a) => {
+      if (a === "" || a === undefined) {
+        return 0;
+      } else if (typeof a === 'string') {
+        return parseInt(a, 10);
+      } else {
+        return a;
+      }
+    }, z.number()).nullable().optional(),
     surname: z.string().optional()
 }).strict();
 

@@ -16,7 +16,15 @@ export const UserModel = createZodNamedType(
     email: z.string().optional(),
     email_validated: z.number().optional().default(0),
     spare_email: z.string().optional(),
-    spare_email_validated: z.preprocess((a) => typeof a === 'string' ? parseInt(a, 10) : a, z.number()).nullable().optional().default(0),
+    spare_email_validated: z.preprocess((a) => {
+      if (a === "" || a === undefined) {
+        return 0;
+      } else if (typeof a === 'string') {
+        return parseInt(a, 10);
+      } else {
+        return a;
+      }
+    }, z.number()).nullable().optional(),
     twoFactorAuthentication: z.boolean().optional().default(false),
   }).transform(user => ({
     firstname: user.firstname,

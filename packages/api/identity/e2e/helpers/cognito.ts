@@ -12,7 +12,11 @@ export async function addUserToCognito(username: string, password: string): Prom
     TemporaryPassword: password,
     UserPoolId: process.env.E2E_IDENTITY_COGNITO_USER_POOL_ID
   }
-  await cognitoProvider.adminCreateUser(adminCreateUserParams);
+  try {
+    await cognitoProvider.adminCreateUser(adminCreateUserParams);
+  } catch (e) {
+    console.error("Error adding test user to Cognito", e);
+  }
 }
 
 export async function userExistsInCognitoWithUsername(username: string): Promise<boolean> {

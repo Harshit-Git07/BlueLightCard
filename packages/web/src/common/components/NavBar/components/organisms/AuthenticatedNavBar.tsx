@@ -1,20 +1,25 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import DesktopNavigation from './DesktopNavigation';
 import NotificationButton from '../atoms/NotificationButton';
 import MobileNavToggleButton from '../atoms/MobileNavToggleButton';
 import { AuthenticatedNavBarProps } from '../../types';
 import MobileNavigation from './MobileNavigation';
 import Logo from '@/components/Logo';
+import SearchDropDown from '@/page-components/SearchDropDown/SearchDropDown';
 import { SearchBar } from '@bluelightcard/shared-ui';
 
 const AuthenticatedNavBar = ({
   navigationItems,
   isSticky,
   onSearchTerm,
+  onSearchCategoryChange,
+  onSearchCompanyChange,
 }: AuthenticatedNavBarProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [term, setTerm] = useState('');
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
+
+  const navBarRef = useRef<HTMLDivElement>(null);
 
   const onSearchInputFocus = useCallback(() => {
     setSearchOverlayOpen(true);
@@ -38,8 +43,40 @@ const AuthenticatedNavBar = ({
     setShowMobileMenu(!showMobileMenu);
   };
 
+  const onKeyDownListener = useCallback(
+    (event: KeyboardEvent) => {
+      if (!searchOverlayOpen) return;
+
+      if (event.key === 'Escape') {
+        onBack();
+      }
+    },
+    [searchOverlayOpen, onBack]
+  );
+
+  const onFocusListener = useCallback(
+    (event: FocusEvent) => {
+      if (!searchOverlayOpen) return;
+
+      if (!navBarRef.current?.contains(document.activeElement)) {
+        onBack();
+      }
+    },
+    [searchOverlayOpen, navBarRef, onBack]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDownListener);
+    document.addEventListener('focusin', onFocusListener);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDownListener);
+      document.removeEventListener('focusin', onFocusListener);
+    };
+  }, [onKeyDownListener, onFocusListener]);
+
   return (
-    <div data-testid="authenticated-navbar">
+    <div ref={navBarRef} data-testid="authenticated-navbar">
       <div
         className={`dark:bg-NavBar-bg-colour-dark bg-NavBar-bg-colour text-NavBar-item-text-colour dark:text-NavBar-item-text-colour-dark ${
           isSticky && !showMobileMenu
@@ -59,9 +96,10 @@ const AuthenticatedNavBar = ({
                   onFocus={onSearchInputFocus}
                   onBackButtonClick={onBack}
                   onClear={onClear}
-                  placeholderText="Search for offers or brands"
+                  placeholderText="Search for offers or companies"
                   value={term}
                   onSearch={onSearchTerm}
+                  showBackArrow={searchOverlayOpen}
                 />
               </div>
 
@@ -77,17 +115,27 @@ const AuthenticatedNavBar = ({
           <DesktopNavigation navigationItems={navigationItems} />
         </div>
       </div>
+
       {showMobileMenu && <MobileNavigation navigationItems={navigationItems} />}
+
       <div className="tablet:hidden bg-colour-surface dark:bg-colour-surface-dark">
         <SearchBar
           onFocus={onSearchInputFocus}
           onBackButtonClick={onBack}
           onClear={onClear}
-          placeholderText="Search for offers or brands"
+          placeholderText="Search for offers or companies"
           value={term}
           onSearch={onSubmitSearch}
+          showBackArrow={searchOverlayOpen}
         />
       </div>
+
+      <SearchDropDown
+        isOpen={searchOverlayOpen}
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onClose={onBack}
+      />
     </div>
   );
 };

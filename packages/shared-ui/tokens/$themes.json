@@ -25,7 +25,9 @@
       "Shared-Components/Logo": "enabled",
       "Shared-Components/Accordion": "enabled",
       "Shared-Components/Tag": "enabled",
-      "Shared-Components/MagicButton": "enabled"
+      "Shared-Components/MagicButton": "enabled",
+      "Shared-Components/DropDownItem": "enabled",
+      "Shared-Components/DropDownList": "enabled"
     },
     "$figmaStyleReferences": {}
   },
@@ -55,7 +57,9 @@
       "Shared-Components/Logo": "enabled",
       "Shared-Components/Accordion": "enabled",
       "Shared-Components/Tag": "enabled",
-      "Shared-Components/MagicButton": "enabled"
+      "Shared-Components/MagicButton": "enabled",
+      "Shared-Components/DropDownItem": "enabled",
+      "Shared-Components/DropDownList": "enabled"
     },
     "$figmaStyleReferences": {}
   }

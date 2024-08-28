@@ -90,6 +90,10 @@ const SearchBar: FC<SearchProps> = ({
     setIsFocused(true);
   };
 
+  const onInputBlur = () => {
+    setIsFocused(false);
+  };
+
   const leftArrow = (
     <button
       aria-label="Back button"
@@ -136,11 +140,13 @@ const SearchBar: FC<SearchProps> = ({
           id="searchInput"
           ref={initialValue}
           onFocus={onInputFocus}
+          onBlur={onInputBlur}
           onChange={onInputChange}
           value={searchTerm}
           placeholder={isFocused ? '' : placeholderText}
           type="search"
           enterKeyHint="search"
+          autoComplete="off"
           onKeyDown={onSubmit}
           className="search-bar text-ellipsis pl-14 pr-12 py-3 text-sm rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
         />

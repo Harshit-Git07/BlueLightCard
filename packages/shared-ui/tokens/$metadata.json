@@ -10,6 +10,8 @@
     "Shared-Components/Logo",
     "Shared-Components/Card",
     "Shared-Components/CardCarousel",
+    "Shared-Components/DropDownItem",
+    "Shared-Components/DropDownList",
     "Shared-Components/Badge",
     "Shared-Components/Tag",
     "Shared-Components/Pill",

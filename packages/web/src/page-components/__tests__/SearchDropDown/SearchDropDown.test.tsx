@@ -1,70 +1,48 @@
-import renderer from 'react-test-renderer';
-import ReactDom from 'react-dom';
-import SearchDropDown from '../../SearchDropDown/SearchDropDown';
-import { NextRouter } from 'next/router';
-import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import { act, render, fireEvent, within } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
+import { composeStories } from '@storybook/react';
+import * as stories from '../../SearchDropDown/SearchDropDown.stories';
 
-const mockData = {
-  data: {
-    response: {
-      categories: [
-        {
-          id: '8',
-          name: 'Fashion',
-          __typename: 'CategoryMenu',
-        },
-        {
-          id: '16',
-          name: 'Featured',
-          __typename: 'CategoryMenu',
-        },
-      ],
-      companies: [
-        {
-          id: '26529',
-          name: ' Youth & Earth',
-          __typename: 'CompanyMenu',
-        },
-        {
-          id: '14779',
-          name: '1 Stop Barber Shop ',
-          __typename: 'CompanyMenu',
-        },
-      ],
-    },
-  },
-};
-
-jest.mock('react-dom', () => ({
-  ...jest.requireActual<typeof ReactDom>('react-dom'),
-  preload: jest.fn(),
-}));
-
-let mockRouter: Partial<NextRouter>;
-
-jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn(),
-}));
-
-jest.mock('next/router', () => ({
-  useRouter: () => mockRouter,
-}));
+const { Default, Interaction } = composeStories(stories);
 
 describe('SearchDropDown', () => {
-  it('should match snapshot', () => {
-    const { data } = mockData;
-    const onSearchCompanyChange = jest.fn();
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  });
+
+  it('renders the dropdown', () => {
+    const { container } = render(<Default />);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it('is interactive', async () => {
     const onSearchCategoryChange = jest.fn();
-    const component = renderer.create(
-      <RouterContext.Provider value={mockRouter as NextRouter}>
-        <SearchDropDown
-          onSearchCompanyChange={onSearchCompanyChange}
-          onSearchCategoryChange={onSearchCategoryChange}
-          {...data}
-        />
-      </RouterContext.Provider>
+    const onSearchCompanyChange = jest.fn();
+    const onClose = jest.fn();
+
+    const { container } = render(
+      <Interaction
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onClose={onClose}
+      />
     );
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+
+    const category = within(container).getByText('Children and toys');
+    fireEvent.click(category);
+
+    const companySearch = within(container).getByPlaceholderText('Search for a company');
+    await act(() => userEvent.type(companySearch, 'you'));
+
+    const company = await within(container).findByText('Youth & Earth');
+    fireEvent.click(company);
+
+    const overlay = within(container).getByTestId('search-dropdown-overlay');
+    fireEvent.click(overlay);
+
+    expect(onSearchCategoryChange).toHaveBeenCalledWith('11', 'Children and toys');
+    expect(onSearchCompanyChange).toHaveBeenCalledWith('26529', 'Youth & Earth');
+    expect(onClose).toHaveBeenCalled();
   });
 });

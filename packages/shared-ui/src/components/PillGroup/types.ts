@@ -1,6 +1,6 @@
 export type PillGroupProps = {
   pillGroup: PillProps[];
-  onSelectedPill: (id: number) => void;
+  onSelectedPill: (pill: PillProps) => void;
   title: string;
 };
 

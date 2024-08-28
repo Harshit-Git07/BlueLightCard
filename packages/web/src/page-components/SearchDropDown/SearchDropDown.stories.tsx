@@ -1,19 +1,18 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { fireEvent, userEvent, within } from '@storybook/testing-library';
 import { SearchDropDownPresenter } from './SearchDropDown';
 
 const componentMeta: Meta<typeof SearchDropDownPresenter> = {
   title: 'Components/SearchDropDown',
   component: SearchDropDownPresenter,
-  argTypes: {},
+  argTypes: {
+    onSearchCategoryChange: { action: 'Category selected' },
+    onSearchCompanyChange: { action: 'Company selected' },
+    onClose: { action: 'Closed' },
+  },
   parameters: {
     controls: {
-      exclude: [
-        'categories',
-        'companies',
-        'isLoading',
-        'onSearchCategoryChange',
-        'onSearchCompanyChange',
-      ],
+      exclude: ['categories', 'companies', 'isLoading'],
     },
   },
 };
@@ -91,7 +90,7 @@ const mockData = {
       companies: [
         {
           id: '26529',
-          name: ' Youth & Earth',
+          name: 'Youth & Earth',
           __typename: 'CompanyMenu',
         },
         {
@@ -148,9 +147,31 @@ export const Default = DefaultTemplate.bind({});
 Default.args = {
   categories: mockData.data.response.categories,
   companies: mockData.data.response.companies,
-  isLoading: false,
-  onSearchCategoryChange: () => {},
-  onSearchCompanyChange: () => {},
+  isOpen: true,
+};
+
+export const Interaction = DefaultTemplate.bind({});
+
+Interaction.args = {
+  ...Default.args,
+};
+Interaction.argTypes = {
+  onSearchCategoryChange: { action: 'Category selected' },
+  onSearchCompanyChange: { action: 'Company selected' },
+  onClose: { action: 'Closed' },
+};
+Interaction.play = async ({ canvasElement }) => {
+  const category = within(canvasElement).getByText('Children and toys');
+  fireEvent.click(category);
+
+  const companyDropdown = within(canvasElement).getByPlaceholderText('Search for a company');
+  await userEvent.type(companyDropdown, 'you');
+
+  const company = await within(canvasElement).findByText('Youth & Earth');
+  fireEvent.click(company);
+
+  const overlay = within(canvasElement).getByTestId('search-dropdown-overlay');
+  fireEvent.click(overlay);
 };
 
 export default componentMeta;

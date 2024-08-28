@@ -1,10 +1,12 @@
-import { FC } from 'react';
+import { FC, KeyboardEvent } from 'react';
 import { useCSSMerge, useCSSConditional } from '../../hooks/useCSS';
 import { PlatformVariant, SharedProps } from '../../types';
 
 export type Props = SharedProps & {
   text: string;
+  tabIndex?: number;
   onSelected: () => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
   disabled?: boolean;
   outline?: boolean;
   iconLeft?: React.ReactNode;
@@ -14,10 +16,12 @@ export type Props = SharedProps & {
 
 const PillButtons: FC<Props> = ({
   text,
+  tabIndex = 0,
   iconLeft,
   iconRight,
   disabled = false,
   onSelected,
+  onKeyDown,
   outline,
   isSelected,
   platform,
@@ -26,6 +30,12 @@ const PillButtons: FC<Props> = ({
     if (!isSelected && !disabled) {
       onSelected();
     }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (!onKeyDown) return;
+
+    onKeyDown(event);
   };
 
   const dynamicCss = useCSSConditional({
@@ -47,7 +57,13 @@ const PillButtons: FC<Props> = ({
   );
 
   return (
-    <button className={generalCss} onClick={() => handleClick()} disabled={disabled}>
+    <button
+      tabIndex={tabIndex}
+      className={generalCss}
+      onClick={() => handleClick()}
+      onKeyDown={handleKeyDown}
+      disabled={disabled}
+    >
       {iconLeft && <span className="mr-1">{iconLeft}</span>}
       {text}
       {iconRight && <span className="ml-1">{iconRight}</span>}

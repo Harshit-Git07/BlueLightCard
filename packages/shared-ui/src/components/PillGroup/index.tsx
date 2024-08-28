@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 import { PillGroupProps, PillProps } from './types';
 import PillButtons from '../PillButtons';
 import { PlatformVariant } from '../../../src/types';
@@ -6,9 +6,26 @@ import { PlatformVariant } from '../../../src/types';
 const PillGroup: React.FC<PillGroupProps> = ({ pillGroup, onSelectedPill, title }) => {
   const [selectedPillId, setSelectedPillId] = useState<string | null>(null);
 
-  const handlePillClick = (pillId: string) => {
-    setSelectedPillId(pillId);
-    onSelectedPill(Number(pillId));
+  const handlePillClick = (pill: PillProps) => {
+    setSelectedPillId(pill.id.toString());
+    onSelectedPill(pill);
+  };
+
+  const handlePillKeyDown = (event: KeyboardEvent) => {
+    const previousKeys = ['ArrowLeft', 'ArrowUp'];
+    if (previousKeys.includes(event.key) && event.currentTarget.previousElementSibling) {
+      (event.currentTarget.previousElementSibling as HTMLElement).focus();
+    }
+
+    const nextKeys = ['ArrowRight', 'ArrowDown'];
+    if (nextKeys.includes(event.key) && event.currentTarget.nextElementSibling) {
+      (event.currentTarget.nextElementSibling as HTMLElement).focus();
+    }
+
+    const resetKeys = ['ArrowRight', 'ArrowDown', 'Tab'];
+    if (resetKeys.includes(event.key) && !event.currentTarget.nextElementSibling) {
+      (event.currentTarget.parentElement?.firstChild as HTMLElement)?.focus();
+    }
   };
 
   return (
@@ -20,11 +37,13 @@ const PillGroup: React.FC<PillGroupProps> = ({ pillGroup, onSelectedPill, title 
         {title}
       </p>
       <div className="flex gap-[15px] flex-wrap">
-        {pillGroup.map((pill: PillProps) => (
+        {pillGroup.map((pill: PillProps, index) => (
           <PillButtons
             key={pill.id}
             text={pill.label}
-            onSelected={() => handlePillClick(pill.id.toString())}
+            tabIndex={index}
+            onSelected={() => handlePillClick(pill)}
+            onKeyDown={handlePillKeyDown}
             isSelected={selectedPillId === pill.id.toString()}
             platform={PlatformVariant.MobileHybrid}
           />

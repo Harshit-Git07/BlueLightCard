@@ -35,7 +35,6 @@
       "@/page-components/*": ["src/page-components/*"],
       "@/scripts/*": ["./scripts/*"],
       "@core/*": ["../api/core/src/*"],
-      "@storybook/*": ["./.storybook/*"],
 
       // TODO: Remove once data is pulled in via GQL and data folder is no longer needed.
       "@/data/*": ["data/*"],

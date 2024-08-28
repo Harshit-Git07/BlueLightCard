@@ -17,7 +17,7 @@ export const Default = DefaultTemplate.bind({});
 
 Default.args = {
   labelText: 'Search bar',
-  placeholderText: 'Search for offers or brands',
+  placeholderText: 'Search for offers or companies',
   showBackArrow: false,
 };
 

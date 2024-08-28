@@ -1,9 +1,11 @@
-export type InputTypeSelectProps = {
+export type DropdownProps = {
   options: KeyValue[];
   placeholder: string;
-  onSelect: (id: string) => void;
   disabled?: boolean;
+  searchable?: boolean;
   customClass?: string;
+  onSelect: (option: KeyValue) => void;
+  onOpen?: (listbox: HTMLDivElement) => void;
 };
 
 export type KeyValue = {

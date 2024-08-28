@@ -7,7 +7,7 @@ import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayEx
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
 
-import { productionDomainNames, stagingDomainNames } from '../constants/domains';
+import { productionAdminDomainNames, stagingAdminDomainNames } from '../constants/domains';
 import { IDatabase } from '../database/adapter';
 
 type GlobalConfig = {
@@ -28,7 +28,9 @@ export function createAdminApi(
         ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
-              domainName: isProduction(stack.stage) ? productionDomainNames[brand] : stagingDomainNames[brand],
+              domainName: isProduction(stack.stage)
+                ? productionAdminDomainNames[brand]
+                : stagingAdminDomainNames[brand],
               certificate: Certificate.fromCertificateArn(stack, 'AdminDomainCertificate', certificateArn),
             },
           }),

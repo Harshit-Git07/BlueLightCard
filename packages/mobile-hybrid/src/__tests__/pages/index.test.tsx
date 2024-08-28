@@ -1,13 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import Home from '@/pages';
 import '@testing-library/jest-dom';
-import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
-import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import eventBus from '@/eventBus';
 import useOffers from '@/hooks/useOffers';
-import useFavouritedBrands from '@/hooks/useFavouritedBrands';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 
 jest.mock('@/invoke/apiCall');
 jest.mock('@/modules/popularbrands/brands');
@@ -30,10 +25,11 @@ jest.mock('swiper/css/pagination', () => jest.fn());
 jest.mock('swiper/css/navigation', () => jest.fn());
 
 const useOffersMock = jest.mocked(useOffers);
-const useFavouritedBrandsMock = jest.mocked(useFavouritedBrands);
 
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 let amplitudeFlagsAndExperiments: Record<string, string>;
-
+let controlGroup = false;
 describe('Home', () => {
   beforeEach(() => {
     jest.resetAllMocks();
@@ -54,131 +50,100 @@ describe('Home', () => {
         },
       ],
     });
-
     amplitudeFlagsAndExperiments = {
-      [Experiments.FAVOURITED_BRANDS]: 'off',
-      [Experiments.POPULAR_OFFERS]: 'control',
-      [Experiments.STREAMLINED_HOMEPAGE]: 'off',
+      [Experiments.POPULAR_OFFERS]: 'treatment',
     };
+    whenHomePageIsRendered();
   });
 
   describe('Search Bar', () => {
     const placeholderText = 'Search stores or brands';
     it('should render when home page is rendered', () => {
-      whenHomePageIsRendered();
-
       const searchBar = screen.queryByPlaceholderText(placeholderText);
       expect(searchBar).toBeInTheDocument();
     });
   });
 
-  describe('Favourited Brands Experiment', () => {
-    it('should render when experiment enabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.FAVOURITED_BRANDS]: 'on',
-      };
-
-      whenHomePageIsRendered();
-
-      const favouritedBrandsTitle = screen.queryByText('Your favourite brands');
-      expect(favouritedBrandsTitle).toBeInTheDocument();
-    });
-
-    it('should not render when experiment disabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.FAVOURITED_BRANDS]: 'off',
-      };
-
-      whenHomePageIsRendered();
-
-      const favouritedBrandsTitle = screen.queryByText('Your favourite brands');
-      expect(favouritedBrandsTitle).not.toBeInTheDocument();
+  describe('Popular brands', () => {
+    it('should render popular brands when home page is rendered and popular offers experiment  is in treatment group - blc-uk', () => {
+      const popularBrandsTitle = screen.queryByText('Popular brands');
+      expect(popularBrandsTitle).toBeInTheDocument();
     });
   });
 
-  describe('Popular Offers Experiment', () => {
-    describe('with popular offers experiment enabled & favourited brands disabled', () => {
-      beforeEach(() => {
-        amplitudeFlagsAndExperiments = {
-          ...amplitudeFlagsAndExperiments,
-          [Experiments.FAVOURITED_BRANDS]: 'off',
-          [Experiments.POPULAR_OFFERS]: 'treatment',
-        };
-      });
-
-      it('should render', () => {
-        whenHomePageIsRendered();
-
-        const popularBrandsTitle = screen.queryByText('Popular brands');
-        expect(popularBrandsTitle).toBeInTheDocument();
-      });
+  describe('Offers', () => {
+    it("should render 'Flexible offer carousel' when home page is rendered", () => {
+      const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
+      expect(flexibleOfferCarousel).toBeInTheDocument();
     });
 
-    it('should not render when experiment enabled & favourited brands enabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.FAVOURITED_BRANDS]: 'on',
-        [Experiments.POPULAR_OFFERS]: 'treatment',
-      };
-
-      whenHomePageIsRendered();
-
-      const popularBrandsTitle = screen.queryByText('Popular brands');
-      expect(popularBrandsTitle).not.toBeInTheDocument();
-    });
-
-    it('should not render when experiment disabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.POPULAR_OFFERS]: 'control',
-      };
-
-      whenHomePageIsRendered();
-
-      const popularBrandsTitle = screen.queryByText('Popular brands');
-      expect(popularBrandsTitle).not.toBeInTheDocument();
+    it("should render 'Standard offer carousel' when home page is rendered", () => {
+      const standardOfferCarousel = screen.getByText('Standard offer carousel');
+      expect(standardOfferCarousel).toBeInTheDocument();
     });
   });
 
-  describe('Streamlined homepage Experiment', () => {
-    it('should render "News" below standard offer carousel when experiment enabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.STREAMLINED_HOMEPAGE]: 'on',
-      };
-
-      whenHomePageIsRendered();
-
+  describe('News', () => {
+    it('should render news page when home page is rendered', () => {
       const newsTitle = screen.getByText('Latest news');
-      const standardOfferCarousel = screen.getByText('Standard offer carousel');
-      expect(newsTitle.compareDocumentPosition(standardOfferCarousel)).toBe(2);
+      expect(newsTitle).toBeInTheDocument();
     });
+  });
 
-    it('should render "News" above standard offer carousel when experiment disabled', () => {
-      amplitudeFlagsAndExperiments = {
-        ...amplitudeFlagsAndExperiments,
-        [Experiments.STREAMLINED_HOMEPAGE]: 'off',
-      };
-
-      whenHomePageIsRendered();
-
-      const newsTitle = screen.getByText('Latest news');
+  describe('Home page ordering ', () => {
+    it('should render popular brands, offer carousels, latest news in descending order when home page is rendered', () => {
+      const popularBrandsTitle = screen.queryByText('Popular brands');
       const standardOfferCarousel = screen.getByText('Standard offer carousel');
-      expect(standardOfferCarousel.compareDocumentPosition(newsTitle)).toBe(2);
+      const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
+      const newsTitle = screen.getByText('Latest news');
+
+      expect(elementIsBeneath(popularBrandsTitle, standardOfferCarousel)).toBe(true);
+      expect(elementIsBeneath(flexibleOfferCarousel, newsTitle)).toBe(true);
     });
   });
 });
 
+// This test is only needed until popular brands are introduced to blc-au & dds, after that it can be deleted.
+describe('Popular brands blc-aus & dds ', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+
+    useOffersMock.mockReturnValue({
+      flexible: {
+        title: 'Flexible offer carousel',
+        random: false,
+        subtitle: '',
+        items: [],
+      },
+      deal: [],
+      groups: [
+        {
+          title: 'Standard offer carousel',
+          random: false,
+          items: [],
+        },
+      ],
+    });
+    amplitudeFlagsAndExperiments = {
+      [Experiments.POPULAR_OFFERS]: 'control',
+    };
+    whenHomePageIsRendered();
+  });
+  it('should render popular brands when home page is rendered and popular offers experiment is in control group - blc-au & dds', () => {
+    const popularBrandsTitle = screen.queryByText('Popular brands');
+    expect(popularBrandsTitle).not.toBeInTheDocument();
+  });
+});
+
+// Utility function to determine if a selected html element appears below another
+function elementIsBeneath(elementOne: HTMLElement | null, elementTwo: HTMLElement | null): boolean {
+  if (!elementOne || !elementTwo) {
+    throw new Error('Both elements must be present');
+  }
+  return !!(elementOne.compareDocumentPosition(elementTwo) & Node.DOCUMENT_POSITION_FOLLOWING);
+}
+
 const whenHomePageIsRendered = () => {
-  useFavouritedBrandsMock.mockReturnValue([
-    {
-      id: 1,
-      imageSrc: '',
-      brandName: 'Test Company',
-    },
-  ]);
   render(
     <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, amplitudeFlagsAndExperiments]]}>
       <Home />

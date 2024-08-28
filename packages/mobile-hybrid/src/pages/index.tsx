@@ -11,32 +11,24 @@ import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import Search from '@/components/Search/Search';
 import PopularBrandsSlider from '@/modules/popularbrands';
-import FavouritedBrandsSlider from '@/modules/favouritedbrands';
-import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { useAtom } from 'jotai';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import Amplitude from '@/components/Amplitude/Amplitude';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import {
   AmplitudeExperimentState,
   AmplitudeFeatureFlagState,
 } from '@/components/AmplitudeProvider/types';
-import { useAtom } from 'jotai';
-
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
-  const brands = useFavouritedBrands();
-  const { is } = useAmplitude();
   const [seeAllNews, setSeeAllNews] = useAtom(newsPanelStore);
-  const showFavouritedBrands =
-    brands.length > 0 && is(Experiments.FAVOURITED_BRANDS, AmplitudeFeatureFlagState.On);
   const bodyHeight = useRef<HTMLElement>(null);
-
+  const { is } = useAmplitude();
   const request = useCallback(() => {
     const homePageServices = [APIUrl.News, APIUrl.FavouritedBrands, APIUrl.OfferPromos];
     homePageServices.forEach((url) => {
@@ -82,13 +74,11 @@ const Home: NextPage<any> = () => {
           />
         </div>
         <PromoBanner />
-        {showFavouritedBrands && <FavouritedBrandsSlider />}
-        {is(Experiments.POPULAR_OFFERS, AmplitudeExperimentState.Treatment) &&
-          !showFavouritedBrands && <PopularBrandsSlider />}
+        {is(Experiments.POPULAR_OFFERS, AmplitudeExperimentState.Treatment) && (
+          <PopularBrandsSlider />
+        )}
         <Offers />
-        <Amplitude keyName={Experiments.STREAMLINED_HOMEPAGE} value={AmplitudeFeatureFlagState.On}>
-          <NewsPreview />
-        </Amplitude>
+        <NewsPreview />
       </div>
       <ListPanel visible={seeAllNews} onClose={seeAllClick}>
         {seeAllNews && <NewsList />}

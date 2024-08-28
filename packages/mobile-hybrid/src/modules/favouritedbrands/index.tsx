@@ -4,23 +4,11 @@ import PopularBrands from '@/components/PopularBrands/PopularBrands';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import useFavouritedBrands from '@/hooks/useFavouritedBrands';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { useAmplitude } from '@/hooks/useAmplitude';
-import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
-
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const FavouritedBrandsSlider: FC = () => {
-  const { is } = useAmplitude();
-
-  /**
-   * @featureFlag favourite-subtitle
-   * @description Render the subtitle for the favourite brands carousel if the feature flag is on
-   * */
-  const controlSubtitle = is(Experiments.FAVOURITE_SUBTITLE, AmplitudeFeatureFlagState.On)
-    ? 'Star brands you love or plan to revisit so they show up here'
-    : undefined;
+  const controlSubtitle = 'Star brands you love or plan to revisit so they show up here';
 
   const brands = useFavouritedBrands();
   const onBrandItemClick = (compid: number) => {

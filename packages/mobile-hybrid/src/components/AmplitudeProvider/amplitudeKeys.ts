@@ -1,4 +1,3 @@
-// TB - Comment to trigger deploy in mobile-hybrid. Remove this asap.
 export enum FeatureFlags {
   SEARCH_RESULTS_PAGE_CATEGORIES_LINKS = 'search-results-page-categories-links',
   SEARCH_START_PAGE_BRANDS_LINK = 'search-start-page-brands-link',
@@ -15,8 +14,6 @@ export enum FeatureFlags {
 export enum Experiments {
   NON_EXCLUSIVE_OFFERS = 'non-exclusive-offers',
   POPULAR_OFFERS = 'popular-offers',
-  FAVOURITED_BRANDS = 'favourited-brands',
-  STREAMLINED_HOMEPAGE = 'streamlined-homepage',
   FAVOURITE_SUBTITLE = 'favourite-subtitle',
   HOMEPAGE_POSITIONING = 'homepage-positioning',
   BF_FLEXI = 'bf-flexi',

@@ -16,14 +16,6 @@ const analytics = new InvokeNativeAnalytics();
 
 const PopularBrandsSlider: FC = () => {
   const { is } = useAmplitude();
-
-  /**
-   * @featureFlag streamlined-homepage
-   * @description Render the subtitle for popular brands if the feature flag is not on
-   * */
-  const controlSubtitle = is(Experiments.STREAMLINED_HOMEPAGE, AmplitudeFeatureFlagState.On)
-    ? undefined
-    : 'Explore popular brands with a swipe!';
   const onBrandItemClick = (compid: number) => {
     const companyPageExperiment = is(
       Experiments.NEW_COMPANY_PAGE,
@@ -51,7 +43,6 @@ const PopularBrandsSlider: FC = () => {
   };
   return (
     <PopularBrands
-      text={controlSubtitle}
       onBrandItemClick={onBrandItemClick}
       brands={brands}
       onInteracted={onCarouselInteracted}

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, KeyboardEvent, useEffect, useState } from 'react';
 import Image from '../Image';
 import Badge from '../Badge';
 import getCDNUrl from '../../utils/getCDNUrl';
@@ -18,6 +18,7 @@ export type Props = SharedProps & {
   companyName: string;
   variant?: 'vertical' | 'horizontal';
   quality?: number;
+  tabIndex?: number;
   onClick?: () => void;
 };
 
@@ -36,6 +37,7 @@ const ResponsiveOfferCard: FC<Props> = ({
   platform,
   onClick = undefined,
   quality = 75,
+  tabIndex = 0,
 }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
@@ -48,6 +50,18 @@ const ResponsiveOfferCard: FC<Props> = ({
       companyId,
       companyName,
     });
+  };
+
+  const onCardInteraction = () => {
+    if (onClick) return onClick();
+
+    openOfferSheet();
+  };
+
+  const onCardKeyDown = (event: KeyboardEvent) => {
+    if (event.key !== 'Enter') return;
+
+    onCardInteraction();
   };
 
   const tagBackground: BgColorTagParser = {
@@ -74,6 +88,11 @@ const ResponsiveOfferCard: FC<Props> = ({
         variant === 'vertical' ? css : 'py-3 flow-root'
       }`}
       data-testid={`offer-card-${id}`}
+      role="button"
+      aria-label={`${companyName}: ${name}`}
+      tabIndex={tabIndex}
+      onClick={onCardInteraction}
+      onKeyDown={onCardKeyDown}
     >
       <div
         className={`rounded-t-lg overflow-hidden ${
@@ -83,7 +102,6 @@ const ResponsiveOfferCard: FC<Props> = ({
         }`}
       >
         <Image
-          onClick={onClick ?? openOfferSheet}
           src={imageSource}
           alt={`${name} offer`}
           width={0}

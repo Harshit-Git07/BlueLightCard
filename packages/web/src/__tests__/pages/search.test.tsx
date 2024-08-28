@@ -93,6 +93,15 @@ describe('SearchPage', () => {
     expect(offerCard).toBeInTheDocument();
   });
 
+  it('Renders tokenised results for tokenised-search experiment', async () => {
+    givenResultsAreReturned();
+    whenSearchPageIsRendered('on');
+
+    const offerCard = await screen.findByTestId('offer-card-123');
+
+    expect(offerCard).toBeInTheDocument();
+  });
+
   describe('Analytics', () => {
     it.each(['treatment', 'control'])('should logSearchCardClicked event', async (variant) => {
       givenResultsAreReturned();
@@ -132,7 +141,7 @@ const whenSearchPageIsRendered = (variant: string) => {
   const userContext = userContextTypeFactory.build();
 
   const mockExperimentClient = {
-    variant: jest.fn().mockReturnValue({ variant }),
+    variant: jest.fn().mockReturnValue({ value: variant }),
   } satisfies Pick<ExperimentClient, 'variant'>;
 
   const experimentClientMock: () => Promise<ExperimentClient> = () =>

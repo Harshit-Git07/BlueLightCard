@@ -1,4 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import '@testing-library/jest-dom';
 import ResponsiveOfferCard, { Props } from '.';
 
@@ -48,5 +50,33 @@ describe('ResponsiveOfferCard component', () => {
     render(<ResponsiveOfferCard {...args} variant="horizontal" />);
     const offerCard = screen.getByTestId('offer-card-123');
     expect(offerCard).toHaveClass('py-3 flow-root');
+  });
+
+  it('Should be focusable by pressing Tab', async () => {
+    render(<ResponsiveOfferCard {...args} />);
+
+    const offerCard = screen.getByTestId('offer-card-123');
+    await userEvent.keyboard('{Tab}');
+
+    expect(offerCard).toHaveFocus();
+  });
+
+  it('Should trigger click event by pressing Enter', async () => {
+    const onClick = jest.fn();
+    render(<ResponsiveOfferCard {...args} onClick={onClick} />);
+
+    const offerCard = screen.getByTestId('offer-card-123');
+    await userEvent.keyboard('{Tab}');
+    await userEvent.keyboard('{Enter}');
+
+    expect(offerCard).toHaveFocus();
+    expect(onClick).toHaveBeenCalled();
+  });
+
+  it('Should have no accessibility violations', async () => {
+    const { container } = render(<ResponsiveOfferCard {...args} />);
+    const results = await axe(container);
+
+    expect(results).toHaveNoViolations();
   });
 });

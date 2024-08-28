@@ -3,10 +3,9 @@ import { useRouter } from 'next/router';
 import { NextPage } from 'next/types';
 import React, { useContext, useEffect } from 'react';
 
-import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { makeQuery } from 'src/graphql/makeQuery';
 
-import { AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB, BRAND, CDN_URL } from '@/global-vars';
+import { AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB, BRAND } from '@/global-vars';
 import { advertQuery } from 'src/graphql/advertQuery';
 
 import AuthContext from '@/context/Auth/AuthContext';
@@ -14,24 +13,40 @@ import UserContext from '@/context/User/UserContext';
 import getCDNUrl from '@/utils/getCDNUrl';
 import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceholder';
 import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
-import { logSearchCardClicked, logSearchPage, logSerpSearchStarted } from '@/utils/amplitude';
+import {
+  logSearchCategoryEvent,
+  logSearchCardClicked,
+  logSearchPage,
+  logSerpSearchStarted,
+} from '@/utils/amplitude';
 import { shuffle } from 'lodash';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import BannerCarousel from '@/components/BannerCarousel/BannerCarousel';
 import SearchEmptyState from '@/page-components/SearchEmptyState/SearchEmptyState';
 import Container from '@/components/Container/Container';
-import Heading from '@/components/Heading/Heading';
+import { getOffersByCategoryUrl } from '@/utils/externalPageUrls';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
-import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
+import {
+  Heading,
+  PillGroup,
+  PlatformVariant,
+  ResponsiveOfferCard,
+  useOfferDetails,
+} from '@bluelightcard/shared-ui';
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { z } from 'zod';
-import { TokenisedSearch } from './tokenised-search';
+import useFetchCompaniesOrCategories from '../common/hooks/useFetchCompaniesOrCategories';
 
 const he = require('he');
 
 type BannerDataType = {
   imageSource: string;
   link: string;
+};
+
+const onSearchCategoryChange = async (categoryId: string, categoryName: string) => {
+  await logSearchCategoryEvent(categoryId, categoryName);
+  window.location.href = getOffersByCategoryUrl(categoryId);
 };
 
 const onSearchCardClick = async (
@@ -54,7 +69,7 @@ const onSearchCardClick = async (
   );
 };
 
-const Search: NextPage = () => {
+export const TokenisedSearch: NextPage = () => {
   const router = useRouter();
 
   const [query, setQuery] = React.useState<string>((router.query.q as string) ?? '');
@@ -72,6 +87,7 @@ const Search: NextPage = () => {
 
   const searchExperiment = useAmplitudeExperiment('category_level_three_search', 'control');
   const { viewOffer } = useOfferDetails();
+  const { categories } = useFetchCompaniesOrCategories(userCtx);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,12 +120,9 @@ const Search: NextPage = () => {
 
       setIsLoading(false);
 
-      logSearchPage(query as string, searchResults.results ? searchResults.results.length : 0);
+      logSearchPage(query, searchResults.results ? searchResults.results.length : 0);
       if (router.query.issuer === 'serp') {
-        logSerpSearchStarted(
-          query as string,
-          searchResults.results ? searchResults.results.length : 0
-        );
+        logSerpSearchStarted(query, searchResults.results ? searchResults.results.length : 0);
       }
     };
 
@@ -130,15 +143,29 @@ const Search: NextPage = () => {
     'control'
   );
 
-  const useTokenisedSearch = useAmplitudeExperiment('tokenised-search', 'off');
+  const changeCategoryHandler = (categoryId: string, categoryName: string) => {
+    onSearchCategoryChange(categoryId, categoryName);
+  };
 
-  if (useTokenisedSearch.data?.variantName === 'on') return <TokenisedSearch />;
+  const getOfferTypeFromIndex = (tagIndex: number) => {
+    switch (tagIndex) {
+      case 0:
+        return 'Online';
+      case 2:
+        return 'Giftcards';
+      case 5:
+      case 6:
+        return 'In-store';
+      default:
+        return 'Online';
+    }
+  };
 
   return (
     <>
       {/* Search Results */}
       <>
-        <Container className="py-5" addBottomHorizontalLine={false}>
+        <Container className="py-[20px]" addBottomHorizontalLine={false}>
           <Heading headingLevel="h1">Search results for: {query}</Heading>
           {error && (
             <Heading headingLevel="h2" className="pt-5">
@@ -147,19 +174,22 @@ const Search: NextPage = () => {
           )}
         </Container>
 
-        <Container className="py-5" addBottomHorizontalLine={false}>
+        <Container className="py-[20px]" addBottomHorizontalLine={false}>
           {!isLoading && (!searchResults || searchResults.length === 0) && <SearchEmptyState />}
 
-          <div className="grid laptop:grid-cols-3 tablet:grid-cols-2 grid-cols-1">
-            {isLoading && [...Array(6)].map((_, index) => <OfferCardPlaceholder key={index} />)}
+          <div className="grid tablet:grid-cols-2 grid-cols-1 gap-[24px]">
+            {isLoading &&
+              [...Array(6)].map((_, index) => (
+                <OfferCardPlaceholder key={`offer-card-placeholder-${index}`} />
+              ))}
 
             {!isLoading &&
               searchResults &&
               searchResults.length > 0 &&
               searchResults.map((result, index) => {
                 const imageSrc = result.offerimg.replaceAll('\\/', '/');
-                let hasLink = true;
                 let onOfferCardClick = undefined;
+
                 const onTrackSearchAnalytics = () => {
                   onSearchCardClick(
                     result.CompID,
@@ -171,8 +201,8 @@ const Search: NextPage = () => {
                     index + 1
                   );
                 };
+
                 if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
-                  hasLink = false;
                   onOfferCardClick = async () => {
                     onTrackSearchAnalytics();
                     await viewOffer({
@@ -186,37 +216,51 @@ const Search: NextPage = () => {
                 } else {
                   onOfferCardClick = () => {
                     onTrackSearchAnalytics();
+                    router.push(`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`);
                   };
                 }
+
                 return (
-                  <div className="p-2 m-2" key={index}>
-                    <OfferCard
-                      companyName={result.CompanyName}
-                      offerName={he.decode(result.OfferName)}
-                      imageSrc={
+                  <div key={result.ID}>
+                    <ResponsiveOfferCard
+                      id={result.ID}
+                      type={getOfferTypeFromIndex(result.OfferType)}
+                      name={he.decode(result.OfferName)}
+                      image={
                         imageSrc !== ''
                           ? imageSrc
                           : getCDNUrl(`/companyimages/complarge/retina/${result.CompID}.jpg`)
                       }
-                      alt={''}
-                      offerLink={`/offerdetails.php?cid=${result.CompID}&oid=${result.ID}`}
-                      offerTag={result.OfferType}
-                      withBorder
-                      offerId={result.ID}
                       companyId={result.CompID}
-                      id={'_offer_card_' + index}
+                      companyName={result.CompanyName}
                       onClick={onOfferCardClick}
-                      hasLink={hasLink}
                     />
                   </div>
                 );
               })}
           </div>
         </Container>
+
+        <Container className="tablet:pt-10" addBottomHorizontalLine={false}>
+          <PillGroup
+            title={'Browse Categories'}
+            pillGroup={categories.map((cat) => ({
+              id: Number(cat.id),
+              label: cat.name,
+            }))}
+            onSelectedPill={(id) => {
+              const selectedCategory = categories.find((cat) => cat.id === id.toString());
+              if (selectedCategory) {
+                changeCategoryHandler(selectedCategory.id, selectedCategory.name);
+              }
+            }}
+          />
+        </Container>
       </>
-      ){/* Adverts */}
+
+      {/* Adverts */}
       {adverts.length > 0 && (
-        <Container className="tablet:py-5 pb-[44px]" addBottomHorizontalLine={false}>
+        <Container addBottomHorizontalLine={false}>
           <BannerCarousel
             banners={adverts.map((advert, index) => ({
               name: `${index} + 'banner'`,
@@ -232,7 +276,7 @@ const Search: NextPage = () => {
 
 export const getStaticProps = getI18nStaticProps;
 
-export default withAuthProviderLayout(Search, {
+export default withAuthProviderLayout(TokenisedSearch, {
   seo: {
     title: 'offers.search.title',
   },

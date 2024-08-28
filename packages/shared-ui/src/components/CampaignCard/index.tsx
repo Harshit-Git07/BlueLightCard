@@ -1,5 +1,4 @@
-import { FC } from 'react';
-import { atom, useAtom } from 'jotai';
+import { FC, useState } from 'react';
 import getCDNUrl from '../../utils/getCDNUrl';
 import Image from '../Image';
 import Link from '../Link';
@@ -11,12 +10,10 @@ export type CampaignCardProps = {
   className?: string;
 };
 
-const imageSourceAtom = atom<string | null>(null);
-
 const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl, className }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
-  const [imageSource, setImageSource] = useAtom(imageSourceAtom);
+  const [imageSource, setImageSource] = useState(image);
 
   if (!imageSource) {
     setImageSource(getCDNUrl(image));

@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.24.0...bluelightcard/redemptions-v1.25.0) (2024-08-29)
+
+
+### Features
+
+* [None] Add env var to allow skipping Discovery or Redemptions locally ([#2084](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2084)) ([ed00edd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed00edd21858110b160895d7a2e9fa9352b3ff20))
+* add admin domain names ([#2120](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2120)) ([9924c8a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9924c8aa0ea45f2788e07f1e46803218c18eb840))
+* prevent web to send push notifications ([#2090](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2090)) ([23e8e5d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/23e8e5d7471f8ee31cd35bdb3b4d9aba27d4e8ba))
+* TR-631 update redeem vault strategy ([#2050](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2050)) ([a07ada1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a07ada160be14d763de0010436dd9d92052eae7d))
+* TR-643 add production and staging domains based on brand ([#2100](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2100)) ([45c158d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/45c158df6999fb6674f321b6a8feadbec9e6654a))
+* **TR-727:** remove duplicate logging ([#2095](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2095)) ([438cc25](https://github.com/bluelightcard/BlueLightCard-2.0/commit/438cc25e8576c44f32f0ebc0c53176c5e127d2c6))
+* **TR-784-detailed-metrics:** add detailed metrics for redemptions ([#2086](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2086)) ([6264023](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6264023ebfc02e05069566ebbaf984a56d9cd4d5))
+* update braze keys for staging ([#2115](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2115)) ([de94f9d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/de94f9d3058838701d220a22637a01388eb4b643))
+* Vault Get Batches HTTP Endpoint [TR-701] ([#1914](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1914)) ([74ed0a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/74ed0a9ed51e84dbc148936002521989a0d11cd5))
+
+
+### Bug Fixes
+
+* add backward compatibility ([#2126](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2126)) ([c732568](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c732568dd374c2484c9560df4e0512d0a737c550))
+* lowercase redemption headers to account for HTTP2 requests ([#2025](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2025)) ([5b9093f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5b9093fd2fc89d57e175a6866880fe8e9d8b0014))
+
 ## [1.24.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.23.0...bluelightcard/redemptions-v1.24.0) (2024-08-22)
 
 

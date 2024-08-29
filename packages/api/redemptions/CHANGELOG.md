@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.25.0...bluelightcard/redemptions-v1.25.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* **TR-631:** Revert "feat: TR-631 update redeem vault strategy ([#2050](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2050))" ([#2131](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2131)) ([d968fec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d968fecc7c1ce20dfb12430a62daf34137f9d64f))
+
 ## [1.25.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.24.0...bluelightcard/redemptions-v1.25.0) (2024-08-29)
 
 

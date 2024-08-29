@@ -190,6 +190,37 @@ describe('SearchPage', () => {
     expect(categoryOne).toBeInTheDocument();
   });
 
+  it('Navigates to the category page when a category is clicked', async () => {
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: 'https://localhost',
+      },
+      writable: true,
+    });
+
+    givenResultsAreReturned();
+    makeNavbarQueryMock.mockResolvedValue({
+      data: {
+        response: {
+          categories: [
+            { id: '1', name: 'Category One' },
+            { id: '2', name: 'Category Two' },
+          ],
+          companies: [],
+        },
+      },
+      loading: false,
+      networkStatus: NetworkStatus.ready,
+    });
+
+    whenSearchPageIsRendered('control');
+
+    const categoryOne = await screen.findByText('Category One');
+    await userEvent.click(categoryOne);
+
+    expect(window.location.href).toEqual('/offers.php?cat=true&type=1');
+  });
+
   it('Renders tenancy adverts', async () => {
     givenResultsAreReturned();
     makeQueryMock.mockResolvedValue({

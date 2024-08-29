@@ -143,8 +143,9 @@ export const TokenisedSearch: NextPage = () => {
     'control'
   );
 
-  const changeCategoryHandler = (categoryId: string, categoryName: string) => {
-    onSearchCategoryChange(categoryId, categoryName);
+  const changeCategoryHandler = (category: { id: number; label: string }) => {
+    if (!category) return;
+    onSearchCategoryChange(category.id.toString(), category.label);
   };
 
   const getOfferTypeFromIndex = (tagIndex: number) => {
@@ -248,12 +249,7 @@ export const TokenisedSearch: NextPage = () => {
               id: Number(cat.id),
               label: cat.name,
             }))}
-            onSelectedPill={(id) => {
-              const selectedCategory = categories.find((cat) => cat.id === id.toString());
-              if (selectedCategory) {
-                changeCategoryHandler(selectedCategory.id, selectedCategory.name);
-              }
-            }}
+            onSelectedPill={changeCategoryHandler}
           />
         </Container>
       </>

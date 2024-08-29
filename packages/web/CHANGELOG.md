@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.71.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.70.2...bluelightcard/web-v1.71.0) (2024-08-28)
+
+
+### Features
+
+* DISCO-529 Tokenised web search page ([#1958](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1958)) ([10261b7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/10261b73fd33ae182916509055f0430f79d6caa3))
+* DISCO-550 Integrate search dropdown ([#2019](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2019)) ([b19e5b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b19e5b05634aa04c125080cd9a4a3659da0bf8de))
+
 ## [1.70.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.70.1...bluelightcard/web-v1.70.2) (2024-08-22)
 
 

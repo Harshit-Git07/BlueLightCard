@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.3.0...bluelightcard/discovery-v1.4.0) (2024-08-28)
+
+
+### Features
+
+* [DISCO-641]  updated readme for OpenSearch ([#2067](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2067)) ([052b7b2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/052b7b21f2c5977c0e4d5cdaf7a22dbbe8ed47b1))
+* disco 644 add integration test for legacy search example ([#2063](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2063)) ([76858d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/76858d0f81e8b5bb766ffcc56687f5502e79cd4c))
+
 ## 1.3.0 (2024-08-22)
 
 

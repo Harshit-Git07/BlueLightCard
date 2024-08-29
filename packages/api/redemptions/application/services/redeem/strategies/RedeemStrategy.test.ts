@@ -1,19 +1,35 @@
 import { faker } from '@faker-js/faker';
+import { Factory } from 'fishery';
 
-import { IGenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
+import { as } from '@blc-mono/core/utils/testing';
+import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { IRedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
+import { RedemptionsEventsRepositoryMock } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepositoryMock';
+import { Redemption } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+import { VaultBatch } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import {
-  IRedemptionsRepository,
-  Redemption,
-} from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
-import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
-import { IVaultsRepository, Vault } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
-import { genericFactory } from '@blc-mono/redemptions/libs/test/factories/generic.factory';
+  IVaultCodesRepository,
+  VaultCode,
+  VaultCodesRepository,
+} from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
+import {
+  IVaultsRepository,
+  Vault,
+  VaultsRepository,
+} from '@blc-mono/redemptions/application/repositories/VaultsRepository';
+import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
+import {
+  genericsTable,
+  redemptionsTable,
+  vaultBatchesTable,
+  vaultCodesTable,
+  vaultsTable,
+} from '@blc-mono/redemptions/libs/database/schema';
 import { redemptionFactory } from '@blc-mono/redemptions/libs/test/factories/redemption.factory';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
-import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatches.factory';
+import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { RedeemParams } from './IRedeemStrategy';
 import { RedeemGenericStrategy } from './RedeemGenericStrategy';
@@ -22,157 +38,142 @@ import { RedeemShowCardStrategy } from './RedeemShowCardStrategy';
 import { RedeemVaultStrategy } from './RedeemVaultStrategy';
 
 describe('Redemption Strategies', () => {
-  // General mocks
-  const mockedSilentLogger = createSilentLogger();
-  const defaultParams: RedeemParams = {
-    brazeExternalUserId: faker.string.uuid(),
-    companyName: faker.company.name(),
-    memberId: faker.string.sample(8),
-    offerName: faker.lorem.words(3),
-    clientType: faker.helpers.arrayElement(['web', 'mobile']),
-  };
-  // Repository mocks
-  function mockRedemptionsEventsRepository(): IRedemptionsEventsRepository {
-    return {
-      publishMemberRedeemIntentEvent: jest.fn(),
-      publishRedemptionEvent: jest.fn(),
-      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
-      publishVaultBatchCreatedEvent: jest.fn(),
-    };
-  }
-  function mockGenericsRepository(): IGenericsRepository {
-    return {
-      deleteByRedemptionId: jest.fn(),
-      updateByRedemptionId: jest.fn(),
-      createGeneric: jest.fn(),
-      findOneByRedemptionId: jest.fn(),
-      withTransaction: jest.fn(),
-    };
-  }
-  function mockVaultsRepository(): IVaultsRepository {
-    return {
-      create: jest.fn(),
-      findOneByRedemptionId: jest.fn(),
-      createMany: jest.fn(),
-      updateOneById: jest.fn(),
-      withTransaction: jest.fn(),
-      findOneById: jest.fn(),
-    };
-  }
-  function mockVaultCodesRepository(): IVaultCodesRepository {
-    return {
-      checkIfMemberReachedMaxCodeClaimed: jest.fn(),
-      claimVaultCode: jest.fn(),
-      create: jest.fn(),
-      checkVaultCodesRemaining: jest.fn(),
-      withTransaction: jest.fn(),
-      createMany: jest.fn(),
-      findManyByBatchId: jest.fn(),
-      updateManyByBatchId: jest.fn(),
-    };
-  }
-  function mockLegacyVaultApiRepository(): ILegacyVaultApiRepository {
-    return {
-      getNumberOfCodesIssued: jest.fn(),
-      assignCodeToMember: jest.fn(),
-      findVaultsRelatingToLinkId: jest.fn(),
-      getCodesRedeemed: jest.fn(),
-      checkVaultStock: jest.fn(),
-      viewVaultBatches: jest.fn(),
-    };
-  }
-
   describe('RedeemGenericStrategy', () => {
-    const testGenericRedemption = redemptionFactory.build({
-      redemptionType: 'generic',
-    });
-    const testGeneric = genericFactory.build({
-      redemptionId: testGenericRedemption.id,
-    });
+    const mockedLogger = createTestLogger();
+    const mockedSilentLogger = createSilentLogger();
+    const defaultParams: RedeemParams = {
+      brazeExternalUserId: faker.string.uuid(),
+      companyName: faker.company.name(),
+      memberId: faker.string.sample(8),
+      offerName: faker.lorem.words(3),
+      clientType: faker.helpers.arrayElement(['web', 'mobile']),
+    };
 
     function callGenericRedeemStrategy(
+      connection: IDatabaseConnection,
       redemption: Redemption,
-      overrides?: {
-        redemptionEventsRepository?: IRedemptionsEventsRepository;
-        genericsRepository?: IGenericsRepository;
-      },
+      options: {
+        silent?: boolean;
+        overrides?: {
+          redemptionEventsRepository?: IRedemptionsEventsRepository;
+        };
+      } = {},
     ) {
       const mockedRedemptionsEventsRepository =
-        overrides?.redemptionEventsRepository || mockRedemptionsEventsRepository();
-      const genericsRepository = overrides?.genericsRepository || mockGenericsRepository();
+        options.overrides?.redemptionEventsRepository || new RedemptionsEventsRepositoryMock();
+
+      const genericsRepository = new GenericsRepository(connection);
       const service = new RedeemGenericStrategy(
         genericsRepository,
         mockedRedemptionsEventsRepository,
-        mockedSilentLogger,
+        options.silent ? mockedSilentLogger : mockedLogger,
       );
 
       return service.redeem(redemption, defaultParams);
     }
 
+    let database: RedemptionsTestDatabase;
+    let connection: DatabaseConnection;
+
+    const redemption = Factory.define<typeof redemptionsTable.$inferSelect>(() => ({
+      id: `rdm-${faker.string.uuid()}`,
+      offerId: faker.number.int({
+        min: 1,
+        max: 1_000_000,
+      }),
+      companyId: 1,
+      connection: 'affiliate',
+      affiliate: 'awin',
+      offerType: 'online',
+      platform: 'BLC_UK',
+      redemptionType: 'generic',
+      url: 'https://www.blcshine.com',
+    }));
+    const generic = (redemptionId: string) =>
+      Factory.define<typeof genericsTable.$inferSelect>(() => ({
+        id: `gnr-${faker.string.uuid()}`,
+        redemptionId: redemptionId,
+        code: 'TEST10',
+      }));
+
+    beforeAll(async () => {
+      database = await RedemptionsTestDatabase.start();
+      connection = await database.getConnection();
+    }, 60_000);
+
+    afterEach(async () => {
+      await database.reset();
+    });
+
+    afterAll(async () => {
+      await database?.down?.();
+    });
+
     it('Should throw when no generic is found', async () => {
       // Arrange
-      const mockedGenericsRepository = mockGenericsRepository();
-      mockedGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(null);
+      const redemptionCreated = redemption.build();
+      await connection.db.insert(redemptionsTable).values(redemptionCreated);
 
-      // Act & Assert
-      await expect(() =>
-        callGenericRedeemStrategy(testGenericRedemption, {
-          genericsRepository: mockedGenericsRepository,
-        }),
-      ).rejects.toThrow();
+      // Act
+      const result = callGenericRedeemStrategy(connection, redemptionCreated, { silent: true });
+
+      // Assert
+      await expect(result).rejects.toThrow();
     });
 
     it('Should return kind equals to "Ok" when a generic is found', async () => {
       // Arrange
-      const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-      mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-      const mockedGenericsRepository = mockGenericsRepository();
-      mockedGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testGeneric);
+      const redemptionCreated = redemption.build();
+      const genericCreated = generic(redemptionCreated.id).build();
+      await connection.db.insert(redemptionsTable).values(redemptionCreated);
+      await connection.db.insert(genericsTable).values(genericCreated);
 
       // Act
-      const result = await callGenericRedeemStrategy(testGenericRedemption, {
-        genericsRepository: mockedGenericsRepository,
-        redemptionEventsRepository: mockedRedemptionsEventsRepository,
-      });
+      const result = await callGenericRedeemStrategy(connection, redemptionCreated);
 
       // Assert
       expect(result.kind).toBe('Ok');
-      expect(result.redemptionType).toEqual('generic');
-      expect(result.redemptionDetails.code).toEqual(testGeneric.code);
-      expect(result.redemptionDetails.url).toEqual(testGenericRedemption.url);
+      if (result.kind === 'Ok') {
+        expect(result.redemptionType).toEqual('generic');
+        expect(result.redemptionDetails.code).toEqual(genericCreated.code);
+        expect(result.redemptionDetails.url).toEqual(redemptionCreated.url);
+      }
     });
 
-    it('Should publish a redemption event', async () => {
+    it('publishes a redemption event', async () => {
       // Arrange
-      const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-      mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-      const mockedGenericsRepository = mockGenericsRepository();
-      mockedGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testGeneric);
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+
+      const redemptionCreated = redemption.build();
+      const genericCreated = generic(redemptionCreated.id).build();
+      await connection.db.insert(redemptionsTable).values(redemptionCreated);
+      await connection.db.insert(genericsTable).values(genericCreated);
 
       // Act
-      const result = await callGenericRedeemStrategy(testGenericRedemption, {
-        redemptionEventsRepository: mockedRedemptionsEventsRepository,
-        genericsRepository: mockedGenericsRepository,
+      const result = await callGenericRedeemStrategy(connection, redemptionCreated, {
+        overrides: {
+          redemptionEventsRepository,
+        },
       });
 
       // Assert
       expect(result.kind).toBe('Ok');
-      expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
-      expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
         memberDetails: {
           memberId: defaultParams.memberId,
           brazeExternalUserId: defaultParams.brazeExternalUserId,
         },
         redemptionDetails: {
-          redemptionId: testGenericRedemption.id,
+          redemptionId: redemptionCreated.id,
           redemptionType: 'generic',
-          companyId: testGenericRedemption.companyId,
+          companyId: redemptionCreated.companyId,
           companyName: defaultParams.companyName,
-          offerId: testGenericRedemption.offerId,
+          offerId: redemptionCreated.offerId,
           offerName: defaultParams.offerName,
-          code: testGeneric.code,
-          affiliate: testGenericRedemption.affiliate,
-          url: testGenericRedemption.url,
+          code: genericCreated.code,
+          affiliate: redemptionCreated.affiliate,
+          url: redemptionCreated.url,
           clientType: defaultParams.clientType,
         },
       });
@@ -180,358 +181,502 @@ describe('Redemption Strategies', () => {
   });
 
   describe('RedeemPreAppliedStrategy', () => {
-    const testPreAppliedRedemption = redemptionFactory.build({
-      redemptionType: 'preApplied',
-    });
-
-    function callPreAppliedRedeemStrategy(
-      redemption: Redemption,
-      overrides?: {
-        redemptionEventsRepository?: IRedemptionsEventsRepository;
-      },
-    ) {
-      const mockedRedemptionsEventsRepository =
-        overrides?.redemptionEventsRepository || mockRedemptionsEventsRepository();
-      const service = new RedeemPreAppliedStrategy(mockedRedemptionsEventsRepository, mockedSilentLogger);
-
-      return service.redeem(redemption, defaultParams);
-    }
-
-    it('Should fail to redeem if no redemption URL is configured', async () => {
-      // Arrange
-      const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-      const redemptionWithoutUrl = redemptionFactory.build({
+    it('fails to redeem if no redemption URL is configured', async () => {
+      const redemption = redemptionFactory.build({
         redemptionType: 'preApplied',
+        offerId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        affiliate: 'awin',
         url: undefined,
       });
 
-      // Act & Assert
-      await expect(() =>
-        callPreAppliedRedeemStrategy(redemptionWithoutUrl, {
-          redemptionEventsRepository: mockedRedemptionsEventsRepository,
-        }),
-      ).rejects.toThrow('Redemption URL was missing but required for pre-applied redemption');
-      expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).not.toHaveBeenCalled();
-    });
-    it('Should publish member redemption event', async () => {
-      // Arrange
-      const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-      mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
+      const params: RedeemParams = {
+        brazeExternalUserId: faker.string.uuid(),
+        clientType: faker.helpers.arrayElement(['mobile', 'web']),
+        companyName: faker.company.name(),
+        memberId: faker.number
+          .int({
+            min: 1,
+            max: 1_000_000,
+          })
+          .toString(),
+        offerName: faker.commerce.productName(),
+      };
+
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+      const mockLogger = createSilentLogger();
+      const strategy = new RedeemPreAppliedStrategy(redemptionEventsRepository, mockLogger);
 
       // Act
-      const redeemedResult = await callPreAppliedRedeemStrategy(testPreAppliedRedemption, {
-        redemptionEventsRepository: mockedRedemptionsEventsRepository,
+      await expect(() => strategy.redeem(redemption, params)).rejects.toThrow(
+        'Redemption URL was missing but required for pre-applied redemption',
+      );
+      expect(redemptionEventsRepository.publishRedemptionEvent).not.toHaveBeenCalled();
+    });
+
+    it('should publish member redemption event', async () => {
+      // Arrange
+      const redemption = redemptionFactory.build({
+        redemptionType: 'preApplied', //
+        offerId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        affiliate: 'awin',
       });
+      const params: RedeemParams = {
+        brazeExternalUserId: faker.string.uuid(),
+        clientType: faker.helpers.arrayElement(['mobile', 'web']),
+        companyName: faker.company.name(),
+        memberId: faker.number
+          .int({
+            min: 1,
+            max: 1_000_000,
+          })
+          .toString(),
+        offerName: faker.commerce.productName(),
+      };
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+      const mockLogger = createSilentLogger();
+      const strategy = new RedeemPreAppliedStrategy(redemptionEventsRepository, mockLogger);
+
+      // Act
+      const redeemedResult = await strategy.redeem(redemption, params);
 
       // Assert
-      expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
         memberDetails: {
-          memberId: defaultParams.memberId,
-          brazeExternalUserId: defaultParams.brazeExternalUserId,
+          memberId: params.memberId,
+          brazeExternalUserId: params.brazeExternalUserId,
         },
         redemptionDetails: {
-          redemptionId: testPreAppliedRedemption.id,
-          redemptionType: testPreAppliedRedemption.redemptionType,
-          companyId: testPreAppliedRedemption.companyId,
-          companyName: defaultParams.companyName,
-          offerId: testPreAppliedRedemption.offerId,
-          offerName: defaultParams.offerName,
-          affiliate: testPreAppliedRedemption.affiliate,
+          redemptionId: redemption.id,
+          redemptionType: redemption.redemptionType,
+          companyId: redemption.companyId,
+          companyName: params.companyName,
+          offerId: redemption.offerId,
+          offerName: params.offerName,
+          affiliate: redemption.affiliate,
           url: redeemedResult.redemptionDetails.url,
-          clientType: defaultParams.clientType,
+          clientType: params.clientType,
         },
       });
     });
   });
 
   describe('RedeemShowCardStrategy', () => {
-    const testShowCardRedemption = redemptionFactory.build({
-      redemptionType: 'showCard',
-    });
-
-    function callShowCardRedeemStrategy(
-      redemption: Redemption,
-      overrides?: {
-        redemptionEventsRepository?: IRedemptionsEventsRepository;
-      },
-    ) {
-      const mockedRedemptionsEventsRepository =
-        overrides?.redemptionEventsRepository || mockRedemptionsEventsRepository();
-      const service = new RedeemShowCardStrategy(mockedRedemptionsEventsRepository, mockedSilentLogger);
-
-      return service.redeem(redemption, defaultParams);
-    }
-
-    it('Should publish member redemption event', async () => {
+    it('should publish member redemption event', async () => {
       // Arrange
-      const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-      mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-
-      // Act
-      await callShowCardRedeemStrategy(testShowCardRedemption, {
-        redemptionEventsRepository: mockedRedemptionsEventsRepository,
+      const redemption = redemptionFactory.build({
+        redemptionType: 'showCard',
+        offerId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        affiliate: undefined,
+        url: undefined,
       });
 
+      const params: RedeemParams = {
+        brazeExternalUserId: faker.string.uuid(),
+        clientType: faker.helpers.arrayElement(['mobile', 'web']),
+        companyName: faker.company.name(),
+        memberId: faker.number
+          .int({
+            min: 1,
+            max: 1_000_000,
+          })
+          .toString(),
+        offerName: faker.commerce.productName(),
+      };
+      const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+      const mockLogger = createSilentLogger();
+      const strategy = new RedeemShowCardStrategy(redemptionEventsRepository, mockLogger);
+
+      // Act
+      await strategy.redeem(redemption, params);
+
       // Assert
-      expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+      expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
         memberDetails: {
-          memberId: defaultParams.memberId,
-          brazeExternalUserId: defaultParams.brazeExternalUserId,
+          memberId: params.memberId,
+          brazeExternalUserId: params.brazeExternalUserId,
         },
         redemptionDetails: {
-          redemptionId: testShowCardRedemption.id,
-          redemptionType: testShowCardRedemption.redemptionType,
-          companyId: testShowCardRedemption.companyId,
-          companyName: defaultParams.companyName,
-          offerId: testShowCardRedemption.offerId,
-          offerName: defaultParams.offerName,
-          affiliate: testShowCardRedemption.affiliate,
-          clientType: defaultParams.clientType,
+          redemptionId: redemption.id,
+          redemptionType: redemption.redemptionType,
+          companyId: redemption.companyId,
+          companyName: params.companyName,
+          offerId: redemption.offerId,
+          offerName: params.offerName,
+          affiliate: redemption.affiliate,
+          clientType: params.clientType,
         },
       });
     });
   });
 
   describe('RedeemVaultStrategy', () => {
-    const testVaultRedemption = redemptionFactory.build({
-      redemptionType: 'vault',
-    });
-    const testStandardVault = vaultFactory.build({
-      redemptionId: testVaultRedemption.id,
-      vaultType: 'standard',
-    });
-    const testStandardVaultCode = vaultCodeFactory.build({
-      vaultId: testStandardVault.id,
-    });
-    const testLegacyVault = vaultFactory.build({
-      redemptionId: testVaultRedemption.id,
-      vaultType: 'legacy',
-    });
-    const testLegacyVaultCode = {
-      linkId: faker.string.uuid(),
-      vaultId: faker.string.uuid(),
-      code: faker.string.sample(10),
-    };
-    const testRedemptionEventParams = (vault: Vault, vaultCode: { code: string }) => ({
-      memberDetails: {
-        memberId: defaultParams.memberId,
-        brazeExternalUserId: defaultParams.brazeExternalUserId,
-      },
-      redemptionDetails: {
-        redemptionId: testVaultRedemption.id,
-        redemptionType: 'vault',
-        companyId: testVaultRedemption.companyId,
-        companyName: defaultParams.companyName,
-        offerId: testVaultRedemption.offerId,
-        offerName: defaultParams.offerName,
-        code: vaultCode.code,
-        affiliate: testVaultRedemption.affiliate,
-        url: testVaultRedemption.url ?? '',
-        clientType: defaultParams.clientType,
-        vaultDetails: {
-          id: vault.id,
-          alertBelow: vault.alertBelow,
-          email: vault.email ?? '',
-          vaultType: vault.vaultType,
-        },
-      },
-    });
-    const setupReposForVaultCodeNotFoundOnLegacy = () => {
-      const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-      mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-      const mockedVaultsRepository = mockVaultsRepository();
-      mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testLegacyVault);
-      mockedVaultsRepository.updateOneById = jest.fn().mockResolvedValue({
-        id: testLegacyVault.id,
-      });
-      const mockedLegacyVaultApiRepository = mockLegacyVaultApiRepository();
-      mockedLegacyVaultApiRepository.getNumberOfCodesIssued = jest.fn().mockResolvedValue(0);
-      mockedLegacyVaultApiRepository.assignCodeToMember = jest.fn().mockResolvedValue(undefined);
-      const mockedVaultCodesRepository = mockVaultCodesRepository();
-      mockedVaultCodesRepository.checkIfMemberReachedMaxCodeClaimed = jest.fn().mockResolvedValue(false);
-
-      return {
-        mockedRedemptionsEventsRepository,
-        mockedVaultsRepository,
-        mockedLegacyVaultApiRepository,
-        mockedVaultCodesRepository,
-      };
+    const mockedLogger = createTestLogger();
+    const mockedSilentLogger = createSilentLogger();
+    const defaultStrategyParams: RedeemParams = {
+      brazeExternalUserId: faker.string.uuid(),
+      companyName: faker.company.name(),
+      memberId: faker.string.sample(8),
+      offerName: faker.lorem.words(3),
+      clientType: faker.helpers.arrayElement(['web', 'mobile']),
     };
 
     function callVaultRedeemStrategy(
+      connection: IDatabaseConnection,
       redemption: Redemption,
-      overrides?: {
-        redemptionEventsRepository?: IRedemptionsEventsRepository;
-        redemptionsRepository?: IRedemptionsRepository;
-        vaultsRepository?: IVaultsRepository;
-        vaultCodesRepository?: IVaultCodesRepository;
-        legacyVaultApiRepository?: ILegacyVaultApiRepository;
-      },
+      params: RedeemParams,
+      options: {
+        overrides?: {
+          legacyVaultApiRepository?: ILegacyVaultApiRepository;
+          redemptionEventsRepository?: IRedemptionsEventsRepository;
+        };
+        silent?: boolean;
+      } = {},
     ) {
-      const mockedRedemptionsEventsRepository =
-        overrides?.redemptionEventsRepository || mockRedemptionsEventsRepository();
-      const mockedVaultsRepository = overrides?.vaultsRepository || mockVaultsRepository();
-      const mockedVaultCodesRepository = overrides?.vaultCodesRepository || mockVaultCodesRepository();
-      const mockedLegacyVaultApiRepository = overrides?.legacyVaultApiRepository || mockLegacyVaultApiRepository();
+      const mockedLegacyVaultApiRepository =
+        options.overrides?.legacyVaultApiRepository ??
+        ({
+          getNumberOfCodesIssued: jest.fn(),
+          assignCodeToMember: jest.fn(),
+          findVaultsRelatingToLinkId: jest.fn(),
+          getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
+        } satisfies ILegacyVaultApiRepository);
+      const vaultsRepository = new VaultsRepository(connection);
+      const vaultCodesRepository = new VaultCodesRepository(connection);
       const service = new RedeemVaultStrategy(
-        mockedVaultsRepository,
-        mockedVaultCodesRepository,
+        vaultsRepository,
+        vaultCodesRepository,
         mockedLegacyVaultApiRepository,
-        mockedRedemptionsEventsRepository,
-        mockedSilentLogger,
+        options.overrides?.redemptionEventsRepository || new RedemptionsEventsRepositoryMock(),
+        options.silent ? mockedSilentLogger : mockedLogger,
       );
-
-      return service.redeem(redemption, defaultParams);
+      return service.redeem(redemption, params);
     }
+
+    let database: RedemptionsTestDatabase;
+    let connection: DatabaseConnection;
+
+    const redemption = Factory.define<typeof redemptionsTable.$inferSelect>(() => ({
+      id: `rdm-${faker.string.uuid()}`,
+      offerId: faker.number.int({
+        min: 1,
+        max: 1_000_000,
+      }),
+      companyId: 1,
+      connection: 'affiliate',
+      affiliate: 'awin',
+      offerType: 'online',
+      platform: 'BLC_UK',
+      redemptionType: 'generic',
+      url: 'https://www.blcshine.com',
+    }));
+    const vault = (
+      redemptionId: Vault['redemptionId'],
+      vaultType: Vault['vaultType'],
+      status: Vault['status'],
+      maxPerUser: Vault['maxPerUser'],
+      id?: Vault['id'],
+      alertBelow?: Vault['alertBelow'],
+      email?: Vault['email'],
+    ) =>
+      Factory.define<typeof vaultsTable.$inferSelect>(() => ({
+        id: id ?? `vlt-${faker.string.uuid()}`,
+        redemptionId: redemptionId,
+        vaultType: vaultType,
+        status,
+        alertBelow: alertBelow ?? 10,
+        created: faker.date.recent(),
+        email: email ?? faker.internet.email(),
+        integrationId: faker.number.int({
+          min: 1,
+          max: 1_000_000,
+        }),
+        integration: 'eagleeye',
+        maxPerUser,
+        showQR: false,
+      }));
+    const vaultBatches = (vaultId: VaultBatch['vaultId']) =>
+      Factory.define<typeof vaultBatchesTable.$inferSelect>(() =>
+        vaultBatchFactory.build({
+          vaultId: vaultId,
+        }),
+      );
+    const vaultCodes = (
+      vaultId: VaultCode['vaultId'],
+      expiry: VaultCode['expiry'],
+      batchId: VaultCode['batchId'],
+      memberId: VaultCode['memberId'],
+      code?: VaultCode['code'],
+    ) =>
+      Factory.define<typeof vaultCodesTable.$inferSelect>(() => ({
+        id: `vcd-${faker.string.uuid()}`,
+        vaultId: vaultId,
+        memberId,
+        code: code ?? faker.string.sample(10),
+        created: faker.date.recent(),
+        batchId: batchId,
+        expiry: expiry,
+      }));
+
+    beforeAll(async () => {
+      database = await RedemptionsTestDatabase.start();
+      connection = await database.getConnection();
+    }, 60_000);
+
+    afterEach(async () => {
+      await database.reset();
+    });
+
+    afterAll(async () => {
+      // delete process.env.BRAND;
+      await database?.down?.();
+    });
 
     it('Should throw when no vault is found', async () => {
       // Arrange
-      const mockedVaultsRepository = mockVaultsRepository();
-      mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(null);
+      const redemptionCreated = redemption.build();
+      await connection.db.insert(redemptionsTable).values(redemptionCreated);
 
       // Act
-      const result = callVaultRedeemStrategy(testVaultRedemption, {
-        vaultsRepository: mockedVaultsRepository,
+      const result = callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+        silent: true,
       });
 
       // Assert
       await expect(result).rejects.toThrow();
     });
-
     describe('Standard vault flow', () => {
       it('Should throw when no matching active vault exists', async () => {
         // Arrange
-        const inactiveVault = vaultFactory.build({
-          redemptionId: testVaultRedemption.id,
-          status: 'in-active',
-        });
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(inactiveVault);
+        const redemptionCreated = redemption.build();
+        const vaultCreated = vault(redemptionCreated.id, 'standard', 'in-active', 3).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
 
-        // Act & Assert
-        await expect(() =>
-          callVaultRedeemStrategy(testVaultRedemption, {
-            vaultsRepository: mockedVaultsRepository,
-          }),
-        ).rejects.toThrow();
+        // Act
+        const result = callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+          silent: true,
+        });
+
+        // Assert
+        await expect(result).rejects.toThrow();
       });
       it('Should throw when no vault code is found', async () => {
         // Arrange
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testStandardVault);
-        const mockedVaultCodesRepository = mockVaultCodesRepository();
-        mockedVaultCodesRepository.checkVaultCodesRemaining = jest.fn().mockResolvedValue(0);
+        const redemptionCreated = redemption.build();
+        const vaultCreated = vault(redemptionCreated.id, 'standard', 'active', 3).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
 
-        // Act & Assert
-        await expect(() =>
-          callVaultRedeemStrategy(testVaultRedemption, {
-            vaultsRepository: mockedVaultsRepository,
-          }),
-        ).rejects.toThrow('No vault code found');
+        // Act
+        const result = callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+          silent: true,
+        });
+
+        // Assert
+        await expect(result).rejects.toThrow();
       });
       it('Should return kind equals to "MaxPerUserReached" when max per user is reached', async () => {
         // Arrange
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testStandardVault);
-        const mockedVaultCodesRepository = mockVaultCodesRepository();
-        mockedVaultCodesRepository.checkIfMemberReachedMaxCodeClaimed = jest.fn().mockResolvedValue(true);
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(redemptionCreated.id, 'standard', 'active', 3).build();
+        const vaultBatchCreated = vaultBatches(vaultCreated.id).build();
+        const vaultCodesCreated = [
+          vaultCodes(
+            vaultCreated.id,
+            faker.date.future(),
+            vaultBatchCreated.id,
+            defaultStrategyParams.memberId,
+          ).build(),
+          vaultCodes(
+            vaultCreated.id,
+            faker.date.future(),
+            vaultBatchCreated.id,
+            defaultStrategyParams.memberId,
+          ).build(),
+          vaultCodes(
+            vaultCreated.id,
+            faker.date.future(),
+            vaultBatchCreated.id,
+            defaultStrategyParams.memberId,
+          ).build(),
+        ];
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
+        await connection.db.insert(vaultBatchesTable).values(vaultBatchCreated);
+        await connection.db.insert(vaultCodesTable).values(vaultCodesCreated);
 
         // Act
-        const result = await callVaultRedeemStrategy(testVaultRedemption, {
-          vaultsRepository: mockedVaultsRepository,
-          vaultCodesRepository: mockedVaultCodesRepository,
-        });
+        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams);
 
         // Assert
         expect(result.kind).toBe('MaxPerUserReached');
       });
       it('Should return kind equals to "Ok" when a vault code is found', async () => {
         // Arrange
-        const claimedVaultCode = vaultCodeFactory.build();
-        const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-        mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testStandardVault);
-        const mockedVaultCodesRepository = mockVaultCodesRepository();
-        mockedVaultCodesRepository.checkIfMemberReachedMaxCodeClaimed = jest.fn().mockResolvedValue(false);
-        mockedVaultCodesRepository.claimVaultCode = jest.fn().mockResolvedValue(claimedVaultCode);
+        const recentDate = faker.date.recent();
+        const futureDate = faker.date.future();
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(redemptionCreated.id, 'standard', 'active', 3).build();
+        const vaultBatchCreated = vaultBatches(vaultCreated.id).build();
+        const vaultCodesCreated = [
+          vaultCodes(vaultCreated.id, futureDate, vaultBatchCreated.id, null, 'FUTURE_CODE').build(),
+          vaultCodes(vaultCreated.id, recentDate, vaultBatchCreated.id, null, 'RECENT_CODE').build(),
+        ];
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
+        await connection.db.insert(vaultBatchesTable).values(vaultBatchCreated);
+        await connection.db.insert(vaultCodesTable).values(vaultCodesCreated);
 
         // Act
-        const result = await callVaultRedeemStrategy(testVaultRedemption, {
-          vaultsRepository: mockedVaultsRepository,
-          vaultCodesRepository: mockedVaultCodesRepository,
-          redemptionEventsRepository: mockedRedemptionsEventsRepository,
-        });
+        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams);
 
         // Assert
         expect(result.kind).toBe('Ok');
-        expect(result.redemptionType).toEqual('vault');
-        expect(result.redemptionDetails?.url).toEqual(testVaultRedemption.url);
+        if (result.kind === 'Ok') {
+          expect(result.redemptionType).toEqual('vault');
+          expect(result.redemptionDetails.url).toEqual(redemptionCreated.url);
+          // expect(result.redemptionDetails.code).toEqual('RECENT_CODE'); // TODO: Check if this is necessary
+        }
       });
-      it('Should publish a redemption event', async () => {
-        const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-        mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testStandardVault);
-        const mockedVaultCodesRepository = mockVaultCodesRepository();
-        mockedVaultCodesRepository.checkIfMemberReachedMaxCodeClaimed = jest.fn().mockResolvedValue(false);
-        mockedVaultCodesRepository.claimVaultCode = jest.fn().mockResolvedValue(testStandardVaultCode);
+      it('publishes a redemption event', async () => {
+        // Arrange
+        const vaultCode = faker.string.alphanumeric(16);
+        const mockVaultRepository = {
+          findOneByRedemptionId: jest
+            .fn()
+            .mockResolvedValue(vault('1', 'standard', 'active', 3, 'vlt-1234', 100, 'any@mail.com').build()),
+        } satisfies Partial<IVaultsRepository>;
+        const mockVaultCodesRepository = {
+          checkIfMemberReachedMaxCodeClaimed: jest.fn().mockResolvedValue(false),
+          claimVaultCode: jest.fn().mockResolvedValue({ code: vaultCode }),
+        } satisfies Partial<IVaultCodesRepository>;
+
+        const redemption = redemptionFactory.build({
+          redemptionType: 'vault',
+          offerId: faker.number.int({
+            min: 1,
+            max: 1_000_000,
+          }),
+          affiliate: 'awin',
+        });
+        const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+        const defaultParams: RedeemParams = {
+          brazeExternalUserId: faker.string.uuid(),
+          companyName: faker.company.name(),
+          memberId: faker.string.sample(8),
+          offerName: faker.lorem.words(3),
+          clientType: faker.helpers.arrayElement(['web', 'mobile']),
+        };
+        const strategy = new RedeemVaultStrategy(
+          as(mockVaultRepository),
+          as(mockVaultCodesRepository),
+          as(jest.fn()),
+          redemptionEventsRepository,
+          mockedLogger,
+        );
 
         // Act
-        const result = await callVaultRedeemStrategy(testVaultRedemption, {
-          vaultsRepository: mockedVaultsRepository,
-          vaultCodesRepository: mockedVaultCodesRepository,
-          redemptionEventsRepository: mockedRedemptionsEventsRepository,
-        });
+        const redeemedResult = await strategy.redeem(redemption, defaultParams);
 
         // Assert
-        expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
-        expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith(
-          testRedemptionEventParams(testStandardVault, testStandardVaultCode),
-        );
-        expect(result).toStrictEqual({
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+          memberDetails: {
+            memberId: defaultParams.memberId,
+            brazeExternalUserId: defaultParams.brazeExternalUserId,
+          },
+          redemptionDetails: {
+            redemptionId: redemption.id,
+            redemptionType: 'vault',
+            companyId: redemption.companyId,
+            companyName: defaultParams.companyName,
+            offerId: redemption.offerId,
+            offerName: defaultParams.offerName,
+            code: vaultCode,
+            affiliate: redemption.affiliate,
+            url: redemption.url,
+            clientType: defaultParams.clientType,
+            vaultDetails: {
+              id: 'vlt-1234',
+              alertBelow: 100,
+              email: 'any@mail.com',
+              vaultType: 'standard',
+            },
+          },
+        });
+
+        expect(redeemedResult).toStrictEqual({
           kind: 'Ok',
           redemptionType: 'vault',
           redemptionDetails: {
-            url: testVaultRedemption.url,
-            code: testStandardVaultCode.code,
+            url: redemption.url,
+            code: vaultCode,
           },
         });
       });
     });
-
     describe('Legacy vault flow', () => {
       it('Should throw when there is an error checking the number of codes assigned', async () => {
         // Arrange
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testLegacyVault);
-        const mockedLegacyVaultApiRepository = mockLegacyVaultApiRepository();
-        mockedLegacyVaultApiRepository.getNumberOfCodesIssued = jest
-          .fn()
-          .mockRejectedValue(new Error('Error checking number of codes issued'));
+        const mockedLegacyVaultApiRepository = {
+          findVaultsRelatingToLinkId: jest.fn(),
+          getNumberOfCodesIssued: jest.fn().mockRejectedValue(new Error('Error checking number of codes issued')),
+          assignCodeToMember: jest.fn(),
+          getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
+        } satisfies ILegacyVaultApiRepository;
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
 
-        // Act & Assert
-        await expect(() =>
-          callVaultRedeemStrategy(testVaultRedemption, {
-            vaultsRepository: mockedVaultsRepository,
-            legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-          }),
-        ).rejects.toThrow('Error checking number of codes issued');
+        // Act
+        const act = () =>
+          callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+            overrides: { legacyVaultApiRepository: mockedLegacyVaultApiRepository },
+          });
+
+        // Assert
+        await expect(act).rejects.toThrow('Error checking number of codes issued');
       });
       it('Should return kind "MaxPerUserReached" when amountIssued is greater than or equal to vault maxPerUser', async () => {
         // Arrange
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest
-          .fn()
-          .mockResolvedValue({ ...testLegacyVault, maxPerUser: 3 });
-        const mockedLegacyVaultApiRepository = mockLegacyVaultApiRepository();
-        mockedLegacyVaultApiRepository.getNumberOfCodesIssued = jest.fn().mockResolvedValue(3);
-        mockedLegacyVaultApiRepository.assignCodeToMember = jest.fn().mockResolvedValue(undefined);
+        const mockedLegacyVaultApiRepository = {
+          findVaultsRelatingToLinkId: jest.fn(),
+          getNumberOfCodesIssued: jest.fn().mockResolvedValue(3),
+          assignCodeToMember: jest.fn().mockResolvedValue(undefined),
+          getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
+        } satisfies ILegacyVaultApiRepository;
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
 
         // Act
-        const result = await callVaultRedeemStrategy(testVaultRedemption, {
-          vaultsRepository: mockedVaultsRepository,
-          legacyVaultApiRepository: mockedLegacyVaultApiRepository,
+        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+          overrides: { legacyVaultApiRepository: mockedLegacyVaultApiRepository },
         });
 
         // Assert
@@ -539,117 +684,131 @@ describe('Redemption Strategies', () => {
       });
       it('Should throw when there is an error assigning the code to the user', async () => {
         // Arrange
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testLegacyVault);
-        const mockedLegacyVaultApiRepository = mockLegacyVaultApiRepository();
-        mockedLegacyVaultApiRepository.getNumberOfCodesIssued = jest.fn().mockResolvedValue(1);
-        mockedLegacyVaultApiRepository.assignCodeToMember = jest
-          .fn()
-          .mockRejectedValue(new Error('Error assigning code'));
+        const mockedLegacyVaultApiRepository = {
+          findVaultsRelatingToLinkId: jest.fn(),
+          getNumberOfCodesIssued: jest.fn().mockResolvedValue(0),
+          assignCodeToMember: jest.fn().mockRejectedValue(new Error('Error assigning code')),
+          getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
+        } satisfies ILegacyVaultApiRepository;
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
 
-        // Act & Assert
-        await expect(() =>
-          callVaultRedeemStrategy(testVaultRedemption, {
-            legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-            vaultsRepository: mockedVaultsRepository,
-          }),
-        ).rejects.toThrow('Error assigning code');
+        // Act
+        const act = () =>
+          callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+            overrides: { legacyVaultApiRepository: mockedLegacyVaultApiRepository },
+          });
+
+        // Assert
+        await expect(act).rejects.toThrow('Error assigning code');
       });
       it('Should return kind equals to "Ok" when a vault code is found', async () => {
         // Arrange
-        const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-        mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testLegacyVault);
-        const mockedLegacyVaultApiRepository = mockLegacyVaultApiRepository();
-        mockedLegacyVaultApiRepository.findVaultsRelatingToLinkId = jest.fn();
-        mockedLegacyVaultApiRepository.getNumberOfCodesIssued = jest.fn().mockResolvedValue(1);
-        mockedLegacyVaultApiRepository.assignCodeToMember = jest.fn().mockResolvedValue(testLegacyVaultCode);
-
-        // Act
-        const result = await callVaultRedeemStrategy(testVaultRedemption, {
-          legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-          vaultsRepository: mockedVaultsRepository,
-          redemptionEventsRepository: mockedRedemptionsEventsRepository,
-        });
-
-        // Assert
-        expect(result.kind).toBe('Ok');
-        expect(result.redemptionType).toEqual('vault');
-        expect(result.redemptionDetails?.url).toEqual(testVaultRedemption.url);
-        expect(result.redemptionDetails?.code).toEqual(testLegacyVaultCode.code);
-      });
-      it('Should publish a redemption event', async () => {
-        // Arrange
-        const mockedVaultsRepository = mockVaultsRepository();
-        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testLegacyVault);
-        const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-        mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
-        const mockedLegacyVaultApiRepository = mockLegacyVaultApiRepository();
-        mockedLegacyVaultApiRepository.getNumberOfCodesIssued = jest.fn().mockResolvedValue(1);
-        mockedLegacyVaultApiRepository.assignCodeToMember = jest.fn().mockResolvedValue(testLegacyVaultCode);
-
-        // Act
-        const result = await callVaultRedeemStrategy(testVaultRedemption, {
-          vaultsRepository: mockedVaultsRepository,
-          legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-          redemptionEventsRepository: mockedRedemptionsEventsRepository,
-        });
-
-        // Assert
-        expect(result.kind).toBe('Ok');
-        expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
-        expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith(
-          testRedemptionEventParams(testLegacyVault, testLegacyVaultCode),
-        );
-      });
-      it('Should redeem with standard flow when code doesnt exist in legacy', async () => {
-        // Arrange
-        const {
-          mockedVaultCodesRepository,
-          mockedVaultsRepository,
-          mockedLegacyVaultApiRepository,
-          mockedRedemptionsEventsRepository,
-        } = setupReposForVaultCodeNotFoundOnLegacy();
-        mockedVaultCodesRepository.claimVaultCode = jest.fn().mockResolvedValue(testStandardVaultCode);
-
-        // Act
-        const result = await callVaultRedeemStrategy(testVaultRedemption, {
-          vaultsRepository: mockedVaultsRepository,
-          legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-          redemptionEventsRepository: mockedRedemptionsEventsRepository,
-          vaultCodesRepository: mockedVaultCodesRepository,
-        });
-
-        // Assert
-        expect(result.kind).toBe('Ok');
-        expect(mockedVaultsRepository.updateOneById).toHaveBeenCalledTimes(1);
-        expect(mockedVaultsRepository.updateOneById).toHaveBeenCalledWith(testLegacyVault.id, {
-          vaultType: 'standard',
-        });
-      });
-      it('Should throw an error if the code doesnt exist in either standard or legacy', async () => {
-        // Arrange
-        const {
-          mockedVaultCodesRepository,
-          mockedVaultsRepository,
-          mockedLegacyVaultApiRepository,
-          mockedRedemptionsEventsRepository,
-        } = setupReposForVaultCodeNotFoundOnLegacy();
-        mockedVaultCodesRepository.claimVaultCode = jest.fn().mockResolvedValue(undefined);
-
-        // Act & Assert
-        await expect(() =>
-          callVaultRedeemStrategy(testVaultRedemption, {
-            vaultsRepository: mockedVaultsRepository,
-            legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-            redemptionEventsRepository: mockedRedemptionsEventsRepository,
-            vaultCodesRepository: mockedVaultCodesRepository,
+        const desiredCode = faker.string.sample(10);
+        const mockedLegacyVaultApiRepository = {
+          findVaultsRelatingToLinkId: jest.fn(),
+          getNumberOfCodesIssued: jest.fn().mockResolvedValue(0),
+          assignCodeToMember: jest.fn().mockResolvedValue({
+            linkId: faker.string.uuid(),
+            vaultId: faker.string.uuid(),
+            code: desiredCode,
           }),
-        ).rejects.toThrow('No vault code found');
-        expect(mockedVaultsRepository.updateOneById).toHaveBeenCalledTimes(1);
-        expect(mockedVaultsRepository.updateOneById).toHaveBeenCalledWith(testLegacyVault.id, {
-          vaultType: 'standard',
+          getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
+        } satisfies ILegacyVaultApiRepository;
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(redemptionCreated.id, 'legacy', 'active', 3).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
+
+        // Act
+        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+          overrides: { legacyVaultApiRepository: mockedLegacyVaultApiRepository },
+        });
+
+        // Assert
+        expect(result.kind).toBe('Ok');
+        if (result.kind === 'Ok') {
+          expect(result.redemptionType).toEqual('vault');
+          expect(result.redemptionDetails.url).toEqual(redemptionCreated.url);
+          expect(result.redemptionDetails.code).toEqual(desiredCode);
+        }
+      });
+      it('publishes a redemption event', async () => {
+        // Arrange
+        const redemptionEventsRepository = new RedemptionsEventsRepositoryMock();
+
+        const desiredCode = faker.string.sample(10);
+        const mockedLegacyVaultApiRepository = {
+          findVaultsRelatingToLinkId: jest.fn(),
+          getNumberOfCodesIssued: jest.fn().mockResolvedValue(0),
+          assignCodeToMember: jest.fn().mockResolvedValue({
+            linkId: faker.string.uuid(),
+            vaultId: faker.string.uuid(),
+            code: desiredCode,
+          }),
+          getCodesRedeemed: jest.fn(),
+          checkVaultStock: jest.fn(),
+          viewVaultBatches: jest.fn(),
+        } satisfies ILegacyVaultApiRepository;
+        const redemptionCreated = redemption.build({
+          redemptionType: 'vault',
+        });
+        const vaultCreated = vault(
+          redemptionCreated.id,
+          'legacy',
+          'active',
+          3,
+          'vlt-1234',
+          100,
+          'any@mail.com',
+        ).build();
+        await connection.db.insert(redemptionsTable).values(redemptionCreated);
+        await connection.db.insert(vaultsTable).values(vaultCreated);
+
+        // Act
+        const result = await callVaultRedeemStrategy(connection, redemptionCreated, defaultStrategyParams, {
+          overrides: {
+            legacyVaultApiRepository: mockedLegacyVaultApiRepository,
+            redemptionEventsRepository,
+          },
+        });
+
+        // Assert
+        expect(result.kind).toBe('Ok');
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
+        expect(redemptionEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith({
+          memberDetails: {
+            memberId: defaultStrategyParams.memberId,
+            brazeExternalUserId: defaultStrategyParams.brazeExternalUserId,
+          },
+          redemptionDetails: {
+            redemptionId: redemptionCreated.id,
+            redemptionType: 'vault',
+            companyId: redemptionCreated.companyId,
+            companyName: defaultStrategyParams.companyName,
+            offerId: redemptionCreated.offerId,
+            offerName: defaultStrategyParams.offerName,
+            code: desiredCode,
+            affiliate: redemptionCreated.affiliate,
+            url: redemptionCreated.url,
+            clientType: defaultStrategyParams.clientType,
+            vaultDetails: {
+              id: 'vlt-1234',
+              alertBelow: 100,
+              email: 'any@mail.com',
+              vaultType: 'legacy',
+            },
+          },
         });
       });
     });

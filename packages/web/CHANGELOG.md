@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.71.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.71.0...bluelightcard/web-v1.71.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* DISCO-805 Fixed category pill navigation ([#2124](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2124)) ([a224722](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a224722f34d6a99487cf2098c63aaefdbe7c874a))
+* make identity user api shape optional ([#2121](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2121)) ([7a7fbbc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7a7fbbc1ed92101f426424c76f876a7d750379ea))
+
 ## [1.71.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.70.2...bluelightcard/web-v1.71.0) (2024-08-28)
 
 

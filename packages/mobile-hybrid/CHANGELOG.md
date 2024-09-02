@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.28.1...bluelightcard/mobile-hybrid-v1.29.0) (2024-09-02)
+
+
+### Features
+
+* added tokens to offers near you ([#2111](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2111)) ([fc706bf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fc706bf2dfeaecdd132a48d4392a29c600165c4b))
+* adds and handles company page amplitude experiment on mobile-hybrid ([#2097](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2097)) ([f46ac16](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f46ac16c8bcd38d3f12c7974e0f14510eb965baa))
+* disco 546 updated with update requirements ([#2098](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2098)) ([e965f6c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e965f6c2ed73c466c12a5d1b8581f8f59a796d43))
+
+
+### Bug Fixes
+
+* make identity user api shape optional ([#2121](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2121)) ([7a7fbbc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7a7fbbc1ed92101f426424c76f876a7d750379ea))
+
 ## [1.28.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.28.0...bluelightcard/mobile-hybrid-v1.28.1) (2024-08-23)
 
 

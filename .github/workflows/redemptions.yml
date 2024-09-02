@@ -54,8 +54,7 @@ jobs:
       - name: Test
         run: npm run test:coverage -w packages/api/redemptions
       - name: Test Cloud flare
-        working-directory: "packages/api/redemptions/cloudflare/QRImageGenerator"
-        run: npm run test:coverage
+        run: npm run test:cloudflare -w packages/api/redemptions
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

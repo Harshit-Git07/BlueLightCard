@@ -9,7 +9,7 @@
     "drizzle:generate": "dotenv -e ../../../.env -- drizzle-kit generate:mysql",
     "test": "jest --passWithNoTests",
     "typecheck": "tsc -noEmit",
-    "test:coverage": "npm run test --coverage"
+    "test:coverage": "npm run test -- --coverage"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",

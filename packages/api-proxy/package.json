@@ -6,10 +6,11 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "test:unit": "vitest run",
-    "test:unit:coverage": "vitest run --coverage --coverage.provider istanbul"
+    "test:unit:coverage": "vitest run --coverage --coverage.reporter=lcov"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20240502.0",
+		"@vitest/coverage-v8": "1.6.0",
     "@types/node": "20.12.8",
     "nock": "14.0.0-beta.5",
     "typescript": "5.4.5",

@@ -44,7 +44,7 @@ jobs:
           node-version: 18
       - name: Setup
         uses: ./.github/actions/setup
-      - run: npm test -w packages/shared-ui
+      - run: npm run test:coverage -w packages/shared-ui
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

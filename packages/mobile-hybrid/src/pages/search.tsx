@@ -45,13 +45,13 @@ const SearchPage: NextPage = () => {
       <div className="mt-4 mb-5 ml-2">
         <Amplitude keyName={FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK} value="on">
           <button
-            className="pl-3 py-2 block text-primary-dukeblue-700 dark:text-primary-vividskyblue-700 text-md w-full h-full text-left"
+            className="pl-3 py-2 block text-colour-primary-light dark:text-colour-primary-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body w-full h-full text-left"
             onClick={() => navigation.navigate('/mapsearch.php')}
           >
             <FontAwesomeIcon
               icon={faLocationDot}
               size="xl"
-              className="pr-3 cursor-pointer text-primary-dukeblue-700 dark:text-primary-vividskyblue-700"
+              className="pr-3 cursor-pointer text-colour-primary-light dark:text-colour-primary-dark"
               aria-hidden="true"
             />
             Offers near you
@@ -60,12 +60,12 @@ const SearchPage: NextPage = () => {
         <Amplitude keyName={FeatureFlags.SEARCH_START_PAGE_BRANDS_LINK} value="on">
           <Link
             href={'/'}
-            className="pl-3 py-2 text-primary-dukeblue-700 dark:text-primary-vividskyblue-700 text-md w-full inline-block text-left"
+            className="pl-3 py-2 text-colour-primary-light dark:text-colour-primary-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body w-full inline-block text-left"
           >
             <FontAwesomeIcon
               icon={faTag}
               size="xl"
-              className="pr-2.5 cursor-pointer text-primary-dukeblue-700 dark:text-primary-vividskyblue-700"
+              className="pr-2.5 cursor-pointer text-colour-primary-light dark:text-colour-primary-dark"
               aria-hidden="true"
             />
             Search for brands

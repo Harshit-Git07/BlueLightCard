@@ -13,25 +13,31 @@ export interface Props {
  */
 const SearchResultsPresenter: FC<Props> = ({ results, onOfferClick }) => {
   return (
-    <div role="list" className="px-4 py-6">
-      {!results.length && <p className="text-center py-4 dark:text-white">No results found.</p>}
+    <div role="list" className="mt-6">
+      {!results.length && (
+        <p className="text-center dark:text-listItem-text-colour-dark text-listItem-text-colour-light font-typography-title-small font-typography-title-small-weight text-typography-title-small leading-typography-title-small tracking-typography-title-small">
+          No results found
+        </p>
+      )}
       {results.map((offer, index) => (
-        <div key={offer.id} role="listitem" className="mb-4">
-          <ListItem
-            title={offer.offername}
-            text={offer.companyname}
-            onClick={() =>
-              onOfferClick({
-                companyId: offer.compid,
-                companyName: offer.companyname,
-                offerId: offer.id,
-                offerName: offer.offername,
-                searchResultNumber: index + 1,
-              })
-            }
-            imageSrc={offer.s3logos}
-            imageAlt={offer.offername}
-          />
+        <div key={offer.id} role="listitem">
+          <div className="p-4 border-b border-listItem-divider-colour-light dark:border-listItem-divider-colour-dark">
+            <ListItem
+              title={offer.offername}
+              text={offer.companyname}
+              onClick={() =>
+                onOfferClick({
+                  companyId: offer.compid,
+                  companyName: offer.companyname,
+                  offerId: offer.id,
+                  offerName: offer.offername,
+                  searchResultNumber: index + 1,
+                })
+              }
+              imageSrc={offer.s3logos}
+              imageAlt={offer.offername}
+            />
+          </div>
         </div>
       ))}
     </div>

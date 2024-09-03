@@ -70,7 +70,7 @@ describe('Search results', () => {
     it('should show no results found when nothing found', async () => {
       whenSearchResultsPageIsRendered(searchTermValue, []);
 
-      await screen.findByText('No results found.');
+      await screen.findByText('No results found');
     });
   });
 

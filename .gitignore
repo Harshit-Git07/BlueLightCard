@@ -166,3 +166,5 @@ packages/web/public/local/newSearch
 
 # Vim config/session files
 **/*.vim
+.terraform.lock.hcl
+.terraform

@@ -1,0 +1,83 @@
+name: Observability as code
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/infrastructure/datadog/**
+      - .github/workflows/infrastructure-datadog.yml
+      - packages/infrastructure/datadog/CHANGELOG.md
+  pull_request:
+    paths:
+      - packages/infrastructure/datadog/**
+      - .github/workflows/infrastructure-datadog.yml
+      - packages/infrastructure/datadog/CHANGELOG.md
+
+permissions: write-all
+
+jobs:
+
+  changelog:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: googleapis/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/infrastructure
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/infrastructure
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
+  terraform_pull_request:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: 'Terraform actions for pull request'
+        uses: ./.github/actions/terraform
+        with:
+          directory: 'packages/infrastructure/datadog'
+          environment: 'pull_request'
+          token: ${{ secrets.TERRAFORM_TOKEN }}
+          workspace: 'develop'
+
+  terraform_staging:
+    needs:
+      - terraform_pull_request
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: 'Terraform actions for staging'
+        uses: ./.github/workflows/terraform.yml
+        with:
+          directory: 'packages/infrastructure/datadog'
+          environment: 'staging'
+          token: ${{ secrets.TERRAFORM_TOKEN }}
+          workspace: 'develop'
+
+  terraform_production:
+    needs:
+      - terraform_pull_request
+      - terraform_staging
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: 'Terraform actions for staging'
+        uses: ./.github/workflows/terraform.yml
+        with:
+          directory: 'packages/infrastructure/datadog'
+          environment: 'production'
+          token: ${{ secrets.TERRAFORM_TOKEN }}
+          workspace: 'production'

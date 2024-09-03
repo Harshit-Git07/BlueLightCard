@@ -1,0 +1,59 @@
+name: 'Terraform'
+description: 'Use terraform'
+inputs:
+  environment:
+    description: 'Environment'
+    required: true
+  workspace:
+    description: 'Terraform workspace'
+    required: true
+  token:
+    description: 'Terraform token'
+    required: true
+  directory:
+    description: 'Terraform directory'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.9.5"
+        cli_config_credentials_token: ${{ inputs.token }}
+
+    - name: Terraform Init
+      shell: bash
+      run: |
+        echo "TF_WORKSPACE=${{ inputs.workspace }}" >> $GITHUB_ENV
+        export TF_WORKSPACE=${{ inputs.workspace }}
+        terraform init
+      working-directory: ${{ inputs.directory }}
+
+    - name: Terraform validate
+      if: inputs.environment == 'pull_request'
+      shell: bash
+      run: |
+        terraform validate || { echo "::error title=terraform validate failed::terraform validate failed"; exit 1; }
+      working-directory: ${{ inputs.terraform_directory }}
+
+    - name: Terraform format check
+      if: inputs.environment == 'pull_request'
+      shell: bash
+      run: |
+        terraform fmt -check || { echo "::error title=terraform fmt failed::terraform fmt failed"; exit 1; }
+      working-directory: ${{ inputs.terraform_directory }}
+
+    - name: Terraform Plan
+      if: inputs.environment == 'pull_request' || inputs.environment == 'staging'  || inputs.environment == 'production'
+      shell: bash
+      run: |
+        terraform plan
+      working-directory: ${{ inputs.directory }}
+
+    - name: Terraform Apply
+      if: inputs.environment == 'staging'  || inputs.environment == 'production'
+      shell: bash
+      run: |
+        terraform apply -auto-approve
+      working-directory: ${{ inputs.directory }}

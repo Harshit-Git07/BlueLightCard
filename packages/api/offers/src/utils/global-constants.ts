@@ -13,7 +13,7 @@ export const enum APP_MODE {
 
 export const enum OFFERS_DOMAIN_NAME {
   BLC_UK = 'offers.blcshine.io',
-  DDS_UK = 'offers-dds.blcshine.io',
+  DDS_UK = 'offers-dds-uk.blcshine.io',
   BLC_AUS = 'offers-au.blcshine.io',
 }
 

@@ -15,12 +15,15 @@ import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { useAtom } from 'jotai';
+import USPBanner from '@/components/UspBanner/UspBanner';
+import Amplitude from '@/components/Amplitude/Amplitude';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import {
   AmplitudeExperimentState,
   AmplitudeFeatureFlagState,
 } from '@/components/AmplitudeProvider/types';
+
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
@@ -63,6 +66,9 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
+        <Amplitude keyName={Experiments.USP_BANNER_HOMEPAGE} value="on">
+          <USPBanner></USPBanner>
+        </Amplitude>
         <div className="my-2 mx-2">
           <Search
             onSearch={(searchTerm) =>

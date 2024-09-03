@@ -20,6 +20,7 @@ export enum Experiments {
   OFFER_SHEET_VAULT = 'offer-sheet-redeem-vault-app',
   OFFER_SHEET_NON_VAULT = 'offer-sheet-redeem-non-vault-app',
   CATEGORY_LEVEL_THREE_SEARCH = 'search-category-level-three-hybrid-v2',
+  USP_BANNER_HOMEPAGE = 'usp-banner-homepage',
   NEW_COMPANY_PAGE = 'app-new-company-page',
 }
 

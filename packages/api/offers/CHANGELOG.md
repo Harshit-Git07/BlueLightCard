@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.39.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.38.0...bluelightcard/offers-v1.39.0) (2024-09-03)
+
+
+### Features
+
+* [DISCO-565] Update Offers DDS custom domain name ([#2146](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2146)) ([3eff084](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3eff0849acbed1c191f065baf0966a974fe1a3a3))
+
+
+### Other Changes
+
+* setup coverage reporting in to sonarcloud ([1771bfb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1771bfb72e5fb4e6d7135a5d94c4d0f8693f6f8e))
+
 ## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.37.0...bluelightcard/offers-v1.38.0) (2024-08-21)
 
 

@@ -187,7 +187,7 @@ jobs:
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
             region: 'eu-west-2'
             offers_graphql_endpoint: 'https://whrpak5b7vgk5ccqwmsc5geltm.appsync-api.eu-west-2.amazonaws.com/graphql'
-            offers_api_gateway_endpoint: 'https://staging-offers-dds.blcshine.io'
+            offers_api_gateway_endpoint: 'https://staging-offers-dds-uk.blcshine.io'
             offers_brand: 'dds-uk'
     runs-on: ubuntu-latest
     needs:
@@ -299,7 +299,7 @@ jobs:
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
             offers_graphql_endpoint: 'https://bseyuukkyrcnrmpbnpq5vehowy.appsync-api.eu-west-2.amazonaws.com/graphql'
-            offers_api_gateway_endpoint: 'https://offers-dds.blcshine.io'
+            offers_api_gateway_endpoint: 'https://offers-dds-uk.blcshine.io'
             offers_brand: 'dds-uk'
     environment: Production
     runs-on: ubuntu-latest

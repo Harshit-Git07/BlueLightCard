@@ -6,9 +6,16 @@ import { TestUser } from '@blc-mono/redemptions/libs/test/helpers/identity';
 describe('GET /search', async () => {
   const testUserTokens = await TestUser.authenticate();
 
+  const getSearchEndpoint = () => {
+    if (ENDPOINTS.SEARCH === undefined || ENDPOINTS.SEARCH === '') {
+      return `${ApiGatewayV1Api.discovery.url}/search`;
+    }
+    return ENDPOINTS.SEARCH;
+  };
+
   const whenSearchIsCalledWith = async (params: Record<string, string>, headers: Record<string, string>) => {
     const urlParams = new URLSearchParams(params);
-    const searchEndpoint = ENDPOINTS.SEARCH ?? `${ApiGatewayV1Api.discovery.url}/search`;
+    const searchEndpoint = getSearchEndpoint();
     return fetch(`${searchEndpoint}?${urlParams.toString()}`, {
       method: 'GET',
       headers: {

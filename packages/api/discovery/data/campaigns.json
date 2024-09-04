@@ -1,0 +1,22 @@
+[
+  {
+    "id": "testerCampaign",
+    "campaignType": "thankyouCampaign",
+    "content": {
+      "imageURL": "imageURL",
+      "iframeURL": "https://api.odicci.com/widgets/iframe_loaders/2031feeae3808e7b8802"
+    },
+    "startDate": "2024-09-02T00:00:00Z",
+    "endDate": "2024-09-08T23:59:59.997Z"
+  },
+  {
+    "id": "1",
+    "campaignType": "thankyouCampaign",
+    "content": {
+      "imageURL": "imageURL",
+      "iframeURL": "iframeURL"
+    },
+    "startDate": "2024-09-09T00:00:00Z",
+    "endDate": "2024-09-15T23:59:59.997Z"
+  }
+]

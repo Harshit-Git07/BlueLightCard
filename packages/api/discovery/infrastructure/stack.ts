@@ -97,6 +97,15 @@ async function DiscoveryStack({ stack, app }: StackContext) {
         OPENSEARCH_STAGING_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint,
       },
     }),
+    'GET /campaigns': Route.createRoute({
+      apiGatewayModelGenerator,
+      stack,
+      functionName: 'GetActiveCampaignHandler',
+      restApi,
+      handler: 'packages/api/discovery/application/handlers/campaigns/getActiveCampaigns.handler',
+      requestValidatorName: 'GetCampaignEventValidator',
+      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+    }),
   });
 
   const openSearchDomain = await new OpenSearchDomain(stack, vpc).setup();

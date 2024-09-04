@@ -1,8 +1,8 @@
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1ApiFunctionRouteProps, Function, Stack } from 'sst/constructs';
 import { SSTConstruct } from 'sst/constructs/Construct';
+import { Permissions } from 'sst/constructs/util/permission';
 
 import {
   ApiGatewayModelGenerator,
@@ -24,7 +24,7 @@ export type RouteOptions = {
   stack: Stack;
   bind?: SSTConstruct[];
   defaultAllowedOrigins: string[];
-  permissions?: PolicyStatement[];
+  permissions?: Permissions;
 };
 
 export class Route {

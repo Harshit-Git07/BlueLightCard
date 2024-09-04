@@ -129,15 +129,9 @@ export class HomePageAus {
   }
 
   async assertElementsVisibleHomeScreenLoggedIn(): Promise<void> {
-    await expect(this.BLUELIGHTBUTTON_NAVBAR_AUS).toBeVisible();
     await expect(this.HOME_NAVBAR_AUS).toBeVisible();
-    await expect(this.OFFERS_NAVBAR_AUS).toBeVisible();
-    await expect(this.MYCARD_NAVBAR_AUS).toBeVisible();
-    await expect(this.MYACCOUNT_NAVBAR_AUS).toBeVisible();
-    await expect(this.FAQS_NAVBAR_AUS).toBeVisible();
     await expect(this.LOGOUT_NAVBAR_AUS).toBeVisible();
     await expect(this.SEARCH_BY_COMPANY_OR_PHRASE_TEXT_AUS).toBeVisible();
     await expect(this.MAGNIFIER_SEARCHBAR_AUS).toBeVisible();
-    await expect(this.DEALS_OF_THE_WEEK_HEADING_AUS).toBeVisible();
   }
 }

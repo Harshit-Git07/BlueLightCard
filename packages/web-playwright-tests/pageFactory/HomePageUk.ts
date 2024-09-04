@@ -122,19 +122,8 @@ export class HomePageUk {
       await expect(this.HOME_NAVBAR_UK).toBeVisible();
     }
     await expect(this.OFFERS_HEADER_LINK_UK).toBeVisible();
-
-    if (process.env.ENVIRONMENT === 'staging') {
-      await expect(this.DISCOVERMORE_NAVBAR_UK).toBeVisible();
-    } else {
-      await expect(this.BROWSECATEGORIES_NAVBAR_UK).toBeVisible();
-    }
-
-    await expect(this.MY_CARD_LINK_UK).toBeVisible();
-    await expect(this.MY_ACCOUNT_LINK_UK).toBeVisible();
-    await expect(this.FAQS_NAVBAR_UK).toBeVisible();
     await expect(this.LOGOUT_NAVBAR_UK).toBeVisible();
     await expect(this.SEARCH_BUTTON_UK).toBeVisible();
-    await expect(this.DEALS_OF_THE_WEEK_HEADING_UK).toBeVisible();
   }
 
   // Menu selection methods

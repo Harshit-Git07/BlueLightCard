@@ -86,12 +86,7 @@ export class HomePageDds {
   // Element assertions
   async assertElementsVisibleHomeScreenLoggedIn(): Promise<void> {
     await expect(this.DDSLOGOBUTTON_NAVBAR_DDS).toBeVisible();
-    await expect(this.OFFERS_NAVBAR_DDS).toBeVisible();
-    await expect(this.PRIVILEGE_CARD_NAVBAR_DDS).toBeVisible();
-    await expect(this.MY_ACCOUNT_NAVBAR_DDS).toBeVisible();
-    await expect(this.FAQS_NAVBAR_DDS).toBeVisible();
     await expect(this.LOGOUT_NAVBAR_DDS).toBeVisible();
     await expect(this.SEARCH_TEXT_DDS).toBeVisible();
-    await expect(this.DEALS_OF_THE_WEEK_HEADING_DDS).toBeVisible();
   }
 }

@@ -66,7 +66,10 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
-        <Amplitude keyName={Experiments.USP_BANNER_HOMEPAGE} value="on">
+        <Amplitude
+          keyName={Experiments.USP_BANNER_HOMEPAGE}
+          value={AmplitudeExperimentState.Treatment}
+        >
           <USPBanner></USPBanner>
         </Amplitude>
         <div className="my-2 mx-2">

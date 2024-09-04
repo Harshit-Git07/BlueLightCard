@@ -1,5 +1,3 @@
-import { BRAND } from '@/global-vars';
-import { BRANDS } from '../types/brands.enum';
 import { amplitudeStore } from '../context/AmplitudeExperiment';
 import { experimentsAndFeatureFlags } from '../utils/amplitude/store';
 import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
@@ -14,12 +12,8 @@ export const getOffersByCategoryUrl = (categoryId: string) => {
 
 export const getOffersBySearchTermUrl = (searchTerm: string, issuer: string = '') => {
   let disableModernSearch = false;
-
-  // Aus has to use PHP until search is globalised
-  if (BRAND === BRANDS.BLC_AU) {
-    const amplitudeFlags = amplitudeStore.get(experimentsAndFeatureFlags);
-    disableModernSearch = amplitudeFlags[AmplitudeExperimentFlags.AUS_DISABLE_WEB_SEARCH] === 'on';
-  }
+  const amplitudeFlags = amplitudeStore.get(experimentsAndFeatureFlags);
+  disableModernSearch = amplitudeFlags[AmplitudeExperimentFlags.DISABLE_MODERN_WEB_SEARCH] === 'on';
 
   return disableModernSearch
     ? `/offers.php?type=1&opensearch=1&search=${searchTerm}`

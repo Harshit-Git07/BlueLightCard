@@ -25,11 +25,9 @@ describe('getOffersBySearchTermUrl', () => {
     expect(searchPath).toEqual('/search?issuer=serp&q=Test search term');
   });
 
-  test('it returns the modern search path for BLC AU when feature flag is OFF', () => {
-    mockGlobals.BRAND = 'blc-au';
-
+  test('it returns the modern search path for when feature flag is OFF', () => {
     amplitudeStore.set(experimentsAndFeatureFlags, {
-      [AmplitudeExperimentFlags.AUS_DISABLE_WEB_SEARCH]: 'off',
+      [AmplitudeExperimentFlags.DISABLE_MODERN_WEB_SEARCH]: 'off',
     });
 
     const searchPath = getOffersBySearchTermUrl('Test search term', 'serp');
@@ -37,11 +35,9 @@ describe('getOffersBySearchTermUrl', () => {
     expect(searchPath).toEqual('/search?issuer=serp&q=Test search term');
   });
 
-  test('it returns the legacy search path for BLC AU when feature flag is ON', () => {
-    mockGlobals.BRAND = 'blc-au';
-
+  test('it returns the legacy search path for feature flag is ON', () => {
     amplitudeStore.set(experimentsAndFeatureFlags, {
-      [AmplitudeExperimentFlags.AUS_DISABLE_WEB_SEARCH]: 'on',
+      [AmplitudeExperimentFlags.DISABLE_MODERN_WEB_SEARCH]: 'on',
     });
 
     const searchPath = getOffersBySearchTermUrl('Test search term', 'serp');

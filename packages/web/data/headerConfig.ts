@@ -5,6 +5,7 @@ import {
   COGNITO_LOGIN_URL,
   COGNITO_LOGOUT_URL,
   ZENDESK_V1_BLC_UK_URL,
+  HOLIDAY_URL,
 } from '@/global-vars';
 import { redirect } from '@/utils/externalRedirect';
 
@@ -141,7 +142,7 @@ export const getNavItems = (
           link: '/holiday-discounts.php',
           onClickLink: async (target) => {
             await logBrowseCategoriesClicked(target);
-            redirect('/holiday-discounts.php');
+            redirect(HOLIDAY_URL);
           },
         },
         {

@@ -18,6 +18,8 @@ const AMPLITUDE_DEPLOYMENT_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KE
 const AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB =
   process.env.NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB ?? '';
 const ENVIRONMENT = process.env.NEXT_PUBLIC_ENVIRONMENT;
+const HOLIDAY_URL =
+  process.env.NEXT_PUBLIC_APP_HOLIDAY_URL ?? 'https://holiday-discounts.bluelightcard.co.uk';
 
 // Proxy
 const API_PROXY_URL = process.env.NEXT_PUBLIC_API_PROXY_URL ?? '';
@@ -131,4 +133,5 @@ module.exports = {
   BRAZE_SDK_API_KEY,
   BRAND_URL,
   ZENDESK_V1_BLC_UK_URL,
+  HOLIDAY_URL,
 };

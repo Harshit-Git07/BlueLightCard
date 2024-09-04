@@ -8,6 +8,7 @@ import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtim
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { redirect } from '@/utils/externalRedirect';
 import { act } from '@testing-library/react';
+import { HOLIDAY_URL } from '@/global-vars';
 
 const logOffersClickedMock = jest.fn();
 const logBrowseCategoriesClickedMock = jest.fn();
@@ -80,7 +81,7 @@ describe('Navigation component for logged in and logged out', () => {
       ['Giftcard Discounts', '/offers.php?type=2'],
       ['Offers Near You', '/nearme.php'],
       ['Deals of the Week', '/members-home'],
-      ['Holiday Discounts', '/holiday-discounts.php'],
+      ['Holiday Discounts', HOLIDAY_URL],
       ['Days Out', '/days-out.php'],
       ['My Card', '/highstreetcard.php'],
       ['My Account', '/account.php'],

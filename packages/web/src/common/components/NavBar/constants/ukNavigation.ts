@@ -43,6 +43,11 @@ export const AUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
     label: 'Discover More',
     children: [
       {
+        id: 'deal-finder',
+        label: 'Deal Finder',
+        url: 'https://dealfinder.bluelightcard.co.uk',
+      },
+      {
         id: 'holiday-discounts',
         label: 'Holiday Discounts',
         url: '/holiday-discounts.php',

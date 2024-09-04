@@ -28,7 +28,7 @@ export function createVaultCodesUploadRule(
     environment: {
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: eventBusName,
     },
-    permissions: [putEventsPolicy, vaultCodesUpload.setUp.getGetRecordPolicyStatement()],
+    permissions: [putEventsPolicy, vaultCodesUpload.setUp.getGetObjectPolicyStatement()],
   });
   return {
     pattern: {

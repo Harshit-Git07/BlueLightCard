@@ -276,7 +276,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
   // Create domain email identity
   await createDomainEmailIdentity(config.redemptionsEmailDomain, stack.region);
 
-  const adminApi = createAdminApi(stack, globalConfig, certificateArn, database, brand);
+  const adminApi = createAdminApi(stack, globalConfig, certificateArn, database, brand, vaultCodesUpload);
 
   stack.addOutputs({
     RedemptionsApiEndpoint: api.url,

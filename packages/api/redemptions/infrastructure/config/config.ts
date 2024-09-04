@@ -1,6 +1,6 @@
 import { Stack } from 'sst/constructs';
 
-import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND } from '@blc-mono/core/constants/common';
+import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND, MAP_BRAND } from '@blc-mono/core/constants/common';
 import { Brand, CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
@@ -35,6 +35,7 @@ export type RedemptionsStackConfig = {
   brazeRedemptionGenericPushNotificationCampaignId: string;
   brazeRedemptionShowCardPushNotificationCampaignId: string;
   identityApiUrl: string;
+  vaultCodesUploadBucket: string;
 };
 
 export class RedemptionsStackConfigResolver {
@@ -48,7 +49,7 @@ export class RedemptionsStackConfigResolver {
       case PR_STAGE_REGEX.test(stack.stage):
         return this.forPrStage();
       default:
-        return this.fromEnvironmentVariables();
+        return this.fromEnvironmentVariables(stack.stage, MAP_BRAND[brand]);
     }
   }
 
@@ -95,6 +96,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionPreAppliedPushNotificationCampaignId: 'f0e25e82-1436-4357-b198-c2b69fd98cf4',
         brazeRedemptionGenericPushNotificationCampaignId: '378d0b0e-aa79-4b7e-a1a8-96459db8379a',
         brazeRedemptionShowCardPushNotificationCampaignId: '90df7afd-5d1d-48d5-a4a5-a71c9279c1d0',
+        vaultCodesUploadBucket: `production-${MAP_BRAND[BLC_UK_BRAND]}-vault-codes-upload`,
       },
       [BLC_AU_BRAND]: {
         ...common,
@@ -112,6 +114,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionPreAppliedPushNotificationCampaignId: '', //todo add id
         brazeRedemptionGenericPushNotificationCampaignId: '', //todo add id
         brazeRedemptionShowCardPushNotificationCampaignId: '', //todo add id
+        vaultCodesUploadBucket: `production-${MAP_BRAND[BLC_AU_BRAND]}-vault-codes-upload`,
       },
       [DDS_UK_BRAND]: {
         ...common,
@@ -129,6 +132,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionPreAppliedPushNotificationCampaignId: '', //todo add id
         brazeRedemptionGenericPushNotificationCampaignId: '', //todo add id
         brazeRedemptionShowCardPushNotificationCampaignId: '', //todo add id
+        vaultCodesUploadBucket: `production-${MAP_BRAND[DDS_UK_BRAND]}-vault-codes-upload`,
       },
     };
   }
@@ -166,6 +170,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
         brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
         brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
+        vaultCodesUploadBucket: `staging-${MAP_BRAND[BLC_UK_BRAND]}-vault-codes-upload`,
       },
       [BLC_AU_BRAND]: {
         ...common,
@@ -183,6 +188,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionPreAppliedPushNotificationCampaignId: '', //todo add id
         brazeRedemptionGenericPushNotificationCampaignId: '', //todo add id
         brazeRedemptionShowCardPushNotificationCampaignId: '', //todo add id
+        vaultCodesUploadBucket: `staging-${MAP_BRAND[BLC_AU_BRAND]}-vault-codes-upload`,
       },
       [DDS_UK_BRAND]: {
         ...common,
@@ -200,6 +206,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionPreAppliedPushNotificationCampaignId: '', //todo add id
         brazeRedemptionGenericPushNotificationCampaignId: '', //todo add id
         brazeRedemptionShowCardPushNotificationCampaignId: '', //todo add id
+        vaultCodesUploadBucket: `staging-${MAP_BRAND[DDS_UK_BRAND]}-vault-codes-upload`,
       },
     };
   }
@@ -231,10 +238,11 @@ export class RedemptionsStackConfigResolver {
       brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
       brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
       identityApiUrl: 'https://staging-identity.blcshine.io',
+      vaultCodesUploadBucket: 'staging-blc-uk-vault-codes-upload',
     };
   }
 
-  public static fromEnvironmentVariables(): RedemptionsStackConfig {
+  public static fromEnvironmentVariables(stage: string, brand: string): RedemptionsStackConfig {
     return {
       redemptionsLambdaScriptsSecretName: getEnv(
         RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME,
@@ -290,6 +298,7 @@ export class RedemptionsStackConfigResolver {
         RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID,
       ),
       identityApiUrl: getEnv(RedemptionsStackEnvironmentKeys.IDENTITY_API_URL),
+      vaultCodesUploadBucket: `${stage}-${brand}-vault-codes-upload`,
     };
   }
 }

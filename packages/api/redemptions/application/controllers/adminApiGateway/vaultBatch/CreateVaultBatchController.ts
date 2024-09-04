@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
+import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
   CreateVaultBatchService,
@@ -42,22 +43,27 @@ export class CreateVaultBatchController extends APIGatewayController<ParsedReque
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
     const result = await this.createVaultBatchService.createVaultBatch(request);
-    if (result.kind === 'Ok') {
-      return {
-        statusCode: 200,
-        data: {
-          vaultBatchId: result.data.vaultBatchId,
-          signedUrl: result.data.signedUrl,
-          service: result.data.service,
-        },
-      };
-    } else {
-      return {
-        statusCode: 404,
-        data: {
-          message: 'Vault Batch failed to be created',
-        },
-      };
+
+    switch (result.kind) {
+      case 'Ok':
+        return {
+          statusCode: 200,
+          data: {
+            id: result.data.id,
+            vaultId: result.data.vaultId,
+            uploadUrl: result.data.uploadUrl,
+          },
+        };
+      case 'Error':
+        return {
+          statusCode: 404,
+          data: {
+            message: result.data.message,
+          },
+        };
+
+      default:
+        exhaustiveCheck(result, 'Unhandled result kind');
     }
   }
 }

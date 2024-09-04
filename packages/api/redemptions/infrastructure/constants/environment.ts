@@ -66,4 +66,7 @@ export enum RedemptionsStackEnvironmentKeys {
 
   // Identity
   IDENTITY_API_URL = 'IDENTITY_API_URL',
+
+  // S3
+  VAULT_CODES_UPLOAD_BUCKET = 'VAULT_CODES_UPLOAD_BUCKET',
 }

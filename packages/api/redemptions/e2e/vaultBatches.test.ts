@@ -2,10 +2,18 @@ import { faker } from '@faker-js/faker';
 import AWS from 'aws-sdk';
 import { eq, inArray } from 'drizzle-orm';
 import { ApiGatewayV1Api } from 'sst/node/api';
-import { afterAll, beforeAll, describe, expect, it, onTestFinished } from 'vitest';
+import { beforeAll, describe, expect, it, onTestFinished, test } from 'vitest';
 
 import { DatabaseConnectionType } from '../libs/database/connection';
-import { redemptionsTable, vaultBatchesTable, vaultCodesTable, vaultsTable } from '../libs/database/schema';
+import {
+  createRedemptionsIdE2E,
+  createVaultBatchesIdE2E,
+  createVaultIdE2E,
+  redemptionsTable,
+  vaultBatchesTable,
+  vaultCodesTable,
+  vaultsTable,
+} from '../libs/database/schema';
 import { redemptionFactory } from '../libs/test/factories/redemption.factory';
 import { vaultFactory } from '../libs/test/factories/vault.factory';
 import { vaultBatchFactory } from '../libs/test/factories/vaultBatches.factory';
@@ -17,18 +25,56 @@ describe('Vault Batch admin API tests', () => {
   let connectionManager: E2EDatabaseConnectionManager;
   let apiKey: string;
 
-  const defaultRedemption = redemptionFactory.build();
-  const defaultVault = vaultFactory.build({ redemptionId: defaultRedemption.id });
-  const defaultVaultBatch = vaultBatchFactory.build({ vaultId: defaultVault.id });
-  const defaultVaultCodes = vaultCodeFactory.buildList(5, {
-    vaultId: defaultVault.id,
-    batchId: defaultVaultBatch.id,
-    memberId: null,
-  });
+  const buildRedemptionForPostMethod = (companyId: number, offerId: number) => {
+    const redemption = redemptionFactory.build({
+      id: createRedemptionsIdE2E(),
+      companyId: companyId,
+      offerId: offerId,
+      redemptionType: 'vault',
+      connection: 'direct',
+      url: faker.internet.url(),
+    });
+
+    return {
+      redemption,
+      async insert() {
+        await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+      },
+      async cleanup() {
+        await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+      },
+    };
+  };
+
+  const buildVaultForPostMethod = (redemptionParams: NonNullable<Parameters<typeof redemptionFactory.build>[0]>) => {
+    const redemption = redemptionFactory.build(redemptionParams);
+    const vault = vaultFactory.build({
+      id: createVaultIdE2E(),
+      redemptionId: redemption.id,
+    });
+
+    return {
+      vault,
+      async insert() {
+        await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
+        await connectionManager.connection.db.insert(vaultsTable).values(vault);
+      },
+      async cleanup() {
+        await connectionManager.connection.db.delete(vaultBatchesTable).where(eq(vaultBatchesTable.vaultId, vault.id));
+        await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, vault.id));
+        await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+      },
+    };
+  };
 
   const buildVault = () => {
-    const redemption = redemptionFactory.build();
-    const vault = vaultFactory.build({ redemptionId: redemption.id });
+    const redemption = redemptionFactory.build({
+      id: createRedemptionsIdE2E(),
+    });
+    const vault = vaultFactory.build({
+      id: createVaultIdE2E(),
+      redemptionId: redemption.id,
+    });
 
     return {
       vault,
@@ -44,7 +90,10 @@ describe('Vault Batch admin API tests', () => {
   };
 
   const buildVaultBatch = (vaultId: string) => {
-    const vaultBatch = vaultBatchFactory.build({ vaultId });
+    const vaultBatch = vaultBatchFactory.build({
+      id: createVaultBatchesIdE2E(),
+      vaultId,
+    });
 
     return {
       vaultBatch,
@@ -131,54 +180,175 @@ describe('Vault Batch admin API tests', () => {
     // Set a conservative timeout
   }, 60_000);
 
-  afterAll(async () => {
-    await connectionManager.connection.db.delete(vaultCodesTable).where(eq(vaultCodesTable.vaultId, defaultVault.id));
-    await connectionManager.connection.db
-      .delete(vaultBatchesTable)
-      .where(eq(vaultBatchesTable.id, defaultVaultBatch.id));
+  async function callBatchEndpoint(
+    method: string,
+    key?: string,
+    body?: object,
+    queryStringParam?: string,
+  ): Promise<Response> {
+    const params = queryStringParam ? `batch/${queryStringParam}` : 'batch';
 
-    await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, defaultVault.id));
-    await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, defaultRedemption.id));
+    if (!key) {
+      return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}${params}`, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } else {
+      const payload = body
+        ? {
+            method: method,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-API-Key': key,
+            },
+            body: JSON.stringify(body),
+          }
+        : {
+            method: method,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-API-Key': key,
+            },
+          };
+
+      return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}${params}`, payload);
+    }
+  }
+
+  describe('API key authentication', () => {
+    test.each([
+      { method: 'POST', queryStringParam: undefined },
+      { method: 'GET', queryStringParam: 'my-vault-id' },
+      { method: 'PATCH', queryStringParam: undefined },
+    ])(`$method: authorisation error for no key`, async (params): Promise<void> => {
+      const result = await callBatchEndpoint(params.method, undefined, undefined, params.queryStringParam);
+      expect(result.status).toBe(403);
+    });
+
+    test.each([
+      { method: 'POST', queryStringParam: undefined },
+      { method: 'GET', queryStringParam: 'my-vault-id' },
+      { method: 'PATCH', queryStringParam: undefined },
+    ])(`$method: authorisation error for invalid key`, async (params): Promise<void> => {
+      const result = await callBatchEndpoint(params.method, 'invalid-api-key', undefined, params.queryStringParam);
+      expect(result.status).toBe(403);
+    });
   });
 
-  describe('GET Vault Batches', () => {
-    describe('API key authentication', () => {
-      it('responds with an authorisation error if no key is provided', async () => {
-        const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch/my-vault-id`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+  describe('POST Vault Batches', () => {
+    test.each([
+      {
+        vaultId: 'vault#BLC',
+        message: 'legacy vaultId is incorrectly formatted',
+      },
+      {
+        vaultId: 'vault#12345#BLC',
+        message: 'legacy vaultId is missing companyId and/or offerId',
+      },
+      {
+        vaultId: 'vault#12345-67890#BLC',
+        message: 'redemption does not exist for legacy vault',
+      },
+      {
+        vaultId: 'vlt-123-456-789-000',
+        message: 'vault does not exist for standard vaultId',
+      },
+    ])(`returns 404 for $message: $vaultId`, async (params): Promise<void> => {
+      const body = {
+        vaultId: params.vaultId,
+        expiry: faker.date.future().toISOString(),
+      };
 
-        expect(result.status).toBe(403);
-      });
+      const result = await callBatchEndpoint('POST', apiKey, body);
+      const responseBody = await result.json();
 
-      it('responds with an authorisation error if the wrong key is provided', async () => {
-        const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch/my-vault-id`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': 'probably-not-this-one',
-          },
-        });
-
-        expect(result.status).toBe(403);
+      expect(responseBody).toStrictEqual({
+        statusCode: 404,
+        data: {
+          message: `CreateVaultBatch - ${params.message} (vaultId=${params.vaultId})`,
+        },
       });
     });
 
+    it('returns 404 error when legacy vaultId vaults record does not exist', async () => {
+      const companyId = 12345;
+      const offerId = 67890;
+      const { ...RedemptionHooks } = buildRedemptionForPostMethod(companyId, offerId);
+      onTestFinished(RedemptionHooks.cleanup);
+      await RedemptionHooks.insert();
+
+      const legacyVaultId = `vault#${companyId}-${offerId}#BLC`;
+      const body = {
+        vaultId: legacyVaultId,
+        expiry: faker.date.future().toISOString(),
+      };
+
+      const result = await callBatchEndpoint('POST', apiKey, body);
+      const responseBody = await result.json();
+
+      expect(responseBody).toStrictEqual({
+        statusCode: 404,
+        data: {
+          message: `CreateVaultBatch - vault does not exist for legacy vault redemptionId (vaultId=${legacyVaultId})`,
+        },
+      });
+    });
+
+    it('returns 200 when legacy vaultId redemptions and vaults records exist', async () => {
+      const companyId = 12345;
+      const offerId = 67890;
+      const { ...VaultHooks } = buildVaultForPostMethod({
+        id: createRedemptionsIdE2E(),
+        companyId: companyId,
+        offerId: offerId,
+        redemptionType: 'vault',
+        connection: 'direct',
+        url: faker.internet.url(),
+      });
+      onTestFinished(VaultHooks.cleanup);
+      await VaultHooks.insert();
+
+      const legacyVaultId = `vault#${companyId}-${offerId}#BLC`;
+      const body = {
+        vaultId: legacyVaultId,
+        expiry: faker.date.future().toISOString(),
+      };
+
+      const result = await callBatchEndpoint('POST', apiKey, body);
+
+      expect(result.status).toStrictEqual(200);
+    });
+
+    it('returns 200 when standard vaultId vaults record exists', async () => {
+      const { vault, ...VaultHooks } = buildVaultForPostMethod({
+        id: createRedemptionsIdE2E(),
+        redemptionType: 'vault',
+        connection: 'direct',
+        url: faker.internet.url(),
+      });
+      onTestFinished(VaultHooks.cleanup);
+      await VaultHooks.insert();
+
+      const body = {
+        vaultId: vault.id,
+        expiry: faker.date.future().toISOString(),
+      };
+
+      const result = await callBatchEndpoint('POST', apiKey, body);
+
+      expect(result.status).toStrictEqual(200);
+    });
+  });
+
+  describe('GET Vault Batches', () => {
     it('returns a batch for a given Vault Id', async () => {
       const { vault, vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(5);
       onTestFinished(vaultCodeHooks.cleanup);
       await vaultCodeHooks.insert();
 
-      const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch/${vault.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-      });
+      const result = await callBatchEndpoint('GET', apiKey, undefined, vault.id);
       const body = await result.json();
 
       expect(body).toStrictEqual({
@@ -213,13 +383,7 @@ describe('Vault Batch admin API tests', () => {
       await secondVaultBatchHooks.insert();
       await secondBatchCodeListHooks.insert();
 
-      const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch/${vault.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-      });
+      const result = await callBatchEndpoint('GET', apiKey, undefined, vault.id);
       const body = await result.json();
 
       expect(body).toStrictEqual({
@@ -258,13 +422,7 @@ describe('Vault Batch admin API tests', () => {
       await unclaimedVaultCodeHooks.insert();
       await claimedVaultCodeHooks.insert();
 
-      const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch/${vault.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-      });
+      const result = await callBatchEndpoint('GET', apiKey, undefined, vault.id);
       const body = await result.json();
 
       expect(body).toStrictEqual({
@@ -283,89 +441,40 @@ describe('Vault Batch admin API tests', () => {
   });
 
   describe('PATCH Vault Batches', () => {
-    describe('API key authentication', () => {
-      it('responds with an authorisation error if no key is provided', async () => {
-        const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            batchId: `vbt-${faker.string.uuid()}`,
-            expiry: faker.date.future().toISOString(),
-          }),
-        });
+    it('responds with a bad request error if the body is invalid', async () => {
+      const body = {
+        batchId: `vbt-${faker.string.uuid()}`,
+      };
 
-        expect(result.status).toBe(403);
-      });
+      const result = await callBatchEndpoint('PATCH', apiKey, body);
 
-      it('responds with an authorisation error if the wrong key is provided', async () => {
-        const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': 'probably-not-this-one',
-          },
-          body: JSON.stringify({
-            batchId: `vbt-${faker.string.uuid()}`,
-            expiry: faker.date.future().toISOString(),
-          }),
-        });
+      expect(result.status).toBe(400);
+    });
 
-        expect(result.status).toBe(403);
-      });
+    it('responds with a not found error if the batch does not exist', async () => {
+      const body = {
+        batchId: `vbt-non-existent`,
+        expiry: faker.date.future().toISOString(),
+      };
 
-      it('responds with a bad request error if the body is invalid', async () => {
-        const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-          },
-          body: JSON.stringify({
-            batchId: `vbt-${faker.string.uuid()}`,
-          }),
-        });
+      const result = await callBatchEndpoint('PATCH', apiKey, body);
 
-        expect(result.status).toBe(400);
-      });
+      expect(result.status).toBe(404);
+    });
 
-      it('responds with a not found error if the batch does not exist', async () => {
-        const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-          },
-          body: JSON.stringify({
-            batchId: `vbt-non-existent`,
-            expiry: faker.date.future().toISOString(),
-          }),
-        });
+    it('responds with no content if the batch and codes are updated', async () => {
+      const { vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(5);
+      onTestFinished(vaultCodeHooks.cleanup);
+      await vaultCodeHooks.insert();
 
-        expect(result.status).toBe(404);
-      });
+      const body = {
+        batchId: vaultBatch.id,
+        expiry: faker.date.future().toISOString(),
+      };
 
-      it('responds with no content if the batch and codes are updated', async () => {
-        await connectionManager.connection.db.insert(redemptionsTable).values(defaultRedemption);
-        await connectionManager.connection.db.insert(vaultsTable).values(defaultVault);
-        await connectionManager.connection.db.insert(vaultBatchesTable).values(defaultVaultBatch);
-        await connectionManager.connection.db.insert(vaultCodesTable).values(defaultVaultCodes);
+      const result = await callBatchEndpoint('PATCH', apiKey, body);
 
-        const result = await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}batch`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': apiKey,
-          },
-          body: JSON.stringify({
-            batchId: defaultVaultBatch.id,
-            expiry: faker.date.future().toISOString(),
-          }),
-        });
-
-        expect(result.status).toStrictEqual(204);
-      });
+      expect(result.status).toStrictEqual(204);
     });
   });
 });

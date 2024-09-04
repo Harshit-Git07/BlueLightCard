@@ -3,6 +3,9 @@ import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { Stack } from 'sst/constructs';
 
+import { MAP_BRAND } from '@blc-mono/core/constants/common';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
+
 import { IVaultCodesUploadAdapter } from './adapter';
 
 export class VaultCodesUpload {
@@ -18,8 +21,11 @@ export class VaultCodesUpload {
   }
 
   private createBucket(): Bucket {
+    //S3 bucket names must be lowercase and not contain underscores
+    const bucketBrand = MAP_BRAND[getBrandFromEnv()];
+
     //this comment can be removed, it is here just to trigger release PR, and again
-    const bucketName = `${this.stack.stage}-${this.stack.region}-vault-codes-upload`;
+    const bucketName = `${this.stack.stage}-${bucketBrand}-vault-codes-upload`;
     return new Bucket(this.stack, bucketName, {
       removalPolicy: RemovalPolicy.RETAIN_ON_UPDATE_OR_DELETE,
       autoDeleteObjects: false,
@@ -33,7 +39,7 @@ export class VaultCodesUpload {
       getBucketName: () => {
         return bucket.bucketName;
       },
-      getGetRecordPolicyStatement: () => {
+      getGetObjectPolicyStatement: () => {
         return new PolicyStatement({
           actions: [
             'logs:PutLogEvents',
@@ -44,6 +50,13 @@ export class VaultCodesUpload {
           ],
           effect: Effect.ALLOW,
           resources: ['arn:aws:logs:*:*:*', bucket.bucketArn, `${bucket.bucketArn}/*`],
+        });
+      },
+      getPutObjectPolicyStatement: () => {
+        return new PolicyStatement({
+          actions: ['s3:PutObject'],
+          effect: Effect.ALLOW,
+          resources: [bucket.bucketArn, `${bucket.bucketArn}/*`],
         });
       },
     };

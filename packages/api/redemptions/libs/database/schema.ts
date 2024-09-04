@@ -104,7 +104,7 @@ export const vaultBatchesTable = pgTable('vaultBatches', {
     .notNull(),
   // Other
   file: varchar('file').notNull(),
-  expiry: timestamp('expiry').defaultNow().notNull(),
+  expiry: timestamp('expiry').notNull(),
   created: timestamp('created').defaultNow().notNull(),
 });
 

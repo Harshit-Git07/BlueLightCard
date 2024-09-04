@@ -5,10 +5,12 @@ import { ApiGatewayV1Api, Stack } from 'sst/constructs';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
 
 import { productionAdminDomainNames, stagingAdminDomainNames } from '../constants/domains';
 import { IDatabase } from '../database/adapter';
+import { VaultCodesUpload } from '../s3/vaultCodesUpload';
 
 type GlobalConfig = {
   apiGatewayEndpointTypes: EndpointType[];
@@ -20,6 +22,7 @@ export function createAdminApi(
   certificateArn: string | undefined,
   database: IDatabase,
   brand: 'BLC_UK' | 'BLC_AU' | 'DDS_UK',
+  vaultCodesUpload: VaultCodesUpload,
 ): ApiGatewayV1Api<Record<string, never>> {
   const adminApi = new ApiGatewayV1Api(stack, 'redemptionsAdmin', {
     cdk: {
@@ -48,8 +51,8 @@ export function createAdminApi(
   });
   const adminApiUsagePlan = adminApi.cdk.restApi.addUsagePlan('redemptions-admin-api-usage-plan', {
     throttle: {
-      rateLimit: 1,
-      burstLimit: 2,
+      rateLimit: 100,
+      burstLimit: 20,
     },
     apiStages: [
       {
@@ -75,8 +78,6 @@ export function createAdminApi(
       handler: 'packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/getVaultBatchHandler.handler',
       requestValidatorName: 'GetVaultBatchValidator',
     }),
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     'POST /batch': AdminRoute.createRoute({
       apiGatewayModelGenerator: adminApiGatewayModelGenerator,
       stack,
@@ -86,6 +87,10 @@ export function createAdminApi(
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/createVaultBatchHandler.handler',
       requestValidatorName: 'CreateVaultBatchValidator',
+      environment: {
+        [RedemptionsStackEnvironmentKeys.VAULT_CODES_UPLOAD_BUCKET]: vaultCodesUpload.setUp.getBucketName(),
+      },
+      permissions: [vaultCodesUpload.setUp.getPutObjectPolicyStatement()],
     }),
     'PATCH /batch': AdminRoute.createRoute({
       apiGatewayModelGenerator: adminApiGatewayModelGenerator,

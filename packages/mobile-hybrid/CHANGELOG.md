@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.29.0...bluelightcard/mobile-hybrid-v1.30.0) (2024-09-04)
+
+
+### Features
+
+* add bottom border to list item ([#2118](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2118)) ([1577d7d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1577d7d95877658d6e2cd1d711d6d025a2a968a7))
+* conv-blc-1.0: adds amplitude component and usp banner component for exp blc-1.0 ([#2119](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2119)) ([62b6c30](https://github.com/bluelightcard/BlueLightCard-2.0/commit/62b6c300b482b1cc254969bc97217ff563fe6d12))
+
+
+### Other Changes
+
+* trigger conversion change ([#2167](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2167)) ([5030d3a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5030d3a838648705f2bec5572c31f0de3ebcef34))
+
 ## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.28.1...bluelightcard/mobile-hybrid-v1.29.0) (2024-09-02)
 
 

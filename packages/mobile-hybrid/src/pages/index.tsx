@@ -66,6 +66,7 @@ const Home: NextPage<any> = () => {
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
+        {/* Conversion experiment */}
         <Amplitude
           keyName={Experiments.USP_BANNER_HOMEPAGE}
           value={AmplitudeExperimentState.Treatment}

@@ -81,7 +81,7 @@ export const logAndFilterPostAuthOld = (
   isDds: boolean,
 ) => {
   const auditLogFunctionPost = new Function(stack, name, {
-    handler: 'packages/api/identity/src/audit/audit.handler',
+    handler: 'packages/api/identity/src/audit/auditHandler.handler',
     environment: {
       SERVICE: 'identity',
       DATA_STREAM: stream,
@@ -110,7 +110,7 @@ export const logAndFilterPreTokenOld = (
   isDds: boolean,
 ) => {
   const auditLogFunctionPre = new Function(stack, name, {
-    handler: 'packages/api/identity/src/audit/audit.handler',
+    handler: 'packages/api/identity/src/audit/auditHandler.handler',
     environment: {
       SERVICE: 'identity',
       DATA_STREAM: stream,

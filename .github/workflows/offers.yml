@@ -102,7 +102,7 @@ jobs:
             stagingBaseUrl: https://staging.bluelightcard.co.uk
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-uk
-            cdnUrl: 'https://blcimg-dev.img.bluelightcard.co.uk'
+            cdnUrl: 'https://blcimgdev.s3.eu-west-2.amazonaws.com'
             brand: BLC_UK
             stage: staging
           - deployment: 'dds-uk-staging'

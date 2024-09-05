@@ -11,6 +11,7 @@ export interface Env {
   IDENTITY_API_BLC_AU: string;
   OFFERS_API_BLC_UK: string;
   OFFERS_API_BLC_AU: string;
+  OFFERS_API_DDS_UK: string;
   REDEMPTIONS_API_UK: string;
   DISCOVERY_API_UK: string;
 }
@@ -41,6 +42,7 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
     '/au/auth': env.AUTH_API_BLC_AU,
     '/eu/identity': env.IDENTITY_API_BLC_UK,
     '/au/identity': env.IDENTITY_API_BLC_AU,
+    '/eu/offers/dds': env.OFFERS_API_DDS_UK,
     '/eu/offers': env.OFFERS_API_BLC_UK,
     '/au/offers': env.OFFERS_API_BLC_AU,
     '/eu/redemptions': env.REDEMPTIONS_API_UK,

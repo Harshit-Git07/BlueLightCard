@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import List from './List';
-import pageDecorator from '@storybook/pageDecorator';
+import pageDecorator from '@storybook-config/pageDecorator';
 import { ListVariant } from './types';
 import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
 

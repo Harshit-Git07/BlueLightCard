@@ -19,7 +19,7 @@
     "paths": {
       "@/data/*": ["./data/*"],
       "@/*": ["./src/*"],
-      "@storybook/*": ["./.storybook/*"]
+      "@storybook-config/*": ["./.storybook/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".storybook/*.tsx", ".storybook/*.ts"],

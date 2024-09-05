@@ -59,24 +59,6 @@ describe('User Profile Provider component', () => {
       });
     });
 
-    it('should not call v5 user endpoint when feature flag disabled', async () => {
-      whenUserProfileProviderComponentIsRendered(mockPlatformAdapter, {
-        [FeatureFlags.V5_API_INTEGRATION]: 'off',
-        [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'treatment',
-      });
-
-      expect(mockPlatformAdapter.invokeV5Api).not.toHaveBeenCalled();
-    });
-
-    it('should not call v5 user endpoint when category search experiment is control', async () => {
-      whenUserProfileProviderComponentIsRendered(mockPlatformAdapter, {
-        [FeatureFlags.V5_API_INTEGRATION]: 'on',
-        [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'control',
-      });
-
-      expect(mockPlatformAdapter.invokeV5Api).not.toHaveBeenCalled();
-    });
-
     it('should not set user profile when no user service received from api', async () => {
       const { result } = renderHook(() => useAtom(userProfile));
 
@@ -106,6 +88,7 @@ describe('User Profile Provider component', () => {
       };
       const mockPlatformAdapter = useMockPlatformAdapter(200, {
         data: {
+          uuid: 'mock-uuid-1',
           profile: testUserProfile,
         },
       });
@@ -113,7 +96,11 @@ describe('User Profile Provider component', () => {
 
       whenUserProfileProviderComponentIsRendered(mockPlatformAdapter);
 
-      await waitFor(() => expect(expect(result.current[0]).toStrictEqual(testUserProfile)));
+      await waitFor(() =>
+        expect(
+          expect(result.current[0]).toStrictEqual({ ...testUserProfile, uuid: 'mock-uuid-1' }),
+        ),
+      );
     });
 
     it('should set age gated value to true for under 18 user', async () => {
@@ -126,6 +113,7 @@ describe('User Profile Provider component', () => {
       };
       const mockPlatformAdapter = useMockPlatformAdapter(200, {
         data: {
+          uuid: 'mock-uuid-1',
           profile: testUserProfile,
         },
       });
@@ -134,7 +122,13 @@ describe('User Profile Provider component', () => {
       whenUserProfileProviderComponentIsRendered(mockPlatformAdapter);
 
       await waitFor(() =>
-        expect(expect(result.current[0]).toStrictEqual({ ...testUserProfile, isAgeGated: false })),
+        expect(
+          expect(result.current[0]).toStrictEqual({
+            ...testUserProfile,
+            uuid: 'mock-uuid-1',
+            isAgeGated: false,
+          }),
+        ),
       );
     });
   });

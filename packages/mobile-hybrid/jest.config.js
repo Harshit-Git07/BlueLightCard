@@ -10,6 +10,8 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@/data/(.*)$': '<rootDir>/data/$1',
+    '^.+\\.(css|less)$': '<rootDir>/src/styles/__mocks__/styleMock.ts',
+    '^swiper/(.*)$': '<rootDir>/src/styles/__mocks__/styleMock.ts',
   },
   testPathIgnorePatterns: ['<rootDir>/src/pages/'],
   testEnvironment: 'jest-environment-jsdom',

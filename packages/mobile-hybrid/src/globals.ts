@@ -24,6 +24,7 @@ export const NAVIGATE_NEWS_URL =
 
 export const V5_API_URL = {
   Search: `/${V5_REGION}/discovery/search`,
+  CampaignEvents: `/${V5_REGION}/discovery/campaigns`,
   User: `/${V5_REGION}/identity/user`,
 } as const;
 

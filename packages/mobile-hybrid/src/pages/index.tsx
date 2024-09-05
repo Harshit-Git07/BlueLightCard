@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { useCallback, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import ListPanel from '@/components/ListPanel/ListPanel';
 import { NewsList, NewsPreview } from '@/modules/news';
@@ -7,6 +8,8 @@ import { newsPanelStore } from '@/modules/news/store';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import trackScrollDepth from '@/utils/scrollDepth';
 import Offers from '@/modules/offers';
+import CampaignBanner from '@/components/CampaignBanner';
+import type { CampaignEvent } from '@/components/CampaignBanner/types';
 import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import Search from '@/components/Search/Search';
@@ -14,10 +17,11 @@ import PopularBrandsSlider from '@/modules/popularbrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { userProfile } from '@/components/UserProfileProvider/store';
+import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import USPBanner from '@/components/UspBanner/UspBanner';
 import Amplitude from '@/components/Amplitude/Amplitude';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import {
   AmplitudeExperimentState,
@@ -29,6 +33,8 @@ const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
+  const router = useRouter();
+  const userProfileValue = useAtomValue(userProfile);
   const [seeAllNews, setSeeAllNews] = useAtom(newsPanelStore);
   const bodyHeight = useRef<HTMLElement>(null);
   const { is } = useAmplitude();
@@ -63,6 +69,21 @@ const Home: NextPage<any> = () => {
 
   useOnResume(request);
 
+  const showCampaignBanner =
+    userProfileValue?.uuid !== undefined &&
+    userProfileValue?.isAgeGated === true &&
+    is(FeatureFlags.THANK_YOU_CAMPAIGN, AmplitudeFeatureFlagState.On);
+
+  const onCampaignClick = (clickedCampaignEvent: CampaignEvent) => {
+    if (!userProfileValue) return;
+
+    router.push(
+      `/odicci-iframe-campaign?iframeUrl=${encodeURIComponent(
+        clickedCampaignEvent.content.iframeURL,
+      )}`,
+    );
+  };
+
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
@@ -84,6 +105,9 @@ const Home: NextPage<any> = () => {
           />
         </div>
         <PromoBanner />
+
+        {showCampaignBanner && <CampaignBanner onClick={onCampaignClick} />}
+
         {is(Experiments.POPULAR_OFFERS, AmplitudeExperimentState.Treatment) && (
           <PopularBrandsSlider />
         )}

@@ -47,6 +47,7 @@ jobs:
         run: npm run test:coverage -w packages/api/core
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        if: github.actor != 'dependabot[bot]'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

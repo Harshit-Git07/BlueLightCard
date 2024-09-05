@@ -69,6 +69,7 @@ jobs:
         run: npm run test:coverage -w packages/web
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        if: github.actor != 'dependabot[bot]'
         with:
           projectBaseDir: packages/web
         env:

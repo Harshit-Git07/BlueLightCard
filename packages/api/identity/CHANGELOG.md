@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.95.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.94.2...bluelightcard/identity-v1.95.0) (2024-09-05)
+
+
+### Features
+
+* [TI 1583] Add e2e tests for updating user status and GDPR ([#2116](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2116)) ([6207d81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6207d815e5adbf34d01fe94447fa232d32c7f0b8))
+* [TI-1625] Create unit tests for delete cognito user lambda ([#2108](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2108)) ([377dc92](https://github.com/bluelightcard/BlueLightCard-2.0/commit/377dc92e734f05877ddbf75ac1df21232d2dc9a7))
+* add new unit tests for audit handler ([#2078](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2078)) ([5e6a551](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5e6a551052eb77f44fdfc8cfa344db1e7a9826b0))
+
+
+### Bug Fixes
+
+* zod error on datadog ([#2113](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2113)) ([f4a27ef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4a27ef7cdad8f4f04c30cd80682e805eaa43ebc))
+
+
+### Other Changes
+
+* setup coverage reporting in to sonarcloud ([1771bfb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1771bfb72e5fb4e6d7135a5d94c4d0f8693f6f8e))
+
 ## [1.94.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.94.1...bluelightcard/identity-v1.94.2) (2024-08-27)
 
 

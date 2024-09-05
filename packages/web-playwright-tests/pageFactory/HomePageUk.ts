@@ -29,11 +29,29 @@ export class HomePageUk {
   private readonly OFFERS_HEADER_LINK_UK: Locator;
   private readonly MY_CARD_LINK_UK: Locator;
   private readonly MY_ACCOUNT_LINK_UK: Locator;
-  private readonly SEARCH_BUTTON_UK: Locator;
+
   private readonly DEALS_OF_THE_WEEK_HEADING_UK: Locator;
+
+  // Search options
+  private readonly SEARCH_BUTTON_UK: Locator;
+
+  private readonly SEARCH_OPTION_COMPANY_UK: Locator;
+  private readonly SEARCH_OPTION_CATEGORY_UK: Locator;
+  private readonly SEARCH_OPTION_SEARCHTERM_UK: Locator;
+
+  private readonly SEARCH_OPTION_DROPDOWN_UK: Locator;
+
+  private readonly SEARCH_NOW_BUTTON_UK: Locator;
 
   // Cookie handling
   private readonly ACCEPT_COOKIES_BUTTON_UK: Locator;
+
+  // Share options
+  private readonly SEARCH_DROPDOWN_SELECTOR_UK: Locator;
+
+  // Code Redemption options
+  private readonly CLICK_HERE_TO_SEE_DISCOUNT_UK: Locator;
+  private readonly VISIT_WEBSITE_UK: Locator;
 
   constructor(page: Page, context: BrowserContext) {
     this.page = page;
@@ -66,11 +84,24 @@ export class HomePageUk {
     this.OFFERS_HEADER_LINK_UK = page.getByTestId('Offers-header-link');
     this.MY_CARD_LINK_UK = page.getByRole('link', { name: 'My Card' });
     this.MY_ACCOUNT_LINK_UK = page.getByRole('link', { name: 'My Account' });
-    this.SEARCH_BUTTON_UK = page.locator('[data-testid="searchBtn"]');
+
     this.DEALS_OF_THE_WEEK_HEADING_UK = page.getByRole('heading', { name: 'Deals of the Week' });
+
+    // Search options
+    this.SEARCH_BUTTON_UK = page.getByTestId('searchBtn').locator('svg');
+    this.SEARCH_OPTION_COMPANY_UK = page.getByTestId('byCompany');
+    this.SEARCH_OPTION_CATEGORY_UK = page.getByTestId('byCategory');
+    this.SEARCH_OPTION_SEARCHTERM_UK = page.getByRole('textbox');
+    this.SEARCH_OPTION_DROPDOWN_UK = page.locator('select[aria-label="drop-down selector"]');
+    this.SEARCH_NOW_BUTTON_UK = page.getByRole('button', { name: 'Search now' });
 
     // Cookie handling
     this.ACCEPT_COOKIES_BUTTON_UK = page.getByRole('button', { name: 'Agree to all' });
+
+    // Search options
+    this.SEARCH_DROPDOWN_SELECTOR_UK = page.locator('select[aria-label="drop-down selector"]');
+    this.CLICK_HERE_TO_SEE_DISCOUNT_UK = page.getByText('Click here to see discount');
+    this.VISIT_WEBSITE_UK = page.getByRole('button', { name: 'Visit Website' });
   }
 
   // Navigation methods
@@ -126,9 +157,80 @@ export class HomePageUk {
     await expect(this.SEARCH_BUTTON_UK).toBeVisible();
   }
 
+  //Navigation methods
+  async clickMyAccountLink(): Promise<void> {
+    await this.MY_ACCOUNT_LINK_UK.click();
+    await this.page.waitForLoadState('load');
+  }
+
   // Menu selection methods
   async selectOptionFromTheOffersMenu(offersOption: string): Promise<void> {
     await this.DISCOVERMORE_NAVBAR_UK.hover();
     await this.page.getByRole('link', { name: offersOption }).click();
   }
+
+  // Search option methods
+  async searchForCompanyCategoryOrPhrase(searchOption: string, searchTerm: string): Promise<void> {
+    await this.SEARCH_BUTTON_UK.click();
+    switch (searchOption.toLowerCase()) {
+      case 'company':
+        await this.SEARCH_OPTION_COMPANY_UK.click();
+        await this.page.selectOption('select[aria-label="drop-down selector"]', {
+          label: searchTerm,
+        });
+
+        break;
+
+      case 'category':
+        await this.SEARCH_OPTION_CATEGORY_UK.click();
+        await this.page.selectOption('select[aria-label="drop-down selector"]', {
+          label: searchTerm,
+        });
+
+        break;
+
+      case 'phrase':
+        await this.SEARCH_OPTION_SEARCHTERM_UK.fill(searchTerm);
+        await this.SEARCH_NOW_BUTTON_UK.click();
+
+        break;
+
+      default:
+        throw new Error(
+          `Unknown search option: ${searchOption} - options are "Company, Category and Phrase"`,
+        );
+    }
+    await this.page.waitForLoadState('load');
+
+    await sleep(6000);
+
+    //Check the heading is correct
+    await expect(this.page.getByRole('heading', { name: searchTerm }).first()).toBeVisible();
+
+    await expect(
+      this.page.getByRole('heading', { name: searchTerm, exact: true }).first(),
+    ).toBeVisible();
+  }
+
+  async clickToSeeTheDiscount(expectedDiscountCode: string, newPageUrl: string): Promise<void> {
+    await this.CLICK_HERE_TO_SEE_DISCOUNT_UK.click();
+    const offerPagePromise = this.page.waitForEvent('popup');
+    await this.VISIT_WEBSITE_UK.click();
+
+    const offerPage = await offerPagePromise;
+    await offerPage.waitForLoadState('load');
+    expect(offerPage.url()).toContain(newPageUrl);
+
+    // Ensure the clipboard has the expected value by reading it and asserting expected vs actual
+    await this.context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    const clipboardText = await offerPage.evaluate(async () => {
+      return await navigator.clipboard.readText();
+    });
+
+    expect(clipboardText).toBe(expectedDiscountCode);
+  }
+}
+
+async function sleep(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }

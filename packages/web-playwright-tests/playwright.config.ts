@@ -1,5 +1,4 @@
 import { PlaywrightTestConfig } from '@playwright/test';
-import { testConfig } from './testConfig';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 

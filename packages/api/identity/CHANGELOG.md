@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.96.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.95.0...bluelightcard/identity-v1.96.0) (2024-09-05)
+
+
+### Features
+
+* fix configuration of audit handler ([#2172](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2172)) ([2f6e79d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2f6e79dd1c35162381d131aa1b91d33a71eb94f7))
+
 ## [1.95.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.94.2...bluelightcard/identity-v1.95.0) (2024-09-05)
 
 

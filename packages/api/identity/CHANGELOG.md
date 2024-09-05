@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.97.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.96.0...bluelightcard/identity-v1.97.0) (2024-09-05)
+
+
+### Features
+
+* Refactor code to move to service and repository ([#2140](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2140)) ([c7a01d3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c7a01d3169d7c66b173dd397145e02238edcfa4c))
+
 ## [1.96.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.95.0...bluelightcard/identity-v1.96.0) (2024-09-05)
 
 

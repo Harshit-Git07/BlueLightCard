@@ -3,20 +3,20 @@
     "id": "testerCampaign",
     "campaignType": "thankyouCampaign",
     "content": {
-      "imageURL": "imageURL",
+      "imageURL": "https://cdn.bluelightcard.co.uk/big-rewards-2024-1.jpg",
       "iframeURL": "https://campaign.odicci.com/#/2031feeae3808e7b8802"
     },
     "startDate": "2024-09-02T00:00:00Z",
-    "endDate": "2024-09-08T23:59:59.997Z"
+    "endDate": "2024-09-06T23:59:59.997Z"
   },
   {
     "id": "1",
     "campaignType": "thankyouCampaign",
     "content": {
-      "imageURL": "imageURL",
-      "iframeURL": "iframeURL"
+      "imageURL": "https://cdn.bluelightcard.co.uk/big-rewards-2024-1.jpg",
+      "iframeURL": "https://campaign.odicci.com/#/2031feeae3808e7b8802"
     },
-    "startDate": "2024-09-09T00:00:00Z",
+    "startDate": "2024-09-09T08:00:00Z",
     "endDate": "2024-09-15T23:59:59.997Z"
   }
 ]

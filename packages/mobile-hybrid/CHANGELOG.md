@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.30.0...bluelightcard/mobile-hybrid-v1.31.0) (2024-09-06)
+
+
+### Features
+
+* DISCO-787 Added thank you campaign to Hybrid ([#2138](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2138)) ([c1d1ec8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c1d1ec8559703328ce3c0de35f6c89d4b9929d4c))
+
+
+### Bug Fixes
+
+* DISCO-787 Hybrid UI fixes for thank you campaign ([#2180](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2180)) ([14866dc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/14866dcd8cbe0ddf9b4c3f66e34ffe6e75cb04d6))
+
+
+### Other Changes
+
+* added csp for allowing only odicci domain ([#2186](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2186)) ([7973730](https://github.com/bluelightcard/BlueLightCard-2.0/commit/79737304b41e92f6189a1dd3220158b8973a2de7))
+
 ## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.29.0...bluelightcard/mobile-hybrid-v1.30.0) (2024-09-04)
 
 

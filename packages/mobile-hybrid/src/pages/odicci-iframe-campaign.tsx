@@ -6,6 +6,7 @@ import { userProfile } from '@/components/UserProfileProvider/store';
 import { spinner } from '@/modules/Spinner/store';
 import { Button, ThemeVariant } from '@bluelightcard/shared-ui';
 import { faChevronLeft } from '@fortawesome/pro-solid-svg-icons';
+import Head from 'next/head';
 
 const IframeCampaignPage: NextPage = () => {
   const setSpinner = useSetAtom(spinner);
@@ -33,6 +34,10 @@ const IframeCampaignPage: NextPage = () => {
 
   return (
     <div className="w-full h-full fixed z-50 top-0 flex flex-col">
+      <Head>
+        <meta httpEquiv="Content-Security-Policy" content="frame-src *.odicci.com" />
+      </Head>
+
       <div className="py-2">
         <Button variant={ThemeVariant.Tertiary} iconLeft={faChevronLeft} onClick={onBackClick}>
           Back to Home

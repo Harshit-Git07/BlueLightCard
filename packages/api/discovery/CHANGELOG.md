@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.4.0...bluelightcard/discovery-v1.5.0) (2024-09-06)
+
+
+### Features
+
+* [DISCO-787] Update Campaign time & image URL ([#2183](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2183)) ([1ddb0b8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1ddb0b84516cf45eec1c4b653310365d22767209))
+* Disco 787 BE service for Thank you campaign ([#2147](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2147)) ([9166640](https://github.com/bluelightcard/BlueLightCard-2.0/commit/916664027cbd376c2ea68cd8ca1d6fa6630e0613))
+
+
+### Other Changes
+
+* setup coverage reporting in to sonarcloud ([1771bfb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1771bfb72e5fb4e6d7135a5d94c4d0f8693f6f8e))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.3.0...bluelightcard/discovery-v1.4.0) (2024-08-28)
 
 

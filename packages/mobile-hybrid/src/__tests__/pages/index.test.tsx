@@ -44,7 +44,7 @@ jest.mock('next/router', () => ({
 
 const useOffersMock = jest.mocked(useOffers);
 
-let userProfileValue: UserProfile = { uuid: 'mock-uuid-1', isAgeGated: true };
+let userProfileValue: UserProfile = { uuid: 'mock-uuid-1', canRedeemOffer: true, isAgeGated: true };
 let amplitudeFlagsAndExperiments: Record<string, string>;
 let controlGroup = false;
 let mockPlatformAdapter: IPlatformAdapter;
@@ -136,6 +136,20 @@ describe('Home', () => {
       expect(campaignBanner).not.toBeInTheDocument();
 
       userProfileValue.uuid = 'mock-uuid-1';
+    });
+
+    it('does not render the campaign banner when the user cannot redeem offers', () => {
+      userProfileValue.canRedeemOffer = false;
+      amplitudeFlagsAndExperiments = {
+        [FeatureFlags.THANK_YOU_CAMPAIGN]: 'on',
+      };
+      whenHomePageIsRendered();
+
+      const campaignBanner = screen.queryByTestId('campaign-banner');
+
+      expect(campaignBanner).not.toBeInTheDocument();
+
+      userProfileValue.canRedeemOffer = true;
     });
 
     it('does not render the campaign banner when the user is not past the age gate', () => {

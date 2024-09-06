@@ -3,6 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { act, render, screen } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import {
   PlatformAdapterProvider,
@@ -61,6 +62,22 @@ describe('Odicci Iframe Campaign Page', () => {
       ),
     );
   };
+
+  it('should render the back button', async () => {
+    await whenPageIsRendered();
+    const backButton = await screen.findByText('Back to Home');
+
+    expect(backButton).toBeInTheDocument();
+  });
+
+  it('should navigate back to the home page when the back button is clicked', async () => {
+    await whenPageIsRendered();
+    const backButton = await screen.findByText('Back to Home');
+
+    await userEvent.click(backButton);
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/');
+  });
 
   it('should load the Odicci iframe', async () => {
     const { container } = await whenPageIsRendered();

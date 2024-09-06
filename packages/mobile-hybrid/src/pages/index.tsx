@@ -71,6 +71,7 @@ const Home: NextPage<any> = () => {
 
   const showCampaignBanner =
     userProfileValue?.uuid !== undefined &&
+    userProfileValue?.canRedeemOffer === true &&
     userProfileValue?.isAgeGated === true &&
     is(FeatureFlags.THANK_YOU_CAMPAIGN, AmplitudeFeatureFlagState.On);
 

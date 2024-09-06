@@ -89,6 +89,7 @@ describe('User Profile Provider component', () => {
       const mockPlatformAdapter = useMockPlatformAdapter(200, {
         data: {
           uuid: 'mock-uuid-1',
+          canRedeemOffer: true,
           profile: testUserProfile,
         },
       });
@@ -98,7 +99,11 @@ describe('User Profile Provider component', () => {
 
       await waitFor(() =>
         expect(
-          expect(result.current[0]).toStrictEqual({ ...testUserProfile, uuid: 'mock-uuid-1' }),
+          expect(result.current[0]).toStrictEqual({
+            ...testUserProfile,
+            uuid: 'mock-uuid-1',
+            canRedeemOffer: true,
+          }),
         ),
       );
     });
@@ -114,6 +119,7 @@ describe('User Profile Provider component', () => {
       const mockPlatformAdapter = useMockPlatformAdapter(200, {
         data: {
           uuid: 'mock-uuid-1',
+          canRedeemOffer: true,
           profile: testUserProfile,
         },
       });
@@ -126,6 +132,7 @@ describe('User Profile Provider component', () => {
           expect(result.current[0]).toStrictEqual({
             ...testUserProfile,
             uuid: 'mock-uuid-1',
+            canRedeemOffer: true,
             isAgeGated: false,
           }),
         ),

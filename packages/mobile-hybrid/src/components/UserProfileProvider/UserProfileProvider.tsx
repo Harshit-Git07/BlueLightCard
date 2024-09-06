@@ -31,6 +31,7 @@ const UserProfileProvider: FC<PropsWithChildren> = ({ children }) => {
         const userProfileParsed = {
           ...userProfileData.profile,
           uuid: userProfileData.uuid,
+          canRedeemOffer: userProfileData.canRedeemOffer,
           service: userServiceValue,
           isAgeGated: !isUnder18(userProfileData.profile.dob),
         };

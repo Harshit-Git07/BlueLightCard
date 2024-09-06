@@ -10,5 +10,6 @@ export type UserProfile = {
   uuid?: string;
   service?: string;
   isAgeGated?: boolean;
+  canRedeemOffer?: boolean;
 };
 export const userProfile = atom<UserProfile | undefined>(undefined);

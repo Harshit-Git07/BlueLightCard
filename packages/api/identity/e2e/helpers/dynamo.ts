@@ -1,4 +1,4 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {
   DeleteCommand,
   DeleteCommandInput,
@@ -8,13 +8,18 @@ import {
   PutCommandInput,
   QueryCommand,
   UpdateCommand,
-  UpdateCommandInput
+  UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 
-export async function getItemFromIdentityTable(memberUuid: string, sortKeyPrefix: string): Promise<Record<string, any> | undefined> {
-  const dynamodb = createDynamoDbClient();
+export async function getItemFromIdentityTable(
+  memberUuid: string,
+  sortKeyPrefix: string,
+  region: string,
+  tableName: string,
+): Promise<Record<string, any> | undefined> {
+  const dynamodb = createDynamoDbClient(region);
   const queryParams = {
-    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    TableName: tableName,
     KeyConditionExpression: '#pk= :pk AND begins_with(#sk, :sk)',
     ExpressionAttributeValues: {
       ':pk': `MEMBER#${memberUuid}`,
@@ -30,10 +35,16 @@ export async function getItemFromIdentityTable(memberUuid: string, sortKeyPrefix
   return result.Items?.[0];
 }
 
-export async function getItemFromIdMappingTable(brand: string, legacyId: number, memberUuid: string): Promise<Record<string, any> | undefined> {
-  const dynamodb = createDynamoDbClient();
+export async function getItemFromIdMappingTable(
+  brand: string,
+  legacyId: number,
+  memberUuid: string,
+  region: string,
+  tableName: string,
+): Promise<Record<string, any> | undefined> {
+  const dynamodb = createDynamoDbClient(region);
   const queryParams = {
-    TableName: `${process.env.E2E_ID_MAPPING_TABLE_NAME}`,
+    TableName: tableName,
     KeyConditionExpression: '#legacy_id= :legacy_id AND #uuid = :uuid',
     ExpressionAttributeValues: {
       ':legacy_id': `BRAND#${brand}#${legacyId}`,
@@ -50,22 +61,25 @@ export async function getItemFromIdMappingTable(brand: string, legacyId: number,
 }
 
 export async function getUnsuccessfulLoginItemFor(
-  email: string
+  email: string,
+  region: string,
+  tableName: string,
+  userPoolId: string,
 ): Promise<Record<string, NativeAttributeValue>[]> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const params = {
     ExpressionAttributeValues: {
-      ":email": email,
-      ":userPoolId": process.env.E2E_IDENTITY_COGNITO_USER_POOL_ID
+      ':email': email,
+      ':userPoolId': userPoolId,
     },
     ExpressionAttributeNames: {
-      "#email": "email",
-      "#userPoolId": "userPoolId"
+      '#email': 'email',
+      '#userPoolId': 'userPoolId',
     },
-    TableName: process.env.E2E_UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME,
-    KeyConditionExpression: "#email = :email and #userPoolId = :userPoolId",
+    TableName: tableName,
+    KeyConditionExpression: '#email = :email and #userPoolId = :userPoolId',
     IndexName: 'gsi1',
-  }
+  };
 
   const response = await dynamodb.send(new QueryCommand(params));
   return response.Items ?? [];
@@ -73,15 +87,17 @@ export async function getUnsuccessfulLoginItemFor(
 
 export async function createProfileItemInIdentityTableFor(
   memberUuid: string,
-  profileUuid: string
+  profileUuid: string,
+  region: string,
+  tableName: string,
 ): Promise<void> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const updateParams = {
-    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    TableName: tableName,
     Key: {
       pk: `MEMBER#${memberUuid}`,
-      sk: `PROFILE#${profileUuid}`
-    }
+      sk: `PROFILE#${profileUuid}`,
+    },
   } as UpdateCommandInput;
 
   await dynamodb.send(new UpdateCommand(updateParams));
@@ -92,18 +108,20 @@ export async function createCardItemInIdentityTableFor(
   cardId: number,
   status: string,
   expires: string,
-  posted: string
+  posted: string,
+  region: string,
+  tableName: string,
 ): Promise<void> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const updateParams = {
-    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    TableName: tableName,
     Item: {
       pk: `MEMBER#${memberUuid}`,
       sk: `CARD#${cardId}`,
       status,
       expires,
       posted,
-    }
+    },
   } as PutCommandInput;
 
   await dynamodb.send(new PutCommand(updateParams));
@@ -111,33 +129,38 @@ export async function createCardItemInIdentityTableFor(
 
 export async function createUnsuccessfulLoginItemFor(
   email: string,
-  count: number = 1
+  region: string,
+  tableName: string,
+  userPoolId: string,
+  count: number = 1,
 ): Promise<void> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const putParams = {
-    TableName: process.env.E2E_UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME,
+    TableName: tableName,
     Item: {
       email: email,
-      userPoolId: process.env.E2E_IDENTITY_COGNITO_USER_POOL_ID,
+      userPoolId: userPoolId,
       count: count,
       timestamp: Date.now(),
     },
-  }
+  };
 
   await dynamodb.send(new PutCommand(putParams));
 }
 
 export async function deleteProfileItemFromIdentityTableFor(
   memberUuid: string,
-  profileSortKey: string
+  profileSortKey: string,
+  region: string,
+  tableName: string,
 ): Promise<void> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const queryParams = {
-    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    TableName: tableName,
     Key: {
       pk: `MEMBER#${memberUuid}`,
-      sk: profileSortKey
-    }
+      sk: profileSortKey,
+    },
   } as DeleteCommandInput;
 
   await dynamodb.send(new DeleteCommand(queryParams));
@@ -145,15 +168,17 @@ export async function deleteProfileItemFromIdentityTableFor(
 
 export async function deleteCardItemFromIdentityTableFor(
   memberUuid: string,
-  cardId: number
+  cardId: number,
+  region: string,
+  tableName: string,
 ): Promise<void> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const queryParams = {
-    TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+    TableName: tableName,
     Key: {
       pk: `MEMBER#${memberUuid}`,
-      sk: `CARD#${cardId}`
-    }
+      sk: `CARD#${cardId}`,
+    },
   } as DeleteCommandInput;
 
   await dynamodb.send(new DeleteCommand(queryParams));
@@ -163,17 +188,19 @@ export async function deleteItemsFromIdentityTableFor(
   memberUuid: string,
   brand: string,
   cardId: number,
-  profileUuid: string
+  profileUuid: string,
+  region: string,
+  tableName: string,
 ): Promise<void> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const sortKeys = [`BRAND#${brand}`, `CARD#${cardId}`, `PROFILE#${profileUuid}`];
   for (const sortKey of sortKeys) {
     const queryParams = {
-      TableName: `${process.env.E2E_IDENTITY_TABLE_NAME}`,
+      TableName: tableName,
       Key: {
         pk: `MEMBER#${memberUuid}`,
-        sk: sortKey
-      }
+        sk: sortKey,
+      },
     } as DeleteCommandInput;
 
     await dynamodb.send(new DeleteCommand(queryParams));
@@ -183,21 +210,23 @@ export async function deleteItemsFromIdentityTableFor(
 export async function deleteItemFromIdMappingTableFor(
   memberUuid: string,
   brand: string,
-  legacyId: number
+  legacyId: number,
+  region: string,
+  tableName: string,
 ): Promise<void> {
-  const dynamodb = createDynamoDbClient();
+  const dynamodb = createDynamoDbClient(region);
   const queryParams = {
-    TableName: `${process.env.E2E_ID_MAPPING_TABLE_NAME}`,
+    TableName: tableName,
     Key: {
       legacy_id: `BRAND#${brand}#${legacyId}`,
-      uuid: memberUuid
-    }
+      uuid: memberUuid,
+    },
   } as DeleteCommandInput;
 
   await dynamodb.send(new DeleteCommand(queryParams));
 }
 
-function createDynamoDbClient(): DynamoDBDocumentClient {
-  const client = new DynamoDBClient({ region: process.env.E2E_AWS_REGION });
+function createDynamoDbClient(region: string): DynamoDBDocumentClient {
+  const client = new DynamoDBClient({ region: region });
   return DynamoDBDocumentClient.from(client);
 }

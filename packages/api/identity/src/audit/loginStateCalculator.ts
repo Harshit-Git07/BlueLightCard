@@ -1,8 +1,10 @@
+import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { LoginAudit, CLIENT_NAME_LOGIN_AUDIT_MAP } from 'src/models/loginAudits';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
 
 export function calculateLoginState(clientId: string, action: string): number {
-  const webClientId = process.env.WEB_CLIENT_ID;
-  const loginClientIds = process.env.LOGIN_CLIENT_IDS ?? '{}';
+  const webClientId = getEnv(IdentityStackEnvironmentKeys.WEB_CLIENT_ID);
+  const loginClientIds = getEnvOrDefault(IdentityStackEnvironmentKeys.LOGIN_CLIENT_IDS, '{}');
   const loginClientIdMap = JSON.parse(loginClientIds);
 
   let state = 0;

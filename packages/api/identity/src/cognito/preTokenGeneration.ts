@@ -4,12 +4,14 @@ import { PreTokenGenerateService } from 'src/services/PreTokenGenerateService';
 import { ProfileService } from 'src/services/ProfileService';
 import * as amplitude from '@amplitude/analytics-node';
 import EVENTS from '@blc-mono/core/types/events';
+import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
 
-const service: string = process.env.SERVICE as string;
-const IDENTITY_TABLE_NAME = process.env.IDENTITY_TABLE_NAME ?? '';
-const REGION = process.env.REGION ?? 'eu-west-2';
-const AMPLITUDE_API_KEY = process.env.AMPLITUDE_API_KEY ?? '';
-const POOL_INFO = process.env.POOL_INFO ?? '';
+const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
+const IDENTITY_TABLE_NAME = getEnv(IdentityStackEnvironmentKeys.IDENTITY_TABLE_NAME);
+const REGION = getEnvOrDefault(IdentityStackEnvironmentKeys.REGION, 'eu-west-2');
+const AMPLITUDE_API_KEY = getEnv(IdentityStackEnvironmentKeys.AMPLITUDE_API_KEY);
+const POOL_INFO = getEnv(IdentityStackEnvironmentKeys.POOL_INFO);
 const logger = new Logger({ serviceName: `${service}-preTokenGeneration` });
 
 const preTokenGenerateService = new PreTokenGenerateService(IDENTITY_TABLE_NAME, REGION, logger);

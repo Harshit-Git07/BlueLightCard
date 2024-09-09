@@ -1,2 +1,16 @@
 process.env.SERVICE = 'test service';
 process.env.DATA_STREAM = 'test data stream';
+process.env.DEBUG_LOGGING_ENABLED = 'false';
+process.env.IDENTITY_TABLE_NAME = 'someIdentityTableName';
+process.env.WEB_CLIENT_ID = 'someWebClientId';
+process.env.ID_MAPPING_TABLE_NAME = 'someIdMappingTableName';
+process.env.USER_POOL_ID_DDS = 'someUserPoolIdDds';
+process.env.USER_POOL_ID = 'someUserPoolId';
+process.env.OLD_USER_POOL_ID_DDS = 'someOldUserPoolIdDds';
+process.env.OLD_USER_POOL_ID = 'someOldUserPoolId';
+process.env.DLQ_URL = 'dlq-url';
+process.env.UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME = 'unsuccessful-login-attempts-table';
+process.env.REGION = 'eu-west-2';
+process.env.DD_VERSION = '1.0.0';
+process.env.EVENT_BUS = 'test-event-bus';
+process.env.EVENT_SOURCE = 'test.event.source';

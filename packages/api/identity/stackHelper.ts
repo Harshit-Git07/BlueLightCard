@@ -32,6 +32,8 @@ import {
   logAndFilterPostAuthOld,
   logAndFilterPreTokenOld,
 } from '../identity/src/helpers/cognitoClientHelperOld';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
 
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
   appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
@@ -67,7 +69,7 @@ export function createOldCognito(
   role: Role,
   isDds: boolean = false,
 ) {
-  const logLevel = process.env.POWERTOOLS_LOG_LEVEL ?? 'INFO';
+  const logLevel = getEnvOrDefault(IdentityStackEnvironmentKeys.POWERTOOLS_LOG_LEVEL, 'INFO');
   const region = stack.region as REGIONS;
   const brandPrefix = getBrandPrefix(isDds);
   const cognito = new Cognito(stack, isDds ? 'cognito_dds' : 'cognito', {
@@ -156,7 +158,7 @@ export function createNewCognito(
   adminRole: Role,
   isDDS: boolean = false,
 ) {
-  const logLevel = process.env.POWERTOOLS_LOG_LEVEL ?? 'INFO';
+  const logLevel = getEnvOrDefault(IdentityStackEnvironmentKeys.POWERTOOLS_LOG_LEVEL, 'INFO');
   const region = stack.region as REGIONS;
   const brandPrefix = getBrandPrefix(isDDS);
   const blcBrand = region === REGIONS.AP_SOUTHEAST_2 ? BRANDS.BLC_AU : BRANDS.BLC_UK;

@@ -2,10 +2,10 @@ import { getAuthenticationToken, handler } from '../customAuthenticatorLambdaHan
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import { CognitoJwtPayload } from 'aws-jwt-verify/jwt-model';
 
-process.env.OLD_USER_POOL_ID = "eu-west-2_rNmQEiFS4";
-process.env.OLD_USER_POOL_ID_DDS = "eu-west-2_jbLX0JEdN";
-process.env.USER_POOL_ID = "eu-west-2_E8RFhXXZY";
-process.env.USER_POOL_ID_DDS = "eu-west-2_YQNcmfl2l";
+process.env.OLD_USER_POOL_ID = 'eu-west-2_rNmQEiFS4';
+process.env.OLD_USER_POOL_ID_DDS = 'eu-west-2_jbLX0JEdN';
+process.env.USER_POOL_ID = 'eu-west-2_E8RFhXXZY';
+process.env.USER_POOL_ID_DDS = 'eu-west-2_YQNcmfl2l';
 
 describe('customAuthenticatorLambdaHandler', () => {
   test("handler function should throw and 'Unauthorized' error when token is non JWT", async () => {

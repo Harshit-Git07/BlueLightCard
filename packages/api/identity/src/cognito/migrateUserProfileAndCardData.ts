@@ -5,15 +5,28 @@ import { DynamoDBDocumentClient, QueryCommand, PutCommand } from '@aws-sdk/lib-d
 import { Response } from './../../../core/src/utils/restResponse/response';
 import { BRANDS } from './../../../core/src/types/brands.enum';
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
-const service: string = process.env.SERVICE as string;
-const identityTableName = process.env.IDENTITY_TABLE_NAME;
-const idMappingtableName = process.env.ID_MAPPING_TABLE_NAME;
-const logger = new Logger({ serviceName: `${service}-migrateUserProfileAndCardData`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
+import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+
+const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
+const identityTableName: string = getEnv(IdentityStackEnvironmentKeys.IDENTITY_TABLE_NAME);
+const idMappingtableName: string = getEnv(IdentityStackEnvironmentKeys.ID_MAPPING_TABLE_NAME);
+
+const logLevel =
+  getEnvOrDefault(IdentityStackEnvironmentKeys.DEBUG_LOGGING_ENABLED, 'false').toLowerCase() ==
+  'true'
+    ? 'DEBUG'
+    : 'INFO';
+
+const logger = new Logger({
+  serviceName: `${service}-migrateUserProfileAndCardData`,
+  logLevel: logLevel,
+});
 const sqs = new SQS();
 
 // Function to send a message to SQS Queue
 async function sendToDLQ(event: any) {
-  const dlqUrl = process.env.DLQ_URL || '';
+  const dlqUrl: string = getEnv(IdentityStackEnvironmentKeys.DLQ_URL);
   const params = {
     QueueUrl: dlqUrl,
     MessageBody: JSON.stringify(event),
@@ -26,7 +39,8 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event: any, context: any) => {
   logger.debug('event received', event);
-  const brand = event.detail !== undefined || event.detail !== null ? event.detail.brand?.toUpperCase() : null;
+  const brand =
+    event.detail !== undefined || event.detail !== null ? event.detail.brand?.toUpperCase() : null;
 
   if (brand == null) {
     return Response.BadRequest({ message: 'Please provide brand details' });
@@ -110,9 +124,9 @@ export const handler = async (event: any, context: any) => {
         sk: oldProfileUuid !== null ? oldProfileUuid : `PROFILE#${profileUuid}`,
         firstname: event.detail.name,
         surname: event.detail.surname,
-        email: event.detail.email === "" ? "NA" : event.detail.email ?? "NA",
+        email: event.detail.email === '' ? 'NA' : event.detail.email ?? 'NA',
         email_validated: event.detail.emailValidated ?? 0,
-        spare_email: event.detail.spareemail === "" ? "NA" : event.detail.spareemail ?? "NA",
+        spare_email: event.detail.spareemail === '' ? 'NA' : event.detail.spareemail ?? 'NA',
         spare_email_validated: event.detail.spareemailvalidated,
         organisation: event.detail.service,
         gender: event.detail.gender,

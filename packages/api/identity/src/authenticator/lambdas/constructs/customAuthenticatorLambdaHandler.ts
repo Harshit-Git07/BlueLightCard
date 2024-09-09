@@ -1,23 +1,40 @@
 import 'dd-trace/init';
 
-import { APIGatewayAuthorizerResult, APIGatewayRequestAuthorizerEvent, PolicyDocument } from 'aws-lambda';
+import {
+  APIGatewayAuthorizerResult,
+  APIGatewayRequestAuthorizerEvent,
+  PolicyDocument,
+} from 'aws-lambda';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import jwtDecode from 'jwt-decode';
 import { Logger } from '@aws-lambda-powertools/logger';
 
 import { datadog } from 'datadog-lambda-js';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 const BEARER_PREFIX = 'Bearer ';
 
-const logger = new Logger({ serviceName: `customAuthenticatorLambdaHandler`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO' });
+const logLevel =
+  getEnvOrDefault(IdentityStackEnvironmentKeys.DEBUG_LOGGING_ENABLED, 'false').toLowerCase() ==
+  'true'
+    ? 'DEBUG'
+    : 'INFO';
+const logger = new Logger({
+  serviceName: `customAuthenticatorLambdaHandler`,
+  logLevel: logLevel,
+});
 
-const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ? process.env.USE_DATADOG_AGENT.toLowerCase() : 'false';
+const useDatadogAgent: boolean =
+  getEnvOrDefault(IdentityStackEnvironmentKeys.USE_DATADOG_AGENT, 'false').toLowerCase() == 'true';
 
-const handlerUnwrapped = async function (event: APIGatewayRequestAuthorizerEvent): Promise<APIGatewayAuthorizerResult> {
-  const OLD_USER_POOL_ID = process.env.OLD_USER_POOL_ID ?? "";
-  const OLD_USER_POOL_ID_DDS = process.env.OLD_USER_POOL_ID_DDS ?? "";
-  const USER_POOL_ID = process.env.USER_POOL_ID ?? "";
-  const USER_POOL_ID_DDS = process.env.USER_POOL_ID_DDS ?? "";
+const handlerUnwrapped = async function (
+  event: APIGatewayRequestAuthorizerEvent,
+): Promise<APIGatewayAuthorizerResult> {
+  const OLD_USER_POOL_ID = getEnv(IdentityStackEnvironmentKeys.OLD_USER_POOL_ID);
+  const OLD_USER_POOL_ID_DDS = getEnv(IdentityStackEnvironmentKeys.OLD_USER_POOL_ID_DDS);
+  const USER_POOL_ID = getEnv(IdentityStackEnvironmentKeys.USER_POOL_ID);
+  const USER_POOL_ID_DDS = getEnv(IdentityStackEnvironmentKeys.USER_POOL_ID_DDS);
 
   logger.debug(`event => ${JSON.stringify(event)}`);
 
@@ -47,7 +64,7 @@ const handlerUnwrapped = async function (event: APIGatewayRequestAuthorizerEvent
         userPoolId: USER_POOL_ID_DDS,
         clientId: decodedToken.aud,
         tokenUse: 'id',
-      }
+      },
     ]);
 
     const CognitoVerifyParameters: any = {};
@@ -81,7 +98,7 @@ const handlerUnwrapped = async function (event: APIGatewayRequestAuthorizerEvent
   }
 };
 
-export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;
+export const handler = useDatadogAgent ? datadog(handlerUnwrapped) : handlerUnwrapped;
 
 export function getAuthenticationToken(event: any) {
   let authToken = event.headers['Authorization'] || event.headers['authorization'] || '';

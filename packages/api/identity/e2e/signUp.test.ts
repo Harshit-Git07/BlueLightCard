@@ -1,29 +1,27 @@
-import { setupE2eEnvironmentVars } from "./helpers/config";
-import { PutEventsRequest } from "@aws-sdk/client-eventbridge";
-import { putEvent } from "./helpers/eventbridge";
-import { v4 as UUID } from "uuid";
+import { PutEventsRequest } from '@aws-sdk/client-eventbridge';
+import { putEvent } from './helpers/eventbridge';
+import { v4 as UUID } from 'uuid';
 import {
   deleteItemFromIdMappingTableFor,
   deleteItemsFromIdentityTableFor,
   getItemFromIdentityTable,
-  getItemFromIdMappingTable
-} from "./helpers/dynamo";
-import { CardStatus } from "../../core/src/types/cardStatus.enum";
-import { random } from "lodash";
-import { waitOn } from "../../core/src/utils/waitOn";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { REGIONS } from "../../core/src/types/regions.enum";
-import { getBrandFromEnv } from "../../core/src/utils/checkBrand";
-import { isLocal } from "../../core/src/utils/checkEnvironment";
-import { Config } from "sst/node/config";
-import { E2E_TEST_TIMEOUT } from "./helpers/constants";
+  getItemFromIdMappingTable,
+} from './helpers/dynamo';
+import { CardStatus } from '../../core/src/types/cardStatus.enum';
+import { random } from 'lodash';
+import { waitOn } from '../../core/src/utils/waitOn';
+import { afterEach, describe, expect, it } from 'vitest';
+import { REGIONS } from '../../core/src/types/regions.enum';
+import { getBrandFromEnv } from '../../core/src/utils/checkBrand';
+import { isLocal } from '../../core/src/utils/checkEnvironment';
+import { Config } from 'sst/node/config';
+import { E2E_TEST_TIMEOUT } from './helpers/constants';
 
 describe('Identity: User Sign up and Migration', () => {
-  beforeAll(async () => {
-    await setupE2eEnvironmentVars();
-  });
-
   const brands = isLocal(Config.STAGE) ? ['BLC_UK', 'DDS_UK', 'BLC_AU'] : [getBrandFromEnv()];
+  const eventBusName = Config.SHARED_EVENT_BUS_NAME;
+  const identityTableName = Config.IDENTITY_TABLE_NAME;
+  const idMappingTableName = Config.ID_MAPPING_TABLE_NAME;
 
   brands.forEach((brand) => {
     const memberUuid = UUID();
@@ -51,59 +49,77 @@ describe('Identity: User Sign up and Migration', () => {
       trustId: 'trustId',
       trustName: 'trustName',
       merged_uid: '0',
-      cardExpires: new Date("2060-12-23").toISOString(),
-      cardPosted: new Date("2024-01-01").toISOString(),
+      cardExpires: new Date('2060-12-23').toISOString(),
+      cardPosted: new Date('2024-01-01').toISOString(),
       cardStatus: 1,
     };
 
+    const region = brand === 'BLC_AU' ? REGIONS.AP_SOUTHEAST_2 : REGIONS.EU_WEST_2;
+
     describe(`for brand ${brand}`, () => {
-      beforeEach(() => {
-        process.env.E2E_AWS_REGION = brand === 'BLC_AU' ? REGIONS.AP_SOUTHEAST_2 : REGIONS.EU_WEST_2;
-      });
-
       afterEach(async () => {
-        await deleteItemsFromIdentityTableFor(memberUuid, brand, cardId, profileUuid);
-        await deleteItemFromIdMappingTableFor(memberUuid, brand, legacyId);
-        delete process.env.E2E_AWS_REGION;
+        await deleteItemsFromIdentityTableFor(
+          memberUuid,
+          brand,
+          cardId,
+          profileUuid,
+          region,
+          identityTableName,
+        );
+        await deleteItemFromIdMappingTableFor(
+          memberUuid,
+          brand,
+          legacyId,
+          region,
+          idMappingTableName,
+        );
       });
 
-      it('should add user to identity table when "user.signup" is sent', async () => {
-        const userDetailsEntry = {
-          Entries: [
-            {
-              EventBusName: process.env.E2E_EVENT_BUS_NAME,
-              Source: "user.signup",
-              DetailType: `${brand} User signup`,
-              Detail: JSON.stringify(userSignUpDetails),
-              Time: new Date(),
-            },
-          ],
-        } as PutEventsRequest;
+      it(
+        'should add user to identity table when "user.signup" is sent',
+        async () => {
+          const userDetailsEntry = {
+            Entries: [
+              {
+                EventBusName: eventBusName,
+                Source: 'user.signup',
+                DetailType: `${brand} User signup`,
+                Detail: JSON.stringify(userSignUpDetails),
+                Time: new Date(),
+              },
+            ],
+          } as PutEventsRequest;
 
-        const result = await putEvent(userDetailsEntry);
+          const result = await putEvent(userDetailsEntry, region);
 
-        expect(result.$metadata.httpStatusCode).toEqual(200);
-        await thenUserWasAddedSuccessfully();
-      }, E2E_TEST_TIMEOUT);
+          expect(result.$metadata.httpStatusCode).toEqual(200);
+          await thenUserWasAddedSuccessfully();
+        },
+        E2E_TEST_TIMEOUT,
+      );
 
-      it('should add user to identity table when "user.signin.migrated" is sent', async () => {
-        const userDetailsEntry = {
-          Entries: [
-            {
-              EventBusName: process.env.E2E_EVENT_BUS_NAME,
-              Source: "user.signin.migrated",
-              DetailType: `${brand} User Sign In Migrated`,
-              Detail: JSON.stringify(userSignUpDetails),
-              Time: new Date(),
-            },
-          ],
-        } as PutEventsRequest;
+      it(
+        'should add user to identity table when "user.signin.migrated" is sent',
+        async () => {
+          const userDetailsEntry = {
+            Entries: [
+              {
+                EventBusName: eventBusName,
+                Source: 'user.signin.migrated',
+                DetailType: `${brand} User Sign In Migrated`,
+                Detail: JSON.stringify(userSignUpDetails),
+                Time: new Date(),
+              },
+            ],
+          } as PutEventsRequest;
 
-        const result = await putEvent(userDetailsEntry);
+          const result = await putEvent(userDetailsEntry, region);
 
-        expect(result.$metadata.httpStatusCode).toEqual(200);
-        await thenUserWasAddedSuccessfully();
-      }, E2E_TEST_TIMEOUT);
+          expect(result.$metadata.httpStatusCode).toEqual(200);
+          await thenUserWasAddedSuccessfully();
+        },
+        E2E_TEST_TIMEOUT,
+      );
     });
 
     async function thenUserWasAddedSuccessfully() {
@@ -116,7 +132,12 @@ describe('Identity: User Sign up and Migration', () => {
     }
 
     async function thenBrandDetailsWereAddedSuccessfully(): Promise<void> {
-      const brandDetails = await getItemFromIdentityTable(memberUuid, "BRAND#");
+      const brandDetails = await getItemFromIdentityTable(
+        memberUuid,
+        'BRAND#',
+        region,
+        identityTableName,
+      );
 
       expect(brandDetails).toBeDefined();
       expect(brandDetails?.pk).toBe(`MEMBER#${memberUuid}`);
@@ -125,7 +146,13 @@ describe('Identity: User Sign up and Migration', () => {
     }
 
     async function thenIdMappingWasAddedSuccessfully(): Promise<void> {
-      const idMappingDetails = await getItemFromIdMappingTable(brand, legacyId, memberUuid);
+      const idMappingDetails = await getItemFromIdMappingTable(
+        brand,
+        legacyId,
+        memberUuid,
+        region,
+        idMappingTableName,
+      );
 
       expect(idMappingDetails).toBeDefined();
       expect(idMappingDetails?.legacy_id).toBe(`BRAND#${brand}#${legacyId}`);
@@ -133,19 +160,29 @@ describe('Identity: User Sign up and Migration', () => {
     }
 
     async function thenCardDetailsWereAddedSuccessfully(): Promise<void> {
-      const cardDetails = await getItemFromIdentityTable(memberUuid, "CARD#");
+      const cardDetails = await getItemFromIdentityTable(
+        memberUuid,
+        'CARD#',
+        region,
+        identityTableName,
+      );
 
       expect(cardDetails).toBeDefined();
       expect(cardDetails?.pk).toBe(`MEMBER#${memberUuid}`);
       expect(cardDetails?.sk).toBe(`CARD#${cardId}`);
       expect(cardDetails?.status).toBe(CardStatus.AWAITING_ID);
       expect(cardDetails?.cardPrefix).not.toBeDefined();
-      expect(cardDetails?.expires).toBe("2060-12-23T00:00:00.000Z");
-      expect(cardDetails?.posted).toBe("2024-01-01T00:00:00.000Z");
+      expect(cardDetails?.expires).toBe('2060-12-23T00:00:00.000Z');
+      expect(cardDetails?.posted).toBe('2024-01-01T00:00:00.000Z');
     }
 
     async function thenProfileDetailsWereAddedSuccessfully(): Promise<void> {
-      const profileDetails = await getItemFromIdentityTable(memberUuid, "PROFILE#");
+      const profileDetails = await getItemFromIdentityTable(
+        memberUuid,
+        'PROFILE#',
+        region,
+        identityTableName,
+      );
 
       expect(profileDetails).toBeDefined();
       expect(profileDetails?.pk).toBe(`MEMBER#${memberUuid}`);
@@ -153,15 +190,15 @@ describe('Identity: User Sign up and Migration', () => {
       expect(profileDetails?.email).toBe(email);
       expect(profileDetails?.firstname).toBe(firstName);
       expect(profileDetails?.surname).toBe(surname);
-      expect(profileDetails?.gender).toBe("F");
-      expect(profileDetails?.dob).toBe("1990-12-01");
-      expect(profileDetails?.mobile).toBe("07000000000");
-      expect(profileDetails?.employer).toBe("trustName");
-      expect(profileDetails?.employer_id).toBe("trustId");
-      expect(profileDetails?.merged_uid).toBe("0");
-      expect(profileDetails?.organisation).toBe("NHS");
+      expect(profileDetails?.gender).toBe('F');
+      expect(profileDetails?.dob).toBe('1990-12-01');
+      expect(profileDetails?.mobile).toBe('07000000000');
+      expect(profileDetails?.employer).toBe('trustName');
+      expect(profileDetails?.employer_id).toBe('trustId');
+      expect(profileDetails?.merged_uid).toBe('0');
+      expect(profileDetails?.organisation).toBe('NHS');
       expect(profileDetails?.email_validated).toBe(0);
-      expect(profileDetails?.spare_email).toBe("NA");
+      expect(profileDetails?.spare_email).toBe('NA');
       expect(profileDetails?.spare_email_validated).not.toBeDefined();
       expect(profileDetails?.merged_time).not.toBeDefined();
     }

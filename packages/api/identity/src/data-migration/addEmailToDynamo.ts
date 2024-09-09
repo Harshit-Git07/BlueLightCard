@@ -1,21 +1,29 @@
-
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, UpdateCommand, UpdateCommandInput, QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { promises as fs} from 'fs'
+import {
+  DynamoDBDocumentClient,
+  UpdateCommand,
+  UpdateCommandInput,
+  QueryCommand,
+} from '@aws-sdk/lib-dynamodb';
+import { promises as fs } from 'fs';
 import mysql from 'mysql2/promise';
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
+import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
 
-dotenv.config({ path: __dirname+'/.env' });
+dotenv.config({ path: __dirname + '/.env' });
 
-const region = process.env.REGION ?? 'eu-west-2';
-const tableName = process.env.DYNAMO_TABLE;
+const region: string = getEnvOrDefault(IdentityStackEnvironmentKeys.REGION, 'eu-west-2');
+const tableName: string = getEnv(IdentityStackEnvironmentKeys.DYNAMO_TABLE);
 
-const host = process.env.DB_HOST;
-const legacyTable = process.env.LEGACY_TABLE_NAME ?? '';
-const port = parseInt(process.env.DB_PORT ?? '3306');
-const user = process.env.DB_USER;
-const password = process.env.DB_PASSWORD;
-const database = process.env.DATABASE;
+const host: string = getEnv(IdentityStackEnvironmentKeys.DB_HOST);
+const legacyTable: string = getEnv(IdentityStackEnvironmentKeys.LEGACY_TABLE_NAME);
+
+const port: number = parseInt(getEnvOrDefault(IdentityStackEnvironmentKeys.DB_PORT, '3306'));
+
+const user: string = getEnv(IdentityStackEnvironmentKeys.DB_USER);
+const password: string = getEnv(IdentityStackEnvironmentKeys.DB_PASSWORD);
+const database: string = getEnv(IdentityStackEnvironmentKeys.DATABASE);
 
 const failedItemsFileName = `itemsFailed-${Date.now().toString()}.txt`;
 const itemsNotFoundFileName = `itemsNotFound-${Date.now().toString()}.txt`;
@@ -23,14 +31,13 @@ const duplicateItemsFileName = `itemsDuplicate-${Date.now().toString()}.txt`;
 const offsetRecordFile = `finalOffset.txt`;
 
 const dynamoclient = new DynamoDBClient({ region: region });
-const dynamodb = DynamoDBDocumentClient.from(dynamoclient); 
+const dynamodb = DynamoDBDocumentClient.from(dynamoclient);
 let processedItems = 0;
 let failed = 0;
 
 async function addEmailData() {
-
-  if (host === '' || password === '' || user === '' || tableName === '' || legacyTable === ''){
-    return { status: 'error ', message:  'env variables missing'};
+  if (host === '' || password === '' || user === '' || tableName === '' || legacyTable === '') {
+    return { status: 'error ', message: 'env variables missing' };
   }
 
   const connection = await mysql.createConnection({
@@ -38,23 +45,27 @@ async function addEmailData() {
     port: port,
     user: user,
     password: password,
-    database: database
+    database: database,
   });
 
   let batchNumber = 0;
-  const batchSize: number = parseInt(process.env.BATCH_SIZE ?? '2000') ?? 2000;
-  let offset: number = parseInt(process.env.OFFSET ?? '0') ?? 0;
 
-  while(true){
+  const batchSize: number = parseInt(
+    getEnvOrDefault(IdentityStackEnvironmentKeys.BATCH_SIZE, '2000'),
+  );
+
+  let offset: number = parseInt(getEnvOrDefault(IdentityStackEnvironmentKeys.OFFSET, '0'));
+
+  while (true) {
     const query = fetchDBRecords(batchSize, offset);
     const [result] = await connection.query(query);
-    
+
     let rows: RowData[] = [];
-    
+
     if (Array.isArray(result) && result.length > 0) {
       rows = result as RowData[];
     }
-  
+
     const promises = [];
 
     if (rows.length === 0) {
@@ -64,61 +75,70 @@ async function addEmailData() {
       const { valid, reason } = validateData(row);
 
       if (!valid) {
-        await fs.writeFile(failedItemsFileName, `Failed to update item with id: ${row.id} - uuid: ${row.uuid}\n`, { flag: 'a' });
+        await fs.writeFile(
+          failedItemsFileName,
+          `Failed to update item with id: ${row.id} - uuid: ${row.uuid}\n`,
+          { flag: 'a' },
+        );
         failed++;
         continue;
       } else {
         promises.push(await addDataToDynamo(row));
       }
-
     }
-    
 
     // execute Promise.all on promises with a catch on error
     if (promises.length > 0) {
       await Promise.all(promises)
-      .then(() => {console.log(`Processed total ${++batchNumber} batches - Processed Items: ${processedItems} - failed Items: ${failed} - current offset: ${offset}`);})
-      .catch((error) => {
-        console.error(`Failed to add item to dynamo ${error as string}`);
-      });
+        .then(() => {
+          console.log(
+            `Processed total ${++batchNumber} batches - Processed Items: ${processedItems} - failed Items: ${failed} - current offset: ${offset}`,
+          );
+        })
+        .catch((error) => {
+          console.error(`Failed to add item to dynamo ${error as string}`);
+        });
     }
 
     offset += batchSize;
     await fs.writeFile(offsetRecordFile, offset.toString());
   }
   await connection.end();
-  return { status: 'success', message: `total processed items ${processedItems}, total failed ${failed}` };
+  return {
+    status: 'success',
+    message: `total processed items ${processedItems}, total failed ${failed}`,
+  };
 }
 
 async function addDataToDynamo(item: RowData) {
-
-  if(item.uuid !== null && item.uuid !== undefined && item.uuid !== "" && item.uuid !== "uuid") {
+  if (item.uuid !== null && item.uuid !== undefined && item.uuid !== '' && item.uuid !== 'uuid') {
     const sk = await findSecondaryKey(item.uuid);
 
-    if(sk !== undefined) {
-
+    if (sk !== undefined) {
       const updateParams: UpdateCommandInput = {
         TableName: tableName,
         Key: {
-          "pk"   : `MEMBER#${item.uuid}`,
-          "sk"  : `${sk}`
+          pk: `MEMBER#${item.uuid}`,
+          sk: `${sk}`,
         },
-        UpdateExpression: 'set email = :email, email_validated = :email_validated, confirmed = :confirmed',
-        ExpressionAttributeValues: {':email' : item.email, 
-                                    ':email_validated' : item.validated,
-                                    ':confirmed' : item.confirmed          
-                                    },
-        ReturnValues: "UPDATED_NEW",
-      }
+        UpdateExpression:
+          'set email = :email, email_validated = :email_validated, confirmed = :confirmed',
+        ExpressionAttributeValues: {
+          ':email': item.email,
+          ':email_validated': item.validated,
+          ':confirmed': item.confirmed,
+        },
+        ReturnValues: 'UPDATED_NEW',
+      };
 
       try {
         const result = await dynamodb.send(new UpdateCommand(updateParams));
-        processedItems++
+        processedItems++;
       } catch (err: any) {
         await fs.writeFile(failedItemsFileName, `Failed to update ${item.uuid}\n`, { flag: 'a' });
       }
     }
-  } 
+  }
 }
 
 async function findSecondaryKey(uuid: string) {
@@ -136,11 +156,11 @@ async function findSecondaryKey(uuid: string) {
   };
 
   const result = await dynamodb.send(new QueryCommand(queryParams));
-  if(result.Items === null || result.Items?.length === 0) {
+  if (result.Items === null || result.Items?.length === 0) {
     await fs.writeFile(itemsNotFoundFileName, `${uuid}\n`, { flag: 'a' });
     failed++;
     return undefined;
-  } else if(result.Items !== undefined && result.Items?.length > 1) {
+  } else if (result.Items !== undefined && result.Items?.length > 1) {
     await fs.writeFile(duplicateItemsFileName, `${uuid}\n`, { flag: 'a' });
     failed++;
     return undefined;
@@ -149,7 +169,7 @@ async function findSecondaryKey(uuid: string) {
   }
 }
 
-function validateData(rowData: RowData): { valid: any; reason?: any; } {
+function validateData(rowData: RowData): { valid: any; reason?: any } {
   if (rowData.id === null || rowData.id === undefined)
     return { valid: false, reason: 'legacy user id is null or undefined' };
   else if (rowData.uuid === null || rowData.uuid === undefined)
@@ -165,10 +185,10 @@ function validateData(rowData: RowData): { valid: any; reason?: any; } {
 }
 
 function fetchDBRecords(batchSize: number, offset: number) {
-  return(`SELECT u.id, u.uuid, u.email, u.validated, u.confirmed
+  return `SELECT u.id, u.uuid, u.email, u.validated, u.confirmed
   FROM ${legacyTable} u 
   ORDER BY u.id 
-  LIMIT ${batchSize} OFFSET ${offset}`);
+  LIMIT ${batchSize} OFFSET ${offset}`;
 }
 
 interface RowData {

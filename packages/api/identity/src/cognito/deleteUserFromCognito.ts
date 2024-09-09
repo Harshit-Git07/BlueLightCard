@@ -4,9 +4,16 @@ import {
   AdminGetUserCommand,
   AdminDeleteUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
+import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
 
-const service: string = process.env.SERVICE as string;
-const logger = new Logger({ serviceName: `${service}-deleteUserFromCognito`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO'});
+const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
+const logLevel =
+  getEnvOrDefault(IdentityStackEnvironmentKeys.DEBUG_LOGGING_ENABLED, 'false').toLowerCase() ==
+  'true'
+    ? 'DEBUG'
+    : 'INFO';
+const logger = new Logger({ serviceName: `${service}-deleteUserFromCognito`, logLevel: logLevel });
 
 export async function deleteUserFromCognito(
   cognito: CognitoIdentityProviderClient,
@@ -14,7 +21,9 @@ export async function deleteUserFromCognito(
   username: string,
 ) {
   if (!cognito || !poolId || !username) {
-    logger.debug(`Cognito client, poolId or username not provided, poolId: ${poolId} | username: ${username} `);
+    logger.debug(
+      `Cognito client, poolId or username not provided, poolId: ${poolId} | username: ${username} `,
+    );
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -49,7 +58,9 @@ export async function deleteUserFromCognito(
       };
     }
   } catch (e: any) {
-    logger.debug(`Error deleting user from poolId: ${poolId} | username: ${username} | error message: ${e.message} `);
+    logger.debug(
+      `Error deleting user from poolId: ${poolId} | username: ${username} | error message: ${e.message} `,
+    );
     return {
       statusCode: 500,
       body: JSON.stringify({

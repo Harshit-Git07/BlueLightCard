@@ -7,6 +7,7 @@ import {
   UserPoolType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { getEnv } from '@blc-mono/core/utils/getEnv';
 import {
   CdkCustomResourceHandler,
   CdkCustomResourceIsCompleteHandler,
@@ -14,6 +15,7 @@ import {
   CdkCustomResourceIsCompleteEvent,
 } from 'aws-lambda';
 import * as runtypes from 'runtypes';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
 import { Readable } from 'stream';
 import streamBuffers from 'stream-buffers';
 
@@ -33,9 +35,10 @@ export type S3ResourceLocator = runtypes.Static<typeof s3ResourceLocatorRuntype>
 
 export type UpdateCognitoUiProperties = runtypes.Static<typeof updateCognitoUiPropertiesRuntype>;
 
-const s3Client = new S3Client({ region: process.env.AWS_REGION });
+const region = getEnv(IdentityStackEnvironmentKeys.REGION);
+const s3Client = new S3Client({ region: region });
 const cognitoClient = new CognitoIdentityProviderClient({
-  region: process.env.AWS_REGION,
+  region: region,
 });
 
 export const eventHandler: CdkCustomResourceHandler = async (event) => {
@@ -71,9 +74,8 @@ export const handler: CdkCustomResourceIsCompleteHandler = async (event) => {
 async function createCognitoUiSettings(
   event: CdkCustomResourceIsCompleteEvent,
 ): Promise<CdkCustomResourceIsCompleteResponse> {
-  const { cssLocator, logoLocator, userPoolClientId, userPoolId } = updateCognitoUiPropertiesRuntype.check(
-    event.ResourceProperties,
-  );
+  const { cssLocator, logoLocator, userPoolClientId, userPoolId } =
+    updateCognitoUiPropertiesRuntype.check(event.ResourceProperties);
 
   console.log('Checking userpool domain');
   const userPool = await getUserPool(userPoolId);

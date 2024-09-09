@@ -4,8 +4,15 @@ import {
   AdminUpdateUserAttributesCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { Logger } from '@aws-lambda-powertools/logger';
-const service: string = process.env.SERVICE as string;
-const logger = new Logger({ serviceName: `${service}-updateCognitoUserEmail`, logLevel: process.env.DEBUG_LOGGING_ENABLED ? 'DEBUG' : 'INFO'});
+import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
+const logLevel =
+  getEnvOrDefault(IdentityStackEnvironmentKeys.DEBUG_LOGGING_ENABLED, 'false').toLowerCase() ==
+  'true'
+    ? 'DEBUG'
+    : 'INFO';
+const logger = new Logger({ serviceName: `${service}-updateCognitoUserEmail`, logLevel: logLevel });
 
 export async function updateCognitoEmail(
   cognito: CognitoIdentityProviderClient,
@@ -13,13 +20,12 @@ export async function updateCognitoEmail(
   username: string,
   newEmail: string,
 ) {
-
-  if(!cognito || !poolId || !username || !newEmail){
+  if (!cognito || !poolId || !username || !newEmail) {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: 'cognito client, poolId, username or new email not provided'
-      })
+        message: 'cognito client, poolId, username or new email not provided',
+      }),
     };
   }
   const input = {
@@ -38,7 +44,7 @@ export async function updateCognitoEmail(
       };
     }
   } catch (e: any) {
-     logger.error(`error getting user email in Cognito`, { e });
+    logger.error(`error getting user email in Cognito`, { e });
   }
 
   const params = {
@@ -52,9 +58,8 @@ export async function updateCognitoEmail(
       {
         Name: 'email_verified',
         Value: 'true',
-      }
+      },
     ],
-    
   };
   try {
     const command = new AdminUpdateUserAttributesCommand(params);

@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.72.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.71.1...bluelightcard/web-v1.72.0) (2024-09-09)
+
+
+### Features
+
+* [DISCO-697] Added in deal finder into 'Discover More' dropdown in header ([#2099](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2099)) ([2b90cf8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2b90cf834f29f6e0ad3e7223036796e77e61ae41))
+* cot 294 url changes for holidays ([#2165](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2165)) ([9426889](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9426889742742f02a7e95a50b1d4413036f80ff4))
+* Disco 787 BE service for Thank you campaign ([#2147](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2147)) ([9166640](https://github.com/bluelightcard/BlueLightCard-2.0/commit/916664027cbd376c2ea68cd8ca1d6fa6630e0613))
+* Disco-731-DDS-Update modern members homepage to point to legacy search page upon searching ([#2139](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2139)) ([12248bc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/12248bca4b818ff8bb02d8dded5a6215ba2fbfdb))
+
+
+### Bug Fixes
+
+* fix issue with the swiper ([#2168](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2168)) ([98cf652](https://github.com/bluelightcard/BlueLightCard-2.0/commit/98cf652cec35a286ec700b6526a8af96e463c2ad))
+
+
+### Other Changes
+
+* setup coverage reporting in to sonarcloud ([1771bfb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1771bfb72e5fb4e6d7135a5d94c4d0f8693f6f8e))
+
 ## [1.71.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.71.0...bluelightcard/web-v1.71.1) (2024-08-29)
 
 

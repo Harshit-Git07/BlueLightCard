@@ -12,7 +12,7 @@ import CampaignBanner from '@/components/CampaignBanner';
 import type { CampaignEvent } from '@/components/CampaignBanner/types';
 import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import Search from '@/components/Search/Search';
+import { SearchBar } from '@bluelightcard/shared-ui';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl } from '@/globals';
@@ -96,7 +96,7 @@ const Home: NextPage<any> = () => {
           <USPBanner></USPBanner>
         </Amplitude>
         <div className="my-2 mx-2">
-          <Search
+          <SearchBar
             onSearch={(searchTerm) =>
               navigation.navigate(
                 `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,

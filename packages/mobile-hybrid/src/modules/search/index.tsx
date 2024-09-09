@@ -1,13 +1,12 @@
 import { FC, useCallback, useState } from 'react';
-import { SearchModuleProps } from './types';
+import { SearchModuleProps, SearchProps } from './types';
 import Amplitude from '@/components/Amplitude/Amplitude';
-import Search from '@/components/Search/Search';
+import { SearchBar } from '@bluelightcard/shared-ui';
 import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButton';
 import useSearch from '@/hooks/useSearch';
 import { recentSearchesData } from '@/constants';
 import { useRouter } from 'next/router';
 import { backNavagationalPaths } from './paths';
-import { SearchProps } from '@/components/Search/types';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { usePlatformAdapter } from '../../../../shared-ui/src/adapters';
 
@@ -32,7 +31,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   }, [canBackNav, router]);
 
   const onSearch = useCallback<SearchProps['onSearch']>(
-    (termInput) => {
+    (termInput: string) => {
       setSearchOverlayOpen(false);
       router.push(`/searchresults?search=${termInput}`);
     },
@@ -47,7 +46,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   return (
     <>
       <div className="flex items-center px-2 pt-2 justify-between">
-        <Search
+        <SearchBar
           onFocus={onSearchInputFocus}
           onBackButtonClick={onBack}
           onClear={onClear}

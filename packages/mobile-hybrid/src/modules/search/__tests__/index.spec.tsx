@@ -1,4 +1,4 @@
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen, act, fireEvent, waitFor } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import SearchModule from '../index';
@@ -17,6 +17,21 @@ import {
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
+
+jest.mock('swiper/react', () => ({
+  Swiper: () => null,
+  SwiperSlide: () => null,
+}));
+
+jest.mock('swiper/modules', () => ({
+  Navigation: () => null,
+  Pagination: () => null,
+  Autoplay: () => null,
+}));
+
+jest.mock('swiper/css', () => jest.fn());
+jest.mock('swiper/css/pagination', () => jest.fn());
+jest.mock('swiper/css/navigation', () => jest.fn());
 
 describe('SearchModule', () => {
   let props: SearchModuleProps;
@@ -86,9 +101,11 @@ describe('SearchModule', () => {
 
       await act(() => userEvent.type(searchInput, 'test'));
 
-      fireEvent.submit(searchInput);
-
-      expect(pushMockFn).toHaveBeenCalledWith('/searchresults?search=test');
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('test');
+        fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter', charCode: 13 });
+        expect(pushMockFn).toHaveBeenCalledWith('/searchresults?search=test');
+      });
     });
   });
 

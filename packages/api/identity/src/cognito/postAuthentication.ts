@@ -4,7 +4,7 @@ import { CognitoIdentityServiceProvider } from 'aws-sdk';
 import { UnsuccessfulLoginAttemptsService } from '../../src/services/UnsuccessfulLoginAttemptsService';
 import { ProfileService } from '../../src/services/ProfileService';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const oldUserPoolId = getEnv(IdentityStackEnvironmentKeys.OLD_USER_POOL_ID);
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);

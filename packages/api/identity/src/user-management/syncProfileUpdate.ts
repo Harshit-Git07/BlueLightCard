@@ -13,7 +13,7 @@ import { sendToDLQ } from '../../src/helpers/DLQ';
 import { v4 } from 'uuid';
 import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 const identityTableName = getEnv(IdentityStackEnvironmentKeys.IDENTITY_TABLE_NAME);

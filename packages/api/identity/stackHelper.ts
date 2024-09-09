@@ -33,7 +33,7 @@ import {
   logAndFilterPreTokenOld,
 } from '../identity/src/helpers/cognitoClientHelperOld';
 import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
   appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();

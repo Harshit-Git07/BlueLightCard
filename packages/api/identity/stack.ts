@@ -46,7 +46,7 @@ import {
   getNewCognitoUserPoolIdStackOutputName,
 } from '@blc-mono/core/identity/identityStackOutputs';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const SERVICE_NAME = 'identity';
 

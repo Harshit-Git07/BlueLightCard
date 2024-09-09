@@ -1,6 +1,6 @@
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const sqs = new SQSClient({
   region: getEnvOrDefault(IdentityStackEnvironmentKeys.REGION, 'eu-west-2'),

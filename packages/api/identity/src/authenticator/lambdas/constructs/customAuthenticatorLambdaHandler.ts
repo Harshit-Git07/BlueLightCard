@@ -10,7 +10,7 @@ import jwtDecode from 'jwt-decode';
 import { Logger } from '@aws-lambda-powertools/logger';
 
 import { datadog } from 'datadog-lambda-js';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 const BEARER_PREFIX = 'Bearer ';

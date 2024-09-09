@@ -9,7 +9,7 @@ import { promises as fs } from 'fs';
 import mysql from 'mysql2/promise';
 import * as dotenv from 'dotenv';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 dotenv.config({ path: __dirname + '/.env' });
 

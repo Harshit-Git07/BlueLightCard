@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import url from 'url';
 import { Response } from './../../../../core/src/utils/restResponse/response';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 

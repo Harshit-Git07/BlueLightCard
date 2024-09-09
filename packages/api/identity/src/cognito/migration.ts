@@ -13,7 +13,7 @@ import { BrandService } from 'src/services/BrandService';
 import { isValidEmail } from './emailValidator';
 import { isValidPasswordForCognito, isValidPasswordForLegacy } from './passwordValidator';
 import { getEnv, getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 var base64 = require('base-64');
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);

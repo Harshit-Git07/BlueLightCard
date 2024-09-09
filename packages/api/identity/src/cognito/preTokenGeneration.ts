@@ -5,7 +5,7 @@ import { ProfileService } from 'src/services/ProfileService';
 import * as amplitude from '@amplitude/analytics-node';
 import EVENTS from '@blc-mono/core/types/events';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 const IDENTITY_TABLE_NAME = getEnv(IdentityStackEnvironmentKeys.IDENTITY_TABLE_NAME);

@@ -5,7 +5,7 @@ import { unpackJWT } from './unpackJWT';
 import { UserService } from '../../src/services/UserService';
 import { isNull } from 'lodash';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 

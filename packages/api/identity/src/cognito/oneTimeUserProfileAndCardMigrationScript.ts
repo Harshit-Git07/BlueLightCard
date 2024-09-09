@@ -6,9 +6,8 @@ import * as dotenv from 'dotenv';
 import mysql from 'mysql2/promise';
 
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
-import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
 import { setDate } from './../../../core/src/utils/setDate';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 interface RowData {

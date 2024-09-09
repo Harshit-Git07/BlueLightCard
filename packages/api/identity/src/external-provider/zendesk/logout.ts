@@ -1,7 +1,7 @@
 import { type APIGatewayEvent, type Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 

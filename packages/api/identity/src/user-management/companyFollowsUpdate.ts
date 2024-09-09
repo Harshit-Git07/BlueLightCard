@@ -9,7 +9,7 @@ import {
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const region: string = getEnvOrDefault(IdentityStackEnvironmentKeys.REGION, 'eu-west-2');
 const sqs = new SQSClient({ region: region });

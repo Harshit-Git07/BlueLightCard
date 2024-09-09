@@ -1,7 +1,6 @@
-import { LambdaAbstract } from '../../../common/lambdaAbstract';
 import { Stack } from 'aws-cdk-lib';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { Cognito } from 'sst/constructs';
+import { LambdaAbstract } from 'src/common/lambdaAbstract';
 
 export class CustomAuthenticatorLambda extends LambdaAbstract {
   constructor(private stack: Stack, private stage: String) {
@@ -10,7 +9,8 @@ export class CustomAuthenticatorLambda extends LambdaAbstract {
 
   create(): NodejsFunction {
     const customAuthenticator = new NodejsFunction(this.stack, 'customAuthenticatorLambda', {
-      entry: './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.ts',
+      entry:
+        './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.ts',
       handler: 'handler',
       reservedConcurrentExecutions: 1,
       retryAttempts: 2,

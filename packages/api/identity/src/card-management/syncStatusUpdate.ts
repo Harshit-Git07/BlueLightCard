@@ -7,7 +7,7 @@ import { BRANDS } from './../../../core/src/types/brands.enum';
 import { getCardStatus } from './../../../core/src/utils/getCardStatus';
 import { setDate } from './../../../core/src/utils/setDate';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 const identityTableName = getEnv(IdentityStackEnvironmentKeys.IDENTITY_TABLE_NAME);

@@ -5,7 +5,7 @@ import { sendToDLQ } from 'src/helpers/DLQ';
 import { deleteUserFromCognito } from './deleteUserFromCognito';
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 const logger = new Logger({ serviceName: `${service}-deleteUser` });

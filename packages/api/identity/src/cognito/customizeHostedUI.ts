@@ -15,7 +15,7 @@ import {
   CdkCustomResourceIsCompleteEvent,
 } from 'aws-lambda';
 import * as runtypes from 'runtypes';
-import { IdentityStackEnvironmentKeys } from 'src/utils/IdentityStackEnvironmentKeys';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 import { Readable } from 'stream';
 import streamBuffers from 'stream-buffers';
 

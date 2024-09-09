@@ -44,6 +44,8 @@ export function createPromotionUpdatedRule(
         config.redemptionsLambdaScriptsCodeAmountIssuedPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_VIEW_VAULT_BATCHES_PATH]:
         config.redemptionsLambdaScriptsViewVaultBatchesPath,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH]:
+        config.redemptionsLambdaScriptsCheckVaultStockPath,
       // Datadog unified service tracking
       DD_SERVICE: 'redemptions',
     },

@@ -5,7 +5,7 @@ import { getEnv, getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 
 import { DiscoveryStackEnvironmentKeys } from '../../infrastructure/constants/environment';
-import { SearchOfferType, SearchResultsType } from '../../libs/models/SearchResults';
+import { SearchOfferType, SearchResultsType } from '../models/SearchResults';
 
 const logger = new LambdaLogger({ serviceName: 'search-legacy-search' });
 

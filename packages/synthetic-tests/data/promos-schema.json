@@ -1,0 +1,326 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "deal": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "random": {
+                "type": "boolean"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "compid": {
+                      "type": "number"
+                    },
+                    "offername": {
+                      "type": "string"
+                    },
+                    "logos": {
+                      "type": "string"
+                    },
+                    "companyname": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    },
+                    "s3Image": {
+                      "type": "string"
+                    },
+                    "RestrictedTo": {
+                      "type": "string"
+                    },
+                    "RestrictedFrom": {
+                      "type": "string"
+                    },
+                    "absoluteLogos": {
+                      "type": "string"
+                    },
+                    "s3logos": {
+                      "type": "string"
+                    },
+                    "absoluteImage": {
+                      "type": "string"
+                    },
+                    "s3image": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "compid",
+                    "offername",
+                    "logos",
+                    "companyname",
+                    "image",
+                    "s3Image",
+                    "RestrictedTo",
+                    "RestrictedFrom",
+                    "absoluteLogos",
+                    "s3logos",
+                    "absoluteImage",
+                    "s3image"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "title",
+              "random",
+              "items"
+            ]
+          }
+        },
+        "flexible": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "subtitle": {
+              "type": "string"
+            },
+            "random": {
+              "type": "boolean"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "imagehome": {
+                    "type": "string"
+                  },
+                  "imagedetail": {
+                    "type": "string"
+                  },
+                  "navtitle": {
+                    "type": "string"
+                  },
+                  "intro": {
+                    "type": "string"
+                  },
+                  "footer": {
+                    "type": "string"
+                  },
+                  "random": {
+                    "type": "boolean"
+                  },
+                  "hide": {
+                    "type": "boolean"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "mode": {
+                          "type": "string"
+                        },
+                        "imagelist": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "subtitle": {
+                          "type": "string"
+                        },
+                        "oid": {
+                          "type": "number"
+                        },
+                        "cid": {
+                          "type": "string"
+                        },
+                        "tid": {
+                          "type": "string"
+                        },
+                        "expires": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "auth": {
+                          "type": "boolean"
+                        },
+                        "hide": {
+                          "type": "boolean"
+                        },
+                        "restrictedto": {
+                          "type": "string"
+                        },
+                        "restrictedfrom": {
+                          "type": "string"
+                        },
+                        "absoluteImagelist": {
+                          "type": "string"
+                        },
+                        "s3imagelist": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "imagelist",
+                        "title",
+                        "subtitle",
+                        "oid",
+                        "cid",
+                        "tid",
+                        "expires",
+                        "url",
+                        "auth",
+                        "hide",
+                        "restrictedto",
+                        "restrictedfrom",
+                        "absoluteImagelist",
+                        "s3imagelist"
+                      ]
+                    }
+                  },
+                  "id": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "title",
+                  "imagehome",
+                  "imagedetail",
+                  "navtitle",
+                  "intro",
+                  "footer",
+                  "random",
+                  "hide",
+                  "items",
+                  "id"
+                ]
+              }
+            }
+          },
+          "required": [
+            "title",
+            "subtitle",
+            "random",
+            "items"
+          ]
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "random": {
+                "type": "boolean"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "compid": {
+                      "type": "number"
+                    },
+                    "offername": {
+                      "type": "string"
+                    },
+                    "logos": {
+                      "type": "string"
+                    },
+                    "companyname": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    },
+                    "s3Image": {
+                      "type": "string"
+                    },
+                    "RestrictedTo": {
+                      "type": "string"
+                    },
+                    "RestrictedFrom": {
+                      "type": "string"
+                    },
+                    "absoluteLogos": {
+                      "type": "string"
+                    },
+                    "s3logos": {
+                      "type": "string"
+                    },
+                    "absoluteImage": {
+                      "type": "string"
+                    },
+                    "s3image": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "compid",
+                    "offername",
+                    "logos",
+                    "companyname",
+                    "image",
+                    "s3Image",
+                    "RestrictedTo",
+                    "RestrictedFrom",
+                    "absoluteLogos",
+                    "s3logos",
+                    "absoluteImage",
+                    "s3image"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "title",
+              "items"
+            ]
+          }
+        }
+      },
+      "required": [
+        "deal",
+        "flexible",
+        "groups"
+      ]
+    }
+  },
+  "required": [
+    "success",
+    "message",
+    "data"
+  ]
+}

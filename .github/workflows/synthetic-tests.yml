@@ -1,0 +1,83 @@
+name: Synthetic Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/synthetic-tests/**
+      - .github/workflows/synthetic-tests.yml
+      - packages/synthetic-tests/CHANGELOG.md
+  pull_request:
+    paths:
+      - packages/synthetic-tests/**
+      - .github/workflows/synthetic-tests.yml
+      - packages/synthetic-tests/CHANGELOG.md
+
+permissions: write-all
+
+jobs:
+
+  changelog:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: googleapis/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/synthetic-tests
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/synthetic-tests
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
+  check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: 'Terraform actions for pull request'
+        uses: ./.github/actions/terraform
+        with:
+          directory: 'packages/synthetic-tests'
+          environment: 'pull_request'
+          token: ${{ secrets.TERRAFORM_TOKEN }}
+          workspace: 'develop'
+
+  staging:
+    needs:
+      - terraform_pull_request
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: 'Terraform actions for staging'
+        uses: ./.github/actions/terraform
+        with:
+          directory: 'packages/synthetic-tests'
+          environment: 'staging'
+          token: ${{ secrets.TERRAFORM_TOKEN }}
+          workspace: 'develop'
+
+  release:
+    needs:
+      - terraform_pull_request
+      - terraform_staging
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: 'Terraform actions for staging'
+        uses: ./.github/actions/terraform
+        with:
+          directory: 'packages/synthetic-tests'
+          environment: 'production'
+          token: ${{ secrets.TERRAFORM_TOKEN }}
+          workspace: 'production'

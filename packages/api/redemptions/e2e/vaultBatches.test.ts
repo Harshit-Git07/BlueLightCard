@@ -222,6 +222,7 @@ describe('Vault Batch admin API tests', () => {
       { method: 'POST', queryStringParam: undefined },
       { method: 'GET', queryStringParam: 'my-vault-id' },
       { method: 'PATCH', queryStringParam: undefined },
+      { method: 'DELETE', queryStringParam: undefined },
     ])(`$method: authorisation error for no key`, async (params): Promise<void> => {
       const result = await callBatchEndpoint(params.method, undefined, undefined, params.queryStringParam);
       expect(result.status).toBe(403);
@@ -231,6 +232,7 @@ describe('Vault Batch admin API tests', () => {
       { method: 'POST', queryStringParam: undefined },
       { method: 'GET', queryStringParam: 'my-vault-id' },
       { method: 'PATCH', queryStringParam: undefined },
+      { method: 'DELETE', queryStringParam: undefined },
     ])(`$method: authorisation error for invalid key`, async (params): Promise<void> => {
       const result = await callBatchEndpoint(params.method, 'invalid-api-key', undefined, params.queryStringParam);
       expect(result.status).toBe(403);
@@ -475,6 +477,151 @@ describe('Vault Batch admin API tests', () => {
       const result = await callBatchEndpoint('PATCH', apiKey, body);
 
       expect(result.status).toStrictEqual(204);
+    });
+  });
+
+  describe('DELETE Vault Batches', () => {
+    const delMsg = 'Vault Batch Delete -';
+
+    it('returns 404 if batch ID does not exist', async () => {
+      const body = {
+        batchId: `vbt-non-existent`,
+      };
+
+      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const responseBody = await result.json();
+
+      expect(responseBody).toStrictEqual({
+        statusCode: 404,
+        data: {
+          message: `${delMsg} the vault batch does not exist`,
+        },
+      });
+    });
+
+    it('returns 200 if batch ID exists and does not have claimed or unclaimed codes', async () => {
+      const { vault, ...vaultHooks } = buildVault();
+      const { vaultBatch, ...vaultBatchHooks } = buildVaultBatch(vault.id);
+
+      onTestFinished(async () => {
+        await vaultBatchHooks.cleanup();
+        await vaultHooks.cleanup();
+      });
+      await vaultHooks.insert();
+      await vaultBatchHooks.insert();
+
+      const body = {
+        batchId: vaultBatch.id,
+      };
+
+      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const responseBody = await result.json();
+
+      expect(responseBody).toStrictEqual({
+        statusCode: 200,
+        data: {
+          vaultBatchId: vaultBatch.id,
+          vaultBatchDeleted: true,
+          vaultCodesDeleted: false,
+          countCodesDeleted: 0,
+          message: `${delMsg} there are no codes to delete, batch successfully deleted`,
+        },
+      });
+    });
+
+    it('returns 200 if batch ID exists and only has unclaimed codes', async () => {
+      const unclaimedCodesCount = 1000;
+      const { vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(unclaimedCodesCount);
+
+      onTestFinished(async () => {
+        await vaultCodeHooks.cleanup();
+      });
+      await vaultCodeHooks.insert();
+
+      const body = {
+        batchId: vaultBatch.id,
+      };
+
+      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const responseBody = await result.json();
+
+      expect(responseBody).toStrictEqual({
+        statusCode: 200,
+        data: {
+          vaultBatchId: vaultBatch.id,
+          vaultBatchDeleted: true,
+          vaultCodesDeleted: true,
+          countCodesDeleted: unclaimedCodesCount,
+          message: `${delMsg} the batch and codes where successfully deleted`,
+        },
+      });
+    });
+
+    it('returns 200 if batch ID exists and has claimed and unclaimed codes', async () => {
+      const unclaimedCodesCount = 997;
+      const { vault, vaultBatch, ...unclaimedVaultCodeHooks } = buildVaultWithCodes(unclaimedCodesCount);
+
+      const claimedCodesCount = 3;
+      const { ...claimedVaultCodeHooks } = buildVaultCodes(claimedCodesCount, {
+        vaultId: vault.id,
+        batchId: vaultBatch.id,
+        memberId: faker.string.uuid(),
+      });
+
+      onTestFinished(async () => {
+        await claimedVaultCodeHooks.cleanup();
+        await unclaimedVaultCodeHooks.cleanup();
+      });
+      await unclaimedVaultCodeHooks.insert();
+      await claimedVaultCodeHooks.insert();
+
+      const body = {
+        batchId: vaultBatch.id,
+      };
+
+      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const responseBody = await result.json();
+
+      expect(responseBody).toStrictEqual({
+        statusCode: 200,
+        data: {
+          vaultBatchId: vaultBatch.id,
+          vaultBatchDeleted: false,
+          vaultCodesDeleted: true,
+          countCodesDeleted: unclaimedCodesCount,
+          message: `${delMsg} batch was not deleted as it has ${claimedCodesCount} claimed code(s), unclaimed codes successfully deleted`,
+        },
+      });
+    });
+
+    it('returns 200 if batch ID exists and only has claimed codes', async () => {
+      const claimedCodesCount = 1000;
+      const { vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(claimedCodesCount, {
+        memberId: faker.string.uuid(),
+      });
+
+      onTestFinished(async () => {
+        await vaultCodeHooks.cleanup();
+      });
+      await vaultCodeHooks.insert();
+
+      const body = {
+        batchId: vaultBatch.id,
+      };
+
+      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const responseBody = await result.json();
+
+      expect(responseBody).toStrictEqual({
+        statusCode: 200,
+        data: {
+          vaultBatchId: vaultBatch.id,
+          vaultBatchDeleted: false,
+          vaultCodesDeleted: false,
+          countCodesDeleted: 0,
+          message: `${delMsg} batch has ${claimedCodesCount} claimed codes only, nothing deleted`,
+        },
+      });
     });
   });
 });

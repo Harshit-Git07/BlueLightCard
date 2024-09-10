@@ -67,6 +67,9 @@ describe('UpdateVaultBatchService', () => {
       claimVaultCode: jest.fn(),
       createMany: jest.fn(),
       withTransaction: jest.fn(),
+      findClaimedCodesByBatchId: jest.fn(),
+      findUnclaimedCodesByBatchId: jest.fn(),
+      deleteUnclaimedCodesByBatchId: jest.fn(),
     };
   }
 

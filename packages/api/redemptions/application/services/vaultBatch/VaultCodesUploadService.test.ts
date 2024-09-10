@@ -55,14 +55,13 @@ describe('VaultCodesUploadService', () => {
       ? override.vaultBatchesRepo
       : new VaultBatchesRepository(connection);
     const s3ClientProvider = override.s3ClientProvider ? override.s3ClientProvider : ({} as IS3ClientProvider);
-    const service = new VaultCodesUploadService(
+    return new VaultCodesUploadService(
       logger,
       vaultCodesRepo,
       vaultBatchesRepo,
       redemptionsEventsRepo,
       s3ClientProvider,
     );
-    return service;
   }
 
   function mockS3ClientProvider(): IS3ClientProvider {
@@ -100,6 +99,9 @@ describe('VaultCodesUploadService', () => {
       withTransaction: jest.fn(),
       findManyByBatchId: jest.fn(),
       updateManyByBatchId: jest.fn(),
+      findClaimedCodesByBatchId: jest.fn(),
+      findUnclaimedCodesByBatchId: jest.fn(),
+      deleteUnclaimedCodesByBatchId: jest.fn(),
     };
   }
 

@@ -1,4 +1,4 @@
-import { and, asc, count, eq, gte, isNull, or, sql } from 'drizzle-orm';
+import { and, asc, count, eq, gte, isNotNull, isNull, not, or, sql } from 'drizzle-orm';
 import lodash from 'lodash';
 
 import { DatabaseTransactionConnection } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
@@ -19,6 +19,9 @@ export interface IVaultCodesRepository {
   checkVaultCodesRemaining(vaultId: string): Promise<number>;
   findManyByBatchId(batchId: string): Promise<VaultCode[] | null>;
   updateManyByBatchId(batchId: string, update: Partial<VaultCode>): Promise<Pick<VaultCode, 'id'>[] | null>;
+  deleteUnclaimedCodesByBatchId(batchId: string): Promise<Pick<VaultCode, 'id'>[]>;
+  findClaimedCodesByBatchId(batchId: string): Promise<VaultCode[]>;
+  findUnclaimedCodesByBatchId(batchId: string): Promise<VaultCode[]>;
 }
 
 export class VaultCodesRepository extends Repository implements IVaultCodesRepository {
@@ -148,6 +151,45 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
       .returning({
         id: vaultCodesTable.id,
       })
+      .execute();
+  }
+
+  public async deleteUnclaimedCodesByBatchId(batchId: string): Promise<Pick<VaultCode, 'id'>[]> {
+    return await this.connection.db
+      .delete(vaultCodesTable)
+      .where(
+        and(
+          eq(vaultCodesTable.batchId, batchId),
+          or(isNull(vaultCodesTable.memberId), eq(vaultCodesTable.memberId, '')),
+        ),
+      )
+      .returning({ id: vaultCodesTable.id })
+      .execute();
+  }
+
+  public async findClaimedCodesByBatchId(batchId: string): Promise<VaultCode[]> {
+    return await this.connection.db
+      .select()
+      .from(vaultCodesTable)
+      .where(
+        and(
+          eq(vaultCodesTable.batchId, batchId),
+          or(isNotNull(vaultCodesTable.memberId), not(eq(vaultCodesTable.memberId, ''))),
+        ),
+      )
+      .execute();
+  }
+
+  public async findUnclaimedCodesByBatchId(batchId: string): Promise<VaultCode[]> {
+    return await this.connection.db
+      .select()
+      .from(vaultCodesTable)
+      .where(
+        and(
+          eq(vaultCodesTable.batchId, batchId),
+          or(isNull(vaultCodesTable.memberId), eq(vaultCodesTable.memberId, '')),
+        ),
+      )
       .execute();
   }
 }

@@ -1,16 +1,16 @@
 import { eq } from 'drizzle-orm';
 
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
+import { vaultBatchesTable } from '@blc-mono/redemptions/libs/database/schema';
 import {
-  redemptionsTable,
-  vaultBatchesTable,
-  vaultCodesTable,
-  vaultsTable,
-} from '@blc-mono/redemptions/libs/database/schema';
-import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
+  createManyVaultBatchRecords,
+  createRedemptionRecord,
+  createVaultBatchRecord,
+  createVaultCodeRecordsClaimed,
+  createVaultCodeRecordsUnclaimed,
+  createVaultRecord,
+} from '@blc-mono/redemptions/libs/test/helpers/databaseRecords';
 
-import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
-import { vaultFactory } from '../../libs/test/factories/vault.factory';
 import { vaultBatchFactory } from '../../libs/test/factories/vaultBatches.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
@@ -35,12 +35,8 @@ describe('VaultBatchesRepository', () => {
 
   describe('createVaultBatch', () => {
     it('should create the vaultBatch', async () => {
-      const redemption = redemptionFactory.build();
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      await connection.db.insert(vaultsTable).values(vault).execute();
-
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
       const vaultBatch = vaultBatchFactory.build({
         vaultId: vault.id,
       });
@@ -63,15 +59,9 @@ describe('VaultBatchesRepository', () => {
         file: 'new-file',
         expiry: new Date('2025-08-02T16:20:52.000Z'),
       };
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-        file: 'old-file',
-      });
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
       const repository = new VaultBatchesRepository(connection);
 
       // Act
@@ -110,16 +100,9 @@ describe('VaultBatchesRepository', () => {
   describe('findOneById', () => {
     it('should find the vaultBatch by id', async () => {
       // Arrange
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-        created: new Date('2024-01-03T00:27:26.000Z'),
-        expiry: new Date('2025-01-26T19:07:53.000Z'),
-      });
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
       const repository = new VaultBatchesRepository(connection);
 
       // Act
@@ -144,45 +127,29 @@ describe('VaultBatchesRepository', () => {
   describe('findByVaultId', () => {
     it('returns all batches with the given vault identifier', async () => {
       // Arrange
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const batchCount = 3;
+      await createManyVaultBatchRecords(connection, vault.id, batchCount);
       const repository = new VaultBatchesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-
-      const vaultBatches = vaultBatchFactory.buildList(3, {
-        vaultId: vault.id,
-      });
-
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatches).execute();
 
       // Act
       const result = await repository.findByVaultId(vault.id);
 
       // Assert
-      expect(result).toHaveLength(3);
+      expect(result).toHaveLength(batchCount);
     });
 
     it('does not return batches for other vaults', async () => {
       // Arrange
       const repository = new VaultBatchesRepository(connection);
 
-      const redemptions = redemptionFactory.buildList(2);
-      const lookupVault = vaultFactory.build({ redemptionId: redemptions[0].id });
-      const otherVault = vaultFactory.build({ redemptionId: redemptions[1].id });
-
-      const vaultBatches = [
-        ...vaultBatchFactory.buildList(2, {
-          vaultId: lookupVault.id,
-        }),
-        ...vaultBatchFactory.buildList(2, {
-          vaultId: otherVault.id,
-        }),
-      ];
-
-      await connection.db.insert(redemptionsTable).values(redemptions).execute();
-      await connection.db.insert(vaultsTable).values([lookupVault, otherVault]).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatches).execute();
+      const redemption1 = await createRedemptionRecord(connection);
+      const redemption2 = await createRedemptionRecord(connection);
+      const lookupVault = await createVaultRecord(connection, redemption1.id);
+      const otherVault = await createVaultRecord(connection, redemption2.id);
+      await createManyVaultBatchRecords(connection, lookupVault.id, 2);
+      await createManyVaultBatchRecords(connection, otherVault.id, 2);
 
       // Act
       const result = await repository.findByVaultId(lookupVault.id);
@@ -196,11 +163,8 @@ describe('VaultBatchesRepository', () => {
     it('returns an empty array if no batches are found', async () => {
       // Arrange
       const repository = new VaultBatchesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
 
       // Act
       const result = await repository.findByVaultId(vault.id);
@@ -213,111 +177,77 @@ describe('VaultBatchesRepository', () => {
   describe('getCodesRemaining', () => {
     it('returns the number of unused codes in a batch', async () => {
       // Arrange
-      const unusedMemberId = null;
-      const usedMemberId = '12345';
-
       const repository = new VaultBatchesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      const vaultBatch = vaultBatchFactory.build({ vaultId: vault.id });
-      const vaultCodes = [
-        ...vaultCodeFactory.buildList(5, {
-          vaultId: vault.id,
-          batchId: vaultBatch.id,
-          memberId: unusedMemberId,
-        }),
-        ...vaultCodeFactory.buildList(2, {
-          vaultId: vault.id,
-          batchId: vaultBatch.id,
-          memberId: usedMemberId,
-        }),
-      ];
 
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
-      await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
+
+      const unclaimedBatchSize = 5;
+      await createVaultCodeRecordsUnclaimed(connection, vault.id, vaultBatch.id, unclaimedBatchSize);
+
+      const claimedBatchSize = 2;
+      await createVaultCodeRecordsClaimed(connection, vault.id, vaultBatch.id, claimedBatchSize);
 
       // Act
       const result = await repository.getCodesRemaining(vaultBatch.id);
 
       // Assert
-      expect(result).toBe(5);
+      expect(result).toBe(unclaimedBatchSize);
     });
 
     it('does not include counts for other batches', async () => {
       // Arrange
       const repository = new VaultBatchesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      const [lookupBatch, otherBatch] = vaultBatchFactory.buildList(2, { vaultId: vault.id });
-      const lookupBatchVaultCodes = vaultCodeFactory.buildList(6, {
-        vaultId: vault.id,
-        batchId: lookupBatch.id,
-        memberId: null,
-      });
-      const otherBatchVaultCodes = vaultCodeFactory.buildList(3, {
-        vaultId: vault.id,
-        batchId: otherBatch.id,
-        memberId: null,
-      });
 
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values([lookupBatch, otherBatch]).execute();
-      await connection.db.insert(vaultCodesTable).values(lookupBatchVaultCodes).execute();
-      await connection.db.insert(vaultCodesTable).values(otherBatchVaultCodes).execute();
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const lookupBatch = await createVaultBatchRecord(connection, vault.id);
+      const otherBatch = await createVaultBatchRecord(connection, vault.id);
+
+      const lookupBatchSize = 6;
+      await createVaultCodeRecordsUnclaimed(connection, vault.id, lookupBatch.id, lookupBatchSize);
+
+      const otherBatchSize = 3;
+      await createVaultCodeRecordsUnclaimed(connection, vault.id, otherBatch.id, otherBatchSize);
 
       // Act
       const result = await repository.getCodesRemaining(lookupBatch.id);
 
       // Assert
-      expect(result).toBe(6);
+      expect(result).toBe(lookupBatchSize);
     });
 
     it('does not include counts for other vaults', async () => {
       // Arrange
       const repository = new VaultBatchesRepository(connection);
-      const redemptions = redemptionFactory.buildList(2);
-      const lookupVault = vaultFactory.build({ redemptionId: redemptions[0].id });
-      const otherVault = vaultFactory.build({ redemptionId: redemptions[1].id });
-      const lookupBatch = vaultBatchFactory.build({ vaultId: lookupVault.id });
-      const otherBatch = vaultBatchFactory.build({ vaultId: otherVault.id });
 
-      const lookupBatchVaultCodes = vaultCodeFactory.buildList(3, {
-        vaultId: lookupVault.id,
-        batchId: lookupBatch.id,
-        memberId: null,
-      });
-      const otherBatchVaultCodes = vaultCodeFactory.buildList(5, {
-        vaultId: otherVault.id,
-        batchId: otherBatch.id,
-        memberId: null,
-      });
+      const redemption1 = await createRedemptionRecord(connection);
+      const lookupVault = await createVaultRecord(connection, redemption1.id);
+      const lookupBatch = await createVaultBatchRecord(connection, lookupVault.id);
+      const lookupBatchSize = 3;
+      await createVaultCodeRecordsUnclaimed(connection, lookupVault.id, lookupBatch.id, lookupBatchSize);
 
-      await connection.db.insert(redemptionsTable).values(redemptions).execute();
-      await connection.db.insert(vaultsTable).values([lookupVault, otherVault]).execute();
-      await connection.db.insert(vaultBatchesTable).values([lookupBatch, otherBatch]).execute();
-      await connection.db.insert(vaultCodesTable).values(lookupBatchVaultCodes).execute();
-      await connection.db.insert(vaultCodesTable).values(otherBatchVaultCodes).execute();
+      const redemption2 = await createRedemptionRecord(connection);
+      const otherVault = await createVaultRecord(connection, redemption2.id);
+      const otherBatch = await createVaultBatchRecord(connection, otherVault.id);
+      const otherBatchSize = 5;
+      await createVaultCodeRecordsUnclaimed(connection, otherVault.id, otherBatch.id, otherBatchSize);
 
       // Act
       const result = await repository.getCodesRemaining(lookupBatch.id);
 
       // Assert
-      expect(result).toBe(3);
+      expect(result).toBe(lookupBatchSize);
     });
 
     it('returns zero if no codes are found', async () => {
       // Arrange
       const repository = new VaultBatchesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      const vaultBatch = vaultBatchFactory.build({ vaultId: vault.id });
 
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
       // Act
       const result = await repository.getCodesRemaining(vaultBatch.id);
@@ -329,17 +259,41 @@ describe('VaultBatchesRepository', () => {
     it('returns zero if the vault batch does not exist', async () => {
       // Arrange
       const repository = new VaultBatchesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
 
       // Act
       const result = await repository.getCodesRemaining('batch-does-not-exist');
 
       // Assert
       expect(result).toBe(0);
+    });
+  });
+
+  describe('deleteById', () => {
+    it('returns empty if the vault batch does not exist', async () => {
+      // Arrange
+      const repository = new VaultBatchesRepository(connection);
+
+      // Act
+      const result = await repository.deleteById('batch-does-not-exist');
+
+      // Assert
+      expect(result.length).toBe(0);
+    });
+
+    it('returns batch ID if the vault batch exists', async () => {
+      // Arrange
+      const repository = new VaultBatchesRepository(connection);
+
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
+
+      // Act
+      const result = await repository.deleteById(vaultBatch.id);
+
+      // Assert
+      expect(result.length).toBe(1);
+      expect(result).toStrictEqual([{ id: vaultBatch.id }]);
     });
   });
 });

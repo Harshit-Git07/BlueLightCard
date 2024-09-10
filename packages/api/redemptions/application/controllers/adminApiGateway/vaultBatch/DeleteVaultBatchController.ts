@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
+import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
   DeleteVaultBatchService,
@@ -42,22 +43,27 @@ export class DeleteVaultBatchController extends APIGatewayController<ParsedReque
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
     const result = await this.deleteVaultBatchService.deleteVaultBatch(request);
-    if (result.kind === 'Ok') {
-      return {
-        statusCode: 200,
-        data: {
-          vaultBatchId: result.data.vaultBatchId,
-          batchDeleted: result.data.batchDeleted,
-          service: result.data.service,
-        },
-      };
-    } else {
-      return {
-        statusCode: 404,
-        data: {
-          message: 'Vault Batch failed to be deleted',
-        },
-      };
+    switch (result.kind) {
+      case 'Ok':
+        return {
+          statusCode: 200,
+          data: {
+            vaultBatchId: result.data.vaultBatchId,
+            vaultBatchDeleted: result.data.vaultBatchDeleted,
+            vaultCodesDeleted: result.data.vaultCodesDeleted,
+            countCodesDeleted: result.data.countCodesDeleted,
+            message: result.data.message,
+          },
+        };
+      case 'Error':
+        return {
+          statusCode: 404,
+          data: {
+            message: result.data.message,
+          },
+        };
+      default:
+        exhaustiveCheck(result, 'Unhandled result kind');
     }
   }
 }

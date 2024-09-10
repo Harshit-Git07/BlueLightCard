@@ -1,17 +1,17 @@
 import { eq } from 'drizzle-orm';
 
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import {
-  redemptionsTable,
-  vaultBatchesTable,
-  vaultCodesTable,
-  vaultsTable,
-} from '@blc-mono/redemptions/libs/database/schema';
-import { redemptionFactory } from '@blc-mono/redemptions/libs/test/factories/redemption.factory';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatches.factory';
+import { vaultCodesTable } from '@blc-mono/redemptions/libs/database/schema';
 import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
+import {
+  createRedemptionRecord,
+  createVaultBatchRecord,
+  createVaultCodeRecordsClaimed,
+  createVaultCodeRecordsExpired,
+  createVaultCodeRecordsUnclaimed,
+  createVaultRecord,
+} from '@blc-mono/redemptions/libs/test/helpers/databaseRecords';
 
 import { VaultCodesRepository } from './VaultCodesRepository';
 
@@ -54,71 +54,32 @@ describe('VaultCodesRepository', () => {
 
   describe('checkVaultCodesRemaining', () => {
     it('should return the number of unclaimed codes in the vault', async () => {
-      // Arrange
-      const repository = new VaultCodesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({
-        redemptionId: redemption.id,
-      });
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-      });
-      const vaultCodes = [
-        vaultCodeFactory.build({
-          vaultId: vault.id,
-          batchId: vaultBatch.id,
-          memberId: null,
-        }),
-        vaultCodeFactory.build({
-          vaultId: vault.id,
-          batchId: vaultBatch.id,
-          memberId: null,
-        }),
-      ];
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
-      await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
+      const batchSize = 1000;
+      await createVaultCodeRecordsUnclaimed(connection, vault.id, vaultBatch.id, batchSize);
 
       // Act
+      const repository = new VaultCodesRepository(connection);
       const result = await repository.checkVaultCodesRemaining(vault.id);
 
       // Assert
-      expect(result).toEqual(2);
+      expect(result).toEqual(batchSize);
     });
 
     it('should return 0 if theres only expired unclaimed codes in the vault', async () => {
       // Arrange
-      const repository = new VaultCodesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({
-        redemptionId: redemption.id,
-      });
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-      });
-      const vaultCodes = [
-        vaultCodeFactory.build({
-          vaultId: vault.id,
-          batchId: vaultBatch.id,
-          memberId: null,
-          expiry: new Date('1999-01-01'),
-        }),
-        vaultCodeFactory.build({
-          vaultId: vault.id,
-          batchId: vaultBatch.id,
-          memberId: null,
-          expiry: new Date('1999-01-01'),
-        }),
-      ];
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
-      await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
+      const batchSize = 1000;
+      await createVaultCodeRecordsExpired(connection, vault.id, vaultBatch.id, batchSize);
 
       // Act
+      const repository = new VaultCodesRepository(connection);
       const result = await repository.checkVaultCodesRemaining(vault.id);
 
       // Assert
@@ -126,40 +87,26 @@ describe('VaultCodesRepository', () => {
     });
 
     it('should throw error if vault codes does not exist with given vault ID', async () => {
-      // Arrange
-      const repository = new VaultCodesRepository(connection);
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({
-        redemptionId: redemption.id,
-      });
-
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-
       // Act & Assert
-      await expect(() => repository.checkVaultCodesRemaining(vault.id)).rejects.toThrow();
+      const repository = new VaultCodesRepository(connection);
+      await expect(() => repository.checkVaultCodesRemaining('some-vault-id-that-does-not-exist')).rejects.toThrow();
     });
   });
 
   describe('createVaultCode', () => {
     it('should create the vaultCode', async () => {
-      const redemption = redemptionFactory.build();
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      await connection.db.insert(vaultsTable).values(vault).execute();
-
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-      });
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      // Arrange
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
       const vaultCode = vaultCodeFactory.build({
         vaultId: vault.id,
         batchId: vaultBatch.id,
-        expiry: new Date('2028-12-31T23:59:59.000Z'),
       });
       const repository = new VaultCodesRepository(connection);
       const result = await repository.create(vaultCode);
+
       expect(result).toEqual({ id: vaultCode.id });
       const createdVaultCode = await connection.db
         .select()
@@ -172,60 +119,161 @@ describe('VaultCodesRepository', () => {
 
   describe('createManyVaultCode', () => {
     it('should create many vaultCodes', async () => {
-      const redemption = redemptionFactory.build();
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      await connection.db.insert(vaultsTable).values(vault).execute();
-
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-      });
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
+      // Arrange
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
       const batchSize = 1000;
-      const codeBatch = [];
-      for (let i = 0; i < batchSize; i++) {
-        const vaultCode = vaultCodeFactory.build({
-          vaultId: vault.id,
-          batchId: vaultBatch.id,
-          expiry: new Date('2028-12-31T23:59:59.000Z'),
-        });
-        codeBatch.push(vaultCode);
-      }
+      const vaultCodes = vaultCodeFactory.buildList(batchSize, {
+        vaultId: vault.id,
+        batchId: vaultBatch.id,
+        memberId: null,
+      });
 
       const repository = new VaultCodesRepository(connection);
-      await repository.createMany(codeBatch);
+      await repository.createMany(vaultCodes);
       const createdVaultCodes = await connection.db
         .select()
         .from(vaultCodesTable)
         .where(eq(vaultCodesTable.batchId, vaultBatch.id))
         .execute();
-      expect(createdVaultCodes).toEqual(codeBatch);
+      expect(createdVaultCodes).toEqual(vaultCodes);
+    });
+  });
+
+  describe('deleteAllUnusedCodesByBatchId', () => {
+    it('should return array of vault code ids when delete all unclaimed codes associated to the batchId', async () => {
+      // Arrange
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
+
+      const unclaimedBatchSize = 997;
+      const unclaimedVaultCodes = await createVaultCodeRecordsUnclaimed(
+        connection,
+        vault.id,
+        vaultBatch.id,
+        unclaimedBatchSize,
+      );
+
+      const unclaimedVaultCodeIds = [];
+      for (const vaultCode of unclaimedVaultCodes) {
+        unclaimedVaultCodeIds.push({ id: vaultCode.id });
+      }
+
+      const claimedBatchSize = 3;
+      const claimedVaultCodes = await createVaultCodeRecordsClaimed(
+        connection,
+        vault.id,
+        vaultBatch.id,
+        claimedBatchSize,
+      );
+
+      // Act
+      const repository = new VaultCodesRepository(connection);
+      const deletedVaultCodeIds = await repository.deleteUnclaimedCodesByBatchId(vaultBatch.id);
+
+      // Assert
+      expect(deletedVaultCodeIds).toEqual(unclaimedVaultCodeIds);
+
+      const vaultCodesRemaining = await connection.db
+        .select()
+        .from(vaultCodesTable)
+        .where(eq(vaultCodesTable.batchId, vaultBatch.id))
+        .execute();
+
+      expect(vaultCodesRemaining).toEqual(claimedVaultCodes);
+    });
+
+    it('should return empty array when attempt to delete all unused codes for a batchId that does not exist', async () => {
+      const repository = new VaultCodesRepository(connection);
+      const emptyArray = await repository.deleteUnclaimedCodesByBatchId('some-vault-batch-id-that-does-not-exist');
+      expect(emptyArray).toEqual([]);
+    });
+  });
+
+  describe('findClaimedCodesByBatchId', () => {
+    it('should return array of claimed vault code associated to the batchId', async () => {
+      // Arrange
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
+
+      const claimedBatchSize = 997;
+      const claimedVaultCodes = await createVaultCodeRecordsClaimed(
+        connection,
+        vault.id,
+        vaultBatch.id,
+        claimedBatchSize,
+      );
+
+      const unclaimedBatchSize = 3;
+      await createVaultCodeRecordsUnclaimed(connection, vault.id, vaultBatch.id, unclaimedBatchSize);
+
+      const repository = new VaultCodesRepository(connection);
+      const vaultCodesClaimed = await repository.findClaimedCodesByBatchId(vaultBatch.id);
+
+      // Assert
+      expect(vaultCodesClaimed).toEqual(claimedVaultCodes);
+    });
+
+    it('should return empty array when attempt to find claimed codes for a batchId that does not exist', async () => {
+      const repository = new VaultCodesRepository(connection);
+      const emptyArray = await repository.findClaimedCodesByBatchId('some-vault-batch-id-that-does-not-exist');
+      expect(emptyArray).toEqual([]);
+    });
+  });
+
+  describe('findUnClaimedCodesByBatchId', () => {
+    it('should return array of unclaimed vault code associated to the batchId', async () => {
+      // Arrange
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
+
+      const unclaimedBatchSize = 997;
+      const unclaimedVaultCodes = await createVaultCodeRecordsUnclaimed(
+        connection,
+        vault.id,
+        vaultBatch.id,
+        unclaimedBatchSize,
+      );
+
+      const claimedBatchSize = 3;
+      await createVaultCodeRecordsClaimed(connection, vault.id, vaultBatch.id, claimedBatchSize);
+
+      const repository = new VaultCodesRepository(connection);
+      const vaultCodesUnclaimed = await repository.findUnclaimedCodesByBatchId(vaultBatch.id);
+
+      // Assert
+      expect(vaultCodesUnclaimed).toEqual(unclaimedVaultCodes);
+    });
+
+    it('should return empty array when attempt to find unclaimed codes for a batchId that does not exist', async () => {
+      const repository = new VaultCodesRepository(connection);
+      const emptyArray = await repository.findUnclaimedCodesByBatchId('some-vault-batch-id-that-does-not-exist');
+      expect(emptyArray).toEqual([]);
     });
   });
 
   describe('findManyByBatchId', () => {
     it('should find the vaultCodes by batchId', async () => {
       // Arrange
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-      });
-      const vaultCodes = vaultCodeFactory.buildList(3, {
-        vaultId: vault.id,
-        batchId: vaultBatch.id,
-      });
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
-      await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
-
-      const repository = new VaultCodesRepository(connection);
+      const claimedCodesBatchSize = 3;
+      const vaultCodes = await createVaultCodeRecordsClaimed(
+        connection,
+        vault.id,
+        vaultBatch.id,
+        claimedCodesBatchSize,
+      );
 
       // Act
+      const repository = new VaultCodesRepository(connection);
       const result = await repository.findManyByBatchId(vaultBatch.id);
 
       // Assert
@@ -252,27 +300,20 @@ describe('VaultCodesRepository', () => {
         expiry: new Date('2025-08-02T16:20:52.000Z'),
         created: new Date('2024-08-02T16:20:52.000Z'),
       };
-      const redemption = redemptionFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
-      const vaultBatch = vaultBatchFactory.build({
-        vaultId: vault.id,
-      });
-      const vaultCodes = vaultCodeFactory.buildList(3, {
-        vaultId: vault.id,
-        batchId: vaultBatch.id,
-        memberId: null,
-        created: new Date('2024-08-02T16:20:52.000Z'),
-        expiry: new Date('2024-08-02T16:20:52.000Z'),
-      });
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
-      await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(vaultsTable).values(vault).execute();
-      await connection.db.insert(vaultBatchesTable).values(vaultBatch).execute();
-      await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
-
-      const repository = new VaultCodesRepository(connection);
+      const unclaimedCodesBatchSize = 3;
+      const vaultCodes = await createVaultCodeRecordsUnclaimed(
+        connection,
+        vault.id,
+        vaultBatch.id,
+        unclaimedCodesBatchSize,
+      );
 
       // Act
+      const repository = new VaultCodesRepository(connection);
       const result = await repository.updateManyByBatchId(vaultBatch.id, updatedData);
 
       // Assert

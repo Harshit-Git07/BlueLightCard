@@ -14,6 +14,7 @@ export interface IVaultBatchesRepository {
   create(vaultBatch: NewVaultBatch): Promise<Pick<VaultBatch, 'id'>>;
   findByVaultId(vaultId: string): Promise<VaultBatch[]>;
   getCodesRemaining(batchId: string): Promise<number>;
+  deleteById(id: string): Promise<Pick<VaultBatch, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultBatchesRepository;
   updateOneById(id: string, update: UpdateVaultBatch): Promise<Pick<VaultBatch, 'id'> | null>;
   findOneById(id: string): Promise<VaultBatch | null>;
@@ -44,6 +45,14 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
       .execute();
 
     return result[0].codesRemaining;
+  }
+
+  public async deleteById(id: string): Promise<Pick<VaultBatch, 'id'>[]> {
+    return await this.connection.db
+      .delete(vaultBatchesTable)
+      .where(eq(vaultBatchesTable.id, id))
+      .returning({ id: vaultBatchesTable.id })
+      .execute();
   }
 
   public withTransaction(transaction: DatabaseTransactionConnection): VaultBatchesRepository {

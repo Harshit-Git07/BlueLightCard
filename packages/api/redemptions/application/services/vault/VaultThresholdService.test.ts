@@ -48,6 +48,9 @@ describe('AdminEmailService', () => {
       createMany: jest.fn(),
       findManyByBatchId: jest.fn(),
       updateManyByBatchId: jest.fn(),
+      deleteUnclaimedCodesByBatchId: jest.fn(),
+      findClaimedCodesByBatchId: jest.fn(),
+      findUnclaimedCodesByBatchId: jest.fn(),
     };
     const logger = createTestLogger();
     return new VaultThresholdService(logger, mockLegacyVaultApiRepo, mockVaultCodesRepo, mockAdminEmailRepo);
@@ -120,6 +123,9 @@ describe('AdminEmailService', () => {
           createMany: jest.fn(),
           findManyByBatchId: jest.fn(),
           updateManyByBatchId: jest.fn(),
+          deleteUnclaimedCodesByBatchId: jest.fn(),
+          findClaimedCodesByBatchId: jest.fn(),
+          findUnclaimedCodesByBatchId: jest.fn(),
         };
         jest.spyOn(mockVaultCodesRepository, 'checkVaultCodesRemaining');
         const service = getVaultThresholdService({
@@ -160,6 +166,9 @@ describe('AdminEmailService', () => {
           createMany: jest.fn(),
           findManyByBatchId: jest.fn(),
           updateManyByBatchId: jest.fn(),
+          deleteUnclaimedCodesByBatchId: jest.fn(),
+          findClaimedCodesByBatchId: jest.fn(),
+          findUnclaimedCodesByBatchId: jest.fn(),
         };
         const mockLegacyVaultApiRepo: ILegacyVaultApiRepository = {
           viewVaultBatches: jest.fn().mockResolvedValue({
@@ -223,6 +232,9 @@ describe('AdminEmailService', () => {
           createMany: jest.fn(),
           findManyByBatchId: jest.fn(),
           updateManyByBatchId: jest.fn(),
+          deleteUnclaimedCodesByBatchId: jest.fn(),
+          findClaimedCodesByBatchId: jest.fn(),
+          findUnclaimedCodesByBatchId: jest.fn(),
         };
         const mockLegacyVaultApiRepo: ILegacyVaultApiRepository = {
           viewVaultBatches: jest.fn().mockResolvedValue({

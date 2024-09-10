@@ -73,6 +73,7 @@ describe('CreateVaultBatchService', () => {
     withTransaction: jest.fn(),
     updateOneById: jest.fn(),
     findOneById: jest.fn(),
+    deleteById: jest.fn(),
   };
 
   const mockS3ClientProvider: IS3ClientProvider = {

@@ -6,3 +6,5 @@
 
 # Code owners for the bastion host access user
 stacks/infra/bastionHost/BastionHostAccessUser.ts @K0vacs @shahzaibbutt-blc
+
+/test-directory @uatec @shahzaibbutt-blc

@@ -57,7 +57,7 @@ export const ViewVaultBatchesDataSchema = z.record(
 );
 export const ViewVaultBatchesResponseSchema = z.object({
   success: z.boolean(),
-  data: ViewVaultBatchesDataSchema,
+  data: z.union([ViewVaultBatchesDataSchema, z.array(z.null())]),
 });
 export type ViewVaultBatchesData = z.infer<typeof ViewVaultBatchesDataSchema>;
 export type ViewVaultBatchesResponse = z.infer<typeof ViewVaultBatchesResponseSchema>;
@@ -285,9 +285,10 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
         authorization: key,
       },
     });
-    if (response.ok) {
-      const data = await response.json();
-      return ViewVaultBatchesResponseSchema.parse(data).data;
+    const data = (await response.json()) as ViewVaultBatchesResponse;
+    const parsedData = ViewVaultBatchesResponseSchema.parse(data);
+    if (response.ok && !Array.isArray(parsedData.data)) {
+      return parsedData.data;
     }
     return this.handleErrorResponse(response, 'Error while viewing vault batches', {
       companyId,

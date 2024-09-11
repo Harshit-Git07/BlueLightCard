@@ -4,7 +4,6 @@ import { memberRedemptionEventDetailFactory } from '@blc-mono/redemptions/libs/t
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { IAdminEmailRepository } from '../../repositories/AdminEmailRepository';
-import { ILegacyVaultApiRepository } from '../../repositories/LegacyVaultApiRepository';
 import { IVaultCodesRepository } from '../../repositories/VaultCodesRepository';
 
 import { VaultThresholdService } from './VaultThresholdService';
@@ -18,42 +17,37 @@ jest.mock('@blc-mono/core/utils/getEnv', () => ({
 }));
 
 describe('AdminEmailService', () => {
-  function getVaultThresholdService(override: {
-    vaultCodesRepo?: IVaultCodesRepository;
-    legacyVaultApiRepo?: ILegacyVaultApiRepository;
-    adminEmailRepo?: IAdminEmailRepository;
-  }) {
-    const mockAdminEmailRepo = override.adminEmailRepo ?? {
-      sendVaultThresholdEmail: jest.fn(),
+  function mockAdminEmailRepo(): IAdminEmailRepository {
+    return {
       sendVaultBatchCreatedEmail: jest.fn(),
+      sendVaultThresholdEmail: jest.fn(),
     };
-    const mockLegacyVaultApiRepo = override.legacyVaultApiRepo ?? {
-      assignCodeToMember: jest.fn(),
-      findVaultsRelatingToLinkId: jest.fn(),
-      getCodesRedeemed: jest.fn(),
-      getNumberOfCodesIssued: jest.fn(),
-      checkVaultStock: jest.fn(),
-      viewVaultBatches: jest.fn(),
-    };
-    const mockVaultCodesRepo = override.vaultCodesRepo ?? {
+  }
+
+  function mockVaultCodesRepo(): IVaultCodesRepository {
+    return {
       checkIfMemberReachedMaxCodeClaimed: jest.fn(),
       checkVaultCodesRemaining: jest.fn(),
-      createVaultCode: jest.fn(),
-      findOneByCode: jest.fn(),
-      findOneByOfferId: jest.fn(),
       claimVaultCode: jest.fn(),
-      updateOneByCode: jest.fn(),
-      withTransaction: jest.fn(),
       create: jest.fn(),
       createMany: jest.fn(),
       findManyByBatchId: jest.fn(),
       updateManyByBatchId: jest.fn(),
+      withTransaction: jest.fn(),
       deleteUnclaimedCodesByBatchId: jest.fn(),
       findClaimedCodesByBatchId: jest.fn(),
       findUnclaimedCodesByBatchId: jest.fn(),
     };
+  }
+
+  function getVaultThresholdService(override: {
+    vaultCodesRepo?: IVaultCodesRepository;
+    adminEmailRepo?: IAdminEmailRepository;
+  }) {
+    const mockedAdminEmailRepo = override.adminEmailRepo ?? mockAdminEmailRepo();
+    const mockedVaultCodesRepo = override.vaultCodesRepo ?? mockVaultCodesRepo();
     const logger = createTestLogger();
-    return new VaultThresholdService(logger, mockLegacyVaultApiRepo, mockVaultCodesRepo, mockAdminEmailRepo);
+    return new VaultThresholdService(logger, mockedVaultCodesRepo, mockedAdminEmailRepo);
   }
 
   describe('checkIfVaultThresholdHit', () => {
@@ -111,25 +105,13 @@ describe('AdminEmailService', () => {
       'if remaining %d codes with %d of alert below, expected threshold check response to be %s',
       (unclaimed, total, expected) => {
         // Arrange
-        const mockVaultCodesRepository: IVaultCodesRepository = {
-          checkVaultCodesRemaining: jest.fn().mockResolvedValue({
-            totalCodes: total,
-            unclaimedCodes: unclaimed,
-          }),
-          checkIfMemberReachedMaxCodeClaimed: jest.fn(),
-          claimVaultCode: jest.fn(),
-          withTransaction: jest.fn(),
-          create: jest.fn(),
-          createMany: jest.fn(),
-          findManyByBatchId: jest.fn(),
-          updateManyByBatchId: jest.fn(),
-          deleteUnclaimedCodesByBatchId: jest.fn(),
-          findClaimedCodesByBatchId: jest.fn(),
-          findUnclaimedCodesByBatchId: jest.fn(),
-        };
-        jest.spyOn(mockVaultCodesRepository, 'checkVaultCodesRemaining');
+        const mockedVaultCodesRepo = mockVaultCodesRepo();
+        mockedVaultCodesRepo.checkVaultCodesRemaining = jest.fn().mockResolvedValue({
+          totalCodes: total,
+          unclaimedCodes: unclaimed,
+        });
         const service = getVaultThresholdService({
-          vaultCodesRepo: mockVaultCodesRepository,
+          vaultCodesRepo: mockedVaultCodesRepo,
         });
 
         // Act
@@ -142,138 +124,93 @@ describe('AdminEmailService', () => {
   });
 
   describe('handleVaultThresholdEmail', () => {
-    describe.each(['legacy', 'standard'])('vault type %s', (vaultType) => {
-      it('should send email successfully if decision is true', async () => {
-        // Arrange
-        const eventDetail = memberRedemptionEventDetailFactory.build({
-          redemptionDetails: {
-            vaultDetails: {
-              vaultType: vaultType as 'legacy' | 'standard',
-              alertBelow: 100,
-            },
+    it('should send email successfully if decision is true', async () => {
+      // Arrange
+      const eventDetail = memberRedemptionEventDetailFactory.build({
+        redemptionDetails: {
+          vaultDetails: {
+            vaultType: 'standard',
+            alertBelow: 100,
           },
-        });
-        const mockAdminEmailRepo: IAdminEmailRepository = {
-          sendVaultThresholdEmail: jest.fn().mockResolvedValue(undefined),
-          sendVaultBatchCreatedEmail: jest.fn(),
-        };
-        const mockVaultCodesRepo: IVaultCodesRepository = {
-          checkVaultCodesRemaining: jest.fn().mockResolvedValue(50),
-          checkIfMemberReachedMaxCodeClaimed: jest.fn(),
-          claimVaultCode: jest.fn(),
-          withTransaction: jest.fn(),
-          create: jest.fn(),
-          createMany: jest.fn(),
-          findManyByBatchId: jest.fn(),
-          updateManyByBatchId: jest.fn(),
-          deleteUnclaimedCodesByBatchId: jest.fn(),
-          findClaimedCodesByBatchId: jest.fn(),
-          findUnclaimedCodesByBatchId: jest.fn(),
-        };
-        const mockLegacyVaultApiRepo: ILegacyVaultApiRepository = {
-          viewVaultBatches: jest.fn().mockResolvedValue({
-            [faker.string.uuid()]: {
-              expires: '2050-01-01 23:59:59',
-              dateAdded: '2050-01-01 23:59:59',
-              filename: 'something1.csv',
-            },
-            [faker.string.uuid()]: {
-              expires: '2050-01-01 23:59:59',
-              dateAdded: '2050-01-01 23:59:59',
-              filename: 'something2.csv',
-            },
-          }),
-          checkVaultStock: jest.fn().mockResolvedValue(25),
-          assignCodeToMember: jest.fn(),
-          findVaultsRelatingToLinkId: jest.fn(),
-          getCodesRedeemed: jest.fn(),
-          getNumberOfCodesIssued: jest.fn(),
-        };
-        const service = getVaultThresholdService({
-          legacyVaultApiRepo: mockLegacyVaultApiRepo,
-          vaultCodesRepo: mockVaultCodesRepo,
-          adminEmailRepo: mockAdminEmailRepo,
-        });
-        // Act
-        const result = await service.handleVaultThresholdEmail(eventDetail);
+        },
+      });
+      const mockedAdminEmailRepo = mockAdminEmailRepo();
+      mockedAdminEmailRepo.sendVaultThresholdEmail = jest.fn().mockResolvedValue(undefined);
+      const mockedVaultCodesRepo = mockVaultCodesRepo();
+      mockedVaultCodesRepo.checkVaultCodesRemaining = jest.fn().mockResolvedValue(50);
+      const service = getVaultThresholdService({
+        vaultCodesRepo: mockedVaultCodesRepo,
+        adminEmailRepo: mockedAdminEmailRepo,
+      });
+      // Act
+      const result = await service.handleVaultThresholdEmail(eventDetail);
 
-        // Assert
-        expect(result).toBeUndefined();
-        if (vaultType === 'legacy') {
-          expect(mockLegacyVaultApiRepo.viewVaultBatches).toHaveBeenCalled();
-          expect(mockLegacyVaultApiRepo.checkVaultStock).toHaveBeenCalledTimes(2);
-        }
-        if (vaultType === 'standard') {
-          expect(mockVaultCodesRepo.checkVaultCodesRemaining).toHaveBeenCalled();
-        }
-        expect(mockAdminEmailRepo.sendVaultThresholdEmail).toHaveBeenCalled();
+      // Assert
+      expect(result).toBeUndefined();
+      expect(mockedVaultCodesRepo.checkVaultCodesRemaining).toHaveBeenCalled();
+      expect(mockedAdminEmailRepo.sendVaultThresholdEmail).toHaveBeenCalledWith({
+        alertBelow: eventDetail.redemptionDetails.vaultDetails?.alertBelow,
+        companyName: eventDetail.redemptionDetails.companyName,
+        offerId: eventDetail.redemptionDetails.offerId,
+        offerName: eventDetail.redemptionDetails.offerName,
+        remainingCodes: 50,
+        thresholdPercentage: 50,
+        recipient: eventDetail.redemptionDetails.vaultDetails?.email,
+      });
+    });
+
+    it('should not send email if decision is false', async () => {
+      // Arrange
+      const eventDetail = memberRedemptionEventDetailFactory.build({
+        redemptionDetails: {
+          vaultDetails: {
+            vaultType: 'standard',
+            alertBelow: 101,
+          },
+        },
+      });
+      const mockedAdminEmailRepo = mockAdminEmailRepo();
+      mockedAdminEmailRepo.sendVaultThresholdEmail = jest.fn().mockResolvedValue(undefined);
+      const mockedVaultCodesRepo = mockVaultCodesRepo();
+      mockedVaultCodesRepo.checkVaultCodesRemaining = jest.fn().mockResolvedValue(51);
+
+      const service = getVaultThresholdService({
+        vaultCodesRepo: mockedVaultCodesRepo,
+        adminEmailRepo: mockedAdminEmailRepo,
+      });
+      // Act
+      const result = await service.handleVaultThresholdEmail(eventDetail);
+
+      // Assert
+      expect(result).toBeUndefined();
+      expect(mockedVaultCodesRepo.checkVaultCodesRemaining).toHaveBeenCalled();
+      expect(mockedAdminEmailRepo.sendVaultThresholdEmail).not.toHaveBeenCalled();
+    });
+
+    it('should not send email if vaultType is legacy', async () => {
+      // Arrange
+      const eventDetail = memberRedemptionEventDetailFactory.build({
+        redemptionDetails: {
+          vaultDetails: {
+            vaultType: 'legacy',
+            alertBelow: 101,
+          },
+        },
+      });
+      const mockedAdminEmailRepo = mockAdminEmailRepo();
+      const mockedVaultCodesRepo = mockVaultCodesRepo();
+      const service = getVaultThresholdService({
+        vaultCodesRepo: mockedVaultCodesRepo,
+        adminEmailRepo: mockedAdminEmailRepo,
       });
 
-      it('should not send email if decision is false', async () => {
-        // Arrange
-        const eventDetail = memberRedemptionEventDetailFactory.build({
-          redemptionDetails: {
-            vaultDetails: {
-              vaultType: vaultType as 'legacy' | 'standard',
-              alertBelow: 101,
-            },
-          },
-        });
-        const mockAdminEmailRepo: IAdminEmailRepository = {
-          sendVaultThresholdEmail: jest.fn().mockResolvedValue(undefined),
-          sendVaultBatchCreatedEmail: jest.fn(),
-        };
-        const mockVaultCodesRepo: IVaultCodesRepository = {
-          checkVaultCodesRemaining: jest.fn().mockResolvedValue(51),
-          checkIfMemberReachedMaxCodeClaimed: jest.fn(),
-          claimVaultCode: jest.fn(),
-          withTransaction: jest.fn(),
-          create: jest.fn(),
-          createMany: jest.fn(),
-          findManyByBatchId: jest.fn(),
-          updateManyByBatchId: jest.fn(),
-          deleteUnclaimedCodesByBatchId: jest.fn(),
-          findClaimedCodesByBatchId: jest.fn(),
-          findUnclaimedCodesByBatchId: jest.fn(),
-        };
-        const mockLegacyVaultApiRepo: ILegacyVaultApiRepository = {
-          viewVaultBatches: jest.fn().mockResolvedValue({
-            [faker.string.uuid()]: {
-              expires: '2050-01-01 23:59:59',
-              dateAdded: '2050-01-01 23:59:59',
-              filename: 'something1.csv',
-            },
-            [faker.string.uuid()]: {
-              expires: '1999-01-01 23:59:59',
-              dateAdded: '1999-01-01 23:59:59',
-              filename: 'something2.csv',
-            },
-          }),
-          checkVaultStock: jest.fn().mockResolvedValue(1),
-          assignCodeToMember: jest.fn(),
-          findVaultsRelatingToLinkId: jest.fn(),
-          getCodesRedeemed: jest.fn(),
-          getNumberOfCodesIssued: jest.fn(),
-        };
-        const service = getVaultThresholdService({
-          legacyVaultApiRepo: mockLegacyVaultApiRepo,
-          vaultCodesRepo: mockVaultCodesRepo,
-          adminEmailRepo: mockAdminEmailRepo,
-        });
-        // Act
-        const result = await service.handleVaultThresholdEmail(eventDetail);
+      // Act
+      const result = await service.handleVaultThresholdEmail(eventDetail);
 
-        // Assert
-        expect(result).toBeUndefined();
-        if (vaultType === 'legacy') {
-          expect(mockLegacyVaultApiRepo.viewVaultBatches).toHaveBeenCalled();
-          expect(mockLegacyVaultApiRepo.checkVaultStock).toHaveBeenCalledTimes(1);
-        }
-        if (vaultType === 'standard') {
-          expect(mockVaultCodesRepo.checkVaultCodesRemaining).toHaveBeenCalled();
-        }
-        expect(mockAdminEmailRepo.sendVaultThresholdEmail).not.toHaveBeenCalled();
-      });
+      // Assert
+      expect(result).toBeUndefined();
+      expect(mockedVaultCodesRepo.checkVaultCodesRemaining).not.toHaveBeenCalled();
+      expect(mockedAdminEmailRepo.sendVaultThresholdEmail).not.toHaveBeenCalled();
     });
   });
 });

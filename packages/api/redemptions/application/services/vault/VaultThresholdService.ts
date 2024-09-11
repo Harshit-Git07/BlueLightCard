@@ -1,15 +1,7 @@
-import { sum } from 'lodash';
-
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
-import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 
 import { AdminEmailRepository, IAdminEmailRepository } from '../../repositories/AdminEmailRepository';
-import {
-  ILegacyVaultApiRepository,
-  LegacyVaultApiRepository,
-  ViewVaultBatchesData,
-} from '../../repositories/LegacyVaultApiRepository';
 import { IVaultCodesRepository, VaultCodesRepository } from '../../repositories/VaultCodesRepository';
 
 export type VaultThresholdEmailShouldBeSentData = {
@@ -48,18 +40,12 @@ export interface IVaultThresholdService {
 
 export class VaultThresholdService implements IVaultThresholdService {
   static readonly key = 'VaultThresholdService';
-  static readonly inject = [
-    Logger.key,
-    LegacyVaultApiRepository.key,
-    VaultCodesRepository.key,
-    AdminEmailRepository.key,
-  ] as const;
+  static readonly inject = [Logger.key, VaultCodesRepository.key, AdminEmailRepository.key] as const;
 
   private acceptedThresholds = [100, 75, 50, 25, 0];
 
   constructor(
     private readonly logger: ILogger,
-    private readonly legacyVaultsApiRepo: ILegacyVaultApiRepository,
     private readonly vaultCodesRepo: IVaultCodesRepository,
     private readonly adminEmailRepo: IAdminEmailRepository,
   ) {}
@@ -103,108 +89,27 @@ export class VaultThresholdService implements IVaultThresholdService {
       });
       return;
     }
-    switch (vaultDetails.vaultType) {
-      case 'standard':
-        await this.handleStandardVaultThreshold({
-          vaultId: vaultDetails.id,
-          vaultAlertBelow: vaultDetails.alertBelow,
-          companyName: redemptionDetails.companyName,
-          offerId: redemptionDetails.offerId,
-          offerName: redemptionDetails.offerName,
-          vaultAdminEmail: vaultDetails.email,
-        });
-        break;
-      case 'legacy':
-        await this.handleLegacyVaultThreshold({
-          companyId: redemptionDetails.companyId,
-          offerId: redemptionDetails.offerId,
-          companyName: redemptionDetails.companyName,
-          offerName: redemptionDetails.offerName,
-          vaultAlertBelow: vaultDetails.alertBelow,
-          vaultEmail: vaultDetails.email,
-        });
-        break;
-      default:
-        exhaustiveCheck(vaultDetails.vaultType, 'Invalid vault type');
-    }
-  }
-
-  private async handleLegacyVaultThreshold(data: {
-    vaultEmail: string;
-    vaultAlertBelow: number;
-    companyId: number;
-    offerId: number;
-    companyName: string;
-    offerName: string;
-  }): Promise<void> {
-    const vaultBatches = await this.legacyVaultsApiRepo.viewVaultBatches(data.offerId, data.companyId);
-    const parsedVaultBatches = this.filterExpiredVaultBatches(vaultBatches);
-    const remainingCodesArray = await Promise.all(
-      parsedVaultBatches.map((vaultBatchId) =>
-        this.legacyVaultsApiRepo.checkVaultStock(vaultBatchId, data.offerId, data.companyId),
-      ),
-    );
-    const remainingCodes = sum(remainingCodesArray);
-    const thresholdPercentage = this.checkIfVaultThresholdHit(data.vaultAlertBelow, remainingCodes);
+    if (vaultDetails.vaultType !== 'standard') return;
+    const unclaimedCodes = await this.vaultCodesRepo.checkVaultCodesRemaining(vaultDetails.id);
+    const thresholdPercentage = this.checkIfVaultThresholdHit(vaultDetails.alertBelow, unclaimedCodes);
     if (thresholdPercentage !== false && this.acceptedThresholds.includes(thresholdPercentage)) {
       await this.adminEmailRepo.sendVaultThresholdEmail({
-        recipient: data.vaultEmail,
-        alertBelow: data.vaultAlertBelow,
-        remainingCodes,
-        thresholdPercentage,
-        companyName: data.companyName,
-        offerId: data.offerId,
-        offerName: data.offerName,
+        alertBelow: vaultDetails.alertBelow,
+        companyName: redemptionDetails.companyName,
+        offerId: redemptionDetails.offerId,
+        offerName: redemptionDetails.offerName,
+        remainingCodes: unclaimedCodes,
+        thresholdPercentage: thresholdPercentage,
+        recipient: vaultDetails.email,
       });
       return;
     }
     this.logger.error({
-      message: 'Vault Threshold Email Legacy - Email was not sent.',
+      message: 'Vault Threshold Email Standard - Email was not sent.',
       context: {
-        data,
+        redemptionDetails,
+        vaultDetails,
       },
     });
-  }
-
-  private async handleStandardVaultThreshold(data: {
-    vaultId: string;
-    vaultAlertBelow: number;
-    companyName: string;
-    offerId: number;
-    offerName: string;
-    vaultAdminEmail: string;
-  }): Promise<void> {
-    const unclaimedCodes = await this.vaultCodesRepo.checkVaultCodesRemaining(data.vaultId);
-    const thresholdPercentage = this.checkIfVaultThresholdHit(data.vaultAlertBelow, unclaimedCodes);
-    if (thresholdPercentage !== false && this.acceptedThresholds.includes(thresholdPercentage)) {
-      await this.adminEmailRepo.sendVaultThresholdEmail({
-        alertBelow: data.vaultAlertBelow,
-        companyName: data.companyName,
-        offerId: data.offerId,
-        offerName: data.offerName,
-        remainingCodes: unclaimedCodes,
-        thresholdPercentage: thresholdPercentage,
-        recipient: data.vaultAdminEmail,
-      });
-    } else {
-      this.logger.error({
-        message: 'Vault Threshold Email Standard - Email was not sent.',
-        context: {
-          data,
-        },
-      });
-    }
-  }
-
-  private filterExpiredVaultBatches(vaultBatches: ViewVaultBatchesData): string[] {
-    return Object.keys(vaultBatches).reduce((accumulator: string[], vaultBatchId) => {
-      const vaultBatch = vaultBatches[vaultBatchId];
-      const currentDate = new Date();
-      const vaultExpirationDate = new Date(vaultBatch.expires);
-      if (vaultExpirationDate >= currentDate) {
-        accumulator.push(vaultBatchId);
-      }
-      return accumulator;
-    }, []);
   }
 }

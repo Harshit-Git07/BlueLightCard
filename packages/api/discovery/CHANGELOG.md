@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.5.0...bluelightcard/discovery-v1.6.0) (2024-09-11)
+
+
+### Features
+
+* DISCO-867 created objects and builders for Offers schema ([#2187](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2187)) ([3c1667b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3c1667bd3f2f433ad3dba39bb3489e19600abd23))
+
 ## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.4.0...bluelightcard/discovery-v1.5.0) (2024-09-06)
 
 

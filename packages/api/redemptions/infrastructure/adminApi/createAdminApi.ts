@@ -114,6 +114,16 @@ export function createAdminApi(
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/deleteVaultBatchHandler.handler',
       requestValidatorName: 'DeleteVaultBatchValidator',
     }),
+    'POST /redemptions/{offerId}': AdminRoute.createRoute({
+      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
+      stack,
+      functionName: 'CreateRedemptionConfigHandler',
+      restApi: restAdminApi,
+      database,
+      handler:
+        './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/CreateRedemptionConfigHandler.handler',
+      requestValidatorName: 'CreateRedemptionConfigValidator',
+    }),
   });
 
   return adminApi;

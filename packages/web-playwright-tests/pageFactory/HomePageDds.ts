@@ -82,7 +82,7 @@ export class HomePageDds {
     await this.EMAIL_TEXTFIELD_DDS.fill(email);
     await this.PASSWORD_TEXTFIELD_DDS.fill(password);
     await this.SUBMIT_BUTTON_DDS.click();
-    await this.page.waitForLoadState('load'); // Wait until the page is fully loaded
+    await this.page.waitForLoadState('load');
   }
 
   // Element assertions

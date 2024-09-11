@@ -1,18 +1,14 @@
 import { Page, BrowserContext, Locator, expect } from '@playwright/test';
-import { WebActions } from '@lib/WebActions';
 
 export class HomePageAus {
   readonly page: Page;
   readonly context: BrowserContext;
-  private webActions: WebActions;
 
   // Locators
   // Navbar top
   private readonly BLUELIGHTBUTTON_NAVBAR_AUS: Locator;
   private readonly HOME_NAVBAR_AUS: Locator;
   private readonly OFFERS_NAVBAR_AUS: Locator;
-  private readonly MYCARD_NAVBAR_AUS: Locator;
-  private readonly MYACCOUNT_NAVBAR_AUS: Locator;
   private readonly FAQS_NAVBAR_AUS: Locator;
   private readonly SIGNUP_NAVBAR_AUS: Locator;
   private readonly LOGIN_NAVBAR_AUS: Locator;
@@ -20,9 +16,6 @@ export class HomePageAus {
 
   // Searchbar options
   private readonly MAGNIFIER_SEARCHBAR_AUS: Locator;
-  private readonly CATEGORYOPTION_SEARCHBAR_AUS: Locator;
-  private readonly PHRASE_SEARCHBAR_AUS: Locator;
-  private readonly SEARCHNOW_BUTTON_SEARCHBAR_AUS: Locator;
 
   // Login options - Login screen
   private readonly LOGIN_BUTTON_AUS: Locator;
@@ -41,12 +34,20 @@ export class HomePageAus {
   private readonly START_SAVING_LINK_AUS: Locator;
   private readonly EXCLUSIVE_SAVINGS_HEADING_AUS: Locator;
   private readonly SEARCH_BY_COMPANY_OR_PHRASE_TEXT_AUS: Locator;
-  private readonly DEALS_OF_THE_WEEK_HEADING_AUS: Locator;
+
+  // Search options
+  private readonly SEARCH_BUTTON_AUS: Locator;
+  private readonly SEARCH_OPTION_COMPANY_AUS: Locator;
+  private readonly SEARCH_OPTION_CATEGORY_AUS: Locator;
+  private readonly SEARCH_OPTION_SEARCHTERM_AUS: Locator;
+  private readonly SEARCH_NOW_BUTTON_AUS: Locator;
+
+  // Code Redemption options
+  private readonly CLICK_HERE_TO_SEE_DISCOUNT_AUS: Locator;
 
   constructor(page: Page, context: BrowserContext) {
     this.page = page;
     this.context = context;
-    this.webActions = new WebActions(this.page, this.context);
 
     // Initialize locators
     // Navbar top
@@ -55,8 +56,6 @@ export class HomePageAus {
     this.OFFERS_NAVBAR_AUS = page
       .getByRole('navigation')
       .getByRole('link', { name: 'Offers', exact: true });
-    this.MYCARD_NAVBAR_AUS = page.getByRole('link', { name: 'My Card' });
-    this.MYACCOUNT_NAVBAR_AUS = page.getByRole('link', { name: 'My Account' });
     this.FAQS_NAVBAR_AUS = page.getByRole('link', { name: 'FAQs' });
     this.SIGNUP_NAVBAR_AUS = page.getByRole('link', { name: 'Sign up' });
     this.LOGIN_NAVBAR_AUS = page.getByLabel('Login');
@@ -64,9 +63,6 @@ export class HomePageAus {
 
     // Searchbar options
     this.MAGNIFIER_SEARCHBAR_AUS = page.locator('.search-trigger');
-    this.CATEGORYOPTION_SEARCHBAR_AUS = page.getByRole('button', { name: 'or by category' });
-    this.PHRASE_SEARCHBAR_AUS = page.getByLabel('or By Phrase');
-    this.SEARCHNOW_BUTTON_SEARCHBAR_AUS = page.getByRole('button', { name: 'Search now' });
 
     // Login options - Login screen
     this.LOGIN_BUTTON_AUS = page.getByRole('link', { name: 'Login' }).nth(1);
@@ -87,7 +83,14 @@ export class HomePageAus {
       name: 'Exclusive savings for',
     });
     this.SEARCH_BY_COMPANY_OR_PHRASE_TEXT_AUS = page.getByText('Search by company or phrase');
-    this.DEALS_OF_THE_WEEK_HEADING_AUS = page.getByRole('heading', { name: 'Deals of the Week' });
+
+    // Search options
+    this.SEARCH_BUTTON_AUS = page.locator('.search-trigger');
+    this.SEARCH_OPTION_COMPANY_AUS = page.locator('//button[@title="by company"]');
+    this.SEARCH_OPTION_CATEGORY_AUS = page.locator('//button[@title="or by category"]');
+    this.SEARCH_OPTION_SEARCHTERM_AUS = page.getByRole('textbox');
+    this.SEARCH_NOW_BUTTON_AUS = page.getByRole('button', { name: 'Search now' });
+    this.CLICK_HERE_TO_SEE_DISCOUNT_AUS = page.getByText('Click here to see discount');
   }
 
   // Methods for common actions
@@ -96,12 +99,14 @@ export class HomePageAus {
   }
 
   async login(email: string, password: string): Promise<void> {
+    await this.LOGIN_BUTTON_AUS.waitFor({ state: 'visible' });
     await this.LOGIN_BUTTON_AUS.click();
     await expect(this.LOGIN_TEXT_AUS).toBeVisible();
+    await this.EMAIL_TEXTFIELD_AUS.waitFor({ state: 'visible' });
     await this.EMAIL_TEXTFIELD_AUS.fill(email);
     await this.PASSWORD_TEXTFIELD_AUS.fill(password);
     await this.SUBMIT_BUTTON_AUS.click();
-    await this.page.waitForLoadState('load'); // Wait until the page is fully loaded
+    await this.page.waitForLoadState('load');
   }
 
   async navigateToUrlAus(): Promise<void> {
@@ -135,5 +140,50 @@ export class HomePageAus {
     await expect(this.LOGOUT_NAVBAR_AUS).toBeVisible();
     await expect(this.SEARCH_BY_COMPANY_OR_PHRASE_TEXT_AUS).toBeVisible();
     await expect(this.MAGNIFIER_SEARCHBAR_AUS).toBeVisible();
+  }
+
+  // Search option methods
+  async searchForCompanyCategoryOrPhrase(searchOption: string, searchTerm: string): Promise<void> {
+    await this.SEARCH_BUTTON_AUS.click();
+    switch (searchOption.toLowerCase()) {
+      case 'company':
+        await this.SEARCH_OPTION_COMPANY_AUS.click();
+        await this.page
+          .locator(`ul.dropdown-menu.inner.selectpicker li a span.text:has-text("${searchTerm}")`)
+          .click();
+
+        break;
+
+      case 'category':
+        await this.SEARCH_OPTION_CATEGORY_AUS.click();
+        await this.page
+          .locator(`ul.dropdown-menu.inner.selectpicker li a span.text:has-text("${searchTerm}")`)
+          .click();
+
+        break;
+
+      case 'phrase':
+        await this.SEARCH_OPTION_SEARCHTERM_AUS.fill(searchTerm);
+        await this.SEARCH_NOW_BUTTON_AUS.click();
+
+        break;
+
+      default:
+        throw new Error(
+          `Unknown search option: ${searchOption} - options are "Company, Category and Phrase"`,
+        );
+    }
+    await this.page.waitForLoadState('load');
+
+    //Check the heading is correct
+    await expect(
+      this.page.getByRole('heading', { name: searchTerm, exact: true }).first(),
+    ).toBeVisible();
+  }
+
+  async clickToSeeTheDiscount(newPageUrl: string): Promise<void> {
+    await this.CLICK_HERE_TO_SEE_DISCOUNT_AUS.click();
+    await this.page.waitForURL(newPageUrl, { waitUntil: 'load' });
+    expect(this.page.url()).toContain(newPageUrl);
   }
 }

@@ -13,7 +13,6 @@ export class HomePageUk {
   private readonly FAQS_NAVBAR_UK: Locator;
   private readonly REGISTERNOW_NAVBAR_UK: Locator;
   private readonly DISCOVERMORE_NAVBAR_UK: Locator;
-  private readonly BROWSECATEGORIES_NAVBAR_UK: Locator;
   private readonly LOGOUT_NAVBAR_UK: Locator;
 
   // Login options - Login screen
@@ -28,27 +27,16 @@ export class HomePageUk {
   private readonly REGISTER_LINK_UK: Locator;
   private readonly FORGOT_PASSWORD_LINK_UK: Locator;
   private readonly OFFERS_HEADER_LINK_UK: Locator;
-  private readonly MY_CARD_LINK_UK: Locator;
-  private readonly MY_ACCOUNT_LINK_UK: Locator;
-
-  private readonly DEALS_OF_THE_WEEK_HEADING_UK: Locator;
 
   // Search options
   private readonly SEARCH_BUTTON_UK: Locator;
-
   private readonly SEARCH_OPTION_COMPANY_UK: Locator;
   private readonly SEARCH_OPTION_CATEGORY_UK: Locator;
   private readonly SEARCH_OPTION_SEARCHTERM_UK: Locator;
-
-  private readonly SEARCH_OPTION_DROPDOWN_UK: Locator;
-
   private readonly SEARCH_NOW_BUTTON_UK: Locator;
 
   // Cookie handling
   private readonly ACCEPT_COOKIES_BUTTON_UK: Locator;
-
-  // Share options
-  private readonly SEARCH_DROPDOWN_SELECTOR_UK: Locator;
 
   // Code Redemption options
   private readonly CLICK_HERE_TO_SEE_DISCOUNT_UK: Locator;
@@ -69,7 +57,6 @@ export class HomePageUk {
       .getByRole('navigation')
       .getByRole('link', { name: 'Register now' });
     this.DISCOVERMORE_NAVBAR_UK = page.locator('[data-testid="navigation-dropdown-discover-more"]');
-    this.BROWSECATEGORIES_NAVBAR_UK = page.getByRole('link', { name: 'Browse categories' });
     this.LOGOUT_NAVBAR_UK = page.getByRole('link', { name: 'Logout' });
 
     // Login options - Login screen
@@ -84,24 +71,16 @@ export class HomePageUk {
     this.REGISTER_LINK_UK = page.getByRole('link', { name: 'Register', exact: true });
     this.FORGOT_PASSWORD_LINK_UK = page.getByRole('link', { name: 'Forgot password?' });
     this.OFFERS_HEADER_LINK_UK = page.getByTestId('Offers-header-link');
-    this.MY_CARD_LINK_UK = page.getByRole('link', { name: 'My Card' });
-    this.MY_ACCOUNT_LINK_UK = page.getByRole('link', { name: 'My Account' });
-
-    this.DEALS_OF_THE_WEEK_HEADING_UK = page.getByRole('heading', { name: 'Deals of the Week' });
 
     // Search options
     this.SEARCH_BUTTON_UK = page.getByTestId('searchBtn').locator('svg');
     this.SEARCH_OPTION_COMPANY_UK = page.getByTestId('byCompany');
     this.SEARCH_OPTION_CATEGORY_UK = page.getByTestId('byCategory');
     this.SEARCH_OPTION_SEARCHTERM_UK = page.getByRole('textbox');
-    this.SEARCH_OPTION_DROPDOWN_UK = page.locator('select[aria-label="drop-down selector"]');
     this.SEARCH_NOW_BUTTON_UK = page.getByRole('button', { name: 'Search now' });
 
     // Cookie handling
     this.ACCEPT_COOKIES_BUTTON_UK = page.getByRole('button', { name: 'Agree to all' });
-
-    // Search options
-    this.SEARCH_DROPDOWN_SELECTOR_UK = page.locator('select[aria-label="drop-down selector"]');
     this.CLICK_HERE_TO_SEE_DISCOUNT_UK = page.getByText('Click here to see discount');
     this.VISIT_WEBSITE_UK = page.getByRole('button', { name: 'Visit Website' });
   }
@@ -129,7 +108,7 @@ export class HomePageUk {
     await this.EMAIL_TEXTFIELD_UK.fill(email);
     await this.PASSWORD_TEXTFIELD_UK.fill(password);
     await this.SUBMIT_BUTTON_UK.click();
-    await this.page.waitForLoadState('load'); // Wait until the page is fully loaded
+    await this.page.waitForLoadState('load');
   }
 
   // Element assertions
@@ -160,11 +139,6 @@ export class HomePageUk {
   }
 
   //Navigation methods
-  async clickMyAccountLink(): Promise<void> {
-    await this.MY_ACCOUNT_LINK_UK.click();
-    await this.page.waitForLoadState('load');
-  }
-
   // Menu selection methods
   async selectOptionFromTheOffersMenu(offersOption: string): Promise<void> {
     await this.DISCOVERMORE_NAVBAR_UK.hover();
@@ -190,7 +164,7 @@ export class HomePageUk {
         });
 
         break;
-
+        
       case 'phrase':
         await this.SEARCH_OPTION_SEARCHTERM_UK.fill(searchTerm);
         await this.SEARCH_NOW_BUTTON_UK.click();
@@ -203,8 +177,6 @@ export class HomePageUk {
         );
     }
     await this.page.waitForLoadState('load');
-
-    await sleep(6000);
 
     //Check the heading is correct
     await expect(this.page.getByRole('heading', { name: searchTerm }).first()).toBeVisible();
@@ -231,8 +203,4 @@ export class HomePageUk {
 
     expect(clipboardText).toBe(expectedDiscountCode);
   }
-}
-
-async function sleep(milliseconds: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }

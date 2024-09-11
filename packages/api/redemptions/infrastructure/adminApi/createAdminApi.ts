@@ -121,7 +121,7 @@ export function createAdminApi(
       restApi: restAdminApi,
       database,
       handler:
-        './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/CreateRedemptionConfigHandler.handler',
+        './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/createRedemptionConfigHandler.handler',
       requestValidatorName: 'CreateRedemptionConfigValidator',
     }),
   });

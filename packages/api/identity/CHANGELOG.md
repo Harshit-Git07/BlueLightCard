@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.98.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.97.0...bluelightcard/identity-v1.98.0) (2024-09-11)
+
+
+### Features
+
+* fix typecheck error ([#2191](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2191)) ([c860001](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c8600012d13664df77a828d3f6b50e75216490e0))
+* **identity:** add migration tests (TI-1637) ([#2123](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2123)) ([83f0318](https://github.com/bluelightcard/BlueLightCard-2.0/commit/83f031815ccac5556e56e71d53ef6dde090f24e2))
+* load env vars using common method from core ([#2107](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2107)) ([7e044f9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7e044f9d6186a19c1d7d19a43712ba6cb5dba3c3))
+
 ## [1.97.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.96.0...bluelightcard/identity-v1.97.0) (2024-09-05)
 
 

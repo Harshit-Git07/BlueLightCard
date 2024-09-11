@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.98.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.98.0...bluelightcard/identity-v1.98.1) (2024-09-11)
+
+
+### Bug Fixes
+
+* remove gsi for spare_email ([#2212](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2212)) ([f0227dc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f0227dcea4b434d4f18d01b6f166e2c3c2f2ab0a))
+
 ## [1.98.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.97.0...bluelightcard/identity-v1.98.0) (2024-09-11)
 
 

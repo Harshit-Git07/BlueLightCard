@@ -552,7 +552,7 @@ describe('Vault Batch admin API tests', () => {
           vaultBatchDeleted: true,
           vaultCodesDeleted: true,
           countCodesDeleted: unclaimedCodesCount,
-          message: `${delMsg} the batch and codes where successfully deleted`,
+          message: `${delMsg} the batch and codes were successfully deleted`,
         },
       });
     });

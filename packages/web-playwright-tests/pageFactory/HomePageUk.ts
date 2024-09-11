@@ -4,6 +4,7 @@ export class HomePageUk {
   readonly page: Page;
   readonly context: BrowserContext;
 
+  // Locators
   // Navbar top
   private readonly BLUELIGHTBUTTON_NAVBAR_UK: Locator;
   private readonly HOME_NAVBAR_UK: Locator;
@@ -57,6 +58,7 @@ export class HomePageUk {
     this.page = page;
     this.context = context;
 
+    // Initialize locators
     // Navbar top
     this.BLUELIGHTBUTTON_NAVBAR_UK = page.locator('[data-testid="brandLogo"]');
     this.HOME_NAVBAR_UK = page.locator('[data-testid="Home-header-link"]');

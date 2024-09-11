@@ -1,15 +1,21 @@
-import { TestInfo, test as baseTest } from "@playwright/test";
-import { WebActions } from "@lib/WebActions";
-import { HomePageUk } from "pageFactory/HomePageUk";
-import { HomePageDds } from "pageFactory/HomePageDds";
-import { HomePageAus } from "pageFactory/HomePageAus";
-import { MyAccountPageAus } from "pageFactory/MyAccountPageAus";
-import { OnlineDiscountsPageUk } from "pageFactory/OnlineDiscountsPageUk";
+import { TestInfo, test as baseTest } from '@playwright/test';
+import { WebActions } from '@lib/WebActions';
+import { HomePageUk } from 'pageFactory/HomePageUk';
+import { RegistrationPageUk } from 'pageFactory/RegistrationUk/RegistrationPageUk';
+import { AboutYouPageUk } from 'pageFactory/RegistrationUk/AboutYouPageUk';
+import { AboutYourRolePageUk } from 'pageFactory/RegistrationUk/AboutYourRolePageUk';
+import { HomePageDds } from 'pageFactory/HomePageDds';
+import { HomePageAus } from 'pageFactory/HomePageAus';
+import { MyAccountPageAus } from 'pageFactory/MyAccountPageAus';
+import { OnlineDiscountsPageUk } from 'pageFactory/OnlineDiscountsPageUk';
 
 const test = baseTest.extend<{
   webActions: WebActions;
   testInfo: TestInfo;
   homePageUk: HomePageUk;
+  aboutYouPageUk: AboutYouPageUk;
+  aboutYourRolePageUk: AboutYourRolePageUk;
+  registrationPageUk: RegistrationPageUk;
   onlineDiscountPageUk: OnlineDiscountsPageUk;
   homePageDds: HomePageDds;
   homePageAus: HomePageAus;
@@ -20,6 +26,15 @@ const test = baseTest.extend<{
   },
   homePageUk: async ({ page, context }, use) => {
     await use(new HomePageUk(page, context));
+  },
+  registrationPageUk: async ({ page, context }, use) => {
+    await use(new RegistrationPageUk(page, context));
+  },
+  aboutYouPageUk: async ({ page, context }, use) => {
+    await use(new AboutYouPageUk(page, context));
+  },
+  aboutYourRolePageUk: async ({ page, context }, use) => {
+    await use(new AboutYourRolePageUk(page, context));
   },
   onlineDiscountPageUk: async ({ page, context }, use) => {
     await use(new OnlineDiscountsPageUk(page, context));

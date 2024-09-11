@@ -17,6 +17,16 @@ export class WebActions {
   }
 
   async verifyPageUrlContains(expectedUrl: string) {
-    await this.page.waitForURL(expectedUrl, { timeout: 2000 });
+    try {
+      const currentUrl = this.page.url();
+
+      if (!currentUrl.includes(expectedUrl)) {
+        throw new Error(
+          `Expected URL to contain '${expectedUrl}', but the current URL is '${currentUrl}'.`,
+        );
+      }
+    } catch (error) {
+      throw new Error(`An error occurred while verifying the URL: ${error.message}`);
+    }
   }
 }

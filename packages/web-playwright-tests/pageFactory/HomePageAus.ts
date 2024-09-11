@@ -6,6 +6,7 @@ export class HomePageAus {
   readonly context: BrowserContext;
   private webActions: WebActions;
 
+  // Locators
   // Navbar top
   private readonly BLUELIGHTBUTTON_NAVBAR_AUS: Locator;
   private readonly HOME_NAVBAR_AUS: Locator;
@@ -47,6 +48,7 @@ export class HomePageAus {
     this.context = context;
     this.webActions = new WebActions(this.page, this.context);
 
+    // Initialize locators
     // Navbar top
     this.BLUELIGHTBUTTON_NAVBAR_AUS = page.locator('div.site-logo');
     this.HOME_NAVBAR_AUS = page.getByRole('link', { name: 'Home', exact: true });

@@ -7,6 +7,7 @@ export class HomePageDds {
   readonly page: Page;
   readonly context: BrowserContext;
 
+  // Locators
   // Navbar top
   private readonly DDSLOGOBUTTON_NAVBAR_DDS: Locator;
   private readonly OFFERS_NAVBAR_DDS: Locator;
@@ -34,6 +35,7 @@ export class HomePageDds {
     this.context = context;
     webActions = new WebActions(this.page, this.context);
 
+    // Initialize locators
     // Navbar top
     this.DDSLOGOBUTTON_NAVBAR_DDS = page.locator('div.site-logo');
     this.OFFERS_NAVBAR_DDS = page.getByRole('link', { name: 'Offers ' });

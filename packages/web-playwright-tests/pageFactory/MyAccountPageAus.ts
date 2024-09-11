@@ -7,6 +7,7 @@ export class MyAccountPageAus {
   readonly page: Page;
   readonly context: BrowserContext;
 
+  // Locators
   //Navbar top
   readonly BLUELIGHT_NAVBAR: Locator;
   readonly HOME_NAVBAR: Locator;
@@ -34,6 +35,7 @@ export class MyAccountPageAus {
     this.context = context;
     webActions = new WebActions(this.page, this.context);
 
+    // Initialize locators
     //Navbar top
 
     this.BLUELIGHT_NAVBAR = page.getByRole("link", {

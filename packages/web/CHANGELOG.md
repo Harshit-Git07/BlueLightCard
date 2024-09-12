@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.72.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.72.1...bluelightcard/web-v1.72.2) (2024-09-12)
+
+
+### Other Changes
+
+* force chore on web package ([#2227](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2227)) ([2dbd936](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2dbd9365ff3dd57e17e1e72b6320552524e144c6))
+
 ## [1.72.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.72.0...bluelightcard/web-v1.72.1) (2024-09-12)
 
 

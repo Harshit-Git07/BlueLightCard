@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.32.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.31.0...bluelightcard/mobile-hybrid-v1.32.0) (2024-09-12)
+
+
+### Features
+
+* added shared ui SearchBar component to hybrid ([#2181](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2181)) ([c13cdaf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c13cdaf63a3b409b3d2d23dd0575a7e5807c109a))
+
+
+### Other Changes
+
+* setup mobile-hybrid code scanning ([#2221](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2221)) ([b38611d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b38611d7af24ff9322e9f4b1eb4b880c583105b6))
+
 ## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.30.0...bluelightcard/mobile-hybrid-v1.31.0) (2024-09-06)
 
 

@@ -17,17 +17,9 @@ describe('getOffersBySearchTermUrl', () => {
     jest.resetAllMocks();
   });
 
-  test('it returns the modern search path for BLC UK', () => {
-    mockGlobals.BRAND = 'blc-uk';
-
-    const searchPath = getOffersBySearchTermUrl('Test search term', 'serp');
-
-    expect(searchPath).toEqual('/search?issuer=serp&q=Test search term');
-  });
-
-  test('it returns the modern search path for when feature flag is OFF', () => {
+  test('it returns the modern search path for when feature flag is ON', () => {
     amplitudeStore.set(experimentsAndFeatureFlags, {
-      [AmplitudeExperimentFlags.DISABLE_MODERN_WEB_SEARCH]: 'off',
+      [AmplitudeExperimentFlags.ENABLE_MODERN_WEB_SEARCH]: 'on',
     });
 
     const searchPath = getOffersBySearchTermUrl('Test search term', 'serp');
@@ -35,9 +27,9 @@ describe('getOffersBySearchTermUrl', () => {
     expect(searchPath).toEqual('/search?issuer=serp&q=Test search term');
   });
 
-  test('it returns the legacy search path for feature flag is ON', () => {
+  test('it returns the legacy search path for feature flag is OFF', () => {
     amplitudeStore.set(experimentsAndFeatureFlags, {
-      [AmplitudeExperimentFlags.DISABLE_MODERN_WEB_SEARCH]: 'on',
+      [AmplitudeExperimentFlags.ENABLE_MODERN_WEB_SEARCH]: 'off',
     });
 
     const searchPath = getOffersBySearchTermUrl('Test search term', 'serp');

@@ -11,11 +11,11 @@ export const getOffersByCategoryUrl = (categoryId: string) => {
 };
 
 export const getOffersBySearchTermUrl = (searchTerm: string, issuer: string = '') => {
-  let disableModernSearch = false;
+  let enableModernSearch = false;
   const amplitudeFlags = amplitudeStore.get(experimentsAndFeatureFlags);
-  disableModernSearch = amplitudeFlags[AmplitudeExperimentFlags.DISABLE_MODERN_WEB_SEARCH] === 'on';
+  enableModernSearch = amplitudeFlags[AmplitudeExperimentFlags.ENABLE_MODERN_WEB_SEARCH] === 'on';
 
-  return disableModernSearch
-    ? `/offers.php?type=1&opensearch=1&search=${searchTerm}`
-    : `/search?issuer=${issuer}&q=${searchTerm}`;
+  return enableModernSearch
+    ? `/search?issuer=${issuer}&q=${searchTerm}`
+    : `/offers.php?type=1&opensearch=1&search=${searchTerm}`;
 };

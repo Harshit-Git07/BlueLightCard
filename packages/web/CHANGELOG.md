@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.72.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.72.0...bluelightcard/web-v1.72.1) (2024-09-12)
+
+
+### Bug Fixes
+
+* issue with input zoom in ([#2223](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2223)) ([faba763](https://github.com/bluelightcard/BlueLightCard-2.0/commit/faba763377842b4f0b6fed630754fd446000656e))
+
+
+### Other Changes
+
+* setup mobile-hybrid code scanning ([#2221](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2221)) ([b38611d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b38611d7af24ff9322e9f4b1eb4b880c583105b6))
+
 ## [1.72.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.71.1...bluelightcard/web-v1.72.0) (2024-09-09)
 
 

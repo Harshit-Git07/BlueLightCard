@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.25.1...bluelightcard/redemptions-v1.26.0) (2024-09-11)
+
+
+### Features
+
+* [TR-829] infrastructure for Post Redemption Config infrastructure ([#2201](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2201)) ([ffa8f8a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ffa8f8a069d9e69b3ef5b2a0015effc629d7137f))
+* fix e2e test ([#2209](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2209)) ([6fba193](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6fba1931df6e7e2ab93e5f91f1cb661867ec5cbd))
+* only send vault threshold emails for standard vaults ([#2184](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2184)) ([0072a7d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0072a7d3b326d4aca052e1193e341f8a6e6d9dd4))
+* Tr 707 vault batch delete lambda ([#2037](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2037)) ([fa41d5e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fa41d5e14fa98ada46f89d0da2310734e6a5805e))
+* Tr 708 vault batch post lambda ([#2114](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2114)) ([f4912ec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f4912ec3895741332dc605dc682b58802cbd7beb))
+
+
+### Bug Fixes
+
+* fix typo in handler path ([#2218](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2218)) ([ef3cb88](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ef3cb8820e11b3c250d4acc06dc66e03ccbf43aa))
+
+
+### Other Changes
+
+* setup coverage reporting in to sonarcloud ([1771bfb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1771bfb72e5fb4e6d7135a5d94c4d0f8693f6f8e))
+
 ## [1.25.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.25.0...bluelightcard/redemptions-v1.25.1) (2024-08-29)
 
 

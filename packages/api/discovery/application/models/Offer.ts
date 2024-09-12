@@ -1,5 +1,6 @@
 import { Boost } from './Boost';
 import { Category } from './Category';
+import { Company } from './Company';
 import { Discount } from './Discount';
 
 export type Offer = {
@@ -15,7 +16,7 @@ export type Offer = {
   evergreen: boolean;
   tags: string[];
   serviceRestrictions: string[];
-  companyId: number;
+  company: Company;
   categories: Category[];
   local: boolean;
   discount: Discount;

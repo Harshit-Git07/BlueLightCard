@@ -16,7 +16,7 @@ describe('Offer Factory', () => {
       evergreen: false,
       tags: ['tag1', 'tag2'],
       serviceRestrictions: ['none'],
-      companyId: 1,
+      company: expect.any(Object),
       categories: expect.any(Array),
       local: false,
       discount: expect.any(Object),

@@ -1,5 +1,7 @@
 import * as Factory from 'factory.ts';
 
+import { companyFactory } from '@blc-mono/discovery/application/factories/CompanyFactory';
+
 import { Offer } from '../models/Offer';
 
 import { boostFactory } from './BoostFactory';
@@ -19,7 +21,7 @@ export const offerFactory = Factory.Sync.makeFactory<Offer>({
   evergreen: false,
   tags: ['tag1', 'tag2'],
   serviceRestrictions: ['none'],
-  companyId: 1,
+  company: companyFactory.build(),
   categories: [categoryFactory.build()],
   local: false,
   discount: discountFactory.build(),

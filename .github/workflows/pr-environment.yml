@@ -386,7 +386,7 @@ jobs:
           - brand: 'dds-uk'
             identity_brand: 'dds_uk'
             identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
-            identity_api_url: 'https://staging-identity-dds.blcshine.io'
+            identity_api_url: 'https://staging-identity.blcshine.io'
             amplitude_deployment_key: 'DDS_UK_AMPLITUDE_DEPLOYMENT_KEY'
             cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
             cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'

@@ -18,5 +18,15 @@
     },
     "startDate": "2024-09-09T08:00:00Z",
     "endDate": "2024-09-15T23:59:59.997Z"
+  },
+  {
+    "id": "2",
+    "campaignType": "thankyouCampaign",
+    "content": {
+      "imageURL": "https://cdn.bluelightcard.co.uk/big-rewards-2024-1.jpg",
+      "iframeURL": "https://campaign.odicci.com/#/1a8769cebe693143f572"
+    },
+    "startDate": "2024-09-16T10:00:00Z",
+    "endDate": "2024-09-22T23:59:59.997Z"
   }
 ]

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.6.0...bluelightcard/discovery-v1.7.0) (2024-09-12)
+
+
+### Features
+
+* [DISCO-695] Update Offer type to include Company ([#2229](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2229)) ([5bd9753](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5bd9753d860c26b770f5ebc6ea68e7ce2076613d))
+
 ## [1.6.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.5.0...bluelightcard/discovery-v1.6.0) (2024-09-11)
 
 

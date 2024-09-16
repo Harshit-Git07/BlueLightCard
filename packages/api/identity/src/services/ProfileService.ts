@@ -1,41 +1,36 @@
-import { UserProfile } from "src/models/userprofile";
-import { ProfileRepository } from "src/repositories/profileRepository";
+import { UserProfile } from 'src/models/userprofile';
+import { IProfileRepository, ProfileRepository } from 'src/repositories/profileRepository';
 
 export interface IProfileService {
-    isSpareEmail(uuid: string, email: string): Promise<boolean>;
-    getData(uuid: string): Promise<UserProfile>;
-    getUuidByEmail(email: string): Promise<string>;
+  isSpareEmail(uuid: string, email: string): Promise<boolean>;
+  getData(uuid: string): Promise<UserProfile | null>;
+  getUuidByEmail(email: string): Promise<string>;
 }
 
-export class ProfileService implements IProfileService{
-    public profile: ProfileRepository;
-  
-    constructor(private readonly tableName: string, private readonly region: string) {
-      this.profile = new ProfileRepository(tableName, region);
-    }
+export class ProfileService implements IProfileService {
+  public profile: IProfileRepository = new ProfileRepository();
 
-    public async isSpareEmail(uuid: string, email: string) {
-        const data = await this.profile.findByUuid(uuid);
-        if(data && data.Items && data.Items.length > 0){
-          return data.Items[0].spare_email === email;
-        }
-        return false;
+  public async isSpareEmail(uuid: string, email: string) {
+    const data = await this.profile.findByUuid(uuid);
+    if (data?.Items && data.Items.length > 0) {
+      return data.Items[0].spare_email === email;
     }
-
-    public async getUuidByEmail(email: string) {
-      const data = await this.profile.findByEmail(email);
-      if(data && data.Items && data.Items.length > 0){
-        return data.Items[0].pk.replace("MEMBER#","");
-      }
-      return "";
+    return false;
   }
 
-    public async getData(uuid: string): Promise<UserProfile> {
-      const data = await this.profile.findByUuid(uuid);
-      if(data && data.Items && data.Items.length > 0){
-        return data.Items[0];
-      }
-      return {}
+  public async getUuidByEmail(email: string) {
+    const data = await this.profile.findByEmail(email);
+    if (data?.Items && data.Items.length > 0) {
+      return data.Items[0].pk.replace('MEMBER#', '');
     }
+    return '';
+  }
 
+  public async getData(uuid: string): Promise<UserProfile> {
+    const data = await this.profile.findByUuid(uuid);
+    if (data?.Items && data.Items.length > 0) {
+      return data.Items[0];
+    }
+    return {};
+  }
 }

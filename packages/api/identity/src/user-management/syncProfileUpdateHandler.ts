@@ -12,6 +12,7 @@ import { UserProfileModel, UserProfile } from '../../src/models/userprofile';
 import { sendToDLQ } from '../../src/helpers/DLQ';
 import { v4 } from 'uuid';
 import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
+import { IProfileService, ProfileService } from 'src/services/ProfileService';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
@@ -31,6 +32,8 @@ const client = new DynamoDBClient({
   region: getEnvOrDefault(IdentityStackEnvironmentKeys.REGION, 'eu-west-2'),
 });
 const dynamodb = DynamoDBDocumentClient.from(client);
+
+const profileService: IProfileService = new ProfileService();
 
 const validateFormData = (data: UserProfile) => {
   if (
@@ -78,6 +81,7 @@ export const handler = async (event: any, context: any) => {
   delete event.detail.uuid;
   delete event.detail.brand;
   let detail: UserProfile;
+
   try {
     detail = UserProfileModel.parse(event.detail);
     const isValid = validateFormData(detail);
@@ -102,10 +106,13 @@ export const handler = async (event: any, context: any) => {
       '#sk': 'sk',
     },
   };
+
+  const result = await dynamodb.send(new QueryCommand(queryParams));
+
   let profileUuid = null;
   let action = 'created';
   let spareEmail = 'NA';
-  const result = await dynamodb.send(new QueryCommand(queryParams));
+
   if (result.Items === null || result.Items?.length === 0) {
     logger.debug('user profile data not found, will be created', event);
     profileUuid = `PROFILE#${v4()}`;
@@ -121,8 +128,8 @@ export const handler = async (event: any, context: any) => {
   }
 
   let updateExp = '';
-
   let expAttrValues: Record<string, any> = {};
+
   (Object.keys(detail) as (keyof typeof detail)[]).find((key) => {
     if (key === 'dob') {
       detail[key] =

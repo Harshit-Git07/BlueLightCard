@@ -95,10 +95,7 @@ export const handler = async (event: UserMigrationTriggerEvent) => {
       }
     }
   } else if (event.triggerSource == 'UserMigration_ForgotPassword') {
-    const profileService = new ProfileService(
-      `${tableName}`,
-      getEnv(IdentityStackEnvironmentKeys.REGION),
-    );
+    const profileService = new ProfileService();
     const uuid = await profileService.getUuidByEmail(event.userName);
     if (uuid.length > 0) {
       const brandService = new BrandService(

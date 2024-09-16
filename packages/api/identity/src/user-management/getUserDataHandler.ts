@@ -1,9 +1,10 @@
 import { APIGatewayEvent, APIGatewayProxyStructuredResultV2, Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { Response } from '../../../core/src/utils/restResponse/response';
-import { unpackJWT } from './unpackJWT';
-import { UserService } from '../../src/services/UserService';
 import { isNull } from 'lodash';
+import { unpackJWT } from './unpackJWT';
+
+import { UserService } from 'src/services/UserService';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
@@ -15,7 +16,7 @@ const region: string = getEnvOrDefault(IdentityStackEnvironmentKeys.REGION, 'eu-
 
 const userService = new UserService(tableName, region, logger);
 
-export const get = async (
+export const handler = async (
   event: APIGatewayEvent,
   context: Context,
 ): Promise<APIGatewayProxyStructuredResultV2> => {

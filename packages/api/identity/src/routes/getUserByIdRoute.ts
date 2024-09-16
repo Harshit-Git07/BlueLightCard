@@ -7,14 +7,17 @@ import {
 } from '../../../core/src/extensions/apiGatewayExtension';
 
 export class GetUserByIdRoute {
-  constructor(private apiGatewayModelGenerator: ApiGatewayModelGenerator, private agUserModel: Model) {}
+  constructor(
+    private apiGatewayModelGenerator: ApiGatewayModelGenerator,
+    private agUserModel: Model,
+  ) {}
 
   getRouteDetails() {
     return {
       function: {
-        handler: 'packages/api/identity/src/user-management/userData.get',
+        handler: 'packages/api/identity/src/user-management/getUserDataHandler.handler',
       },
-      authorizer: "identityAuthorizer",
+      authorizer: 'identityAuthorizer',
       cdk: {
         method: {
           requestModels: { 'application/json': this.agUserModel.getModel() },

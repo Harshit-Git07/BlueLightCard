@@ -101,10 +101,7 @@ async function deleteDBRecordIfExists(email: string, userPoolId: string) {
 
 async function isSpareEmail(uuid: string, email: string): Promise<boolean> {
   try {
-    const profileService = new ProfileService(
-      IDENTITY_TABLE_NAME,
-      getEnv(IdentityStackEnvironmentKeys.REGION),
-    );
+    const profileService = new ProfileService();
     return await profileService.isSpareEmail(uuid, email);
   } catch (error) {
     logger.info('is spare email check with uuid failed, error: ', { error });

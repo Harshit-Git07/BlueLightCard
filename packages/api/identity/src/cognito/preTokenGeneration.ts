@@ -15,7 +15,7 @@ const POOL_INFO = getEnv(IdentityStackEnvironmentKeys.POOL_INFO);
 const logger = new Logger({ serviceName: `${service}-preTokenGeneration` });
 
 const preTokenGenerateService = new PreTokenGenerateService(IDENTITY_TABLE_NAME, REGION, logger);
-const profile = new ProfileService(IDENTITY_TABLE_NAME, REGION);
+const profile = new ProfileService();
 
 export const handler = async (event: PreTokenGenerationTriggerEvent, context: any) => {
   logger.info('audit', {

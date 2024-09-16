@@ -1,4 +1,6 @@
 process.env.SERVICE = 'test service';
+process.env.IDENTITY_TABLE_NAME = 'someIdentityTableName';
+process.env.ID_MAPPING_TABLE_NAME = 'someIdMappingTableName';
 process.env.DATA_STREAM = 'test data stream';
 process.env.DEBUG_LOGGING_ENABLED = 'false';
 process.env.IDENTITY_TABLE_NAME = 'someIdentityTableName';

@@ -1,0 +1,529 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`New Offer Sheet component should render offer sheet header component without error 1`] = `
+<div
+  className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0"
+>
+  <div
+    className="space-y-2"
+  >
+    <div
+      className="flex justify-center"
+    >
+      <img
+        alt="company logo"
+        className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+        data-nimg="1"
+        decoding="async"
+        height={64}
+        loading="lazy"
+        onError={[Function]}
+        onLoad={[Function]}
+        src="_next/static/Logo?width=256&quality=75"
+        srcSet="_next/static/Logo?width=128&quality=75 1x, _next/static/Logo?width=256&quality=75 2x"
+        style={
+          {
+            "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 100 64'%3E%3Cfilter id='b' color-interpolation-filters='sRGB'%3E%3CfeGaussianBlur stdDeviation='20'/%3E%3C/filter%3E%3Cimage preserveAspectRatio='none' filter='url(%23b)' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+            "backgroundPosition": "50% 50%",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+            "color": "transparent",
+          }
+        }
+        width={100}
+      />
+    </div>
+    <h2
+      className="text-2xl mb-2 font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline"
+    >
+      Name
+    </h2>
+    <p
+      className="text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light mt-2 "
+    >
+      Description
+    </p>
+    <div
+      className="flex flex-wrap justify-center mt-4"
+    >
+      <button
+        className="py-1 px-5 rounded-md transition border-2 text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+        onClick={[Function]}
+        type="button"
+      >
+        <div
+          className="false flex flex-row"
+        >
+          <div
+            className="my-auto"
+          >
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-arrow-up-from-bracket "
+              data-icon="arrow-up-from-bracket"
+              data-prefix="fas"
+              data-testid="font-awesome-share-icon"
+              focusable="false"
+              role="img"
+              style={{}}
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+                fill="currentColor"
+                style={{}}
+              />
+            </svg>
+          </div>
+          <span
+            className="ml-2"
+          >
+            Share offer
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`New Offer Sheet component should render offer sheet header component without error 2`] = `
+<div
+  className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0"
+>
+  <div
+    className="space-y-2"
+  >
+    <div
+      className="flex justify-center"
+    >
+      <img
+        alt="company logo"
+        className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+        data-nimg="1"
+        decoding="async"
+        height={64}
+        loading="lazy"
+        onError={[Function]}
+        onLoad={[Function]}
+        src="_next/static/Logo?width=256&quality=75"
+        srcSet="_next/static/Logo?width=128&quality=75 1x, _next/static/Logo?width=256&quality=75 2x"
+        style={
+          {
+            "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 100 64'%3E%3Cfilter id='b' color-interpolation-filters='sRGB'%3E%3CfeGaussianBlur stdDeviation='20'/%3E%3C/filter%3E%3Cimage preserveAspectRatio='none' filter='url(%23b)' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+            "backgroundPosition": "50% 50%",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+            "color": "transparent",
+          }
+        }
+        width={100}
+      />
+    </div>
+    <h2
+      className="text-2xl mb-2 font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline"
+    >
+      Name
+    </h2>
+    <p
+      className="text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light mt-2 "
+    >
+      Description
+    </p>
+    <div
+      className="flex flex-wrap justify-center mt-4"
+    >
+      <button
+        className="py-1 px-5 rounded-md transition border-2 text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+        onClick={[Function]}
+        type="button"
+      >
+        <div
+          className="false flex flex-row"
+        >
+          <div
+            className="my-auto"
+          >
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-arrow-up-from-bracket "
+              data-icon="arrow-up-from-bracket"
+              data-prefix="fas"
+              data-testid="font-awesome-share-icon"
+              focusable="false"
+              role="img"
+              style={{}}
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+                fill="currentColor"
+                style={{}}
+              />
+            </svg>
+          </div>
+          <span
+            className="ml-2"
+          >
+            Share offer
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`New Offer Sheet component should render offer sheet header component without error 3`] = `
+<div
+  className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0"
+>
+  <div
+    className="space-y-2"
+  >
+    <div
+      className="flex justify-center"
+    >
+      <img
+        alt="company logo"
+        className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+        data-nimg="1"
+        decoding="async"
+        height={64}
+        loading="lazy"
+        onError={[Function]}
+        onLoad={[Function]}
+        src="_next/static/Logo?width=256&quality=75"
+        srcSet="_next/static/Logo?width=128&quality=75 1x, _next/static/Logo?width=256&quality=75 2x"
+        style={
+          {
+            "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 100 64'%3E%3Cfilter id='b' color-interpolation-filters='sRGB'%3E%3CfeGaussianBlur stdDeviation='20'/%3E%3C/filter%3E%3Cimage preserveAspectRatio='none' filter='url(%23b)' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+            "backgroundPosition": "50% 50%",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+            "color": "transparent",
+          }
+        }
+        width={100}
+      />
+    </div>
+    <h2
+      className="text-2xl mb-2 font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline"
+    >
+      Name
+    </h2>
+    <p
+      className="text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light mt-2 "
+    >
+      Description
+    </p>
+    <div
+      className="flex flex-wrap justify-center mt-4"
+    >
+      <button
+        className="py-1 px-5 rounded-md transition border-2 text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+        onClick={[Function]}
+        type="button"
+      >
+        <div
+          className="false flex flex-row"
+        >
+          <div
+            className="my-auto"
+          >
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-arrow-up-from-bracket "
+              data-icon="arrow-up-from-bracket"
+              data-prefix="fas"
+              data-testid="font-awesome-share-icon"
+              focusable="false"
+              role="img"
+              style={{}}
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+                fill="currentColor"
+                style={{}}
+              />
+            </svg>
+          </div>
+          <span
+            className="ml-2"
+          >
+            Share offer
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`New Offer Sheet component should render offer sheet header component without error 4`] = `
+<div
+  className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0"
+>
+  <div
+    className="space-y-2"
+  >
+    <div
+      className="flex justify-center"
+    >
+      <img
+        alt="company logo"
+        className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+        data-nimg="1"
+        decoding="async"
+        height={64}
+        loading="lazy"
+        onError={[Function]}
+        onLoad={[Function]}
+        src="_next/static/Logo?width=256&quality=75"
+        srcSet="_next/static/Logo?width=128&quality=75 1x, _next/static/Logo?width=256&quality=75 2x"
+        style={
+          {
+            "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 100 64'%3E%3Cfilter id='b' color-interpolation-filters='sRGB'%3E%3CfeGaussianBlur stdDeviation='20'/%3E%3C/filter%3E%3Cimage preserveAspectRatio='none' filter='url(%23b)' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+            "backgroundPosition": "50% 50%",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+            "color": "transparent",
+          }
+        }
+        width={100}
+      />
+    </div>
+    <h2
+      className="text-2xl mb-2 font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline"
+    >
+      Name
+    </h2>
+    <p
+      className="text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light mt-2 "
+    >
+      Description
+    </p>
+    <div
+      className="flex flex-wrap justify-center mt-4"
+    >
+      <button
+        className="py-1 px-5 rounded-md transition border-2 text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+        onClick={[Function]}
+        type="button"
+      >
+        <div
+          className="false flex flex-row"
+        >
+          <div
+            className="my-auto"
+          >
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-arrow-up-from-bracket "
+              data-icon="arrow-up-from-bracket"
+              data-prefix="fas"
+              data-testid="font-awesome-share-icon"
+              focusable="false"
+              role="img"
+              style={{}}
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+                fill="currentColor"
+                style={{}}
+              />
+            </svg>
+          </div>
+          <span
+            className="ml-2"
+          >
+            Share offer
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`New Offer Sheet component should render offer sheet header component without error 5`] = `
+<div
+  className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0"
+>
+  <div
+    className="space-y-2"
+  >
+    <div
+      className="flex justify-center"
+    >
+      <img
+        alt="company logo"
+        className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+        data-nimg="1"
+        decoding="async"
+        height={64}
+        loading="lazy"
+        onError={[Function]}
+        onLoad={[Function]}
+        src="_next/static/Logo?width=256&quality=75"
+        srcSet="_next/static/Logo?width=128&quality=75 1x, _next/static/Logo?width=256&quality=75 2x"
+        style={
+          {
+            "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 100 64'%3E%3Cfilter id='b' color-interpolation-filters='sRGB'%3E%3CfeGaussianBlur stdDeviation='20'/%3E%3C/filter%3E%3Cimage preserveAspectRatio='none' filter='url(%23b)' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+            "backgroundPosition": "50% 50%",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+            "color": "transparent",
+          }
+        }
+        width={100}
+      />
+    </div>
+    <h2
+      className="text-2xl mb-2 font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline"
+    >
+      Name
+    </h2>
+    <p
+      className="text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light mt-2 "
+    >
+      Description
+    </p>
+    <div
+      className="flex flex-wrap justify-center mt-4"
+    >
+      <button
+        className="py-1 px-5 rounded-md transition border-2 text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+        onClick={[Function]}
+        type="button"
+      >
+        <div
+          className="false flex flex-row"
+        >
+          <div
+            className="my-auto"
+          >
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-arrow-up-from-bracket "
+              data-icon="arrow-up-from-bracket"
+              data-prefix="fas"
+              data-testid="font-awesome-share-icon"
+              focusable="false"
+              role="img"
+              style={{}}
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+                fill="currentColor"
+                style={{}}
+              />
+            </svg>
+          </div>
+          <span
+            className="ml-2"
+          >
+            Share offer
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`New Offer Sheet component should render offer sheet header component without error 6`] = `
+<div
+  className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0"
+>
+  <div
+    className="space-y-2"
+  >
+    <div
+      className="flex justify-center"
+    >
+      <img
+        alt="company logo"
+        className="!relative object-contain object-center rounded shadow-[0_4px_12px_0_rgba(0,0,0,0.15)]"
+        data-nimg="1"
+        decoding="async"
+        height={64}
+        loading="lazy"
+        onError={[Function]}
+        onLoad={[Function]}
+        src="_next/static/Logo?width=256&quality=75"
+        srcSet="_next/static/Logo?width=128&quality=75 1x, _next/static/Logo?width=256&quality=75 2x"
+        style={
+          {
+            "backgroundImage": "url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 100 64'%3E%3Cfilter id='b' color-interpolation-filters='sRGB'%3E%3CfeGaussianBlur stdDeviation='20'/%3E%3C/filter%3E%3Cimage preserveAspectRatio='none' filter='url(%23b)' x='0' y='0' height='100%25' width='100%25' href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=='/%3E%3C/svg%3E")",
+            "backgroundPosition": "50% 50%",
+            "backgroundRepeat": "no-repeat",
+            "backgroundSize": "cover",
+            "color": "transparent",
+          }
+        }
+        width={100}
+      />
+    </div>
+    <h2
+      className="text-2xl mb-2 font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline"
+    >
+      Name
+    </h2>
+    <p
+      className="text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light mt-2 "
+    >
+      Description
+    </p>
+    <div
+      className="flex flex-wrap justify-center mt-4"
+    >
+      <button
+        className="py-1 px-5 rounded-md transition border-2 text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] !border-transparent w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+        onClick={[Function]}
+        type="button"
+      >
+        <div
+          className="false flex flex-row"
+        >
+          <div
+            className="my-auto"
+          >
+            <svg
+              aria-hidden="true"
+              className="svg-inline--fa fa-arrow-up-from-bracket "
+              data-icon="arrow-up-from-bracket"
+              data-prefix="fas"
+              data-testid="font-awesome-share-icon"
+              focusable="false"
+              role="img"
+              style={{}}
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M246.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 109.3V320c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 53 43 96 96 96H352c53 0 96-43 96-96V352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V352z"
+                fill="currentColor"
+                style={{}}
+              />
+            </svg>
+          </div>
+          <span
+            className="ml-2"
+          >
+            Share offer
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;

@@ -11,14 +11,6 @@
   padding-bottom: 2rem !important;
 }
 
-.swiper-pagination-bullet {
-  @apply bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark opacity-100 !important;
-}
-
-.swiper-pagination-bullet-active {
-  @apply bg-colour-primary-light dark:bg-colour-primary-dark !important;
-}
-
 .swiper-button-prev,
 .swiper-button-next {
   background: #000000cc;

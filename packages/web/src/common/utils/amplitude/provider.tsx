@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import AmplitudeContext from '../../context/AmplitudeContext';
 import { Amplitude } from './amplitude';
 import { AMPLITUDE_API_KEY } from '@/global-vars';

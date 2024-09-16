@@ -10,7 +10,7 @@ import '@/nativeReceive';
 import { museoFont, sourceSansPro } from '@/font';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
-import { SharedUIConfigProvider, ViewOfferProvider } from '@bluelightcard/shared-ui';
+import { SharedUIConfigProvider } from '@bluelightcard/shared-ui';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
 import { MobilePlatformAdapter } from '@/utils/platformAdapter';
@@ -41,9 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
           */}
             <UserProfileProvider>
               <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
-                <ViewOfferProvider>
-                  <Component {...pageProps} />
-                </ViewOfferProvider>
+                <Component {...pageProps} />
                 <Spinner />
               </main>
             </UserProfileProvider>

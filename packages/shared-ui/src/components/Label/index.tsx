@@ -1,14 +1,12 @@
-import { FC } from 'react';
-import { config } from '../OfferSheet/types';
+import type { FC } from 'react';
 
 export type Props = {
-  type: string;
+  type: 'normal' | 'alert';
   text: string | undefined;
   className?: string;
 };
 
-const labelConfig: config = {
-  //TODO::Not whitelabel with design tokens revisit
+const labelConfig = {
   normal: {
     textColor: 'text-tag-label-colour-light dark:text-tag-label-colour-dark',
     backgroundColor: 'bg-tag-bg-colour-light dark:bg-tag-bg-colour-dark',
@@ -19,7 +17,7 @@ const labelConfig: config = {
   },
 };
 
-const Label: FC<Props> = ({ text, type, className = '' }) => {
+const Label: FC<Props> = ({ text, type = 'normal', className = '' }) => {
   const { textColor, backgroundColor } = labelConfig[type];
 
   return (

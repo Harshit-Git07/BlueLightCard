@@ -5,6 +5,7 @@ exports[`MagicButton component snapshot test for component variants should rende
   className=" z-10 relative w-fit rounded-full overflow-hidden p-1 h-[3.75rem] disabled"
   disabled={true}
   onClick={[Function]}
+  type="button"
 >
   <div
     className="relative py-2 px-4 rounded-full z-10 h-full w-full flex justify-center items-center text-magicButton-disabled-label-colour dark:text-magicButton-disabled-label-colour-dark bg-magicButton-disabled-bg-colour dark:bg-magicButton-disabled-bg-colour-dark opacity-30"
@@ -23,6 +24,7 @@ exports[`MagicButton component snapshot test for component variants should rende
   className=" z-10 relative w-fit rounded-full overflow-hidden p-1 h-[3.75rem] cursor-pointer"
   disabled={false}
   onClick={[Function]}
+  type="button"
 >
   <div
     className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"
@@ -79,6 +81,7 @@ exports[`MagicButton component snapshot test for component variants should rende
   className=" z-10 relative w-fit rounded-full overflow-hidden p-1 h-[3.75rem] cursor-pointer"
   disabled={false}
   onClick={[Function]}
+  type="button"
 >
   <div
     className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"

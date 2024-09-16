@@ -1,5 +1,4 @@
 import { FC, useMemo } from 'react';
-import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import useOffers from '@/hooks/useOffers';
 import Heading from '@/components/Heading/Heading';
 import CardCarousel from '@/components/Carousel/CardCarousel';
@@ -17,7 +16,6 @@ const analytics = new InvokeNativeAnalytics();
 const Offers: FC = () => {
   const { is } = useAmplitude();
   const { flexible, groups } = useOffers();
-  const { viewOffer } = useOfferDetails();
 
   /**
    * @experiment
@@ -73,13 +71,6 @@ const Offers: FC = () => {
         brand_offer: offername,
       },
     });
-
-    await viewOffer({
-      offerId: id,
-      companyId: compid,
-      companyName: companyname,
-      platform: PlatformVariant.MobileHybrid,
-    });
   };
   const onSlideChange = (carouselName: string) => {
     analytics.logAnalyticsEvent({
@@ -118,6 +109,7 @@ const Offers: FC = () => {
           <CardCarousel
             slides={homepagePositionOffersExpr.items.map((offer) => ({
               id: offer.compid,
+              offerId: offer.offerId,
               title: offer.companyname,
               text: offer.offername,
               imageSrc: offer.image?.length ? offer.image : offer.s3logos,
@@ -141,6 +133,7 @@ const Offers: FC = () => {
             <CardCarousel
               slides={group.items.map((offer) => ({
                 id: offer.compid,
+                offerId: offer.id,
                 title: offer.companyname,
                 text: offer.offername,
                 imageSrc: offer.image?.length ? offer.image : offer.s3logos,

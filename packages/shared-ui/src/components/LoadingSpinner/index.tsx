@@ -1,5 +1,6 @@
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { mergeClassnames } from '../../utils/cssUtils';
 
 export interface LoadingPlaceholderProps {
   containerClassName?: string;
@@ -8,7 +9,10 @@ export interface LoadingPlaceholderProps {
 const LoadingSpinner = ({ containerClassName, spinnerClassName }: LoadingPlaceholderProps) => {
   return (
     <div className={`${containerClassName} flex justify-center`}>
-      <FontAwesomeIcon icon={faSpinner} className={`animate-spin m-auto ${spinnerClassName}`} />
+      <FontAwesomeIcon
+        icon={faSpinner}
+        className={mergeClassnames(`animate-spin m-auto ${spinnerClassName}`)}
+      />
     </div>
   );
 };

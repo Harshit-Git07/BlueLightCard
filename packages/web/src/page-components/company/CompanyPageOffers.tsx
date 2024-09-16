@@ -1,7 +1,9 @@
-import { Heading, ResponsiveOfferCard } from '@bluelightcard/shared-ui/index';
-import React, { FC } from 'react';
+import { Drawer, Heading, ResponsiveOfferCard } from '@bluelightcard/shared-ui/index';
+import { OfferSheet } from '@bluelightcard/shared-ui';
+import React, { FC, useContext } from 'react';
 import { useMedia } from 'react-use';
 import { OfferData } from './types';
+import AmplitudeContext from '../../common/context/AmplitudeContext';
 
 type props = {
   offers: OfferData[];
@@ -18,6 +20,8 @@ type props = {
 
 const CompanyPageOffers: FC<props> = ({ offers, companyName, companyId, onOfferClick }) => {
   const isMobile = useMedia('(max-width: 500px)');
+  const amplitude = useContext(AmplitudeContext);
+
   return (
     <>
       {offers && offers.length > 0 && (
@@ -41,15 +45,24 @@ const CompanyPageOffers: FC<props> = ({ offers, companyName, companyId, onOfferC
                   )
                 }
               >
-                <ResponsiveOfferCard
-                  id={offer.id}
-                  type={offer.type}
-                  name={offer.name}
-                  image={offer.image}
-                  companyId={Number(companyId)}
-                  companyName={companyName}
-                  variant={isMobile ? 'horizontal' : 'vertical'}
-                />
+                <Drawer
+                  key={'drawer-' + index}
+                  drawer={OfferSheet}
+                  offerId={offer.id}
+                  companyId={offer.companyId as unknown as number}
+                  companyName={offer.companyName}
+                  amplitude={amplitude}
+                >
+                  <ResponsiveOfferCard
+                    id={offer.id}
+                    type={offer.type}
+                    name={offer.name}
+                    image={offer.image}
+                    companyId={Number(companyId)}
+                    companyName={companyName}
+                    variant={isMobile ? 'horizontal' : 'vertical'}
+                  />
+                </Drawer>
               </button>
             ))}
           </div>

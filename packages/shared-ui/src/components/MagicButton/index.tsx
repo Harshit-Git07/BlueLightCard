@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 import { IconDefinition } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -12,24 +12,25 @@ type BodyStyles = {
   [key in MagicBtnVariant]: string;
 };
 
-export type Props = PropsWithChildren & {
+export type MagicButtonProps = PropsWithChildren & {
   variant: MagicBtnVariant;
   onClick?: () => void;
   clickable?: boolean;
   className?: string;
-  label: string;
+  label?: string;
   description?: string;
   icon?: IconDefinition;
 };
 
-const MagicButton: FC<Props> = ({
+const MagicButton: FC<MagicButtonProps> = ({
   variant = MagicBtnVariant.Primary,
   clickable = true,
-  onClick = undefined,
+  onClick = () => {},
   className = '',
   icon,
   label,
   description,
+  ...props
 }) => {
   const pressedBtn = variant === MagicBtnVariant.Pressed;
   const disabledBtn = variant === MagicBtnVariant.Disabled;
@@ -68,11 +69,13 @@ const MagicButton: FC<Props> = ({
 
   return (
     <button
+      type="button"
       className={`${className} z-10 relative w-fit rounded-full overflow-hidden p-1 h-[3.75rem] ${
         disabledBtn ? 'disabled' : clickable ? 'cursor-pointer' : 'cursor-default'
       }`}
       disabled={disabledBtn}
-      onClick={() => (!disabledBtn && onClick ? onClick() : null)}
+      onClick={onClick}
+      {...props}
     >
       {!disabledBtn && pressedBtn && (
         <div className="absolute z-0 aspect-square min-w-[125%] min-h-[125%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex">

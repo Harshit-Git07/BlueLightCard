@@ -1,5 +1,5 @@
 import * as amplitude from '@amplitude/analytics-browser';
-import { ServerZoneType } from '@amplitude/analytics-types/lib/esm/server-zone';
+import type { ServerZoneType } from '@amplitude/analytics-types/lib/esm/server-zone';
 import { BRAND } from '@/global-vars';
 
 const { LogLevel } = amplitude.Types;
@@ -8,7 +8,7 @@ export const AMPLITUDE_SERVER_ZONE: ServerZoneType = 'EU';
 export const AMPLITUDE_LOG_LEVEL = LogLevel.Warn;
 
 export class Amplitude {
-  public isInitialised: boolean = false;
+  public isInitialised = false;
 
   async initialise(apiKey: string) {
     if (this.isInitialised) {

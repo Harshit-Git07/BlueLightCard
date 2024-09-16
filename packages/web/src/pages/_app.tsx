@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import '@/styles/swiper.css';
 
 import type { AppProps } from 'next/app';
-import { FC, ReactElement, useContext, lazy } from 'react';
+import { type ReactElement, useContext, lazy } from 'react';
 import { appWithTranslation } from 'next-i18next';
 import { datadogRum } from '@datadog/browser-rum';
 import flagsmith from 'flagsmith';
@@ -24,7 +24,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 // Prevent fontawesome from adding its CSS since we did it manually above:
 import { config } from '@fortawesome/fontawesome-svg-core';
-import { NextPageWithLayout } from '@/page-types/layout';
+import type { NextPageWithLayout } from '@/page-types/layout';
 import Head from 'next/head';
 import AmplitudeProvider from '@/utils/amplitude/provider';
 import { FlagsmithProvider } from 'flagsmith/react';
@@ -59,7 +59,7 @@ const ReactQueryDevtoolsPreview = lazy(() =>
 );
 const queryClient = new QueryClient();
 
-const App: FC<AppProps> = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }: AppProps) => {
   const amplitude = useContext(AmplitudeContext);
   // Use the layout defined at the page level, if available
   const getLayout = (Component as NextPageWithLayout).getLayout || ((page: ReactElement) => page);

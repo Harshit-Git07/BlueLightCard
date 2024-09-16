@@ -1,4 +1,5 @@
 interface OfferBaseModel {
+  offerId?: number;
   id: number;
   compid: number;
   offername: string;

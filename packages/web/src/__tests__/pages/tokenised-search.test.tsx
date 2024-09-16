@@ -86,6 +86,20 @@ describe('SearchPage', () => {
       loading: false,
       networkStatus: NetworkStatus.ready,
     });
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
   });
 
   it('Renders loading placeholders', async () => {
@@ -347,11 +361,19 @@ const whenSearchPageIsRendered = (variant: string) => {
 const whenOfferCardClicked = async () => {
   let user = userEvent.setup();
 
-  const offerCard = await screen.findByTestId('offer-card-123');
+  const offerCard = await screen.findByTestId('_drawer_0');
 
-  await user.click(offerCard.children[0].children[0]);
+  await user.click(offerCard.children[0]);
 };
 
 const thenAmplitudeEventFired = () => {
-  expect(logSearchCardClicked).toHaveBeenCalledWith(342, 'Apple', 123, 'Apple', 'Apple', 5, 3);
+  expect(logSearchCardClicked).toHaveBeenCalledWith(
+    340,
+    'Online Company',
+    121,
+    'Online Offer 1',
+    'Apple',
+    5,
+    1
+  );
 };

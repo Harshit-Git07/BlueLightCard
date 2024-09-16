@@ -14,4 +14,5 @@ export interface CardCarouselProps {
   itemsToShow: number;
   useSmallCards?: boolean;
   offers: CardCarouselOffer[];
+  opensOffersheet?: boolean;
 }

@@ -1,3 +1,4 @@
+import { Messages } from '../../utils/messages';
 import { getOffer } from '../offers';
 import { useMockPlatformAdapter } from 'src/adapters';
 
@@ -31,6 +32,14 @@ describe('getOffer', () => {
 
     const result = getOffer(mockPlatformAdapter, 123);
 
-    expect(result).rejects.toThrow('Unable to retrieve offer details');
+    expect(result).rejects.toThrow(Messages.UNABLE_RETRIEVE_OFFER_DETAILS);
+  });
+
+  test('getOffer throws an error if there are no offers', async () => {
+    const mockPlatformAdapter = useMockPlatformAdapter(404);
+
+    const result = getOffer(mockPlatformAdapter, 123);
+
+    expect(result).rejects.toThrow('Offer not found');
   });
 });

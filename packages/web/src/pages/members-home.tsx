@@ -7,11 +7,10 @@ import {
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
   BLACK_FRIDAY_TIME_LOCK_END_DATE,
   OFFERS_BRAND,
-  CDN_URL,
 } from '@/global-vars';
 import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
 import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
-import {
+import type {
   BannerType,
   DealsOfTheWeekType,
   FeaturedOffersType,
@@ -24,7 +23,7 @@ import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerP
 import AlertBox from '@/components/AlertBox/AlertBox';
 import Container from '@/components/Container/Container';
 import { SwiperCarousel } from '@bluelightcard/shared-ui';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 
 import inTimePeriod from '@/utils/inTimePeriod';
@@ -33,12 +32,9 @@ import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
-import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
-import { useRouter } from 'next/router';
 import { useBrazeContentCards } from '@/hooks/useBrazeContentCards';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeContext from '../common/context/AmplitudeContext';
-import { useMedia } from 'react-use';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -75,11 +71,8 @@ const HomePage: NextPage<any> = () => {
   const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
   const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
-  const { viewOffer } = useOfferDetails();
 
   const contentCards = useBrazeContentCards();
-  const router = useRouter();
-  const isMobile = useMedia('(max-width: 500px)');
 
   const brazeContentCardsEnabled = useAmplitudeExperiment(
     AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
@@ -92,8 +85,6 @@ const HomePage: NextPage<any> = () => {
   // Auth context
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
-
-  const amplitude = useContext(AmplitudeContext);
 
   // Fetch Data on first load
   useEffect(() => {
@@ -143,17 +134,6 @@ const HomePage: NextPage<any> = () => {
     userCtx.error,
   ]);
 
-  async function onSelectOffer(offerId: number, companyId: number, companyName: string) {
-    await viewOffer({
-      offerId: offerId,
-      companyId: companyId,
-      companyName: companyName,
-      platform: PlatformVariant.Web,
-      amplitudeCtx: amplitude,
-      responsiveWeb: isMobile,
-    });
-  }
-
   // Format carousel data
   const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({
     offername: cleanText(offer.offername),
@@ -163,7 +143,6 @@ const HomePage: NextPage<any> = () => {
     offerId: offer.id,
     companyId: offer.compid,
     hasLink: false,
-    onClick: async () => await onSelectOffer(offer.id, offer.compid, offer.companyname),
   }));
 
   const flexibleOffersData = flexibleMenu
@@ -183,7 +162,6 @@ const HomePage: NextPage<any> = () => {
     offerId: offer.id,
     companyId: offer.compid,
     hasLink: false,
-    onClick: async () => await onSelectOffer(offer.id, offer.compid, offer.companyname),
   }));
 
   const isBlackFriday = inTimePeriod(BLACK_FRIDAY_TIMELOCK_SETTINGS);
@@ -282,6 +260,7 @@ const HomePage: NextPage<any> = () => {
             itemsToShow={3}
             useSmallCards
             offers={flexibleOffersData}
+            opensOffersheet={false}
           />
         </Container>
       )}
@@ -293,7 +272,7 @@ const HomePage: NextPage<any> = () => {
           <Container
             className="py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
             addBottomHorizontalLine
-            key={index}
+            key={'mm-' + index}
             data-testid={`marketplace-menu-carousel-${index}`}
           >
             <CardCarousel
@@ -308,8 +287,6 @@ const HomePage: NextPage<any> = () => {
                   offerId: item.offerId,
                   companyId: item.compid,
                   hasLink: false,
-                  onClick: async () =>
-                    await onSelectOffer(item.offerId, item.compid, item.companyname),
                 };
               })}
             />

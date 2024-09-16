@@ -10,13 +10,7 @@ import { shuffle } from 'lodash';
 import { BRAND } from '@/global-vars';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
-import {
-  Container,
-  CompanyAbout,
-  PlatformVariant,
-  CampaignCard,
-  useOfferDetails,
-} from '@bluelightcard/shared-ui';
+import { Container, CompanyAbout, PlatformVariant, CampaignCard } from '@bluelightcard/shared-ui';
 import { getCompany, getOffersByCompany } from '../common/utils/company/companyData';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import AmplitudeContext from '@/context/AmplitudeContext';
@@ -59,8 +53,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-  const { viewOffer } = useOfferDetails();
-
   const getBrand = () => {
     switch (BRAND) {
       case BRANDS.BLC_UK:
@@ -70,16 +62,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         return 'Defense Discount Service';
     }
   };
-
-  async function onSelectOffer(offerId: number, companyId: number, companyName: string) {
-    await viewOffer({
-      offerId: offerId,
-      companyId: companyId,
-      companyName: companyName,
-      platform: PlatformVariant.Web,
-      amplitudeCtx: amplitude,
-    });
-  }
 
   useEffect(() => {
     const fetchBannerData = async () => {
@@ -243,7 +225,6 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             companyName: string,
             index: number
           ) => {
-            onSelectOffer(offerId, companyId, companyName);
             if (amplitude) {
               await amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
                 company_id: companyData.id,

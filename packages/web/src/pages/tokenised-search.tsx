@@ -27,11 +27,11 @@ import Container from '@/components/Container/Container';
 import { getOffersByCategoryUrl } from '@/utils/externalPageUrls';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import {
+  Drawer,
   Heading,
+  OfferSheet,
   PillGroup,
-  PlatformVariant,
   ResponsiveOfferCard,
-  useOfferDetails,
 } from '@bluelightcard/shared-ui';
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { z } from 'zod';
@@ -86,7 +86,6 @@ export const TokenisedSearch: NextPage = () => {
   const amplitude = useContext(AmplitudeContext);
 
   const searchExperiment = useAmplitudeExperiment('category_level_three_search', 'control');
-  const { viewOffer } = useOfferDetails();
   const { categories } = useFetchCompaniesOrCategories(userCtx);
 
   useEffect(() => {
@@ -103,7 +102,9 @@ export const TokenisedSearch: NextPage = () => {
         searchExperiment.data?.variantName === 'treatment'
       );
 
-      if (searchResults.results) {
+      console.log(searchResults);
+
+      if (searchResults?.results) {
         setSearchResults(searchResults.results);
         setUsedQuery(query);
       } else {
@@ -120,9 +121,9 @@ export const TokenisedSearch: NextPage = () => {
 
       setIsLoading(false);
 
-      logSearchPage(query, searchResults.results ? searchResults.results.length : 0);
+      logSearchPage(query, searchResults?.results ? searchResults.results.length : 0);
       if (router.query.issuer === 'serp') {
-        logSerpSearchStarted(query, searchResults.results ? searchResults.results.length : 0);
+        logSerpSearchStarted(query, searchResults?.results ? searchResults.results.length : 0);
       }
     };
 
@@ -206,13 +207,6 @@ export const TokenisedSearch: NextPage = () => {
                 if (searchOfferSheetExperiment.data?.variantName === 'treatment') {
                   onOfferCardClick = async () => {
                     onTrackSearchAnalytics();
-                    await viewOffer({
-                      offerId: result.ID as unknown as number,
-                      companyId: result.CompID as unknown as number,
-                      companyName: result.CompanyName,
-                      platform: PlatformVariant.Web,
-                      amplitudeCtx: amplitude,
-                    });
                   };
                 } else {
                   onOfferCardClick = () => {
@@ -222,20 +216,28 @@ export const TokenisedSearch: NextPage = () => {
                 }
 
                 return (
-                  <div key={result.ID}>
-                    <ResponsiveOfferCard
-                      id={result.ID}
-                      type={getOfferTypeFromIndex(result.OfferType)}
-                      name={he.decode(result.OfferName)}
-                      image={
-                        imageSrc !== ''
-                          ? imageSrc
-                          : getCDNUrl(`/companyimages/complarge/retina/${result.CompID}.jpg`)
-                      }
+                  <div key={result.ID} data-testid={'_drawer_' + index}>
+                    <Drawer
+                      drawer={OfferSheet}
                       companyId={result.CompID}
+                      offerId={result.ID}
                       companyName={result.CompanyName}
+                      amplitude={amplitude}
                       onClick={onOfferCardClick}
-                    />
+                    >
+                      <ResponsiveOfferCard
+                        id={result.ID}
+                        type={getOfferTypeFromIndex(result.OfferType)}
+                        name={he.decode(result.OfferName)}
+                        image={
+                          imageSrc !== ''
+                            ? imageSrc
+                            : getCDNUrl(`/companyimages/complarge/retina/${result.CompID}.jpg`)
+                        }
+                        companyId={result.CompID}
+                        companyName={result.CompanyName}
+                      />
+                    </Drawer>
                   </div>
                 );
               })}

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { OfferListItem, SearchResults } from '../types';
 import ListItem from '@/components/ListItem/ListItem';
+import { Drawer, OfferSheet } from '@bluelightcard/shared-ui';
 
 export interface Props {
   results: SearchResults;
@@ -22,21 +23,28 @@ const SearchResultsPresenter: FC<Props> = ({ results, onOfferClick }) => {
       {results.map((offer, index) => (
         <div key={offer.id} role="listitem">
           <div className="p-4 border-b border-listItem-divider-colour-light dark:border-listItem-divider-colour-dark">
-            <ListItem
-              title={offer.offername}
-              text={offer.companyname}
-              onClick={() =>
-                onOfferClick({
-                  companyId: offer.compid,
-                  companyName: offer.companyname,
-                  offerId: offer.id,
-                  offerName: offer.offername,
-                  searchResultNumber: index + 1,
-                })
-              }
-              imageSrc={offer.s3logos}
-              imageAlt={offer.offername}
-            />
+            <Drawer
+              drawer={OfferSheet}
+              companyId={offer.compid}
+              offerId={offer.id}
+              companyName={offer.companyname || ''}
+            >
+              <ListItem
+                title={offer.offername}
+                text={offer.companyname}
+                onClick={() =>
+                  onOfferClick({
+                    companyId: offer.compid,
+                    companyName: offer.companyname,
+                    offerId: offer.id,
+                    offerName: offer.offername,
+                    searchResultNumber: index + 1,
+                  })
+                }
+                imageSrc={offer.s3logos}
+                imageAlt={offer.offername}
+              />
+            </Drawer>
           </div>
         </div>
       ))}

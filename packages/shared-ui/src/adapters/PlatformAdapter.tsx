@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { AmplitudeLogParams, PlatformVariant } from '../types';
+import type { AmplitudeLogParams, PlatformVariant } from '../types';
 
 export type Amplitude = {
   isInitialised: boolean;

@@ -1,5 +1,5 @@
-import React, { FC, useContext, useState } from 'react';
-import { OfferCardProps } from './types';
+import React, { type FC, useContext, useState } from 'react';
+import type { OfferCardProps } from './types';
 import Link from '@/components/Link/Link';
 import Image from '@/components/Image/Image';
 import OfferCardDetails from './OfferCardDetails';
@@ -87,8 +87,9 @@ const OfferCard: FC<OfferCardProps> = ({
   );
 
   return (
-    <div
-      className={`w-full h-full relative pb-5 mb-2 ${backgroundRootClasses} ${borderClasses} overflow-hidden`}
+    <button
+      type="button"
+      className={`w-full h-full relative pb-5 mb-2 ${backgroundRootClasses} ${borderClasses} overflow-hidden text-left`}
       data-testid={id}
       onClick={onClick}
     >
@@ -105,7 +106,7 @@ const OfferCard: FC<OfferCardProps> = ({
         </Link>
       )}
       {!hasLink && body}
-    </div>
+    </button>
   );
 };
 export default OfferCard;

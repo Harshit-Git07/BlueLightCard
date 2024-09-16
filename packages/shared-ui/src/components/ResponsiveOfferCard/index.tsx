@@ -5,7 +5,6 @@ import getCDNUrl from '../../utils/getCDNUrl';
 import { PlatformVariant, SharedProps } from '../../types';
 import { useCSSConditional, useCSSMerge } from '../../hooks/useCSS';
 import { offerTypeParser, OfferTypeStrLiterals } from '../../utils/offers/offerSheetParser';
-import { useOfferSheetControls } from '../../context/OfferSheet/hooks';
 
 export type BgColorString = `bg-${string}`;
 
@@ -41,27 +40,12 @@ const ResponsiveOfferCard: FC<Props> = ({
 }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
-  const { open } = useOfferSheetControls();
   const [imageSource, setImageSource] = useState<string>(image ? getCDNUrl(image) : fallbackImage);
-
-  const openOfferSheet = () => {
-    open({
-      offerId: id,
-      companyId,
-      companyName,
-    });
-  };
-
-  const onCardInteraction = () => {
-    if (onClick) return onClick();
-
-    openOfferSheet();
-  };
 
   const onCardKeyDown = (event: KeyboardEvent) => {
     if (event.key !== 'Enter') return;
 
-    onCardInteraction();
+    onClick && onClick();
   };
 
   const tagBackground: BgColorTagParser = {
@@ -91,7 +75,7 @@ const ResponsiveOfferCard: FC<Props> = ({
       role="button"
       aria-label={`${companyName}: ${name}`}
       tabIndex={tabIndex}
-      onClick={onCardInteraction}
+      onClick={onClick}
       onKeyDown={onCardKeyDown}
     >
       <div

@@ -47,7 +47,7 @@ const SwiperCarousel: React.FC<CarouselProps> = ({
           spaceBetween: 20,
         },
       }}
-      className={pagination ? 'swiper-pagination-enabled z-0' : ''}
+      className={pagination ? 'swiper-pagination-enabled' : ''}
     >
       {React.Children.map(children, (child, index) => (
         <SwiperSlide key={index}>{child}</SwiperSlide>

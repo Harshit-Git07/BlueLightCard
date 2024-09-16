@@ -1,16 +1,14 @@
-import { RedemptionType } from '../../utils/redemptionTypes';
 import { useMockPlatformAdapter } from '../../adapters';
 import { getRedemptionDetails, redeemOffer, RedeemResultKind } from '../redemptions';
+import { undefined } from 'zod';
 
 describe('getRedemptionDetails', () => {
   test('getRedemptionDetails calls the redemption details endpoint', async () => {
-    const mockPlatformAdapter = useMockPlatformAdapter(200, {
-      data: { redemptionType: RedemptionType.VAULT },
-    });
+    const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
 
     const result = await getRedemptionDetails(mockPlatformAdapter, 123);
 
-    expect(result).toEqual({ data: { redemptionType: RedemptionType.VAULT } });
+    expect(result).toEqual({ data: { redemptionType: 'vault' } });
     expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
       '/eu/redemptions/member/redemptionDetails',
       {
@@ -35,7 +33,7 @@ describe('redeemOffer', () => {
       statusCode: 200,
       data: {
         kind: RedeemResultKind.OK,
-        redemptionType: RedemptionType.VAULT,
+        redemptionType: 'vault',
         redemptionDetails: {
           url: 'https://example.com',
           code: '123456',
@@ -44,17 +42,14 @@ describe('redeemOffer', () => {
     };
 
     const expectedResponse = {
-      kind: RedeemResultKind.OK,
-      redemptionType: RedemptionType.VAULT,
-      redemptionDetails: {
-        url: 'https://example.com',
-        code: '123456',
-      },
+      data: mockedResponseData.data,
+      state: RedeemResultKind.OK,
     };
 
     const mockPlatformAdapter = useMockPlatformAdapter(200, mockedResponseData);
 
     const result = await redeemOffer(mockPlatformAdapter, 123, 'offerName', 'companyName');
+
     expect(result).toEqual(expectedResponse);
 
     expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/eu/redemptions/member/redeem', {
@@ -69,9 +64,14 @@ describe('redeemOffer', () => {
       data: { kind: RedeemResultKind.MaxPerUserReached, message: 'max reached' },
     };
 
+    const expectedResponse = {
+      data: mockResponseData.data,
+      state: RedeemResultKind.MaxPerUserReached,
+    };
+
     const mockPlatformAdapter = useMockPlatformAdapter(403, mockResponseData);
-    const result = redeemOffer(mockPlatformAdapter, 123, 'offerName', 'companyName');
-    await expect(result).rejects.toThrow('Unable to redeem offer');
+    const result = await redeemOffer(mockPlatformAdapter, 123, 'offerName', 'companyName');
+    expect(result).toEqual(expectedResponse);
   });
 
   test('redeemOffer throws an error if the redeem endpoint does not return a 200', async () => {
@@ -82,6 +82,6 @@ describe('redeemOffer', () => {
 
     const result = redeemOffer(mockPlatformAdapter, 123, 'offerName', 'companyName');
 
-    await expect(result).rejects.toThrow('Unable to redeem offer');
+    expect(result).rejects.toThrow('Unable to redeem offer');
   });
 });

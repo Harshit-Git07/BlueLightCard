@@ -7,7 +7,9 @@ import { AmplitudeArg, PlatformVariant, ThemeVariant } from '../../types';
 import CheckSvg from './CheckSvg';
 import CheckCircleSvg from './CheckCircleSvg';
 import ErrorCircleSvg from './ErrorCircleSvg';
-import { type Amplitude, usePlatformAdapter } from '../../adapters';
+import { offerSheetAtom } from '../OfferSheet/store';
+import { useAtomValue } from 'jotai';
+import { usePlatformAdapter } from '../../adapters';
 
 type Props = {
   showShareLabel?: boolean;
@@ -17,7 +19,6 @@ type Props = {
     url: string;
   };
   shareLabel?: string;
-  amplitude?: Amplitude | null;
   amplitudeDetails?: AmplitudeArg;
 };
 
@@ -25,11 +26,12 @@ const ShareButton: FC<Props> = ({
   showShareLabel = true,
   shareDetails,
   shareLabel = 'Share',
-  amplitude,
   amplitudeDetails,
 }) => {
   const platformAdapter = usePlatformAdapter();
-  const isMobile = platformAdapter.platform === PlatformVariant.MobileHybrid;
+  const { platform, amplitudeEvent } = useAtomValue(offerSheetAtom);
+  const isMobile = platform === PlatformVariant.MobileHybrid;
+
   const [shareBtnState, setShareBtnState] = useState<'share' | 'error' | 'success'>('share');
 
   const copyLink = async () => {
@@ -64,8 +66,8 @@ const ShareButton: FC<Props> = ({
   };
 
   const handleShareClick = async () => {
-    if (amplitudeDetails) {
-      platformAdapter.logAnalyticsEvent(amplitudeDetails.event, amplitudeDetails.params, amplitude);
+    if (amplitudeEvent && amplitudeDetails) {
+      amplitudeEvent(amplitudeDetails);
     }
 
     if (isMobile && !showShareLabel && shareDetails) {

@@ -16,14 +16,6 @@ const config: Config = {
   presets,
   content: ['./src/**/*.{tsx,js}', './docs/**/*.{tsx,mdx}'],
   plugins: [],
-  theme: {
-    extend: {
-      boxShadow: {
-        offerSheetTop: '0 -2px 8px rgba(0, 0, 0, 0.1)',
-        dropdownTop: '0 2px 8px rgba(0, 0, 0, 0.15)',
-      },
-    },
-  },
 };
 
 export default config;

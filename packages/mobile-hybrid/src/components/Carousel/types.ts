@@ -6,7 +6,6 @@ export interface CardCarouselProps {
 
 export interface Slide {
   id: number;
-  offerId?: number;
   text?: string;
   title?: string;
   imageSrc: string;

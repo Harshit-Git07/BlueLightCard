@@ -8,11 +8,14 @@ import {
   AuthedAmplitudeExperimentProvider,
 } from '@/context/AmplitudeExperiment';
 import requireAuth from '../../hoc/requireAuth';
+import { ViewOfferProvider } from '@bluelightcard/shared-ui';
 
 const BaseLayoutWrapperAuth: React.FC<LayoutProps> = (props) => (
   <UserProvider>
     <AuthedAmplitudeExperimentProvider>
-      <BaseLayout {...props}>{props.children}</BaseLayout>
+      <ViewOfferProvider>
+        <BaseLayout {...props}>{props.children}</BaseLayout>
+      </ViewOfferProvider>
     </AuthedAmplitudeExperimentProvider>
   </UserProvider>
 );

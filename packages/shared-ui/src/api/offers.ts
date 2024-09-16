@@ -1,4 +1,3 @@
-import { Messages } from '../utils/messages';
 import { IPlatformAdapter } from '../adapters';
 import { z } from 'zod';
 
@@ -21,15 +20,11 @@ export async function getOffer(
   const result = await platformAdapter.invokeV5Api(`/eu/offers/offers/${offerId.toString()}`, {
     method: 'GET',
   });
-  if (result.status === 404) {
-    throw new Error(Messages.OFFER_NOT_FOUND);
-  }
 
   if (result.status !== 200) {
-    throw new Error(Messages.UNABLE_RETRIEVE_OFFER_DETAILS);
+    throw new Error('Unable to retrieve offer details');
   }
 
   const resultData = JSON.parse(result.data);
-
   return OfferDataSchema.parse(resultData.data);
 }

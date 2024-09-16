@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect } from 'react';
-import { usePlatformAdapter } from '@bluelightcard/shared-ui';
+import { PlatformVariant, useOfferDetails, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import SearchResultsPresenter from './SearchResultsPresenter';
 import { OfferListItem } from '../types';
 import InvokeNativeAnalytics from '@/invoke/analytics';
@@ -14,6 +14,8 @@ const analytics = new InvokeNativeAnalytics();
 const SearchResultsContainer: FC = () => {
   const platformAdapter = usePlatformAdapter();
   const { searchTerm, searchResults } = useSearch(platformAdapter);
+
+  const { viewOffer } = useOfferDetails();
 
   const logSearchResultsListViewedAnalytic = useCallback(
     (numberOfResults: number) => {
@@ -46,6 +48,13 @@ const SearchResultsContainer: FC = () => {
         search_term: searchTerm,
         search_result_number: searchResultNumber,
       },
+    });
+
+    await viewOffer({
+      offerId,
+      companyId,
+      companyName,
+      platform: PlatformVariant.MobileHybrid,
     });
   };
 

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the generic redemption type 1`] = `"offer-sheet-redeem-non-vault-app"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the preApplied redemption type 1`] = `"offer-sheet-redeem-non-vault-app"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the showCard redemption type 1`] = `"offer-sheet-redeem-non-vault-app"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the vault redemption type 1`] = `"offer-sheet-redeem-vault-app"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the mobile-hybrid experiment for the vaultQR redemption type 1`] = `"offer-sheet-redeem-non-vault-app"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the web experiment for the generic redemption type 1`] = `"offer-sheet-redeem-non-vault-web"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the web experiment for the preApplied redemption type 1`] = `"offer-sheet-redeem-non-vault-web"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the web experiment for the showCard redemption type 1`] = `"offer-sheet-redeem-non-vault-web"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the web experiment for the vault redemption type 1`] = `"offer-sheet-redeem-vault-search-and-homepage-web-2"`;
+
+exports[`getPlatformExperimentForRedemptionType checks the web experiment for the vaultQR redemption type 1`] = `"offer-sheet-redeem-non-vault-web"`;

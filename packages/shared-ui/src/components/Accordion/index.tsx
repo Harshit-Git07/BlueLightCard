@@ -1,25 +1,24 @@
 import { FC, useState } from 'react';
 import MinusSvg from './MinusSvg';
 import PlusSvg from './PlusSvg';
+import { useAtomValue } from 'jotai';
+import { offerSheetAtom } from '../OfferSheet/store';
 import { AmplitudeArg } from '../../types';
-import { Amplitude, usePlatformAdapter } from '../../adapters';
 
 export type Props = {
   title: string;
   children: React.ReactNode;
-  amplitude?: Amplitude | null;
   amplitudeDetails?: AmplitudeArg;
 };
 
-const Accordion: FC<Props> = ({ title, children, amplitude, amplitudeDetails }) => {
-  const platformAdapter = usePlatformAdapter();
-
+const Accordion: FC<Props> = ({ title, children, amplitudeDetails }) => {
   const [active, setActive] = useState(false);
+  const { amplitudeEvent } = useAtomValue(offerSheetAtom);
 
   const handleToggle = () => {
     setActive(!active);
-    if (!active && amplitudeDetails) {
-      platformAdapter.logAnalyticsEvent(amplitudeDetails.event, amplitudeDetails.params, amplitude);
+    if (!active && amplitudeEvent && amplitudeDetails) {
+      amplitudeEvent(amplitudeDetails);
     }
   };
 

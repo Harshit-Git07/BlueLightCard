@@ -15,5 +15,5 @@ export const useCSSConditional = (classes: Record<string, boolean>) => {
 };
 
 export const useCSSMerge = (...css: string[]) => {
-  return useMemo(() => css.join(' '), [css]);
+  return useMemo(() => css.join(' '), [...css]);
 };

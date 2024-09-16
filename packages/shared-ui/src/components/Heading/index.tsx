@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import { mergeClassnames } from '../../utils/cssUtils';
+import { FC } from 'react';
 
 export interface Props extends React.HTMLAttributes<HTMLHeadingElement> {
   headingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -31,7 +30,7 @@ const Heading: FC<Props> = ({ headingLevel, children, className }) => {
       break;
   }
 
-  const classes = mergeClassnames(size, defaultStyles, className);
+  const classes = `${size} ${defaultStyles} ${className}`;
   return <Heading className={classes}>{children}</Heading>;
 };
 

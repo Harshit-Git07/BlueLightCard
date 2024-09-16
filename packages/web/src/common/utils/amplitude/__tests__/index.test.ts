@@ -35,14 +35,13 @@ describe('Initialise Amplitude', () => {
       expect(amplitudeMock.init).toHaveBeenCalledWith('API_KEY', mockedUserId, {
         serverZone: 'EU',
         logLevel: amplitude.Types.LogLevel.Warn,
-        transport: 'beacon',
       });
     });
 
-    it('should call set session id with the session id', () => {
+    it('should call set session id with the session id', async () => {
       sessionStorage.setItem('amplitude_session_id', '5678');
 
-      target.initialiseAmplitude();
+      await target.initialiseAmplitude();
 
       expect(amplitudeMock.setSessionId).toHaveBeenCalledWith(5678);
     });
@@ -60,15 +59,16 @@ describe('Initialise Amplitude', () => {
     expect(amplitude.track).toHaveBeenCalledWith(EVENTS.HOMEPAGE_VIEWED, eventProperties);
   });
 
-  it('should call logSearchTermEvent with correct parameters when searchTerm is provided', () => {
+  it('should call logSearchTermEvent with correct parameters when searchTerm is provided', async () => {
     const searchTerm = 'test';
     const eventProperties = {
       search_term: searchTerm,
       brand: 'blc-uk',
     };
     const trackMock = jest.spyOn(amplitude, 'track');
+    trackMock.mockResolvedValue({ promise: Promise.resolve() } as never);
 
-    logSearchTermEvent(searchTerm);
+    await logSearchTermEvent(searchTerm);
 
     expect(trackMock).toHaveBeenCalledWith(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties);
   });

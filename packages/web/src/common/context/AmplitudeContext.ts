@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Amplitude } from '@/utils/amplitude/amplitude';
+import { Amplitude } from '@/utils/amplitude/amplitude';
 
 const AmplitudeContext = React.createContext<Amplitude | null | undefined>(null);
 

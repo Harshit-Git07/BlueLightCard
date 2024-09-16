@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { cssUtil } from '../../utils/cssUtils';
+import { cssUtil } from '../../utils/cssUtil';
 import { SharedProps, PlatformVariant } from '../../types';
 import { useCSSConditional, useCSSMerge } from '../../hooks/useCSS';
 

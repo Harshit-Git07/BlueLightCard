@@ -1,5 +1,5 @@
 import * as amplitude from '@amplitude/analytics-browser';
-import type { ServerZoneType } from '@amplitude/analytics-types/lib/esm/server-zone';
+import { ServerZoneType } from '@amplitude/analytics-types/lib/esm/server-zone';
 import { BRAND } from '@/global-vars';
 
 const { LogLevel } = amplitude.Types;
@@ -8,7 +8,7 @@ export const AMPLITUDE_SERVER_ZONE: ServerZoneType = 'EU';
 export const AMPLITUDE_LOG_LEVEL = LogLevel.Warn;
 
 export class Amplitude {
-  public isInitialised = false;
+  public isInitialised: boolean = false;
 
   async initialise(apiKey: string) {
     if (this.isInitialised) {
@@ -22,11 +22,10 @@ export class Amplitude {
 
     const sessionId = sessionStorage.getItem('amplitude_session_id');
 
-    const initResult = amplitude.init(apiKey, {
+    const initResult = await amplitude.init(apiKey, {
       serverZone: AMPLITUDE_SERVER_ZONE,
       logLevel: AMPLITUDE_LOG_LEVEL,
-      transport: 'beacon',
-    });
+    }).promise;
     if (sessionId) this.setSessionId(sessionId);
 
     this.isInitialised = true;

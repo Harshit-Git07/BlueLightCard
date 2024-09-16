@@ -10,7 +10,13 @@ import { shuffle } from 'lodash';
 import { BRAND } from '@/global-vars';
 import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
-import { Container, CompanyAbout, PlatformVariant, CampaignCard } from '@bluelightcard/shared-ui';
+import {
+  Container,
+  CompanyAbout,
+  PlatformVariant,
+  CampaignCard,
+  useOfferDetails,
+} from '@bluelightcard/shared-ui';
 import { getCompany, getOffersByCompany } from '../common/utils/company/companyData';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import AmplitudeContext from '@/context/AmplitudeContext';
@@ -53,6 +59,8 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
+  const { viewOffer } = useOfferDetails();
+
   const getBrand = () => {
     switch (BRAND) {
       case BRANDS.BLC_UK:
@@ -62,6 +70,16 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         return 'Defense Discount Service';
     }
   };
+
+  async function onSelectOffer(offerId: number, companyId: number, companyName: string) {
+    await viewOffer({
+      offerId: offerId,
+      companyId: companyId,
+      companyName: companyName,
+      platform: PlatformVariant.Web,
+      amplitudeCtx: amplitude,
+    });
+  }
 
   useEffect(() => {
     const fetchBannerData = async () => {
@@ -180,9 +198,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         <CompanyPageWebHeader
           isMobile={isMobile}
           companyData={companyData}
-          companySharedEvent={() => {
+          companySharedEvent={async () => {
             if (amplitude) {
-              amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
+              await amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
                 company_id: companyData.id,
                 company_name: companyData.name,
               });
@@ -201,10 +219,10 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         {/* Filters */}
         <CompanyPageFilters
           enabledFilters={enabledFilters}
-          onSelected={(pillType: CompanyPageFilterOptions) => {
+          onSelected={async (pillType: CompanyPageFilterOptions) => {
             setFilterType(pillType);
             if (amplitude) {
-              amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
+              await amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
                 company_id: companyData.id,
                 company_name: companyData.name,
                 filter_name: pillType,
@@ -218,15 +236,16 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           offers={filteredOffers || []}
           companyId={companyData?.id}
           companyName={companyData?.name}
-          onOfferClick={(
+          onOfferClick={async (
             offerId: number,
             offerName: string,
             companyId: number,
             companyName: string,
             index: number
           ) => {
+            onSelectOffer(offerId, companyId, companyName);
             if (amplitude) {
-              amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
+              await amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
                 company_id: companyData.id,
                 company_name: companyData.name,
                 position: index,

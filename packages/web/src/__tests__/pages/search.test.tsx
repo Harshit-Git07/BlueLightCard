@@ -17,12 +17,6 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { Factory } from 'fishery';
 import _noop from 'lodash/noop';
 import { logSearchCardClicked } from '@/utils/amplitude';
-import {
-  IPlatformAdapter,
-  PlatformAdapterProvider,
-  V5RequestOptions,
-} from '@bluelightcard/shared-ui/adapters';
-import { PlatformVariant } from '@bluelightcard/shared-ui/types';
 
 jest.mock('@amplitude/analytics-browser', () => ({
   Types: { LogLevel: {} },
@@ -69,20 +63,6 @@ describe('SearchPage', () => {
       data: [],
       loading: false,
       networkStatus: NetworkStatus.ready,
-    });
-
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
     });
   });
 
@@ -174,9 +154,7 @@ const whenSearchPageIsRendered = (variant: string) => {
           <RouterContext.Provider value={mockRouter as NextRouter}>
             <AuthContext.Provider value={mockAuthContext as AuthContextType}>
               <UserContext.Provider value={userContext}>
-                <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-                  <Search />
-                </PlatformAdapterProvider>
+                <Search />
               </UserContext.Provider>
             </AuthContext.Provider>
           </RouterContext.Provider>
@@ -189,58 +167,11 @@ const whenSearchPageIsRendered = (variant: string) => {
 const whenOfferCardClicked = async () => {
   let user = userEvent.setup();
 
-  const drawer = await screen.findByTestId('_drawer_0');
+  const offerCard = await screen.findByTestId('_offer_card_0');
 
-  await user.click(drawer.children[0]);
+  await user.click(offerCard);
 };
 
 const thenAmplitudeEventFired = () => {
   expect(logSearchCardClicked).toHaveBeenCalledWith(342, 'Apple', 123, 'Apple', 'Apple', 1, 1);
-};
-
-export const getMockInvoke = (redemptionType?: string) => {
-  return (path: string, options: V5RequestOptions) => {
-    if (!redemptionType || redemptionType === 'error') {
-      return Promise.resolve({ status: 500, data: '' });
-    }
-    if (path === `/eu/offers/offers/123`) {
-      return Promise.resolve({
-        status: 200,
-        data: JSON.stringify({
-          data: {
-            id: 123,
-            companyId: 123,
-            companyLogo: 'https://cdn.bluelightcard.co.uk/companyimages/complarge/retina/5319.jpg',
-            description: 'Offer Description',
-            expiry: '12/10/1998',
-            name: 'Test Offer',
-            terms: 'Must be a Blue Light Card member in order to receive the discount.',
-            type: 'Online',
-          },
-        }),
-      });
-    } else {
-      return Promise.resolve({
-        status: 200,
-        data: JSON.stringify({
-          data: {
-            redemptionType: redemptionType,
-          },
-        }),
-      });
-    }
-  };
-};
-
-const mockPlatformAdapter: IPlatformAdapter = {
-  getAmplitudeFeatureFlag: () => 'treatment',
-  invokeV5Api: getMockInvoke('vault'),
-  logAnalyticsEvent: () => {},
-  navigate: () => {},
-  navigateExternal: () => ({
-    isOpen: () => true,
-  }),
-  writeTextToClipboard: () => Promise.resolve(),
-  getBrandURL: () => 'https://bluelightcard.co.uk',
-  platform: PlatformVariant.Web,
 };

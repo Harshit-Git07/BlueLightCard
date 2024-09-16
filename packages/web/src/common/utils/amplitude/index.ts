@@ -12,11 +12,10 @@ export async function initialiseAmplitude() {
   if (idToken) {
     let { 'custom:blc_old_uuid': userId } = unpackJWT(idToken);
     userId = userId ?? null;
-    amplitude.init(AMPLITUDE_API_KEY, userId, {
+    await amplitude.init(AMPLITUDE_API_KEY, userId, {
       serverZone: AMPLITUDE_SERVER_ZONE,
       logLevel: AMPLITUDE_LOG_LEVEL,
-      transport: 'beacon',
-    });
+    }).promise;
     if (sessionId) amplitude.setSessionId(Number(sessionId));
   } else {
     throw new Error('User is not authenticated. Cannot initialise Amplitude without user uuid');
@@ -63,50 +62,50 @@ export function logMembersHomePage() {
   });
 }
 
-export function logSearchCompanyEvent(companyId: string, companyName: string) {
+export async function logSearchCompanyEvent(companyId: string, companyName: string) {
   const eventProperties = {
     company_id: companyId,
     company_name: companyName,
     brand: BRAND,
   };
-  amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties);
+  await amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties).promise;
 }
 
-export function logSearchCategoryEvent(categoryId: string, categoryName: string) {
+export async function logSearchCategoryEvent(categoryId: string, categoryName: string) {
   const eventProperties = {
     category_id: categoryId,
     category_name: categoryName,
     brand: BRAND,
   };
-  amplitude.track(EVENTS.SEARCH_BY_CATEGORY_STARTED, eventProperties);
+  await amplitude.track(EVENTS.SEARCH_BY_CATEGORY_STARTED, eventProperties).promise;
 }
 
-export function logSearchTermEvent(searchTerm: string) {
+export async function logSearchTermEvent(searchTerm: string) {
   const eventProperties = {
     search_term: searchTerm,
     brand: BRAND,
   };
   if (searchTerm) {
-    amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties);
+    await amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties).promise;
   }
 }
 
-export function logSearchPage(searchTerm?: string, resultsCount?: number) {
+export async function logSearchPage(searchTerm?: string, resultsCount?: number) {
   initialiseAmplitude();
 
-  logSearchResultsViewed(searchTerm, resultsCount);
+  await logSearchResultsViewed(searchTerm, resultsCount);
 }
 
-export function logSearchResultsViewed(searchTerm?: string, resultsCount?: number) {
+export async function logSearchResultsViewed(searchTerm?: string, resultsCount?: number) {
   const searchResultsEvent = {
     search_term: searchTerm ?? '',
     number_of_results: resultsCount ?? 0,
     brand: BRAND,
   };
-  amplitude.track(EVENTS.SEARCH_RESULTS_VIEWED, searchResultsEvent);
+  await amplitude.track(EVENTS.SEARCH_RESULTS_VIEWED, searchResultsEvent).promise;
 }
 
-export function logSearchCardClicked(
+export async function logSearchCardClicked(
   companyId: number,
   companyName: string,
   offerId: number,
@@ -125,14 +124,14 @@ export function logSearchCardClicked(
     search_result_number: searchResultNumber ?? 0,
     brand: BRAND,
   };
-  amplitude.track(EVENTS.SEARCH_RESULTS_CARD_CLICKED, eventProperties);
+  await amplitude.track(EVENTS.SEARCH_RESULTS_CARD_CLICKED, eventProperties).promise;
 }
 
-export function logSerpSearchStarted(searchTerm?: string, resultsCount?: number) {
+export async function logSerpSearchStarted(searchTerm?: string, resultsCount?: number) {
   const searchResultsEvent = {
     search_term: searchTerm ?? '',
     number_of_results: resultsCount ?? 0,
     brand: BRAND,
   };
-  amplitude.track(EVENTS.SERP_SEARCH_STARTED, searchResultsEvent);
+  await amplitude.track(EVENTS.SERP_SEARCH_STARTED, searchResultsEvent).promise;
 }

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ThemeColorTokens, ThemeVariant } from '../../types';
-import { cssUtil } from '../../utils/cssUtils';
+import { cssUtil } from '../../utils/cssUtil';
 import { ButtonProps, ColorToken } from './types';
 
 // Note: as part of Globalisation tokens, inverted buttons and outline style element are out of scope.
@@ -74,7 +74,6 @@ const Button: FC<ButtonProps> = ({
   withoutHover = false,
   withoutFocus = false,
   borderless = false,
-  ...props
 }) => {
   const colorToken = (
     invertColor && color[variant].invert ? color[variant].invert : color[variant].base
@@ -104,7 +103,6 @@ const Button: FC<ButtonProps> = ({
         disabled={type !== 'link' ? disabled : undefined}
         className={`${classes}, text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font`}
         onClick={type !== 'link' ? onClick : undefined}
-        {...props}
       >
         {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
         {children}

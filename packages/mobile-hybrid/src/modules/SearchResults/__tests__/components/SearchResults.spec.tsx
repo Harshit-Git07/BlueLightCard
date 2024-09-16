@@ -59,19 +59,6 @@ describe('Search results', () => {
     testDataV5[1].OfferName = 'Test Offer';
   });
 
-  beforeAll(() => {
-    window.matchMedia = (query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // Deprecated
-      removeListener: jest.fn(), // Deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    });
-  });
-
   describe('render results', () => {
     it('should render list of results', async () => {
       await act(() => whenSearchResultsPageIsRendered(searchTermValue, testData));

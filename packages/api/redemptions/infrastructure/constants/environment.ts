@@ -69,4 +69,7 @@ export enum RedemptionsStackEnvironmentKeys {
 
   // S3
   VAULT_CODES_UPLOAD_BUCKET = 'VAULT_CODES_UPLOAD_BUCKET',
+
+  // Enable legacy vaults to be converted to standard vaults
+  ENABLE_STANDARD_VAULT = 'ENABLE_STANDARD_VAULT',
 }

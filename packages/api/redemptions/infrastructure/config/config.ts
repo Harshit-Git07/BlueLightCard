@@ -36,6 +36,7 @@ export type RedemptionsStackConfig = {
   brazeRedemptionShowCardPushNotificationCampaignId: string;
   identityApiUrl: string;
   vaultCodesUploadBucket: string;
+  enableStandardVault: string;
 };
 
 export class RedemptionsStackConfigResolver {
@@ -77,6 +78,7 @@ export class RedemptionsStackConfigResolver {
       brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
       brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
       brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
+      enableStandardVault: 'false',
     } satisfies Partial<RedemptionsStackConfig>;
 
     return {
@@ -151,6 +153,7 @@ export class RedemptionsStackConfigResolver {
       redemptionsLambdaScriptsCheckVaultStockPath: 'NewVault/checkVaultStock',
       redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
       redemptionsEmailDomain: 'bluelightcard.co.uk',
+      enableStandardVault: 'true',
     } satisfies Partial<RedemptionsStackConfig>;
 
     return {
@@ -239,6 +242,7 @@ export class RedemptionsStackConfigResolver {
       brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
       identityApiUrl: 'https://staging-identity.blcshine.io',
       vaultCodesUploadBucket: 'staging-blc-uk-vault-codes-upload',
+      enableStandardVault: 'true',
     };
   }
 
@@ -299,6 +303,7 @@ export class RedemptionsStackConfigResolver {
       ),
       identityApiUrl: getEnv(RedemptionsStackEnvironmentKeys.IDENTITY_API_URL),
       vaultCodesUploadBucket: `${stage}-${brand}-vault-codes-upload`,
+      enableStandardVault: getEnv(RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT),
     };
   }
 }

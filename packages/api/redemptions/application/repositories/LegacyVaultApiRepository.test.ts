@@ -53,7 +53,7 @@ describe('LegacyVaultApiRepository', () => {
       // Arrange
       const linkId = faker.number.int(4);
       const logger = createTestLogger();
-      const mockedSecretsManger = {
+      const mockedSecretsManager = {
         getSecretValueJson: jest.fn().mockReturnValue({
           codeRedeemedData: 'dummy',
           codeRedeemedPassword: 'dummy',
@@ -62,7 +62,7 @@ describe('LegacyVaultApiRepository', () => {
           checkAmountIssuedData: 'dummy',
           checkAmountIssuedPassword: 'dummy',
           retrieveAllVaultsData: 'NewVault/retrieveAllVaults',
-          retrieveAllVaultsPassword: 'sjDpKVBt^FxCzq8y',
+          retrieveAllVaultsPassword: '123dummytest1234',
           viewVaultBatchesData: 'dummy',
           viewVaultBatchesPassword: 'dummy',
           checkVaultStockData: 'dummy',
@@ -74,7 +74,7 @@ describe('LegacyVaultApiRepository', () => {
         success: true,
         data: legacyVaults,
       });
-      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
       // Act
       const response = await repository.findVaultsRelatingToLinkId(linkId);
@@ -96,7 +96,7 @@ describe('LegacyVaultApiRepository', () => {
       // Arrange
       const linkId = faker.number.int(4);
       const logger = createTestLogger();
-      const mockedSecretsManger = {
+      const mockedSecretsManager = {
         getSecretValueJson: jest.fn().mockReturnValue({
           codeRedeemedData: 'dummy',
           codeRedeemedPassword: 'dummy',
@@ -105,7 +105,7 @@ describe('LegacyVaultApiRepository', () => {
           checkAmountIssuedData: 'dummy',
           checkAmountIssuedPassword: 'dummy',
           retrieveAllVaultsData: 'NewVault/retrieveAllVaults',
-          retrieveAllVaultsPassword: 'sjDpKVBt^FxCzq8y',
+          retrieveAllVaultsPassword: '123dummytest1234',
           viewVaultBatchesData: 'dummy',
           viewVaultBatchesPassword: 'dummy',
           checkVaultStockData: 'dummy',
@@ -117,7 +117,7 @@ describe('LegacyVaultApiRepository', () => {
         success: true,
         data: unaffectedLegacyVaults,
       });
-      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
       // Act
       const response = await repository.findVaultsRelatingToLinkId(linkId);
@@ -133,7 +133,7 @@ describe('LegacyVaultApiRepository', () => {
     const defaultOfferId = faker.number.int(4);
     const defaultCompanyId = faker.number.int(4);
     const logger = createTestLogger();
-    const mockedSecretsManger = {
+    const mockedSecretsManager = {
       getSecretValueJson: jest.fn().mockReturnValue({
         codeRedeemedData: 'dummy',
         codeRedeemedPassword: 'dummy',
@@ -144,7 +144,7 @@ describe('LegacyVaultApiRepository', () => {
         retrieveAllVaultsData: 'dummy',
         retrieveAllVaultsPassword: 'dummy',
         viewVaultBatchesData: 'NewVault/viewBatches',
-        viewVaultBatchesPassword: 'sjDpKVBt^FxCzq8y', // dummy password
+        viewVaultBatchesPassword: '123dummytest1234',
         checkVaultStockData: 'dummy',
         checkVaultStockPassword: 'dummy',
       }),
@@ -167,7 +167,7 @@ describe('LegacyVaultApiRepository', () => {
           success: true,
           data: vaultBatches,
         });
-      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
       // Act
       const response = await repository.viewVaultBatches(defaultOfferId, defaultCompanyId);
@@ -188,7 +188,7 @@ describe('LegacyVaultApiRepository', () => {
           success: true,
           data: {},
         });
-      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
       // Act
       const response = await repository.viewVaultBatches(defaultOfferId, defaultCompanyId);
@@ -203,7 +203,7 @@ describe('LegacyVaultApiRepository', () => {
     const defaultCompanyId = faker.number.int(4);
     const defaultBatchNo = faker.string.uuid();
     const logger = createTestLogger();
-    const mockedSecretsManger = {
+    const mockedSecretsManager = {
       getSecretValueJson: jest.fn().mockReturnValue({
         codeRedeemedData: 'dummy',
         codeRedeemedPassword: 'dummy',
@@ -216,7 +216,7 @@ describe('LegacyVaultApiRepository', () => {
         viewVaultBatchesData: 'dummy',
         viewVaultBatchesPassword: 'dummy',
         checkVaultStockData: 'NewVault/checkVaultStock',
-        checkVaultStockPassword: 'sjDpKVBt^FxCzq8y', // dummy password
+        checkVaultStockPassword: '123dummytest1234',
       }),
     } satisfies ISecretsManager;
 
@@ -234,7 +234,7 @@ describe('LegacyVaultApiRepository', () => {
           success: true,
           data: vaultStock,
         });
-      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
       // Act
       const response = await repository.checkVaultStock(defaultBatchNo, defaultOfferId, defaultCompanyId);
@@ -256,13 +256,100 @@ describe('LegacyVaultApiRepository', () => {
           success: true,
           data: 0,
         });
-      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManger);
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
 
       // Act
       const response = await repository.checkVaultStock(defaultBatchNo, defaultOfferId, defaultCompanyId);
 
       // Assert
       expect(response).toEqual(0);
+    });
+  });
+
+  describe('assignCodeToMemberWithErrorHandling', () => {
+    it('should return kind Ok if the request was successful', async () => {
+      // Arrange
+      const memberId = faker.number.int(4).toString();
+      const companyId = faker.number.int(4);
+      const offerId = faker.number.int(4);
+      const logger = createTestLogger();
+      const mockedSecretsManager = {
+        getSecretValueJson: jest.fn().mockReturnValue({
+          codeRedeemedData: 'dummy',
+          codeRedeemedPassword: 'dummy',
+          assignUserCodesData: 'NewVault/assignUserCodes',
+          assignUserCodesPassword: '123dummytest1234',
+          checkAmountIssuedData: 'dummy',
+          checkAmountIssuedPassword: 'dummy',
+          retrieveAllVaultsData: 'dummy',
+          retrieveAllVaultsPassword: 'dummy',
+          viewVaultBatchesData: 'dummy',
+          viewVaultBatchesPassword: 'dummy',
+          checkVaultStockData: 'dummy',
+          checkVaultStockPassword: 'dummy',
+        }),
+      } satisfies ISecretsManager;
+      nock('https://test.com')
+        .post('/test-env/assignUserCodes', {
+          companyId,
+          offerId,
+          userId: memberId,
+          brand: 'BLC',
+        })
+        .reply(200, {
+          success: true,
+          data: {
+            code: 'dummy',
+          },
+        });
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
+
+      // Act
+      const response = await repository.assignCodeToMemberWithErrorHandling(memberId, companyId, offerId);
+
+      // Assert
+      expect(response).toEqual({ kind: 'Ok', data: { code: 'dummy' } });
+    });
+    it('should return kind NoCodesAvailable if the request was successful but no codes were available', async () => {
+      // Arrange
+      const memberId = faker.number.int(4).toString();
+      const companyId = faker.number.int(4);
+      const offerId = faker.number.int(4);
+      const logger = createTestLogger();
+      const mockedSecretsManager = {
+        getSecretValueJson: jest.fn().mockReturnValue({
+          codeRedeemedData: 'dummy',
+          codeRedeemedPassword: 'dummy',
+          assignUserCodesData: 'NewVault/assignUserCodes',
+          assignUserCodesPassword: '123dummytest1234',
+          checkAmountIssuedData: 'dummy',
+          checkAmountIssuedPassword: 'dummy',
+          retrieveAllVaultsData: 'dummy',
+          retrieveAllVaultsPassword: 'dummy',
+          viewVaultBatchesData: 'dummy',
+          viewVaultBatchesPassword: 'dummy',
+          checkVaultStockData: 'dummy',
+          checkVaultStockPassword: 'dummy',
+        }),
+      } satisfies ISecretsManager;
+      nock('https://test.com')
+        .post('/test-env/assignUserCodes', {
+          companyId,
+          offerId,
+          userId: memberId,
+          brand: 'BLC',
+        })
+        .reply(400, {
+          success: false,
+          message: 'No codes available',
+        });
+      const repository = new LegacyVaultApiRepository(logger, mockedSecretsManager);
+
+      // Act
+      const response = await repository.assignCodeToMemberWithErrorHandling(memberId, companyId, offerId);
+
+      // Assert
+      expect(response).toEqual({ kind: 'NoCodesAvailable' });
     });
   });
 });

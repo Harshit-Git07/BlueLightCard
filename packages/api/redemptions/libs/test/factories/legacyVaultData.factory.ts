@@ -20,8 +20,8 @@ export const legacyVaultDataFactory = Factory.define<LegacyVaultData>(() => ({
 
 export const legacyVaultBatchesFactory = Factory.define<ViewVaultBatchesData>(() => ({
   [faker.string.uuid()]: {
-    expires: '2024-01-01 23:59:59',
-    dateAdded: '2024-01-01 23:59:59',
+    expires: faker.date.future().toISOString(),
+    dateAdded: faker.date.past().toISOString(),
     filename: 'something.csv',
   },
 }));

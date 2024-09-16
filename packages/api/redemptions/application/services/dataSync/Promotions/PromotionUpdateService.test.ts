@@ -15,8 +15,9 @@ describe('PromotionUpdateService', () => {
     const logger = createTestLogger();
     const legacyVaultApiRepository = {
       assignCodeToMember: jest.fn(),
+      assignCodeToMemberWithErrorHandling: jest.fn(),
       findVaultsRelatingToLinkId: jest.fn(),
-      getNumberOfCodesIssued: jest.fn(),
+      getNumberOfCodesIssuedByMember: jest.fn(),
       getCodesRedeemed: jest.fn(),
       checkVaultStock: jest.fn(),
       viewVaultBatches: jest.fn(),

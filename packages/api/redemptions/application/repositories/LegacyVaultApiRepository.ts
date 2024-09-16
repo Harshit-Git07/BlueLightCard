@@ -25,14 +25,19 @@ export const GetNumberOfCodesResponseSchema = z.object({
 });
 export type GetNumberOfCodesResponse = z.infer<typeof GetNumberOfCodesResponseSchema>;
 
-export const AssignCodeTeMemberDataSchema = z.object({
+export const AssignCodeToMemberDataSchema = z.object({
   code: z.string(),
 });
-export const AssignCodeTeMemberResponseSchema = z.object({
-  data: AssignCodeTeMemberDataSchema,
+export const AssignCodeToMemberResponseSchema = z.object({
+  data: AssignCodeToMemberDataSchema,
 });
-export type AssignCodeTeMemberData = z.infer<typeof AssignCodeTeMemberDataSchema>;
-export type AssignCodeTeMemberResponse = z.infer<typeof AssignCodeTeMemberResponseSchema>;
+export const AssignCodeToMemberWithErrorHandlingResponseSchema = z.object({
+  success: z.boolean(),
+  data: AssignCodeToMemberDataSchema.optional(),
+  message: z.string().optional(),
+});
+export type AssignCodeToMemberData = z.infer<typeof AssignCodeToMemberDataSchema>;
+export type AssignCodeToMemberResponse = z.infer<typeof AssignCodeToMemberResponseSchema>;
 
 export const RedeemedCodeSchema = z.object({
   code: z.string(),
@@ -43,7 +48,7 @@ export const RedeemedCodesResponseSchema = z.object({
 export type RedeemedCode = z.infer<typeof RedeemedCodeSchema>;
 export type CodesRedeemedResponse = z.infer<typeof RedeemedCodesResponseSchema>;
 
-export type AssignCodeTeMemberSpotifyData = AssignCodeTeMemberData & {
+export type AssignCodeTeMemberSpotifyData = AssignCodeToMemberData & {
   trackingUrl: string;
 };
 
@@ -110,9 +115,14 @@ export type VaultSecrets = z.infer<typeof VaultSecretsSchema>;
 
 export interface ILegacyVaultApiRepository {
   findVaultsRelatingToLinkId(linkId: number): Promise<VaultItem[]>;
-  getNumberOfCodesIssued(memberId: string, companyId: number, offerId: number): Promise<number>;
+  getNumberOfCodesIssuedByMember(memberId: string, companyId: number, offerId: number): Promise<number>;
   getCodesRedeemed(companyId: number, offerId: number, memberId: string): Promise<string[]>;
-  assignCodeToMember(memberId: string, companyId: number, offerId: number): Promise<AssignCodeTeMemberData>;
+  assignCodeToMember(memberId: string, companyId: number, offerId: number): Promise<AssignCodeToMemberData>;
+  assignCodeToMemberWithErrorHandling(
+    memberId: string,
+    companyId: number,
+    offerId: number,
+  ): Promise<{ kind: 'Ok'; data: AssignCodeToMemberData } | { kind: 'NoCodesAvailable'; data?: never }>;
   viewVaultBatches(offerId: number, companyId: number): Promise<ViewVaultBatchesData>;
   checkVaultStock(batchNo: string, offerId: number, companyId: number): Promise<CheckVaultStockData>;
 }
@@ -180,7 +190,7 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     }));
   }
 
-  public async getNumberOfCodesIssued(memberId: string, companyId: number, offerId: number): Promise<number> {
+  public async getNumberOfCodesIssuedByMember(memberId: string, companyId: number, offerId: number): Promise<number> {
     const endpoint = this.getRequestEndpoint(ApisLambdaScripts.CHECK_AMOUNT_ISSUED);
     const credentials = await this.getLegacyVaultCredentials();
     const key = this.generateKey(credentials.checkAmountIssuedData, credentials.checkAmountIssuedPassword);
@@ -241,7 +251,7 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     memberId: string,
     companyId: number,
     offerId: number,
-  ): Promise<AssignCodeTeMemberData> {
+  ): Promise<AssignCodeToMemberData> {
     const brand = platformToBrandMap[this.brand];
     const endpoint = this.getRequestEndpoint(ApisLambdaScripts.ASSIGN_USER_CODES);
     const credentials = await this.getLegacyVaultCredentials();
@@ -260,7 +270,7 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
     });
     if (response.ok) {
       const data = await response.json();
-      return AssignCodeTeMemberResponseSchema.parse(data).data;
+      return AssignCodeToMemberResponseSchema.parse(data).data;
     }
     return this.handleErrorResponse(response, 'Error while assigning code to member', {
       memberId,
@@ -323,6 +333,47 @@ export class LegacyVaultApiRepository implements ILegacyVaultApiRepository {
       offerId,
       companyId,
       brand,
+    });
+  }
+
+  public async assignCodeToMemberWithErrorHandling(
+    memberId: string,
+    companyId: number,
+    offerId: number,
+  ): Promise<{ kind: 'Ok'; data: AssignCodeToMemberData } | { kind: 'NoCodesAvailable'; data?: never }> {
+    const brand = platformToBrandMap[this.brand];
+    const endpoint = this.getRequestEndpoint(ApisLambdaScripts.ASSIGN_USER_CODES);
+    const credentials = await this.getLegacyVaultCredentials();
+    const key = this.generateKey(credentials.assignUserCodesData, credentials.assignUserCodesPassword);
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify({
+        userId: memberId,
+        brand,
+        companyId,
+        offerId,
+      }),
+      headers: {
+        authorization: key,
+      },
+    });
+    const data = (await response.json()) as {
+      success: boolean;
+      message?: string;
+      data?: AssignCodeToMemberData;
+    };
+    const parsedData = AssignCodeToMemberWithErrorHandlingResponseSchema.parse(data);
+
+    if (response.status === 200 && parsedData?.data?.code) {
+      return { kind: 'Ok', data: parsedData.data };
+    }
+    if (response.status === 400 && parsedData?.message === 'No codes available') {
+      return { kind: 'NoCodesAvailable' };
+    }
+    return this.handleErrorResponse(response, 'Error while assigning code to member', {
+      memberId,
+      companyId,
+      offerId,
     });
   }
 

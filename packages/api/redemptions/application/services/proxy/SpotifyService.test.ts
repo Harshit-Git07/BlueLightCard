@@ -15,7 +15,8 @@ describe('SpotifyService', () => {
     const mockedLogger = createTestLogger();
     const mockedLegacyVaultApiRepository: ILegacyVaultApiRepository = {
       assignCodeToMember: jest.fn(),
-      getNumberOfCodesIssued: jest.fn(),
+      assignCodeToMemberWithErrorHandling: jest.fn(),
+      getNumberOfCodesIssuedByMember: jest.fn(),
       findVaultsRelatingToLinkId: jest.fn(),
       getCodesRedeemed: jest.fn(),
       checkVaultStock: jest.fn(),
@@ -35,7 +36,8 @@ describe('SpotifyService', () => {
       const mockedLegacyVaultApiRepository = {
         getCodesRedeemed: jest.fn().mockResolvedValue(['bar', 'baz']),
         assignCodeToMember: jest.fn(),
-        getNumberOfCodesIssued: jest.fn(),
+        assignCodeToMemberWithErrorHandling: jest.fn(),
+        getNumberOfCodesIssuedByMember: jest.fn(),
         findVaultsRelatingToLinkId: jest.fn(),
         checkVaultStock: jest.fn(),
         viewVaultBatches: jest.fn(),
@@ -59,7 +61,8 @@ describe('SpotifyService', () => {
       const mockedLegacyVaultApiRepository = {
         getCodesRedeemed: jest.fn().mockResolvedValue([]),
         assignCodeToMember: jest.fn().mockResolvedValue({ code: 'bar' }),
-        getNumberOfCodesIssued: jest.fn(),
+        assignCodeToMemberWithErrorHandling: jest.fn(),
+        getNumberOfCodesIssuedByMember: jest.fn(),
         findVaultsRelatingToLinkId: jest.fn(),
         checkVaultStock: jest.fn(),
         viewVaultBatches: jest.fn(),

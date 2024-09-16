@@ -43,23 +43,22 @@ export type RedeemShowCardStrategyResult = {
   redemptionDetails: Record<never, never>;
 };
 
-export type VaultStrategyResultWithDetails = {
-  kind: 'Ok';
-  redemptionType: RedeemVaultRedemptionType;
-  redemptionDetails: {
-    url?: string;
-    code: string;
-    vaultDetails?: {
-      id: string;
-      alertBelow: number;
-      vaultType: 'legacy' | 'standard';
-      email: string;
-    };
-  };
-};
-export type VaultStrategyResultMaxPerUser = { kind: 'MaxPerUserReached' };
-
-export type RedeemVaultStrategyResult = VaultStrategyResultWithDetails | VaultStrategyResultMaxPerUser;
+export type RedeemVaultStrategyResult =
+  | {
+      kind: 'Ok';
+      redemptionType: RedeemVaultRedemptionType;
+      redemptionDetails: {
+        url?: string;
+        code: string;
+        vaultDetails?: {
+          id: string;
+          alertBelow: number;
+          vaultType: 'legacy' | 'standard';
+          email: string;
+        };
+      };
+    }
+  | { kind: 'MaxPerUserReached'; redemptionType?: never; redemptionDetails?: never };
 
 export type RedeemParams = {
   memberId: string;
@@ -71,10 +70,4 @@ export type RedeemParams = {
 
 export interface IRedeemStrategy {
   redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemedStrategyResult>;
-}
-
-export function isVaultStrategyResultWithDetails(
-  object: RedeemedStrategyResult,
-): object is VaultStrategyResultWithDetails {
-  return object.kind === 'Ok';
 }

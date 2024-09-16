@@ -204,6 +204,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
         // Event Bus
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
         [RedemptionsStackEnvironmentKeys.IDENTITY_API_URL]: config.identityApiUrl,
+        [RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT]: config.enableStandardVault,
       },
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: [

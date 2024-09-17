@@ -76,6 +76,11 @@ export class VaultThresholdService implements IVaultThresholdService {
       {} as Record<number, number>, // Initialize the accumulator as an empty object.
     );
 
+    this.logger.info({
+      message: 'Vault Threshold Email - Thresholds',
+      context: { thresholds, unclaimedCodes },
+    });
+
     const thresholdPercentage = thresholds[unclaimedCodes];
     return thresholdPercentage ?? false;
   }
@@ -106,10 +111,11 @@ export class VaultThresholdService implements IVaultThresholdService {
       return;
     }
     this.logger.error({
-      message: 'Vault Threshold Email Standard - Email was not sent.',
+      message: 'Vault Threshold Email Standard - Email was not sent',
       context: {
         redemptionDetails,
         vaultDetails,
+        thresholdPercentage,
       },
     });
   }

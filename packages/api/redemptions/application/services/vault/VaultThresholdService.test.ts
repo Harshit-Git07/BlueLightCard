@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
 
+import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { memberRedemptionEventDetailFactory } from '@blc-mono/redemptions/libs/test/factories/memberRedemptionEvent.factory';
-import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { IAdminEmailRepository } from '../../repositories/AdminEmailRepository';
 import { IVaultCodesRepository } from '../../repositories/VaultCodesRepository';
@@ -40,13 +41,15 @@ describe('AdminEmailService', () => {
     };
   }
 
-  function getVaultThresholdService(override: {
-    vaultCodesRepo?: IVaultCodesRepository;
-    adminEmailRepo?: IAdminEmailRepository;
-  }) {
+  function getVaultThresholdService(
+    logger: ILogger,
+    override: {
+      vaultCodesRepo?: IVaultCodesRepository;
+      adminEmailRepo?: IAdminEmailRepository;
+    },
+  ) {
     const mockedAdminEmailRepo = override.adminEmailRepo ?? mockAdminEmailRepo();
     const mockedVaultCodesRepo = override.vaultCodesRepo ?? mockVaultCodesRepo();
-    const logger = createTestLogger();
     return new VaultThresholdService(logger, mockedVaultCodesRepo, mockedAdminEmailRepo);
   }
 
@@ -105,12 +108,13 @@ describe('AdminEmailService', () => {
       'if remaining %d codes with %d of alert below, expected threshold check response to be %s',
       (unclaimed, total, expected) => {
         // Arrange
+        const mockedLogger = createTestLogger();
         const mockedVaultCodesRepo = mockVaultCodesRepo();
         mockedVaultCodesRepo.checkVaultCodesRemaining = jest.fn().mockResolvedValue({
           totalCodes: total,
           unclaimedCodes: unclaimed,
         });
-        const service = getVaultThresholdService({
+        const service = getVaultThresholdService(mockedLogger, {
           vaultCodesRepo: mockedVaultCodesRepo,
         });
 
@@ -126,6 +130,7 @@ describe('AdminEmailService', () => {
   describe('handleVaultThresholdEmail', () => {
     it('should send email successfully if decision is true', async () => {
       // Arrange
+      const mockedLogger = createTestLogger();
       const eventDetail = memberRedemptionEventDetailFactory.build({
         redemptionDetails: {
           vaultDetails: {
@@ -138,7 +143,7 @@ describe('AdminEmailService', () => {
       mockedAdminEmailRepo.sendVaultThresholdEmail = jest.fn().mockResolvedValue(undefined);
       const mockedVaultCodesRepo = mockVaultCodesRepo();
       mockedVaultCodesRepo.checkVaultCodesRemaining = jest.fn().mockResolvedValue(50);
-      const service = getVaultThresholdService({
+      const service = getVaultThresholdService(mockedLogger, {
         vaultCodesRepo: mockedVaultCodesRepo,
         adminEmailRepo: mockedAdminEmailRepo,
       });
@@ -157,10 +162,15 @@ describe('AdminEmailService', () => {
         thresholdPercentage: 50,
         recipient: eventDetail.redemptionDetails.vaultDetails?.email,
       });
+      expect(mockedLogger.info).toHaveBeenCalledWith({
+        message: 'Vault Threshold Email - Thresholds',
+        context: { thresholds: { 0: 0, 25: 25, 50: 50, 75: 75, 100: 100 }, unclaimedCodes: 50 },
+      });
     });
 
     it('should not send email if decision is false', async () => {
       // Arrange
+      const mockedSilentLogger = createSilentLogger();
       const eventDetail = memberRedemptionEventDetailFactory.build({
         redemptionDetails: {
           vaultDetails: {
@@ -174,7 +184,7 @@ describe('AdminEmailService', () => {
       const mockedVaultCodesRepo = mockVaultCodesRepo();
       mockedVaultCodesRepo.checkVaultCodesRemaining = jest.fn().mockResolvedValue(51);
 
-      const service = getVaultThresholdService({
+      const service = getVaultThresholdService(mockedSilentLogger, {
         vaultCodesRepo: mockedVaultCodesRepo,
         adminEmailRepo: mockedAdminEmailRepo,
       });
@@ -185,10 +195,23 @@ describe('AdminEmailService', () => {
       expect(result).toBeUndefined();
       expect(mockedVaultCodesRepo.checkVaultCodesRemaining).toHaveBeenCalled();
       expect(mockedAdminEmailRepo.sendVaultThresholdEmail).not.toHaveBeenCalled();
+      expect(mockedSilentLogger.info).toHaveBeenCalledWith({
+        message: 'Vault Threshold Email - Thresholds',
+        context: { thresholds: { 0: 0, 25: 25, 50: 50, 75: 75, 101: 100 }, unclaimedCodes: 51 },
+      });
+      expect(mockedSilentLogger.error).toHaveBeenCalledWith({
+        message: 'Vault Threshold Email Standard - Email was not sent',
+        context: {
+          redemptionDetails: eventDetail.redemptionDetails,
+          vaultDetails: eventDetail.redemptionDetails.vaultDetails,
+          thresholdPercentage: false,
+        },
+      });
     });
 
     it('should not send email if vaultType is legacy', async () => {
       // Arrange
+      const mockedLogger = createTestLogger();
       const eventDetail = memberRedemptionEventDetailFactory.build({
         redemptionDetails: {
           vaultDetails: {
@@ -199,7 +222,7 @@ describe('AdminEmailService', () => {
       });
       const mockedAdminEmailRepo = mockAdminEmailRepo();
       const mockedVaultCodesRepo = mockVaultCodesRepo();
-      const service = getVaultThresholdService({
+      const service = getVaultThresholdService(mockedLogger, {
         vaultCodesRepo: mockedVaultCodesRepo,
         adminEmailRepo: mockedAdminEmailRepo,
       });

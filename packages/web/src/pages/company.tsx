@@ -198,9 +198,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         <CompanyPageWebHeader
           isMobile={isMobile}
           companyData={companyData}
-          companySharedEvent={async () => {
+          companySharedEvent={() => {
             if (amplitude) {
-              await amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
+              amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
                 company_id: companyData.id,
                 company_name: companyData.name,
               });
@@ -219,10 +219,10 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         {/* Filters */}
         <CompanyPageFilters
           enabledFilters={enabledFilters}
-          onSelected={async (pillType: CompanyPageFilterOptions) => {
+          onSelected={(pillType: CompanyPageFilterOptions) => {
             setFilterType(pillType);
             if (amplitude) {
-              await amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
+              amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
                 company_id: companyData.id,
                 company_name: companyData.name,
                 filter_name: pillType,
@@ -236,7 +236,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           offers={filteredOffers || []}
           companyId={companyData?.id}
           companyName={companyData?.name}
-          onOfferClick={async (
+          onOfferClick={(
             offerId: number,
             offerName: string,
             companyId: number,
@@ -245,7 +245,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
           ) => {
             onSelectOffer(offerId, companyId, companyName);
             if (amplitude) {
-              await amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
+              amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
                 company_id: companyData.id,
                 company_name: companyData.name,
                 position: index,

@@ -47,7 +47,7 @@ export default function CopyCodePage() {
       const codeString = decodeBase64(code);
       await navigator.clipboard.writeText(codeString);
       if (amplitude) {
-        await amplitude.trackEventAsync(amplitudeEvents.EMAIL_CODE_CLICKED, data);
+        amplitude.trackEventAsync(amplitudeEvents.EMAIL_CODE_CLICKED, data);
       }
       setCopied(true);
       setButtonText('Code copied!');

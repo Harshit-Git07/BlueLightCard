@@ -12,17 +12,18 @@ export async function initialiseAmplitude() {
   if (idToken) {
     let { 'custom:blc_old_uuid': userId } = unpackJWT(idToken);
     userId = userId ?? null;
-    await amplitude.init(AMPLITUDE_API_KEY, userId, {
+    amplitude.init(AMPLITUDE_API_KEY, userId, {
       serverZone: AMPLITUDE_SERVER_ZONE,
       logLevel: AMPLITUDE_LOG_LEVEL,
-    }).promise;
+      transport: 'beacon',
+    });
     if (sessionId) amplitude.setSessionId(Number(sessionId));
   } else {
     throw new Error('User is not authenticated. Cannot initialise Amplitude without user uuid');
   }
 }
 
-function scrolledToBlock(scrolledPercentage: number): number {
+export function scrolledToBlock(scrolledPercentage: number): number {
   if (scrolledPercentage >= 0 && scrolledPercentage < 25) {
     return 25;
   } else if (scrolledPercentage >= 25 && scrolledPercentage < 50) {
@@ -62,50 +63,50 @@ export function logMembersHomePage() {
   });
 }
 
-export async function logSearchCompanyEvent(companyId: string, companyName: string) {
+export function logSearchCompanyEvent(companyId: string, companyName: string) {
   const eventProperties = {
     company_id: companyId,
     company_name: companyName,
     brand: BRAND,
   };
-  await amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties).promise;
+  amplitude.track(EVENTS.SEARCH_BY_COMPANY_STARTED, eventProperties);
 }
 
-export async function logSearchCategoryEvent(categoryId: string, categoryName: string) {
+export function logSearchCategoryEvent(categoryId: string, categoryName: string) {
   const eventProperties = {
     category_id: categoryId,
     category_name: categoryName,
     brand: BRAND,
   };
-  await amplitude.track(EVENTS.SEARCH_BY_CATEGORY_STARTED, eventProperties).promise;
+  amplitude.track(EVENTS.SEARCH_BY_CATEGORY_STARTED, eventProperties);
 }
 
-export async function logSearchTermEvent(searchTerm: string) {
+export function logSearchTermEvent(searchTerm: string) {
   const eventProperties = {
     search_term: searchTerm,
     brand: BRAND,
   };
   if (searchTerm) {
-    await amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties).promise;
+    amplitude.track(EVENTS.SEARCH_BY_PHRASE_STARTED, eventProperties);
   }
 }
 
-export async function logSearchPage(searchTerm?: string, resultsCount?: number) {
+export function logSearchPage(searchTerm?: string, resultsCount?: number) {
   initialiseAmplitude();
 
-  await logSearchResultsViewed(searchTerm, resultsCount);
+  logSearchResultsViewed(searchTerm, resultsCount);
 }
 
-export async function logSearchResultsViewed(searchTerm?: string, resultsCount?: number) {
+export function logSearchResultsViewed(searchTerm?: string, resultsCount?: number) {
   const searchResultsEvent = {
     search_term: searchTerm ?? '',
     number_of_results: resultsCount ?? 0,
     brand: BRAND,
   };
-  await amplitude.track(EVENTS.SEARCH_RESULTS_VIEWED, searchResultsEvent).promise;
+  amplitude.track(EVENTS.SEARCH_RESULTS_VIEWED, searchResultsEvent);
 }
 
-export async function logSearchCardClicked(
+export function logSearchCardClicked(
   companyId: number,
   companyName: string,
   offerId: number,
@@ -124,14 +125,14 @@ export async function logSearchCardClicked(
     search_result_number: searchResultNumber ?? 0,
     brand: BRAND,
   };
-  await amplitude.track(EVENTS.SEARCH_RESULTS_CARD_CLICKED, eventProperties).promise;
+  amplitude.track(EVENTS.SEARCH_RESULTS_CARD_CLICKED, eventProperties);
 }
 
-export async function logSerpSearchStarted(searchTerm?: string, resultsCount?: number) {
+export function logSerpSearchStarted(searchTerm?: string, resultsCount?: number) {
   const searchResultsEvent = {
     search_term: searchTerm ?? '',
     number_of_results: resultsCount ?? 0,
     brand: BRAND,
   };
-  await amplitude.track(EVENTS.SERP_SEARCH_STARTED, searchResultsEvent).promise;
+  amplitude.track(EVENTS.SERP_SEARCH_STARTED, searchResultsEvent);
 }

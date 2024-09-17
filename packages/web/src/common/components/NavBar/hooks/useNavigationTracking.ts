@@ -46,8 +46,8 @@ export const useNavigationTracking = () => {
   const amplitude = useContext(AmplitudeContext);
   const userCtx = useContext(UserContext);
 
-  const trackNavigationEvent = async (buttonID: string) => {
-    return await trackEvent(amplitude, userCtx.user?.uuid, 'navigation_clicked', {
+  const trackNavigationEvent = (buttonID: string) => {
+    return trackEvent(amplitude, userCtx.user?.uuid, 'navigation_clicked', {
       menuItem: buttonID,
     });
   };

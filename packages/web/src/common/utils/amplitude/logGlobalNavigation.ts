@@ -17,68 +17,58 @@ export type LogGlobalNavigationBrowseCategoriesParams = BaseLogGlobalNavigationP
   categoryPage: string;
 };
 
-export const logGlobalNavigationOffersClicked = async ({
+export const logGlobalNavigationOffersClicked = ({
   amplitude,
   userUuid,
   offerPage,
   origin,
 }: LogGlobalNavigationParams) => {
-  await trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_OFFERS_CLICKED, {
+  trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_OFFERS_CLICKED, {
     offer_page: offerPage,
     origin,
   });
 };
 
-export const logGlobalNavigationBrowseCategoriesClicked = async ({
+export const logGlobalNavigationBrowseCategoriesClicked = ({
   amplitude,
   userUuid,
   categoryPage,
   origin,
 }: LogGlobalNavigationBrowseCategoriesParams) => {
-  await trackEvent(
-    amplitude,
-    userUuid,
-    amplitudeEvents.GLOBAL_NAVIGATION_BROWSE_CATEGORIES_CLICKED,
-    {
-      category_page: categoryPage,
-      origin,
-    }
-  );
-};
-
-export const logGlobalNavigationMyCardClicked = async ({
-  amplitude,
-  userUuid,
-  origin,
-}: BaseLogGlobalNavigationParams) => {
-  await trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_MY_CARD_CLICKED, {
+  trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_BROWSE_CATEGORIES_CLICKED, {
+    category_page: categoryPage,
     origin,
   });
 };
 
-export const logGlobalNavigationMyAccountClicked = async ({
+export const logGlobalNavigationMyCardClicked = ({
   amplitude,
   userUuid,
   origin,
 }: BaseLogGlobalNavigationParams) => {
-  await trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_MY_ACCOUNT_CLICKED, {
+  trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_MY_CARD_CLICKED, {
     origin,
   });
 };
 
-export const logGlobalNavigationNotificationsClicked = async ({
+export const logGlobalNavigationMyAccountClicked = ({
   amplitude,
   userUuid,
   origin,
 }: BaseLogGlobalNavigationParams) => {
-  return await trackEvent(
-    amplitude,
-    userUuid,
-    amplitudeEvents.GLOBAL_NAVIGATION_NOTIFICATIONS_CLICKED,
-    {
-      origin,
-    }
-  );
+  trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_MY_ACCOUNT_CLICKED, {
+    origin,
+  });
+};
+
+export const logGlobalNavigationNotificationsClicked = ({
+  amplitude,
+  userUuid,
+  origin,
+}: BaseLogGlobalNavigationParams) => {
+  return trackEvent(amplitude, userUuid, amplitudeEvents.GLOBAL_NAVIGATION_NOTIFICATIONS_CLICKED, {
+    origin,
+  });
 };
 
 const trackEvent = async (

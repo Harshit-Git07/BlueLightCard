@@ -22,10 +22,11 @@ export class Amplitude {
 
     const sessionId = sessionStorage.getItem('amplitude_session_id');
 
-    const initResult = await amplitude.init(apiKey, {
+    const initResult = amplitude.init(apiKey, {
       serverZone: AMPLITUDE_SERVER_ZONE,
       logLevel: AMPLITUDE_LOG_LEVEL,
-    }).promise;
+      transport: 'beacon',
+    });
     if (sessionId) this.setSessionId(sessionId);
 
     this.isInitialised = true;

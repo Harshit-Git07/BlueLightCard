@@ -3,11 +3,12 @@ import { userEvent } from '@testing-library/user-event';
 import Home from '@/pages';
 import '@testing-library/jest-dom';
 import useOffers from '@/hooks/useOffers';
+import * as globals from '@/globals';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { NextRouter } from 'next/router';
 import { userProfile, UserProfile } from '@/components/UserProfileProvider/store';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import {
   IPlatformAdapter,
   PlatformAdapterProvider,
@@ -40,6 +41,13 @@ const mockRouter: Partial<NextRouter> = {
 
 jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
+}));
+
+const mockGlobals = globals as { BRAND: string };
+jest.mock('@/globals', () => ({
+  ...jest.requireActual('@/globals'),
+  __esModule: true,
+  BRAND: 'blc-uk',
 }));
 
 const useOffersMock = jest.mocked(useOffers);
@@ -126,9 +134,6 @@ describe('Home', () => {
   describe('Thank You Campaign', () => {
     it('does not render the campaign banner when the user UUID is undefined', () => {
       userProfileValue.uuid = undefined;
-      amplitudeFlagsAndExperiments = {
-        [FeatureFlags.THANK_YOU_CAMPAIGN]: 'on',
-      };
       whenHomePageIsRendered();
 
       const campaignBanner = screen.queryByTestId('campaign-banner');
@@ -140,9 +145,6 @@ describe('Home', () => {
 
     it('does not render the campaign banner when the user cannot redeem offers', () => {
       userProfileValue.canRedeemOffer = false;
-      amplitudeFlagsAndExperiments = {
-        [FeatureFlags.THANK_YOU_CAMPAIGN]: 'on',
-      };
       whenHomePageIsRendered();
 
       const campaignBanner = screen.queryByTestId('campaign-banner');
@@ -154,9 +156,6 @@ describe('Home', () => {
 
     it('does not render the campaign banner when the user is not past the age gate', () => {
       userProfileValue.isAgeGated = false;
-      amplitudeFlagsAndExperiments = {
-        [FeatureFlags.THANK_YOU_CAMPAIGN]: 'on',
-      };
       whenHomePageIsRendered();
 
       const campaignBanner = screen.queryByTestId('campaign-banner');
@@ -166,18 +165,18 @@ describe('Home', () => {
       userProfileValue.isAgeGated = true;
     });
 
-    it('does not render the campaign banner when the feature flag is disabled', () => {
-      amplitudeFlagsAndExperiments = {
-        [FeatureFlags.THANK_YOU_CAMPAIGN]: 'off',
-      };
+    it('does not render the campaign banner when the brand is not BLC UK', async () => {
+      mockGlobals.BRAND = 'blc-au';
       whenHomePageIsRendered();
 
       const campaignBanner = screen.queryByTestId('campaign-banner');
 
       expect(campaignBanner).not.toBeInTheDocument();
+
+      mockGlobals.BRAND = 'blc-uk';
     });
 
-    it('renders the campaign banner when the feature flag is enabled', async () => {
+    it('renders the campaign banner when the brand is BLC UK', async () => {
       mockPlatformAdapter.invokeV5Api = jest.fn().mockResolvedValue({
         statusCode: 200,
         data: JSON.stringify({
@@ -193,9 +192,6 @@ describe('Home', () => {
         }),
       });
 
-      amplitudeFlagsAndExperiments = {
-        [FeatureFlags.THANK_YOU_CAMPAIGN]: 'on',
-      };
       whenHomePageIsRendered();
 
       const campaignBanner = await screen.findByTestId('campaign-banner');
@@ -219,9 +215,6 @@ describe('Home', () => {
         }),
       });
 
-      amplitudeFlagsAndExperiments = {
-        [FeatureFlags.THANK_YOU_CAMPAIGN]: 'on',
-      };
       whenHomePageIsRendered();
 
       const campaignBanner = await screen.findByTestId('campaign-banner');

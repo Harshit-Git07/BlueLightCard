@@ -15,18 +15,15 @@ import InvokeNativeNavigation from '@/invoke/navigation';
 import { SearchBar } from '@bluelightcard/shared-ui';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
-import { APIUrl } from '@/globals';
+import { APIUrl, BRAND } from '@/globals';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { useAtom, useAtomValue } from 'jotai';
 import { userProfile } from '@/components/UserProfileProvider/store';
-import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import USPBanner from '@/components/UspBanner/UspBanner';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import { useAmplitude } from '@/hooks/useAmplitude';
-import {
-  AmplitudeExperimentState,
-  AmplitudeFeatureFlagState,
-} from '@/components/AmplitudeProvider/types';
+import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -73,7 +70,7 @@ const Home: NextPage<any> = () => {
     userProfileValue?.uuid !== undefined &&
     userProfileValue?.canRedeemOffer === true &&
     userProfileValue?.isAgeGated === true &&
-    is(FeatureFlags.THANK_YOU_CAMPAIGN, AmplitudeFeatureFlagState.On);
+    BRAND === 'blc-uk';
 
   const onCampaignClick = (clickedCampaignEvent: CampaignEvent) => {
     if (!userProfileValue) return;

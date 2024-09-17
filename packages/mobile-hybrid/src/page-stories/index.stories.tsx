@@ -1,9 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
-import { useSetAtom } from 'jotai/index';
-import { useEffect } from 'react';
-import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import IndexPage from '@/pages/index';
 import pageDecorator from '@storybook-config/pageDecorator';
 
@@ -57,12 +53,6 @@ const componentMeta: Meta<typeof IndexPage> = {
 };
 
 const DefaultTemplate: StoryFn<typeof IndexPage> = (args) => {
-  const setExperimentsAndFeatureFlags = useSetAtom(experimentsAndFeatureFlags);
-
-  useEffect(() => {
-    setExperimentsAndFeatureFlags({ [FeatureFlags.THANK_YOU_CAMPAIGN]: 'off' });
-  }, [setExperimentsAndFeatureFlags]);
-
   return <IndexPage {...args} />;
 };
 
@@ -71,12 +61,6 @@ export const Default = DefaultTemplate.bind({});
 Default.args = {};
 
 const ThankYouCampaignTemplate: StoryFn<typeof IndexPage> = (args) => {
-  const setExperimentsAndFeatureFlags = useSetAtom(experimentsAndFeatureFlags);
-
-  useEffect(() => {
-    setExperimentsAndFeatureFlags({ [FeatureFlags.THANK_YOU_CAMPAIGN]: 'on' });
-  }, [setExperimentsAndFeatureFlags]);
-
   return <IndexPage {...args} />;
 };
 

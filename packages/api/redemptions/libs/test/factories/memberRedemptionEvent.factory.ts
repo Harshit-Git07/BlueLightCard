@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
+import { MemberRedemptionParams } from '@blc-mono/redemptions/application/services/DWH/dwhLoggingService';
 
 export const memberRedemptionEventDetailFactory = Factory.define<MemberRedemptionEvent['detail']>(() => ({
   memberDetails: {
@@ -46,3 +47,28 @@ export const memberRedemptionEventFactory = Factory.define<MemberRedemptionEvent
   time: faker.date.recent().toISOString(),
   version: '0',
 }));
+
+export const memberRedemptionParamsFactory = Factory.define<MemberRedemptionParams>(() => {
+  const redemptionType = faker.helpers.arrayElement(['showCard', 'preApplied', 'generic', 'vault', 'vaultQR'] as const);
+  const redemptionHasCode = ['generic', 'vault', 'vaultQR'].includes(redemptionType);
+
+  return {
+    clientType: 'web' as const,
+    redemptionType: redemptionType,
+    offerId: faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+    companyId: faker.number.int({
+      min: 1,
+      max: 1_000_000,
+    }),
+    memberId: faker.number
+      .int({
+        min: 1,
+        max: 1_000_000,
+      })
+      .toString(),
+    code: redemptionHasCode ? '' : undefined,
+  } as MemberRedemptionParams;
+});

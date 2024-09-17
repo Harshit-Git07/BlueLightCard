@@ -71,7 +71,7 @@ describe('DwhMemberRedemptionController', () => {
       expect(service.logMemberRedemption).toHaveBeenCalledTimes(1);
       expect(service.logMemberRedemption).toHaveBeenCalledWith({
         data: {
-          // clientType: mockEvent.detail.redemptionDetails.clientType,
+          clientType: mockEvent.detail.redemptionDetails.clientType,
           code: mockEvent.detail.redemptionDetails.code,
           companyId: mockEvent.detail.redemptionDetails.companyId,
           offerId: mockEvent.detail.redemptionDetails.offerId,
@@ -83,6 +83,7 @@ describe('DwhMemberRedemptionController', () => {
       expect(service.logMemberRedemption).toHaveBeenCalledWith(
         expect.objectContaining({
           data: {
+            clientType: mockEvent.detail.redemptionDetails.clientType,
             code: mockEvent.detail.redemptionDetails.code,
             companyId: mockEvent.detail.redemptionDetails.companyId,
             offerId: mockEvent.detail.redemptionDetails.offerId,

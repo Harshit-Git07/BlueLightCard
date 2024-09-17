@@ -2,6 +2,10 @@ import { faker } from '@faker-js/faker';
 import { describe } from '@jest/globals';
 
 import { as } from '@blc-mono/core/utils/testing';
+import {
+  memberRedemptionEventFactory,
+  memberRedemptionParamsFactory,
+} from '@blc-mono/redemptions/libs/test/factories/memberRedemptionEvent.factory';
 
 import {
   DwhLoggingService,
@@ -152,33 +156,38 @@ describe('DwhLoggingService', () => {
   });
 
   describe('logMemberRedemption', () => {
-    it.each(['vault', 'vaultQR'])(
+    it('logs all redemptions to the data warehouse', async () => {
+      // Arrange
+      const repository = {
+        logVaultRedemption: jest.fn(),
+        logRedemption: jest.fn(),
+      };
+      const service = new DwhLoggingService(as(repository));
+      const params = new MemberRedemptionParamsDto(memberRedemptionParamsFactory.build());
+
+      // Act
+      await service.logMemberRedemption(params);
+
+      // Assert
+      expect(repository.logRedemption).toHaveBeenCalledTimes(1);
+      expect(repository.logRedemption).toHaveBeenCalledWith(params);
+    });
+
+    it.each(['vault', 'vaultQR'] as const)(
       'should call DwhRepository.logVaultRedemption correctly if the redemption type is %s',
       async (redemptionType) => {
         // Arrange
         const repository = {
           logVaultRedemption: jest.fn(),
+          logRedemption: jest.fn(),
         };
 
         const service = new DwhLoggingService(as(repository));
-        const params = new MemberRedemptionParamsDto({
-          redemptionType: as(redemptionType),
-          offerId: faker.number.int({
-            min: 1,
-            max: 1_000_000,
+        const params = new MemberRedemptionParamsDto(
+          memberRedemptionParamsFactory.build({
+            redemptionType,
           }),
-          companyId: faker.number.int({
-            min: 1,
-            max: 1_000_000,
-          }),
-          memberId: faker.number
-            .int({
-              min: 1,
-              max: 1_000_000,
-            })
-            .toString(),
-          code: faker.string.alphanumeric(),
-        });
+        );
 
         // Act
         await service.logMemberRedemption(params);
@@ -200,26 +209,14 @@ describe('DwhLoggingService', () => {
       // Arrange
       const repository = {
         logVaultRedemption: jest.fn(),
+        logRedemption: jest.fn(),
       };
       const service = new DwhLoggingService(as(repository));
-      const params = new MemberRedemptionParamsDto({
-        redemptionType: as('not-vault'),
-        offerId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
+      const params = new MemberRedemptionParamsDto(
+        memberRedemptionParamsFactory.build({
+          redemptionType: 'generic',
         }),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
-        memberId: faker.number
-          .int({
-            min: 1,
-            max: 1_000_000,
-          })
-          .toString(),
-        code: faker.string.alphanumeric(),
-      });
+      );
 
       // Act
       await service.logMemberRedemption(params);
@@ -232,26 +229,10 @@ describe('DwhLoggingService', () => {
       // Arrange
       const repository = {
         logVaultRedemption: jest.fn().mockRejectedValue(new Error('Test error')),
+        logRedemption: jest.fn().mockRejectedValue(new Error('Test error')),
       };
       const service = new DwhLoggingService(as(repository));
-      const params = new MemberRedemptionParamsDto({
-        redemptionType: 'vault',
-        offerId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
-        memberId: faker.number
-          .int({
-            min: 1,
-            max: 1_000_000,
-          })
-          .toString(),
-        code: faker.string.alphanumeric(),
-      });
+      const params = new MemberRedemptionParamsDto(memberRedemptionParamsFactory.build());
 
       // Act
       const act = () => service.logMemberRedemption(params);
@@ -259,5 +240,28 @@ describe('DwhLoggingService', () => {
       // Assert
       await expect(act).rejects.toThrow('Test error');
     });
+  });
+
+  describe('MemberRedemptionParamsDto', () => {
+    it.each(['generic', 'preApplied', 'showCard', 'vault'] as const)(
+      'allows creation of a DTO from a %s redemption event',
+      (redemptionType) => {
+        const event = memberRedemptionEventFactory.build({
+          detail: {
+            redemptionDetails: {
+              redemptionType: redemptionType,
+            },
+          },
+        });
+        const dto = MemberRedemptionParamsDto.fromMemberRedemptionEvent(event);
+
+        const redemptionDetails = event.detail.redemptionDetails;
+        expect(dto.data.redemptionType).toBe(redemptionType);
+        expect(dto.data.clientType).toBe(redemptionDetails.clientType);
+        expect(dto.data.companyId).toBe(redemptionDetails.companyId);
+        expect(dto.data.offerId).toBe(redemptionDetails.offerId);
+        expect(dto.data.memberId).toBe(event.detail.memberDetails.memberId);
+      },
+    );
   });
 });

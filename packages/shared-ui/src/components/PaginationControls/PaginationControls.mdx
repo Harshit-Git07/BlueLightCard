@@ -1,0 +1,87 @@
+import { Canvas, Controls, Meta, Story, useOf } from '@storybook/blocks';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+import FigmaEmbed from '../../../.storybook/blocks/FigmaEmbed';
+import * as PaginationControls from './PaginationControls.stories';
+
+<Meta title="Molecules/Pagination Controls" of={PaginationControls} />
+
+# Pagination Controls
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Usage](#usage)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+- This component renders controls for managing pagination.
+- The controls can include:
+  - A button to navigate to the previous page (disabled if on first page)
+  - A button showing the first page
+  - A button for viewing previous page numbers in the list (if applicable)
+  - A button for each of the next page numbers (number of buttons shown shrinks/grows with width of component)
+  - A button for viewing next page numbers in the list (if applicable)
+  - A button showing the last page
+  - A button to navigate to the next page (disabled if on the last page)
+- The controls are tokenised with support for all brands and light/dark mode
+- The controls are keyboard accessible, each control has a clear label and can be focused and interacted with via the keyboard
+- The controls are tokenised according to the design system
+
+## Props
+
+<Controls />
+
+## State
+
+The controls are stateless, all information that they render is provided entirely via props
+
+## Usage
+
+```jsx
+const ExampleComponent = () => {
+  const platformAdapter = usePlatformAdapter();
+
+  const [status, setStatus] = useState('loading');
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const getData = async (page) => {
+    setStatus('loading');
+
+    try {
+      const data = await platformAdapter.invokeV5Api('/some-paginated-data', { page });
+
+      setTotalPages(data.meta.totalPages);
+      setCurrentPage(data.meta.currentPage);
+      setStatus('success');
+    } catch (err) {
+      setStatus('error');
+    }
+  };
+
+  useEffect(() => {]
+    const getFirstPage = getData(1);
+
+    getFirstPage();
+  }, [getData]);
+
+  return (
+    <PaginationControls
+      disabled={status === 'loading'}
+      totalPages={totalPages}
+      currentPage={currentPage}
+      onPageChange={getData}
+    />
+  );
+};
+```
+
+## Design
+
+<FigmaEmbed />

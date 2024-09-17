@@ -9,6 +9,9 @@ const config: StorybookConfig = {
     '@storybook/addon-onboarding',
     '@storybook/addon-interactions',
     '@storybook/addon-a11y',
+    '@storybook/addon-docs',
+    '@storybook/addon-mdx-gfm',
+    '@storybook/addon-designs',
   ],
   staticDirs: [
     '../public',

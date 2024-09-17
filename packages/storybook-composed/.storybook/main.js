@@ -19,6 +19,10 @@ const config = {
     getAbsolutePath('@storybook/addon-essentials'),
     getAbsolutePath('@chromatic-com/storybook'),
     getAbsolutePath('@storybook/addon-interactions'),
+    '@storybook/addon-designs',
+    '@storybook/addon-docs',
+    '@storybook/addon-a11y',
+    '@storybook/addon-mdx-gfm',
   ],
   framework: {
     name: getAbsolutePath('@storybook/react-webpack5'),

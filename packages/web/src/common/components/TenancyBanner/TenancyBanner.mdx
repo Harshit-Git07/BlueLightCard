@@ -1,0 +1,63 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as TenancyBanner from './TenancyBanner.stories';
+
+<Meta of={TenancyBanner} />
+
+# Tenancy Banner
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Usage](#usage)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+- This component retrieves and renders the tenancy banner carousel of sponsored adverts from Blue Light Card partners
+- The banner supports two variants for the types of tenancy banner to show: large or small
+- The banner is tokenised according to the design system
+- The banner is keyboard accessible where appropriate
+  - There is however likely a limitation with accessibility here as the tenancy banners currently do not have any data to provide a user friendly label
+- The data for the banner is currently provided via the getBanners GraphQL query
+- This component is located within Web only due to this current coupling to GraphQL, which prevents the component from being reusable in Mobile Hybrid
+- In future, it may be possible to consolidate Web and Hybrid tenancy banners into Shared UI if we replatform the endpoint into a new REST API
+
+## Props
+
+<Controls />
+
+## State
+
+The banner uses shared state via Jotai for storing all of the loaded banner data returned from the query, all versions of the banner should share the same state
+
+## Usage
+
+Use this component when you need to load either large or small tenancy banners into the page:
+
+```jsx
+const ExamplePage = () => (
+  <body>
+    <Header>
+      <TenancyBanner variant="large" />
+    </Header>
+
+    <Footer>
+      <TenancyBanner variant="small" />
+    </Footer>
+  </body>
+);
+```
+
+## Design
+
+There is currently no design available for this component, however:
+
+- the large variant should look identical to the promo banner carousel on the Web Home page
+- the small variant should look identical to the adverts banner carousel on the Web Search page

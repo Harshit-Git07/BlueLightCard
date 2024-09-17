@@ -17,6 +17,7 @@ module.exports = {
     '@storybook/preset-scss',
     '@storybook/addon-a11y',
     '@storybook/addon-mdx-gfm',
+    '@storybook/addon-designs',
   ],
   staticDirs: [
     {
@@ -60,6 +61,7 @@ module.exports = {
       '@/hooks': resolve(__dirname, '../src/common/hooks'),
       '@/utils': resolve(__dirname, '../src/common/utils'),
       '@/types': resolve(__dirname, '../src/common/types'),
+      '@bluelightcard/shared-ui/storybook-config': resolve(__dirname, '../../shared-ui/.storybook'),
     };
     return config;
   },

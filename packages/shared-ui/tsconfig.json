@@ -17,6 +17,6 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "."
   },
-  "include": ["**/*.ts", "**/*.tsx", ".storybook/*.ts", ".storybook/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", ".storybook/*.ts", ".storybook/*.tsx", ".storybook/**/*.tsx"],
   "exclude": ["node_modules"]
 }

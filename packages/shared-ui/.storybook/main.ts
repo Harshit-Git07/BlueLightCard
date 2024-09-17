@@ -7,6 +7,10 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-onboarding',
     '@storybook/addon-interactions',
+    '@storybook/addon-designs',
+    '@storybook/addon-docs',
+    '@storybook/addon-a11y',
+    '@storybook/addon-mdx-gfm',
   ],
   staticDirs: [
     {

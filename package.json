@@ -52,6 +52,7 @@
     "@redocly/cli": "1.7.0",
     "@smithy/types": "3.3.0",
     "@smithy/util-stream": "^2.0.23",
+    "@storybook/addon-designs": "^7.0.9",
     "@storybook/icons": "1.2.9",
     "@storybook/testing-react": "2.0.1",
     "@swc/core": "1.4.16",

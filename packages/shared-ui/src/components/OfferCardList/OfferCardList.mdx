@@ -1,0 +1,76 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+import FigmaEmbed from '../../../.storybook/blocks/FigmaEmbed';
+import * as OfferCardList from './OfferCardList.stories';
+
+<Meta title="Organisms/OfferCardList" of={OfferCardList} />
+
+# Offer Card List
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Usage](#usage)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+- This component renders a list of the [`<ResponsiveOfferCard/>` component](../?path=/docs/component-system-responsiveoffercard--docs)
+- The list includes different visual states for: loading, error, and success
+- The list can show offers in either a vertical or horizontal format
+- The list can be shown as a grid of columns:
+  - Mobile: defaults to 1 column
+  - Tablet: defaults to 2 columns
+  - Desktop: defaults to 3 columns
+- The list is data source agnostic, so offer data can be provided to this component from any endpoint, assuming it matches the offer schema
+- The list is accessible so each offer in the list can be focused and read by screen readers
+- The list is tokenised according to the design system
+
+## Props
+
+<Controls />
+
+## State
+
+The list is stateless, all content that it renders is provided entirely via props
+
+## Usage
+
+```jsx
+const ExampleComponent = () => {
+  const platformAdapter = usePlatformAdapter();
+  const { viewOffer } = useOfferDetails();
+
+  const [status, setStatus] = useState('loading');
+  const [offers, setOffers] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      setStatus('loading');
+
+      try {
+        const offerResults = await platformAdapter.invokveV5Api('/offers');
+        setOffers(offerResults.data);
+        setStatus('success');
+      } catch (err) {
+        setStatus('error');
+      }
+    };
+
+    getData();
+  }, []);
+
+  return (
+    <OfferCardList variant="vertical" status={status} offers={offers} onOfferClick={viewOffer} />
+  );
+};
+```
+
+## Design
+
+<FigmaEmbed />

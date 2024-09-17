@@ -124,9 +124,7 @@ Any supporting components can go in a `/components` sub folder within the compon
 
 ### UX Documentation
 
-Storybook docs are used for documenting the components and providing guidance on how to use the components.
-
-Each component needs an `.mdx` file which will contain the documentation, see the [storybook docs](https://storybook.js.org/docs/writing-docs/doc-blocks)
+See `docs/StorybookDocumentation.md`.
 
 ### Tests
 

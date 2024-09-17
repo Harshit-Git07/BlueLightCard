@@ -7,6 +7,7 @@ import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
+import { createSearchOfferCompanyTable } from '@blc-mono/discovery/infrastructure/database/CreateSearchOfferCompanyTable';
 import { OpenSearchDomain } from '@blc-mono/discovery/infrastructure/search/OpenSearchDomain';
 import { Identity } from '@blc-mono/identity/stack';
 
@@ -119,6 +120,8 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     },
     vpc,
   });
+
+  createSearchOfferCompanyTable(stack);
 
   stack.addOutputs({
     DiscoveryApiEndpoint: api.url,

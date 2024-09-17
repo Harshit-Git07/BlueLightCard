@@ -4,7 +4,7 @@ describe('Company Factory', () => {
   it('should build a default Company object', () => {
     const company = companyFactory.build();
     expect(company).toEqual({
-      id: 1,
+      id: '1',
       legacyCompanyId: 201,
       name: 'Sample Company',
       logo: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',

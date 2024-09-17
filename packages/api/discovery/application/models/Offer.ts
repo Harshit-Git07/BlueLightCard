@@ -4,7 +4,7 @@ import { Company } from './Company';
 import { Discount } from './Discount';
 
 export type Offer = {
-  id: number;
+  id: string;
   legacyOfferId: number;
   name: string;
   status: string;

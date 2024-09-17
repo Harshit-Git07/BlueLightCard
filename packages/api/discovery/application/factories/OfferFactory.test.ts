@@ -4,7 +4,7 @@ describe('Offer Factory', () => {
   it('should build a default Offer object', () => {
     const offer = offerFactory.build();
     expect(offer).toEqual({
-      id: 1,
+      id: '1',
       legacyOfferId: 101,
       name: 'Sample Offer',
       status: 'active',

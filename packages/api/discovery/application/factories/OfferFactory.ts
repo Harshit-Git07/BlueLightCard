@@ -9,7 +9,7 @@ import { categoryFactory } from './CategoryFactory';
 import { discountFactory } from './DiscountFactory';
 
 export const offerFactory = Factory.Sync.makeFactory<Offer>({
-  id: Factory.each((i) => i + 1),
+  id: Factory.each((i) => (i + 1).toString()),
   legacyOfferId: 101,
   name: 'Sample Offer',
   status: 'active',

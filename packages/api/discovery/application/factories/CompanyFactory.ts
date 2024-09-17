@@ -5,7 +5,7 @@ import { Company } from '../models/Company';
 import { categoryFactory } from './CategoryFactory';
 
 export const companyFactory = Factory.Sync.makeFactory<Company>({
-  id: Factory.each((i) => i + 1),
+  id: Factory.each((i) => (i + 1).toString()),
   legacyCompanyId: 201,
   name: 'Sample Company',
   logo: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',

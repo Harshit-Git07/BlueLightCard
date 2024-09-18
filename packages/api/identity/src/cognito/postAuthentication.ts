@@ -6,7 +6,7 @@ import { ProfileService } from '../../src/services/ProfileService';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
-const oldUserPoolId = getEnv(IdentityStackEnvironmentKeys.OLD_USER_POOL_ID);
+const oldUserPoolId = process.env.OLD_USER_POOL_ID;
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 const logger = new Logger({ serviceName: `${service}-postAuthentication` });
 const UNSUCCESSFUL_LOGIN_ATTEMPTS_TABLE_NAME = getEnv(

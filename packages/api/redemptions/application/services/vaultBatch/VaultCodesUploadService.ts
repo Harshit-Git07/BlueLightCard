@@ -103,23 +103,36 @@ export class VaultCodesUploadService implements IVaultCodesUploadService {
     const codes = text
       .split('\n')
       .map((line) => line.trim())
-      .filter((line) => line !== '');
+      .filter((line) => {
+        if (line.includes(' ')) {
+          this.logger.error({
+            message: 'Vault code upload - Invalid blank space in code',
+            context: { line },
+          });
+          throw new Error('Vault code upload - Invalid blank space in code');
+        }
+        // Filter out empty lines
+        return line !== '';
+      });
     return codes;
   }
 
   private extractFilePathInfo(fileName: string): { vaultId: string; batchId: string; created: Date } {
-    // The pattern of the file path is {vaultId}/{batchId}/{created}.csv
-    const regex = /^(vlt-[0-9a-fA-F-]+)\/(vbt-[0-9a-fA-F-]+)\/([\d-]+T[\d:.]+Z)\.csv$/;
+    // The pattern of the file path should always be {vaultId}/{batchId}/{created}.csv
+    // vaultId and batchId are UUIDs, created is an ISO 8601 date
+    const [vaultId, batchId, created] = fileName.split('/');
+    const createdDateISOStr = created?.replace('.csv', '');
+    const parsedCreated = new Date(createdDateISOStr);
 
-    const match = regex.exec(fileName);
-
-    if (match) {
-      const [, vaultId, batchId, created] = match;
-
-      return { vaultId, batchId, created: new Date(created) };
+    if (!vaultId || !batchId || !createdDateISOStr || isNaN(parsedCreated?.getTime())) {
+      this.logger.error({
+        message: 'Vault code upload - Invalid file path',
+        context: { fileName },
+      });
+      throw new Error('Vault code upload - Invalid file path');
     }
 
-    throw new Error('Vault code upload - Invalid file path');
+    return { vaultId, batchId, created: parsedCreated };
   }
 
   private async getS3File(bucketName: string, objectKey: string): Promise<GetObjectCommandOutput | null> {

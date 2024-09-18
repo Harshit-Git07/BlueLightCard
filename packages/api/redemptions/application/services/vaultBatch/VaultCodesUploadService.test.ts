@@ -1,10 +1,11 @@
 import { faker } from '@faker-js/faker';
 
+import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { IS3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
-import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import {
   IRedemptionsEventsRepository,
@@ -40,13 +41,15 @@ describe('VaultCodesUploadService', () => {
     delete process.env.AWS_REGION;
   });
 
-  function makeService(override: {
-    vaultCodesRepo?: IVaultCodesRepository;
-    redemptionsEventsRepo?: IRedemptionsEventsRepository;
-    vaultBatchesRepo?: IVaultBatchesRepository;
-    s3ClientProvider?: IS3ClientProvider;
-  }) {
-    const logger = createTestLogger();
+  function makeService(
+    logger: ILogger,
+    override: {
+      vaultCodesRepo?: IVaultCodesRepository;
+      redemptionsEventsRepo?: IRedemptionsEventsRepository;
+      vaultBatchesRepo?: IVaultBatchesRepository;
+      s3ClientProvider?: IS3ClientProvider;
+    },
+  ) {
     const vaultCodesRepo = override.vaultCodesRepo ? override.vaultCodesRepo : new VaultCodesRepository(connection);
     const redemptionsEventsRepo = override.redemptionsEventsRepo
       ? override.redemptionsEventsRepo
@@ -116,13 +119,14 @@ describe('VaultCodesUploadService', () => {
 
   it('should process all codes in the batch and send event', async () => {
     // Arrange
+    const mockedLogger = createTestLogger();
     const mockedS3ClientProvider = mockS3ClientProvider();
     const mockedVaultBatchesRepo = mockVaultBatchesRepo();
     const mockedVaultCodesRepo = mockVaultCodesRepo();
     mockedVaultCodesRepo.createMany = jest.fn().mockResolvedValue(undefined);
     const mockedRedemptionsEventsRepo = mockRedemptionsEventsRepo();
     mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent = jest.fn().mockResolvedValue(undefined);
-    const service = makeService({
+    const service = makeService(mockedLogger, {
       vaultCodesRepo: mockedVaultCodesRepo,
       redemptionsEventsRepo: mockedRedemptionsEventsRepo,
       vaultBatchesRepo: as(mockedVaultBatchesRepo),
@@ -147,11 +151,12 @@ describe('VaultCodesUploadService', () => {
 
   it('should throw error if fail to get s3 file', async () => {
     // Arrange
+    const mockedSilentLogger = createSilentLogger();
     const mockedS3ClientProvider = mockS3ClientProvider();
     mockedS3ClientProvider.getClient = jest.fn().mockReturnValue({
       send: jest.fn().mockRejectedValue(new Error('Failed to get file')),
     });
-    const service = makeService({
+    const service = makeService(mockedSilentLogger, {
       s3ClientProvider: mockedS3ClientProvider,
     });
 
@@ -163,6 +168,7 @@ describe('VaultCodesUploadService', () => {
 
   it('should throw error if empty file', async () => {
     // Arrange
+    const mockedSilentLogger = createSilentLogger();
     const mockedS3ClientProvider = mockS3ClientProvider();
     mockedS3ClientProvider.getClient = jest.fn().mockReturnValue({
       send: jest.fn().mockResolvedValue({
@@ -171,7 +177,7 @@ describe('VaultCodesUploadService', () => {
         },
       }),
     });
-    const service = makeService({
+    const service = makeService(mockedSilentLogger, {
       s3ClientProvider: mockedS3ClientProvider,
     });
 
@@ -183,7 +189,8 @@ describe('VaultCodesUploadService', () => {
 
   it('should throw error if fail to extract file name info', async () => {
     // Arrange
-    const service = makeService({});
+    const mockedSilentLogger = createSilentLogger();
+    const service = makeService(mockedSilentLogger, {});
 
     // Act & Assert
     await expect(service.handle(defaultBucketName, 'invalid-path', 1000)).rejects.toThrow(
@@ -193,6 +200,7 @@ describe('VaultCodesUploadService', () => {
 
   it('should count failed and successful code insertions', async () => {
     // Arrange
+    const mockedLogger = createTestLogger();
     const mockedS3ClientProvider = mockS3ClientProvider();
     const mockedVaultBatchesRepo = mockVaultBatchesRepo();
     const mockedVaultCodesRepo = mockVaultCodesRepo();
@@ -202,7 +210,7 @@ describe('VaultCodesUploadService', () => {
       .mockResolvedValue(undefined);
     const mockedRedemptionsEventsRepo = mockRedemptionsEventsRepo();
     mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent = jest.fn().mockResolvedValue(undefined);
-    const service = makeService({
+    const service = makeService(mockedLogger, {
       vaultCodesRepo: mockedVaultCodesRepo,
       redemptionsEventsRepo: mockedRedemptionsEventsRepo,
       vaultBatchesRepo: as(mockedVaultBatchesRepo),
@@ -223,5 +231,39 @@ describe('VaultCodesUploadService', () => {
       countCodeInsertSuccess: 1,
       fileName: defaultFileName,
     });
+  });
+
+  it('should throw error if codes have blank lines', async () => {
+    // Arrange
+    const mockedSilentLogger = createSilentLogger();
+    const mockedS3ClientProvider = mockS3ClientProvider();
+    mockedS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => 'co de1\ncod e3\nc ode2',
+        },
+      }),
+    });
+    const mockedVaultBatchesRepo = mockVaultBatchesRepo();
+    const service = makeService(mockedSilentLogger, {
+      s3ClientProvider: mockedS3ClientProvider,
+      vaultBatchesRepo: as(mockedVaultBatchesRepo),
+    });
+
+    // Act & Assert
+    await expect(service.handle(defaultBucketName, defaultS3Path, 1000)).rejects.toThrow(
+      'Vault code upload - Invalid blank space in code',
+    );
+  });
+
+  it('should throw error if file path is invalid', async () => {
+    // Arrange
+    const mockedSilentLogger = createSilentLogger();
+    const service = makeService(mockedSilentLogger, {});
+
+    // Act & Assert
+    await expect(service.handle(defaultBucketName, 'invalid-path', 1000)).rejects.toThrow(
+      'Vault code upload - Invalid file path',
+    );
   });
 });

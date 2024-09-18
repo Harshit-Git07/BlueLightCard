@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.100.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.99.0...bluelightcard/identity-v1.100.0) (2024-09-18)
+
+
+### Features
+
+* small change to trigger chore(release) pipeline ([#2266](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2266)) ([69e0b4d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/69e0b4d4f861958569fedf77d8c6ce67ab487984))
+
 ## [1.99.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.98.1...bluelightcard/identity-v1.99.0) (2024-09-17)
 
 

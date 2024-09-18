@@ -66,24 +66,23 @@ export function createAdminApi(
   const restAdminApi = adminApi.cdk.restApi;
   const adminApiGatewayModelGenerator = new ApiGatewayModelGenerator(adminApi.cdk.restApi);
 
+  const baseParams = {
+    apiGatewayModelGenerator: adminApiGatewayModelGenerator,
+    database,
+    restApi: restAdminApi,
+    stack,
+  };
+
   adminApi.addRoutes(stack, {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     'GET /batch/{vaultId}': AdminRoute.createRoute({
-      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
-      stack,
+      ...baseParams,
       functionName: 'GetVaultBatchHandler',
-      restApi: restAdminApi,
-      database,
       handler: 'packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/getVaultBatchHandler.handler',
       requestValidatorName: 'GetVaultBatchValidator',
     }),
     'POST /batch': AdminRoute.createRoute({
-      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
-      stack,
+      ...baseParams,
       functionName: 'CreateVaultBatchHandler',
-      restApi: restAdminApi,
-      database,
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/createVaultBatchHandler.handler',
       requestValidatorName: 'CreateVaultBatchValidator',
@@ -93,36 +92,33 @@ export function createAdminApi(
       permissions: [vaultCodesUpload.setUp.getPutObjectPolicyStatement()],
     }),
     'PATCH /batch': AdminRoute.createRoute({
-      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
-      stack,
+      ...baseParams,
       functionName: 'UpdateVaultBatchHandler',
-      restApi: restAdminApi,
-      database,
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/updateVaultBatchHandler.handler',
       requestValidatorName: 'UpdateVaultBatchValidator',
     }),
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     'DELETE /batch': AdminRoute.createRoute({
-      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
-      stack,
+      ...baseParams,
       functionName: 'DeleteVaultBatchHandler',
-      restApi: restAdminApi,
-      database,
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/deleteVaultBatchHandler.handler',
       requestValidatorName: 'DeleteVaultBatchValidator',
     }),
     'POST /redemptions/{offerId}': AdminRoute.createRoute({
-      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
-      stack,
+      ...baseParams,
       functionName: 'CreateRedemptionConfigHandler',
-      restApi: restAdminApi,
-      database,
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/createRedemptionConfigHandler.handler',
       requestValidatorName: 'CreateRedemptionConfigValidator',
+    }),
+    'GET /redemptions/{offerId}': AdminRoute.createRoute({
+      ...baseParams,
+      functionName: 'GetRedemptionsConfigHandler',
+      restApi: restAdminApi,
+      handler:
+        'packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/getRedemptionConfigHandler.handler',
+      requestValidatorName: 'GetRedemptionsConfigValidator',
     }),
   });
 

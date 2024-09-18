@@ -53,13 +53,15 @@ describe('VaultCodesRepository', () => {
   });
 
   describe('checkVaultCodesRemaining', () => {
-    it('should return the number of unclaimed codes in the vault', async () => {
+    it('should return the number of unclaimed codes of only one vault', async () => {
       const redemption = await createRedemptionRecord(connection);
       const vault = await createVaultRecord(connection, redemption.id);
+      const secondVault = await createVaultRecord(connection, redemption.id);
       const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
       const batchSize = 1000;
       await createVaultCodeRecordsUnclaimed(connection, vault.id, vaultBatch.id, batchSize);
+      await createVaultCodeRecordsUnclaimed(connection, secondVault.id, vaultBatch.id, batchSize);
 
       // Act
       const repository = new VaultCodesRepository(connection);

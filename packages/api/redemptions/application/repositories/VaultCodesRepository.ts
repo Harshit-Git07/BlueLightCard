@@ -129,6 +129,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
         and(
           or(isNull(vaultCodesTable.memberId), eq(vaultCodesTable.memberId, '')),
           gte(vaultCodesTable.expiry, sql`NOW()`),
+          eq(vaultCodesTable.vaultId, vaultsTable.id),
         ),
       )
       .execute();

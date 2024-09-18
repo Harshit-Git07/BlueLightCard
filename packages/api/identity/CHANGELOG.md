@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.99.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.98.1...bluelightcard/identity-v1.99.0) (2024-09-17)
+
+
+### Features
+
+* add unit tests for user management folder ([#2148](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2148)) ([cb5d0eb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cb5d0eb7377b404109d87183c84d68051c5b98e4))
+* TI-1624 create units tests for card management ([#2203](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2203)) ([f6b9745](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f6b9745785981a3b455c904c85f9b2e705744cfc))
+
 ## [1.98.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.98.0...bluelightcard/identity-v1.98.1) (2024-09-11)
 
 

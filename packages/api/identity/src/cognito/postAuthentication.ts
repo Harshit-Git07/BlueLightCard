@@ -92,7 +92,7 @@ async function deleteDBRecordIfExists(email: string, userPoolId: string) {
       await unsuccessfulLoginAttemptsService.deleteRecord(email, userPoolId);
     } catch (e: any) {
       logger.error(
-        'failed to delete record with email: ' + email + ' and user pool id: ' + userPoolId,
+        'failed to delete record with email: ' + email + ' and user pool id is: ' + userPoolId,
         { e },
       );
     }

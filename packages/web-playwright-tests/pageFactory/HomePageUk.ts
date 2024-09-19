@@ -27,6 +27,11 @@ export class HomePageUk {
   private readonly REGISTER_LINK_UK: Locator;
   private readonly FORGOT_PASSWORD_LINK_UK: Locator;
   private readonly OFFERS_HEADER_LINK_UK: Locator;
+  private readonly SPONSOR_BANNER_UK: Locator;
+  private readonly DEAL_OF_THE_WEEK_UK: Locator;
+  private readonly FLEXI_MENU_UK: Locator;
+  private readonly MARKETPLACE_MENU_UK: Locator;
+  private readonly FEATURE_CAROUSEL_UK: Locator;
 
   // Search options
   private readonly SEARCH_BUTTON_UK: Locator;
@@ -71,6 +76,11 @@ export class HomePageUk {
     this.REGISTER_LINK_UK = page.getByRole('link', { name: 'Register', exact: true });
     this.FORGOT_PASSWORD_LINK_UK = page.getByRole('link', { name: 'Forgot password?' });
     this.OFFERS_HEADER_LINK_UK = page.getByTestId('Offers-header-link');
+    this.SPONSOR_BANNER_UK = page.getByTestId('homepage-sponsor-banners');
+    this.DEAL_OF_THE_WEEK_UK = page.getByRole('heading', { name: 'Deals of the week' });
+    this.FLEXI_MENU_UK = page.getByTestId('flexi-menu-carousel');
+    this.MARKETPLACE_MENU_UK = page.getByTestId('marketplace-menu-carousel-0');
+    this.FEATURE_CAROUSEL_UK = page.getByTestId('featured-menu-carousel');
 
     // Search options
     this.SEARCH_BUTTON_UK = page.getByTestId('searchBtn').locator('svg');
@@ -203,4 +213,16 @@ export class HomePageUk {
 
     expect(clipboardText).toBe(expectedDiscountCode);
   }
+  // Asserts that all the carousels on the home screen are visible when the user is logged in
+  async assertCarouselsVisibleHomeScreenLoggedIn(): Promise<void> {
+
+    await expect(this.SPONSOR_BANNER_UK).toBeVisible();
+    await expect(this.DEAL_OF_THE_WEEK_UK).toBeVisible();
+    await expect(this.FLEXI_MENU_UK).toBeVisible();
+    await expect(this.MARKETPLACE_MENU_UK).toBeVisible();
+    await expect(this.FEATURE_CAROUSEL_UK).toBeVisible();
+
+   
+  }
+
 }

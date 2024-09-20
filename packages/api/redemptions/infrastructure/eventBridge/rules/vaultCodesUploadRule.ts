@@ -22,7 +22,8 @@ export function createVaultCodesUploadRule(
   const vaultCodesUploadHandler = new SSTFunction(stack, 'vaultCodesUploadHandler', {
     database,
     handler: 'packages/api/redemptions/application/handlers/eventBridge/vaultBatch/vaultCodesUploadHandler.handler',
-    retryAttempts: 2,
+    timeout: 900,
+    retryAttempts: 0,
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,
     environment: {

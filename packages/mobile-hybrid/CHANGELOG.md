@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.32.0...bluelightcard/mobile-hybrid-v1.33.0) (2024-09-18)
+
+
+### Features
+
+* DISCO-922 Swapped flag for Thank You Campaign to env ([#2260](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2260)) ([2f90200](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2f90200bc465de93a8d6076dc9da30adc7e76e1c))
+* offer sheet refactor ([#1989](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1989)) ([96d7b97](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96d7b97cbb6099b881812cd5cfe7cac7ff0d8a7f))
+
+
+### Bug Fixes
+
+* revert offer sheet ([#2256](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2256)) ([9fcd603](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9fcd603476055d7745ce745cabeca0e6385af7a4))
+
 ## [1.32.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.31.0...bluelightcard/mobile-hybrid-v1.32.0) (2024-09-12)
 
 

@@ -11,6 +11,13 @@ export interface IDwhRepository {
   logRedemptionAttempt(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
   logVaultRedemption(offerId: number, companyId: number, memberId: string, code: string): Promise<void>;
   logRedemption(dto: MemberRedemptionParamsDto): Promise<void>;
+  logCallbackVaultRedemption(
+    offerId: unknown,
+    code: unknown,
+    orderValue: unknown,
+    currency: unknown,
+    redeemedAt: unknown,
+  ): Promise<void>;
 }
 
 const EVENT_ORIGIN_OFFER_SHEET = 'offer_sheet';
@@ -131,5 +138,29 @@ export class DwhRepository implements IDwhRepository {
       },
     });
     await firehoseClient.send(firehoseCommand);
+  }
+
+  async logCallbackVaultRedemption(
+    offerId: number,
+    code: string,
+    orderValue: number,
+    currency: string,
+    redeemedAt: string,
+  ): Promise<void> {
+    const command = new PutRecordCommand({
+      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME),
+      Record: {
+        Data: Buffer.from(
+          JSON.stringify({
+            offerId,
+            code,
+            orderValue,
+            currency,
+            redeemedAt,
+          }),
+        ),
+      },
+    });
+    await this.client.send(command);
   }
 }

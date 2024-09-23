@@ -1,5 +1,5 @@
-import { RemovalPolicy, SecretValue } from 'aws-cdk-lib';
-import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager'
+import { RemovalPolicy } from 'aws-cdk-lib';
+import { ISecret, Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import * as kinesisfirehose from 'aws-cdk-lib/aws-kinesisfirehose';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
@@ -30,6 +30,19 @@ const platformMap =  {
   [DDS_UK_BRAND] : 'dds',
   [BLC_AU_BRAND] : 'blc-au',
 } as const;
+
+const callbackVaultRedemptionStreamNames = {
+	'production': {
+		[BLC_UK_BRAND]: 'dwh-blc-production-vaultRedemption',
+		[BLC_AU_BRAND]: 'dwh-blc-p1-production-vaultRedemption',
+		[DDS_UK_BRAND]: 'dwh-dds-p1-production-vaultRedemptions'
+	},
+	'staging': {
+		[BLC_UK_BRAND]: 'dwh-blc-p1-develop-vaultRedemption',
+		[BLC_AU_BRAND]: 'dwh-blc-p1-develop-vaultRedemption',
+		[DDS_UK_BRAND]: 'dwh-dds-p1-develop-vaultRedemptions'
+	}
+}
  
 let redshiftSecret: ISecret;
 const getRedshiftSecret = (stack: Stack) => {
@@ -54,6 +67,8 @@ export class DwhKenisisFirehoseStreams {
   public readonly compAppClickStream: IFirehoseStreamAdapter;
   public readonly vaultStream: IFirehoseStreamAdapter;
   public readonly redemptionTypeStream: IFirehoseStreamAdapter;
+	public readonly callbackVaultRedemptionStreamProd: IFirehoseStreamAdapter;
+	public readonly callbackVaultRedemptionStreamDevelop: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -64,7 +79,8 @@ export class DwhKenisisFirehoseStreams {
     }
 
     const redshiftSchemaName = secret.secretValueFromJson('schema');
-    const brandPrefix = platformMap[getBrandFromEnv()];
+		const brandFromEnv = getBrandFromEnv()
+    const brandPrefix = platformMap[brandFromEnv];
 
     this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-compView', `dwh-${brandPrefix}-production-compView`).setup();
     this.compClickStream = new KenisisFirehoseStream(stack, 'dwh-compClick', `dwh-${brandPrefix}-production-compClick`).setup();
@@ -74,6 +90,8 @@ export class DwhKenisisFirehoseStreams {
     this.redemptionTypeStream = new KenisisFirehoseStream(stack, 'dwh-redemption', `dwh-${brandPrefix}-redemption`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblredemption` : undefined)
     }).setup();
+		this.callbackVaultRedemptionStreamProd = new KenisisFirehoseStream(stack, 'dwh-callbackVaultRedemptionProd', callbackVaultRedemptionStreamNames.production[brandFromEnv]).setup();
+		this.callbackVaultRedemptionStreamDevelop = new KenisisFirehoseStream(stack, 'dwh-callbackVaultRedemptionDevelop', callbackVaultRedemptionStreamNames.staging[brandFromEnv]).setup();
 
   }
 }

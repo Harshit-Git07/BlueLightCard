@@ -1,4 +1,5 @@
 import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
+import { faker } from '@faker-js/faker';
 import { mockClient } from 'aws-sdk-client-mock';
 
 import { ClientType } from '@blc-mono/core/schemas/domain';
@@ -23,6 +24,7 @@ describe('DwhRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_COMP_APP_CLICK_STREAM_NAME];
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME];
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_REDEMPTIONS_STREAM_NAME];
+    delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME];
   });
 
   describe('logOfferView', () => {
@@ -258,6 +260,72 @@ describe('DwhRepository', () => {
 
       // Act
       const result = dwhRepository.logRedemption(dto);
+
+      // Assert
+      await expect(result).rejects.toThrow();
+    });
+  });
+
+  describe('logCallbackVaultRedemption', () => {
+    // These test fields are just assumptions, the actual fields types are not known. We're just forwarding them directly to Firehose
+    const testOfferId = faker.number.int({
+      min: 0,
+      max: 1000000,
+    });
+    const testCode = faker.string.sample(10);
+    const testOrderValue = faker.number.int({
+      min: 0,
+      max: 1000000,
+    });
+    const testCurrency = faker.finance.currencyCode();
+    const testRedeemedAt = faker.date.recent().toISOString();
+    const testStreamName = 'firehose-callback';
+
+    it('should send the correct data to the callback stream', async () => {
+      // Arrange
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      mockFirehoseClient.on(PutRecordCommand);
+      const dwhRepository = new DwhRepository();
+
+      // Act
+      await dwhRepository.logCallbackVaultRedemption(
+        testOfferId,
+        testCode,
+        testOrderValue,
+        testCurrency,
+        testRedeemedAt,
+      );
+
+      // Assert
+      const calls = mockFirehoseClient.calls();
+      expect(calls.length).toBe(1);
+      const putCommand = calls[0].args[0] as PutRecordCommand;
+      expect(putCommand.input.DeliveryStreamName).toBe(testStreamName);
+      const data = new TextDecoder().decode(putCommand.input.Record!.Data);
+      expect(JSON.parse(data)).toStrictEqual({
+        offerId: testOfferId,
+        code: testCode,
+        orderValue: testOrderValue,
+        currency: testCurrency,
+        redeemedAt: testRedeemedAt,
+      });
+    });
+
+    it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
+      // Arrange
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      const dwhRepository = new DwhRepository();
+
+      mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');
+
+      // Act
+      const result = dwhRepository.logCallbackVaultRedemption(
+        testOfferId,
+        testCode,
+        testOrderValue,
+        testCurrency,
+        testRedeemedAt,
+      );
 
       // Assert
       await expect(result).rejects.toThrow();

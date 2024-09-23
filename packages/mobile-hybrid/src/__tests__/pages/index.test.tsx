@@ -199,6 +199,36 @@ describe('Home', () => {
       expect(campaignBanner).toBeInTheDocument();
     });
 
+    it('logs an analytics event when the campaign banner is clicked', async () => {
+      mockPlatformAdapter.invokeV5Api = jest.fn().mockResolvedValue({
+        statusCode: 200,
+        data: JSON.stringify({
+          data: [
+            {
+              id: '1',
+              content: {
+                imageURL: '/spin_to_win.jpg',
+                iframeURL: 'https://campaign.odicci.com/#/2031feeae3808e7b8802',
+              },
+            },
+          ],
+        }),
+      });
+
+      whenHomePageIsRendered();
+
+      const campaignBanner = await screen.findByTestId('campaign-banner');
+      const image = campaignBanner.querySelector('div > div > div > img');
+
+      if (!image) throw new Error('Banner image is not in the document');
+
+      await userEvent.click(image);
+
+      expect(mockPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith('blue_rewards_clicked', {
+        click_type: 'Homepage Banner',
+      });
+    });
+
     it('navigates to the Odicci campaign page when the campaign banner is clicked', async () => {
       mockPlatformAdapter.invokeV5Api = jest.fn().mockResolvedValue({
         statusCode: 200,

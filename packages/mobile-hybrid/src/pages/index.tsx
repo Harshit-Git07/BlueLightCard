@@ -12,7 +12,7 @@ import CampaignBanner from '@/components/CampaignBanner';
 import type { CampaignEvent } from '@/components/CampaignBanner/types';
 import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import { SearchBar } from '@bluelightcard/shared-ui';
+import { SearchBar, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl, BRAND } from '@/globals';
@@ -30,6 +30,7 @@ const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
+  const platformAdapter = usePlatformAdapter();
   const router = useRouter();
   const userProfileValue = useAtomValue(userProfile);
   const [seeAllNews, setSeeAllNews] = useAtom(newsPanelStore);
@@ -74,6 +75,10 @@ const Home: NextPage<any> = () => {
 
   const onCampaignClick = (clickedCampaignEvent: CampaignEvent) => {
     if (!userProfileValue) return;
+
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.BLUE_REWARDS_CLICKED, {
+      click_type: 'Homepage Banner',
+    });
 
     router.push(
       `/odicci-iframe-campaign?iframeUrl=${encodeURIComponent(

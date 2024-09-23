@@ -247,15 +247,23 @@ describe('SearchPage', () => {
 
     expect(results).toHaveNoViolations();
   });
+});
 
-  describe('Analytics', () => {
-    it.each(['treatment', 'control'])('should logSearchCardClicked event', async (variant) => {
-      givenResultsAreReturned();
-      whenSearchPageIsRendered(variant);
-
-      await whenOfferCardClicked();
-      thenAmplitudeEventFired();
+describe('Analytics', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    makeQueryMock.mockResolvedValue({
+      data: [],
+      loading: false,
+      networkStatus: NetworkStatus.ready,
     });
+  });
+  it.each(['treatment', 'control'])('should logSearchCardClicked event', async (variant) => {
+    givenResultsAreReturned();
+    whenSearchPageIsRendered(variant);
+
+    await whenOfferCardClicked();
+    thenAmplitudeEventFired();
   });
 });
 

@@ -32,6 +32,7 @@ import CompanyPageFilters, {
   CompanyPageFilterOptions,
 } from '../page-components/company/CompanyPageFilters';
 import CompanyPageOffers from '../page-components/company/CompanyPageOffers';
+import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
 
 type CompanyPageProps = {};
 
@@ -190,123 +191,132 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
         />
       </Head>
 
-      {errorMessage && <CompanyPageError message={errorMessage} />}
-
-      <Container
-        className="desktop:mt-16 mobile:mt-[14px]"
-        platform={isMobile ? PlatformVariant.MobileHybrid : PlatformVariant.Web}
-      >
-        {/* About page (ONLY ON WEB), ShareButton and FavouriteButton */}
-        <CompanyPageWebHeader
-          isMobile={isMobile}
-          companyData={companyData}
-          companySharedEvent={() => {
-            if (amplitude) {
-              amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
-                company_id: companyData.id,
-                company_name: companyData.name,
-              });
-            }
-          }}
+      {isLoading ? (
+        <LoadingSpinner
+          containerClassName="w-full h-[100vh]"
+          spinnerClassName="text-[5em] text-palette-primary dark:text-palette-secondary"
         />
-        {!isMobile && (
-          <div className="w-full">
-            <CompanyAbout
-              CompanyDescription={companyData.description}
-              platform={PlatformVariant.Web}
+      ) : (
+        <>
+          {errorMessage && <CompanyPageError message={errorMessage} />}
+
+          <Container
+            className="desktop:mt-16 mobile:mt-[14px]"
+            platform={isMobile ? PlatformVariant.MobileHybrid : PlatformVariant.Web}
+          >
+            {/* About page (ONLY ON WEB), ShareButton and FavouriteButton */}
+            <CompanyPageWebHeader
+              isMobile={isMobile}
+              companyData={companyData}
+              companySharedEvent={() => {
+                if (amplitude) {
+                  amplitude.trackEventAsync(amplitudeEvents.COMPANY_SHARED_CLICKED, {
+                    company_id: companyData.id,
+                    company_name: companyData.name,
+                  });
+                }
+              }}
             />
-          </div>
-        )}
+            {!isMobile && (
+              <div className="w-full">
+                <CompanyAbout
+                  CompanyDescription={companyData.description}
+                  platform={PlatformVariant.Web}
+                />
+              </div>
+            )}
 
-        {/* Filters */}
-        <CompanyPageFilters
-          enabledFilters={enabledFilters}
-          onSelected={(pillType: CompanyPageFilterOptions) => {
-            setFilterType(pillType);
-            if (amplitude) {
-              amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
-                company_id: companyData.id,
-                company_name: companyData.name,
-                filter_name: pillType,
-              });
-            }
-          }}
-        />
-
-        {/* Offer cards */}
-        <CompanyPageOffers
-          offers={filteredOffers || []}
-          companyId={companyData?.id}
-          companyName={companyData?.name}
-          onOfferClick={(
-            offerId: number,
-            offerName: string,
-            companyId: number,
-            companyName: string,
-            index: number
-          ) => {
-            onSelectOffer(offerId, companyId, companyName);
-            if (amplitude) {
-              amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
-                company_id: companyData.id,
-                company_name: companyData.name,
-                position: index,
-                offer_id: offerId,
-                offer_name: offerName,
-              });
-            }
-          }}
-        />
-
-        {/* Adverts (ONLY ON DESKTOP) */}
-        {!isMobile && !isLoading && adverts && adverts.length > 0 && (
-          <div className="w-full mb-16 tablet:mt-14">
-            <div className="grid grid-cols-2 gap-10">
-              {adverts.slice(0, 2).map((advert, index) => {
-                return (
-                  <CampaignCard
-                    key={'card-' + index}
-                    name={advert.__typename}
-                    image={advert.imageSource}
-                    linkUrl={advert.link}
-                    className="h-[200px]"
-                  />
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* About page (MOBILE) */}
-        {isMobile && companyData.name && (
-          <div className="my-4">
-            <CompanyAbout
-              CompanyName={`About ${companyData.name}`}
-              CompanyDescription={companyData.description}
-              platform={PlatformVariant.MobileHybrid}
+            {/* Filters */}
+            <CompanyPageFilters
+              enabledFilters={enabledFilters}
+              onSelected={(pillType: CompanyPageFilterOptions) => {
+                setFilterType(pillType);
+                if (amplitude) {
+                  amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
+                    company_id: companyData.id,
+                    company_name: companyData.name,
+                    filter_name: pillType,
+                  });
+                }
+              }}
             />
-          </div>
-        )}
 
-        {/* Adverts (ONLY ON MOBILE RESPONSIVE - since it is positioned after the company about section) */}
-        {isMobile && !isLoading && adverts && adverts.length > 0 && (
-          <div className="w-full mb-5 mt-4">
-            <div className="grid gap-2">
-              {adverts.slice(0, 2).map((advert, index) => {
-                return (
-                  <CampaignCard
-                    key={'mobile-card-' + index}
-                    name={advert.__typename}
-                    image={advert.imageSource}
-                    linkUrl={advert.link}
-                    className="min-h-[140px]"
-                  />
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </Container>
+            {/* Offer cards */}
+            <CompanyPageOffers
+              offers={filteredOffers || []}
+              companyId={companyData?.id}
+              companyName={companyData?.name}
+              onOfferClick={(
+                offerId: number,
+                offerName: string,
+                companyId: number,
+                companyName: string,
+                index: number
+              ) => {
+                onSelectOffer(offerId, companyId, companyName);
+                if (amplitude) {
+                  amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
+                    company_id: companyData.id,
+                    company_name: companyData.name,
+                    position: index,
+                    offer_id: offerId,
+                    offer_name: offerName,
+                  });
+                }
+              }}
+            />
+
+            {/* Adverts (ONLY ON DESKTOP) */}
+            {!isMobile && !isLoading && adverts && adverts.length > 0 && (
+              <div className="w-full mb-16 tablet:mt-14">
+                <div className="grid grid-cols-2 gap-10">
+                  {adverts.slice(0, 2).map((advert, index) => {
+                    return (
+                      <CampaignCard
+                        key={'card-' + index}
+                        name={advert.__typename}
+                        image={advert.imageSource}
+                        linkUrl={advert.link}
+                        className="h-[200px]"
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* About page (MOBILE) */}
+            {isMobile && companyData.name && (
+              <div className="my-4">
+                <CompanyAbout
+                  CompanyName={`About ${companyData.name}`}
+                  CompanyDescription={companyData.description}
+                  platform={PlatformVariant.MobileHybrid}
+                />
+              </div>
+            )}
+
+            {/* Adverts (ONLY ON MOBILE RESPONSIVE - since it is positioned after the company about section) */}
+            {isMobile && !isLoading && adverts && adverts.length > 0 && (
+              <div className="w-full mb-5 mt-4">
+                <div className="grid gap-2">
+                  {adverts.slice(0, 2).map((advert, index) => {
+                    return (
+                      <CampaignCard
+                        key={'mobile-card-' + index}
+                        name={advert.__typename}
+                        image={advert.imageSource}
+                        linkUrl={advert.link}
+                        className="min-h-[140px]"
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </Container>
+        </>
+      )}
     </>
   );
 };

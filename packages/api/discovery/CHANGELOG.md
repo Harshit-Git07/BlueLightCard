@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.7.0...bluelightcard/discovery-v1.8.0) (2024-09-23)
+
+
+### Features
+
+* [DISCO-695] Adds "Search" table with Offer & Company repositories ([#2255](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2255)) ([727e8f5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/727e8f5b5d31cdbcb9122e87fdcd4239283b7d85))
+* disco-901 Week 3-5 Campaign Details ([#2274](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2274)) ([752b28a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/752b28a0da38be7ebf4f351857785157fce75231))
+
 ## [1.7.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.6.0...bluelightcard/discovery-v1.7.0) (2024-09-12)
 
 

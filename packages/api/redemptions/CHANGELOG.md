@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.26.0...bluelightcard/redemptions-v1.27.0) (2024-09-20)
+
+
+### Features
+
+* [TR-828] add infrastructure for redemptions admin get api ([#2204](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2204)) ([9bc36af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9bc36af154268aa240e8bf169a7ae3d1ea16bca9))
+* add missing query ([#2261](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2261)) ([866a40b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/866a40b08d9cdc7ac6ad58c0400c3e2bd8ac6853))
+* add more info to vault threshold logger ([#2248](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2248)) ([609c5dd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/609c5dd035dcd40bf2740bde5a304e5a8b04b050))
+* throw if file of vault codes upload have codes with blank spaces ([#2216](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2216)) ([b6bc7b9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b6bc7b9f8fc6559101ef3a2fdb9107a95a76ed88))
+* TR-631 update legacy redeem vault strategy ([#2149](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2149)) ([48f4800](https://github.com/bluelightcard/BlueLightCard-2.0/commit/48f480066cfd2f135fdc4ad11ce2d28cee06db10))
+* Write to Firehose on Redemption (TR-614) ([#1700](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1700)) ([7116c2b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7116c2bd8bdc2c599f719773b4707ebefaa9d9e8))
+
+
+### Bug Fixes
+
+* increase timeout for vault code upload handler timeout ([#2281](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2281)) ([daa3aac](https://github.com/bluelightcard/BlueLightCard-2.0/commit/daa3aac42b3f75b40f81fbe44fa8e48bedad3e59))
+
 ## [1.26.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.25.1...bluelightcard/redemptions-v1.26.0) (2024-09-11)
 
 

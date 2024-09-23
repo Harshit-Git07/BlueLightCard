@@ -129,7 +129,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
       if (companyDataResponse !== null || companyDataResponse) {
         setCompanyData(companyDataResponse);
-        handleCompanyView('companyPage', companyDataResponse.id, companyDataResponse.name);
+        if (userCtx.user?.uuid) {
+          handleCompanyView('companyPage', companyDataResponse.id, companyDataResponse.name);
+        }
       } else {
         setErrorMessage('Company could not be found.');
       }

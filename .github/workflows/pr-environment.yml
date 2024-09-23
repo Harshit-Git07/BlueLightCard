@@ -404,7 +404,7 @@ jobs:
     #   - backend-offers
     #   - backend-redemptions
     env:
-      NEXT_PUBLIC_API_PROXY_URL: https://staging-api.bluelightcard.workers.dev
+      NEXT_PUBLIC_API_PROXY_URL: https://pr-api.bluelightcard.workers.dev
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets[matrix.amplitude_deployment_key] }}
       NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}

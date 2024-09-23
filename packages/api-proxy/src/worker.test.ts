@@ -2,8 +2,8 @@ import nock from 'nock';
 import { expect, describe, it } from 'vitest';
 import { Env, handleRequest } from './worker';
 
-const workerDomain = 'https://api.bluelightcard.workers.dev';
-const testEnv: Env = {
+export const workerDomain = 'https://api.bluelightcard.workers.dev';
+export const testEnv: Env = {
 	ENVIRONMENT: 'test',
 	AUTH_API_BLC_UK: 'https://auth.blc.uk',
 	AUTH_API_BLC_AU: 'https://auth.blc.au',

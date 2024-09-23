@@ -38,6 +38,8 @@ Once the Cloudflare Worker is running, it will act as a proxy for forwarding req
 
 If you run the worker in your localhost environment, you can send requests to http://localhost:58125 -> the port is randomly selected see the console output.
 
+If you deploy the worker to the PR environment, you can send requests to https://pr-api.bluelightcard.workers.dev.
+
 If you deploy the worker to the staging environment, you can send requests to https://staging-api.bluelightcard.workers.dev.
 
 If you deploy the worker to the production environment, you can send requests to https://api.bluelightcard.workers.dev.
@@ -48,5 +50,6 @@ If you deploy the worker to the production environment, you can send requests to
 * This worker uses TypeScript for type safety and Wrangler for deployment to the Cloudflare Workers platform.
 * You can customize the worker logic and environment variables based on your application's requirements.
 * The script `dev-v2` that runs the `wrangler-dev.sh` script is not used yet but will be in V2.
+* The `pr-worker` is just a wrapper around the standard worker logic that will replace the CORS allowed host with the Origin from the request if it matches the pr-XXX.{brand-name}.pages.dev pattern. This is needed for PR environments as the CORS host cannot be wild-carded.
 
 If you encounter any issues or have questions, feel free to reach out to the GitHub CODEOWNERS for assistance.

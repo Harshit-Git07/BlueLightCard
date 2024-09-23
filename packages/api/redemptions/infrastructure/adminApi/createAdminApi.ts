@@ -1,6 +1,7 @@
-import { ApiKeySourceType } from 'aws-cdk-lib/aws-apigateway';
+import { ApiKeySourceType, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { EndpointType } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1Api, Stack } from 'sst/constructs';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
@@ -11,9 +12,35 @@ import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRou
 import { productionAdminDomainNames, stagingAdminDomainNames } from '../constants/domains';
 import { IDatabase } from '../database/adapter';
 import { VaultCodesUpload } from '../s3/vaultCodesUpload';
-
 type GlobalConfig = {
   apiGatewayEndpointTypes: EndpointType[];
+};
+
+type baseParams = {
+  apiGatewayModelGenerator: ApiGatewayModelGenerator;
+  database: IDatabase;
+  restApi: RestApi;
+  stack: Stack;
+};
+
+type AdminApiRoutesParams = {
+  name: string;
+  handler: string;
+  environment?: Record<string, string>;
+  permissions?: PolicyStatement[];
+};
+
+const createRoutesFactory = (baseParams: baseParams) => {
+  return ({ name, handler, environment, permissions }: AdminApiRoutesParams) => {
+    return AdminRoute.createRoute({
+      ...baseParams,
+      functionName: `${name}Handler`,
+      handler,
+      requestValidatorName: `${name}Validator`,
+      environment,
+      permissions,
+    });
+  };
 };
 
 export function createAdminApi(
@@ -73,52 +100,47 @@ export function createAdminApi(
     stack,
   };
 
+  const routeFactory = createRoutesFactory(baseParams);
+
   adminApi.addRoutes(stack, {
-    'GET /batch/{vaultId}': AdminRoute.createRoute({
-      ...baseParams,
-      functionName: 'GetVaultBatchHandler',
-      handler: 'packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/getVaultBatchHandler.handler',
-      requestValidatorName: 'GetVaultBatchValidator',
+    'GET /batch/{vaultId}': routeFactory({
+      name: 'GetVaultBatch',
+      handler:
+        './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/getVaultBatchHandler.handler',
     }),
-    'POST /batch': AdminRoute.createRoute({
-      ...baseParams,
-      functionName: 'CreateVaultBatchHandler',
+    'POST /batch': routeFactory({
+      name: 'CreateVaultBatch',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/createVaultBatchHandler.handler',
-      requestValidatorName: 'CreateVaultBatchValidator',
       environment: {
         [RedemptionsStackEnvironmentKeys.VAULT_CODES_UPLOAD_BUCKET]: vaultCodesUpload.setUp.getBucketName(),
       },
       permissions: [vaultCodesUpload.setUp.getPutObjectPolicyStatement()],
     }),
-    'PATCH /batch': AdminRoute.createRoute({
-      ...baseParams,
-      functionName: 'UpdateVaultBatchHandler',
+    'PATCH /batch': routeFactory({
+      name: 'UpdateVaultBatch',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/updateVaultBatchHandler.handler',
-      requestValidatorName: 'UpdateVaultBatchValidator',
     }),
-    'DELETE /batch': AdminRoute.createRoute({
-      ...baseParams,
-      functionName: 'DeleteVaultBatchHandler',
+    'DELETE /batch': routeFactory({
+      name: 'DeleteVaultBatch',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/deleteVaultBatchHandler.handler',
-      requestValidatorName: 'DeleteVaultBatchValidator',
     }),
-    'POST /redemptions/{offerId}': AdminRoute.createRoute({
-      ...baseParams,
-      functionName: 'CreateRedemptionConfigHandler',
+    'POST /redemptions/{offerId}': routeFactory({
+      name: 'CreateRedemptionConfig',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/createRedemptionConfigHandler.handler',
-      requestValidatorName: 'CreateRedemptionConfigValidator',
     }),
-    'GET /redemptions/{offerId}': AdminRoute.createRoute({
-      ...baseParams,
-      functionName: 'GetRedemptionsConfigHandler',
-      restApi: restAdminApi,
+    'PATCH /redemptions/{offerID}': routeFactory({
+      name: 'UpdateRedemptionConfig',
       handler:
-        'packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/getRedemptionConfigHandler.handler',
-      requestValidatorName: 'GetRedemptionsConfigValidator',
+        './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/updateRedemptionConfigHandler.handler',
+    }),
+    'GET /redemptions/{offerId}': routeFactory({
+      name: 'GetRedemptionConfig',
+      handler:
+        './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/getRedemptionConfigHandler.handler',
     }),
   });
 

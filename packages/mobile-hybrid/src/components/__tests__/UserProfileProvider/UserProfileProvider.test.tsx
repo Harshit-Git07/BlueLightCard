@@ -34,7 +34,7 @@ describe('User Profile Provider component', () => {
   const mockPlatformAdapter = useMockPlatformAdapter();
   const defaultAmplitudeStore = {
     [FeatureFlags.V5_API_INTEGRATION]: 'on',
-    [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'treatment',
+    [Experiments.SEARCH_V5]: 'treatment',
   };
   afterEach(() => {
     jest.resetAllMocks();

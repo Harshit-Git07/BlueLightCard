@@ -71,7 +71,7 @@ describe('useSearch', () => {
     ]);
   });
 
-  it('executes V5 searches for category three experiment', async () => {
+  it('executes V5 searches for searchV5 experiment', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, {
       data: [
         {

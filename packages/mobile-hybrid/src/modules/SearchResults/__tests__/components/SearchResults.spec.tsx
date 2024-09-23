@@ -125,7 +125,7 @@ describe('Search results', () => {
   const whenSearchResultsPageIsRendered = (
     term: string = '',
     existingSearchResults: SearchResults = [],
-    categoryLevelThreeSearchExperiment = 'control',
+    searchV5Experiment = 'control',
     platformAdapter = mockPlatformAdapter,
     v5EndpointsFlag = 'off',
   ) => {
@@ -138,7 +138,7 @@ describe('Search results', () => {
             [
               experimentsAndFeatureFlags,
               {
-                [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: categoryLevelThreeSearchExperiment,
+                [Experiments.SEARCH_V5]: searchV5Experiment,
                 [FeatureFlags.V5_API_INTEGRATION]: v5EndpointsFlag,
               },
             ],

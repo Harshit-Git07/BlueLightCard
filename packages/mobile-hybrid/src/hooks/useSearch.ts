@@ -78,9 +78,8 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
   const [searchResults, setSearchResults] = useAtom(searchResultsAtom);
 
-  const withCategoryThreeExperiment =
-    platformAdapter.getAmplitudeFeatureFlag(Experiments.CATEGORY_LEVEL_THREE_SEARCH) ===
-    'treatment';
+  const withSearchV5Experiment =
+    platformAdapter.getAmplitudeFeatureFlag(Experiments.SEARCH_V5) === 'treatment';
 
   const doSearch = async (term: string) => {
     setSearchTerm(term);
@@ -105,7 +104,7 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
     }
   };
 
-  const doSearchWithCategoryThreeExperiment = async (
+  const doSearchWithSearchV5Experiment = async (
     term: string,
     organisation: string = '',
     isAgeGated: boolean = false,
@@ -145,7 +144,7 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
     status,
     searchTerm,
     searchResults,
-    doSearch: withCategoryThreeExperiment ? doSearchWithCategoryThreeExperiment : doSearch,
+    doSearch: withSearchV5Experiment ? doSearchWithSearchV5Experiment : doSearch,
     resetSearch,
   };
 };

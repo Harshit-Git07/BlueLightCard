@@ -83,9 +83,7 @@ describe('Search Results', () => {
         .spyOn(InvokeNativeAPICall.prototype, 'requestDataAsync')
         .mockResolvedValue({ success: true, data: [] });
 
-      await act(() =>
-        whenPageIsRenderedWithFlags({ [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'control' }),
-      );
+      await act(() => whenPageIsRenderedWithFlags({ [Experiments.SEARCH_V5]: 'control' }));
 
       expect(requestMock).toHaveBeenCalledWith(APIUrl.Search, {
         term: 'test search value',
@@ -96,7 +94,7 @@ describe('Search Results', () => {
       }
     });
 
-    it('should set the search term from the query params when level three search experiment is on ', async () => {
+    it('should set the search term from the query params when  searchV5 experiment is on ', async () => {
       if (mockRouter.query) {
         mockRouter.query.search = 'test search value';
       }
@@ -109,7 +107,7 @@ describe('Search Results', () => {
       await act(() =>
         whenPageIsRenderedWithFlags(
           {
-            [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'treatment',
+            [Experiments.SEARCH_V5]: 'treatment',
             [FeatureFlags.V5_API_INTEGRATION]: 'on',
           },
           mockPlatformAdapter,
@@ -135,19 +133,19 @@ describe('Search Results', () => {
     });
 
     it('should show the spinner when search is made', async () => {
-      await whenPageIsRenderedWithFlags({ [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'control' });
+      await whenPageIsRenderedWithFlags({ [Experiments.SEARCH_V5]: 'control' });
 
       const spinner = screen.findByRole('progressbar');
       expect(spinner).toBeTruthy();
     });
 
-    it('should show the spinner when search is made with level three experiment on', async () => {
+    it('should show the spinner when search is made with searchV5 experiment on', async () => {
       const mockPlatformAdapter = useMockPlatformAdapter(200, {
         data: testDataV5,
       });
 
       await whenPageIsRenderedWithFlags(
-        { [Experiments.CATEGORY_LEVEL_THREE_SEARCH]: 'treatment' },
+        { [Experiments.SEARCH_V5]: 'treatment' },
         mockPlatformAdapter,
       );
 

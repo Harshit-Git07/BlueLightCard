@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.73.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.72.2...bluelightcard/web-v1.73.0) (2024-09-23)
+
+
+### Features
+
+* added beacon api to track amplitude events ([#2257](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2257)) ([f6cf2b9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f6cf2b9c03d02dc75d43e6cea04db84129931f51))
+* added beacon api to track amplitude events (WIP) ([#2234](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2234)) ([421f294](https://github.com/bluelightcard/BlueLightCard-2.0/commit/421f294a2057add952857f2f342c6664e962b8f2))
+* offer sheet refactor ([#1989](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1989)) ([96d7b97](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96d7b97cbb6099b881812cd5cfe7cac7ff0d8a7f))
+
+
+### Bug Fixes
+
+* added guard around company page log to amplitude ([#2215](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2215)) ([d06c655](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d06c655f907b65017be5156225b9532f2c9e0833))
+* DISCO-839 Fixed logout link in new header ([#2275](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2275)) ([4f9c8c8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4f9c8c8c3b3bcdc4101a411cd7fac05a553b9acf))
+* displays loading spinner in company page until APIare completed ([#2285](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2285)) ([522acd7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/522acd76c38182c55e5a748abf237349837d6be1))
+* flakey test on tokenised search ([#2270](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2270)) ([e4d9a80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4d9a80d1ca6afab43d723a9761bd467edb15fc9))
+* revert offer sheet ([#2256](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2256)) ([9fcd603](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9fcd603476055d7745ce745cabeca0e6385af7a4))
+
 ## [1.72.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.72.1...bluelightcard/web-v1.72.2) (2024-09-12)
 
 

@@ -90,4 +90,35 @@ describe('Odicci Iframe Campaign Page', () => {
       'https://api.odicci.com/widgets/iframe_loaders/8d11f7da521240eda77f?odicci_external_user_id=mock-uuid-1',
     );
   });
+
+  describe('terms and conditions button', () => {
+    it('should render', async () => {
+      await whenPageIsRendered();
+      const termsButton = await screen.findByText('Terms and Conditions');
+
+      expect(termsButton).toBeInTheDocument();
+    });
+
+    it('should log an analytics event when clicked', async () => {
+      await whenPageIsRendered();
+      const termsButton = await screen.findByText('Terms and Conditions');
+
+      await userEvent.click(termsButton);
+
+      expect(mockPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith('blue_rewards_clicked', {
+        click_type: 'T&Cs',
+      });
+    });
+
+    it('should navigate to the external T&Cs URL when clicked', async () => {
+      await whenPageIsRendered();
+      const termsButton = await screen.findByText('Terms and Conditions');
+
+      await userEvent.click(termsButton);
+
+      expect(mockPlatformAdapter.navigateExternal).toHaveBeenCalledWith(
+        'https://prizedraw-terms-conditions.bluelightcard.co.uk/',
+      );
+    });
+  });
 });

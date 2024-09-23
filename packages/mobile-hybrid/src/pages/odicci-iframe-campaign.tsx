@@ -4,11 +4,13 @@ import { useRouter } from 'next/router';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { userProfile } from '@/components/UserProfileProvider/store';
 import { spinner } from '@/modules/Spinner/store';
-import { Button, ThemeVariant } from '@bluelightcard/shared-ui';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { Button, ThemeVariant, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import { faChevronLeft } from '@fortawesome/pro-solid-svg-icons';
 import Head from 'next/head';
 
 const IframeCampaignPage: NextPage = () => {
+  const platformAdapter = usePlatformAdapter();
   const setSpinner = useSetAtom(spinner);
   const router = useRouter();
   const userProfileValue = useAtomValue(userProfile);
@@ -32,6 +34,14 @@ const IframeCampaignPage: NextPage = () => {
     router.push('/');
   };
 
+  const onTermsClick = () => {
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.BLUE_REWARDS_CLICKED, {
+      click_type: 'T&Cs',
+    });
+
+    platformAdapter.navigateExternal('https://prizedraw-terms-conditions.bluelightcard.co.uk/');
+  };
+
   return (
     <div className="w-full h-full fixed z-50 top-0 flex flex-col">
       <Head>
@@ -51,6 +61,12 @@ const IframeCampaignPage: NextPage = () => {
         style={{ textAlign: 'center' }}
         src={iframeUrlWithUuid}
       />
+
+      <div className="py-2">
+        <Button variant={ThemeVariant.Tertiary} onClick={onTermsClick}>
+          Terms and Conditions
+        </Button>
+      </div>
     </div>
   );
 };

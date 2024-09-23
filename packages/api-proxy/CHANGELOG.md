@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/api-proxy-v1.0.0...bluelightcard/api-proxy-v1.1.0) (2024-09-23)
+
+
+### Features
+
+* [TR-650]  get gatewayUrl using brand headers ([#2117](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2117)) ([f836eee](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f836eee292dcce20dd7119cc6c11143640c10442))
+* offer sheet refactor ([#1989](https://github.com/bluelightcard/BlueLightCard-2.0/issues/1989)) ([96d7b97](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96d7b97cbb6099b881812cd5cfe7cac7ff0d8a7f))
+* **PE-140:** Separate proxy worker for PR envs to modify CORS headers ([#2226](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2226)) ([7c2e32a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7c2e32a81d67ca13135727a784da80ff77692395))
+
+
+### Bug Fixes
+
+* revert offer sheet ([#2256](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2256)) ([9fcd603](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9fcd603476055d7745ce745cabeca0e6385af7a4))
+
 ## 1.0.0 (2024-09-05)
 
 

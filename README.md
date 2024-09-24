@@ -4,6 +4,7 @@
 
 - [Redemptions Stack](packages/api/redemptions/README.md)
 - [Storybook deployments](docs/StorybookDeployments.md)
+- [Scaffolding](docs/Scaffolding.md)
 
 ## Components
 
@@ -14,6 +15,7 @@
 ```
 
 ## Getting started
+
 Take a copy of the .env.example file and save it as .env in the same directory.
 
 Install dependencies by running:
@@ -33,7 +35,6 @@ Alternatively, use Leapp - this tool can help you to assume roles.
 Make sure you have Docker up and running before trying to run the backend code.
 
 To start the backend run the following (this will deploy the backend to your aws account)
-
 
 ```sh
 npm run dev
@@ -64,6 +65,7 @@ To start the front end run (in another terminal)
 ```sh
 npm run dev -w packages/web
 ```
+
 You need an AWS token and also WARP ( VPN ) turned on
 You also need values in your web .env file ( please ask a coworker )
 
@@ -197,11 +199,14 @@ The solution is to retry the command - it will work eventually 🫣
 ## Architecture and API contracts
 
 ### Postman collection
+
 [Postman collection](docs/api/BlueLightCard2.0.postman_collection.json)
 
 ### Contracts
+
 - Redemptions ( members ) : https://bluelightcard.atlassian.net/wiki/spaces/TR/pages/2556231774/API+Contracts
 - Redemptions ( admin ) : https://bluelightcard.atlassian.net/wiki/spaces/TR/pages/2559115446/Redemptions+Admin+API
 
 Architecture
+
 - https://miro.com/app/board/uXjVKXQLWLc=/

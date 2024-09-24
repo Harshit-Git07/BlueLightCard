@@ -5,7 +5,7 @@ export class HomePageUk {
   readonly context: BrowserContext;
 
   // Locators
-  // Navbar top
+  // Navbar top - logged out
   private readonly BLUELIGHTBUTTON_NAVBAR_UK: Locator;
   private readonly HOME_NAVBAR_UK: Locator;
   private readonly ABOUTUS_NAVBAR_UK: Locator;
@@ -14,6 +14,13 @@ export class HomePageUk {
   private readonly REGISTERNOW_NAVBAR_UK: Locator;
   private readonly DISCOVERMORE_NAVBAR_UK: Locator;
   private readonly LOGOUT_NAVBAR_UK: Locator;
+
+  //Navbar - logged in
+  private readonly MYACCOUNT_NAVBAR_UK: Locator;
+
+  //Personal Infomation
+  private readonly MOBILE_FIELD_UK: Locator;
+  private readonly UPDATE_BUTTON_UK: Locator;
 
   // Login options - Login screen
   private readonly LOGIN_BUTTON_UK: Locator;
@@ -53,7 +60,7 @@ export class HomePageUk {
     this.context = context;
 
     // Initialize locators
-    // Navbar top
+    // Navbar top - logged out
     this.BLUELIGHTBUTTON_NAVBAR_UK = page.locator('[data-testid="brandLogo"]');
     this.HOME_NAVBAR_UK = page.locator('[data-testid="Home-header-link"]');
     this.ABOUTUS_NAVBAR_UK = page.getByRole('navigation').getByRole('link', { name: 'About us' });
@@ -64,6 +71,13 @@ export class HomePageUk {
       .getByRole('link', { name: 'Register now' });
     this.DISCOVERMORE_NAVBAR_UK = page.locator('[data-testid="navigation-dropdown-discover-more"]');
     this.LOGOUT_NAVBAR_UK = page.getByRole('link', { name: 'Logout' });
+
+    //Navbar - logged in
+    this.MYACCOUNT_NAVBAR_UK = page.getByTestId('My Account-header-link');
+
+    //Personal Infomation
+    this.MOBILE_FIELD_UK = page.getByPlaceholder('Mobile Number');
+    this.UPDATE_BUTTON_UK = page.locator("button[data-qa='button-personal-info-details']");
 
     // Login options - Login screen
     this.LOGIN_BUTTON_UK = page.getByRole('link', { name: 'Login' }).nth(1);
@@ -188,7 +202,7 @@ export class HomePageUk {
         });
 
         break;
-        
+
       case 'phrase':
         await this.SEARCH_OPTION_SEARCHTERM_UK.fill(searchTerm);
         await this.SEARCH_NOW_BUTTON_UK.click();
@@ -229,14 +243,33 @@ export class HomePageUk {
   }
   // Asserts that all the carousels on the home screen are visible when the user is logged in
   async assertCarouselsVisibleHomeScreenLoggedIn(): Promise<void> {
-
     await expect(this.SPONSOR_BANNER_UK).toBeVisible();
     await expect(this.DEAL_OF_THE_WEEK_UK).toBeVisible();
     await expect(this.FLEXI_MENU_UK).toBeVisible();
     await expect(this.MARKETPLACE_MENU_UK).toBeVisible();
     await expect(this.FEATURE_CAROUSEL_UK).toBeVisible();
-
-   
   }
+  // My Account - Change mobile number
+  async changeMobileNumber(email: string, password: string): Promise<void> {
+    function generateMobileNumber(): string {
+      const prefix = '07';
+      const remainingDigits = Math.floor(Math.random() * 900000000) + 100000000;
+      return prefix + remainingDigits.toString();
+    }
 
+    const newMobileNumber = generateMobileNumber();
+    const updatedMobileNumber = await this.MOBILE_FIELD_UK;
+    //console.log(newMobileNumber);
+
+    await this.MYACCOUNT_NAVBAR_UK.click();
+    await this.MOBILE_FIELD_UK.fill(' ');
+    await updatedMobileNumber.fill(newMobileNumber);
+    await this.UPDATE_BUTTON_UK.click();
+    await this.LOGOUT_NAVBAR_UK.click();
+    await this.login(email, password);
+    await this.MYACCOUNT_NAVBAR_UK.click();
+    await this.MOBILE_FIELD_UK.isVisible();
+
+    await expect(updatedMobileNumber).toHaveValue(newMobileNumber);
+  }
 }

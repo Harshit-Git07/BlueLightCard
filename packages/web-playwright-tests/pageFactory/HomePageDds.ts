@@ -7,7 +7,7 @@ export class HomePageDds {
   readonly page: Page;
   readonly context: BrowserContext;
 
-  // Navbar top
+  // Navbar logged out
   private readonly DDSLOGOBUTTON_NAVBAR_DDS: Locator;
   private readonly OFFERS_NAVBAR_DDS: Locator;
   private readonly PRIVILEGE_CARD_NAVBAR_DDS: Locator;
@@ -15,6 +15,13 @@ export class HomePageDds {
   private readonly FAQS_NAVBAR_DDS: Locator;
   private readonly LOGOUT_NAVBAR_DDS: Locator;
   private readonly SEARCH_TEXT_DDS: Locator;
+
+  //Navbar - logged in
+  private readonly MYACCOUNT_NAVBAR_DDS: Locator;
+
+  //Personal Infomation
+  private readonly MOBILE_FIELD_DDS: Locator;
+  private readonly UPDATE_BUTTON_DDS: Locator;
 
   // Login options - Login screen
   private readonly LOGIN_BUTTON_DDS: Locator;
@@ -49,7 +56,7 @@ export class HomePageDds {
     this.context = context;
     webActions = new WebActions(this.page, this.context);
 
-    // Navbar top
+    // Navbar logged out
     this.DDSLOGOBUTTON_NAVBAR_DDS = page.locator('div.site-logo');
     this.OFFERS_NAVBAR_DDS = page.getByRole('link', { name: 'Offers ' });
     this.PRIVILEGE_CARD_NAVBAR_DDS = page.getByRole('link', { name: 'Privilege Card' });
@@ -57,6 +64,13 @@ export class HomePageDds {
     this.FAQS_NAVBAR_DDS = page.getByRole('link', { name: 'FAQs' });
     this.LOGOUT_NAVBAR_DDS = page.getByRole('link', { name: 'Logout' });
     this.SEARCH_TEXT_DDS = page.getByText('Search by company or phrase');
+
+    //Navbar - logged in
+    this.MYACCOUNT_NAVBAR_DDS = page.getByRole('link', { name: 'My Account' });
+
+    //Personal Infomation
+    this.MOBILE_FIELD_DDS = page.getByPlaceholder('Mobile Number');
+    this.UPDATE_BUTTON_DDS = page.locator("button[id='detailsbutton']");
 
     // Login options - Login screen
     this.LOGIN_BUTTON_DDS = page.getByRole('link', { name: 'Login' }).nth(1);
@@ -189,14 +203,33 @@ export class HomePageDds {
   }
 
   async assertIncorrectLoginDetailsElementsArePresent(): Promise<void> {
-  
-
     await expect(this.EMAIL_TEXTFIELD_DDS).toBeVisible();
     await expect(this.PASSWORD_TEXTFIELD_DDS).toBeVisible();
     await expect(this.SUBMIT_BUTTON_DDS).toBeVisible();
     await expect(this.INCORRECT_LOGIN_WARNING_DDS).toBeVisible();
-
-  
   }
 
+  // My Account - Change mobile number
+  async changeMobileNumber(email: string, password: string): Promise<void> {
+    function generateMobileNumber(): string {
+      const prefix = '07';
+      const remainingDigits = Math.floor(Math.random() * 900000000) + 100000000;
+      return prefix + remainingDigits.toString();
+    }
+
+    const newMobileNumber = generateMobileNumber();
+    const updatedMobileNumber = await this.MOBILE_FIELD_DDS;
+    //console.log(newMobileNumber);
+
+    await this.MYACCOUNT_NAVBAR_DDS.click();
+    await this.MOBILE_FIELD_DDS.fill(' ');
+    await updatedMobileNumber.fill(newMobileNumber);
+    await this.UPDATE_BUTTON_DDS.click();
+    await this.LOGOUT_NAVBAR_DDS.click();
+    await this.login(email, password);
+    await this.MYACCOUNT_NAVBAR_DDS.click();
+    await this.MOBILE_FIELD_DDS.isVisible();
+
+    await expect(updatedMobileNumber).toHaveValue(newMobileNumber);
+  }
 }

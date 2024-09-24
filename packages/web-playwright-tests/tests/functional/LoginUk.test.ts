@@ -15,6 +15,20 @@ test(`@Uk @SmokeTest @Web @NeedsTestCase - Login to uk home page`, async ({
   });
 });
 
+test(`@Uk @SmokeTest @Web @NeedsTestCase - Cannot login to uk home page - due to wrong password`, async ({
+  homePageUk,
+}) => {
+  await test.step(`Logging in to BLC Uk - Sending wrong password`, async () => {
+    await homePageUk.navigateToUrlAndLogin(
+      process.env.EMAIL_UK, "wrongpassword"
+    );
+  });
+
+  await test.step(`Asserting the incorrect username of password element appears`, async () => {
+    await homePageUk.assertIncorrectLoginDetailsElementsArePresent();
+  });
+});
+
 test(`@Uk @SmokeTest @Web @NeedsTestCase - Check Home screen options when not logged in`, async ({
   homePageUk,
 }) => {

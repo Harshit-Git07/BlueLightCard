@@ -22,3 +22,17 @@ test(`@Aus @SmokeTest @Web @NeedsTestCase - Check Home screen options when not l
     await homePageAus.assertElementsVisibleHomeScreenNotLoggedIn();
   });
 });
+
+test(`@Aus @SmokeTest @Web @NeedsTestCase - erify that incorrect password warning appears`, async ({
+  homePageAus,
+}) => {
+  await test.step(`Navigating to BLC Aus`, async () => {
+    await homePageAus.navigateToUrlAndLogin(process.env.EMAIL_AUS,
+      "wrongpassword");
+   });
+ 
+  
+   await test.step(`Asserting the incorrect username of password element appears`, async () => {
+     await homePageAus.assertIncorrectLoginDetailsElementsArePresent();
+  });
+});

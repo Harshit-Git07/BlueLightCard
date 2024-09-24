@@ -23,6 +23,7 @@ export class HomePageAus {
   private readonly EMAIL_TEXTFIELD_AUS: Locator;
   private readonly PASSWORD_TEXTFIELD_AUS: Locator;
   private readonly SUBMIT_BUTTON_AUS: Locator;
+  private readonly INCORRECT_LOGIN_WARNING_AUS: Locator;
 
   // Cookies popup
   private readonly ACCEPTCOOKIES_BUTTON_AUS: Locator;
@@ -70,6 +71,7 @@ export class HomePageAus {
     this.EMAIL_TEXTFIELD_AUS = page.getByRole('textbox', { name: 'name@host.com' });
     this.PASSWORD_TEXTFIELD_AUS = page.getByRole('textbox', { name: 'Password' });
     this.SUBMIT_BUTTON_AUS = page.getByRole('button', { name: 'submit' });
+    this.INCORRECT_LOGIN_WARNING_AUS = page.getByRole('paragraph');
 
     // Cookies popup
     this.ACCEPTCOOKIES_BUTTON_AUS = page.getByRole('button', { name: 'Agree to all' });
@@ -185,5 +187,16 @@ export class HomePageAus {
     await this.CLICK_HERE_TO_SEE_DISCOUNT_AUS.click();
     await this.page.waitForURL(newPageUrl, { waitUntil: 'load' });
     expect(this.page.url()).toContain(newPageUrl);
+  }
+
+  async assertIncorrectLoginDetailsElementsArePresent(): Promise<void> {
+  
+
+    await expect(this.EMAIL_TEXTFIELD_AUS).toBeVisible();
+    await expect(this.PASSWORD_TEXTFIELD_AUS).toBeVisible();
+    await expect(this.SUBMIT_BUTTON_AUS).toBeVisible();
+    await expect(this.INCORRECT_LOGIN_WARNING_AUS).toBeVisible();
+
+  
   }
 }

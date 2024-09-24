@@ -22,6 +22,7 @@ export class HomePageDds {
   private readonly EMAIL_TEXTFIELD_DDS: Locator;
   private readonly PASSWORD_TEXTFIELD_DDS: Locator;
   private readonly SUBMIT_BUTTON_DDS: Locator;
+  private readonly INCORRECT_LOGIN_WARNING_DDS: Locator;
 
   // Search options
   private readonly SEARCH_BUTTON_DDS: Locator;
@@ -63,6 +64,7 @@ export class HomePageDds {
     this.EMAIL_TEXTFIELD_DDS = page.getByRole('textbox', { name: 'name@host.com' });
     this.PASSWORD_TEXTFIELD_DDS = page.getByRole('textbox', { name: 'Password' });
     this.SUBMIT_BUTTON_DDS = page.getByRole('button', { name: 'submit' });
+    this.INCORRECT_LOGIN_WARNING_DDS = page.getByRole('paragraph');
 
     // Additional locators for assertions
     this.DEALS_OF_THE_WEEK_HEADING_DDS = page.getByRole('heading', { name: 'Deals of the Week' });
@@ -185,4 +187,16 @@ export class HomePageDds {
     // });
     // expect(clipboardText).toBe(expectedDiscountCode);
   }
+
+  async assertIncorrectLoginDetailsElementsArePresent(): Promise<void> {
+  
+
+    await expect(this.EMAIL_TEXTFIELD_DDS).toBeVisible();
+    await expect(this.PASSWORD_TEXTFIELD_DDS).toBeVisible();
+    await expect(this.SUBMIT_BUTTON_DDS).toBeVisible();
+    await expect(this.INCORRECT_LOGIN_WARNING_DDS).toBeVisible();
+
+  
+  }
+
 }

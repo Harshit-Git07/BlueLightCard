@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
+import { as } from '@blc-mono/core/utils/testing';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
@@ -53,14 +54,14 @@ describe('RedeemService', () => {
     const mockedRedemptionEventsRepository = redemptionEventsRepository ?? mockRedemptionEventsRepository();
     const service = new RedeemService(
       mockedLogger,
-      mockedRedemptionsRepository,
+      as(mockedRedemptionsRepository),
       mockedRedeemStrategyResolver,
       mockedRedemptionEventsRepository,
     );
     return service.redeem(offerId, mockedParams);
   }
 
-  function mockRedemptionRepository(): IRedemptionsRepository {
+  function mockRedemptionRepository(): Partial<IRedemptionsRepository> {
     return {
       findOneByOfferId: jest.fn(),
       updateManyByOfferId: jest.fn(),
@@ -86,7 +87,7 @@ describe('RedeemService', () => {
 
     // Act
     const result = await callRedeemMethod(defaultOfferId, {
-      redemptionsRepository: mockedRedemptionsRepository,
+      redemptionsRepository: as(mockedRedemptionsRepository),
     });
 
     // Assert
@@ -116,7 +117,7 @@ describe('RedeemService', () => {
 
     // Act
     const result = await callRedeemMethod(defaultOfferId, {
-      redemptionsRepository: mockedRedemptionsRepository,
+      redemptionsRepository: as(mockedRedemptionsRepository),
       redeemStrategyResolver,
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });
@@ -157,7 +158,7 @@ describe('RedeemService', () => {
 
     // Act
     await callRedeemMethod(defaultOfferId, {
-      redemptionsRepository: mockedRedemptionsRepository,
+      redemptionsRepository: as(mockedRedemptionsRepository),
       redeemStrategyResolver,
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });
@@ -204,7 +205,7 @@ describe('RedeemService', () => {
 
     // Act
     await callRedeemMethod(defaultOfferId, {
-      redemptionsRepository: mockedRedemptionsRepository,
+      redemptionsRepository: as(mockedRedemptionsRepository),
       redeemStrategyResolver,
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });
@@ -250,7 +251,7 @@ describe('RedeemService', () => {
     // Act
     const result = await callRedeemMethod(defaultOfferId, {
       logger: silentLogger,
-      redemptionsRepository: mockedRedemptionsRepository,
+      redemptionsRepository: as(mockedRedemptionsRepository),
       redeemStrategyResolver,
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });

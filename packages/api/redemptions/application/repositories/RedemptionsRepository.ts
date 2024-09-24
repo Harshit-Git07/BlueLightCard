@@ -12,6 +12,7 @@ export type NewRedemption = typeof redemptionsTable.$inferInsert;
 export type RedemptionId = Pick<Redemption, 'id'>;
 
 export interface IRedemptionsRepository {
+  findOneById(id: string): Promise<Redemption | null>;
   findOneByOfferId(offerId: number): Promise<Redemption | null>;
   updateManyByOfferId(offerIds: number[], update: UpdateRedemption): Promise<RedemptionId[]>;
   updateOneByOfferId(offerId: number, update: UpdateRedemption): Promise<RedemptionId | null>;
@@ -22,6 +23,17 @@ export interface IRedemptionsRepository {
 export class RedemptionsRepository extends Repository implements IRedemptionsRepository {
   static readonly key = 'RedemptionsRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
+
+  public async findOneById(id: string): Promise<Redemption | null> {
+    const results = await this.connection.db
+      .select()
+      .from(redemptionsTable)
+      .where(eq(redemptionsTable.id, id))
+      .limit(1)
+      .execute();
+
+    return results[0];
+  }
 
   public async findOneByOfferId(offerId: number): Promise<Redemption | null> {
     const results = await this.connection.db

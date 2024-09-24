@@ -68,6 +68,32 @@ describe('RedemptionsRepository', () => {
     });
   });
 
+  describe('findOneById', () => {
+    it('returns the redemption when it exists', async () => {
+      const repository = new RedemptionsRepository(connection);
+      const redemption = redemptionFactory.build();
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      const result = await repository.findOneById(redemption.id);
+
+      expect(result).toEqual(redemption);
+    });
+
+    it('returns undefined when the redemption does not exist', async () => {
+      const repository = new RedemptionsRepository(connection);
+      const id = faker.number
+        .int({
+          min: 1,
+          max: 1_000_000,
+        })
+        .toString();
+
+      const result = await repository.findOneById(id);
+
+      expect(result).toEqual(undefined);
+    });
+  });
+
   describe('updateOneByOfferId', () => {
     it('should update the redemptions record by offer ID', async () => {
       const offerId = 123;

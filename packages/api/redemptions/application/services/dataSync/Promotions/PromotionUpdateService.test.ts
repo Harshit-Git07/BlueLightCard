@@ -1,3 +1,4 @@
+import { as } from '@blc-mono/core/utils/testing';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { IRedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
 import {
@@ -28,8 +29,8 @@ describe('PromotionUpdateService', () => {
       updateOneByOfferId: jest.fn(),
       updateManyByOfferId: jest.fn(),
       withTransaction: jest.fn(),
-    } satisfies IRedemptionsRepository;
-    const service = new PromotionUpdateService(logger, legacyVaultApiRepository, redemptionsRepository);
+    } satisfies Partial<IRedemptionsRepository>;
+    const service = new PromotionUpdateService(logger, legacyVaultApiRepository, as(redemptionsRepository));
     const vaultItems = vaultItemFactory.buildList(2);
     legacyVaultApiRepository.findVaultsRelatingToLinkId.mockReturnValue(vaultItems);
     redemptionsRepository.updateManyByOfferId.mockResolvedValue([

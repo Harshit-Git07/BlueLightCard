@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import { ClientType } from '@blc-mono/core/schemas/domain';
+import { as } from '@blc-mono/core/utils/testing';
 import { IRedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -26,7 +27,7 @@ describe('RedemptionDetailsService', () => {
     };
   }
 
-  function mockRedemptionsRepository(): IRedemptionsRepository {
+  function mockRedemptionsRepository(): Partial<IRedemptionsRepository> {
     return {
       findOneByOfferId: jest.fn(),
       updateManyByOfferId: jest.fn(),
@@ -45,7 +46,7 @@ describe('RedemptionDetailsService', () => {
     const service = new RedemptionDetailsService(
       logger,
       mockedRedemptionsEventsRepository,
-      mockedRedemptionsRepository,
+      as(mockedRedemptionsRepository),
     );
 
     // Act
@@ -70,7 +71,7 @@ describe('RedemptionDetailsService', () => {
     const service = new RedemptionDetailsService(
       logger,
       mockedRedemptionsEventsRepository,
-      mockedRedemptionsRepository,
+      as(mockedRedemptionsRepository),
     );
 
     // Act
@@ -98,7 +99,7 @@ describe('RedemptionDetailsService', () => {
     const service = new RedemptionDetailsService(
       logger,
       mockedRedemptionsEventsRepository,
-      mockedRedemptionsRepository,
+      as(mockedRedemptionsRepository),
     );
 
     // Act
@@ -131,7 +132,7 @@ describe('RedemptionDetailsService', () => {
     const service = new RedemptionDetailsService(
       logger,
       mockedRedemptionsEventsRepository,
-      mockedRedemptionsRepository,
+      as(mockedRedemptionsRepository),
     );
 
     // Act

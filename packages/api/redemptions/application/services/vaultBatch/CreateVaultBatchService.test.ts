@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 
+import { as } from '@blc-mono/core/utils/testing';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { IS3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
@@ -49,7 +50,7 @@ describe('CreateVaultBatchService', () => {
     } satisfies ParsedRequest;
   }
 
-  const mockRedemptionsRepository: IRedemptionsRepository = {
+  const mockRedemptionsRepository: Partial<IRedemptionsRepository> = {
     findOneByOfferId: jest.fn(),
     updateManyByOfferId: jest.fn(),
     updateOneByOfferId: jest.fn(),
@@ -89,7 +90,7 @@ describe('CreateVaultBatchService', () => {
 
     const service: CreateVaultBatchService = new CreateVaultBatchService(
       createSilentLogger(),
-      mockRedemptionsRepository,
+      as(mockRedemptionsRepository),
       mockVaultsRepository,
       mockVaultBatchesRepository,
       transactionManager,

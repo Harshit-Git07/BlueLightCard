@@ -43,13 +43,25 @@ const IframeCampaignPage: NextPage = () => {
   };
 
   return (
-    <div className="w-full h-full fixed z-50 top-0 flex flex-col">
+    /*
+      Fixed styling and bottom padding has to be applied to page to clear Android bottom nav.
+      This means that there is a larger gap at the bottom of the page on iOS.
+      Hybrid has no way of knowing whether Android or iOS so cannot apply custom styling.
+      Mobile team are aware of this, there's not a good fix.
+      Yeah it sucks.
+    */
+    <div className="w-full h-full fixed z-50 top-0 pb-5 flex flex-col">
       <Head>
         <meta httpEquiv="Content-Security-Policy" content="frame-src *.odicci.com" />
       </Head>
 
       <div className="py-2">
-        <Button variant={ThemeVariant.Tertiary} iconLeft={faChevronLeft} onClick={onBackClick}>
+        <Button
+          variant={ThemeVariant.Tertiary}
+          borderless={true}
+          iconLeft={faChevronLeft}
+          onClick={onBackClick}
+        >
           Back to Home
         </Button>
       </div>
@@ -63,7 +75,7 @@ const IframeCampaignPage: NextPage = () => {
       />
 
       <div className="py-2">
-        <Button variant={ThemeVariant.Tertiary} onClick={onTermsClick}>
+        <Button variant={ThemeVariant.Tertiary} borderless={true} onClick={onTermsClick}>
           Terms and Conditions
         </Button>
       </div>

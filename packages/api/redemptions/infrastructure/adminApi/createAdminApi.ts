@@ -173,7 +173,7 @@ export function createAdminApi(
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/createRedemptionConfigHandler.handler',
     }),
-    'PATCH /redemptions/{offerID}': routeFactory({
+    'PATCH /redemptions/{offerId}': routeFactory({
       name: 'UpdateRedemptionConfig',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/updateRedemptionConfigHandler.handler',

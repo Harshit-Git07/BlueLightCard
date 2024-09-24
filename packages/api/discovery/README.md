@@ -76,6 +76,20 @@ or go into the docker desktop and stop then remove the environments
 npm run test
 ```
 
+## E2E Tests
+
+- From the top level directory run:
+
+```shell
+npm npm run dev
+```
+
+- In a separate terminal navigate to `packages/api/discovery` and run:
+
+```shell
+npm run e2e:discovery
+```
+
 ## Linting
 
 ```shell

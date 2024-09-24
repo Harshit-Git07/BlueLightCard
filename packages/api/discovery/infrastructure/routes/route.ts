@@ -1,5 +1,6 @@
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { ApiGatewayV1ApiFunctionRouteProps, Function, Stack } from 'sst/constructs';
 import { SSTConstruct } from 'sst/constructs/Construct';
 import { Permissions } from 'sst/constructs/util/permission';
@@ -25,6 +26,7 @@ export type RouteOptions = {
   bind?: SSTConstruct[];
   defaultAllowedOrigins: string[];
   permissions?: Permissions;
+  vpc?: IVpc;
 };
 
 export class Route {
@@ -39,6 +41,7 @@ export class Route {
     stack,
     defaultAllowedOrigins,
     permissions,
+    vpc,
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'discoveryAuthorizer'> {
     const requestModels = model ? { 'application/json': model.getModel() } : undefined;
     const methodResponses = MethodResponses.toMethodResponses(
@@ -58,6 +61,7 @@ export class Route {
             ...environment,
             [DiscoveryStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]: JSON.stringify(defaultAllowedOrigins),
           },
+          vpc,
         }),
         method: {
           requestModels,

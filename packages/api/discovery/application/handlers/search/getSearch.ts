@@ -5,23 +5,19 @@ import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda/trigger/ap
 import { datadog } from 'datadog-lambda-js';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
-
-import { search } from '../../../application/services/legacySearch';
-
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
 const logger = new LambdaLogger({ serviceName: 'search-get' });
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
-  const { searchTerm, service, isAgeGated, authToken } = getQueryParams(event);
+  const { searchTerm, service } = getQueryParams(event);
 
   if (searchTerm && service) {
     logger.info({ message: `Search term: ${searchTerm}` });
-    const result = await search(searchTerm, authToken, isAgeGated, service);
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        data: result.results,
+        data: [],
       }),
     };
   } else {

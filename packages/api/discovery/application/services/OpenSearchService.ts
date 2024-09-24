@@ -87,7 +87,9 @@ export class OpenSearchService {
     });
 
     logger.info({
-      message: `Response from querying index ${indexName} was ${response.statusCode} - ${JSON.stringify(response.body)}`,
+      message: `Response from querying index ${indexName} was ${response.statusCode} - ${JSON.stringify(
+        response.body,
+      )}`,
     });
   }
 

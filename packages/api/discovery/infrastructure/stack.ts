@@ -15,7 +15,6 @@ import { Shared } from '../../../../stacks/stack';
 import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastructure/config/config';
 
 import { Route } from './routes/route';
-
 async function DiscoveryStack({ stack, app }: StackContext) {
   const { certificateArn, vpc } = use(Shared);
   const { authorizer } = use(Identity);
@@ -47,6 +46,8 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     },
     layers,
   });
+
+  const openSearchDomain = await new OpenSearchDomain(stack, vpc).setup();
 
   const api = new ApiGatewayV1Api(stack, 'discovery', {
     authorizers: {
@@ -91,12 +92,9 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       requestValidatorName: 'GetSearchValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       environment: {
-        SEARCH_LAMBDA_SCRIPTS_HOST: config.searchLambdaScriptsHost,
-        SEARCH_LAMBDA_SCRIPTS_ENVIRONMENT: config.searchLambdaScriptsEnvironment,
-        SEARCH_BRAND: config.searchBrand,
-        SEARCH_AUTH_TOKEN_OVERRIDE: config.searchAuthTokenOverride,
-        OPENSEARCH_STAGING_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint,
+        SEARCH_DOMAIN_HOST: openSearchDomain,
       },
+      vpc,
     }),
     'GET /campaigns': Route.createRoute({
       apiGatewayModelGenerator,
@@ -109,7 +107,6 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     }),
   });
 
-  const openSearchDomain = await new OpenSearchDomain(stack, vpc).setup();
   const createSearchIndex = new Function(stack, `${stack.stage}-createSearchIndex`, {
     functionName: `${stack.stage}-createSearchIndex`,
     handler: 'packages/api/discovery/application/handlers/search/createSearchIndex.handler',

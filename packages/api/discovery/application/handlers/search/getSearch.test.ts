@@ -25,7 +25,7 @@ describe('getSearch Handler', () => {
     const results = await whenSearchCalled();
 
     const expectedResponse = {
-      body: JSON.stringify({ data: expectedSearchResults.results }),
+      body: JSON.stringify({ data: [] }),
       statusCode: 200,
     };
 

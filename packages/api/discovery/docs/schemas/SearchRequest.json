@@ -1,0 +1,20 @@
+{
+  "SearchRequest": {
+    "type": "object",
+    "properties": {
+      "searchTerm": {
+        "type": "string"
+      },
+      "siteId": {
+        "type": "integer"
+      },
+      "allowAgeGated": {
+        "type": "boolean"
+      },
+      "service": {
+        "type": "string"
+      }
+    },
+    "required": ["searchTerm", "siteId", "allowAgeGated", "service"]
+  }
+}

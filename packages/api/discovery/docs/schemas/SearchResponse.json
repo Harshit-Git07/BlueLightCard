@@ -1,0 +1,19 @@
+{
+  "SearchResponse": {
+    "type": "object",
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "total": {
+        "type": "integer"
+      },
+      "data": {
+        "type": "array",
+        "items": {
+          "$ref": "./Offer.json#/Offer"
+        }
+      }
+    }
+  }
+}

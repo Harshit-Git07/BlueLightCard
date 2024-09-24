@@ -5,7 +5,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import { IFirehoseStreamAdapter } from './adapter';
-import { isProduction } from '@blc-mono/core/src/utils/checkEnvironment';
+import { isProduction, isStaging } from '@blc-mono/core/src/utils/checkEnvironment';
 import { Config, Stack } from 'sst/constructs';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND, MAP_BRAND } from '@blc-mono/core/constants/common';
@@ -187,7 +187,8 @@ class KenisisFirehoseStream {
       logStream
     );
 
-    const useRedshift = (isProduction(this.stack.stage) && this.redshiftOptions.tableName);
+    const isRedShiftEnvironment = isProduction(this.stack.stage) || isStaging(this.stack.stage);
+    const useRedshift = (isRedShiftEnvironment && this.redshiftOptions.tableName);
     const redshiftConfig = useRedshift ? this.createRedshiftReference(
       String(this.redshiftOptions.tableName),
       deliveryRole,

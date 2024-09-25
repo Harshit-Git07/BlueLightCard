@@ -15,6 +15,7 @@ import { Identity } from '@blc-mono/identity/stack';
 import { Shared } from '../../../../stacks/stack';
 import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastructure/config/config';
 
+import { setupOffersIndexCron } from './crons/SetupOffersIndexCron';
 import { Route } from './routes/route';
 async function DiscoveryStack({ stack, app }: StackContext) {
   const { certificateArn, vpc, bus } = use(Shared);
@@ -138,6 +139,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     ),
   });
 
+  setupOffersIndexCron(stack, searchOfferCompanyTable, vpc, openSearchDomain, config, SERVICE_NAME);
   stack.addOutputs({
     DiscoveryApiEndpoint: api.url,
     DiscoveryApiCustomDomain: api.customDomainUrl,

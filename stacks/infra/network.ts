@@ -1,4 +1,4 @@
-import { IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
+import { GatewayVpcEndpointAwsService, IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
 import { isProduction, isStaging } from '@blc-mono/core/src/utils/checkEnvironment';
 import { isDdsUkBrand } from '@blc-mono/core/src/utils/checkBrand';
@@ -47,6 +47,11 @@ export class Network {
       vpcName: vpcName,
       maxAzs: 3,
       subnetConfiguration: this.subnetConfiguration(),
+      gatewayEndpoints: {
+        dynamoDb: {
+          service: GatewayVpcEndpointAwsService.DYNAMODB,
+        },
+      },
     });
   }
 

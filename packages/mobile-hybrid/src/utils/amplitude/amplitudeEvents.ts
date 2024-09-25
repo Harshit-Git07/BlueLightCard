@@ -6,4 +6,5 @@ export enum AmplitudeEvents {
   SEARCH_RESULTS_LIST_CLICKED = 'search_results_list_clicked',
   TYPE_LIST_VIEWED = 'type_list_viewed',
   BLUE_REWARDS_CLICKED = 'blue_rewards_clicked',
+  COMPANYPAGE_VIEWED = 'company_viewed',
 }

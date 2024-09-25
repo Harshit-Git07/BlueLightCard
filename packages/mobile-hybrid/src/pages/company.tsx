@@ -18,6 +18,10 @@ import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import CompanyPageError from '@/page-components/company/components/CompanyPageError';
+import InvokeNativeAnalytics from '@/invoke/analytics';
+import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+
+const analytics = new InvokeNativeAnalytics();
 
 const Company: NextPage<any> = () => {
   const router = useRouter();
@@ -56,6 +60,15 @@ const Company: NextPage<any> = () => {
         companyName: company.data.name,
         companyDescription: company.data.description,
         offers: offers.data.offers as OfferModel[],
+      });
+
+      analytics.logAnalyticsEvent({
+        event: AmplitudeEvents.COMPANYPAGE_VIEWED,
+        parameters: {
+          company_id: cid,
+          company_name: company.data.name,
+          origin: 'mobile-hybrid',
+        },
       });
 
       setSpinner(false);

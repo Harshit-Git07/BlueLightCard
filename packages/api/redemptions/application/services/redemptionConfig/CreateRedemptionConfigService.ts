@@ -6,25 +6,31 @@ import { PostRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/pos
 import { RedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
 import { RedemptionConfig, transformToRedemptionConfig } from '../../transformers/RedemptionConfigTransformer';
 
-type CreateRedemptionResponse =
-  | {
-      kind: 'Error';
-      data: { message: string };
-    }
-  | {
-      kind: 'DuplicationError';
-      data: { message: string };
-    }
-  | {
-      kind: 'ValidationError';
-      data: ZodError<CreateRedemptionSchema>;
-    }
-  | {
-      kind: 'Ok';
-      data: RedemptionConfig;
-    };
+type CreateRedemptionResponse = {
+  kind: 'Ok';
+  data: RedemptionConfig;
+};
 
 type CreateRedemptionSchema = z.infer<typeof PostRedemptionConfigModel>;
+
+export class SchemaValidationError extends Error {
+  public name = 'SchemaValidationError';
+
+  constructor(public readonly data: ZodError<CreateRedemptionSchema>) {
+    super('Validation Error');
+  }
+}
+
+export class ServiceError extends Error {
+  public name = 'ServiceError';
+
+  constructor(
+    public readonly message: string,
+    public readonly statusCode: number,
+  ) {
+    super(message);
+  }
+}
 
 export interface ICreateRedemptionConfigService {
   createRedemptionConfig(request: PostRedemptionConfigModel): Promise<CreateRedemptionResponse>;
@@ -39,25 +45,25 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     private readonly redemptionConfigRepository: RedemptionConfigRepository,
   ) {}
 
-  public async createRedemptionConfig(request: CreateRedemptionSchema): Promise<CreateRedemptionResponse> {
+  private async validateRequest(request: CreateRedemptionSchema) {
     const result = PostRedemptionConfigModel.safeParse(request);
 
     if (!result.success) {
-      return {
-        kind: 'ValidationError',
-        data: result.error,
-      };
+      throw new SchemaValidationError(result.error);
     }
 
     if (await this.redemptionConfigRepository.findOneByOfferId(request.offerId)) {
-      return {
-        kind: 'DuplicationError',
-        data: { message: 'The offerId already has a redemption config' },
-      };
+      throw new ServiceError('The offerId already has a redemption config', 409);
     }
 
+    return result;
+  }
+
+  public async createRedemptionConfig(request: CreateRedemptionSchema): Promise<CreateRedemptionResponse> {
+    const { data: requestData } = await this.validateRequest(request);
+
     try {
-      const { id: redemptionId } = await this.redemptionConfigRepository.createRedemption(request);
+      const { id: redemptionId } = await this.redemptionConfigRepository.createRedemption(requestData);
       const redemptionEntity = await this.redemptionConfigRepository.findOneById(redemptionId);
 
       if (!redemptionEntity) {
@@ -77,12 +83,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
       };
     } catch (e) {
       this.logger.error({ message: 'Error when creating redemption configuration', error: e });
-      return {
-        kind: 'Error',
-        data: {
-          message: 'Error when creating redemption configuration',
-        },
-      };
+      throw new Error('Error when creating redemption configuration');
     }
   }
 }

@@ -5,36 +5,30 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 
 export const PostRedemptionConfigModel = createZodNamedType(
   'PostRedemptionConfigModel',
-  z
-    .object({
-      affiliate: z
-        .enum([
-          'awin',
-          'affiliateFuture',
-          'rakuten',
-          'affilinet',
-          'webgains',
-          'partnerize',
-          'impactRadius',
-          'adtraction',
-          'affiliateGateway',
-          'optimiseMedia',
-          'commissionJunction',
-          'tradedoubler',
-        ])
-        .optional(),
-      companyId: z.union([z.string(), z.number()]),
-      connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
-      offerId: z.union([z.string(), z.number()]),
-      offerType: z.enum(['online', 'in-store']),
-      redemptionType: z.enum(REDEMPTION_TYPES),
-      url: z.string().optional(),
-    })
-    .transform((value) => ({
-      ...value,
-      companyId: Number(value.companyId),
-      offerId: Number(value.offerId),
-    })),
+  z.object({
+    affiliate: z
+      .enum([
+        'awin',
+        'affiliateFuture',
+        'rakuten',
+        'affilinet',
+        'webgains',
+        'partnerize',
+        'impactRadius',
+        'adtraction',
+        'affiliateGateway',
+        'optimiseMedia',
+        'commissionJunction',
+        'tradedoubler',
+      ])
+      .optional(),
+    companyId: z.coerce.number(),
+    connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
+    offerId: z.coerce.number(),
+    offerType: z.enum(['online', 'in-store']),
+    redemptionType: z.enum(REDEMPTION_TYPES),
+    url: z.string().optional(),
+  }),
 );
 
 export type PostRedemptionConfigModel = z.infer<typeof PostRedemptionConfigModel>;

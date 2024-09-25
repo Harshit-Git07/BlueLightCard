@@ -4,11 +4,12 @@ import { z } from 'zod';
 import { JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { JsonValue } from '@blc-mono/core/types/json';
 import { Result } from '@blc-mono/core/types/result';
-import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
   CreateRedemptionConfigService,
   ICreateRedemptionConfigService,
+  SchemaValidationError,
+  ServiceError,
 } from '@blc-mono/redemptions/application/services/redemptionConfig/CreateRedemptionConfigService';
 import { PostRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
 
@@ -39,33 +40,36 @@ export class CreateRedemptionConfigController extends APIGatewayController<Parse
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const result = await this.createRedemptionConfigService.createRedemptionConfig(request.body);
-    switch (result.kind) {
-      case 'Ok':
-        return {
-          statusCode: 200,
-          data: result.data,
-        };
+    try {
+      const result = await this.createRedemptionConfigService.createRedemptionConfig(request.body);
 
-      case 'Error':
+      return {
+        statusCode: 200,
+        data: result.data,
+      };
+    } catch (e) {
+      if (e instanceof ServiceError) {
         return {
-          statusCode: 500,
-          data: result.data,
+          statusCode: e.statusCode,
+          data: { message: e.message },
         };
+      }
 
-      case 'DuplicationError':
-        return {
-          statusCode: 409,
-          data: result.data,
-        };
-
-      case 'ValidationError':
+      if (e instanceof SchemaValidationError) {
         return {
           statusCode: 400,
-          data: result.data as unknown as JsonValue,
+          data: e.data as unknown as JsonValue,
         };
-      default:
-        exhaustiveCheck(result, 'Unhandled result kind');
+      }
+
+      if (e instanceof Error) {
+        return {
+          statusCode: 500,
+          data: { message: e.message },
+        };
+      }
+
+      throw new Error(`Unhandled error creating redemption config: ${(e as Error).message}`);
     }
   }
 }

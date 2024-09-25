@@ -1,5 +1,10 @@
-import { as } from '@blc-mono/core/utils/testing';
-import { ICreateRedemptionConfigService } from '@blc-mono/redemptions/application/services/redemptionConfig/CreateRedemptionConfigService';
+import { ZodError } from 'zod';
+
+import {
+  ICreateRedemptionConfigService,
+  SchemaValidationError,
+  ServiceError,
+} from '@blc-mono/redemptions/application/services/redemptionConfig/CreateRedemptionConfigService';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { CreateRedemptionConfigController } from './CreateRedemptionConfigController';
@@ -41,10 +46,7 @@ describe('CreateRedemptionConfigController', () => {
       createRedemptionConfig: jest.fn(),
     } satisfies ICreateRedemptionConfigService;
 
-    MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
-      kind: 'Error',
-      data: { error: 'error' },
-    });
+    MockCreateRedemptionConfigService.createRedemptionConfig.mockRejectedValue(new Error('some error'));
 
     const requestBody = {
       companyId: 1234,
@@ -62,59 +64,65 @@ describe('CreateRedemptionConfigController', () => {
     });
 
     expect(result.statusCode).toEqual(500);
-    expect(result.data).toStrictEqual({ error: 'error' });
+    expect(result.data).toStrictEqual({ message: 'some error' });
   });
 
-  it('returns 409 for a duplication error request', async () => {
+  it('returns given status code for a service error request', async () => {
     const logger = createTestLogger();
     const MockCreateRedemptionConfigService = {
       createRedemptionConfig: jest.fn(),
     } satisfies ICreateRedemptionConfigService;
 
-    MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
-      kind: 'DuplicationError',
-      data: { error: 'duplication' },
-    });
+    MockCreateRedemptionConfigService.createRedemptionConfig.mockRejectedValue(
+      new ServiceError('service error message', 409),
+    );
 
     const requestBody = {
       companyId: 1234,
+      offerId: 4321,
+      connection: 'none',
+      offerType: 'in-store',
+      redemptionType: 'preApplied',
+      affiliate: 'awin',
+      url: 'some-url',
     } as const;
 
     const controller = new CreateRedemptionConfigController(logger, MockCreateRedemptionConfigService);
-    const result = await controller.handle(
-      as({
-        body: requestBody,
-      }),
-    );
+    const result = await controller.handle({
+      body: requestBody,
+    });
 
     expect(result.statusCode).toEqual(409);
-    expect(result.data).toStrictEqual({ error: 'duplication' });
+    expect(result.data).toStrictEqual({ message: 'service error message' });
   });
 
-  it('returns 400 for a validation error request', async () => {
+  it('returns 400 for a schema validation error request', async () => {
     const logger = createTestLogger();
     const MockCreateRedemptionConfigService = {
       createRedemptionConfig: jest.fn(),
     } satisfies ICreateRedemptionConfigService;
 
-    MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
-      kind: 'ValidationError',
-      data: { error: 'validation' },
-    });
+    MockCreateRedemptionConfigService.createRedemptionConfig.mockRejectedValue(
+      new SchemaValidationError(new ZodError([])),
+    );
 
     const requestBody = {
       companyId: 1234,
+      offerId: 4321,
+      connection: 'none',
+      offerType: 'in-store',
+      redemptionType: 'preApplied',
+      affiliate: 'awin',
+      url: 'some-url',
     } as const;
 
     const controller = new CreateRedemptionConfigController(logger, MockCreateRedemptionConfigService);
-    const result = await controller.handle(
-      as({
-        body: requestBody,
-      }),
-    );
+    const result = await controller.handle({
+      body: requestBody,
+    });
 
     expect(result.statusCode).toEqual(400);
-    expect(result.data).toStrictEqual({ error: 'validation' });
+    expect(result.data).toStrictEqual(new ZodError([]));
   });
 
   it('throws an error if an invalid Kind is returned from the service', async () => {
@@ -123,7 +131,7 @@ describe('CreateRedemptionConfigController', () => {
       createRedemptionConfig: jest.fn(),
     } satisfies ICreateRedemptionConfigService;
 
-    MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
+    MockCreateRedemptionConfigService.createRedemptionConfig.mockRejectedValue({
       kind: 'Asparagus',
       data: { type: 'yummy green vegetable' },
     });

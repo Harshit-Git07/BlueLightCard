@@ -1,6 +1,7 @@
+import { Company } from '@blc-mono/discovery/application/models/Company';
+
 import { Boost } from './Boost';
 import { Category } from './Category';
-import { Company } from './Company';
 import { Discount } from './Discount';
 
 export type Offer = {

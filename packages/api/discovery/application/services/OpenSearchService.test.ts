@@ -1,21 +1,16 @@
-import axios from 'axios';
-
 import { getEnv } from '@blc-mono/core/utils/getEnv'; // Ensure the correct import of getEnv
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { OpenSearchService } from './OpenSearchService';
 
-jest.mock('axios');
-
 jest.mock('@blc-mono/core/utils/getEnv');
-
-const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 const mockCreate = jest.fn().mockResolvedValue({ acknowledged: true });
 const mockIndex = jest.fn().mockResolvedValue({ result: 'created' });
 const mockSearch = jest.fn().mockResolvedValue({ result: 'created' });
 const mockDelete = jest.fn().mockResolvedValue({ acknowledged: true });
 const mockExists = jest.fn().mockResolvedValue({ body: true });
+const mockBulkCreate = jest.fn().mockResolvedValue({ statusCode: 200 });
 
 (getEnv as jest.Mock).mockReturnValue('hostname');
 
@@ -34,8 +29,7 @@ describe('OpenSearchService', () => {
     jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearch);
     jest.spyOn(openSearchService['openSearchClient'].indices, 'delete').mockImplementation(mockDelete);
     jest.spyOn(openSearchService['openSearchClient'].indices, 'exists').mockImplementation(mockExists);
-
-    mockedAxios.post.mockResolvedValue({ data: { acknowledged: true } });
+    jest.spyOn(openSearchService['openSearchClient'], 'bulk').mockImplementation(mockBulkCreate);
   });
 
   it('should create an index with the correct settings', async () => {
@@ -43,7 +37,7 @@ describe('OpenSearchService', () => {
 
     await openSearchService.createIndex(indexName);
 
-    expect(getEnv).toHaveBeenCalledWith(DiscoveryStackEnvironmentKeys.SEARCH_DOMAIN_HOST);
+    expect(getEnv).toHaveBeenCalledWith(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT);
 
     expect(mockCreate).toHaveBeenCalledWith({
       index: indexName,
@@ -112,5 +106,11 @@ describe('OpenSearchService', () => {
     });
 
     expect(result).toBe(true);
+  });
+
+  it('should add multiple documents to an index', async () => {
+    await openSearchService.addDocumentsToIndex([], indexName);
+    expect(mockBulkCreate).toHaveBeenCalledTimes(1);
+    expect(mockBulkCreate).toHaveBeenCalledWith({ body: [], index: indexName, refresh: true });
   });
 });

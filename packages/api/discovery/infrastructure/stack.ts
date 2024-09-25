@@ -8,6 +8,7 @@ import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { createSearchOfferCompanyTable } from '@blc-mono/discovery/infrastructure/database/CreateSearchOfferCompanyTable';
+import { populateOpenSearchRule } from '@blc-mono/discovery/infrastructure/rules/populateOpenSearchRule';
 import { OpenSearchDomain } from '@blc-mono/discovery/infrastructure/search/OpenSearchDomain';
 import { Identity } from '@blc-mono/identity/stack';
 
@@ -16,7 +17,7 @@ import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastru
 
 import { Route } from './routes/route';
 async function DiscoveryStack({ stack, app }: StackContext) {
-  const { certificateArn, vpc } = use(Shared);
+  const { certificateArn, vpc, bus } = use(Shared);
   const { authorizer } = use(Identity);
   const SERVICE_NAME = 'discovery';
   stack.tags.setTag('service', SERVICE_NAME);
@@ -34,7 +35,8 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   stack.setDefaultFunctionProps({
     timeout: 20,
     environment: {
-      service: SERVICE_NAME,
+      region: stack.region,
+      SERVICE: SERVICE_NAME,
       DD_VERSION: process.env.DD_VERSION || '',
       DD_ENV: process.env.SST_STAGE || 'undefined',
       DD_API_KEY: process.env.DD_API_KEY || '',
@@ -43,6 +45,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       USE_DATADOG_AGENT,
       DD_SERVICE: SERVICE_NAME,
       DD_SITE: 'datadoghq.eu',
+      OPENSEARCH_DOMAIN: process.env.OPENSEARCH_DOMAIN ?? '',
     },
     layers,
   });
@@ -92,7 +95,11 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       requestValidatorName: 'GetSearchValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       environment: {
-        SEARCH_DOMAIN_HOST: openSearchDomain,
+        SEARCH_LAMBDA_SCRIPTS_HOST: config.searchLambdaScriptsHost,
+        SEARCH_LAMBDA_SCRIPTS_ENVIRONMENT: config.searchLambdaScriptsEnvironment,
+        SEARCH_BRAND: config.searchBrand,
+        SEARCH_AUTH_TOKEN_OVERRIDE: config.searchAuthTokenOverride,
+        OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint,
       },
       vpc,
     }),
@@ -113,12 +120,23 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     memorySize: 512,
     permissions: ['es'],
     environment: {
-      SEARCH_DOMAIN_HOST: openSearchDomain,
+      OPENSEARCH_DOMAIN_ENDPOINT: openSearchDomain,
     },
     vpc,
   });
 
-  createSearchOfferCompanyTable(stack);
+  const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);
+
+  bus.addRules(stack, {
+    populateOpenSearchRule: populateOpenSearchRule(
+      stack,
+      vpc,
+      searchOfferCompanyTable,
+      openSearchDomain,
+      config,
+      SERVICE_NAME,
+    ),
+  });
 
   stack.addOutputs({
     DiscoveryApiEndpoint: api.url,

@@ -5,7 +5,6 @@ export type SearchOfferType = {
   CompID: number;
   CompanyName: string;
   OfferType: number;
-
   S3Logos: string;
 };
 

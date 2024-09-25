@@ -101,7 +101,7 @@ export class DiscoveryStackConfigResolver {
         DiscoveryStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
         JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
       ),
-      openSearchDomainEndpoint: getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_STAGING_DOMAIN_ENDPOINT),
+      openSearchDomainEndpoint: getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT),
     };
   }
 }

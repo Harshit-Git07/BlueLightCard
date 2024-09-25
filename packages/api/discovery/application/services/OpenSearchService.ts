@@ -5,6 +5,7 @@ import { defaultProvider } from '@aws-sdk/credential-provider-node';
 
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 const logger = new LambdaLogger({ serviceName: 'openSearch' });
@@ -13,7 +14,7 @@ export class OpenSearchService {
   private openSearchClient: Client;
 
   constructor() {
-    const searchDomainHost = getEnv(DiscoveryStackEnvironmentKeys.SEARCH_DOMAIN_HOST);
+    const searchDomainHost = getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT);
     const searchDomainContainsProtocol = searchDomainHost.includes('http');
 
     this.openSearchClient = new Client({
@@ -66,8 +67,14 @@ export class OpenSearchService {
       body: document,
       refresh: true,
     });
-
     logger.info({ message: `Response from adding document to index ${indexName} was ${response.statusCode}` });
+  }
+
+  public async addDocumentsToIndex(documents: OpenSearchBulkCommand[], indexName: string): Promise<void> {
+    const response = await this.openSearchClient.bulk({ body: documents, index: indexName, refresh: true });
+    logger.info({
+      message: `Response from adding documents to index ${indexName} was ${response.statusCode} - ${JSON.stringify(response.body)}`,
+    });
   }
 
   public async queryIndex(term: string, indexName: string): Promise<void> {

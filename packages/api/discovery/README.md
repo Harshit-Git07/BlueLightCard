@@ -21,7 +21,7 @@ SEARCH_AUTH_TOKEN_OVERRIDE - override the auth token for the search service, use
 or production environments (format is "Bearer abc123")
 
 #open search
-OPENSEARCH_STAGING_DOMAIN_ENDPOINT=
+OPENSEARCH_DOMAIN_ENDPOINT=
 OPENSEARCH_CREATE_NEW_DOMAIN=false
 OPENSEARCH_INITIAL_ADMIN_PASSWORD=
 ```
@@ -49,7 +49,7 @@ OPENSEARCH_CREATE_NEW_DOMAIN and set this to true. When running the code will re
 domain.
 This can be found in the AWS OpenSearch Service. Once a search has been created you can change this value back to false
 and
-grab the domain endpoint value and update the OPENSEARCH_STAGING_DOMAIN_ENDPOINT variable.
+grab the domain endpoint value and update the OPENSEARCH_DOMAIN_ENDPOINT variable.
 
 ### Running against Staging/Ephemeral OpenSearch
 
@@ -58,7 +58,7 @@ in.
 This is in the same location as the check for OPENSEARCH_CREATE_NEW_DOMAIN. As it stands the current set up at the time
 of writing
 Prod/Ephemeral will create new domains and staging and normally local will use the URL set in the
-OPENSEARCH_STAGING_DOMAIN_ENDPOINT variable.
+OPENSEARCH_DOMAIN_ENDPOINT variable.
 
 ### Remove Docker
 

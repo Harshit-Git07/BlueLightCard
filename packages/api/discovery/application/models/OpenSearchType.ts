@@ -1,0 +1,59 @@
+import { Offer } from '@blc-mono/discovery/application/models/Offer';
+
+export type OpenSearchBulkCommand = OpenSearchCommand | OpenSearchBody;
+
+export type OpenSearchCommand = {
+  create: object;
+};
+
+export type OpenSearchBody = {
+  offer_id: string;
+  offer_name: string;
+  offer_status: string;
+  offer_type: string;
+  offer_description: string;
+  offer_description_stripped: string;
+  offer_image: string;
+  offer_expires: string;
+  offer_start: string;
+  offer_tags: string[];
+  company_id: string;
+  company_name: string;
+  company_name_stripped: string;
+  company_small_logo: string;
+  company_tags: string[];
+  is_age_gated: string;
+  restricted_to: string[];
+  category_name: string;
+  new_category_1: string;
+  category_level_2: string;
+  category_level_3: string;
+  category_level_4: string;
+  date_offer_last_updated: string;
+};
+
+export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
+  offer_id: offer.id,
+  offer_name: offer.name.trim(),
+  offer_status: offer.status,
+  offer_type: offer.offerType,
+  offer_description: offer.offerDescription.trim(),
+  offer_description_stripped: offer.offerDescription.trim().replace(/<[^<>]*>/g, ''),
+  offer_image: offer.image.trim(),
+  offer_expires: offer.offerEnd,
+  offer_start: offer.offerStart,
+  offer_tags: offer.tags,
+  company_id: offer.company.id,
+  company_name: offer.company.name,
+  company_name_stripped: offer.company.name.trim() || '',
+  company_small_logo: offer.company.logo,
+  company_tags: offer.company.alsoKnownAs,
+  is_age_gated: offer.company.ageRestrictions || 'false',
+  restricted_to: offer.company.serviceRestrictions,
+  category_name: offer.categories.length > 0 ? offer.categories[0].name : '',
+  new_category_1: offer.categories.find((category) => category.level === 1)?.name ?? '',
+  category_level_2: offer.categories.find((category) => category.level === 2)?.name ?? '',
+  category_level_3: offer.categories.find((category) => category.level === 3)?.name ?? '',
+  category_level_4: offer.categories.find((category) => category.level === 4)?.name ?? '',
+  date_offer_last_updated: offer.updatedAt,
+});

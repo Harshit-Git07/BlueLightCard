@@ -49,7 +49,7 @@ function generateRandomEmail(length: number): string {
   return `${process.env.TESTMAIL_NAMESPACE}.${randomPart}@inbox.testmail.app`;
 }
 
-function generateUKMobileNumber(): string {
+export function generateUKMobileNumber(): string {
   const mobileNumber = '07' + chance.string({ length: 9, pool: '0123456789' });
   return mobileNumber;
 }
@@ -233,5 +233,7 @@ function generateUKPostcode(): string {
     chance.integer({ min: 0, max: 9 }) + chance.character({ pool: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' });
   return `${postcodeArea} ${postcodeDistrict}`;
 }
+
+
 
 export { User, Address, generateRandomEmail };

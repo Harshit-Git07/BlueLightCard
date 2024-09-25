@@ -249,27 +249,8 @@ export class HomePageUk {
     await expect(this.MARKETPLACE_MENU_UK).toBeVisible();
     await expect(this.FEATURE_CAROUSEL_UK).toBeVisible();
   }
-  // My Account - Change mobile number
-  async changeMobileNumber(email: string, password: string): Promise<void> {
-    function generateMobileNumber(): string {
-      const prefix = '07';
-      const remainingDigits = Math.floor(Math.random() * 900000000) + 100000000;
-      return prefix + remainingDigits.toString();
-    }
 
-    const newMobileNumber = generateMobileNumber();
-    const updatedMobileNumber = await this.MOBILE_FIELD_UK;
-    //console.log(newMobileNumber);
-
-    await this.MYACCOUNT_NAVBAR_UK.click();
-    await this.MOBILE_FIELD_UK.fill(' ');
-    await updatedMobileNumber.fill(newMobileNumber);
-    await this.UPDATE_BUTTON_UK.click();
-    await this.LOGOUT_NAVBAR_UK.click();
-    await this.login(email, password);
-    await this.MYACCOUNT_NAVBAR_UK.click();
-    await this.MOBILE_FIELD_UK.isVisible();
-
-    await expect(updatedMobileNumber).toHaveValue(newMobileNumber);
-  }
 }
+
+
+

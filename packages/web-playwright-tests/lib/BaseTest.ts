@@ -8,6 +8,7 @@ import { HomePageDds } from 'pageFactory/HomePageDds';
 import { HomePageAus } from 'pageFactory/HomePageAus';
 import { MyAccountPageAus } from 'pageFactory/MyAccountPageAus';
 import { OnlineDiscountsPageUk } from 'pageFactory/OnlineDiscountsPageUk';
+import { MyAccountPageUk } from '@pages/MyAccountPageUk';
 
 const test = baseTest.extend<{
   webActions: WebActions;
@@ -20,6 +21,7 @@ const test = baseTest.extend<{
   homePageDds: HomePageDds;
   homePageAus: HomePageAus;
   myAccountPageAus: MyAccountPageAus;
+  myAccountPageUk: MyAccountPageUk;
 }>({
   webActions: async ({ page, context }, use) => {
     await use(new WebActions(page, context));
@@ -47,6 +49,9 @@ const test = baseTest.extend<{
   },
   myAccountPageAus: async ({ page, context }, use) => {
     await use(new MyAccountPageAus(page, context));
+  },
+  myAccountPageUk: async ({ page, context }, use) => {
+    await use(new MyAccountPageUk(page, context));
   },
 });
 

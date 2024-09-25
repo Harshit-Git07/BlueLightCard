@@ -9,7 +9,7 @@ import {
   RedemptionsEventsRepository,
 } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 
-import { Redemption } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
 import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemGenericStrategyResult, RedeemParams } from './IRedeemStrategy';
@@ -24,7 +24,7 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
     private readonly logger: ILogger,
   ) {}
 
-  async redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemGenericStrategyResult> {
+  async redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemGenericStrategyResult> {
     const generic = await this.genericsRepository.findOneByRedemptionId(redemption.id);
     const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url ?? '', params.memberId);
     if (!generic) {

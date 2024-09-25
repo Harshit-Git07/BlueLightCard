@@ -4,7 +4,7 @@ import {
   RedemptionsEventsRepository,
 } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 
-import { Redemption } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
 import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemParams, RedeemShowCardStrategyResult } from './IRedeemStrategy';
@@ -18,7 +18,7 @@ export class RedeemShowCardStrategy implements IRedeemStrategy {
     private readonly logger: ILogger,
   ) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemShowCardStrategyResult> {
+  async redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemShowCardStrategyResult> {
     const event = createMemberRedemptionEvent(redemption, params, {
       redemptionType: 'showCard',
     });

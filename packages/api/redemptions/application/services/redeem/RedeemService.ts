@@ -1,10 +1,14 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 
 import {
+  IRedemptionConfigRepository,
+  RedemptionConfigEntity,
+  RedemptionConfigRepository,
+} from '../../repositories/RedemptionConfigRepository';
+import {
   IRedemptionsEventsRepository,
   RedemptionsEventsRepository,
 } from '../../repositories/RedemptionsEventsRepository';
-import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
 import { IRedeemStrategyResolver, RedeemStrategyResolver } from './RedeemStrategyResolver';
 import { RedeemedStrategyResult, RedeemParams } from './strategies/IRedeemStrategy';
@@ -23,22 +27,23 @@ export class RedeemService implements IRedeemService {
   static readonly key = 'RedeemService';
   static readonly inject = [
     Logger.key,
-    RedemptionsRepository.key,
+    RedemptionConfigRepository.key,
     RedeemStrategyResolver.key,
     RedemptionsEventsRepository.key,
   ] as const;
 
   constructor(
     private readonly logger: ILogger,
-    private readonly redemptionsRepository: IRedemptionsRepository,
+    private readonly redemptionConfigRepository: IRedemptionConfigRepository,
     private readonly redeemStrategyResolver: IRedeemStrategyResolver,
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
   ) {}
 
   public async redeem(offerId: number, params: RedeemParams): Promise<RedeemResult> {
-    const redemption = await this.redemptionsRepository.findOneByOfferId(offerId);
+    const redemptionConfigEntity: RedemptionConfigEntity | null =
+      await this.redemptionConfigRepository.findOneByOfferId(offerId);
 
-    if (!redemption) {
+    if (!redemptionConfigEntity) {
       return {
         kind: 'RedemptionNotFound',
       };
@@ -51,9 +56,9 @@ export class RedeemService implements IRedeemService {
         },
         redemptionDetails: {
           clientType: params.clientType,
-          companyId: redemption.companyId,
+          companyId: redemptionConfigEntity.companyId,
           offerId,
-          redemptionType: redemption.redemptionType,
+          redemptionType: redemptionConfigEntity.redemptionType,
         },
       })
       .catch((error) => {
@@ -63,8 +68,8 @@ export class RedeemService implements IRedeemService {
         });
       });
 
-    const redeemStrategy = this.redeemStrategyResolver.getRedemptionStrategy(redemption.redemptionType);
+    const redeemStrategy = this.redeemStrategyResolver.getRedemptionStrategy(redemptionConfigEntity.redemptionType);
 
-    return redeemStrategy.redeem(redemption, params);
+    return redeemStrategy.redeem(redemptionConfigEntity, params);
   }
 }

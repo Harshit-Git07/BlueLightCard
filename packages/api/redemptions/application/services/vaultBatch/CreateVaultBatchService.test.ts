@@ -12,7 +12,7 @@ import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logg
 
 import { ParsedRequest } from '../../controllers/adminApiGateway/vaultBatch/CreateVaultBatchController';
 import { S3SignedUrl } from '../../helpers/S3SignedUrl';
-import { IRedemptionsRepository } from '../../repositories/RedemptionsRepository';
+import { IRedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
 import { IVaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
 import { IVaultsRepository } from '../../repositories/VaultsRepository';
 
@@ -50,8 +50,9 @@ describe('CreateVaultBatchService', () => {
     } satisfies ParsedRequest;
   }
 
-  const mockRedemptionsRepository: Partial<IRedemptionsRepository> = {
+  const mockRedemptionsRepository: IRedemptionConfigRepository = {
     findOneByOfferId: jest.fn(),
+    findOneById: jest.fn(),
     updateManyByOfferId: jest.fn(),
     updateOneByOfferId: jest.fn(),
     createRedemption: jest.fn(),

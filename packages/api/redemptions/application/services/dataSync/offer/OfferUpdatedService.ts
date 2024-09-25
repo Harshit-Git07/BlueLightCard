@@ -10,7 +10,13 @@ import {
   parseRedemptionType,
 } from '../../../helpers/dataSync/offerLegacyToRedemptionConfig';
 import { GenericsRepository, NewGeneric, UpdateGeneric } from '../../../repositories/GenericsRepository';
-import { NewRedemption, RedemptionsRepository, UpdateRedemption } from '../../../repositories/RedemptionsRepository';
+import {
+  NewRedemptionConfigEntity,
+  RedemptionConfigEntity,
+  RedemptionConfigIdEntity,
+  RedemptionConfigRepository,
+  UpdateRedemptionConfigEntity,
+} from '../../../repositories/RedemptionConfigRepository';
 
 export interface IOfferUpdatedService {
   updateOffer(event: OfferUpdatedEvent): Promise<void>;
@@ -20,14 +26,14 @@ export class OfferUpdatedService implements IOfferUpdatedService {
   static readonly key = 'OfferService';
   static readonly inject = [
     Logger.key,
-    RedemptionsRepository.key,
+    RedemptionConfigRepository.key,
     GenericsRepository.key,
     TransactionManager.key,
   ] as const;
 
   constructor(
     private readonly logger: ILogger,
-    private readonly redemptionsRepository: RedemptionsRepository,
+    private readonly redemptionConfigRepository: RedemptionConfigRepository,
     private readonly genericsRepository: GenericsRepository,
     private readonly transactionManager: TransactionManager,
   ) {}
@@ -54,11 +60,13 @@ export class OfferUpdatedService implements IOfferUpdatedService {
      */
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
-      const redemptionTransaction = this.redemptionsRepository.withTransaction(transactionConnection);
-      const existingRedemptionData = await redemptionTransaction.findOneByOfferId(detail.offerId);
+      const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
+      const existingRedemptionConfigData: RedemptionConfigEntity | null = await redemptionTransaction.findOneByOfferId(
+        detail.offerId,
+      );
 
-      if (!existingRedemptionData) {
-        const redemptionData: NewRedemption = {
+      if (!existingRedemptionConfigData) {
+        const newRedemptionConfigData: NewRedemptionConfigEntity = {
           offerId: detail.offerId,
           companyId: detail.companyId,
           redemptionType: parseRedemptionType(detail.offerUrl, detail.offerCode).redemptionType,
@@ -68,11 +76,12 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           url: parseOfferUrl(detail.offerUrl).url,
         };
 
-        const newRedemption = await redemptionTransaction.createRedemption(redemptionData);
+        const redemptionConfigIdEntity: RedemptionConfigIdEntity | null =
+          await redemptionTransaction.createRedemption(newRedemptionConfigData);
 
-        if (redemptionData.redemptionType === 'generic' && detail.offerCode) {
+        if (newRedemptionConfigData.redemptionType === 'generic' && detail.offerCode) {
           const genericData: NewGeneric = {
-            redemptionId: newRedemption.id,
+            redemptionId: redemptionConfigIdEntity.id,
             code: detail.offerCode,
           };
 
@@ -80,7 +89,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           await genericTransaction.createGeneric(genericData);
         }
       } else {
-        const updateRedemptionData: UpdateRedemption = {
+        const updateRedemptionConfigData: UpdateRedemptionConfigEntity = {
           offerId: detail.offerId,
           companyId: detail.companyId,
           redemptionType: parseRedemptionType(detail.offerUrl, detail.offerCode).redemptionType,
@@ -91,8 +100,9 @@ export class OfferUpdatedService implements IOfferUpdatedService {
         };
 
         if (
-          updateRedemptionData.redemptionType === 'vault' &&
-          (existingRedemptionData.redemptionType === 'vault' || existingRedemptionData.redemptionType === 'vaultQR')
+          updateRedemptionConfigData.redemptionType === 'vault' &&
+          (existingRedemptionConfigData.redemptionType === 'vault' ||
+            existingRedemptionConfigData.redemptionType === 'vaultQR')
         ) {
           /**
            * if the existing record redemption type is 'vault' or 'vaultQR' and the update data redemption type is also
@@ -123,7 +133,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
            * vaultQR is to be updated to another redemptionType or another redemptionType is to be updated to a vault
            */
           this.logger.info({
-            message: `Offer Update - Redemption update by offerId exit: Redemption is a ${existingRedemptionData.redemptionType}, update will overwrite values incorrectly`,
+            message: `Offer Update - Redemption update by offerId exit: Redemption is a ${existingRedemptionConfigData.redemptionType}, update will overwrite values incorrectly`,
             context: {
               offerId: detail.offerId,
               companyId: detail.companyId,
@@ -132,8 +142,11 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           return;
         }
 
-        const redemptionUpdate = await redemptionTransaction.updateOneByOfferId(detail.offerId, updateRedemptionData);
-        if (!redemptionUpdate) {
+        const redemptionIdEntity: RedemptionConfigIdEntity | null = await redemptionTransaction.updateOneByOfferId(
+          detail.offerId,
+          updateRedemptionConfigData,
+        );
+        if (!redemptionIdEntity) {
           this.logger.error({
             message: 'Offer Update - Redemption update by offerId failed: No redemptions were updated',
             context: {
@@ -146,39 +159,42 @@ export class OfferUpdatedService implements IOfferUpdatedService {
           );
         }
 
-        if (existingRedemptionData.redemptionType === 'generic' || updateRedemptionData.redemptionType === 'generic') {
+        if (
+          existingRedemptionConfigData.redemptionType === 'generic' ||
+          updateRedemptionConfigData.redemptionType === 'generic'
+        ) {
           const genericTransaction = this.genericsRepository.withTransaction(transactionConnection);
-          const genericExist = await genericTransaction.findOneByRedemptionId(existingRedemptionData.id);
+          const genericExist = await genericTransaction.findOneByRedemptionId(existingRedemptionConfigData.id);
 
           const genericToDelete =
             genericExist &&
-            existingRedemptionData.redemptionType === 'generic' &&
-            updateRedemptionData.redemptionType !== 'generic';
+            existingRedemptionConfigData.redemptionType === 'generic' &&
+            updateRedemptionConfigData.redemptionType !== 'generic';
 
-          const genericToInsert = !genericExist && updateRedemptionData.redemptionType === 'generic';
+          const genericToInsert = !genericExist && updateRedemptionConfigData.redemptionType === 'generic';
 
-          const genericToUpdate = genericExist && updateRedemptionData.redemptionType === 'generic';
+          const genericToUpdate = genericExist && updateRedemptionConfigData.redemptionType === 'generic';
 
           if (genericToDelete) {
-            const genericDelete = await genericTransaction.deleteByRedemptionId(existingRedemptionData.id);
+            const genericDelete = await genericTransaction.deleteByRedemptionId(existingRedemptionConfigData.id);
             if (genericDelete.length < 1) {
               this.logger.error({
                 message: 'Offer Update - Generic delete by redemptionId failed: No generics were deleted',
                 context: {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
-                  redemptionId: existingRedemptionData.id,
+                  redemptionId: existingRedemptionConfigData.id,
                 },
               });
               throw new Error(
-                `Offer Update - Generic delete by redemptionId failed: No generics were deleted (redemptionId="${existingRedemptionData.id}")`,
+                `Offer Update - Generic delete by redemptionId failed: No generics were deleted (redemptionId="${existingRedemptionConfigData.id}")`,
               );
             }
           }
 
           if (genericToInsert && detail.offerCode) {
             const genericData: NewGeneric = {
-              redemptionId: existingRedemptionData.id,
+              redemptionId: existingRedemptionConfigData.id,
               code: detail.offerCode,
             };
             const genericInsert = await genericTransaction.createGeneric(genericData);
@@ -188,7 +204,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
                 context: {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
-                  redemptionId: existingRedemptionData.id,
+                  redemptionId: existingRedemptionConfigData.id,
                 },
               });
               throw new Error('Offer Update - Generic insert failed: no generics were inserted');
@@ -199,18 +215,21 @@ export class OfferUpdatedService implements IOfferUpdatedService {
             const genericData: UpdateGeneric = {
               code: detail.offerCode,
             };
-            const genericUpdate = await genericTransaction.updateByRedemptionId(existingRedemptionData.id, genericData);
+            const genericUpdate = await genericTransaction.updateByRedemptionId(
+              existingRedemptionConfigData.id,
+              genericData,
+            );
             if (genericUpdate.length < 1) {
               this.logger.error({
                 message: 'Offer Update - Generic update by redemptionId failed: No generics were updated',
                 context: {
                   offerId: detail.offerId,
                   companyId: detail.companyId,
-                  redemptionId: existingRedemptionData.id,
+                  redemptionId: existingRedemptionConfigData.id,
                 },
               });
               throw new Error(
-                `Offer Update - Generic update by redemptionId failed: No generics were updated (redemptionId="${existingRedemptionData.id}")`,
+                `Offer Update - Generic update by redemptionId failed: No generics were updated (redemptionId="${existingRedemptionConfigData.id}")`,
               );
             }
           }

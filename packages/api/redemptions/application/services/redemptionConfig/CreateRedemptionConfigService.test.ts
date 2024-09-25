@@ -4,7 +4,7 @@ import { ZodError } from 'zod';
 import { as } from '@blc-mono/core/utils/testing';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { IRedemptionsRepository } from '../../repositories/RedemptionsRepository';
+import { IRedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
 
 import { CreateRedemptionConfigService } from './CreateRedemptionConfigService';
 
@@ -27,7 +27,7 @@ describe('CreateRedemptionConfigService', () => {
       id: 'redemption-id',
     };
 
-    const mockRedemptionsRepository: Partial<IRedemptionsRepository> = {
+    const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {
       createRedemption: jest.fn().mockResolvedValue({ id: 'redemption-id' }),
       findOneById: jest.fn().mockResolvedValue(showCardResponse),
       findOneByOfferId: jest.fn().mockResolvedValue(null),
@@ -45,7 +45,7 @@ describe('CreateRedemptionConfigService', () => {
   it("returns 'kind: ValidationError' for a validation error request", async () => {
     const logger = createSilentLogger();
 
-    const mockRedemptionsRepository: Partial<IRedemptionsRepository> = {
+    const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {
       createRedemption: jest.fn(),
       findOneById: jest.fn(),
       findOneByOfferId: jest.fn().mockResolvedValue(null),
@@ -69,7 +69,7 @@ describe('CreateRedemptionConfigService', () => {
       redemptionType: 'showCard',
     } as const;
 
-    const mockRedemptionsRepository: Partial<IRedemptionsRepository> = {
+    const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {
       createRedemption: jest.fn().mockResolvedValue({ id: 'redemption-id' }),
       findOneById: jest.fn().mockResolvedValue(undefined),
       findOneByOfferId: jest.fn().mockResolvedValue(null),
@@ -96,7 +96,7 @@ describe('CreateRedemptionConfigService', () => {
       redemptionType: 'showCard',
     } as const;
 
-    const mockRedemptionsRepository: Partial<IRedemptionsRepository> = {
+    const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {
       findOneByOfferId: jest.fn().mockResolvedValue(true),
     };
     const service = new CreateRedemptionConfigService(logger, as(mockRedemptionsRepository));

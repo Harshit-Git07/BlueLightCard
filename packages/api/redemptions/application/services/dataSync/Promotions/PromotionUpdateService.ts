@@ -10,9 +10,9 @@ import {
   LegacyVaultApiRepository,
 } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import {
-  IRedemptionsRepository,
-  RedemptionsRepository,
-} from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+  IRedemptionConfigRepository,
+  RedemptionConfigRepository,
+} from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { Affiliate, Connection, OfferType } from '@blc-mono/redemptions/libs/database/schema';
 
 export enum PromotionUpdateResults {
@@ -46,12 +46,12 @@ export interface IPromotionUpdateService {
 export class PromotionUpdateService implements IPromotionUpdateService {
   public static key = 'PromotionUpdateService' as const;
 
-  static readonly inject = [Logger.key, LegacyVaultApiRepository.key, RedemptionsRepository.key] as const;
+  static readonly inject = [Logger.key, LegacyVaultApiRepository.key, RedemptionConfigRepository.key] as const;
 
   constructor(
     protected logger: ILogger,
     private readonly legacyVaultApiRepository: ILegacyVaultApiRepository,
-    private readonly redemptionRepository: IRedemptionsRepository,
+    private readonly redemptionConfigRepository: IRedemptionConfigRepository,
   ) {}
 
   private isDirectLink(link: string): boolean {
@@ -140,7 +140,7 @@ export class PromotionUpdateService implements IPromotionUpdateService {
       throw new Error(`Promotion Update - Parse connection failed (link="${link}")`);
     }
 
-    const results = await this.redemptionRepository.updateManyByOfferId(offerIds, {
+    const results = await this.redemptionConfigRepository.updateManyByOfferId(offerIds, {
       ...connection,
     });
 

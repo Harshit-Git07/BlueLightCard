@@ -10,7 +10,11 @@ import { IS3ClientProvider, S3ClientProvider } from '@blc-mono/redemptions/libs/
 import { VaultType } from '../../../libs/database/schema';
 import { ParsedRequest } from '../../controllers/adminApiGateway/vaultBatch/CreateVaultBatchController';
 import { S3SignedUrl } from '../../helpers/S3SignedUrl';
-import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
+import {
+  IRedemptionConfigRepository,
+  RedemptionConfigEntity,
+  RedemptionConfigRepository,
+} from '../../repositories/RedemptionConfigRepository';
 import { IVaultBatchesRepository, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
 import { IVaultsRepository, VaultsRepository } from '../../repositories/VaultsRepository';
 
@@ -43,7 +47,7 @@ export class CreateVaultBatchService implements ICreateVaultBatchService {
   static readonly key = 'CreateVaultBatchService';
   static readonly inject = [
     Logger.key,
-    RedemptionsRepository.key,
+    RedemptionConfigRepository.key,
     VaultsRepository.key,
     VaultBatchesRepository.key,
     TransactionManager.key,
@@ -53,7 +57,7 @@ export class CreateVaultBatchService implements ICreateVaultBatchService {
 
   constructor(
     private readonly logger: ILogger,
-    private readonly redemptionsRepository: IRedemptionsRepository,
+    private readonly redemptionConfigRepository: IRedemptionConfigRepository,
     private readonly vaultsRepository: IVaultsRepository,
     private readonly vaultBatchesRepository: IVaultBatchesRepository,
     private readonly transactionManager: ITransactionManager,
@@ -202,15 +206,17 @@ export class CreateVaultBatchService implements ICreateVaultBatchService {
     }
 
     const offerId = Number(legacyIds[1]);
-    const redemption = await this.redemptionsRepository.findOneByOfferId(offerId);
-    if (!redemption) {
+
+    const redemptionConfigEntity: RedemptionConfigEntity | null =
+      await this.redemptionConfigRepository.findOneByOfferId(offerId);
+    if (!redemptionConfigEntity) {
       return {
         isError: true,
         result: `CreateVaultBatch - redemption does not exist for legacy vault (vaultId=${legacyVaultId})`,
       };
     }
 
-    const vault = await this.vaultsRepository.findOneByRedemptionId(redemption.id);
+    const vault = await this.vaultsRepository.findOneByRedemptionId(redemptionConfigEntity.id);
     if (!vault) {
       return {
         isError: true,

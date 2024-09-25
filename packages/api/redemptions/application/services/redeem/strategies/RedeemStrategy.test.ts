@@ -4,11 +4,11 @@ import { beforeAll } from '@jest/globals';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { IGenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
-import { IRedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 import {
-  IRedemptionsRepository,
-  Redemption,
-} from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+  IRedemptionConfigRepository,
+  RedemptionConfigEntity,
+} from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
+import { IRedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { IVaultsRepository, Vault } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { genericFactory } from '@blc-mono/redemptions/libs/test/factories/generic.factory';
@@ -102,7 +102,7 @@ describe('Redemption Strategies', () => {
     });
 
     function callGenericRedeemStrategy(
-      redemption: Redemption,
+      redemptionConfigEntity: RedemptionConfigEntity,
       logger: ILogger,
       overrides?: {
         redemptionEventsRepository?: IRedemptionsEventsRepository;
@@ -114,7 +114,7 @@ describe('Redemption Strategies', () => {
       const genericsRepository = overrides?.genericsRepository || mockGenericsRepository();
       const service = new RedeemGenericStrategy(genericsRepository, mockedRedemptionsEventsRepository, logger);
 
-      return service.redeem(redemption, defaultParams);
+      return service.redeem(redemptionConfigEntity, defaultParams);
     }
 
     it('Should throw when no generic is found', async () => {
@@ -196,7 +196,7 @@ describe('Redemption Strategies', () => {
     });
 
     function callPreAppliedRedeemStrategy(
-      redemption: Redemption,
+      redemptionConfigEntity: RedemptionConfigEntity,
       logger: ILogger,
       overrides?: {
         redemptionEventsRepository?: IRedemptionsEventsRepository;
@@ -206,7 +206,7 @@ describe('Redemption Strategies', () => {
         overrides?.redemptionEventsRepository || mockRedemptionsEventsRepository();
       const service = new RedeemPreAppliedStrategy(mockedRedemptionsEventsRepository, logger);
 
-      return service.redeem(redemption, defaultParams);
+      return service.redeem(redemptionConfigEntity, defaultParams);
     }
 
     it('Should fail to redeem if no redemption URL is configured', async () => {
@@ -264,7 +264,7 @@ describe('Redemption Strategies', () => {
     });
 
     function callShowCardRedeemStrategy(
-      redemption: Redemption,
+      redemptionConfigEntity: RedemptionConfigEntity,
       logger: ILogger,
       overrides?: {
         redemptionEventsRepository?: IRedemptionsEventsRepository;
@@ -274,7 +274,7 @@ describe('Redemption Strategies', () => {
         overrides?.redemptionEventsRepository || mockRedemptionsEventsRepository();
       const service = new RedeemShowCardStrategy(mockedRedemptionsEventsRepository, logger);
 
-      return service.redeem(redemption, defaultParams);
+      return service.redeem(redemptionConfigEntity, defaultParams);
     }
 
     it('Should publish member redemption event', async () => {
@@ -356,11 +356,11 @@ describe('Redemption Strategies', () => {
     });
 
     function callVaultRedeemStrategy(
-      redemption: Redemption,
+      redemptionConfigEntity: RedemptionConfigEntity,
       logger: ILogger,
       overrides?: {
         redemptionEventsRepository?: IRedemptionsEventsRepository;
-        redemptionsRepository?: IRedemptionsRepository;
+        redemptionConfigRepository?: IRedemptionConfigRepository;
         vaultsRepository?: IVaultsRepository;
         vaultCodesRepository?: IVaultCodesRepository;
         legacyVaultApiRepository?: ILegacyVaultApiRepository;
@@ -379,7 +379,7 @@ describe('Redemption Strategies', () => {
         logger,
       );
 
-      return service.redeem(redemption, defaultParams);
+      return service.redeem(redemptionConfigEntity, defaultParams);
     }
 
     it('Should throw when no vault is found', async () => {

@@ -8,7 +8,7 @@ import { RedemptionsEventsRepository } from '@blc-mono/redemptions/application/r
 import { RedemptionDetailsService } from '@blc-mono/redemptions/application/services/redemptionDetails/RedemptionDetailsService';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 
-import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigRepository } from '../../../repositories/RedemptionConfigRepository';
 
 const logger = new LambdaLogger({ serviceName: 'redemptions-redeem-post' });
 const connection = await DatabaseConnection.fromEnvironmentVariables(DatabaseConnectionType.READ_WRITE);
@@ -18,7 +18,7 @@ const controller = createInjector()
   .provideValue(Logger.key, logger)
   .provideValue(DatabaseConnection.key, connection)
   // Repositories
-  .provideClass(RedemptionsRepository.key, RedemptionsRepository)
+  .provideClass(RedemptionConfigRepository.key, RedemptionConfigRepository)
   .provideClass(DwhRepository.key, DwhRepository)
   // API Service
   .provideClass(RedemptionsEventsRepository.key, RedemptionsEventsRepository)

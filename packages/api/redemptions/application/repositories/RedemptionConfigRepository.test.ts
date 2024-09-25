@@ -6,9 +6,9 @@ import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
-import { RedemptionsRepository } from './RedemptionsRepository';
+import { RedemptionConfigRepository } from './RedemptionConfigRepository';
 
-describe('RedemptionsRepository', () => {
+describe('RedemptionConfigRepository', () => {
   let database: RedemptionsTestDatabase;
   let connection: DatabaseConnection;
 
@@ -28,7 +28,7 @@ describe('RedemptionsRepository', () => {
   describe('findOneByOfferId', () => {
     it('should return the redemption when it exists', async () => {
       // Arrange
-      const repository = new RedemptionsRepository(connection);
+      const repository = new RedemptionConfigRepository(connection);
       const redemption = redemptionFactory.build();
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
@@ -41,7 +41,7 @@ describe('RedemptionsRepository', () => {
 
     it('should return null when the redemption does not exist', async () => {
       // Arrange
-      const repository = new RedemptionsRepository(connection);
+      const repository = new RedemptionConfigRepository(connection);
       const offerId = faker.number.int({
         min: 1,
         max: 1_000_000,
@@ -56,7 +56,7 @@ describe('RedemptionsRepository', () => {
 
     it('should throw an error when there are multiple matching redemptions matching the offerId', async () => {
       // Arrange
-      const repository = new RedemptionsRepository(connection);
+      const repository = new RedemptionConfigRepository(connection);
       const redemption1 = redemptionFactory.build();
       const redemption2 = redemptionFactory.build({
         offerId: redemption1.offerId,
@@ -70,7 +70,7 @@ describe('RedemptionsRepository', () => {
 
   describe('findOneById', () => {
     it('returns the redemption when it exists', async () => {
-      const repository = new RedemptionsRepository(connection);
+      const repository = new RedemptionConfigRepository(connection);
       const redemption = redemptionFactory.build();
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
@@ -80,7 +80,7 @@ describe('RedemptionsRepository', () => {
     });
 
     it('returns undefined when the redemption does not exist', async () => {
-      const repository = new RedemptionsRepository(connection);
+      const repository = new RedemptionConfigRepository(connection);
       const id = faker.number
         .int({
           min: 1,
@@ -108,7 +108,7 @@ describe('RedemptionsRepository', () => {
       });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
-      const repository = new RedemptionsRepository(connection);
+      const repository = new RedemptionConfigRepository(connection);
       const redemptionUpdate = redemptionFactory.build({
         offerId: offerId,
         companyId: 123,

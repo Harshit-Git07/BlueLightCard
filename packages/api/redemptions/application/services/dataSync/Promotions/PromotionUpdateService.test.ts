@@ -1,6 +1,5 @@
-import { as } from '@blc-mono/core/utils/testing';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
-import { IRedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+import { IRedemptionConfigRepository } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import {
   PromotionUpdateResults,
   PromotionUpdateService,
@@ -14,7 +13,7 @@ describe('PromotionUpdateService', () => {
     // Arrange
     const event = promotionsUpdatedEventFactory.build();
     const logger = createTestLogger();
-    const legacyVaultApiRepository = {
+    const mockLegacyVaultApiRepository = {
       assignCodeToMember: jest.fn(),
       assignCodeToMemberWithErrorHandling: jest.fn(),
       findVaultsRelatingToLinkId: jest.fn(),
@@ -23,17 +22,20 @@ describe('PromotionUpdateService', () => {
       checkVaultStock: jest.fn(),
       viewVaultBatches: jest.fn(),
     } satisfies ILegacyVaultApiRepository;
-    const redemptionsRepository = {
+    const mockRedemptionConfigRepository = {
       createRedemption: jest.fn(),
+      findOneById: jest.fn(),
       findOneByOfferId: jest.fn(),
       updateOneByOfferId: jest.fn(),
       updateManyByOfferId: jest.fn(),
       withTransaction: jest.fn(),
-    } satisfies Partial<IRedemptionsRepository>;
-    const service = new PromotionUpdateService(logger, legacyVaultApiRepository, as(redemptionsRepository));
+    } satisfies IRedemptionConfigRepository;
+
+    const service = new PromotionUpdateService(logger, mockLegacyVaultApiRepository, mockRedemptionConfigRepository);
+
     const vaultItems = vaultItemFactory.buildList(2);
-    legacyVaultApiRepository.findVaultsRelatingToLinkId.mockReturnValue(vaultItems);
-    redemptionsRepository.updateManyByOfferId.mockResolvedValue([
+    mockLegacyVaultApiRepository.findVaultsRelatingToLinkId.mockReturnValue(vaultItems);
+    mockRedemptionConfigRepository.updateManyByOfferId.mockResolvedValue([
       { offerId: vaultItems[0].offerId },
       { offerId: vaultItems[1].offerId },
     ]);
@@ -43,7 +45,7 @@ describe('PromotionUpdateService', () => {
 
     // Assert
     expect(response.kind).toEqual(PromotionUpdateResults.PROMOTION_UPDATED_SUCCESS);
-    expect(redemptionsRepository.updateManyByOfferId).toHaveBeenCalledWith(
+    expect(mockRedemptionConfigRepository.updateManyByOfferId).toHaveBeenCalledWith(
       [vaultItems[0].offerId, vaultItems[1].offerId],
       expect.any(Object),
     );

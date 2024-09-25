@@ -9,7 +9,11 @@ import {
   parseRedemptionType,
 } from '../../../helpers/dataSync/offerLegacyToRedemptionConfig';
 import { GenericsRepository, NewGeneric } from '../../../repositories/GenericsRepository';
-import { NewRedemption, RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
+import {
+  NewRedemptionConfigEntity,
+  RedemptionConfigIdEntity,
+  RedemptionConfigRepository,
+} from '../../../repositories/RedemptionConfigRepository';
 
 export interface IOfferCreatedService {
   createOffer(event: OfferCreatedEvent): Promise<void>;
@@ -17,10 +21,10 @@ export interface IOfferCreatedService {
 
 export class OfferCreatedService implements IOfferCreatedService {
   static readonly key = 'OfferService';
-  static readonly inject = [RedemptionsRepository.key, GenericsRepository.key, TransactionManager.key] as const;
+  static readonly inject = [RedemptionConfigRepository.key, GenericsRepository.key, TransactionManager.key] as const;
 
   constructor(
-    private readonly redemptionsRepository: RedemptionsRepository,
+    private readonly redemptionConfigRepository: RedemptionConfigRepository,
     private readonly genericsRepository: GenericsRepository,
     private readonly transactionManager: TransactionManager,
   ) {}
@@ -28,7 +32,7 @@ export class OfferCreatedService implements IOfferCreatedService {
   public async createOffer(event: OfferCreatedEvent): Promise<void> {
     const { detail } = event;
 
-    const redemptionData: NewRedemption = {
+    const redemptionData: NewRedemptionConfigEntity = {
       offerId: detail.offerId,
       companyId: detail.companyId,
       redemptionType: parseRedemptionType(detail.offerUrl, detail.offerCode).redemptionType,
@@ -40,10 +44,11 @@ export class OfferCreatedService implements IOfferCreatedService {
 
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
-      const redemptionTransaction = this.redemptionsRepository.withTransaction(transactionConnection);
-      const newRedemption = await redemptionTransaction.createRedemption(redemptionData);
+      const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
+      const redemptionIdEntity: RedemptionConfigIdEntity | null =
+        await redemptionTransaction.createRedemption(redemptionData);
 
-      const redemptionId = newRedemption.id;
+      const redemptionId = redemptionIdEntity.id;
       if (redemptionData.redemptionType === 'generic' && detail.offerCode) {
         const genericData: NewGeneric = {
           redemptionId: redemptionId,

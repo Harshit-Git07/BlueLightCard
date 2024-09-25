@@ -7,7 +7,7 @@ import {
   VAULTQR,
 } from '@blc-mono/redemptions/application/services/redeem/RedeemStrategyResolver';
 
-import { Redemption } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
 export type RedeemedStrategyResult =
   | RedeemGenericStrategyResult
@@ -69,5 +69,5 @@ export type RedeemParams = {
 };
 
 export interface IRedeemStrategy {
-  redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemedStrategyResult>;
+  redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemedStrategyResult>;
 }

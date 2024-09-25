@@ -8,10 +8,12 @@ import { VaultCreatedEvent, VaultCreatedEventDetail } from '../../controllers/ev
 import { VaultUpdatedEvent, VaultUpdatedEventDetail } from '../../controllers/eventBridge/vault/VaultUpdatedController';
 import { AffiliateConfigurationHelper } from '../../helpers/affiliate/AffiliateConfiguration';
 import {
-  IRedemptionsRepository,
-  RedemptionsRepository,
-  UpdateRedemption,
-} from '../../repositories/RedemptionsRepository';
+  IRedemptionConfigRepository,
+  RedemptionConfigEntity,
+  RedemptionConfigIdEntity,
+  RedemptionConfigRepository,
+  UpdateRedemptionConfigEntity,
+} from '../../repositories/RedemptionConfigRepository';
 import { IVaultsRepository, NewVault, UpdateVault, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
 
 export interface IVaultService {
@@ -23,22 +25,25 @@ export class VaultService implements IVaultService {
   static readonly key = 'VaultService';
   static readonly inject = [
     Logger.key,
-    RedemptionsRepository.key,
+    RedemptionConfigRepository.key,
     VaultsRepository.key,
     TransactionManager.key,
   ] as const;
 
   constructor(
     private readonly logger: ILogger,
-    private readonly redemptionsRepo: IRedemptionsRepository,
+    private readonly redemptionConfigRepository: IRedemptionConfigRepository,
     private readonly vaultsRepo: IVaultsRepository,
     private readonly transactionManager: ITransactionManager,
   ) {}
 
   public async updateVault(event: VaultUpdatedEvent): Promise<void> {
     const { detail } = event;
-    const redemption = await this.redemptionsRepo.findOneByOfferId(detail.offerId);
-    if (!redemption) {
+
+    const redemptionConfigEntity: RedemptionConfigEntity | null =
+      await this.redemptionConfigRepository.findOneByOfferId(detail.offerId);
+
+    if (!redemptionConfigEntity) {
       this.logger.error({
         message: 'Vault Update - Redemption find one by offer id failed: Redemption not found',
         context: {
@@ -52,7 +57,7 @@ export class VaultService implements IVaultService {
     }
     //TODO: refactor logic here so that we are checking vault results are undefined and apply logic from line 151
     let vaultId = 'VAULT_NOT_EXIST';
-    const vault = await this.vaultsRepo.findOneByRedemptionId(redemption.id);
+    const vault = await this.vaultsRepo.findOneByRedemptionId(redemptionConfigEntity.id);
     if (vault) {
       vaultId = vault.id;
     }
@@ -60,15 +65,19 @@ export class VaultService implements IVaultService {
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
       const vaultTransaction = this.vaultsRepo.withTransaction(transactionConnection);
-      const redemptionTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
+      const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
       const redemptionData = this.makeRedemptionsData(detail);
-      const redemptionUpdate = await redemptionTransaction.updateOneByOfferId(detail.offerId, redemptionData);
 
-      if (!redemptionUpdate) {
+      const redemptionIdEntity: RedemptionConfigIdEntity | null = await redemptionTransaction.updateOneByOfferId(
+        detail.offerId,
+        redemptionData,
+      );
+
+      if (!redemptionIdEntity) {
         this.logger.error({
           message: 'Vault Update - Redemption update by offer id failed: No redemptions found',
           context: {
-            redemptionId: redemption.id,
+            redemptionId: redemptionConfigEntity.id,
             offerId: detail.offerId,
             companyId: detail.companyId,
           },
@@ -86,7 +95,7 @@ export class VaultService implements IVaultService {
           maxPerUser: detail.maxPerUser,
           showQR: detail.showQR,
           email: detail.adminEmail,
-          redemptionId: redemption.id,
+          redemptionId: redemptionConfigEntity.id,
           vaultType: 'legacy',
           ...this.getIntegrationsSettings(detail),
         };
@@ -110,7 +119,7 @@ export class VaultService implements IVaultService {
           maxPerUser: detail.maxPerUser,
           showQR: detail.showQR,
           email: detail.adminEmail,
-          redemptionId: redemption.id,
+          redemptionId: redemptionConfigEntity.id,
           vaultType: 'legacy',
           ...this.getIntegrationsSettings(detail),
         };
@@ -120,12 +129,14 @@ export class VaultService implements IVaultService {
           this.logger.error({
             message: 'Vault Update - Vault update failed: No vaults were updated',
             context: {
-              redemptionId: redemption.id,
+              redemptionId: redemptionConfigEntity.id,
               offerId: detail.offerId,
               companyId: detail.companyId,
             },
           });
-          throw new Error(`Vault Update - Vault create failed: No vaults were updated (redemptionId=${redemption.id})`);
+          throw new Error(
+            `Vault Update - Vault create failed: No vaults were updated (redemptionId=${redemptionConfigEntity.id})`,
+          );
         }
       }
     });
@@ -134,8 +145,9 @@ export class VaultService implements IVaultService {
   public async createVault(event: VaultCreatedEvent): Promise<void> {
     const { detail } = event;
 
-    const redemption = await this.redemptionsRepo.findOneByOfferId(detail.offerId);
-    if (!redemption) {
+    const redemptionConfigEntity: RedemptionConfigEntity | null =
+      await this.redemptionConfigRepository.findOneByOfferId(detail.offerId);
+    if (!redemptionConfigEntity) {
       this.logger.error({
         message: 'Vault create - Redemption find one by offer id failed: Redemption not found',
         context: {
@@ -151,11 +163,15 @@ export class VaultService implements IVaultService {
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
       const vaultTransaction = this.vaultsRepo.withTransaction(transactionConnection);
-      const redemptionTransaction = this.redemptionsRepo.withTransaction(transactionConnection);
+      const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
       const redemptionData = this.makeRedemptionsData(detail);
-      const redemptionUpdate = await redemptionTransaction.updateOneByOfferId(detail.offerId, redemptionData);
 
-      if (!redemptionUpdate) {
+      const redemptionIdEntity: RedemptionConfigIdEntity | null = await redemptionTransaction.updateOneByOfferId(
+        detail.offerId,
+        redemptionData,
+      );
+
+      if (!redemptionIdEntity) {
         this.logger.error({
           message: 'Vault Create - Redemption update by offer id failed: No redemptions found',
           context: {
@@ -174,7 +190,7 @@ export class VaultService implements IVaultService {
         maxPerUser: detail.maxPerUser,
         showQR: detail.showQR,
         email: detail.adminEmail,
-        redemptionId: redemption.id,
+        redemptionId: redemptionConfigEntity.id,
         vaultType: 'legacy',
         ...this.getIntegrationsSettings(detail),
       };
@@ -193,7 +209,7 @@ export class VaultService implements IVaultService {
     });
   }
 
-  private makeRedemptionsData(detail: VaultCreatedEventDetail | VaultUpdatedEventDetail): UpdateRedemption {
+  private makeRedemptionsData(detail: VaultCreatedEventDetail | VaultUpdatedEventDetail): UpdateRedemptionConfigEntity {
     if (!detail.link) {
       return {
         redemptionType: 'vaultQR',

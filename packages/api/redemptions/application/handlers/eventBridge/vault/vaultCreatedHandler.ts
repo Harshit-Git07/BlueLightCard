@@ -4,7 +4,7 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { VaultCreatedController } from '@blc-mono/redemptions/application/controllers/eventBridge/vault/VaultCreatedController';
-import { RedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { VaultService } from '@blc-mono/redemptions/application/services/vault/VaultService';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
@@ -20,7 +20,7 @@ const controller = createInjector()
   .provideValue(DatabaseConnection.key, connection)
   .provideClass(TransactionManager.key, TransactionManager)
   // Repositories
-  .provideClass(RedemptionsRepository.key, RedemptionsRepository)
+  .provideClass(RedemptionConfigRepository.key, RedemptionConfigRepository)
   .provideClass(VaultsRepository.key, VaultsRepository)
   // API Service
   .provideClass(VaultService.key, VaultService)

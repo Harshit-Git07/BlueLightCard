@@ -3,10 +3,14 @@ import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
 import {
+  IRedemptionConfigRepository,
+  RedemptionConfigEntity,
+  RedemptionConfigRepository,
+} from '../../repositories/RedemptionConfigRepository';
+import {
   IRedemptionsEventsRepository,
   RedemptionsEventsRepository,
 } from '../../repositories/RedemptionsEventsRepository';
-import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
 
 export type RedemptionDetailsResult =
   | {
@@ -25,12 +29,12 @@ export interface IRedemptionDetailsService {
 
 export class RedemptionDetailsService implements IRedemptionDetailsService {
   static readonly key = 'RedemptionDetailsService';
-  static readonly inject = [Logger.key, RedemptionsEventsRepository.key, RedemptionsRepository.key] as const;
+  static readonly inject = [Logger.key, RedemptionsEventsRepository.key, RedemptionConfigRepository.key] as const;
 
   constructor(
     private readonly logger: ILogger,
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
-    private readonly redemptionsRepository: IRedemptionsRepository,
+    private readonly redemptionConfigRepository: IRedemptionConfigRepository,
   ) {}
 
   public async getRedemptionDetails(
@@ -44,9 +48,11 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
         clientType,
       },
     });
-    const redemption = await this.redemptionsRepository.findOneByOfferId(offerId);
 
-    if (!redemption) {
+    const redemptionConfigEntity: RedemptionConfigEntity | null =
+      await this.redemptionConfigRepository.findOneByOfferId(offerId);
+
+    if (!redemptionConfigEntity) {
       return {
         kind: 'RedemptionNotFound',
       };
@@ -58,9 +64,9 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
           memberId: memberId,
         },
         redemptionDetails: {
-          redemptionType: redemption.redemptionType,
+          redemptionType: redemptionConfigEntity.redemptionType,
           offerId: offerId,
-          companyId: redemption.companyId,
+          companyId: redemptionConfigEntity.companyId,
           clientType: clientType,
         },
       })
@@ -74,7 +80,7 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
     return {
       kind: 'Ok',
       data: {
-        redemptionType: redemption.redemptionType,
+        redemptionType: redemptionConfigEntity.redemptionType,
       },
     };
   }

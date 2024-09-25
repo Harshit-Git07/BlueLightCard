@@ -5,7 +5,7 @@ import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { OfferUpdatedController } from '@blc-mono/redemptions/application/controllers/eventBridge/offer/OfferUpdatedController';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
-import { RedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { OfferUpdatedService } from '@blc-mono/redemptions/application/services/dataSync/offer/OfferUpdatedService';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
@@ -20,7 +20,7 @@ const controller = createInjector()
   .provideValue(DatabaseConnection.key, connection)
   .provideClass(TransactionManager.key, TransactionManager)
   // Repositories
-  .provideClass(RedemptionsRepository.key, RedemptionsRepository)
+  .provideClass(RedemptionConfigRepository.key, RedemptionConfigRepository)
   .provideClass(GenericsRepository.key, GenericsRepository)
   // API Service
   .provideClass(OfferUpdatedService.key, OfferUpdatedService)

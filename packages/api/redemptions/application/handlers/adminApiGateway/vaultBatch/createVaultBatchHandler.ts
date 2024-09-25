@@ -4,7 +4,7 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { CreateVaultBatchController } from '@blc-mono/redemptions/application/controllers/adminApiGateway/vaultBatch/CreateVaultBatchController';
-import { RedemptionsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsRepository';
+import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { VaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { CreateVaultBatchService } from '@blc-mono/redemptions/application/services/vaultBatch/CreateVaultBatchService';
@@ -22,7 +22,7 @@ const controller = createInjector()
   .provideValue(Logger.key, logger)
   .provideValue(DatabaseConnection.key, connection)
   .provideClass(TransactionManager.key, TransactionManager)
-  .provideClass(RedemptionsRepository.key, RedemptionsRepository)
+  .provideClass(RedemptionConfigRepository.key, RedemptionConfigRepository)
   .provideClass(VaultsRepository.key, VaultsRepository)
   .provideClass(VaultBatchesRepository.key, VaultBatchesRepository)
   .provideClass(S3ClientProvider.key, S3ClientProvider)

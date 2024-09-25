@@ -3,7 +3,7 @@ import { z, ZodError } from 'zod';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { PostRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
 
-import { RedemptionsRepository } from '../../repositories/RedemptionsRepository';
+import { RedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
 import { RedemptionConfig, transformToRedemptionConfig } from '../../transformers/RedemptionConfigTransformer';
 
 type CreateRedemptionResponse =
@@ -32,11 +32,11 @@ export interface ICreateRedemptionConfigService {
 
 export class CreateRedemptionConfigService implements ICreateRedemptionConfigService {
   static readonly key = 'CreateRedemptionConfigService';
-  static readonly inject = [Logger.key, RedemptionsRepository.key] as const;
+  static readonly inject = [Logger.key, RedemptionConfigRepository.key] as const;
 
   constructor(
     private readonly logger: ILogger,
-    private readonly redemptionsRepository: RedemptionsRepository,
+    private readonly redemptionConfigRepository: RedemptionConfigRepository,
   ) {}
 
   public async createRedemptionConfig(request: CreateRedemptionSchema): Promise<CreateRedemptionResponse> {
@@ -49,7 +49,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
       };
     }
 
-    if (await this.redemptionsRepository.findOneByOfferId(request.offerId)) {
+    if (await this.redemptionConfigRepository.findOneByOfferId(request.offerId)) {
       return {
         kind: 'DuplicationError',
         data: { message: 'The offerId already has a redemption config' },
@@ -57,8 +57,8 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     }
 
     try {
-      const { id: redemptionId } = await this.redemptionsRepository.createRedemption(request);
-      const redemptionEntity = await this.redemptionsRepository.findOneById(redemptionId);
+      const { id: redemptionId } = await this.redemptionConfigRepository.createRedemption(request);
+      const redemptionEntity = await this.redemptionConfigRepository.findOneById(redemptionId);
 
       if (!redemptionEntity) {
         this.logger.error({

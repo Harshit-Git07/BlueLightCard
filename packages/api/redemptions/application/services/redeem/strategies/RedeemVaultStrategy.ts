@@ -21,7 +21,7 @@ import {
 } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
-import { Redemption } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
 import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemParams, RedeemVaultStrategyResult } from './IRedeemStrategy';
@@ -46,7 +46,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     private readonly logger: ILogger,
   ) {}
 
-  async redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemVaultStrategyResult> {
+  async redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemVaultStrategyResult> {
     const { id, redemptionType, url, companyId, offerId } = redemption;
     const { memberId } = params;
     if (!(redemptionType === 'vault' || redemptionType === 'vaultQR')) {

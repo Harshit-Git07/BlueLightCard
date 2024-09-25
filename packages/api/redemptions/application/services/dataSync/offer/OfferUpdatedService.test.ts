@@ -7,7 +7,10 @@ import { RedemptionsTestDatabase } from '../../../../libs/test/helpers/database'
 import { createTestLogger } from '../../../../libs/test/helpers/logger';
 import { OfferUpdatedEvent } from '../../../controllers/eventBridge/offer/OfferUpdatedController';
 import { GenericsRepository, NewGeneric } from '../../../repositories/GenericsRepository';
-import { NewRedemption, RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
+import {
+  NewRedemptionConfigEntity,
+  RedemptionConfigRepository,
+} from '../../../repositories/RedemptionConfigRepository';
 
 import { OfferUpdatedService } from './OfferUpdatedService';
 
@@ -15,7 +18,7 @@ describe('OfferUpdatedService', () => {
   const mockedLogger = createTestLogger();
 
   function makeOfferUpdatedService(connection: IDatabaseConnection) {
-    const redemptionsRepository = new RedemptionsRepository(connection);
+    const redemptionsRepository = new RedemptionConfigRepository(connection);
     const genericsRepository = new GenericsRepository(connection);
     const transactionManager = new TransactionManager(connection);
     return new OfferUpdatedService(mockedLogger, redemptionsRepository, genericsRepository, transactionManager);
@@ -45,7 +48,9 @@ describe('OfferUpdatedService', () => {
       return service.updateOffer(event);
     }
 
-    async function createRedemptionToModify(redemptionData: NewRedemption): Promise<Pick<Redemption, 'id'>[]> {
+    async function createRedemptionToModify(
+      redemptionData: NewRedemptionConfigEntity,
+    ): Promise<Pick<Redemption, 'id'>[]> {
       return await connection.db
         .insert(redemptionsTable)
         .values(redemptionData)
@@ -91,7 +96,7 @@ describe('OfferUpdatedService', () => {
 
       it('should not update vault offer that is affiliate', async () => {
         //create record to be modified
-        const currentData: NewRedemption = {
+        const currentData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'vault',
@@ -126,7 +131,7 @@ describe('OfferUpdatedService', () => {
 
       it('should not update vault offer that is direct', async () => {
         //create record to be modified
-        const currentData: NewRedemption = {
+        const currentData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'vault',
@@ -160,7 +165,7 @@ describe('OfferUpdatedService', () => {
 
       it('should update generic offer to preApplied and delete generics record', async () => {
         //create records to be modified
-        const currentRedemptionData: NewRedemption = {
+        const currentRedemptionData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'generic',
@@ -203,7 +208,7 @@ describe('OfferUpdatedService', () => {
 
       it('should update online generic offer to in-store and update generics record', async () => {
         //create records to be modified
-        const currentRedemptionData: NewRedemption = {
+        const currentRedemptionData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'generic',
@@ -248,7 +253,7 @@ describe('OfferUpdatedService', () => {
 
       it('should update preApplied offer to generic offer and insert generics record', async () => {
         //create records to be modified
-        const currentRedemptionData: NewRedemption = {
+        const currentRedemptionData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'preApplied',
@@ -287,7 +292,7 @@ describe('OfferUpdatedService', () => {
 
       it('should update generic offer connection from direct to affiliate and update generics record', async () => {
         //create records to be modified
-        const currentRedemptionData: NewRedemption = {
+        const currentRedemptionData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'generic',
@@ -332,7 +337,7 @@ describe('OfferUpdatedService', () => {
 
       it('should update preApplied offer to showCard offer', async () => {
         //create records to be modified
-        const currentRedemptionData: NewRedemption = {
+        const currentRedemptionData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'preApplied',
@@ -366,7 +371,7 @@ describe('OfferUpdatedService', () => {
 
       it('should update preApplied offer to vault spotify offer', async () => {
         //create records to be modified
-        const currentRedemptionData: NewRedemption = {
+        const currentRedemptionData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'preApplied',
@@ -400,7 +405,7 @@ describe('OfferUpdatedService', () => {
 
       it('should update vault spotify offer to preApplied offer', async () => {
         //create records to be modified
-        const currentRedemptionData: NewRedemption = {
+        const currentRedemptionData: NewRedemptionConfigEntity = {
           offerId: 456,
           companyId: 123,
           redemptionType: 'vault',

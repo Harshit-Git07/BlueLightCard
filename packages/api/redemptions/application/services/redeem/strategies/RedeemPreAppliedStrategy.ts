@@ -5,7 +5,7 @@ import {
   RedemptionsEventsRepository,
 } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 
-import { Redemption } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
 import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemParams, RedeemPreAppliedStrategyResult } from './IRedeemStrategy';
@@ -20,7 +20,7 @@ export class RedeemPreAppliedStrategy implements IRedeemStrategy {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async redeem(redemption: Redemption, params: RedeemParams): Promise<RedeemPreAppliedStrategyResult> {
+  async redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemPreAppliedStrategyResult> {
     if (!redemption.url) {
       this.logger.error({
         message: 'Redemption URL was missing but required for pre-applied redemption',

@@ -14,7 +14,7 @@ import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { VaultCreatedEvent } from '../../controllers/eventBridge/vault/VaultCreatedController';
 import { VaultUpdatedEvent } from '../../controllers/eventBridge/vault/VaultUpdatedController';
 import { AffiliateConfigurationHelper } from '../../helpers/affiliate/AffiliateConfiguration';
-import { IRedemptionsRepository, RedemptionsRepository } from '../../repositories/RedemptionsRepository';
+import { IRedemptionConfigRepository, RedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
 import { IVaultCodesRepository } from '../../repositories/VaultCodesRepository';
 import { IVaultsRepository, VaultsRepository } from '../../repositories/VaultsRepository';
 
@@ -35,14 +35,15 @@ describe('VaultService', () => {
 
   type MakeVaultServiceOptions = {
     overrides: {
-      redemptionsRepository?: Partial<IRedemptionsRepository>;
+      redemptionConfigRepository?: Partial<IRedemptionConfigRepository>;
       vaultsRepository?: Partial<IVaultsRepository>;
       vaultCodesRepository?: Partial<IVaultCodesRepository>;
       transactionManager?: Partial<ITransactionManager>;
     };
   };
   function makeVaultService(connection: IDatabaseConnection, options?: MakeVaultServiceOptions) {
-    const redemptionRepository = options?.overrides.redemptionsRepository ?? new RedemptionsRepository(connection);
+    const redemptionRepository =
+      options?.overrides.redemptionConfigRepository ?? new RedemptionConfigRepository(connection);
     const vaultsRepository = options?.overrides.vaultsRepository ?? new VaultsRepository(connection);
     const transactionManager = options?.overrides.transactionManager ? null : new TransactionManager(connection);
     const service = new VaultService(

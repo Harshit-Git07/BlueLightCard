@@ -13,7 +13,7 @@ import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemption
 import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemController';
-import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigRepository } from '../../../repositories/RedemptionConfigRepository';
 import { RedeemService } from '../../../services/redeem/RedeemService';
 import { RedeemStrategyResolver } from '../../../services/redeem/RedeemStrategyResolver';
 import { RedeemGenericStrategy } from '../../../services/redeem/strategies/RedeemGenericStrategy';
@@ -31,7 +31,7 @@ const controller = createInjector()
   .provideValue(DatabaseConnection.key, connection)
   .provideClass(SecretsManager.key, SecretsManager)
   // Repositories
-  .provideClass(RedemptionsRepository.key, RedemptionsRepository)
+  .provideClass(RedemptionConfigRepository.key, RedemptionConfigRepository)
   .provideClass(GenericsRepository.key, GenericsRepository)
   .provideClass(VaultsRepository.key, VaultsRepository)
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)

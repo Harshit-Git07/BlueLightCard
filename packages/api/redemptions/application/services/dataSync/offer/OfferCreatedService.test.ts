@@ -6,13 +6,13 @@ import { offerCreatedEventFactory } from '../../../../libs/test/factories/offerE
 import { RedemptionsTestDatabase } from '../../../../libs/test/helpers/database';
 import { OfferCreatedEvent } from '../../../controllers/eventBridge/offer/OfferCreatedController';
 import { GenericsRepository } from '../../../repositories/GenericsRepository';
-import { RedemptionsRepository } from '../../../repositories/RedemptionsRepository';
+import { RedemptionConfigRepository } from '../../../repositories/RedemptionConfigRepository';
 
 import { OfferCreatedService } from './OfferCreatedService';
 
 describe('OfferCreatedService', () => {
   function makeOfferCreatedService(connection: IDatabaseConnection) {
-    const redemptionsRepository = new RedemptionsRepository(connection);
+    const redemptionsRepository = new RedemptionConfigRepository(connection);
     const genericsRepository = new GenericsRepository(connection);
     const transactionManager = new TransactionManager(connection);
     return new OfferCreatedService(redemptionsRepository, genericsRepository, transactionManager);

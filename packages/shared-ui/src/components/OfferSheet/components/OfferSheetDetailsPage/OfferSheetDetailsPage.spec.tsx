@@ -155,7 +155,7 @@ describe('smoke test', () => {
     );
 
     const label1 = getByText(/online/i);
-    const label2 = getByText(/expiry: 30\/06\/2030/i);
+    const label2 = getByText(/expiry: 30 Jun 2030/i);
 
     expect(label1).toBeTruthy();
     expect(label2).toBeTruthy();

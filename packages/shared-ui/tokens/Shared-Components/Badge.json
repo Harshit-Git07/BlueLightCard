@@ -50,11 +50,11 @@
   },
   "badge-label-colour": {
     "light": {
-      "value": "{colour.onSurface-fixed.light}",
+      "value": "{colour.onSurface-dark-fixed.light}",
       "type": "color"
     },
     "dark": {
-      "value": "{colour.onSurface-fixed.dark}",
+      "value": "{colour.onSurface-dark-fixed.dark}",
       "type": "color"
     }
   }

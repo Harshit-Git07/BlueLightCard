@@ -246,5 +246,95 @@
       "value": "{colour.primary-hover.dark}",
       "type": "color"
     }
+  },
+  "button-danger-default-bg-colour": {
+    "light": {
+      "value": "{colour.error.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.error.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-hover-bg-colour": {
+    "light": {
+      "value": "{colour.error-hover.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.error-hover.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-disabled-bg-colour": {
+    "light": {
+      "value": "{colour.error-disabled.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.error-disabled.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-default-label-colour": {
+    "light": {
+      "value": "{colour.onError.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onError.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-hover-label-colour": {
+    "light": {
+      "value": "{colour.onError-hover.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onError-hover.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-disabled-label-colour": {
+    "light": {
+      "value": "{colour.onError-disabled.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onError-disabled.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-default-icon-colour": {
+    "light": {
+      "value": "{colour.onError.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onError.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-hover-icon-colour": {
+    "light": {
+      "value": "{colour.onError-hover.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onError-hover.dark}",
+      "type": "color"
+    }
+  },
+  "button-danger-disabled-icon-colour": {
+    "light": {
+      "value": "{colour.onError-disabled.light}",
+      "type": "color"
+    },
+    "dark": {
+      "value": "{colour.onError-disabled.dark}",
+      "type": "color"
+    }
   }
 }

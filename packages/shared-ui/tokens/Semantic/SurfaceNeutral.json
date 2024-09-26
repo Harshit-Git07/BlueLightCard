@@ -36,6 +36,18 @@
         "description": "two levels lighter on dark mode for containers sitting on top of default surface of black and/or surface container for a high contrast but maintains default surface colour of white on light mode - e.g usage could be fill for search bar."
       }
     },
+    "surface-bright-fixed": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "stays white on both dark and light mode"
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "stays white on both dark and light mode"
+      }
+    },
     "surface-dim": {
       "light": {
         "value": "{colour.greyscale.grey-100}",
@@ -55,6 +67,16 @@
       },
       "dark": {
         "value": "{colour.greyscale.grey-700}",
+        "type": "color"
+      }
+    },
+    "surface-inverse": {
+      "light": {
+        "value": "{colour.greyscale.grey-800}",
+        "type": "color"
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-100}",
         "type": "color"
       }
     },
@@ -118,7 +140,7 @@
         "description": "colour used for any disabled elements that do not use brand specific colours"
       }
     },
-    "onSurface-fixed": {
+    "onSurface-dark-fixed": {
       "light": {
         "value": "{colour.greyscale.grey-900}",
         "type": "color",
@@ -128,6 +150,18 @@
         "value": "{colour.greyscale.grey-900}",
         "type": "color",
         "description": "dark text colour fixed on both light and dark mode. For use cases where text sits on top of a highlight / fixed accent colour"
+      }
+    },
+    "onSurface-bright-fixed": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "light text colour fixed on both light and dark mode. "
+      },
+      "dark": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "light text colour fixed on both light and dark mode. "
       }
     }
   }

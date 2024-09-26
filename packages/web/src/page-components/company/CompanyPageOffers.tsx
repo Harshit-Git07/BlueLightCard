@@ -7,13 +7,7 @@ type props = {
   offers: OfferData[];
   companyName: string;
   companyId: string;
-  onOfferClick: (
-    offerId: number,
-    offerName: string,
-    companyId: number,
-    companyName: string,
-    offerIndex: number
-  ) => void;
+  onOfferClick: (offerId: number, companyId: number, companyName: string) => void;
 };
 
 const CompanyPageOffers: FC<props> = ({ offers, companyName, companyId, onOfferClick }) => {
@@ -27,31 +21,25 @@ const CompanyPageOffers: FC<props> = ({ offers, companyName, companyId, onOfferC
               isMobile ? 'gap-2' : 'gap-10'
             } tablet:gap-10 desktop:grid desktop:grid-cols-2`}
           >
-            {offers?.map((offer: OfferData, index: number) => (
-              <button
-                className="text-left"
-                key={offer.id}
-                onClick={() =>
-                  onOfferClick(
-                    offer.id,
-                    offer.name,
-                    Number(offer.companyId),
-                    offer.companyName,
-                    index + 1
-                  )
-                }
-              >
-                <ResponsiveOfferCard
-                  id={offer.id}
-                  type={offer.type}
-                  name={offer.name}
-                  image={offer.image}
-                  companyId={Number(companyId)}
-                  companyName={companyName}
-                  variant={isMobile ? 'horizontal' : 'vertical'}
-                />
-              </button>
-            ))}
+            {offers?.map((offer: OfferData, index: number) => {
+              return (
+                <button
+                  className="text-left"
+                  key={offer.id}
+                  onClick={() => onOfferClick(offer.id, Number(companyId), companyName)}
+                >
+                  <ResponsiveOfferCard
+                    id={offer.id}
+                    type={offer.type}
+                    name={offer.name}
+                    image={offer.image}
+                    companyId={Number(companyId)}
+                    companyName={companyName}
+                    variant={isMobile ? 'horizontal' : 'vertical'}
+                  />
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

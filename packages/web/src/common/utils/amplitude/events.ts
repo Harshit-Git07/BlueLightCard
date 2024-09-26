@@ -16,7 +16,6 @@ const events = {
   OFFER_VIEWED: 'offer_viewed',
   VAULT_CODE_REQUEST_CLICKED: 'vault_code_request_code_clicked',
   VAULT_CODE_REQUEST_VIEWED: 'vault_code_request_code_viewed',
-  COMPANY_OFFER_CLICKED: 'company_offer_clicked',
   COMPANY_SHARED_CLICKED: 'company_share_clicked',
   COMPANY_FILTER_CLICKED: 'company_filter_clicked',
   OFFER_TERMS_CLICKED: 'offer_terms_clicked',

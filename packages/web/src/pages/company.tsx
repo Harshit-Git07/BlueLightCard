@@ -246,23 +246,8 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
               offers={filteredOffers || []}
               companyId={companyData?.id}
               companyName={companyData?.name}
-              onOfferClick={(
-                offerId: number,
-                offerName: string,
-                companyId: number,
-                companyName: string,
-                index: number
-              ) => {
+              onOfferClick={(offerId: number, companyId: number, companyName: string) => {
                 onSelectOffer(offerId, companyId, companyName);
-                if (amplitude) {
-                  amplitude.trackEventAsync(amplitudeEvents.COMPANY_OFFER_CLICKED, {
-                    company_id: companyData.id,
-                    company_name: companyData.name,
-                    position: index,
-                    offer_id: offerId,
-                    offer_name: offerName,
-                  });
-                }
               }}
             />
 

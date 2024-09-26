@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.33.0...bluelightcard/mobile-hybrid-v1.34.0) (2024-09-25)
+
+
+### Features
+
+* DISCO-899 Added analytics event for campaign banner click ([#2276](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2276)) ([d72709b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d72709b1f4b295b94390f30ec22ba62e9e6213df))
+* DISCO-900 Added T&C footer to campaign page ([#2279](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2279)) ([681581c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/681581cd328d688357a17355b2f0a97166bdfd0b))
+
+
+### Bug Fixes
+
+* added amplitude log company_viewed for modern CompanyPage in mobile-hybrid ([#2310](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2310)) ([e3ddf69](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e3ddf690f9d785b3237120346747358f0b2f2e73))
+* DISCO-959 Fixed rewards campaign footer styling on Android ([#2304](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2304)) ([e68fcaf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e68fcafb601062dfb2bb95332490dd390b6db4e2))
+
+
+### Other Changes
+
+* update amplitude exp for search v5 ([#2269](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2269)) ([1bb5977](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1bb5977f5b2bbd8b3155f198fb34b66d275b4b7f))
+
 ## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.32.0...bluelightcard/mobile-hybrid-v1.33.0) (2024-09-18)
 
 

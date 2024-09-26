@@ -243,10 +243,6 @@ jobs:
           DDS_OLD_COGNITO_USER_POOL_ID: 'eu-west-2_jbLX0JEdN'
           BLC_UK_IDENTITY_API_ID: 'tr1afrar24'
         run: npx sst deploy global --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}} && npx sst deploy redemptions --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}}
-      - name: Deploy Spec
-        env:
-          REDOCLY_AUTHORIZATION: ${{ secrets.REDOCLY_AUTHORIZATION }}
-        run: npm run -s oas -w packages/api/redemptions  --region=${{ matrix.deployment.region }} --stage=${{matrix.deployment.stage}} --api-version=v1
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog
         with:

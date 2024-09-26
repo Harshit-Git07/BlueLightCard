@@ -43,22 +43,16 @@ const config: PlaywrightTestConfig = {
 
   projects: [
     {
-      name: `Edge`,
+      name: `Firefox`,
       use: {
-        browserName: `chromium`,
-        channel: `msedge`,
+        browserName: 'firefox', // Switch to Firefox
         headless: true,
-        viewport: { width: 1500, height: 730 },
+        viewport: { width: 1280, height: 720 },
         ignoreHTTPSErrors: true,
-        acceptDownloads: true,
-        screenshot: `only-on-failure`,
-        video: `retain-on-failure`,
-        trace: `retain-on-failure`,
-        launchOptions: {
-          slowMo: 0,
+ 
         },
       },
-    },
+    
   ],
 };
 

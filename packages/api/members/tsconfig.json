@@ -1,0 +1,20 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "baseUrl": ".",
+    "paths": {
+      "@blc-mono/core/*": ["../core/src/*"],
+      "@blc-mono/members/*": ["./*"]
+    },
+    "esModuleInterop": true,
+    "allowJs": true,
+    "resolveJsonModule": true
+  },
+  "ts-node": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "lib": ["DOM", "ES5"],
+    "esModuleInterop": true
+  }
+}

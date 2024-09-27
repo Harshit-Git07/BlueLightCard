@@ -1,0 +1,51 @@
+import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { Logger } from '@aws-lambda-powertools/logger';
+import { DynamoDB } from 'aws-sdk';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
+import { MemberApplicationRepository } from 'application/repositories/memberApplicationRepository';
+import { MemberApplicationService } from 'application/services/memberApplicationService';
+import { MemberApplicationQueryPayload } from 'application/types/memberApplicationTypes';
+
+const service: string = process.env.SERVICE as string;
+const logger = new Logger({ serviceName: `${service}-getMemberApplication` });
+
+const tableName = process.env.IDENTITY_TABLE_NAME as string;
+const dynamoDB = new DynamoDB.DocumentClient({ region: process.env.REGION ?? 'eu-west-2' });
+
+const repository = new MemberApplicationRepository(dynamoDB, tableName);
+const applicationService = new MemberApplicationService(repository, logger);
+
+export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+  const { brand, memberUUID, applicationId } = event.pathParameters || {};
+
+  if (!memberUUID || !brand) {
+    logger.error({ message: 'Missing required query parameters' });
+    return Response.BadRequest({ message: 'Bad Request: memberUUID and brand are required' });
+  }
+
+  try {
+    const payload: MemberApplicationQueryPayload = {
+      memberUUID: memberUUID,
+      brand: brand,
+      applicationId: applicationId ?? null,
+    };
+
+    const memberApplication = await applicationService.getMemberApplications(payload);
+
+    if (memberApplication && memberApplication.length > 0) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(memberApplication),
+      };
+    } else {
+      return Response.NotFound({ message: 'No matching member applications found' });
+    }
+  } catch (error) {
+    logger.error({ message: 'Error fetching member application', error });
+    if (error instanceof Error) {
+      return Response.Error(error);
+    } else {
+      return Response.Error(new Error('Unknown error occurred while fetching member application'));
+    }
+  }
+};

@@ -8,7 +8,6 @@ import { MemberServicesHub } from 'member-services-hub/stack';
 import { Discovery } from '@blc-mono/discovery/infrastructure/stack';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
-
 export default {
   config(_input) {
     return {

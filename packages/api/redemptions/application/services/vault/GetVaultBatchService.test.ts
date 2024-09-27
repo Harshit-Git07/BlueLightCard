@@ -1,6 +1,6 @@
 import { as } from '@blc-mono/core/utils/testing';
 import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatches.factory';
+import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
 
 import { IVaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
 import { IVaultsRepository } from '../../repositories/VaultsRepository';

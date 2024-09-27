@@ -4,7 +4,7 @@ import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { PostRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
 
 import { RedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
-import { RedemptionConfig, transformToRedemptionConfig } from '../../transformers/RedemptionConfigTransformer';
+import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
 type CreateRedemptionResponse = {
   kind: 'Ok';
@@ -38,11 +38,12 @@ export interface ICreateRedemptionConfigService {
 
 export class CreateRedemptionConfigService implements ICreateRedemptionConfigService {
   static readonly key = 'CreateRedemptionConfigService';
-  static readonly inject = [Logger.key, RedemptionConfigRepository.key] as const;
+  static readonly inject = [Logger.key, RedemptionConfigRepository.key, RedemptionConfigTransformer.key] as const;
 
   constructor(
     private readonly logger: ILogger,
     private readonly redemptionConfigRepository: RedemptionConfigRepository,
+    private readonly redemptionConfigTransformer: RedemptionConfigTransformer,
   ) {}
 
   private async validateRequest(request: CreateRedemptionSchema) {
@@ -64,9 +65,9 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
 
     try {
       const { id: redemptionId } = await this.redemptionConfigRepository.createRedemption(requestData);
-      const redemptionEntity = await this.redemptionConfigRepository.findOneById(redemptionId);
+      const redemptionConfigEntity = await this.redemptionConfigRepository.findOneById(redemptionId);
 
-      if (!redemptionEntity) {
+      if (!redemptionConfigEntity) {
         this.logger.error({
           message: 'Unable to fetch newly created redemption',
           context: {
@@ -79,7 +80,12 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
 
       return {
         kind: 'Ok',
-        data: transformToRedemptionConfig(redemptionEntity),
+        data: this.redemptionConfigTransformer.transformToRedemptionConfig({
+          redemptionConfigEntity: redemptionConfigEntity,
+          genericEntity: null,
+          vaultEntity: null,
+          vaultBatchEntities: [],
+        }),
       };
     } catch (e) {
       this.logger.error({ message: 'Error when creating redemption configuration', error: e });

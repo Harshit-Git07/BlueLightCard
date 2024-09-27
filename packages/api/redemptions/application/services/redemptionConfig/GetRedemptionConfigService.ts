@@ -1,30 +1,53 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 
+import { Generic, GenericsRepository, IGenericsRepository } from '../../repositories/GenericsRepository';
+import {
+  IRedemptionConfigRepository,
+  RedemptionConfigEntity,
+  RedemptionConfigRepository,
+} from '../../repositories/RedemptionConfigRepository';
+import { IVaultBatchesRepository, VaultBatch, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
+import { IVaultsRepository, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
+import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
+
 export type RedemptionConfigResult =
   | {
       kind: 'Ok';
-      data: {
-        offerId: string;
-      };
+      data: RedemptionConfig;
     }
   | {
       kind: 'RedemptionNotFound';
     }
   | {
       kind: 'Error';
+      data: { message: string };
     };
 
 export interface IGetRedemptionConfigService {
-  getRedemption(offerId: string): RedemptionConfigResult;
+  getRedemptionConfig(offerId: number): Promise<RedemptionConfigResult>;
 }
 
 export class GetRedemptionConfigService implements IGetRedemptionConfigService {
-  static readonly key = 'RedemptionService';
-  static readonly inject = [Logger.key] as const;
+  static readonly key = 'GetRedemptionConfigService';
+  static readonly inject = [
+    Logger.key,
+    RedemptionConfigRepository.key,
+    GenericsRepository.key,
+    VaultsRepository.key,
+    VaultBatchesRepository.key,
+    RedemptionConfigTransformer.key,
+  ] as const;
 
-  constructor(private readonly logger: ILogger) {}
+  constructor(
+    private readonly logger: ILogger,
+    private readonly redemptionConfigRepository: IRedemptionConfigRepository,
+    private readonly genericsRepository: IGenericsRepository,
+    private readonly vaultsRepository: IVaultsRepository,
+    private readonly vaultBatchesRepository: IVaultBatchesRepository,
+    private readonly redemptionConfigTransformer: RedemptionConfigTransformer,
+  ) {}
 
-  public getRedemption(offerId: string): RedemptionConfigResult {
+  public async getRedemptionConfig(offerId: number): Promise<RedemptionConfigResult> {
     this.logger.info({
       message: 'offerId',
       context: {
@@ -32,11 +55,48 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
       },
     });
 
-    return {
+    let redemptionConfigEntity: RedemptionConfigEntity | null;
+    let genericEntity: Generic | null = null;
+    let vaultEntity: Vault | null = null;
+    let vaultBatchEntities: VaultBatch[] = [];
+
+    try {
+      redemptionConfigEntity = await this.redemptionConfigRepository.findOneByOfferId(offerId);
+    } catch (error) {
+      return Promise.resolve({
+        kind: 'Error',
+        data: { message: 'Something when wrong getting redemption' },
+      });
+    }
+
+    if (!redemptionConfigEntity) {
+      return Promise.resolve({
+        kind: 'RedemptionNotFound',
+        data: { message: `Could not find redemption with offerid=[${offerId}]` },
+      });
+    }
+
+    const redemptionType = redemptionConfigEntity.redemptionType;
+
+    if (redemptionType === 'generic') {
+      genericEntity = await this.genericsRepository.findOneByRedemptionId(redemptionConfigEntity.id);
+    }
+
+    if (redemptionType === 'vault' || redemptionType === 'vaultQR') {
+      vaultEntity = await this.vaultsRepository.findOneByRedemptionId(redemptionConfigEntity.id);
+      if (vaultEntity) {
+        vaultBatchEntities = await this.vaultBatchesRepository.findByVaultId(vaultEntity.id);
+      }
+    }
+
+    return Promise.resolve({
       kind: 'Ok',
-      data: {
-        offerId: offerId,
-      },
-    };
+      data: this.redemptionConfigTransformer.transformToRedemptionConfig({
+        redemptionConfigEntity: redemptionConfigEntity,
+        genericEntity: genericEntity,
+        vaultEntity: vaultEntity,
+        vaultBatchEntities: vaultBatchEntities,
+      }),
+    });
   }
 }

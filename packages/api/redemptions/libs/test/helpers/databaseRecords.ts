@@ -7,15 +7,15 @@ import {
   vaultCodesTable,
   vaultsTable,
 } from '@blc-mono/redemptions/libs/database/schema';
-import { redemptionFactory } from '@blc-mono/redemptions/libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatches.factory';
+import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
 import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
 
 export async function createRedemptionRecord(
   connection: DatabaseConnection,
 ): Promise<typeof redemptionsTable.$inferSelect> {
-  const redemption = redemptionFactory.build();
+  const redemption = redemptionConfigEntityFactory.build();
   await connection.db.insert(redemptionsTable).values(redemption).execute();
   return redemption;
 }

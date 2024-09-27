@@ -4,7 +4,7 @@ import { IVaultBatchesRepository } from '@blc-mono/redemptions/application/repos
 import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatches.factory';
+import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
 import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';

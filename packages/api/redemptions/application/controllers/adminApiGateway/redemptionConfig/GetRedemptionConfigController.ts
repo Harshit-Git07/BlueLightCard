@@ -13,7 +13,7 @@ import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../Ad
 
 const GetRedemptionRequestModel = z.object({
   pathParameters: z.object({
-    offerId: z.string(),
+    offerId: z.coerce.number(),
   }),
 });
 
@@ -24,7 +24,7 @@ export class GetRedemptionConfigController extends APIGatewayController<ParsedRe
 
   constructor(
     logger: ILogger,
-    private readonly redemptionsService: IGetRedemptionConfigService,
+    private readonly redemptionsConfigService: IGetRedemptionConfigService,
   ) {
     super(logger);
   }
@@ -33,10 +33,10 @@ export class GetRedemptionConfigController extends APIGatewayController<ParsedRe
     return this.zodParseRequest(request, GetRedemptionRequestModel);
   }
 
-  public handle(request: ParsedRequest): APIGatewayResult {
+  public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
     const offerId = request.pathParameters.offerId;
 
-    const result = this.redemptionsService.getRedemption(offerId);
+    const result = await this.redemptionsConfigService.getRedemptionConfig(offerId);
 
     switch (result.kind) {
       case 'Ok':

@@ -1,52 +1,199 @@
-import { transformToRedemptionConfig } from './RedemptionConfigTransformer';
+import { as } from '@blc-mono/core/utils/testing';
+import { genericFactory } from '@blc-mono/redemptions/libs/test/factories/generic.factory';
+import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
+import { redemptionVaultConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionVaultConfig.factory';
+import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
+import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
 
-describe('Redemption Config Formatter', () => {
-  it('returns the correct shape for Show Card config', () => {
-    const showCard = {
-      id: 'show-card-id',
-      companyId: 1234,
-      offerId: 4321,
-      connection: 'none',
-      offerType: 'in-store',
-      redemptionType: 'showCard',
-      affiliate: null,
-      url: null,
-    } as const;
+import { Generic } from '../repositories/GenericsRepository';
+import { RedemptionConfigEntity } from '../repositories/RedemptionConfigRepository';
+import { Vault } from '../repositories/VaultsRepository';
 
-    const showCardResponse = {
-      id: showCard.id,
-      companyId: showCard.companyId.toString(),
-      offerId: showCard.offerId.toString(),
-      connection: showCard.connection,
-      offerType: showCard.offerType,
-      redemptionType: showCard.redemptionType,
+import { RedemptionConfigTransformer } from './RedemptionConfigTransformer';
+import { RedemptionVaultConfig, RedemptionVaultConfigTransformer } from './RedemptionVaultConfigTransformer';
+
+const mockRedemptionVaultConfigTransformer: Partial<RedemptionVaultConfigTransformer> = {
+  transformToRedemptionVaultConfig: jest.fn(),
+};
+
+const redemptionConfigTransformer: RedemptionConfigTransformer = new RedemptionConfigTransformer(
+  as(mockRedemptionVaultConfigTransformer),
+);
+
+const vaultEntity: Vault = vaultFactory.build();
+const vaultBatchEntities = vaultBatchFactory.buildList(3);
+const genericEntity: Generic = genericFactory.build();
+
+const redemptionVaultConfig: RedemptionVaultConfig = redemptionVaultConfigFactory.build();
+
+describe('transformToRedemptionConfig', () => {
+  it.each(['vault', 'vaultQR'] as const)(
+    "returns formatted RedemptionConfig when redemptionType is '%s' and no vault entity",
+    (redemptionType) => {
+      const vaultRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+        redemptionType,
+      });
+
+      const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+        redemptionConfigEntity: vaultRedemptionConfigEntity,
+        genericEntity: null,
+        vaultEntity: null,
+        vaultBatchEntities: [],
+      });
+
+      const expectedRedemptionConfig = {
+        id: vaultRedemptionConfigEntity.id,
+        offerId: vaultRedemptionConfigEntity.offerId.toString(),
+        redemptionType: vaultRedemptionConfigEntity.redemptionType,
+        connection: vaultRedemptionConfigEntity.connection,
+        companyId: vaultRedemptionConfigEntity.companyId.toString(),
+        affiliate: vaultRedemptionConfigEntity.affiliate,
+        url: vaultRedemptionConfigEntity.url,
+        vault: null,
+      };
+
+      expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+
+      expect(mockRedemptionVaultConfigTransformer.transformToRedemptionVaultConfig).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each(['vault', 'vaultQR'] as const)(
+    "returns formatted RedemptionConfig when redemptionType is '%s'",
+    (redemptionType) => {
+      const vaultRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+        redemptionType,
+      });
+
+      mockRedemptionVaultConfigTransformer.transformToRedemptionVaultConfig = jest
+        .fn()
+        .mockReturnValue(redemptionVaultConfig);
+
+      const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+        redemptionConfigEntity: vaultRedemptionConfigEntity,
+        genericEntity: null,
+        vaultEntity,
+        vaultBatchEntities,
+      });
+
+      const expectedRedemptionConfig = {
+        id: vaultRedemptionConfigEntity.id,
+        offerId: vaultRedemptionConfigEntity.offerId.toString(),
+        redemptionType: vaultRedemptionConfigEntity.redemptionType,
+        connection: vaultRedemptionConfigEntity.connection,
+        companyId: vaultRedemptionConfigEntity.companyId.toString(),
+        affiliate: vaultRedemptionConfigEntity.affiliate,
+        url: vaultRedemptionConfigEntity.url,
+        vault: redemptionVaultConfig,
+      };
+
+      expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+      expect(mockRedemptionVaultConfigTransformer.transformToRedemptionVaultConfig).toHaveBeenCalledWith(
+        vaultEntity,
+        vaultBatchEntities,
+      );
+    },
+  );
+
+  it('returns formatted RedemptionConfig when redemptionType is generic and no generic entity', () => {
+    const genericRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'generic',
+    });
+
+    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+      redemptionConfigEntity: genericRedemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+    });
+
+    const expectedRedemptionConfig = {
+      id: genericRedemptionConfigEntity.id,
+      offerId: genericRedemptionConfigEntity.offerId.toString(),
+      redemptionType: genericRedemptionConfigEntity.redemptionType,
+      connection: genericRedemptionConfigEntity.connection,
+      companyId: genericRedemptionConfigEntity.companyId.toString(),
+      affiliate: genericRedemptionConfigEntity.affiliate,
+      url: genericRedemptionConfigEntity.url,
+      generic: null,
     };
 
-    const result = transformToRedemptionConfig(showCard);
-
-    expect(result).toStrictEqual(showCardResponse);
+    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
   });
 
-  it('returns the correct shape for PreApplied config', () => {
-    const preApplied = {
-      id: 'pre-applied-id',
-      companyId: 1234,
-      offerId: 4321,
-      connection: 'none',
-      offerType: 'online',
-      redemptionType: 'preApplied',
-      affiliate: 'awin',
-      url: 'some-url',
-    } as const;
+  it('returns formatted RedemptionConfig when redemptionType is generic', () => {
+    const genericRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'generic',
+    });
 
-    const preAppliedResponse = {
-      ...preApplied,
-      companyId: preApplied.companyId.toString(),
-      offerId: preApplied.offerId.toString(),
+    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+      redemptionConfigEntity: genericRedemptionConfigEntity,
+      genericEntity,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+    });
+
+    const expectedRedemptionConfig = {
+      id: genericRedemptionConfigEntity.id,
+      offerId: genericRedemptionConfigEntity.offerId.toString(),
+      redemptionType: genericRedemptionConfigEntity.redemptionType,
+      connection: genericRedemptionConfigEntity.connection,
+      companyId: genericRedemptionConfigEntity.companyId.toString(),
+      affiliate: genericRedemptionConfigEntity.affiliate,
+      url: genericRedemptionConfigEntity.url,
+      generic: {
+        id: genericEntity.id,
+        code: genericEntity.code,
+      },
     };
 
-    const result = transformToRedemptionConfig(preApplied);
+    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+  });
 
-    expect(result).toStrictEqual(preAppliedResponse);
+  it('returns formatted RedemptionConfig when redemptionType is preApplied', () => {
+    const preAppliedRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'preApplied',
+    });
+
+    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+      redemptionConfigEntity: preAppliedRedemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+    });
+
+    const expectedRedemptionConfig = {
+      id: preAppliedRedemptionConfigEntity.id,
+      offerId: preAppliedRedemptionConfigEntity.offerId.toString(),
+      redemptionType: preAppliedRedemptionConfigEntity.redemptionType,
+      connection: preAppliedRedemptionConfigEntity.connection,
+      companyId: preAppliedRedemptionConfigEntity.companyId.toString(),
+      affiliate: preAppliedRedemptionConfigEntity.affiliate,
+      url: preAppliedRedemptionConfigEntity.url,
+    };
+
+    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+  });
+
+  it('returns formatted RedemptionConfig when redemptionType is showCard', () => {
+    const preAppliedRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'showCard',
+    });
+
+    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+      redemptionConfigEntity: preAppliedRedemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+    });
+
+    const expectedRedemptionConfig = {
+      id: preAppliedRedemptionConfigEntity.id,
+      offerId: preAppliedRedemptionConfigEntity.offerId.toString(),
+      redemptionType: preAppliedRedemptionConfigEntity.redemptionType,
+      companyId: preAppliedRedemptionConfigEntity.companyId.toString(),
+    };
+
+    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
   });
 });

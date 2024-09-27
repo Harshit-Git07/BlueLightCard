@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
 import { vaultFactory } from '../../libs/test/factories/vault.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
@@ -31,7 +31,7 @@ describe('VaultsRepository', () => {
     it('should return the vault when it exists', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       const vault = vaultFactory.build({
         redemptionId: redemption.id,
         status: 'active',
@@ -50,7 +50,7 @@ describe('VaultsRepository', () => {
     it('should return null when the vault does not exist', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
       // Act
@@ -63,7 +63,7 @@ describe('VaultsRepository', () => {
     it('should throw an error when there are multiple matching vaults matching the redemptionId', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       const vault1 = vaultFactory.build({
         redemptionId: redemption.id,
         status: 'active',
@@ -86,7 +86,7 @@ describe('VaultsRepository', () => {
     it('returns a vault when given a valid vaultId', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       const vault = vaultFactory.build({ redemptionId: redemption.id });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
       await connection.db.insert(vaultsTable).values(vault).execute();
@@ -112,7 +112,7 @@ describe('VaultsRepository', () => {
     it('should update the vault when it exists', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       const vault = vaultFactory.build({
         redemptionId: redemption.id,
         status: 'active',
@@ -153,7 +153,7 @@ describe('VaultsRepository', () => {
     it('should create the vault', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       const vault = vaultFactory.build({
         redemptionId: redemption.id,
         status: 'active',

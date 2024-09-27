@@ -8,7 +8,7 @@ End-to-end tests can be run with:
 
 ```sh
 npm run dev # The stack needs to be running to run E2E tests
-npm run test -w packages/api/redemptions
+npm run -w packages/api/redemptions test:e2e
 ```
 
 Note that you may need to [install the Session Manager plugin for the AWS CLI](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)

@@ -4,7 +4,7 @@ import { ClientType } from '@blc-mono/core/schemas/domain';
 import { as } from '@blc-mono/core/utils/testing';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../../../libs/test/factories/redemptionConfigEntity.factory';
 import { IRedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
 import { IRedemptionsEventsRepository } from '../../repositories/RedemptionsEventsRepository';
 
@@ -62,7 +62,7 @@ describe('RedemptionDetailsService', () => {
   it('should return an Ok result when the redemption is found', async () => {
     // Arrange
     const logger = createTestLogger();
-    const redemption = redemptionFactory.build();
+    const redemption = redemptionConfigEntityFactory.build();
     const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
     mockedRedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent = jest
       .fn()
@@ -90,7 +90,7 @@ describe('RedemptionDetailsService', () => {
   it('should send data for DWH to event bus', async () => {
     // Arrange
     const logger = createTestLogger();
-    const redemption = redemptionFactory.build();
+    const redemption = redemptionConfigEntityFactory.build();
     const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
     mockedRedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent = jest
       .fn()
@@ -123,7 +123,7 @@ describe('RedemptionDetailsService', () => {
   it('should return successfully if send data for DWH to event bus fails', async () => {
     // Arrange
     const logger = createSilentLogger();
-    const redemption = redemptionFactory.build();
+    const redemption = redemptionConfigEntityFactory.build();
     const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
     mockedRedemptionsEventsRepository.publishMemberRetrievedRedemptionDetailsEvent = jest
       .fn()

@@ -1,9 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
+import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { affiliateEnum, createRedemptionsId, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-export const redemptionFactory = Factory.define<typeof redemptionsTable.$inferSelect>(() => ({
+export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEntity>(() => ({
   id: createRedemptionsId(),
   offerId: faker.number.int({
     min: 1,

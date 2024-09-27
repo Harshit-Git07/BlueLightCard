@@ -4,7 +4,7 @@ import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { redemptionFactory } from '../../../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../../../libs/test/factories/redemptionConfigEntity.factory';
 import { IRedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
 import {
   IRedemptionsEventsRepository,
@@ -86,7 +86,7 @@ describe('RedeemService', () => {
 
   it('should return an Ok result when the redemption is found and redeemed successfully', async () => {
     // Arrange
-    const redemption = redemptionFactory.build();
+    const redemption = redemptionConfigEntityFactory.build();
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
       redemptionType: 'preApplied',
@@ -121,7 +121,7 @@ describe('RedeemService', () => {
 
   it('should publish member redeem intent event', async () => {
     // Arrange
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       offerId: defaultOfferId,
       affiliate: 'awin',
     });
@@ -169,7 +169,7 @@ describe('RedeemService', () => {
 
   it('should send data for DWH (logRedemptionAttempt) and generic code Braze email to event bus', async () => {
     // Arrange
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       offerId: defaultOfferId,
       affiliate: 'awin',
     });
@@ -216,7 +216,7 @@ describe('RedeemService', () => {
 
   it('should complete successfully when publishMemberRedeemIntentEvent (DWH - logRedemptionAttempt) fails', async () => {
     // Arrange
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       offerId: defaultOfferId,
     });
     const redeemedResult: RedeemedStrategyResult = {

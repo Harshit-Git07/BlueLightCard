@@ -16,9 +16,9 @@ import {
   vaultCodesTable,
   vaultsTable,
 } from '../libs/database/schema';
-import { redemptionFactory } from '../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
 import { vaultFactory } from '../libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '../libs/test/factories/vaultBatches.factory';
+import { vaultBatchFactory } from '../libs/test/factories/vaultBatch.factory';
 import { vaultCodeFactory } from '../libs/test/factories/vaultCode.factory';
 import { TestAccount, TestUser, TestUserTokens } from '../libs/test/helpers/identity';
 
@@ -44,9 +44,9 @@ describe('POST /member/redeem', () => {
 
   const buildTestRedemption = (
     redemptionType: (typeof REDEMPTION_TYPES)[number],
-    additionalParams: Omit<Parameters<typeof redemptionFactory.build>[0], 'redemptionType'> = {},
+    additionalParams: Omit<Parameters<typeof redemptionConfigEntityFactory.build>[0], 'redemptionType'> = {},
   ) => {
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
       redemptionType: redemptionType,
       connection: 'direct',

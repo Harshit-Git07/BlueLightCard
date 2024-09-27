@@ -14,9 +14,9 @@ import {
   vaultCodesTable,
   vaultsTable,
 } from '../libs/database/schema';
-import { redemptionFactory } from '../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
 import { vaultFactory } from '../libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '../libs/test/factories/vaultBatches.factory';
+import { vaultBatchFactory } from '../libs/test/factories/vaultBatch.factory';
 import { vaultCodeFactory } from '../libs/test/factories/vaultCode.factory';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
@@ -26,7 +26,7 @@ describe('Vault Batch admin API tests', () => {
   let apiKey: string;
 
   const buildRedemptionForPostMethod = (companyId: number, offerId: number) => {
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
       companyId: companyId,
       offerId: offerId,
@@ -46,8 +46,10 @@ describe('Vault Batch admin API tests', () => {
     };
   };
 
-  const buildVaultForPostMethod = (redemptionParams: NonNullable<Parameters<typeof redemptionFactory.build>[0]>) => {
-    const redemption = redemptionFactory.build(redemptionParams);
+  const buildVaultForPostMethod = (
+    redemptionParams: NonNullable<Parameters<typeof redemptionConfigEntityFactory.build>[0]>,
+  ) => {
+    const redemption = redemptionConfigEntityFactory.build(redemptionParams);
     const vault = vaultFactory.build({
       id: createVaultIdE2E(),
       redemptionId: redemption.id,
@@ -68,7 +70,7 @@ describe('Vault Batch admin API tests', () => {
   };
 
   const buildVault = () => {
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
     });
     const vault = vaultFactory.build({

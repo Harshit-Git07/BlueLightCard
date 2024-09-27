@@ -5,16 +5,21 @@ import {
   IGetRedemptionConfigService,
   RedemptionConfigResult,
 } from '@blc-mono/redemptions/application/services/redemptionConfig/GetRedemptionConfigService';
+import { RedemptionConfig } from '@blc-mono/redemptions/application/transformers/RedemptionConfigTransformer';
+import { redemptionConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfig.factory';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { GetRedemptionConfigController } from './GetRedemptionConfigController';
 
 const mockLogger = createTestLogger();
 const mockGetRedemptionConfigService = {
-  getRedemption: jest.fn(),
+  getRedemptionConfig: jest.fn(),
 } satisfies IGetRedemptionConfigService;
 
 const getRedemptionConfigController = new GetRedemptionConfigController(mockLogger, mockGetRedemptionConfigService);
+
+const redemptionConfig: RedemptionConfig = redemptionConfigFactory.build();
+const offerId = faker.number.int();
 
 describe('GetRedemptionConfigController', () => {
   afterEach(() => {
@@ -22,33 +27,32 @@ describe('GetRedemptionConfigController', () => {
   });
 
   it('calls GetRedemptionConfigService with an offer id to get a redemption config', () => {
-    const expectedOfferId = faker.string.numeric(8);
-
-    mockGetRedemptionConfigService.getRedemption.mockReturnValueOnce({
+    mockGetRedemptionConfigService.getRedemptionConfig.mockReturnValueOnce({
       kind: 'Ok',
-      data: {
-        offerId: faker.string.numeric(8),
-      },
+      data: redemptionConfig,
     } satisfies RedemptionConfigResult);
 
     getRedemptionConfigController.handle({
       pathParameters: {
-        offerId: expectedOfferId,
+        offerId,
       },
     });
 
-    expect(mockGetRedemptionConfigService.getRedemption).toHaveBeenCalledTimes(1);
-    expect(mockGetRedemptionConfigService.getRedemption).toHaveBeenCalledWith(expectedOfferId);
+    expect(mockGetRedemptionConfigService.getRedemptionConfig).toHaveBeenCalledTimes(1);
+    expect(mockGetRedemptionConfigService.getRedemptionConfig).toHaveBeenCalledWith(offerId);
   });
 
-  it('returns a 500 response when GetRedemptionConfigService returns error', () => {
-    mockGetRedemptionConfigService.getRedemption.mockReturnValueOnce({
+  it('returns a 500 response when GetRedemptionConfigService returns error', async () => {
+    mockGetRedemptionConfigService.getRedemptionConfig.mockReturnValueOnce({
       kind: 'Error',
+      data: {
+        message: 'Something went wrong',
+      },
     } satisfies RedemptionConfigResult);
 
-    const result = getRedemptionConfigController.handle({
+    const result = await getRedemptionConfigController.handle({
       pathParameters: {
-        offerId: faker.string.numeric(8),
+        offerId,
       },
     });
 
@@ -59,14 +63,14 @@ describe('GetRedemptionConfigController', () => {
     });
   });
 
-  it('returns a 404 response when GetRedemptionConfigService returns RedemptionNotFound', () => {
-    mockGetRedemptionConfigService.getRedemption.mockReturnValueOnce({
+  it('returns a 404 response when GetRedemptionConfigService returns RedemptionNotFound', async () => {
+    mockGetRedemptionConfigService.getRedemptionConfig.mockReturnValueOnce({
       kind: 'RedemptionNotFound',
     } satisfies RedemptionConfigResult);
 
-    const result = getRedemptionConfigController.handle({
+    const result = await getRedemptionConfigController.handle({
       pathParameters: {
-        offerId: faker.string.numeric(8),
+        offerId,
       },
     });
 
@@ -77,26 +81,20 @@ describe('GetRedemptionConfigController', () => {
     });
   });
 
-  it('returns 200 response when GetRedemptionConfigService returns a valid redemption config', () => {
-    const expectedOfferId = faker.string.numeric(8);
-
-    mockGetRedemptionConfigService.getRedemption.mockReturnValueOnce({
+  it('returns 200 response when GetRedemptionConfigService returns a valid redemption config', async () => {
+    mockGetRedemptionConfigService.getRedemptionConfig.mockReturnValueOnce({
       kind: 'Ok',
-      data: {
-        offerId: expectedOfferId,
-      },
+      data: redemptionConfig,
     } satisfies RedemptionConfigResult);
 
-    const result = getRedemptionConfigController.handle({
+    const result = await getRedemptionConfigController.handle({
       pathParameters: {
-        offerId: faker.string.numeric(8),
+        offerId,
       },
     });
 
     expect(result.statusCode).toBe(200);
-    expect(result.data).toEqual({
-      offerId: expectedOfferId,
-    });
+    expect(result.data).toEqual(redemptionConfig);
   });
 
   it('fails with parsing errors', async () => {
@@ -117,22 +115,22 @@ describe('GetRedemptionConfigController', () => {
     expect(result.body).toContain('Validation error');
   });
 
-  it('throws an error if an unsupported response occurs in the service', () => {
+  it('throws an error if an unsupported response occurs in the service', async () => {
     const expectedOfferId = faker.string.numeric(8);
 
-    mockGetRedemptionConfigService.getRedemption.mockReturnValueOnce({
+    mockGetRedemptionConfigService.getRedemptionConfig.mockReturnValueOnce({
       kind: 'Asparagus',
       data: {
         offerId: expectedOfferId,
       },
     });
 
-    expect(() =>
+    await expect(() =>
       getRedemptionConfigController.handle({
         pathParameters: {
-          offerId: faker.string.numeric(8),
+          offerId,
         },
       }),
-    ).toThrow();
+    ).rejects.toThrow();
   });
 });

@@ -12,7 +12,7 @@ import { IRedemptionsEventsRepository } from '@blc-mono/redemptions/application/
 import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { IVaultsRepository, Vault } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { genericFactory } from '@blc-mono/redemptions/libs/test/factories/generic.factory';
-import { redemptionFactory } from '@blc-mono/redemptions/libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
 import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
@@ -94,7 +94,7 @@ describe('Redemption Strategies', () => {
   }
 
   describe('RedeemGenericStrategy', () => {
-    const testGenericRedemption = redemptionFactory.build({
+    const testGenericRedemption = redemptionConfigEntityFactory.build({
       redemptionType: 'generic',
     });
     const testGeneric = genericFactory.build({
@@ -191,7 +191,7 @@ describe('Redemption Strategies', () => {
   });
 
   describe('RedeemPreAppliedStrategy', () => {
-    const testPreAppliedRedemption = redemptionFactory.build({
+    const testPreAppliedRedemption = redemptionConfigEntityFactory.build({
       redemptionType: 'preApplied',
     });
 
@@ -213,7 +213,7 @@ describe('Redemption Strategies', () => {
       // Arrange
       const mockedSilentLogger = createSilentLogger();
       const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
-      const redemptionWithoutUrl = redemptionFactory.build({
+      const redemptionWithoutUrl = redemptionConfigEntityFactory.build({
         redemptionType: 'preApplied',
         url: undefined,
       });
@@ -259,7 +259,7 @@ describe('Redemption Strategies', () => {
   });
 
   describe('RedeemShowCardStrategy', () => {
-    const testShowCardRedemption = redemptionFactory.build({
+    const testShowCardRedemption = redemptionConfigEntityFactory.build({
       redemptionType: 'showCard',
     });
 
@@ -309,7 +309,7 @@ describe('Redemption Strategies', () => {
   });
 
   describe('RedeemVaultStrategy', () => {
-    const testVaultRedemption = redemptionFactory.build({
+    const testVaultRedemption = redemptionConfigEntityFactory.build({
       redemptionType: 'vault',
     });
     const testStandardVault = vaultFactory.build({

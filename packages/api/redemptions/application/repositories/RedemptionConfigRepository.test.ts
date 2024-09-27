@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
 import { RedemptionConfigRepository } from './RedemptionConfigRepository';
@@ -29,7 +29,7 @@ describe('RedemptionConfigRepository', () => {
     it('should return the redemption when it exists', async () => {
       // Arrange
       const repository = new RedemptionConfigRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
       // Act
@@ -57,8 +57,8 @@ describe('RedemptionConfigRepository', () => {
     it('should throw an error when there are multiple matching redemptions matching the offerId', async () => {
       // Arrange
       const repository = new RedemptionConfigRepository(connection);
-      const redemption1 = redemptionFactory.build();
-      const redemption2 = redemptionFactory.build({
+      const redemption1 = redemptionConfigEntityFactory.build();
+      const redemption2 = redemptionConfigEntityFactory.build({
         offerId: redemption1.offerId,
       });
       await connection.db.insert(redemptionsTable).values([redemption1, redemption2]).execute();
@@ -71,7 +71,7 @@ describe('RedemptionConfigRepository', () => {
   describe('findOneById', () => {
     it('returns the redemption when it exists', async () => {
       const repository = new RedemptionConfigRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
       const result = await repository.findOneById(redemption.id);
@@ -97,7 +97,7 @@ describe('RedemptionConfigRepository', () => {
   describe('updateOneByOfferId', () => {
     it('should update the redemptions record by offer ID', async () => {
       const offerId = 123;
-      const redemption = redemptionFactory.build({
+      const redemption = redemptionConfigEntityFactory.build({
         offerId: offerId,
         companyId: 123,
         redemptionType: 'preApplied',
@@ -109,7 +109,7 @@ describe('RedemptionConfigRepository', () => {
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
       const repository = new RedemptionConfigRepository(connection);
-      const redemptionUpdate = redemptionFactory.build({
+      const redemptionUpdate = redemptionConfigEntityFactory.build({
         offerId: offerId,
         companyId: 123,
         redemptionType: 'generic',

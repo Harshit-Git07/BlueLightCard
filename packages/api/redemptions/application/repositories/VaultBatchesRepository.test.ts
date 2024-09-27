@@ -11,7 +11,7 @@ import {
   createVaultRecord,
 } from '@blc-mono/redemptions/libs/test/helpers/databaseRecords';
 
-import { vaultBatchFactory } from '../../libs/test/factories/vaultBatches.factory';
+import { vaultBatchFactory } from '../../libs/test/factories/vaultBatch.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
 import { VaultBatchesRepository } from './VaultBatchesRepository';

@@ -2,7 +2,7 @@ import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connecti
 import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 import { genericFactory } from '../../libs/test/factories/generic.factory';
-import { redemptionFactory } from '../../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
 import { GenericsRepository } from './GenericsRepository';
@@ -28,7 +28,7 @@ describe('GenericsRepository', () => {
     it('should return the generic when it exists', async () => {
       // Arrange
       const repository = new GenericsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       const generic = genericFactory.build({
         redemptionId: redemption.id,
       });
@@ -45,7 +45,7 @@ describe('GenericsRepository', () => {
     it('should return null when the generic does not exist', async () => {
       // Arrange
       const repository = new GenericsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       await connection.db.insert(redemptionsTable).values(redemption).execute();
 
       // Act
@@ -58,7 +58,7 @@ describe('GenericsRepository', () => {
     it('should throw an error when there are multiple matching generics matching the redemptionId', async () => {
       // Arrange
       const repository = new GenericsRepository(connection);
-      const redemption = redemptionFactory.build();
+      const redemption = redemptionConfigEntityFactory.build();
       const generic1 = genericFactory.build({
         redemptionId: redemption.id,
       });

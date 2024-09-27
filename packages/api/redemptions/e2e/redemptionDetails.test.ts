@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, onTestFinished, test } from 'vit
 
 import { DatabaseConnectionType } from '../libs/database/connection';
 import { createRedemptionsIdE2E, redemptionsTable } from '../libs/database/schema';
-import { redemptionFactory } from '../libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
 import { TestAccount, TestUser, TestUserTokens } from '../libs/test/helpers/identity';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
@@ -78,7 +78,7 @@ describe('GET /member/redemptionDetails', () => {
 
   test('should return the redemption details', async () => {
     // Arrange
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
     });
     await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
@@ -114,7 +114,7 @@ describe('GET /member/redemptionDetails', () => {
     { timeout: 60_000 },
     async () => {
       // Arrange
-      const redemption = redemptionFactory.build({
+      const redemption = redemptionConfigEntityFactory.build({
         id: createRedemptionsIdE2E(),
       });
       await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
@@ -149,7 +149,7 @@ describe('GET /member/redemptionDetails', () => {
 
   test('should send data to the compView stream when client type is web', { timeout: 60_000 }, async () => {
     // Arrange
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
     });
     await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
@@ -184,7 +184,7 @@ describe('GET /member/redemptionDetails', () => {
 
   test('should send data to the compAppView stream when client type is mobile', { timeout: 60_000 }, async () => {
     // Arrange
-    const redemption = redemptionFactory.build({
+    const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
     });
     await connectionManager.connection.db.insert(redemptionsTable).values(redemption);

@@ -4,9 +4,9 @@ import { as } from '@blc-mono/core/utils/testing';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { IS3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
-import { redemptionFactory } from '@blc-mono/redemptions/libs/test/factories/redemption.factory';
+import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatches.factory';
+import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -170,7 +170,7 @@ describe('CreateVaultBatchService', () => {
     const legacyVaultId = 'vault#12345-67890#BLC';
     const testEvent = getTestEvent(legacyVaultId);
 
-    mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemptionFactory.build());
+    mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemptionConfigEntityFactory.build());
     mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(null);
 
     const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
@@ -205,7 +205,7 @@ describe('CreateVaultBatchService', () => {
     const legacyVaultId = 'vault#12345-67890#BLC';
     const testEvent = getTestEvent(legacyVaultId);
 
-    const redemption = redemptionFactory.build();
+    const redemption = redemptionConfigEntityFactory.build();
     mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
 
     const vault = vaultFactory.build({ redemptionId: redemption.id });

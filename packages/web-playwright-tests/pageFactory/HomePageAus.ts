@@ -5,7 +5,7 @@ export class HomePageAus {
   readonly context: BrowserContext;
 
   // Locators
-  // Navbar top
+  // Navbar logged out
   private readonly BLUELIGHTBUTTON_NAVBAR_AUS: Locator;
   private readonly HOME_NAVBAR_AUS: Locator;
   private readonly OFFERS_NAVBAR_AUS: Locator;
@@ -13,6 +13,13 @@ export class HomePageAus {
   private readonly SIGNUP_NAVBAR_AUS: Locator;
   private readonly LOGIN_NAVBAR_AUS: Locator;
   private readonly LOGOUT_NAVBAR_AUS: Locator;
+
+  //Navbar - logged in
+  private readonly MYACCOUNT_NAVBAR_AUS: Locator;
+
+  //Personal Infomation
+  private readonly MOBILE_FIELD_AUS: Locator;
+  private readonly UPDATE_BUTTON_AUS: Locator;
 
   // Searchbar options
   private readonly MAGNIFIER_SEARCHBAR_AUS: Locator;
@@ -51,7 +58,7 @@ export class HomePageAus {
     this.context = context;
 
     // Initialize locators
-    // Navbar top
+    // Navbar logged out
     this.BLUELIGHTBUTTON_NAVBAR_AUS = page.locator('div.site-logo');
     this.HOME_NAVBAR_AUS = page.getByRole('link', { name: 'Home', exact: true });
     this.OFFERS_NAVBAR_AUS = page
@@ -61,6 +68,13 @@ export class HomePageAus {
     this.SIGNUP_NAVBAR_AUS = page.getByRole('link', { name: 'Sign up' });
     this.LOGIN_NAVBAR_AUS = page.getByLabel('Login');
     this.LOGOUT_NAVBAR_AUS = page.getByRole('link', { name: 'Logout' });
+
+    //Navbar - logged in
+    this.MYACCOUNT_NAVBAR_AUS = page.getByRole('link', { name: 'My Account' });
+
+    //Personal Infomation
+    this.MOBILE_FIELD_AUS = page.getByPlaceholder('Mobile Number');
+    this.UPDATE_BUTTON_AUS = page.getByRole('button', { name: 'Update details' });
 
     // Searchbar options
     this.MAGNIFIER_SEARCHBAR_AUS = page.locator('.search-trigger');
@@ -190,13 +204,11 @@ export class HomePageAus {
   }
 
   async assertIncorrectLoginDetailsElementsArePresent(): Promise<void> {
-  
-
     await expect(this.EMAIL_TEXTFIELD_AUS).toBeVisible();
     await expect(this.PASSWORD_TEXTFIELD_AUS).toBeVisible();
     await expect(this.SUBMIT_BUTTON_AUS).toBeVisible();
     await expect(this.INCORRECT_LOGIN_WARNING_AUS).toBeVisible();
+  }
 
   
-  }
 }

@@ -1,13 +1,13 @@
 import { as } from '@blc-mono/core/utils/testing';
-import { genericFactory } from '@blc-mono/redemptions/libs/test/factories/generic.factory';
+import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { redemptionVaultConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionVaultConfig.factory';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 
-import { Generic } from '../repositories/GenericsRepository';
+import { GenericEntity } from '../repositories/GenericsRepository';
 import { RedemptionConfigEntity } from '../repositories/RedemptionConfigRepository';
-import { Vault } from '../repositories/VaultsRepository';
+import { VaultEntity } from '../repositories/VaultsRepository';
 
 import { RedemptionConfigTransformer } from './RedemptionConfigTransformer';
 import { RedemptionVaultConfig, RedemptionVaultConfigTransformer } from './RedemptionVaultConfigTransformer';
@@ -20,9 +20,9 @@ const redemptionConfigTransformer: RedemptionConfigTransformer = new RedemptionC
   as(mockRedemptionVaultConfigTransformer),
 );
 
-const vaultEntity: Vault = vaultFactory.build();
-const vaultBatchEntities = vaultBatchFactory.buildList(3);
-const genericEntity: Generic = genericFactory.build();
+const vaultEntity: VaultEntity = vaultEntityFactory.build();
+const vaultBatchEntities = vaultBatchEntityFactory.buildList(3);
+const genericEntity: GenericEntity = genericEntityFactory.build();
 
 const redemptionVaultConfig: RedemptionVaultConfig = redemptionVaultConfigFactory.build();
 

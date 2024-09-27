@@ -14,7 +14,13 @@ import {
   RedemptionConfigRepository,
   UpdateRedemptionConfigEntity,
 } from '../../repositories/RedemptionConfigRepository';
-import { IVaultsRepository, NewVault, UpdateVault, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
+import {
+  IVaultsRepository,
+  NewVaultEntity,
+  UpdateVaultEntity,
+  VaultEntity,
+  VaultsRepository,
+} from '../../repositories/VaultsRepository';
 
 export interface IVaultService {
   updateVault(event: VaultUpdatedEvent): Promise<void>;
@@ -89,7 +95,7 @@ export class VaultService implements IVaultService {
 
       if (vaultId === 'VAULT_NOT_EXIST') {
         //vault does not exist, so may have been data sync issue in the past, so create it now
-        const vaultData: NewVault = {
+        const vaultData: NewVaultEntity = {
           alertBelow: detail.alertBelow,
           status: detail.vaultStatus ? 'active' : 'in-active',
           maxPerUser: detail.maxPerUser,
@@ -113,7 +119,7 @@ export class VaultService implements IVaultService {
         }
       } else {
         //vault exists, so update it
-        const vaultData: UpdateVault = {
+        const vaultData: UpdateVaultEntity = {
           alertBelow: detail.alertBelow,
           status: detail.vaultStatus ? 'active' : 'in-active',
           maxPerUser: detail.maxPerUser,
@@ -184,7 +190,7 @@ export class VaultService implements IVaultService {
         );
       }
 
-      const vaultData: NewVault = {
+      const vaultData: NewVaultEntity = {
         alertBelow: detail.alertBelow,
         status: detail.vaultStatus ? 'active' : 'in-active',
         maxPerUser: detail.maxPerUser,
@@ -242,7 +248,7 @@ export class VaultService implements IVaultService {
 
   private getIntegrationsSettings(
     detail: VaultCreatedEventDetail | VaultUpdatedEventDetail,
-  ): Pick<Vault, 'integration' | 'integrationId'> | undefined {
+  ): Pick<VaultEntity, 'integration' | 'integrationId'> | undefined {
     if (detail?.eeCampaignId) {
       return {
         integration: 'eagleeye',

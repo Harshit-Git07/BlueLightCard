@@ -11,7 +11,7 @@ import {
   createVaultRecord,
 } from '@blc-mono/redemptions/libs/test/helpers/databaseRecords';
 
-import { vaultBatchFactory } from '../../libs/test/factories/vaultBatch.factory';
+import { vaultBatchEntityFactory } from '../../libs/test/factories/vaultBatchEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
 import { VaultBatchesRepository } from './VaultBatchesRepository';
@@ -37,18 +37,18 @@ describe('VaultBatchesRepository', () => {
     it('should create the vaultBatch', async () => {
       const redemption = await createRedemptionRecord(connection);
       const vault = await createVaultRecord(connection, redemption.id);
-      const vaultBatch = vaultBatchFactory.build({
+      const vaultBatchEntity = vaultBatchEntityFactory.build({
         vaultId: vault.id,
       });
       const repository = new VaultBatchesRepository(connection);
-      const result = await repository.create(vaultBatch);
-      expect(result).toEqual({ id: vaultBatch.id });
+      const result = await repository.create(vaultBatchEntity);
+      expect(result).toEqual({ id: vaultBatchEntity.id });
       const createdVaultBatch = await connection.db
         .select()
         .from(vaultBatchesTable)
-        .where(eq(vaultBatchesTable.id, vaultBatch.id))
+        .where(eq(vaultBatchesTable.id, vaultBatchEntity.id))
         .execute();
-      expect(createdVaultBatch[0]).toEqual(vaultBatch);
+      expect(createdVaultBatch[0]).toEqual(vaultBatchEntity);
     });
   });
 

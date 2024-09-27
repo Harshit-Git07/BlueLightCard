@@ -1,9 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
-import { createRedemptionsId, createVaultId, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
+import { VaultEntity } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
+import { createRedemptionsId, createVaultId } from '@blc-mono/redemptions/libs/database/schema';
 
-export const vaultFactory = Factory.define<typeof vaultsTable.$inferSelect>(() => ({
+export const vaultEntityFactory = Factory.define<VaultEntity>(() => ({
   id: createVaultId(),
   redemptionId: createRedemptionsId(),
   status: 'active',

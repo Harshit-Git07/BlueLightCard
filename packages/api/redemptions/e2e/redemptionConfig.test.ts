@@ -4,10 +4,10 @@ import { eq } from 'drizzle-orm';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { beforeAll, describe, expect, test } from 'vitest';
 
-import { Generic } from '../application/repositories/GenericsRepository';
+import { GenericEntity } from '../application/repositories/GenericsRepository';
 import { RedemptionConfigEntity } from '../application/repositories/RedemptionConfigRepository';
-import { VaultBatch } from '../application/repositories/VaultBatchesRepository';
-import { Vault } from '../application/repositories/VaultsRepository';
+import { VaultBatchEntity } from '../application/repositories/VaultBatchesRepository';
+import { VaultEntity } from '../application/repositories/VaultsRepository';
 import { DatabaseConnectionType } from '../libs/database/connection';
 import {
   createRedemptionsIdE2E,
@@ -16,10 +16,10 @@ import {
   vaultBatchesTable,
   vaultsTable,
 } from '../libs/database/schema';
-import { genericFactory } from '../libs/test/factories/generic.factory';
+import { genericEntityFactory } from '../libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '../libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '../libs/test/factories/vaultBatch.factory';
+import { vaultBatchEntityFactory } from '../libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '../libs/test/factories/vaultEntity.factory';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
 
@@ -58,19 +58,19 @@ describe('redemption config admin API tests', () => {
         affiliate: 'awin',
       });
 
-      const vaultEntity: Vault = vaultFactory.build({
+      const vaultEntity: VaultEntity = vaultEntityFactory.build({
         redemptionId: redemptionConfigEntity.id,
       });
 
-      const vaultBatchEntityOne: VaultBatch = vaultBatchFactory.build({
+      const vaultBatchEntityOne: VaultBatchEntity = vaultBatchEntityFactory.build({
         vaultId: vaultEntity.id,
         created: new Date('2021-01-01'),
       });
-      const vaultBatchEntityTwo: VaultBatch = vaultBatchFactory.build({
+      const vaultBatchEntityTwo: VaultBatchEntity = vaultBatchEntityFactory.build({
         vaultId: vaultEntity.id,
         created: new Date('2021-02-01'),
       });
-      const vaultBatchEntityThree: VaultBatch = vaultBatchFactory.build({
+      const vaultBatchEntityThree: VaultBatchEntity = vaultBatchEntityFactory.build({
         vaultId: vaultEntity.id,
         created: new Date('2021-03-01'),
       });
@@ -142,7 +142,7 @@ describe('redemption config admin API tests', () => {
       url: faker.internet.url(),
     });
 
-    const genericEntity: Generic = genericFactory.build({
+    const genericEntity: GenericEntity = genericEntityFactory.build({
       id: faker.string.uuid(),
       code: faker.string.alphanumeric({ length: 8 }),
       redemptionId: redemptionConfigEntity.id,
@@ -270,7 +270,7 @@ async function deleteRedemptionFromDatabase(redemptionId: string) {
   await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemptionId));
 }
 
-async function insertGenericInDatabase(genericEntity: Generic) {
+async function insertGenericInDatabase(genericEntity: GenericEntity) {
   await connectionManager.connection.db.insert(genericsTable).values(genericEntity);
 }
 
@@ -278,7 +278,7 @@ async function deleteGenericFromDatabase(genericId: string) {
   await connectionManager.connection.db.delete(genericsTable).where(eq(genericsTable.id, genericId));
 }
 
-async function insertVaultInDatabase(vaultEntity: Vault) {
+async function insertVaultInDatabase(vaultEntity: VaultEntity) {
   await connectionManager.connection.db.insert(vaultsTable).values(vaultEntity);
 }
 
@@ -286,13 +286,13 @@ async function deleteVaultFromDatabase(vaultId: string) {
   await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, vaultId));
 }
 
-async function insertVaultBatchesInDatabase(vaultBatchEntities: VaultBatch[]) {
+async function insertVaultBatchesInDatabase(vaultBatchEntities: VaultBatchEntity[]) {
   await vaultBatchEntities.forEach(async (vaultBatchEntity) => {
     await insertVaultBatchInDatabase(vaultBatchEntity);
   });
 }
 
-async function insertVaultBatchInDatabase(vaultBatchEntity: VaultBatch) {
+async function insertVaultBatchInDatabase(vaultBatchEntity: VaultBatchEntity) {
   await connectionManager.connection.db.insert(vaultBatchesTable).values(vaultBatchEntity);
 }
 

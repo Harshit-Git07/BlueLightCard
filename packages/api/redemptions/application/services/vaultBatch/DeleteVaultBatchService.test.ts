@@ -4,8 +4,8 @@ import { IVaultBatchesRepository } from '@blc-mono/redemptions/application/repos
 import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
-import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCodeEntity.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -59,7 +59,7 @@ describe('DeleteVaultBatchService', () => {
   };
 
   function mockBatchExist(exist: boolean): void {
-    const value = exist ? vaultBatchFactory.build({ id: testBatchId }) : null;
+    const value = exist ? vaultBatchEntityFactory.build({ id: testBatchId }) : null;
     mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue(value);
   }
 
@@ -78,7 +78,7 @@ describe('DeleteVaultBatchService', () => {
   }
 
   function mockUnclaimedCodesOnlyForBatchDeleteSucceeds(success: boolean): void {
-    const unclaimedCode = vaultCodeFactory.build({
+    const unclaimedCode = vaultCodeEntityFactory.build({
       batchId: testBatchId,
       memberId: null,
     });
@@ -91,7 +91,7 @@ describe('DeleteVaultBatchService', () => {
   }
 
   function mockClaimedCodesOnly(): void {
-    const claimedCode = vaultCodeFactory.build({
+    const claimedCode = vaultCodeEntityFactory.build({
       batchId: testBatchId,
       memberId: '123456',
     });
@@ -102,11 +102,11 @@ describe('DeleteVaultBatchService', () => {
   }
 
   function mockClaimedAndUnclaimedCodesForBatchDeleteUnclaimedSucceeds(success: boolean): void {
-    const unclaimedCode = vaultCodeFactory.build({
+    const unclaimedCode = vaultCodeEntityFactory.build({
       batchId: testBatchId,
       memberId: null,
     });
-    const claimedCode = vaultCodeFactory.build({
+    const claimedCode = vaultCodeEntityFactory.build({
       batchId: testBatchId,
       memberId: '123456',
     });

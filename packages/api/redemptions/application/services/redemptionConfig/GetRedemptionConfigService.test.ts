@@ -1,16 +1,16 @@
 import { faker } from '@faker-js/faker';
 
 import { as } from '@blc-mono/core/utils/testing';
-import { genericFactory } from '@blc-mono/redemptions/libs/test/factories/generic.factory';
+import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { Generic, IGenericsRepository } from '../../repositories/GenericsRepository';
+import { GenericEntity, IGenericsRepository } from '../../repositories/GenericsRepository';
 import { IRedemptionConfigRepository, RedemptionConfigEntity } from '../../repositories/RedemptionConfigRepository';
 import { IVaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
-import { IVaultsRepository, Vault } from '../../repositories/VaultsRepository';
+import { IVaultsRepository, VaultEntity } from '../../repositories/VaultsRepository';
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
 import { GetRedemptionConfigService, RedemptionConfigResult } from './GetRedemptionConfigService';
@@ -121,7 +121,7 @@ describe('GetRedemptionConfigService', () => {
   });
 
   it('should call transformToRedemptionConfig with genericEntity when redemptionType is generic', async () => {
-    const genericEntity: Generic = genericFactory.build();
+    const genericEntity: GenericEntity = genericEntityFactory.build();
 
     const genericRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       redemptionType: 'generic',
@@ -143,8 +143,8 @@ describe('GetRedemptionConfigService', () => {
   });
 
   it('should call transformToRedemptionConfig with vaultEntity and vaultBatchEntities when redemptionType is vault', async () => {
-    const vaultEntity: Vault = vaultFactory.build();
-    const vaultBatchEntities = vaultBatchFactory.buildList(3);
+    const vaultEntity: VaultEntity = vaultEntityFactory.build();
+    const vaultBatchEntities = vaultBatchEntityFactory.buildList(3);
 
     const vaultRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       redemptionType: 'vault',

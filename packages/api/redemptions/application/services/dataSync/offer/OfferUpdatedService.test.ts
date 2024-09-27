@@ -6,7 +6,7 @@ import { offerUpdatedEventFactory } from '../../../../libs/test/factories/offerE
 import { RedemptionsTestDatabase } from '../../../../libs/test/helpers/database';
 import { createTestLogger } from '../../../../libs/test/helpers/logger';
 import { OfferUpdatedEvent } from '../../../controllers/eventBridge/offer/OfferUpdatedController';
-import { GenericsRepository, NewGeneric } from '../../../repositories/GenericsRepository';
+import { GenericsRepository, NewGenericEntity } from '../../../repositories/GenericsRepository';
 import {
   NewRedemptionConfigEntity,
   RedemptionConfigRepository,
@@ -58,7 +58,7 @@ describe('OfferUpdatedService', () => {
         .execute();
     }
 
-    async function createGenericToModify(genericData: NewGeneric): Promise<Pick<Generic, 'id'>[]> {
+    async function createGenericToModify(genericData: NewGenericEntity): Promise<Pick<Generic, 'id'>[]> {
       return await connection.db
         .insert(genericsTable)
         .values(genericData)
@@ -175,7 +175,7 @@ describe('OfferUpdatedService', () => {
         };
         const currentRedemption = await createRedemptionToModify(currentRedemptionData);
 
-        const currentGenericData: NewGeneric = {
+        const currentGenericData: NewGenericEntity = {
           redemptionId: currentRedemption[0].id,
           code: 'test123',
         };
@@ -218,7 +218,7 @@ describe('OfferUpdatedService', () => {
         };
         const currentRedemption = await createRedemptionToModify(currentRedemptionData);
 
-        const currentGenericData: NewGeneric = {
+        const currentGenericData: NewGenericEntity = {
           redemptionId: currentRedemption[0].id,
           code: 'test123',
         };
@@ -302,7 +302,7 @@ describe('OfferUpdatedService', () => {
         };
         const currentRedemption = await createRedemptionToModify(currentRedemptionData);
 
-        const currentGenericData: NewGeneric = {
+        const currentGenericData: NewGenericEntity = {
           redemptionId: currentRedemption[0].id,
           code: 'test123',
         };

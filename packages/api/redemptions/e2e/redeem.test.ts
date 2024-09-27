@@ -17,9 +17,9 @@ import {
   vaultsTable,
 } from '../libs/database/schema';
 import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '../libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '../libs/test/factories/vaultBatch.factory';
-import { vaultCodeFactory } from '../libs/test/factories/vaultCode.factory';
+import { vaultBatchEntityFactory } from '../libs/test/factories/vaultBatchEntity.factory';
+import { vaultCodeEntityFactory } from '../libs/test/factories/vaultCodeEntity.factory';
+import { vaultEntityFactory } from '../libs/test/factories/vaultEntity.factory';
 import { TestAccount, TestUser, TestUserTokens } from '../libs/test/helpers/identity';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
@@ -66,17 +66,17 @@ describe('POST /member/redeem', () => {
   };
 
   const buildVault = (redemptionId: string) => {
-    const vault = vaultFactory.build({
+    const vault = vaultEntityFactory.build({
       id: createVaultIdE2E(),
       redemptionId: redemptionId,
       status: 'active',
       vaultType: 'standard',
     });
-    const vaultBatch = vaultBatchFactory.build({
+    const vaultBatch = vaultBatchEntityFactory.build({
       id: createVaultBatchesIdE2E(),
       vaultId: vault.id,
     });
-    const vaultCode = vaultCodeFactory.build({
+    const vaultCode = vaultCodeEntityFactory.build({
       id: createVaultCodesIdE2E(),
       batchId: vaultBatch.id,
       expiry: faker.date.future({ years: 1 }),

@@ -1,9 +1,9 @@
 import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
 
-import { Generic } from '../repositories/GenericsRepository';
+import { GenericEntity } from '../repositories/GenericsRepository';
 import { RedemptionConfigEntity } from '../repositories/RedemptionConfigRepository';
-import { VaultBatch } from '../repositories/VaultBatchesRepository';
-import { Vault } from '../repositories/VaultsRepository';
+import { VaultBatchEntity } from '../repositories/VaultBatchesRepository';
+import { VaultEntity } from '../repositories/VaultsRepository';
 
 import { RedemptionVaultConfig, RedemptionVaultConfigTransformer } from './RedemptionVaultConfigTransformer';
 
@@ -27,9 +27,9 @@ export type RedemptionConfig = {
 
 export type RedemptionConfigDto = {
   redemptionConfigEntity: RedemptionConfigEntity;
-  genericEntity: Generic | null;
-  vaultEntity: Vault | null;
-  vaultBatchEntities: VaultBatch[];
+  genericEntity: GenericEntity | null;
+  vaultEntity: VaultEntity | null;
+  vaultBatchEntities: VaultBatchEntity[];
 };
 
 export class RedemptionConfigTransformer {
@@ -40,9 +40,9 @@ export class RedemptionConfigTransformer {
 
   public transformToRedemptionConfig(redemptionConfigDto: RedemptionConfigDto): RedemptionConfig {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigDto.redemptionConfigEntity;
-    const genericEntity: Generic | null = redemptionConfigDto.genericEntity;
-    const vaultEntity: Vault | null = redemptionConfigDto.vaultEntity;
-    const vaultBatchEntities: VaultBatch[] = redemptionConfigDto.vaultBatchEntities;
+    const genericEntity: GenericEntity | null = redemptionConfigDto.genericEntity;
+    const vaultEntity: VaultEntity | null = redemptionConfigDto.vaultEntity;
+    const vaultBatchEntities: VaultBatchEntity[] = redemptionConfigDto.vaultBatchEntities;
 
     const redemptionType = redemptionConfigEntity.redemptionType;
 

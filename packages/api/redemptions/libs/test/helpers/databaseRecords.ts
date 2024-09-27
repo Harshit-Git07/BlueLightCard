@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 
+import { VaultCodeEntity } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import {
   redemptionsTable,
@@ -8,9 +9,9 @@ import {
   vaultsTable,
 } from '@blc-mono/redemptions/libs/database/schema';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
-import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCodeEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 
 export async function createRedemptionRecord(
   connection: DatabaseConnection,
@@ -24,7 +25,7 @@ export async function createVaultRecord(
   connection: DatabaseConnection,
   redemptionId: string,
 ): Promise<typeof vaultsTable.$inferSelect> {
-  const vault = vaultFactory.build({ redemptionId: redemptionId });
+  const vault = vaultEntityFactory.build({ redemptionId: redemptionId });
   await connection.db.insert(vaultsTable).values(vault).execute();
   return vault;
 }
@@ -36,12 +37,12 @@ export async function createVaultBatchRecord(
 ): Promise<typeof vaultBatchesTable.$inferSelect> {
   let vaultBatch;
   if (batchId) {
-    vaultBatch = vaultBatchFactory.build({
+    vaultBatch = vaultBatchEntityFactory.build({
       id: batchId,
       vaultId: vaultId,
     });
   } else {
-    vaultBatch = vaultBatchFactory.build({
+    vaultBatch = vaultBatchEntityFactory.build({
       vaultId: vaultId,
     });
   }
@@ -55,7 +56,7 @@ export async function createManyVaultBatchRecords(
   vaultId: string,
   count: number,
 ): Promise<(typeof vaultBatchesTable.$inferSelect)[]> {
-  const vaultBatches = vaultBatchFactory.buildList(count, {
+  const vaultBatches = vaultBatchEntityFactory.buildList(count, {
     vaultId: vaultId,
   });
   await connection.db.insert(vaultBatchesTable).values(vaultBatches).execute();
@@ -67,8 +68,8 @@ export async function createVaultCodeRecordsUnclaimed(
   vaultId: string,
   batchId: string,
   batchSize: number,
-): Promise<(typeof vaultCodesTable.$inferSelect)[]> {
-  const vaultCodes = vaultCodeFactory.buildList(batchSize, {
+): Promise<VaultCodeEntity[]> {
+  const vaultCodes = vaultCodeEntityFactory.buildList(batchSize, {
     vaultId: vaultId,
     batchId: batchId,
     memberId: null,
@@ -82,8 +83,8 @@ export async function createVaultCodeRecordsClaimed(
   vaultId: string,
   batchId: string,
   batchSize: number,
-): Promise<(typeof vaultCodesTable.$inferSelect)[]> {
-  const vaultCodes = vaultCodeFactory.buildList(batchSize, {
+): Promise<VaultCodeEntity[]> {
+  const vaultCodes = vaultCodeEntityFactory.buildList(batchSize, {
     vaultId: vaultId,
     batchId: batchId,
   });
@@ -96,11 +97,11 @@ export async function createVaultCodeRecordsExpired(
   vaultId: string,
   batchId: string,
   batchSize: number,
-): Promise<(typeof vaultCodesTable.$inferSelect)[]> {
+): Promise<VaultCodeEntity[]> {
   const expiry = faker.date.past();
   expiry.setMilliseconds(0);
 
-  const vaultCodes = vaultCodeFactory.buildList(batchSize, {
+  const vaultCodes = vaultCodeEntityFactory.buildList(batchSize, {
     vaultId: vaultId,
     batchId: batchId,
     expiry: new Date(expiry),

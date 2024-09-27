@@ -1,6 +1,6 @@
 import { as } from '@blc-mono/core/utils/testing';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 
 import { IVaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
 import { IVaultsRepository } from '../../repositories/VaultsRepository';
@@ -10,8 +10,8 @@ import GetVaultBatchService from './GetVaultBatchService';
 describe('GetVaultBatchService', () => {
   it('returns vault batch information when provided a valid vaultId', async () => {
     //Arrange
-    const vault = vaultFactory.build();
-    const vaultBatches = vaultBatchFactory.buildList(3, {
+    const vault = vaultEntityFactory.build();
+    const vaultBatches = vaultBatchEntityFactory.buildList(3, {
       vaultId: vault.id,
     });
 
@@ -84,7 +84,7 @@ describe('GetVaultBatchService', () => {
 
   it('returns an empty array if there are no batches found for the given vaultId', async () => {
     //Arrange
-    const vault = vaultFactory.build();
+    const vault = vaultEntityFactory.build();
 
     const vaultsRepository = {
       findOneById: jest.fn().mockResolvedValue(vault),

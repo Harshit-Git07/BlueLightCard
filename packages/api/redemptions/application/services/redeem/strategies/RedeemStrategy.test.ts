@@ -10,11 +10,11 @@ import {
 } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { IRedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
-import { IVaultsRepository, Vault } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
-import { genericFactory } from '@blc-mono/redemptions/libs/test/factories/generic.factory';
+import { IVaultsRepository, VaultEntity } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
+import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
+import { vaultCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCodeEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { RedeemParams } from './IRedeemStrategy';
@@ -97,7 +97,7 @@ describe('Redemption Strategies', () => {
     const testGenericRedemption = redemptionConfigEntityFactory.build({
       redemptionType: 'generic',
     });
-    const testGeneric = genericFactory.build({
+    const genericEntity = genericEntityFactory.build({
       redemptionId: testGenericRedemption.id,
     });
 
@@ -137,7 +137,7 @@ describe('Redemption Strategies', () => {
       const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
       mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
       const mockedGenericsRepository = mockGenericsRepository();
-      mockedGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testGeneric);
+      mockedGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(genericEntity);
 
       // Act
       const result = await callGenericRedeemStrategy(testGenericRedemption, mockedLogger, {
@@ -148,7 +148,7 @@ describe('Redemption Strategies', () => {
       // Assert
       expect(result.kind).toBe('Ok');
       expect(result.redemptionType).toEqual('generic');
-      expect(result.redemptionDetails.code).toEqual(testGeneric.code);
+      expect(result.redemptionDetails.code).toEqual(genericEntity.code);
       expect(result.redemptionDetails.url).toEqual(testGenericRedemption.url);
     });
 
@@ -158,7 +158,7 @@ describe('Redemption Strategies', () => {
       const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
       mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
       const mockedGenericsRepository = mockGenericsRepository();
-      mockedGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testGeneric);
+      mockedGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(genericEntity);
 
       // Act
       const result = await callGenericRedeemStrategy(testGenericRedemption, mockedLogger, {
@@ -181,7 +181,7 @@ describe('Redemption Strategies', () => {
           companyName: defaultParams.companyName,
           offerId: testGenericRedemption.offerId,
           offerName: defaultParams.offerName,
-          code: testGeneric.code,
+          code: genericEntity.code,
           affiliate: testGenericRedemption.affiliate,
           url: testGenericRedemption.url,
           clientType: defaultParams.clientType,
@@ -312,15 +312,15 @@ describe('Redemption Strategies', () => {
     const testVaultRedemption = redemptionConfigEntityFactory.build({
       redemptionType: 'vault',
     });
-    const testStandardVault = vaultFactory.build({
+    const testStandardVault = vaultEntityFactory.build({
       redemptionId: testVaultRedemption.id,
       vaultType: 'standard',
       maxPerUser: 99,
     });
-    const testStandardVaultCode = vaultCodeFactory.build({
+    const testStandardVaultCode = vaultCodeEntityFactory.build({
       vaultId: testStandardVault.id,
     });
-    const testLegacyVault = vaultFactory.build({
+    const testLegacyVault = vaultEntityFactory.build({
       redemptionId: testVaultRedemption.id,
       vaultType: 'legacy',
       maxPerUser: 99,
@@ -330,7 +330,7 @@ describe('Redemption Strategies', () => {
       vaultId: faker.string.uuid(),
       code: faker.string.sample(10),
     };
-    const testRedemptionEventParams = (vault: Vault, vaultCode: { code: string }) => ({
+    const testRedemptionEventParams = (vault: VaultEntity, vaultCode: { code: string }) => ({
       memberDetails: {
         memberId: defaultParams.memberId,
         brazeExternalUserId: defaultParams.brazeExternalUserId,
@@ -401,7 +401,7 @@ describe('Redemption Strategies', () => {
       it('Should throw when no matching active vault exists', async () => {
         // Arrange
         const mockedSilentLogger = createSilentLogger();
-        const inactiveVault = vaultFactory.build({
+        const inactiveVault = vaultEntityFactory.build({
           redemptionId: testVaultRedemption.id,
           status: 'in-active',
         });
@@ -450,7 +450,7 @@ describe('Redemption Strategies', () => {
       it('Should return kind equals to "Ok" when a vault code is found', async () => {
         // Arrange
         const mockedLogger = createTestLogger();
-        const claimedVaultCode = vaultCodeFactory.build();
+        const claimedVaultCode = vaultCodeEntityFactory.build();
         const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
         mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
         const mockedVaultsRepository = mockVaultsRepository();

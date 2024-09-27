@@ -4,8 +4,8 @@ import {
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
-import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCodeEntity.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -15,8 +15,8 @@ import { IVaultCodesRepository, VaultCodesRepository } from '../../repositories/
 import { UpdateVaultBatchService } from './UpdateVaultBatchService';
 
 describe('UpdateVaultBatchService', () => {
-  const defaultVaultBatch = vaultBatchFactory.build();
-  const defaultVaultCode = vaultCodeFactory.build();
+  const defaultVaultBatch = vaultBatchEntityFactory.build();
+  const defaultVaultCode = vaultCodeEntityFactory.build();
   let database: RedemptionsTestDatabase;
   let connection: DatabaseConnection;
 

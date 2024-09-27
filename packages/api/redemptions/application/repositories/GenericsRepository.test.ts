@@ -1,7 +1,7 @@
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 
-import { genericFactory } from '../../libs/test/factories/generic.factory';
+import { genericEntityFactory } from '../../libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
@@ -29,17 +29,17 @@ describe('GenericsRepository', () => {
       // Arrange
       const repository = new GenericsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
-      const generic = genericFactory.build({
+      const genericEntity = genericEntityFactory.build({
         redemptionId: redemption.id,
       });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(genericsTable).values(generic).execute();
+      await connection.db.insert(genericsTable).values(genericEntity).execute();
 
       // Act
       const result = await repository.findOneByRedemptionId(redemption.id);
 
       // Assert
-      expect(result).toEqual(generic);
+      expect(result).toEqual(genericEntity);
     });
 
     it('should return null when the generic does not exist', async () => {
@@ -59,14 +59,14 @@ describe('GenericsRepository', () => {
       // Arrange
       const repository = new GenericsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
-      const generic1 = genericFactory.build({
+      const genericEntity1 = genericEntityFactory.build({
         redemptionId: redemption.id,
       });
-      const generic2 = genericFactory.build({
+      const genericEntity2 = genericEntityFactory.build({
         redemptionId: redemption.id,
       });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
-      await connection.db.insert(genericsTable).values([generic1, generic2]).execute();
+      await connection.db.insert(genericsTable).values([genericEntity1, genericEntity2]).execute();
 
       // Act & Assert
       await expect(() => repository.findOneByRedemptionId(redemption.id)).rejects.toThrow();

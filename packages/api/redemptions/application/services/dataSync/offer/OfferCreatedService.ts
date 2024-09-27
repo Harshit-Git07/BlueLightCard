@@ -8,7 +8,7 @@ import {
   parseOfferUrl,
   parseRedemptionType,
 } from '../../../helpers/dataSync/offerLegacyToRedemptionConfig';
-import { GenericsRepository, NewGeneric } from '../../../repositories/GenericsRepository';
+import { GenericsRepository, NewGenericEntity } from '../../../repositories/GenericsRepository';
 import {
   NewRedemptionConfigEntity,
   RedemptionConfigIdEntity,
@@ -50,7 +50,7 @@ export class OfferCreatedService implements IOfferCreatedService {
 
       const redemptionId = redemptionIdEntity.id;
       if (redemptionData.redemptionType === 'generic' && detail.offerCode) {
-        const genericData: NewGeneric = {
+        const genericData: NewGenericEntity = {
           redemptionId: redemptionId,
           code: detail.offerCode,
         };

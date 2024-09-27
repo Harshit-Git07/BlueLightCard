@@ -1,25 +1,25 @@
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 
-import { VaultBatch } from '../repositories/VaultBatchesRepository';
-import { Vault } from '../repositories/VaultsRepository';
+import { VaultBatchEntity } from '../repositories/VaultBatchesRepository';
+import { VaultEntity } from '../repositories/VaultsRepository';
 
 import { RedemptionVaultConfigTransformer } from './RedemptionVaultConfigTransformer';
 
 const redemptionVaultConfigTransformer: RedemptionVaultConfigTransformer = new RedemptionVaultConfigTransformer();
 
-const vaultEntity: Vault = vaultFactory.build();
+const vaultEntity: VaultEntity = vaultEntityFactory.build();
 
 describe('transformToRedemptionVaultConfig', () => {
   it('returns formatted RedemptionVaultConfig when has vault batches', () => {
-    const vaultBatchOne: VaultBatch = vaultBatchFactory.build({ created: new Date('2021-01-01') });
-    const vaultBatchTwo: VaultBatch = vaultBatchFactory.build({ created: new Date('2021-02-01') });
-    const vaultBatchThree: VaultBatch = vaultBatchFactory.build({ created: new Date('2021-03-01') });
+    const vaultBatchEntityOne: VaultBatchEntity = vaultBatchEntityFactory.build({ created: new Date('2021-01-01') });
+    const vaultBatchEntityTwo: VaultBatchEntity = vaultBatchEntityFactory.build({ created: new Date('2021-02-01') });
+    const vaultBatchEntityThree: VaultBatchEntity = vaultBatchEntityFactory.build({ created: new Date('2021-03-01') });
 
     const actualRedemptionVaultConfig = redemptionVaultConfigTransformer.transformToRedemptionVaultConfig(vaultEntity, [
-      vaultBatchOne,
-      vaultBatchThree,
-      vaultBatchTwo,
+      vaultBatchEntityOne,
+      vaultBatchEntityThree,
+      vaultBatchEntityTwo,
     ]);
 
     const expectedRedemptionVaultConfig = {
@@ -33,19 +33,19 @@ describe('transformToRedemptionVaultConfig', () => {
       integrationId: String(vaultEntity.integrationId),
       batches: [
         {
-          id: vaultBatchOne.id,
-          created: vaultBatchOne.created.toISOString(),
-          expiry: vaultBatchOne.expiry.toISOString(),
+          id: vaultBatchEntityOne.id,
+          created: vaultBatchEntityOne.created.toISOString(),
+          expiry: vaultBatchEntityOne.expiry.toISOString(),
         },
         {
-          id: vaultBatchTwo.id,
-          created: vaultBatchTwo.created.toISOString(),
-          expiry: vaultBatchTwo.expiry.toISOString(),
+          id: vaultBatchEntityTwo.id,
+          created: vaultBatchEntityTwo.created.toISOString(),
+          expiry: vaultBatchEntityTwo.expiry.toISOString(),
         },
         {
-          id: vaultBatchThree.id,
-          created: vaultBatchThree.created.toISOString(),
-          expiry: vaultBatchThree.expiry.toISOString(),
+          id: vaultBatchEntityThree.id,
+          created: vaultBatchEntityThree.created.toISOString(),
+          expiry: vaultBatchEntityThree.expiry.toISOString(),
         },
       ],
     };
@@ -54,7 +54,7 @@ describe('transformToRedemptionVaultConfig', () => {
   });
 
   it('returns formatted RedemptionVaultConfig when integrationId is null', () => {
-    const vaultEntityWithNullIntegrationId: Vault = vaultFactory.build({ integrationId: null });
+    const vaultEntityWithNullIntegrationId: VaultEntity = vaultEntityFactory.build({ integrationId: null });
 
     const actualRedemptionVaultConfig = redemptionVaultConfigTransformer.transformToRedemptionVaultConfig(
       vaultEntityWithNullIntegrationId,

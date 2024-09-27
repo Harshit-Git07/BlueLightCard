@@ -15,9 +15,9 @@ import {
   vaultsTable,
 } from '../libs/database/schema';
 import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '../libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '../libs/test/factories/vaultBatch.factory';
-import { vaultCodeFactory } from '../libs/test/factories/vaultCode.factory';
+import { vaultBatchEntityFactory } from '../libs/test/factories/vaultBatchEntity.factory';
+import { vaultCodeEntityFactory } from '../libs/test/factories/vaultCodeEntity.factory';
+import { vaultEntityFactory } from '../libs/test/factories/vaultEntity.factory';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
 
@@ -50,7 +50,7 @@ describe('Vault Batch admin API tests', () => {
     redemptionParams: NonNullable<Parameters<typeof redemptionConfigEntityFactory.build>[0]>,
   ) => {
     const redemption = redemptionConfigEntityFactory.build(redemptionParams);
-    const vault = vaultFactory.build({
+    const vault = vaultEntityFactory.build({
       id: createVaultIdE2E(),
       redemptionId: redemption.id,
     });
@@ -73,7 +73,7 @@ describe('Vault Batch admin API tests', () => {
     const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
     });
-    const vault = vaultFactory.build({
+    const vault = vaultEntityFactory.build({
       id: createVaultIdE2E(),
       redemptionId: redemption.id,
     });
@@ -92,7 +92,7 @@ describe('Vault Batch admin API tests', () => {
   };
 
   const buildVaultBatch = (vaultId: string) => {
-    const vaultBatch = vaultBatchFactory.build({
+    const vaultBatch = vaultBatchEntityFactory.build({
       id: createVaultBatchesIdE2E(),
       vaultId,
     });
@@ -110,9 +110,9 @@ describe('Vault Batch admin API tests', () => {
 
   const buildVaultCodes = (
     count: number,
-    vaultCodeParams: NonNullable<Parameters<typeof vaultCodeFactory.build>[0]>,
+    vaultCodeParams: NonNullable<Parameters<typeof vaultCodeEntityFactory.build>[0]>,
   ) => {
-    const vaultCodes = vaultCodeFactory.buildList(count, {
+    const vaultCodes = vaultCodeEntityFactory.buildList(count, {
       vaultId: vaultCodeParams.vaultId,
       batchId: vaultCodeParams.batchId,
       memberId: null,
@@ -137,7 +137,7 @@ describe('Vault Batch admin API tests', () => {
 
   const buildVaultWithCodes = (
     numberOfCodes: number,
-    vaultCodeParams?: Parameters<typeof vaultCodeFactory.build>[0],
+    vaultCodeParams?: Parameters<typeof vaultCodeEntityFactory.build>[0],
   ) => {
     const { vault, ...vaultHooks } = buildVault();
     const { vaultBatch, ...vaultBatchHooks } = buildVaultBatch(vault.id);

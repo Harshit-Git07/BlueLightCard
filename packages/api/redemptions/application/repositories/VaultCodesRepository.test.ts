@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { vaultCodesTable } from '@blc-mono/redemptions/libs/database/schema';
-import { vaultCodeFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCode.factory';
+import { vaultCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCodeEntity.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import {
   createRedemptionRecord,
@@ -102,7 +102,7 @@ describe('VaultCodesRepository', () => {
       const vault = await createVaultRecord(connection, redemption.id);
       const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
-      const vaultCode = vaultCodeFactory.build({
+      const vaultCode = vaultCodeEntityFactory.build({
         vaultId: vault.id,
         batchId: vaultBatch.id,
       });
@@ -127,7 +127,7 @@ describe('VaultCodesRepository', () => {
       const vaultBatch = await createVaultBatchRecord(connection, vault.id);
 
       const batchSize = 1000;
-      const vaultCodes = vaultCodeFactory.buildList(batchSize, {
+      const vaultCodes = vaultCodeEntityFactory.buildList(batchSize, {
         vaultId: vault.id,
         batchId: vaultBatch.id,
         memberId: null,

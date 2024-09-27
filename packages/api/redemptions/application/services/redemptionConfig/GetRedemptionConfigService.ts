@@ -1,13 +1,17 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 
-import { Generic, GenericsRepository, IGenericsRepository } from '../../repositories/GenericsRepository';
+import { GenericEntity, GenericsRepository, IGenericsRepository } from '../../repositories/GenericsRepository';
 import {
   IRedemptionConfigRepository,
   RedemptionConfigEntity,
   RedemptionConfigRepository,
 } from '../../repositories/RedemptionConfigRepository';
-import { IVaultBatchesRepository, VaultBatch, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
-import { IVaultsRepository, Vault, VaultsRepository } from '../../repositories/VaultsRepository';
+import {
+  IVaultBatchesRepository,
+  VaultBatchEntity,
+  VaultBatchesRepository,
+} from '../../repositories/VaultBatchesRepository';
+import { IVaultsRepository, VaultEntity, VaultsRepository } from '../../repositories/VaultsRepository';
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
 export type RedemptionConfigResult =
@@ -56,9 +60,9 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
     });
 
     let redemptionConfigEntity: RedemptionConfigEntity | null;
-    let genericEntity: Generic | null = null;
-    let vaultEntity: Vault | null = null;
-    let vaultBatchEntities: VaultBatch[] = [];
+    let genericEntity: GenericEntity | null = null;
+    let vaultEntity: VaultEntity | null = null;
+    let vaultBatchEntities: VaultBatchEntity[] = [];
 
     try {
       redemptionConfigEntity = await this.redemptionConfigRepository.findOneByOfferId(offerId);

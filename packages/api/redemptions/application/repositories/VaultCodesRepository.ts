@@ -7,21 +7,24 @@ import { vaultCodesTable, vaultsTable } from '@blc-mono/redemptions/libs/databas
 
 import { Repository } from './Repository';
 
-export type VaultCode = typeof vaultCodesTable.$inferSelect;
-export type NewVaultCode = typeof vaultCodesTable.$inferInsert;
+export type VaultCodeEntity = typeof vaultCodesTable.$inferSelect;
+export type NewVaultCodeEntity = typeof vaultCodesTable.$inferInsert;
 
 export interface IVaultCodesRepository {
-  create(vaultCode: NewVaultCode): Promise<Pick<VaultCode, 'id'>>;
-  createMany(vaultCodes: NewVaultCode[]): Promise<Pick<VaultCode, 'id'>[]>;
+  create(newVaultCodeEntity: NewVaultCodeEntity): Promise<Pick<VaultCodeEntity, 'id'>>;
+  createMany(newVaultCodeEntities: NewVaultCodeEntity[]): Promise<Pick<VaultCodeEntity, 'id'>[]>;
   checkIfMemberReachedMaxCodeClaimed(vaultId: string, memberId: string, maxPerUser: number): Promise<boolean>;
-  claimVaultCode(vaultId: string, memberId: string): Promise<Pick<VaultCode, 'code'> | undefined>;
+  claimVaultCode(vaultId: string, memberId: string): Promise<Pick<VaultCodeEntity, 'code'> | undefined>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultCodesRepository;
   checkVaultCodesRemaining(vaultId: string): Promise<number>;
-  findManyByBatchId(batchId: string): Promise<VaultCode[] | null>;
-  updateManyByBatchId(batchId: string, update: Partial<VaultCode>): Promise<Pick<VaultCode, 'id'>[] | null>;
-  deleteUnclaimedCodesByBatchId(batchId: string): Promise<Pick<VaultCode, 'id'>[]>;
-  findClaimedCodesByBatchId(batchId: string): Promise<VaultCode[]>;
-  findUnclaimedCodesByBatchId(batchId: string): Promise<VaultCode[]>;
+  findManyByBatchId(batchId: string): Promise<VaultCodeEntity[] | null>;
+  updateManyByBatchId(
+    batchId: string,
+    updateVaultCodeEntity: Partial<VaultCodeEntity>,
+  ): Promise<Pick<VaultCodeEntity, 'id'>[] | null>;
+  deleteUnclaimedCodesByBatchId(batchId: string): Promise<Pick<VaultCodeEntity, 'id'>[]>;
+  findClaimedCodesByBatchId(batchId: string): Promise<VaultCodeEntity[]>;
+  findUnclaimedCodesByBatchId(batchId: string): Promise<VaultCodeEntity[]>;
 }
 
 export class VaultCodesRepository extends Repository implements IVaultCodesRepository {
@@ -49,7 +52,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
    * Pick a random code from the list and attempt to assign the code
    * If the code was not successfully claimed, retry with a different code until we succeed or run out of codes
    */
-  public async claimVaultCode(vaultId: string, memberId: string): Promise<Pick<VaultCode, 'code'> | undefined> {
+  public async claimVaultCode(vaultId: string, memberId: string): Promise<Pick<VaultCodeEntity, 'code'> | undefined> {
     const codes = await this.connection.db
       .select({
         id: vaultCodesTable.id,
@@ -94,7 +97,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
     return undefined;
   }
 
-  public async create(vaultCode: NewVaultCode): Promise<Pick<VaultCode, 'id'>> {
+  public async create(vaultCode: NewVaultCodeEntity): Promise<Pick<VaultCodeEntity, 'id'>> {
     return this.exactlyOne(
       await this.connection.db
         .insert(vaultCodesTable)
@@ -104,7 +107,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
     );
   }
 
-  public async createMany(vaultCodes: NewVaultCode[]): Promise<Pick<VaultCode, 'id'>[]> {
+  public async createMany(vaultCodes: NewVaultCodeEntity[]): Promise<Pick<VaultCodeEntity, 'id'>[]> {
     return await this.connection.db
       .insert(vaultCodesTable)
       .values(vaultCodes)
@@ -140,11 +143,14 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
     return Number(vaultCodesStatus.unclaimedCodes);
   }
 
-  public findManyByBatchId(batchId: string): Promise<VaultCode[] | null> {
+  public findManyByBatchId(batchId: string): Promise<VaultCodeEntity[] | null> {
     return this.connection.db.select().from(vaultCodesTable).where(eq(vaultCodesTable.batchId, batchId)).execute();
   }
 
-  public updateManyByBatchId(batchId: string, update: Partial<VaultCode>): Promise<Pick<VaultCode, 'id'>[] | null> {
+  public updateManyByBatchId(
+    batchId: string,
+    update: Partial<VaultCodeEntity>,
+  ): Promise<Pick<VaultCodeEntity, 'id'>[] | null> {
     return this.connection.db
       .update(vaultCodesTable)
       .set(update)
@@ -155,7 +161,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
       .execute();
   }
 
-  public async deleteUnclaimedCodesByBatchId(batchId: string): Promise<Pick<VaultCode, 'id'>[]> {
+  public async deleteUnclaimedCodesByBatchId(batchId: string): Promise<Pick<VaultCodeEntity, 'id'>[]> {
     return await this.connection.db
       .delete(vaultCodesTable)
       .where(
@@ -168,7 +174,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
       .execute();
   }
 
-  public async findClaimedCodesByBatchId(batchId: string): Promise<VaultCode[]> {
+  public async findClaimedCodesByBatchId(batchId: string): Promise<VaultCodeEntity[]> {
     return await this.connection.db
       .select()
       .from(vaultCodesTable)
@@ -181,7 +187,7 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
       .execute();
   }
 
-  public async findUnclaimedCodesByBatchId(batchId: string): Promise<VaultCode[]> {
+  public async findUnclaimedCodesByBatchId(batchId: string): Promise<VaultCodeEntity[]> {
     return await this.connection.db
       .select()
       .from(vaultCodesTable)

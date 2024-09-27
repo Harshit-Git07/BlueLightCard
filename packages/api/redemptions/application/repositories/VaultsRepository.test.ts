@@ -5,10 +5,10 @@ import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connecti
 import { redemptionsTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '../../libs/test/factories/vault.factory';
+import { vaultEntityFactory } from '../../libs/test/factories/vaultEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
-import { Vault, VaultsRepository } from './VaultsRepository';
+import { VaultEntity, VaultsRepository } from './VaultsRepository';
 
 describe('VaultsRepository', () => {
   let database: RedemptionsTestDatabase;
@@ -32,7 +32,7 @@ describe('VaultsRepository', () => {
       // Arrange
       const repository = new VaultsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
-      const vault = vaultFactory.build({
+      const vault = vaultEntityFactory.build({
         redemptionId: redemption.id,
         status: 'active',
         maxPerUser: 1,
@@ -64,12 +64,12 @@ describe('VaultsRepository', () => {
       // Arrange
       const repository = new VaultsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
-      const vault1 = vaultFactory.build({
+      const vault1 = vaultEntityFactory.build({
         redemptionId: redemption.id,
         status: 'active',
         maxPerUser: 1,
       });
-      const vault2 = vaultFactory.build({
+      const vault2 = vaultEntityFactory.build({
         redemptionId: redemption.id,
         status: 'active',
         maxPerUser: 1,
@@ -87,7 +87,7 @@ describe('VaultsRepository', () => {
       // Arrange
       const repository = new VaultsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
-      const vault = vaultFactory.build({ redemptionId: redemption.id });
+      const vault = vaultEntityFactory.build({ redemptionId: redemption.id });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
       await connection.db.insert(vaultsTable).values(vault).execute();
 
@@ -113,14 +113,14 @@ describe('VaultsRepository', () => {
       // Arrange
       const repository = new VaultsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
-      const vault = vaultFactory.build({
+      const vault = vaultEntityFactory.build({
         redemptionId: redemption.id,
         status: 'active',
         maxPerUser: 1,
       });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
       await connection.db.insert(vaultsTable).values(vault).execute();
-      const vaultDataToUpdate: Pick<Vault, 'status'> = {
+      const vaultDataToUpdate: Pick<VaultEntity, 'status'> = {
         status: 'in-active',
       };
 
@@ -137,7 +137,7 @@ describe('VaultsRepository', () => {
       // Arrange
       const repository = new VaultsRepository(connection);
       const id = faker.string.uuid();
-      const vaultDataToUpdate: Pick<Vault, 'status'> = {
+      const vaultDataToUpdate: Pick<VaultEntity, 'status'> = {
         status: 'in-active',
       };
 
@@ -154,7 +154,7 @@ describe('VaultsRepository', () => {
       // Arrange
       const repository = new VaultsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
-      const vault = vaultFactory.build({
+      const vault = vaultEntityFactory.build({
         redemptionId: redemption.id,
         status: 'active',
         maxPerUser: 1,

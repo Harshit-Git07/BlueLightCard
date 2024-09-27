@@ -1,5 +1,5 @@
-import { VaultBatch } from '../repositories/VaultBatchesRepository';
-import { Vault } from '../repositories/VaultsRepository';
+import { VaultBatchEntity } from '../repositories/VaultBatchesRepository';
+import { VaultEntity } from '../repositories/VaultsRepository';
 
 export type RedemptionVaultBatchConfig = {
   id: string;
@@ -23,8 +23,8 @@ export class RedemptionVaultConfigTransformer {
   static readonly key = 'RedemptionVaultConfigTransformer';
 
   public transformToRedemptionVaultConfig(
-    vaultEntity: Vault,
-    vaultBatchEntities: VaultBatch[],
+    vaultEntity: VaultEntity,
+    vaultBatchEntities: VaultBatchEntity[],
   ): RedemptionVaultConfig | null {
     const batches: RedemptionVaultBatchConfig[] = vaultBatchEntities.map((batch) => ({
       id: batch.id,

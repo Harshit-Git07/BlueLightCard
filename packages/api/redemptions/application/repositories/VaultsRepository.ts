@@ -7,20 +7,20 @@ import { vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 import { Repository } from './Repository';
 
-export type Vault = typeof vaultsTable.$inferSelect;
-export type UpdateVault = Partial<typeof vaultsTable.$inferInsert>;
-export type NewVault = typeof vaultsTable.$inferInsert;
+export type VaultEntity = typeof vaultsTable.$inferSelect;
+export type UpdateVaultEntity = Partial<typeof vaultsTable.$inferInsert>;
+export type NewVaultEntity = typeof vaultsTable.$inferInsert;
 
 export type VaultFilters = {
-  status?: Vault['status'];
+  status?: VaultEntity['status'];
 };
 
 export interface IVaultsRepository {
-  findOneByRedemptionId(redemptionId: string, filters?: VaultFilters): Promise<Vault | null>;
-  findOneById(id: string): Promise<Vault | null>;
-  updateOneById(id: string, vaultDataToUpdate: UpdateVault): Promise<Pick<Vault, 'id'> | undefined>;
-  createMany(vaults: NewVault[]): Promise<Pick<Vault, 'id'>[]>;
-  create(vault: NewVault): Promise<Pick<Vault, 'id'>>;
+  findOneByRedemptionId(redemptionId: string, filters?: VaultFilters): Promise<VaultEntity | null>;
+  findOneById(id: string): Promise<VaultEntity | null>;
+  updateOneById(id: string, updateVaultEntity: UpdateVaultEntity): Promise<Pick<VaultEntity, 'id'> | undefined>;
+  createMany(NewVaultEntities: NewVaultEntity[]): Promise<Pick<VaultEntity, 'id'>[]>;
+  create(newVaultEntity: NewVaultEntity): Promise<Pick<VaultEntity, 'id'>>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultsRepository;
 }
 
@@ -28,7 +28,7 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
   static readonly key = 'VaultsRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
 
-  public async findOneByRedemptionId(redemptionId: string, filters: VaultFilters = {}): Promise<Vault | null> {
+  public async findOneByRedemptionId(redemptionId: string, filters: VaultFilters = {}): Promise<VaultEntity | null> {
     const results = await this.connection.db
       .select()
       .from(vaultsTable)
@@ -41,12 +41,12 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
     return this.atMostOne(results);
   }
 
-  public async findOneById(id: string): Promise<Vault | null> {
+  public async findOneById(id: string): Promise<VaultEntity | null> {
     const result = await this.connection.db.select().from(vaultsTable).where(eq(vaultsTable.id, id)).execute();
     return this.atMostOne(result);
   }
 
-  public updateOneById(id: string, vaultDataToUpdate: UpdateVault): Promise<Pick<Vault, 'id'> | undefined> {
+  public updateOneById(id: string, vaultDataToUpdate: UpdateVaultEntity): Promise<Pick<VaultEntity, 'id'> | undefined> {
     return this.connection.db
       .update(vaultsTable)
       .set(vaultDataToUpdate)
@@ -58,7 +58,7 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .then((result) => result?.at(0));
   }
 
-  public createMany(vaults: NewVault[]): Promise<Pick<Vault, 'id'>[]> {
+  public createMany(vaults: NewVaultEntity[]): Promise<Pick<VaultEntity, 'id'>[]> {
     return this.connection.db
       .insert(vaultsTable)
       .values(vaults)
@@ -68,7 +68,7 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .execute();
   }
 
-  public async create(vault: NewVault): Promise<Pick<Vault, 'id'>> {
+  public async create(vault: NewVaultEntity): Promise<Pick<VaultEntity, 'id'>> {
     return this.exactlyOne(
       await this.connection.db.insert(vaultsTable).values(vault).returning({ id: vaultsTable.id }).execute(),
     );

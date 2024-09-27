@@ -6,15 +6,18 @@ import { genericsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 import { Repository } from './Repository';
 
-export type Generic = typeof genericsTable.$inferSelect;
-export type UpdateGeneric = Partial<typeof genericsTable.$inferInsert>;
-export type NewGeneric = typeof genericsTable.$inferInsert;
+export type GenericEntity = typeof genericsTable.$inferSelect;
+export type UpdateGenericEntity = Partial<typeof genericsTable.$inferInsert>;
+export type NewGenericEntity = typeof genericsTable.$inferInsert;
 
 export interface IGenericsRepository {
-  findOneByRedemptionId(redemptionId: string): Promise<Generic | null>;
-  createGeneric(genericData: NewGeneric): Promise<Pick<Generic, 'id'>[]>;
-  updateByRedemptionId(redemptionId: string, genericData: UpdateGeneric): Promise<Pick<Generic, 'id'>[]>;
-  deleteByRedemptionId(redemptionId: string): Promise<Pick<Generic, 'id'>[]>;
+  findOneByRedemptionId(redemptionId: string): Promise<GenericEntity | null>;
+  createGeneric(newGenericEntity: NewGenericEntity): Promise<Pick<GenericEntity, 'id'>[]>;
+  updateByRedemptionId(
+    redemptionId: string,
+    updateGenricEntity: UpdateGenericEntity,
+  ): Promise<Pick<GenericEntity, 'id'>[]>;
+  deleteByRedemptionId(redemptionId: string): Promise<Pick<GenericEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): GenericsRepository;
 }
 
@@ -22,7 +25,7 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
   static readonly key = 'GenericsRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
 
-  public async findOneByRedemptionId(redemptionId: string): Promise<Generic | null> {
+  public async findOneByRedemptionId(redemptionId: string): Promise<GenericEntity | null> {
     const results = await this.connection.db
       .select()
       .from(genericsTable)
@@ -33,11 +36,14 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
     return this.atMostOne(results);
   }
 
-  public createGeneric(genericData: NewGeneric): Promise<Pick<Generic, 'id'>[]> {
+  public createGeneric(genericData: NewGenericEntity): Promise<Pick<GenericEntity, 'id'>[]> {
     return this.connection.db.insert(genericsTable).values(genericData).returning({ id: genericsTable.id }).execute();
   }
 
-  public updateByRedemptionId(redemptionId: string, genericData: UpdateGeneric): Promise<Pick<Generic, 'id'>[]> {
+  public updateByRedemptionId(
+    redemptionId: string,
+    genericData: UpdateGenericEntity,
+  ): Promise<Pick<GenericEntity, 'id'>[]> {
     return this.connection.db
       .update(genericsTable)
       .set(genericData)
@@ -46,7 +52,7 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
       .execute();
   }
 
-  public deleteByRedemptionId(redemptionId: string): Promise<Pick<Generic, 'id'>[]> {
+  public deleteByRedemptionId(redemptionId: string): Promise<Pick<GenericEntity, 'id'>[]> {
     return this.connection.db
       .delete(genericsTable)
       .where(eq(genericsTable.redemptionId, redemptionId))

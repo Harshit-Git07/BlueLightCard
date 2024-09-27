@@ -6,24 +6,27 @@ import { vaultBatchesTable, vaultCodesTable } from '@blc-mono/redemptions/libs/d
 
 import { Repository } from './Repository';
 
-export type VaultBatch = typeof vaultBatchesTable.$inferSelect;
-export type NewVaultBatch = typeof vaultBatchesTable.$inferInsert;
-export type UpdateVaultBatch = Partial<typeof vaultBatchesTable.$inferInsert>;
+export type VaultBatchEntity = typeof vaultBatchesTable.$inferSelect;
+export type NewVaultBatchEntity = typeof vaultBatchesTable.$inferInsert;
+export type UpdateVaultBatchEntity = Partial<typeof vaultBatchesTable.$inferInsert>;
 
 export interface IVaultBatchesRepository {
-  create(vaultBatch: NewVaultBatch): Promise<Pick<VaultBatch, 'id'>>;
-  findByVaultId(vaultId: string): Promise<VaultBatch[]>;
+  create(newVaultBatchEntity: NewVaultBatchEntity): Promise<Pick<VaultBatchEntity, 'id'>>;
+  findByVaultId(vaultId: string): Promise<VaultBatchEntity[]>;
   getCodesRemaining(batchId: string): Promise<number>;
-  deleteById(id: string): Promise<Pick<VaultBatch, 'id'>[]>;
+  deleteById(id: string): Promise<Pick<VaultBatchEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultBatchesRepository;
-  updateOneById(id: string, update: UpdateVaultBatch): Promise<Pick<VaultBatch, 'id'> | null>;
-  findOneById(id: string): Promise<VaultBatch | null>;
+  updateOneById(
+    id: string,
+    updateVaultBatchEntity: UpdateVaultBatchEntity,
+  ): Promise<Pick<VaultBatchEntity, 'id'> | null>;
+  findOneById(id: string): Promise<VaultBatchEntity | null>;
 }
 export class VaultBatchesRepository extends Repository implements IVaultBatchesRepository {
   static readonly key = 'VaultBatchesRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
 
-  public async create(vaultBatch: NewVaultBatch): Promise<Pick<VaultBatch, 'id'>> {
+  public async create(vaultBatch: NewVaultBatchEntity): Promise<Pick<VaultBatchEntity, 'id'>> {
     return this.exactlyOne(
       await this.connection.db
         .insert(vaultBatchesTable)
@@ -33,7 +36,7 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
     );
   }
 
-  public findByVaultId(vaultId: string): Promise<VaultBatch[]> {
+  public findByVaultId(vaultId: string): Promise<VaultBatchEntity[]> {
     return this.connection.db.select().from(vaultBatchesTable).where(eq(vaultBatchesTable.vaultId, vaultId)).execute();
   }
 
@@ -47,7 +50,7 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
     return result[0].codesRemaining;
   }
 
-  public async deleteById(id: string): Promise<Pick<VaultBatch, 'id'>[]> {
+  public async deleteById(id: string): Promise<Pick<VaultBatchEntity, 'id'>[]> {
     return await this.connection.db
       .delete(vaultBatchesTable)
       .where(eq(vaultBatchesTable.id, id))
@@ -59,13 +62,16 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
     return new VaultBatchesRepository(transaction);
   }
 
-  public async findOneById(id: string): Promise<VaultBatch | null> {
+  public async findOneById(id: string): Promise<VaultBatchEntity | null> {
     return this.atMostOne(
       await this.connection.db.select().from(vaultBatchesTable).where(eq(vaultBatchesTable.id, id)).execute(),
     );
   }
 
-  public async updateOneById(id: string, update: Partial<VaultBatch>): Promise<Pick<VaultBatch, 'id'> | null> {
+  public async updateOneById(
+    id: string,
+    update: Partial<VaultBatchEntity>,
+  ): Promise<Pick<VaultBatchEntity, 'id'> | null> {
     return this.atMostOne(
       await this.connection.db
         .update(vaultBatchesTable)

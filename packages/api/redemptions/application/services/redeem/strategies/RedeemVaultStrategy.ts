@@ -16,7 +16,7 @@ import {
 } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import {
   IVaultsRepository,
-  Vault,
+  VaultEntity,
   VaultsRepository,
 } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
@@ -110,7 +110,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
   }
 
   private async handleRedeemStandardVault(
-    vault: Vault,
+    vault: VaultEntity,
     redemptionType: 'vault' | 'vaultQR',
     redemptionUrl: string | null,
     memberId: string,
@@ -165,7 +165,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
   }
 
   private async handleRedeemLegacyVault(
-    vault: Vault,
+    vault: VaultEntity,
     redemptionType: 'vault' | 'vaultQR',
     redemptionUrl: string | null,
     redemptionCompanyId: number,

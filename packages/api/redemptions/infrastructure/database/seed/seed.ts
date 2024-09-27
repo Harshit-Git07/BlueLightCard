@@ -1,3 +1,4 @@
+import { NewGenericEntity } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import {
   genericsPrefix,
@@ -47,7 +48,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
   ] satisfies (typeof redemptionsTable.$inferInsert)[];
   await db.insert(redemptionsTable).values(redemptionsData).onConflictDoNothing();
 
-  const genericsData: (typeof genericsTable.$inferInsert)[] = [
+  const genericsData: NewGenericEntity[] = [
     {
       id: `${genericsPrefix}-b5761799-d552-4496-a46e-8ff43162dbdb`,
       redemptionId: redemptionsData[0].id,

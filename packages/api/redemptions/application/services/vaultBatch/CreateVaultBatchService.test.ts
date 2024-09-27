@@ -5,8 +5,8 @@ import { TransactionManager } from '@blc-mono/redemptions/infrastructure/databas
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { IS3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
-import { vaultFactory } from '@blc-mono/redemptions/libs/test/factories/vault.factory';
-import { vaultBatchFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatch.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -208,10 +208,10 @@ describe('CreateVaultBatchService', () => {
     const redemption = redemptionConfigEntityFactory.build();
     mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
 
-    const vault = vaultFactory.build({ redemptionId: redemption.id });
+    const vault = vaultEntityFactory.build({ redemptionId: redemption.id });
     mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(vault);
 
-    const vaultBatch = vaultBatchFactory.build({ vaultId: vault.id });
+    const vaultBatch = vaultBatchEntityFactory.build({ vaultId: vault.id });
     mockVaultBatchesRepository.withTransaction = jest.fn().mockReturnValue({
       create: jest.fn().mockResolvedValue({ id: vaultBatch.id }),
     });
@@ -224,10 +224,10 @@ describe('CreateVaultBatchService', () => {
   });
 
   it('should return kind "Ok" when standard vaultId vaults record exists', async () => {
-    const vault = vaultFactory.build();
+    const vault = vaultEntityFactory.build();
     mockVaultsRepository.findOneById = jest.fn().mockResolvedValue(vault);
 
-    const vaultBatch = vaultBatchFactory.build({ vaultId: vault.id });
+    const vaultBatch = vaultBatchEntityFactory.build({ vaultId: vault.id });
     mockVaultBatchesRepository.withTransaction = jest.fn().mockReturnValue({
       create: jest.fn().mockResolvedValue({ id: vaultBatch.id }),
     });

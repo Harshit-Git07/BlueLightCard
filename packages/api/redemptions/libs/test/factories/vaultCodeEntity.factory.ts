@@ -1,14 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
-import {
-  createVaultBatchesId,
-  createVaultCodesId,
-  createVaultId,
-  vaultCodesTable,
-} from '@blc-mono/redemptions/libs/database/schema';
+import { VaultCodeEntity } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
+import { createVaultBatchesId, createVaultCodesId, createVaultId } from '@blc-mono/redemptions/libs/database/schema';
 
-export const vaultCodeFactory = Factory.define<typeof vaultCodesTable.$inferSelect>(() => {
+export const vaultCodeEntityFactory = Factory.define<VaultCodeEntity>(() => {
   const created = faker.date.past();
   const expiry = faker.date.future({ years: 1 });
 

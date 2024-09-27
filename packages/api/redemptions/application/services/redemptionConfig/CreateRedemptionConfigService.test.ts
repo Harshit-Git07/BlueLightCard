@@ -19,7 +19,7 @@ const mockRedemptionConfigTransformer: Partial<RedemptionConfigTransformer> = {
   transformToRedemptionConfig: jest.fn(),
 };
 
-const showCardRequest = {
+const validRedemptionConfigRequest = {
   companyId: faker.number.int(),
   offerId: faker.number.int(),
   connection: 'none',
@@ -55,7 +55,7 @@ describe('CreateRedemptionConfigService', () => {
       as(mockRedemptionConfigTransformer),
     );
 
-    await service.createRedemptionConfig(showCardRequest);
+    await service.createRedemptionConfig(validRedemptionConfigRequest);
 
     expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledWith({
       redemptionConfigEntity: redemptionConfigEntity,
@@ -70,17 +70,17 @@ describe('CreateRedemptionConfigService', () => {
   it("returns 'kind: OK' for a successful request", async () => {
     const logger = createTestLogger();
 
-    const showCardRedemptionConfig: RedemptionConfig = {
-      ...showCardRequest,
-      companyId: showCardRequest.companyId.toString(),
-      offerId: showCardRequest.offerId.toString(),
+    const redemptionConfig: RedemptionConfig = {
+      ...validRedemptionConfigRequest,
+      companyId: validRedemptionConfigRequest.companyId.toString(),
+      offerId: validRedemptionConfigRequest.offerId.toString(),
       id: 'redemption-id',
     };
 
     mockRedemptionsRepository.createRedemption = jest.fn().mockResolvedValue({ id: 'redemption-id' });
     mockRedemptionsRepository.findOneById = jest.fn().mockResolvedValue(redemptionConfigEntity);
 
-    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(showCardRedemptionConfig);
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(redemptionConfig);
 
     const service = new CreateRedemptionConfigService(
       logger,
@@ -88,10 +88,10 @@ describe('CreateRedemptionConfigService', () => {
       as(mockRedemptionConfigTransformer),
     );
 
-    const result = await service.createRedemptionConfig(showCardRequest);
+    const result = await service.createRedemptionConfig(validRedemptionConfigRequest);
 
     expect(result.kind).toEqual('Ok');
-    expect(result.data).toStrictEqual(showCardRedemptionConfig);
+    expect(result.data).toStrictEqual(redemptionConfig);
     expect(mockRedemptionsRepository.createRedemption).toHaveBeenCalledTimes(1);
   });
 
@@ -107,11 +107,11 @@ describe('CreateRedemptionConfigService', () => {
       as(mockRedemptionConfigTransformer),
     );
 
-    await expect(service.createRedemptionConfig(showCardRequest)).rejects.toThrow();
+    await expect(service.createRedemptionConfig(validRedemptionConfigRequest)).rejects.toThrow();
 
     expect(logger.error).toHaveBeenCalledWith({
       message: 'Unable to fetch newly created redemption',
-      context: { offerId: showCardRequest.offerId, redemptionId: 'redemption-id' },
+      context: { offerId: validRedemptionConfigRequest.offerId, redemptionId: 'redemption-id' },
     });
   });
 
@@ -129,7 +129,7 @@ describe('CreateRedemptionConfigService', () => {
     );
 
     try {
-      await service.createRedemptionConfig(showCardRequest);
+      await service.createRedemptionConfig(validRedemptionConfigRequest);
     } catch (e) {
       expect(e).toBeInstanceOf(ServiceError);
       const error = e as ServiceError;
@@ -138,16 +138,29 @@ describe('CreateRedemptionConfigService', () => {
     }
   });
 
-  it('throws an error when there is a schema validation failure', async () => {
+  it.each([
+    [
+      'invalid companyId',
+      {
+        companyId: 'invalid-companyId',
+        offerId: faker.number.int(),
+        connection: 'none',
+        offerType: 'in-store',
+        redemptionType: 'showCard',
+      } as const,
+    ],
+    [
+      'invalid offerId',
+      {
+        companyId: faker.number.int(),
+        offerId: '',
+        connection: 'none',
+        offerType: 'in-store',
+        redemptionType: 'showCard',
+      } as const,
+    ],
+  ])('throws an error when there is a schema validation failure: %s', async (_type, invalidRequest) => {
     const logger = createSilentLogger();
-
-    const showCardRequestWithInvalidCompanyId = {
-      companyId: 'invalid-companyId',
-      offerId: faker.number.int(),
-      connection: 'none',
-      offerType: 'in-store',
-      redemptionType: 'showCard',
-    } as const;
 
     const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {
       createRedemption: jest.fn(),
@@ -162,7 +175,7 @@ describe('CreateRedemptionConfigService', () => {
     );
 
     try {
-      await service.createRedemptionConfig(as(showCardRequestWithInvalidCompanyId));
+      await service.createRedemptionConfig(as(invalidRequest));
     } catch (e) {
       expect(e).toBeInstanceOf(SchemaValidationError);
       const error = e as SchemaValidationError;
@@ -189,7 +202,7 @@ describe('CreateRedemptionConfigService', () => {
       as(mockRedemptionConfigTransformer),
     );
 
-    await expect(service.createRedemptionConfig(showCardRequest)).rejects.toThrow();
+    await expect(service.createRedemptionConfig(validRedemptionConfigRequest)).rejects.toThrow();
 
     expect(logger.error).toHaveBeenCalledWith({
       message: 'Error when creating redemption configuration',

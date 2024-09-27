@@ -22,9 +22,9 @@ export const PostRedemptionConfigModel = createZodNamedType(
         'tradedoubler',
       ])
       .optional(),
-    companyId: z.coerce.number(),
+    companyId: z.coerce.number().positive(),
     connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
-    offerId: z.coerce.number(),
+    offerId: z.coerce.number().positive(),
     offerType: z.enum(['online', 'in-store']),
     redemptionType: z.enum(REDEMPTION_TYPES),
     url: z.string().optional(),

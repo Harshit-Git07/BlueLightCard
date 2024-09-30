@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.73.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.73.0...bluelightcard/web-v1.73.1) (2024-09-27)
+
+
+### Bug Fixes
+
+* TO-1223 fixes company page events when triggering OfferSheet ([#2324](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2324)) ([f40ccfb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f40ccfbd66985a7f45b7b25c1a4fd60538370559))
+
 ## [1.73.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.72.2...bluelightcard/web-v1.73.0) (2024-09-23)
 
 

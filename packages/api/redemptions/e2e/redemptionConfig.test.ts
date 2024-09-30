@@ -50,8 +50,8 @@ describe('redemption config admin API tests', () => {
     async (redemptionType) => {
       const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
         id: createRedemptionsIdE2E(),
-        companyId: faker.number.int({ max: 1000000 }),
-        offerId: faker.number.int({ max: 1000000 }),
+        companyId: faker.number.int({ max: 216380 }),
+        offerId: faker.number.int({ max: 216380 }),
         redemptionType: redemptionType,
         connection: 'affiliate',
         url: faker.internet.url(),
@@ -135,8 +135,8 @@ describe('redemption config admin API tests', () => {
   test('GET /redemptions/{offerId} should return 200 for redemptionType generic', async () => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
-      companyId: faker.number.int({ max: 1000000 }),
-      offerId: faker.number.int({ max: 1000000 }),
+      companyId: faker.number.int({ max: 216380 }),
+      offerId: faker.number.int({ max: 216380 }),
       redemptionType: 'generic',
       connection: 'affiliate',
       url: faker.internet.url(),
@@ -182,8 +182,8 @@ describe('redemption config admin API tests', () => {
   test('GET /redemptions/{offerId} should return 200 for redemptionType ShowCard', async () => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
-      companyId: faker.number.int({ max: 1000000 }),
-      offerId: faker.number.int({ max: 1000000 }),
+      companyId: faker.number.int({ max: 216380 }),
+      offerId: faker.number.int({ max: 216380 }),
       redemptionType: 'showCard',
     });
 
@@ -212,8 +212,8 @@ describe('redemption config admin API tests', () => {
   test('GET /redemptions/{offerId} should return correct redemptionConfig for redemptionType PreApplied', async () => {
     const redemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
-      companyId: faker.number.int({ max: 1000000 }),
-      offerId: faker.number.int({ max: 1000000 }),
+      companyId: faker.number.int({ max: 216380 }),
+      offerId: faker.number.int({ max: 216380 }),
       redemptionType: 'preApplied',
       connection: 'affiliate',
       url: faker.internet.url(),
@@ -246,7 +246,7 @@ describe('redemption config admin API tests', () => {
   });
 
   test('GET /redemptions/{offerId} returns 404 if offerId can not be found', async () => {
-    const result = await callRedemptionConfigEndpoint(faker.number.int({ max: 1000000 }));
+    const result = await callRedemptionConfigEndpoint(faker.number.int({ max: 216380 }));
 
     expect(result.status).toBe(404);
 

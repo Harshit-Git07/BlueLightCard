@@ -53,6 +53,10 @@ export class GetRedemptionConfigController extends APIGatewayController<ParsedRe
           },
         };
       case 'Error':
+        this.logger.error({
+          message: 'Error when getting redemption config',
+          context: { offerId, error: result.data.message },
+        });
         return {
           statusCode: 500,
           data: {

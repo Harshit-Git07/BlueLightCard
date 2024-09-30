@@ -67,6 +67,10 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
     try {
       redemptionConfigEntity = await this.redemptionConfigRepository.findOneByOfferId(offerId);
     } catch (error) {
+      this.logger.error({
+        message: 'Error when getting redemption configuration',
+        context: { offerId, error },
+      });
       return Promise.resolve({
         kind: 'Error',
         data: { message: 'Something when wrong getting redemption' },

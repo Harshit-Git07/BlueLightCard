@@ -91,34 +91,55 @@ describe('Odicci Iframe Campaign Page', () => {
     );
   });
 
-  describe('terms and conditions button', () => {
-    it('should render', async () => {
+  describe('Button onClick events', () => {
+    beforeEach(async () => {
       await whenPageIsRendered();
-      const termsButton = await screen.findByText('Terms and Conditions');
-
-      expect(termsButton).toBeInTheDocument();
     });
 
-    it('should log an analytics event when clicked', async () => {
-      await whenPageIsRendered();
+    const whenTermsClicked = async () => {
       const termsButton = await screen.findByText('Terms and Conditions');
-
       await userEvent.click(termsButton);
+      return termsButton;
+    };
 
+    const whenBoostedOffersClicked = async () => {
+      const boostedOffers = await screen.findByText('Boosted Offers');
+      await userEvent.click(boostedOffers);
+      return boostedOffers;
+    };
+
+    it('should render both Terms and Conditions and Boosted Offers buttons', async () => {
+      const termsButton = await screen.findByText('Terms and Conditions');
+      const boostedOffers = await screen.findByText('Boosted Offers');
+
+      expect(termsButton).toBeInTheDocument();
+      expect(boostedOffers).toBeInTheDocument();
+    });
+
+    it('should log an analytics event when the Terms and Conditions button is clicked', async () => {
+      await whenTermsClicked();
       expect(mockPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith('blue_rewards_clicked', {
         click_type: 'T&Cs',
       });
     });
 
-    it('should navigate to the external T&Cs URL when clicked', async () => {
-      await whenPageIsRendered();
-      const termsButton = await screen.findByText('Terms and Conditions');
+    it('should log an analytics event when the Boosted Offers button is clicked', async () => {
+      await whenBoostedOffersClicked();
+      expect(mockPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith('blue_rewards_clicked', {
+        click_type: 'Boosted Offers',
+      });
+    });
 
-      await userEvent.click(termsButton);
-
+    it('should navigate to the external T&Cs URL when the Terms and Conditions button is clicked', async () => {
+      await whenTermsClicked();
       expect(mockPlatformAdapter.navigateExternal).toHaveBeenCalledWith(
         'https://prizedraw-terms-conditions.bluelightcard.co.uk/',
       );
+    });
+
+    it('should navigate to the Big Blue Rewards flexible offers page when the Boosted Offers button is clicked', async () => {
+      await whenBoostedOffersClicked();
+      expect(mockPlatformAdapter.navigate).toHaveBeenCalledWith('/flexibleOffers.php?id=0');
     });
   });
 });

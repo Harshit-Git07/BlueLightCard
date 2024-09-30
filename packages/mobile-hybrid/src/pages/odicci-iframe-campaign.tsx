@@ -34,6 +34,13 @@ const IframeCampaignPage: NextPage = () => {
     router.push('/');
   };
 
+  const onBoostedOffersClick = () => {
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.BLUE_REWARDS_CLICKED, {
+      click_type: 'Boosted Offers',
+    });
+
+    platformAdapter.navigate('/flexibleOffers.php?id=0');
+  };
   const onTermsClick = () => {
     platformAdapter.logAnalyticsEvent(AmplitudeEvents.BLUE_REWARDS_CLICKED, {
       click_type: 'T&Cs',
@@ -73,10 +80,12 @@ const IframeCampaignPage: NextPage = () => {
         style={{ textAlign: 'center' }}
         src={iframeUrlWithUuid}
       />
-
-      <div className="py-2">
+      <div className="grid">
         <Button variant={ThemeVariant.Tertiary} borderless={true} onClick={onTermsClick}>
           Terms and Conditions
+        </Button>
+        <Button variant={ThemeVariant.Tertiary} borderless={true} onClick={onBoostedOffersClick}>
+          Boosted Offers
         </Button>
       </div>
     </div>

@@ -15,18 +15,13 @@ describe('CallbackController', () => {
       XAPIKey: 'abcdefghijklmnopqurstuvwxyz',
     },
     body: {
-      // These test fields are just assumptions, the actual fields types are not known. We're just forwarding them directly to Firehose
-      offerId: faker.number.int({
-        min: 0,
-        max: 1000000,
-      }),
+      offerId: faker.string.sample(10),
       code: faker.string.sample(10),
-      orderValue: faker.number.int({
-        min: 0,
-        max: 1000000,
-      }),
+      orderValue: faker.string.sample(10),
       currency: faker.finance.currencyCode(),
       redeemedAt: faker.date.recent().toISOString(),
+      memberId: faker.string.sample(10),
+      integrationType: 'uniqodo' as const,
     },
   };
 

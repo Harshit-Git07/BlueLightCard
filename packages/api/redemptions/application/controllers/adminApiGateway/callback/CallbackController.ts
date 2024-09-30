@@ -41,6 +41,9 @@ export class CallbackController extends APIGatewayController<ParsedRequest> {
       case 'Error':
         return {
           statusCode: 500,
+          data: {
+            message: 'Internal server error',
+          },
         };
       default:
         exhaustiveCheck(result.kind, 'Unhandled result kind');

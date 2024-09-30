@@ -8,8 +8,8 @@ import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayEx
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
+import { DwhKenisisFirehoseStreams } from '@blc-mono/shared/infra/firehose/DwhKenisisFirehoseStreams';
 
-import { RedemptionsStackConfigResolver } from '../config/config';
 import { productionAdminDomainNames, stagingAdminDomainNames } from '../constants/domains';
 import { IDatabase } from '../database/adapter';
 import { VaultCodesUpload } from '../s3/vaultCodesUpload';
@@ -51,8 +51,8 @@ export function createAdminApi(
   database: IDatabase,
   brand: 'BLC_UK' | 'BLC_AU' | 'DDS_UK',
   vaultCodesUpload: VaultCodesUpload,
+  dwhKenisisFirehoseStreams: DwhKenisisFirehoseStreams,
 ): ApiGatewayV1Api<Record<string, never>> {
-  const config = RedemptionsStackConfigResolver.for(stack);
   const adminApi = new ApiGatewayV1Api(stack, 'redemptionsAdmin', {
     cdk: {
       restApi: {
@@ -183,7 +183,7 @@ export function createAdminApi(
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/getRedemptionConfigHandler.handler',
     }),
-    'POST /callback': AdminRoute.createRoute({
+    'POST /vault/webhook': AdminRoute.createRoute({
       apiGatewayModelGenerator: adminApiGatewayModelGenerator,
       stack,
       functionName: 'CallbackHandler',
@@ -192,7 +192,8 @@ export function createAdminApi(
       handler: './packages/api/redemptions/application/handlers/adminApiGateway/callback/postCallbackHandler.handler',
       requestValidatorName: 'CallbackValidator',
       environment: {
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME]: config.dwhFirehoseCallbackStreamName,
+        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME]:
+          dwhKenisisFirehoseStreams.callbackVaultRedemptionStream.getStreamName(),
       },
       permissions: [firehosePutRecord],
     }),

@@ -7,8 +7,9 @@ export type ICallbackResponse = {
   kind: 'NoContent' | 'Error';
 };
 
+type PostCallbackData = PostCallbackModel & { memberId: string };
 export interface ICallbackService {
-  handle(data: PostCallbackModel): Promise<ICallbackResponse>;
+  handle(data: PostCallbackData): Promise<ICallbackResponse>;
 }
 
 export class CallbackService implements ICallbackService {
@@ -17,13 +18,21 @@ export class CallbackService implements ICallbackService {
 
   constructor(
     private readonly logger: ILogger,
-    private dwhRepository: IDwhRepository,
+    private readonly dwhRepository: IDwhRepository,
   ) {}
 
-  public async handle(data: PostCallbackModel): Promise<ICallbackResponse> {
-    const { code, currency, offerId, orderValue, redeemedAt } = data;
+  public async handle(data: PostCallbackData): Promise<ICallbackResponse> {
+    const { code, currency, offerId, orderValue, redeemedAt, integrationType, memberId } = data;
     try {
-      await this.dwhRepository.logCallbackVaultRedemption(offerId, code, orderValue, currency, redeemedAt);
+      await this.dwhRepository.logCallbackVaultRedemption(
+        offerId,
+        code,
+        orderValue,
+        currency,
+        redeemedAt,
+        integrationType,
+        memberId,
+      );
       return {
         kind: 'NoContent',
       };

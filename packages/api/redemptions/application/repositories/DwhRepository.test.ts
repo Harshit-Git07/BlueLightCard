@@ -267,18 +267,13 @@ describe('DwhRepository', () => {
   });
 
   describe('logCallbackVaultRedemption', () => {
-    // These test fields are just assumptions, the actual fields types are not known. We're just forwarding them directly to Firehose
-    const testOfferId = faker.number.int({
-      min: 0,
-      max: 1000000,
-    });
+    const testOfferId = faker.string.sample(10);
     const testCode = faker.string.sample(10);
-    const testOrderValue = faker.number.int({
-      min: 0,
-      max: 1000000,
-    });
+    const testOrderValue = faker.string.sample(10);
     const testCurrency = faker.finance.currencyCode();
     const testRedeemedAt = faker.date.recent().toISOString();
+    const testMemberId = faker.string.sample(10);
+    const testIntegrationType = 'uniqodo';
     const testStreamName = 'firehose-callback';
 
     it('should send the correct data to the callback stream', async () => {
@@ -294,6 +289,8 @@ describe('DwhRepository', () => {
         testOrderValue,
         testCurrency,
         testRedeemedAt,
+        testIntegrationType,
+        testMemberId,
       );
 
       // Assert
@@ -303,11 +300,13 @@ describe('DwhRepository', () => {
       expect(putCommand.input.DeliveryStreamName).toBe(testStreamName);
       const data = new TextDecoder().decode(putCommand.input.Record!.Data);
       expect(JSON.parse(data)).toStrictEqual({
-        offerId: testOfferId,
+        offer_id: testOfferId,
         code: testCode,
-        orderValue: testOrderValue,
+        order_value: testOrderValue,
         currency: testCurrency,
-        redeemedAt: testRedeemedAt,
+        redeemed_at: testRedeemedAt,
+        integration_type: testIntegrationType,
+        member_id: testMemberId,
       });
     });
 
@@ -325,6 +324,8 @@ describe('DwhRepository', () => {
         testOrderValue,
         testCurrency,
         testRedeemedAt,
+        testIntegrationType,
+        testMemberId,
       );
 
       // Assert

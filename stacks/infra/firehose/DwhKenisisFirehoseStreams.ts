@@ -32,16 +32,9 @@ const platformMap =  {
 } as const;
 
 const callbackVaultRedemptionStreamNames = {
-	'production': {
-		[BLC_UK_BRAND]: 'dwh-blc-production-vaultRedemption',
-		[BLC_AU_BRAND]: 'dwh-blc-p1-production-vaultRedemption',
-		[DDS_UK_BRAND]: 'dwh-dds-p1-production-vaultRedemptions'
-	},
-	'staging': {
-		[BLC_UK_BRAND]: 'dwh-blc-p1-develop-vaultRedemption',
-		[BLC_AU_BRAND]: 'dwh-blc-p1-develop-vaultRedemption',
-		[DDS_UK_BRAND]: 'dwh-dds-p1-develop-vaultRedemptions'
-	}
+	[BLC_UK_BRAND]: 'blc-uk-vaultIntegrationCallback',
+	[BLC_AU_BRAND]: 'blc-au-vaultIntegrationCallback',
+	[DDS_UK_BRAND]: 'dds-uk-vaultIntegrationCallback'
 }
  
 let redshiftSecret: ISecret;
@@ -67,8 +60,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly compAppClickStream: IFirehoseStreamAdapter;
   public readonly vaultStream: IFirehoseStreamAdapter;
   public readonly redemptionTypeStream: IFirehoseStreamAdapter;
-	public readonly callbackVaultRedemptionStreamProd: IFirehoseStreamAdapter;
-	public readonly callbackVaultRedemptionStreamDevelop: IFirehoseStreamAdapter;
+	public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -90,8 +82,7 @@ export class DwhKenisisFirehoseStreams {
     this.redemptionTypeStream = new KenisisFirehoseStream(stack, 'dwh-redemption', `dwh-${brandPrefix}-redemption`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblredemption` : undefined)
     }).setup();
-		this.callbackVaultRedemptionStreamProd = new KenisisFirehoseStream(stack, 'dwh-callbackVaultRedemptionProd', callbackVaultRedemptionStreamNames.production[brandFromEnv]).setup();
-		this.callbackVaultRedemptionStreamDevelop = new KenisisFirehoseStream(stack, 'dwh-callbackVaultRedemptionDevelop', callbackVaultRedemptionStreamNames.staging[brandFromEnv]).setup();
+		this.callbackVaultRedemptionStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegrationCallback', callbackVaultRedemptionStreamNames[brandFromEnv]).setup();
 
   }
 }

@@ -5,6 +5,7 @@ import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { MemberRedemptionParamsDto } from '@blc-mono/redemptions/application/services/DWH/dwhLoggingService';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
+import { IntegrationType } from '@blc-mono/redemptions/libs/models/postCallback';
 
 export interface IDwhRepository {
   logOfferView(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
@@ -12,11 +13,13 @@ export interface IDwhRepository {
   logVaultRedemption(offerId: number, companyId: number, memberId: string, code: string): Promise<void>;
   logRedemption(dto: MemberRedemptionParamsDto): Promise<void>;
   logCallbackVaultRedemption(
-    offerId: unknown,
-    code: unknown,
-    orderValue: unknown,
-    currency: unknown,
-    redeemedAt: unknown,
+    offerId: string,
+    code: string,
+    orderValue: string,
+    currency: string,
+    redeemedAt: string,
+    integrationType: IntegrationType,
+    memberId: string,
   ): Promise<void>;
 }
 
@@ -30,7 +33,7 @@ const CLIENT_TYPE_APP = 'mobile' satisfies ClientType;
 export class DwhRepository implements IDwhRepository {
   static key = 'DwhRepository' as const;
 
-  private client = new FirehoseClient();
+  private readonly client = new FirehoseClient();
 
   async logOfferView(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void> {
     const APPLICATION_TYPE_WEB = 1;
@@ -141,22 +144,26 @@ export class DwhRepository implements IDwhRepository {
   }
 
   async logCallbackVaultRedemption(
-    offerId: number,
+    offerId: string,
     code: string,
-    orderValue: number,
+    orderValue: string,
     currency: string,
     redeemedAt: string,
+    integrationType: IntegrationType,
+    memberId: string,
   ): Promise<void> {
     const command = new PutRecordCommand({
       DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME),
       Record: {
         Data: Buffer.from(
           JSON.stringify({
-            offerId,
+            offer_id: offerId,
             code,
-            orderValue,
+            order_value: orderValue,
             currency,
-            redeemedAt,
+            redeemed_at: redeemedAt,
+            integration_type: integrationType,
+            member_id: memberId,
           }),
         ),
       },

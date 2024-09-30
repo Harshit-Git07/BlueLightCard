@@ -14,13 +14,14 @@ export enum DiscoveryStackSearchBrand {
 }
 
 export type DiscoveryStackConfig = {
-  searchLambdaScriptsEnvironment: string;
-  searchLambdaScriptsHost: string;
-  searchBrand: string;
-  searchAuthTokenOverride?: string;
   apiDefaultAllowedOrigins: string[];
   openSearchDomainEndpoint?: string;
+  searchOfferCompanyTable?: string;
+  timezoneOffset: string;
 };
+
+const UK_TIMEZONE_OFFSET = '+00:00';
+const AUS_TIMEZONE_OFFSET = '+10:00';
 
 export class DiscoveryStackConfigResolver {
   public static for(stack: Stack, region: DiscoveryStackRegion): DiscoveryStackConfig {
@@ -39,69 +40,55 @@ export class DiscoveryStackConfigResolver {
   public static forProductionStage(region: DiscoveryStackRegion): DiscoveryStackConfig {
     if (region === 'ap-southeast-2') {
       return {
-        searchLambdaScriptsEnvironment: 'production',
-        searchLambdaScriptsHost: 'https://jhf5yn6ap2.execute-api.ap-southeast-2.amazonaws.com',
-        searchBrand: DiscoveryStackSearchBrand.BLC_UK,
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au'],
-        openSearchDomainEndpoint: 'https://vpc-staging-search-j27gjrqey5noueu2um3rqvpmba.eu-west-2.es.amazonaws.com',
+        timezoneOffset: AUS_TIMEZONE_OFFSET,
       };
     }
     return {
-      searchLambdaScriptsEnvironment: 'production',
-      searchLambdaScriptsHost: 'https://x26st9km9b.execute-api.eu-west-2.amazonaws.com',
-      searchBrand: DiscoveryStackSearchBrand.BLC_UK,
       apiDefaultAllowedOrigins: [
         'https://www.bluelightcard.co.uk',
         'https://www.bluelightcard.com.au',
         'https://www.defencediscountservice.co.uk',
       ],
-      openSearchDomainEndpoint: 'https://vpc-staging-search-j27gjrqey5noueu2um3rqvpmba.eu-west-2.es.amazonaws.com',
+      timezoneOffset: UK_TIMEZONE_OFFSET,
     };
   }
 
   public static forStagingStage(region: DiscoveryStackRegion): DiscoveryStackConfig {
     if (region === 'ap-southeast-2') {
       return {
-        searchLambdaScriptsEnvironment: 'develop',
-        searchLambdaScriptsHost: 'https://b2w93fcr0g.execute-api.ap-southeast-2.amazonaws.com',
-        searchBrand: DiscoveryStackSearchBrand.BLC_UK,
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au', 'http://localhost:3000'],
+        timezoneOffset: AUS_TIMEZONE_OFFSET,
       };
     }
     return {
-      searchLambdaScriptsEnvironment: 'develop',
-      searchLambdaScriptsHost: 'https://lcsn8cd6i6.execute-api.eu-west-2.amazonaws.com',
-      searchBrand: DiscoveryStackSearchBrand.BLC_UK,
       apiDefaultAllowedOrigins: [
         'https://www.staging.bluelightcard.co.uk',
         'https://www.develop.bluelightcard.com.au',
         'https://www.ddsstaging.bluelightcard.tech',
         'http://localhost:3000',
       ],
+      timezoneOffset: UK_TIMEZONE_OFFSET,
     };
   }
 
   public static forPrStage(): DiscoveryStackConfig {
     return {
-      searchLambdaScriptsEnvironment: 'develop',
-      searchLambdaScriptsHost: 'https://lcsn8cd6i6.execute-api.eu-west-2.amazonaws.com',
-      searchBrand: DiscoveryStackSearchBrand.BLC_UK,
       apiDefaultAllowedOrigins: ['*'],
       openSearchDomainEndpoint: 'https://vpc-staging-search-j27gjrqey5noueu2um3rqvpmba.eu-west-2.es.amazonaws.com',
+      timezoneOffset: UK_TIMEZONE_OFFSET,
     };
   }
 
   public static fromEnvironmentVariables(): DiscoveryStackConfig {
     return {
-      searchLambdaScriptsEnvironment: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_LAMBDA_SCRIPTS_ENVIRONMENT),
-      searchLambdaScriptsHost: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_LAMBDA_SCRIPTS_HOST),
-      searchBrand: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_BRAND),
-      searchAuthTokenOverride: getEnvOrDefault(DiscoveryStackEnvironmentKeys.SEARCH_AUTH_TOKEN_OVERRIDE, ''),
       apiDefaultAllowedOrigins: getEnvValidated(
         DiscoveryStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
         JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
       ),
       openSearchDomainEndpoint: getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT),
+      searchOfferCompanyTable: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME),
+      timezoneOffset: getEnvOrDefault(DiscoveryStackEnvironmentKeys.TIMEZONE_OFFSET, UK_TIMEZONE_OFFSET),
     };
   }
 }

@@ -30,8 +30,8 @@ describe('GET /search', async () => {
       200,
       'A valid request is sent',
       {
-        query: 'JD Sports',
-        isAgeGated: 'false',
+        query: 'Test Company',
+        dob: '2001-01-01',
         organisation: 'blc',
       },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
@@ -58,5 +58,20 @@ describe('GET /search', async () => {
   ])('should return with response code %s when %s', async (statusCode, _description, params, headers) => {
     const result = await whenSearchIsCalledWith(params, headers);
     expect(result.status).toBe(statusCode);
+    expect(await result.json()).toEqual({});
+  });
+
+  it.skip('should return valid search results', async () => {
+    const result = await whenSearchIsCalledWith(
+      {
+        query: 'Test Company',
+        dob: '2001-01-01',
+        organisation: 'blc',
+      },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    expect(result.status).toBe(200);
+    expect(await result.json()).toEqual({});
   });
 });

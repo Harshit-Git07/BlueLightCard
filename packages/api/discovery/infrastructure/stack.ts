@@ -49,7 +49,6 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       USE_DATADOG_AGENT,
       DD_SERVICE: SERVICE_NAME,
       DD_SITE: 'datadoghq.eu',
-      OPENSEARCH_DOMAIN: process.env.OPENSEARCH_DOMAIN ?? '',
     },
     layers,
   });
@@ -99,11 +98,8 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       requestValidatorName: 'GetSearchValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       environment: {
-        SEARCH_LAMBDA_SCRIPTS_HOST: config.searchLambdaScriptsHost,
-        SEARCH_LAMBDA_SCRIPTS_ENVIRONMENT: config.searchLambdaScriptsEnvironment,
-        SEARCH_BRAND: config.searchBrand,
-        SEARCH_AUTH_TOKEN_OVERRIDE: config.searchAuthTokenOverride,
-        OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint,
+        OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
+        STAGE: stack.stage,
       },
       vpc,
     }),
@@ -116,17 +112,6 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       requestValidatorName: 'GetCampaignEventValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
-  });
-
-  const createSearchIndex = new Function(stack, `${stack.stage}-createSearchIndex`, {
-    functionName: `${stack.stage}-createSearchIndex`,
-    handler: 'packages/api/discovery/application/handlers/search/createSearchIndex.handler',
-    memorySize: 512,
-    permissions: ['es'],
-    environment: {
-      OPENSEARCH_DOMAIN_ENDPOINT: openSearchDomain,
-    },
-    vpc,
   });
 
   const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);
@@ -167,7 +152,6 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   stack.addOutputs({
     DiscoveryApiEndpoint: api.url,
     DiscoveryApiCustomDomain: api.customDomainUrl,
-    CreateSearchIndex: createSearchIndex.functionArn,
   });
 
   return {

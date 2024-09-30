@@ -6,6 +6,8 @@ import { DiscoveryStackConfig } from '@blc-mono/discovery/infrastructure/config/
 
 import { CronJobIDs } from '../constants/cronJobIDs';
 
+const EVERY_HOUR_AT_15_MINUTES_PAST = 'cron(15 * * * ? *)';
+
 export function setupOffersIndexCron(
   stack: Stack,
   openSearchOffersTable: TableV2,
@@ -25,14 +27,14 @@ export function setupOffersIndexCron(
           OPENSEARCH_REGION: stack.region ?? '',
           OPENSEARCH_INDEX_SERVICE: serviceName,
           OPENSEARCH_INDEX_ENVIRONMENT: stack.stage ?? '',
-          SEARCH_OFFER_COMPANY_TABLE_NAME: openSearchOffersTable.tableName ?? '',
+          SEARCH_OFFER_COMPANY_TABLE_NAME: config.searchOfferCompanyTable ?? openSearchOffersTable.tableName,
         },
         vpc,
         deadLetterQueueEnabled: true,
         timeout: '5 minutes',
       },
     },
-    schedule: 'cron(15 * * * ? *)', // Every 15 minutes
+    schedule: EVERY_HOUR_AT_15_MINUTES_PAST,
     enabled: false,
   });
 }

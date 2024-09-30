@@ -2,16 +2,26 @@ import { Client } from '@opensearch-project/opensearch';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { SearchResponse } from '@opensearch-project/opensearch/api/types';
 
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
+import {
+  mapSearchResults,
+  SearchResult,
+} from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
+import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 const logger = new LambdaLogger({ serviceName: 'openSearch' });
 
+const service = getEnv(DiscoveryStackEnvironmentKeys.SERVICE);
+const stage = getEnv(DiscoveryStackEnvironmentKeys.STAGE);
+const indexType = 'offers';
+
 export class OpenSearchService {
-  private openSearchClient: Client;
+  private readonly openSearchClient: Client;
 
   constructor() {
     const searchDomainHost = getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT);
@@ -57,19 +67,6 @@ export class OpenSearchService {
     logger.info({ message: `Response from creating index ${indexName} was ${response.statusCode}` });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public async addDocumentToIndex(document: any, indexName: string): Promise<void> {
-    const id = '1';
-
-    const response = await this.openSearchClient.index({
-      id,
-      index: indexName,
-      body: document,
-      refresh: true,
-    });
-    logger.info({ message: `Response from adding document to index ${indexName} was ${response.statusCode}` });
-  }
-
   public async addDocumentsToIndex(documents: OpenSearchBulkCommand[], indexName: string): Promise<void> {
     const response = await this.openSearchClient.bulk({ body: documents, index: indexName, refresh: true });
     logger.info({
@@ -77,27 +74,25 @@ export class OpenSearchService {
     });
   }
 
-  public async queryIndex(term: string, indexName: string): Promise<void> {
-    const query = {
-      query: {
-        match: {
-          title: {
-            query: term,
-          },
-        },
-      },
-    };
+  public async queryIndex(term: string, indexName: string, dob: string, offerType?: string): Promise<SearchResult[]> {
+    const MAX_RESULTS = 40;
 
-    const response = await this.openSearchClient.search({
-      index: indexName,
-      body: query,
+    const searchResults = new OpenSearchSearchRequests(indexName, dob, term, offerType).build().map(async (search) => {
+      return this.openSearchClient.search({
+        index: indexName,
+        body: search.body,
+      });
     });
 
-    logger.info({
-      message: `Response from querying index ${indexName} was ${response.statusCode} - ${JSON.stringify(
-        response.body,
-      )}`,
+    let allSearchResults: SearchResult[] = [];
+    await Promise.all(searchResults).then((results) => {
+      results.forEach((result) => {
+        const mappedSearchResults = mapSearchResults(result.body as SearchResponse);
+        allSearchResults = allSearchResults.concat(mappedSearchResults);
+      });
     });
+
+    return [...new Set(allSearchResults)].slice(0, MAX_RESULTS);
   }
 
   public async deleteIndex(indexName: string): Promise<void> {
@@ -106,5 +101,21 @@ export class OpenSearchService {
     });
 
     logger.info({ message: `Response from deleting index ${indexName} was ${response.statusCode}` });
+  }
+
+  public async getLatestIndexName(): Promise<string> {
+    const response = await this.openSearchClient.cat.indices({ format: 'json' });
+    const indexNames = response.body.map((index: { index: string }) => index.index);
+    const latestIndex = indexNames
+      .filter((indexName: string) => indexName.startsWith(`${service}-${stage}-${indexType}`))
+      .sort()
+      .reverse()[0];
+
+    return latestIndex;
+  }
+
+  public generateIndexName(): string {
+    const timestamp = new Date().getTime();
+    return `${service}-${stage}-${indexType}-${timestamp}`.toLowerCase();
   }
 }

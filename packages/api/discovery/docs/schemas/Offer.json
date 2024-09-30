@@ -9,7 +9,7 @@
         "type": "string"
       },
       "OfferType": {
-        "type": "integer"
+        "type": "string"
       },
       "offerimg": {
         "type": "string"
@@ -22,95 +22,6 @@
       },
       "RestrictedTo": {
         "type": "string"
-      },
-      "raw": {
-        "type": "object",
-        "properties": {
-          "offer_id": {
-            "type": "integer"
-          },
-          "offer_name": {
-            "type": "string"
-          },
-          "offer_status": {
-            "type": "integer"
-          },
-          "offer_type": {
-            "type": "integer"
-          },
-          "offer_description": {
-            "type": "string"
-          },
-          "offer_description_stripped": {
-            "type": "string"
-          },
-          "offer_image": {
-            "type": "string"
-          },
-          "offer_expires": {
-            "type": "string"
-          },
-          "offer_sort_order": {
-            "type": "integer"
-          },
-          "company_id": {
-            "type": "integer"
-          },
-          "company_name": {
-            "type": "string"
-          },
-          "company_name_stripped": {
-            "type": "string"
-          },
-          "company_small_logo": {
-            "type": "string"
-          },
-          "is_age_gated": {
-            "type": "boolean"
-          },
-          "restricted_to": {
-            "type": "string"
-          },
-          "companies_all": {
-            "type": "string"
-          },
-          "category_name": {
-            "type": "string"
-          },
-          "new_category_1": {
-            "type": "string"
-          },
-          "category_level_2": {
-            "type": "string"
-          },
-          "category_level_3": {
-            "type": "string"
-          },
-          "category_level_4": {
-            "type": "string"
-          },
-          "date_offer_first_created": {
-            "type": "string"
-          },
-          "date_offer_last_updated": {
-            "type": "string"
-          },
-          "unique_users_viewed_last24hours": {
-            "type": "integer"
-          },
-          "unique_users_clicked_last24hours": {
-            "type": "integer"
-          },
-          "company_tags": {
-            "type": "string"
-          },
-          "offer_tags": {
-            "type": "string"
-          },
-          "offer_tags_space": {
-            "type": "string"
-          }
-        }
       }
     }
   }

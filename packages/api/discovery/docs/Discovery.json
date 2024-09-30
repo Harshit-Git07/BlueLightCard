@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Blue Light Card API",
+    "title": "Discovery API",
     "version": "1.0.0",
     "description": "API for searching offers on Blue Light Card"
   },
@@ -17,20 +17,48 @@
   ],
   "paths": {
     "/search": {
-      "post": {
+      "get": {
         "tags": ["Search"],
         "summary": "Search for offers",
         "description": "Search for offers based on various criteria",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "./schemas/SearchRequest.json#/SearchRequest"
-              }
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The term to search for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organisation",
+            "in": "query",
+            "description": "The organisation the user belongs to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dob",
+            "in": "query",
+            "description": "The users DOB in YYYY-MM-DD format",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offerType",
+            "in": "query",
+            "description": "The offer type to search for - e.g. online",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "Successful response",

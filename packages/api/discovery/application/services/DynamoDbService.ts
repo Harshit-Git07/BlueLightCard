@@ -15,9 +15,8 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 
-import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
-import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 const logger = new LambdaLogger({ serviceName: 'dynamoDB' });
 
@@ -26,7 +25,7 @@ export class DynamoDBService {
   private readonly dynamodb: DynamoDBDocumentClient;
 
   constructor() {
-    const region = getEnv(DiscoveryStackEnvironmentKeys.REGION);
+    const region = getEnvRaw('AWS_DEFAULT_REGION');
     this.client = new DynamoDBClient({ region });
     this.dynamodb = DynamoDBDocumentClient.from(this.client, {
       marshallOptions: {

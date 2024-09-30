@@ -1,4 +1,5 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { ApiGatewayV1Api, Function, StackContext, use } from 'sst/constructs';
 
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
@@ -8,6 +9,7 @@ import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { createSearchOfferCompanyTable } from '@blc-mono/discovery/infrastructure/database/CreateSearchOfferCompanyTable';
+import { EventRule } from '@blc-mono/discovery/infrastructure/eventHandling/EventQueueRule';
 import { populateOpenSearchRule } from '@blc-mono/discovery/infrastructure/rules/populateOpenSearchRule';
 import { OpenSearchDomain } from '@blc-mono/discovery/infrastructure/search/OpenSearchDomain';
 import { Identity } from '@blc-mono/identity/stack';
@@ -16,6 +18,7 @@ import { Shared } from '../../../../stacks/stack';
 import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastructure/config/config';
 
 import { setupOffersIndexCron } from './crons/SetupOffersIndexCron';
+import { EventQueue } from './eventHandling/EventQueue';
 import { Route } from './routes/route';
 async function DiscoveryStack({ stack, app }: StackContext) {
   const { certificateArn, vpc, bus } = use(Shared);
@@ -25,7 +28,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
 
   const config = DiscoveryStackConfigResolver.for(stack, app.region as DiscoveryStackRegion);
   const globalConfig = GlobalConfigResolver.for(stack.stage);
-  const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
+  const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
   // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
   const layers =
@@ -38,11 +41,11 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     environment: {
       region: stack.region,
       SERVICE: SERVICE_NAME,
-      DD_VERSION: process.env.DD_VERSION || '',
-      DD_ENV: process.env.SST_STAGE || 'undefined',
-      DD_API_KEY: process.env.DD_API_KEY || '',
-      DD_GIT_COMMIT_SHA: process.env.DD_GIT_COMMIT_SHA || '',
-      DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL || '',
+      DD_VERSION: process.env.DD_VERSION ?? '',
+      DD_ENV: process.env.SST_STAGE ?? 'undefined',
+      DD_API_KEY: process.env.DD_API_KEY ?? '',
+      DD_GIT_COMMIT_SHA: process.env.DD_GIT_COMMIT_SHA ?? '',
+      DD_GIT_REPOSITORY_URL: process.env.DD_GIT_REPOSITORY_URL ?? '',
       USE_DATADOG_AGENT,
       DD_SERVICE: SERVICE_NAME,
       DD_SITE: 'datadoghq.eu',
@@ -128,6 +131,10 @@ async function DiscoveryStack({ stack, app }: StackContext) {
 
   const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);
 
+  setupOffersIndexCron(stack, searchOfferCompanyTable, vpc, openSearchDomain, config, SERVICE_NAME);
+
+  const eventQueue = EventQueue(stack, 'discoveryEventQueue');
+
   bus.addRules(stack, {
     populateOpenSearchRule: populateOpenSearchRule(
       stack,
@@ -137,9 +144,27 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       config,
       SERVICE_NAME,
     ),
+    discoveryEventRule: EventRule(stack, eventQueue),
   });
 
-  setupOffersIndexCron(stack, searchOfferCompanyTable, vpc, openSearchDomain, config, SERVICE_NAME);
+  const eventQueueListener = new Function(stack, 'EventQueueListenerLambda', {
+    functionName: `${stack.stage}-${stack.stackName}-eventQueueListener`,
+    handler: 'packages/api/discovery/application/handlers/eventQueue/eventQueueListener.handler',
+    environment: {
+      SEARCH_OFFER_COMPANY_TABLE_NAME: searchOfferCompanyTable.tableName,
+      REGION: stack.region,
+    },
+  });
+  searchOfferCompanyTable.grantReadWriteData(eventQueueListener);
+  eventQueueListener.addEventSource(
+    new SqsEventSource(eventQueue.cdk.queue, {
+      batchSize: 10,
+      enabled: true,
+    }),
+  );
+
+  eventQueue.cdk.queue.grantConsumeMessages(eventQueueListener);
+
   stack.addOutputs({
     DiscoveryApiEndpoint: api.url,
     DiscoveryApiCustomDomain: api.customDomainUrl,

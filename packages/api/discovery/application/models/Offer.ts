@@ -6,22 +6,22 @@ import { Discount } from './Discount';
 
 export type Offer = {
   id: string;
-  legacyOfferId: number;
+  legacyOfferId?: number;
   name: string;
   status: string;
   offerType: string;
   offerDescription: string;
   image: string;
-  offerStart: string;
-  offerEnd: string;
+  offerStart?: string;
+  offerEnd?: string;
   evergreen: boolean;
   tags: string[];
   serviceRestrictions: string[];
   company: Company;
   categories: Category[];
   local: boolean;
-  discount: Discount;
+  discount?: Discount;
   commonExclusions: string[];
-  boost: Boost;
+  boost?: Boost;
   updatedAt: string;
 };

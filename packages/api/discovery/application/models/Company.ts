@@ -2,7 +2,7 @@ import { Category } from './Category';
 
 export type Company = {
   id: string;
-  legacyCompanyId: number;
+  legacyCompanyId?: number;
   name: string;
   logo: string;
   ageRestrictions: string;

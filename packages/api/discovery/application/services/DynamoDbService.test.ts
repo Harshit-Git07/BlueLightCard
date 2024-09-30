@@ -1,6 +1,8 @@
 import 'aws-sdk-client-mock-jest';
 
 import {
+  BatchWriteCommand,
+  BatchWriteCommandInput,
   DeleteCommand,
   DeleteCommandInput,
   DynamoDBDocumentClient,
@@ -47,6 +49,39 @@ describe('DynamoDB Service', () => {
 
       await expect(new DynamoDBService().put({} as PutCommandInput)).rejects.toThrow(
         `Error trying to put record using DynamoDB service: [${error}]`,
+      );
+    });
+  });
+
+  describe('batchWrite', () => {
+    it('should call "batchWrite" command', async () => {
+      mockDynamoDB.on(BatchWriteCommand).resolves({});
+
+      await new DynamoDBService().batchWrite({} as BatchWriteCommandInput);
+
+      expect(mockDynamoDB).toHaveReceivedCommand(BatchWriteCommand);
+    });
+
+    it('should call "batchWrite" command again with unprocessed items', async () => {
+      const unprocessedItems = {
+        table: [{ PutRequest: { Item: dataAttributes } }],
+      };
+      mockDynamoDB.on(BatchWriteCommand).resolvesOnce({ UnprocessedItems: unprocessedItems }).resolves({});
+
+      await new DynamoDBService().batchWrite({} as BatchWriteCommandInput);
+
+      expect(mockDynamoDB).toHaveReceivedCommandTimes(BatchWriteCommand, 2);
+      expect(mockDynamoDB).toHaveReceivedNthCommandWith(2, BatchWriteCommand, {
+        RequestItems: unprocessedItems,
+      });
+    });
+
+    it('should throw error on failed "batchWrite" command', async () => {
+      const error = new Error('DynamoDB error');
+      mockDynamoDB.on(BatchWriteCommand).rejects(error);
+
+      await expect(new DynamoDBService().batchWrite({} as BatchWriteCommandInput)).rejects.toThrow(
+        `Error trying to batch write records using DynamoDB service: [${error}]`,
       );
     });
   });

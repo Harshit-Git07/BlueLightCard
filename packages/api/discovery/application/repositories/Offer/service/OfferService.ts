@@ -11,12 +11,26 @@ const logger = new LambdaLogger({ serviceName: 'offer-service' });
 export async function insertOffer(offer: Offer): Promise<Offer | undefined> {
   try {
     const offerEntity = mapOfferToOfferEntity(offer);
-    logger.info({ message: `Inserting new Offer with id: [${offer.id}]` });
+    logger.info({ message: `Inserting Offer with id: [${offer.id}]` });
     const result = await new OfferRepository().insert(offerEntity);
-    logger.info({ message: `Inserted new Offer with id: [${offer.id}]` });
+    logger.info({ message: `Inserted Offer with id: [${offer.id}]` });
     return result ? mapOfferEntityToOffer(result) : undefined;
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred inserting new Offer with id: [${offer.id}]`));
+  }
+}
+
+export async function insertOffers(offers: Offer[]): Promise<void> {
+  try {
+    const offerEntities = offers.map(mapOfferToOfferEntity);
+    logger.info({ message: `Inserting Offers as batch, amount: [${offers.length}]` });
+    await new OfferRepository().batchInsert(offerEntities);
+    logger.info({ message: `Inserted Offers as batch, amount: [${offers.length}]` });
+    return;
+  } catch (error) {
+    throw new Error(
+      buildErrorMessage(logger, error, `Error occurred inserting Offers as batch, amount: [${offers.length}]`),
+    );
   }
 }
 

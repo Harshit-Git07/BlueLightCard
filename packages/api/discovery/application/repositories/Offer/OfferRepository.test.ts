@@ -14,6 +14,8 @@ describe('Offer Repository', () => {
   beforeEach(() => {
     process.env[DiscoveryStackEnvironmentKeys.REGION] = 'eu-west-2';
     process.env[DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME] = 'search-offer-company-table';
+
+    jest.resetAllMocks();
   });
 
   afterEach(() => {
@@ -38,6 +40,35 @@ describe('Offer Repository', () => {
         TableName: 'search-offer-company-table',
       });
       expect(result).toEqual(offerEntity);
+    });
+  });
+
+  describe('batchInsert', () => {
+    const batchWriteSpy = jest.spyOn(DynamoDBService.prototype, 'batchWrite');
+
+    it('should call "BatchWrite" method with correct parameters', async () => {
+      const offerEntities = offerEntityFactory.buildList(2);
+      batchWriteSpy.mockResolvedValue();
+
+      await new OfferRepository().batchInsert(offerEntities);
+
+      expect(batchWriteSpy).toHaveBeenCalledWith({
+        RequestItems: {
+          ['search-offer-company-table']: [
+            { PutRequest: { Item: offerEntities[0] } },
+            { PutRequest: { Item: offerEntities[1] } },
+          ],
+        },
+      });
+    });
+
+    it('should batch over 25 offers into multiple "BatchWrite" calls', async () => {
+      const offerEntities = offerEntityFactory.buildList(60);
+      batchWriteSpy.mockResolvedValue();
+
+      await new OfferRepository().batchInsert(offerEntities);
+
+      expect(batchWriteSpy).toHaveBeenCalledTimes(3);
     });
   });
 

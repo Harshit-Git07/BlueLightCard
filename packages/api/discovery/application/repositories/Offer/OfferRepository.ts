@@ -9,16 +9,34 @@ const GSI1_NAME = 'gsi1';
 const GSI2_NAME = 'gsi2';
 
 export class OfferRepository {
-  private dynamoDb: DynamoDBService;
+  private readonly dynamoDb: DynamoDBService;
+  private readonly tableName: string;
   constructor() {
     this.dynamoDb = new DynamoDBService();
+    this.tableName = getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME);
   }
 
   async insert(offerEntity: OfferEntity): Promise<OfferEntity | undefined> {
     return (await this.dynamoDb.put({
       Item: offerEntity,
-      TableName: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME),
+      TableName: this.tableName,
     })) as OfferEntity;
+  }
+
+  async batchInsert(offerEntities: OfferEntity[]): Promise<void> {
+    const DYNAMODB_MAX_BATCH_SIZE = 25;
+    for (let i = 0; i < offerEntities.length; i += DYNAMODB_MAX_BATCH_SIZE) {
+      const chunk = offerEntities.slice(i, i + DYNAMODB_MAX_BATCH_SIZE);
+      await this.dynamoDb.batchWrite({
+        RequestItems: {
+          [this.tableName]: chunk.map((offerEntity) => ({
+            PutRequest: {
+              Item: offerEntity,
+            },
+          })),
+        },
+      });
+    }
   }
 
   async delete(id: string, companyId: string): Promise<OfferEntity | undefined> {
@@ -27,7 +45,7 @@ export class OfferRepository {
         partitionKey: OfferKeyBuilders.buildPartitionKey(id),
         sortKey: OfferKeyBuilders.buildSortKey(companyId),
       },
-      TableName: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME),
+      TableName: this.tableName,
     })) as OfferEntity;
   }
 
@@ -37,7 +55,7 @@ export class OfferRepository {
         partitionKey: OfferKeyBuilders.buildPartitionKey(id),
         sortKey: OfferKeyBuilders.buildSortKey(companyId),
       },
-      TableName: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME),
+      TableName: this.tableName,
     })) as OfferEntity;
   }
 
@@ -46,7 +64,7 @@ export class OfferRepository {
       IndexName: GSI1_NAME,
       KeyConditionExpression: 'gsi1PartitionKey = :local_value',
       ExpressionAttributeValues: { ':local_value': OfferKeyBuilders.buildGsi1PartitionKey(false) },
-      TableName: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME),
+      TableName: this.tableName,
     })) as OfferEntity[];
   }
 
@@ -58,7 +76,7 @@ export class OfferRepository {
         ':company_id': OfferKeyBuilders.buildGsi2PartitionKey(companyId),
         ':offer_prefix': OFFER_PREFIX,
       },
-      TableName: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME),
+      TableName: this.tableName,
     })) as OfferEntity[];
   }
 }

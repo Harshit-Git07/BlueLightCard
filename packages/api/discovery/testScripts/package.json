@@ -1,0 +1,15 @@
+{
+  "name": "test-scripts",
+  "version": "1.0.0",
+  "description": "Data population scripts for testing in Discovery",
+  "scripts": {
+    "offer:events": "tsx sendTestOfferEvents.ts",
+    "company:events": "tsx sendTestCompanyEvents.ts"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsx": "^3.14.0"
+  }
+}

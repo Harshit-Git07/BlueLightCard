@@ -54,6 +54,32 @@ describe('Offer Service', () => {
     };
   });
 
+  describe('insertOffers', () => {
+    const offers = offerFactory.buildList(5);
+
+    it('should insert multiple offers successfully', async () => {
+      givenOfferRepositoryBatchInsertReturnsSuccessfully();
+
+      await expect(target.insertOffers(offers)).resolves.not.toThrow();
+    });
+
+    it('should throw error when multiple offers failed to insert', async () => {
+      givenOfferRepositoryBatchInsertThrowsAnError();
+
+      await expect(target.insertOffers(offers)).rejects.toThrow(
+        `Error occurred inserting Offers as batch, amount: [${offers.length}]: [Error: DynamoDB error]`,
+      );
+    });
+
+    const givenOfferRepositoryBatchInsertReturnsSuccessfully = () => {
+      jest.spyOn(OfferRepository.prototype, 'batchInsert').mockResolvedValue();
+    };
+
+    const givenOfferRepositoryBatchInsertThrowsAnError = () => {
+      jest.spyOn(OfferRepository.prototype, 'batchInsert').mockRejectedValue(new Error('DynamoDB error'));
+    };
+  });
+
   describe('deleteOffer', () => {
     const offer = offerFactory.build();
 

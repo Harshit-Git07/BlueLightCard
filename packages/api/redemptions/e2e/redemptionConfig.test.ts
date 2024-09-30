@@ -46,7 +46,7 @@ beforeAll(async () => {
 
 describe('redemption config admin API tests', () => {
   test.each(['vault', 'vaultQR'] as const)(
-    'GET /redemptions/{offerId} should return 200 for redemptionType %d',
+    'GET /redemptions/{offerId} should return 200 for redemptionType %s',
     async (redemptionType) => {
       const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
         id: createRedemptionsIdE2E(),
@@ -246,7 +246,7 @@ describe('redemption config admin API tests', () => {
   });
 
   test('GET /redemptions/{offerId} returns 404 if offerId can not be found', async () => {
-    const result = await callRedemptionConfigEndpoint(9999);
+    const result = await callRedemptionConfigEndpoint(faker.number.int({ max: 1000000 }));
 
     expect(result.status).toBe(404);
 
@@ -287,9 +287,9 @@ async function deleteVaultFromDatabase(vaultId: string) {
 }
 
 async function insertVaultBatchesInDatabase(vaultBatchEntities: VaultBatchEntity[]) {
-  await vaultBatchEntities.forEach(async (vaultBatchEntity) => {
+  for (const vaultBatchEntity of vaultBatchEntities) {
     await insertVaultBatchInDatabase(vaultBatchEntity);
-  });
+  }
 }
 
 async function insertVaultBatchInDatabase(vaultBatchEntity: VaultBatchEntity) {
@@ -297,9 +297,9 @@ async function insertVaultBatchInDatabase(vaultBatchEntity: VaultBatchEntity) {
 }
 
 async function deleteVaultBatchesFromDatabase(vaultBatchIds: string[]) {
-  await vaultBatchIds.forEach(async (vaultBatchId) => {
+  for (const vaultBatchId of vaultBatchIds) {
     await deleteVaultBatchFromDatabase(vaultBatchId);
-  });
+  }
 }
 
 async function deleteVaultBatchFromDatabase(vaultBatchId: string) {

@@ -148,7 +148,6 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   });
 
   const eventQueueListener = new Function(stack, 'EventQueueListenerLambda', {
-    functionName: `${stack.stage}-${stack.stackName}-eventQueueListener`,
     handler: 'packages/api/discovery/application/handlers/eventQueue/eventQueueListener.handler',
     environment: {
       SEARCH_OFFER_COMPANY_TABLE_NAME: searchOfferCompanyTable.tableName,

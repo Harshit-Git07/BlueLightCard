@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.34.0...bluelightcard/mobile-hybrid-v1.35.0) (2024-09-27)
+
+
+### Features
+
+* created notification icon component for hybrid ([#2284](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2284)) ([4af067f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4af067fe34d011c7d4b42c6a9225f21cbf2d2669))
+
 ## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.33.0...bluelightcard/mobile-hybrid-v1.34.0) (2024-09-25)
 
 

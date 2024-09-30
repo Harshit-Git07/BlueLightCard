@@ -3,9 +3,11 @@ import { useAtom } from 'jotai';
 import { FC } from 'react';
 import { companyDataAtom, selectedFilter } from '../atoms';
 import { OfferModel } from '../types';
+import { useMedia } from 'react-use';
 
 const CompanyOffers: FC = () => {
   const { viewOffer } = useOfferDetails();
+  const isMobile = useMedia('(max-width: 500px)');
 
   const companyData = useAtom(companyDataAtom)[0];
   const offers = companyData?.offers;
@@ -48,7 +50,7 @@ const CompanyOffers: FC = () => {
                 platform={PlatformVariant.MobileHybrid}
                 companyId={companyId || 0}
                 companyName={companyName || ''}
-                variant={'horizontal'}
+                variant={isMobile ? 'horizontal' : 'vertical'}
                 onClick={() => onClickEvent(offer.id)}
               />
             </div>

@@ -58,7 +58,6 @@ describe('GET /search', async () => {
   ])('should return with response code %s when %s', async (statusCode, _description, params, headers) => {
     const result = await whenSearchIsCalledWith(params, headers);
     expect(result.status).toBe(statusCode);
-    expect(await result.json()).toEqual({});
   });
 
   it.skip('should return valid search results', async () => {

@@ -97,6 +97,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       handler: 'packages/api/discovery/application/handlers/search/getSearch.handler',
       requestValidatorName: 'GetSearchValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      permissions: ['es'],
       environment: {
         OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
         STAGE: stack.stage,

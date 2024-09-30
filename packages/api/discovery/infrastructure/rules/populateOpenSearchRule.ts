@@ -16,7 +16,7 @@ export const populateOpenSearchRule = (
   targets: {
     populateOpenSearchFunction: {
       function: {
-        permissions: ['dynamodb:Query', table.tableName],
+        permissions: ['dynamodb:Query', table.tableName, 'es'],
         handler: 'packages/api/discovery/application/handlers/search/populateSearchIndex.handler',
         environment: {
           OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomainEndpoint,

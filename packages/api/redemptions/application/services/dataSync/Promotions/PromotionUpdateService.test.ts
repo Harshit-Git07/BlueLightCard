@@ -29,6 +29,7 @@ describe('PromotionUpdateService', () => {
       updateOneByOfferId: jest.fn(),
       updateManyByOfferId: jest.fn(),
       withTransaction: jest.fn(),
+      updateOneById: jest.fn(),
     } satisfies IRedemptionConfigRepository;
 
     const service = new PromotionUpdateService(logger, mockLegacyVaultApiRepository, mockRedemptionConfigRepository);

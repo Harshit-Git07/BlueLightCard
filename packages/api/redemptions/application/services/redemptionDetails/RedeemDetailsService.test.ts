@@ -35,6 +35,7 @@ describe('RedemptionDetailsService', () => {
       updateOneByOfferId: jest.fn(),
       createRedemption: jest.fn(),
       withTransaction: jest.fn(),
+      updateOneById: jest.fn(),
     };
   }
 

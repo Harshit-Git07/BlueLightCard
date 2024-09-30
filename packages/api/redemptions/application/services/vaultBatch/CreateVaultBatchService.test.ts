@@ -57,6 +57,7 @@ describe('CreateVaultBatchService', () => {
     updateOneByOfferId: jest.fn(),
     createRedemption: jest.fn(),
     withTransaction: jest.fn(),
+    updateOneById: jest.fn(),
   };
 
   const mockVaultsRepository: IVaultsRepository = {

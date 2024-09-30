@@ -16,6 +16,7 @@ export interface IRedemptionConfigRepository {
   findOneByOfferId(offerId: number): Promise<RedemptionConfigEntity | null>;
   updateManyByOfferId(offerIds: number[], update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity[]>;
   updateOneByOfferId(offerId: number, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
+  updateOneById(id: string, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
   createRedemption(redemptionData: NewRedemptionConfigEntity): Promise<RedemptionConfigIdEntity>;
   withTransaction(transaction: DatabaseTransactionConnection): IRedemptionConfigRepository;
 }
@@ -70,6 +71,29 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
         .where(eq(redemptionsTable.offerId, offerId))
         .returning({
           id: redemptionsTable.id,
+        })
+        .execute(),
+    );
+  }
+
+  public async updateOneById(
+    id: string,
+    updateRedemptionEntity: UpdateRedemptionConfigEntity,
+  ): Promise<RedemptionConfigEntity | null> {
+    return this.atMostOne(
+      await this.connection.db
+        .update(redemptionsTable)
+        .set(updateRedemptionEntity)
+        .where(eq(redemptionsTable.id, id))
+        .returning({
+          id: redemptionsTable.id,
+          affiliate: redemptionsTable.affiliate,
+          connection: redemptionsTable.connection,
+          offerType: redemptionsTable.offerType,
+          redemptionType: redemptionsTable.redemptionType,
+          url: redemptionsTable.url,
+          companyId: redemptionsTable.companyId,
+          offerId: redemptionsTable.offerId,
         })
         .execute(),
     );

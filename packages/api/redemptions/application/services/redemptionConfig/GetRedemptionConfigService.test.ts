@@ -23,6 +23,7 @@ const mockRedemptionConfigRepository: IRedemptionConfigRepository = {
   updateOneByOfferId: jest.fn(),
   createRedemption: jest.fn(),
   withTransaction: jest.fn(),
+  updateOneById: jest.fn(),
 } satisfies IRedemptionConfigRepository;
 
 const mockGenericsRepository: IGenericsRepository = {

@@ -2,7 +2,12 @@ import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
-import { affiliateEnum, createRedemptionsId, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
+import {
+  affiliateEnum,
+  createRedemptionsId,
+  OfferType,
+  redemptionsTable,
+} from '@blc-mono/redemptions/libs/database/schema';
 
 export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEntity>(() => ({
   id: createRedemptionsId(),
@@ -16,7 +21,7 @@ export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEnti
   }),
   connection: 'affiliate',
   affiliate: faker.helpers.arrayElement(affiliateEnum.enumValues),
-  offerType: 'online',
+  offerType: 'online' as OfferType,
   redemptionType: faker.helpers.arrayElement(redemptionsTable.redemptionType.enumValues),
   url: faker.internet.url(),
 }));

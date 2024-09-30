@@ -264,6 +264,7 @@ function mockRedemptionConfigRepository(): IRedemptionConfigRepository {
     updateOneByOfferId: jest.fn(),
     createRedemption: jest.fn(),
     withTransaction: jest.fn(),
+    updateOneById: jest.fn(),
   };
 }
 

@@ -8,7 +8,7 @@ import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
   IUpdateRedemptionConfigService,
   UpdateRedemptionConfigService,
-} from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfig';
+} from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
 import { PatchRedemptionModel } from '@blc-mono/redemptions/libs/models/PatchRedemptionModel';
 
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../AdminApiGatewayController';
@@ -18,6 +18,7 @@ const PatchRedemptionModelRequest = z.object({
 });
 
 export type PatchRedemptionModelRequest = z.infer<typeof PatchRedemptionModelRequest>;
+export type PatchRedemptionModelRequestBody = PatchRedemptionModelRequest['body'];
 
 export class UpdateRedemptionConfigController extends APIGatewayController<PatchRedemptionModelRequest> {
   static readonly inject = [Logger.key, UpdateRedemptionConfigService.key] as const;
@@ -35,23 +36,29 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Patch
 
   public async handle(request: PatchRedemptionModelRequest): Promise<APIGatewayResult> {
     const results = await this.updateRedemptionConfigService.updateRedemptionConfig(request.body);
+
     switch (results.kind) {
-      case 'Error':
-        return {
-          statusCode: 404,
-          data: {
-            message: 'error',
-          },
-        };
       case 'Ok':
         return {
           statusCode: 200,
+          data: results.data,
+        };
+      case 'Error':
+        return {
+          statusCode: 500,
           data: {
-            message: 'success',
+            message: 'Internal Server Error',
+          },
+        };
+      case 'RedemptionNotFound':
+        return {
+          statusCode: 404,
+          data: {
+            message: 'Redemption not found with given ID',
           },
         };
       default:
-        return exhaustiveCheck(results.kind, 'Unhandled result');
+        return exhaustiveCheck(results, 'Unhandled result');
     }
   }
 }

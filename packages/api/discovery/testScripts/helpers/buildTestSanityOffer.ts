@@ -77,7 +77,7 @@ export function buildTestSanityOffer(): SanityOffer {
       discountType: 'reduction',
     },
     evergreen: false,
-    expires: '2024-08-05',
+    expires: '2025-08-05',
     image: {
       default: {
         _type: 'image',
@@ -119,7 +119,7 @@ export function buildTestSanityOffer(): SanityOffer {
     },
     restrictions: [],
     start: '2024-08-04',
-    status: 'expired',
+    status: 'live',
     termsAndConditions: {
       _type: 'richtext-module',
       tableOfContents: false,

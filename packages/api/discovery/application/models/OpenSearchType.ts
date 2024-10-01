@@ -22,7 +22,7 @@ export type OpenSearchBody = {
   company_name_stripped: string;
   company_small_logo: string;
   company_tags: string[];
-  is_age_gated: string;
+  age_restrictions: string;
   restricted_to: string[];
   category_name: string;
   new_category_1: string;
@@ -48,7 +48,7 @@ export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
   company_name_stripped: offer.company.name.trim() || '',
   company_small_logo: offer.company.logo,
   company_tags: offer.company.alsoKnownAs,
-  is_age_gated: offer.company.ageRestrictions || 'false',
+  age_restrictions: offer.company.ageRestrictions || 'none',
   restricted_to: offer.company.serviceRestrictions,
   category_name: offer.categories.length > 0 ? offer.categories[0].name : '',
   new_category_1: offer.categories.find((category) => category.level === 1)?.name ?? '',

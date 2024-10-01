@@ -18,12 +18,12 @@ export const offerTypeQuery = (offerType?: string): QueryDslQueryContainer => {
   return {};
 };
 
-export const ageGatedQuery = (ageRestrictions: AgeRestriction[]): QueryDslQueryContainer => {
+export const ageRestrictionsQuery = (ageRestrictions: AgeRestriction[]): QueryDslQueryContainer => {
   const shouldClauses = ageRestrictions.map((ageRestriction) => {
     return {
       match: {
-        is_age_gated: {
-          query: ageRestriction,
+        age_restrictions: {
+          query: `*${ageRestriction}*`,
         },
       },
     };

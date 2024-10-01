@@ -1,5 +1,5 @@
 import { Company } from '../application/models/Company';
-import { Company as SanityCompany } from '../application/models/SanityTypes';
+import { AgeRestriction, Company as SanityCompany } from '../application/models/SanityTypes';
 
 export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company => {
   const brandDetails = sanityCompany.brandCompanyDetails?.[0];
@@ -22,7 +22,7 @@ export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company
     legacyCompanyId: brandDetails.companyId,
     name: brandDetails.companyName,
     logo: brandDetails?.companyLogo?.default?.asset?.url,
-    ageRestrictions: brandDetails?.ageRestrictions?.map((restriction) => restriction.name).join(', '),
+    ageRestrictions: mapAgeRestrictions(brandDetails?.ageRestrictions),
     alsoKnownAs: sanityCompany.alsoKnownAs || [],
     serviceRestrictions: sanityCompany.restrictions?.map((restriction) => restriction.name).filter(Boolean) as string[],
     categories:
@@ -36,4 +36,11 @@ export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company
     local: sanityCompany.local || false,
     updatedAt: sanityCompany._updatedAt,
   };
+};
+
+const mapAgeRestrictions = (ageRestrictions: AgeRestriction[]): string => {
+  if (ageRestrictions.length === 0) {
+    return 'none';
+  }
+  return ageRestrictions.map((restriction) => restriction.name).join(', ');
 };

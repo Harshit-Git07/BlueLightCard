@@ -16,7 +16,7 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
   const { searchTerm, service, dob } = getQueryParams(event);
 
   if (searchTerm && service && dob) {
-    logger.info({ message: `Search term: ${searchTerm}` });
+    logger.info({ message: `Search term: ${searchTerm}, service: ${service}, dob: ${dob}` });
 
     try {
       const results = await openSearchService.queryIndex(searchTerm, await openSearchService.getLatestIndexName(), dob);

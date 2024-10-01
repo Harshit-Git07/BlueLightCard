@@ -180,7 +180,7 @@ describe('mapSanityOfferToOffer', () => {
         name: 'Test Company',
         legacyCompanyId: undefined,
         logo: 'logo-ref',
-        ageRestrictions: '',
+        ageRestrictions: 'none',
         alsoKnownAs: [],
         serviceRestrictions: [],
         categories: [],

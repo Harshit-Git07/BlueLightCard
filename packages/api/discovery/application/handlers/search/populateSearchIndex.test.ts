@@ -145,7 +145,7 @@ describe('populateSearchIndex', () => {
       company_name_stripped: 'Company 1',
       company_small_logo: 'http://example.com/logo1.jpg',
       company_tags: ['Alias 1'],
-      is_age_gated: 'None',
+      age_restrictions: 'None',
       restricted_to: ['restriction1', 'restriction2'],
       category_name: 'Category 1',
       new_category_1: 'Category 1',

@@ -27,15 +27,15 @@ describe('OpenSearchSearchRequests', () => {
       should: [
         {
           match: {
-            is_age_gated: {
-              query: 'none',
+            age_restrictions: {
+              query: '*none*',
             },
           },
         },
         {
           match: {
-            is_age_gated: {
-              query: '16+',
+            age_restrictions: {
+              query: '*16+*',
             },
           },
         },

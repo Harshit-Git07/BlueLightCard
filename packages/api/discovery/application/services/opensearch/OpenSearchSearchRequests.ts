@@ -2,7 +2,7 @@ import { SearchRequest } from '@opensearch-project/opensearch/api/types';
 
 import { AgeRestriction, getAgeRestrictions } from '@blc-mono/discovery/application/models/AgeRestrictions';
 import {
-  ageGatedQuery,
+  ageRestrictionsQuery,
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
@@ -49,7 +49,7 @@ export class OpenSearchSearchRequests {
 
   private buildActiveOffersAndCompanyNameSearch(): SearchRequest {
     const mustQueries = [
-      ageGatedQuery(this.ageRestrictions),
+      ageRestrictionsQuery(this.ageRestrictions),
       companyNameQuery(this.searchTerm),
       offerNotExpiredQuery(),
     ];
@@ -70,7 +70,7 @@ export class OpenSearchSearchRequests {
   }
 
   private buildCompanyNameInCompaniesAllSearch(): SearchRequest {
-    const mustQueries = [ageGatedQuery(this.ageRestrictions), companyNameInCompaniesAllQuery(this.searchTerm)];
+    const mustQueries = [ageRestrictionsQuery(this.ageRestrictions), companyNameInCompaniesAllQuery(this.searchTerm)];
 
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
@@ -88,7 +88,11 @@ export class OpenSearchSearchRequests {
   }
 
   private buildOfferTagSearch(): SearchRequest {
-    const mustQueries = [ageGatedQuery(this.ageRestrictions), offerTagQuery(this.searchTerm), offerNotExpiredQuery()];
+    const mustQueries = [
+      ageRestrictionsQuery(this.ageRestrictions),
+      offerTagQuery(this.searchTerm),
+      offerNotExpiredQuery(),
+    ];
 
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
@@ -106,7 +110,11 @@ export class OpenSearchSearchRequests {
   }
 
   private buildOfferNameSearch(): SearchRequest {
-    const mustQueries = [ageGatedQuery(this.ageRestrictions), offerNameQuery(this.searchTerm), offerNotExpiredQuery()];
+    const mustQueries = [
+      ageRestrictionsQuery(this.ageRestrictions),
+      offerNameQuery(this.searchTerm),
+      offerNotExpiredQuery(),
+    ];
 
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
@@ -125,7 +133,7 @@ export class OpenSearchSearchRequests {
 
   private buildCompanyNameFuzzySearch(): SearchRequest {
     const mustQueries = [
-      ageGatedQuery(this.ageRestrictions),
+      ageRestrictionsQuery(this.ageRestrictions),
       companyNameFuzzyQuery(this.searchTerm),
       offerNotExpiredQuery(),
     ];

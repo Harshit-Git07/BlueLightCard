@@ -2,7 +2,7 @@ import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 import { AgeRestriction } from '@blc-mono/discovery/application/models/AgeRestrictions';
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import {
-  ageGatedQuery,
+  ageRestrictionsQuery,
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
@@ -34,22 +34,22 @@ describe('OpenSearchQueries', () => {
         should: [
           {
             match: {
-              is_age_gated: {
-                query: 'none',
+              age_restrictions: {
+                query: '*none*',
               },
             },
           },
           {
             match: {
-              is_age_gated: {
-                query: '16+',
+              age_restrictions: {
+                query: '*16+*',
               },
             },
           },
           {
             match: {
-              is_age_gated: {
-                query: '18+',
+              age_restrictions: {
+                query: '*18+*',
               },
             },
           },
@@ -57,7 +57,7 @@ describe('OpenSearchQueries', () => {
       },
     };
 
-    const query = ageGatedQuery(ageRestrictions);
+    const query = ageRestrictionsQuery(ageRestrictions);
 
     expect(query).toEqual(expectedAgeGatedQuery);
   });

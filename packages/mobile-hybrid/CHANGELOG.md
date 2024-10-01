@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.35.0...bluelightcard/mobile-hybrid-v1.36.0) (2024-09-30)
+
+
+### Features
+
+* [DISCO-966] add flexi menu button to big blue rewards page ([#2336](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2336)) ([a117aa4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a117aa404c970d4e9847e36fc32d6c8e1f9f4c63))
+
+
+### Bug Fixes
+
+* sets ResponsiveOfferCard variant to vertical for iPad devices ([#2352](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2352)) ([3f07fbe](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3f07fbec185c9e48c8c6050beb30d0dd07757391))
+
 ## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.34.0...bluelightcard/mobile-hybrid-v1.35.0) (2024-09-27)
 
 

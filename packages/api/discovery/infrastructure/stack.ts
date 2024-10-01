@@ -10,7 +10,6 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { createSearchOfferCompanyTable } from '@blc-mono/discovery/infrastructure/database/CreateSearchOfferCompanyTable';
 import { EventRule } from '@blc-mono/discovery/infrastructure/eventHandling/EventQueueRule';
-import { populateOpenSearchRule } from '@blc-mono/discovery/infrastructure/rules/populateOpenSearchRule';
 import { OpenSearchDomain } from '@blc-mono/discovery/infrastructure/search/OpenSearchDomain';
 import { Identity } from '@blc-mono/identity/stack';
 
@@ -122,14 +121,6 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   const eventQueue = EventQueue(stack, 'discoveryEventQueue');
 
   bus.addRules(stack, {
-    populateOpenSearchRule: populateOpenSearchRule(
-      stack,
-      vpc,
-      searchOfferCompanyTable,
-      openSearchDomain,
-      config,
-      SERVICE_NAME,
-    ),
     discoveryEventRule: EventRule(stack, eventQueue),
   });
 

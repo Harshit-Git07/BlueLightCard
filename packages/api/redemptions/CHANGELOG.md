@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.27.0...bluelightcard/redemptions-v1.28.0) (2024-09-30)
+
+
+### Features
+
+* [TR-816] admin api post show card ([#2263](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2263)) ([7a8a3de](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7a8a3de77121ea77d4ef26967aa25b997e2be2d5))
+* [TR-816] admin api post show card continued ([#2306](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2306)) ([6937138](https://github.com/bluelightcard/BlueLightCard-2.0/commit/69371384e23331a8bc48462a3ea468796c317841))
+* [TR-816] admin api post show card handling when offerId/companyId is provided as an empty string ([#2339](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2339)) ([c86bea4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c86bea41e96be34c51601682331fa4f74d646183))
+* [TR-830]:added Patch  infra for Redemptions config ([#2214](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2214)) ([97d77e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/97d77e4bb118556815427151bc157ef24b719ef0))
+* TR-403 code provider callback endpoint ([#2271](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2271)) ([f6496bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f6496bbf25216e1161dc35428c7dfaa28b03b966))
+* TR-403 code provider callback endpoint ([#2328](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2328)) ([9f15941](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9f15941bc457219481bbde7f5382b29f0c8dfa8e))
+* TR-818 admin api patch preapplied ([#2337](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2337)) ([a50f813](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a50f813ea608f1e02bda77a35512a9fb1214d3e2))
+* TR-819 redemptions admin api get returns data ([#2288](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2288)) ([b5caebf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b5caebfbe4113ba4e12c83f2f78d152022624232))
+* TR-957 rename redemptionRepository to redemptionConfigRepository ([#2292](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2292)) ([a04fd2a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a04fd2a6e3d24940b6f97518450225afd350e735))
+* TR-963 - improve naming of types in repositories ([#2334](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2334)) ([fab3b26](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fab3b26776b3957c2dd462feb09b8c6008e384fb))
+
+
+### Bug Fixes
+
+* TR-819 - fix broken redemption e2e tests ([#2346](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2346)) ([1eafd96](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1eafd96b37420f411deda17d1b7d7c709691a47d))
+* TR-819 - fix broken redemption e2e tests ([#2347](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2347)) ([25aa7cf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/25aa7cff844d999b6e16bfe805587202c4b2ba75))
+* typo D to lowercase in offerId ([#2298](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2298)) ([59ac380](https://github.com/bluelightcard/BlueLightCard-2.0/commit/59ac38008d22abcba8a8648a05792fc3d89be112))
+
 ## [1.27.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.26.0...bluelightcard/redemptions-v1.27.0) (2024-09-20)
 
 

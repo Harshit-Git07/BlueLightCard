@@ -50,13 +50,13 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query] = useState<string>((router.query.q as string) ?? '');
-  const [adverts, setAdverts] = useState<BannerDataType[]>([]);
+  const [adverts, setAdverts] = useState<BannerDataType[] | null>(null);
   const [companyData, setCompanyData] = useState<CompanyData>({
     id: defaultCompanyPropertyValue,
     name: defaultCompanyPropertyValue,
     description: defaultCompanyPropertyValue,
   });
-  const [offerData, setOfferData] = useState<OfferData[] | null>([]);
+  const [offerData, setOfferData] = useState<OfferData[] | null>(null);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
@@ -160,7 +160,7 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   }, [authCtx.authState.idToken, companyId]);
 
   useEffect(() => {
-    if (adverts.length && companyData && offerData?.length) {
+    if (adverts && companyData && offerData) {
       setIsLoading(false);
     }
   }, [adverts, companyData, offerData]);

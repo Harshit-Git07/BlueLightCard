@@ -1,6 +1,6 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
-import { ApiGatewayV1Api, Function, StackContext, use } from 'sst/constructs';
+import { ApiGatewayV1Api, Function, FunctionDefinition, StackContext, use } from 'sst/constructs';
 
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
@@ -8,16 +8,17 @@ import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
-import { createSearchOfferCompanyTable } from '@blc-mono/discovery/infrastructure/database/CreateSearchOfferCompanyTable';
-import { EventRule } from '@blc-mono/discovery/infrastructure/eventHandling/EventQueueRule';
+import { createSearchOfferCompanyTable } from '@blc-mono/discovery/infrastructure/database/createSearchOfferCompanyTable';
+import { eventRule } from '@blc-mono/discovery/infrastructure/eventHandling/eventQueueRule';
+import { populateSearchIndexRule } from '@blc-mono/discovery/infrastructure/rules/populateSearchIndexRule';
 import { OpenSearchDomain } from '@blc-mono/discovery/infrastructure/search/OpenSearchDomain';
 import { Identity } from '@blc-mono/identity/stack';
 
 import { Shared } from '../../../../stacks/stack';
 import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastructure/config/config';
 
-import { setupOffersIndexCron } from './crons/SetupOffersIndexCron';
-import { EventQueue } from './eventHandling/EventQueue';
+import { populateSearchIndexCron } from './crons/populateSearchIndexCron';
+import { eventQueue } from './eventHandling/eventQueue';
 import { Route } from './routes/route';
 async function DiscoveryStack({ stack, app }: StackContext) {
   const { certificateArn, vpc, bus } = use(Shared);
@@ -116,12 +117,26 @@ async function DiscoveryStack({ stack, app }: StackContext) {
 
   const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);
 
-  setupOffersIndexCron(stack, searchOfferCompanyTable, vpc, openSearchDomain, config, SERVICE_NAME);
+  const populateSearchIndexFunction: FunctionDefinition = {
+    permissions: ['dynamodb:Query', searchOfferCompanyTable.tableName, 'es'],
+    handler: 'packages/api/discovery/application/handlers/search/populateSearchIndex.handler',
+    environment: {
+      OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
+      STAGE: stack.stage ?? '',
+      SEARCH_OFFER_COMPANY_TABLE_NAME: searchOfferCompanyTable.tableName ?? '',
+    },
+    vpc,
+    deadLetterQueueEnabled: true,
+    timeout: '5 minutes',
+  };
 
-  const eventQueue = EventQueue(stack, 'discoveryEventQueue');
+  populateSearchIndexCron(stack, populateSearchIndexFunction);
+
+  const discoveryEventQueue = eventQueue(stack, 'discoveryEventQueue');
 
   bus.addRules(stack, {
-    discoveryEventRule: EventRule(stack, eventQueue),
+    populateOpenSearchRule: populateSearchIndexRule(populateSearchIndexFunction),
+    discoveryEventRule: eventRule(stack, discoveryEventQueue),
   });
 
   const eventQueueListener = new Function(stack, 'EventQueueListenerLambda', {
@@ -133,13 +148,13 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   });
   searchOfferCompanyTable.grantReadWriteData(eventQueueListener);
   eventQueueListener.addEventSource(
-    new SqsEventSource(eventQueue.cdk.queue, {
+    new SqsEventSource(discoveryEventQueue.cdk.queue, {
       batchSize: 10,
       enabled: true,
     }),
   );
 
-  eventQueue.cdk.queue.grantConsumeMessages(eventQueueListener);
+  discoveryEventQueue.cdk.queue.grantConsumeMessages(eventQueueListener);
 
   stack.addOutputs({
     DiscoveryApiEndpoint: api.url,

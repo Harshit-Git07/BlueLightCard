@@ -1,3 +1,3 @@
 export enum CronJobIDs {
-  BUILD_OFFERS_INDEX = 'build-offers-index',
+  POPULATE_SEARCH_INDEX = 'populate-search-index',
 }

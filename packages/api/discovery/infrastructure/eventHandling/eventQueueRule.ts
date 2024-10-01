@@ -1,8 +1,8 @@
 import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
-import { Events } from './Events';
+import { Events } from './events';
 
-export function EventRule(stack: Stack, queue: Queue): EventBusRuleProps {
+export function eventRule(stack: Stack, queue: Queue): EventBusRuleProps {
   const eventRuleDeadLetterQueue = new Queue(stack, 'discoveryEventRule-deadLetterQueue');
 
   return {

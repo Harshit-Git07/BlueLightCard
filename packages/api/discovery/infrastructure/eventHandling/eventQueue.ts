@@ -1,6 +1,6 @@
 import { Queue, Stack } from 'sst/constructs';
 
-export function EventQueue(stack: Stack, name: string): Queue {
+export function eventQueue(stack: Stack, name: string): Queue {
   const deadLetterQueue = new Queue(stack, `${name}-deadLetterQueue`);
 
   return new Queue(stack, name, {

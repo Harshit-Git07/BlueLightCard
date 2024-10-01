@@ -8,7 +8,7 @@ import {
 } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler';
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/mapSanityCompanyToCompany';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/mapSanityOfferToOffer';
-import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/Events';
+import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 import { Company as SanityCompany, Offer as SanityOffer } from '../../models/SanityTypes';
 

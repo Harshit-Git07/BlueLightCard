@@ -19,6 +19,7 @@ export interface IRedemptionConfigRepository {
   updateOneById(id: string, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
   createRedemption(redemptionData: NewRedemptionConfigEntity): Promise<RedemptionConfigIdEntity>;
   withTransaction(transaction: DatabaseTransactionConnection): IRedemptionConfigRepository;
+  deleteById(id: string): Promise<Pick<RedemptionConfigEntity, 'id'>[]>;
 }
 
 export class RedemptionConfigRepository extends Repository implements IRedemptionConfigRepository {
@@ -33,7 +34,7 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
       .limit(1)
       .execute();
 
-    return results[0];
+    return this.atMostOne(results);
   }
 
   public async findOneByOfferId(offerId: number): Promise<RedemptionConfigEntity | null> {
@@ -46,6 +47,15 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
 
     return this.atMostOne(results);
   }
+
+  public async deleteById(id: string): Promise<Pick<RedemptionConfigEntity, 'id'>[]> {
+    return await this.connection.db
+      .delete(redemptionsTable)
+      .where(eq(redemptionsTable.id, id))
+      .returning({ id: redemptionsTable.id })
+      .execute();
+  }
+
   public async updateManyByOfferId(
     offerIds: number[],
     updateRedemptionEntity: UpdateRedemptionConfigEntity,

@@ -46,6 +46,7 @@ function mockVaultsRepository(): IVaultsRepository {
     updateOneById: jest.fn(),
     createMany: jest.fn(),
     create: jest.fn(),
+    deleteById: jest.fn(),
     withTransaction: jest.fn(),
   } satisfies IVaultsRepository;
 }

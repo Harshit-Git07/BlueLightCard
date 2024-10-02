@@ -82,6 +82,41 @@ describe('VaultsRepository', () => {
     });
   });
 
+  describe('deleteById', () => {
+    it('should delete vault', async () => {
+      // Arrange
+      const repository = new VaultsRepository(connection);
+      const redemptionEntity = redemptionConfigEntityFactory.build();
+      const vaultEntity = vaultEntityFactory.build({
+        redemptionId: redemptionEntity.id,
+        status: 'active',
+        maxPerUser: 1,
+      });
+      await connection.db.insert(redemptionsTable).values(redemptionEntity).execute();
+      await connection.db.insert(vaultsTable).values(vaultEntity).execute();
+
+      expect(await repository.findOneById(vaultEntity.id)).toEqual(vaultEntity);
+
+      // Act
+      const result = await repository.deleteById(vaultEntity.id);
+
+      // Assert
+      expect(result).toEqual([{ id: vaultEntity.id }]);
+      expect(await repository.findOneById(vaultEntity.id)).toEqual(null);
+    });
+
+    it('should handle vault not found', async () => {
+      // Arrange
+      const repository = new VaultsRepository(connection);
+
+      // Act
+      const result = await repository.deleteById('not an id');
+
+      // Assert
+      expect(result).toEqual([]);
+    });
+  });
+
   describe('findOneById', () => {
     it('returns a vault when given a valid vaultId', async () => {
       // Arrange

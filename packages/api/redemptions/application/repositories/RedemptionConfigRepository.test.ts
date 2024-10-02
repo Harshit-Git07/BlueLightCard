@@ -68,6 +68,36 @@ describe('RedemptionConfigRepository', () => {
     });
   });
 
+  describe('deleteById', () => {
+    it('should delete redemption configuration', async () => {
+      // Arrange
+      const repository = new RedemptionConfigRepository(connection);
+      const redemptionEntity = redemptionConfigEntityFactory.build();
+
+      await connection.db.insert(redemptionsTable).values(redemptionEntity).execute();
+
+      expect(await repository.findOneById(redemptionEntity.id)).toEqual(redemptionEntity);
+
+      // Act
+      const result = await repository.deleteById(redemptionEntity.id);
+
+      // Assert
+      expect(result).toEqual([{ id: redemptionEntity.id }]);
+      expect(await repository.findOneById(redemptionEntity.id)).toEqual(null);
+    });
+
+    it('should handle redemption configuration not found', async () => {
+      // Arrange
+      const repository = new RedemptionConfigRepository(connection);
+
+      // Act
+      const result = await repository.deleteById('not an id');
+
+      // Assert
+      expect(result).toEqual([]);
+    });
+  });
+
   describe('findOneById', () => {
     it('returns the redemption when it exists', async () => {
       const repository = new RedemptionConfigRepository(connection);
@@ -90,7 +120,7 @@ describe('RedemptionConfigRepository', () => {
 
       const result = await repository.findOneById(id);
 
-      expect(result).toEqual(undefined);
+      expect(result).toEqual(null);
     });
   });
 

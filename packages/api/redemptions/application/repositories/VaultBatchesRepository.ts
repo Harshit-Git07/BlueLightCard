@@ -15,6 +15,7 @@ export interface IVaultBatchesRepository {
   findByVaultId(vaultId: string): Promise<VaultBatchEntity[]>;
   getCodesRemaining(batchId: string): Promise<number>;
   deleteById(id: string): Promise<Pick<VaultBatchEntity, 'id'>[]>;
+  deleteByVaultId(vaultId: string): Promise<Pick<VaultBatchEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultBatchesRepository;
   updateOneById(
     id: string,
@@ -36,8 +37,12 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
     );
   }
 
-  public findByVaultId(vaultId: string): Promise<VaultBatchEntity[]> {
-    return this.connection.db.select().from(vaultBatchesTable).where(eq(vaultBatchesTable.vaultId, vaultId)).execute();
+  public async findByVaultId(vaultId: string): Promise<VaultBatchEntity[]> {
+    return await this.connection.db
+      .select()
+      .from(vaultBatchesTable)
+      .where(eq(vaultBatchesTable.vaultId, vaultId))
+      .execute();
   }
 
   public async getCodesRemaining(batchId: string): Promise<number> {
@@ -48,6 +53,14 @@ export class VaultBatchesRepository extends Repository implements IVaultBatchesR
       .execute();
 
     return result[0].codesRemaining;
+  }
+
+  public async deleteByVaultId(vaultId: string): Promise<Pick<VaultBatchEntity, 'id'>[]> {
+    return await this.connection.db
+      .delete(vaultBatchesTable)
+      .where(eq(vaultBatchesTable.vaultId, vaultId))
+      .returning({ id: vaultBatchesTable.id })
+      .execute();
   }
 
   public async deleteById(id: string): Promise<Pick<VaultBatchEntity, 'id'>[]> {

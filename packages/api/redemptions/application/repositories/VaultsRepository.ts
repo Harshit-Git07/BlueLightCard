@@ -21,6 +21,7 @@ export interface IVaultsRepository {
   updateOneById(id: string, updateVaultEntity: UpdateVaultEntity): Promise<Pick<VaultEntity, 'id'> | undefined>;
   createMany(NewVaultEntities: NewVaultEntity[]): Promise<Pick<VaultEntity, 'id'>[]>;
   create(newVaultEntity: NewVaultEntity): Promise<Pick<VaultEntity, 'id'>>;
+  deleteById(id: string): Promise<Pick<VaultEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultsRepository;
 }
 
@@ -46,8 +47,19 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
     return this.atMostOne(result);
   }
 
-  public updateOneById(id: string, vaultDataToUpdate: UpdateVaultEntity): Promise<Pick<VaultEntity, 'id'> | undefined> {
-    return this.connection.db
+  public async deleteById(id: string): Promise<Pick<VaultEntity, 'id'>[]> {
+    return await this.connection.db
+      .delete(vaultsTable)
+      .where(eq(vaultsTable.id, id))
+      .returning({ id: vaultsTable.id })
+      .execute();
+  }
+
+  public async updateOneById(
+    id: string,
+    vaultDataToUpdate: UpdateVaultEntity,
+  ): Promise<Pick<VaultEntity, 'id'> | undefined> {
+    return await this.connection.db
       .update(vaultsTable)
       .set(vaultDataToUpdate)
       .where(eq(vaultsTable.id, id))
@@ -58,8 +70,8 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .then((result) => result?.at(0));
   }
 
-  public createMany(vaults: NewVaultEntity[]): Promise<Pick<VaultEntity, 'id'>[]> {
-    return this.connection.db
+  public async createMany(vaults: NewVaultEntity[]): Promise<Pick<VaultEntity, 'id'>[]> {
+    return await this.connection.db
       .insert(vaultsTable)
       .values(vaults)
       .returning({

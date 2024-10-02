@@ -50,7 +50,7 @@ describe('CreateVaultBatchService', () => {
     } satisfies ParsedRequest;
   }
 
-  const mockRedemptionsRepository: IRedemptionConfigRepository = {
+  const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {
     findOneByOfferId: jest.fn(),
     findOneById: jest.fn(),
     updateManyByOfferId: jest.fn(),
@@ -60,7 +60,7 @@ describe('CreateVaultBatchService', () => {
     updateOneById: jest.fn(),
   };
 
-  const mockVaultsRepository: IVaultsRepository = {
+  const mockVaultsRepository: Partial<IVaultsRepository> = {
     findOneByRedemptionId: jest.fn(),
     findOneById: jest.fn(),
     updateOneById: jest.fn(),
@@ -69,7 +69,7 @@ describe('CreateVaultBatchService', () => {
     withTransaction: jest.fn(),
   };
 
-  const mockVaultBatchesRepository: IVaultBatchesRepository = {
+  const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {
     create: jest.fn(),
     findByVaultId: jest.fn(),
     getCodesRemaining: jest.fn(),
@@ -79,7 +79,7 @@ describe('CreateVaultBatchService', () => {
     deleteById: jest.fn(),
   };
 
-  const mockS3ClientProvider: IS3ClientProvider = {
+  const mockS3ClientProvider: Partial<IS3ClientProvider> = {
     getClient: jest.fn(),
   };
 
@@ -93,10 +93,10 @@ describe('CreateVaultBatchService', () => {
     const service: CreateVaultBatchService = new CreateVaultBatchService(
       createSilentLogger(),
       as(mockRedemptionsRepository),
-      mockVaultsRepository,
-      mockVaultBatchesRepository,
+      as(mockVaultsRepository),
+      as(mockVaultBatchesRepository),
       transactionManager,
-      mockS3ClientProvider,
+      as(mockS3ClientProvider),
       mockS3SignedUrl,
     );
     return await service.createVaultBatch(testEvent);

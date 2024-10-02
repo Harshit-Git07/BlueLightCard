@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 
+import { as } from '@blc-mono/core/utils/testing';
 import { IVaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
@@ -34,7 +35,7 @@ describe('DeleteVaultBatchService', () => {
     },
   } satisfies ParsedRequest;
 
-  const mockVaultBatchesRepository: IVaultBatchesRepository = {
+  const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {
     create: jest.fn(),
     findByVaultId: jest.fn(),
     getCodesRemaining: jest.fn(),
@@ -122,7 +123,7 @@ describe('DeleteVaultBatchService', () => {
     const transactionManager = new TransactionManager(connection);
     const service = new DeleteVaultBatchService(
       createSilentLogger(),
-      mockVaultBatchesRepository,
+      as(mockVaultBatchesRepository),
       mockVaultCodesRepository,
       transactionManager,
     );

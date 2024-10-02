@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { beforeAll } from '@jest/globals';
 
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
+import { as } from '@blc-mono/core/utils/testing';
 import { IGenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import {
@@ -47,7 +48,7 @@ describe('Redemption Strategies', () => {
       publishVaultBatchCreatedEvent: jest.fn(),
     };
   }
-  function mockGenericsRepository(): IGenericsRepository {
+  function mockGenericsRepository(): Partial<IGenericsRepository> {
     return {
       deleteByRedemptionId: jest.fn(),
       updateByRedemptionId: jest.fn(),
@@ -56,7 +57,7 @@ describe('Redemption Strategies', () => {
       withTransaction: jest.fn(),
     };
   }
-  function mockVaultsRepository(): IVaultsRepository {
+  function mockVaultsRepository(): Partial<IVaultsRepository> {
     return {
       create: jest.fn(),
       findOneByRedemptionId: jest.fn(),
@@ -112,7 +113,7 @@ describe('Redemption Strategies', () => {
       const mockedRedemptionsEventsRepository =
         overrides?.redemptionEventsRepository || mockRedemptionsEventsRepository();
       const genericsRepository = overrides?.genericsRepository || mockGenericsRepository();
-      const service = new RedeemGenericStrategy(genericsRepository, mockedRedemptionsEventsRepository, logger);
+      const service = new RedeemGenericStrategy(as(genericsRepository), as(mockedRedemptionsEventsRepository), logger);
 
       return service.redeem(redemptionConfigEntity, defaultParams);
     }
@@ -126,7 +127,7 @@ describe('Redemption Strategies', () => {
       // Act & Assert
       await expect(() =>
         callGenericRedeemStrategy(testGenericRedemption, mockedSilentLogger, {
-          genericsRepository: mockedGenericsRepository,
+          genericsRepository: as(mockedGenericsRepository),
         }),
       ).rejects.toThrow();
     });
@@ -141,7 +142,7 @@ describe('Redemption Strategies', () => {
 
       // Act
       const result = await callGenericRedeemStrategy(testGenericRedemption, mockedLogger, {
-        genericsRepository: mockedGenericsRepository,
+        genericsRepository: as(mockedGenericsRepository),
         redemptionEventsRepository: mockedRedemptionsEventsRepository,
       });
 
@@ -163,7 +164,7 @@ describe('Redemption Strategies', () => {
       // Act
       const result = await callGenericRedeemStrategy(testGenericRedemption, mockedLogger, {
         redemptionEventsRepository: mockedRedemptionsEventsRepository,
-        genericsRepository: mockedGenericsRepository,
+        genericsRepository: as(mockedGenericsRepository),
       });
 
       // Assert
@@ -372,7 +373,7 @@ describe('Redemption Strategies', () => {
       const mockedVaultCodesRepository = overrides?.vaultCodesRepository || mockVaultCodesRepository();
       const mockedLegacyVaultApiRepository = overrides?.legacyVaultApiRepository || mockLegacyVaultApiRepository();
       const service = new RedeemVaultStrategy(
-        mockedVaultsRepository,
+        as(mockedVaultsRepository),
         mockedVaultCodesRepository,
         mockedLegacyVaultApiRepository,
         mockedRedemptionsEventsRepository,
@@ -390,7 +391,7 @@ describe('Redemption Strategies', () => {
 
       // Act
       const result = callVaultRedeemStrategy(testVaultRedemption, mockedSilentLogger, {
-        vaultsRepository: mockedVaultsRepository,
+        vaultsRepository: as(mockedVaultsRepository),
       });
 
       // Assert
@@ -411,7 +412,7 @@ describe('Redemption Strategies', () => {
         // Act & Assert
         await expect(() =>
           callVaultRedeemStrategy(testVaultRedemption, mockedSilentLogger, {
-            vaultsRepository: mockedVaultsRepository,
+            vaultsRepository: as(mockedVaultsRepository),
           }),
         ).rejects.toThrow();
       });
@@ -426,7 +427,7 @@ describe('Redemption Strategies', () => {
         // Act & Assert
         await expect(() =>
           callVaultRedeemStrategy(testVaultRedemption, mockedSilentLogger, {
-            vaultsRepository: mockedVaultsRepository,
+            vaultsRepository: as(mockedVaultsRepository),
           }),
         ).rejects.toThrow('No vault code found');
       });
@@ -440,7 +441,7 @@ describe('Redemption Strategies', () => {
 
         // Act
         const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
-          vaultsRepository: mockedVaultsRepository,
+          vaultsRepository: as(mockedVaultsRepository),
           vaultCodesRepository: mockedVaultCodesRepository,
         });
 
@@ -461,7 +462,7 @@ describe('Redemption Strategies', () => {
 
         // Act
         const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
-          vaultsRepository: mockedVaultsRepository,
+          vaultsRepository: as(mockedVaultsRepository),
           vaultCodesRepository: mockedVaultCodesRepository,
           redemptionEventsRepository: mockedRedemptionsEventsRepository,
         });
@@ -484,7 +485,7 @@ describe('Redemption Strategies', () => {
 
         // Act
         const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
-          vaultsRepository: mockedVaultsRepository,
+          vaultsRepository: as(mockedVaultsRepository),
           vaultCodesRepository: mockedVaultCodesRepository,
           redemptionEventsRepository: mockedRedemptionsEventsRepository,
         });
@@ -519,7 +520,7 @@ describe('Redemption Strategies', () => {
         // Act & Assert
         await expect(() =>
           callVaultRedeemStrategy(testVaultRedemption, mockedSilentLogger, {
-            vaultsRepository: mockedVaultsRepository,
+            vaultsRepository: as(mockedVaultsRepository),
             legacyVaultApiRepository: mockedLegacyVaultApiRepository,
           }),
         ).rejects.toThrow('Error checking number of codes issued');
@@ -537,7 +538,7 @@ describe('Redemption Strategies', () => {
 
         // Act
         const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
-          vaultsRepository: mockedVaultsRepository,
+          vaultsRepository: as(mockedVaultsRepository),
           legacyVaultApiRepository: mockedLegacyVaultApiRepository,
         });
 
@@ -559,7 +560,7 @@ describe('Redemption Strategies', () => {
         await expect(() =>
           callVaultRedeemStrategy(testVaultRedemption, mockedSilentLogger, {
             legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-            vaultsRepository: mockedVaultsRepository,
+            vaultsRepository: as(mockedVaultsRepository),
           }),
         ).rejects.toThrow('Error assigning code');
       });
@@ -581,7 +582,7 @@ describe('Redemption Strategies', () => {
         // Act
         const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
           legacyVaultApiRepository: mockedLegacyVaultApiRepository,
-          vaultsRepository: mockedVaultsRepository,
+          vaultsRepository: as(mockedVaultsRepository),
           redemptionEventsRepository: mockedRedemptionsEventsRepository,
         });
 
@@ -607,7 +608,7 @@ describe('Redemption Strategies', () => {
 
         // Act
         const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
-          vaultsRepository: mockedVaultsRepository,
+          vaultsRepository: as(mockedVaultsRepository),
           legacyVaultApiRepository: mockedLegacyVaultApiRepository,
           redemptionEventsRepository: mockedRedemptionsEventsRepository,
         });
@@ -637,7 +638,7 @@ describe('Redemption Strategies', () => {
 
         // Act
         const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
-          vaultsRepository: mockedVaultsRepository,
+          vaultsRepository: as(mockedVaultsRepository),
           legacyVaultApiRepository: mockedLegacyVaultApiRepository,
           vaultCodesRepository: mockedVaultCodesRepository,
           redemptionEventsRepository: mockedRedemptionsEventsRepository,
@@ -662,7 +663,7 @@ describe('Redemption Strategies', () => {
         // Act & Assert
         await expect(
           callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
-            vaultsRepository: mockedVaultsRepository,
+            vaultsRepository: as(mockedVaultsRepository),
             legacyVaultApiRepository: mockedLegacyVaultApiRepository,
           }),
         ).rejects.toThrow('No vault codes available on legacy');
@@ -685,7 +686,7 @@ describe('Redemption Strategies', () => {
         // Act & Assert
         await expect(() =>
           callVaultRedeemStrategy(testVaultRedemption, mockedSilentLogger, {
-            vaultsRepository: mockedVaultsRepository,
+            vaultsRepository: as(mockedVaultsRepository),
             legacyVaultApiRepository: mockedLegacyVaultApiRepository,
             vaultCodesRepository: mockedVaultCodesRepository,
           }),

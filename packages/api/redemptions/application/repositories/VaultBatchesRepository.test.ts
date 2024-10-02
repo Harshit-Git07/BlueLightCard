@@ -268,6 +268,40 @@ describe('VaultBatchesRepository', () => {
     });
   });
 
+  describe('deleteByVaultId', () => {
+    it('should delete all vaultBatches', async () => {
+      // Arrange
+      const repository = new VaultBatchesRepository(connection);
+
+      const redemptionEntity = await createRedemptionRecord(connection);
+      const vaultEntity = await createVaultRecord(connection, redemptionEntity.id);
+      const vaultBatchEntityOne = await createVaultBatchRecord(connection, vaultEntity.id);
+      const vaultBatchEntityTwo = await createVaultBatchRecord(connection, vaultEntity.id);
+
+      expect(await repository.findOneById(vaultBatchEntityOne.id)).toEqual(vaultBatchEntityOne);
+      expect(await repository.findOneById(vaultBatchEntityTwo.id)).toEqual(vaultBatchEntityTwo);
+
+      // Act
+      const result = await repository.deleteByVaultId(vaultEntity.id);
+
+      // Assert
+      expect(result).toEqual([{ id: vaultBatchEntityOne.id }, { id: vaultBatchEntityTwo.id }]);
+      expect(await repository.findOneById(vaultBatchEntityOne.id)).toEqual(null);
+      expect(await repository.findOneById(vaultBatchEntityTwo.id)).toEqual(null);
+    });
+
+    it('should handle vault batch not found', async () => {
+      // Arrange
+      const repository = new VaultBatchesRepository(connection);
+
+      // Act
+      const result = await repository.deleteByVaultId('not an id');
+
+      // Assert
+      expect(result).toEqual([]);
+    });
+  });
+
   describe('deleteById', () => {
     it('returns empty if the vault batch does not exist', async () => {
       // Arrange

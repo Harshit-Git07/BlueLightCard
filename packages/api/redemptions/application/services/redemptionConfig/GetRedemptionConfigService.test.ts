@@ -16,7 +16,7 @@ import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformer
 import { GetRedemptionConfigService, RedemptionConfigResult } from './GetRedemptionConfigService';
 
 const mockLogger = createTestLogger();
-const mockRedemptionConfigRepository: IRedemptionConfigRepository = {
+const mockRedemptionConfigRepository: Partial<IRedemptionConfigRepository> = {
   findOneById: jest.fn(),
   findOneByOfferId: jest.fn(),
   updateManyByOfferId: jest.fn(),
@@ -24,34 +24,33 @@ const mockRedemptionConfigRepository: IRedemptionConfigRepository = {
   createRedemption: jest.fn(),
   withTransaction: jest.fn(),
   updateOneById: jest.fn(),
-} satisfies IRedemptionConfigRepository;
+};
 
-const mockGenericsRepository: IGenericsRepository = {
+const mockGenericsRepository: Partial<IGenericsRepository> = {
   findOneByRedemptionId: jest.fn(),
   createGeneric: jest.fn(),
   updateByRedemptionId: jest.fn(),
   deleteByRedemptionId: jest.fn(),
   withTransaction: jest.fn(),
-} satisfies IGenericsRepository;
+};
 
-const mockVaultsRepository: IVaultsRepository = {
+const mockVaultsRepository: Partial<IVaultsRepository> = {
   findOneByRedemptionId: jest.fn(),
   findOneById: jest.fn(),
   updateOneById: jest.fn(),
   createMany: jest.fn(),
   create: jest.fn(),
   withTransaction: jest.fn(),
-} satisfies IVaultsRepository;
+};
 
-const mockVaultBatchesRepository: IVaultBatchesRepository = {
+const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {
   create: jest.fn(),
   findByVaultId: jest.fn(),
   getCodesRemaining: jest.fn(),
   deleteById: jest.fn(),
   withTransaction: jest.fn(),
   updateOneById: jest.fn(),
-  findOneById: jest.fn(),
-} satisfies IVaultBatchesRepository;
+};
 
 const mockRedemptionConfigTransformer: Partial<RedemptionConfigTransformer> = {
   transformToRedemptionConfig: jest.fn(),
@@ -70,10 +69,10 @@ const redemptionConfig: RedemptionConfig = {
 
 const getRedemptionConfigService = new GetRedemptionConfigService(
   mockLogger,
-  mockRedemptionConfigRepository,
-  mockGenericsRepository,
-  mockVaultsRepository,
-  mockVaultBatchesRepository,
+  as(mockRedemptionConfigRepository),
+  as(mockGenericsRepository),
+  as(mockVaultsRepository),
+  as(mockVaultBatchesRepository),
   as(mockRedemptionConfigTransformer),
 );
 

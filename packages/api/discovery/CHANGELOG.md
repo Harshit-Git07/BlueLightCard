@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.8.0...bluelightcard/discovery-v1.9.0) (2024-10-01)
+
+
+### Features
+
+* [DISCO-695] Add Discovery event pipeline ([#2282](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2282)) ([7e97269](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7e97269ac3dfc188dbe88dcf43398a27e713d1b6))
+* [DISCO-696] Build OpenSearch index sourcing Offer Events from DynamoDB ([#2190](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2190)) ([0ea9eb5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0ea9eb5409015116b606b7a7ae39b534d3c9fdcc))
+* Disco 700 - Add Swagger Doc for search and move lambda into VPC ([#2278](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2278)) ([2bf387a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2bf387a4964f6e2e3c5d1b39baa60936516e24dc))
+* Disco-932 - Implementation of Cron ([#2311](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2311)) ([7fc992d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7fc992d01f3f7db19746518193167a05bc2e0163))
+* Feature/disco 701 add open search query builder ([#2333](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2333)) ([16cd18b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/16cd18bfeb9263d668bc9c2bfbfb79b84342270a))
+
+
+### Bug Fixes
+
+* [DISCO-701] Add opensearch builder back in ([#2359](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2359)) ([923888e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/923888e4a814e3514e7d9ec5b21cd496ec068080))
+* [DISCO-701] Remove unvalid check on response body for search ([#2351](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2351)) ([0452241](https://github.com/bluelightcard/BlueLightCard-2.0/commit/04522414c0e3305e928eac3d1bf4dcd19e6470b1))
+* [DISCO-701] Update age restrictions handling ([#2356](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2356)) ([ad4a52b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ad4a52b0ff87aef71be0ba70f7a23a2504035d19))
+* Update discovery sonar settings for infrastructure ([#2300](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2300)) ([26cd281](https://github.com/bluelightcard/BlueLightCard-2.0/commit/26cd2812473cbb577132f3cdefab86faf9a0db60))
+
 ## [1.8.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.7.0...bluelightcard/discovery-v1.8.0) (2024-09-23)
 
 

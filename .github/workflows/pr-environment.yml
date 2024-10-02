@@ -519,6 +519,7 @@ jobs:
             <tr><td><strong>Status:</strong></td><td>&nbsp;✅&nbsp; Deploy successful!</td></tr>
             <tr><td><strong>PR Preview URL:</strong></td><td>
             <a href='https://pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev'>https://pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev</a>
+            (<a href='https://pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev/mock-login'>Login</a>)
             </td></tr>
             <tr><td><strong>Specific Commit Preview URL:</strong></td><td>
             <a href='${{ steps.cloudflare-publish.outputs.url }}'>${{ steps.cloudflare-publish.outputs.url }}</a>

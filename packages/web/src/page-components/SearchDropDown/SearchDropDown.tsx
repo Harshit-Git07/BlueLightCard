@@ -1,4 +1,4 @@
-import React, { FC, useContext, useRef } from 'react';
+import React, { FC, useContext, useEffect, useRef } from 'react';
 import { SearchDropDownProps } from './types';
 import Link from '@/components/Link/Link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,6 +28,18 @@ export const SearchDropDownPresenter = ({
   onClose,
 }: SearchDropDownPresenterProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [isOpen]);
 
   if (!isOpen) return <></>;
 
@@ -113,7 +125,7 @@ const SearchDropDown: FC<SearchDropDownProps> = ({
   const userCtx = useContext(UserContext);
   const { categories, companies } = useFetchCompaniesOrCategories(userCtx);
 
-  return (
+  return isOpen ? (
     <SearchDropDownPresenter
       isOpen={isOpen}
       companies={companies}
@@ -122,7 +134,7 @@ const SearchDropDown: FC<SearchDropDownProps> = ({
       onSearchCompanyChange={onSearchCompanyChange}
       onClose={onClose}
     />
-  );
+  ) : null;
 };
 
 export default SearchDropDown;

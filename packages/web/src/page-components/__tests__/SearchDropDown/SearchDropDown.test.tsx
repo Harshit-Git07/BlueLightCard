@@ -1,4 +1,4 @@
-import { act, render, fireEvent, within } from '@testing-library/react';
+import { act, render, fireEvent, within, cleanup } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { composeStories } from '@storybook/react';
 import * as stories from '../../SearchDropDown/SearchDropDown.stories';
@@ -44,5 +44,59 @@ describe('SearchDropDown', () => {
     expect(onSearchCategoryChange).toHaveBeenCalledWith('11', 'Children and toys');
     expect(onSearchCompanyChange).toHaveBeenCalledWith('26529', 'Youth & Earth');
     expect(onClose).toHaveBeenCalled();
+  });
+});
+
+describe('SearchDropDown scroll behavior', () => {
+  const onSearchCategoryChange = jest.fn();
+  const onSearchCompanyChange = jest.fn();
+  const onClose = jest.fn();
+
+  afterEach(() => {
+    cleanup();
+    document.body.classList.remove('no-scroll');
+  });
+
+  it('adds the no-scroll class to the body when isOpen is true', () => {
+    render(
+      <Default
+        isOpen={true}
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onClose={onClose}
+      />
+    );
+
+    expect(document.body.classList.contains('no-scroll')).toBe(true);
+  });
+
+  it('removes the no-scroll class from the body when isOpen is false', () => {
+    render(
+      <Default
+        isOpen={false}
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onClose={onClose}
+      />
+    );
+
+    expect(document.body.classList.contains('no-scroll')).toBe(false);
+  });
+
+  it('removes the no-scroll class from the body when component unmounts', () => {
+    const { unmount } = render(
+      <Default
+        isOpen={true}
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onClose={onClose}
+      />
+    );
+
+    expect(document.body.classList.contains('no-scroll')).toBe(true);
+
+    unmount();
+
+    expect(document.body.classList.contains('no-scroll')).toBe(false);
   });
 });

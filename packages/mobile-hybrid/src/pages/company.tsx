@@ -38,12 +38,17 @@ const Company: NextPage<any> = () => {
   useEffect(() => {
     const getOffers = async () => {
       const platformAdapter = new MobilePlatformAdapter();
-      const offersResponse = await platformAdapter.invokeV5Api(`/eu/offers/company/${cid}/offers`, {
+      const offersRetrieve = platformAdapter.invokeV5Api(`/eu/offers/company/${cid}/offers`, {
         method: 'GET',
       });
-      const companyResponse = await platformAdapter.invokeV5Api(`/eu/offers/company/${cid}`, {
+      const companyRetrieve = platformAdapter.invokeV5Api(`/eu/offers/company/${cid}`, {
         method: 'GET',
       });
+
+      const [companyResponse, offersResponse] = await Promise.all([
+        companyRetrieve,
+        offersRetrieve,
+      ]);
 
       // Offer probably doesnt exist or at least somethings gone wrong with the data
       if (!companyResponse.data || !offersResponse.data) {

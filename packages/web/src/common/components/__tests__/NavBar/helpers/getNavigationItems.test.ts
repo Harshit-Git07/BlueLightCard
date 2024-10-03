@@ -59,7 +59,7 @@ describe('getNavigationItems', () => {
         expectedNavigationItems,
         authenticated,
         brand,
-        'https://bluelightcard.zendesk.com/hc/en-gb',
+        'https://bluelightcard.zendesk.com/hc/en-gb/signin',
         COGNITO_LOGOUT_URL,
         isZendeskV1BlcUkEnabled,
         isCognitoUIEnabled
@@ -79,7 +79,7 @@ describe('getNavigationItems > without Zendesk', () => {
         expectedNavigationItems,
         authenticated,
         brand,
-        'https://bluelightcard.zendesk.com/hc/en-gb',
+        'https://bluelightcard.zendesk.com/hc/en-gb/signin',
         COGNITO_LOGOUT_URL,
         false,
         isCognitoUIEnabled
@@ -99,7 +99,7 @@ describe('getNavigationItems > without Cognito UI', () => {
         expectedNavigationItems,
         authenticated,
         brand,
-        'https://bluelightcard.zendesk.com/hc/en-gb',
+        'https://bluelightcard.zendesk.com/hc/en-gb/signin',
         '/logout.php',
         isZendeskV1BlcUkEnabled,
         false

@@ -363,7 +363,7 @@ jobs:
             offers_graphql_endpoint: 'https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql'
             offers_api_gateway_endpoint: 'https://staging-offers.blcshine.io'
             offers_brand: 'blc-uk'
-            zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb'
+            zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin'
             # Brand Specific Variables needed for Seeding of QA Environment
             event_bus_name: staging-blc-mono-eventBus
             cognito_web_pool_client: eu-west-2_Ow2L8azIb

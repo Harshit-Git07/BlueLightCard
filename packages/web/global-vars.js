@@ -68,7 +68,7 @@ const BRAZE_SDK_API_KEY = process.env.NEXT_PUBLIC_BRAZE_SDK_API_KEY ?? '';
 
 // zendesk
 const ZENDESK_V1_BLC_UK_URL =
-  process.env.NEXT_ZENDESK_V1_BLC_UK_URL ?? 'https://bluelightcard.zendesk.com/hc/en-gb';
+  process.env.NEXT_ZENDESK_V1_BLC_UK_URL ?? 'https://bluelightcard.zendesk.com/hc/en-gb/signin';
 
 /*
  * Language is made up of the lng and region

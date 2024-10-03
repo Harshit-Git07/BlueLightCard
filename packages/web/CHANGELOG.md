@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.74.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.73.1...bluelightcard/web-v1.74.0) (2024-10-03)
+
+
+### Features
+
+* feat/COT-854 changed zendesk logged In URL ([#2342](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2342)) ([7c1cd57](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7c1cd57777f6f107a855896d8b2b50f1cd280a08))
+* fixed scroll issue and closing state of SearchDropdown ([#2365](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2365)) ([6d242ac](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6d242acf9d2c412fd5aaa3a1f751ac13fdcfb9b8))
+
+
+### Bug Fixes
+
+* removes advert and offers length check to stop loading and sets initial state to null ([#2361](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2361)) ([ae2716e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae2716e32c63d054a10268b96fcfd3b47c1de6dd))
+
 ## [1.73.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.73.0...bluelightcard/web-v1.73.1) (2024-09-27)
 
 

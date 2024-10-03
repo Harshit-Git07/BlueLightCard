@@ -5,7 +5,7 @@ export interface ICliLoggerDetail extends ILoggerDetail {}
 
 /**
  * Logs colored messages to the console. Do not use this logger in application code.
- * 
+ *
  * - ✅ Human readable
  * - ✅ Colored
  * - ❌ Not machine readable (unstructured)

@@ -1,6 +1,7 @@
 import { SSTConfig } from 'sst';
 import { Identity } from '@blc-mono/identity/stack';
 import { Offers } from '@blc-mono/offers/stack';
+import { OffersCMS } from '@blc-mono/offers-cms/stack';
 import { Web } from 'client/stack';
 import { Shared } from './stacks/stack';
 import { Redemptions } from '@blc-mono/redemptions/infrastructure/stack';
@@ -35,6 +36,7 @@ export default {
       app.stack(Redemptions, { id: 'redemptions' }),
       app.stack(Offers, { id: 'offers' }),
       app.stack(Discovery, { id: 'discovery' }),
+      app.stack(OffersCMS, { id: 'offers-cms' }),
     ]);
 
     app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });

@@ -1,0 +1,77 @@
+{
+  "name": "10% discount online",
+  "expires": null,
+  "_id": "f1984fb38cf38cefe7f7a118b11e3ef8",
+  "commonExclusions": null,
+  "inclusions": null,
+  "_rev": "I5UzWsAiKWwhDGLg8EFfCT",
+  "termsAndConditions": {
+    "_type": "richtext-module",
+    "content": [
+      {
+        "_key": "q-2K5zpQvFBHCuVHsLu2R",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "KKKtPe5_g2u5GnPVja8tF",
+            "_type": "span",
+            "marks": [],
+            "text": "10% off entire order. No minimum purchase requirement. Can be used by any customers on the website. Can’t combine with other discounts. Active until 31st December 2024."
+          }
+        ]
+      }
+    ]
+  },
+  "_createdAt": "2024-08-20T15:15:10Z",
+  "_type": "offer",
+  "local": false,
+  "operation": "update",
+  "brandCompanyDetails": null,
+  "categorySelection": null,
+  "_updatedAt": "2024-09-09T14:52:34Z",
+  "offerDescription": {
+    "content": [
+      {
+        "_key": "OjR-LH-QSiUqFn9fNYcUP",
+        "_type": "block",
+        "children": [
+          {
+            "text": "10% off your online order. Excludes already discounted items.",
+            "_key": "Mn5xs9y_b6mm5Ahkx95Gf",
+            "_type": "span",
+            "marks": []
+          }
+        ]
+      }
+    ],
+    "_type": "richtext-module"
+  },
+  "image": { "default": null, "light": null, "dark": null },
+  "company": null,
+  "offerId": 40526,
+  "brands": [
+    {
+      "_rev": "ay1Qi2kZ7g5h6PfjkqdNX2",
+      "code": "BLC_UK",
+      "link": "https://www.bluelightcard.co.uk",
+      "logo": {
+        "default": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-f24c66a6c27d624868a85e6c7b54a7d2e06406fe-2500x442-webp",
+            "_type": "reference"
+          }
+        }
+      },
+      "_type": "brand",
+      "_id": "17223d8b-b581-4a37-b0fc-7b6d8da5fb61",
+      "name": "Bluelightcard UK",
+      "_createdAt": "2024-07-03T14:58:31Z",
+      "_updatedAt": "2024-07-17T11:26:31Z"
+    }
+  ],
+  "restrictions": null,
+  "boostDetails": null,
+  "evergreen": false,
+  "offerType": { "_type": "offer.type", "offerType": "online" }
+}

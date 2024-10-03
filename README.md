@@ -40,6 +40,22 @@ To start the backend run the following (this will deploy the backend to your aws
 npm run dev
 ```
 
+## Add Github package registry auth token
+
+If you don't have an `.npmrc` file in your user home directory, create one.
+
+Add the following line:
+
+```
+//npm.pkg.github.com/:_authToken=<auth_token>
+```
+
+Replace `<auth_token>` with a GitHub Personal Token (classic) with permissions set only to `read:packages`.
+
+Set the token so that it has authorisation to read packages in the bluelightcard GitHub organisation.
+
+See the [GitHub documentation on package authentication](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-with-a-personal-access-token) for more information.
+
 ### Seeding
 
 To seed your local environment run the seed command (in another terminal)

@@ -12,7 +12,7 @@ describe('Form component', () => {
   let user: UserEvent;
   let fieldsSchemaMock: Array<FormField | FormField[]>;
 
-  const TextFieldComponent: FC = ({ id, required, value, _ref, onChange }: any) => (
+  const TextFieldComponent: FC<any> = ({ id, required, value, _ref, onChange }) => (
     <input
       id={id}
       required={required}
@@ -23,7 +23,7 @@ describe('Form component', () => {
     />
   );
 
-  const SelectFieldComponent: FC = ({ id, required, value, _ref, onChange }: any) => (
+  const SelectFieldComponent: FC<any> = ({ id, required, value, _ref, onChange }) => (
     <select id={id} required={required} ref={_ref} defaultValue={value} onChange={onChange}>
       <option value="">Please select a value</option>
       <option value="option-1">Option 1</option>

@@ -6,7 +6,9 @@ inputs:
     required: true
     default: 'true'
   token:
+    description: 'Token for accessing GitHub Package Registry'
     required: true
+  
 runs:
   using: 'composite'
   steps:
@@ -14,6 +16,7 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
+        registry-url: 'https://npm.pkg.github.com'
 
     - name: Cache node_modules
       id: cache-node-modules
@@ -30,7 +33,7 @@ runs:
       if: steps.cache-node-modules.outputs.cache-hit != 'true'
       shell: 'bash'
       env:
-        NPM_AUTH: ${{ inputs.token }}
+        NODE_AUTH_TOKEN: ${{ inputs.token }}
       run: npm ci
 
     - if: failure()

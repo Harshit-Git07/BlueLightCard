@@ -38,12 +38,19 @@
     ],
     "packages/shared-ui/**/*.{js,jsx,mjs,ts,tsx,mts}": [
       "npm run -w packages/shared-ui lint:staged --"
+    ],
+    "packages/api/offers-cms/**/*.{js,jsx,mjs,ts,tsx,mts,json,md}": [
+      "npm run -w packages/api/offers-cms format:staged --"
+    ],
+    "packages/api/offers-cms/**/*.{js,jsx,mjs,ts,tsx,mts}": [
+      "npm run -w packages/api/offers-cms lint:staged --"
     ]
   },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "3.606.0",
     "@aws-sdk/client-eventbridge": "3.606.0",
     "@aws-sdk/client-s3": "3.606.0",
+    "@bluelightcard/sanity-types": "0.0.14",
     "@cloudflare/workers-types": "4.20240502.0",
     "@commitlint/cli": "^17.6.5",
     "@commitlint/config-conventional": "^17.6.5",

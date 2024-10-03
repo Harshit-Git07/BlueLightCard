@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@blc-mono/shared/*": ["../../../stacks/*"],
+      "@blc-mono/core/*": ["../core/src/*"],
+      "@blc-mono/offers-cms/*": ["./*"]
+    }
+  }
+}

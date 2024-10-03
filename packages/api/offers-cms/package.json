@@ -1,0 +1,43 @@
+{
+  "name": "@blc-mono/offers-cms",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "deploy": "sst deploy",
+    "dev": "sst dev",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "format:staged": "prettier --write --ignore-unknown",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:staged": "eslint --fix",
+    "typecheck": "tsc --noEmit",
+    "types:generate": "sst types",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-events": "1.203.0",
+    "@aws-sdk/client-dynamodb": "^3.650.0",
+    "@aws-sdk/client-eventbridge": "^3.662.0",
+    "@aws-sdk/lib-dynamodb": "^3.650.0",
+    "@hono/zod-validator": "^0.2.2",
+    "aws-jwt-verify": "^4.0.1",
+    "hono": "^4.6.1",
+    "ky": "^1.7.2",
+    "sst": "^2.4.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@jest/globals": "29.7.0",
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^20",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "jest": "29.7.0",
+    "lint-staged": "15.2.10",
+    "prettier": "^3.3.3",
+    "ts-jest": "29.2.5",
+    "typescript": "5.6.2"
+  }
+}

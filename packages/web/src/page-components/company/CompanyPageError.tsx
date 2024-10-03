@@ -12,9 +12,7 @@ const CompanyPageError: FC<props> = ({ message }) => {
       <Heading headingLevel={'h2'} className="dark:text-white text-black pt-8">
         {message}
       </Heading>
-      <Button type="link" href="/">
-        Return Home
-      </Button>
+      <Button href="/">Return Home</Button>
     </div>
   );
 };

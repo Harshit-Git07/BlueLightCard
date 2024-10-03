@@ -287,6 +287,19 @@
         "value": "#1A49FF",
         "type": "color"
       },
+      "duke-400-40%": {
+        "value": "{colour.blc.duke-400}",
+        "type": "color",
+        "$extensions": {
+          "studio.tokens": {
+            "modify": {
+              "type": "lighten",
+              "value": "0.4",
+              "space": "lch"
+            }
+          }
+        }
+      },
       "duke-500": {
         "value": "#2929CC",
         "type": "color"

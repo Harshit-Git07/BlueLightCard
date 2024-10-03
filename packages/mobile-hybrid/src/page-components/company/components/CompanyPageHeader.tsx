@@ -21,9 +21,7 @@ const CompanyPageHeader: FC = () => {
       <Button
         onClick={backEvent}
         className="text-primary-dukeblue-700 !px-0 !py-0"
-        type="button"
         variant={ThemeVariant.Tertiary}
-        borderless={true}
       >
         Back
       </Button>

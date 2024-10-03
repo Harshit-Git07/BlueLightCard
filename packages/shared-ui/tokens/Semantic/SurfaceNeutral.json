@@ -163,6 +163,17 @@
         "type": "color",
         "description": "light text colour fixed on both light and dark mode. "
       }
+    },
+    "onSurface-inverse": {
+      "light": {
+        "value": "{colour.greyscale.white}",
+        "type": "color",
+        "description": "light text colour fixed on both light and dark mode. "
+      },
+      "dark": {
+        "value": "{colour.greyscale.grey-900}",
+        "type": "color"
+      }
     }
   }
 }

@@ -112,11 +112,9 @@ const OfferTopDetailsHeader: FC<Props> = ({
               {offerData.description && offerData.description.length > 300 && (
                 <Button
                   variant={ThemeVariant.Tertiary}
-                  slim
                   withoutHover
                   className="w-fit"
                   onClick={handleSeeMore}
-                  borderless
                 >
                   {expanded ? 'See less' : 'See more...'}
                 </Button>

@@ -81,7 +81,7 @@ exports[`ViewOfferProvider it renders the offer sheet 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-spinner animate-spin m-auto text-[5em]"
+                  class="svg-inline--fa fa-spinner animate-spin m-auto text-colour-onSurface dark:text-colour-onSurface-dark text-[5em]"
                   data-icon="spinner"
                   data-prefix="far"
                   focusable="false"
@@ -138,7 +138,7 @@ exports[`ViewOfferProvider it renders the offer sheet 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-inline--fa fa-spinner animate-spin m-auto text-[5em]"
+                  class="svg-inline--fa fa-spinner animate-spin m-auto text-colour-onSurface dark:text-colour-onSurface-dark text-[5em]"
                   data-icon="spinner"
                   data-prefix="far"
                   focusable="false"

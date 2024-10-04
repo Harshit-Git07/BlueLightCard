@@ -24,7 +24,9 @@ export class BrazeEmailClientProvider implements IBrazeEmailClientProvider {
   private brazeApiUrl = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL);
 
   public async getClient(): Promise<Braze> {
-    const secrets = await this.secretsManger.getSecretValueJson('blc-mono-redemptions/NewVaultSecrets');
+    const secrets = await this.secretsManger.getSecretValueJson(
+      getEnv(RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME),
+    );
     const braze = BrazeCredentialsSecretSchema.parse(secrets);
     return new Braze(this.brazeApiUrl, braze.brazeApiKey);
   }

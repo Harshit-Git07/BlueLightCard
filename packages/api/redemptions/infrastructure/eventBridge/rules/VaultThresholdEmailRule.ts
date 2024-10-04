@@ -36,22 +36,23 @@ export function createVaultThresholdEmailRule(
     deadLetterQueue: queue.cdk.queue,
     database,
     environment: {
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_FROM]: config.redemptionsEmailFrom,
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_FROM]: config.sesConfig.redemptionsEmailFrom,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]:
+        config.lambdaScriptsConfig.redemptionsLambdaScriptsHost,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
-        config.redemptionsLambdaScriptsEnvironment,
+        config.lambdaScriptsConfig.redemptionsLambdaScriptsEnvironment,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH]:
-        config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
+        config.lambdaScriptsPathsConfig.redemptionsLambdaScriptsRetrieveAllVaultsPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
-        config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+        config.lambdaScriptsPathsConfig.redemptionsLambdaScriptsCodeAmountIssuedPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
-        config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
+        config.lambdaScriptsPathsConfig.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
-        config.redemptionsLambdaScriptsCodeRedeemedPath,
+        config.lambdaScriptsPathsConfig.redemptionsLambdaScriptsCodeRedeemedPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_VIEW_VAULT_BATCHES_PATH]:
-        config.redemptionsLambdaScriptsViewVaultBatchesPath,
+        config.lambdaScriptsPathsConfig.redemptionsLambdaScriptsViewVaultBatchesPath,
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH]:
-        config.redemptionsLambdaScriptsCheckVaultStockPath,
+        config.lambdaScriptsPathsConfig.redemptionsLambdaScriptsCheckVaultStockPath,
     },
     permissions: [sendEmailAmazonSESPolicy, getSecretValueSecretsManagerPolicy],
   });

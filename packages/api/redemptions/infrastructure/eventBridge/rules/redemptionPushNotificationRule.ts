@@ -24,18 +24,19 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,
     environment: {
-      [RedemptionsStackEnvironmentKeys.BRAZE_API_URL]: config.brazeApiUrl,
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST]: config.redemptionsWebHost,
+      [RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME]: config.secretsManagerConfig.secretsManagerName,
+      [RedemptionsStackEnvironmentKeys.BRAZE_API_URL]: config.brazeConfig.brazeApiUrl,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST]: config.networkConfig.redemptionsWebHost,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_PUSH_NOTIFICATION_CAMPAIGN_ID]:
-        config.brazeRedemptionVaultPushNotificationCampaignId,
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionVaultPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_QR_PUSH_NOTIFICATION_CAMPAIGN_ID]:
-        config.brazeRedemptionVaultQRPushNotificationCampaignId,
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionVaultQRPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_PRE_APPLIED_PUSH_NOTIFICATION_CAMPAIGN_ID]:
-        config.brazeRedemptionPreAppliedPushNotificationCampaignId,
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionPreAppliedPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GENERIC_PUSH_NOTIFICATION_CAMPAIGN_ID]:
-        config.brazeRedemptionGenericPushNotificationCampaignId,
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionGenericPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID]:
-        config.brazeRedemptionShowCardPushNotificationCampaignId,
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionShowCardPushNotificationCampaignId,
     },
     permissions: [getSecretValueSecretsManager],
   });

@@ -4,11 +4,13 @@ import { BrazeCredentials, BrazeEmailClientProvider } from '@blc-mono/redemption
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 const setup = () => {
+  process.env.SECRETS_MANAGER_NAME = 'test-redemption-vault-secrets';
   process.env.BRAZE_API_URL = 'https://rest.fra-02.braze.com.eu';
   process.env.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID = 'test';
 };
 
 const teardown = () => {
+  delete process.env.SECRETS_MANAGER_NAME;
   delete process.env.BRAZE_API_URL;
   delete process.env.BRAZE_VAULT_REDEMPTION_VAULT_CAMPAIGN_ID;
 };

@@ -37,6 +37,7 @@ import { createVaultBatchCreatedRule } from './eventBridge/rules/vaultBatchCreat
 import { createVaultCodesUploadRule } from './eventBridge/rules/vaultCodesUploadRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
 import { createVaultThresholdEmailRule } from './eventBridge/rules/VaultThresholdEmailRule';
+import { buildLambdaScriptsEnvs } from './helpers/buildLambdaScriptsEnvs';
 import { Route } from './routes/route';
 import { VaultCodesUpload } from './s3/vaultCodesUpload';
 
@@ -97,7 +98,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
         // IMPORTANT: If you need to update these settings, remember to also
         //            update them in APIGatewayController
         defaultCorsPreflightOptions: {
-          allowOrigins: config.apiDefaultAllowedOrigins,
+          allowOrigins: config.networkConfig.apiDefaultAllowedOrigins,
           allowHeaders: ['*'],
           allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
           allowCredentials: true,
@@ -164,7 +165,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       handler:
         'packages/api/redemptions/application/handlers/apiGateway/redemptionDetails/getRedemptionDetails.handler',
       requestValidatorName: 'GetRedemptionDetailsValidator',
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      defaultAllowedOrigins: config.networkConfig.apiDefaultAllowedOrigins,
       permissions: [publishRedemptionsEventBusPolicy],
       environment: {
         // Event Bus
@@ -184,29 +185,14 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       requestValidatorName: 'PostRedeemValidator',
       environment: {
         // Lambda Script Integration
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
-          config.redemptionsLambdaScriptsSecretName,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
-          config.redemptionsLambdaScriptsEnvironment,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH]:
-          config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
-          config.redemptionsLambdaScriptsCodeRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
-          config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
-          config.redemptionsLambdaScriptsCodeAmountIssuedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_VIEW_VAULT_BATCHES_PATH]:
-          config.redemptionsLambdaScriptsViewVaultBatchesPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_VAULT_STOCK_PATH]:
-          config.redemptionsLambdaScriptsCheckVaultStockPath,
+        ...buildLambdaScriptsEnvs(config),
+        [RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME]: config.secretsManagerConfig.secretsManagerName,
         // Event Bus
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
-        [RedemptionsStackEnvironmentKeys.IDENTITY_API_URL]: config.identityApiUrl,
-        [RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT]: config.enableStandardVault,
+        [RedemptionsStackEnvironmentKeys.IDENTITY_API_URL]: config.networkConfig.identityApiUrl,
+        [RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT]: config.featureFlagsConfig.enableStandardVault,
       },
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      defaultAllowedOrigins: config.networkConfig.apiDefaultAllowedOrigins,
       permissions: [
         // Common
         publishRedemptionsEventBusPolicy,
@@ -224,7 +210,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       restApi,
       handler: 'packages/api/redemptions/application/handlers/apiGateway/affiliate/postAffiliate.handler',
       requestValidatorName: 'PostAffiliateValidator',
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      defaultAllowedOrigins: config.networkConfig.apiDefaultAllowedOrigins,
     }),
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -237,21 +223,10 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       requestValidatorName: 'PostSpotifyValidator',
       environment: {
         // Lambda Script Integration
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_SECRET_NAME]:
-          config.redemptionsLambdaScriptsSecretName,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ENVIRONMENT]:
-          config.redemptionsLambdaScriptsEnvironment,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST]: config.redemptionsLambdaScriptsHost,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_RETRIEVE_ALL_VAULTS_PATH]:
-          config.redemptionsLambdaScriptsRetrieveAllVaultsPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CODES_REDEEMED_PATH]:
-          config.redemptionsLambdaScriptsCodeRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_ASSIGN_USER_CODES_PATH]:
-          config.redemptionsLambdaScriptsAssignUserCodesRedeemedPath,
-        [RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_CHECK_AMOUNT_ISSUED_PATH]:
-          config.redemptionsLambdaScriptsCodeAmountIssuedPath,
+        [RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME]: config.secretsManagerConfig.secretsManagerName,
+        ...buildLambdaScriptsEnvs(config),
       },
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      defaultAllowedOrigins: config.networkConfig.apiDefaultAllowedOrigins,
       permissions: [getSecretValueSecretsManagerPolicy],
     }),
   });
@@ -275,7 +250,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
   });
 
   // Create domain email identity
-  await createDomainEmailIdentity(config.redemptionsEmailDomain, stack.region);
+  await createDomainEmailIdentity(config.sesConfig.redemptionsEmailDomain, stack.region);
 
   const adminApi = createAdminApi(
     stack,

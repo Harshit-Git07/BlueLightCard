@@ -27,7 +27,7 @@ export function createVaultBatchCreatedRule(
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,
     environment: {
-      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_FROM]: config.redemptionsEmailFrom,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_FROM]: config.sesConfig.redemptionsEmailFrom,
     },
     permissions: [sendAdminEmailPolicyStatement],
   });

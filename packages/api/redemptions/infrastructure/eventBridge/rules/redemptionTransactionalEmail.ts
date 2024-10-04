@@ -4,6 +4,7 @@ import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 import { RedemptionEventDetailType, REDEMPTIONS_EVENT_SOURCE } from '@blc-mono/core/constants/redemptions';
 import { RedemptionsStackConfig } from '@blc-mono/redemptions/infrastructure/config/config';
 
+import { RedemptionsStackEnvironmentKeys } from '../../constants/environment';
 import { SSTFunction } from '../../constructs/SSTFunction';
 
 /**
@@ -26,13 +27,19 @@ export function createRedemptionTransactionalEmailRule(
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,
     environment: {
-      BRAZE_VAULT_EMAIL_CAMPAIGN_ID: config.brazeVaultEmailCampaignId,
-      BRAZE_GENERIC_EMAIL_CAMPAIGN_ID: config.brazeGenericEmailCampaignId,
-      BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID: config.brazePreAppliedEmailCampaignId,
-      BRAZE_API_URL: config.brazeApiUrl,
-      REDEMPTIONS_WEB_HOST: config.redemptionsWebHost,
-      BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID: config.brazeVaultQrCodeEmailCampaignId,
-      BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID: config.brazeShowCardEmailCampaignId,
+      [RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME]: config.secretsManagerConfig.secretsManagerName,
+      [RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID]:
+        config.brazeEmailCampaignsConfig.brazeVaultEmailCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID]:
+        config.brazeEmailCampaignsConfig.brazeGenericEmailCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID]:
+        config.brazeEmailCampaignsConfig.brazePreAppliedEmailCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_API_URL]: config.brazeConfig.brazeApiUrl,
+      [RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST]: config.networkConfig.redemptionsWebHost,
+      [RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID]:
+        config.brazeEmailCampaignsConfig.brazeVaultQrCodeEmailCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID]:
+        config.brazeEmailCampaignsConfig.brazeShowCardEmailCampaignId,
       // Datadog unified service tracking
       DD_SERVICE: 'redemptions',
     },

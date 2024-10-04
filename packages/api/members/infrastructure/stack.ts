@@ -14,6 +14,8 @@ import { GetMemberApplicationRoute } from './routes/GetMemberApplicationRoute';
 import { UpdateMemberApplicationRoute } from './routes/UpdateMemberApplicationRoute';
 import { UpdateMemberCardRoute } from './routes/UpdateMemberCardRoute';
 import { MemberCardModel } from '../application/models/memberCardModel';
+import { GetOrganisationsRoute } from './routes/GetOrganisationsRoute';
+import { OrganisationModel } from 'application/models/organisationModel';
 
 export async function Members({ stack, app }: StackContext) {
   const identityTableName = `${app.stage}-${app.name}-identityTable`;
@@ -85,6 +87,8 @@ export async function Members({ stack, app }: StackContext) {
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberProfileModel);
 
   const agMemberCardModel = apiGatewayModelGenerator.generateModelFromZodEffect(MemberCardModel);
+  const agOrganisationModel =
+    apiGatewayModelGenerator.generateModelFromZodEffect(OrganisationModel);
 
   membersApi.addRoutes(stack, {
     'GET /members/v5/profiles': new GetMemberProfilesRoute(
@@ -130,6 +134,16 @@ export async function Members({ stack, app }: StackContext) {
         agMemberCardModel,
         identityTableName,
       ).getRouteDetails(),
+    'GET /members/v5/orgs/{brand}': new GetOrganisationsRoute(
+      apiGatewayModelGenerator,
+      agOrganisationModel,
+      identityTableName,
+    ).getRouteDetails(),
+    'GET /members/v5/orgs/{brand}/{organisationId}': new GetOrganisationsRoute(
+      apiGatewayModelGenerator,
+      agOrganisationModel,
+      identityTableName,
+    ).getRouteDetails(),
   });
 
   // memberApi.addRoutes(stack, {

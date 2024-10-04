@@ -9,18 +9,17 @@ import {
   IUpdateRedemptionConfigService,
   UpdateRedemptionConfigService,
 } from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
-import { PatchRedemptionModel } from '@blc-mono/redemptions/libs/models/PatchRedemptionModel';
+import { PatchRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../AdminApiGatewayController';
 
-const PatchRedemptionModelRequest = z.object({
-  body: JsonStringSchema.pipe(PatchRedemptionModel),
+const UpdateRedemptionConfigRequestModel = z.object({
+  body: JsonStringSchema.pipe(PatchRedemptionConfigModel),
 });
 
-export type PatchRedemptionModelRequest = z.infer<typeof PatchRedemptionModelRequest>;
-export type PatchRedemptionModelRequestBody = PatchRedemptionModelRequest['body'];
+export type ParsedRequest = z.infer<typeof UpdateRedemptionConfigRequestModel>;
 
-export class UpdateRedemptionConfigController extends APIGatewayController<PatchRedemptionModelRequest> {
+export class UpdateRedemptionConfigController extends APIGatewayController<ParsedRequest> {
   static readonly inject = [Logger.key, UpdateRedemptionConfigService.key] as const;
 
   constructor(
@@ -30,11 +29,11 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Patch
     super(logger);
   }
 
-  protected parseRequest(request: APIGatewayProxyEventV2): Result<PatchRedemptionModelRequest, ParseRequestError> {
-    return this.zodParseRequest(request, PatchRedemptionModelRequest);
+  protected parseRequest(request: APIGatewayProxyEventV2): Result<ParsedRequest, ParseRequestError> {
+    return this.zodParseRequest(request, UpdateRedemptionConfigRequestModel);
   }
 
-  public async handle(request: PatchRedemptionModelRequest): Promise<APIGatewayResult> {
+  public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
     const results = await this.updateRedemptionConfigService.updateRedemptionConfig(request.body);
 
     switch (results.kind) {
@@ -46,16 +45,13 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Patch
       case 'Error':
         return {
           statusCode: 500,
-          data: {
-            message: 'Internal Server Error',
-          },
+          data: results.data,
         };
+      case 'GenericNotFound':
       case 'RedemptionNotFound':
         return {
           statusCode: 404,
-          data: {
-            message: 'Redemption not found with given ID',
-          },
+          data: results.data,
         };
       default:
         return exhaustiveCheck(results, 'Unhandled result');

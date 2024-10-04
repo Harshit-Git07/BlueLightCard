@@ -7,7 +7,7 @@ import { genericEntityFactory } from '../../libs/test/factories/genericEntity.fa
 import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
-import { GenericsRepository, NewGenericEntity } from './GenericsRepository';
+import { GenericsRepository, NewGenericEntity, UpdateGenericEntity } from './GenericsRepository';
 
 describe('GenericsRepository', () => {
   let database: RedemptionsTestDatabase;
@@ -192,6 +192,39 @@ describe('GenericsRepository', () => {
 
       // Act & Assert
       await expect(() => repository.findOneByRedemptionId(redemption.id)).rejects.toThrow();
+    });
+  });
+
+  describe('updateOneById', () => {
+    it('should update the generics record by ID and return updated record', async () => {
+      const repository = new GenericsRepository(connection);
+      const redemption = redemptionConfigEntityFactory.build({
+        redemptionType: 'generic',
+      });
+      const generic = genericEntityFactory.build({
+        redemptionId: redemption.id,
+      });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+      await connection.db.insert(genericsTable).values(generic).execute();
+
+      const updatePayload: UpdateGenericEntity = {
+        code: 'test-offer-code',
+      };
+
+      const updatedRecord = await repository.updateOneById(generic.id, updatePayload);
+
+      expect(updatedRecord).toStrictEqual({
+        id: generic.id,
+        redemptionId: redemption.id,
+        code: updatePayload.code,
+      });
+    });
+
+    it('should not update non-existent record and return null', async () => {
+      const repository = new GenericsRepository(connection);
+      const updatePayload: UpdateGenericEntity = genericEntityFactory.build();
+      const updatedRecord = await repository.updateOneById('non-exist-id', updatePayload);
+      expect(updatedRecord).toBe(null);
     });
   });
 });

@@ -161,6 +161,50 @@ describe('RedemptionConfigRepository', () => {
     });
   });
 
+  describe('updateOneById', () => {
+    it('should update the redemptions record by ID and return updated record', async () => {
+      const redemption = redemptionConfigEntityFactory.build({
+        offerId: 123,
+        companyId: 456,
+        redemptionType: 'generic',
+        connection: 'direct',
+        offerType: 'online',
+        url: 'https://www.direct.com',
+        affiliate: null,
+      });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      const repository = new RedemptionConfigRepository(connection);
+      const updatePayload: UpdateRedemptionConfigEntity = {
+        offerId: 321,
+        companyId: 654,
+        connection: 'affiliate',
+        url: 'https://www.awin1.com',
+        affiliate: 'awin',
+      };
+
+      const updatedRecord = await repository.updateOneById(redemption.id, updatePayload);
+
+      expect(updatedRecord).toStrictEqual({
+        id: redemption.id,
+        affiliate: updatePayload.affiliate,
+        connection: updatePayload.connection,
+        offerType: redemption.offerType,
+        redemptionType: redemption.redemptionType,
+        url: updatePayload.url,
+        companyId: updatePayload.companyId,
+        offerId: updatePayload.offerId,
+      });
+    });
+
+    it('should not update non-existent record and return null', async () => {
+      const repository = new RedemptionConfigRepository(connection);
+      const updatePayload: UpdateRedemptionConfigEntity = redemptionConfigEntityFactory.build();
+      const updatedRecord = await repository.updateOneById('non-exist-id', updatePayload);
+      expect(updatedRecord).toBe(null);
+    });
+  });
+
   describe('updateManyByOfferId', () => {
     it.todo('should update the redemptions records by offer IDs');
   });

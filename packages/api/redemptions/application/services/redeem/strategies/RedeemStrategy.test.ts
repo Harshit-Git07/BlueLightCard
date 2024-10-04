@@ -52,6 +52,7 @@ describe('Redemption Strategies', () => {
     return {
       deleteByRedemptionId: jest.fn(),
       updateByRedemptionId: jest.fn(),
+      updateOneById: jest.fn(),
       createGeneric: jest.fn(),
       findOneByRedemptionId: jest.fn(),
       withTransaction: jest.fn(),

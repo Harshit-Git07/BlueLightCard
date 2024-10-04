@@ -17,6 +17,7 @@ export interface IGenericsRepository {
     redemptionId: string,
     updateGenricEntity: UpdateGenericEntity,
   ): Promise<Pick<GenericEntity, 'id'>[]>;
+  updateOneById(id: string, genericData: UpdateGenericEntity): Promise<GenericEntity | null>;
   deleteById(id: string): Promise<Pick<GenericEntity, 'id'>[]>;
   deleteByRedemptionId(redemptionId: string): Promise<Pick<GenericEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): GenericsRepository;
@@ -51,6 +52,21 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
       .where(eq(genericsTable.redemptionId, redemptionId))
       .returning({ id: genericsTable.id })
       .execute();
+  }
+
+  public async updateOneById(id: string, genericData: UpdateGenericEntity): Promise<GenericEntity | null> {
+    return this.atMostOne(
+      await this.connection.db
+        .update(genericsTable)
+        .set(genericData)
+        .where(eq(genericsTable.id, id))
+        .returning({
+          id: genericsTable.id,
+          redemptionId: genericsTable.redemptionId,
+          code: genericsTable.code,
+        })
+        .execute(),
+    );
   }
 
   public deleteByRedemptionId(redemptionId: string): Promise<Pick<GenericEntity, 'id'>[]> {

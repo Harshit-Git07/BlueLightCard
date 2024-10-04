@@ -3,39 +3,36 @@ import { z } from 'zod';
 import { RedemptionType } from '../database/schema';
 
 export const VaultModel = z.object({
-  vault: z
-    .object({
-      id: z.string().uuid().optional(),
-      alertBelow: z.number().optional(),
-      status: z.string().optional(),
-      maxPerUser: z.number().optional(),
-      createdAt: z.string().optional(),
-      email: z.string().optional(),
-      integration: z.string().optional(),
-      integrationId: z.string().uuid().optional(),
-    })
-    .optional(),
+  vault: z.object({
+    id: z.string(),
+    alertBelow: z.number(),
+    status: z.string(),
+    maxPerUser: z.number(),
+    createdAt: z.string(),
+    email: z.string(),
+    integration: z.string().nullable(),
+    integrationId: z.string().nullable(),
+  }),
 });
 
 export const GenericModel = z.object({
-  generic: z
-    .object({
-      id: z.string().uuid().optional(),
-      code: z.string().optional(),
-    })
-    .optional(),
+  generic: z.object({
+    id: z.string(),
+    code: z.string(),
+  }),
 });
 
 export const UrlModel = z.object({
-  url: z.string().optional(),
+  url: z.string(),
 });
 
 export const CommonModel = (redemptionType: RedemptionType) =>
   z.object({
     id: z.string(),
     redemptionType: z.literal(redemptionType),
-    connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none').optional(),
-    companyId: z.number().optional(),
+    connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
+    offerId: z.coerce.number().positive(),
+    companyId: z.coerce.number().positive(),
     affiliate: z
       .enum([
         'awin',
@@ -51,16 +48,16 @@ export const CommonModel = (redemptionType: RedemptionType) =>
         'commissionJunction',
         'tradedoubler',
       ])
-      .optional(),
+      .nullable(),
   });
 
 export const PatchShowCardModel = CommonModel('showCard');
 export const PatchPreAppliedModel = CommonModel('preApplied').merge(UrlModel);
 export const PatchVaultModel = CommonModel('vault').merge(UrlModel).merge(VaultModel);
-export const PatchVaultQRModel = CommonModel('vaultQR').merge(UrlModel).merge(VaultModel);
+export const PatchVaultQRModel = CommonModel('vaultQR').merge(VaultModel);
 export const PatchGenericModel = CommonModel('generic').merge(UrlModel).merge(GenericModel);
 
-export const PatchRedemptionModel = z.discriminatedUnion('redemptionType', [
+export const PatchRedemptionConfigModel = z.discriminatedUnion('redemptionType', [
   PatchShowCardModel,
   PatchPreAppliedModel,
   PatchVaultModel,

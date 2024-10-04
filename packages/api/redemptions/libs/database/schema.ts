@@ -59,6 +59,7 @@ export const redemptionsTable = pgTable('redemptions', {
 
 export const genericsPrefix = 'gnr';
 export const createGenericsId = (): string => `${genericsPrefix}-${uuidv4()}`;
+export const createGenericsIdE2E = (): string => `e2e:${createGenericsId()}`;
 export const genericsTable = pgTable('generics', {
   // PK
   id: varchar('id').primaryKey().$defaultFn(createGenericsId),

@@ -1,15 +1,25 @@
 import { faker } from '@faker-js/faker';
 import AWS from 'aws-sdk';
 import { ApiGatewayV1Api } from 'sst/node/api';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
-import { GenericsRepository } from '../application/repositories/GenericsRepository';
+import {
+  UpdateGenericRedemptionSchema,
+  UpdatePreAppliedRedemptionSchema,
+  UpdateShowCardRedemptionSchema,
+} from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
+
+import { GenericEntity, GenericsRepository } from '../application/repositories/GenericsRepository';
 import { RedemptionConfigCombinedRepository } from '../application/repositories/RedemptionConfigCombinedRepository';
-import { RedemptionConfigRepository } from '../application/repositories/RedemptionConfigRepository';
+import {
+  RedemptionConfigEntity,
+  RedemptionConfigRepository,
+} from '../application/repositories/RedemptionConfigRepository';
 import { VaultBatchesRepository } from '../application/repositories/VaultBatchesRepository';
 import { VaultsRepository } from '../application/repositories/VaultsRepository';
 import { DatabaseConnectionType } from '../libs/database/connection';
-import { createRedemptionsIdE2E, RedemptionType } from '../libs/database/schema';
+import { createGenericsIdE2E, createRedemptionsIdE2E, RedemptionType } from '../libs/database/schema';
+import { genericEntityFactory } from '../libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
@@ -23,9 +33,75 @@ let genericsRepository: GenericsRepository;
 let redemptionConfigRepository: RedemptionConfigRepository;
 let redemptionRepositoryHelper: RedemptionConfigCombinedRepository;
 
-const redemptionsId: string = createRedemptionsIdE2E();
+const offerId = 1;
 
-describe('PATCH /redemptions/:offerId', () => {
+describe('PATCH /redemptions/{offerId}', () => {
+  const testGenericBody = {
+    id: createRedemptionsIdE2E(),
+    offerId: offerId,
+    redemptionType: 'generic' as RedemptionType,
+    connection: 'affiliate',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: 'awin',
+    url: 'https://www.awin1.com/',
+    generic: {
+      id: createGenericsIdE2E(),
+      code: 'DISCOUNT_CODE_01',
+    },
+  } satisfies UpdateGenericRedemptionSchema;
+
+  const redemptionConfigEntityForGeneric: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+    id: testGenericBody.id,
+    companyId: testGenericBody.companyId,
+    offerId: testGenericBody.offerId,
+    redemptionType: 'generic',
+    connection: 'direct',
+    url: faker.internet.url(),
+    affiliate: null,
+    offerType: 'online',
+  });
+
+  const testPreAppliedBody = {
+    id: createRedemptionsIdE2E(),
+    offerId: offerId,
+    redemptionType: 'preApplied' as RedemptionType,
+    connection: 'direct',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: null,
+    url: 'https://www.whatever.com/',
+  } satisfies UpdatePreAppliedRedemptionSchema;
+
+  const redemptionConfigEntityForPreApplied: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+    id: testPreAppliedBody.id,
+    companyId: testPreAppliedBody.companyId,
+    offerId: testPreAppliedBody.offerId,
+    redemptionType: 'preApplied',
+    connection: 'affiliate',
+    url: faker.internet.url(),
+    affiliate: 'awin',
+    offerType: 'online',
+  });
+
+  const testShowCardBody = {
+    id: createRedemptionsIdE2E(),
+    offerId: offerId,
+    redemptionType: 'showCard' as RedemptionType,
+    connection: 'none',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: null,
+  } satisfies UpdateShowCardRedemptionSchema;
+
+  const redemptionConfigEntityForShowCard: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+    id: testShowCardBody.id,
+    companyId: testShowCardBody.companyId,
+    offerId: testShowCardBody.offerId,
+    redemptionType: 'showCard',
+    connection: 'none',
+    url: null,
+    affiliate: null,
+    offerType: 'in-store',
+  });
+
   beforeAll(async () => {
     // eslint-disable-next-line no-console
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
@@ -53,98 +129,145 @@ describe('PATCH /redemptions/:offerId', () => {
       });
     });
 
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([1]);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([offerId]);
 
     // Set a conservative timeout
   }, 60_000);
 
+  afterEach(async () => {
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([offerId]);
+  });
+
   afterAll(async () => {
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([1]);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([offerId]);
     await connectionManager?.cleanup();
   });
 
-  it('should update the redemption configuration', async () => {
-    const offerId = 1;
+  it('should return 404 if redemptions record can not be found', async () => {
+    const result = await callPatchRedemptionConfigEndpoint(testGenericBody);
 
-    const redemption = redemptionConfigEntityFactory.build({
-      id: redemptionsId,
-      companyId: parseInt(faker.string.numeric(8)),
-      offerId: offerId,
-      offerType: 'online',
-      redemptionType: 'preApplied' as RedemptionType,
-      connection: 'affiliate',
-      url: faker.internet.url(),
-    });
+    expect(result.status).toBe(404);
 
-    const updatedConfig = {
-      redemptionType: 'preApplied',
-      id: redemption.id,
-      connection: 'direct' as RedemptionType,
-      companyId: 12345,
-      affiliate: redemption.affiliate,
-      url: 'some new url',
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 404,
+      data: {
+        message: `Redemption Config Update - redemptionId does not exist: ${testGenericBody.id}`,
+      },
     };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
 
-    redemptionConfigRepository.createRedemption(redemption);
+  it('should return 200 and correct redemptionConfig for preApplied redemptionType on update success', async () => {
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForPreApplied);
 
-    // Make a request to update the redemption configuration
-    const response = await callRedemptionEndpoint('PATCH', apiKey, updatedConfig, String(offerId));
+    const result = await callPatchRedemptionConfigEndpoint(testPreAppliedBody);
 
-    // Assert that the response status is 200
-    expect(response.status).toBe(200);
+    expect(result.status).toBe(200);
 
-    // Assert that the response body contains the updated configuration
+    const actualResponseBody = await result.json();
+
     const expectedResponseBody = {
       statusCode: 200,
       data: {
-        redemptionType: updatedConfig.redemptionType,
-        id: updatedConfig.id,
-        connection: updatedConfig.connection,
-        companyId: String(updatedConfig.companyId),
-        affiliate: updatedConfig.affiliate,
-        url: updatedConfig.url,
-        offerId: String(redemption.offerId),
+        id: testPreAppliedBody.id,
+        offerId: String(testPreAppliedBody.offerId),
+        redemptionType: testPreAppliedBody.redemptionType,
+        connection: testPreAppliedBody.connection,
+        companyId: String(testPreAppliedBody.companyId),
+        affiliate: testPreAppliedBody.affiliate,
+        url: testPreAppliedBody.url,
       },
     };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
 
-    const responseBody = await response.json();
-    expect(responseBody).toEqual(expectedResponseBody);
+  it('should return 200 and correct redemptionConfig for showCard redemptionType on update success', async () => {
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForShowCard);
+
+    const result = await callPatchRedemptionConfigEndpoint(testShowCardBody);
+
+    expect(result.status).toBe(200);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: testShowCardBody.id,
+        offerId: String(testShowCardBody.offerId),
+        redemptionType: testShowCardBody.redemptionType,
+        companyId: String(testShowCardBody.companyId),
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
+
+  it('should return 404 for generic redemptionType if generics record can not be found', async () => {
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForGeneric);
+
+    const result = await callPatchRedemptionConfigEndpoint(testGenericBody);
+
+    expect(result.status).toBe(404);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 404,
+      data: {
+        message: `Redemption Config Update - generic record does not exist with corresponding id's: ${testGenericBody.id}`,
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
+
+  it('should return 200 and correct redemptionConfig for generic redemptionType on update success', async () => {
+    const genericEntity: GenericEntity = genericEntityFactory.build({
+      id: testGenericBody.generic.id,
+      code: faker.string.alphanumeric({ length: 8 }),
+      redemptionId: testGenericBody.id,
+    });
+
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForGeneric);
+    await genericsRepository.createGeneric(genericEntity);
+
+    const result = await callPatchRedemptionConfigEndpoint(testGenericBody);
+
+    expect(result.status).toBe(200);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: testGenericBody.id,
+        offerId: String(testGenericBody.offerId),
+        redemptionType: testGenericBody.redemptionType,
+        connection: testGenericBody.connection,
+        companyId: String(testGenericBody.companyId),
+        affiliate: testGenericBody.affiliate,
+        url: testGenericBody.url,
+        generic: {
+          id: testGenericBody.generic.id,
+          code: testGenericBody.generic.code,
+        },
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+
+    await genericsRepository.deleteById(genericEntity.id);
   });
 });
 
-async function callRedemptionEndpoint(
-  method: string,
-  key?: string,
-  body?: object,
-  queryStringParam?: string,
-): Promise<Response> {
-  const params = queryStringParam ? `redemptions/${queryStringParam}` : 'redemptions';
-
-  if (!key) {
-    return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}${params}`, {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  } else {
-    const payload = body
-      ? {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': key,
-          },
-          body: JSON.stringify(body),
-        }
-      : {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': key,
-          },
-        };
-
-    return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}${params}`, payload);
-  }
+async function callPatchRedemptionConfigEndpoint(body: object): Promise<Response> {
+  const payload = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': apiKey,
+    },
+    body: JSON.stringify(body),
+  };
+  return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}/redemptions/${offerId}`, payload);
 }

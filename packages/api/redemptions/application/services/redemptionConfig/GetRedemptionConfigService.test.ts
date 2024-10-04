@@ -30,6 +30,7 @@ const mockGenericsRepository: Partial<IGenericsRepository> = {
   findOneByRedemptionId: jest.fn(),
   createGeneric: jest.fn(),
   updateByRedemptionId: jest.fn(),
+  updateOneById: jest.fn(),
   deleteByRedemptionId: jest.fn(),
   withTransaction: jest.fn(),
 };

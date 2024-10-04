@@ -1,20 +1,40 @@
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { EventBus as AwsEventBus } from 'aws-cdk-lib/aws-events';
-import { Config, EventBus, Function, type StackContext, Table } from 'sst/constructs';
+import {
+  ApiGatewayV1Api,
+  Config,
+  EventBus,
+  Function,
+  type StackContext,
+  Table,
+  use,
+} from 'sst/constructs';
 import { z } from 'zod';
 
+import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
+import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
+import { generateOffersCustomDomainName } from '@blc-mono/core/offers/generateOffersCustomDomainName';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvOrDefaultValidated } from '@blc-mono/core/utils/getEnv';
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
+import { Identity } from '@blc-mono/identity/stack';
 import { OffersCMSStackEnvironmentKeys } from '@blc-mono/offers-cms/src/constants/environment';
+import { Shared } from '@blc-mono/shared/stack';
 
 const CMS_BUS_NAME = 'in';
 const CMS_RAW_DATA_TABLE_NAME = 'cmsRawData';
 const CMS_DATA_TABLE_NAME = 'cmsData';
 const API_FUNCTION_NAME = 'apiFunction';
 const CONSUMER_FUNCTION_NAME = 'consumerFunction';
+const API_GATEWAY_NAME = 'offers-cms-apiGateway';
 
 const cliLogger = new CliLogger();
 
 export function OffersCMS({ stack }: StackContext) {
+  const { authorizer } = use(Identity);
+  const { certificateArn } = use(Shared);
+  const globalConfig = GlobalConfigResolver.for(stack.stage);
+
   const cmsRawDataTable = new Table(stack, CMS_RAW_DATA_TABLE_NAME, {
     fields: {
       _id: 'string',
@@ -74,10 +94,44 @@ export function OffersCMS({ stack }: StackContext) {
     },
   });
 
+  // API Gateway provisioning
+  const gateway = new ApiGatewayV1Api(stack, API_GATEWAY_NAME, {
+    authorizers: {
+      offersAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
+    },
+    defaults: {
+      authorizer: 'offersAuthorizer',
+    },
+    cdk: {
+      restApi: {
+        deployOptions: {
+          stageName: 'v1',
+        },
+        endpointTypes: globalConfig.apiGatewayEndpointTypes,
+        ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
+          certificateArn && {
+            domainName: {
+              domainName: generateOffersCustomDomainName(stack),
+              certificate: Certificate.fromCertificateArn(
+                stack,
+                'DomainCertificate',
+                certificateArn,
+              ),
+            },
+          }),
+      },
+    },
+    routes: {
+      // Only one single route as hono handles the routing
+      'ANY /{proxy+}': 'packages/api/offers-cms/lambda/api.handler',
+    },
+  });
+
   stack.addOutputs({
     api: apiFunction.url,
     ingest: cmsEvents.eventBusArn,
     ingestProcessor: consumerFunction.functionArn,
+    offersCmsApiGateway: gateway.cdk.restApi.url,
   });
 
   return {

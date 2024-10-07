@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.9.0...bluelightcard/discovery-v1.9.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* DISCO-1011 Fixed iframe typo in campaign validation schema ([#2386](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2386)) ([934be78](https://github.com/bluelightcard/BlueLightCard-2.0/commit/934be78e2076e83164dd7f0b9ea0110a1dfb7949))
+
+
+### Other Changes
+
+* Add Zod validation for campaign data and query parameters in getActiv… ([#2318](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2318)) ([3d3df23](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3d3df23c4083d26d6b33e81f2cc15ba24f5b30a1))
+
 ## [1.9.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.8.0...bluelightcard/discovery-v1.9.0) (2024-10-01)
 
 

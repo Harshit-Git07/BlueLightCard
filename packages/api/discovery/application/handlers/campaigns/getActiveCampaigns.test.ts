@@ -1,5 +1,6 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
+import campaigns from '../../../data/campaigns.json';
 import * as MapCampaignHelper from '../../../helpers/mapCampaignData';
 import { CampaignType } from '../../services/campaigns';
 
@@ -11,6 +12,11 @@ describe('getActiveCampaigns Handler', () => {
       type: CampaignType.ThankYouCampaign,
     },
   };
+
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2024-11-11'));
+  });
+
   it('should return response from getActiveCampaigns service when a type is passed', async () => {
     const expectedCampaignData = [
       {
@@ -21,15 +27,27 @@ describe('getActiveCampaigns Handler', () => {
           iframeURL: 'https://campaign.odicci.com/#/2031feeae3808e7b8802',
         },
         startDate: '2024-09-02T00:00:00Z',
-        endDate: '2024-09-06T23:59:59.997Z',
+        endDate: '2024-12-06T23:59:59.997Z',
       },
     ];
 
-    const getActiveCampaignsSpy = jest.spyOn(MapCampaignHelper, 'mapCampaignData').mockImplementation(() => []);
+    const getActiveCampaignsSpy = jest
+      .spyOn(MapCampaignHelper, 'mapCampaignData')
+      .mockImplementation(() => expectedCampaignData);
 
     const expectedResponse = {
       statusCode: 200,
-      body: JSON.stringify({ data: [] }),
+      body: JSON.stringify({
+        data: [
+          {
+            id: 'testerCampaign',
+            content: {
+              imageURL: 'https://cdn.bluelightcard.co.uk/big-rewards-2024-1.jpg',
+              iframeURL: 'https://campaign.odicci.com/#/2031feeae3808e7b8802',
+            },
+          },
+        ],
+      }),
     };
 
     const results = await handler(mockEvent as APIGatewayEvent);
@@ -37,7 +55,7 @@ describe('getActiveCampaigns Handler', () => {
     expect(results.statusCode).toEqual(200);
     expect(results.body).toEqual(expectedResponse.body);
 
-    expect(getActiveCampaignsSpy).toHaveBeenCalledWith(expect.arrayContaining(expectedCampaignData));
+    expect(getActiveCampaignsSpy).toHaveBeenCalledWith(campaigns);
   });
 
   it('should return a 500 if an error is thrown whilst mapping the campaign data', async () => {

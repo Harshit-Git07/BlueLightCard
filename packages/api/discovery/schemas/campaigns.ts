@@ -8,7 +8,7 @@ export const CampaignEventsSchema = z.array(
     campaignType: z.enum([CampaignType.ThankYouCampaign, CampaignType.BlackFriday]),
     content: z.object({
       imageURL: z.string().optional(),
-      iframeUrl: z.string().optional(),
+      iframeURL: z.string().optional(),
     }),
     startDate: z.string(),
     endDate: z.string(),

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.101.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.100.0...bluelightcard/identity-v1.101.0) (2024-10-07)
+
+
+### Features
+
+* added new lambda handler for logging out user from cognito ([#2332](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2332)) ([c2bec1c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c2bec1cd540778241a6290806a16c76a167a62ee))
+
 ## [1.100.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.99.0...bluelightcard/identity-v1.100.0) (2024-09-18)
 
 

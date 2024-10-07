@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VerticalMenuItem component matches snapshot in its default state 1`] = `
+<div>
+  <li
+    class="h-[50px] pl-[18px] flex items-center hover:cursor-pointer hover:text-colour-primary-hover hover:dark:text-colour-primary-hover-dark hover:border-r hover:border-colour-primary-hover hover:dark:border-colour-primary-dark "
+  >
+    <button
+      class="h-full w-full flex items-center"
+    >
+      <p>
+        test
+      </p>
+    </button>
+  </li>
+</div>
+`;
+
+exports[`VerticalMenuItem component matches snapshot in its selected state 1`] = `
+<div>
+  <li
+    class="h-[50px] pl-[18px] flex items-center hover:cursor-pointer hover:text-colour-primary-hover hover:dark:text-colour-primary-hover-dark hover:border-r hover:border-colour-primary-hover hover:dark:border-colour-primary-dark border-r border-colour-primary dark:border-colour-primary-dark text-colour-primary dark:text-colour-primary-dark bg-colour-surface-container dark:bg-colour-surface-container-dark"
+  >
+    <button
+      class="h-full w-full flex items-center"
+    >
+      <p>
+        test
+      </p>
+    </button>
+  </li>
+</div>
+`;

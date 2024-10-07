@@ -13,6 +13,7 @@
     "lint:fix": "eslint --fix .",
     "test:coverage": "jest --coverage",
     "test": "jest --silent --testPathIgnorePatterns=e2e/",
+    "test:update": "jest --silent --testPathIgnorePatterns=e2e/ -u",
     "test:watch": "jest --watch --testPathIgnorePatterns=e2e/",
     "storybook": "STORYBOOK_ENV=true storybook dev -p 6006",
     "build-storybook": "STORYBOOK_ENV=true storybook build",

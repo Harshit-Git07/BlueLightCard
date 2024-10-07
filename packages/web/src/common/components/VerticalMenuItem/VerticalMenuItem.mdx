@@ -1,0 +1,86 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as VerticalMenuItem from './VerticalMenuItem.stories';
+
+<Meta of={VerticalMenuItem} />
+
+# VerticalMenuItem
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Overview
+
+A component to be rendered in a menu. When clicked it can either:
+- navigate the user to a different page, or
+- trigger some functionality when clicked.
+
+## Props
+
+<Controls />
+
+## Variants and States
+
+### OnClick
+
+<Canvas of={VerticalMenuItem.OnClick} />
+
+### HRef
+
+<Canvas of={VerticalMenuItem.HRef} />
+
+### Selected
+
+<Canvas of={VerticalMenuItem.Selected} />
+
+## Implementation
+Usage example using tsx
+
+```tsx
+type ExampleVerticalMenuProps = {
+  numberOfItems: number;
+} & VerticalMenuItemProps;
+const ExampleVerticalMenu: FC<ExampleVerticalMenuProps> = ({
+  numberOfItems,
+  ...verticalItemProps
+}) => {
+  const [selectedItems, setSelectedItems] = useState<Array<number>>([]);
+
+  const itemOnClick = (itemIndex: number) =>
+    setSelectedItems((prevState) =>
+      prevState.includes(itemIndex)
+        ? selectedItems.filter((item) => item !== itemIndex)
+        : [...selectedItems, itemIndex]
+    );
+
+  return (
+    <ul className="w-[263px]">
+      {Array(numberOfItems)
+        .fill(0)
+        .map((_, index) => (
+          <VerticalMenuItem
+            key={index}
+            {...verticalItemProps}
+            selected={selectedItems.includes(index)}
+            onClick={() => itemOnClick(index)}
+          />
+        ))}
+    </ul>
+  );
+};
+```
+
+## Usage Guidelines
+
+➡️ The parent of the VerticalMenuItem should set the width of the items.
+
+➡️ The parent of the VerticalMenuItem should determine whether the item is selected or not.
+
+➡️ The `href` prop has priority over the `onClick` prop if both are supplied.
+
+## Design
+
+[Figma](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=66-40592&node-type=canvas&t=EZw5NJ3j8wNNgRKY-0)

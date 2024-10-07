@@ -329,6 +329,26 @@ export function Identity({ stack }: StackContext) {
       'GET /user': new GetUserByIdRoute(apiGatewayModelGenerator, agUserModel).getRouteDetails(),
     });
 
+    identityApi.addRoutes(stack, {
+      'POST /global-logout': {
+        function: {
+          handler: "packages/api/identity/src/cognito/globalLogout.handler",
+          environment: {
+            ADMIN_AUTH_API_KEY: appSecret.secretValueFromJson('admin_auth_api_key').toString(),
+            BLC_UK_COGNITO_USER_POOL_ID: cognito.userPoolId,
+            BLC_UK_OLD_COGNITO_USER_POOL_ID: oldCognitoBlc.cognito.userPoolId,
+          },
+          permissions: [
+            new PolicyStatement({
+              actions: ["cognito-idp:AdminUserGlobalSignOut"],
+              resources: [cognito.userPoolArn, oldCognitoBlc.cognito.userPoolArn],
+              effect: Effect.ALLOW,
+            }),
+          ],
+        }
+      }
+    });
+
     stack.addOutputs({
       BlcUkCognitoUserPoolId: cognito.userPoolId,
       BlcUkOldCognitoUserPoolId: oldCognitoBlc.cognito.userPoolId,

@@ -60,4 +60,5 @@ export enum IdentityStackEnvironmentKeys {
   OLD_CLIENT_SECRET = 'OLD_CLIENT_SECRET',
   EVENT_BUS = 'EVENT_BUS',
   EVENT_SOURCE = 'EVENT_SOURCE',
+  ADMIN_AUTH_API_KEY = 'ADMIN_AUTH_API_KEY',
 }

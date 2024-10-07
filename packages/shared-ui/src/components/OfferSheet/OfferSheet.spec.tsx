@@ -2,7 +2,7 @@
 import OfferSheet, { Props } from '.';
 import { render } from '@testing-library/react';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../adapters';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
 
@@ -12,6 +12,15 @@ const mockQueryClient = new QueryClient();
 const props: Props = {
   height: '90%',
 };
+
+// Mock the useQuery hook from @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const actualReactQuery = jest.requireActual('@tanstack/react-query');
+  return {
+    ...actualReactQuery,
+    useQuery: jest.fn(),
+  };
+});
 
 jest.mock('../../hooks/useOfferDetails', () => ({
   useOfferDetails: jest.fn().mockReturnValue({
@@ -42,6 +51,15 @@ function renderComponent() {
 }
 
 describe('smoke test', () => {
+  beforeEach(() => {
+    // Set up the mock data for useQuery
+    (useQuery as jest.Mock).mockReturnValue({
+      data: {
+        canRedeemOffer: true,
+      },
+    });
+  });
+
   afterAll(() => {
     jest.clearAllMocks();
   });

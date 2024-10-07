@@ -413,7 +413,7 @@ const OfferSheetDetailsPage: FC = () => {
   return (
     <div className={css}>
       {showErrorPage && <OfferDetailsErrorPage />}
-      {!showErrorPage && (
+      {!showErrorPage && user.data && (
         <>
           <OfferTopDetailsHeader />
           <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-colour-surface-light dark:bg-colour-surface-dark">

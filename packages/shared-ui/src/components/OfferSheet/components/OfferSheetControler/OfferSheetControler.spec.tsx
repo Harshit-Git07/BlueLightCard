@@ -2,7 +2,7 @@
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../adapters';
 import OfferSheetControler from '.';
 import { render, waitFor } from '@testing-library/react';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { QueryClientProvider, QueryClient, useQuery } from '@tanstack/react-query';
 import { useOfferDetails } from '../../../../hooks/useOfferDetails';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
@@ -16,6 +16,15 @@ jest.mock('next/router', () => ({
     push: jest.fn(),
   }),
 }));
+
+// Mock the useQuery hook from @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const actualReactQuery = jest.requireActual('@tanstack/react-query');
+  return {
+    ...actualReactQuery,
+    useQuery: jest.fn(),
+  };
+});
 
 const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
 const mockQueryClient = new QueryClient();
@@ -35,6 +44,15 @@ function renderComponent() {
 jest.mock('../../../../hooks/useOfferDetails');
 
 describe('smoke test', () => {
+  beforeEach(() => {
+    // Set up the mock data for useQuery
+    (useQuery as jest.Mock).mockReturnValue({
+      data: {
+        canRedeemOffer: true,
+      },
+    });
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });

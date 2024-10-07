@@ -9,7 +9,16 @@ import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
 import { PlatformVariant } from 'src/types';
 import { RedemptionType } from '../../types';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+
+// Mock the useQuery hook from @tanstack/react-query
+jest.mock('@tanstack/react-query', () => {
+  const actualReactQuery = jest.requireActual('@tanstack/react-query');
+  return {
+    ...actualReactQuery,
+    useQuery: jest.fn(),
+  };
+});
 
 const queryClient = new QueryClient();
 
@@ -86,6 +95,15 @@ const OfferSheetDetailsPageProvider = ({
 };
 
 describe('smoke test', () => {
+  beforeEach(() => {
+    // Set up the mock data for useQuery
+    (useQuery as jest.Mock).mockReturnValue({
+      data: {
+        canRedeemOffer: true,
+      },
+    });
+  });
+
   afterAll(() => {
     jest.clearAllMocks();
   });

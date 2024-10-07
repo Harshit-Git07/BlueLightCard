@@ -62,28 +62,28 @@ async updateMobileNumberField(newMobileNumber: string, updatedMobileNumber: any)
 }
 
 
-// Call to change the mobile number in the account settings
-async updateMobileNumberAndVerifyChangesSaved(): Promise<void> {
-  // Generates a new mobile number and retrieves the mobile field element
-  const newMobileNumber = generateUKMobileNumber();
-  const updatedMobileNumber = this.MOBILE_FIELD_UK;
+// Call to update the mobile number in the account settings
+async updateMobileNumber(newMobileNumber: string): Promise<void> {
+  // Retrieve the mobile field element
+  const mobileFieldElement = this.MOBILE_FIELD_UK;
   
-  
-  // Updates the mobile number field with the new mobile number
-  await this.updateMobileNumberField.call(this, newMobileNumber, updatedMobileNumber);
+  // Update the mobile number field with the provided mobile number
+  await this.updateMobileNumberField.call(this, newMobileNumber, mobileFieldElement);
   
   await this.UPDATE_BUTTON_UK.click(); // Clicks the update button to save the changes
 
-  //Refreshes the page after saving
-
+  // Refresh the page after saving
   await this.page.reload();
-    
-  // Creates a locator for the mobile number field to verify the update
 
-  const mobileNumberLocator = this.page.locator('xpath=//*[@id="mobile" and @value="'+newMobileNumber+'"]')
- 
-  await updatedMobileNumber.scrollIntoViewIfNeeded();
- 
-  await mobileNumberLocator.isVisible();
+  await mobileFieldElement.scrollIntoViewIfNeeded();
+}
+
+// Separate method to verify that the mobile number was updated correctly
+async verifyMobileNumberUpdated(newMobileNumber: string): Promise<void> {
+  // Create a locator for the mobile number field to verify the update
+  const mobileNumberLocator = this.page.locator(`xpath=//*[@id="mobile" and @value="${newMobileNumber}"]`);
+  
+  // Verify that the new mobile number is visible
+  await expect(mobileNumberLocator).toBeVisible();
 }
 }

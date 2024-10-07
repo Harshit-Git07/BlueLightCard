@@ -7,9 +7,10 @@ import test from '@lib/BaseTest';
 test(`@Uk @SmokeTest @Web Ensure all the Navigation links work on header`, async ({
   homePageUk,
   webActions,
+  homePagePreLoginUK,
 }) => {
   await test.step(`Logging in to BLC UK`, async () => {
-    await homePageUk.navigateToUrlAndLogin(process.env.EMAIL_UK, process.env.PASSWORD_UK);
+    await homePagePreLoginUK.navigateToUrlAndLogin(process.env.EMAIL_UK, process.env.PASSWORD_UK);
   });
 
   //Offers

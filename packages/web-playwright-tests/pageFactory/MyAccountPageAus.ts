@@ -38,30 +38,35 @@ export class MyAccountPageAus {
   async navigateToMyAccountAus(): Promise<void> {
     await this.page.goto(process.env.MY_ACCOUNT_URL_AUS);
   }
+// Updates the mobile number field with the newly generated mobile number
+async updateMobileNumberField(newMobileNumber: string, updatedMobileNumber: any): Promise<void> {
+  await this.MOBILE_FIELD_AUS.fill(' '); // Clears the existing mobile number field
+  await updatedMobileNumber.fill(newMobileNumber); // Fills the mobile field with the new mobile number
+}
 
-  // Update the mobile number field with the new mobile number
-  async updateMobileNumberField(newMobileNumber: string, updatedMobileNumber: any): Promise<void> {
-    await this.MOBILE_FIELD_AUS.fill(' ');
-    await updatedMobileNumber.fill(newMobileNumber);
-  }
 
-  async updateMobileNumberAndVerifyChangesSaved(): Promise<void> {
-    // Generates a new mobile number and retrieves the mobile field element
-    const newMobileNumber = generateAUSMobileNumber();
-    const updatedMobileNumber = this.MOBILE_FIELD_AUS;
+// Call to update the mobile number in the account settings
+async updateMobileNumber(newMobileNumber: string): Promise<void> {
+  // Retrieve the mobile field element
+  const mobileFieldElement = this.MOBILE_FIELD_AUS;
+  
+  // Update the mobile number field with the provided mobile number
+  await this.updateMobileNumberField.call(this, newMobileNumber, mobileFieldElement);
+  
+  await this.UPDATE_BUTTON_AUS.click(); // Clicks the update button to save the changes
 
-    // Update the mobile number field with the new mobile number
-    await this.updateMobileNumberField.call(this, newMobileNumber, updatedMobileNumber);
+  // Refresh the page after saving
+  await this.page.reload();
 
-    await this.UPDATE_BUTTON_AUS.click();
+  await mobileFieldElement.scrollIntoViewIfNeeded();
+}
 
-    await this.page.reload();
-    const mobileNumberLocator = this.page.locator(
-      'xpath=//*[@id="mobile" and @value="' + newMobileNumber + '"]',
-    );
-
-    await updatedMobileNumber.scrollIntoViewIfNeeded();
-
-    await mobileNumberLocator.isVisible();
-  }
+// Separate method to verify that the mobile number was updated correctly
+async verifyMobileNumberUpdated(newMobileNumber: string): Promise<void> {
+  // Create a locator for the mobile number field to verify the update
+  const mobileNumberLocator = this.page.locator(`xpath=//*[@id="mobile" and @value="${newMobileNumber}"]`);
+  
+  // Verify that the new mobile number is visible
+  await expect(mobileNumberLocator).toBeVisible();
+}
 }

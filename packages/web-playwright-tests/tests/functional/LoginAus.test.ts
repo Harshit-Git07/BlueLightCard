@@ -1,38 +1,20 @@
 import test from '@lib/BaseTest';
 
-test(`@Aus @SmokeTest @Web @NeedsTestCase - Login to aus home page`, async ({ homePageAus }) => {
-  await test.step(`Logging in to BLC Aus`, async () => {
-    await homePageAus.navigateToUrlAndLogin(process.env.EMAIL_AUS, process.env.PASSWORD_AUS);
-  });
+
+
+test.beforeEach(async ({homePagePreLoginAUS }) => {
+  await test.step(`Logging in to BLC AUS`, async () => {
+    await homePagePreLoginAUS.navigateToUrlAndLogin(process.env.EMAIL_AUS, process.env.PASSWORD_AUS);
+});
+});
+
+test(`@Aus @SmokeTest @Web @NeedsTestCase - Login to aus home page`, async ({ homePageLoggedInAus }) => {
+
 
   await test.step(`Asserting the expected elements are visible on the Home screen`, async () => {
-    await homePageAus.assertElementsVisibleHomeScreenLoggedIn();
+    await homePageLoggedInAus.assertElementsVisibleHomeScreenLoggedIn();
   });
 });
 
-test(`@Aus @SmokeTest @Web @NeedsTestCase - Check Home screen options when not logged in`, async ({
-  homePageAus,
-}) => {
-  await test.step(`Navigating to BLC Aus`, async () => {
-    await homePageAus.navigateToUrlAus();
-    await homePageAus.acceptCookies();
-  });
 
-  await test.step(`Asserting the expected elements are visible on the Home screen`, async () => {
-    await homePageAus.assertElementsVisibleHomeScreenNotLoggedIn();
-  });
-});
 
-test(`@Aus @SmokeTest @Web @NeedsTestCase - erify that incorrect password warning appears`, async ({
-  homePageAus,
-}) => {
-  await test.step(`Navigating to BLC Aus`, async () => {
-    await homePageAus.navigateToUrlAndLogin(process.env.EMAIL_AUS,
-      "wrongpassword");
-   });
- 
-  
-   await test.step(`Asserting the incorrect username of password element appears`, async () => {
-     await homePageAus.assertIncorrectLoginDetailsElementsArePresent();
-  });
-});

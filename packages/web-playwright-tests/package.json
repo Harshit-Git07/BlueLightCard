@@ -25,13 +25,13 @@
     "chance": "^1.1.12",
     "crypto-js": "^4.2.0",
     "dotenv": "16.4.5",
+    "eslint": "8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "exceljs": "^4.4.0",
     "node-fetch": "^3.3.2",
     "npm": "^10.7.0",
     "pdfjs-dist-es5": "^2.13.216",
     "pg": "^8.11.5",
-    "playwright-typescript-playwright-test": "file:",
     "typescript": "^5.4.5",
     "winston": "^3.13.0"
   },
@@ -40,7 +40,7 @@
     "@types/axios": "^0.14.0",
     "@types/chance": "^1.1.6",
     "@types/node": "^20.12.12",
-    "@types/node-fetch": "^2.6.11",
-    "eslint": "9.11.1"
+    "@types/node-fetch": "^2.6.11"
+    
   }
 }

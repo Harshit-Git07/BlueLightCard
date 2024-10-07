@@ -14,8 +14,12 @@ import { GetMemberApplicationRoute } from './routes/GetMemberApplicationRoute';
 import { UpdateMemberApplicationRoute } from './routes/UpdateMemberApplicationRoute';
 import { UpdateMemberCardRoute } from './routes/UpdateMemberCardRoute';
 import { MemberCardModel } from '../application/models/memberCardModel';
+
+import { MemberApplicationModel } from '../application/models/memberApplicationModel';
+
 import { GetOrganisationsRoute } from './routes/GetOrganisationsRoute';
 import { OrganisationModel } from 'application/models/organisationModel';
+
 
 export async function Members({ stack, app }: StackContext) {
   const identityTableName = `${app.stage}-${app.name}-identityTable`;
@@ -87,8 +91,13 @@ export async function Members({ stack, app }: StackContext) {
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberProfileModel);
 
   const agMemberCardModel = apiGatewayModelGenerator.generateModelFromZodEffect(MemberCardModel);
+
+  const agMemberApplicationModel =
+    apiGatewayModelGenerator.generateModelFromZodEffect(MemberApplicationModel);
+
   const agOrganisationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(OrganisationModel);
+
 
   membersApi.addRoutes(stack, {
     'GET /members/v5/profiles': new GetMemberProfilesRoute(
@@ -113,25 +122,25 @@ export async function Members({ stack, app }: StackContext) {
     ).getRouteDetails(),
     'GET /members/v5/applications/{brand}/{memberUUID}': new GetMemberApplicationRoute(
       apiGatewayModelGenerator,
-      agMemberCardModel,
+      agMemberApplicationModel,
       identityTableName,
     ).getRouteDetails(),
     'GET /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new GetMemberApplicationRoute(
         apiGatewayModelGenerator,
-        agMemberCardModel,
+        agMemberApplicationModel,
         identityTableName,
       ).getRouteDetails(),
     'PUT /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new UpdateMemberApplicationRoute(
         apiGatewayModelGenerator,
-        agMemberCardModel,
+        agMemberApplicationModel,
         identityTableName,
       ).getRouteDetails(),
     'POST /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new UpdateMemberApplicationRoute(
         apiGatewayModelGenerator,
-        agMemberCardModel,
+        agMemberApplicationModel,
         identityTableName,
       ).getRouteDetails(),
     'GET /members/v5/orgs/{brand}': new GetOrganisationsRoute(

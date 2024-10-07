@@ -1,4 +1,4 @@
-export enum NewCardReason {
+export enum ApplicationReason {
   SIGNUP = 'SIGNUP',
   RENEWAL = 'RENEWAL',
   NAME_CHANGE = 'NAME_CHANGE',

@@ -5,6 +5,7 @@ import {
   MemberApplicationUpdatePayload,
 } from '../types/memberApplicationTypes';
 import { MemberApplicationModel } from '../models/memberApplicationModel';
+import { APIError } from '../models/APIError';
 
 /**
  * @swagger
@@ -50,6 +51,7 @@ export class MemberApplicationService {
    */
   async getMemberApplications(
     query: MemberApplicationQueryPayload,
+    errorList: APIError[],
   ): Promise<MemberApplicationModel[] | null> {
     return this.repository.getMemberApplications(query);
   }
@@ -78,6 +80,7 @@ export class MemberApplicationService {
     query: MemberApplicationQueryPayload,
     updatedApplication: MemberApplicationUpdatePayload,
     isInsert: boolean,
+    errorSet: APIError[],
   ): Promise<void> {
     let action: string = isInsert ? 'cre' : 'upd';
     try {

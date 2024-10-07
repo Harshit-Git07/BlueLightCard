@@ -7,7 +7,8 @@ import {
   MemberApplicationQueryPayload,
 } from '../../types/memberApplicationTypes';
 import { MemberApplicationModel } from '../../models/memberApplicationModel';
-import { NewCardReason } from '../../enums/NewCardReason';
+import { ApplicationReason } from '../../enums/ApplicationReason';
+import { APIError } from '@blc-mono/members/application/models/APIError';
 
 // Mock the dependencies
 jest.mock('../../repositories/memberApplicationRepository');
@@ -45,26 +46,30 @@ describe('MemberApplicationService', () => {
 
   it('should update a member application successfully', async () => {
     const updatePayload: MemberApplicationUpdatePayload = {
-      addr1: '123 Test Street',
-      addr2: 'Apt 4B',
+      address1: '123 Test Street',
+      address2: 'Apt 4B',
       city: 'Testville',
       postcode: '12345',
       country: 'Testland',
-      start_time: '2024-12-12T00:00:00Z',
-      eligibility_status: 'Eligible',
-      verification_method: 'Email',
-      id_s3_primary: 's3://bucket/primary-id.jpg',
-      id_s3_secondary: 's3://bucket/secondary-id.jpg',
-      trusted_domain_email: 'test@example.com',
-      new_card_reason: NewCardReason.LOST_CARD,
-      change_reason: 'Address change',
-      change_firstname: 'John',
-      change_surname: 'Doe',
-      change_doc_type: 'Passport',
-      rejection_reason: 'Incomplete application',
+      startDate: '2024-12-12T00:00:00Z',
+      eligibilityStatus: 'Eligible',
+      verificationMethod: 'Email',
+      idS3LocationPrimary: 's3://bucket/primary-id.jpg',
+      idS3LocationSecondary: 's3://bucket/secondary-id.jpg',
+      trustedDomainEmail: 'test@example.com',
+      applicationReason: ApplicationReason.LOST_CARD,
+      nameChangeReason: 'Address change',
+      nameChangeFirstName: 'John',
+      nameChangeLastName: 'Doe',
+      nameChangeDocType: 'Passport',
+      rejectionReason: 'Incomplete application',
+      promoCode: null,
+      trustedDomainValidated: false,
     };
 
-    await service.upsertMemberApplication(queryPayload, updatePayload, false);
+    let errorSet: APIError[] = [];
+
+    await service.upsertMemberApplication(queryPayload, updatePayload, false, errorSet);
 
     expect(mockRepository.upsertMemberApplication).toHaveBeenCalledWith(
       queryPayload,
@@ -89,7 +94,7 @@ describe('MemberApplicationService', () => {
       id_s3_primary: 's3://bucket/primary-id.jpg',
       id_s3_secondary: 's3://bucket/secondary-id.jpg',
       trusted_domain_email: 'test@example.com',
-      new_card_reason: NewCardReason.LOST_CARD,
+      new_card_reason: ApplicationReason.LOST_CARD,
       change_reason: 'Address change',
       change_firstname: 'John',
       change_surname: 'Doe',
@@ -97,8 +102,10 @@ describe('MemberApplicationService', () => {
       rejection_reason: 'Incomplete application',
     };
 
+    let errorSet: APIError[] = [];
+
     await expect(
-      service.upsertMemberApplication(queryPayload, invalidPayload as any, false),
+      service.upsertMemberApplication(queryPayload, invalidPayload as any, false, errorSet),
     ).rejects.toThrow(z.ZodError);
     expect(mockRepository.upsertMemberApplication).not.toHaveBeenCalled();
     expect(mockLogger.error).toHaveBeenCalled();
@@ -106,31 +113,35 @@ describe('MemberApplicationService', () => {
 
   it('should return a not found message if ConditionalCheckFailedException occurs', async () => {
     const updatePayload: MemberApplicationUpdatePayload = {
-      addr1: '123 Test Street',
-      addr2: 'Apt 4B',
+      address1: '123 Test Street',
+      address2: 'Apt 4B',
       city: 'Testville',
       postcode: '12345',
       country: 'Testland',
-      start_time: '2024-12-12T00:00:00Z',
-      eligibility_status: 'Eligible',
-      verification_method: 'Email',
-      id_s3_primary: 's3://bucket/primary-id.jpg',
-      id_s3_secondary: 's3://bucket/secondary-id.jpg',
-      trusted_domain_email: 'test@example.com',
-      new_card_reason: NewCardReason.LOST_CARD,
-      change_reason: 'Address change',
-      change_firstname: 'John',
-      change_surname: 'Doe',
-      change_doc_type: 'Passport',
-      rejection_reason: 'Incomplete application',
+      startDate: '2024-12-12T00:00:00Z',
+      eligibilityStatus: 'Eligible',
+      verificationMethod: 'Email',
+      idS3LocationPrimary: 's3://bucket/primary-id.jpg',
+      idS3LocationSecondary: 's3://bucket/secondary-id.jpg',
+      trustedDomainEmail: 'test@example.com',
+      applicationReason: ApplicationReason.LOST_CARD,
+      nameChangeReason: 'Address change',
+      nameChangeFirstName: 'John',
+      nameChangeLastName: 'Doe',
+      nameChangeDocType: 'Passport',
+      rejectionReason: 'Incomplete application',
+      promoCode: null,
+      trustedDomainValidated: false,
     };
 
     const error = new Error('ConditionalCheckFailedException');
     (error as any).code = 'ConditionalCheckFailedException';
     mockRepository.upsertMemberApplication.mockRejectedValue(error);
 
+    let errorSet: APIError[] = [];
+
     try {
-      await service.upsertMemberApplication(queryPayload, updatePayload, false);
+      await service.upsertMemberApplication(queryPayload, updatePayload, false, errorSet);
     } catch (err) {
       expect(err).toBeInstanceOf(Error);
       expect((err as any).code).toBe('ConditionalCheckFailedException');
@@ -140,30 +151,34 @@ describe('MemberApplicationService', () => {
   it('should retrieve member applications successfully', async () => {
     const mockApplications: MemberApplicationModel[] = [
       {
-        member_uuid: '12345678-1234-1234-12345678',
-        application_uuid: '56785678-1234-1234-56785678',
-        addr1: '123 Test Street',
-        addr2: 'Apt 4B',
+        memberUuid: '12345678-1234-1234-12345678',
+        applicationUuid: '56785678-1234-1234-56785678',
+        address1: '123 Test Street',
+        address2: 'Apt 4B',
         city: 'Testville',
         postcode: '12345',
         country: 'Testland',
-        start_time: '2024-12-12T00:00:00Z',
-        eligibility_status: 'Eligible',
-        verification_method: 'Email',
-        id_s3_primary: 's3://bucket/primary-id.jpg',
-        id_s3_secondary: 's3://bucket/secondary-id.jpg',
-        trusted_domain_email: 'test@example.com',
-        new_card_reason: NewCardReason.LOST_CARD,
-        change_reason: 'Address change',
-        change_firstname: 'John',
-        change_surname: 'Doe',
-        change_doc_type: 'Passport',
-        rejection_reason: 'Incomplete application',
+        startDate: '2024-12-12T00:00:00Z',
+        eligibilityStatus: 'Eligible',
+        verificationMethod: 'Email',
+        idS3LocationPrimary: 's3://bucket/primary-id.jpg',
+        idS3LocationSecondary: 's3://bucket/secondary-id.jpg',
+        trustedDomainEmail: 'test@example.com',
+        applicationReason: ApplicationReason.LOST_CARD,
+        nameChangeReason: 'Address change',
+        nameChangeFirstName: 'John',
+        nameChangeLastName: 'Doe',
+        nameChangeDocType: 'Passport',
+        rejectionReason: 'Incomplete application',
+        promoCode: null,
+        trustedDomainValidated: false,
       },
     ];
     mockRepository.getMemberApplications.mockResolvedValue(mockApplications);
 
-    const result = await service.getMemberApplications(queryPayload);
+    let errorSet: APIError[] = [];
+
+    const result = await service.getMemberApplications(queryPayload, errorSet);
 
     expect(result).toEqual(mockApplications);
     expect(mockRepository.getMemberApplications).toHaveBeenCalledWith(queryPayload);
@@ -172,7 +187,8 @@ describe('MemberApplicationService', () => {
   it('should handle no member applications found', async () => {
     mockRepository.getMemberApplications.mockResolvedValue([]);
 
-    const result = await service.getMemberApplications(queryPayload);
+    let errorSet: APIError[] = [];
+    const result = await service.getMemberApplications(queryPayload, errorSet);
 
     expect(result).toEqual([]);
     expect(mockRepository.getMemberApplications).toHaveBeenCalledWith(queryPayload);
@@ -181,52 +197,57 @@ describe('MemberApplicationService', () => {
   it('should return multiple applications for a single member without specifying an application ID', async () => {
     const mockApplications: MemberApplicationModel[] = [
       {
-        member_uuid: '12345678-1234-1234-12345678',
-        application_uuid: '56785678-1234-1234-56785678',
-        addr1: '123 Test Street',
-        addr2: 'Apt 4B',
+        memberUuid: '12345678-1234-1234-12345678',
+        applicationUuid: '56785678-1234-1234-56785678',
+        address1: '123 Test Street',
+        address2: 'Apt 4B',
         city: 'Testville',
         postcode: '12345',
         country: 'Testland',
-        start_time: '2024-12-12T00:00:00Z',
-        eligibility_status: 'Eligible',
-        verification_method: 'Email',
-        id_s3_primary: 's3://bucket/primary-id.jpg',
-        id_s3_secondary: 's3://bucket/secondary-id.jpg',
-        trusted_domain_email: 'test@example.com',
-        new_card_reason: NewCardReason.NAME_CHANGE,
-        change_reason: 'Address change',
-        change_firstname: 'John',
-        change_surname: 'Doe',
-        change_doc_type: 'Passport',
-        rejection_reason: 'Incomplete application',
+        startDate: '2024-12-12T00:00:00Z',
+        eligibilityStatus: 'Eligible',
+        verificationMethod: 'Email',
+        idS3LocationPrimary: 's3://bucket/primary-id.jpg',
+        idS3LocationSecondary: 's3://bucket/secondary-id.jpg',
+        trustedDomainEmail: 'test@example.com',
+        applicationReason: ApplicationReason.NAME_CHANGE,
+        nameChangeReason: 'Address change',
+        nameChangeFirstName: 'John',
+        nameChangeLastName: 'Doe',
+        nameChangeDocType: 'Passport',
+        rejectionReason: 'Incomplete application',
+        promoCode: null,
+        trustedDomainValidated: false,
       },
       {
-        member_uuid: '12345678-1234-1234-12345678',
-        application_uuid: '56785678-1234-1234-56785678',
-        addr1: '124 Test Street',
-        addr2: 'Apt 4B',
+        memberUuid: '12345678-1234-1234-12345678',
+        applicationUuid: '56785678-1234-1234-56785678',
+        address1: '124 Test Street',
+        address2: 'Apt 4B',
         city: 'Testville',
         postcode: '12345',
         country: 'Testland',
-        start_time: '2024-12-12T00:00:00Z',
-        eligibility_status: 'Eligible',
-        verification_method: 'Email',
-        id_s3_primary: 's3://bucket/primary-id.jpg',
-        id_s3_secondary: 's3://bucket/secondary-id.jpg',
-        trusted_domain_email: 'test@example.com',
-        new_card_reason: NewCardReason.LOST_CARD,
-        change_reason: 'Address change',
-        change_firstname: 'John',
-        change_surname: 'Doe',
-        change_doc_type: 'Passport',
-        rejection_reason: 'Incomplete application',
+        startDate: '2024-12-12T00:00:00Z',
+        eligibilityStatus: 'Eligible',
+        verificationMethod: 'Email',
+        idS3LocationPrimary: 's3://bucket/primary-id.jpg',
+        idS3LocationSecondary: 's3://bucket/secondary-id.jpg',
+        trustedDomainEmail: 'test@example.com',
+        applicationReason: ApplicationReason.LOST_CARD,
+        nameChangeReason: 'Address change',
+        nameChangeFirstName: 'John',
+        nameChangeLastName: 'Doe',
+        nameChangeDocType: 'Passport',
+        rejectionReason: 'Incomplete application',
+        promoCode: null,
+        trustedDomainValidated: false,
       },
     ];
 
     mockRepository.getMemberApplications.mockResolvedValue(mockApplications);
 
-    const result = await service.getMemberApplications(queryPayload);
+    let errorSet: APIError[] = [];
+    const result = await service.getMemberApplications(queryPayload, errorSet);
 
     expect(result).toEqual(mockApplications);
     expect(mockRepository.getMemberApplications).toHaveBeenCalledWith(queryPayload);
@@ -234,30 +255,34 @@ describe('MemberApplicationService', () => {
 
   it('should log an error if repository throws an unexpected error during update', async () => {
     const updatePayload: MemberApplicationUpdatePayload = {
-      addr1: '123 Test Street',
-      addr2: 'Apt 4B',
+      address1: '123 Test Street',
+      address2: 'Apt 4B',
       city: 'Testville',
       postcode: '12345',
       country: 'Testland',
-      start_time: '2024-12-12T00:00:00Z',
-      eligibility_status: 'Eligible',
-      verification_method: 'Email',
-      id_s3_primary: 's3://bucket/primary-id.jpg',
-      id_s3_secondary: 's3://bucket/secondary-id.jpg',
-      trusted_domain_email: 'test@example.com',
-      new_card_reason: NewCardReason.LOST_CARD,
-      change_reason: 'Address change',
-      change_firstname: 'John',
-      change_surname: 'Doe',
-      change_doc_type: 'Passport',
-      rejection_reason: 'Incomplete application',
+      startDate: '2024-12-12T00:00:00Z',
+      eligibilityStatus: 'Eligible',
+      verificationMethod: 'Email',
+      idS3LocationPrimary: 's3://bucket/primary-id.jpg',
+      idS3LocationSecondary: 's3://bucket/secondary-id.jpg',
+      trustedDomainEmail: 'test@example.com',
+      applicationReason: ApplicationReason.LOST_CARD,
+      nameChangeReason: 'Address change',
+      nameChangeFirstName: 'John',
+      nameChangeLastName: 'Doe',
+      nameChangeDocType: 'Passport',
+      rejectionReason: 'Incomplete application',
+      promoCode: null,
+      trustedDomainValidated: false,
     };
 
     const unexpectedError = new Error('Unexpected error');
+
     mockRepository.upsertMemberApplication.mockRejectedValue(unexpectedError);
 
+    let errorSet: APIError[] = [];
     try {
-      await service.upsertMemberApplication(queryPayload, updatePayload, false);
+      await service.upsertMemberApplication(queryPayload, updatePayload, false, errorSet);
     } catch (err) {
       expect(err).toBeInstanceOf(Error);
       expect((err as Error).message).toBe('Unexpected error');
@@ -266,26 +291,29 @@ describe('MemberApplicationService', () => {
 
   it('should log an info message when an application is successfully created', async () => {
     const createPayload: MemberApplicationUpdatePayload = {
-      addr1: '123 Test Street',
-      addr2: 'Apt 4B',
+      address1: '123 Test Street',
+      address2: 'Apt 4B',
       city: 'Testville',
       postcode: '12345',
       country: 'Testland',
-      start_time: '2024-12-12T00:00:00Z',
-      eligibility_status: 'Eligible',
-      verification_method: 'Email',
-      id_s3_primary: 's3://bucket/primary-id.jpg',
-      id_s3_secondary: 's3://bucket/secondary-id.jpg',
-      trusted_domain_email: 'test@example.com',
-      new_card_reason: NewCardReason.SIGNUP,
-      change_reason: null,
-      change_firstname: null,
-      change_surname: null,
-      change_doc_type: null,
-      rejection_reason: null,
+      startDate: '2024-12-12T00:00:00Z',
+      eligibilityStatus: 'Eligible',
+      verificationMethod: 'Email',
+      idS3LocationPrimary: 's3://bucket/primary-id.jpg',
+      idS3LocationSecondary: 's3://bucket/secondary-id.jpg',
+      trustedDomainEmail: 'test@example.com',
+      applicationReason: ApplicationReason.SIGNUP,
+      nameChangeReason: null,
+      nameChangeFirstName: null,
+      nameChangeLastName: null,
+      nameChangeDocType: null,
+      rejectionReason: null,
+      promoCode: null,
+      trustedDomainValidated: false,
     };
 
-    await service.upsertMemberApplication(queryPayload, createPayload, true);
+    let errorSet: APIError[] = [];
+    await service.upsertMemberApplication(queryPayload, createPayload, true, errorSet);
 
     expect(mockRepository.upsertMemberApplication).toHaveBeenCalledWith(
       queryPayload,

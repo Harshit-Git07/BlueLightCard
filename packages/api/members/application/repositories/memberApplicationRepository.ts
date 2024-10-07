@@ -29,10 +29,14 @@ export class MemberApplicationRepository {
       },
     };
 
+    queryParams.ExpressionAttributeNames!['#sk'] = 'sk';
+
     if (query.applicationId) {
       queryParams.KeyConditionExpression += ' AND #sk = :sk';
-      queryParams.ExpressionAttributeNames!['#sk'] = 'sk';
       queryParams.ExpressionAttributeValues![':sk'] = `APPLICATION#${query.applicationId}`;
+    } else {
+      queryParams.KeyConditionExpression += ' AND begins_with(#sk, :skPrefix)';
+      queryParams.ExpressionAttributeValues![':skPrefix'] = 'APPLICATION#';
     }
 
     const queryResult = await this.dynamoDB.query(queryParams).promise();
@@ -41,8 +45,15 @@ export class MemberApplicationRepository {
       return null;
     }
 
-    // Parse each item against the Zod schema
-    const validatedItems = queryResult.Items.map((item) => MemberApplicationModel.parse(item));
+    // Parse each item against the Zod schema and transform it
+    const validatedItems = queryResult.Items.map((item) => {
+      const transformedItem = Object.keys(item).reduce((acc, key) => {
+        const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1);
+        acc[lowerCaseKey] = item[key];
+        return acc;
+      }, {} as { [key: string]: any });
+      return MemberApplicationModel.parse(transformedItem);
+    });
 
     return validatedItems;
   }
@@ -63,7 +74,8 @@ export class MemberApplicationRepository {
 
     for (const field of Object.keys(payload) as (keyof MemberApplicationUpdatePayload)[]) {
       if (payload[field] !== undefined) {
-        updateExpression.push(`${field} = :${field}`);
+        const capitalizedField = field.charAt(0).toUpperCase() + field.slice(1);
+        updateExpression.push(`${capitalizedField} = :${field}`);
         expressionAttributeValues[`:${field}`] = payload[field];
       }
     }

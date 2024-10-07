@@ -1,3 +1,5 @@
+import { ApplicationReason } from '../enums/ApplicationReason';
+
 export interface MemberApplicationQueryPayload {
   brand: string;
   memberUUID: string;
@@ -5,21 +7,23 @@ export interface MemberApplicationQueryPayload {
 }
 
 export interface MemberApplicationUpdatePayload {
-  addr1: string;
-  addr2: string;
+  startDate: string;
+  eligibilityStatus: string;
+  applicationReason: ApplicationReason;
+  verificationMethod: string;
+  address1: string;
+  address2: string;
   city: string;
   postcode: string;
   country: string;
-  start_time: string;
-  eligibility_status: string;
-  verification_method: string;
-  id_s3_primary: string;
-  id_s3_secondary: string;
-  trusted_domain_email: string;
-  new_card_reason: string | null;
-  change_reason: string | null;
-  change_firstname: string | null;
-  change_surname: string | null;
-  change_doc_type: string | null;
-  rejection_reason: string | null;
+  promoCode: string | null;
+  idS3LocationPrimary: string;
+  idS3LocationSecondary: string;
+  trustedDomainEmail: string;
+  trustedDomainValidated: boolean;
+  nameChangeReason: string | null;
+  nameChangeFirstName: string | null;
+  nameChangeLastName: string | null;
+  nameChangeDocType: string | null;
+  rejectionReason: string | null;
 }

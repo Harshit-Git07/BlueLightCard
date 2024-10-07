@@ -11,7 +11,7 @@ export class UpdateMemberApplicationRoute {
   constructor(
     private apiGatewayModelGenerator: ApiGatewayModelGenerator,
     private agMemberApplicationModel: Model,
-    private identityTableName: string,
+    private applicationTableName: string,
   ) {}
 
   getRouteDetails(): ApiGatewayV1ApiRouteProps<never> {
@@ -21,13 +21,13 @@ export class UpdateMemberApplicationRoute {
           'packages/api/members/application/handlers/application/updateMemberApplication.handler',
         environment: {
           SERVICE: 'member',
-          IDENTITY_TABLE_NAME: this.identityTableName,
+          APPLICATION_TABLE_NAME: this.applicationTableName,
         },
         permissions: [
           new PolicyStatement({
             effect: Effect.ALLOW,
             actions: ['dynamodb:Query', 'dynamodb:UpdateItem'],
-            resources: [`arn:aws:dynamodb:*:*:table/${this.identityTableName}`],
+            resources: [`arn:aws:dynamodb:*:*:table/${this.applicationTableName}`],
           }),
         ],
       },

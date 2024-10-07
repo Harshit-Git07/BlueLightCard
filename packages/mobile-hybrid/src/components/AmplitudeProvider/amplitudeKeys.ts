@@ -5,10 +5,6 @@ export enum FeatureFlags {
   SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK = 'search-start-page-offers-near-you-link',
   SEARCH_RECENT_SEARCHES = 'search-recent-searches',
   V5_API_INTEGRATION = 'v5-api-integration',
-  OFFER_SHEET_VAULT_QR = 'offer-sheet-redeem-qr-app',
-  OFFER_SHEET_GENERIC = 'offer-sheet-redeem-generic-app',
-  OFFER_SHEET_SHOW_CARD = 'offer-sheet-redeem-show-card-app',
-  OFFER_SHEET_PREAPPLIED = 'offer-sheet-redeem-preapplied-app',
 }
 
 export enum Experiments {

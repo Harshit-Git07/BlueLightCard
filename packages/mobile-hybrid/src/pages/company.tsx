@@ -20,6 +20,7 @@ import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import CompanyPageError from '@/page-components/company/components/CompanyPageError';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
+import { ToastContainer } from 'react-toastify';
 
 const analytics = new InvokeNativeAnalytics();
 
@@ -121,6 +122,7 @@ const Company: NextPage<any> = () => {
               platform={PlatformVariant.MobileHybrid}
             />
           </div>
+          <ToastContainer hideProgressBar />
         </>
       )}
     </div>

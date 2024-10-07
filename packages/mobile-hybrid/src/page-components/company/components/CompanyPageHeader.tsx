@@ -1,14 +1,18 @@
-import { Button, Heading, ThemeVariant } from '@bluelightcard/shared-ui';
+import { Button, Heading, ShareButton, ThemeVariant } from '@bluelightcard/shared-ui';
 import { FC } from 'react';
 import { companyDataAtom } from '../atoms';
 import { useAtom } from 'jotai';
 import InvokeNativeLifecycle from '@/invoke/lifecycle';
 
+const brandUrl = process.env.NEXT_PUBLIC_BRAND_URL;
 const lifecycleEvent = new InvokeNativeLifecycle();
 
 const CompanyPageHeader: FC = () => {
   const [company] = useAtom(companyDataAtom);
   const companyName = company?.companyName;
+  const companyDescription = company?.companyDescription;
+  const companyId = company?.companyId;
+
   const backEvent = () => {
     try {
       lifecycleEvent.lifecycleEvent('onBackPressed');
@@ -31,11 +35,14 @@ const CompanyPageHeader: FC = () => {
       >
         {companyName}
       </Heading>
-      {/* TODO: Removed till we find a solution for the share button on mobile */}
-      {/* <ShareButton
-        shareDetails={{ name: companyName, description: '', url: '' }}
+      <ShareButton
+        shareDetails={{
+          name: companyName,
+          description: companyDescription,
+          url: `https://${brandUrl}/company?cid=${companyId}`,
+        }}
         showShareLabel={false}
-      /> */}
+      />
     </div>
   );
 };

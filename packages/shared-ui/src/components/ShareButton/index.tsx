@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faX } from '@fortawesome/pro-solid-svg-icons';
 import Button from '../Button';
@@ -54,6 +55,8 @@ const ShareButton: FC<Props> = ({
         icon: <CheckCircleSvg />,
         toastId: 'link-copied-success',
         closeButton: false,
+        className:
+          'py-3.5 px-4 rounded text-colour-onSurface-inverse bg-colour-surface-inverse dark:text-colour-onSurface-inverse-dark dark:bg-colour-surface-inverse-dark',
       });
     } else {
       toast.error('Failed to copy link', {
@@ -61,6 +64,8 @@ const ShareButton: FC<Props> = ({
         icon: <ErrorCircleSvg />,
         toastId: 'link-copied-error',
         closeButton: false,
+        className:
+          'py-3.5 px-4 rounded text-colour-onSurface-inverse bg-colour-surface-inverse dark:text-colour-onSurface-inverse-dark dark:bg-colour-surface-inverse-dark',
       });
     }
   };

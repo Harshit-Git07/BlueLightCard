@@ -163,7 +163,7 @@ export function OffersCMS({ stack }: StackContext) {
 
 function getEnv(value: string, defaultValue?: string): string {
   try {
-    if (defaultValue) {
+    if (defaultValue || defaultValue === '') {
       return getEnvOrDefaultValidated(value, defaultValue, z.string());
     } else {
       return getEnvValidated(value, z.string());

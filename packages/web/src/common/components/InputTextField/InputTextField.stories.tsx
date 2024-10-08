@@ -22,7 +22,7 @@ const iconArgSelect = {
 };
 
 const componentMeta: Meta<typeof InputTextField> = {
-  title: 'Component System/Form/InputTextField',
+  title: 'Deprecated / Component System/Form/InputTextField',
   component: InputTextField,
   argTypes: {
     icon: {

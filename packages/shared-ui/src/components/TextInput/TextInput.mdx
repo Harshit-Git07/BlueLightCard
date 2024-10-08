@@ -1,0 +1,115 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as TextInput from './TextInput.stories';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+import FigmaEmbed from '../../../.storybook/blocks/FigmaEmbed';
+
+<Meta of={TextInput} />
+
+# TextInput
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Status
+<ComponentStatus />
+
+## Overview
+
+The Text Input component is a versatile UI element used to create text field input areas in forms. It typically includes a label and optional helper text or validation messages. This component ensures consistency and accessibility in form design, providing a structured and user-friendly way to capture user input.
+
+## Props
+
+<Controls />
+
+
+## Variants and States
+
+List of variants can be shown below here.
+
+**Default**
+<Canvas of={TextInput.Default} />
+
+**Active**
+<Canvas of={TextInput.Active} />
+
+**Filled**
+<Canvas of={TextInput.Filled} />
+
+**Error**
+<Canvas of={TextInput.Error} />
+
+**Disabled**
+<Canvas of={TextInput.Disabled} />
+
+**With All Features**
+<Canvas of={TextInput.WithAllFeatures} />
+
+## Implementation
+Usage example using jsx
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import TextInput from './TextInput'; // Adjust the import path as necessary
+
+const ExampleComponent = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [inputState, setInputState] = useState('Default');
+  const [helpMessage, setHelpMessage] = useState('');
+
+  useEffect(() => {
+    // Simulate loading an initial value
+    setTimeout(() => {
+      setInputValue('Initial Value');
+      setInputState('Filled');
+    }, 1000);
+  }, []);
+
+  const handleInputChange = (e) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+
+    if (newValue.length < 3) {
+      setInputState('Error');
+      setHelpMessage('Input must be at least 3 characters long');
+    } else {
+      setInputState('Default');
+      setHelpMessage('');
+    }
+  };
+
+  return (
+    <div className="p-4">
+      <TextInput
+        name="example-input"
+        label="Example Input"
+        placeholder="Enter text here"
+        value={inputValue}
+        onChange={handleInputChange}
+        state={inputState}
+        showLabel={true}
+        showHelpMessage={!!helpMessage}
+        helpMessage={helpMessage}
+        required={true}
+        maxChars={50}
+      />
+    </div>
+  );
+};
+
+export default ExampleComponent;
+```
+
+## Usage Guidelines
+
+➡️ Always use placeholder in input field where indicated
+
+➡️ Character or word counters should be used if there is a character or word limit.
+
+## Design
+Use the `<FigmaEmbed />` component.

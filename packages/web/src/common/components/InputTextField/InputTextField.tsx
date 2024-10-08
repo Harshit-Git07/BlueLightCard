@@ -3,6 +3,12 @@ import { InputTextFieldProps } from './types';
 import InputFieldWrapper from '@/components/_shared/InputFieldWrapper';
 import { cssUtil } from '@/utils/cssUtil';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/TextInput/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
+
 const InputTextField: FC<InputTextFieldProps> = ({
   icon,
   error,

@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextInput component snapshot tests renders default input correctly 1`] = `
+<div
+  className="space-y-2"
+>
+  <div
+    className="relative"
+  >
+    <input
+      aria-invalid={false}
+      aria-label="test-input"
+      aria-required={false}
+      className="w-full rounded-md py-2 px-3 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-palette-white border focus:outline-none text-colour-onSurface dark:text-colour-onSurface-dark placeholder-colour-onSurface-subtle dark:placeholder-colour-onSurface-subtle-dark"
+      disabled={false}
+      id="test-input"
+      maxLength={100}
+      name="test-input"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Enter text"
+      required={false}
+      value=""
+    />
+  </div>
+</div>
+`;
+
+exports[`TextInput component snapshot tests renders input in error state 1`] = `
+<div
+  className="space-y-2"
+>
+  <div
+    className="relative"
+  >
+    <input
+      aria-describedby="test-input-info"
+      aria-invalid={true}
+      aria-label="test-input"
+      aria-required={false}
+      className="w-full rounded-md py-2 px-3 border-colour-onError-container dark:border-colour-onError-container-dark border focus:outline-none text-colour-onSurface dark:text-colour-onSurface-dark placeholder-colour-onSurface-subtle dark:placeholder-colour-onSurface-subtle-dark"
+      disabled={false}
+      id="test-input"
+      maxLength={100}
+      name="test-input"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Enter text"
+      required={false}
+      value=""
+    />
+  </div>
+  <div>
+    <label
+      className="font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small text-colour-error dark:text-colour-error-dark"
+      id="test-input-info"
+    >
+      Error message
+    </label>
+  </div>
+</div>
+`;
+
+exports[`TextInput component snapshot tests renders input with label and icon 1`] = `
+<div
+  className="space-y-2"
+>
+  <div
+    className="flex items-center gap-2"
+  >
+    <label
+      className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+    >
+      Test-label
+    </label>
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-info text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+      data-icon="circle-info"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </div>
+  <div
+    className="relative"
+  >
+    <input
+      aria-invalid={false}
+      aria-label="test-input"
+      aria-required={false}
+      className="w-full rounded-md py-2 px-3 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-palette-white border focus:outline-none text-colour-onSurface dark:text-colour-onSurface-dark placeholder-colour-onSurface-subtle dark:placeholder-colour-onSurface-subtle-dark"
+      disabled={false}
+      id="test-input"
+      maxLength={100}
+      name="test-input"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Enter text"
+      required={false}
+      value=""
+    />
+  </div>
+</div>
+`;

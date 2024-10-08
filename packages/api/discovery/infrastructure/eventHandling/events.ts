@@ -4,4 +4,5 @@ export enum Events {
   OFFER_DELETED = 'offer.deleted',
   COMPANY_CREATED = 'company.created',
   COMPANY_UPDATED = 'company.updated',
+  OPENSEARCH_POPULATE_INDEX = 'opensearch.populate.index',
 }

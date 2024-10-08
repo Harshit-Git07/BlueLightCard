@@ -106,6 +106,8 @@ jobs:
             cdnUrl: 'https://blcimgdev.s3.eu-west-2.amazonaws.com'
             brand: BLC_UK
             stage: staging
+            discoveryEventBusName: 'staging-blc-mono-eventBus'
+            cmsAccount: '971422711515'
           - deployment: 'dds-uk-staging'
             region: 'eu-west-2'
             stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
@@ -114,6 +116,8 @@ jobs:
             cdnUrl: 'https://ddsimgdev.s3.eu-west-2.amazonaws.com'
             brand: DDS_UK
             stage: staging-dds
+            cmsAccount: '971422711515'
+            discoveryEventBusName: 'staging-dds-blc-mono-eventBus'
             blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
             blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
             ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
@@ -121,12 +125,14 @@ jobs:
             blcUkIdentityApiId: 'tr1afrar24'
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
+            cmsAccount: '971422711515'
             stagingBaseUrl: https://develop.bluelightcard.com.au
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-aus
             cdnUrl: 'https://blc-au-img-dev.s3.ap-southeast-2.amazonaws.com'
             brand: BLC_AU
             stage: staging
+            discoveryEventBusName: 'staging-blc-mono-eventBus'
     needs:
       - install
       - test
@@ -143,6 +149,8 @@ jobs:
       DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
       DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
       BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
+      OFFERS_CMS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
+      OFFERS_CMS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

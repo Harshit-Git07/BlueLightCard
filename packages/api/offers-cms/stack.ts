@@ -1,5 +1,6 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { EventBus as AwsEventBus } from 'aws-cdk-lib/aws-events';
+import { AccountPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import {
   ApiGatewayV1Api,
   Config,
@@ -15,10 +16,11 @@ import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { generateOffersCustomDomainName } from '@blc-mono/core/offers/generateOffersCustomDomainName';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { getEnvOrDefaultValidated } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefaultValidated, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
 import { Identity } from '@blc-mono/identity/stack';
 import { OffersCMSStackEnvironmentKeys } from '@blc-mono/offers-cms/src/constants/environment';
+import { SharedStackEnvironmentKeys } from '@blc-mono/shared/infra/environment';
 import { Shared } from '@blc-mono/shared/stack';
 
 const CMS_BUS_NAME = 'in';
@@ -27,6 +29,7 @@ const CMS_DATA_TABLE_NAME = 'cmsData';
 const API_FUNCTION_NAME = 'apiFunction';
 const CONSUMER_FUNCTION_NAME = 'consumerFunction';
 const API_GATEWAY_NAME = 'offers-cms-apiGateway';
+const EVENT_BUS_ID = 'Discovery Event Bus';
 
 const cliLogger = new CliLogger();
 
@@ -56,15 +59,15 @@ export function OffersCMS({ stack }: StackContext) {
     bind: [cmsDataTable],
     url: true,
     environment: {
-      OFFERS_BRAND: getEnv(OffersCMSStackEnvironmentKeys.OFFERS_BRAND),
-      DISCOVERY_EVENT_BUS_NAME: getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME),
+      OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
+      DISCOVERY_EVENT_BUS_NAME: getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, ''),
     },
   });
 
   const discoBus = AwsEventBus.fromEventBusName(
     stack,
-    getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_ID, 'discoveryBus'),
-    getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, 'staging-blc-mono-eventBus'),
+    EVENT_BUS_ID,
+    getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, ''),
   );
   const wrappedDiscoBus = new Config.Parameter(stack, 'discovery_bus', {
     value: discoBus.eventBusName,
@@ -74,8 +77,8 @@ export function OffersCMS({ stack }: StackContext) {
     handler: 'packages/api/offers-cms/lambda/consumer.handler',
     bind: [cmsRawDataTable, cmsDataTable, wrappedDiscoBus],
     environment: {
-      OFFERS_BRAND: getEnv(OffersCMSStackEnvironmentKeys.OFFERS_BRAND),
-      DISCOVERY_EVENT_BUS_NAME: getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME),
+      OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
+      DISCOVERY_EVENT_BUS_NAME: getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, ''),
     },
   });
 
@@ -93,6 +96,23 @@ export function OffersCMS({ stack }: StackContext) {
       },
     },
   });
+
+  const cmsAccountId = getEnv(OffersCMSStackEnvironmentKeys.CMS_ACCOUNT, '');
+
+  if (cmsAccountId.length > 0) {
+    const awsCmsBus = cmsEvents.cdk.eventBus as AwsEventBus;
+    awsCmsBus.addToResourcePolicy(
+      new PolicyStatement({
+        sid: 'AllowCMSaccount',
+        actions: ['events:PutEvents'],
+        effect: Effect.ALLOW,
+        principals: [new AccountPrincipal(cmsAccountId)],
+        resources: [awsCmsBus.eventBusArn],
+      }),
+    );
+  } else {
+    cliLogger.warn({ message: 'CMS Account not set. Skipping resource policy.' });
+  }
 
   // API Gateway provisioning
   const gateway = new ApiGatewayV1Api(stack, API_GATEWAY_NAME, {
@@ -141,15 +161,15 @@ export function OffersCMS({ stack }: StackContext) {
   };
 }
 
-function getEnv(value: string, defaultValue = '') {
+function getEnv(value: string, defaultValue?: string): string {
   try {
-    return getEnvOrDefaultValidated(value, defaultValue, z.string());
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      cliLogger.error({ message: 'Validation error', error: error.errors });
+    if (defaultValue) {
+      return getEnvOrDefaultValidated(value, defaultValue, z.string());
     } else {
-      cliLogger.error({ message: 'Unknown error', error });
+      return getEnvValidated(value, z.string());
     }
+  } catch (error) {
+    cliLogger.error({ message: `Error retrieving environment variable "${value}"`, error });
     throw error;
   }
 }

@@ -24,7 +24,7 @@ const CompanyPageHeader: FC = () => {
     <div className="py-2 flex flex-row justify-between items-center">
       <Button
         onClick={backEvent}
-        className="text-primary-dukeblue-700 !px-0 !py-0 !justify-start"
+        className="text-primary-dukeblue-700 !px-0 !py-0 !justify-start !min-w-min"
         variant={ThemeVariant.Tertiary}
       >
         Back

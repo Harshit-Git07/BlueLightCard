@@ -108,7 +108,7 @@ const ShareButton: FC<Props> = ({
     <Button
       variant={ThemeVariant.Tertiary}
       withoutHover
-      className={`w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit ${!showShareLabel && '!justify-end'}`}
+      className={`w-fit m-1 mobile:px-0 mobile:py-0 min-h-6 laptop:min-h-fit ${!showShareLabel && '!justify-end !min-w-min'}`}
       onClick={handleShareClick}
     >
       <div

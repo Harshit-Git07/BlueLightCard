@@ -1,0 +1,59 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as ToggleInput from './ToggleInput.stories';
+
+<Meta of={ToggleInput} />
+
+# ToggleInput
+
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Implementation](#implementation)
+- [Design](#design)
+
+## Overview
+
+A toggle component to use in a form - uses html input checkbox
+
+<Canvas of={ToggleInput.ExampleUsage} />
+
+## Props
+
+<Controls />
+
+## State
+
+Default
+
+<Canvas of={ToggleInput.Unselected} />
+
+Selected
+
+<Canvas of={ToggleInput.Selected} />
+
+Disabled
+
+<Canvas of={ToggleInput.UnselectedDisabled} />
+
+Disabled Selected
+
+<Canvas of={ToggleInput.SelectedDisabled } />
+
+## Implementation
+Usage example using jsx
+
+```jsx
+const SomeForm: FC = () => {
+  const [selected, setSelected] = useState(false);
+  return <ToggleInput
+           id="subscribeToggle"
+           name="subscribe"
+           selected={selected}
+           onChange={() => setSelected(!selected)}
+         />;
+};
+```
+
+## Design
+
+- [Figma](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=299-1279&m=dev)

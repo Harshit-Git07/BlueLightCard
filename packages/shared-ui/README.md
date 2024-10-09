@@ -26,7 +26,7 @@ npm install
 Run storybook
 
 ```sh
-npm run storybook
+STORYBOOK_ENV=1 npm run storybook
 ```
 
 ## Usage

@@ -1,4 +1,5 @@
 import { NavigationItem } from '../types';
+import { HOLIDAY_URL } from '@/global-vars';
 
 // Do we want to hardcode these links in or have them read from a json or a config file?
 export const AUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
@@ -50,7 +51,7 @@ export const AUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
       {
         id: 'holiday-discounts',
         label: 'Holiday Discounts',
-        url: '/holiday-discounts.php',
+        url: HOLIDAY_URL,
       },
       {
         id: 'days-out',

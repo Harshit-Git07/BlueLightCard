@@ -138,3 +138,28 @@ export const vaultCodesTable = pgTable(
     memberIdx: index('member_idx').on(table.memberId),
   }),
 );
+
+export const integrationCodesPrefix = 'vic';
+export const createIntegrationCodesId = (): string => `${integrationCodesPrefix}-${uuidv4()}`;
+export const integrationCodesTable = pgTable(
+  'integrationCodes',
+  {
+    // PK
+    id: varchar('id').primaryKey().$defaultFn(createIntegrationCodesId),
+    // FK
+    vaultId: varchar('vaultId')
+      .references(() => vaultsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+      .notNull(),
+    // Other
+    code: varchar('code').notNull(),
+    created: timestamp('created').defaultNow().notNull(),
+    expiry: timestamp('expiry').notNull(),
+    memberId: varchar('memberId').notNull(),
+    integrationId: varchar('integrationId').notNull(),
+    integration: integrationEnum('integration').notNull(),
+  },
+  (table) => ({
+    icVaultIdx: index('ic_vault_idx').on(table.vaultId),
+    icMemberIdx: index('ic_member_idx').on(table.memberId),
+  }),
+);

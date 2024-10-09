@@ -132,7 +132,7 @@ export function OffersCMS({ stack }: StackContext) {
         ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
-              domainName: generateOffersCustomDomainName(stack),
+              domainName: generateOffersCustomDomainName(stack, 'v2'),
               certificate: Certificate.fromCertificateArn(
                 stack,
                 'DomainCertificate',

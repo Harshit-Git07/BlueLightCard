@@ -5,16 +5,18 @@ export const BLC_AUS = 'blc-aus';
 export const DDS_UK = 'dds-uk';
 export const EPHEMERAL_PR_REGEX = /^pr-\d+-blc-mono(-dds)?$/;
 
+export const OFFERS_DOMAIN_NAME = 'blcshine.io';
+
 export const enum APP_MODE {
   DEV = 'dev',
   REMOVE = 'remove',
   DEPLOY = 'deploy',
 }
 
-export const enum OFFERS_DOMAIN_NAME {
-  BLC_UK = 'offers.blcshine.io',
-  DDS_UK = 'offers-dds-uk.blcshine.io',
-  BLC_AUS = 'offers-au.blcshine.io',
+export const enum OFFERS_SUBDOMAINS {
+  BLC_UK = 'offers',
+  DDS_UK = 'offers-dds-uk',
+  BLC_AUS = 'offers-au',
 }
 
 export const enum DATABASE_PROPS {

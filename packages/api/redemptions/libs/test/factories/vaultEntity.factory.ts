@@ -9,7 +9,7 @@ export const vaultEntityFactory = Factory.define<VaultEntity>(() => ({
   redemptionId: createRedemptionsId(),
   status: 'active',
   alertBelow: 10,
-  created: new Date('2024-07-16T03:17:18.000Z'),
+  created: new Date('2024-07-16'),
   email: faker.internet.email(),
   vaultType: 'standard',
   integrationId: faker.number.int({

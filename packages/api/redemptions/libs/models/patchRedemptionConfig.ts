@@ -57,6 +57,8 @@ export const PatchVaultModel = CommonModel('vault').merge(UrlModel).merge(VaultM
 export const PatchVaultQRModel = CommonModel('vaultQR').merge(VaultModel);
 export const PatchGenericModel = CommonModel('generic').merge(UrlModel).merge(GenericModel);
 
+export const PatchVaultOrVaultQRModel = z.union([PatchVaultModel, PatchVaultQRModel]);
+
 export const PatchRedemptionConfigModel = z.discriminatedUnion('redemptionType', [
   PatchShowCardModel,
   PatchPreAppliedModel,

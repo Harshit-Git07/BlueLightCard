@@ -49,6 +49,7 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Parse
         };
       case 'GenericNotFound':
       case 'RedemptionNotFound':
+      case 'VaultNotFound':
         return {
           statusCode: 404,
           data: results.data,

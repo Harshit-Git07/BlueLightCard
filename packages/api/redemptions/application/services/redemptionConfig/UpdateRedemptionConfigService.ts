@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { ParsedRequest } from '@blc-mono/redemptions/application/controllers/adminApiGateway/redemptionConfig/UpdateRedemptionConfigController';
 import {
@@ -7,9 +8,17 @@ import {
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import {
+  Affiliate,
+  Integration,
+  integrationEnum,
+  RedemptionType,
+  Status,
+} from '@blc-mono/redemptions/libs/database/schema';
+import {
   PatchGenericModel,
   PatchPreAppliedModel,
   PatchShowCardModel,
+  PatchVaultOrVaultQRModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
 import { GenericEntity, GenericsRepository, UpdateGenericEntity } from '../../repositories/GenericsRepository';
@@ -18,12 +27,12 @@ import {
   RedemptionConfigRepository,
   UpdateRedemptionConfigEntity,
 } from '../../repositories/RedemptionConfigRepository';
-import { VaultBatchEntity } from '../../repositories/VaultBatchesRepository';
-import { VaultEntity } from '../../repositories/VaultsRepository';
+import { VaultBatchEntity, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
+import { UpdateVaultEntity, VaultEntity, VaultsRepository } from '../../repositories/VaultsRepository';
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
 export type UpdateRedemptionConfigError = {
-  kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound';
+  kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound';
   data: {
     message: string;
   };
@@ -37,8 +46,13 @@ export type UpdateRedemptionConfigSuccess = {
 export type UpdateShowCardRedemptionSchema = z.infer<typeof PatchShowCardModel>;
 export type UpdatePreAppliedRedemptionSchema = z.infer<typeof PatchPreAppliedModel>;
 export type UpdateGenericRedemptionSchema = z.infer<typeof PatchGenericModel>;
+export type UpdateVaultRedemptionSchema = z.infer<typeof PatchVaultOrVaultQRModel>;
 
-let requestPayload: UpdateShowCardRedemptionSchema | UpdatePreAppliedRedemptionSchema | UpdateGenericRedemptionSchema;
+let requestPayload:
+  | UpdateShowCardRedemptionSchema
+  | UpdatePreAppliedRedemptionSchema
+  | UpdateGenericRedemptionSchema
+  | UpdateVaultRedemptionSchema;
 
 export interface IUpdateRedemptionConfigService {
   updateRedemptionConfig(
@@ -52,6 +66,8 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     Logger.key,
     RedemptionConfigRepository.key,
     GenericsRepository.key,
+    VaultsRepository.key,
+    VaultBatchesRepository.key,
     RedemptionConfigTransformer.key,
     TransactionManager.key,
   ] as const;
@@ -60,6 +76,8 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     private readonly logger: ILogger,
     private readonly redemptionConfigRepository: RedemptionConfigRepository,
     private readonly genericsRepository: GenericsRepository,
+    private readonly vaultsRepository: VaultsRepository,
+    private readonly vaultBatchesRepository: VaultBatchesRepository,
     private readonly redemptionConfigTransformer: RedemptionConfigTransformer,
     private readonly transactionManager: ITransactionManager,
   ) {}
@@ -77,6 +95,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
 
       const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
       const genericsTransaction = this.genericsRepository.withTransaction(transactionConnection);
+      const vaultsTransaction = this.vaultsRepository.withTransaction(transactionConnection);
       switch (request.redemptionType) {
         case 'showCard':
           return await this.updateShowCard(request as UpdateShowCardRedemptionSchema, redemptionTransaction);
@@ -90,10 +109,11 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
           );
         case 'vault':
         case 'vaultQR':
-          return this.updateRedemptionConfigError(
-            'Error',
-            request.id,
-            `${request.redemptionType} offer update is under construction`,
+          return await this.updateVaultOrVaultQR(
+            request as UpdateVaultRedemptionSchema,
+            redemptionTransaction,
+            vaultsTransaction,
+            request.redemptionType,
           );
         default:
           return this.updateRedemptionConfigError(
@@ -166,6 +186,68 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     return await this.updateRedemption(request.id, redemptionPayload, redemptionTransaction, genericEntity, null, []);
   }
 
+  private async updateVaultOrVaultQR(
+    request: UpdateVaultRedemptionSchema,
+    redemptionTransaction: RedemptionConfigRepository,
+    vaultsTransaction: VaultsRepository,
+    redemptionType: RedemptionType,
+  ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
+    const vaultRecord = await vaultsTransaction.findOneByRedemptionId(request.id);
+    if (!vaultRecord || vaultRecord.id !== request.vault.id) {
+      return this.updateRedemptionConfigError(
+        'VaultNotFound',
+        request.id,
+        "vault record does not exist with corresponding id's",
+      );
+    }
+
+    const vaultPayload: UpdateVaultEntity = {
+      alertBelow: request.vault.alertBelow,
+      status: request.vault.status as Status,
+      maxPerUser: request.vault.maxPerUser,
+      email: request.vault.email,
+      integration: this.isValidIntegrationType(request.vault.integration)
+        ? (request.vault.integration as Integration)
+        : null,
+      integrationId: this.isValidIntegrationType(request.vault.integration)
+        ? Number(request.vault.integrationId)
+        : null,
+    };
+
+    const vaultId: Partial<Pick<VaultEntity, 'id'>> | undefined = await vaultsTransaction.updateOneById(
+      request.vault.id,
+      vaultPayload,
+    );
+
+    if (!vaultId) {
+      return this.updateRedemptionConfigError('Error', request.id, 'vault record failed to update');
+    }
+
+    const vaultBatchEntities: VaultBatchEntity[] | [] = await this.vaultBatchesRepository.findByVaultId(
+      request.vault.id,
+    );
+
+    const vaultEntity: VaultEntity | null = await vaultsTransaction.findOneById(request.vault.id);
+
+    let redemptionPayload: UpdateRedemptionConfigEntity = {
+      affiliate: request.affiliate as Affiliate,
+      connection: request.connection,
+    };
+
+    if (redemptionType !== REDEMPTION_TYPES[2] && 'url' in request) {
+      redemptionPayload = { ...redemptionPayload, url: request.url };
+    }
+
+    return await this.updateRedemption(
+      request.id,
+      redemptionPayload,
+      redemptionTransaction,
+      null,
+      vaultEntity,
+      vaultBatchEntities,
+    );
+  }
+
   private async updateRedemption(
     redemptionId: string,
     redemptionPayload: UpdateRedemptionConfigEntity,
@@ -195,7 +277,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
   }
 
   private updateRedemptionConfigError(
-    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound',
+    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound',
     redemptionId: string,
     message: string,
   ): UpdateRedemptionConfigError {
@@ -212,5 +294,16 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
         message: `Redemption Config Update - ${message}: ${redemptionId}`,
       },
     };
+  }
+
+  private isValidIntegrationType(integration: string | null): boolean {
+    if (!integration) {
+      return false;
+    }
+    if (Object.values(integrationEnum.enumValues).includes(integration)) {
+      return true;
+    }
+
+    return false;
   }
 }

@@ -13,11 +13,16 @@ import {
 } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
+import { Integration, Status } from '@blc-mono/redemptions/libs/database/schema';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfig.factory';
+import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
+import { IVaultBatchesRepository, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
+import { IVaultsRepository, VaultsRepository } from '../../repositories/VaultsRepository';
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
 import {
@@ -27,6 +32,7 @@ import {
   UpdateRedemptionConfigService,
   UpdateRedemptionConfigSuccess,
   UpdateShowCardRedemptionSchema,
+  UpdateVaultRedemptionSchema,
 } from './UpdateRedemptionConfigService';
 
 describe('UpdateRedemptionConfigService', () => {
@@ -43,6 +49,53 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   const testRedemptionId = `rdm-${faker.string.uuid()}`;
+
+  const testVaultId = `vlt-${faker.string.uuid()}`;
+
+  const testVaultBatchId = `vbt-${faker.string.uuid()}`;
+
+  const testVaultBatchBody = vaultBatchEntityFactory.build({
+    id: testVaultBatchId,
+    vaultId: testVaultId,
+    created: new Date(),
+    expiry: new Date(),
+  });
+
+  const testVaultBody = {
+    id: testRedemptionId,
+    offerId: faker.number.int({ max: 1000000 }),
+    redemptionType: 'vault',
+    connection: 'direct',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: 'awin',
+    url: 'https://www.awin1.com/',
+    vault: {
+      id: testVaultId,
+      alertBelow: 1000,
+      status: 'active' as Status,
+      maxPerUser: 5,
+      createdAt: '2024-12-12',
+      email: faker.internet.email(),
+      integration: 'eagleEye' as Integration,
+      integrationId: faker.string.numeric(8),
+    },
+  } satisfies UpdateVaultRedemptionSchema;
+
+  const testVaultRedemptionConfig: RedemptionConfig = {
+    ...testVaultBody,
+    offerId: String(testVaultBody.offerId),
+    companyId: String(testVaultBody.companyId),
+    vault: {
+      ...testVaultBody.vault,
+      batches: [
+        {
+          ...testVaultBatchBody,
+          created: testVaultBatchBody.created.toISOString(),
+          expiry: testVaultBatchBody.expiry.toISOString(),
+        },
+      ],
+    },
+  };
 
   const testGenericId = `gnr-${faker.string.uuid()}`;
 
@@ -99,6 +152,8 @@ describe('UpdateRedemptionConfigService', () => {
 
   const mockRedemptionConfigRepository: Partial<IRedemptionConfigRepository> = {};
   const mockGenericsRepository: Partial<IGenericsRepository> = {};
+  const mockVaultsRepository: Partial<IVaultsRepository> = {};
+  const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {};
   const mockRedemptionConfigTransformer: Partial<RedemptionConfigTransformer> = {};
 
   function mockRedemptionConfigExist(exist: boolean): void {
@@ -144,8 +199,42 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericsRepository.withTransaction = jest.fn().mockReturnValue(mockGenericsRepository);
   }
 
+  function mockVaultExist(exist: boolean): void {
+    const value = exist
+      ? vaultEntityFactory.build({
+          id: testVaultId,
+          redemptionId: testRedemptionId,
+        })
+      : null;
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(value);
+  }
+
+  function mockVaultBatches(): void {
+    mockVaultBatchesRepository.findByVaultId = jest.fn().mockResolvedValue(testVaultBatchBody);
+  }
+
+  function mockVaultUpdateSucceeds(success: boolean): void {
+    const value = success
+      ? vaultEntityFactory.build({
+          id: testVaultId,
+        })
+      : null;
+    mockVaultsRepository.updateOneById = jest.fn().mockResolvedValue(value);
+  }
+
+  function mockVaultFindOneById(): void {
+    const value = vaultEntityFactory.build({
+      id: testVaultId,
+    });
+    mockVaultsRepository.findOneById = jest.fn().mockResolvedValue(value);
+  }
+
+  function mockVaultTransaction(): void {
+    mockVaultsRepository.withTransaction = jest.fn().mockReturnValue(mockVaultsRepository);
+  }
+
   function getExpectedError(
-    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound',
+    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound',
     message: string,
   ): UpdateRedemptionConfigError {
     return {
@@ -173,6 +262,8 @@ describe('UpdateRedemptionConfigService', () => {
       logger,
       mockRedemptionConfigRepository as RedemptionConfigRepository,
       mockGenericsRepository as GenericsRepository,
+      mockVaultsRepository as VaultsRepository,
+      mockVaultBatchesRepository as VaultBatchesRepository,
       mockRedemptionConfigTransformer as RedemptionConfigTransformer,
       transactionManager,
     );
@@ -199,6 +290,7 @@ describe('UpdateRedemptionConfigService', () => {
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericExist(false);
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigTransaction();
 
@@ -223,6 +315,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericExist(true);
     mockGenericsUpdateSucceeds(false);
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigTransaction();
 
@@ -244,6 +337,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericExist(true);
     mockGenericsUpdateSucceeds(true);
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigUpdateSucceeds(false);
     mockRedemptionConfigTransaction();
@@ -266,6 +360,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericExist(true);
     mockGenericsUpdateSucceeds(true);
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
@@ -296,6 +391,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigUpdateSucceeds(false);
     mockRedemptionConfigTransaction();
@@ -316,6 +412,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
@@ -346,6 +443,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigUpdateSucceeds(false);
     mockRedemptionConfigTransaction();
@@ -366,6 +464,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
+    mockVaultTransaction();
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
@@ -389,5 +488,84 @@ describe('UpdateRedemptionConfigService', () => {
 
     expect(actual.kind).toEqual('Ok');
     expect(actual.data).toEqual(testShowCardRedemptionConfig);
+  });
+
+  it('should return kind "VaultNotFound" when the vault offer vaults record does not exist', async () => {
+    mockRedemptionConfigExist(true);
+
+    //mock repo(s) responses/resolves that execute inside transactionManager(s)
+    mockVaultExist(false);
+    mockGenericTransaction();
+    mockVaultTransaction();
+
+    mockRedemptionConfigTransaction();
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createSilentLogger(),
+      {
+        body: testVaultBody,
+      },
+    );
+
+    const expected: UpdateRedemptionConfigError = getExpectedError(
+      'VaultNotFound',
+      "vault record does not exist with corresponding id's",
+    );
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return kind "Error" when the vault offer vaults record fails to update', async () => {
+    mockRedemptionConfigExist(true);
+
+    //mock repo(s) responses/resolves that execute inside transactionManager(s)
+    mockVaultExist(true);
+    mockVaultUpdateSucceeds(false);
+    mockGenericTransaction();
+    mockVaultTransaction();
+
+    mockRedemptionConfigTransaction();
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createSilentLogger(),
+      {
+        body: testVaultBody,
+      },
+    );
+
+    const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'vault record failed to update');
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return kind "Ok" when the vault offer redemptions and vault records update correctly', async () => {
+    mockRedemptionConfigExist(true);
+
+    //mock repo(s) responses/resolves that execute inside transactionManager(s)
+    mockVaultExist(true);
+    mockVaultBatches();
+    mockVaultFindOneById();
+    mockVaultUpdateSucceeds(true);
+    mockGenericTransaction();
+    mockVaultTransaction();
+
+    mockRedemptionConfigUpdateSucceeds(true, {
+      id: testRedemptionId,
+      offerId: Number(testVaultBody.offerId),
+      redemptionType: testVaultBody.redemptionType,
+      connection: testVaultBody.connection,
+      companyId: Number(testVaultBody.companyId),
+      affiliate: testVaultBody.affiliate,
+      url: testVaultBody.url,
+      offerType: 'online',
+    });
+    mockRedemptionConfigTransaction();
+
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(testVaultRedemptionConfig);
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(createTestLogger(), {
+      body: testVaultBody,
+    });
+
+    expect(actual.kind).toEqual('Ok');
+    expect(actual.data).toEqual(testVaultRedemptionConfig);
   });
 });

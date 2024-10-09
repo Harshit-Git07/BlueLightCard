@@ -7,6 +7,7 @@ import {
   UpdateGenericRedemptionSchema,
   UpdatePreAppliedRedemptionSchema,
   UpdateShowCardRedemptionSchema,
+  UpdateVaultRedemptionSchema,
 } from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
 
 import { GenericEntity, GenericsRepository } from '../application/repositories/GenericsRepository';
@@ -15,12 +16,20 @@ import {
   RedemptionConfigEntity,
   RedemptionConfigRepository,
 } from '../application/repositories/RedemptionConfigRepository';
-import { VaultBatchesRepository } from '../application/repositories/VaultBatchesRepository';
-import { VaultsRepository } from '../application/repositories/VaultsRepository';
+import { VaultBatchEntity, VaultBatchesRepository } from '../application/repositories/VaultBatchesRepository';
+import { VaultEntity, VaultsRepository } from '../application/repositories/VaultsRepository';
 import { DatabaseConnectionType } from '../libs/database/connection';
-import { createGenericsIdE2E, createRedemptionsIdE2E, RedemptionType } from '../libs/database/schema';
+import {
+  createGenericsIdE2E,
+  createRedemptionsIdE2E,
+  createVaultBatchesIdE2E,
+  createVaultIdE2E,
+  RedemptionType,
+} from '../libs/database/schema';
 import { genericEntityFactory } from '../libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
+import { vaultBatchEntityFactory } from '../libs/test/factories/vaultBatchEntity.factory';
+import { vaultEntityFactory } from '../libs/test/factories/vaultEntity.factory';
 
 import { E2EDatabaseConnectionManager } from './helpers/database';
 
@@ -34,8 +43,108 @@ let redemptionConfigRepository: RedemptionConfigRepository;
 let redemptionRepositoryHelper: RedemptionConfigCombinedRepository;
 
 const offerId = 1;
+const vaultId = createVaultIdE2E();
 
 describe('PATCH /redemptions/{offerId}', () => {
+  const vaultBatchesEntity: VaultBatchEntity = vaultBatchEntityFactory.build({
+    id: createVaultBatchesIdE2E(),
+    vaultId: vaultId,
+  });
+
+  const testVaultBodyWithUcOrEEIntegration = {
+    id: createRedemptionsIdE2E(),
+    offerId: offerId,
+    redemptionType: 'vault' as RedemptionType,
+    connection: 'affiliate',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: 'awin',
+    url: 'https://www.awin1.com/',
+    vault: {
+      id: createVaultIdE2E(),
+      alertBelow: 10,
+      status: 'active',
+      maxPerUser: 1,
+      createdAt: String(new Date('2024-07-16')),
+      email: faker.internet.email(),
+      integration: 'uniqodo',
+      integrationId: faker.string.numeric(8),
+    },
+  } satisfies UpdateVaultRedemptionSchema;
+
+  const redemptionConfigEntityForVaultWithUcOrEeIntegration: RedemptionConfigEntity =
+    redemptionConfigEntityFactory.build({
+      id: testVaultBodyWithUcOrEEIntegration.id,
+      companyId: testVaultBodyWithUcOrEEIntegration.companyId,
+      offerId: testVaultBodyWithUcOrEEIntegration.offerId,
+      redemptionType: testVaultBodyWithUcOrEEIntegration.redemptionType,
+      connection: 'direct',
+      url: faker.internet.url(),
+      affiliate: null,
+      offerType: 'online',
+    });
+
+  const testVaultBody = {
+    id: createRedemptionsIdE2E(),
+    offerId: offerId,
+    redemptionType: 'vault' as RedemptionType,
+    connection: 'affiliate',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: 'awin',
+    url: 'https://www.awin1.com/',
+    vault: {
+      id: vaultId,
+      alertBelow: 10,
+      status: 'active',
+      maxPerUser: 1,
+      createdAt: String(new Date('2024-07-16')),
+      email: faker.internet.email(),
+      integration: 'non existent integration type',
+      integrationId: faker.string.numeric(8),
+    },
+  } satisfies UpdateVaultRedemptionSchema;
+
+  const redemptionConfigEntityForVault: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+    id: testVaultBody.id,
+    companyId: testVaultBody.companyId,
+    offerId: testVaultBody.offerId,
+    redemptionType: testVaultBody.redemptionType,
+    connection: 'direct',
+    url: faker.internet.url(),
+    affiliate: null,
+    offerType: 'online',
+  });
+
+  const testVaultQRBody = {
+    id: createRedemptionsIdE2E(),
+    offerId: offerId,
+    redemptionType: 'vaultQR' as RedemptionType,
+    connection: 'affiliate',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: 'awin',
+    url: 'https://www.awin1.com/',
+    vault: {
+      id: vaultId,
+      alertBelow: 10,
+      status: 'active',
+      maxPerUser: 1,
+      createdAt: String(new Date('2024-07-16')),
+      email: faker.internet.email(),
+      integration: null,
+      integrationId: null,
+    },
+  } satisfies UpdateVaultRedemptionSchema;
+
+  const redemptionConfigEntityForVaultQR: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+    id: testVaultQRBody.id,
+    companyId: testVaultQRBody.companyId,
+    offerId: testVaultQRBody.offerId,
+    redemptionType: testVaultQRBody.redemptionType,
+    connection: 'direct',
+    affiliate: null,
+    offerType: 'in-store',
+    url: null,
+  });
+
   const testGenericBody = {
     id: createRedemptionsIdE2E(),
     offerId: offerId,
@@ -257,6 +366,163 @@ describe('PATCH /redemptions/{offerId}', () => {
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
 
     await genericsRepository.deleteById(genericEntity.id);
+  });
+
+  it('should return 404 for vault redemptionType if vaults record can not be found', async () => {
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForVault);
+
+    const result = await callPatchRedemptionConfigEndpoint(testVaultBody);
+
+    expect(result.status).toBe(404);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 404,
+      data: {
+        message: `Redemption Config Update - vault record does not exist with corresponding id's: ${testVaultBody.id}`,
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
+
+  it('should return 200 and correct redemptionConfig for vault redemptionType on update success', async () => {
+    const vaultEntity: VaultEntity = vaultEntityFactory.build({
+      id: testVaultBody.vault.id,
+      redemptionId: testVaultBody.id,
+    });
+
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForVault);
+    await vaultsRepository.create(vaultEntity);
+    await vaultBatchesRepository.create(vaultBatchesEntity);
+
+    const result = await callPatchRedemptionConfigEndpoint(testVaultBody);
+
+    expect(result.status).toBe(200);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: testVaultBody.id,
+        offerId: String(testVaultBody.offerId),
+        redemptionType: testVaultBody.redemptionType,
+        connection: testVaultBody.connection,
+        companyId: String(testVaultBody.companyId),
+        affiliate: testVaultBody.affiliate,
+        url: testVaultBody.url,
+        vault: {
+          id: testVaultBody.vault.id,
+          alertBelow: testVaultBody.vault.alertBelow,
+          status: testVaultBody.vault.status,
+          maxPerUser: testVaultBody.vault.maxPerUser,
+          createdAt: new Date(testVaultBody.vault.createdAt).toISOString(),
+          email: testVaultBody.vault.email,
+          integration: null,
+          integrationId: null,
+          batches: [
+            {
+              id: vaultBatchesEntity.id,
+              created: vaultBatchesEntity.created.toISOString(),
+              expiry: vaultBatchesEntity.expiry.toISOString(),
+            },
+          ],
+        },
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+
+    await vaultBatchesRepository.deleteByVaultId(vaultEntity.id);
+    await vaultsRepository.deleteById(vaultEntity.id);
+  });
+
+  it('should return 200 and correct redemptionConfig for vaultQR redemptionType on update success', async () => {
+    const vaultQREntity: VaultEntity = vaultEntityFactory.build({
+      id: testVaultQRBody.vault.id,
+      redemptionId: testVaultQRBody.id,
+    });
+
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForVaultQR);
+    await vaultsRepository.create(vaultQREntity);
+
+    const result = await callPatchRedemptionConfigEndpoint(testVaultQRBody);
+
+    expect(result.status).toBe(200);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: testVaultQRBody.id,
+        offerId: String(testVaultQRBody.offerId),
+        redemptionType: testVaultQRBody.redemptionType,
+        connection: testVaultQRBody.connection,
+        companyId: String(testVaultQRBody.companyId),
+        affiliate: testVaultQRBody.affiliate,
+        url: null,
+        vault: {
+          id: testVaultQRBody.vault.id,
+          alertBelow: testVaultQRBody.vault.alertBelow,
+          status: testVaultQRBody.vault.status,
+          maxPerUser: testVaultQRBody.vault.maxPerUser,
+          createdAt: new Date(testVaultQRBody.vault.createdAt).toISOString(),
+          email: testVaultQRBody.vault.email,
+          integration: testVaultQRBody.vault.integration,
+          integrationId: testVaultQRBody.vault.integrationId,
+          batches: [],
+        },
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+
+    await vaultBatchesRepository.deleteByVaultId(vaultQREntity.id);
+    await vaultsRepository.deleteById(vaultQREntity.id);
+  });
+
+  it('should return 200 and correct redemptionConfig for vaultQR redemptionType and uniqodo/ee integration type on update success', async () => {
+    const vaultEntity: VaultEntity = vaultEntityFactory.build({
+      id: testVaultBodyWithUcOrEEIntegration.vault.id,
+      redemptionId: testVaultBodyWithUcOrEEIntegration.id,
+    });
+
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForVaultWithUcOrEeIntegration);
+    await vaultsRepository.create(vaultEntity);
+
+    const result = await callPatchRedemptionConfigEndpoint(testVaultBodyWithUcOrEEIntegration);
+
+    expect(result.status).toBe(200);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: testVaultBodyWithUcOrEEIntegration.id,
+        offerId: String(testVaultBodyWithUcOrEEIntegration.offerId),
+        redemptionType: testVaultBodyWithUcOrEEIntegration.redemptionType,
+        connection: testVaultBodyWithUcOrEEIntegration.connection,
+        companyId: String(testVaultBodyWithUcOrEEIntegration.companyId),
+        affiliate: testVaultBodyWithUcOrEEIntegration.affiliate,
+        url: testVaultBodyWithUcOrEEIntegration.url,
+        vault: {
+          id: testVaultBodyWithUcOrEEIntegration.vault.id,
+          alertBelow: testVaultBodyWithUcOrEEIntegration.vault.alertBelow,
+          status: testVaultBodyWithUcOrEEIntegration.vault.status,
+          maxPerUser: testVaultBodyWithUcOrEEIntegration.vault.maxPerUser,
+          createdAt: new Date(testVaultBodyWithUcOrEEIntegration.vault.createdAt).toISOString(),
+          email: testVaultBodyWithUcOrEEIntegration.vault.email,
+          integration: testVaultBodyWithUcOrEEIntegration.vault.integration,
+          integrationId: testVaultBodyWithUcOrEEIntegration.vault.integrationId,
+          batches: [],
+        },
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+
+    await vaultBatchesRepository.deleteByVaultId(vaultEntity.id);
+    await vaultsRepository.deleteById(vaultEntity.id);
   });
 });
 

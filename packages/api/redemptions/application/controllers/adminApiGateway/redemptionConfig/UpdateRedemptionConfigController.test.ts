@@ -7,6 +7,7 @@ import {
   UpdateRedemptionConfigError,
   UpdateRedemptionConfigSuccess,
   UpdateShowCardRedemptionSchema,
+  UpdateVaultRedemptionSchema,
 } from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
 import { RedemptionConfig } from '@blc-mono/redemptions/application/transformers/RedemptionConfigTransformer';
 
@@ -66,8 +67,38 @@ describe('UpdateRedemptionConfigController', () => {
     companyId: String(testGenericBody.companyId),
   };
 
+  const testVaultBody = {
+    id: `rdm-${faker.string.uuid()}`,
+    offerId: faker.number.int({ max: 1000000 }),
+    redemptionType: 'vault',
+    connection: 'affiliate',
+    companyId: faker.number.int({ max: 1000000 }),
+    affiliate: 'awin',
+    url: 'https://www.awin1.com/',
+    vault: {
+      id: `vlt-${faker.string.uuid()}`,
+      maxPerUser: faker.number.int({ max: 100 }),
+      status: 'active',
+      createdAt: faker.date.recent().toISOString(),
+      email: faker.internet.email(),
+      integration: 'uniqodo',
+      integrationId: faker.string.numeric(8),
+      alertBelow: faker.number.int({ max: 100 }),
+    },
+  } satisfies UpdateVaultRedemptionSchema;
+
+  const testVaultRedemptionConfig: RedemptionConfig = {
+    ...testVaultBody,
+    offerId: String(testVaultBody.offerId),
+    companyId: String(testVaultBody.companyId),
+    vault: {
+      ...testVaultBody.vault,
+      batches: [],
+    },
+  };
+
   function getTestUpdateRedemptionConfigError(
-    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound',
+    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound',
   ): UpdateRedemptionConfigError {
     return {
       kind: kind,
@@ -182,6 +213,43 @@ describe('UpdateRedemptionConfigController', () => {
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
     const actual = await controller.handle({ body: testShowCardBody });
+    expect(actual.statusCode).toEqual(200);
+  });
+
+  /**
+   * vault(qr) redemptionType tests
+   */
+  it('Maps "Error" result for vault redemption correctly to 500 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(getTestUpdateRedemptionConfigError('Error'));
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle({ body: testVaultBody });
+    expect(actual.statusCode).toEqual(500);
+  });
+
+  it('Maps "RedemptionNotFound" result for vault redemption correctly to 404 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('RedemptionNotFound'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle({ body: testVaultBody });
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  it('Maps "VaultNotFound" result for vault redemption correctly to 404 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('VaultNotFound'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle({ body: testVaultBody });
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  it('Maps "Ok" result for vault redemption correctly correctly to 200 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigSuccess(testVaultRedemptionConfig),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle({ body: testVaultBody });
     expect(actual.statusCode).toEqual(200);
   });
 });

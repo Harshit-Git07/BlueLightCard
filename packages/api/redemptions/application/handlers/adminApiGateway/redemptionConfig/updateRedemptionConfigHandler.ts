@@ -6,6 +6,8 @@ import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { UpdateRedemptionConfigController } from '@blc-mono/redemptions/application/controllers/adminApiGateway/redemptionConfig/UpdateRedemptionConfigController';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
+import { VaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
+import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { UpdateRedemptionConfigService } from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
 import { RedemptionConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionConfigTransformer';
 import { RedemptionVaultConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionVaultConfigTransformer';
@@ -22,6 +24,8 @@ const controller = createInjector()
   .provideClass(TransactionManager.key, TransactionManager)
   .provideClass(RedemptionConfigRepository.key, RedemptionConfigRepository)
   .provideClass(GenericsRepository.key, GenericsRepository)
+  .provideClass(VaultsRepository.key, VaultsRepository)
+  .provideClass(VaultBatchesRepository.key, VaultBatchesRepository)
   .provideClass(RedemptionVaultConfigTransformer.key, RedemptionVaultConfigTransformer)
   .provideClass(RedemptionConfigTransformer.key, RedemptionConfigTransformer)
   .provideClass(UpdateRedemptionConfigService.key, UpdateRedemptionConfigService)

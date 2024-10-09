@@ -12,7 +12,7 @@ import { TestUser } from '@blc-mono/redemptions/libs/test/helpers/identity';
 
 const getSearchEndpoint = () => {
   if (ENDPOINTS.SEARCH === undefined || ENDPOINTS.SEARCH === '') {
-    return `${ApiGatewayV1Api.discovery.url}/search`;
+    return `${ApiGatewayV1Api.discovery.url}search`;
   }
   return ENDPOINTS.SEARCH;
 };
@@ -96,7 +96,7 @@ describe('OpenSearch E2E Test', async () => {
     await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
     await new Promise((resolve) => setTimeout(resolve, 2000));
     await sendTestEvents({ source: Events.OPENSEARCH_POPULATE_INDEX, events: offers });
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     const result = await whenSearchIsCalledWith(
       { ...openSearchQuery },

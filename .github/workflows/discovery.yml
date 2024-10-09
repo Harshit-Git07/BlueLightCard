@@ -225,6 +225,7 @@ jobs:
         working-directory: packages/api/discovery
         env:
           BRAND: ${{ matrix.deployment.brand }}
+          REGION : ${{ matrix.deployment.region }}
         run: npx sst bind --stage ${{ matrix.deployment.stage }} vitest e2e
 
   release:

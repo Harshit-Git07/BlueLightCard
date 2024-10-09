@@ -748,6 +748,7 @@ jobs:
         working-directory: packages/api/discovery
         env:
           BRAND: BLC_UK
+          REGION: eu-west-2
         run: npx sst bind --stage $PR_PREFIX vitest e2e
 
   # Lighthouse Audit of Web frontend

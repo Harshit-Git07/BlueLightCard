@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
+import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
-import { Offer as SanityOffer } from '@blc-mono/discovery/application/models/SanityTypes';
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';

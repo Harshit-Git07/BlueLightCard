@@ -1,6 +1,5 @@
+import { Company as SanityCompany } from '@bluelightcard/sanity-types';
 import { v4 } from 'uuid';
-
-import { Company as SanityCompany } from '@blc-mono/discovery/application/models/SanityTypes';
 
 export function buildTestSanityCompany(): SanityCompany {
   return {

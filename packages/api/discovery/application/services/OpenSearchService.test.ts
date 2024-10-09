@@ -85,7 +85,6 @@ describe('OpenSearchService', () => {
       offerimg: 'img',
       CompID: '456',
       CompanyName: 'CompanyName',
-      RestrictedTo: [],
     });
   });
 

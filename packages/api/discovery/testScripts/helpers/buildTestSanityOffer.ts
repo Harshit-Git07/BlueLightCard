@@ -1,6 +1,5 @@
+import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { v4 } from 'uuid';
-
-import { Offer as SanityOffer } from '@blc-mono/discovery/application/models/SanityTypes';
 
 export function buildTestSanityOffer(): SanityOffer {
   return {
@@ -117,7 +116,8 @@ export function buildTestSanityOffer(): SanityOffer {
       _type: 'offer.type',
       offerType: 'online',
     },
-    restrictions: [],
+    includedTrust: [],
+    excludedTrust: [],
     start: '2024-08-04',
     status: 'live',
     termsAndConditions: {

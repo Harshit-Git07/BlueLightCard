@@ -19,9 +19,6 @@
       },
       "CompanyName": {
         "type": "string"
-      },
-      "RestrictedTo": {
-        "type": "string"
       }
     }
   }

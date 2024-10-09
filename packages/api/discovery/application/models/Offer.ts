@@ -16,7 +16,8 @@ export type Offer = {
   offerEnd?: string;
   evergreen: boolean;
   tags: string[];
-  serviceRestrictions: string[];
+  includedTrusts: string[];
+  excludedTrusts: string[];
   company: Company;
   categories: Category[];
   local: boolean;

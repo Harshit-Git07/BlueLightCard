@@ -1,4 +1,5 @@
-import { Offer as SanityOffer } from '@blc-mono/discovery/application/models/SanityTypes';
+import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
+
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 

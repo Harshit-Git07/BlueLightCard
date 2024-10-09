@@ -1,11 +1,14 @@
-import { Boost } from '../application/models/Boost';
-import { Discount } from '../application/models/Discount';
-import { Offer } from '../application/models/Offer';
 import {
   BoostType as SanityBoostType,
   DiscountType as SanityDiscountType,
   Offer as SanityOffer,
-} from '../application/models/SanityTypes';
+} from '@bluelightcard/sanity-types';
+
+import { mapSanityTrustToTrust } from '@blc-mono/discovery/helpers/mapSanityTrustToTrust';
+
+import { Boost } from '../application/models/Boost';
+import { Discount } from '../application/models/Discount';
+import { Offer } from '../application/models/Offer';
 
 import { mapSanityCompanyToCompany } from './mapSanityCompanyToCompany';
 
@@ -44,7 +47,8 @@ export const mapSanityOfferToOffer = (sanityOffer: SanityOffer): Offer => {
     offerEnd: sanityOffer.expires,
     evergreen: sanityOffer.evergreen ?? false,
     tags: sanityOffer.tags?.map((tag) => tag._key) ?? [],
-    serviceRestrictions: sanityOffer.restrictions?.map((restriction) => restriction.name ?? '') ?? [],
+    includedTrusts: mapSanityTrustToTrust(sanityOffer.includedTrust),
+    excludedTrusts: mapSanityTrustToTrust(sanityOffer.excludedTrust),
     company: mapSanityCompanyToCompany(sanityOffer.company),
     categories:
       sanityOffer.categorySelection?.map((category) => ({

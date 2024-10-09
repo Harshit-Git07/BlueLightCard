@@ -1,10 +1,10 @@
 import '../../../../../.sst/types/index';
 
 import { EventBridgeClient, PutEventsCommand, PutEventsCommandInput } from '@aws-sdk/client-eventbridge';
+import { Company, Offer } from '@bluelightcard/sanity-types';
 import { EventBus } from 'sst/node/event-bus';
 
 import { getEnv } from '@blc-mono/core/src/utils/getEnv';
-import { Company, Offer } from '@blc-mono/discovery/application/models/SanityTypes';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 interface TestEvents {

@@ -7,7 +7,8 @@ export type Company = {
   logo: string;
   ageRestrictions: string;
   alsoKnownAs: string[];
-  serviceRestrictions: string[];
+  includedTrusts: string[];
+  excludedTrusts: string[];
   categories: Category[];
   local: boolean;
   updatedAt: string;

@@ -9,7 +9,6 @@ export interface SearchResult {
   offerimg: string;
   CompID: string;
   CompanyName: string;
-  RestrictedTo?: Array<string>;
 }
 
 export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
@@ -25,7 +24,6 @@ export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
         offerimg: hit._source?.offer_image ?? '',
         CompID: hit._source?.company_id ?? '',
         CompanyName: hit._source?.company_name ?? '',
-        RestrictedTo: hit._source?.restricted_to,
       });
     });
 

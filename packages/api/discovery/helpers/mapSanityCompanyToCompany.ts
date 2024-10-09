@@ -1,5 +1,8 @@
+import { AgeRestriction, Company as SanityCompany } from '@bluelightcard/sanity-types';
+
+import { mapSanityTrustToTrust } from '@blc-mono/discovery/helpers/mapSanityTrustToTrust';
+
 import { Company } from '../application/models/Company';
-import { AgeRestriction, Company as SanityCompany } from '../application/models/SanityTypes';
 
 export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company => {
   const brandDetails = sanityCompany.brandCompanyDetails?.[0];
@@ -24,7 +27,8 @@ export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company
     logo: brandDetails?.companyLogo?.default?.asset?.url,
     ageRestrictions: mapAgeRestrictions(brandDetails?.ageRestrictions),
     alsoKnownAs: sanityCompany.alsoKnownAs || [],
-    serviceRestrictions: sanityCompany.restrictions?.map((restriction) => restriction.name).filter(Boolean) as string[],
+    includedTrusts: mapSanityTrustToTrust(sanityCompany.includedTrust),
+    excludedTrusts: mapSanityTrustToTrust(sanityCompany.excludedTrust),
     categories:
       sanityCompany.categorySelection?.map((category) => ({
         id: category.categoryItem?.id ?? 0,

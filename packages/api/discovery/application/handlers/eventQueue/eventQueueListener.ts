@@ -1,4 +1,5 @@
 import { Logger } from '@aws-lambda-powertools/logger';
+import { Company as SanityCompany, Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { EventBridgeEvent, SQSEvent } from 'aws-lambda';
 
 import { handleCompanyUpdated } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyEventHandler';
@@ -9,8 +10,6 @@ import {
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/mapSanityCompanyToCompany';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/mapSanityOfferToOffer';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
-
-import { Company as SanityCompany, Offer as SanityOffer } from '../../models/SanityTypes';
 
 const logger = new Logger({ serviceName: 'event-queue-listener' });
 

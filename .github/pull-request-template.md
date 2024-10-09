@@ -11,3 +11,4 @@
 - [ ] If this makes a change to the frontend web app, I have done my best to adhere to the [Frontend Developer Guidelines](https://bluelightcard.atlassian.net/wiki/spaces/BTB/pages/1981382661/Frontend+Development+Guidelines).
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] If this change requires a feature flag, I have tested the feature with the flag on and ensured that switching the feature off does not cause errors. The name of the feature flag is:

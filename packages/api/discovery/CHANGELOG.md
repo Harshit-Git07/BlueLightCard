@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.9.1...bluelightcard/discovery-v1.10.0) (2024-10-09)
+
+
+### Features
+
+* [DISCO-702] E2E tests for OpenSearch ([#2370](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2370)) ([b0e57a3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b0e57a336f3cb4a2fecd4a782b361e22329e85ef))
+* [DISCO-795] Refactor to remove hard coded sanity types, split service restrictions into included and excluded trusts ([#2420](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2420)) ([d17bcff](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d17bcff450b9b5cbb8de39143c4251818bd0fd6c))
+* Disco-987 week 6 & 7 thank you campaign details ([#2434](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2434)) ([832ea40](https://github.com/bluelightcard/BlueLightCard-2.0/commit/832ea40d92febe4ca0d663865c275d3e0afae6a0))
+
+
+### Bug Fixes
+
+* [DISCO-702] Add region to Discovery E2E test runs ([#2423](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2423)) ([0617bd3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0617bd3e4acfe47721edb706242491d576ab693a))
+
 ## [1.9.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.9.0...bluelightcard/discovery-v1.9.1) (2024-10-07)
 
 

@@ -37,6 +37,7 @@ export function OffersCMS({ stack }: StackContext) {
   const { authorizer } = use(Identity);
   const { certificateArn } = use(Shared);
   const globalConfig = GlobalConfigResolver.for(stack.stage);
+  const discoveryBusName = getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, '');
 
   const cmsRawDataTable = new Table(stack, CMS_RAW_DATA_TABLE_NAME, {
     fields: {
@@ -60,29 +61,29 @@ export function OffersCMS({ stack }: StackContext) {
     url: true,
     environment: {
       OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
-      DISCOVERY_EVENT_BUS_NAME: getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, ''),
+      DISCOVERY_EVENT_BUS_NAME: discoveryBusName,
     },
-  });
-
-  const discoBus = AwsEventBus.fromEventBusName(
-    stack,
-    EVENT_BUS_ID,
-    getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, ''),
-  );
-  const wrappedDiscoBus = new Config.Parameter(stack, 'discovery_bus', {
-    value: discoBus.eventBusName,
   });
 
   const consumerFunction = new Function(stack, CONSUMER_FUNCTION_NAME, {
     handler: 'packages/api/offers-cms/lambda/consumer.handler',
-    bind: [cmsRawDataTable, cmsDataTable, wrappedDiscoBus],
+    bind: [cmsRawDataTable, cmsDataTable],
     environment: {
       OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
-      DISCOVERY_EVENT_BUS_NAME: getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, ''),
+      DISCOVERY_EVENT_BUS_NAME: discoveryBusName,
     },
   });
 
-  consumerFunction.attachPermissions([[discoBus, 'grantPutEventsTo']]);
+  if (discoveryBusName.length > 0) {
+    const discoBus = AwsEventBus.fromEventBusName(stack, EVENT_BUS_ID, discoveryBusName);
+    const wrappedDiscoBus = new Config.Parameter(stack, 'discovery_bus', {
+      value: discoBus.eventBusName,
+    });
+    consumerFunction.bind([wrappedDiscoBus]);
+    consumerFunction.attachPermissions([[discoBus, 'grantPutEventsTo']]);
+  } else {
+    cliLogger.info({ message: 'Discovery Event Bus not set. Offers CMS events will not be sent.' });
+  }
 
   const cmsEvents = new EventBus(stack, CMS_BUS_NAME, {
     rules: {
@@ -111,7 +112,7 @@ export function OffersCMS({ stack }: StackContext) {
       }),
     );
   } else {
-    cliLogger.warn({ message: 'CMS Account not set. Skipping resource policy.' });
+    cliLogger.info({ message: 'CMS Account not set. Skipping resource policy creation.' });
   }
 
   // API Gateway provisioning

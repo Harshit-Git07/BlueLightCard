@@ -46,6 +46,7 @@ jobs:
             backend-shared:
               - packages/api/discovery/**
               - packages/api/offers/**
+              - packages/api/offers-cms/**
               - packages/api/redemptions/**
               - packages/api/identity/**
               - packages/api/core/**
@@ -56,6 +57,7 @@ jobs:
               - package.json
             backend-offers:
               - packages/api/offers/**
+              - packages/api/offers-cms/**
               - packages/api/core/**
               - stacks/**
               - .github/workflows/pr-environment.yml

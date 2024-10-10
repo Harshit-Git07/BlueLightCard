@@ -6,6 +6,8 @@ import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config
 import { Shared } from '../../../../stacks/stack';
 import { MemberStackConfigResolver, MemberStackRegion } from './config/config';
 
+import { createMemberCodesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberCodesTable';
+
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { MemberProfileModel } from '../application/models/memberProfileModel';
 import { GetMemberProfilesRoute } from './routes/GetMemberProfilesRoute';
@@ -19,7 +21,6 @@ import { MemberApplicationModel } from '../application/models/memberApplicationM
 
 import { GetOrganisationsRoute } from './routes/GetOrganisationsRoute';
 import { OrganisationModel } from 'application/models/organisationModel';
-
 
 export async function Members({ stack, app }: StackContext) {
   const identityTableName = `${app.stage}-${app.name}-identityTable`;
@@ -37,18 +38,7 @@ export async function Members({ stack, app }: StackContext) {
       service: 'members',
     },
   });
-  /*
-  const referenceDataTable = new Table(stack, 'referenceData', {
-    fields: {
-      pk: 'string',
-      sk: 'string',
-    },
-    primaryIndex: {
-      partitionKey: 'pk',
-      sortKey: 'sk',
-    },
-  });
-*/
+
   const membersApi = new ApiGatewayV1Api(stack, 'members', {
     authorizers: {
       // memberAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
@@ -84,20 +74,23 @@ export async function Members({ stack, app }: StackContext) {
     },
   });
 
+  const memberCodesTable = createMemberCodesTable(stack);
+
   const restApi = membersApi.cdk.restApi;
 
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(membersApi.cdk.restApi);
+
   const agMembersProfileModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberProfileModel);
 
-  const agMemberCardModel = apiGatewayModelGenerator.generateModelFromZodEffect(MemberCardModel);
+  const agMemberCardModel =
+    apiGatewayModelGenerator.generateModelFromZodEffect(MemberCardModel);
 
   const agMemberApplicationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberApplicationModel);
 
   const agOrganisationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(OrganisationModel);
-
 
   membersApi.addRoutes(stack, {
     'GET /members/v5/profiles': new GetMemberProfilesRoute(
@@ -154,22 +147,6 @@ export async function Members({ stack, app }: StackContext) {
       identityTableName,
     ).getRouteDetails(),
   });
-
-  // memberApi.addRoutes(stack, {
-  //   'GET /member/employmenttypes/{brand}': Route.createRoute({
-  //     apiGatewayModelGenerator,
-  //     stack,
-  //     functionName: 'GetEmploymentTypesHandler',
-  //     restApi,
-  //     handler: 'packages/api/members/application/handlers/job-details/getEmploymentTypes.handler',
-  //     requestValidatorName: 'GetEmploymentTypesValidator',
-  //     defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
-  //     authorizer: 'none',
-  //     apiKeyRequired: true,
-  //     permissions: [referenceDataTable],
-  //     bind: [referenceDataTable],
-  //   }),
-  // });
 
   stack.addOutputs({
     MembersApiEndpoint: membersApi.url,

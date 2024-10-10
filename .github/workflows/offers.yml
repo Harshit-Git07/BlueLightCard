@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - packages/api/offers/**
-      - packages/api/offers/CHANGELOG.md
+      - packages/api/offers-cms/**
       - packages/api/core/**
       - stacks/**
       - .github/workflows/offers.yml
@@ -15,7 +15,7 @@ on:
   pull_request:
     paths:
       - packages/api/offers/**
-      - packages/api/offers/CHANGELOG.md
+      - packages/api/offers-cms/**
       - packages/api/core/**
       - stacks/**
       - .github/workflows/offers.yml

@@ -104,7 +104,7 @@ export function OffersCMS({ stack }: StackContext) {
     const awsCmsBus = cmsEvents.cdk.eventBus as AwsEventBus;
     awsCmsBus.addToResourcePolicy(
       new PolicyStatement({
-        sid: 'AllowCMSaccount',
+        sid: `Allow-CMS-Account-To-${awsCmsBus.eventBusName}`,
         actions: ['events:PutEvents'],
         effect: Effect.ALLOW,
         principals: [new AccountPrincipal(cmsAccountId)],

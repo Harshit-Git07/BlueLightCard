@@ -1,7 +1,7 @@
 import { PutEventsCommand } from '@aws-sdk/client-eventbridge';
-import { WebhookEventResult } from '@bluelightcard/sanity-types';
+import { type WebhookEventResult } from '@bluelightcard/sanity-types';
 
-import { type LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { type ILogger } from '@blc-mono/core/utils/logger';
 
 import { createEBClient } from '../lib/eventbridge';
 
@@ -20,7 +20,7 @@ const generateSource = (record: ArrayElement<WebhookEventResult>): string => {
 export async function publishToEventBus(
   record: ArrayElement<WebhookEventResult>,
   busName: string,
-  logger: LambdaLogger,
+  logger: ILogger,
 ) {
   const source = generateSource(record);
   const putOutput = await eb.send(

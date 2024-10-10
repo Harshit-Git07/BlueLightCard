@@ -1,10 +1,10 @@
-import { WebhookEventResult } from '@bluelightcard/sanity-types';
+import { type WebhookEventResult } from '@bluelightcard/sanity-types';
 import { Table } from 'sst/node/table';
 
-import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { type ILogger } from '@blc-mono/core/utils/logger';
 
 import { createDbConnection } from '../lib/db';
-import { SanityChangeEvent } from '../lib/events';
+import { type SanityChangeEvent } from '../lib/events';
 
 const db = createDbConnection();
 
@@ -12,10 +12,18 @@ type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
   : never;
 
-export async function ingestOffer(
-  record: Extract<ArrayElement<WebhookEventResult>, { _type: 'offer' }>,
-  logger: LambdaLogger,
-) {
+type WebhookResultRecord = ArrayElement<WebhookEventResult>;
+
+type RecordType = WebhookResultRecord['_type'];
+
+type Record<type extends RecordType> = Extract<
+  WebhookResultRecord,
+  {
+    _type: type;
+  }
+>;
+
+export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
   const brand = record.brands?.find((brand) => brand?.code === process.env.OFFERS_BRAND);
 
   if (!brand) {
@@ -25,18 +33,16 @@ export async function ingestOffer(
     return;
   }
 
-  record._id = record.offerId ? record.offerId.toString() : record._id;
-
   await db.put({
-    TableName: Table.cmsData.tableName,
-    Item: record,
+    TableName: Table.cmsOffersData.tableName,
+    Item: {
+      ...record,
+      companyId: record.company?._id.toString() ?? '',
+    },
   });
 }
 
-export async function ingestCompany(
-  record: Extract<ArrayElement<WebhookEventResult>, { _type: 'company' }>,
-  logger: LambdaLogger,
-) {
+export async function ingestCompany(record: Record<'company'>, logger: ILogger) {
   const brand = record.brandCompanyDetails?.find(
     (company) => company.brand?.code === process.env.OFFERS_BRAND,
   );
@@ -49,18 +55,28 @@ export async function ingestCompany(
   }
 
   await db.put({
-    TableName: Table.cmsData.tableName,
+    TableName: Table.cmsCompanyData.tableName,
+    Item: {
+      ...record,
+      companyId: brand.companyId?.toString() ?? '',
+    },
+  });
+}
+
+export async function ingestRawOffer(record: Record<'offer'>) {
+  await db.put({
+    TableName: Table.cmsOffersRawData.tableName,
     Item: record,
   });
 }
 
-export async function ingestRawRecord(record: ArrayElement<WebhookEventResult>) {
+export async function ingestRawCompany(record: Record<'company'>) {
   await db.put({
-    TableName: Table.cmsRawData.tableName,
+    TableName: Table.cmsCompanyRawData.tableName,
     Item: record,
   });
 }
 
 export function extractEvent(event: SanityChangeEvent) {
-  return JSON.parse(event.body) as ArrayElement<WebhookEventResult>;
+  return JSON.parse(event.body) as WebhookResultRecord;
 }

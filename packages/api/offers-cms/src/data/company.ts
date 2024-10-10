@@ -1,4 +1,4 @@
-import { Company } from '@bluelightcard/sanity-types';
+import { type Company } from '@bluelightcard/sanity-types';
 import { Table } from 'sst/node/table';
 
 import { createDbConnection } from '../lib/db';
@@ -6,7 +6,7 @@ import { createDbConnection } from '../lib/db';
 const db = createDbConnection();
 
 export async function getCompany(id: string) {
-  const cmsTable = Table.cmsData.tableName;
+  const cmsTable = Table.cmsCompanyData.tableName;
   const item = await db.get({
     TableName: cmsTable,
     Key: {

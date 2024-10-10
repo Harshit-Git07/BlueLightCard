@@ -1,8 +1,7 @@
-import { Client } from '@opensearch-project/opensearch';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { Client } from '@opensearch-project/opensearch';
 import { SearchResponse } from '@opensearch-project/opensearch/api/types';
+import { isBefore, subWeeks } from 'date-fns';
 
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
@@ -13,12 +12,19 @@ import {
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 
 const logger = new LambdaLogger({ serviceName: 'openSearch' });
 
 const service = getEnv(DiscoveryStackEnvironmentKeys.SERVICE);
 const stage = getEnv(DiscoveryStackEnvironmentKeys.STAGE);
 const indexType = 'offers';
+
+type OpenSearchIndex = {
+  indexName: string;
+  creationDate: string;
+};
 
 export class OpenSearchService {
   private readonly openSearchClient: Client;
@@ -126,15 +132,28 @@ export class OpenSearchService {
     logger.info({ message: `Response from deleting index ${indexName} was ${response.statusCode}` });
   }
 
-  public async getLatestIndexName(): Promise<string> {
-    const response = await this.openSearchClient.cat.indices({ format: 'json' });
-    const indexNames = response.body.map((index: { index: string }) => index.index);
-    const latestIndex = indexNames
-      .filter((indexName: string) => indexName.startsWith(`${service}-${stage}-${indexType}`))
-      .sort()
-      .reverse()[0];
+  public async getStageIndicesForDeletion(): Promise<string[]> {
+    const indices = await getIndicesList(this.openSearchClient);
+    const numberOfIndicesToRetain = 2;
 
-    return latestIndex;
+    const orderedIndexNames = getOfferIndexNamesByLatest(indices);
+    const indexNamesToRetain = orderedIndexNames.slice(0, numberOfIndicesToRetain);
+
+    return orderedIndexNames.filter((indexName: string) => !indexNamesToRetain.includes(indexName));
+  }
+
+  public async getPrEnvironmentIndicesForDeletion(): Promise<string[]> {
+    const indices = await getIndicesList(this.openSearchClient);
+
+    return indices
+      .filter((index: OpenSearchIndex) => index.indexName.startsWith(`${service}-pr-`) && indexOlderThan7Days(index))
+      .map((index: OpenSearchIndex) => index.indexName);
+  }
+
+  public async getLatestIndexName(): Promise<string> {
+    const indices = await getIndicesList(this.openSearchClient);
+    const orderedIndexNames = getOfferIndexNamesByLatest(indices);
+    return orderedIndexNames[0];
   }
 
   public generateIndexName(): string {
@@ -142,3 +161,27 @@ export class OpenSearchService {
     return `${service}-${stage}-${indexType}-${timestamp}`.toLowerCase();
   }
 }
+
+const getIndicesList = async (openSearchClient: Client): Promise<OpenSearchIndex[]> => {
+  const response = await openSearchClient.cat.indices({ h: ['index', 'creation.date.string'], format: 'json' });
+  return response.body.map((index: { index: string; 'creation.date.string': string }) => toIndex(index));
+};
+
+const toIndex = (index: { index: string; 'creation.date.string': string }): OpenSearchIndex => {
+  return {
+    indexName: index.index,
+    creationDate: index['creation.date.string'],
+  };
+};
+
+const getOfferIndexNamesByLatest = (indices: OpenSearchIndex[]): string[] => {
+  return indices
+    .map((index: OpenSearchIndex) => index.indexName)
+    .filter((indexName: string) => indexName.startsWith(`${service}-${stage}-${indexType}`))
+    .sort((a, b) => a.localeCompare(b))
+    .reverse();
+};
+
+const indexOlderThan7Days = (index: OpenSearchIndex): boolean => {
+  return isBefore(new Date(index.creationDate), subWeeks(new Date(), 1));
+};

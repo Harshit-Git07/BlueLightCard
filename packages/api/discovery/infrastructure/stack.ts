@@ -8,6 +8,7 @@ import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
+import { deleteOldSearchIndicesCron } from '@blc-mono/discovery/infrastructure/crons/deleteOldSearchIndicesCron';
 import { createSearchOfferCompanyTable } from '@blc-mono/discovery/infrastructure/database/createSearchOfferCompanyTable';
 import { eventRule } from '@blc-mono/discovery/infrastructure/eventHandling/eventQueueRule';
 import { populateSearchIndexRule } from '@blc-mono/discovery/infrastructure/rules/populateSearchIndexRule';
@@ -140,6 +141,20 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   };
 
   populateSearchIndexCron(stack, populateSearchIndexFunction);
+
+  const deleteOldSearchIndicesFunction: FunctionDefinition = {
+    permissions: ['es'],
+    handler: 'packages/api/discovery/application/handlers/search/deleteOldSearchIndices.handler',
+    environment: {
+      OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
+      STAGE: stack.stage ?? '',
+    },
+    vpc,
+    deadLetterQueueEnabled: true,
+    timeout: '5 minutes',
+  };
+
+  deleteOldSearchIndicesCron(stack, deleteOldSearchIndicesFunction);
 
   const discoveryEventQueue = eventQueue(stack, 'discoveryEventQueue');
 

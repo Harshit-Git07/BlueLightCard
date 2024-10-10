@@ -1,3 +1,5 @@
+import { subDays } from 'date-fns';
+
 import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import { OpenSearchService } from './OpenSearchService';
@@ -27,9 +29,17 @@ const mockSearch = jest.fn().mockResolvedValue({
 });
 const mockDelete = jest.fn().mockResolvedValue({ acknowledged: true });
 const mockExists = jest.fn().mockResolvedValue({ body: true });
-const mockGetLatest = jest.fn().mockResolvedValue({
-  body: [{ index: 'service-stage-offers-010202000' }, { index: 'service-stage-offers-010202001' }],
-});
+const mockGetLatestWithStageIndices = (numberOfIndices: number) => {
+  const indices = Array.from({ length: numberOfIndices }, (_, i) => ({
+    index: `service-stage-offers-01020200${i}`,
+    'creation.date.string': '2020-01-01T00:00:00',
+  }));
+  return jest.fn().mockResolvedValue({ body: indices });
+};
+const mockGetLatestWithPRIndices = (creationDate: string) =>
+  jest
+    .fn()
+    .mockResolvedValue({ body: [{ index: `service-pr-101-offers-010202000`, 'creation.date.string': creationDate }] });
 const mockBulkCreate = jest.fn().mockResolvedValue({ statusCode: 200 });
 
 const openSearchService = new OpenSearchService();
@@ -47,7 +57,9 @@ describe('OpenSearchService', () => {
     jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearch);
     jest.spyOn(openSearchService['openSearchClient'].indices, 'delete').mockImplementation(mockDelete);
     jest.spyOn(openSearchService['openSearchClient'].indices, 'exists').mockImplementation(mockExists);
-    jest.spyOn(openSearchService['openSearchClient'].cat, 'indices').mockImplementation(mockGetLatest);
+    jest
+      .spyOn(openSearchService['openSearchClient'].cat, 'indices')
+      .mockImplementation(mockGetLatestWithStageIndices(2));
 
     jest.spyOn(openSearchService['openSearchClient'], 'bulk').mockImplementation(mockBulkCreate);
 
@@ -96,6 +108,70 @@ describe('OpenSearchService', () => {
     });
 
     expect(mockDelete).toHaveBeenCalledTimes(1);
+  });
+
+  describe('getStageIndicesForDeletion', () => {
+    it('should get no indices for deletion if less than 2 indices returned', async () => {
+      jest
+        .spyOn(openSearchService['openSearchClient'].cat, 'indices')
+        .mockImplementation(mockGetLatestWithStageIndices(1));
+
+      const result = await openSearchService.getStageIndicesForDeletion();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should get no indices for deletion if 2 indices returned', async () => {
+      jest
+        .spyOn(openSearchService['openSearchClient'].cat, 'indices')
+        .mockImplementation(mockGetLatestWithStageIndices(2));
+
+      const result = await openSearchService.getStageIndicesForDeletion();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should get indices for deletion if greater than 2 indices returned', async () => {
+      jest
+        .spyOn(openSearchService['openSearchClient'].cat, 'indices')
+        .mockImplementation(mockGetLatestWithStageIndices(3));
+
+      const result = await openSearchService.getStageIndicesForDeletion();
+
+      expect(result).toEqual(['service-stage-offers-010202000']);
+    });
+  });
+
+  describe('getPrIndicesForDeletion', () => {
+    it('should get no indices for deletion if no pr indices returned', async () => {
+      jest
+        .spyOn(openSearchService['openSearchClient'].cat, 'indices')
+        .mockImplementation(mockGetLatestWithStageIndices(1));
+
+      const result = await openSearchService.getPrEnvironmentIndicesForDeletion();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should get indices for deletion if pr indices returned older than 7 days', async () => {
+      jest
+        .spyOn(openSearchService['openSearchClient'].cat, 'indices')
+        .mockImplementation(mockGetLatestWithPRIndices(subDays(new Date(), 8).toISOString()));
+
+      const result = await openSearchService.getPrEnvironmentIndicesForDeletion();
+
+      expect(result).toEqual(['service-pr-101-offers-010202000']);
+    });
+
+    it('should get no indices for deletion if pr indices returned younger than 7 days', async () => {
+      jest
+        .spyOn(openSearchService['openSearchClient'].cat, 'indices')
+        .mockImplementation(mockGetLatestWithPRIndices(new Date().toISOString()));
+
+      const result = await openSearchService.getPrEnvironmentIndicesForDeletion();
+
+      expect(result).toEqual([]);
+    });
   });
 
   it('should check if an index exists', async () => {

@@ -23,7 +23,7 @@ export const GenericModel = z.object({
 });
 
 export const UrlModel = z.object({
-  url: z.string(),
+  url: z.string().url(),
 });
 
 export const CommonModel = (redemptionType: RedemptionType) =>

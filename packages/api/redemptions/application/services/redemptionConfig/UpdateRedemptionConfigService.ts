@@ -32,7 +32,14 @@ import { UpdateVaultEntity, VaultEntity, VaultsRepository } from '../../reposito
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
 export type UpdateRedemptionConfigError = {
-  kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound';
+  kind:
+    | 'Error'
+    | 'UrlPayloadOfferIdMismatch'
+    | 'RedemptionNotFound'
+    | 'RedemptionOfferCompanyIdMismatch'
+    | 'GenericNotFound'
+    | 'GenericCodeEmpty'
+    | 'VaultNotFound';
   data: {
     message: string;
   };
@@ -56,6 +63,7 @@ let requestPayload:
 
 export interface IUpdateRedemptionConfigService {
   updateRedemptionConfig(
+    offerId: string,
     request: ParsedRequest['body'],
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError>;
 }
@@ -83,11 +91,31 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
   ) {}
 
   public async updateRedemptionConfig(
+    offerId: string,
     request: ParsedRequest['body'],
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
     requestPayload = request;
-    if (!(await this.redemptionConfigRepository.findOneById(request.id))) {
+
+    if (offerId !== String(request.offerId)) {
+      return this.updateRedemptionConfigError(
+        'UrlPayloadOfferIdMismatch',
+        request.id,
+        'offerId in URL and payload do not match',
+      );
+    }
+
+    const redemptionConfigEntity = await this.redemptionConfigRepository.findOneById(request.id);
+
+    if (!redemptionConfigEntity) {
       return this.updateRedemptionConfigError('RedemptionNotFound', request.id, 'redemptionId does not exist');
+    }
+
+    if (request.offerId !== redemptionConfigEntity.offerId || request.companyId !== redemptionConfigEntity.companyId) {
+      return this.updateRedemptionConfigError(
+        'RedemptionOfferCompanyIdMismatch',
+        request.id,
+        'offerId/companyId do not match for this redemption',
+      );
     }
 
     return await this.transactionManager.withTransaction(async (transaction) => {
@@ -155,6 +183,10 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     redemptionTransaction: RedemptionConfigRepository,
     genericsTransaction: GenericsRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
+    if (request.generic.code === '') {
+      return this.updateRedemptionConfigError('GenericCodeEmpty', request.id, 'generic code cannot be blank');
+    }
+
     const genericRecord = await genericsTransaction.findOneByRedemptionId(request.id);
     if (!genericRecord || genericRecord.id !== request.generic.id) {
       return this.updateRedemptionConfigError(
@@ -277,7 +309,14 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
   }
 
   private updateRedemptionConfigError(
-    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound',
+    kind:
+      | 'Error'
+      | 'UrlPayloadOfferIdMismatch'
+      | 'RedemptionNotFound'
+      | 'RedemptionOfferCompanyIdMismatch'
+      | 'GenericNotFound'
+      | 'GenericCodeEmpty'
+      | 'VaultNotFound',
     redemptionId: string,
     message: string,
   ): UpdateRedemptionConfigError {

@@ -14,6 +14,9 @@ import { PatchRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/pa
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../AdminApiGatewayController';
 
 const UpdateRedemptionConfigRequestModel = z.object({
+  pathParameters: z.object({
+    offerId: z.string(),
+  }),
   body: JsonStringSchema.pipe(PatchRedemptionConfigModel),
 });
 
@@ -34,7 +37,8 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Parse
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const results = await this.updateRedemptionConfigService.updateRedemptionConfig(request.body);
+    const offerId = request.pathParameters.offerId;
+    const results = await this.updateRedemptionConfigService.updateRedemptionConfig(offerId, request.body);
 
     switch (results.kind) {
       case 'Ok':
@@ -47,8 +51,11 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Parse
           statusCode: 500,
           data: results.data,
         };
-      case 'GenericNotFound':
+      case 'UrlPayloadOfferIdMismatch':
       case 'RedemptionNotFound':
+      case 'RedemptionOfferCompanyIdMismatch':
+      case 'GenericNotFound':
+      case 'GenericCodeEmpty':
       case 'VaultNotFound':
         return {
           statusCode: 404,

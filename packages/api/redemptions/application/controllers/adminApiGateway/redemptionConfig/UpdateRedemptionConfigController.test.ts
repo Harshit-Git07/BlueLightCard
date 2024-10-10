@@ -13,7 +13,7 @@ import { RedemptionConfig } from '@blc-mono/redemptions/application/transformers
 
 import { createTestLogger } from '../../../../libs/test/helpers/logger';
 
-import { UpdateRedemptionConfigController } from './UpdateRedemptionConfigController';
+import { ParsedRequest, UpdateRedemptionConfigController } from './UpdateRedemptionConfigController';
 
 describe('UpdateRedemptionConfigController', () => {
   const testGenericBody = {
@@ -67,6 +67,18 @@ describe('UpdateRedemptionConfigController', () => {
     companyId: String(testGenericBody.companyId),
   };
 
+  function getParsedRequest(
+    offerId: number,
+    body: UpdateGenericRedemptionSchema | UpdatePreAppliedRedemptionSchema | UpdateShowCardRedemptionSchema,
+  ): ParsedRequest {
+    return {
+      pathParameters: {
+        offerId: String(offerId),
+      },
+      body: body,
+    };
+  }
+
   const testVaultBody = {
     id: `rdm-${faker.string.uuid()}`,
     offerId: faker.number.int({ max: 1000000 }),
@@ -98,7 +110,14 @@ describe('UpdateRedemptionConfigController', () => {
   };
 
   function getTestUpdateRedemptionConfigError(
-    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound',
+    kind:
+      | 'Error'
+      | 'UrlPayloadOfferIdMismatch'
+      | 'RedemptionNotFound'
+      | 'RedemptionOfferCompanyIdMismatch'
+      | 'GenericNotFound'
+      | 'GenericCodeEmpty'
+      | 'VaultNotFound',
   ): UpdateRedemptionConfigError {
     return {
       kind: kind,
@@ -124,21 +143,51 @@ describe('UpdateRedemptionConfigController', () => {
   } satisfies IUpdateRedemptionConfigService;
 
   /**
-   * generic redemptionType tests
+   * common tests (payload redemptionType does not matter)
    */
-  it('Maps "Error" result for generic redemption correctly to 500 response', async () => {
+  it('Maps "Error" result correctly to 500 response', async () => {
     UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(getTestUpdateRedemptionConfigError('Error'));
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testGenericBody });
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
     expect(actual.statusCode).toEqual(500);
   });
 
-  it('Maps "RedemptionNotFound" result for generic redemption correctly to 404 response', async () => {
+  it('Maps "UrlPayloadOfferIdMismatch" result correctly to 404 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('UrlPayloadOfferIdMismatch'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId + 1, testGenericBody));
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  it('Maps "RedemptionNotFound" result correctly to 404 response', async () => {
     UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
       getTestUpdateRedemptionConfigError('RedemptionNotFound'),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testGenericBody });
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  it('Maps "RedemptionOfferCompanyIdMismatch" result correctly to 404 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('RedemptionOfferCompanyIdMismatch'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  /**
+   * generic redemptionType tests
+   */
+  it('Maps "GenericCodeEmpty" result for generic redemption correctly to 404 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('GenericCodeEmpty'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
     expect(actual.statusCode).toEqual(404);
   });
 
@@ -147,7 +196,7 @@ describe('UpdateRedemptionConfigController', () => {
       getTestUpdateRedemptionConfigError('GenericNotFound'),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testGenericBody });
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
     expect(actual.statusCode).toEqual(404);
   });
 
@@ -156,91 +205,43 @@ describe('UpdateRedemptionConfigController', () => {
       getTestUpdateRedemptionConfigSuccess(testGenericRedemptionConfig),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testGenericBody });
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
     expect(actual.statusCode).toEqual(200);
   });
 
   /**
    * preApplied redemptionType tests
    */
-  it('Maps "Error" result for preApplied redemption correctly to 500 response', async () => {
-    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(getTestUpdateRedemptionConfigError('Error'));
-    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testPreAppliedBody });
-    expect(actual.statusCode).toEqual(500);
-  });
-
-  it('Maps "RedemptionNotFound" result for preApplied redemption correctly to 404 response', async () => {
-    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
-      getTestUpdateRedemptionConfigError('RedemptionNotFound'),
-    );
-    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testPreAppliedBody });
-    expect(actual.statusCode).toEqual(404);
-  });
-
   it('Maps "Ok" result for preApplied redemption correctly correctly to 200 response', async () => {
     UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
       getTestUpdateRedemptionConfigSuccess(testPreAppliedRedemptionConfig),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testPreAppliedBody });
+    const actual = await controller.handle(getParsedRequest(testPreAppliedBody.offerId, testPreAppliedBody));
     expect(actual.statusCode).toEqual(200);
   });
 
   /**
    * showCard redemptionType tests
    */
-  it('Maps "Error" result for showCard redemption correctly to 500 response', async () => {
-    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(getTestUpdateRedemptionConfigError('Error'));
-    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testShowCardBody });
-    expect(actual.statusCode).toEqual(500);
-  });
-
-  it('Maps "RedemptionNotFound" result for showCard redemption correctly to 404 response', async () => {
-    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
-      getTestUpdateRedemptionConfigError('RedemptionNotFound'),
-    );
-    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testShowCardBody });
-    expect(actual.statusCode).toEqual(404);
-  });
-
   it('Maps "Ok" result for showCard redemption correctly correctly to 200 response', async () => {
     UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
       getTestUpdateRedemptionConfigSuccess(testShowCardRedemptionConfig),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testShowCardBody });
+    const actual = await controller.handle(getParsedRequest(testShowCardBody.offerId, testShowCardBody));
     expect(actual.statusCode).toEqual(200);
   });
 
   /**
    * vault(qr) redemptionType tests
    */
-  it('Maps "Error" result for vault redemption correctly to 500 response', async () => {
-    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(getTestUpdateRedemptionConfigError('Error'));
-    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testVaultBody });
-    expect(actual.statusCode).toEqual(500);
-  });
-
-  it('Maps "RedemptionNotFound" result for vault redemption correctly to 404 response', async () => {
-    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
-      getTestUpdateRedemptionConfigError('RedemptionNotFound'),
-    );
-    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testVaultBody });
-    expect(actual.statusCode).toEqual(404);
-  });
-
   it('Maps "VaultNotFound" result for vault redemption correctly to 404 response', async () => {
     UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
       getTestUpdateRedemptionConfigError('VaultNotFound'),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testVaultBody });
+    const actual = await controller.handle(getParsedRequest(testVaultBody.offerId, testVaultBody));
     expect(actual.statusCode).toEqual(404);
   });
 
@@ -249,7 +250,7 @@ describe('UpdateRedemptionConfigController', () => {
       getTestUpdateRedemptionConfigSuccess(testVaultRedemptionConfig),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
-    const actual = await controller.handle({ body: testVaultBody });
+    const actual = await controller.handle(getParsedRequest(testVaultBody.offerId, testVaultBody));
     expect(actual.statusCode).toEqual(200);
   });
 });

@@ -46,6 +46,8 @@ const offerId = 1;
 const vaultId = createVaultIdE2E();
 
 describe('PATCH /redemptions/{offerId}', () => {
+  const companyId = faker.number.int({ max: 1000000 });
+
   const vaultBatchesEntity: VaultBatchEntity = vaultBatchEntityFactory.build({
     id: createVaultBatchesIdE2E(),
     vaultId: vaultId,
@@ -150,7 +152,7 @@ describe('PATCH /redemptions/{offerId}', () => {
     offerId: offerId,
     redemptionType: 'generic' as RedemptionType,
     connection: 'affiliate',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: companyId,
     affiliate: 'awin',
     url: 'https://www.awin1.com/',
     generic: {
@@ -175,7 +177,7 @@ describe('PATCH /redemptions/{offerId}', () => {
     offerId: offerId,
     redemptionType: 'preApplied' as RedemptionType,
     connection: 'direct',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: companyId,
     affiliate: null,
     url: 'https://www.whatever.com/',
   } satisfies UpdatePreAppliedRedemptionSchema;
@@ -196,7 +198,7 @@ describe('PATCH /redemptions/{offerId}', () => {
     offerId: offerId,
     redemptionType: 'showCard' as RedemptionType,
     connection: 'none',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: companyId,
     affiliate: null,
   } satisfies UpdateShowCardRedemptionSchema;
 
@@ -252,6 +254,22 @@ describe('PATCH /redemptions/{offerId}', () => {
     await connectionManager?.cleanup();
   });
 
+  it('should return 404 if URL offerId and payload offerId do not match', async () => {
+    const result = await callPatchRedemptionConfigEndpoint({ ...testGenericBody, offerId: offerId + 1 });
+
+    expect(result.status).toBe(404);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 404,
+      data: {
+        message: `Redemption Config Update - offerId in URL and payload do not match: ${testGenericBody.id}`,
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
+
   it('should return 404 if redemptions record can not be found', async () => {
     const result = await callPatchRedemptionConfigEndpoint(testGenericBody);
 
@@ -263,6 +281,24 @@ describe('PATCH /redemptions/{offerId}', () => {
       statusCode: 404,
       data: {
         message: `Redemption Config Update - redemptionId does not exist: ${testGenericBody.id}`,
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
+
+  it('should return 404 if payload offerId/companyId do not match redemptions record offerId/companyId', async () => {
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForPreApplied);
+
+    const result = await callPatchRedemptionConfigEndpoint({ ...testPreAppliedBody, companyId: companyId + 1 });
+
+    expect(result.status).toBe(404);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 404,
+      data: {
+        message: `Redemption Config Update - offerId/companyId do not match for this redemption: ${testPreAppliedBody.id}`,
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
@@ -308,6 +344,30 @@ describe('PATCH /redemptions/{offerId}', () => {
         offerId: String(testShowCardBody.offerId),
         redemptionType: testShowCardBody.redemptionType,
         companyId: String(testShowCardBody.companyId),
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
+
+  it('should return 404 for generic redemptionType if payload generic.code is a blank string', async () => {
+    await redemptionConfigRepository.createRedemption(redemptionConfigEntityForGeneric);
+
+    const result = await callPatchRedemptionConfigEndpoint({
+      ...testGenericBody,
+      generic: {
+        id: testGenericBody.generic.id,
+        code: '',
+      },
+    });
+
+    expect(result.status).toBe(404);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 404,
+      data: {
+        message: `Redemption Config Update - generic code cannot be blank: ${testGenericBody.id}`,
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);

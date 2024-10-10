@@ -15,7 +15,7 @@ import { TransactionManager } from '@blc-mono/redemptions/infrastructure/databas
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { Integration, Status } from '@blc-mono/redemptions/libs/database/schema';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
-import { redemptionConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfig.factory';
+import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
@@ -49,9 +49,10 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   const testRedemptionId = `rdm-${faker.string.uuid()}`;
-
+  const testOfferId = faker.number.int({ max: 1000000 });
+  const testCompanyId = faker.number.int({ max: 1000000 });
+  const testGenericId = `gnr-${faker.string.uuid()}`;
   const testVaultId = `vlt-${faker.string.uuid()}`;
-
   const testVaultBatchId = `vbt-${faker.string.uuid()}`;
 
   const testVaultBatchBody = vaultBatchEntityFactory.build({
@@ -63,10 +64,10 @@ describe('UpdateRedemptionConfigService', () => {
 
   const testVaultBody = {
     id: testRedemptionId,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: testOfferId,
     redemptionType: 'vault',
     connection: 'direct',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: testCompanyId,
     affiliate: 'awin',
     url: 'https://www.awin1.com/',
     vault: {
@@ -83,8 +84,8 @@ describe('UpdateRedemptionConfigService', () => {
 
   const testVaultRedemptionConfig: RedemptionConfig = {
     ...testVaultBody,
-    offerId: String(testVaultBody.offerId),
-    companyId: String(testVaultBody.companyId),
+    offerId: String(testOfferId),
+    companyId: String(testCompanyId),
     vault: {
       ...testVaultBody.vault,
       batches: [
@@ -97,14 +98,12 @@ describe('UpdateRedemptionConfigService', () => {
     },
   };
 
-  const testGenericId = `gnr-${faker.string.uuid()}`;
-
   const testGenericBody = {
     id: testRedemptionId,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: testOfferId,
     redemptionType: 'generic',
     connection: 'direct',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: testCompanyId,
     affiliate: 'awin',
     url: 'https://www.awin1.com/',
     generic: {
@@ -115,39 +114,39 @@ describe('UpdateRedemptionConfigService', () => {
 
   const testGenericRedemptionConfig: RedemptionConfig = {
     ...testGenericBody,
-    offerId: String(testGenericBody.offerId),
-    companyId: String(testGenericBody.companyId),
+    offerId: String(testOfferId),
+    companyId: String(testCompanyId),
   };
 
   const testPreAppliedBody = {
     id: testRedemptionId,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: testOfferId,
     redemptionType: 'preApplied',
     connection: 'none',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: testCompanyId,
     affiliate: null,
     url: 'https://www.whatever.com/',
   } satisfies UpdatePreAppliedRedemptionSchema;
 
   const testPreAppliedRedemptionConfig: RedemptionConfig = {
     ...testPreAppliedBody,
-    offerId: String(testGenericBody.offerId),
-    companyId: String(testGenericBody.companyId),
+    offerId: String(testOfferId),
+    companyId: String(testCompanyId),
   };
 
   const testShowCardBody = {
     id: testRedemptionId,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: testOfferId,
     redemptionType: 'showCard',
     connection: 'none',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: testCompanyId,
     affiliate: null,
   } satisfies UpdateShowCardRedemptionSchema;
 
   const testShowCardRedemptionConfig: RedemptionConfig = {
     ...testShowCardBody,
-    offerId: String(testGenericBody.offerId),
-    companyId: String(testGenericBody.companyId),
+    offerId: String(testOfferId),
+    companyId: String(testCompanyId),
   };
 
   const mockRedemptionConfigRepository: Partial<IRedemptionConfigRepository> = {};
@@ -158,8 +157,10 @@ describe('UpdateRedemptionConfigService', () => {
 
   function mockRedemptionConfigExist(exist: boolean): void {
     const value = exist
-      ? redemptionConfigFactory.build({
+      ? redemptionConfigEntityFactory.build({
           id: testRedemptionId,
+          offerId: testOfferId,
+          companyId: testCompanyId,
         })
       : null;
     mockRedemptionConfigRepository.findOneById = jest.fn().mockResolvedValue(value);
@@ -234,7 +235,14 @@ describe('UpdateRedemptionConfigService', () => {
   }
 
   function getExpectedError(
-    kind: 'Error' | 'RedemptionNotFound' | 'GenericNotFound' | 'VaultNotFound',
+    kind:
+      | 'Error'
+      | 'UrlPayloadOfferIdMismatch'
+      | 'RedemptionNotFound'
+      | 'RedemptionOfferCompanyIdMismatch'
+      | 'GenericNotFound'
+      | 'GenericCodeEmpty'
+      | 'VaultNotFound',
     message: string,
   ): UpdateRedemptionConfigError {
     return {
@@ -249,13 +257,10 @@ describe('UpdateRedemptionConfigService', () => {
    * pass createSilentLogger for test errors, and createTestLogger for success
    * keeps terminal clean when test errors
    * terminal should be clean for success - if not, then there is something that needs fixing
-   *
-   * @param logger
-   * @param request
    */
   async function callService(
     logger: ILogger,
-    request: ParsedRequest,
+    request: ParsedRequest['body'],
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
     const transactionManager = new TransactionManager(connection);
     const service = new UpdateRedemptionConfigService(
@@ -267,20 +272,63 @@ describe('UpdateRedemptionConfigService', () => {
       mockRedemptionConfigTransformer as RedemptionConfigTransformer,
       transactionManager,
     );
-    return await service.updateRedemptionConfig(request.body);
+    return await service.updateRedemptionConfig(String(testOfferId), request);
   }
+
+  it('should return kind "UrlPayloadOfferIdMismatch" when the offerId in the URL and payload do not match', async () => {
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createSilentLogger(),
+      { ...testGenericBody, offerId: testOfferId + 1 },
+    );
+
+    const expected: UpdateRedemptionConfigError = getExpectedError(
+      'UrlPayloadOfferIdMismatch',
+      'offerId in URL and payload do not match',
+    );
+    expect(actual).toEqual(expected);
+  });
 
   it('should return kind "RedemptionNotFound" when the redemptions record does not exist', async () => {
     mockRedemptionConfigExist(false);
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testGenericBody,
-      },
+      testGenericBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError('RedemptionNotFound', 'redemptionId does not exist');
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return kind "RedemptionOfferCompanyIdMismatch" when the payload offerId/companyId do not match the redemptions record offerId/companyId', async () => {
+    mockRedemptionConfigExist(true);
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createSilentLogger(),
+      { ...testGenericBody, companyId: testCompanyId + 1 },
+    );
+
+    const expected: UpdateRedemptionConfigError = getExpectedError(
+      'RedemptionOfferCompanyIdMismatch',
+      'offerId/companyId do not match for this redemption',
+    );
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return kind "GenericCodeEmpty" when the request payload contains a blank string for the generics code value', async () => {
+    mockRedemptionConfigExist(true);
+
+    //mock repo(s) responses/resolves that execute inside transactionManager(s)
+    mockGenericTransaction();
+    mockVaultTransaction();
+    mockRedemptionConfigTransaction();
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createSilentLogger(),
+      { ...testGenericBody, generic: { id: testGenericBody.generic.id, code: '' } },
+    );
+
+    const expected: UpdateRedemptionConfigError = getExpectedError('GenericCodeEmpty', 'generic code cannot be blank');
     expect(actual).toEqual(expected);
   });
 
@@ -296,9 +344,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testGenericBody,
-      },
+      testGenericBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError(
@@ -321,9 +367,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testGenericBody,
-      },
+      testGenericBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'generics record failed to update');
@@ -344,9 +388,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testGenericBody,
-      },
+      testGenericBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'redemption record failed to update');
@@ -378,9 +420,10 @@ describe('UpdateRedemptionConfigService', () => {
       .fn()
       .mockReturnValue(testGenericRedemptionConfig);
 
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(createTestLogger(), {
-      body: testGenericBody,
-    });
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createTestLogger(),
+      testGenericBody,
+    );
 
     expect(actual.kind).toEqual('Ok');
     expect(actual.data).toEqual(testGenericRedemptionConfig);
@@ -398,9 +441,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testPreAppliedBody,
-      },
+      testPreAppliedBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'redemption record failed to update');
@@ -430,9 +471,10 @@ describe('UpdateRedemptionConfigService', () => {
       .fn()
       .mockReturnValue(testPreAppliedRedemptionConfig);
 
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(createTestLogger(), {
-      body: testPreAppliedBody,
-    });
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createTestLogger(),
+      testPreAppliedBody,
+    );
 
     expect(actual.kind).toEqual('Ok');
     expect(actual.data).toEqual(testPreAppliedRedemptionConfig);
@@ -450,9 +492,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testShowCardBody,
-      },
+      testShowCardBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'redemption record failed to update');
@@ -482,9 +522,10 @@ describe('UpdateRedemptionConfigService', () => {
       .fn()
       .mockReturnValue(testShowCardRedemptionConfig);
 
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(createTestLogger(), {
-      body: testShowCardBody,
-    });
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createTestLogger(),
+      testShowCardBody,
+    );
 
     expect(actual.kind).toEqual('Ok');
     expect(actual.data).toEqual(testShowCardRedemptionConfig);
@@ -502,9 +543,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testVaultBody,
-      },
+      testVaultBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError(
@@ -527,9 +566,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
       createSilentLogger(),
-      {
-        body: testVaultBody,
-      },
+      testVaultBody,
     );
 
     const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'vault record failed to update');
@@ -561,9 +598,10 @@ describe('UpdateRedemptionConfigService', () => {
 
     mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(testVaultRedemptionConfig);
 
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(createTestLogger(), {
-      body: testVaultBody,
-    });
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createTestLogger(),
+      testVaultBody,
+    );
 
     expect(actual.kind).toEqual('Ok');
     expect(actual.data).toEqual(testVaultRedemptionConfig);

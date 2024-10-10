@@ -506,7 +506,7 @@ jobs:
           body-includes: '🚀 Successfully deployed preview environment for ${{matrix.brand}}'
 
       - name: Create Comment for Frontend ${{matrix.brand}}
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: success() && github.event.number
         with:
           issue-number: ${{ github.event.number }}
@@ -557,7 +557,7 @@ jobs:
           body-includes: '🚀 Successfully Backend Shared Preview Environment'
 
       - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: success() && github.event.number
         with:
           issue-number: ${{ github.event.number }}
@@ -591,7 +591,7 @@ jobs:
           body-includes: '🚀 Successfully Backend Offers Preview Environment'
 
       - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: success() && github.event.number
         with:
           issue-number: ${{ github.event.number }}
@@ -625,7 +625,7 @@ jobs:
           body-includes: '🚀 Successfully Backend Redemptions Preview Environment'
 
       - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: success() && github.event.number
         with:
           issue-number: ${{ github.event.number }}
@@ -660,7 +660,7 @@ jobs:
           body-includes: '🚀 Successfully Backend Discovery Preview Environment'
 
       - name: Create Comment
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: success() && github.event.number
         with:
           issue-number: ${{ github.event.number }}

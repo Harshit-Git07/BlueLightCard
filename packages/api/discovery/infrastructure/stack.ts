@@ -113,6 +113,15 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       requestValidatorName: 'GetCampaignEventValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
+    'GET /categories': Route.createRoute({
+      apiGatewayModelGenerator,
+      stack,
+      functionName: 'GetCatgoriesHandler',
+      restApi,
+      handler: 'packages/api/discovery/application/handlers/categories/getCategories.handler',
+      requestValidatorName: 'GetCategoriesValidator',
+      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+    }),
   });
 
   const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);

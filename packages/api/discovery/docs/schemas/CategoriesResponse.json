@@ -1,0 +1,16 @@
+{
+  "CategoriesResponse": {
+    "type": "object",
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "data": {
+        "type": "array",
+        "items": {
+          "$ref": "./Category.json#/Category"
+        }
+      }
+    }
+  }
+}

@@ -167,6 +167,11 @@ describe('getNavigationItems', () => {
             label: 'Days Out',
             url: '/days-out.php',
           },
+          {
+            id: 'motoring-discounts',
+            label: 'Motoring Discounts',
+            url: 'https://motoring-discounts.bluelightcard.co.uk',
+          },
         ],
         id: 'discover-more',
         label: 'Discover More',

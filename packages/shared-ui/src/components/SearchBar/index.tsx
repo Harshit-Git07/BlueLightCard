@@ -48,8 +48,7 @@ const SearchBar: FC<SearchProps> = ({
     event.preventDefault();
 
     if (searchTerm && searchTerm.length >= 3) {
-      setErrorMessage('');
-      setIsFocused(false);
+      _onBackButtonClick();
       onSearch(searchTerm);
     } else {
       setErrorMessage('Enter 3 or more characters to search.');

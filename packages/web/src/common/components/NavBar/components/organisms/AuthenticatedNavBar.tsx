@@ -43,6 +43,16 @@ const AuthenticatedNavBar = ({
     setShowMobileMenu(!showMobileMenu);
   };
 
+  const onClickCategory = (catId: string, catName: string) => {
+    setSearchOverlayOpen(false);
+    onSearchCategoryChange(catId, catName);
+  };
+
+  const onClickCompany = (compId: string, company: string) => {
+    setSearchOverlayOpen(false);
+    onSearchCompanyChange(compId, company);
+  };
+
   const onKeyDownListener = useCallback(
     (event: KeyboardEvent) => {
       if (!searchOverlayOpen) return;
@@ -132,8 +142,8 @@ const AuthenticatedNavBar = ({
 
       <SearchDropDown
         isOpen={searchOverlayOpen}
-        onSearchCategoryChange={onSearchCategoryChange}
-        onSearchCompanyChange={onSearchCompanyChange}
+        onSearchCategoryChange={onClickCategory}
+        onSearchCompanyChange={onClickCompany}
         onClose={onBack}
       />
     </div>

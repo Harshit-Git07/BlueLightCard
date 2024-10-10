@@ -45,6 +45,54 @@ describe('SearchDropDown', () => {
     expect(onSearchCompanyChange).toHaveBeenCalledWith('26529', 'Youth & Earth');
     expect(onClose).toHaveBeenCalled();
   });
+
+  it('closes the SearchDropDown when clicking on a Category', async () => {
+    const onSearchCategoryChange = jest.fn();
+    const mockOnClose = jest.fn();
+
+    const { container } = render(
+      <Interaction
+        isOpen={true}
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchCompanyChange={() => {}}
+        onClose={mockOnClose}
+      />
+    );
+
+    const category = within(container).getByText('Children and toys');
+    fireEvent.click(category);
+
+    const overlay = within(container).getByTestId('search-dropdown-overlay');
+    fireEvent.click(overlay);
+
+    expect(onSearchCategoryChange).toHaveBeenCalledWith('11', 'Children and toys');
+    expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  it('closes the SearchDropDown when clicking on a Company', async () => {
+    const onSearchCompanyChange = jest.fn();
+    const mockOnClose = jest.fn();
+
+    const { container } = render(
+      <Interaction
+        onSearchCategoryChange={() => {}}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onClose={mockOnClose}
+      />
+    );
+
+    const companySearch = within(container).getByPlaceholderText('Search for a company');
+    await act(() => userEvent.type(companySearch, 'you'));
+
+    const company = await within(container).findByText('Youth & Earth');
+    fireEvent.click(company);
+
+    const overlay = within(container).getByTestId('search-dropdown-overlay');
+    fireEvent.click(overlay);
+
+    expect(onSearchCompanyChange).toHaveBeenCalledWith('26529', 'Youth & Earth');
+    expect(mockOnClose).toHaveBeenCalled();
+  });
 });
 
 describe('SearchDropDown scroll behavior', () => {

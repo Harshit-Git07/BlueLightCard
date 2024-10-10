@@ -215,28 +215,8 @@ exports[`submits the search bar 1`] = `
         id="searchInput"
         placeholder="Search for offers or companies"
         type="search"
-        value="Nike"
+        value=""
       />
-      <button
-        aria-label="Clear button"
-        type="button"
-      >
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-circle-xmark fa-xl absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
-          data-icon="circle-xmark"
-          data-prefix="fas"
-          focusable="false"
-          role="img"
-          viewBox="0 0 512 512"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
     </div>
   </form>
 </div>

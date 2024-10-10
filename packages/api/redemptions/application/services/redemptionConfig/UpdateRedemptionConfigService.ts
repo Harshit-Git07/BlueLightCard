@@ -7,13 +7,7 @@ import {
   ITransactionManager,
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
-import {
-  Affiliate,
-  Integration,
-  integrationEnum,
-  RedemptionType,
-  Status,
-} from '@blc-mono/redemptions/libs/database/schema';
+import { Affiliate, Integration, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
   PatchGenericModel,
   PatchPreAppliedModel,
@@ -21,6 +15,7 @@ import {
   PatchVaultOrVaultQRModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
+import { isValidIntegrationType } from '../../helpers/isValidIntegrationType';
 import { GenericEntity, GenericsRepository, UpdateGenericEntity } from '../../repositories/GenericsRepository';
 import {
   RedemptionConfigEntity,
@@ -37,9 +32,11 @@ export type UpdateRedemptionConfigError = {
     | 'UrlPayloadOfferIdMismatch'
     | 'RedemptionNotFound'
     | 'RedemptionOfferCompanyIdMismatch'
+    | 'RedemptionTypeMismatch'
     | 'GenericNotFound'
     | 'GenericCodeEmpty'
-    | 'VaultNotFound';
+    | 'VaultNotFound'
+    | 'MaxPerUserError';
   data: {
     message: string;
   };
@@ -115,6 +112,14 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
         'RedemptionOfferCompanyIdMismatch',
         request.id,
         'offerId/companyId do not match for this redemption',
+      );
+    }
+
+    if (request.redemptionType !== redemptionConfigEntity.redemptionType) {
+      return this.updateRedemptionConfigError(
+        'RedemptionTypeMismatch',
+        request.id,
+        'redemption type do not match for this redemption',
       );
     }
 
@@ -233,17 +238,23 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       );
     }
 
+    if (request.vault.maxPerUser < 1) {
+      return this.updateRedemptionConfigError(
+        'MaxPerUserError',
+        request.id,
+        'max limit per user cannot be less than 1',
+      );
+    }
+
     const vaultPayload: UpdateVaultEntity = {
       alertBelow: request.vault.alertBelow,
-      status: request.vault.status as Status,
+      status: request.vault.status,
       maxPerUser: request.vault.maxPerUser,
       email: request.vault.email,
-      integration: this.isValidIntegrationType(request.vault.integration)
+      integration: isValidIntegrationType(request.vault.integration)
         ? (request.vault.integration as Integration)
         : null,
-      integrationId: this.isValidIntegrationType(request.vault.integration)
-        ? Number(request.vault.integrationId)
-        : null,
+      integrationId: isValidIntegrationType(request.vault.integration) ? Number(request.vault.integrationId) : null,
     };
 
     const vaultId: Partial<Pick<VaultEntity, 'id'>> | undefined = await vaultsTransaction.updateOneById(
@@ -314,9 +325,11 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       | 'UrlPayloadOfferIdMismatch'
       | 'RedemptionNotFound'
       | 'RedemptionOfferCompanyIdMismatch'
+      | 'RedemptionTypeMismatch'
       | 'GenericNotFound'
       | 'GenericCodeEmpty'
-      | 'VaultNotFound',
+      | 'VaultNotFound'
+      | 'MaxPerUserError',
     redemptionId: string,
     message: string,
   ): UpdateRedemptionConfigError {
@@ -333,16 +346,5 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
         message: `Redemption Config Update - ${message}: ${redemptionId}`,
       },
     };
-  }
-
-  private isValidIntegrationType(integration: string | null): boolean {
-    if (!integration) {
-      return false;
-    }
-    if (Object.values(integrationEnum.enumValues).includes(integration)) {
-      return true;
-    }
-
-    return false;
   }
 }

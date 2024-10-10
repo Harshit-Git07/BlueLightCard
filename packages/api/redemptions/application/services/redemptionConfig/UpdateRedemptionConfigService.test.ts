@@ -13,7 +13,7 @@ import {
 } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { Integration, Status } from '@blc-mono/redemptions/libs/database/schema';
+import { Integration, RedemptionType, Status } from '@blc-mono/redemptions/libs/database/schema';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
@@ -155,12 +155,13 @@ describe('UpdateRedemptionConfigService', () => {
   const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {};
   const mockRedemptionConfigTransformer: Partial<RedemptionConfigTransformer> = {};
 
-  function mockRedemptionConfigExist(exist: boolean): void {
+  function mockRedemptionConfigExist(exist: boolean, redemptionType: RedemptionType = 'preApplied'): void {
     const value = exist
       ? redemptionConfigEntityFactory.build({
           id: testRedemptionId,
           offerId: testOfferId,
           companyId: testCompanyId,
+          redemptionType: redemptionType,
         })
       : null;
     mockRedemptionConfigRepository.findOneById = jest.fn().mockResolvedValue(value);
@@ -240,6 +241,7 @@ describe('UpdateRedemptionConfigService', () => {
       | 'UrlPayloadOfferIdMismatch'
       | 'RedemptionNotFound'
       | 'RedemptionOfferCompanyIdMismatch'
+      | 'RedemptionTypeMismatch'
       | 'GenericNotFound'
       | 'GenericCodeEmpty'
       | 'VaultNotFound',
@@ -315,8 +317,23 @@ describe('UpdateRedemptionConfigService', () => {
     expect(actual).toEqual(expected);
   });
 
+  it('should return kind "RedemptionTypeMismatch" when the payload redemption type do not match the redemptions record redemption type', async () => {
+    mockRedemptionConfigExist(true, 'vault');
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createSilentLogger(),
+      { ...testVaultBody, redemptionType: 'showCard' },
+    );
+
+    const expected: UpdateRedemptionConfigError = getExpectedError(
+      'RedemptionTypeMismatch',
+      'redemption type do not match for this redemption',
+    );
+    expect(actual).toEqual(expected);
+  });
+
   it('should return kind "GenericCodeEmpty" when the request payload contains a blank string for the generics code value', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'generic');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
@@ -333,7 +350,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "GenericNotFound" when the generic offer generics record does not exist', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'generic');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericExist(false);
@@ -355,7 +372,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "Error" when the generic offer generics record fails to update', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'generic');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericExist(true);
@@ -375,7 +392,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "Error" when the generic offer redemption record fails to update', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'generic');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericExist(true);
@@ -396,7 +413,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "Ok" when the generic offer redemptions and generic records update correctly', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'generic');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericExist(true);
@@ -481,7 +498,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "Error" when the showCard offer redemption record fails to update', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'showCard');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
@@ -500,7 +517,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "Ok" when the showCard offer redemptions record updates correctly', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'showCard');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
@@ -532,7 +549,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "VaultNotFound" when the vault offer vaults record does not exist', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'vault');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockVaultExist(false);
@@ -554,7 +571,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "Error" when the vault offer vaults record fails to update', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'vault');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockVaultExist(true);
@@ -574,7 +591,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it('should return kind "Ok" when the vault offer redemptions and vault records update correctly', async () => {
-    mockRedemptionConfigExist(true);
+    mockRedemptionConfigExist(true, 'vault');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockVaultExist(true);

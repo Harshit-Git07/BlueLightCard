@@ -99,6 +99,14 @@ describe('UpdateRedemptionConfigController', () => {
     },
   } satisfies UpdateVaultRedemptionSchema;
 
+  const testVaultBodyWithInvalidMaxPerUser = {
+    ...testVaultBody,
+    vault: {
+      ...testVaultBody.vault,
+      maxPerUser: 0,
+    },
+  } satisfies UpdateVaultRedemptionSchema;
+
   const testVaultRedemptionConfig: RedemptionConfig = {
     ...testVaultBody,
     offerId: String(testVaultBody.offerId),
@@ -115,9 +123,11 @@ describe('UpdateRedemptionConfigController', () => {
       | 'UrlPayloadOfferIdMismatch'
       | 'RedemptionNotFound'
       | 'RedemptionOfferCompanyIdMismatch'
+      | 'RedemptionTypeMismatch'
       | 'GenericNotFound'
       | 'GenericCodeEmpty'
-      | 'VaultNotFound',
+      | 'VaultNotFound'
+      | 'MaxPerUserError',
   ): UpdateRedemptionConfigError {
     return {
       kind: kind,
@@ -173,6 +183,15 @@ describe('UpdateRedemptionConfigController', () => {
   it('Maps "RedemptionOfferCompanyIdMismatch" result correctly to 404 response', async () => {
     UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
       getTestUpdateRedemptionConfigError('RedemptionOfferCompanyIdMismatch'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  it('Maps "RedemptionTypeMismatch" result correctly to 404 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('RedemptionTypeMismatch'),
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
     const actual = await controller.handle(getParsedRequest(testGenericBody.offerId, testGenericBody));
@@ -242,6 +261,15 @@ describe('UpdateRedemptionConfigController', () => {
     );
     const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
     const actual = await controller.handle(getParsedRequest(testVaultBody.offerId, testVaultBody));
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  it('Maps "MaxPerUserError" result for max per user limit set to less than 1 correctly to 404 response', async () => {
+    UpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('MaxPerUserError'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, UpdateRedemptionConfigService);
+    const actual = await controller.handle(getParsedRequest(testVaultBody.offerId, testVaultBodyWithInvalidMaxPerUser));
     expect(actual.statusCode).toEqual(404);
   });
 

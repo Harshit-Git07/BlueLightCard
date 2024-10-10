@@ -54,9 +54,11 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Parse
       case 'UrlPayloadOfferIdMismatch':
       case 'RedemptionNotFound':
       case 'RedemptionOfferCompanyIdMismatch':
+      case 'RedemptionTypeMismatch':
       case 'GenericNotFound':
       case 'GenericCodeEmpty':
       case 'VaultNotFound':
+      case 'MaxPerUserError':
         return {
           statusCode: 404,
           data: results.data,

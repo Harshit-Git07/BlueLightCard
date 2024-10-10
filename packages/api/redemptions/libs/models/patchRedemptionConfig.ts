@@ -6,10 +6,10 @@ export const VaultModel = z.object({
   vault: z.object({
     id: z.string(),
     alertBelow: z.number(),
-    status: z.string(),
+    status: z.enum(['active', 'in-active']),
     maxPerUser: z.number(),
     createdAt: z.string(),
-    email: z.string(),
+    email: z.string().email(),
     integration: z.string().nullable(),
     integrationId: z.string().nullable(),
   }),

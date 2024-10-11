@@ -63,7 +63,6 @@ const redemptionConfig: RedemptionConfig = {
   companyId: faker.string.uuid(),
   offerId: faker.string.uuid(),
   connection: 'none',
-  offerType: 'in-store',
   redemptionType: 'showCard',
   id: 'redemption-id',
 };

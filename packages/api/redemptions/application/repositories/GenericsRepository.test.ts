@@ -42,11 +42,10 @@ describe('GenericsRepository', () => {
       const result = await repository.createGeneric(genericEntity);
 
       // Assert
-      expect(result.length).toEqual(1);
-      const createdGenericEntity = await repository.findOneByRedemptionId(redemptionEntity.id);
 
-      expect(createdGenericEntity).toEqual({
-        id: result[0].id,
+      expect(result).toEqual({
+        id: result.id,
+
         redemptionId: redemptionEntity.id,
         code: genericEntity.code,
       });

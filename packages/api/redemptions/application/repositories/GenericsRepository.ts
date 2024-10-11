@@ -12,10 +12,10 @@ export type NewGenericEntity = typeof genericsTable.$inferInsert;
 
 export interface IGenericsRepository {
   findOneByRedemptionId(redemptionId: string): Promise<GenericEntity | null>;
-  createGeneric(newGenericEntity: NewGenericEntity): Promise<Pick<GenericEntity, 'id'>[]>;
+  createGeneric(newGenericEntity: NewGenericEntity): Promise<GenericEntity>;
   updateByRedemptionId(
     redemptionId: string,
-    updateGenricEntity: UpdateGenericEntity,
+    updateGenericEntity: UpdateGenericEntity,
   ): Promise<Pick<GenericEntity, 'id'>[]>;
   updateOneById(id: string, genericData: UpdateGenericEntity): Promise<GenericEntity | null>;
   deleteById(id: string): Promise<Pick<GenericEntity, 'id'>[]>;
@@ -38,15 +38,15 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
     return this.atMostOne(results);
   }
 
-  public createGeneric(genericData: NewGenericEntity): Promise<Pick<GenericEntity, 'id'>[]> {
-    return this.connection.db.insert(genericsTable).values(genericData).returning({ id: genericsTable.id }).execute();
+  public async createGeneric(genericData: NewGenericEntity): Promise<GenericEntity> {
+    return this.exactlyOne(await this.connection.db.insert(genericsTable).values(genericData).returning().execute());
   }
 
-  public updateByRedemptionId(
+  public async updateByRedemptionId(
     redemptionId: string,
     genericData: UpdateGenericEntity,
   ): Promise<Pick<GenericEntity, 'id'>[]> {
-    return this.connection.db
+    return await this.connection.db
       .update(genericsTable)
       .set(genericData)
       .where(eq(genericsTable.redemptionId, redemptionId))
@@ -69,16 +69,16 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
     );
   }
 
-  public deleteByRedemptionId(redemptionId: string): Promise<Pick<GenericEntity, 'id'>[]> {
-    return this.connection.db
+  public async deleteByRedemptionId(redemptionId: string): Promise<Pick<GenericEntity, 'id'>[]> {
+    return await this.connection.db
       .delete(genericsTable)
       .where(eq(genericsTable.redemptionId, redemptionId))
       .returning({ id: genericsTable.id })
       .execute();
   }
 
-  public deleteById(id: string): Promise<Pick<GenericEntity, 'id'>[]> {
-    return this.connection.db
+  public async deleteById(id: string): Promise<Pick<GenericEntity, 'id'>[]> {
+    return await this.connection.db
       .delete(genericsTable)
       .where(eq(genericsTable.id, id))
       .returning({ id: genericsTable.id })

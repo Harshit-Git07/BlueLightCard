@@ -198,7 +198,7 @@ export class OfferUpdatedService implements IOfferUpdatedService {
               code: detail.offerCode,
             };
             const genericInsert = await genericTransaction.createGeneric(genericData);
-            if (genericInsert.length < 1) {
+            if (!genericInsert) {
               this.logger.error({
                 message: 'Offer Update - Generic insert failed: no generics were inserted',
                 context: {

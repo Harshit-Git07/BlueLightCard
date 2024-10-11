@@ -18,7 +18,6 @@ export type RedemptionConfig = {
   connection?: string | null;
   id?: string;
   offerId: string;
-  offerType?: string;
   redemptionType: (typeof REDEMPTION_TYPES)[number];
   url?: string | null;
   generic?: RedemptionGenericConfig | null;

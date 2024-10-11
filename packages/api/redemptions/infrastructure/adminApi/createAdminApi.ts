@@ -168,7 +168,7 @@ export function createAdminApi(
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/deleteVaultBatchHandler.handler',
     }),
-    'POST /redemptions/{offerId}': routeFactory({
+    'POST /redemptions': routeFactory({
       name: 'CreateRedemptionConfig',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/createRedemptionConfigHandler.handler',

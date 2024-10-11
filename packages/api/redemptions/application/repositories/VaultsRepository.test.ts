@@ -200,13 +200,13 @@ describe('VaultsRepository', () => {
       const result = await repository.create(vault);
 
       // Assert
-      expect(result).toEqual({ id: vault.id });
-      const createdVaults = await connection.db
+      const createdVault = await connection.db
         .select()
         .from(vaultsTable)
         .where(eq(vaultsTable.redemptionId, redemption.id))
         .execute();
-      expect(createdVaults[0]).toEqual(vault);
+
+      expect(result).toEqual(createdVault[0]);
     });
   });
 });

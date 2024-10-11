@@ -14,3 +14,40 @@ export const redemptionConfigFactory = Factory.define<RedemptionConfig>(() => ({
   redemptionType: faker.helpers.arrayElement(redemptionsTable.redemptionType.enumValues),
   url: faker.internet.url(),
 }));
+
+export const genericRedemptionConfigFactory = Factory.define<RedemptionConfig>(() => ({
+  id: createRedemptionsId(),
+  offerId: faker.string.uuid(),
+  companyId: faker.string.uuid(),
+  connection: 'affiliate',
+  affiliate: faker.helpers.arrayElement(affiliateEnum.enumValues),
+  offerType: 'online',
+  redemptionType: 'generic',
+  url: faker.internet.url(),
+  generic: {
+    code: faker.string.alphanumeric(),
+    id: faker.string.uuid(),
+  },
+}));
+
+export const vaultRedemptionConfigFactory = Factory.define<RedemptionConfig>(() => ({
+  id: createRedemptionsId(),
+  offerId: faker.string.uuid(),
+  companyId: faker.string.uuid(),
+  connection: 'affiliate',
+  affiliate: faker.helpers.arrayElement(affiliateEnum.enumValues),
+  offerType: 'online',
+  redemptionType: faker.helpers.arrayElement(['vault', 'vaultQR']),
+  url: faker.internet.url(),
+  vault: {
+    alertBelow: faker.number.int(),
+    status: faker.helpers.arrayElement(['active', 'in-active']),
+    maxPerUser: faker.number.int(),
+    integrationId: faker.string.uuid(),
+    createdAt: faker.date.past.toString(),
+    email: faker.internet.email(),
+    integration: faker.helpers.arrayElement(['eagleeye', 'uniqodo']),
+    id: faker.string.uuid(),
+    batches: [],
+  },
+}));

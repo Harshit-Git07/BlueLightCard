@@ -109,13 +109,9 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
     );
   }
 
-  public async createRedemption(newRedemptionEntity: NewRedemptionConfigEntity): Promise<RedemptionConfigIdEntity> {
+  public async createRedemption(newRedemptionEntity: NewRedemptionConfigEntity): Promise<RedemptionConfigEntity> {
     return this.exactlyOne(
-      await this.connection.db
-        .insert(redemptionsTable)
-        .values(newRedemptionEntity)
-        .returning({ id: redemptionsTable.id })
-        .execute(),
+      await this.connection.db.insert(redemptionsTable).values(newRedemptionEntity).returning().execute(),
     );
   }
 

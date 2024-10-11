@@ -19,8 +19,8 @@ export interface IVaultsRepository {
   findOneByRedemptionId(redemptionId: string, filters?: VaultFilters): Promise<VaultEntity | null>;
   findOneById(id: string): Promise<VaultEntity | null>;
   updateOneById(id: string, updateVaultEntity: UpdateVaultEntity): Promise<Pick<VaultEntity, 'id'> | undefined>;
-  createMany(NewVaultEntities: NewVaultEntity[]): Promise<Pick<VaultEntity, 'id'>[]>;
-  create(newVaultEntity: NewVaultEntity): Promise<Pick<VaultEntity, 'id'>>;
+  createMany(NewVaultEntities: NewVaultEntity[]): Promise<VaultEntity[]>;
+  create(newVaultEntity: NewVaultEntity): Promise<VaultEntity>;
   deleteById(id: string): Promise<Pick<VaultEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultsRepository;
 }
@@ -70,20 +70,12 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .then((result) => result?.at(0));
   }
 
-  public async createMany(vaults: NewVaultEntity[]): Promise<Pick<VaultEntity, 'id'>[]> {
-    return await this.connection.db
-      .insert(vaultsTable)
-      .values(vaults)
-      .returning({
-        id: vaultsTable.id,
-      })
-      .execute();
+  public async createMany(vaults: NewVaultEntity[]): Promise<VaultEntity[]> {
+    return await this.connection.db.insert(vaultsTable).values(vaults).returning().execute();
   }
 
-  public async create(vault: NewVaultEntity): Promise<Pick<VaultEntity, 'id'>> {
-    return this.exactlyOne(
-      await this.connection.db.insert(vaultsTable).values(vault).returning({ id: vaultsTable.id }).execute(),
-    );
+  public async create(vault: NewVaultEntity): Promise<VaultEntity> {
+    return this.exactlyOne(await this.connection.db.insert(vaultsTable).values(vault).returning().execute());
   }
 
   public withTransaction(transaction: DatabaseTransactionConnection): VaultsRepository {

@@ -2,14 +2,13 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { z } from 'zod';
 
 import { JsonStringSchema } from '@blc-mono/core/schemas/common';
-import { JsonValue } from '@blc-mono/core/types/json';
 import { Result } from '@blc-mono/core/types/result';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
   CreateRedemptionConfigService,
+  DuplicateError,
+  FailedToCreateError,
   ICreateRedemptionConfigService,
-  SchemaValidationError,
-  ServiceError,
 } from '@blc-mono/redemptions/application/services/redemptionConfig/CreateRedemptionConfigService';
 import { PostRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
 
@@ -48,20 +47,18 @@ export class CreateRedemptionConfigController extends APIGatewayController<Parse
         data: result.data,
       };
     } catch (e) {
-      if (e instanceof ServiceError) {
+      if (e instanceof DuplicateError) {
         return {
-          statusCode: e.statusCode,
+          statusCode: 409,
           data: { message: e.message },
         };
       }
-
-      if (e instanceof SchemaValidationError) {
+      if (e instanceof FailedToCreateError) {
         return {
           statusCode: 400,
-          data: e.data as unknown as JsonValue,
+          data: { message: e.message },
         };
       }
-
       if (e instanceof Error) {
         return {
           statusCode: 500,

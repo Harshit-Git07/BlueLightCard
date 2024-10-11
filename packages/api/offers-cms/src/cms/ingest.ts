@@ -63,16 +63,9 @@ export async function ingestCompany(record: Record<'company'>, logger: ILogger) 
   });
 }
 
-export async function ingestRawOffer(record: Record<'offer'>) {
+export async function ingestRawRecord(record: WebhookResultRecord) {
   await db.put({
-    TableName: Table.cmsOffersRawData.tableName,
-    Item: record,
-  });
-}
-
-export async function ingestRawCompany(record: Record<'company'>) {
-  await db.put({
-    TableName: Table.cmsCompanyRawData.tableName,
+    TableName: Table.cmsRawData.tableName,
     Item: record,
   });
 }

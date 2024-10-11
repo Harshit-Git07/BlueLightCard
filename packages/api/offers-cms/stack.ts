@@ -38,8 +38,7 @@ export function OffersCMS({ stack }: StackContext) {
   const globalConfig = GlobalConfigResolver.for(stack.stage);
   const discoveryBusName = getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, '');
 
-  const { offersRawDataTable, offersDataTable, companyRawDataTable, companyDataTable } =
-    createTables(stack);
+  const { rawDataTable, offersDataTable, companyDataTable } = createTables(stack);
 
   const apiFunction = new Function(stack, API_FUNCTION_NAME, {
     handler: 'packages/api/offers-cms/lambda/api.handler',
@@ -53,7 +52,7 @@ export function OffersCMS({ stack }: StackContext) {
 
   const consumerFunction = new Function(stack, CONSUMER_FUNCTION_NAME, {
     handler: 'packages/api/offers-cms/lambda/consumer.handler',
-    bind: [offersRawDataTable, offersDataTable, companyRawDataTable, companyDataTable],
+    bind: [rawDataTable, offersDataTable, companyDataTable],
     environment: {
       OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
       DISCOVERY_EVENT_BUS_NAME: discoveryBusName,

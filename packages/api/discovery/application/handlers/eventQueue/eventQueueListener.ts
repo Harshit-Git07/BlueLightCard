@@ -35,7 +35,7 @@ const unwrappedHandler = async (event: SQSEvent) => {
           throw new Error(`Invalid event source: [${body.source}]`);
       }
     } catch (error) {
-      logger.error({ message: 'Error processing event', error });
+      logger.error({ message: `Error processing event`, error, event: JSON.stringify(body.detail) });
       throw new Error(`Error processing events: [${error}]`);
     }
   }

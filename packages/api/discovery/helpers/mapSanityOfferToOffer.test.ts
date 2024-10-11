@@ -123,17 +123,6 @@ it('should throw an error if offerDescription.content is missing', () => {
   );
 });
 
-it('should throw an error if image.default.asset.url is missing', () => {
-  const sanityOfferWithoutDescription: Partial<SanityOffer> = {
-    ...validSanityOffer,
-    image: undefined,
-  };
-
-  expect(() => mapSanityOfferToOffer(sanityOfferWithoutDescription as SanityOffer)).toThrow(
-    'Missing sanity field: image.default.asset.url',
-  );
-});
-
 it('should throw an error if company is missing', () => {
   const sanityOfferWithoutDescription: Partial<SanityOffer> = {
     ...validSanityOffer,

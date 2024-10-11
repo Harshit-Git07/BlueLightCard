@@ -28,9 +28,6 @@ export const mapSanityOfferToOffer = (sanityOffer: SanityOffer): Offer => {
   if (!sanityOffer.offerDescription.content) {
     throw new Error('Missing sanity field: offerDescription.content');
   }
-  if (!sanityOffer.image?.default?.asset?.url) {
-    throw new Error('Missing sanity field: image.default.asset.url');
-  }
   if (!sanityOffer.company) {
     throw new Error('Missing sanity field: company');
   }
@@ -42,7 +39,7 @@ export const mapSanityOfferToOffer = (sanityOffer: SanityOffer): Offer => {
     status: sanityOffer.status,
     offerType: sanityOffer.offerType?.offerType,
     offerDescription: getBlockText(sanityOffer.offerDescription.content),
-    image: sanityOffer.image?.default?.asset?.url,
+    image: sanityOffer.image?.default?.asset?.url ?? '',
     offerStart: sanityOffer.start,
     offerEnd: sanityOffer.expires,
     evergreen: sanityOffer.evergreen ?? false,

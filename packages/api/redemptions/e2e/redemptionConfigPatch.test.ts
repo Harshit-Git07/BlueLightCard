@@ -123,7 +123,6 @@ describe('PATCH /redemptions/{offerId}', () => {
     connection: 'affiliate',
     companyId: faker.number.int({ max: 1000000 }),
     affiliate: 'awin',
-    url: 'https://www.awin1.com/',
     vault: {
       id: vaultId,
       alertBelow: 10,
@@ -521,7 +520,6 @@ describe('PATCH /redemptions/{offerId}', () => {
         connection: testVaultQRBody.connection,
         companyId: String(testVaultQRBody.companyId),
         affiliate: testVaultQRBody.affiliate,
-        url: null,
         vault: {
           id: testVaultQRBody.vault.id,
           alertBelow: testVaultQRBody.vault.alertBelow,

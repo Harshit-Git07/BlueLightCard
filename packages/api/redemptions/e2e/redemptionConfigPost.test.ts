@@ -154,12 +154,15 @@ describe('POST /redemptions/', () => {
       expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     });
 
-    it.each(['vault', 'vaultQR'])('POST /redemptions returns 200 for %s redemptionType', async (redemptionType) => {
+    it.each([
+      ['vault', 104],
+      ['vaultQR', 105],
+    ])('POST /redemptions returns 200 for %s redemptionType', async (redemptionType, offerId) => {
       const redemptionConfigRequest = {
         affiliate: null,
         companyId: faker.number.int({ max: 216380 }),
         connection: 'direct',
-        offerId: 104,
+        offerId: offerId,
         redemptionType: redemptionType,
         ...(redemptionType === 'vault' && { url: faker.internet.url() }),
         vault: {

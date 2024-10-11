@@ -42,7 +42,7 @@ export function OffersCMS({ stack }: StackContext) {
     createTables(stack);
 
   const apiFunction = new Function(stack, API_FUNCTION_NAME, {
-    handler: new URL('./lambda/api.handler', import.meta.url).pathname,
+    handler: 'packages/api/offers-cms/lambda/api.handler',
     bind: [offersDataTable, companyDataTable],
     url: true,
     environment: {
@@ -52,7 +52,7 @@ export function OffersCMS({ stack }: StackContext) {
   });
 
   const consumerFunction = new Function(stack, CONSUMER_FUNCTION_NAME, {
-    handler: new URL('./lambda/consumer.handler', import.meta.url).pathname,
+    handler: 'packages/api/offers-cms/lambda/consumer.handler',
     bind: [offersRawDataTable, offersDataTable, companyRawDataTable, companyDataTable],
     environment: {
       OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
@@ -129,7 +129,7 @@ export function OffersCMS({ stack }: StackContext) {
     },
     routes: {
       // Only one single route as hono handles the routing
-      'ANY /{proxy+}': new URL('./lambda/api.handler', import.meta.url).pathname,
+      'ANY /{proxy+}': 'packages/api/offers-cms/lambda/api.handler',
     },
   });
 

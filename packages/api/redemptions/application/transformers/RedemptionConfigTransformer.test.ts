@@ -33,7 +33,6 @@ describe('transformToRedemptionConfig', () => {
       const vaultRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
         redemptionType,
       });
-
       const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
         redemptionConfigEntity: vaultRedemptionConfigEntity,
         genericEntity: null,
@@ -48,7 +47,7 @@ describe('transformToRedemptionConfig', () => {
         connection: vaultRedemptionConfigEntity.connection,
         companyId: vaultRedemptionConfigEntity.companyId.toString(),
         affiliate: vaultRedemptionConfigEntity.affiliate,
-        url: vaultRedemptionConfigEntity.url,
+        ...(redemptionType === 'vault' && { url: vaultRedemptionConfigEntity.url }),
         vault: null,
       };
 
@@ -64,7 +63,6 @@ describe('transformToRedemptionConfig', () => {
       const vaultRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
         redemptionType,
       });
-
       mockRedemptionVaultConfigTransformer.transformToRedemptionVaultConfig = jest
         .fn()
         .mockReturnValue(redemptionVaultConfig);
@@ -83,7 +81,7 @@ describe('transformToRedemptionConfig', () => {
         connection: vaultRedemptionConfigEntity.connection,
         companyId: vaultRedemptionConfigEntity.companyId.toString(),
         affiliate: vaultRedemptionConfigEntity.affiliate,
-        url: vaultRedemptionConfigEntity.url,
+        ...(redemptionType === 'vault' && { url: vaultRedemptionConfigEntity.url }),
         vault: redemptionVaultConfig,
       };
 

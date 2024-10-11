@@ -80,7 +80,7 @@ export class RedemptionConfigTransformer {
         ? this.redemptionVaultConfigTransformer.transformToRedemptionVaultConfig(vaultEntity, vaultBatchEntities)
         : null;
 
-      redemptionProperties.url = redemptionConfigEntity.url;
+      if (redemptionType === 'vault') redemptionProperties.url = redemptionConfigEntity.url;
       redemptionProperties.affiliate = redemptionConfigDto.redemptionConfigEntity.affiliate;
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;
     }

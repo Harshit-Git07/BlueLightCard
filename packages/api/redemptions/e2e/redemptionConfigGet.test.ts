@@ -78,7 +78,7 @@ describe('redemption config admin API tests', () => {
       offerId,
       redemptionType: redemptionType,
       connection: 'affiliate',
-      url: faker.internet.url(),
+      ...(redemptionType === 'vault' && { url: faker.internet.url() }),
       affiliate: 'awin',
     });
 
@@ -121,7 +121,7 @@ describe('redemption config admin API tests', () => {
         connection: redemptionConfigEntity.connection,
         companyId: String(redemptionConfigEntity.companyId),
         affiliate: redemptionConfigEntity.affiliate,
-        url: redemptionConfigEntity.url,
+        ...(redemptionType === 'vault' && { url: redemptionConfigEntity.url }),
         vault: {
           id: vaultEntity.id,
           alertBelow: vaultEntity.alertBelow,

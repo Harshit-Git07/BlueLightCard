@@ -49,13 +49,13 @@ describe('POST /redemptions/', () => {
       });
     });
 
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([1, 2, 3, 4, 5]);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([101, 102, 103, 104, 105]);
 
     // Set a conservative timeout
   }, 60_000);
 
   afterAll(async () => {
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([1, 2, 3, 4, 5]);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([101, 102, 103, 104, 105]);
     await connectionManager?.cleanup();
   });
 
@@ -63,7 +63,7 @@ describe('POST /redemptions/', () => {
     it('POST /redemptions returns 200 for showCard redemptionType', async () => {
       const redemptionConfigRequest = {
         companyId: faker.number.int({ max: 216380 }),
-        offerId: 1,
+        offerId: 101,
         redemptionType: 'showCard',
       };
 
@@ -90,7 +90,7 @@ describe('POST /redemptions/', () => {
         affiliate: null,
         companyId: faker.number.int({ max: 216380 }),
         connection: 'direct',
-        offerId: 2,
+        offerId: 102,
         redemptionType: 'preApplied',
         url: 'https://www.whatever.com/',
       };
@@ -121,7 +121,7 @@ describe('POST /redemptions/', () => {
         affiliate: null,
         companyId: faker.number.int({ max: 216380 }),
         connection: 'direct',
-        offerId: 3,
+        offerId: 103,
         redemptionType: 'generic',
         url: 'https://www.whatever.com/',
         generic: {
@@ -154,23 +154,20 @@ describe('POST /redemptions/', () => {
       expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     });
 
-    it.each([
-      ['vault', 4],
-      ['vaultQR', 5],
-    ])('POST /redemptions returns 200 for %s redemptionType', async (redemptionType, offerId) => {
+    it.each(['vault', 'vaultQR'])('POST /redemptions returns 200 for %s redemptionType', async (redemptionType) => {
       const redemptionConfigRequest = {
         affiliate: null,
         companyId: faker.number.int({ max: 216380 }),
         connection: 'direct',
-        offerId: offerId,
+        offerId: 104,
         redemptionType: redemptionType,
-        url: 'https://www.whatever.com/',
+        ...(redemptionType === 'vault' && { url: faker.internet.url() }),
         vault: {
           alertBelow: faker.number.int({ max: 216380 }),
           status: faker.helpers.arrayElement(['active', 'in-active']),
           maxPerUser: faker.number.int({ max: 216380 }),
           createdAt: faker.date.past().toString(),
-          email: 'some@email.com',
+          email: faker.internet.email(),
           integration: faker.helpers.arrayElement(['eagleeye', 'uniqodo']),
           integrationId: faker.number.int({ max: 216380 }),
           batches: [],
@@ -192,7 +189,7 @@ describe('POST /redemptions/', () => {
           offerId: String(redemptionConfigRequest.offerId),
           id: expect.any(String),
           redemptionType: redemptionConfigRequest.redemptionType,
-          url: redemptionConfigRequest.url,
+          ...(redemptionType === 'vault' && { url: redemptionConfigRequest.url }),
           vault: {
             alertBelow: redemptionConfigRequest.vault.alertBelow,
             status: redemptionConfigRequest.vault.status,
@@ -212,7 +209,7 @@ describe('POST /redemptions/', () => {
     it('POST /redemptions returns 409 when a redemptionConfig with given offerId already exists', async () => {
       const redemptionConfigRequest = {
         companyId: faker.number.int({ max: 216380 }),
-        offerId: 1,
+        offerId: 101,
         redemptionType: 'showCard',
       };
 
@@ -226,7 +223,7 @@ describe('POST /redemptions/', () => {
         affiliate: null,
         companyId: faker.number.int({ max: 216380 }),
         connection: 'direct',
-        offerId: 3,
+        offerId: 103,
         redemptionType: 'generic',
         url: 'https://www.whatever.com/',
         generic: {},

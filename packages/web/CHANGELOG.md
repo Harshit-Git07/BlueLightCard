@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.75.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.74.0...bluelightcard/web-v1.75.0) (2024-10-14)
+
+
+### Features
+
+* [DISCO-1013] Add motoring landing page ([#2454](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2454)) ([10706ab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/10706ab44e91e74eb3eefeb2e419d18d4c1ed818))
+* add VerticalMenuItem component to web component lib ([#2396](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2396)) (MAMA-1) ([899892d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/899892dfed76aa35e4a31c89dbb1310f7bafad02))
+* MER 1 shared button component ([#2360](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2360)) ([4c6ffba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4c6ffba70ec849abae15ae844dc166c427ba8435))
+* MER-3 input field text input component ([#2376](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2376)) ([a4c9675](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a4c9675700fb69e82fc371744b91ff207cffd14d))
+* reset search on going back ([#2413](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2413)) ([ca9d8d6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ca9d8d680a70076ce2c8b963216c9ccc2cc5b212))
+
+
+### Bug Fixes
+
+* [MER-1] - Button revert ([#2466](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2466)) ([38bf3d9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/38bf3d9aefb6f280c856b1050a9058e1df7e2eb5))
+* TO-1186 Add CMS PoC into monorepo ([#2354](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2354)) ([9c598f0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9c598f0304258ac56e4a31ca8fb0fd7dcccafab4))
+
 ## [1.74.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.73.1...bluelightcard/web-v1.74.0) (2024-10-03)
 
 

@@ -7,6 +7,7 @@ import { CallbackController } from '@blc-mono/redemptions/application/controller
 import { DwhRepository } from '@blc-mono/redemptions/application/repositories/DwhRepository';
 import { CallbackService } from '@blc-mono/redemptions/application/services/callback/CallbackService';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
+import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
 const service: string = getEnvRaw('SERVICE_NAME') ?? 'redemptions';
 const logger = new LambdaLogger({ serviceName: `${service}-post-callback` });
@@ -16,6 +17,7 @@ const controller = createInjector()
   // General
   .provideValue(Logger.key, logger)
   .provideValue(DatabaseConnection.key, connection)
+  .provideClass(SecretsManager.key, SecretsManager)
   // Repositories
   .provideClass(DwhRepository.key, DwhRepository)
   // Services

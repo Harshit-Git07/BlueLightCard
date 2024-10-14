@@ -10,9 +10,11 @@ import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastru
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
 import { DwhKenisisFirehoseStreams } from '@blc-mono/shared/infra/firehose/DwhKenisisFirehoseStreams';
 
+import { RedemptionsStackConfigResolver } from '../config/config';
 import { productionAdminDomainNames, stagingAdminDomainNames } from '../constants/domains';
 import { IDatabase } from '../database/adapter';
 import { VaultCodesUpload } from '../s3/vaultCodesUpload';
+
 type GlobalConfig = {
   apiGatewayEndpointTypes: EndpointType[];
 };
@@ -53,6 +55,7 @@ export function createAdminApi(
   vaultCodesUpload: VaultCodesUpload,
   dwhKenisisFirehoseStreams: DwhKenisisFirehoseStreams,
 ): ApiGatewayV1Api<Record<string, never>> {
+  const config = RedemptionsStackConfigResolver.for(stack);
   const adminApi = new ApiGatewayV1Api(stack, 'redemptionsAdmin', {
     cdk: {
       restApi: {
@@ -140,6 +143,11 @@ export function createAdminApi(
     effect: Effect.ALLOW,
     resources: ['*'],
   });
+  const secretsManagerGetSecretValue = new PolicyStatement({
+    actions: ['secretsmanager:GetSecretValue'],
+    effect: Effect.ALLOW,
+    resources: ['*'],
+  });
 
   const routeFactory = createRoutesFactory(baseParams);
 
@@ -194,8 +202,9 @@ export function createAdminApi(
       environment: {
         [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME]:
           dwhKenisisFirehoseStreams.callbackVaultRedemptionStream.getStreamName(),
+        [RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME]: config.secretsManagerConfig.secretsManagerName,
       },
-      permissions: [firehosePutRecord],
+      permissions: [firehosePutRecord, secretsManagerGetSecretValue],
     }),
   });
 

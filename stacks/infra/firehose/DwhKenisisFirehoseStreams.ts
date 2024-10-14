@@ -34,7 +34,8 @@ const platformMap =  {
 const callbackVaultRedemptionStreamNames = {
 	[BLC_UK_BRAND]: 'blc-uk-vaultIntegrationCallback',
 	[BLC_AU_BRAND]: 'blc-au-vaultIntegrationCallback',
-	[DDS_UK_BRAND]: 'dds-uk-vaultIntegrationCallback'
+	// This one doesn't have dds in the name because the stage is "staging-dds" or "production-dds"
+	[DDS_UK_BRAND]: 'uk-vaultIntegrationCallback'
 }
  
 let redshiftSecret: ISecret;

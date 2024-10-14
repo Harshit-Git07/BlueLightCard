@@ -1,9 +1,9 @@
 import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
-import { faker } from '@faker-js/faker';
 import { mockClient } from 'aws-sdk-client-mock';
 
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
+import { eagleEyeModelFactory, uniqodoModelFactory } from '@blc-mono/redemptions/libs/test/factories/callback.factory';
 
 import { MemberRedemptionParamsDto } from '../services/DWH/dwhLoggingService';
 
@@ -266,15 +266,9 @@ describe('DwhRepository', () => {
     });
   });
 
-  describe('logCallbackVaultRedemption', () => {
-    const testOfferId = faker.string.sample(10);
-    const testCode = faker.string.sample(10);
-    const testOrderValue = faker.string.sample(10);
-    const testCurrency = faker.finance.currencyCode();
-    const testRedeemedAt = faker.date.recent().toISOString();
-    const testMemberId = faker.string.sample(10);
-    const testIntegrationType = 'uniqodo';
+  describe('logCallbackEagleEyeVaultRedemption', () => {
     const testStreamName = 'firehose-callback';
+    const testEagleEyeData = eagleEyeModelFactory.build();
 
     it('should send the correct data to the callback stream', async () => {
       // Arrange
@@ -283,15 +277,7 @@ describe('DwhRepository', () => {
       const dwhRepository = new DwhRepository();
 
       // Act
-      await dwhRepository.logCallbackVaultRedemption(
-        testOfferId,
-        testCode,
-        testOrderValue,
-        testCurrency,
-        testRedeemedAt,
-        testIntegrationType,
-        testMemberId,
-      );
+      await dwhRepository.logCallbackEagleEyeVaultRedemption(testEagleEyeData);
 
       // Assert
       const calls = mockFirehoseClient.calls();
@@ -300,13 +286,27 @@ describe('DwhRepository', () => {
       expect(putCommand.input.DeliveryStreamName).toBe(testStreamName);
       const data = new TextDecoder().decode(putCommand.input.Record!.Data);
       expect(JSON.parse(data)).toStrictEqual({
-        offer_id: testOfferId,
-        code: testCode,
-        order_value: testOrderValue,
-        currency: testCurrency,
-        redeemed_at: testRedeemedAt,
-        integration_type: testIntegrationType,
-        member_id: testMemberId,
+        account_id: testEagleEyeData.accountId,
+        account_status: testEagleEyeData.accountStatus,
+        account_type_id: testEagleEyeData.accountTypeId,
+        account_transaction_id: testEagleEyeData.accountTransactionId,
+        account_type: testEagleEyeData.accountType,
+        account_sub_type: testEagleEyeData.accountSubType,
+        balances: {
+          available: testEagleEyeData.balances.available,
+          refundable: testEagleEyeData.balances.refundable,
+        },
+        issuer_id: testEagleEyeData.issuerId,
+        resource_id: testEagleEyeData.resourceId,
+        resource_type: testEagleEyeData.resourceType,
+        token: testEagleEyeData.token,
+        token_dates: {
+          start: testEagleEyeData.tokenDates.start,
+          end: testEagleEyeData.tokenDates.end,
+        },
+        token_id: testEagleEyeData.tokenId,
+        token_status: testEagleEyeData.tokenStatus,
+        consumer_id: testEagleEyeData.consumerId,
       });
     });
 
@@ -318,15 +318,77 @@ describe('DwhRepository', () => {
       mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');
 
       // Act
-      const result = dwhRepository.logCallbackVaultRedemption(
-        testOfferId,
-        testCode,
-        testOrderValue,
-        testCurrency,
-        testRedeemedAt,
-        testIntegrationType,
-        testMemberId,
-      );
+      const result = dwhRepository.logCallbackEagleEyeVaultRedemption(testEagleEyeData);
+
+      // Assert
+      await expect(result).rejects.toThrow();
+    });
+  });
+
+  describe('logCallbackUniqodoVaultRedemption', () => {
+    const testStreamName = 'firehose-callback';
+    const testUniqodoData = uniqodoModelFactory.build();
+
+    it('should send the correct data to the callback stream', async () => {
+      // Arrange
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      mockFirehoseClient.on(PutRecordCommand);
+      const dwhRepository = new DwhRepository();
+
+      // Act
+      await dwhRepository.logCallbackUniqodoVaultRedemption(testUniqodoData);
+
+      // Assert
+      const calls = mockFirehoseClient.calls();
+      expect(calls.length).toBe(1);
+      const putCommand = calls[0].args[0] as PutRecordCommand;
+      expect(putCommand.input.DeliveryStreamName).toBe(testStreamName);
+      const data = new TextDecoder().decode(putCommand.input.Record!.Data);
+      expect(JSON.parse(data)).toStrictEqual({
+        claim: {
+          expires_at: testUniqodoData.claim.expiresAt,
+          code: testUniqodoData.claim.code,
+          created_at: testUniqodoData.claim.createdAt,
+          deactivated_at: testUniqodoData.claim.deactivatedAt,
+          linked_unique_reference: testUniqodoData.claim.linkedUniqueReference,
+          promotion_id: testUniqodoData.claim.promotionId,
+        },
+        promotion: {
+          id: testUniqodoData.promotion.id,
+          status: testUniqodoData.promotion.status,
+          code_type: testUniqodoData.promotion.codeType,
+          timezone: testUniqodoData.promotion.timezone,
+          redemptions_per_code: testUniqodoData.promotion.redemptionsPerCode,
+          title: testUniqodoData.promotion.title,
+          reward_type: testUniqodoData.promotion.rewardType,
+          reward: {
+            type: testUniqodoData.promotion.reward.type,
+            amount: testUniqodoData.promotion.reward.amount,
+            discount_type: testUniqodoData.promotion.reward.discountType,
+            up_to_maximum_of: testUniqodoData.promotion.reward.upToMaximumOf,
+            product_exclusion_rule: testUniqodoData.promotion.reward.productExclusionRule,
+          },
+          available_to_claim: testUniqodoData.promotion.availableToClaim,
+          available_to_redeem: testUniqodoData.promotion.availableToRedeem,
+          start_date: testUniqodoData.promotion.startDate,
+          end_date: testUniqodoData.promotion.endDate,
+          terms: testUniqodoData.promotion.terms,
+          code_expiry: testUniqodoData.promotion.codeExpiry,
+          code_expiry_unit: testUniqodoData.promotion.codeExpiryUnit,
+        },
+        customer: testUniqodoData.customer,
+      });
+    });
+
+    it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
+      // Arrange
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      const dwhRepository = new DwhRepository();
+
+      mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');
+
+      // Act
+      const result = dwhRepository.logCallbackUniqodoVaultRedemption(testUniqodoData);
 
       // Assert
       await expect(result).rejects.toThrow();

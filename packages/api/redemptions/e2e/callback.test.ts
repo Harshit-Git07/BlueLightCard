@@ -1,18 +1,11 @@
+import { faker } from '@faker-js/faker';
 import AWS from 'aws-sdk';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { IntegrationType } from '../libs/models/postCallback';
+import { UniqodoModel } from '../libs/models/postCallback';
 
-type RequestBody = {
-  offerId: string;
-  code: string;
-  orderValue: string;
-  currency: string;
-  redeemedAt: string;
-  integrationType: IntegrationType;
-  memberId: string;
-};
+type RequestBody = UniqodoModel;
 
 let apiKey: string;
 
@@ -49,13 +42,39 @@ beforeAll(async () => {
 describe('POST /vault/webhook', () => {
   it('should log callback vault redemption firehose stream and return NoContent kind', async () => {
     const testBody: RequestBody = {
-      offerId: 'offerId',
-      code: 'code',
-      orderValue: 'orderValue',
-      currency: 'currency',
-      redeemedAt: 'redeemedAt',
       integrationType: 'uniqodo',
-      memberId: 'memberId',
+      claim: {
+        expiresAt: faker.date.recent().toISOString(),
+        code: faker.string.sample(10),
+        createdAt: faker.date.recent().toISOString(),
+        deactivatedAt: faker.date.recent().toISOString(),
+        linkedUniqueReference: faker.string.sample(10),
+        promotionId: faker.string.sample(10),
+      },
+      promotion: {
+        id: faker.string.sample(10),
+        status: faker.string.sample(10),
+        codeType: faker.string.sample(10),
+        timezone: faker.string.sample(10),
+        redemptionsPerCode: faker.number.int(10),
+        title: faker.string.sample(10),
+        rewardType: faker.string.sample(10),
+        reward: {
+          type: faker.string.sample(10),
+          amount: faker.finance.amount(),
+          discountType: faker.string.sample(10),
+          upToMaximumOf: faker.finance.amount(),
+          productExclusionRule: faker.string.sample(10),
+        },
+        availableToClaim: faker.number.int(10),
+        availableToRedeem: faker.number.int(10),
+        startDate: faker.date.recent().toISOString(),
+        endDate: faker.date.recent().toISOString(),
+        terms: faker.string.sample(10),
+        codeExpiry: faker.number.int(10),
+        codeExpiryUnit: faker.string.sample(10),
+      },
+      customer: faker.string.sample(10),
     };
 
     const response = await callCallbackEndpoint(testBody);

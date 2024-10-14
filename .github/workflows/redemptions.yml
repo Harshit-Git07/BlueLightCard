@@ -199,7 +199,9 @@ jobs:
               "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
               "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
               "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
-              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}",
+              "eagleEyeApiKey":"${{ secrets.EAGLE_EYE_API_KEY }}",
+              "uniqodoApiKey":"${{ secrets.UNIQODO_API_KEY }}"
             }'
       - name: Create Secret
         if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
@@ -219,7 +221,9 @@ jobs:
               "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
               "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
               "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
-              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}",
+              "eagleEyeApiKey":"${{ secrets.EAGLE_EYE_API_KEY }}",
+              "uniqodoApiKey":"${{ secrets.UNIQODO_API_KEY }}"
             }'
       - name: Build
         run: npm run build
@@ -366,7 +370,9 @@ jobs:
               "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
               "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
               "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
-              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}",
+              "eagleEyeApiKey":"${{ secrets.EAGLE_EYE_API_KEY }}",
+              "uniqodoApiKey":"${{ secrets.UNIQODO_API_KEY }}"
             }'
       - name: Create Secret
         if: ${{ env.SECRET_NAME != 'blc-mono-redemptions/NewVaultSecrets' }}
@@ -386,7 +392,9 @@ jobs:
               "viewVaultBatchesPassword":"${{ secrets.VIEW_VAULT_BATCHES_PASSWORD }}",
               "checkVaultStockData":"${{ secrets.CHECK_VAULT_STOCK_DATA }}",
               "checkVaultStockPassword":"${{ secrets.CHECK_VAULT_STOCK_PASSWORD }}",
-              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}"
+              "brazeApiKey":"${{ secrets.BRAZE_API_KEY }}",
+              "eagleEyeApiKey":"${{ secrets.EAGLE_EYE_API_KEY }}",
+              "uniqodoApiKey":"${{ secrets.UNIQODO_API_KEY }}"
             }'
       - name: Build
         run: npm run build

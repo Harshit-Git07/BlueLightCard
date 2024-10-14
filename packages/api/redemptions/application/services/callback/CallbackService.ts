@@ -1,5 +1,5 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { PostCallbackModel } from '@blc-mono/redemptions/libs/models/postCallback';
+import { EagleEyeModel, UniqodoModel } from '@blc-mono/redemptions/libs/models/postCallback';
 
 import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
 
@@ -7,9 +7,8 @@ export type ICallbackResponse = {
   kind: 'NoContent' | 'Error';
 };
 
-type PostCallbackData = PostCallbackModel & { memberId: string };
 export interface ICallbackService {
-  handle(data: PostCallbackData): Promise<ICallbackResponse>;
+  handle(data: UniqodoModel | EagleEyeModel): Promise<ICallbackResponse>;
 }
 
 export class CallbackService implements ICallbackService {
@@ -21,18 +20,16 @@ export class CallbackService implements ICallbackService {
     private readonly dwhRepository: IDwhRepository,
   ) {}
 
-  public async handle(data: PostCallbackData): Promise<ICallbackResponse> {
-    const { code, currency, offerId, orderValue, redeemedAt, integrationType, memberId } = data;
+  public async handle(data: UniqodoModel | EagleEyeModel): Promise<ICallbackResponse> {
     try {
-      await this.dwhRepository.logCallbackVaultRedemption(
-        offerId,
-        code,
-        orderValue,
-        currency,
-        redeemedAt,
-        integrationType,
-        memberId,
-      );
+      switch (data.integrationType) {
+        case 'uniqodo':
+          await this.dwhRepository.logCallbackUniqodoVaultRedemption(data);
+          break;
+        case 'eagleeye':
+          await this.dwhRepository.logCallbackEagleEyeVaultRedemption(data);
+          break;
+      }
       return {
         kind: 'NoContent',
       };

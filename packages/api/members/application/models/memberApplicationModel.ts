@@ -7,32 +7,61 @@ export const MemberApplicationModel = createZodNamedType(
   'MemberApplicationModel',
   z
     .object({
-      pk: z.string().startsWith('MEMBER#'),
-      sk: z.string().startsWith('APPLICATION#'),
-      startDate: z.string().datetime(),
-      eligibilityStatus: z.string(),
-      applicationReason: z.nativeEnum(ApplicationReason).nullable(),
-      verificationMethod: z.string(),
-      address1: z.string(),
-      address2: z.string(),
-      city: z.string(),
-      postcode: z.string(),
-      country: z.string(),
-      promoCode: z.string().nullable(),
-      idS3LocationPrimary: z.string(),
-      idS3LocationSecondary: z.string(),
-      trustedDomainEmail: z.string(),
-      trustedDomainValidated: z.boolean(),
-      nameChangeReason: z.string().nullable(),
-      nameChangeFirstName: z.string().nullable(),
-      nameChangeLastName: z.string().nullable(),
-      nameChangeDocType: z.string().nullable(),
-      rejectionReason: z.string().nullable(),
+      pk: z
+        .string()
+        .refine((val) => val.startsWith('MEMBER#'), {
+          message: 'pk must start with MEMBER#',
+        })
+        .refine(
+          (val) => {
+            const uuid = val.replace('MEMBER#', '');
+            const x = uuid;
+            return z.string().uuid().safeParse(uuid).success;
+          },
+          {
+            message: 'pk must be a valid UUID after MEMBER#',
+          },
+        ),
+      sk: z
+        .string()
+        .refine((val) => val.startsWith('APPLICATION#'), {
+          message: 'sk must start with APPLICATION#',
+        })
+        .refine(
+          (val) => {
+            const uuid = val.replace('APPLICATION#', '');
+            return z.string().uuid().safeParse(uuid).success;
+          },
+          {
+            message: 'sk must be a valid UUID after APPLICATION#',
+          },
+        ),
+      startDate: z.string().datetime().optional(),
+      eligibilityStatus: z.string().optional(),
+      applicationReason: z.nativeEnum(ApplicationReason).nullable().optional(),
+      verificationMethod: z.string().optional(),
+      address1: z.string().optional(),
+      address2: z.string().optional(),
+      city: z.string().optional(),
+      postcode: z.string().optional(),
+      country: z.string().optional(),
+      promoCode: z.string().nullable().optional(),
+      idS3LocationPrimary: z.string().optional(),
+      idS3LocationSecondary: z.string().optional(),
+      trustedDomainEmail: z.string().optional(),
+      trustedDomainValidated: z.boolean().optional(),
+      nameChangeReason: z.string().nullable().optional(),
+      nameChangeFirstName: z.string().nullable().optional(),
+      nameChangeLastName: z.string().nullable().optional(),
+      nameChangeDocType: z.string().nullable().optional(),
+      rejectionReason: z.string().nullable().optional(),
     })
     .transform((application) => ({
       memberUuid: application.pk.replace('MEMBER#', ''),
       applicationUuid: application.sk.replace('APPLICATION#', ''),
-      startDate: transformDateToFormatYYYYMMDD(application.startDate),
+      startDate: application.startDate
+        ? transformDateToFormatYYYYMMDD(application.startDate)
+        : undefined,
       eligibilityStatus: application.eligibilityStatus,
       applicationReason: application.applicationReason,
       verificationMethod: application.verificationMethod,

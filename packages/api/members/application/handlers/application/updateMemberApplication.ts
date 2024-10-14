@@ -9,7 +9,7 @@ import {
 import { MemberApplicationRepository } from '../../repositories/memberApplicationRepository';
 import { MemberApplicationService } from '../../services/memberApplicationService';
 import { Response } from '../../utils/restResponse/response';
-import { APIErrorCode } from '../../enums/APIError';
+import { APIErrorCode } from '../../enums/APIErrorCode';
 import { APIError } from '../../models/APIError';
 
 const service: string = process.env.SERVICE as string;
@@ -61,12 +61,48 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
     const updatePayload: MemberApplicationUpdatePayload = body;
 
-    await applicationService.upsertMemberApplication(
-      queryPayload,
-      updatePayload,
-      event.httpMethod === 'POST',
-      errorSet,
-    );
+    const isInsert = event.httpMethod === 'POST';
+
+    try {
+      await applicationService.upsertMemberApplication(
+        queryPayload,
+        updatePayload,
+        isInsert,
+        errorSet,
+      );
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        'code' in error &&
+        (error as any).code === 'ConditionalCheckFailedException'
+      ) {
+        if (isInsert) {
+          return Response.BadRequest({
+            message: 'Member application already exists',
+            errors: [
+              new APIError(
+                APIErrorCode.RESOURCE_NOT_FOUND,
+                'applicationId',
+                'Member application already exists',
+              ),
+            ],
+          });
+        } else {
+          return Response.NotFound({
+            message: 'Member profile and/or application not found',
+            errors: [
+              new APIError(
+                APIErrorCode.RESOURCE_NOT_FOUND,
+                'applicationId',
+                'Member profile and/or application not found',
+              ),
+            ],
+          });
+        }
+      } else {
+        throw error;
+      }
+    }
 
     if (errorSet.length > 0) {
       return Response.BadRequest({

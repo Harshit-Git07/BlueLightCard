@@ -6,6 +6,8 @@ import {
 } from '../types/memberApplicationTypes';
 import { MemberApplicationModel } from '../models/memberApplicationModel';
 import { APIError } from '../models/APIError';
+import { APIErrorCode } from '../enums/APIErrorCode';
+import { ZodError } from 'zod';
 
 /**
  * @swagger
@@ -84,16 +86,50 @@ export class MemberApplicationService {
   ): Promise<void> {
     let action: string = isInsert ? 'cre' : 'upd';
     try {
-      MemberApplicationModel.parse({
+      const parsedModel = MemberApplicationModel.parse({
         pk: `MEMBER#${query.memberUUID}`,
         sk: `APPLICATION#${query.applicationId}`,
         ...updatedApplication,
       });
+
+      if (isInsert) {
+        if (parsedModel.eligibilityStatus == undefined) {
+          this.logger.info(`eligibilityStatus is required on create`);
+          errorSet.push(
+            new APIError(
+              APIErrorCode.VALIDATION_ERROR,
+              'eligibilityStatus',
+              'eligibilityStatus is required on create',
+            ),
+          );
+        }
+        if (parsedModel.verificationMethod == undefined) {
+          this.logger.info(`verificationMethod is required on create`);
+          errorSet.push(
+            new APIError(
+              APIErrorCode.VALIDATION_ERROR,
+              'verificationMethod',
+              'verificationMethod is required on create',
+            ),
+          );
+        }
+      }
+
+      if (errorSet.length > 0) return;
+
       await this.repository.upsertMemberApplication(query, updatedApplication, isInsert);
       this.logger.info(`Application ${action}ated successfully`, { query });
     } catch (error) {
-      this.logger.error(`Unknown error ${action}ating application:`, { error });
-      throw error;
+      if (error instanceof ZodError) {
+        (error as ZodError).errors.forEach((issue) => {
+          errorSet.push(
+            new APIError(APIErrorCode.VALIDATION_ERROR, issue.path.join('.'), issue.message),
+          );
+        });
+      } else {
+        this.logger.error(`Unknown error ${action}ating application:`, { error });
+        throw error;
+      }
     }
   }
 }

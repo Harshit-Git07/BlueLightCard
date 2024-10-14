@@ -21,8 +21,8 @@ describe('MemberApplicationService', () => {
 
   let queryPayload: MemberApplicationQueryPayload = {
     brand: 'blc-uk',
-    memberUUID: '1234',
-    applicationId: '5678',
+    memberUUID: '12345687-2134-1234-1234-123456781234',
+    applicationId: '22345687-2134-1234-1234-123456781234',
   };
 
   beforeEach(() => {
@@ -89,8 +89,6 @@ describe('MemberApplicationService', () => {
       postcode: '12345',
       country: 'Testland',
       start_time: 'INVALID_DATE',
-      eligibility_status: 'Eligible',
-      verification_method: 'Email',
       id_s3_primary: 's3://bucket/primary-id.jpg',
       id_s3_secondary: 's3://bucket/secondary-id.jpg',
       trusted_domain_email: 'test@example.com',
@@ -104,11 +102,11 @@ describe('MemberApplicationService', () => {
 
     let errorSet: APIError[] = [];
 
-    await expect(
-      service.upsertMemberApplication(queryPayload, invalidPayload as any, false, errorSet),
-    ).rejects.toThrow(z.ZodError);
+    await service.upsertMemberApplication(queryPayload, invalidPayload as any, true, errorSet);
+
+    expect(errorSet).toHaveLength(2);
+
     expect(mockRepository.upsertMemberApplication).not.toHaveBeenCalled();
-    expect(mockLogger.error).toHaveBeenCalled();
   });
 
   it('should return a not found message if ConditionalCheckFailedException occurs', async () => {

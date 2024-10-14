@@ -5,7 +5,7 @@ import { Response } from '../../utils/restResponse/response';
 import { MemberApplicationRepository } from 'application/repositories/memberApplicationRepository';
 import { MemberApplicationService } from 'application/services/memberApplicationService';
 import { MemberApplicationQueryPayload } from 'application/types/memberApplicationTypes';
-import { APIErrorCode } from '../../enums/APIError';
+import { APIErrorCode } from '../../enums/APIErrorCode';
 import { APIError } from '../../models/APIError';
 
 const service: string = process.env.SERVICE as string;

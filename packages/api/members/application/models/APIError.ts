@@ -1,4 +1,4 @@
-import { APIErrorCode } from '../enums/APIError';
+import { APIErrorCode } from '../enums/APIErrorCode';
 
 export class APIError {
   public readonly code!: APIErrorCode;

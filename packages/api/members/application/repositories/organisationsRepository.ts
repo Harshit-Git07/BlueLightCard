@@ -27,35 +27,35 @@ export class OrganisationsRepository {
     return validatedItems;
   }
 
-  getQueryParams(organisationId: string | undefined, brand: string) {  
-    const baseParams = {  
-      TableName: this.tableName,  
-      ExpressionAttributeNames: {  
-        '#pk': 'pk',  
-        '#sk': 'sk',  
-      },  
-      ExpressionAttributeValues: organisationId  
-        ? {  
-            ':pk': `ORGANISATION#${organisationId}`,  
-            ':sk': `BRAND#${brand}`,  
-          }  
-        : {  
-            ':pk': 'ORGANISATION#',  
-            ':sk': `BRAND#${brand}`,  
-          },  
-    };  
-  
-    if (organisationId) {  
-      return {  
-        ...baseParams,  
-        KeyConditionExpression: '#pk = :pk AND #sk = :sk',  
-      };  
-    } else {  
-      return {  
-        ...baseParams,  
-        IndexName: 'gsi1',  
-        KeyConditionExpression: '#sk = :sk AND begins_with(#pk, :pk)',  
-      };  
-    }  
-  }  
+  getQueryParams(organisationId: string | undefined, brand: string) {
+    const baseParams = {
+      TableName: this.tableName,
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: organisationId
+        ? {
+            ':pk': `ORGANISATION#${organisationId}`,
+            ':sk': `BRAND#${brand}`,
+          }
+        : {
+            ':pk': 'ORGANISATION#',
+            ':sk': `BRAND#${brand}`,
+          },
+    };
+
+    if (organisationId) {
+      return {
+        ...baseParams,
+        KeyConditionExpression: '#pk = :pk AND #sk = :sk',
+      };
+    } else {
+      return {
+        ...baseParams,
+        IndexName: 'gsi1',
+        KeyConditionExpression: '#sk = :sk AND begins_with(#pk, :pk)',
+      };
+    }
+  }
 }

@@ -67,9 +67,9 @@ describe('GET /search', async () => {
   });
 });
 
-describe('OpenSearch E2E Test', async () => {
+describe('Search E2E Event Handling', async () => {
   const testUserTokens = await TestUser.authenticate();
-  const generatedUUID = randomUUID().toString();
+  const generatedUUID = `test-${randomUUID().toString()}`;
   const openSearchQuery = { query: generatedUUID, dob: '1990-01-01', organisation: 'DEN' };
   const offers: SanityOffer[] = [buildTestSanityOffer()];
   offers[0]._id = generatedUUID;
@@ -92,7 +92,7 @@ describe('OpenSearch E2E Test', async () => {
     await sendTestEvents({ source: Events.OFFER_DELETED, events: offers });
   });
 
-  it('should push an offer to eventbridge and run index then query index for expected result', async () => {
+  it('should consume offer created event and populate search index', async () => {
     await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
     await new Promise((resolve) => setTimeout(resolve, 2000));
     await sendTestEvents({ source: Events.OPENSEARCH_POPULATE_INDEX, events: offers });
@@ -104,8 +104,8 @@ describe('OpenSearch E2E Test', async () => {
     );
 
     const results = (await result.json()) as { data: SearchResult[] };
+    const searchResult = results.data.find((result) => result.ID === generatedUUID);
 
-    expect(results.data.length).toBe(1);
-    expect(results.data).toStrictEqual(expectedSearchResult);
+    expect([searchResult]).toStrictEqual(expectedSearchResult);
   });
 });

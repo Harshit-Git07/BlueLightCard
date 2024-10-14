@@ -12,15 +12,17 @@ export type ColorToken = {
 };
 
 export type ButtonProps = PropsWithChildren & {
-  type?: 'button' | 'submit';
+  type?: 'button' | 'submit' | 'link';
   disabled?: boolean;
+  slim?: boolean;
   className?: string;
   variant?: ThemeVariant;
+  invertColor?: boolean;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;
   href?: string;
   onClick?: MouseEventHandler;
   withoutHover?: boolean;
   withoutFocus?: boolean;
-  size?: string;
+  borderless?: boolean;
 };

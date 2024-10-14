@@ -40,7 +40,7 @@ const OfferDetailsErrorPage: FC = () => {
       <p className="font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light">
         Don’t worry, you can access it by clicking the button below.
       </p>
-      <Button variant={ThemeVariant.Primary} onClick={onButtonClick}>
+      <Button variant={ThemeVariant.Primary} onClick={onButtonClick} borderless>
         {offerMeta?.companyName}
       </Button>
     </div>

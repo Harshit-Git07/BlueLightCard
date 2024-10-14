@@ -63,7 +63,12 @@ const IframeCampaignPage: NextPage = () => {
       </Head>
 
       <div className="py-2">
-        <Button variant={ThemeVariant.Tertiary} iconLeft={faChevronLeft} onClick={onBackClick}>
+        <Button
+          variant={ThemeVariant.Tertiary}
+          borderless={true}
+          iconLeft={faChevronLeft}
+          onClick={onBackClick}
+        >
           Back to Home
         </Button>
       </div>
@@ -76,10 +81,10 @@ const IframeCampaignPage: NextPage = () => {
         src={iframeUrlWithUuid}
       />
       <div className="grid">
-        <Button variant={ThemeVariant.Tertiary} onClick={onTermsClick}>
+        <Button variant={ThemeVariant.Tertiary} borderless={true} onClick={onTermsClick}>
           Terms and Conditions
         </Button>
-        <Button variant={ThemeVariant.Tertiary} onClick={onBoostedOffersClick}>
+        <Button variant={ThemeVariant.Tertiary} borderless={true} onClick={onBoostedOffersClick}>
           Boosted Offers
         </Button>
       </div>

@@ -1,8 +1,105 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Button component snapshot Test renders a Secondary button in disabled state button 1`] = `
+<button
+  className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2 disabled:text-button-secondary-disabled-label-colour-light disabled:dark:text-button-secondary-disabled-label-colour-dark disabled:border-button-secondary-disabled-border-colour-light dark:disabled:border-button-secondary-disabled-border-colour-dark text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark    border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  disabled={true}
+  onClick={[Function]}
+  type="submit"
+>
+  Button
+</button>
+`;
+
+exports[`Button component snapshot Test renders a borderless, inverted button 1`] = `
+<button
+  className=" py-1.5 px-5 rounded-md transition border-2   text-[#000099] hover:bg-[#B3FAFAFA] focus:outline-0 bg-[#FAFAFA] border-transparent , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  type="button"
+>
+  Button
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-plus ml-2"
+    data-icon="plus"
+    data-prefix="fas"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;
+
+exports[`Button component snapshot Test renders a button with a Secondary Button 1`] = `
+<button
+  className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  type="button"
+>
+  Button
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-plus ml-2"
+    data-icon="plus"
+    data-prefix="fas"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;
+
+exports[`Button component snapshot Test renders a button with a Tertiary Button 1`] = `
+<button
+  className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  !border-transparent , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  type="button"
+>
+  Button
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-plus ml-2"
+    data-icon="plus"
+    data-prefix="fas"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;
+
+exports[`Button component snapshot Test renders a button with link as anchor tag 1`] = `
+<a
+  className="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+>
+  Button
+</a>
+`;
+
 exports[`Button component snapshot Test renders a button with the correct icon side "left" 1`] = `
 <button
-  className="py-1 px-3 h-8 flex items-center justify-center gap-2 px-5 rounded-md transition border-2 min-w-[85px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark  bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-transparent , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
   type="button"
 >
   <svg
@@ -28,7 +125,7 @@ exports[`Button component snapshot Test renders a button with the correct icon s
 
 exports[`Button component snapshot Test renders a button with the correct icon side "right" 1`] = `
 <button
-  className="py-1 px-3 h-8 flex items-center justify-center gap-2 px-5 rounded-md transition border-2 min-w-[85px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  className=" py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-transparent , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
   type="button"
 >
   Button
@@ -50,76 +147,4 @@ exports[`Button component snapshot Test renders a button with the correct icon s
     />
   </svg>
 </button>
-`;
-
-exports[`Button component snapshot Test renders a large button 1`] = `
-<button
-  className="py-2 px-6 h-10 flex items-center justify-center gap-2 px-5 rounded-md transition border-2 min-w-[85px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
-  type="button"
->
-  Button
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-plus ml-2"
-    data-icon="plus"
-    data-prefix="fas"
-    focusable="false"
-    role="img"
-    style={{}}
-    viewBox="0 0 448 512"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-      fill="currentColor"
-      style={{}}
-    />
-  </svg>
-</button>
-`;
-
-exports[`Button component snapshot Test renders an XSmall button 1`] = `
-<button
-  className="py-2 px-2 h-7 flex items-center justify-center gap-2 px-5 rounded-md transition border-2 min-w-[85px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
-  type="button"
->
-  Button
-  <svg
-    aria-hidden="true"
-    className="svg-inline--fa fa-plus ml-2"
-    data-icon="plus"
-    data-prefix="fas"
-    focusable="false"
-    role="img"
-    style={{}}
-    viewBox="0 0 448 512"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
-      fill="currentColor"
-      style={{}}
-    />
-  </svg>
-</button>
-`;
-
-exports[`Button component snapshot Test renders a Secondary button in disabled state button 1`] = `
-<button
-  className="py-1 px-3 h-8 flex items-center justify-center gap-2 px-5 rounded-md transition border-2 min-w-[85px] disabled:text-button-secondary-disabled-label-colour-light disabled:dark:text-button-secondary-disabled-label-colour-dark disabled:border-button-secondary-disabled-border-colour-light dark:disabled:border-button-secondary-disabled-border-colour-dark text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark    border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
-  disabled={true}
-  onClick={[Function]}
-  type="submit"
->
-  Button
-</button>
-`;
-
-exports[`Button component snapshot Test renders a button with href as anchor tag 1`] = `
-<a
-  className="py-1 px-3 h-8 flex items-center justify-center gap-2 px-5 rounded-md transition border-2 min-w-[85px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
-  href="/"
->
-  Button
-</a>
 `;

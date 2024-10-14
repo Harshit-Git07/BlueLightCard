@@ -22,7 +22,7 @@ const iconArgSelect = {
 };
 
 const componentMeta: Meta<typeof Button> = {
-  title: 'Deprecated /Component System/Button',
+  title: 'Component System/Button',
   component: Button,
   argTypes: {
     iconLeft: {

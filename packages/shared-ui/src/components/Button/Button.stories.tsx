@@ -3,32 +3,20 @@ import { faPlus, faMinus } from '@fortawesome/pro-regular-svg-icons';
 import { Meta, StoryFn } from '@storybook/react';
 import Button from './';
 import { ThemeVariant } from 'src/types';
-import { faCircle } from '@fortawesome/pro-solid-svg-icons';
-const icons = { faPlus, faMinus, faCircle };
+
+const icons = { faPlus, faMinus };
+
 library.add(...Object.values(icons));
 
 const iconArgSelect = {
-  options: ['none', ...Object.keys(icons)], // Use spread syntax for options
+  options: ['none'].concat(...Object.keys(icons)),
   mapping: { none: undefined, ...icons },
   control: {
-    type: 'select', // Use select for dropdown list
+    type: 'select',
     labels: {
       none: 'No Icon',
       faPlus: 'Plus Icon',
       faMinus: 'Minus Icon',
-      faCircle: 'Circle Icon',
-    },
-  },
-};
-
-const sizeArgSelect = {
-  options: ['Large', 'Small', 'XSmall'],
-  control: {
-    type: 'select',
-    labels: {
-      Large: 'Large',
-      Small: 'Small',
-      XSmall: 'Extra Small',
     },
   },
 };
@@ -45,25 +33,28 @@ const componentMeta: Meta<typeof Button> = {
       description: 'Icon appears right of the button text',
       ...iconArgSelect,
     },
-    size: {
-      description: 'Size of the button',
-      ...sizeArgSelect,
-    },
-  },
-  args: {
-    iconLeft: icons.faCircle,
-    iconRight: icons.faCircle,
-    size: 'Large',
   },
 };
 
 const DefaultTemplate: StoryFn<typeof Button> = (args) => <Button {...args}>Button</Button>;
+
+export const Default = DefaultTemplate.bind({});
+
+Default.args = {
+  variant: ThemeVariant.Primary,
+  disabled: false,
+  slim: false,
+  invertColor: false,
+  onClick: () => {},
+};
 
 export const Primary = DefaultTemplate.bind({});
 
 Primary.args = {
   variant: ThemeVariant.Primary,
   disabled: false,
+  slim: false,
+  invertColor: false,
   onClick: () => {},
 };
 
@@ -72,6 +63,8 @@ export const Secondary = DefaultTemplate.bind({});
 Secondary.args = {
   variant: ThemeVariant.Secondary,
   disabled: false,
+  slim: false,
+  invertColor: false,
   onClick: () => {},
 };
 
@@ -80,22 +73,41 @@ export const Tertiary = DefaultTemplate.bind({});
 Tertiary.args = {
   variant: ThemeVariant.Tertiary,
   disabled: false,
+  slim: false,
+  invertColor: false,
   onClick: () => {},
 };
 
-export const PrimaryDanger = DefaultTemplate.bind({});
+export const Link = DefaultTemplate.bind({});
 
-PrimaryDanger.args = {
-  variant: ThemeVariant.PrimaryDanger,
+Link.args = {
+  type: 'link',
+  href: '/',
+};
+
+const InvertedTemplate: StoryFn<typeof Button> = (args) => (
+  <div className="p-5 bg-palette-primary-base">
+    <Button {...args}>Button</Button>
+  </div>
+);
+
+export const PrimaryInverted = InvertedTemplate.bind({});
+
+PrimaryInverted.args = {
+  variant: ThemeVariant.Primary,
   disabled: false,
+  slim: false,
+  invertColor: true,
   onClick: () => {},
 };
 
-export const TertiaryDanger = DefaultTemplate.bind({});
+export const SecondaryInverted = InvertedTemplate.bind({});
 
-TertiaryDanger.args = {
-  variant: ThemeVariant.TertiaryDanger,
+SecondaryInverted.args = {
+  variant: ThemeVariant.Secondary,
   disabled: false,
+  slim: false,
+  invertColor: true,
   onClick: () => {},
 };
 

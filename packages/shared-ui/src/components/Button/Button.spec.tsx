@@ -4,6 +4,7 @@ import { faMinus, faPlus } from '@fortawesome/pro-solid-svg-icons';
 import { render, screen } from '@testing-library/react';
 import renderer from 'react-test-renderer';
 import { ThemeVariant } from '../../types';
+
 describe('Button component', () => {
   let props: ButtonProps;
 
@@ -23,11 +24,7 @@ describe('Button component', () => {
 
   describe('snapshot Test', () => {
     it('renders a button with the correct icon side "left"', () => {
-      const component = renderer.create(
-        <Button withoutFocus={true} iconLeft={faMinus}>
-          Button
-        </Button>,
-      );
+      const component = renderer.create(<Button iconLeft={faMinus}>Button</Button>);
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
@@ -37,9 +34,10 @@ describe('Button component', () => {
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
-    it('renders a large button', () => {
+
+    it('renders a borderless, inverted button', () => {
       const component = renderer.create(
-        <Button size={'Large'} iconRight={faPlus}>
+        <Button borderless={true} invertColor={true} iconRight={faPlus}>
           Button
         </Button>,
       );
@@ -47,9 +45,19 @@ describe('Button component', () => {
       expect(tree).toMatchSnapshot();
     });
 
-    it('renders an XSmall button', () => {
+    it('renders a button with a Tertiary Button', () => {
       const component = renderer.create(
-        <Button size={'XSmall'} iconRight={faPlus}>
+        <Button variant={ThemeVariant.Tertiary} iconRight={faPlus}>
+          Button
+        </Button>,
+      );
+      const tree = component.toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+
+    it('renders a button with a Secondary Button', () => {
+      const component = renderer.create(
+        <Button variant={ThemeVariant.Secondary} iconRight={faPlus}>
           Button
         </Button>,
       );
@@ -73,8 +81,12 @@ describe('Button component', () => {
       expect(tree).toMatchSnapshot();
     });
 
-    it('renders a button with href as anchor tag', () => {
-      const component = renderer.create(<Button href={'/'}>Button</Button>);
+    it('renders a button with link as anchor tag', () => {
+      const component = renderer.create(
+        <Button variant={ThemeVariant.Secondary} type={'link'}>
+          Button
+        </Button>,
+      );
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });

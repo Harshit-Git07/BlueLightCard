@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.36.1...bluelightcard/mobile-hybrid-v1.37.0) (2024-10-14)
+
+
+### Features
+
+* MER 1 shared button component ([#2360](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2360)) ([4c6ffba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4c6ffba70ec849abae15ae844dc166c427ba8435))
+
+
+### Bug Fixes
+
+* [MER-1] - Button revert ([#2466](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2466)) ([38bf3d9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/38bf3d9aefb6f280c856b1050a9058e1df7e2eb5))
+* added share btn to App company page and got toastify notifications working ([6c17e84](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6c17e844642d33c5489da7fbeef3fd67a76a6f47))
+* Back an Share cta's alignment fix on Apps Company Page ([#2406](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2406)) ([d756b89](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d756b89cacd4339ba54eb817b8d8174a91ea70d6))
+* centralise the Company name on the Apps Company Page ([#2438](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2438)) ([1819d2e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1819d2e2b2ac00833452915f9114e88d3d62424b))
+* fixed alignment for the Back an Share ctas for the Apps Company page header ([d756b89](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d756b89cacd4339ba54eb817b8d8174a91ea70d6))
+* runs api calls in paralel to decrease api call time ([#2374](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2374)) ([46c1850](https://github.com/bluelightcard/BlueLightCard-2.0/commit/46c18503369b6598e22b0a35a9b41a14e00cfcff))
+* Share button not available on mobile company page ([#2350](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2350)) ([6c17e84](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6c17e844642d33c5489da7fbeef3fd67a76a6f47))
+
+
+### Other Changes
+
+* cleanup archived amplitude feature flags for OfferSheet ([#2402](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2402)) ([34b682f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/34b682f5abc620c991e5170db4c8a732264a61ee))
+
 ## [1.36.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.36.0...bluelightcard/mobile-hybrid-v1.36.1) (2024-10-03)
 
 

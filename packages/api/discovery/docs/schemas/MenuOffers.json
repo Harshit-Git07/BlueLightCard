@@ -1,0 +1,90 @@
+{
+  "MenuOffer": {
+    "type": "object",
+    "properties": {
+      "OfferID": {
+        "type": "integer"
+      },
+      "OfferName": {
+        "type": "string"
+      },
+      "OfferDescription": {
+        "type": "string"
+      },
+      "ImageURL": {
+        "type": "string"
+      },
+      "CompanyID": {
+        "type": "string"
+      },
+      "CompanyName": {
+        "type": "string"
+      }
+    }
+  },
+  "dealsOfTheWeek": {
+    "type": "object",
+    "properties": {
+      "offers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/MenuOffer"
+        }
+      }
+    }
+  },
+  "featured": {
+    "type": "object",
+    "properties": {
+      "offers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/MenuOffer"
+        }
+      }
+    }
+  },
+  "marketplace": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "menuName": {
+          "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "offers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/MenuOffer"
+          }
+        }
+      }
+    }
+  },
+  "flexible": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "listID": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "imageURL": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "enums": {
+    "MenuID": {
+      "type": "string",
+      "enum": ["flexible", "dealsOfTheWeek", "featured", "marketplace"]
+    }
+  }
+}

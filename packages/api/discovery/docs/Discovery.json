@@ -188,6 +188,83 @@
         }
       }
     },
+    "/menus": {
+      "get": {
+        "tags": ["Menus"],
+        "summary": "Retrieve Menus of Offers",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id or id's of the menus to retrieve",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "./schemas/MenuOffers.json#/enums/MenuID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dealsOfTheWeek": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./schemas/MenuOffers.json#/dealsOfTheWeek"
+                      }
+                    },
+                    "featured": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./schemas/MenuOffers.json#/featured"
+                      }
+                    },
+                    "flexible": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./schemas/MenuOffers.json#/flexible"
+                      }
+                    },
+                    "marketplace": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "./schemas/MenuOffers.json#/marketplace"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid Menu ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid ID"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "tags": ["Categories"],

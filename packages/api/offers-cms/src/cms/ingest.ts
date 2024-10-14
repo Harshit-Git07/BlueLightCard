@@ -37,6 +37,7 @@ export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
     TableName: Table.cmsOffersData.tableName,
     Item: {
       ...record,
+      offerId: record.offerId?.toString() ?? '',
       companyId: record.company?._id.toString() ?? '',
     },
   });

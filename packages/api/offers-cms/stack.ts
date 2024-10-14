@@ -70,6 +70,7 @@ export function OffersCMS({ stack }: StackContext) {
     cliLogger.info({ message: 'Discovery Event Bus not set. Offers CMS events will not be sent.' });
   }
 
+  const cmsBusLogGroup = new LogGroup(stack, 'cms-bus');
   const cmsEvents = new EventBus(stack, CMS_BUS_NAME, {
     rules: {
       sanityRule: {
@@ -77,6 +78,12 @@ export function OffersCMS({ stack }: StackContext) {
         targets: {
           consumerTarget: {
             function: consumerFunction,
+          },
+          eventLogs: {
+            type: 'log_group',
+            cdk: {
+              logGroup: cmsBusLogGroup,
+            },
           },
         },
       },

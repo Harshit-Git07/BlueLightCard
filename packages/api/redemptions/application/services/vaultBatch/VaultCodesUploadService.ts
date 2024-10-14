@@ -53,11 +53,12 @@ export class VaultCodesUploadService implements IVaultCodesUploadService {
     const codeInsertFailArray: string[] = [];
     let countCodeInsertSuccess = 0;
     let countCodeInsertFail = 0;
+    let countCodeDuplicates = 0;
 
     for (let i = 0; i < codes.length; i += batchSize) {
       const batchVaultCodes = codes.slice(i, i + batchSize);
       try {
-        await this.vaultCodesRepo.createMany(
+        const result = await this.vaultCodesRepo.createMany(
           batchVaultCodes.map((code) => ({
             vaultId,
             batchId,
@@ -67,7 +68,9 @@ export class VaultCodesUploadService implements IVaultCodesUploadService {
             memberId: null,
           })),
         );
-        countCodeInsertSuccess += batchVaultCodes.length;
+
+        countCodeInsertSuccess += result.length;
+        countCodeDuplicates += batchVaultCodes.length - result.length;
       } catch (error) {
         codeInsertFailArray.push(...batchVaultCodes);
         countCodeInsertFail += batchVaultCodes.length;
@@ -77,6 +80,12 @@ export class VaultCodesUploadService implements IVaultCodesUploadService {
     this.logger.info({
       message: `Vault code upload - ${countCodeInsertSuccess} vault codes inserted into the database`,
     });
+
+    if (countCodeDuplicates > 0) {
+      this.logger.warn({
+        message: `Vault code upload - ${countCodeDuplicates} duplicate vault codes were not inserted`,
+      });
+    }
 
     this.redemptionsEventsRepository.publishVaultBatchCreatedEvent({
       vaultId,

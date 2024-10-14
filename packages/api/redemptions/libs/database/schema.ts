@@ -1,5 +1,15 @@
 import { sql } from 'drizzle-orm';
-import { boolean, index, integer, pgEnum, pgTable, ReferenceConfig, timestamp, varchar } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  index,
+  integer,
+  pgEnum,
+  pgTable,
+  ReferenceConfig,
+  timestamp,
+  unique,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { v4 as uuidv4 } from 'uuid';
 
 import { REDEMPTION_TYPES } from '../../../core/src/constants/redemptions';
@@ -136,6 +146,7 @@ export const vaultCodesTable = pgTable(
     createdIdx: index('created_idx').on(table.created),
     expiryIdx: index('expiry_idx').on(table.expiry),
     memberIdx: index('member_idx').on(table.memberId),
+    uniqueCodeIdx: unique('idx_unique_vault_code').on(table.vaultId, table.code).nullsNotDistinct(),
   }),
 );
 

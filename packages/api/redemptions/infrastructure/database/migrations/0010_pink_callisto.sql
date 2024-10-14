@@ -1,0 +1,1 @@
+ALTER TABLE "vaultCodes" ADD CONSTRAINT "idx_unique_vault_code" UNIQUE NULLS NOT DISTINCT("vaultId","code");

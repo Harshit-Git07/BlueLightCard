@@ -111,7 +111,8 @@ export class VaultCodesRepository extends Repository implements IVaultCodesRepos
     return await this.connection.db
       .insert(vaultCodesTable)
       .values(vaultCodes)
-      .returning({ id: vaultCodesTable.id })
+      .returning({ id: vaultCodesTable.id, code: vaultCodesTable.code })
+      .onConflictDoNothing()
       .execute();
   }
 

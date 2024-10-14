@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, count, eq } from 'drizzle-orm';
 
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { vaultCodesTable } from '@blc-mono/redemptions/libs/database/schema';
@@ -95,7 +95,7 @@ describe('VaultCodesRepository', () => {
     });
   });
 
-  describe('createVaultCode', () => {
+  describe('create', () => {
     it('should create the vaultCode', async () => {
       // Arrange
       const redemption = await createRedemptionRecord(connection);
@@ -119,7 +119,7 @@ describe('VaultCodesRepository', () => {
     });
   });
 
-  describe('createManyVaultCode', () => {
+  describe('createMany', () => {
     it('should create many vaultCodes', async () => {
       // Arrange
       const redemption = await createRedemptionRecord(connection);
@@ -141,6 +141,33 @@ describe('VaultCodesRepository', () => {
         .where(eq(vaultCodesTable.batchId, vaultBatch.id))
         .execute();
       expect(createdVaultCodes).toEqual(vaultCodes);
+    });
+
+    it('should not insert duplicated vault codes', async () => {
+      const duplicateCodeName = 'ABCD';
+      const redemption = await createRedemptionRecord(connection);
+      const vault = await createVaultRecord(connection, redemption.id);
+      const vaultBatch = await createVaultBatchRecord(connection, vault.id);
+      const vaultCode = vaultCodeEntityFactory.build({
+        vaultId: vault.id,
+        batchId: vaultBatch.id,
+        memberId: null,
+        code: duplicateCodeName,
+      });
+      const repository = new VaultCodesRepository(connection);
+
+      const countQuery = connection.db
+        .select({ count: count() })
+        .from(vaultCodesTable)
+        .where(and(eq(vaultCodesTable.vaultId, vault.id), eq(vaultCodesTable.code, duplicateCodeName)));
+
+      const { count: initialCount } = (await countQuery.execute())[0];
+      expect(initialCount).toBe(0);
+      await connection.db.insert(vaultCodesTable).values(vaultCode);
+
+      await repository.createMany([vaultCode]);
+      const { count: finalCount } = (await countQuery.execute())[0];
+      expect(finalCount).toEqual(1);
     });
   });
 

@@ -66,9 +66,9 @@ export const PostGenericModel = createZodNamedType(
 export const VaultModel = createZodNamedType(
   'VaultModel',
   z.object({
-    alertBelow: z.number(),
+    alertBelow: z.number().positive(),
     status: z.enum(['active', 'in-active']),
-    maxPerUser: z.number(),
+    maxPerUser: z.number().positive(),
     integrationId: z.number().nullable(),
     createdAt: z.string(),
     email: z.string().email(),

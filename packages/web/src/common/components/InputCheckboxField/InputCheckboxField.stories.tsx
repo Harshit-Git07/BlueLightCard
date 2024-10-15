@@ -3,7 +3,7 @@ import React from 'react';
 import InputCheckboxField from '@/components/InputCheckboxField/InputCheckboxField';
 
 const componentMeta: Meta<typeof InputCheckboxField> = {
-  title: 'Component System/Form/InputCheckboxField',
+  title: 'Deprecated/Component System/Form/InputCheckboxField',
   component: InputCheckboxField,
   argTypes: {
     label: { control: 'object' },

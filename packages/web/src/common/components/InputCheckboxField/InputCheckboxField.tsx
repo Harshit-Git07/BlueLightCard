@@ -4,6 +4,11 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/pro-regular-svg-icons';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/Checkbox/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 const InputCheckboxField: FC<InputCheckboxFieldProps> = ({
   id,
   label,

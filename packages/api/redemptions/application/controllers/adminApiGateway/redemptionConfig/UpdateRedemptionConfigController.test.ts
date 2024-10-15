@@ -91,7 +91,6 @@ describe('UpdateRedemptionConfigController', () => {
       id: `vlt-${faker.string.uuid()}`,
       maxPerUser: faker.number.int({ max: 100 }),
       status: 'active',
-      createdAt: faker.date.recent().toISOString(),
       email: faker.internet.email(),
       integration: 'uniqodo',
       integrationId: faker.string.numeric(8),
@@ -113,6 +112,7 @@ describe('UpdateRedemptionConfigController', () => {
     companyId: String(testVaultBody.companyId),
     vault: {
       ...testVaultBody.vault,
+      createdAt: 'some date',
       batches: [],
     },
   };

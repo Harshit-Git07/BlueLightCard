@@ -75,7 +75,6 @@ describe('UpdateRedemptionConfigService', () => {
       alertBelow: 1000,
       status: 'active' as Status,
       maxPerUser: 5,
-      createdAt: '2024-12-12',
       email: faker.internet.email(),
       integration: 'eagleEye' as Integration,
       integrationId: faker.string.numeric(8),
@@ -88,6 +87,7 @@ describe('UpdateRedemptionConfigService', () => {
     companyId: String(testCompanyId),
     vault: {
       ...testVaultBody.vault,
+      createdAt: 'someDate',
       batches: [
         {
           ...testVaultBatchBody,

@@ -127,7 +127,7 @@ describe('redemption config admin API tests', () => {
           alertBelow: vaultEntity.alertBelow,
           status: vaultEntity.status,
           maxPerUser: vaultEntity.maxPerUser,
-          createdAt: vaultEntity.created.toISOString(),
+          createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/),
           email: vaultEntity.email,
           integration: vaultEntity.integration,
           integrationId: String(vaultEntity.integrationId),

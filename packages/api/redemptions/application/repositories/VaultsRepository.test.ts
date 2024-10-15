@@ -5,10 +5,11 @@ import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connecti
 import { redemptionsTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
 
 import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
-import { vaultEntityFactory } from '../../libs/test/factories/vaultEntity.factory';
+import { newVaultEntityFactory, vaultEntityFactory } from '../../libs/test/factories/vaultEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
-import { VaultEntity, VaultsRepository } from './VaultsRepository';
+import { RedemptionConfigEntity } from './RedemptionConfigRepository';
+import { NewVaultEntity, VaultEntity, VaultsRepository } from './VaultsRepository';
 
 describe('VaultsRepository', () => {
   let database: RedemptionsTestDatabase;
@@ -185,11 +186,11 @@ describe('VaultsRepository', () => {
   });
 
   describe('createVault', () => {
-    it('should create the vault', async () => {
+    it('creates a vault and sets the created datetime', async () => {
       // Arrange
       const repository = new VaultsRepository(connection);
-      const redemption = redemptionConfigEntityFactory.build();
-      const vault = vaultEntityFactory.build({
+      const redemption: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
+      const vault: NewVaultEntity = newVaultEntityFactory.build({
         redemptionId: redemption.id,
         status: 'active',
         maxPerUser: 1,
@@ -207,6 +208,31 @@ describe('VaultsRepository', () => {
         .execute();
 
       expect(result).toEqual(createdVault[0]);
+    });
+
+    it('creates many vaults and sets the same created datetime for each vault', async () => {
+      // Arrange
+      const repository = new VaultsRepository(connection);
+      const redemption: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
+      const vault: NewVaultEntity[] = newVaultEntityFactory.buildList(2, {
+        redemptionId: redemption.id,
+        status: 'active',
+        maxPerUser: 1,
+      });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      // Act
+      const result = await repository.createMany(vault);
+
+      // Assert
+      const createdVaults = await connection.db
+        .select()
+        .from(vaultsTable)
+        .where(eq(vaultsTable.redemptionId, redemption.id))
+        .execute();
+
+      expect(result).toEqual(createdVaults);
+      expect(result[0].created).toStrictEqual(result[1].created);
     });
   });
 });

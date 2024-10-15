@@ -9,7 +9,7 @@ import { Repository } from './Repository';
 
 export type VaultEntity = typeof vaultsTable.$inferSelect;
 export type UpdateVaultEntity = Partial<typeof vaultsTable.$inferInsert>;
-export type NewVaultEntity = typeof vaultsTable.$inferInsert;
+export type NewVaultEntity = Omit<typeof vaultsTable.$inferInsert, 'created'>;
 
 export type VaultFilters = {
   status?: VaultEntity['status'];
@@ -71,11 +71,29 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
   }
 
   public async createMany(vaults: NewVaultEntity[]): Promise<VaultEntity[]> {
-    return await this.connection.db.insert(vaultsTable).values(vaults).returning().execute();
+    const date = new Date();
+
+    return await this.connection.db
+      .insert(vaultsTable)
+      .values(
+        vaults.map((vault) => ({
+          ...vault,
+          created: date,
+        })),
+      )
+      .returning()
+      .execute();
   }
 
   public async create(vault: NewVaultEntity): Promise<VaultEntity> {
-    return this.exactlyOne(await this.connection.db.insert(vaultsTable).values(vault).returning().execute());
+    const date = new Date();
+    return this.exactlyOne(
+      await this.connection.db
+        .insert(vaultsTable)
+        .values({ ...vault, created: date })
+        .returning()
+        .execute(),
+    );
   }
 
   public withTransaction(transaction: DatabaseTransactionConnection): VaultsRepository {

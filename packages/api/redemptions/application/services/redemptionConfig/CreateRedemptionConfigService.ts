@@ -177,7 +177,6 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     const vaultRequestData: NewVaultEntity = {
       redemptionId: redemptionId,
       alertBelow: vault.alertBelow,
-      created: new Date(vault.createdAt),
       email: vault.email,
       integration: vault.integration,
       integrationId: vault.integrationId,

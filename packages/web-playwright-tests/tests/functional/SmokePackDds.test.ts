@@ -1,5 +1,5 @@
 import test from '@lib/BaseTest';
-import { HomePageLoggedInDds } from '@pages/HomePageLoggedInDds';
+
 
 test.beforeEach(async ({homePagePreLoginDDS }) => {
   await test.step(`Logging in to DDS`, async () => {
@@ -8,15 +8,15 @@ test.beforeEach(async ({homePagePreLoginDDS }) => {
 });
 
 
-test(`@Dds @SmokeTest @Web - DDS Existing User - Redeem offer`, async ({ homePageLoggedInDds }) => {
+test(`@Dds @SmokeTest @Web - DDS Existing User - Redeem offer`, async ({ membersHomeDds }) => {
 
 
   await test.step(`Performing the search for British Airways`, async () => {
-    await homePageLoggedInDds.searchForCompanyCategoryOrPhrase('Phrase', 'British Airways');
+    await membersHomeDds.searchForCompanyCategoryOrPhrase('Phrase', 'British Airways');
   });
 
   await test.step(`Clicking the Discount button and asserting the code is copied and correct website is displayed`, async () => {
-    await homePageLoggedInDds.clickToSeeTheDiscount('BAHERO', 'britishairways.com');
+    await membersHomeDds.clickToSeeTheDiscount('BAHERO', 'britishairways.com');
   });
 });
 

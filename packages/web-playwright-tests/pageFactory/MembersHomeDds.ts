@@ -3,7 +3,7 @@ import { WebActions } from '@lib/WebActions';
 
 let webActions: WebActions;
 
-export class HomePageLoggedInDds {
+export class MembersHomeDds {
   readonly page: Page;
   readonly context: BrowserContext;
 

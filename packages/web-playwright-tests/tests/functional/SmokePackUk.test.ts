@@ -9,15 +9,15 @@ test.beforeEach(async ({homePagePreLoginUK }) => {
 
 
 
-test(`@Uk @SmokeTest @Web - BLC UK Existing User - Redeem offer - 004`, async ({ homePageUk }) => {
+test(`@Uk @SmokeTest @Web - BLC UK Existing User - Redeem offer - 004`, async ({ membersHomeUk }) => {
 
 
   await test.step(`Performing the search for Pets At Home`, async () => {
-    await homePageUk.searchForCompanyCategoryOrPhrase('Company', 'Pets At Home');
+    await membersHomeUk.searchForCompanyCategoryOrPhrase('Company', 'Pets At Home');
   });
 
   await test.step(`Clicking the Discount button and asserting the code is copied and correct website is displayed`, async () => {
-    await homePageUk.clickToSeeTheDiscount('BLC10', 'petsathome.com');
+    await membersHomeUk.clickToSeeTheDiscount('BLC10', 'petsathome.com');
   });
 
 });

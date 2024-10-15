@@ -7,6 +7,6 @@ test.beforeEach(async ({homePagePreLoginDDS }) => {
 });
 });
 
-test (`@Dds @SmokeTest @Web @NeedsTestCase - Login to dds home page and verify elements on screen`, async ({ homePageLoggedInDds }) => {
-  await homePageLoggedInDds.assertElementsVisibleHomeScreenLoggedIn();
+test (`@Dds @SmokeTest @Web @NeedsTestCase - Login to dds home page and verify elements on screen`, async ({ membersHomeDds }) => {
+  await membersHomeDds.assertElementsVisibleHomeScreenLoggedIn();
   });

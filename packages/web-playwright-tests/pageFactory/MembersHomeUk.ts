@@ -1,6 +1,6 @@
 import { Page, BrowserContext, Locator, expect } from '@playwright/test';
 
-export class HomePageLoggedInUk {
+export class MembersHomeUk {
   readonly page: Page;
   readonly context: BrowserContext;
 

@@ -9,20 +9,20 @@ test.beforeEach(async ({homePagePreLoginUK }) => {
 });
 
 test(`@Uk @SmokeTest @Web @NeedsTestCase - Login to uk home page`, async ({
-   homePageUk
+   membersHomeUk
 }) => {
 
   await test.step(`Asserting the expected elements are visible on the Home screen`, async () => {
-    await homePageUk.assertElementsVisibleHomeScreenLoggedIn();
+    await membersHomeUk.assertElementsVisibleHomeScreenLoggedIn();
   });
 });
 
 test(`@Uk @SmokeTest @Web @NeedsTestCase - Verify user is able to view all features on members home page`, async ({
-  homePageUk, 
+  membersHomeUk, 
 }) => {
   
   await test.step(`Asserting the expected elements are visible on the Home screen`, async () => {
-    await homePageUk.assertCarouselsVisibleHomeScreenLoggedIn();
+    await membersHomeUk.assertCarouselsVisibleHomeScreenLoggedIn();
   });
 });
 

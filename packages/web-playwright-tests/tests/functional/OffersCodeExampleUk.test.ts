@@ -5,7 +5,7 @@ import test from '@lib/BaseTest';
 
 //TC_001 - Home
 test(`@Uk @SmokeTest @Web Ensure all the Navigation links work on header`, async ({
-  homePageUk,
+  membersHomeUk,
   webActions,
   homePagePreLoginUK,
 }) => {
@@ -15,12 +15,12 @@ test(`@Uk @SmokeTest @Web Ensure all the Navigation links work on header`, async
 
   //Offers
   await test.step(`Hovering on offers and checking the Online Discounts-header-link`, async () => {
-    await homePageUk.selectOptionFromTheOffersMenu('Online Discounts');
+    await membersHomeUk.selectOptionFromTheOffersMenu('Online Discounts');
     await webActions.verifyPageUrlContains('/offers.php?type=0');
   });
 
   await test.step(`Hovering on offers and checking the Online Discounts-header-link`, async () => {
-    await homePageUk.selectOptionFromTheOffersMenu('Online Discounts');
+    await membersHomeUk.selectOptionFromTheOffersMenu('Online Discounts');
     await webActions.verifyPageUrlContains('/offers.php?type=0');
   });
 });

@@ -17,11 +17,14 @@ import { MobilePlatformAdapter } from '@/utils/platformAdapter';
 import { QueryClient } from '@tanstack/react-query';
 import { QueryClientProvider } from '@tanstack/react-query';
 import UserProfileProvider from '@/components/UserProfileProvider/UserProfileProvider';
+import useNativeMock from '@/hooks/mocks/useNativeMock';
 
 dayjs.extend(CustomParseFormat);
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
+
+  useNativeMock();
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -38,6 +38,7 @@ jobs:
       backend-redemptions: ${{ steps.filter.outputs.backend-redemptions }}
       backend-discovery: ${{ steps.filter.outputs.backend-discovery }}
       frontend-web: ${{ steps.filter.outputs.frontend-web }}
+      frontend-hybrid: ${{ steps.filter.outputs.frontend-hybrid }}
     steps:
       - uses: dorny/paths-filter@v3
         id: filter
@@ -82,6 +83,12 @@ jobs:
               - package.json
             frontend-web:
               - packages/web/**
+              - packages/shared-ui/**
+              - .github/workflows/pr-environment.yml
+              - package-lock.json
+              - package.json
+            frontend-hybrid:
+              - packages/mobile-hybrid/**
               - packages/shared-ui/**
               - .github/workflows/pr-environment.yml
               - package-lock.json
@@ -522,6 +529,99 @@ jobs:
             <tr><td><strong>PR Preview URL:</strong></td><td>
             <a href='https://pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev'>https://pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev</a>
             (<a href='https://pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev/mock-login'>Login</a>)
+            </td></tr>
+            <tr><td><strong>Specific Commit Preview URL:</strong></td><td>
+            <a href='${{ steps.cloudflare-publish.outputs.url }}'>${{ steps.cloudflare-publish.outputs.url }}</a>
+            </td></tr>
+            <tr><td><strong>QA Test Environment Login Username</strong></td><td>
+            <p>
+              ${{ steps.seeding-script-outputs.outputs.testUsername}}
+            </p>
+            </td></tr>
+            <tr><td><strong>QA Test Environment Login Password</strong></td><td>
+            <p>
+            ${{ steps.seeding-script-outputs.outputs.testPassword }}
+            </p>
+            </td></tr>
+            </table>
+
+  # Deploy the hybrid frontend
+  # Matrix Deployment for each brand does not allow dynamic outputs which is needed to be able to create the comment
+  # By nesting the comment it allows us to be able to use the values within the matrix steps
+  frontend-hybrid:
+    name: Deploy Hybrid Frontend for PR ${{matrix.brand}}
+    if: ${{ needs.changes.outputs.frontend-hybrid == 'true' && github.actor != 'dependabot[bot]' }}
+    needs:
+      - changes
+      - install
+    environment: Staging
+    strategy:
+      matrix:
+        include:
+          - brand: 'blc-uk'
+            offers_brand: 'blc-uk'
+          - brand: 'blc-au'
+            offers_brand: 'blc-aus'
+          - brand: 'dds-uk'
+            offers_brand: 'dds-4j3'
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
+      NEXT_PUBLIC_ENV: 'preview'
+      NEXT_PUBLIC_USE_NATIVE_MOCK: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Cache NextJS Build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/packages/mobile-hybrid/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('packages/mobile-hybrid/**/*.[jt]s', 'packages/mobile-hybrid/**/*.[jt]sx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+      - name: Build
+        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/mobile-hybrid
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        id: cloudflare-publish
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{matrix.brand}}
+          branch: mobile-hybrid-pr-${{ github.event.pull_request.number }}
+          directory: packages/mobile-hybrid/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully deployed Hybrid preview environment for ${{matrix.brand}}'
+
+      - name: Create Comment for Frontend ${{matrix.brand}}
+        uses: peter-evans/create-or-update-comment@v3
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully deployed Hybrid preview environment for ${{matrix.brand}}
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
+            </td></tr>
+            <tr><td><strong>Status:</strong></td><td>&nbsp;✅&nbsp; Deploy successful!</td></tr>
+            <tr><td><strong>PR Preview URL:</strong></td><td>
+            <a href='https://mobile-hybrid-pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev'>https://mobile-hybrid-pr-${{ github.event.pull_request.number }}.${{matrix.offers_brand}}.pages.dev</a>
             </td></tr>
             <tr><td><strong>Specific Commit Preview URL:</strong></td><td>
             <a href='${{ steps.cloudflare-publish.outputs.url }}'>${{ steps.cloudflare-publish.outputs.url }}</a>

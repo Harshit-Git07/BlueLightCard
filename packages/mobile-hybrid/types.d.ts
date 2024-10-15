@@ -136,4 +136,6 @@ declare type GlobalState = Window &
       };
     };
     setTheme: (mode: 'light' | 'dark') => void;
+    onResponse: NativeReceive.WebViewAPIResponse.onResponse;
+    setExperiment: NativeReceive.WebViewExperiment.setExperiment;
   };

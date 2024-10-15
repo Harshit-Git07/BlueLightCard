@@ -105,12 +105,16 @@ export class OpenSearchService {
   private buildUniqueSearchResults(allSearchResults: SearchResult[]): SearchResult[] {
     const MAX_RESULTS = 40;
 
-    const uniqueSearchResults = [...new Set(allSearchResults)];
+    const uniqueSearchResults: SearchResult[] = [];
+
+    allSearchResults.forEach((searchResult) => {
+      if (!uniqueSearchResults.some(({ ID }) => ID === searchResult.ID)) {
+        uniqueSearchResults.push(searchResult);
+      }
+    });
+
     logger.info({
       message: `Found ${uniqueSearchResults.length} unique search results`,
-    });
-    logger.debug({
-      message: `Found unique search results - ${JSON.stringify(uniqueSearchResults)}`,
     });
 
     const uniqueResultsSubset = uniqueSearchResults.slice(0, MAX_RESULTS);
@@ -121,7 +125,7 @@ export class OpenSearchService {
       message: `Returning unique search results - ${JSON.stringify(uniqueResultsSubset)}`,
     });
 
-    return uniqueSearchResults;
+    return uniqueResultsSubset;
   }
 
   public async deleteIndex(indexName: string): Promise<void> {

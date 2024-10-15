@@ -6,24 +6,23 @@ import { OpenSearchService } from './OpenSearchService';
 
 const mockCreate = jest.fn().mockResolvedValue({ acknowledged: true });
 const mockIndex = jest.fn().mockResolvedValue({ result: 'created' });
+const mockSearchHit = {
+  _source: {
+    title: 'dummyTitle',
+    description: 'dummyDescription',
+    offer_id: '123',
+    offer_name: 'OfferName',
+    offer_type: '1',
+    offer_image: 'img',
+    company_id: '456',
+    company_name: 'CompanyName',
+    restricted_to: [],
+  },
+};
 const mockSearch = jest.fn().mockResolvedValue({
   body: {
     hits: {
-      hits: [
-        {
-          _source: {
-            title: 'dummyTitle',
-            description: 'dummyDescription',
-            offer_id: '123',
-            offer_name: 'OfferName',
-            offer_type: '1',
-            offer_image: 'img',
-            company_id: '456',
-            company_name: 'CompanyName',
-            restricted_to: [],
-          },
-        },
-      ],
+      hits: [mockSearchHit],
     },
   },
 });
@@ -98,6 +97,54 @@ describe('OpenSearchService', () => {
       CompID: '456',
       CompanyName: 'CompanyName',
     });
+  });
+
+  it('should return unique search results', async () => {
+    const mockSearchWithDuplicates = jest.fn().mockResolvedValue({
+      body: {
+        hits: {
+          hits: [mockSearchHit, mockSearchHit],
+        },
+      },
+    });
+    jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
+
+    const results = await openSearchService.queryIndex(sampleDocument.title, indexName, '2001-01-01');
+
+    expect(results).toStrictEqual([
+      {
+        ID: '123',
+        OfferName: 'OfferName',
+        OfferType: '1',
+        offerimg: 'img',
+        CompID: '456',
+        CompanyName: 'CompanyName',
+      },
+    ]);
+  });
+
+  it('should return max 40 search results', async () => {
+    const searchHits = [];
+    for (let i = 0; i < 41; i++) {
+      const searchHit = {
+        _source: {
+          offer_id: `${i}`,
+        },
+      };
+      searchHits.push({ ...searchHit });
+    }
+    const mockSearchWith41Results = jest.fn().mockResolvedValue({
+      body: {
+        hits: {
+          hits: searchHits,
+        },
+      },
+    });
+    jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith41Results);
+
+    const results = await openSearchService.queryIndex(sampleDocument.title, indexName, '2001-01-01');
+
+    expect(results.length).toBe(40);
   });
 
   it('should delete an index', async () => {

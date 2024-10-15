@@ -1,10 +1,43 @@
 # Define code owners for specific folders
 # Each line represents a file pattern followed by the GitHub username or team name
 
-# Code owners for the "api-proxy" folder
-/packages/api-proxy/*   @k0vacs
+# Commented out packages with no owner will fall back to the `*` owner. Tech Leads
 
-# Code owners for the bastion host access user
-stacks/infra/bastionHost/BastionHostAccessUser.ts @K0vacs @shahzaibbutt-blc
+# Component ownership
 
-/test-directory @uatec @shahzaibbutt-blc
+## Public
+/docs/*
+
+## Tech Leads - Shared components
+# /packages/mobile-hybrid/*
+# /packages/shared-ui/*
+# /packages/web/*
+# /packages/api/core/*
+/packages/api-proxy/* @bluelightcard/tech-leads
+
+/packages/storybook-composed/* @scliftas @bluelightcard/tech-leads
+
+## Offers
+/packages/chrome-extension/* @bluelightcard/offers @bluelightcard/tech-leads
+/packages/api/offers/* @bluelightcard/offers @bluelightcard/tech-leads
+
+## Platform
+/packages/infrastructure/* @bluelightcard/platform @bluelightcard/tech-leads
+/packages/synthetic-tests/* @bluelightcard/platform @bluelightcard/tech-leads
+
+## Identity
+/packages/member-services-hub/* @bluelightcard/identity @bluelightcard/tech-leads
+/packages/api/identity/* @bluelightcard/identity @bluelightcard/tech-leads
+/packages/api/members/* @bluelightcard/identity @bluelightcard/tech-leads
+
+## Discovery
+/packages/api/discovery/* @bluelightcard/discovery @bluelightcard/tech-leads
+
+## Redemptions
+/packages/api/redemptions/* @bluelightcard/redemptions @bluelightcard/tech-leads
+
+## QA
+/packages/web-playwright-tests/* @bluelightcard/qa
+
+## Fallback
+* @bluelightcard/tech-leads

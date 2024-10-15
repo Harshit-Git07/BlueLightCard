@@ -90,7 +90,19 @@ export const TokenisedSearch: NextPage = () => {
   const { categories } = useFetchCompaniesOrCategories(userCtx);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchData = async () => {
+      if (
+        !authCtx.authState.idToken ||
+        !userCtx.user ||
+        !router.isReady ||
+        usedQuery === query ||
+        cancelled
+      ) {
+        return;
+      }
+
       setIsLoading(true);
 
       // Search Query
@@ -102,6 +114,9 @@ export const TokenisedSearch: NextPage = () => {
         userCtx.user?.profile.organisation ?? '',
         searchExperiment.data?.variantName === 'treatment'
       );
+
+      // Abort if this useEffect call has already been cancelled before the query resolved
+      if (cancelled) return;
 
       if (searchResults.results) {
         setSearchResults(searchResults.results);
@@ -126,13 +141,12 @@ export const TokenisedSearch: NextPage = () => {
       }
     };
 
-    if (authCtx.authState.idToken && Boolean(userCtx.user) && router.isReady) {
-      if (usedQuery !== query) {
-        fetchData();
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authCtx.authState.idToken, userCtx.isAgeGated, userCtx.user, router.isReady, query]);
+    fetchData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authCtx, userCtx, router, query, searchExperiment, usedQuery]);
 
   useEffect(() => {
     setQuery((router.query.q as string) ?? '');

@@ -13,7 +13,8 @@ const openSearchService = new OpenSearchService();
 export const handlerUnwrapped = async () => {
   const indicesToDelete: string[] = [];
 
-  indicesToDelete.push(...(await openSearchService.getStageIndicesForDeletion()));
+  indicesToDelete.push(...(await openSearchService.getPublishedIndicesForDeletion()));
+  indicesToDelete.push(...(await openSearchService.getDraftIndicesForDeletion()));
 
   if (isStaging(getEnv(DiscoveryStackEnvironmentKeys.STAGE))) {
     indicesToDelete.push(...(await openSearchService.getPrEnvironmentIndicesForDeletion()));

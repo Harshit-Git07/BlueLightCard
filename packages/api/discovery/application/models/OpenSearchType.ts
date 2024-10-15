@@ -14,8 +14,8 @@ export type OpenSearchBody = {
   offer_description: string;
   offer_description_stripped: string;
   offer_image: string;
-  offer_expires: string;
-  offer_start: string;
+  offer_expires?: string;
+  offer_start?: string;
   offer_tags: string[];
   company_id: string;
   company_name: string;
@@ -41,8 +41,8 @@ export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
   offer_description: offer.offerDescription.trim(),
   offer_description_stripped: offer.offerDescription.trim().replace(/<[^<>]*>/g, ''),
   offer_image: offer.image.trim(),
-  offer_expires: offer.offerEnd ?? '',
-  offer_start: offer.offerStart ?? '',
+  offer_expires: offer.offerEnd,
+  offer_start: offer.offerStart,
   offer_tags: offer.tags,
   company_id: offer.company.id,
   company_name: offer.company.name,

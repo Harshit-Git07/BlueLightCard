@@ -5,7 +5,7 @@ import { datadog } from 'datadog-lambda-js';
 
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
 import { mapOfferToOpenSearchBody, OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/OpenSearchService';
+import { draftIndexPrefix, OpenSearchService } from '@blc-mono/discovery/application/services/OpenSearchService';
 
 import { getNonLocalOffers } from '../../repositories/Offer/service/OfferService';
 
@@ -29,13 +29,20 @@ export const handlerUnwrapped = async () => {
   try {
     if (offers.length > 0) {
       const openSearchRequestBody = createOpenSearchDocuments(offers);
-      await openSearchService.addDocumentsToIndex(openSearchRequestBody, openSearchService.generateIndexName());
+      const indexName = openSearchService.generateIndexName();
+      const draftIndexName = `${draftIndexPrefix}${indexName}`;
+
+      await openSearchService.createIndex(draftIndexName);
+      await openSearchService.addDocumentsToIndex(openSearchRequestBody, draftIndexName);
+      await openSearchService.cloneIndex(draftIndexName, indexName);
+      await openSearchService.deleteIndex(draftIndexName);
     } else {
       logger.error('No offers or companies found in dynamoDB');
       return;
     }
-  } catch (err) {
-    logger.error('Error building search index', JSON.stringify(err));
+  } catch (error) {
+    logger.error('Error building search index', JSON.stringify(error));
+    throw error;
   }
 };
 

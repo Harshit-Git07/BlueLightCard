@@ -9,7 +9,8 @@ jest.mock('@blc-mono/core/utils/getEnv');
 
 describe('deleteOldSearchIndices Handler', () => {
   let deleteIndexMock: jest.SpyInstance;
-  let getStageIndicesForDeletionMock: jest.SpyInstance;
+  let getPublishedIndicesForDeletionMock: jest.SpyInstance;
+  let getDraftIndicesForDeletionMock: jest.SpyInstance;
   let getPrEnvironmentIndicesForDeletionMock: jest.SpyInstance;
 
   afterEach(() => {
@@ -20,9 +21,12 @@ describe('deleteOldSearchIndices Handler', () => {
     givenEnvironmentIs('production');
 
     deleteIndexMock = jest.spyOn(OpenSearchService.prototype, 'deleteIndex');
-    getStageIndicesForDeletionMock = jest
-      .spyOn(OpenSearchService.prototype, 'getStageIndicesForDeletion')
+    getPublishedIndicesForDeletionMock = jest
+      .spyOn(OpenSearchService.prototype, 'getPublishedIndicesForDeletion')
       .mockResolvedValue(['index1', 'index2']);
+    getDraftIndicesForDeletionMock = jest
+      .spyOn(OpenSearchService.prototype, 'getDraftIndicesForDeletion')
+      .mockResolvedValue(['draft-index1', 'draft-index2']);
     getPrEnvironmentIndicesForDeletionMock = jest
       .spyOn(OpenSearchService.prototype, 'getPrEnvironmentIndicesForDeletion')
       .mockResolvedValue(['pr-index3', 'pr-index4']);
@@ -34,22 +38,34 @@ describe('deleteOldSearchIndices Handler', () => {
     expect(getPrEnvironmentIndicesForDeletionMock).not.toHaveBeenCalled();
   });
 
-  it('should delete stage indices when stage indices available for deletion', async () => {
+  it('should delete published indices when published indices available for deletion', async () => {
     await handler();
 
-    expect(getStageIndicesForDeletionMock).toHaveBeenCalled();
+    expect(getPublishedIndicesForDeletionMock).toHaveBeenCalled();
     expect(deleteIndexMock).toHaveBeenCalledWith('index1');
     expect(deleteIndexMock).toHaveBeenCalledWith('index2');
   });
 
-  it('should not call "deleteIndex" when no stage indices available for deletion', async () => {
-    getStageIndicesForDeletionMock = jest
-      .spyOn(OpenSearchService.prototype, 'getStageIndicesForDeletion')
+  it('should delete draft indices when draft indices available for deletion', async () => {
+    await handler();
+
+    expect(getDraftIndicesForDeletionMock).toHaveBeenCalled();
+    expect(deleteIndexMock).toHaveBeenCalledWith('draft-index1');
+    expect(deleteIndexMock).toHaveBeenCalledWith('draft-index2');
+  });
+
+  it('should not call "deleteIndex" when no published or draft indices available for deletion', async () => {
+    getPublishedIndicesForDeletionMock = jest
+      .spyOn(OpenSearchService.prototype, 'getPublishedIndicesForDeletion')
+      .mockResolvedValue([]);
+    getDraftIndicesForDeletionMock = jest
+      .spyOn(OpenSearchService.prototype, 'getDraftIndicesForDeletion')
       .mockResolvedValue([]);
 
     await handler();
 
-    expect(getStageIndicesForDeletionMock).toHaveBeenCalled();
+    expect(getPublishedIndicesForDeletionMock).toHaveBeenCalled();
+    expect(getDraftIndicesForDeletionMock).toHaveBeenCalled();
     expect(deleteIndexMock).not.toHaveBeenCalled();
   });
 

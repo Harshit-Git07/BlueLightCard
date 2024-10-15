@@ -41,125 +41,200 @@ describe('populateSearchIndex', () => {
     expect(loggerError).toHaveBeenCalledWith('No offers or companies found in dynamoDB');
   });
 
-  it('should log an error if an exception occurs', async () => {
+  describe('and offers are found', () => {
+    let loggerErrorSpy: jest.SpyInstance;
     const error = new Error('Test error');
-    const mockOffers = offerFactory.buildList(1);
-    const loggerError = jest.spyOn(Logger.prototype, 'error');
 
-    jest.spyOn(OffersService, 'getNonLocalOffers').mockResolvedValue(mockOffers);
-    jest.spyOn(OpenSearchService.prototype, 'addDocumentsToIndex').mockRejectedValue(error);
+    beforeEach(() => {
+      const mockOffers = offerFactory.buildList(1);
+      jest.spyOn(OffersService, 'getNonLocalOffers').mockResolvedValue(mockOffers);
 
-    await handler();
-    expect(loggerError).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
-  });
+      loggerErrorSpy = jest.spyOn(Logger.prototype, 'error');
 
-  it('should convert offers to OpenSearch format and add to index', async () => {
-    const addMultipleDocumentsToIndex = jest
-      .spyOn(OpenSearchService.prototype, 'addDocumentsToIndex')
-      .mockResolvedValue(undefined);
-    const mockOffers = offerFactory.buildList(1);
-    const getMockOffers = jest.spyOn(OffersService, 'getNonLocalOffers').mockResolvedValue(mockOffers);
+      jest.spyOn(OpenSearchService.prototype, 'generateIndexName').mockReturnValue('index-name');
+    });
 
-    await handler();
-    expect(getMockOffers).toHaveBeenCalled();
-    expect(addMultipleDocumentsToIndex).toHaveBeenCalled();
-  });
+    it('should create draft index successfully', async () => {
+      const createIndexSpy = jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
 
-  it('should map an offer to OpenSearchType correctly', () => {
-    const TODAY = new Date().toISOString();
-    const TOMORROW = new Date(Date.now() + 86400000).toISOString();
-    const ONE_HOUR_LATER = new Date(Date.now() + 3600000).toISOString();
+      await handler();
 
-    const offer: Offer = {
-      id: 'offer-1',
-      legacyOfferId: 1,
-      name: 'Offer 1',
-      status: 'active',
-      offerType: 'discount',
-      offerDescription: 'Description for offer 1',
-      image: 'http://example.com/image1.jpg',
-      offerStart: TODAY,
-      offerEnd: TOMORROW,
-      evergreen: false,
-      tags: ['tag1', 'tag2'],
-      includedTrusts: ['restriction1', 'restriction2'],
-      excludedTrusts: [],
-      company: {
-        id: 'company-1',
-        legacyCompanyId: 1,
-        name: 'Company 1',
-        logo: 'http://example.com/logo1.jpg',
-        ageRestrictions: 'None',
-        alsoKnownAs: ['Alias 1'],
-        includedTrusts: ['restriction1', 'restriction2'],
-        excludedTrusts: [],
-        categories: [
-          {
-            id: 1,
-            name: 'Category 1',
-            parentCategoryIds: ['parent-1'],
-            level: 1,
+      expect(createIndexSpy).toHaveBeenCalledWith('draft-index-name');
+    });
+
+    it('should throw error if failure creating draft index', async () => {
+      jest.spyOn(OpenSearchService.prototype, 'createIndex').mockRejectedValue(error);
+
+      await expect(handler()).rejects.toThrow(error);
+      expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
+    });
+
+    describe('and draft index is created successfully', () => {
+      beforeEach(() => {
+        jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
+      });
+
+      it('should convert offers to OpenSearch format and add to index', async () => {
+        const addMultipleDocumentsToIndex = jest
+          .spyOn(OpenSearchService.prototype, 'addDocumentsToIndex')
+          .mockResolvedValue(undefined);
+        const mockOffers = offerFactory.buildList(1);
+        const getMockOffers = jest.spyOn(OffersService, 'getNonLocalOffers').mockResolvedValue(mockOffers);
+
+        await handler();
+        expect(getMockOffers).toHaveBeenCalled();
+        expect(addMultipleDocumentsToIndex).toHaveBeenCalled();
+      });
+
+      it('should map an offer to OpenSearchType correctly', () => {
+        const TODAY = new Date().toISOString();
+        const TOMORROW = new Date(Date.now() + 86400000).toISOString();
+        const ONE_HOUR_LATER = new Date(Date.now() + 3600000).toISOString();
+
+        const offer: Offer = {
+          id: 'offer-1',
+          legacyOfferId: 1,
+          name: 'Offer 1',
+          status: 'active',
+          offerType: 'discount',
+          offerDescription: 'Description for offer 1',
+          image: 'http://example.com/image1.jpg',
+          offerStart: TODAY,
+          offerEnd: TOMORROW,
+          evergreen: false,
+          tags: ['tag1', 'tag2'],
+          includedTrusts: ['restriction1', 'restriction2'],
+          excludedTrusts: [],
+          company: {
+            id: 'company-1',
+            legacyCompanyId: 1,
+            name: 'Company 1',
+            logo: 'http://example.com/logo1.jpg',
+            ageRestrictions: 'None',
+            alsoKnownAs: ['Alias 1'],
+            includedTrusts: ['restriction1', 'restriction2'],
+            excludedTrusts: [],
+            categories: [
+              {
+                id: 1,
+                name: 'Category 1',
+                parentCategoryIds: ['parent-1'],
+                level: 1,
+                updatedAt: TODAY,
+              },
+            ],
+            local: false,
             updatedAt: TODAY,
           },
-        ],
-        local: false,
-        updatedAt: TODAY,
-      },
-      categories: [
-        {
-          id: 1,
-          name: 'Category 1',
-          parentCategoryIds: ['parent-1'],
-          level: 1,
+          categories: [
+            {
+              id: 1,
+              name: 'Category 1',
+              parentCategoryIds: ['parent-1'],
+              level: 1,
+              updatedAt: TODAY,
+            },
+          ],
+          local: false,
+          discount: {
+            coverage: '100',
+            type: 'percentage',
+            description: 'mock discount description 1',
+            updatedAt: '2022-01-01T00:00:00Z',
+          },
+          commonExclusions: ['exclusion1', 'exclusion2'],
+          boost: {
+            type: 'temporary',
+            boostStart: TODAY,
+            boostEnd: ONE_HOUR_LATER,
+            updatedAt: TODAY,
+          },
           updatedAt: TODAY,
-        },
-      ],
-      local: false,
-      discount: {
-        coverage: '100',
-        type: 'percentage',
-        description: 'mock discount description 1',
-        updatedAt: '2022-01-01T00:00:00Z',
-      },
-      commonExclusions: ['exclusion1', 'exclusion2'],
-      boost: {
-        type: 'temporary',
-        boostStart: TODAY,
-        boostEnd: ONE_HOUR_LATER,
-        updatedAt: TODAY,
-      },
-      updatedAt: TODAY,
-    };
+        };
 
-    const expectedOpenSearchType: OpenSearchBody = {
-      offer_id: 'offer-1',
-      offer_name: 'Offer 1',
-      offer_status: 'active',
-      offer_type: 'discount',
-      offer_description: 'Description for offer 1',
-      offer_description_stripped: 'Description for offer 1',
-      offer_image: 'http://example.com/image1.jpg',
-      offer_start: offer.offerStart ?? '',
-      offer_expires: offer.offerEnd ?? '',
-      offer_tags: ['tag1', 'tag2'],
-      company_id: 'company-1',
-      company_name: 'Company 1',
-      company_name_stripped: 'Company 1',
-      company_small_logo: 'http://example.com/logo1.jpg',
-      company_tags: ['Alias 1'],
-      age_restrictions: 'None',
-      included_trusts: ['restriction1', 'restriction2'],
-      excluded_trusts: [],
-      category_name: 'Category 1',
-      new_category_1: 'Category 1',
-      category_level_2: '',
-      category_level_3: '',
-      category_level_4: '',
-      date_offer_last_updated: offer.updatedAt,
-    };
+        const expectedOpenSearchType: OpenSearchBody = {
+          offer_id: 'offer-1',
+          offer_name: 'Offer 1',
+          offer_status: 'active',
+          offer_type: 'discount',
+          offer_description: 'Description for offer 1',
+          offer_description_stripped: 'Description for offer 1',
+          offer_image: 'http://example.com/image1.jpg',
+          offer_start: offer.offerStart ?? '',
+          offer_expires: offer.offerEnd ?? '',
+          offer_tags: ['tag1', 'tag2'],
+          company_id: 'company-1',
+          company_name: 'Company 1',
+          company_name_stripped: 'Company 1',
+          company_small_logo: 'http://example.com/logo1.jpg',
+          company_tags: ['Alias 1'],
+          age_restrictions: 'None',
+          included_trusts: ['restriction1', 'restriction2'],
+          excluded_trusts: [],
+          category_name: 'Category 1',
+          new_category_1: 'Category 1',
+          category_level_2: '',
+          category_level_3: '',
+          category_level_4: '',
+          date_offer_last_updated: offer.updatedAt,
+        };
 
-    const result = mapOfferToOpenSearchBody(offer);
+        const result = mapOfferToOpenSearchBody(offer);
 
-    expect(isEqual(result, expectedOpenSearchType)).toBe(true);
+        expect(isEqual(result, expectedOpenSearchType)).toBe(true);
+      });
+
+      it('should throw error if failure adding documents to index', async () => {
+        jest.spyOn(OpenSearchService.prototype, 'addDocumentsToIndex').mockRejectedValue(error);
+
+        await expect(handler()).rejects.toThrow(error);
+        expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
+      });
+    });
+
+    describe('and draft index is populated successfully', () => {
+      beforeEach(() => {
+        jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
+        jest.spyOn(OpenSearchService.prototype, 'addDocumentsToIndex').mockResolvedValue(undefined);
+      });
+
+      it('should clone index successfully', async () => {
+        const cloneIndexSpy = jest.spyOn(OpenSearchService.prototype, 'cloneIndex').mockResolvedValue(undefined);
+
+        await handler();
+
+        expect(cloneIndexSpy).toHaveBeenCalledWith('draft-index-name', 'index-name');
+      });
+
+      it('should throw error if failure cloning index', async () => {
+        jest.spyOn(OpenSearchService.prototype, 'cloneIndex').mockRejectedValue(error);
+
+        await expect(handler()).rejects.toThrow(error);
+        expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
+      });
+    });
+
+    describe('and index is cloned successfully', () => {
+      beforeEach(() => {
+        jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
+        jest.spyOn(OpenSearchService.prototype, 'addDocumentsToIndex').mockResolvedValue(undefined);
+        jest.spyOn(OpenSearchService.prototype, 'cloneIndex').mockResolvedValue(undefined);
+      });
+
+      it('should delete draft index successfully', async () => {
+        const deleteIndexSpy = jest.spyOn(OpenSearchService.prototype, 'deleteIndex').mockResolvedValue(undefined);
+
+        await handler();
+
+        expect(deleteIndexSpy).toHaveBeenCalledWith('draft-index-name');
+      });
+
+      it('should throw error if failure deleting index', async () => {
+        jest.spyOn(OpenSearchService.prototype, 'deleteIndex').mockRejectedValue(error);
+
+        await expect(handler()).rejects.toThrow(error);
+        expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
+      });
+    });
   });
 });

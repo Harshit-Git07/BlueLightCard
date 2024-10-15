@@ -1,6 +1,6 @@
 import { Cron, FunctionDefinition, Stack } from 'sst/constructs';
 
-import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 import { CronJobIDs } from '../constants/cronJobIDs';
 
@@ -12,6 +12,6 @@ export function deleteOldSearchIndicesCron(stack: Stack, functionDefinition: Fun
       function: functionDefinition,
     },
     schedule: EVERY_12_HOURS,
-    enabled: isProduction(stack.stage) || isStaging(stack.stage),
+    enabled: isStaging(stack.stage),
   });
 }

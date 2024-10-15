@@ -5,6 +5,7 @@ import { isBefore, subWeeks } from 'date-fns';
 
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { openSearchFieldMapping } from '@blc-mono/discovery/application/models/OpenSearchFieldMapping';
 import { OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
 import {
   mapSearchResults,
@@ -14,6 +15,8 @@ import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/servic
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
+
+export const draftIndexPrefix = 'draft-';
 
 const logger = new LambdaLogger({ serviceName: 'openSearch' });
 
@@ -28,6 +31,7 @@ type OpenSearchIndex = {
 
 export class OpenSearchService {
   private readonly openSearchClient: Client;
+  private indicesList: OpenSearchIndex[] = [];
 
   constructor() {
     const searchDomainHost = getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT);
@@ -56,21 +60,46 @@ export class OpenSearchService {
   }
 
   public async createIndex(indexName: string): Promise<void> {
-    const settings = {
+    const body = {
       settings: {
         index: {
           number_of_shards: 2,
           number_of_replicas: 0,
         },
       },
+      mappings: {
+        properties: openSearchFieldMapping,
+      },
     };
 
     const response = await this.openSearchClient.indices.create({
       index: indexName,
-      body: settings,
+      body,
     });
 
     logger.info({ message: `Response from creating index ${indexName} was ${response.statusCode}` });
+  }
+
+  public async cloneIndex(sourceIndexName: string, targetIndexName: string): Promise<void> {
+    try {
+      await this.openSearchClient.indices.addBlock({
+        index: sourceIndexName,
+        block: 'write',
+      });
+      await this.openSearchClient.indices.clone({
+        index: sourceIndexName,
+        target: targetIndexName,
+      });
+      await this.openSearchClient.indices.putSettings({
+        index: sourceIndexName,
+        body: { index: { blocks: { write: false } } },
+      });
+    } catch (error) {
+      logger.error({
+        message: `Error cloning index ${sourceIndexName} as new index ${targetIndexName} - ${JSON.stringify(error)}`,
+      });
+      throw error;
+    }
   }
 
   public async addDocumentsToIndex(documents: OpenSearchBulkCommand[], indexName: string): Promise<void> {
@@ -136,22 +165,40 @@ export class OpenSearchService {
     logger.info({ message: `Response from deleting index ${indexName} was ${response.statusCode}` });
   }
 
-  public async getStageIndicesForDeletion(): Promise<string[]> {
-    const indices = await getIndicesList(this.openSearchClient);
+  public async getPublishedIndicesForDeletion(): Promise<string[]> {
+    await this.initializeIndicesList();
     const numberOfIndicesToRetain = 2;
 
-    const orderedIndexNames = getOfferIndexNamesByLatest(indices);
+    const orderedIndexNames = getOfferIndexNamesByLatest(this.indicesList);
     const indexNamesToRetain = orderedIndexNames.slice(0, numberOfIndicesToRetain);
 
     return orderedIndexNames.filter((indexName: string) => !indexNamesToRetain.includes(indexName));
   }
 
-  public async getPrEnvironmentIndicesForDeletion(): Promise<string[]> {
-    const indices = await getIndicesList(this.openSearchClient);
+  public async getDraftIndicesForDeletion(): Promise<string[]> {
+    await this.initializeIndicesList();
 
-    return indices
+    return this.indicesList
+      .filter(
+        (index: OpenSearchIndex) =>
+          index.indexName.startsWith(`${draftIndexPrefix}${service}-${stage}-${indexType}`) &&
+          indexOlderThan7Days(index),
+      )
+      .map((index: OpenSearchIndex) => index.indexName);
+  }
+
+  public async getPrEnvironmentIndicesForDeletion(): Promise<string[]> {
+    await this.initializeIndicesList();
+
+    return this.indicesList
       .filter((index: OpenSearchIndex) => index.indexName.startsWith(`${service}-pr-`) && indexOlderThan7Days(index))
       .map((index: OpenSearchIndex) => index.indexName);
+  }
+
+  private async initializeIndicesList(): Promise<void> {
+    if (this.indicesList.length === 0) {
+      this.indicesList = await getIndicesList(this.openSearchClient);
+    }
   }
 
   public async getLatestIndexName(): Promise<string> {

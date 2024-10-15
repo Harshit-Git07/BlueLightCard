@@ -11,11 +11,11 @@ import { CallbackController } from './CallbackController';
 
 describe('CallbackController', () => {
   beforeAll(() => {
-    process.env.SECRETS_MANAGER_NAME = 'secrets-manager-name';
+    process.env.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME = 'secrets-manager-name';
   });
 
   afterAll(() => {
-    delete process.env.SECRETS_MANAGER_NAME;
+    delete process.env.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME;
   });
 
   const mockedCallbackService = {

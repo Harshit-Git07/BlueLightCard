@@ -202,7 +202,8 @@ export function createAdminApi(
       environment: {
         [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME]:
           dwhKenisisFirehoseStreams.callbackVaultRedemptionStream.getStreamName(),
-        [RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME]: config.secretsManagerConfig.secretsManagerName,
+        [RedemptionsStackEnvironmentKeys.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME]:
+          config.integrationProviderConfig.secretsManagerConfig.name,
       },
       permissions: [firehosePutRecord, secretsManagerGetSecretValue],
     }),

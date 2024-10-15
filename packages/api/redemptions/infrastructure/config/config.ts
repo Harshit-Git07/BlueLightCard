@@ -66,6 +66,12 @@ type FeatureFlagsConfig = {
   enableStandardVault: string;
 };
 
+type IntegrationProviderConfig = {
+  secretsManagerConfig: {
+    name: string;
+  };
+};
+
 export type RedemptionsStackConfig = {
   secretsManagerConfig: SecretsManagerConfig;
   networkConfig: NetworkConfig;
@@ -76,10 +82,12 @@ export type RedemptionsStackConfig = {
   brazePushNotificationRedemptionCampaignsConfig: BrazePushNotificationRedemptionCampaignsConfig;
   sesConfig: SESConfig;
   featureFlagsConfig: FeatureFlagsConfig;
+  integrationProviderConfig: IntegrationProviderConfig;
 };
 
 export type PerBrandStaticValues = {
   secretManagerName: SecretsManagerConfig['secretsManagerName'];
+  integrationProviderSecretsManagerName: IntegrationProviderConfig['secretsManagerConfig']['name'];
 };
 
 export type StaticValues = {
@@ -110,6 +118,11 @@ export class RedemptionsStackConfigResolver {
 
     return {
       [BLC_UK_BRAND]: {
+        integrationProviderConfig: {
+          secretsManagerConfig: {
+            name: this.fromPerBrandStaticValues(BLC_UK_BRAND).integrationProviderSecretsManagerName,
+          },
+        },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_UK_BRAND).secretManagerName,
         },
@@ -148,6 +161,11 @@ export class RedemptionsStackConfigResolver {
         },
       },
       [BLC_AU_BRAND]: {
+        integrationProviderConfig: {
+          secretsManagerConfig: {
+            name: this.fromPerBrandStaticValues(BLC_AU_BRAND).integrationProviderSecretsManagerName,
+          },
+        },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_AU_BRAND).secretManagerName,
         },
@@ -186,6 +204,11 @@ export class RedemptionsStackConfigResolver {
         },
       },
       [DDS_UK_BRAND]: {
+        integrationProviderConfig: {
+          secretsManagerConfig: {
+            name: this.fromPerBrandStaticValues(DDS_UK_BRAND).integrationProviderSecretsManagerName,
+          },
+        },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(DDS_UK_BRAND).secretManagerName,
         },
@@ -234,6 +257,11 @@ export class RedemptionsStackConfigResolver {
 
     return {
       [BLC_UK_BRAND]: {
+        integrationProviderConfig: {
+          secretsManagerConfig: {
+            name: this.fromPerBrandStaticValues(BLC_UK_BRAND).integrationProviderSecretsManagerName,
+          },
+        },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_UK_BRAND).secretManagerName,
         },
@@ -272,6 +300,11 @@ export class RedemptionsStackConfigResolver {
         },
       },
       [BLC_AU_BRAND]: {
+        integrationProviderConfig: {
+          secretsManagerConfig: {
+            name: this.fromPerBrandStaticValues(BLC_AU_BRAND).integrationProviderSecretsManagerName,
+          },
+        },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_AU_BRAND).secretManagerName,
         },
@@ -310,6 +343,11 @@ export class RedemptionsStackConfigResolver {
         },
       },
       [DDS_UK_BRAND]: {
+        integrationProviderConfig: {
+          secretsManagerConfig: {
+            name: this.fromPerBrandStaticValues(DDS_UK_BRAND).integrationProviderSecretsManagerName,
+          },
+        },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(DDS_UK_BRAND).secretManagerName,
         },
@@ -352,6 +390,11 @@ export class RedemptionsStackConfigResolver {
 
   public static forPrStage(): RedemptionsStackConfig {
     return {
+      integrationProviderConfig: {
+        secretsManagerConfig: {
+          name: 'blc-mono-redemptions/integrationProviderSecrets',
+        },
+      },
       secretsManagerConfig: {
         secretsManagerName: 'blc-mono-redemptions/NewVaultSecrets',
       },
@@ -395,6 +438,11 @@ export class RedemptionsStackConfigResolver {
 
   public static fromEnvironmentVariables(stage: string, brand: Brand): RedemptionsStackConfig {
     return {
+      integrationProviderConfig: {
+        secretsManagerConfig: {
+          name: 'blc-mono-redemptions/integrationProviderSecrets-dev',
+        },
+      },
       secretsManagerConfig: {
         secretsManagerName: this.fromPerBrandStaticValues(brand).secretManagerName,
       },
@@ -474,12 +522,15 @@ export class RedemptionsStackConfigResolver {
     const values: Record<Brand, PerBrandStaticValues> = {
       [BLC_AU_BRAND]: {
         secretManagerName: 'blc-mono-redemptions/NewVaultSecrets-blc-au',
+        integrationProviderSecretsManagerName: 'blc-mono-redemptions/integrationProviderSecrets-blc-au',
       },
       [BLC_UK_BRAND]: {
         secretManagerName: 'blc-mono-redemptions/NewVaultSecrets',
+        integrationProviderSecretsManagerName: 'blc-mono-redemptions/integrationProviderSecrets',
       },
       [DDS_UK_BRAND]: {
         secretManagerName: 'blc-mono-redemptions/NewVaultSecrets-dds-uk',
+        integrationProviderSecretsManagerName: 'blc-mono-redemptions/integrationProviderSecrets-dds-uk',
       },
     };
 

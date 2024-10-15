@@ -14,7 +14,7 @@ async function callCallbackEndpoint(body: RequestBody): Promise<Response> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-API-Key': apiKey,
+      'x-api-key': apiKey,
     },
     body: JSON.stringify(body),
   };
@@ -25,7 +25,7 @@ async function callCallbackEndpoint(body: RequestBody): Promise<Response> {
 beforeAll(async () => {
   // eslint-disable-next-line no-console
   const APIGateway = new AWS.APIGateway();
-  const keyLookup = `${process.env.SST_STAGE}-redemptions-admin`;
+  const keyLookup = `${process.env.SST_STAGE}-redemptions-uniqodo`;
   apiKey = await new Promise((resolve) => {
     APIGateway.getApiKeys({ nameQuery: keyLookup, includeValues: true }, (_err, data) => {
       if (!data.items![0].value) {

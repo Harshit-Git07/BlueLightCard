@@ -37,7 +37,7 @@ export class CallbackController extends APIGatewayController<ParsedRequest> {
 
   protected async parseRequest(request: APIGatewayProxyEventV2): Promise<Result<ParsedRequest, ParseRequestError>> {
     const secrets = await this.secretsManager.getSecretValueJson(
-      getEnv(RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME),
+      getEnv(RedemptionsStackEnvironmentKeys.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME),
     );
     const { uniqodoApiKey, eagleEyeApiKey } = IntegrationsSecretSchema.parse(secrets);
 

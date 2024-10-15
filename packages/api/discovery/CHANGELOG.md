@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.10.0...bluelightcard/discovery-v1.11.0) (2024-10-15)
+
+
+### Features
+
+* [DISCO-1004] Add explicit mapping to index population ([#2490](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2490)) ([d5b0d5a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d5b0d5a21978b16d7289e152cf055eab381c4f28))
+* [DISCO-1004] Remove image url validation, add error logging ([#2467](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2467)) ([daae248](https://github.com/bluelightcard/BlueLightCard-2.0/commit/daae24821b9fcbf3c042c30a8942e1f152ec963c))
+* [DISCO-938] Add categories API to return static list of categories ([#2443](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2443)) ([96075ae](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96075aeacccd0a8796bd00f46159f50df6b373ad))
+* [DISCO-991] Remove old search indices every 12 hours ([#2457](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2457)) ([1b618d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1b618d2e6e3f1281ce9fbeecedfc64f521efc370))
+* DISCO - 1002 - Menus Spec added to open api ([#2441](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2441)) ([41e2566](https://github.com/bluelightcard/BlueLightCard-2.0/commit/41e2566bce39dfe57615aba2f18b5fcced6d688e))
+
+
+### Bug Fixes
+
+* [DISCO-1004] Add deduplication logic and limit the search results to 40 ([#2486](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2486)) ([67bf354](https://github.com/bluelightcard/BlueLightCard-2.0/commit/67bf354bba521fdf8e35fdbcedd75189d1352c4d))
+
+
+### Other Changes
+
+* [None] Update git workflow to add e2e test to production deploy pre-requisites, update test data in e2e test ([#2477](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2477)) ([aef3115](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aef3115b75353c789753db851d963c551071ad8e))
+
 ## [1.10.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.9.1...bluelightcard/discovery-v1.10.0) (2024-10-09)
 
 

@@ -1,6 +1,6 @@
 export type HomepageMenu = {
+  id: string;
   name: string;
-  offers: number[];
   startTime: string;
   endTime: string;
   updatedAt: string;

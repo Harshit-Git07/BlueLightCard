@@ -4,8 +4,8 @@ describe('HomepageMenu Factory', () => {
   it('should build a default HomepageMenu object', () => {
     const menu = homepageMenuFactory.build();
     expect(menu).toEqual({
+      id: '1',
       name: 'Sample Menu',
-      offers: [1, 2, 3],
       startTime: '2024-09-01T00:00:00',
       endTime: '2024-09-30T23:59:59',
       updatedAt: '2024-09-01T00:00:00',

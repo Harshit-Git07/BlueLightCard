@@ -286,7 +286,7 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ':white_check_mark: :test_tube: Staging deployment for Web (${{matrix.brand}}) was successful!'
+          title: ':test_tube: Staging deployment for Web (${{matrix.brand}}) was successful!'
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && (needs.changelog.outputs.releases_created || needs.sharedui-changelog.outputs.releases_created)
@@ -404,10 +404,10 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-          title: ':x: Production deployment failed for Web (${{matrix.brand}})!'
+          title: '@here :x: Production deployment failed for Web (${{matrix.brand}})!'
       - name: Send Slack message on success
         if: ${{ success() }}
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ':white_check_mark: Production deployment for Web (${{matrix.brand}}) was successful!'
+          title: ':rocket: Production deployment for Web (${{matrix.brand}}) was successful!'

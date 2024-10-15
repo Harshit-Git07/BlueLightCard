@@ -266,7 +266,7 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ":white_check_mark: :test_tube: Staging deployment for Redemptions (${{matrix.deployment.brand}}) was successful!"
+          title: ":test_tube: Staging deployment for Redemptions (${{matrix.deployment.brand}}) was successful!"
 
   e2e-redemptions:
     name: Run E2E tests (redemptions)
@@ -427,10 +427,10 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-          title: ":x: Production deployment failed for Redemptions (${{matrix.deployment.brand}})!"
+          title: "@here :x: Production deployment failed for Redemptions (${{matrix.deployment.brand}})!"
       - name: Send Slack message on success
         if: ${{ success() }}
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ":white_check_mark: Production deployment for Redemptions (${{matrix.deployment.brand}}) was successful!"
+          title: ":rocket: Production deployment for Redemptions (${{matrix.deployment.brand}}) was successful!"

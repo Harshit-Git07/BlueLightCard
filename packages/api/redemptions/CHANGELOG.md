@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.28.0...bluelightcard/redemptions-v1.29.0) (2024-10-15)
+
+
+### Features
+
+* (READ DESC BEFORE RELEASE) update body from callback update ([#2427](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2427)) ([3c2f59c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3c2f59cfe8862e5c6cc3b305c3da9c26242e8a7f))
+* [TR-234] (BEFORE RELEASE PLEASE READ DESC.) Transactional email per brand ([#2286](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2286)) ([546d9b4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/546d9b47e13113cf7a15c9c250f6e8f80a42a1d0))
+* [TR-744] Handle duplicate vault code uploads ([#2450](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2450)) ([6e89bad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6e89bad1265c3955f55aaee88259ff0c6610e4e8))
+* [TR-820] admin api post generic and vault ([#2414](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2414)) ([ce2d9d6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ce2d9d6f17580a49bf782623ee8f755a8c8da49d))
+* [TR-823] admin api POST vault and vaultQR ([#2474](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2474)) ([99639bf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99639bf7da402dbf19b930495ca0f2c3c8e90f03))
+* Tr 821 admin api patch generic strategy ([#2338](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2338)) ([5820ac2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5820ac262230388800346ccbf4f09a08117ff399))
+* Tr 821 admin api patch generic validation ([#2421](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2421)) ([7f4ce66](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7f4ce66eac4d9e7030afb2e9ea3ef722c371fd9c))
+* tr 824 patch vault and vault qr redemption type ([#2410](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2410)) ([71f90d9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/71f90d9dbbf96f0baf4c779d2f559e10d7026cf1))
+* Tr 970 vault integration codes db table ([#2401](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2401)) ([62aacb1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/62aacb126e994da61786ed40746dd71984bdc8ae))
+
+
+### Bug Fixes
+
+* [TR-820] resolve e2e test issues ([#2468](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2468)) ([5c35e7a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5c35e7a80e5ebbd156209df7751aaadb989333a4))
+* [TR-823] remove created datetime from request body ([#2481](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2481)) ([b65a38d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b65a38da821b453aa6bb0328524974375500b1ec))
+* e2e test ([#2487](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2487)) ([0346247](https://github.com/bluelightcard/BlueLightCard-2.0/commit/03462476ad1ec3db0370139b5cb83d802c4ab3de))
+* tests - maybe ([#2472](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2472)) ([78ca157](https://github.com/bluelightcard/BlueLightCard-2.0/commit/78ca1573f48fe57a067710f58641a6a3bd412883))
+* tr 824  ([#2458](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2458)) ([0493269](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0493269fd2e95a5bfe15bd575b667a54eaa3bf68))
+* TR-819 - fix broken redemption e2e tests ([#2353](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2353)) ([be32d69](https://github.com/bluelightcard/BlueLightCard-2.0/commit/be32d69c888459ffde8e2da634ed23cdcb776cd7))
+
 ## [1.28.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.27.0...bluelightcard/redemptions-v1.28.0) (2024-09-30)
 
 

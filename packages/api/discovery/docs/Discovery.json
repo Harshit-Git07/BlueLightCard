@@ -195,7 +195,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "query",
             "description": "The id or id's of the menus to retrieve",
             "schema": {
               "type": "array",

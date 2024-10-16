@@ -123,6 +123,15 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       requestValidatorName: 'GetCategoriesValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
+    'GET /menus': Route.createRoute({
+      apiGatewayModelGenerator,
+      stack,
+      functionName: 'GetMenusHandler',
+      restApi,
+      handler: 'packages/api/discovery/application/handlers/Menus/getMenus.handler',
+      requestValidatorName: 'GetMenusValidator',
+      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+    }),
   });
 
   const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);

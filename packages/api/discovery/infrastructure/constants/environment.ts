@@ -11,6 +11,7 @@ export enum DiscoveryStackEnvironmentKeys {
   OPENSEARCH_DOMAIN_ENDPOINT = 'OPENSEARCH_DOMAIN_ENDPOINT',
   // Search
   SEARCH_ENDPOINT = 'SEARCH_ENDPOINT',
+  MENU_ENDPOINT = 'MENU_ENDPOINT',
   SEARCH_OFFER_COMPANY_TABLE_NAME = 'SEARCH_OFFER_COMPANY_TABLE_NAME',
   TIMEZONE_OFFSET = 'TIMEZONE_OFFSET',
   REGION = 'REGION',
@@ -20,4 +21,5 @@ export enum DiscoveryStackEnvironmentKeys {
 
 export const ENDPOINTS = {
   SEARCH: process.env[DiscoveryStackEnvironmentKeys.SEARCH_ENDPOINT],
+  MENU: process.env[DiscoveryStackEnvironmentKeys.MENU_ENDPOINT],
 };

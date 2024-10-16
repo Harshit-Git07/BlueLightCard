@@ -607,7 +607,7 @@ jobs:
           body-includes: '🚀 Successfully deployed Hybrid preview environment for ${{matrix.brand}}'
 
       - name: Create Comment for Frontend ${{matrix.brand}}
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: success() && github.event.number
         with:
           issue-number: ${{ github.event.number }}

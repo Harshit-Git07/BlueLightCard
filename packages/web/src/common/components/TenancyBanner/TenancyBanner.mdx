@@ -1,9 +1,9 @@
 import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
 import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
 import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
-import * as TenancyBanner from './TenancyBanner.stories';
+import * as TenancyBannerPresenter from './TenancyBanner.stories';
 
-<Meta of={TenancyBanner} />
+<Meta of={TenancyBannerPresenter} />
 
 # Tenancy Banner
 
@@ -61,3 +61,15 @@ There is currently no design available for this component, however:
 
 - the large variant should look identical to the promo banner carousel on the Web Home page
 - the small variant should look identical to the adverts banner carousel on the Web Search page
+
+## Variants
+
+List of variants can be shown below here.
+
+### Large
+
+<Canvas of={TenancyBannerPresenter.Large} />
+
+### Small
+
+<Canvas of={TenancyBannerPresenter.Small} />

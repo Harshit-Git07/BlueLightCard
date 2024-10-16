@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TenancyBanner component Should render TenancyBanner component with no errors 1`] = `
+<div>
+  <div
+    class="swiper swiper-initialized swiper-horizontal"
+  >
+    <div
+      class="swiper-wrapper"
+      style="cursor: grab; transition-duration: 0ms; transition-delay: 0ms; transform: translate3d(NaNpx, 0px, 0px);"
+    />
+    <div
+      class="swiper-button-prev"
+    />
+    <div
+      class="swiper-button-next"
+    />
+  </div>
+</div>
+`;

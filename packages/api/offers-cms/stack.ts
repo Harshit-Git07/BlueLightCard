@@ -41,16 +41,6 @@ export function OffersCMS({ stack }: StackContext) {
 
   const { rawDataTable, offersDataTable, companyDataTable } = createTables(stack);
 
-  const apiFunction = new Function(stack, API_FUNCTION_NAME, {
-    handler: 'packages/api/offers-cms/lambda/api.handler',
-    bind: [offersDataTable, companyDataTable],
-    url: true,
-    environment: {
-      OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
-      DISCOVERY_EVENT_BUS_NAME: discoveryBusName,
-    },
-  });
-
   const consumerFunction = new Function(stack, CONSUMER_FUNCTION_NAME, {
     handler: 'packages/api/offers-cms/lambda/consumer.handler',
     bind: [rawDataTable, offersDataTable, companyDataTable],
@@ -108,12 +98,27 @@ export function OffersCMS({ stack }: StackContext) {
     cliLogger.info({ message: 'CMS Account not set. Skipping resource policy creation.' });
   }
 
+  const apiFunction = new Function(stack, API_FUNCTION_NAME, {
+    handler: 'packages/api/offers-cms/lambda/api.handler',
+    bind: [offersDataTable, companyDataTable],
+    url: true,
+    environment: {
+      BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
+    },
+  });
+
   const gateway = new ApiGatewayV1Api(stack, API_GATEWAY_NAME, {
     authorizers: {
       offersAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
     },
     defaults: {
       authorizer: 'offersAuthorizer',
+      function: {
+        bind: [offersDataTable, companyDataTable],
+        environment: {
+          BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
+        },
+      },
     },
     cdk: {
       restApi: {

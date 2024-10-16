@@ -10,8 +10,7 @@ export async function getCompany(id: string) {
   const item = await db.get({
     TableName: cmsTable,
     Key: {
-      _id: id,
-      _type: 'company',
+      companyId: id,
     },
   });
 

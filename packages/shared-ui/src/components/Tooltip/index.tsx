@@ -25,7 +25,7 @@ const Tooltip: FC<Props> = ({ children, text, position, isOpen, isMaxWidth = fal
   const squareCss = useCSSMerge(
     squareWidthCss,
     squarePositionCss,
-    'transition-opacity ease-in',
+    'transition-opacity ease-in pointer-events-none',
     `max-w-60 text-center rounded px-4 py-[6px] ${!isOpen && 'opacity-0'} group-hover:opacity-100 absolute`,
     'bg-colour-surface-inverse dark:bg-colour-surface-inverse-dark dark:text-colour-onSurface text-colour-onSurface-dark',
     'font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small',

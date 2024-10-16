@@ -27,6 +27,8 @@ export enum ThemeVariant {
   Primary = 'primary',
   Secondary = 'secondary',
   Tertiary = 'tertiary',
+  PrimaryDanger = 'primary-danger',
+  TertiaryDanger = 'tertiary-danger',
 }
 
 export type ThemeColorTokens = Record<

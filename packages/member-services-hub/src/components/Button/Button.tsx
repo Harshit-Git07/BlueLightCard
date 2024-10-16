@@ -30,6 +30,13 @@ const colorVariants: ThemeColorTokens = {
     },
   },
 };
+
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/Button-V2/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
+
 const Button: FC<ButtonProps> = ({
   id,
   name,

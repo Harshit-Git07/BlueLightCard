@@ -1,0 +1,57 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import * as Button from './Button.stories';
+
+<Meta of={Button} />
+
+# Button
+
+- [Overview](#overview)
+- [Props](#props)
+- [Usage](#usage)
+- [Variants](#variants)
+- [Design](#design)
+
+## Overview
+Buttons are clickable items used for actions and to trigger events, for example, opening/closing a dialogue, cancelling an action or performing a delete operation or submitting a form. They can have different styles depending on their needs.
+
+Tertiary buttons, which look similar to links, are used for less important or less commonly used actions.
+
+## Props
+<Controls />
+
+## Usage
+➡️ Buttons may contain icon, on the left or the right side, padding between icon and text is 8px.
+
+➡️ Use 8 px spacing between buttons stacked horizontally and 16px space between buttons stacked vertically.
+
+➡️ Replace text with a loading action is submitted, but still processing(Out of scope) 24px horizontal padding and fixed height based on each button size.
+
+➡️ Button is always set to hug contents avoid changing width. In certain layouts button width fills container i.e mobile screen.
+
+➡️ Use only one primary button per content area, and any remaining calls to action (CTA) should be represented as lower emphasis buttons.
+
+➡️ Should have just 1 word for explaining the action; a maximum of 3 words where only the first one will be capitalised something
+
+➡️ If two buttons are stacked horizontally, secondary action uses secondary button at min width and primary action fills containerMust include sub-section on accessibility
+
+## Variants
+List of variants can be shown below here.
+
+### Primary
+<Canvas of={Button.Primary} />
+
+### Secondary
+<Canvas of={Button.Secondary} />
+
+### Tertiary
+<Canvas of={Button.Tertiary} />
+
+### PrimaryDanger
+<Canvas of={Button.PrimaryDanger} />
+
+### TertiaryDanger
+<Canvas of={Button.TertiaryDanger} />
+
+### Design
+Please see the [Figma design](<https://www.figma.com/design/OHV7qGPnjsPLs5aTcYwSoB/Blue-Print-(WIP)?node-id=1605-12652&node-type=frame&t=zju6ZcPBgfJJmo3q-0>) for the design of the Button component.

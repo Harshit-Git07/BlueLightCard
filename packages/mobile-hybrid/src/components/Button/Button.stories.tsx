@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import Button from './Button';
 
 const componentMeta: Meta<typeof Button> = {
-  title: 'Button',
+  title: 'Deprecated/Button',
   component: Button,
 };
 

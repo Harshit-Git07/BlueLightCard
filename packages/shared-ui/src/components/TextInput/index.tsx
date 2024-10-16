@@ -1,21 +1,40 @@
-import React, { FC, forwardRef, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/pro-solid-svg-icons';
 
 import { TextInputProps, TextInputState } from './types';
 
-type Props = TextInputProps;
+const getInputClasses = (state: TextInputState) => {
+  const baseClasses = 'w-full rounded-md px-4 border focus:outline-none pt-6 pb-2';
 
-const getInputLabelClasses = (state: TextInputState) => {
   switch (state) {
     case 'Active':
-      return 'border-colour-primary dark:border-colour-primary-dark';
+    case 'Filled':
+      return `${baseClasses} border-colour-primary dark:border-colour-primary-dark bg-transparent`;
     case 'Error':
-      return 'border-colour-onError-container dark:border-colour-onError-container-dark';
+      return `${baseClasses} border-colour-error dark:border-colour-error bg-transparent`;
     case 'Disabled':
-      return 'placeholder-colour-onSurface-disabled dark:placeholder-colour-onSurface-disabled-dark bg-colour-surface-container dark:bg-colour-surface-container-dark';
+      return `${baseClasses} bg-colour-surface-container border-colour-onSurface-outline-subtle dark:bg-colour-surface-container-dark dark:border-colour-onSurface-outline-subtle-dark`;
     default:
-      return 'border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-palette-white';
+      return `${baseClasses} border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent`;
+  }
+};
+
+const getPlaceholderClasses = (state: TextInputState) => {
+  const baseClasses = 'absolute left-4 transition-all duration-200 pointer-events-none';
+  const activeClasses =
+    'font-typography-label font-typography-label-weight text-typography-label leading-typography-label top-2';
+  const inactiveClasses =
+    'font-typography-body font-typography-body-weight text-typography-body leading-typography-body top-1/2 -translate-y-1/2';
+
+  switch (state) {
+    case 'Active':
+    case 'Filled':
+      return `${baseClasses} ${activeClasses} text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark`;
+    case 'Disabled':
+      return `${baseClasses} ${inactiveClasses} text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark`;
+    default:
+      return `${baseClasses} ${inactiveClasses} text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark`;
   }
 };
 
@@ -31,12 +50,13 @@ const getMessageLabelClasses = (state: TextInputState) => {
 };
 
 const TextInput: FC<TextInputProps> = ({
+  id,
   name,
   state = 'Default',
   value,
   required = false,
-  maxChars = 100,
-  _ref,
+  maxChars = 200,
+  showCharCount,
   onChange,
   onKeyDown,
   placeholder,
@@ -49,20 +69,14 @@ const TextInput: FC<TextInputProps> = ({
   showHelpMessage = false,
   infoMessage,
   showInfoMessage = false,
+  ariaLabel,
 }) => {
   const [inputState, setInputState] = useState<TextInputState>(state);
+  const remainingChars = maxChars - (value?.length ?? 0);
 
   useEffect(() => {
-    if (value) {
-      if (value.length > 0) {
-        setInputState('Filled');
-      } else {
-        setInputState(state);
-      }
-    } else {
-      setInputState(state);
-    }
-  }, [value, state]);
+    setInputState(state);
+  }, [state]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -87,24 +101,30 @@ const TextInput: FC<TextInputProps> = ({
 
   const helpMessageId = `${name}-help`;
   const infoMessageId = `${name}-info`;
+  const charCountId = `${name}-char-count`;
 
   const getAriaDescribedBy = () => {
     const ids = [];
     if (showHelpMessage && helpMessage) ids.push(helpMessageId);
     if (showInfoMessage && infoMessage) ids.push(infoMessageId);
+    if (showCharCount) ids.push(charCountId);
     return ids.length > 0 ? ids.join(' ') : undefined;
   };
 
   return (
     <div className="space-y-2">
-      {(showLabel || showIcon) && (
+      {showLabel && (
         <div className="flex items-center gap-2">
           {showLabel && (
-            <label className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body">
+            <label
+              htmlFor={id ?? name}
+              aria-label={ariaLabel}
+              className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+            >
               {label}
             </label>
           )}
-          {showIcon && (
+          {showIcon && showLabel && (
             <FontAwesomeIcon
               className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
               icon={faCircleInfo}
@@ -122,17 +142,15 @@ const TextInput: FC<TextInputProps> = ({
         </div>
       )}
 
-      <div className="relative">
+      <div className="relative h-[50px]">
         <input
-          id={name}
-          className={`w-full rounded-md py-2 px-3 ${getInputLabelClasses(inputState)} border focus:outline-none text-colour-onSurface dark:text-colour-onSurface-dark placeholder-colour-onSurface-subtle dark:placeholder-colour-onSurface-subtle-dark`}
+          id={id ?? name}
+          className={`${getInputClasses(inputState)} text-colour-onSurface dark:text-colour-onSurface-dark h-full`}
           value={value}
-          placeholder={inputState === 'Active' ? '' : placeholder}
           maxLength={maxChars}
           min={min}
           max={max}
           name={name}
-          aria-label={name}
           required={required}
           onChange={handleChange}
           onKeyDown={onKeyDown}
@@ -143,14 +161,7 @@ const TextInput: FC<TextInputProps> = ({
           aria-required={required}
           aria-describedby={getAriaDescribedBy()}
         />
-        {inputState === 'Active' && (
-          <label
-            htmlFor={name}
-            className="absolute left-3 -top-2 bg-white dark:bg-gray-800 px-1 transition-all duration-200 pointer-events-none text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small leading-typography-body tracking-typography-body"
-          >
-            {placeholder}
-          </label>
-        )}
+        <span className={getPlaceholderClasses(inputState)}>{placeholder}</span>
       </div>
 
       {showInfoMessage && infoMessage && (
@@ -163,13 +174,16 @@ const TextInput: FC<TextInputProps> = ({
           </label>
         </div>
       )}
+      {showCharCount && (
+        <div
+          id={charCountId}
+          className={`font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small ${getMessageLabelClasses(inputState)}`}
+        >
+          {remainingChars} characters remaining
+        </div>
+      )}
     </div>
   );
 };
 
-// eslint-disable-next-line react/display-name
-const TextInputWithRef = forwardRef<unknown, Props>((props, ref) => (
-  <TextInput {...props} _ref={ref} />
-));
-
-export default TextInputWithRef;
+export default TextInput;

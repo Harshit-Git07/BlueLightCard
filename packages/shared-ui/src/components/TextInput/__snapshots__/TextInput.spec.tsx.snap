@@ -5,24 +5,27 @@ exports[`TextInput component snapshot tests renders default input correctly 1`] 
   className="space-y-2"
 >
   <div
-    className="relative"
+    className="relative h-[50px]"
   >
     <input
       aria-invalid={false}
-      aria-label="test-input"
       aria-required={false}
-      className="w-full rounded-md py-2 px-3 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-palette-white border focus:outline-none text-colour-onSurface dark:text-colour-onSurface-dark placeholder-colour-onSurface-subtle dark:placeholder-colour-onSurface-subtle-dark"
+      className="w-full rounded-md px-4 border focus:outline-none pt-6 pb-2 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent text-colour-onSurface dark:text-colour-onSurface-dark h-full"
       disabled={false}
       id="test-input"
-      maxLength={100}
+      maxLength={200}
       name="test-input"
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}
-      placeholder="Enter text"
       required={false}
       value=""
     />
+    <span
+      className="absolute left-4 transition-all duration-200 pointer-events-none font-typography-body font-typography-body-weight text-typography-body leading-typography-body top-1/2 -translate-y-1/2 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    >
+      Enter text
+    </span>
   </div>
 </div>
 `;
@@ -32,25 +35,28 @@ exports[`TextInput component snapshot tests renders input in error state 1`] = `
   className="space-y-2"
 >
   <div
-    className="relative"
+    className="relative h-[50px]"
   >
     <input
       aria-describedby="test-input-info"
       aria-invalid={true}
-      aria-label="test-input"
       aria-required={false}
-      className="w-full rounded-md py-2 px-3 border-colour-onError-container dark:border-colour-onError-container-dark border focus:outline-none text-colour-onSurface dark:text-colour-onSurface-dark placeholder-colour-onSurface-subtle dark:placeholder-colour-onSurface-subtle-dark"
+      className="w-full rounded-md px-4 border focus:outline-none pt-6 pb-2 border-colour-error dark:border-colour-error bg-transparent text-colour-onSurface dark:text-colour-onSurface-dark h-full"
       disabled={false}
       id="test-input"
-      maxLength={100}
+      maxLength={200}
       name="test-input"
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}
-      placeholder="Enter text"
       required={false}
       value=""
     />
+    <span
+      className="absolute left-4 transition-all duration-200 pointer-events-none font-typography-body font-typography-body-weight text-typography-body leading-typography-body top-1/2 -translate-y-1/2 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    >
+      Enter text
+    </span>
   </div>
   <div>
     <label
@@ -72,6 +78,7 @@ exports[`TextInput component snapshot tests renders input with label and icon 1`
   >
     <label
       className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+      htmlFor="test-input"
     >
       Test-label
     </label>
@@ -94,24 +101,27 @@ exports[`TextInput component snapshot tests renders input with label and icon 1`
     </svg>
   </div>
   <div
-    className="relative"
+    className="relative h-[50px]"
   >
     <input
       aria-invalid={false}
-      aria-label="test-input"
       aria-required={false}
-      className="w-full rounded-md py-2 px-3 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-palette-white border focus:outline-none text-colour-onSurface dark:text-colour-onSurface-dark placeholder-colour-onSurface-subtle dark:placeholder-colour-onSurface-subtle-dark"
+      className="w-full rounded-md px-4 border focus:outline-none pt-6 pb-2 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent text-colour-onSurface dark:text-colour-onSurface-dark h-full"
       disabled={false}
       id="test-input"
-      maxLength={100}
+      maxLength={200}
       name="test-input"
       onBlur={[Function]}
       onChange={[Function]}
       onFocus={[Function]}
-      placeholder="Enter text"
       required={false}
       value=""
     />
+    <span
+      className="absolute left-4 transition-all duration-200 pointer-events-none font-typography-body font-typography-body-weight text-typography-body leading-typography-body top-1/2 -translate-y-1/2 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    >
+      Enter text
+    </span>
   </div>
 </div>
 `;

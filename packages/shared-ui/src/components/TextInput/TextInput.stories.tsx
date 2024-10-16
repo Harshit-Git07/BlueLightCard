@@ -44,32 +44,9 @@ Default.args = {
   name: 'default-input',
   placeholder: 'Enter text here',
   label: 'Default Input',
-  infoMessage: 'Additional information about this field',
-  helpMessage: 'This is a help message',
+  ariaLabel: 'This is a example aria text for screen readers',
   state: 'Default' as TextInputState,
-};
-
-export const WithLabel = Template.bind({});
-WithLabel.args = {
-  ...Default.args,
   showLabel: true,
-};
-
-export const WithIcon = Template.bind({});
-WithIcon.args = {
-  ...Default.args,
-  showIcon: true,
-};
-
-export const WithLabelAndIcon = Template.bind({});
-WithLabelAndIcon.args = {
-  ...Default.args,
-  showIcon: true,
-  showLabel: true,
-  helpMessage: 'This is a help message',
-  showHelpMessage: true,
-  infoMessage: 'Additional information about this field',
-  showInfoMessage: true,
 };
 
 export const Active = Template.bind({});
@@ -89,7 +66,8 @@ export const Error = Template.bind({});
 Error.args = {
   ...Default.args,
   state: 'Error' as TextInputState,
-  infoMessage: 'This field has an error',
+  required: true,
+  infoMessage: 'This field is required',
   showInfoMessage: true,
 };
 
@@ -99,29 +77,54 @@ Disabled.args = {
   state: 'Disabled' as TextInputState,
 };
 
+export const ShowLabelWithIcon = Template.bind({});
+ShowLabelWithIcon.args = {
+  ...Default.args,
+  showLabel: true,
+};
+
+export const ShowLabelWithoutIcon = Template.bind({});
+ShowLabelWithoutIcon.args = {
+  ...Default.args,
+  showIcon: true,
+  helpMessage: 'This is a help message',
+};
+
+export const ShowHelpMessage = Template.bind({});
+ShowHelpMessage.args = {
+  ...Default.args,
+  helpMessage: 'This is a help message',
+  showHelpMessage: true,
+};
+
+export const ShowInfoMessage = Template.bind({});
+ShowInfoMessage.args = {
+  ...Default.args,
+  infoMessage: 'Additional information about this field',
+  showInfoMessage: true,
+};
+
 export const WithMaxChars = Template.bind({});
 WithMaxChars.args = {
   ...Default.args,
   maxChars: 20,
-  infoMessage: '0/20 characters',
-  showInfoMessage: true,
-};
-
-export const Required = Template.bind({});
-Required.args = {
-  ...Default.args,
-  required: true,
+  showCharCount: true,
 };
 
 export const WithAllFeatures = Template.bind({});
 WithAllFeatures.args = {
-  ...Default.args,
+  name: 'all-features-input',
+  placeholder: 'Enter text here',
+  label: 'Input with All Features',
+  state: 'Default' as TextInputState,
   showLabel: true,
   showIcon: true,
+  required: true,
+  maxChars: 50,
   helpMessage: 'This is a help message',
   showHelpMessage: true,
   infoMessage: 'Additional information about this field',
   showInfoMessage: true,
-  required: true,
-  maxChars: 50,
+  ariaLabel: 'This is a example aria text for screen readers',
+  showCharCount: true,
 };

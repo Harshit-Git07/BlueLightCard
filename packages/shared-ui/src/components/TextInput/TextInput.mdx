@@ -55,7 +55,7 @@ Usage example using jsx
 
 ```jsx
 import React, { useState, useEffect } from 'react';
-import TextInput from './TextInput'; // Adjust the import path as necessary
+import TextInput from './TextInput';
 
 const ExampleComponent = () => {
   const [inputValue, setInputValue] = useState('');
@@ -86,6 +86,7 @@ const ExampleComponent = () => {
   return (
     <div className="p-4">
       <TextInput
+        id="textInput1"
         name="example-input"
         label="Example Input"
         placeholder="Enter text here"
@@ -97,6 +98,7 @@ const ExampleComponent = () => {
         helpMessage={helpMessage}
         required={true}
         maxChars={50}
+        ariaLabel="Example input field"
       />
     </div>
   );
@@ -112,4 +114,6 @@ export default ExampleComponent;
 ➡️ Character or word counters should be used if there is a character or word limit.
 
 ## Design
-Use the `<FigmaEmbed />` component.
+- [Confluence: Text Input Documentation](https://bluelightcard.atlassian.net/wiki/spaces/PE/pages/2935881730/Text+Input)
+- [Figma: TextInput](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=22-4300&node-type=canvas&m=dev)
+

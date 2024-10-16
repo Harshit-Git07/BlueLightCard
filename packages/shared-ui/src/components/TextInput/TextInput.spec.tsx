@@ -48,6 +48,14 @@ describe('TextInput component', () => {
       const input = screen.getByRole('textbox') as HTMLInputElement;
       expect(input.disabled).toBeTruthy();
     });
+
+    it('should set aria-describedby correctly', () => {
+      render(
+        <TextInput {...props} showInfoMessage={true} infoMessage="Info" showCharCount={true} />,
+      );
+      const input = screen.getByRole('textbox');
+      expect(input.getAttribute('aria-describedby')).toBe('test-input-info test-input-char-count');
+    });
   });
 
   describe('visual tests', () => {
@@ -57,9 +65,9 @@ describe('TextInput component', () => {
       expect(label).toBeTruthy();
     });
 
-    it('should show icon when showIcon is true', () => {
-      render(<TextInput {...props} showIcon={true} />);
-      const icon = screen.getByRole('img', { hidden: true });
+    it('should show icon only when both showIcon and showLabel are true', () => {
+      render(<TextInput {...props} showIcon={true} showLabel={true} />);
+      const icon = screen.queryByRole('img', { hidden: true });
       expect(icon).toBeTruthy();
     });
 
@@ -67,6 +75,16 @@ describe('TextInput component', () => {
       render(<TextInput {...props} showInfoMessage={true} infoMessage="Test message" />);
       const message = screen.getByText('Test message');
       expect(message).toBeTruthy();
+    });
+
+    it('should display character count when showCharCount is true', () => {
+      render(<TextInput {...props} showCharCount={true} value="Test" maxChars={10} />);
+      expect(screen.getByText('6 characters remaining')).toBeTruthy();
+    });
+
+    it('should display help message when showHelpMessage is true', () => {
+      render(<TextInput {...props} showHelpMessage={true} helpMessage="This is a help message" />);
+      expect(screen.getByText('This is a help message')).toBeTruthy();
     });
   });
 

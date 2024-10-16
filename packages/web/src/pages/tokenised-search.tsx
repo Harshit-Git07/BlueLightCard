@@ -36,6 +36,7 @@ import {
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { z } from 'zod';
 import useFetchCompaniesOrCategories from '../common/hooks/useFetchCompaniesOrCategories';
+import { isCategorySelected } from '../page-components/SearchDropDown/isCategorySelected';
 
 const he = require('he');
 
@@ -262,6 +263,7 @@ export const TokenisedSearch: NextPage = () => {
             pillGroup={categories.map((cat) => ({
               id: Number(cat.id),
               label: cat.name,
+              selected: isCategorySelected(cat.id, window.location.pathname),
             }))}
             onSelectedPill={changeCategoryHandler}
           />

@@ -194,6 +194,7 @@ describe('SearchPage', () => {
     Object.defineProperty(window, 'location', {
       value: {
         href: 'https://localhost',
+        pathname: '',
       },
       writable: true,
     });

@@ -1,16 +1,9 @@
-import React, { KeyboardEvent, useState } from 'react';
+import React, { KeyboardEvent } from 'react';
 import { PillGroupProps, PillProps } from './types';
 import PillButtons from '../PillButtons';
 import { PlatformVariant } from '../../../src/types';
 
 const PillGroup: React.FC<PillGroupProps> = ({ pillGroup, onSelectedPill, title }) => {
-  const [selectedPillId, setSelectedPillId] = useState<string | null>(null);
-
-  const handlePillClick = (pill: PillProps) => {
-    setSelectedPillId(pill.id.toString());
-    onSelectedPill(pill);
-  };
-
   const handlePillKeyDown = (event: KeyboardEvent) => {
     const previousKeys = ['ArrowLeft', 'ArrowUp'];
     if (previousKeys.includes(event.key) && event.currentTarget.previousElementSibling) {
@@ -42,9 +35,9 @@ const PillGroup: React.FC<PillGroupProps> = ({ pillGroup, onSelectedPill, title 
             key={pill.id}
             text={pill.label}
             tabIndex={index}
-            onSelected={() => handlePillClick(pill)}
+            onSelected={() => onSelectedPill(pill)}
             onKeyDown={handlePillKeyDown}
-            isSelected={selectedPillId === pill.id.toString()}
+            isSelected={pill.selected}
             platform={PlatformVariant.MobileHybrid}
           />
         ))}

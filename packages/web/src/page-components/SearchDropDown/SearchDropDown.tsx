@@ -5,22 +5,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/pro-solid-svg-icons';
 import { Dropdown, PillGroup } from '@bluelightcard/shared-ui';
 import UserContext from '@/context/User/UserContext';
-import useFetchCompaniesOrCategories, {
-  CategoryType,
-  CompanyType,
-} from '@/hooks/useFetchCompaniesOrCategories';
+import useFetchCompaniesOrCategories, { CompanyType } from '@/hooks/useFetchCompaniesOrCategories';
+import { PillProps } from '@bluelightcard/shared-ui/components/PillGroup/types';
+import { isCategorySelected } from './isCategorySelected';
 
 type SearchDropDownPresenterProps = {
   onSearchCategoryChange: (categoryId: string, categoryName: string) => void;
   onSearchCompanyChange: (companyId: string, companyName: string) => void;
   onClose: () => void;
   isOpen: boolean;
-  categories: CategoryType[];
+  categoriesForPillGroup: PillProps[];
   companies: CompanyType[];
 };
 
 export const SearchDropDownPresenter = ({
-  categories,
+  categoriesForPillGroup,
   companies,
   isOpen,
   onSearchCategoryChange,
@@ -78,10 +77,7 @@ export const SearchDropDownPresenter = ({
           <div className="my-[22px] px-4">
             <PillGroup
               title={'Browse categories'}
-              pillGroup={categories.map((cat) => ({
-                id: Number(cat.id),
-                label: cat.name,
-              }))}
+              pillGroup={categoriesForPillGroup}
               onSelectedPill={(pill) => {
                 if (pill) {
                   onSearchCategoryChange(pill.id.toString(), pill.label);
@@ -125,11 +121,17 @@ const SearchDropDown: FC<SearchDropDownProps> = ({
   const userCtx = useContext(UserContext);
   const { categories, companies } = useFetchCompaniesOrCategories(userCtx);
 
+  const categoriesForPillGroup = categories.map((cat) => ({
+    id: Number(cat.id),
+    label: cat.name,
+    selected: isCategorySelected(cat.id, window.location.pathname),
+  }));
+
   return isOpen ? (
     <SearchDropDownPresenter
       isOpen={isOpen}
       companies={companies}
-      categories={categories}
+      categoriesForPillGroup={categoriesForPillGroup}
       onSearchCategoryChange={onSearchCategoryChange}
       onSearchCompanyChange={onSearchCompanyChange}
       onClose={onClose}

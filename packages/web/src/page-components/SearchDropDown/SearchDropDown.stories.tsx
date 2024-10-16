@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { fireEvent, userEvent, within } from '@storybook/testing-library';
 import { SearchDropDownPresenter } from './SearchDropDown';
+import { useState } from 'react';
 
 const componentMeta: Meta<typeof SearchDropDownPresenter> = {
   title: 'Components/SearchDropDown',
@@ -138,14 +139,30 @@ const mockData = {
   },
 };
 
-const DefaultTemplate: StoryFn<typeof SearchDropDownPresenter> = (args) => (
-  <SearchDropDownPresenter {...args}></SearchDropDownPresenter>
-);
+const DefaultTemplate: StoryFn<typeof SearchDropDownPresenter> = (args) => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const categoriesForPillGroup = mockData.data.response.categories.map(({ id, name }) => ({
+    id: Number(id),
+    label: name,
+    selected: selectedCategory === id,
+  }));
+
+  return (
+    <SearchDropDownPresenter
+      {...args}
+      onSearchCategoryChange={(id: string, categoryName: string) => {
+        args.onSearchCategoryChange(id, categoryName);
+        setSelectedCategory(id);
+      }}
+      categoriesForPillGroup={categoriesForPillGroup}
+    ></SearchDropDownPresenter>
+  );
+};
 
 export const Default = DefaultTemplate.bind({});
 
 Default.args = {
-  categories: mockData.data.response.categories,
   companies: mockData.data.response.companies,
   isOpen: true,
 };

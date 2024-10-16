@@ -8,5 +8,6 @@ export type PillGroupProps = {
 export interface PillProps {
   id: number;
   label: string;
+  selected: boolean;
 }
 [];

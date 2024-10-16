@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.665.0",
+    "@smithy/util-retry": "^3.0.7",
+    "uuid": "^10.0.0"
+  }
+}

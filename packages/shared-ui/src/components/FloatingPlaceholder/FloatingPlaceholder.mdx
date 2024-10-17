@@ -1,0 +1,62 @@
+import { Meta, Canvas, Controls, ComponentStatus } from "@storybook/blocks";
+import * as FloatingPlaceholder from "./FloatingPlaceholder.stories";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faInfoCircle,
+} from '@fortawesome/pro-solid-svg-icons';
+
+<Meta of={FloatingPlaceholder} />
+
+# FloatingPlaceholder
+
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Implementation](#implementation)
+
+## Overview
+
+The FloatingPlaceholder is intended to replace the native `placeholder` attribute on `<input/>` elements to achieve the dynamic placement of the placeholder text when the field is active.
+
+<Canvas of={FloatingPlaceholder.Default} />
+
+## Props
+
+<Controls />
+
+## State
+
+### Default State
+
+<Canvas of={FloatingPlaceholder.Default} />
+
+### Disabled State
+
+<Canvas of={FloatingPlaceholder.Disabled} />
+
+## Implementation
+
+Usage example using jsx
+
+```jsx
+const FloatingPlaceholder: FC = () => {
+  return (
+    <div className="relative">
+        <FloatingPlaceholder text="Placeholder" targetId="fieldName" isFieldDisabled={false}>
+          <input
+            className="w-full px-[16px] py-[12px]"
+            id="fieldName"
+            type="text"
+            disabled={false}
+          />
+        </FloatingPlaceholder>
+        <span className="absolute top-1/2 right-4 -translate-y-1/2">
+          <FontAwesomeIcon
+            icon={faInfoCircle}
+            className={`w-[16px] h-[16px]`}
+          />
+        </span>
+      </div>);
+};
+```
+**NOTE:** a dynamic top-margin will need to be applied to the FloatingPlaceholder or wrapper element so that space above the transformed placeholder remains consistent.

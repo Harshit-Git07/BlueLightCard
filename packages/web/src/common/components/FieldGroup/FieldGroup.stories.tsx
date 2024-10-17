@@ -3,8 +3,13 @@ import { Meta, StoryFn } from '@storybook/react';
 import InputTextField from '@/components/InputTextField/InputTextField';
 import FieldGroup from './FieldGroup';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/PasswordInput/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 const componentMeta: Meta<typeof FieldGroup> = {
-  title: 'Component System/Form/Field Group',
+  title: 'Deprecated/Component System/Form/Field Group - Deprecated',
   component: FieldGroup,
   argTypes: {
     invalid: {

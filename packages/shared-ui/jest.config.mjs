@@ -6,6 +6,7 @@ const config = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^src/(.*)$': '<rootDir>/src/$1',
     '\\.(scss|sass|css)$': 'identity-obj-proxy',
+    '^tokens/(.*)$': '<rootDir>/tokens/$1',
   },
   testMatch: ['**/__tests__/**/*.(spec|test).[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   testPathIgnorePatterns: ['.rollup.cache', 'dist'],

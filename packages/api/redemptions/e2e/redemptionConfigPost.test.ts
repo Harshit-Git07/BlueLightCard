@@ -49,13 +49,13 @@ describe('POST /redemptions/', () => {
       });
     });
 
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([101, 102, 103, 104, 105]);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds(['101', '102', '103', '104', '105']);
 
     // Set a conservative timeout
   }, 60_000);
 
   afterAll(async () => {
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([101, 102, 103, 104, 105]);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds(['101', '102', '103', '104', '105']);
     await connectionManager?.cleanup();
   });
 

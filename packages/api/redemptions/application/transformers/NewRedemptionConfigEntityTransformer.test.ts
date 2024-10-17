@@ -11,14 +11,14 @@ const newRedemptionConfigEntityTransformer = new NewRedemptionConfigEntityTransf
 
 const showCardRequestBody: PostRedemptionConfigModel = {
   companyId: faker.number.int(),
-  offerId: faker.number.int(),
+  offerId: faker.string.uuid(),
   connection: 'none',
   redemptionType: 'showCard',
 };
 
 const vaultQRRequestBody: PostRedemptionConfigModel = {
   companyId: faker.number.int(),
-  offerId: faker.number.int(),
+  offerId: faker.string.uuid(),
   connection: 'affiliate',
   redemptionType: 'vaultQR',
   affiliate: 'affiliateFuture',
@@ -34,7 +34,7 @@ const vaultQRRequestBody: PostRedemptionConfigModel = {
 
 const preAppliedRequestBody: PostRedemptionConfigModel = {
   companyId: faker.number.int(),
-  offerId: faker.number.int(),
+  offerId: faker.string.uuid(),
   connection: 'none',
   redemptionType: 'preApplied',
   url: 'www.url.com',
@@ -42,7 +42,7 @@ const preAppliedRequestBody: PostRedemptionConfigModel = {
 
 const vaultRequestBody: PostRedemptionConfigModel = {
   companyId: faker.number.int(),
-  offerId: faker.number.int(),
+  offerId: faker.string.uuid(),
   connection: 'affiliate',
   redemptionType: 'vault',
   affiliate: 'affiliateFuture',
@@ -59,7 +59,7 @@ const vaultRequestBody: PostRedemptionConfigModel = {
 
 const genericRequestBody: PostRedemptionConfigModel = {
   companyId: faker.number.int(),
-  offerId: faker.number.int(),
+  offerId: faker.string.uuid(),
   connection: 'affiliate',
   redemptionType: 'generic',
   affiliate: 'affiliateFuture',
@@ -113,7 +113,7 @@ describe('transformToNewRedemptionConfigEntity', () => {
   it('throws an error when an unsupported redemptionType is provided', () => {
     const redemptionConfigRequestBody: PostRedemptionConfigModel = {
       companyId: faker.number.int(),
-      offerId: faker.number.int(),
+      offerId: faker.string.uuid(),
       connection: 'none',
       redemptionType: as('invalidRedemptionType'),
     } as PostRedemptionConfigModel;

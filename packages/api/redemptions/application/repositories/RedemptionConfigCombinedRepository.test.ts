@@ -50,7 +50,7 @@ beforeEach(() => {
 
 describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
   test('should delete all vaultBatches for redemptions with offerId', async () => {
-    const offerIds = [1, 2, 3];
+    const offerIds = ['1', '2', '3'];
 
     mockRedemptionConfigRepository.findOneByOfferId = jest
       .fn()
@@ -73,7 +73,7 @@ describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
   });
 
   test('should delete all vaults for redemptions with offerId', async () => {
-    const offerIds = [1, 2, 3];
+    const offerIds = ['1', '2', '3'];
 
     mockRedemptionConfigRepository.findOneByOfferId = jest
       .fn()
@@ -96,7 +96,7 @@ describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
   });
 
   test('should find all vaults for redemptions with offerId', async () => {
-    const offerIds = [1, 2, 3];
+    const offerIds = ['1', '2', '3'];
 
     mockRedemptionConfigRepository.findOneByOfferId = jest
       .fn()
@@ -113,7 +113,7 @@ describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
   });
 
   test('should delete all redemptions for all offerIds', async () => {
-    const offerIds = [1, 2, 3];
+    const offerIds = ['1', '2', '3'];
 
     mockRedemptionConfigRepository.findOneByOfferId = jest
       .fn()
@@ -130,7 +130,7 @@ describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
   });
 
   test('should delete generics for all offerIds', async () => {
-    const offerIds = [1, 2, 3];
+    const offerIds = ['1', '2', '3'];
 
     mockRedemptionConfigRepository.findOneByOfferId = jest
       .fn()
@@ -147,7 +147,7 @@ describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
   });
 
   test('should do nothing more if no redemption config is found', async () => {
-    const offerIds = [1];
+    const offerIds = ['1'];
 
     mockRedemptionConfigRepository.findOneById = jest.fn().mockResolvedValue(null);
 
@@ -161,14 +161,14 @@ describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
   });
 
   test('should call findOneByOfferId for all offerIds', async () => {
-    const offerIds = [1, 2, 3];
+    const offerIds = ['1', '2', '3'];
 
     await redemptionConfigCombinedRepository.deleteRedemptionsFromDatabaseByOfferIds(offerIds);
 
     expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledTimes(3);
-    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith(1);
-    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith(2);
-    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith(3);
+    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith('1');
+    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith('2');
+    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith('3');
   });
 
   test('should do nothing if there is no offerIds', async () => {

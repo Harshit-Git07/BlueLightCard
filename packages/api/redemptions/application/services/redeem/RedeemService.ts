@@ -20,7 +20,7 @@ export type RedeemResult =
     };
 
 export interface IRedeemService {
-  redeem(offerId: number, params: RedeemParams): Promise<RedeemResult>;
+  redeem(offerId: string, params: RedeemParams): Promise<RedeemResult>;
 }
 
 export class RedeemService implements IRedeemService {
@@ -39,7 +39,7 @@ export class RedeemService implements IRedeemService {
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
   ) {}
 
-  public async redeem(offerId: number, params: RedeemParams): Promise<RedeemResult> {
+  public async redeem(offerId: string, params: RedeemParams): Promise<RedeemResult> {
     const redemptionConfigEntity: RedemptionConfigEntity | null =
       await this.redemptionConfigRepository.findOneByOfferId(offerId);
 

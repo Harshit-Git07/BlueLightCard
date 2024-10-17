@@ -41,7 +41,7 @@ describe('AdminEmailRepository', () => {
     const sendVaultThresholdEmailData: SendVaultThresholdEmailCommandParams = {
       alertBelow: faker.number.int(100),
       companyName: faker.company.name(),
-      offerId: faker.number.int(9999),
+      offerId: faker.string.uuid(),
       offerName: faker.commerce.productName(),
       recipient: faker.internet.email(),
       remainingCodes: faker.number.int(100),
@@ -66,7 +66,7 @@ describe('AdminEmailRepository', () => {
     const sendVaultThresholdEmailData: SendVaultThresholdEmailCommandParams = {
       alertBelow: faker.number.int(100),
       companyName: faker.company.name(),
-      offerId: faker.number.int(9999),
+      offerId: faker.string.uuid(),
       offerName: faker.commerce.productName(),
       recipient: faker.internet.email(),
       remainingCodes: faker.number.int(100),

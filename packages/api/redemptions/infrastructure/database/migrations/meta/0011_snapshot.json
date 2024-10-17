@@ -1,0 +1,494 @@
+{
+  "id": "396650ca-567f-4892-8d5d-44d51d06410e",
+  "prevId": "1eb14e76-8dc3-47b9-9060-355d94c284ca",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "public.generics": {
+      "name": "generics",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "redemptionId": {
+          "name": "redemptionId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "generics_redemptionId_redemptions_id_fk": {
+          "name": "generics_redemptionId_redemptions_id_fk",
+          "tableFrom": "generics",
+          "tableTo": "redemptions",
+          "columnsFrom": ["redemptionId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.integrationCodes": {
+      "name": "integrationCodes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vaultId": {
+          "name": "vaultId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created": {
+          "name": "created",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expiry": {
+          "name": "expiry",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memberId": {
+          "name": "memberId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "integrationId": {
+          "name": "integrationId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "integration": {
+          "name": "integration",
+          "type": "integration",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "ic_vault_idx": {
+          "name": "ic_vault_idx",
+          "columns": ["vaultId"],
+          "isUnique": false
+        },
+        "ic_member_idx": {
+          "name": "ic_member_idx",
+          "columns": ["memberId"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "integrationCodes_vaultId_vaults_id_fk": {
+          "name": "integrationCodes_vaultId_vaults_id_fk",
+          "tableFrom": "integrationCodes",
+          "tableTo": "vaults",
+          "columnsFrom": ["vaultId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.redemptions": {
+      "name": "redemptions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "affiliate": {
+          "name": "affiliate",
+          "type": "affiliate",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "connection": {
+          "name": "connection",
+          "type": "connection",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "offerId": {
+          "name": "offerId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "offerType": {
+          "name": "offerType",
+          "type": "offerType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "redemptionType": {
+          "name": "redemptionType",
+          "type": "redemptionType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.vaultBatches": {
+      "name": "vaultBatches",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vaultId": {
+          "name": "vaultId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file": {
+          "name": "file",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expiry": {
+          "name": "expiry",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created": {
+          "name": "created",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vaultBatches_vaultId_vaults_id_fk": {
+          "name": "vaultBatches_vaultId_vaults_id_fk",
+          "tableFrom": "vaultBatches",
+          "tableTo": "vaults",
+          "columnsFrom": ["vaultId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.vaultCodes": {
+      "name": "vaultCodes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vaultId": {
+          "name": "vaultId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "batchId": {
+          "name": "batchId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created": {
+          "name": "created",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "expiry": {
+          "name": "expiry",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "memberId": {
+          "name": "memberId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {
+        "vault_idx": {
+          "name": "vault_idx",
+          "columns": ["vaultId"],
+          "isUnique": false
+        },
+        "batch_idx": {
+          "name": "batch_idx",
+          "columns": ["batchId"],
+          "isUnique": false
+        },
+        "created_idx": {
+          "name": "created_idx",
+          "columns": ["created"],
+          "isUnique": false
+        },
+        "expiry_idx": {
+          "name": "expiry_idx",
+          "columns": ["expiry"],
+          "isUnique": false
+        },
+        "member_idx": {
+          "name": "member_idx",
+          "columns": ["memberId"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "vaultCodes_vaultId_vaults_id_fk": {
+          "name": "vaultCodes_vaultId_vaults_id_fk",
+          "tableFrom": "vaultCodes",
+          "tableTo": "vaults",
+          "columnsFrom": ["vaultId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "vaultCodes_batchId_vaultBatches_id_fk": {
+          "name": "vaultCodes_batchId_vaultBatches_id_fk",
+          "tableFrom": "vaultCodes",
+          "tableTo": "vaultBatches",
+          "columnsFrom": ["batchId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "idx_unique_vault_code": {
+          "name": "idx_unique_vault_code",
+          "nullsNotDistinct": true,
+          "columns": ["vaultId", "code"]
+        }
+      }
+    },
+    "public.vaults": {
+      "name": "vaults",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "redemptionId": {
+          "name": "redemptionId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alertBelow": {
+          "name": "alertBelow",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 100
+        },
+        "created": {
+          "name": "created",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "integration": {
+          "name": "integration",
+          "type": "integration",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "integrationId": {
+          "name": "integrationId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maxPerUser": {
+          "name": "maxPerUser",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "showQR": {
+          "name": "showQR",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "status": {
+          "name": "status",
+          "type": "status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vaultType": {
+          "name": "vaultType",
+          "type": "vaultType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'standard'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vaults_redemptionId_redemptions_id_fk": {
+          "name": "vaults_redemptionId_redemptions_id_fk",
+          "tableFrom": "vaults",
+          "tableTo": "redemptions",
+          "columnsFrom": ["redemptionId"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "public.affiliate": {
+      "name": "affiliate",
+      "schema": "public",
+      "values": [
+        "awin",
+        "affiliateFuture",
+        "rakuten",
+        "affilinet",
+        "webgains",
+        "partnerize",
+        "impactRadius",
+        "adtraction",
+        "affiliateGateway",
+        "optimiseMedia",
+        "commissionJunction",
+        "tradedoubler"
+      ]
+    },
+    "public.connection": {
+      "name": "connection",
+      "schema": "public",
+      "values": ["affiliate", "direct", "spotify", "none"]
+    },
+    "public.integration": {
+      "name": "integration",
+      "schema": "public",
+      "values": ["eagleeye", "uniqodo"]
+    },
+    "public.offerType": {
+      "name": "offerType",
+      "schema": "public",
+      "values": ["online", "in-store"]
+    },
+    "public.redemptionType": {
+      "name": "redemptionType",
+      "schema": "public",
+      "values": ["generic", "vault", "vaultQR", "showCard", "preApplied"]
+    },
+    "public.status": {
+      "name": "status",
+      "schema": "public",
+      "values": ["active", "in-active"]
+    },
+    "public.vaultType": {
+      "name": "vaultType",
+      "schema": "public",
+      "values": ["standard", "legacy"]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

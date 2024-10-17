@@ -10,6 +10,7 @@ import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs
 import { UnknownEventBridgeEvent } from '../EventBridgeController';
 
 import { DwhMemberRedemptionController } from './dwhMemberRedemptionController';
+
 describe('DwhMemberRedemptionController', () => {
   describe('invoke', () => {
     it('should call the service correctly', async () => {
@@ -46,10 +47,7 @@ describe('DwhMemberRedemptionController', () => {
               max: 1_000_000,
             }),
             companyName: faker.company.name(),
-            offerId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            offerId: faker.string.uuid(),
             offerName: faker.commerce.productName(),
             code: faker.string.alphanumeric(10),
             affiliate: faker.company.name(),
@@ -122,10 +120,7 @@ describe('DwhMemberRedemptionController', () => {
               max: 1_000_000,
             }),
             companyName: faker.company.name(),
-            offerId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            offerId: faker.string.uuid(),
             offerName: faker.commerce.productName(),
             code: faker.string.alphanumeric(10),
             affiliate: faker.company.name(),

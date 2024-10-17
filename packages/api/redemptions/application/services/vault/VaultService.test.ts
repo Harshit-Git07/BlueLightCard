@@ -24,10 +24,7 @@ describe('VaultService', () => {
   const mockedLogger = createTestLogger();
   const defaultVaultId = `vlt-${faker.string.uuid()}`;
   const defaultRedemptionId = `rdm-${faker.string.uuid()}`;
-  const defaultOfferId = faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  });
+  const defaultOfferId = faker.string.sample(10);
   const defaultCampaignId = faker.number.int({
     min: 1,
     max: 1_000_000,

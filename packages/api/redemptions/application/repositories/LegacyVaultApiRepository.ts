@@ -87,7 +87,7 @@ export type VaultDataResponse = z.infer<typeof VaultDataResponseSchema>;
 export type LegacyVaultData = VaultDataResponse['data'][number];
 
 export type VaultItem = {
-  offerId: number;
+  offerId: string;
   companyId: number;
 };
 

@@ -23,10 +23,7 @@ describe('RedeemService', () => {
     jest.clearAllMocks();
   });
 
-  const defaultOfferId = faker.number.int({
-    min: 1,
-    max: 1_000,
-  });
+  const defaultOfferId = faker.string.sample(10);
   const defaultParams: RedeemParams = {
     memberId: faker.string.sample(5),
     brazeExternalUserId: faker.string.uuid(),
@@ -35,7 +32,7 @@ describe('RedeemService', () => {
     clientType: faker.helpers.arrayElement(['web', 'mobile']),
   };
   function callRedeemMethod(
-    offerId: number,
+    offerId: string,
     {
       params,
       logger,

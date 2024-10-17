@@ -76,7 +76,7 @@ const getRedemptionConfigService = new GetRedemptionConfigService(
   as(mockRedemptionConfigTransformer),
 );
 
-const offerId = faker.number.int();
+const offerId = faker.string.sample(10);
 
 describe('GetRedemptionConfigService', () => {
   beforeEach(() => {
@@ -84,7 +84,7 @@ describe('GetRedemptionConfigService', () => {
   });
 
   it('should return error if findOneByOfferId throws exception', async () => {
-    const offerId = faker.number.int();
+    const offerId = faker.string.sample(10);
 
     mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockRejectedValue(new Error('error'));
 
@@ -97,7 +97,7 @@ describe('GetRedemptionConfigService', () => {
   });
 
   it('should return RedemptionNotFound if findOneByOfferId returns null', async () => {
-    const offerId = faker.number.int();
+    const offerId = faker.string.sample(10);
 
     mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
 

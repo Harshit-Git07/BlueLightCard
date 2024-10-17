@@ -44,10 +44,7 @@ export const offerCreatedEventFactory = Factory.define<OfferCreatedEvent>(() => 
 }));
 
 export const offerUpdatedEventDetailFactory = Factory.define<OfferUpdatedEventDetail>(() => ({
-  offerId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  offerId: faker.string.uuid(),
   companyId: faker.number.int({
     min: 1,
     max: 1_000_000,

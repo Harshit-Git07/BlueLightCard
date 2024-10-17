@@ -28,7 +28,7 @@ export type RedemptionConfigResult =
     };
 
 export interface IGetRedemptionConfigService {
-  getRedemptionConfig(offerId: number): Promise<RedemptionConfigResult>;
+  getRedemptionConfig(offerId: string): Promise<RedemptionConfigResult>;
 }
 
 export class GetRedemptionConfigService implements IGetRedemptionConfigService {
@@ -51,7 +51,7 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
     private readonly redemptionConfigTransformer: RedemptionConfigTransformer,
   ) {}
 
-  public async getRedemptionConfig(offerId: number): Promise<RedemptionConfigResult> {
+  public async getRedemptionConfig(offerId: string): Promise<RedemptionConfigResult> {
     this.logger.info({
       message: 'offerId',
       context: {

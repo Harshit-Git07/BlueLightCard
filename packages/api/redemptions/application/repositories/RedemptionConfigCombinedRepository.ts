@@ -4,8 +4,8 @@ import { VaultBatchesRepository } from '@blc-mono/redemptions/application/reposi
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 
 export interface IRedemptionConfigCombinedRepository {
-  deleteRedemptionsFromDatabaseByOfferIds(offerIds: number[]): Promise<void>;
-  deleteRedemptionFromDatabaseByOfferId(offerId: number): Promise<void>;
+  deleteRedemptionsFromDatabaseByOfferIds(offerIds: string[]): Promise<void>;
+  deleteRedemptionFromDatabaseByOfferId(offerId: string): Promise<void>;
   deleteVaultsByRedemptionId(redemptionId: string): Promise<void>;
 }
 
@@ -26,13 +26,13 @@ export class RedemptionConfigCombinedRepository implements IRedemptionConfigComb
     private readonly genericsRepository: GenericsRepository,
   ) {}
 
-  public async deleteRedemptionsFromDatabaseByOfferIds(offerIds: number[]): Promise<void> {
+  public async deleteRedemptionsFromDatabaseByOfferIds(offerIds: string[]): Promise<void> {
     for (const offerId of offerIds) {
       await this.deleteRedemptionFromDatabaseByOfferId(offerId);
     }
   }
 
-  public async deleteRedemptionFromDatabaseByOfferId(offerId: number) {
+  public async deleteRedemptionFromDatabaseByOfferId(offerId: string) {
     const redemption = await this.redemptionConfigRepository.findOneByOfferId(offerId);
 
     if (redemption) {

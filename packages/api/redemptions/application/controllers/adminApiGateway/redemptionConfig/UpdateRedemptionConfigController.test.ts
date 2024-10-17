@@ -18,7 +18,7 @@ import { ParsedRequest, UpdateRedemptionConfigController } from './UpdateRedempt
 describe('UpdateRedemptionConfigController', () => {
   const testGenericBody = {
     id: `rdm-${faker.string.uuid()}`,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: faker.string.uuid(),
     redemptionType: 'generic',
     connection: 'affiliate',
     companyId: faker.number.int({ max: 1000000 }),
@@ -38,7 +38,7 @@ describe('UpdateRedemptionConfigController', () => {
 
   const testPreAppliedBody = {
     id: `rdm-${faker.string.uuid()}`,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: faker.string.uuid(),
     redemptionType: 'preApplied',
     connection: 'direct',
     companyId: faker.number.int({ max: 1000000 }),
@@ -54,7 +54,7 @@ describe('UpdateRedemptionConfigController', () => {
 
   const testShowCardBody = {
     id: `rdm-${faker.string.uuid()}`,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: faker.string.uuid(),
     redemptionType: 'showCard',
     connection: 'none',
     companyId: faker.number.int({ max: 1000000 }),
@@ -68,7 +68,7 @@ describe('UpdateRedemptionConfigController', () => {
   };
 
   function getParsedRequest(
-    offerId: number,
+    offerId: string,
     body: UpdateGenericRedemptionSchema | UpdatePreAppliedRedemptionSchema | UpdateShowCardRedemptionSchema,
   ): ParsedRequest {
     return {
@@ -81,7 +81,7 @@ describe('UpdateRedemptionConfigController', () => {
 
   const testVaultBody = {
     id: `rdm-${faker.string.uuid()}`,
-    offerId: faker.number.int({ max: 1000000 }),
+    offerId: faker.string.uuid(),
     redemptionType: 'vault',
     connection: 'affiliate',
     companyId: faker.number.int({ max: 1000000 }),

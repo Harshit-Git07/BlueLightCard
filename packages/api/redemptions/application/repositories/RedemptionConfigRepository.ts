@@ -13,9 +13,9 @@ export type RedemptionConfigIdEntity = Pick<RedemptionConfigEntity, 'id'>;
 
 export interface IRedemptionConfigRepository {
   findOneById(id: string): Promise<RedemptionConfigEntity | null>;
-  findOneByOfferId(offerId: number): Promise<RedemptionConfigEntity | null>;
-  updateManyByOfferId(offerIds: number[], update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity[]>;
-  updateOneByOfferId(offerId: number, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
+  findOneByOfferId(offerId: string): Promise<RedemptionConfigEntity | null>;
+  updateManyByOfferId(offerIds: string[], update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity[]>;
+  updateOneByOfferId(offerId: string, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
   updateOneById(id: string, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
   createRedemption(redemptionData: NewRedemptionConfigEntity): Promise<RedemptionConfigIdEntity>;
   withTransaction(transaction: DatabaseTransactionConnection): IRedemptionConfigRepository;
@@ -37,7 +37,7 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
     return this.atMostOne(results);
   }
 
-  public async findOneByOfferId(offerId: number): Promise<RedemptionConfigEntity | null> {
+  public async findOneByOfferId(offerId: string): Promise<RedemptionConfigEntity | null> {
     const results = await this.connection.db
       .select()
       .from(redemptionsTable)
@@ -57,7 +57,7 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
   }
 
   public async updateManyByOfferId(
-    offerIds: number[],
+    offerIds: string[],
     updateRedemptionEntity: UpdateRedemptionConfigEntity,
   ): Promise<RedemptionConfigIdEntity[]> {
     return await this.connection.db
@@ -71,7 +71,7 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
   }
 
   public async updateOneByOfferId(
-    offerId: number,
+    offerId: string,
     updateRedemptionEntity: UpdateRedemptionConfigEntity,
   ): Promise<RedemptionConfigIdEntity | null> {
     return this.atMostOne(

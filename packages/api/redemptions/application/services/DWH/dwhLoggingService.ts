@@ -6,14 +6,14 @@ import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
 
 export type MemberRetrievedRedemptionDetailsParams = {
-  offerId: number;
+  offerId: string;
   companyId: number;
   memberId: string;
   clientType: ClientType;
 };
 
 export type MemberRedeemIntentParams = {
-  offerId: number;
+  offerId: string;
   companyId: number;
   memberId: string;
   clientType: ClientType;
@@ -28,7 +28,7 @@ export interface IDwhLoggingService {
 interface MemberRedemptionBaseParams {
   redemptionType: (typeof REDEMPTION_TYPES)[number];
   clientType: ClientType;
-  offerId: number;
+  offerId: string;
   companyId: number;
   memberId: string;
 }

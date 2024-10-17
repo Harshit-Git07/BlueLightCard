@@ -17,10 +17,7 @@ export const generateFakeJWT = (cardStatus?: string | undefined) => {
 
 export const requestFactory = Factory.define(() => ({
   body: JSON.stringify({
-    offerId: faker.number.int({
-      min: 1,
-      max: 1000000,
-    }),
+    offerId: faker.string.uuid(),
     companyName: faker.lorem.words(5),
     offerName: faker.lorem.words(5),
   }),
@@ -34,10 +31,7 @@ export const requestFactory = Factory.define(() => ({
 
 export const redeemEventFactory = Factory.define<ParsedRequest>(() => ({
   body: {
-    offerId: faker.number.int({
-      min: 1,
-      max: 1000000,
-    }),
+    offerId: faker.string.uuid(),
     companyName: faker.lorem.words(5),
     offerName: faker.lorem.words(5),
   },

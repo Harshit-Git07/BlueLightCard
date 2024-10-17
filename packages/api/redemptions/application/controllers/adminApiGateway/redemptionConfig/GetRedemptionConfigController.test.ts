@@ -19,7 +19,7 @@ const mockGetRedemptionConfigService = {
 const getRedemptionConfigController = new GetRedemptionConfigController(mockLogger, mockGetRedemptionConfigService);
 
 const redemptionConfig: RedemptionConfig = redemptionConfigFactory.build();
-const offerId = faker.number.int();
+const offerId = faker.string.alphanumeric(10);
 
 describe('GetRedemptionConfigController', () => {
   afterEach(() => {
@@ -116,7 +116,7 @@ describe('GetRedemptionConfigController', () => {
   });
 
   it('throws an error if an unsupported response occurs in the service', async () => {
-    const expectedOfferId = faker.string.numeric(8);
+    const expectedOfferId = faker.string.alphanumeric(10);
 
     mockGetRedemptionConfigService.getRedemptionConfig.mockReturnValueOnce({
       kind: 'Asparagus',

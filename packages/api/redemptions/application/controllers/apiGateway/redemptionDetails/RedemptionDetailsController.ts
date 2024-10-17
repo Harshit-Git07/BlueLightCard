@@ -1,7 +1,6 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { z } from 'zod';
 
-import { NON_NEGATIVE_INT } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -19,19 +18,7 @@ const GetRedemptionDetailsRequestModel = z.object({
     Authorization: z.string(),
   }),
   queryStringParameters: z.object({
-    offerId: z
-      .string()
-      .transform((value, ctx) => {
-        const parsed = Number(value);
-        if (isNaN(parsed)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'offerId must be a number',
-          });
-        }
-        return parsed;
-      })
-      .pipe(NON_NEGATIVE_INT),
+    offerId: z.coerce.string(),
   }),
 });
 type ParsedRequest = z.infer<typeof GetRedemptionDetailsRequestModel> & { memberId: string };

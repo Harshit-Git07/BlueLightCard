@@ -12,10 +12,7 @@ import { RedemptionDetailsService } from './RedemptionDetailsService';
 
 describe('RedemptionDetailsService', () => {
   const defaultClientType: ClientType = faker.helpers.arrayElement(['web', 'mobile']);
-  const defaultOfferId = faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  });
+  const defaultOfferId = faker.string.sample(10);
   const defaultMemberId = faker.string.numeric(8);
 
   function mockRedemptionsEventsRepository(): IRedemptionsEventsRepository {

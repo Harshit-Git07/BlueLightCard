@@ -57,10 +57,7 @@ describe('RedemptionsEventsRepository', () => {
           min: 1,
           max: 1_000_000,
         }),
-        offerId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        offerId: faker.string.uuid(),
       },
     };
 

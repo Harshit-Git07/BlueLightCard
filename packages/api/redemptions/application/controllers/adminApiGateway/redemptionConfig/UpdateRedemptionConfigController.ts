@@ -15,7 +15,7 @@ import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../Ad
 
 const UpdateRedemptionConfigRequestModel = z.object({
   pathParameters: z.object({
-    offerId: z.string(),
+    offerId: z.coerce.string(),
   }),
   body: JsonStringSchema.pipe(PatchRedemptionConfigModel),
 });

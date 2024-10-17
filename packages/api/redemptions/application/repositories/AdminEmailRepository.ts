@@ -16,7 +16,7 @@ export type SendVaultThresholdEmailCommandParams = {
   remainingCodes: number;
   thresholdPercentage: number;
   companyName: string;
-  offerId: number;
+  offerId: string;
   offerName: string;
 };
 

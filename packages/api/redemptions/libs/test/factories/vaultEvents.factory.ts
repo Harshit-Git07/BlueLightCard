@@ -43,10 +43,7 @@ export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDe
     }),
   ),
   maxPerUser: faker.number.int(500),
-  offerId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  offerId: faker.string.uuid(),
   platform: faker.helpers.arrayElement(BRANDS),
   showQR: faker.datatype.boolean(),
   ucCampaignId: faker.helpers.maybe(() =>
@@ -93,10 +90,7 @@ export const vaultUpdatedEventDetailFactory = Factory.define<VaultUpdatedEventDe
   ),
   email: faker.helpers.maybe(() => faker.internet.email()),
   maxPerUser: faker.number.int(500),
-  offerId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  offerId: faker.string.uuid(),
   showQR: faker.datatype.boolean(),
   ucCampaignId: faker.helpers.maybe(() =>
     faker.number.int({

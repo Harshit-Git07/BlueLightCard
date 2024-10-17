@@ -13,7 +13,7 @@ import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/
 import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeController';
 
 const OfferUpdatedEventDetailSchema = z.object({
-  offerId: NON_NEGATIVE_INT,
+  offerId: z.coerce.string(),
   companyId: NON_NEGATIVE_INT,
   offerUrl: z.string().nullable(),
   offerCode: z.string().nullable(),

@@ -33,7 +33,7 @@ export class OfferCreatedService implements IOfferCreatedService {
     const { detail } = event;
 
     const redemptionData: NewRedemptionConfigEntity = {
-      offerId: detail.offerId,
+      offerId: detail.offerId.toString(),
       companyId: detail.companyId,
       redemptionType: parseRedemptionType(detail.offerUrl, detail.offerCode).redemptionType,
       connection: parseConnection(detail.offerUrl).connection,

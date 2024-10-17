@@ -24,7 +24,7 @@ export type RedemptionDetailsResult =
     };
 
 export interface IRedemptionDetailsService {
-  getRedemptionDetails(offerId: number, memberId: string, clientType: ClientType): Promise<RedemptionDetailsResult>;
+  getRedemptionDetails(offerId: string, memberId: string, clientType: ClientType): Promise<RedemptionDetailsResult>;
 }
 
 export class RedemptionDetailsService implements IRedemptionDetailsService {
@@ -38,7 +38,7 @@ export class RedemptionDetailsService implements IRedemptionDetailsService {
   ) {}
 
   public async getRedemptionDetails(
-    offerId: number,
+    offerId: string,
     memberId: string,
     clientType: ClientType,
   ): Promise<RedemptionDetailsResult> {

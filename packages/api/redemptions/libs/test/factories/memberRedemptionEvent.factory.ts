@@ -17,10 +17,7 @@ export const memberRedemptionEventDetailFactory = Factory.define<MemberRedemptio
       max: 1_000_000,
     }),
     companyName: faker.company.name(),
-    offerId: faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
+    offerId: faker.string.uuid(),
     offerName: faker.commerce.productName(),
     clientType: faker.helpers.arrayElement(['web', 'mobile']),
     platform: faker.helpers.arrayElement(['BLC_UK', 'BLC_AU', 'DDS_UK']),
@@ -55,10 +52,7 @@ export const memberRedemptionParamsFactory = Factory.define<MemberRedemptionPara
   return {
     clientType: 'web' as const,
     redemptionType: redemptionType,
-    offerId: faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
+    offerId: faker.string.uuid(),
     companyId: faker.number.int({
       min: 1,
       max: 1_000_000,

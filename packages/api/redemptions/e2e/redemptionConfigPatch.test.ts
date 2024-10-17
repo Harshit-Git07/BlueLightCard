@@ -42,7 +42,7 @@ let genericsRepository: GenericsRepository;
 let redemptionConfigRepository: RedemptionConfigRepository;
 let redemptionRepositoryHelper: RedemptionConfigCombinedRepository;
 
-const offerId = 1;
+const offerId = '1';
 const vaultId = createVaultIdE2E();
 
 describe('PATCH /redemptions/{offerId}', () => {

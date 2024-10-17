@@ -57,20 +57,18 @@ beforeAll(async () => {
     });
   });
 
-  await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([1, 2, 3, 4, 5]);
-
   // Set a conservative timeout
 }, 60_000);
 
 afterAll(async () => {
-  await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([1, 2, 3, 4, 5]);
+  await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds(['1', '2', '3', '4', '5']);
   await connectionManager?.cleanup();
 });
 
 describe('redemption config admin API tests', () => {
   test.each([
-    ['vault', 1],
-    ['vaultQR', 2],
+    ['vault', '1'],
+    ['vaultQR', '2'],
   ] as const)('GET /redemptions/{offerId} should return 200 for redemptionType %s', async (redemptionType, offerId) => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
@@ -107,8 +105,6 @@ describe('redemption config admin API tests', () => {
     await vaultBatchesRepository.create(vaultBatchEntityThree);
 
     const result = await callRedemptionConfigEndpoint(redemptionConfigEntity.offerId);
-
-    expect(result.status).toBe(200);
 
     const actualResponseBody = await result.json();
 
@@ -151,6 +147,7 @@ describe('redemption config admin API tests', () => {
         },
       },
     };
+    expect(result.status).toBe(200);
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
 
     await vaultBatchesRepository.deleteById(vaultBatchEntityOne.id);
@@ -165,7 +162,7 @@ describe('redemption config admin API tests', () => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
       companyId: faker.number.int({ max: 216380 }),
-      offerId: 3,
+      offerId: '3',
       redemptionType: 'generic',
       connection: 'affiliate',
       url: faker.internet.url(),
@@ -181,8 +178,6 @@ describe('redemption config admin API tests', () => {
     await genericsRepository.createGeneric(genericEntity);
 
     const result = await callRedemptionConfigEndpoint(redemptionConfigEntity.offerId);
-
-    expect(result.status).toBe(200);
 
     const actualResponseBody = await result.json();
 
@@ -203,6 +198,7 @@ describe('redemption config admin API tests', () => {
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    expect(result.status).toBe(200);
 
     await genericsRepository.deleteById(genericEntity.id);
     await redemptionConfigRepository.deleteById(redemptionConfigEntity.id);
@@ -212,15 +208,13 @@ describe('redemption config admin API tests', () => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
       companyId: faker.number.int({ max: 216380 }),
-      offerId: 4,
+      offerId: '4',
       redemptionType: 'showCard',
     });
 
     await redemptionConfigRepository.createRedemption(redemptionConfigEntity);
 
     const result = await callRedemptionConfigEndpoint(redemptionConfigEntity.offerId);
-
-    expect(result.status).toBe(200);
 
     const actualResponseBody = await result.json();
 
@@ -234,6 +228,7 @@ describe('redemption config admin API tests', () => {
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    expect(result.status).toBe(200);
 
     await redemptionConfigRepository.deleteById(redemptionConfigEntity.id);
   });
@@ -242,7 +237,7 @@ describe('redemption config admin API tests', () => {
     const redemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
       companyId: faker.number.int({ max: 216380 }),
-      offerId: 5,
+      offerId: '5',
       redemptionType: 'preApplied',
       connection: 'affiliate',
       url: faker.internet.url(),
@@ -252,8 +247,6 @@ describe('redemption config admin API tests', () => {
     await redemptionConfigRepository.createRedemption(redemptionConfigEntity);
 
     const result = await callRedemptionConfigEndpoint(redemptionConfigEntity.offerId);
-
-    expect(result.status).toBe(200);
 
     const actualResponseBody = await result.json();
 
@@ -270,14 +263,13 @@ describe('redemption config admin API tests', () => {
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    expect(result.status).toBe(200);
 
     await redemptionConfigRepository.deleteById(redemptionConfigEntity.id);
   });
 
   test('GET /redemptions/{offerId} returns 404 if offerId can not be found', async () => {
-    const result = await callRedemptionConfigEndpoint(faker.number.int({ max: 216380 }));
-
-    expect(result.status).toBe(404);
+    const result = await callRedemptionConfigEndpoint(faker.string.uuid());
 
     const actualResponseBody = await result.json();
 
@@ -288,10 +280,11 @@ describe('redemption config admin API tests', () => {
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    expect(result.status).toBe(404);
   });
 });
 
-async function callRedemptionConfigEndpoint(offerId: number): Promise<Response> {
+async function callRedemptionConfigEndpoint(offerId: string): Promise<Response> {
   const payload = {
     method: 'GET',
     headers: {

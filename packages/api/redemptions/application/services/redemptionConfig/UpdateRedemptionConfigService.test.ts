@@ -49,7 +49,7 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   const testRedemptionId = `rdm-${faker.string.uuid()}`;
-  const testOfferId = faker.number.int({ max: 1000000 });
+  const testOfferId = faker.string.sample(10);
   const testCompanyId = faker.number.int({ max: 1000000 });
   const testGenericId = `gnr-${faker.string.uuid()}`;
   const testVaultId = `vlt-${faker.string.uuid()}`;
@@ -423,7 +423,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
-      offerId: Number(testGenericBody.offerId),
+      offerId: testGenericBody.offerId,
       redemptionType: testGenericBody.redemptionType,
       connection: testGenericBody.connection,
       companyId: Number(testGenericBody.companyId),
@@ -474,7 +474,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
-      offerId: Number(testPreAppliedBody.offerId),
+      offerId: testPreAppliedBody.offerId,
       redemptionType: testPreAppliedBody.redemptionType,
       connection: testPreAppliedBody.connection,
       companyId: Number(testPreAppliedBody.companyId),
@@ -525,7 +525,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
-      offerId: Number(testShowCardBody.offerId),
+      offerId: testShowCardBody.offerId,
       redemptionType: testShowCardBody.redemptionType,
       connection: testShowCardBody.connection,
       companyId: Number(testShowCardBody.companyId),
@@ -603,7 +603,7 @@ describe('UpdateRedemptionConfigService', () => {
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
-      offerId: Number(testVaultBody.offerId),
+      offerId: testVaultBody.offerId,
       redemptionType: testVaultBody.redemptionType,
       connection: testVaultBody.connection,
       companyId: Number(testVaultBody.companyId),

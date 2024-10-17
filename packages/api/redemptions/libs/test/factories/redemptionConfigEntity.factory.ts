@@ -12,10 +12,7 @@ export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEnti
 
     return {
       id: createRedemptionsId(),
-      offerId: faker.number.int({
-        min: 1,
-        max: 1_000_000,
-      }),
+      offerId: faker.string.uuid(),
       companyId: faker.number.int({
         min: 1,
         max: 1_000_000,

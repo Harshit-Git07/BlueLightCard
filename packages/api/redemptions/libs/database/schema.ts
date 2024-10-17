@@ -61,7 +61,7 @@ export const redemptionsTable = pgTable('redemptions', {
   affiliate: affiliateEnum('affiliate'),
   companyId: integer('companyId').notNull(),
   connection: connectionEnum('connection').notNull(),
-  offerId: integer('offerId').notNull(),
+  offerId: varchar('offerId').notNull(),
   offerType: offerTypeEnum('offerType').notNull(),
   redemptionType: redemptionTypeEnum('redemptionType').notNull(),
   url: varchar('url'),

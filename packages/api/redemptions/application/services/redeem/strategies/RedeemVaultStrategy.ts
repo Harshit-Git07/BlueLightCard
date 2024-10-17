@@ -77,7 +77,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
         result = await this.handleRedeemStandardVault(vault, redemptionType, url, memberId);
         break;
       case 'legacy':
-        result = await this.handleRedeemLegacyVault(vault, redemptionType, url, companyId, offerId, memberId);
+        result = await this.handleRedeemLegacyVault(vault, redemptionType, url, companyId, Number(offerId), memberId);
         break;
       default:
         exhaustiveCheck(vault.vaultType, 'Invalid vault type');

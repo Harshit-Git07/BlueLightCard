@@ -1,13 +1,16 @@
-import { z } from "zod";
-import { REDEMPTIONS_EVENT_SOURCE, REDEMPTION_TYPES, RedemptionEventDetailType } from "../constants/redemptions";
-import { NON_NEGATIVE_INT } from "./common";
-import { ClientTypeSchema } from "./domain";
-import { eventSchema } from "./event";
+import { z } from 'zod';
+import {
+  REDEMPTIONS_EVENT_SOURCE,
+  REDEMPTION_TYPES,
+  RedemptionEventDetailType,
+} from '../constants/redemptions';
+import { NON_NEGATIVE_INT } from './common';
+import { ClientTypeSchema } from './domain';
+import { eventSchema } from './event';
 
 // ================================== Domain ===================================
 
 export const RedemptionTypeSchema = z.enum(REDEMPTION_TYPES);
-
 
 // ================================== Events ===================================
 
@@ -17,7 +20,7 @@ export const MemberRedeemIntentEventDetailSchema = z.object({
   }),
   redemptionDetails: z.object({
     redemptionType: RedemptionTypeSchema,
-    offerId: NON_NEGATIVE_INT,
+    offerId: z.coerce.string(),
     companyId: NON_NEGATIVE_INT,
     clientType: ClientTypeSchema,
   }),
@@ -40,22 +43,24 @@ export const MemberRedemptionEventDetailSchema = z.object({
       redemptionId: z.string(),
       companyId: z.number(),
       companyName: z.string(),
-      offerId: z.number(),
+      offerId: z.coerce.string(),
       offerName: z.string(),
       affiliate: z.string().nullable(),
       clientType: ClientTypeSchema,
-      vaultDetails: z.object({
-        id: z.string(),
-        alertBelow: NON_NEGATIVE_INT,
-        vaultType: z.union([z.literal('standard'), z.literal('legacy')]),
-        email: z.string().email(),
-      }).optional(),
+      vaultDetails: z
+        .object({
+          id: z.string(),
+          alertBelow: NON_NEGATIVE_INT,
+          vaultType: z.union([z.literal('standard'), z.literal('legacy')]),
+          email: z.string().email(),
+        })
+        .optional(),
     }),
     z.union([
       z.object({
         redemptionType: z.literal('vaultQR'),
         code: z.string(),
-        url: z.string().optional()
+        url: z.string().optional(),
       }),
       z.object({
         redemptionType: z.literal('vault'),
@@ -74,7 +79,7 @@ export const MemberRedemptionEventDetailSchema = z.object({
         redemptionType: z.literal('preApplied'),
         url: z.string(),
       }),
-    ])
+    ]),
   ),
 });
 export type MemberRedemptionEventDetail = z.infer<typeof MemberRedemptionEventDetailSchema>;
@@ -87,19 +92,23 @@ export type MemberRedemptionEvent = z.infer<typeof MemberRedemptionEventSchema>;
 
 export const MemberRetrievedRedemptionDetailsEventDetailSchema = z.object({
   memberDetails: z.object({
-    memberId: z.string(),
+    memberId: z.coerce.string(),
   }),
   redemptionDetails: z.object({
     redemptionType: RedemptionTypeSchema,
     companyId: z.number(),
-    offerId: z.number(),
+    offerId: z.coerce.string(),
     clientType: ClientTypeSchema,
   }),
 });
-export type MemberRetrievedRedemptionDetailsEventDetail = z.infer<typeof MemberRetrievedRedemptionDetailsEventDetailSchema>;
+export type MemberRetrievedRedemptionDetailsEventDetail = z.infer<
+  typeof MemberRetrievedRedemptionDetailsEventDetailSchema
+>;
 export const MemberRetrievedRedemptionDetailsEventSchema = eventSchema(
   REDEMPTIONS_EVENT_SOURCE,
   z.literal(RedemptionEventDetailType.MEMBER_RETRIEVED_REDEMPTION_DETAILS),
   MemberRetrievedRedemptionDetailsEventDetailSchema,
 );
-export type MemberRetrievedRedemptionDetailsEvent = z.infer<typeof MemberRetrievedRedemptionDetailsEventSchema>;
+export type MemberRetrievedRedemptionDetailsEvent = z.infer<
+  typeof MemberRetrievedRedemptionDetailsEventSchema
+>;

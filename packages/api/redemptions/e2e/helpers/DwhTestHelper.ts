@@ -9,7 +9,7 @@ import { tryParseConcatenatedJSON } from './tryParseConcatenatedJson';
 
 const compViewSchema = z.object({
   cid: z.string(),
-  oid_: z.number(),
+  oid_: z.string(),
   mid: z.string(),
   timedate: z.string(),
   type: z.number(),
@@ -19,7 +19,7 @@ type CompViewRecord = z.infer<typeof compViewSchema>;
 
 const compClickSchema = z.object({
   company_id: z.string(),
-  offer_id: z.number(),
+  offer_id: z.string(),
   member_id: z.string(),
   timedate: z.string(),
   type: z.number(),
@@ -46,35 +46,35 @@ const logger = new CliLogger();
 export class DwhTestHelper {
   constructor(private readonly s3Client: S3Client = new S3Client()) {}
 
-  public findCompViewRecordByOfferId(offerId: number) {
+  public findCompViewRecordByOfferId(offerId: string) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPVIEW_DESTINATION_BUCKET,
       (object): object is CompViewRecord => compViewSchema.parse(object).oid_ === offerId,
     );
   }
 
-  public findCompAppViewRecordByOfferId(offerId: number) {
+  public findCompAppViewRecordByOfferId(offerId: string) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPAPPVIEW_DESTINATION_BUCKET,
       (object): object is CompViewRecord => compViewSchema.parse(object).oid_ === offerId,
     );
   }
 
-  public findCompClickRecordByOfferId(offerId: number) {
+  public findCompClickRecordByOfferId(offerId: string) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPCLICK_DESTINATION_BUCKET,
       (object): object is CompClickRecord => compClickSchema.parse(object).offer_id === offerId,
     );
   }
 
-  public findCompAppClickRecordByOfferId(offerId: number) {
+  public findCompAppClickRecordByOfferId(offerId: string) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_COMPAPPCLICK_DESTINATION_BUCKET,
       (object): object is CompClickRecord => compClickSchema.parse(object).offer_id === offerId,
     );
   }
 
-  public findVaultRecordByOfferId(offerId: number) {
+  public findVaultRecordByOfferId(offerId: string) {
     return this.findObjectInBucket(
       Config.DWH_BLC_PRODUCTION_VAULT_DESTINATION_BUCKET,
       (object): object is VaultRecord => vaultSchema.parse(object).offer_id === offerId.toString(),

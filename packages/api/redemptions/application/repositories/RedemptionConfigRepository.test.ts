@@ -42,10 +42,7 @@ describe('RedemptionConfigRepository', () => {
     it('should return null when the redemption does not exist', async () => {
       // Arrange
       const repository = new RedemptionConfigRepository(connection);
-      const offerId = faker.number.int({
-        min: 1,
-        max: 1_000_000,
-      });
+      const offerId = faker.string.sample(10);
 
       // Act
       const result = await repository.findOneByOfferId(offerId);
@@ -126,7 +123,7 @@ describe('RedemptionConfigRepository', () => {
 
   describe('updateOneByOfferId', () => {
     it('should update the redemptions record by offer ID', async () => {
-      const offerId = 123;
+      const offerId = '123';
       const redemption = redemptionConfigEntityFactory.build({
         offerId: offerId,
         companyId: 123,
@@ -154,7 +151,7 @@ describe('RedemptionConfigRepository', () => {
       expect(redemptionData[0].affiliate).toBe(null);
       expect(redemptionData[0].companyId).toBe(123);
       expect(redemptionData[0].connection).toBe('none');
-      expect(redemptionData[0].offerId).toBe(123);
+      expect(redemptionData[0].offerId).toBe('123');
       expect(redemptionData[0].offerType).toBe('in-store');
       expect(redemptionData[0].redemptionType).toBe('generic');
       expect(redemptionData[0].url).toBe(null);
@@ -164,7 +161,7 @@ describe('RedemptionConfigRepository', () => {
   describe('updateOneById', () => {
     it('should update the redemptions record by ID and return updated record', async () => {
       const redemption = redemptionConfigEntityFactory.build({
-        offerId: 123,
+        offerId: '123',
         companyId: 456,
         redemptionType: 'generic',
         connection: 'direct',
@@ -176,7 +173,7 @@ describe('RedemptionConfigRepository', () => {
 
       const repository = new RedemptionConfigRepository(connection);
       const updatePayload: UpdateRedemptionConfigEntity = {
-        offerId: 321,
+        offerId: '321',
         companyId: 654,
         connection: 'affiliate',
         url: 'https://www.awin1.com',
@@ -212,7 +209,7 @@ describe('RedemptionConfigRepository', () => {
   describe('updateOneById', () => {
     it('should update the redemptions record by ID and return updated record', async () => {
       const redemption = redemptionConfigEntityFactory.build({
-        offerId: 123,
+        offerId: '123',
         companyId: 456,
         redemptionType: 'generic',
         connection: 'direct',
@@ -224,7 +221,7 @@ describe('RedemptionConfigRepository', () => {
 
       const repository = new RedemptionConfigRepository(connection);
       const updatePayload: UpdateRedemptionConfigEntity = {
-        offerId: 321,
+        offerId: '321',
         companyId: 654,
         connection: 'affiliate',
         url: 'https://www.awin1.com',

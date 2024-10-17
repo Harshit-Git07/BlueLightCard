@@ -133,7 +133,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
 
   private async createRedemptionConfigEntity(
     requestData: PostRedemptionConfigModel,
-    offerId: number,
+    offerId: string,
     transactionalRedemptionConfigRepository: RedemptionConfigRepository,
   ) {
     const redemptionConfigRequestData: NewRedemptionConfigEntity =

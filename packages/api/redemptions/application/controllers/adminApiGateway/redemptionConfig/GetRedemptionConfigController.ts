@@ -13,7 +13,7 @@ import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../Ad
 
 const GetRedemptionRequestModel = z.object({
   pathParameters: z.object({
-    offerId: z.coerce.number(),
+    offerId: z.coerce.string(),
   }),
 });
 

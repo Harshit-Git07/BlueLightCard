@@ -9,7 +9,7 @@ export const PostAffiliateModel = createZodNamedType(
     memberId: z.string(),
     platform: z.string().optional(),
     companyId: z.string().optional(),
-    offerId: z.string().optional(),
+    offerId: z.coerce.string().optional(),
   }),
 );
 

@@ -21,7 +21,7 @@ const VaultCreatedEventDetailSchema = z.object({
   linkId: NON_NEGATIVE_INT.nullable().optional(),
   managerId: NON_NEGATIVE_INT.nullable().optional(),
   maxPerUser: NON_NEGATIVE_INT,
-  offerId: NON_NEGATIVE_INT,
+  offerId: z.coerce.string(),
   showQR: z.boolean(),
   ucCampaignId: NON_NEGATIVE_INT.nullable().optional(),
   vaultStatus: z.boolean(),

@@ -8,9 +8,9 @@ import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastru
 import { EagleEyeModel, UniqodoModel } from '@blc-mono/redemptions/libs/models/postCallback';
 
 export interface IDwhRepository {
-  logOfferView(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
-  logRedemptionAttempt(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
-  logVaultRedemption(offerId: number, companyId: number, memberId: string, code: string): Promise<void>;
+  logOfferView(offerId: string, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
+  logRedemptionAttempt(offerId: string, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
+  logVaultRedemption(offerId: string, companyId: number, memberId: string, code: string): Promise<void>;
   logRedemption(dto: MemberRedemptionParamsDto): Promise<void>;
   logCallbackEagleEyeVaultRedemption(data: EagleEyeModel): Promise<void>;
   logCallbackUniqodoVaultRedemption(data: UniqodoModel): Promise<void>;
@@ -28,7 +28,7 @@ export class DwhRepository implements IDwhRepository {
 
   private readonly client = new FirehoseClient();
 
-  async logOfferView(offerId: number, companyId: number, memberId: string, clientType: ClientType): Promise<void> {
+  async logOfferView(offerId: string, companyId: number, memberId: string, clientType: ClientType): Promise<void> {
     const APPLICATION_TYPE_WEB = 1;
     const APPLICATION_TYPE_APP = 5;
     const [streamName, type] = (() => {
@@ -61,7 +61,7 @@ export class DwhRepository implements IDwhRepository {
   }
 
   async logRedemptionAttempt(
-    offerId: number,
+    offerId: string,
     companyId: number,
     memberId: string,
     clientType: ClientType,
@@ -96,7 +96,7 @@ export class DwhRepository implements IDwhRepository {
     await this.client.send(command);
   }
 
-  async logVaultRedemption(offerId: number, companyId: number, memberId: string, code: string): Promise<void> {
+  async logVaultRedemption(offerId: string, companyId: number, memberId: string, code: string): Promise<void> {
     const command = new PutRecordCommand({
       DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME),
       Record: {

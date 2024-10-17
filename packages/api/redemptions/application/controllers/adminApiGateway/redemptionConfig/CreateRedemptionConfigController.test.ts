@@ -9,7 +9,7 @@ const MockCreateRedemptionConfigService = {
 
 const validRequestBody = {
   companyId: 1234,
-  offerId: 4321,
+  offerId: '4321',
   connection: 'none',
   offerType: 'in-store',
   redemptionType: 'preApplied',

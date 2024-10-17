@@ -27,10 +27,7 @@ describe('RedemptionDetailsController', () => {
     // Act
     const result = await controller.handle({
       queryStringParameters: {
-        offerId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        offerId: faker.string.uuid(),
       },
       headers: {
         Authorization: 'Bearer token',
@@ -59,10 +56,7 @@ describe('RedemptionDetailsController', () => {
     // Act
     const result = await controller.handle({
       queryStringParameters: {
-        offerId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        offerId: faker.string.uuid(),
       },
       headers: {
         Authorization: 'Bearer token',

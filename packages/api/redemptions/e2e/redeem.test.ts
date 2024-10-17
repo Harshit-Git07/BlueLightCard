@@ -26,7 +26,7 @@ import { E2EDatabaseConnectionManager } from './helpers/database';
 import { DwhTestHelper } from './helpers/DwhTestHelper';
 
 type RequestBody = {
-  offerId: number;
+  offerId: string;
   companyName: string;
   offerName: string;
 };
@@ -157,10 +157,7 @@ describe('POST /member/redeem', () => {
 
   test('should return unauthorized when called with invalid token', async () => {
     // Arrange
-    const offerId = faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    });
+    const offerId = faker.string.sample(10);
     const companyName = faker.company.name();
     const offerName = faker.commerce.productName();
 
@@ -192,7 +189,7 @@ describe('POST /member/redeem', () => {
 
     // Act
     const result = await sendRedemptionRequest({
-      offerId: String(redemption.offerId) as unknown as number, // invalid (should be number)
+      offerId: Number(redemption.offerId) as unknown as string, // invalid (should be string)
       companyName: faker.company.name(),
       offerName: faker.commerce.productName(),
     });
@@ -295,7 +292,7 @@ describe('POST /member/redeem', () => {
   test('fails to redeem using an invalid offer ID', async () => {
     // Act
     const result = await sendRedemptionRequest({
-      offerId: 1337,
+      offerId: '1337',
       companyName: faker.company.name(),
       offerName: faker.commerce.productName(),
     });

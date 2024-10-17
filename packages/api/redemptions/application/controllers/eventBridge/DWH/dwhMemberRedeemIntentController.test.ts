@@ -34,10 +34,7 @@ describe('DwhMemberRedeemIntentController', () => {
           },
           redemptionDetails: {
             redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
-            offerId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            offerId: faker.string.uuid(),
             companyId: faker.number.int({
               min: 1,
               max: 1_000_000,
@@ -85,10 +82,7 @@ describe('DwhMemberRedeemIntentController', () => {
           // },
           redemptionDetails: {
             redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
-            offerId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            offerId: faker.string.uuid(),
             companyId: faker.number.int({
               min: 1,
               max: 1_000_000,

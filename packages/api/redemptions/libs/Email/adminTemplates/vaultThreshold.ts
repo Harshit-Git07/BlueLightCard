@@ -1,6 +1,6 @@
 export type VaultThresholdBodyParams = {
   subject: string;
-  offerId: number;
+  offerId: string;
   companyName: string;
   offerName: string;
   thresholdPercentage: number;

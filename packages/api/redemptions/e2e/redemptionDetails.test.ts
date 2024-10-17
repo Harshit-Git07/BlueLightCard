@@ -31,10 +31,7 @@ describe('GET /member/redemptionDetails', () => {
 
   test('should return unauthorized when called with invalid token', async () => {
     // Arrange
-    const offerId = faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    });
+    const offerId = faker.string.alphanumeric(10);
 
     // Act
     const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redemptionDetails?offerId=${offerId}`, {
@@ -44,6 +41,7 @@ describe('GET /member/redemptionDetails', () => {
         Authorization: 'Bearer token',
       },
     });
+
     const body = await result.json();
 
     // Assert
@@ -55,10 +53,7 @@ describe('GET /member/redemptionDetails', () => {
 
   test('should return unauthorized when called without a token', async () => {
     // Arrange
-    const offerId = faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    });
+    const offerId = faker.string.alphanumeric(10);
 
     // Act
     const result = await fetch(`${ApiGatewayV1Api.redemptions.url}member/redemptionDetails?offerId=${offerId}`, {
@@ -80,7 +75,9 @@ describe('GET /member/redemptionDetails', () => {
     // Arrange
     const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
+      offerId: faker.string.uuid(),
     });
+
     await connectionManager.connection.db.insert(redemptionsTable).values(redemption);
     onTestFinished(async () => {
       await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));

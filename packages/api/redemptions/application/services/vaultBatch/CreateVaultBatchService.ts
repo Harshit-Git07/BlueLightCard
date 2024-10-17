@@ -205,7 +205,7 @@ export class CreateVaultBatchService implements ICreateVaultBatchService {
       };
     }
 
-    const offerId = Number(legacyIds[1]);
+    const offerId = legacyIds[1];
 
     const redemptionConfigEntity: RedemptionConfigEntity | null =
       await this.redemptionConfigRepository.findOneByOfferId(offerId);

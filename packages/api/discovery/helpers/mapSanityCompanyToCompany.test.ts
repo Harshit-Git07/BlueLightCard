@@ -173,57 +173,6 @@ describe('mapSanityCompanyToCompany', () => {
       'Missing sanity field: ageRestrictions',
     );
   });
-
-  it('should throw an error if companyLogo.default.asset.url is missing', () => {
-    const sanityCompanyWithoutLogoUrl: SanityCompany = {
-      _id: 'company-id',
-      _type: 'company',
-      _createdAt: '2023-01-01T00:00:00Z',
-      _updatedAt: '2023-01-02T00:00:00Z',
-      _rev: 'rev-id',
-      brandCompanyDetails: [
-        {
-          _key: 'brand-key',
-          companyName: 'Test Company',
-          companyLogo: {
-            default: {
-              _type: 'image',
-              asset: {
-                _id: 'logo-id',
-                _type: 'sanity.imageAsset',
-                _createdAt: '2023-01-01T00:00:00Z',
-                _updatedAt: '2023-01-02T00:00:00Z',
-                _rev: 'rev-id',
-              },
-            },
-          },
-          companyId: 123,
-          ageRestrictions: [
-            {
-              _id: '1',
-              _type: 'age.restriction',
-              name: '18+',
-              _createdAt: '2023-01-01T00:00:00Z',
-              _updatedAt: '2023-01-02T00:00:00Z',
-              _rev: 'rev-id',
-            },
-            {
-              _id: '2',
-              _type: 'age.restriction',
-              name: '21+',
-              _createdAt: '2023-01-01T00:00:00Z',
-              _updatedAt: '2023-01-02T00:00:00Z',
-              _rev: 'rev-id2',
-            },
-          ],
-        },
-      ],
-    };
-
-    expect(() => mapSanityCompanyToCompany(sanityCompanyWithoutLogoUrl)).toThrow(
-      'Missing sanity field: companyLogo.default.asset.url',
-    );
-  });
 });
 
 const sanityCompany: SanityCompany = {

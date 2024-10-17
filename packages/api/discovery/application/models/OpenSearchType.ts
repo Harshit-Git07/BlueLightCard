@@ -8,6 +8,7 @@ export type OpenSearchCommand = {
 
 export type OpenSearchBody = {
   offer_id: string;
+  legacy_offer_id?: number;
   offer_name: string;
   offer_status: string;
   offer_type: string;
@@ -35,6 +36,7 @@ export type OpenSearchBody = {
 
 export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
   offer_id: offer.id,
+  legacy_offer_id: offer.legacyOfferId,
   offer_name: offer.name.trim(),
   offer_status: offer.status,
   offer_type: offer.offerType,

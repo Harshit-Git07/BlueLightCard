@@ -5,7 +5,10 @@ import { datadog } from 'datadog-lambda-js';
 
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
 import { mapOfferToOpenSearchBody, OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
-import { draftIndexPrefix, OpenSearchService } from '@blc-mono/discovery/application/services/OpenSearchService';
+import {
+  draftIndexPrefix,
+  OpenSearchService,
+} from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 
 import { getNonLocalOffers } from '../../repositories/Offer/service/OfferService';
 

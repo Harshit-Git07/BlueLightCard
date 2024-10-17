@@ -5,7 +5,7 @@ jest.mock('@blc-mono/discovery/application/services/legacySearch');
 import { handler } from '../../../application/handlers/search/getSearch';
 import { search } from '../../../application/services/legacySearch';
 
-jest.mock('@blc-mono/discovery/application/services/OpenSearchService', () => {
+jest.mock('@blc-mono/discovery/application/services/opensearch/OpenSearchService', () => {
   return {
     OpenSearchService: jest.fn().mockImplementation(() => {
       return {

@@ -13,9 +13,6 @@ export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company
   if (!brandDetails.companyName) {
     throw new Error('Missing sanity field: companyName');
   }
-  if (!brandDetails.companyLogo?.default?.asset?.url) {
-    throw new Error('Missing sanity field: companyLogo.default.asset.url');
-  }
   if (!brandDetails.ageRestrictions) {
     throw new Error('Missing sanity field: ageRestrictions');
   }
@@ -24,7 +21,7 @@ export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company
     id: sanityCompany._id,
     legacyCompanyId: brandDetails.companyId,
     name: brandDetails.companyName,
-    logo: brandDetails?.companyLogo?.default?.asset?.url,
+    logo: brandDetails?.companyLogo?.default?.asset?.url ?? '',
     ageRestrictions: mapAgeRestrictions(brandDetails?.ageRestrictions),
     alsoKnownAs: sanityCompany.alsoKnownAs || [],
     includedTrusts: mapSanityTrustToTrust(sanityCompany.includedTrust),

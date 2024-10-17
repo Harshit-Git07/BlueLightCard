@@ -4,6 +4,7 @@ type OpenSearchFieldMapping = Record<keyof OpenSearchBody, { type: string; analy
 
 export const openSearchFieldMapping: OpenSearchFieldMapping = {
   offer_id: { type: 'text' },
+  legacy_offer_id: { type: 'long' },
   offer_name: {
     type: 'text',
     analyzer: 'snowball',

@@ -2,9 +2,9 @@ import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { handler } from '../../../application/handlers/search/deleteOldSearchIndices';
-import { OpenSearchService } from '../../services/OpenSearchService';
+import { OpenSearchService } from '../../services/opensearch/OpenSearchService';
 
-jest.mock('../../services/OpenSearchService');
+jest.mock('../../services/opensearch/OpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
 
 describe('deleteOldSearchIndices Handler', () => {

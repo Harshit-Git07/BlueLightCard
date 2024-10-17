@@ -153,6 +153,46 @@ describe('OpenSearchService', () => {
     expect(results).toStrictEqual([
       {
         ID: '123',
+        LegacyID: undefined,
+        OfferName: 'OfferName',
+        OfferType: '1',
+        offerimg: 'img',
+        CompID: '456',
+        CompanyName: 'CompanyName',
+      },
+    ]);
+  });
+
+  it('should return unique search results with legacy ID', async () => {
+    const mockSearchHitWithLegacyID = {
+      _source: {
+        title: 'dummyTitle',
+        description: 'dummyDescription',
+        offer_id: '123',
+        legacy_offer_id: 456,
+        offer_name: 'OfferName',
+        offer_type: '1',
+        offer_image: 'img',
+        company_id: '456',
+        company_name: 'CompanyName',
+        restricted_to: [],
+      },
+    };
+    const mockSearchWithDuplicates = jest.fn().mockResolvedValue({
+      body: {
+        hits: {
+          hits: [mockSearchHitWithLegacyID, mockSearchHitWithLegacyID],
+        },
+      },
+    });
+    jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
+
+    const results = await openSearchService.queryIndex(sampleDocument.title, indexName, '2001-01-01');
+
+    expect(results).toStrictEqual([
+      {
+        ID: '123',
+        LegacyID: 456,
         OfferName: 'OfferName',
         OfferType: '1',
         offerimg: 'img',

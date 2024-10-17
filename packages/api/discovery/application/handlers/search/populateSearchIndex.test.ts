@@ -1,10 +1,9 @@
 import { Logger } from '@aws-lambda-powertools/logger';
-import { isEqual } from 'lodash';
 
 import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { mapOfferToOpenSearchBody, OpenSearchBody } from '@blc-mono/discovery/application/models/OpenSearchType';
 import * as OffersService from '@blc-mono/discovery/application/repositories/Offer/service/OfferService';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/OpenSearchService';
+import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { offerFactory } from '../../factories/OfferFactory';
@@ -13,7 +12,7 @@ import { Offer } from '../../models/Offer';
 import { handler } from './populateSearchIndex';
 
 jest.mock('@blc-mono/discovery/application/repositories/Offer/service/OfferService');
-jest.mock('@blc-mono/discovery/application/services/OpenSearchService');
+jest.mock('@blc-mono/discovery/application/services/opensearch/OpenSearchService');
 jest.mock('@aws-lambda-powertools/logger');
 jest.mock('@blc-mono/core/utils/getEnv');
 
@@ -154,6 +153,7 @@ describe('populateSearchIndex', () => {
 
         const expectedOpenSearchType: OpenSearchBody = {
           offer_id: 'offer-1',
+          legacy_offer_id: 1,
           offer_name: 'Offer 1',
           offer_status: 'active',
           offer_type: 'discount',
@@ -181,7 +181,7 @@ describe('populateSearchIndex', () => {
 
         const result = mapOfferToOpenSearchBody(offer);
 
-        expect(isEqual(result, expectedOpenSearchType)).toBe(true);
+        expect(result).toStrictEqual(expectedOpenSearchType);
       });
 
       it('should throw error if failure adding documents to index', async () => {

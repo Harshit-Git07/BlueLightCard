@@ -4,6 +4,7 @@ import { OpenSearchBody } from '@blc-mono/discovery/application/models/OpenSearc
 
 export interface SearchResult {
   ID: string;
+  LegacyID?: number;
   OfferName: string;
   OfferType: string;
   offerimg: string;
@@ -19,6 +20,7 @@ export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
       const hit = searchHit as SearchHit<OpenSearchBody>;
       uniqueSearchResults.add({
         ID: hit._source?.offer_id ?? '',
+        LegacyID: hit._source?.legacy_offer_id,
         OfferName: hit._source?.offer_name ?? '',
         OfferType: hit._source?.offer_type ?? '',
         offerimg: hit._source?.offer_image ?? '',

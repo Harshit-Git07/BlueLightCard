@@ -5,7 +5,7 @@ import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda/trigger/ap
 import { datadog } from 'datadog-lambda-js';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/OpenSearchService';
+import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
 const logger = new LambdaLogger({ serviceName: 'search-get' });

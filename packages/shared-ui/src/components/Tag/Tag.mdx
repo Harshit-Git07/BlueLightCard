@@ -1,0 +1,61 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import * as Tag from './Tag.stories';
+
+<Meta of={Tag} />
+
+# Tags
+
+- [Overview](#overview)
+- [Props](#props)
+- [Usage](#usage)
+- [States](#states)
+- [Design](#design)
+
+## Overview
+
+Tags are static components that show helpful details or attributes .Tags can be added to a card to display an attribute, quality or state of a particular item. They should be used sparingly to avoid overwhelming the user. They come in five styles for different use cases.
+
+## Props
+
+<Controls />
+
+## Usage
+➡️ Tags must appear near the item they're adding extra detail to. Any tags styles can be used together but are stronger when the same style is used.
+
+➡️ Use for categorizing,status, labeling, or read-only situations
+
+➡️ Do not use tags as links that direct you to an entirely different page or launch you from a current experience to a separate tab
+
+➡️ Tag titles should be concise and informative
+
+➡️ Tag titles should describe the tag in a few words or be under 20 characters when possible
+
+➡️ Only include long title content in tags when necessary
+
+## States
+
+List of states can be shown below here.
+
+### Default
+
+<Canvas of={Tag.TagDefault} />
+
+### Success
+
+<Canvas of={Tag.TagSuccess} />
+
+### Warning
+
+<Canvas of={Tag.TagWarning} />
+
+### Error
+
+<Canvas of={Tag.TagError} />
+
+### Info
+
+<Canvas of={Tag.TagInfo} />
+
+## Design
+Please see the [Figma design](<https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=471-37795&node-type=instance&m=devq>) for the design of the Tag component.

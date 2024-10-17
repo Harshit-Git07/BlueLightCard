@@ -226,6 +226,10 @@
         "value": "#E66E00",
         "type": "color"
       },
+      "amber-600": {
+        "value": "#CC6300",
+        "type": "color"
+      },
       "amber-500-30%": {
         "value": "#E66E00",
         "type": "color",

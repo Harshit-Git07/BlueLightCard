@@ -1,0 +1,316 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tag snapshot Test renders a tag With 1 Icon 1`] = `
+<div
+  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
+>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm mr-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+  <span
+    className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+  >
+    Tag
+  </span>
+</div>
+`;
+
+exports[`Tag snapshot Test renders a tag Without an Icon 1`] = `
+<div
+  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
+>
+  <span
+    className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+  >
+    Tag
+  </span>
+</div>
+`;
+
+exports[`Tag snapshot Test renders a tag in Error state 1`] = `
+<div
+  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-error-bright-light dark:bg-colour-error-bright-dark text-colour-onError-bright-light dark:text-colour-onError-bright-dark border-[0.5px] border-colour-onError-bright-light dark:border-color-onError-bright-dark rounded"
+>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm mr-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+  <span
+    className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+  >
+    Tag
+  </span>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm ml-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+</div>
+`;
+
+exports[`Tag snapshot Test renders a tag in Info state 1`] = `
+<div
+  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-info-bright-light dark:bg-colour-info-bright-dark text-colour-onInfo-bright-light dark:text-colour-onInfo-bright-dark border-[0.5px] border-colour-onInfo-bright-light dark:border-colour-onInfo-bright-dark rounded"
+>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm mr-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+  <span
+    className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+  >
+    Tag
+  </span>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm ml-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+</div>
+`;
+
+exports[`Tag snapshot Test renders a tag in Success state 1`] = `
+<div
+  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm mr-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+  <span
+    className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+  >
+    Tag
+  </span>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm ml-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+</div>
+`;
+
+exports[`Tag snapshot Test renders a tag in Warning state 1`] = `
+<div
+  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
+>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm mr-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+  <span
+    className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+  >
+    Tag
+  </span>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm ml-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+</div>
+`;
+
+exports[`Tag snapshot Test renders a tag in default state 1`] = `
+<div
+  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-surface-container-light dark:bg-colour-surface-container-dark text-colour-onSurface-light dark:text-colour-onSurface-dark border-[0.5px] border-colour-onSurface-light dark:border-colour-onSurface-dark rounded"
+>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm mr-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+  <span
+    className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+  >
+    Tag
+  </span>
+  <span
+    className="flex items-center"
+  >
+    <svg
+      aria-hidden="true"
+      className="svg-inline--fa fa-circle-bolt fa-sm ml-1 text-current"
+      data-icon="circle-bolt"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      style={{}}
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm74.1-396.4c5.8 4.7 7.6 12.9 4.2 19.6L281.9 240H352c6.8 0 12.9 4.3 15.1 10.7s.2 13.5-5.1 17.8l-160 128c-5.9 4.7-14.2 4.7-20.1-.1s-7.6-12.9-4.3-19.6L230.1 272H160c-6.8 0-12.8-4.3-15.1-10.7s-.2-13.5 5.1-17.8l160-128c5.9-4.7 14.2-4.7 20.1 .1z"
+        fill="currentColor"
+        style={{}}
+      />
+    </svg>
+  </span>
+</div>
+`;

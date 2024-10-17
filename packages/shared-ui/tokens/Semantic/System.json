@@ -52,11 +52,11 @@
     },
     "onError-bright": {
       "light": {
-        "value": "{colour.system.red-200}",
+        "value": "{colour.system.red-500}",
         "type": "color"
       },
       "dark": {
-        "value": "{colour.system.red-500}",
+        "value": "{colour.system.red-200}",
         "type": "color"
       }
     },
@@ -212,7 +212,7 @@
     },
     "onWarning-bright": {
       "light": {
-        "value": "{colour.system.amber-500}",
+        "value": "{colour.system.amber-600}",
         "type": "color"
       },
       "dark": {

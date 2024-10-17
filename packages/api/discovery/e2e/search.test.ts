@@ -96,7 +96,7 @@ describe('Search E2E Event Handling', async () => {
     await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
     await new Promise((resolve) => setTimeout(resolve, 2000));
     await sendTestEvents({ source: Events.OPENSEARCH_POPULATE_INDEX, events: offers });
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 15000));
 
     const result = await whenSearchIsCalledWith(
       { ...openSearchQuery },

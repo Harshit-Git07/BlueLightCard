@@ -13,6 +13,7 @@ import {
   QueryCommand,
   QueryCommandInput,
 } from '@aws-sdk/lib-dynamodb';
+import { QueryCommandOutput } from '@aws-sdk/lib-dynamodb/dist-types/commands/QueryCommand';
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
@@ -101,8 +102,25 @@ export class DynamoDBService {
 
   static async query(params: QueryCommandInput): Promise<Record<string, NativeAttributeValue>[] | undefined> {
     try {
-      const data = await this.dynamodb.send(new QueryCommand(params));
-      return data.Items;
+      let items: Record<string, NativeAttributeValue>[] = [];
+      let lastEvaluatedKey: Record<string, NativeAttributeValue> | undefined = undefined;
+
+      do {
+        const data: QueryCommandOutput = await this.dynamodb.send(
+          new QueryCommand({
+            ...params,
+            ExclusiveStartKey: lastEvaluatedKey,
+          }),
+        );
+
+        if (data.Items) {
+          items = items.concat(data.Items);
+        }
+
+        lastEvaluatedKey = data.LastEvaluatedKey;
+      } while (lastEvaluatedKey);
+
+      return items;
     } catch (error) {
       const message = 'Error trying to query records using DynamoDB service';
       logger.error({ message, body: error });

@@ -138,6 +138,21 @@ describe('DynamoDB Service', () => {
       expect(result).toEqual([dataAttributes]);
     });
 
+    it('should call "query" command again with lastEvaluatedKey', async () => {
+      mockDynamoDB
+        .on(QueryCommand)
+        .resolvesOnce({ Items: [{ ...dataAttributes }], LastEvaluatedKey: { key: 'key' } })
+        .resolves({ Items: [{ ...dataAttributes }] });
+
+      const result = await DynamoDBService.query({} as QueryCommandInput);
+
+      expect(mockDynamoDB).toHaveReceivedCommandTimes(QueryCommand, 2);
+      expect(mockDynamoDB).toHaveReceivedNthCommandWith(2, QueryCommand, {
+        ExclusiveStartKey: { key: 'key' },
+      });
+      expect(result).toEqual([dataAttributes, dataAttributes]);
+    });
+
     it('should throw error on failed "query" command', async () => {
       const error = new Error('DynamoDB error');
       mockDynamoDB.on(QueryCommand).rejects(error);

@@ -1,7 +1,3 @@
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { mockClient } from 'aws-sdk-client-mock';
-import process from 'process';
-
 import { companyFactory } from '@blc-mono/discovery/application/factories/CompanyFactory';
 import { Company } from '@blc-mono/discovery/application/models/Company';
 import { mapCompanyToCompanyEntity } from '@blc-mono/discovery/application/repositories/Company/service/mapper/CompanyMapper';
@@ -11,29 +7,29 @@ import { CompanyRepository } from '../CompanyRepository';
 
 import * as target from './CompanyService';
 
+jest.mock('@blc-mono/core/utils/getEnv', () => ({
+  getEnv: jest.fn().mockImplementation((param) => {
+    if (param === DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME) {
+      return 'search-offer-company-table';
+    }
+  }),
+  getEnvRaw: jest.fn().mockImplementation((param) => {
+    if (param === DiscoveryStackEnvironmentKeys.REGION) {
+      return 'eu-west-2';
+    }
+  }),
+}));
+
 describe('Company Service', () => {
-  beforeEach(() => {
-    process.env[DiscoveryStackEnvironmentKeys.REGION] = 'eu-west-2';
-    process.env[DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME] = 'search-offer-company-table';
-  });
-
-  afterEach(() => {
-    delete process.env[DiscoveryStackEnvironmentKeys.REGION];
-    delete process.env[DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME];
-    mockDynamoDB.reset();
-  });
-
-  const mockDynamoDB = mockClient(DynamoDBDocumentClient);
-
   describe('insertCompany', () => {
     const company = companyFactory.build();
 
     it('should insert a company successfully', async () => {
-      givenCompanyRepositoryInsertReturnsSuccessfully(company);
+      const mockInsert = jest.spyOn(CompanyRepository.prototype, 'insert').mockResolvedValue();
 
-      const result = await target.insertCompany(company);
+      await target.insertCompany(company);
 
-      expect(result).toEqual(company);
+      expect(mockInsert).toHaveBeenCalledWith(mapCompanyToCompanyEntity(company));
     });
 
     it('should throw error when company failed to insert', async () => {
@@ -43,12 +39,6 @@ describe('Company Service', () => {
         `Error occurred inserting new Company with id: [${company.id}]: [Error: DynamoDB error]`,
       );
     });
-
-    const givenCompanyRepositoryInsertReturnsSuccessfully = (company: Company) => {
-      const companyEntity = mapCompanyToCompanyEntity(company);
-
-      jest.spyOn(CompanyRepository.prototype, 'insert').mockResolvedValue(companyEntity);
-    };
 
     const givenCompanyRepositoryInsertThrowsAnError = () => {
       jest.spyOn(CompanyRepository.prototype, 'insert').mockRejectedValue(new Error('DynamoDB error'));

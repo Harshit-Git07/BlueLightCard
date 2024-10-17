@@ -9,25 +9,23 @@ const GSI1_NAME = 'gsi1';
 const GSI2_NAME = 'gsi2';
 
 export class OfferRepository {
-  private readonly dynamoDb: DynamoDBService;
   private readonly tableName: string;
   constructor() {
-    this.dynamoDb = new DynamoDBService();
     this.tableName = getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME);
   }
 
-  async insert(offerEntity: OfferEntity): Promise<OfferEntity | undefined> {
-    return (await this.dynamoDb.put({
+  async insert(offerEntity: OfferEntity): Promise<void> {
+    await DynamoDBService.put({
       Item: offerEntity,
       TableName: this.tableName,
-    })) as OfferEntity;
+    });
   }
 
   async batchInsert(offerEntities: OfferEntity[]): Promise<void> {
     const DYNAMODB_MAX_BATCH_SIZE = 25;
     for (let i = 0; i < offerEntities.length; i += DYNAMODB_MAX_BATCH_SIZE) {
       const chunk = offerEntities.slice(i, i + DYNAMODB_MAX_BATCH_SIZE);
-      await this.dynamoDb.batchWrite({
+      await DynamoDBService.batchWrite({
         RequestItems: {
           [this.tableName]: chunk.map((offerEntity) => ({
             PutRequest: {
@@ -39,37 +37,39 @@ export class OfferRepository {
     }
   }
 
-  async delete(id: string, companyId: string): Promise<OfferEntity | undefined> {
-    return (await this.dynamoDb.delete({
+  async delete(id: string, companyId: string): Promise<void> {
+    await DynamoDBService.delete({
       Key: {
         partitionKey: OfferKeyBuilders.buildPartitionKey(id),
         sortKey: OfferKeyBuilders.buildSortKey(companyId),
       },
       TableName: this.tableName,
-    })) as OfferEntity;
+    });
   }
 
   async retrieveById(id: string, companyId: string): Promise<OfferEntity | undefined> {
-    return (await this.dynamoDb.get({
+    const result = await DynamoDBService.get({
       Key: {
         partitionKey: OfferKeyBuilders.buildPartitionKey(id),
         sortKey: OfferKeyBuilders.buildSortKey(companyId),
       },
       TableName: this.tableName,
-    })) as OfferEntity;
+    });
+    return result as OfferEntity;
   }
 
   async getNonLocal(): Promise<OfferEntity[] | undefined> {
-    return (await this.dynamoDb.query({
+    const results = await DynamoDBService.query({
       IndexName: GSI1_NAME,
       KeyConditionExpression: 'gsi1PartitionKey = :local_value',
       ExpressionAttributeValues: { ':local_value': OfferKeyBuilders.buildGsi1PartitionKey(false) },
       TableName: this.tableName,
-    })) as OfferEntity[];
+    });
+    return results as OfferEntity[];
   }
 
   async retrieveByCompanyId(companyId: string): Promise<OfferEntity[] | undefined> {
-    return (await this.dynamoDb.query({
+    const results = await DynamoDBService.query({
       IndexName: GSI2_NAME,
       KeyConditionExpression: 'gsi2PartitionKey = :company_id and begins_with(gsi2SortKey, :offer_prefix)',
       ExpressionAttributeValues: {
@@ -77,6 +77,7 @@ export class OfferRepository {
         ':offer_prefix': OFFER_PREFIX,
       },
       TableName: this.tableName,
-    })) as OfferEntity[];
+    });
+    return results as OfferEntity[];
   }
 }

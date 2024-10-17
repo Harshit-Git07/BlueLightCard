@@ -1,5 +1,3 @@
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { mockClient } from 'aws-sdk-client-mock';
 import process from 'process';
 
 import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
@@ -19,20 +17,17 @@ describe('Offer Service', () => {
   afterEach(() => {
     delete process.env[DiscoveryStackEnvironmentKeys.REGION];
     delete process.env[DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME];
-    mockDynamoDB.reset();
   });
-
-  const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
   describe('insertOffer', () => {
     const offer = offerFactory.build();
 
     it('should insert an offer successfully', async () => {
-      givenOfferRepositoryInsertReturnsSuccessfully(offer);
+      const mockInsert = jest.spyOn(OfferRepository.prototype, 'insert').mockResolvedValue();
 
-      const result = await target.insertOffer(offer);
+      await target.insertOffer(offer);
 
-      expect(result).toEqual(offer);
+      expect(mockInsert).toHaveBeenCalledWith(mapOfferToOfferEntity(offer));
     });
 
     it('should throw error when offer failed to insert', async () => {
@@ -42,12 +37,6 @@ describe('Offer Service', () => {
         `Error occurred inserting new Offer with id: [${offer.id}]: [Error: DynamoDB error]`,
       );
     });
-
-    const givenOfferRepositoryInsertReturnsSuccessfully = (offer: Offer) => {
-      const offerEntity = mapOfferToOfferEntity(offer);
-
-      jest.spyOn(OfferRepository.prototype, 'insert').mockResolvedValue(offerEntity);
-    };
 
     const givenOfferRepositoryInsertThrowsAnError = () => {
       jest.spyOn(OfferRepository.prototype, 'insert').mockRejectedValue(new Error('DynamoDB error'));
@@ -84,11 +73,11 @@ describe('Offer Service', () => {
     const offer = offerFactory.build();
 
     it('should delete an offer successfully', async () => {
-      givenOfferRepositoryDeleteReturnsSuccessfully(offer);
+      const mockDelete = jest.spyOn(OfferRepository.prototype, 'delete').mockResolvedValue();
 
-      const result = await target.deleteOffer(offer.id, offer.company.id);
+      await target.deleteOffer(offer.id, offer.company.id);
 
-      expect(result).toEqual(offer);
+      expect(mockDelete).toHaveBeenCalledWith(offer.id, offer.company.id);
     });
 
     it('should throw error when offer failed to insert', async () => {
@@ -98,12 +87,6 @@ describe('Offer Service', () => {
         `Error occurred deleting Offer with id: [${offer.id}]: [Error: DynamoDB error]`,
       );
     });
-
-    const givenOfferRepositoryDeleteReturnsSuccessfully = (offer: Offer) => {
-      const offerEntity = mapOfferToOfferEntity(offer);
-
-      jest.spyOn(OfferRepository.prototype, 'delete').mockResolvedValue(offerEntity);
-    };
 
     const givenOfferRepositoryDeleteThrowsAnError = () => {
       jest.spyOn(OfferRepository.prototype, 'delete').mockRejectedValue(new Error('DynamoDB error'));

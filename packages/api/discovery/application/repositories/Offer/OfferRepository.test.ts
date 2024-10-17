@@ -1,5 +1,3 @@
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { mockClient } from 'aws-sdk-client-mock';
 import process from 'process';
 
 import { offerEntityFactory } from '@blc-mono/discovery/application/factories/OfferEntityFactory';
@@ -9,6 +7,8 @@ import { DynamoDBService } from '@blc-mono/discovery/application/services/Dynamo
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { OFFER_PREFIX } from '../constants/PrimaryKeyPrefixes';
+
+jest.mock('@blc-mono/discovery/application/services/DynamoDbService');
 
 describe('Offer Repository', () => {
   beforeEach(() => {
@@ -21,38 +21,36 @@ describe('Offer Repository', () => {
   afterEach(() => {
     delete process.env[DiscoveryStackEnvironmentKeys.REGION];
     delete process.env[DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME];
-    mockDynamoDB.reset();
   });
 
-  const mockDynamoDB = mockClient(DynamoDBDocumentClient);
+  const mockSave = jest.fn().mockResolvedValue(() => Promise.resolve());
+  const mockBatchWrite = jest.fn().mockResolvedValue(() => Promise.resolve());
+  const mockDelete = jest.fn().mockResolvedValue(() => Promise.resolve());
+  const mockGet = jest.fn();
+  const mockQuery = jest.fn();
 
   describe('insert', () => {
-    const putSpy = jest.spyOn(DynamoDBService.prototype, 'put');
-
     it('should call "Put" method with correct parameters', async () => {
+      DynamoDBService.put = mockSave;
       const offerEntity = offerEntityFactory.build();
-      putSpy.mockResolvedValue(offerEntity);
 
-      const result = await new OfferRepository().insert(offerEntity);
+      await new OfferRepository().insert(offerEntity);
 
-      expect(putSpy).toHaveBeenCalledWith({
+      expect(mockSave).toHaveBeenCalledWith({
         Item: offerEntity,
         TableName: 'search-offer-company-table',
       });
-      expect(result).toEqual(offerEntity);
     });
   });
 
   describe('batchInsert', () => {
-    const batchWriteSpy = jest.spyOn(DynamoDBService.prototype, 'batchWrite');
-
+    DynamoDBService.batchWrite = mockBatchWrite;
     it('should call "BatchWrite" method with correct parameters', async () => {
       const offerEntities = offerEntityFactory.buildList(2);
-      batchWriteSpy.mockResolvedValue();
 
       await new OfferRepository().batchInsert(offerEntities);
 
-      expect(batchWriteSpy).toHaveBeenCalledWith({
+      expect(mockBatchWrite).toHaveBeenCalledWith({
         RequestItems: {
           ['search-offer-company-table']: [
             { PutRequest: { Item: offerEntities[0] } },
@@ -64,44 +62,39 @@ describe('Offer Repository', () => {
 
     it('should batch over 25 offers into multiple "BatchWrite" calls', async () => {
       const offerEntities = offerEntityFactory.buildList(60);
-      batchWriteSpy.mockResolvedValue();
 
       await new OfferRepository().batchInsert(offerEntities);
 
-      expect(batchWriteSpy).toHaveBeenCalledTimes(3);
+      expect(mockBatchWrite).toHaveBeenCalledTimes(3);
     });
   });
 
   describe('delete', () => {
-    const deleteSpy = jest.spyOn(DynamoDBService.prototype, 'delete');
-
+    DynamoDBService.delete = mockDelete;
     it('should call "Delete" method with correct parameters', async () => {
       const offerEntity = offerEntityFactory.build();
-      deleteSpy.mockResolvedValue(offerEntity);
 
-      const result = await new OfferRepository().delete(offerEntity.id, offerEntity.company.id);
+      await new OfferRepository().delete(offerEntity.id, offerEntity.company.id);
 
-      expect(deleteSpy).toHaveBeenCalledWith({
+      expect(mockDelete).toHaveBeenCalledWith({
         Key: {
           partitionKey: OfferKeyBuilders.buildPartitionKey(offerEntity.id),
           sortKey: OfferKeyBuilders.buildSortKey(offerEntity.company.id),
         },
         TableName: 'search-offer-company-table',
       });
-      expect(result).toEqual(offerEntity);
     });
   });
 
   describe('retrieveById', () => {
-    const getSpy = jest.spyOn(DynamoDBService.prototype, 'get');
-
+    DynamoDBService.get = mockGet;
     it('should call "Get" method with correct parameters', async () => {
       const offerEntity = offerEntityFactory.build();
-      getSpy.mockResolvedValue(offerEntity);
+      mockGet.mockResolvedValue(offerEntity);
 
       const result = await new OfferRepository().retrieveById(offerEntity.id, offerEntity.company.id);
 
-      expect(getSpy).toHaveBeenCalledWith({
+      expect(mockGet).toHaveBeenCalledWith({
         Key: {
           partitionKey: OfferKeyBuilders.buildPartitionKey(offerEntity.id),
           sortKey: OfferKeyBuilders.buildSortKey(offerEntity.company.id),
@@ -113,15 +106,14 @@ describe('Offer Repository', () => {
   });
 
   describe('getNonLocal', () => {
-    const querySpy = jest.spyOn(DynamoDBService.prototype, 'query');
-
+    DynamoDBService.query = mockQuery;
     it('should call "Query" method with correct parameters', async () => {
       const offerEntities = offerEntityFactory.buildList(3);
-      querySpy.mockResolvedValue(offerEntities);
+      mockQuery.mockResolvedValue(offerEntities);
 
       const result = await new OfferRepository().getNonLocal();
 
-      expect(querySpy).toHaveBeenCalledWith({
+      expect(mockQuery).toHaveBeenCalledWith({
         IndexName: 'gsi1',
         KeyConditionExpression: 'gsi1PartitionKey = :local_value',
         ExpressionAttributeValues: { ':local_value': 'LOCAL-false' },
@@ -132,16 +124,15 @@ describe('Offer Repository', () => {
   });
 
   describe('retrieveByCompanyId', () => {
-    const querySpy = jest.spyOn(DynamoDBService.prototype, 'query');
-
+    DynamoDBService.query = mockQuery;
     it('should call "Query" method with correct parameters', async () => {
       const companyId = 'companyId';
       const offerEntities = offerEntityFactory.buildList(3);
-      querySpy.mockResolvedValue(offerEntities);
+      mockQuery.mockResolvedValue(offerEntities);
 
       const result = await new OfferRepository().retrieveByCompanyId(companyId);
 
-      expect(querySpy).toHaveBeenCalledWith({
+      expect(mockQuery).toHaveBeenCalledWith({
         IndexName: 'gsi2',
         KeyConditionExpression: 'gsi2PartitionKey = :company_id and begins_with(gsi2SortKey, :offer_prefix)',
         ExpressionAttributeValues: { ':company_id': `COMPANY-${companyId}`, ':offer_prefix': OFFER_PREFIX },

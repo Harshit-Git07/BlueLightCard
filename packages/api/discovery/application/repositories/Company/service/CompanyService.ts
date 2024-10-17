@@ -8,13 +8,12 @@ import { buildErrorMessage } from './utils/ErrorMessageBuilder';
 
 const logger = new LambdaLogger({ serviceName: 'company-service' });
 
-export async function insertCompany(company: Company): Promise<Company | undefined> {
+export async function insertCompany(company: Company): Promise<void> {
   try {
     const companyEntity = mapCompanyToCompanyEntity(company);
     logger.info({ message: `Inserting new Company with id: [${company.id}]` });
-    const result = await new CompanyRepository().insert(companyEntity);
+    await new CompanyRepository().insert(companyEntity);
     logger.info({ message: `Inserted new Company with id: [${company.id}]` });
-    return result ? mapCompanyEntityToCompany(result) : undefined;
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred inserting new Company with id: [${company.id}]`));
   }

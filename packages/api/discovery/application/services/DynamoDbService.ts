@@ -21,20 +21,14 @@ import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 const logger = new LambdaLogger({ serviceName: 'dynamoDB' });
 
 export class DynamoDBService {
-  private readonly client: DynamoDBClient;
-  private readonly dynamodb: DynamoDBDocumentClient;
+  private static readonly client: DynamoDBClient = new DynamoDBClient({ region: getEnvRaw('AWS_DEFAULT_REGION') });
+  private static readonly dynamodb: DynamoDBDocumentClient = DynamoDBDocumentClient.from(this.client, {
+    marshallOptions: {
+      removeUndefinedValues: true,
+    },
+  });
 
-  constructor() {
-    const region = getEnvRaw('AWS_DEFAULT_REGION');
-    this.client = new DynamoDBClient({ region });
-    this.dynamodb = DynamoDBDocumentClient.from(this.client, {
-      marshallOptions: {
-        removeUndefinedValues: true,
-      },
-    });
-  }
-
-  async put(params: PutCommandInput): Promise<Record<string, NativeAttributeValue> | undefined> {
+  static async put(params: PutCommandInput): Promise<Record<string, NativeAttributeValue> | undefined> {
     try {
       const data = await this.dynamodb.send(new PutCommand(params));
       return data.Attributes;
@@ -45,7 +39,7 @@ export class DynamoDBService {
     }
   }
 
-  async batchWrite(params: BatchWriteCommandInput): Promise<void> {
+  static async batchWrite(params: BatchWriteCommandInput): Promise<void> {
     const maxAttempts = 5;
     const baseDelay = 1000;
 
@@ -83,7 +77,7 @@ export class DynamoDBService {
     }
   }
 
-  async delete(params: DeleteCommandInput): Promise<Record<string, NativeAttributeValue> | undefined> {
+  static async delete(params: DeleteCommandInput): Promise<Record<string, NativeAttributeValue> | undefined> {
     try {
       const data = await this.dynamodb.send(new DeleteCommand(params));
       return data.Attributes;
@@ -94,7 +88,7 @@ export class DynamoDBService {
     }
   }
 
-  async get(params: GetCommandInput): Promise<Record<string, NativeAttributeValue> | undefined> {
+  static async get(params: GetCommandInput): Promise<Record<string, NativeAttributeValue> | undefined> {
     try {
       const data = await this.dynamodb.send(new GetCommand(params));
       return data.Item;
@@ -105,7 +99,7 @@ export class DynamoDBService {
     }
   }
 
-  async query(params: QueryCommandInput): Promise<Record<string, NativeAttributeValue>[] | undefined> {
+  static async query(params: QueryCommandInput): Promise<Record<string, NativeAttributeValue>[] | undefined> {
     try {
       const data = await this.dynamodb.send(new QueryCommand(params));
       return data.Items;

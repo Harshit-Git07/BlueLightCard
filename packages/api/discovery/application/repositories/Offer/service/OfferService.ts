@@ -8,13 +8,12 @@ import { mapOfferEntityToOffer, mapOfferToOfferEntity } from './mapper/OfferMapp
 
 const logger = new LambdaLogger({ serviceName: 'offer-service' });
 
-export async function insertOffer(offer: Offer): Promise<Offer | undefined> {
+export async function insertOffer(offer: Offer): Promise<void> {
   try {
     const offerEntity = mapOfferToOfferEntity(offer);
     logger.info({ message: `Inserting Offer with id: [${offer.id}]` });
-    const result = await new OfferRepository().insert(offerEntity);
+    await new OfferRepository().insert(offerEntity);
     logger.info({ message: `Inserted Offer with id: [${offer.id}]` });
-    return result ? mapOfferEntityToOffer(result) : undefined;
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred inserting new Offer with id: [${offer.id}]`));
   }
@@ -34,12 +33,11 @@ export async function insertOffers(offers: Offer[]): Promise<void> {
   }
 }
 
-export async function deleteOffer(id: string, companyId: string): Promise<Offer | undefined> {
+export async function deleteOffer(id: string, companyId: string): Promise<void> {
   try {
     logger.info({ message: `Deleting Offer with id: [${id}]` });
-    const result = await new OfferRepository().delete(id, companyId);
+    await new OfferRepository().delete(id, companyId);
     logger.info({ message: `Deleted Offer with id: [${id}]` });
-    return result ? mapOfferEntityToOffer(result) : undefined;
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred deleting Offer with id: [${id}]`));
   }

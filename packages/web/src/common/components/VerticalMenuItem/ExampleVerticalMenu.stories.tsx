@@ -50,16 +50,16 @@ const DefaultTemplate: StoryFn<ExampleVerticalMenuProps> = (args) => (
   <ExampleVerticalMenu {...args} />
 );
 
-export const OnClickVariant = DefaultTemplate.bind({});
-OnClickVariant.args = {
+export const Default = DefaultTemplate.bind({});
+Default.args = {
   numberOfItems: 2,
   label: 'MenuItem',
   onClick: () => 'Item Clicked!',
   href: undefined,
 };
 
-export const HrefVariant = DefaultTemplate.bind({});
-HrefVariant.args = {
+export const Hover = DefaultTemplate.bind({});
+Hover.args = {
   numberOfItems: 2,
   label: 'MenuItem',
   onClick: undefined,

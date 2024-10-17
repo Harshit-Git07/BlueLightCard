@@ -12,16 +12,16 @@ const DefaultTemplate: StoryFn<typeof VerticalMenuItem> = (args) => (
   </ul>
 );
 
-export const OnClick = DefaultTemplate.bind({});
+export const Default = DefaultTemplate.bind({});
 
-OnClick.args = {
+Default.args = {
   label: 'Default Menu Item',
   onClick: () => "I've been Clicked!",
 };
 
-export const HRef = DefaultTemplate.bind({});
+export const Hover = DefaultTemplate.bind({});
 
-HRef.args = {
+Hover.args = {
   label: 'Default Menu Item',
   href: '/',
 };

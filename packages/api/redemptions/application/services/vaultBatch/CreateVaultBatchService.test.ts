@@ -43,8 +43,10 @@ describe('CreateVaultBatchService', () => {
 
   function getTestEvent(vaultId: string) {
     return {
-      body: {
+      pathParameters: {
         vaultId: vaultId,
+      },
+      body: {
         expiry: faker.date.future().setMilliseconds(0).toString(),
       },
     } satisfies ParsedRequest;

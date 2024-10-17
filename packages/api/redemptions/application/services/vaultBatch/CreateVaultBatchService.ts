@@ -67,7 +67,7 @@ export class CreateVaultBatchService implements ICreateVaultBatchService {
 
   // eslint-disable-next-line require-await
   public async createVaultBatch(request: ParsedRequest): Promise<CreateVaultBatchResult | CreateVaultBatchError> {
-    const vaultIdSent = request.body.vaultId;
+    const vaultIdSent = decodeURIComponent(request.pathParameters.vaultId);
     const expiry = request.body.expiry;
 
     /**

@@ -18,6 +18,9 @@ describe('DeleteVaultBatchController', () => {
       ContentType: 'application/json',
       XAPIKey: 'abcdefghijklmnopqurstuvwxyz',
     },
+    pathParameters: {
+      batchId: testBatchId,
+    },
     body: {
       batchId: testBatchId,
     },

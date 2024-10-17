@@ -14,6 +14,9 @@ import { PatchVaultBatchModel } from '@blc-mono/redemptions/libs/models/patchVau
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../AdminApiGatewayController';
 
 const UpdateVaultBatchRequestModel = z.object({
+  pathParameters: z.object({
+    batchId: z.string(),
+  }),
   body: JsonStringSchema.pipe(PatchVaultBatchModel),
 });
 
@@ -37,7 +40,7 @@ export class UpdateVaultBatchController extends APIGatewayController<ParsedReque
     }
 
     const expiryDateIsInvalid =
-      z.string().datetime().safeParse(parsedRequest.value.body.expiry).success === false ||
+      !z.string().datetime().safeParse(parsedRequest.value.body.expiry).success ||
       new Date(parsedRequest.value.body.expiry) < new Date();
     if (expiryDateIsInvalid) {
       return Result.err({
@@ -54,7 +57,8 @@ export class UpdateVaultBatchController extends APIGatewayController<ParsedReque
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const { batchId, expiry } = request.body;
+    const batchId = request.pathParameters.batchId;
+    const { expiry } = request.body;
     const result = await this.updateVaultBatchService.handle(batchId, new Date(expiry));
 
     switch (result.kind) {

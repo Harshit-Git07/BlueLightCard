@@ -152,12 +152,12 @@ export function createAdminApi(
   const routeFactory = createRoutesFactory(baseParams);
 
   adminApi.addRoutes(stack, {
-    'GET /batch/{vaultId}': routeFactory({
+    'GET /vaults/{vaultId}/batches': routeFactory({
       name: 'GetVaultBatch',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/getVaultBatchHandler.handler',
     }),
-    'POST /batch': routeFactory({
+    'POST vaults/{vaultId}/batches': routeFactory({
       name: 'CreateVaultBatch',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/createVaultBatchHandler.handler',
@@ -166,12 +166,12 @@ export function createAdminApi(
       },
       permissions: [vaultCodesUpload.setUp.getPutObjectPolicyStatement()],
     }),
-    'PATCH /batch': routeFactory({
+    'PATCH vaults/{vaultId}/batches/{batchId}': routeFactory({
       name: 'UpdateVaultBatch',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/updateVaultBatchHandler.handler',
     }),
-    'DELETE /batch': routeFactory({
+    'DELETE vaults/{vaultId}/batches/{batchId}': routeFactory({
       name: 'DeleteVaultBatch',
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/vaultBatch/deleteVaultBatchHandler.handler',

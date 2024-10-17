@@ -18,8 +18,10 @@ describe('CreateVaultBatchController', () => {
       ContentType: 'application/json',
       XAPIKey: 'abcdefghijklmnopqurstuvwxyz',
     },
-    body: {
+    pathParameters: {
       vaultId: testVaultId,
+    },
+    body: {
       expiry: faker.date.future().setMilliseconds(0).toString(),
     },
   };

@@ -182,61 +182,48 @@ describe('Vault Batch admin API tests', () => {
     // Set a conservative timeout
   }, 60_000);
 
-  async function callBatchEndpoint(
-    method: string,
-    key?: string,
-    body?: object,
-    queryStringParam?: string,
-  ): Promise<Response> {
-    const params = queryStringParam ? `batch/${queryStringParam}` : 'batch';
+  async function callBatchEndpoint(method: string, path: string, key?: string, body?: object): Promise<Response> {
+    const payload = {
+      method: method,
+      headers: {
+        ...(key !== undefined && { 'X-API-Key': key }),
+        'Content-Type': 'application/json',
+      },
+      ...(body && { body: JSON.stringify(body) }),
+    };
 
-    if (!key) {
-      return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}${params}`, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } else {
-      const payload = body
-        ? {
-            method: method,
-            headers: {
-              'Content-Type': 'application/json',
-              'X-API-Key': key,
-            },
-            body: JSON.stringify(body),
-          }
-        : {
-            method: method,
-            headers: {
-              'Content-Type': 'application/json',
-              'X-API-Key': key,
-            },
-          };
-
-      return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}${params}`, payload);
-    }
+    return await fetch(`${ApiGatewayV1Api.redemptionsAdmin.url}${path}`, payload);
   }
+
+  const apiCall = {
+    get: callBatchEndpoint.bind(null, 'GET'),
+    post: callBatchEndpoint.bind(null, 'POST'),
+    patch: callBatchEndpoint.bind(null, 'PATCH'),
+    delete: callBatchEndpoint.bind(null, 'DELETE'),
+  };
 
   describe('API key authentication', () => {
     test.each([
-      { method: 'POST', queryStringParam: undefined },
-      { method: 'GET', queryStringParam: 'my-vault-id' },
-      { method: 'PATCH', queryStringParam: undefined },
-      { method: 'DELETE', queryStringParam: undefined },
-    ])(`$method: authorisation error for no key`, async (params): Promise<void> => {
-      const result = await callBatchEndpoint(params.method, undefined, undefined, params.queryStringParam);
+      { path: 'vaults/vlt-abcd/batches', method: 'post', key: undefined },
+      { path: 'vaults/vlt-abcd/batches', method: 'get', key: undefined },
+      { path: 'vaults/vlt-abcd/batches/vbt-efgh', method: 'patch', key: undefined },
+      { path: 'vaults/vlt-abcd/batches/vbt-efgh', method: 'delete', key: undefined },
+      { path: 'vaults/vlt-abcd/batches', method: 'post', key: '' },
+      { path: 'vaults/vlt-abcd/batches', method: 'get', key: '' },
+      { path: 'vaults/vlt-abcd/batches/vbt-efgh', method: 'patch', key: '' },
+      { path: 'vaults/vlt-abcd/batches/vbt-efgh', method: 'delete', key: '' },
+    ] as const)(`$method: authorisation error for no key`, async (params): Promise<void> => {
+      const result = await apiCall[params.method](params.path);
       expect(result.status).toBe(403);
     });
 
     test.each([
-      { method: 'POST', queryStringParam: undefined },
-      { method: 'GET', queryStringParam: 'my-vault-id' },
-      { method: 'PATCH', queryStringParam: undefined },
-      { method: 'DELETE', queryStringParam: undefined },
-    ])(`$method: authorisation error for invalid key`, async (params): Promise<void> => {
-      const result = await callBatchEndpoint(params.method, 'invalid-api-key', undefined, params.queryStringParam);
+      { path: 'vaults/vlt-abcd/batches', method: 'get' },
+      { path: 'vaults/vlt-abcd/batches', method: 'post' },
+      { path: 'vaults/vlt-abcd/batches/vbt-efgh', method: 'patch' },
+      { path: 'vaults/vlt-abcd/batches/vbt-efgh', method: 'delete' },
+    ] as const)(`$method: authorisation error for invalid key`, async (params): Promise<void> => {
+      const result = await apiCall[params.method](params.path, 'invalid-api-key');
       expect(result.status).toBe(403);
     });
   });
@@ -264,8 +251,9 @@ describe('Vault Batch admin API tests', () => {
         vaultId: params.vaultId,
         expiry: faker.date.future().toISOString(),
       };
+      const urlVaultId = encodeURIComponent(params.vaultId);
 
-      const result = await callBatchEndpoint('POST', apiKey, body);
+      const result = await apiCall.post(`vaults/${urlVaultId}/batches`, apiKey, body);
       const responseBody = await result.json();
 
       expect(responseBody).toStrictEqual({
@@ -288,8 +276,9 @@ describe('Vault Batch admin API tests', () => {
         vaultId: legacyVaultId,
         expiry: faker.date.future().toISOString(),
       };
+      const urlVaultId = encodeURIComponent(legacyVaultId);
 
-      const result = await callBatchEndpoint('POST', apiKey, body);
+      const result = await apiCall.post(`vaults/${urlVaultId}/batches`, apiKey, body);
       const responseBody = await result.json();
 
       expect(responseBody).toStrictEqual({
@@ -300,7 +289,7 @@ describe('Vault Batch admin API tests', () => {
       });
     });
 
-    it('returns 200 when legacy vaultId redemptions and vaults records exist', async () => {
+    it('returns 200 when legacy vaultId redemptions and vault exists', async () => {
       const companyId = 12345;
       const offerId = '67890';
       const { ...VaultHooks } = buildVaultForPostMethod({
@@ -319,8 +308,9 @@ describe('Vault Batch admin API tests', () => {
         vaultId: legacyVaultId,
         expiry: faker.date.future().toISOString(),
       };
+      const urlVaultId = encodeURIComponent(legacyVaultId);
 
-      const result = await callBatchEndpoint('POST', apiKey, body);
+      const result = await apiCall.post(`vaults/${urlVaultId}/batches`, apiKey, body);
 
       expect(result.status).toStrictEqual(200);
     });
@@ -340,7 +330,7 @@ describe('Vault Batch admin API tests', () => {
         expiry: faker.date.future().toISOString(),
       };
 
-      const result = await callBatchEndpoint('POST', apiKey, body);
+      const result = await apiCall.post(`vaults/${vault.id}/batches`, apiKey, body);
 
       expect(result.status).toStrictEqual(200);
     });
@@ -352,7 +342,7 @@ describe('Vault Batch admin API tests', () => {
       onTestFinished(vaultCodeHooks.cleanup);
       await vaultCodeHooks.insert();
 
-      const result = await callBatchEndpoint('GET', apiKey, undefined, vault.id);
+      const result = await apiCall.get(`vaults/${vault.id}/batches`, apiKey);
       const body = await result.json();
 
       expect(body).toStrictEqual({
@@ -387,7 +377,7 @@ describe('Vault Batch admin API tests', () => {
       await secondVaultBatchHooks.insert();
       await secondBatchCodeListHooks.insert();
 
-      const result = await callBatchEndpoint('GET', apiKey, undefined, vault.id);
+      const result = await apiCall.get(`vaults/${vault.id}/batches`, apiKey);
       const body = await result.json();
 
       expect(body).toStrictEqual({
@@ -426,7 +416,7 @@ describe('Vault Batch admin API tests', () => {
       await unclaimedVaultCodeHooks.insert();
       await claimedVaultCodeHooks.insert();
 
-      const result = await callBatchEndpoint('GET', apiKey, undefined, vault.id);
+      const result = await apiCall.get(`vaults/${vault.id}/batches`, apiKey);
       const body = await result.json();
 
       expect(body).toStrictEqual({
@@ -446,28 +436,37 @@ describe('Vault Batch admin API tests', () => {
 
   describe('PATCH Vault Batches', () => {
     it('responds with a bad request error if the body is invalid', async () => {
+      const { vault, ...vaultHooks } = buildVault();
+      onTestFinished(vaultHooks.cleanup);
+
+      await vaultHooks.insert();
       const body = {
         batchId: `vbt-${faker.string.uuid()}`,
       };
 
-      const result = await callBatchEndpoint('PATCH', apiKey, body);
+      const result = await apiCall.patch(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
 
       expect(result.status).toBe(400);
     });
 
     it('responds with a not found error if the batch does not exist', async () => {
+      const { vault, ...vaultHooks } = buildVault();
+      onTestFinished(vaultHooks.cleanup);
+
+      await vaultHooks.insert();
+
       const body = {
         batchId: `vbt-non-existent`,
         expiry: faker.date.future().toISOString(),
       };
 
-      const result = await callBatchEndpoint('PATCH', apiKey, body);
+      const result = await apiCall.patch(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
 
       expect(result.status).toBe(404);
     });
 
     it('responds with no content if the batch and codes are updated', async () => {
-      const { vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(5);
+      const { vault, vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(5);
       onTestFinished(vaultCodeHooks.cleanup);
       await vaultCodeHooks.insert();
 
@@ -476,7 +475,7 @@ describe('Vault Batch admin API tests', () => {
         expiry: faker.date.future().toISOString(),
       };
 
-      const result = await callBatchEndpoint('PATCH', apiKey, body);
+      const result = await apiCall.patch(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
 
       expect(result.status).toStrictEqual(204);
     });
@@ -486,11 +485,16 @@ describe('Vault Batch admin API tests', () => {
     const delMsg = 'Vault Batch Delete -';
 
     it('returns 404 if batch ID does not exist', async () => {
+      const { vault, ...vaultHooks } = buildVault();
+      onTestFinished(vaultHooks.cleanup);
+
+      await vaultHooks.insert();
+
       const body = {
         batchId: `vbt-non-existent`,
       };
 
-      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const result = await apiCall.delete(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
       const responseBody = await result.json();
 
       expect(responseBody).toStrictEqual({
@@ -516,7 +520,7 @@ describe('Vault Batch admin API tests', () => {
         batchId: vaultBatch.id,
       };
 
-      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const result = await apiCall.delete(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
       const responseBody = await result.json();
 
       expect(responseBody).toStrictEqual({
@@ -533,7 +537,7 @@ describe('Vault Batch admin API tests', () => {
 
     it('returns 200 if batch ID exists and only has unclaimed codes', async () => {
       const unclaimedCodesCount = 1000;
-      const { vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(unclaimedCodesCount);
+      const { vault, vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(unclaimedCodesCount);
 
       onTestFinished(async () => {
         await vaultCodeHooks.cleanup();
@@ -544,7 +548,7 @@ describe('Vault Batch admin API tests', () => {
         batchId: vaultBatch.id,
       };
 
-      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const result = await apiCall.delete(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
       const responseBody = await result.json();
 
       expect(responseBody).toStrictEqual({
@@ -581,7 +585,7 @@ describe('Vault Batch admin API tests', () => {
         batchId: vaultBatch.id,
       };
 
-      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const result = await apiCall.delete(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
       const responseBody = await result.json();
 
       expect(responseBody).toStrictEqual({
@@ -598,7 +602,7 @@ describe('Vault Batch admin API tests', () => {
 
     it('returns 200 if batch ID exists and only has claimed codes', async () => {
       const claimedCodesCount = 1000;
-      const { vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(claimedCodesCount, {
+      const { vault, vaultBatch, ...vaultCodeHooks } = buildVaultWithCodes(claimedCodesCount, {
         memberId: faker.string.uuid(),
       });
 
@@ -611,7 +615,7 @@ describe('Vault Batch admin API tests', () => {
         batchId: vaultBatch.id,
       };
 
-      const result = await callBatchEndpoint('DELETE', apiKey, body);
+      const result = await apiCall.delete(`vaults/${vault.id}/batches/${body.batchId}`, apiKey, body);
       const responseBody = await result.json();
 
       expect(responseBody).toStrictEqual({

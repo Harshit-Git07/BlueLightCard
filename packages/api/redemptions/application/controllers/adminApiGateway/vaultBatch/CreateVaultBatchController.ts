@@ -14,6 +14,9 @@ import { PostVaultBatchModel } from '@blc-mono/redemptions/libs/models/postVault
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../AdminApiGatewayController';
 
 const CreateVaultBatchRequestModel = z.object({
+  pathParameters: z.object({
+    vaultId: z.string(),
+  }),
   body: JsonStringSchema.pipe(PostVaultBatchModel),
 });
 

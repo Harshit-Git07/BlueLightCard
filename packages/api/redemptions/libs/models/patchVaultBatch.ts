@@ -5,7 +5,6 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 export const PatchVaultBatchModel = createZodNamedType(
   'PatchVaultBatchModel',
   z.object({
-    batchId: z.string(),
     expiry: z.string(),
   }),
 );

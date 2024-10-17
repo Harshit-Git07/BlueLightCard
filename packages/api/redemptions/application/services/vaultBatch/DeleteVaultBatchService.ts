@@ -54,7 +54,8 @@ export class DeleteVaultBatchService implements IDeleteVaultBatchService {
 
   // eslint-disable-next-line require-await
   public async deleteVaultBatch(request: ParsedRequest): Promise<DeleteVaultBatchResult | DeleteVaultBatchError> {
-    const batchId = request.body.batchId;
+    const batchId = request.pathParameters.batchId;
+
     const vaultBatch = await this.vaultBatchesRepository.findOneById(batchId);
     if (!vaultBatch) {
       return this.deleteBatchError(batchId, 'the vault batch does not exist');

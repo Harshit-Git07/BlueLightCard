@@ -30,7 +30,7 @@ describe('DeleteVaultBatchService', () => {
   const testBatchId = faker.string.uuid();
 
   const testEvent = {
-    body: {
+    pathParameters: {
       batchId: testBatchId,
     },
   } satisfies ParsedRequest;

@@ -29,6 +29,7 @@ describe('UpdateVaultBatchController', () => {
 
     // Act
     const result = await controller.handle({
+      pathParameters: { batchId: faker.string.uuid() },
       body: { ...updateVaultBatchEventFactory.build() },
     });
 
@@ -53,6 +54,7 @@ describe('UpdateVaultBatchController', () => {
       headers: {
         Authorization: generateFakeJWT('PHYSICAL_CARD'),
       },
+      pathParameters: { batchId: faker.string.uuid() },
       body: JSON.stringify({
         ...updateVaultBatchEventFactory.build({
           expiry: date,

@@ -1,7 +1,6 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { z } from 'zod';
 
-import { JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -9,12 +8,13 @@ import {
   DeleteVaultBatchService,
   IDeleteVaultBatchService,
 } from '@blc-mono/redemptions/application/services/vaultBatch/DeleteVaultBatchService';
-import { DeleteVaultBatchModel } from '@blc-mono/redemptions/libs/models/deleteVaultBatch';
 
 import { APIGatewayController, APIGatewayResult, ParseRequestError } from '../AdminApiGatewayController';
 
 const DeleteVaultBatchRequestModel = z.object({
-  body: JsonStringSchema.pipe(DeleteVaultBatchModel),
+  pathParameters: z.object({
+    batchId: z.string(),
+  }),
 });
 
 export type ParsedRequest = z.infer<typeof DeleteVaultBatchRequestModel>;

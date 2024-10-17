@@ -1,6 +1,11 @@
 import { FC, forwardRef, useState } from 'react';
 import { InputRadioButtonProps } from './types';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/RadioButton/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 const InputRadioButton: FC<InputRadioButtonProps> = ({
   value,
   required,
@@ -27,9 +32,19 @@ const InputRadioButton: FC<InputRadioButtonProps> = ({
   );
 };
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/RadioButton/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 // eslint-disable-next-line react/display-name
 const InputRadioButtonWithRef = forwardRef<unknown, InputRadioButtonProps>((props, ref) => (
   <InputRadioButton {...props} />
 ));
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/RadioInput/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 export default InputRadioButtonWithRef;

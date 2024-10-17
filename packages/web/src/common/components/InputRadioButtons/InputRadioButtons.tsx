@@ -2,6 +2,11 @@ import { FC, forwardRef, useState, ChangeEvent } from 'react';
 import { InputRadioButtonsProps } from './types';
 import React from 'react';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/RadioButton/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 const InputRadioButton: FC<InputRadioButtonsProps> = ({
   currentSelection,
   inputValues,
@@ -41,7 +46,11 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({
     </>
   );
 };
-
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/RadioButton/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 // eslint-disable-next-line react/display-name
 const InputRadioButtons = forwardRef<HTMLInputElement, InputRadioButtonsProps>((props, ref) => (
   <InputRadioButton {...props} />

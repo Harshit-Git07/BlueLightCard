@@ -3,7 +3,7 @@ import InputRadioButtons from './InputRadioButtons';
 import React from 'react';
 
 const componentMeta: Meta<typeof InputRadioButtons> = {
-  title: 'Component System/Form/InputRadioButtons',
+  title: 'Deprecated/Component System/Form/InputRadioButtons',
   component: InputRadioButtons,
   argTypes: {
     inputValues: { control: 'object' },

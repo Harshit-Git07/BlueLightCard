@@ -1,0 +1,54 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as RadioButton from './RadioButton.stories';
+import Readme from './README.mdx';
+
+<Meta of={RadioButton} />
+
+# RadioButton
+
+- [Overview](#overview)
+- [Props](#props)
+- [States and variants](#states-and-variants)
+- [Implementation](#implementation)
+- [Composition](#composition)
+- [Design](#design)
+
+## Overview
+
+The RadioButton component renders one input and it's associated label.
+
+<Readme />
+
+This is a working example showing multiple RadioButton components working together.
+
+<Canvas of={RadioButton.WorkingExample} />
+
+## Props
+
+<Controls />
+
+## States and variants
+
+<Canvas of={RadioButton.AllStatesAndVariants} />
+
+## Composition
+Having separate components allows a more complex implementation to be achieved than is practical via complex component props.
+
+The example below uses RadioButton components for the first 4 radio items, but uses RadioButtonInput separately for penguin allowing a custom layout.
+
+<Canvas of={RadioButton.CompositionExample} />
+
+
+
+```jsx
+<>
+  <RadioButton name="dc-characters" id={'batman'} checked>Batman</RadioButton>
+  <RadioButton name="dc-characters" id={'joker'}>Joker</RadioButton>
+</>
+
+```
+
+## Design
+Use the `<FigmaEmbed />` component.
+
+Template Ref: https://bluelightcard.atlassian.net/wiki/spaces/PE/pages/2901344266/Storybook+documentation+template#Designs

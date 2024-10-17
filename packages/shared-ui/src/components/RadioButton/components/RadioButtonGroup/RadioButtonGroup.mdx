@@ -1,0 +1,48 @@
+import { Meta, Canvas, Controls ,Description} from '@storybook/blocks';
+import * as RadioButtonGroup from './RadioButtonGroup.stories';
+import Readme from '../../README.mdx'
+
+<Meta of={RadioButtonGroup} />
+
+# RadioButtonGroup
+- [Overview](#overview)
+- [Props](#props)
+- [Variants and States](#variants-and-states)
+- [Design](#design)
+
+## Overview
+
+This component provides a basic group of radio buttons, it's made up of three components...
+
+<Readme />
+
+## Props
+
+<Controls />
+
+## Variants and States
+
+With different labels for each item
+
+<Canvas of={RadioButtonGroup.ItemsWithLabels} />
+
+With borders around items
+
+<Canvas of={RadioButtonGroup.ItemsWithBorder} />
+
+Simple list of just ids
+<Canvas of={RadioButtonGroup.ItemsWithJustIds} />
+
+## Implementation
+Usage example using jsx
+
+```jsx
+const RadioButtonGroup: FC = () => {
+  return <></>;
+};
+```
+
+## Design
+Use the `<FigmaEmbed />` component.
+
+Template Ref: https://bluelightcard.atlassian.net/wiki/spaces/PE/pages/2901344266/Storybook+documentation+template#Designs

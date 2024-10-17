@@ -10,7 +10,7 @@ const icons = { faEnvelope, faLock };
 library.add(...Object.values(icons));
 
 const componentMeta: Meta<typeof InputRadioButton> = {
-  title: 'Component System/identity/InputRadioButton',
+  title: 'Deprecated/Component System/identity/InputRadioButton',
   component: InputRadioButton,
   argTypes: {},
 };

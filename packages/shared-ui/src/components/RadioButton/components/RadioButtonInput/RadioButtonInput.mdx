@@ -1,0 +1,50 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as RadioButtonInput from './RadioButtonInput.stories';
+import Readme from '../../README.mdx';
+
+<Meta of={RadioButtonInput} />
+
+# RadioButtonInput
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Implementation](#implementation)
+- [Design](#design)
+
+## Overview
+
+This component renders only the input element
+
+<Readme />
+
+## Props
+
+<Controls />
+
+## State
+
+Default
+<Canvas of={RadioButtonInput.Default} />
+
+Checked
+<Canvas of={RadioButtonInput.Checked} />
+
+Disabled
+<Canvas of={RadioButtonInput.Disabled} />
+
+Disabled and Checked
+<Canvas of={RadioButtonInput.DisabledChecked} />
+
+
+
+## Implementation
+Usage example using jsx
+
+```jsx
+<RadioButtonInput name="alphabet" id="a" checked={true} disabled={false} onChange={(e,id) => alert(id)} />
+```
+
+## Design
+Use the `<FigmaEmbed />` component.
+
+Template Ref: https://bluelightcard.atlassian.net/wiki/spaces/PE/pages/2901344266/Storybook+documentation+template#Designs

@@ -1,4 +1,5 @@
 import { Config } from 'tailwindcss';
+import { join } from 'path';
 import legacyTheme from './src/legacyTheme';
 import { env } from './src/env';
 import { createBrandedPreset } from './src/tailwind';
@@ -14,7 +15,10 @@ const isStorybookLifecycle =
 const config: Config = {
   darkMode: isStorybookLifecycle ? 'media' : 'class',
   presets,
-  content: ['./src/**/*.{tsx,js}', './docs/**/*.{tsx,mdx}'],
+  content: {
+    relative: true,
+    files: [join(__dirname, './src/**/*.{tsx,js}'), join(__dirname, './docs/**/*.{tsx,mdx}')],
+  },
   plugins: [],
 };
 

@@ -1,7 +1,11 @@
 import type { Config } from 'tailwindcss';
+import { join } from 'path';
 
 export default {
-  content: ['./src/**/*.{js,ts,tsx,mdx}'],
+  content: {
+    relative: true,
+    files: [join(__dirname, './src/**/*.{js,ts,tsx,mdx}')],
+  },
   theme: {
     extend: {
       fontFamily: {},

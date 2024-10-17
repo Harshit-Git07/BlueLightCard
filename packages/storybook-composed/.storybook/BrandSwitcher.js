@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { IconButton, WithTooltip, TooltipLinkList } from '@storybook/components';
 import { ProfileIcon } from '@storybook/icons';
 import { useStorybookApi, useStorybookState } from 'storybook/internal/manager-api';
@@ -7,7 +7,7 @@ export const BrandSwitcher = () => {
   const api = useStorybookApi();
   const storybookState = useStorybookState();
 
-  const [, selectedBrand] = storybookState.refId.split('/');
+  const [, selectedBrand] = storybookState.ref ? storybookState.refId.split('/') : '';
 
   const brandsList = [
     {
@@ -19,16 +19,17 @@ export const BrandSwitcher = () => {
       title: 'BLC AU',
     },
     {
-      id: 'dds',
-      title: 'DDS',
+      id: 'dds-uk',
+      title: 'DDS UK',
     },
   ];
 
   const onBrandClick = (brand, onHide) => () => {
     const url = api.getUrlState();
-    const path = url.path.replace(/blc-uk|blc-au|dds/gi, brand.id);
+    const brandReplaceRegex = /blc-uk|blc-au|dds-uk/gi;
+    const path = url.path.replace(brandReplaceRegex, brand.id);
 
-    const newRefId = storybookState.refId.replace(/blc-uk|blc-au|dds/gi, brand.id);
+    const newRefId = storybookState.refId.replace(brandReplaceRegex, brand.id);
 
     api.navigate(path);
 
@@ -41,34 +42,32 @@ export const BrandSwitcher = () => {
       const iframeUrl = new URL(iframe.src);
       iframeUrl.searchParams.set('id', storybookState.storyId);
       iframeUrl.searchParams.set('refId', newRefId);
-      iframe.src = iframeUrl.toString().replace(/blc-uk|blc-au|dds/gi, brand.id);
+      iframe.src = iframeUrl.toString().replace(brandReplaceRegex, brand.id);
     }
 
     onHide();
   };
 
   return (
-    <Fragment>
-      <WithTooltip
-        placement="top"
-        trigger="click"
-        closeOnOutsideClick
-        tooltip={({ onHide }) => {
-          return (
-            <TooltipLinkList
-              links={brandsList.map((brand) => ({
-                ...brand,
-                active: selectedBrand === brand.id,
-                onClick: onBrandClick(brand, onHide),
-              }))}
-            />
-          );
-        }}
-      >
-        <IconButton key="brand-switcher" title="Brand">
-          <ProfileIcon />
-        </IconButton>
-      </WithTooltip>
-    </Fragment>
+    <WithTooltip
+      placement="top"
+      trigger="click"
+      closeOnOutsideClick
+      tooltip={({ onHide }) => {
+        return (
+          <TooltipLinkList
+            links={brandsList.map((brand) => ({
+              ...brand,
+              active: selectedBrand === brand.id,
+              onClick: onBrandClick(brand, onHide),
+            }))}
+          />
+        );
+      }}
+    >
+      <IconButton key="brand-switcher" title="Brand">
+        <ProfileIcon />
+      </IconButton>
+    </WithTooltip>
   );
 };

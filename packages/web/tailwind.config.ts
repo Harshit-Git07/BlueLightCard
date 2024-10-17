@@ -1,5 +1,6 @@
 import { Config } from 'tailwindcss';
 import plugin from 'tailwindcss/plugin';
+import { join } from 'path';
 import { BRAND } from './global-vars';
 import { buildTokens } from './scripts/dict';
 import { addFontStyles } from './scripts/plugins';
@@ -23,7 +24,13 @@ const isStorybookLifecycle =
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
   darkMode: isStorybookLifecycle ? 'media' : 'class',
-  content: ['./src/**/*.{js,ts,tsx,mdx}', '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: {
+    relative: false,
+    files: [
+      join(__dirname, './src/**/*.{js,ts,tsx,mdx}'),
+      join(__dirname, '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}'),
+    ],
+  },
   presets,
   plugins: [
     plugin(({ addBase }) =>

@@ -38,7 +38,8 @@ const registerColorPropertiesTransform = () => {
  * @returns {Object}
  */
 export const buildTokens = (brands: string[]): TransformedTokensResponse => {
-  const packageRoot = process.cwd();
+  // Use current directory for actual build as Next changes the __dirname but Storybook Composed still needs it
+  const packageRoot = !process.env.STORYBOOK_ENV ? process.cwd() : path.resolve(__dirname, '../');
   const baseTokens = `${packageRoot}/tokens/**/*.json`;
   const brandedTokens = brands.map((brand) => `${packageRoot}/brands/${brand}/tokens/**/*.json`);
 

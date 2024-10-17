@@ -48,6 +48,6 @@
     },
     "files": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "tailwind.config.ts"],
   "exclude": ["node_modules", "stack.ts"]
 }

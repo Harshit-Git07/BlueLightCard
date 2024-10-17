@@ -16,18 +16,18 @@ You can also view the production build [here](https://bfcfa662.web-storybook-d1x
 
 ## What about local development?
 
-For now, the Storybook Composition configuration only references the deployed Storybook instances on the main branch, so essentially, production. Achieving the same thing for a local development environment is currently not supported as this is more complex due to how globalisation has been implemented using build-time configuration. It is intended that this is something we will later be able to add support for. To use Storybook locally, you still need to run Storybook individually for the specific project(s) and brand(s) that you need to.
+Storybook Composed can be ran locally with the following command: `npm run dev -w packages/storybook-composed`.
+
+This uses multithreading to run 9 separate Storybook builds in their own threads for Web, Mobile Hybrid, and Shared UI with variants for BLC UK, AU, and DDS. Once the builds have finished running, the Composed instance should be available at [`http://localhost:6006`](http://localhost:6006) and should hot reload when any changes are made as per usual.
 
 ## What about PR environments?
 
-PR environments are currently also unsupported. It is intended that this is something we will later be able to add support for. To review frontend changes in Storybook for a PR, you still need to look at the Storybook instance(s) for that PR individually.
+PR environments are currently unsupported. It is intended that this is something we will later be able to add support for. To review frontend changes in Storybook for a PR, you still need to look at the Storybook instance(s) for that PR individually.
 
 ## What is planned for this?
 
 There is a rough “wishlist” of things we would like to do to improve on how we are using Storybook Composition. Nobody explicitly owns any of this work, so these are all available for anyone to do as and when if they wish to do so:
 
-- Support local development
 - Support PR environments
 - Add light/dark mode support
-- Add a “Welcome” story to the configuration to hide the initial error that is shown
 - Fix the flash of the previous component that is visible when switching brands

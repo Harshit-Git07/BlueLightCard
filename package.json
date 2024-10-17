@@ -94,6 +94,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "fishery": "^2.2.2",
+    "funthreads": "^2.0.4",
     "generate-password": "1.7.1",
     "husky": "8.0.3",
     "hygen": "^6.2.11",

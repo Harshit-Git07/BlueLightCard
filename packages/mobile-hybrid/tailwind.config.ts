@@ -1,4 +1,5 @@
 import { Config } from 'tailwindcss';
+import { join } from 'path';
 import { createBrandedPreset } from '@bluelightcard/shared-ui/tailwind';
 import { defaultPreset } from './src/defaultPreset';
 import { env } from '@bluelightcard/shared-ui/env';
@@ -15,7 +16,7 @@ const isStorybookLifecycle =
   process.env.npm_lifecycle_event === 'storybook' ||
   process.env.npm_lifecycle_event === 'build-storybook';
 
-export default {
+const config = {
   darkMode: isStorybookLifecycle ? 'media' : 'class',
   presets,
   theme: {
@@ -27,9 +28,14 @@ export default {
       },
     },
   },
-  content: [
-    './.storybook/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: {
+    relative: true,
+    files: [
+      join(__dirname, './.storybook/**/*.{js,ts,jsx,tsx,mdx}'),
+      join(__dirname, './src/**/*.{js,ts,jsx,tsx,mdx}'),
+      join(__dirname, '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}'),
+    ],
+  },
 } satisfies Config;
+
+export default config;

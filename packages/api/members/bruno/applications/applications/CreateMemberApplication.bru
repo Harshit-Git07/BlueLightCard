@@ -1,0 +1,40 @@
+meta {
+  name: CreateMemberApplication
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://{{api_key_sst}}.execute-api.eu-west-2.amazonaws.com/v1/members/v5/applications/{{brand}}/{{member_id}}/{{application_id}}
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: x-api-key
+  value: {{api_key_aws}}
+  placement: header
+}
+
+body:json {
+  {
+    "address1": "123 Main St",
+    "address2": "Apt 8B",
+    "city": "Anytown",
+    "postcode": "BT3 9LE",
+    "country": "United Kingdom",
+    "startDate": "2024-09-12T11:29:08Z",
+    "verificationMethod": "email",
+    "idS3LocationPrimary": "s3://bucket/primary-id",
+    "idS3LocationSecondary": "s3://bucket/secondary-id",
+    "trustedDomainEmail": "user@example.com",
+    "applicationReason": "LOST_CARD",
+    "nameChangeReason": null,
+    "nameChangeFirstName": null,
+    "nameChangeDocType": null,
+    "rejectionReason": null,
+    "promoCode": null,
+    "trustedDomainValidated": false,
+    "eligibilityStatus": "eligible"
+  }
+}

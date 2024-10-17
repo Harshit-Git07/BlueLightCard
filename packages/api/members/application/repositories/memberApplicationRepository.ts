@@ -1,10 +1,10 @@
 import { DynamoDB } from 'aws-sdk';
-import { MemberApplicationModel } from '../models/memberApplicationModel';
 
 import {
   MemberApplicationUpdatePayload,
   MemberApplicationQueryPayload,
 } from '../types/memberApplicationTypes';
+import { MemberApplicationModel } from '../models/memberApplicationModel';
 
 export class MemberApplicationRepository {
   private dynamoDB: DynamoDB.DocumentClient;

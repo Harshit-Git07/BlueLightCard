@@ -5,7 +5,7 @@ interface ResponseHeaders {
   [header: string]: boolean | number | string;
 }
 
-interface ResponsePayload {
+export interface ResponsePayload {
   statusCode: HttpStatusCode;
   body: string;
   headers?: ResponseHeaders;
@@ -78,6 +78,10 @@ export class Response {
     statusCode: HttpStatusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
     headers?: ResponseHeaders,
   ): ResponsePayload {
-    return this.createResponse(statusCode, { message: 'Error', error: error.message }, headers);
+    return this.createResponse(
+      statusCode,
+      { message: 'Error occurred processing request' },
+      headers,
+    );
   }
 }

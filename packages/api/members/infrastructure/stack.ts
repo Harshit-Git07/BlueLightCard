@@ -21,6 +21,9 @@ import { MemberApplicationModel } from '../application/models/memberApplicationM
 
 import { GetOrganisationsRoute } from './routes/GetOrganisationsRoute';
 import { OrganisationModel } from 'application/models/organisationModel';
+import { ReusableCrudGetRoute } from './routes/ReusableCrudGetRoute';
+import { MemberApplicationExternalModel } from '../application/models/reusableCrudPayloadModels';
+import { ReusableCrudUpdateRoute } from './routes/ReusableCrudUpdateRoute';
 
 export async function Members({ stack, app }: StackContext) {
   const identityTableName = `${app.stage}-${app.name}-identityTable`;
@@ -89,6 +92,10 @@ export async function Members({ stack, app }: StackContext) {
   const agMemberApplicationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberApplicationModel);
 
+  const agMemberApplicationExternalModel = apiGatewayModelGenerator.generateModelFromZodEffect(
+    MemberApplicationExternalModel,
+  );
+
   const agOrganisationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(OrganisationModel);
 
@@ -135,6 +142,34 @@ export async function Members({ stack, app }: StackContext) {
         apiGatewayModelGenerator,
         agMemberApplicationModel,
         identityTableName,
+      ).getRouteDetails(),
+    'GET /members/v5/customers/applications/{brand}/{memberUUID}/{applicationId}':
+      new ReusableCrudGetRoute(
+        apiGatewayModelGenerator,
+        agMemberApplicationExternalModel,
+        identityTableName,
+        'application',
+        'applications',
+        'MEMBER',
+        'APPLICATION',
+        'memberUUID',
+        'applicationId',
+        'MemberApplicationExternalModel',
+        'MemberApplicationCustomerPayload',
+      ).getRouteDetails(),
+    'PUT /members/v5/customers/applications/{brand}/{memberUUID}/{applicationId}':
+      new ReusableCrudUpdateRoute(
+        apiGatewayModelGenerator,
+        agMemberApplicationExternalModel,
+        identityTableName,
+        'application',
+        'applications',
+        'MEMBER',
+        'APPLICATION',
+        'memberUUID',
+        'applicationId',
+        'MemberApplicationExternalModel',
+        'MemberApplicationCustomerPayload',
       ).getRouteDetails(),
     'GET /members/v5/orgs/{brand}': new GetOrganisationsRoute(
       apiGatewayModelGenerator,

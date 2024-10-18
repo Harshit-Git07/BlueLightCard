@@ -4,7 +4,9 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda/trigger/api-gateway-proxy';
 import { datadog } from 'datadog-lambda-js';
 
+import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
@@ -21,28 +23,15 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
     try {
       const results = await openSearchService.queryIndex(searchTerm, await openSearchService.getLatestIndexName(), dob);
 
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          data: results,
-        }),
-      };
+      return Response.OK({ message: 'Success', data: results });
     } catch (error) {
       logger.error({ message: `Error querying OpenSearch: ${JSON.stringify(error)}` });
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: 'Error querying OpenSearch',
-        }),
-      };
+      return Response.Error(new Error('Error querying OpenSearch'), HttpStatusCode.INTERNAL_SERVER_ERROR);
     }
   } else {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: `Missing data on request - searchTerm: ${searchTerm}, service: ${service}, dob: ${dob}`,
-      }),
-    };
+    return Response.BadRequest({
+      message: `Missing data on request - searchTerm: ${searchTerm}, service: ${service}, dob: ${dob}`,
+    });
   }
 };
 

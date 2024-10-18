@@ -1,57 +1,58 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
-jest.mock('@blc-mono/discovery/application/services/legacySearch');
+import * as getEnv from '@blc-mono/core/utils/getEnv';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
+import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 
 import { handler } from '../../../application/handlers/search/getSearch';
-import { search } from '../../../application/services/legacySearch';
+import { OpenSearchService } from '../../services/opensearch/OpenSearchService';
 
-jest.mock('@blc-mono/discovery/application/services/opensearch/OpenSearchService', () => {
-  return {
-    OpenSearchService: jest.fn().mockImplementation(() => {
-      return {
-        queryIndex: jest.fn().mockResolvedValue([]),
-        getLatestIndexName: jest.fn().mockReturnValue('indexName'),
-      };
-    }),
-  };
-});
+jest.mock('../../services/opensearch/OpenSearchService');
+jest.mock('@blc-mono/core/utils/getEnv');
 
 describe('getSearch Handler', () => {
-  const expectedSearchResults = {
-    results: [
-      {
-        ID: 1,
-        OfferName: 'Offer1',
-        offerimg: 'Image',
-        CompID: 1,
-        CompanyName: 'Company1',
-        OfferType: 1,
-        S3Logos: 'Image',
-      },
-    ],
-  };
+  const searchResults: SearchResult[] = [
+    {
+      ID: '1',
+      OfferName: 'Offer1',
+      offerimg: 'Image',
+      CompID: '1',
+      CompanyName: 'Company1',
+      OfferType: '1',
+    },
+  ];
 
-  jest.mocked(search).mockResolvedValue(expectedSearchResults);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  beforeEach(() => {
+    jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
+
+    jest.spyOn(OpenSearchService.prototype, 'queryIndex').mockResolvedValue(searchResults);
+    jest.spyOn(OpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
+  });
 
   it('should return a list of results', async () => {
     const results = await whenSearchCalled();
 
-    const expectedResponse = {
-      body: JSON.stringify({ data: [] }),
-      statusCode: 200,
-    };
+    const expectedResponse = Response.OK({
+      message: 'Success',
+      data: searchResults,
+    });
 
     expect(results).toEqual(expectedResponse);
   });
 
   it('should return empty results when none found', async () => {
-    jest.mocked(search).mockResolvedValue({ results: [] });
+    jest.spyOn(OpenSearchService.prototype, 'queryIndex').mockResolvedValue([]);
+
     const results = await whenSearchCalled();
 
-    const expectedResponse = {
-      body: JSON.stringify({ data: [] }),
-      statusCode: 200,
-    };
+    const expectedResponse = Response.OK({
+      message: 'Success',
+      data: [],
+    });
 
     expect(results).toEqual(expectedResponse);
   });
@@ -59,10 +60,9 @@ describe('getSearch Handler', () => {
   it('should return a 400 if search query missing', async () => {
     const results = await whenSearchCalled('');
 
-    const expectedResponse = {
-      body: JSON.stringify({ message: 'Missing data on request - searchTerm: , service: DEN, dob: 2001-01-01' }),
-      statusCode: 400,
-    };
+    const expectedResponse = Response.BadRequest({
+      message: 'Missing data on request - searchTerm: , service: DEN, dob: 2001-01-01',
+    });
 
     expect(results).toEqual(expectedResponse);
   });
@@ -70,10 +70,9 @@ describe('getSearch Handler', () => {
   it('should return a 400 if service is missing', async () => {
     const results = await whenSearchCalled('nike', '');
 
-    const expectedResponse = {
-      body: JSON.stringify({ message: 'Missing data on request - searchTerm: nike, service: , dob: 2001-01-01' }),
-      statusCode: 400,
-    };
+    const expectedResponse = Response.BadRequest({
+      message: 'Missing data on request - searchTerm: nike, service: , dob: 2001-01-01',
+    });
 
     expect(results).toEqual(expectedResponse);
   });
@@ -81,10 +80,9 @@ describe('getSearch Handler', () => {
   it('should return a 400 if dob is missing', async () => {
     const results = await whenSearchCalled('nike', 'DEN', '');
 
-    const expectedResponse = {
-      body: JSON.stringify({ message: 'Missing data on request - searchTerm: nike, service: DEN, dob: ' }),
-      statusCode: 400,
-    };
+    const expectedResponse = Response.BadRequest({
+      message: 'Missing data on request - searchTerm: nike, service: DEN, dob: ',
+    });
 
     expect(results).toEqual(expectedResponse);
   });

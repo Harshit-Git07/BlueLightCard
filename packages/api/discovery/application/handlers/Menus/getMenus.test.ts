@@ -1,5 +1,6 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { MenuResponse } from '@blc-mono/discovery/application/models/MenuResponse';
 
 import { handler } from '../../../application/handlers/Menus/getMenus';
@@ -65,10 +66,10 @@ describe('getMenus handler', () => {
       ],
     };
 
-    const expectedResponse = {
-      body: JSON.stringify({ data: menuResponse }),
-      statusCode: 200,
-    };
+    const expectedResponse = Response.OK({
+      message: 'successful',
+      data: menuResponse,
+    });
 
     expect(result).toEqual(expectedResponse);
   });
@@ -114,10 +115,10 @@ describe('getMenus handler', () => {
       flexible: [],
     };
 
-    const expectedResponse = {
-      body: JSON.stringify({ data: menuResponse }),
-      statusCode: 200,
-    };
+    const expectedResponse = Response.OK({
+      message: 'successful',
+      data: menuResponse,
+    });
 
     expect(result).toEqual(expectedResponse);
   });
@@ -134,10 +135,11 @@ describe('getMenus handler', () => {
 
     const result = await handler(event as APIGatewayEvent);
 
-    const expectedResponse = {
-      body: '{"message":"Error querying getMenus"}',
-      statusCode: 400,
-    };
+    const expectedResponse = Response.BadRequest({
+      message: `error`,
+      data: 'Error querying getMenus',
+    });
+
     expect(result).toEqual(expectedResponse);
   });
 });

@@ -4,7 +4,7 @@ import {
   Offer as SanityOffer,
 } from '@bluelightcard/sanity-types';
 
-import { Offer } from '../application/models/Offer';
+import { Offer } from '../../application/models/Offer';
 
 import { mapSanityOfferToOffer } from './mapSanityOfferToOffer';
 

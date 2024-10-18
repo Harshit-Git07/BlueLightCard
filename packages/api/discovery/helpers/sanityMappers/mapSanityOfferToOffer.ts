@@ -4,11 +4,11 @@ import {
   Offer as SanityOffer,
 } from '@bluelightcard/sanity-types';
 
-import { mapSanityTrustToTrust } from '@blc-mono/discovery/helpers/mapSanityTrustToTrust';
+import { mapSanityTrustToTrust } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityTrustToTrust';
 
-import { Boost } from '../application/models/Boost';
-import { Discount } from '../application/models/Discount';
-import { Offer } from '../application/models/Offer';
+import { Boost } from '../../application/models/Boost';
+import { Discount } from '../../application/models/Discount';
+import { Offer } from '../../application/models/Offer';
 
 import { mapSanityCompanyToCompany } from './mapSanityCompanyToCompany';
 

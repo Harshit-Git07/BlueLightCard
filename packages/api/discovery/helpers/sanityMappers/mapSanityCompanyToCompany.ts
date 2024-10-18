@@ -1,8 +1,8 @@
 import { AgeRestriction, Company as SanityCompany } from '@bluelightcard/sanity-types';
 
-import { mapSanityTrustToTrust } from '@blc-mono/discovery/helpers/mapSanityTrustToTrust';
+import { mapSanityTrustToTrust } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityTrustToTrust';
 
-import { Company } from '../application/models/Company';
+import { Company } from '../../application/models/Company';
 
 export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company => {
   const brandDetails = sanityCompany.brandCompanyDetails?.[0];

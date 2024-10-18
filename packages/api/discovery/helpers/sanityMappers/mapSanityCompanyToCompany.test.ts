@@ -1,6 +1,6 @@
 import { Company as SanityCompany } from '@bluelightcard/sanity-types';
 
-import { Company } from '../application/models/Company';
+import { Company } from '../../application/models/Company';
 
 import { mapSanityCompanyToCompany } from './mapSanityCompanyToCompany';
 

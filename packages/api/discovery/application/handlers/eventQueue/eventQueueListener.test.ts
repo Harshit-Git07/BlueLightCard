@@ -5,16 +5,16 @@ import {
   handleOfferDeleted,
   handleOfferUpdated,
 } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler';
-import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/mapSanityCompanyToCompany';
-import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/mapSanityOfferToOffer';
+import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
+import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 import { handler } from './eventQueueListener';
 
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyEventHandler');
-jest.mock('@blc-mono/discovery/helpers/mapSanityOfferToOffer');
-jest.mock('@blc-mono/discovery/helpers/mapSanityCompanyToCompany');
+jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer');
+jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany');
 
 const handleOfferUpdatedMock = jest.mocked(handleOfferUpdated);
 const handleOfferDeletedMock = jest.mocked(handleOfferDeleted);

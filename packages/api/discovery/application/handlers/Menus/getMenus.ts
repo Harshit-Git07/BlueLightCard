@@ -6,6 +6,7 @@ import { datadog } from 'datadog-lambda-js';
 import { z } from 'zod';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { MenuResponse, MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 const logger = new LambdaLogger({ serviceName: 'menu-get' });
 
@@ -82,28 +83,13 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
       !filteredMenuResponse.marketplace?.length &&
       !filteredMenuResponse.flexible?.length
     ) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          data: dummyMenuResponse,
-        }),
-      };
+      return Response.OK({ message: `successful`, data: dummyMenuResponse });
     }
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        data: filteredMenuResponse,
-      }),
-    };
+    return Response.OK({ message: `successful`, data: filteredMenuResponse });
   } catch (error) {
     logger.error({ message: `Error querying getMenus: ${JSON.stringify(error)}` });
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'Error querying getMenus',
-      }),
-    };
+    return Response.BadRequest({ message: `error`, data: 'Error querying getMenus' });
   }
 };
 

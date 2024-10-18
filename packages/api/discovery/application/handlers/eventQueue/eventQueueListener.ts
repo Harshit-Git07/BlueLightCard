@@ -7,8 +7,8 @@ import {
   handleOfferDeleted,
   handleOfferUpdated,
 } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler';
-import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/mapSanityCompanyToCompany';
-import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/mapSanityOfferToOffer';
+import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
+import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 const logger = new Logger({ serviceName: 'event-queue-listener' });

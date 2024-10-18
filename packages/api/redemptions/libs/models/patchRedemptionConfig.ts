@@ -31,7 +31,7 @@ export const CommonModel = (redemptionType: RedemptionType) =>
     redemptionType: z.literal(redemptionType),
     connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
     offerId: z.coerce.string(),
-    companyId: z.coerce.number().positive(),
+    companyId: z.coerce.string(),
     affiliate: z
       .enum([
         'awin',

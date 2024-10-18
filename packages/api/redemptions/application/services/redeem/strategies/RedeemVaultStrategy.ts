@@ -77,7 +77,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
         result = await this.handleRedeemStandardVault(vault, redemptionType, url, memberId);
         break;
       case 'legacy':
-        result = await this.handleRedeemLegacyVault(vault, redemptionType, url, companyId, Number(offerId), memberId);
+        result = await this.handleRedeemLegacyVault(vault, redemptionType, url, companyId, offerId, memberId);
         break;
       default:
         exhaustiveCheck(vault.vaultType, 'Invalid vault type');
@@ -168,8 +168,8 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     vault: VaultEntity,
     redemptionType: 'vault' | 'vaultQR',
     redemptionUrl: string | null,
-    redemptionCompanyId: number,
-    redemptionOfferId: number,
+    redemptionCompanyId: string,
+    redemptionOfferId: string,
     memberId: string,
   ): Promise<RedeemVaultStrategyResult> {
     const codesIssuedByMember = await this.legacyVaultApiRepository.getNumberOfCodesIssuedByMember(

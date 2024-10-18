@@ -8,6 +8,6 @@ export const affiliateFactory = Factory.define<PostAffiliateModel>(() => ({
   memberId: faker.string.numeric(),
   affiliateUrl: faker.internet.url(),
   platform: faker.helpers.arrayElement(BRANDS),
-  companyId: faker.string.numeric(),
-  offerId: faker.string.numeric(),
+  companyId: faker.string.uuid(),
+  offerId: faker.string.uuid(),
 }));

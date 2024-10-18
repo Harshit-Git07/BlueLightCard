@@ -25,7 +25,7 @@ describe('Vault Batch admin API tests', () => {
   let connectionManager: E2EDatabaseConnectionManager;
   let apiKey: string;
 
-  const buildRedemptionForPostMethod = (companyId: number, offerId: string) => {
+  const buildRedemptionForPostMethod = (companyId: string, offerId: string) => {
     const redemption = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
       companyId: companyId,
@@ -265,8 +265,8 @@ describe('Vault Batch admin API tests', () => {
     });
 
     it('returns 404 error when legacy vaultId vaults record does not exist', async () => {
-      const companyId = 12345;
-      const offerId = '67890';
+      const companyId = faker.string.numeric(5);
+      const offerId = faker.string.numeric(5);
       const { ...RedemptionHooks } = buildRedemptionForPostMethod(companyId, offerId);
       onTestFinished(RedemptionHooks.cleanup);
       await RedemptionHooks.insert();
@@ -290,8 +290,8 @@ describe('Vault Batch admin API tests', () => {
     });
 
     it('returns 200 when legacy vaultId redemptions and vault exists', async () => {
-      const companyId = 12345;
-      const offerId = '67890';
+      const companyId = faker.string.numeric(5);
+      const offerId = faker.string.numeric(5);
       const { ...VaultHooks } = buildVaultForPostMethod({
         id: createRedemptionsIdE2E(),
         companyId: companyId,

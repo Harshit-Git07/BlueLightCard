@@ -62,7 +62,7 @@ describe('POST /redemptions/', () => {
   describe('redemption config admin API tests: POST', () => {
     it('POST /redemptions returns 200 for showCard redemptionType', async () => {
       const redemptionConfigRequest = {
-        companyId: faker.number.int({ max: 216380 }),
+        companyId: faker.string.uuid(),
         offerId: 101,
         redemptionType: 'showCard',
       };
@@ -76,9 +76,9 @@ describe('POST /redemptions/', () => {
       const expectedResponseBody = {
         statusCode: 200,
         data: {
-          companyId: String(redemptionConfigRequest.companyId),
+          companyId: redemptionConfigRequest.companyId,
           id: expect.any(String),
-          offerId: String(redemptionConfigRequest.offerId),
+          offerId: '101',
           redemptionType: redemptionConfigRequest.redemptionType,
         },
       };
@@ -88,7 +88,7 @@ describe('POST /redemptions/', () => {
     it('POST /redemptions returns 200 for preApplied redemptionType', async () => {
       const redemptionConfigRequest = {
         affiliate: null,
-        companyId: faker.number.int({ max: 216380 }),
+        companyId: faker.string.uuid(),
         connection: 'direct',
         offerId: 102,
         redemptionType: 'preApplied',
@@ -105,9 +105,9 @@ describe('POST /redemptions/', () => {
         statusCode: 200,
         data: {
           affiliate: null,
-          companyId: String(redemptionConfigRequest.companyId),
+          companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
-          offerId: String(redemptionConfigRequest.offerId),
+          offerId: '102',
           id: expect.any(String),
           redemptionType: redemptionConfigRequest.redemptionType,
           url: redemptionConfigRequest.url,
@@ -119,9 +119,9 @@ describe('POST /redemptions/', () => {
     it('POST /redemptions returns 200 for generic redemptionType', async () => {
       const redemptionConfigRequest = {
         affiliate: null,
-        companyId: faker.number.int({ max: 216380 }),
+        companyId: faker.string.uuid(),
         connection: 'direct',
-        offerId: 103,
+        offerId: faker.string.uuid(),
         redemptionType: 'generic',
         url: 'https://www.whatever.com/',
         generic: {
@@ -139,9 +139,9 @@ describe('POST /redemptions/', () => {
         statusCode: 200,
         data: {
           affiliate: null,
-          companyId: String(redemptionConfigRequest.companyId),
+          companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
-          offerId: String(redemptionConfigRequest.offerId),
+          offerId: redemptionConfigRequest.offerId,
           id: expect.any(String),
           redemptionType: redemptionConfigRequest.redemptionType,
           url: redemptionConfigRequest.url,
@@ -160,7 +160,7 @@ describe('POST /redemptions/', () => {
     ])('POST /redemptions returns 200 for %s redemptionType', async (redemptionType, offerId) => {
       const redemptionConfigRequest = {
         affiliate: null,
-        companyId: faker.number.int({ max: 216380 }),
+        companyId: faker.string.uuid(),
         connection: 'direct',
         offerId: offerId,
         redemptionType: redemptionType,
@@ -186,7 +186,7 @@ describe('POST /redemptions/', () => {
         statusCode: 200,
         data: {
           affiliate: null,
-          companyId: String(redemptionConfigRequest.companyId),
+          companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: String(redemptionConfigRequest.offerId),
           id: expect.any(String),
@@ -210,10 +210,12 @@ describe('POST /redemptions/', () => {
 
     it('POST /redemptions returns 409 when a redemptionConfig with given offerId already exists', async () => {
       const redemptionConfigRequest = {
-        companyId: faker.number.int({ max: 216380 }),
-        offerId: 101,
+        companyId: faker.string.uuid(),
+        offerId: faker.string.uuid(),
         redemptionType: 'showCard',
       };
+
+      await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
 
       const result = await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
 
@@ -223,9 +225,9 @@ describe('POST /redemptions/', () => {
     it('POST /redemptions returns 400 when a redemptionConfig has not been created due to a schema validation error', async () => {
       const redemptionConfigRequest = {
         affiliate: null,
-        companyId: faker.number.int({ max: 216380 }),
+        companyId: faker.string.uuid(),
         connection: 'direct',
-        offerId: 103,
+        offerId: faker.string.uuid(),
         redemptionType: 'generic',
         url: 'https://www.whatever.com/',
         generic: {},

@@ -1,0 +1,1 @@
+ALTER TABLE "redemptions" ALTER COLUMN "companyId" SET DATA TYPE varchar;

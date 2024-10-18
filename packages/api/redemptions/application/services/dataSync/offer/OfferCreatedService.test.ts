@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
@@ -42,10 +44,13 @@ describe('OfferCreatedService', () => {
 
     describe('should map event data correctly', () => {
       it('should insert mapped event data into DB tables', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         const event = offerCreatedEventFactory.build({
           detail: {
-            offerId: 111,
-            companyId: 111,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://example.com/offer',
             offerCode: 'OFFER123',
             offerType: 1,

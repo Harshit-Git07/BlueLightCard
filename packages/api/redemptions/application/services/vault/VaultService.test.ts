@@ -24,7 +24,7 @@ describe('VaultService', () => {
   const mockedLogger = createTestLogger();
   const defaultVaultId = `vlt-${faker.string.uuid()}`;
   const defaultRedemptionId = `rdm-${faker.string.uuid()}`;
-  const defaultOfferId = faker.string.sample(10);
+  const defaultOfferId = faker.string.uuid();
   const defaultCampaignId = faker.number.int({
     min: 1,
     max: 1_000_000,
@@ -90,7 +90,7 @@ describe('VaultService', () => {
           connection: 'direct',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1234,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
           url: linkEqual,
         });
@@ -122,7 +122,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
           url: faker.internet.url(),
         });
@@ -155,7 +155,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
           url: faker.internet.url(),
         });
@@ -187,7 +187,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
           url: faker.internet.url(),
         });
@@ -220,7 +220,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
         });
         await connection.db.insert(vaultsTable).values({
@@ -254,7 +254,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
         });
         await connection.db.insert(vaultsTable).values({
@@ -288,7 +288,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
         });
         await connection.db.insert(vaultsTable).values({
@@ -323,7 +323,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
         });
         await connection.db.insert(vaultsTable).values({
@@ -357,7 +357,7 @@ describe('VaultService', () => {
           connection: 'direct',
           offerType: 'online',
           redemptionType: 'vaultQR',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
         });
         await connection.db.insert(vaultsTable).values({
@@ -388,7 +388,7 @@ describe('VaultService', () => {
           affiliate: 'awin',
           offerType: 'online',
           redemptionType: 'vault',
-          companyId: 1233,
+          companyId: faker.string.uuid(),
           offerId: defaultOfferId,
         });
         await connection.db.insert(vaultsTable).values({

@@ -21,7 +21,7 @@ export const promotionUpdatedEventDetails = Factory.define<PromotionUpdatedEvent
   link: faker.internet.url(),
   bannerName: faker.lorem.words(3),
   promotionType: faker.number.int(1),
-  companyId: faker.number.int(4),
+  companyId: faker.string.uuid(),
   isAgeGated: faker.datatype.boolean(),
 }));
 

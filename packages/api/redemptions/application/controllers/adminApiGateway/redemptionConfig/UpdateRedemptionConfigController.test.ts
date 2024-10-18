@@ -21,7 +21,7 @@ describe('UpdateRedemptionConfigController', () => {
     offerId: faker.string.uuid(),
     redemptionType: 'generic',
     connection: 'affiliate',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: faker.string.uuid(),
     affiliate: 'awin',
     url: 'https://www.awin1.com/',
     generic: {
@@ -32,8 +32,8 @@ describe('UpdateRedemptionConfigController', () => {
 
   const testGenericRedemptionConfig: RedemptionConfig = {
     ...testGenericBody,
-    offerId: String(testGenericBody.offerId),
-    companyId: String(testGenericBody.companyId),
+    offerId: testGenericBody.offerId,
+    companyId: testGenericBody.companyId,
   };
 
   const testPreAppliedBody = {
@@ -41,15 +41,15 @@ describe('UpdateRedemptionConfigController', () => {
     offerId: faker.string.uuid(),
     redemptionType: 'preApplied',
     connection: 'direct',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: faker.string.uuid(),
     affiliate: null,
     url: 'https://www.whatever.com/',
   } satisfies UpdatePreAppliedRedemptionSchema;
 
   const testPreAppliedRedemptionConfig: RedemptionConfig = {
     ...testPreAppliedBody,
-    offerId: String(testGenericBody.offerId),
-    companyId: String(testGenericBody.companyId),
+    offerId: testGenericBody.offerId,
+    companyId: testGenericBody.companyId,
   };
 
   const testShowCardBody = {
@@ -57,14 +57,14 @@ describe('UpdateRedemptionConfigController', () => {
     offerId: faker.string.uuid(),
     redemptionType: 'showCard',
     connection: 'none',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: faker.string.uuid(),
     affiliate: null,
   } satisfies UpdateShowCardRedemptionSchema;
 
   const testShowCardRedemptionConfig: RedemptionConfig = {
     ...testShowCardBody,
-    offerId: String(testGenericBody.offerId),
-    companyId: String(testGenericBody.companyId),
+    offerId: testGenericBody.offerId,
+    companyId: testGenericBody.companyId,
   };
 
   function getParsedRequest(
@@ -73,7 +73,7 @@ describe('UpdateRedemptionConfigController', () => {
   ): ParsedRequest {
     return {
       pathParameters: {
-        offerId: String(offerId),
+        offerId: offerId,
       },
       body: body,
     };
@@ -84,7 +84,7 @@ describe('UpdateRedemptionConfigController', () => {
     offerId: faker.string.uuid(),
     redemptionType: 'vault',
     connection: 'affiliate',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: faker.string.uuid(),
     affiliate: 'awin',
     url: 'https://www.awin1.com/',
     vault: {
@@ -108,8 +108,8 @@ describe('UpdateRedemptionConfigController', () => {
 
   const testVaultRedemptionConfig: RedemptionConfig = {
     ...testVaultBody,
-    offerId: String(testVaultBody.offerId),
-    companyId: String(testVaultBody.companyId),
+    offerId: testVaultBody.offerId,
+    companyId: testVaultBody.companyId,
     vault: {
       ...testVaultBody.vault,
       createdAt: 'some date',

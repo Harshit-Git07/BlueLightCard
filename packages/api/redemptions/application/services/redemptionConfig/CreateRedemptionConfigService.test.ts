@@ -59,7 +59,7 @@ const mockDatabaseTransactionOperator: Partial<DatabaseTransactionOperator> = {}
 const mockLogger: Partial<ILogger> = createTestLogger();
 
 const validRedemptionConfigRequest: CreateRedemptionConfigSchema = {
-  companyId: faker.number.int(),
+  companyId: faker.string.uuid(),
   offerId: faker.string.uuid(),
   connection: 'none',
   redemptionType: 'preApplied',
@@ -76,7 +76,7 @@ const validRedemptionConfigResponse = {
 
 const redemptionConfigEntity: RedemptionConfigEntity = {
   id: 'someId',
-  companyId: faker.number.int(),
+  companyId: faker.string.uuid(),
   offerId: faker.string.uuid(),
   affiliate: 'awin',
   url: 'https://example.com',
@@ -86,7 +86,7 @@ const redemptionConfigEntity: RedemptionConfigEntity = {
 };
 
 const newRedemptionConfigEntity: NewRedemptionConfigEntity = {
-  companyId: faker.number.int(),
+  companyId: faker.string.uuid(),
   offerId: faker.string.uuid(),
   affiliate: 'awin',
   url: 'https://example.com',
@@ -121,8 +121,8 @@ describe('CreateRedemptionConfigService', () => {
     });
 
     const undefinedRedemptionRequestBody: CreateRedemptionConfigSchema = {
-      companyId: 1234,
-      offerId: '5678',
+      companyId: faker.string.uuid(),
+      offerId: faker.string.uuid(),
       connection: 'none',
       redemptionType: as(undefined),
       url: 'example.url.com',
@@ -162,8 +162,8 @@ describe('CreateRedemptionConfigService', () => {
       });
 
       const showCardRedemptionRequestBody: CreateRedemptionConfigSchema = {
-        companyId: 1234,
-        offerId: '5678',
+        companyId: faker.string.uuid(),
+        offerId: faker.string.uuid(),
         connection: 'none',
         redemptionType,
         url: 'example.url.com',
@@ -195,8 +195,8 @@ describe('CreateRedemptionConfigService', () => {
       });
 
       const vaultRedemptionRequestBody: CreateRedemptionConfigSchema = {
-        companyId: 1234,
-        offerId: '5678',
+        companyId: faker.string.uuid(),
+        offerId: faker.string.uuid(),
         connection: 'none',
         redemptionType,
         url: 'example.url.com',
@@ -230,8 +230,8 @@ describe('CreateRedemptionConfigService', () => {
       });
 
       const vaultRedemptionRequestBody: CreateRedemptionConfigSchema = {
-        companyId: 1234,
-        offerId: '5678',
+        companyId: faker.string.uuid(),
+        offerId: faker.string.uuid(),
         connection: 'none',
         redemptionType,
         url: 'example.url.com',
@@ -277,8 +277,8 @@ describe('CreateRedemptionConfigService', () => {
     });
 
     const genericRedemptionRequestBody: CreateRedemptionConfigSchema = {
-      companyId: 1234,
-      offerId: '5678',
+      companyId: faker.string.uuid(),
+      offerId: faker.string.uuid(),
       connection: 'none',
       redemptionType: 'generic',
       url: 'example.url.com',
@@ -304,8 +304,8 @@ describe('CreateRedemptionConfigService', () => {
     });
 
     const genericRedemptionRequestBody: CreateRedemptionConfigSchema = {
-      companyId: 1234,
-      offerId: '5678',
+      companyId: faker.string.uuid(),
+      offerId: faker.string.uuid(),
       connection: 'none',
       redemptionType: 'generic',
       url: 'example.url.com',

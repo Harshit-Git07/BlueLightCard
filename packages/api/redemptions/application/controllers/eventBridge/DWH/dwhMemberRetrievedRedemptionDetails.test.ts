@@ -35,10 +35,7 @@ describe('DwhMemberRetrievedRedemptionDetails', () => {
           redemptionDetails: {
             redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
             offerId: faker.string.uuid(),
-            companyId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            companyId: faker.string.uuid(),
             clientType: faker.helpers.arrayElement(['web', 'mobile']),
           },
         },
@@ -83,10 +80,7 @@ describe('DwhMemberRetrievedRedemptionDetails', () => {
           redemptionDetails: {
             redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
             offerId: faker.string.uuid(),
-            companyId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            companyId: faker.string.uuid(),
             clientType: faker.helpers.arrayElement(['web', 'mobile']),
           },
         },

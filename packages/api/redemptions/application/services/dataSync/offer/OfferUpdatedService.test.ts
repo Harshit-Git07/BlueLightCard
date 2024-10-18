@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { genericsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
@@ -68,10 +70,13 @@ describe('OfferUpdatedService', () => {
 
     describe('should map event data correctly', () => {
       it('should create the redemptions and generics records if they do not exist', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://non-exist-record.co.uk',
             offerCode: 'test123456',
             offerType: 1,
@@ -81,9 +86,9 @@ describe('OfferUpdatedService', () => {
         const redemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(redemptionData.length).toBe(1);
         expect(redemptionData[0].affiliate).toBe(null);
-        expect(redemptionData[0].companyId).toBe(123);
+        expect(redemptionData[0].companyId).toBe(companyId);
         expect(redemptionData[0].connection).toBe('direct');
-        expect(redemptionData[0].offerId).toBe('456');
+        expect(redemptionData[0].offerId).toBe(offerId);
         expect(redemptionData[0].offerType).toBe('online');
         expect(redemptionData[0].redemptionType).toBe('generic');
         expect(redemptionData[0].url).toBe('https://non-exist-record.co.uk');
@@ -95,10 +100,13 @@ describe('OfferUpdatedService', () => {
       });
 
       it('should not update vault offer that is affiliate', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create record to be modified
         const currentData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'vault',
           connection: 'affiliate',
           affiliate: 'awin',
@@ -110,8 +118,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://thevault.bluelightcard.co.uk',
             offerCode: '',
             offerType: 1,
@@ -120,20 +128,23 @@ describe('OfferUpdatedService', () => {
         await callUpdateOffer(event);
         const updatedData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedData.length).toBe(1);
-        expect(updatedData[0].companyId).toBe(123);
+        expect(updatedData[0].companyId).toBe(companyId);
         expect(updatedData[0].connection).toBe('affiliate');
         expect(updatedData[0].affiliate).toBe('awin');
-        expect(updatedData[0].offerId).toBe('456');
+        expect(updatedData[0].offerId).toBe(offerId);
         expect(updatedData[0].offerType).toBe('online');
         expect(updatedData[0].redemptionType).toBe('vault');
         expect(updatedData[0].url).toBe('https://www.awin1.com/');
       });
 
       it('should not update vault offer that is direct', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create record to be modified
         const currentData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'vault',
           connection: 'direct',
           offerType: 'online',
@@ -144,8 +155,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://thevault.bluelightcard.co.uk',
             offerCode: '',
             offerType: 1,
@@ -155,19 +166,22 @@ describe('OfferUpdatedService', () => {
         const updatedData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedData.length).toBe(1);
         expect(updatedData[0].affiliate).toBe(null);
-        expect(updatedData[0].companyId).toBe(123);
+        expect(updatedData[0].companyId).toBe(companyId);
         expect(updatedData[0].connection).toBe('direct');
-        expect(updatedData[0].offerId).toBe('456');
+        expect(updatedData[0].offerId).toBe(offerId);
         expect(updatedData[0].offerType).toBe('online');
         expect(updatedData[0].redemptionType).toBe('vault');
         expect(updatedData[0].url).toBe('https://direct.co.uk');
       });
 
       it('should update generic offer to preApplied and delete generics record', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create records to be modified
         const currentRedemptionData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'generic',
           connection: 'direct',
           offerType: 'online',
@@ -184,8 +198,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://preApplied-offer.co.uk',
             offerCode: '',
             offerType: 1,
@@ -195,9 +209,9 @@ describe('OfferUpdatedService', () => {
         const updatedRedemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedRedemptionData.length).toBe(1);
         expect(updatedRedemptionData[0].affiliate).toBe(null);
-        expect(updatedRedemptionData[0].companyId).toBe(123);
+        expect(updatedRedemptionData[0].companyId).toBe(companyId);
         expect(updatedRedemptionData[0].connection).toBe('direct');
-        expect(updatedRedemptionData[0].offerId).toBe('456');
+        expect(updatedRedemptionData[0].offerId).toBe(offerId);
         expect(updatedRedemptionData[0].offerType).toBe('online');
         expect(updatedRedemptionData[0].redemptionType).toBe('preApplied');
         expect(updatedRedemptionData[0].url).toBe('https://preApplied-offer.co.uk');
@@ -207,10 +221,13 @@ describe('OfferUpdatedService', () => {
       });
 
       it('should update online generic offer to in-store and update generics record', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create records to be modified
         const currentRedemptionData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'generic',
           connection: 'direct',
           offerType: 'online',
@@ -227,8 +244,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: '',
             offerCode: 'test123-updated',
             offerType: 5,
@@ -238,9 +255,9 @@ describe('OfferUpdatedService', () => {
         const updatedRedemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedRedemptionData.length).toBe(1);
         expect(updatedRedemptionData[0].affiliate).toBe(null);
-        expect(updatedRedemptionData[0].companyId).toBe(123);
+        expect(updatedRedemptionData[0].companyId).toBe(companyId);
         expect(updatedRedemptionData[0].connection).toBe('none');
-        expect(updatedRedemptionData[0].offerId).toBe('456');
+        expect(updatedRedemptionData[0].offerId).toBe(offerId);
         expect(updatedRedemptionData[0].offerType).toBe('in-store');
         expect(updatedRedemptionData[0].redemptionType).toBe('generic');
         expect(updatedRedemptionData[0].url).toBe(null);
@@ -252,10 +269,13 @@ describe('OfferUpdatedService', () => {
       });
 
       it('should update preApplied offer to generic offer and insert generics record', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create records to be modified
         const currentRedemptionData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'preApplied',
           connection: 'direct',
           offerType: 'online',
@@ -266,8 +286,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://generic-offer.co.uk',
             offerCode: 'test123',
             offerType: 1,
@@ -277,9 +297,9 @@ describe('OfferUpdatedService', () => {
         const updatedRedemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedRedemptionData.length).toBe(1);
         expect(updatedRedemptionData[0].affiliate).toBe(null);
-        expect(updatedRedemptionData[0].companyId).toBe(123);
+        expect(updatedRedemptionData[0].companyId).toBe(companyId);
         expect(updatedRedemptionData[0].connection).toBe('direct');
-        expect(updatedRedemptionData[0].offerId).toBe('456');
+        expect(updatedRedemptionData[0].offerId).toBe(offerId);
         expect(updatedRedemptionData[0].offerType).toBe('online');
         expect(updatedRedemptionData[0].redemptionType).toBe('generic');
         expect(updatedRedemptionData[0].url).toBe('https://generic-offer.co.uk');
@@ -291,10 +311,13 @@ describe('OfferUpdatedService', () => {
       });
 
       it('should update generic offer connection from direct to affiliate and update generics record', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create records to be modified
         const currentRedemptionData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'generic',
           connection: 'direct',
           offerType: 'online',
@@ -311,8 +334,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://www.awin1.com',
             offerCode: 'test123-updated',
             offerType: 1,
@@ -322,9 +345,9 @@ describe('OfferUpdatedService', () => {
         const updatedRedemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedRedemptionData.length).toBe(1);
         expect(updatedRedemptionData[0].affiliate).toBe('awin');
-        expect(updatedRedemptionData[0].companyId).toBe(123);
+        expect(updatedRedemptionData[0].companyId).toBe(companyId);
         expect(updatedRedemptionData[0].connection).toBe('affiliate');
-        expect(updatedRedemptionData[0].offerId).toBe('456');
+        expect(updatedRedemptionData[0].offerId).toBe(offerId);
         expect(updatedRedemptionData[0].offerType).toBe('online');
         expect(updatedRedemptionData[0].redemptionType).toBe('generic');
         expect(updatedRedemptionData[0].url).toBe('https://www.awin1.com');
@@ -336,10 +359,13 @@ describe('OfferUpdatedService', () => {
       });
 
       it('should update preApplied offer to showCard offer', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create records to be modified
         const currentRedemptionData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'preApplied',
           connection: 'direct',
           offerType: 'online',
@@ -350,8 +376,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: '',
             offerCode: '',
             offerType: 5,
@@ -361,19 +387,22 @@ describe('OfferUpdatedService', () => {
         const updatedRedemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedRedemptionData.length).toBe(1);
         expect(updatedRedemptionData[0].affiliate).toBe(null);
-        expect(updatedRedemptionData[0].companyId).toBe(123);
+        expect(updatedRedemptionData[0].companyId).toBe(companyId);
         expect(updatedRedemptionData[0].connection).toBe('none');
-        expect(updatedRedemptionData[0].offerId).toBe('456');
+        expect(updatedRedemptionData[0].offerId).toBe(offerId);
         expect(updatedRedemptionData[0].offerType).toBe('in-store');
         expect(updatedRedemptionData[0].redemptionType).toBe('showCard');
         expect(updatedRedemptionData[0].url).toBe(null);
       });
 
       it('should update preApplied offer to vault spotify offer', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create records to be modified
         const currentRedemptionData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'preApplied',
           connection: 'direct',
           offerType: 'online',
@@ -384,8 +413,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://www.spotify.com/uk/ppt/bluelightcard/?code=!!!CODE!!!',
             offerCode: '',
             offerType: 1,
@@ -395,19 +424,22 @@ describe('OfferUpdatedService', () => {
         const updatedRedemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedRedemptionData.length).toBe(1);
         expect(updatedRedemptionData[0].affiliate).toBe(null);
-        expect(updatedRedemptionData[0].companyId).toBe(123);
+        expect(updatedRedemptionData[0].companyId).toBe(companyId);
         expect(updatedRedemptionData[0].connection).toBe('spotify');
-        expect(updatedRedemptionData[0].offerId).toBe('456');
+        expect(updatedRedemptionData[0].offerId).toBe(offerId);
         expect(updatedRedemptionData[0].offerType).toBe('online');
         expect(updatedRedemptionData[0].redemptionType).toBe('vault');
         expect(updatedRedemptionData[0].url).toBe('https://www.spotify.com/uk/ppt/bluelightcard/?code=!!!CODE!!!');
       });
 
       it('should update vault spotify offer to preApplied offer', async () => {
+        const companyId = faker.string.uuid();
+        const offerId = faker.string.uuid();
+
         //create records to be modified
         const currentRedemptionData: NewRedemptionConfigEntity = {
-          offerId: '456',
-          companyId: 123,
+          offerId: offerId,
+          companyId: companyId,
           redemptionType: 'vault',
           connection: 'spotify',
           offerType: 'online',
@@ -418,8 +450,8 @@ describe('OfferUpdatedService', () => {
         //update created record and test is updated
         const event = offerUpdatedEventFactory.build({
           detail: {
-            offerId: '456',
-            companyId: 123,
+            offerId: offerId,
+            companyId: companyId,
             offerUrl: 'https://preApplied-offer.co.uk',
             offerCode: '',
             offerType: 1,
@@ -429,9 +461,9 @@ describe('OfferUpdatedService', () => {
         const updatedRedemptionData = await connection.db.select().from(redemptionsTable).execute();
         expect(updatedRedemptionData.length).toBe(1);
         expect(updatedRedemptionData[0].affiliate).toBe(null);
-        expect(updatedRedemptionData[0].companyId).toBe(123);
+        expect(updatedRedemptionData[0].companyId).toBe(companyId);
         expect(updatedRedemptionData[0].connection).toBe('direct');
-        expect(updatedRedemptionData[0].offerId).toBe('456');
+        expect(updatedRedemptionData[0].offerId).toBe(offerId);
         expect(updatedRedemptionData[0].offerType).toBe('online');
         expect(updatedRedemptionData[0].redemptionType).toBe('preApplied');
         expect(updatedRedemptionData[0].url).toBe('https://preApplied-offer.co.uk');

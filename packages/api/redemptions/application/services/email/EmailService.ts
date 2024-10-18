@@ -7,12 +7,12 @@ export interface IEmailService {
   sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void>;
 }
 export class EmailService implements IEmailService {
-  static key = 'BrazeEmailService' as const;
-  static inject = [Logger.key, EmailRepository.key] as const;
+  static readonly key = 'BrazeEmailService' as const;
+  static readonly inject = [Logger.key, EmailRepository.key] as const;
 
   constructor(
-    private logger: ILogger,
-    private emailRepository: IEmailRepository,
+    private readonly logger: ILogger,
+    private readonly emailRepository: IEmailRepository,
   ) {}
 
   async sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void> {
@@ -28,10 +28,10 @@ export class EmailService implements IEmailService {
             affiliate: event.detail.redemptionDetails.affiliate,
             brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
             code: event.detail.redemptionDetails.code,
-            companyId: event.detail.redemptionDetails.companyId.toString(),
+            companyId: event.detail.redemptionDetails.companyId,
             companyName: event.detail.redemptionDetails.companyName,
             memberId: event.detail.memberDetails.memberId,
-            offerId: event.detail.redemptionDetails.offerId.toString(),
+            offerId: event.detail.redemptionDetails.offerId,
             offerName: event.detail.redemptionDetails.offerName,
             url: event.detail.redemptionDetails.url ?? '',
           },

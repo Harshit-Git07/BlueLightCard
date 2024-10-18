@@ -24,7 +24,7 @@ export const PostRedemptionConfigBaseModel = createZodNamedType(
         ])
         .optional()
         .nullable(),
-      companyId: z.coerce.number().positive(),
+      companyId: z.coerce.string(),
       connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
       offerId: z.coerce.string(),
     })

@@ -13,10 +13,7 @@ export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEnti
     return {
       id: createRedemptionsId(),
       offerId: faker.string.uuid(),
-      companyId: faker.number.int({
-        min: 1,
-        max: 1_000_000,
-      }),
+      companyId: faker.string.uuid(),
       connection: faker.helpers.arrayElement(['affiliate', 'direct', 'spotify', 'none']),
       affiliate: faker.helpers.arrayElement(affiliateEnum.enumValues),
       redemptionType: type,

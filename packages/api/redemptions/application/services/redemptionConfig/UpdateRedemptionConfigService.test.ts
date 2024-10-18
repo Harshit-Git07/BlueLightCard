@@ -49,8 +49,8 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   const testRedemptionId = `rdm-${faker.string.uuid()}`;
-  const testOfferId = faker.string.sample(10);
-  const testCompanyId = faker.number.int({ max: 1000000 });
+  const testOfferId = faker.string.uuid();
+  const testCompanyId = faker.string.uuid();
   const testGenericId = `gnr-${faker.string.uuid()}`;
   const testVaultId = `vlt-${faker.string.uuid()}`;
   const testVaultBatchId = `vbt-${faker.string.uuid()}`;
@@ -83,8 +83,8 @@ describe('UpdateRedemptionConfigService', () => {
 
   const testVaultRedemptionConfig: RedemptionConfig = {
     ...testVaultBody,
-    offerId: String(testOfferId),
-    companyId: String(testCompanyId),
+    offerId: testOfferId,
+    companyId: testCompanyId,
     vault: {
       ...testVaultBody.vault,
       createdAt: 'someDate',
@@ -115,7 +115,7 @@ describe('UpdateRedemptionConfigService', () => {
   const testGenericRedemptionConfig: RedemptionConfig = {
     ...testGenericBody,
     offerId: String(testOfferId),
-    companyId: String(testCompanyId),
+    companyId: testCompanyId,
   };
 
   const testPreAppliedBody = {
@@ -130,8 +130,8 @@ describe('UpdateRedemptionConfigService', () => {
 
   const testPreAppliedRedemptionConfig: RedemptionConfig = {
     ...testPreAppliedBody,
-    offerId: String(testOfferId),
-    companyId: String(testCompanyId),
+    offerId: testOfferId,
+    companyId: testCompanyId,
   };
 
   const testShowCardBody = {
@@ -145,8 +145,8 @@ describe('UpdateRedemptionConfigService', () => {
 
   const testShowCardRedemptionConfig: RedemptionConfig = {
     ...testShowCardBody,
-    offerId: String(testOfferId),
-    companyId: String(testCompanyId),
+    offerId: testOfferId,
+    companyId: testCompanyId,
   };
 
   const mockRedemptionConfigRepository: Partial<IRedemptionConfigRepository> = {};
@@ -426,7 +426,7 @@ describe('UpdateRedemptionConfigService', () => {
       offerId: testGenericBody.offerId,
       redemptionType: testGenericBody.redemptionType,
       connection: testGenericBody.connection,
-      companyId: Number(testGenericBody.companyId),
+      companyId: testGenericBody.companyId,
       affiliate: testGenericBody.affiliate,
       url: testGenericBody.url,
       offerType: 'online',
@@ -477,7 +477,7 @@ describe('UpdateRedemptionConfigService', () => {
       offerId: testPreAppliedBody.offerId,
       redemptionType: testPreAppliedBody.redemptionType,
       connection: testPreAppliedBody.connection,
-      companyId: Number(testPreAppliedBody.companyId),
+      companyId: testPreAppliedBody.companyId,
       affiliate: testPreAppliedBody.affiliate,
       url: testPreAppliedBody.url,
       offerType: 'online',
@@ -528,7 +528,7 @@ describe('UpdateRedemptionConfigService', () => {
       offerId: testShowCardBody.offerId,
       redemptionType: testShowCardBody.redemptionType,
       connection: testShowCardBody.connection,
-      companyId: Number(testShowCardBody.companyId),
+      companyId: testShowCardBody.companyId,
       affiliate: testShowCardBody.affiliate,
       url: null,
       offerType: 'in-store',
@@ -606,7 +606,7 @@ describe('UpdateRedemptionConfigService', () => {
       offerId: testVaultBody.offerId,
       redemptionType: testVaultBody.redemptionType,
       connection: testVaultBody.connection,
-      companyId: Number(testVaultBody.companyId),
+      companyId: testVaultBody.companyId,
       affiliate: testVaultBody.affiliate,
       url: testVaultBody.url,
       offerType: 'online',

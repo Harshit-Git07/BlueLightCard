@@ -30,10 +30,7 @@ describe('DwhLoggingService', () => {
           })
           .toString(),
         offerId: faker.string.uuid(),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        companyId: faker.string.uuid(),
         clientType: faker.helpers.arrayElement(['web', 'mobile']),
       };
 
@@ -64,10 +61,7 @@ describe('DwhLoggingService', () => {
           })
           .toString(),
         offerId: faker.string.uuid(),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        companyId: faker.string.uuid(),
         clientType: faker.helpers.arrayElement(['web', 'mobile']),
       };
 
@@ -88,10 +82,7 @@ describe('DwhLoggingService', () => {
       const service = new DwhLoggingService(as(repository));
       const params: MemberRedeemIntentParams = {
         offerId: faker.string.uuid(),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        companyId: faker.string.uuid(),
         memberId: faker.number
           .int({
             min: 1,
@@ -122,10 +113,7 @@ describe('DwhLoggingService', () => {
       const service = new DwhLoggingService(as(repository));
       const params: MemberRedeemIntentParams = {
         offerId: faker.string.uuid(),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        companyId: faker.string.uuid(),
         memberId: faker.number
           .int({
             min: 1,

@@ -103,11 +103,11 @@ export class EmailRepository implements IEmailRepository {
 
   private generateEmailUrl({
     memberId: userUID,
-    offerId: offerId,
-    companyId: companyId,
-    companyName: companyName,
-    offerName: offerName,
-    url: url,
+    offerId,
+    companyId,
+    companyName,
+    offerName,
+    url,
     affiliate,
     code,
     redemptionType,

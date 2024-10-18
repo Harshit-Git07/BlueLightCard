@@ -8,7 +8,7 @@ const MockCreateRedemptionConfigService = {
 } satisfies ICreateRedemptionConfigService;
 
 const validRequestBody = {
-  companyId: 1234,
+  companyId: '1234',
   offerId: '4321',
   connection: 'none',
   offerType: 'in-store',

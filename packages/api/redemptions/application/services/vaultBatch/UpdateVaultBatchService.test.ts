@@ -1,3 +1,4 @@
+import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
 import {
   ITransactionManager,
@@ -7,7 +8,7 @@ import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connecti
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCodeEntity.factory';
 import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
-import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { IVaultBatchesRepository, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
 import { IVaultCodesRepository, VaultCodesRepository } from '../../repositories/VaultCodesRepository';
@@ -38,9 +39,10 @@ describe('UpdateVaultBatchService', () => {
       vaultBatchesRepo?: IVaultBatchesRepository;
       vaultCodesRepo?: IVaultCodesRepository;
       transactionManager?: ITransactionManager;
+      logger?: ILogger;
     } = {},
   ) {
-    const logger = createTestLogger();
+    const logger = override.logger ?? createTestLogger();
     const vaultBatchesRepo = override.vaultBatchesRepo ?? new VaultBatchesRepository(connection);
     const vaultCodesRepo = override.vaultCodesRepo ?? new VaultCodesRepository(connection);
     const transactionManager = override.transactionManager ?? new TransactionManager(connection);
@@ -106,9 +108,11 @@ describe('UpdateVaultBatchService', () => {
     const mockedVaultBatchesRepo = mockVaultBatchesRepo();
     mockedVaultBatchesRepo.findOneById = jest.fn().mockResolvedValue(null);
     const mockedVaultCodesRepo = mockVaultCodesRepo();
+    const logger = createSilentLogger();
 
     // Act
     const result = await callUpdateVaultBatchService({
+      logger: logger,
       vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
@@ -116,6 +120,13 @@ describe('UpdateVaultBatchService', () => {
     // Assert
     expect(result.kind).toBe('VaultBatchNotFound');
     expect(result.message).toBe('Vault Batch not found');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Update Vault Batch - Vault Batch not found',
+      }),
+    );
+    expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('should return an error if the vaultCode does not exist', async () => {
@@ -124,9 +135,11 @@ describe('UpdateVaultBatchService', () => {
     mockedVaultBatchesRepo.findOneById = jest.fn().mockResolvedValue(defaultVaultBatch);
     const mockedVaultCodesRepo = mockVaultCodesRepo();
     mockedVaultCodesRepo.findManyByBatchId = jest.fn().mockResolvedValue(null);
+    const logger = createSilentLogger();
 
     // Act
     const result = await callUpdateVaultBatchService({
+      logger: logger,
       vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
@@ -134,6 +147,13 @@ describe('UpdateVaultBatchService', () => {
     // Assert
     expect(result.kind).toBe('VaultCodesNotFound');
     expect(result.message).toBe('Vault Codes not found');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Update Vault Batch - Vault Codes not found',
+      }),
+    );
+    expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('should return an error if the vaultBatch is not updated', async () => {
@@ -144,9 +164,11 @@ describe('UpdateVaultBatchService', () => {
     mockedVaultBatchesRepo.withTransaction = jest.fn().mockReturnValue(mockedVaultBatchesRepo);
     const mockedVaultCodesRepo = mockVaultCodesRepo();
     mockedVaultCodesRepo.findManyByBatchId = jest.fn().mockResolvedValue(defaultVaultCode);
+    const logger = createSilentLogger();
 
     // Act
     const result = await callUpdateVaultBatchService({
+      logger: logger,
       vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
@@ -154,6 +176,13 @@ describe('UpdateVaultBatchService', () => {
     // Assert
     expect(result.kind).toBe('ErrorUpdatingVaultBatch');
     expect(result.message).toBe('Vault Batch not updated');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Update Vault Batch - Vault Batch not updated',
+      }),
+    );
+    expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('should return an error if the vaultCode is not updated', async () => {
@@ -168,9 +197,11 @@ describe('UpdateVaultBatchService', () => {
     mockedVaultCodesRepo.findManyByBatchId = jest.fn().mockResolvedValue(defaultVaultCode);
     mockedVaultCodesRepo.updateManyByBatchId = jest.fn().mockResolvedValue(null);
     mockedVaultCodesRepo.withTransaction = jest.fn().mockReturnValue(mockedVaultCodesRepo);
+    const logger = createSilentLogger();
 
     // Act
     const result = await callUpdateVaultBatchService({
+      logger: logger,
       vaultBatchesRepo: as(mockedVaultBatchesRepo),
       vaultCodesRepo: mockedVaultCodesRepo,
     });
@@ -178,5 +209,12 @@ describe('UpdateVaultBatchService', () => {
     // Assert
     expect(result.kind).toBe('ErrorUpdatingVaultCodes');
     expect(result.message).toBe('Vault Codes not updated');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Update Vault Batch - Vault Code not updated',
+      }),
+    );
+    expect(logger.warn).not.toHaveBeenCalled();
   });
 });

@@ -14,14 +14,8 @@ import {
 } from '../../../application/controllers/eventBridge/offer/OfferUpdatedController';
 
 export const offerCreatedEventDetailFactory = Factory.define<OfferCreatedEventDetail>(() => ({
-  offerId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
-  companyId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  offerId: faker.string.uuid(),
+  companyId: faker.string.uuid(),
   offerUrl: faker.internet.url(),
   offerCode: faker.string.alphanumeric(5),
   offerType: faker.number.int({
@@ -45,10 +39,7 @@ export const offerCreatedEventFactory = Factory.define<OfferCreatedEvent>(() => 
 
 export const offerUpdatedEventDetailFactory = Factory.define<OfferUpdatedEventDetail>(() => ({
   offerId: faker.string.uuid(),
-  companyId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  companyId: faker.string.uuid(),
   offerUrl: faker.internet.url(),
   offerCode: faker.string.alphanumeric(5),
   offerType: faker.number.int({

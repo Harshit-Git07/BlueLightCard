@@ -17,10 +17,7 @@ export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDe
   adminEmail: faker.helpers.maybe(() => faker.internet.email()),
   alertBelow: faker.number.int(500),
   brand: faker.company.name(),
-  companyId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  companyId: faker.string.uuid(),
   companyName: faker.company.name(),
   directCode: faker.helpers.maybe(() => faker.string.alphanumeric(10)),
   eeCampaignId: faker.helpers.maybe(() =>
@@ -70,10 +67,7 @@ export const vaultUpdatedEventDetailFactory = Factory.define<VaultUpdatedEventDe
   sk: faker.string.sample(),
   alertBelow: faker.number.int(500),
   brand: faker.company.name(),
-  companyId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  companyId: faker.string.uuid(),
   companyName: faker.company.name(),
   eeCampaignId: faker.helpers.maybe(() =>
     faker.number.int({

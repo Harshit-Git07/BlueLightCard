@@ -53,10 +53,7 @@ describe('RedemptionsEventsRepository', () => {
       redemptionDetails: {
         redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
         clientType: faker.helpers.arrayElement(Object.values(ClientTypeSchema.Values)),
-        companyId: faker.number.int({
-          min: 1,
-          max: 1_000_000,
-        }),
+        companyId: faker.string.uuid(),
         offerId: faker.string.uuid(),
       },
     };

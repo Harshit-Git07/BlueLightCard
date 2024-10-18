@@ -42,10 +42,7 @@ describe('DwhMemberRedemptionController', () => {
               }),
             ),
             redemptionType: 'vault',
-            companyId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            companyId: faker.string.uuid(),
             companyName: faker.company.name(),
             offerId: faker.string.uuid(),
             offerName: faker.commerce.productName(),
@@ -115,10 +112,7 @@ describe('DwhMemberRedemptionController', () => {
           // },
           redemptionDetails: {
             redemptionType: faker.helpers.arrayElement(redemptionTypeEnum.enumValues),
-            companyId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
+            companyId: faker.string.uuid(),
             companyName: faker.company.name(),
             offerId: faker.string.uuid(),
             offerName: faker.commerce.productName(),

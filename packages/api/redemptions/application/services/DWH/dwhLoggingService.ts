@@ -7,14 +7,14 @@ import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository'
 
 export type MemberRetrievedRedemptionDetailsParams = {
   offerId: string;
-  companyId: number;
+  companyId: string;
   memberId: string;
   clientType: ClientType;
 };
 
 export type MemberRedeemIntentParams = {
   offerId: string;
-  companyId: number;
+  companyId: string;
   memberId: string;
   clientType: ClientType;
 };
@@ -29,7 +29,7 @@ interface MemberRedemptionBaseParams {
   redemptionType: (typeof REDEMPTION_TYPES)[number];
   clientType: ClientType;
   offerId: string;
-  companyId: number;
+  companyId: string;
   memberId: string;
 }
 

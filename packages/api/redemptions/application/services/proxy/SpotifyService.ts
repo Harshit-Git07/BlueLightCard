@@ -12,7 +12,7 @@ export type RedeemSpotifyResult = {
 };
 
 export interface ISpotifyService {
-  redeem(companyId: number, offerId: number, memberId: string, url: string): Promise<RedeemSpotifyResult>;
+  redeem(companyId: string, offerId: string, memberId: string, url: string): Promise<RedeemSpotifyResult>;
 }
 
 export class SpotifyService implements ISpotifyService {
@@ -24,7 +24,7 @@ export class SpotifyService implements ISpotifyService {
     private readonly logger: ILogger,
   ) {}
 
-  public async redeem(companyId: number, offerId: number, memberId: string, url: string): Promise<RedeemSpotifyResult> {
+  public async redeem(companyId: string, offerId: string, memberId: string, url: string): Promise<RedeemSpotifyResult> {
     // Check if user has already redeemed a code
     const codesRedeemed = await this.legacyVaultApiRepository.getCodesRedeemed(companyId, offerId, memberId);
 

@@ -14,7 +14,7 @@ const VaultUpdatedEventDetailSchema = z.object({
   adminEmail: z.string().email().nullable().optional(),
   alertBelow: z.number(),
   brand: z.string(),
-  companyId: NON_NEGATIVE_INT,
+  companyId: z.coerce.string(),
   companyName: z.string(),
   eeCampaignId: NON_NEGATIVE_INT.nullable().optional(),
   link: OPTIONAL_URL_SCHEMA,

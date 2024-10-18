@@ -5,8 +5,8 @@ import { AdminEmailRepository, IAdminEmailRepository } from '../../repositories/
 import { IVaultCodesRepository, VaultCodesRepository } from '../../repositories/VaultCodesRepository';
 
 export type VaultThresholdEmailShouldBeSentData = {
-  offerId: number;
-  companyId: number;
+  offerId: string;
+  companyId: string;
   platform: 'BLC_UK' | 'BLC_AU' | 'DDS_UK';
   vaultDetails: {
     id: string;
@@ -42,7 +42,7 @@ export class VaultThresholdService implements IVaultThresholdService {
   static readonly key = 'VaultThresholdService';
   static readonly inject = [Logger.key, VaultCodesRepository.key, AdminEmailRepository.key] as const;
 
-  private acceptedThresholds = [100, 75, 50, 25, 0];
+  private readonly acceptedThresholds = [100, 75, 50, 25, 0];
 
   constructor(
     private readonly logger: ILogger,

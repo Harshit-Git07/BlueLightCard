@@ -21,7 +21,7 @@ export const MemberRedeemIntentEventDetailSchema = z.object({
   redemptionDetails: z.object({
     redemptionType: RedemptionTypeSchema,
     offerId: z.coerce.string(),
-    companyId: NON_NEGATIVE_INT,
+    companyId: z.coerce.string(),
     clientType: ClientTypeSchema,
   }),
 });
@@ -41,7 +41,7 @@ export const MemberRedemptionEventDetailSchema = z.object({
   redemptionDetails: z.intersection(
     z.object({
       redemptionId: z.string(),
-      companyId: z.number(),
+      companyId: z.coerce.string(),
       companyName: z.string(),
       offerId: z.coerce.string(),
       offerName: z.string(),
@@ -96,7 +96,7 @@ export const MemberRetrievedRedemptionDetailsEventDetailSchema = z.object({
   }),
   redemptionDetails: z.object({
     redemptionType: RedemptionTypeSchema,
-    companyId: z.number(),
+    companyId: z.coerce.string(),
     offerId: z.coerce.string(),
     clientType: ClientTypeSchema,
   }),

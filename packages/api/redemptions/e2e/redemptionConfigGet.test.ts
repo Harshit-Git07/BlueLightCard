@@ -72,7 +72,7 @@ describe('redemption config admin API tests', () => {
   ] as const)('GET /redemptions/{offerId} should return 200 for redemptionType %s', async (redemptionType, offerId) => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
-      companyId: faker.number.int({ max: 216380 }),
+      companyId: faker.string.uuid(),
       offerId,
       redemptionType: redemptionType,
       connection: 'affiliate',
@@ -112,10 +112,10 @@ describe('redemption config admin API tests', () => {
       statusCode: 200,
       data: {
         id: redemptionConfigEntity.id,
-        offerId: String(redemptionConfigEntity.offerId),
+        offerId: redemptionConfigEntity.offerId,
         redemptionType: redemptionType,
         connection: redemptionConfigEntity.connection,
-        companyId: String(redemptionConfigEntity.companyId),
+        companyId: redemptionConfigEntity.companyId,
         affiliate: redemptionConfigEntity.affiliate,
         ...(redemptionType === 'vault' && { url: redemptionConfigEntity.url }),
         vault: {
@@ -161,7 +161,7 @@ describe('redemption config admin API tests', () => {
   test('GET /redemptions/{offerId} should return 200 for redemptionType generic', async () => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
-      companyId: faker.number.int({ max: 216380 }),
+      companyId: faker.string.uuid(),
       offerId: '3',
       redemptionType: 'generic',
       connection: 'affiliate',
@@ -185,10 +185,10 @@ describe('redemption config admin API tests', () => {
       statusCode: 200,
       data: {
         id: redemptionConfigEntity.id,
-        offerId: String(redemptionConfigEntity.offerId),
+        offerId: redemptionConfigEntity.offerId,
         redemptionType: 'generic',
         connection: redemptionConfigEntity.connection,
-        companyId: String(redemptionConfigEntity.companyId),
+        companyId: redemptionConfigEntity.companyId,
         affiliate: redemptionConfigEntity.affiliate,
         url: redemptionConfigEntity.url,
         generic: {
@@ -207,7 +207,7 @@ describe('redemption config admin API tests', () => {
   test('GET /redemptions/{offerId} should return 200 for redemptionType ShowCard', async () => {
     const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
-      companyId: faker.number.int({ max: 216380 }),
+      companyId: faker.string.uuid(),
       offerId: '4',
       redemptionType: 'showCard',
     });
@@ -222,9 +222,9 @@ describe('redemption config admin API tests', () => {
       statusCode: 200,
       data: {
         id: redemptionConfigEntity.id,
-        offerId: String(redemptionConfigEntity.offerId),
+        offerId: redemptionConfigEntity.offerId,
         redemptionType: 'showCard',
-        companyId: String(redemptionConfigEntity.companyId),
+        companyId: redemptionConfigEntity.companyId,
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
@@ -236,8 +236,8 @@ describe('redemption config admin API tests', () => {
   test('GET /redemptions/{offerId} should return correct redemptionConfig for redemptionType PreApplied', async () => {
     const redemptionConfigEntity = redemptionConfigEntityFactory.build({
       id: createRedemptionsIdE2E(),
-      companyId: faker.number.int({ max: 216380 }),
-      offerId: '5',
+      companyId: faker.string.uuid(),
+      offerId: faker.string.uuid(),
       redemptionType: 'preApplied',
       connection: 'affiliate',
       url: faker.internet.url(),
@@ -254,10 +254,10 @@ describe('redemption config admin API tests', () => {
       statusCode: 200,
       data: {
         id: redemptionConfigEntity.id,
-        offerId: String(redemptionConfigEntity.offerId),
+        offerId: redemptionConfigEntity.offerId,
         redemptionType: 'preApplied',
         connection: redemptionConfigEntity.connection,
-        companyId: String(redemptionConfigEntity.companyId),
+        companyId: redemptionConfigEntity.companyId,
         affiliate: redemptionConfigEntity.affiliate,
         url: redemptionConfigEntity.url,
       },

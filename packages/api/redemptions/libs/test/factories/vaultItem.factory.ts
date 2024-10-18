@@ -4,9 +4,6 @@ import { Factory } from 'fishery';
 import { VaultItem } from '../../../application/repositories/LegacyVaultApiRepository';
 
 export const vaultItemFactory = Factory.define<VaultItem>(() => ({
-  companyId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  companyId: faker.string.uuid(),
   offerId: faker.string.uuid(),
 }));

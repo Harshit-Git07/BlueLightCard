@@ -20,7 +20,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
     {
       id: `${redemptionsPrefix}-6db7a3c8-13a8-4cf3-a072-9b08ecd9d534`,
       affiliate: 'awin',
-      companyId: 9179,
+      companyId: 'company-9179',
       connection: 'affiliate',
       offerId: '8722',
       offerType: 'online',
@@ -30,7 +30,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
     {
       id: `${redemptionsPrefix}-8s7a3c8-13a8-4cf3-a072-9b08ecd9d534`,
       affiliate: 'awin',
-      companyId: 9179,
+      companyId: 'company-9179',
       connection: 'affiliate',
       offerId: '8723',
       offerType: 'online',
@@ -40,7 +40,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
     {
       id: `${redemptionsPrefix}-1s245ga-13a8-4cf3-a072-c8anm8sl0dm6`,
       affiliate: 'awin',
-      companyId: 9179,
+      companyId: 'company-9179',
       connection: 'affiliate',
       offerId: '8724',
       offerType: 'online',
@@ -50,7 +50,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
     {
       id: `${redemptionsPrefix}-2s356ga-24a8-5cf4-a083-c9anm9sl0dm7`,
       affiliate: null,
-      companyId: 9180,
+      companyId: 'company-9180',
       connection: 'direct',
       offerId: '8725',
       offerType: 'online',

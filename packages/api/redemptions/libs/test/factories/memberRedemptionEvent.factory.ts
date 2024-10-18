@@ -12,10 +12,7 @@ export const memberRedemptionEventDetailFactory = Factory.define<MemberRedemptio
   redemptionDetails: {
     redemptionId: faker.string.uuid(),
     affiliate: faker.company.name(),
-    companyId: faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
+    companyId: faker.string.uuid(),
     companyName: faker.company.name(),
     offerId: faker.string.uuid(),
     offerName: faker.commerce.productName(),
@@ -53,10 +50,7 @@ export const memberRedemptionParamsFactory = Factory.define<MemberRedemptionPara
     clientType: 'web' as const,
     redemptionType: redemptionType,
     offerId: faker.string.uuid(),
-    companyId: faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
+    companyId: faker.string.uuid(),
     memberId: faker.number
       .int({
         min: 1,

@@ -42,11 +42,11 @@ let genericsRepository: GenericsRepository;
 let redemptionConfigRepository: RedemptionConfigRepository;
 let redemptionRepositoryHelper: RedemptionConfigCombinedRepository;
 
-const offerId = '1';
+const offerId = faker.string.uuid();
 const vaultId = createVaultIdE2E();
 
 describe('PATCH /redemptions/{offerId}', () => {
-  const companyId = faker.number.int({ max: 1000000 });
+  const companyId = faker.string.uuid();
 
   const vaultBatchesEntity: VaultBatchEntity = vaultBatchEntityFactory.build({
     id: createVaultBatchesIdE2E(),
@@ -58,7 +58,7 @@ describe('PATCH /redemptions/{offerId}', () => {
     offerId: offerId,
     redemptionType: 'vault' as RedemptionType,
     connection: 'affiliate',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: companyId,
     affiliate: 'awin',
     url: 'https://www.awin1.com/',
     vault: {
@@ -89,7 +89,7 @@ describe('PATCH /redemptions/{offerId}', () => {
     offerId: offerId,
     redemptionType: 'vault' as RedemptionType,
     connection: 'affiliate',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: companyId,
     affiliate: 'awin',
     url: 'https://www.awin1.com/',
     vault: {
@@ -119,7 +119,7 @@ describe('PATCH /redemptions/{offerId}', () => {
     offerId: offerId,
     redemptionType: 'vaultQR' as RedemptionType,
     connection: 'affiliate',
-    companyId: faker.number.int({ max: 1000000 }),
+    companyId: companyId,
     affiliate: 'awin',
     vault: {
       id: vaultId,
@@ -313,10 +313,10 @@ describe('PATCH /redemptions/{offerId}', () => {
       statusCode: 200,
       data: {
         id: testPreAppliedBody.id,
-        offerId: String(testPreAppliedBody.offerId),
+        offerId: testPreAppliedBody.offerId,
         redemptionType: testPreAppliedBody.redemptionType,
         connection: testPreAppliedBody.connection,
-        companyId: String(testPreAppliedBody.companyId),
+        companyId: testPreAppliedBody.companyId,
         affiliate: testPreAppliedBody.affiliate,
         url: testPreAppliedBody.url,
       },
@@ -337,9 +337,9 @@ describe('PATCH /redemptions/{offerId}', () => {
       statusCode: 200,
       data: {
         id: testShowCardBody.id,
-        offerId: String(testShowCardBody.offerId),
+        offerId: testShowCardBody.offerId,
         redemptionType: testShowCardBody.redemptionType,
-        companyId: String(testShowCardBody.companyId),
+        companyId: testShowCardBody.companyId,
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
@@ -407,10 +407,10 @@ describe('PATCH /redemptions/{offerId}', () => {
       statusCode: 200,
       data: {
         id: testGenericBody.id,
-        offerId: String(testGenericBody.offerId),
+        offerId: testGenericBody.offerId,
         redemptionType: testGenericBody.redemptionType,
         connection: testGenericBody.connection,
-        companyId: String(testGenericBody.companyId),
+        companyId: testGenericBody.companyId,
         affiliate: testGenericBody.affiliate,
         url: testGenericBody.url,
         generic: {
@@ -462,10 +462,10 @@ describe('PATCH /redemptions/{offerId}', () => {
       statusCode: 200,
       data: {
         id: testVaultBody.id,
-        offerId: String(testVaultBody.offerId),
+        offerId: testVaultBody.offerId,
         redemptionType: testVaultBody.redemptionType,
         connection: testVaultBody.connection,
-        companyId: String(testVaultBody.companyId),
+        companyId: testVaultBody.companyId,
         affiliate: testVaultBody.affiliate,
         url: testVaultBody.url,
         vault: {
@@ -512,10 +512,10 @@ describe('PATCH /redemptions/{offerId}', () => {
       statusCode: 200,
       data: {
         id: testVaultQRBody.id,
-        offerId: String(testVaultQRBody.offerId),
+        offerId: testVaultQRBody.offerId,
         redemptionType: testVaultQRBody.redemptionType,
         connection: testVaultQRBody.connection,
-        companyId: String(testVaultQRBody.companyId),
+        companyId: testVaultQRBody.companyId,
         affiliate: testVaultQRBody.affiliate,
         vault: {
           id: testVaultQRBody.vault.id,
@@ -555,10 +555,10 @@ describe('PATCH /redemptions/{offerId}', () => {
       statusCode: 200,
       data: {
         id: testVaultBodyWithUcOrEEIntegration.id,
-        offerId: String(testVaultBodyWithUcOrEEIntegration.offerId),
+        offerId: testVaultBodyWithUcOrEEIntegration.offerId,
         redemptionType: testVaultBodyWithUcOrEEIntegration.redemptionType,
         connection: testVaultBodyWithUcOrEEIntegration.connection,
-        companyId: String(testVaultBodyWithUcOrEEIntegration.companyId),
+        companyId: testVaultBodyWithUcOrEEIntegration.companyId,
         affiliate: testVaultBodyWithUcOrEEIntegration.affiliate,
         url: testVaultBodyWithUcOrEEIntegration.url,
         vault: {

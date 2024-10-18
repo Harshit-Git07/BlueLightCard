@@ -8,9 +8,9 @@ import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastru
 import { EagleEyeModel, UniqodoModel } from '@blc-mono/redemptions/libs/models/postCallback';
 
 export interface IDwhRepository {
-  logOfferView(offerId: string, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
-  logRedemptionAttempt(offerId: string, companyId: number, memberId: string, clientType: ClientType): Promise<void>;
-  logVaultRedemption(offerId: string, companyId: number, memberId: string, code: string): Promise<void>;
+  logOfferView(offerId: string, companyId: string, memberId: string, clientType: ClientType): Promise<void>;
+  logRedemptionAttempt(offerId: string, companyId: string, memberId: string, clientType: ClientType): Promise<void>;
+  logVaultRedemption(offerId: string, companyId: string, memberId: string, code: string): Promise<void>;
   logRedemption(dto: MemberRedemptionParamsDto): Promise<void>;
   logCallbackEagleEyeVaultRedemption(data: EagleEyeModel): Promise<void>;
   logCallbackUniqodoVaultRedemption(data: UniqodoModel): Promise<void>;
@@ -28,7 +28,7 @@ export class DwhRepository implements IDwhRepository {
 
   private readonly client = new FirehoseClient();
 
-  async logOfferView(offerId: string, companyId: number, memberId: string, clientType: ClientType): Promise<void> {
+  async logOfferView(offerId: string, companyId: string, memberId: string, clientType: ClientType): Promise<void> {
     const APPLICATION_TYPE_WEB = 1;
     const APPLICATION_TYPE_APP = 5;
     const [streamName, type] = (() => {
@@ -47,7 +47,7 @@ export class DwhRepository implements IDwhRepository {
       Record: {
         Data: Buffer.from(
           JSON.stringify({
-            cid: companyId.toString(),
+            cid: companyId,
             oid_: offerId,
             mid: memberId,
             timedate: new Date().toISOString(),
@@ -62,7 +62,7 @@ export class DwhRepository implements IDwhRepository {
 
   async logRedemptionAttempt(
     offerId: string,
-    companyId: number,
+    companyId: string,
     memberId: string,
     clientType: ClientType,
   ): Promise<void> {
@@ -83,7 +83,7 @@ export class DwhRepository implements IDwhRepository {
       Record: {
         Data: Buffer.from(
           JSON.stringify({
-            company_id: companyId.toString(),
+            company_id: companyId,
             offer_id: offerId,
             member_id: memberId,
             timedate: new Date().toISOString(),
@@ -96,13 +96,13 @@ export class DwhRepository implements IDwhRepository {
     await this.client.send(command);
   }
 
-  async logVaultRedemption(offerId: string, companyId: number, memberId: string, code: string): Promise<void> {
+  async logVaultRedemption(offerId: string, companyId: string, memberId: string, code: string): Promise<void> {
     const command = new PutRecordCommand({
       DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME),
       Record: {
         Data: Buffer.from(
           JSON.stringify({
-            compid: companyId.toString(),
+            compid: companyId,
             code,
             uid: memberId,
             whenrequested: new Date().toISOString(),
@@ -121,7 +121,7 @@ export class DwhRepository implements IDwhRepository {
       Record: {
         Data: Buffer.from(
           JSON.stringify({
-            companyid: dto.data.companyId.toString(),
+            companyid: dto.data.companyId,
             code: dto.data.code ?? '',
             memberid: dto.data.memberId,
             actiontime: new Date().toISOString(),

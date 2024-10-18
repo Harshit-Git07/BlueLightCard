@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 
 import { createTestLogger } from '../../../libs/test/helpers/logger';
@@ -6,8 +8,8 @@ import { SpotifyService } from './SpotifyService';
 
 describe('SpotifyService', () => {
   function callSpotifyRedeemService(
-    companyId: number,
-    offerId: number,
+    companyId: string,
+    offerId: string,
     memberId: string,
     url: string,
     legacyVaultApiRepository?: ILegacyVaultApiRepository,
@@ -29,8 +31,8 @@ describe('SpotifyService', () => {
   describe('redeem', () => {
     it('should return a tracking URL for an already redeemed code', async () => {
       // Arrange
-      const companyId = 1;
-      const offerId = 1;
+      const companyId = faker.string.uuid();
+      const offerId = faker.string.uuid();
       const memberId = 'memberId';
       const url = 'https://www.blcshine.com?code=!!!CODE!!!';
       const mockedLegacyVaultApiRepository = {
@@ -54,8 +56,8 @@ describe('SpotifyService', () => {
 
     it('should assign a code when no code is already redeemed', async () => {
       // Arrange
-      const companyId = 1;
-      const offerId = 1;
+      const companyId = faker.string.uuid();
+      const offerId = faker.string.uuid();
       const memberId = 'memberId';
       const url = 'https://www.blcshine.com?code=!!!CODE!!!';
       const mockedLegacyVaultApiRepository = {

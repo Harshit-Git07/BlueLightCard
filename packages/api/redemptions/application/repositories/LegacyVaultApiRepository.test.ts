@@ -130,8 +130,8 @@ describe('LegacyVaultApiRepository', () => {
   });
 
   describe('viewVaultBatches', () => {
-    const defaultOfferId = faker.number.int(4);
-    const defaultCompanyId = faker.number.int(4);
+    const defaultOfferId = faker.string.uuid();
+    const defaultCompanyId = faker.string.uuid();
     const logger = createTestLogger();
     const mockedSecretsManager = {
       getSecretValueJson: jest.fn().mockReturnValue({
@@ -199,8 +199,8 @@ describe('LegacyVaultApiRepository', () => {
   });
 
   describe('checkVaultStock', () => {
-    const defaultOfferId = faker.number.int(4);
-    const defaultCompanyId = faker.number.int(4);
+    const defaultOfferId = faker.string.uuid();
+    const defaultCompanyId = faker.string.uuid();
     const defaultBatchNo = faker.string.uuid();
     const logger = createTestLogger();
     const mockedSecretsManager = {
@@ -270,8 +270,8 @@ describe('LegacyVaultApiRepository', () => {
     it('should return kind Ok if the request was successful', async () => {
       // Arrange
       const memberId = faker.number.int(4).toString();
-      const companyId = faker.number.int(4);
-      const offerId = faker.number.int(4);
+      const companyId = faker.string.uuid();
+      const offerId = faker.string.uuid();
       const logger = createTestLogger();
       const mockedSecretsManager = {
         getSecretValueJson: jest.fn().mockReturnValue({
@@ -313,8 +313,8 @@ describe('LegacyVaultApiRepository', () => {
     it('should return kind NoCodesAvailable if the request was successful but no codes were available', async () => {
       // Arrange
       const memberId = faker.number.int(4).toString();
-      const companyId = faker.number.int(4);
-      const offerId = faker.number.int(4);
+      const companyId = faker.string.uuid();
+      const offerId = faker.string.uuid();
       const logger = createTestLogger();
       const mockedSecretsManager = {
         getSecretValueJson: jest.fn().mockReturnValue({

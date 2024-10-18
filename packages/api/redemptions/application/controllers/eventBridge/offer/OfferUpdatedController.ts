@@ -14,7 +14,7 @@ import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeCo
 
 const OfferUpdatedEventDetailSchema = z.object({
   offerId: z.coerce.string(),
-  companyId: NON_NEGATIVE_INT,
+  companyId: z.coerce.string(),
   offerUrl: z.string().nullable(),
   offerCode: z.string().nullable(),
   offerType: NON_NEGATIVE_INT,

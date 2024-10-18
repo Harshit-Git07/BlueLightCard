@@ -4,14 +4,8 @@ import { Factory } from 'fishery';
 import { LegacyVaultData, ViewVaultBatchesData } from '../../../application/repositories/LegacyVaultApiRepository';
 
 export const legacyVaultDataFactory = Factory.define<LegacyVaultData>(() => ({
-  companyId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
-  offerId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  companyId: faker.string.uuid(),
+  offerId: faker.string.uuid(),
   linkId: faker.number.int({
     min: 1,
     max: 1_000_000,

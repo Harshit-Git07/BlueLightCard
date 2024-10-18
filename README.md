@@ -212,6 +212,26 @@ The solution is to retry the command - it will work eventually 🫣
 - Hono - for API routing + middleware
 - NextJS - for the web application
 
+## Environments
+
+We have 4 AWS accounts:
+- Production
+- Staging
+- PR
+- Development
+
+Production and Staging are entire environments with their own AWS accounts.
+
+Dev environments (personal environments e.g. `rstiff`) and PR enviroments 
+(ephemeral environments deployed temporariliy for a given PR, e.g. `pr-1801`), are only partial environments.
+
+Due to VPC per-account limits in AWS, Dev and PR environments use a per-aws-account shared `global` stack, specifically it's single VPC.
+These two environments have a singleton `global` deployment in their own name.
+
+e.g. 
+- Dev environment `rstiff`, deployed to `development` aws account, uses the global stack as deployed to the `development` stage.
+- PR environment `pr-1801` deployed to `PR` aws account, uses the global stack as deployed to the `pr` stage.
+
 ## Architecture and API contracts
 
 ### Postman collection

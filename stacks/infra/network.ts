@@ -1,6 +1,11 @@
 import { GatewayVpcEndpointAwsService, IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
-import { isProduction, isStaging } from '@blc-mono/core/src/utils/checkEnvironment';
+import {
+  isDevelopmentSharedStack,
+  isEphemeralSharedStack,
+  isProduction,
+  isStaging,
+} from '@blc-mono/core/src/utils/checkEnvironment';
 import { isDdsUkBrand } from '@blc-mono/core/src/utils/checkBrand';
 import { SubnetConfiguration } from 'aws-cdk-lib/aws-ec2/lib/vpc';
 
@@ -9,24 +14,19 @@ enum VpcName {
   DDS = 'vpc-shared-dds',
 }
 
-enum TagName {
-  BLC = 'staging',
-  DDS = 'staging-dds',
-}
-
 export class Network {
   private readonly _vpc: IVpc;
 
   constructor(private readonly stack: Stack) {
     switch (true) {
+      case isDevelopmentSharedStack(stack.stage):
+      case isEphemeralSharedStack(stack.stage):
       case isProduction(stack.stage):
-        this._vpc = this.createVpc();
-        break;
       case isStaging(stack.stage):
         this._vpc = this.createVpc();
         break;
       default:
-        this._vpc = this.retrieveStagingVpc();
+        this._vpc = this.retrieveSharedVPC();
         break;
     }
   }
@@ -56,18 +56,17 @@ export class Network {
   }
 
   /**
-   * Retrieves the staging VPC.
+   * Retrieves the shared VPC.
    *
-   * The Dev environment uses the staging VPC.
-   * @return {Vpc} The staging VPC.
+   * The dev and PR environments use a shared VPC that is ambient within the given AWS account.
+   * @return {Vpc} The shared VPC for this aws account.
    */
-  private retrieveStagingVpc(): IVpc {
+  private retrieveSharedVPC(): IVpc {
     const vpcName = isDdsUkBrand() ? VpcName.DDS : VpcName.BLC;
-    const tagName = isDdsUkBrand() ? TagName.DDS : TagName.BLC;
 
     return Vpc.fromLookup(this.stack, vpcName, {
       tags: {
-        'sst:stage': tagName,
+        'Name': vpcName,
       },
     });
   }

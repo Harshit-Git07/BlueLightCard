@@ -1,0 +1,106 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import * as Alert from './Alert.stories';
+
+<Meta of={Alert} />
+
+# Alert
+
+- [Overview](#overview)
+- [Props](#props)
+- [Usage](#usage)
+- [Variants](#variants)
+
+## Overview
+
+The Alert component displays important messages to users in different formats. It can be configured as a **full-width banner** that appears at the top of the page, ensuring visibility while pushing other content down, or as an **inline alert** within specific sections of the page. The component is customisable and can convey different states of information using distinct colors and icons.
+
+### Prop Details
+
+<Controls />
+
+## Extra info
+
+➡️ You can customise the alert's appearance with the `alertBackgroundColor` prop, utilising token colors to maintain design consistency across your application.
+
+➡️ Use the `iconAccentColor` prop to define the color of the alert icon, again leveraging token colors for a cohesive visual style.
+
+## Variants
+
+The Alert component can be rendered in different styles depending on its variant.
+
+### Banner Alert
+
+The **Banner Alert** is a sticky, full-width alert that remains at the top of the page. It ensures that important messages are prominently displayed, capturing user attention without being overly intrusive. This variant is ideal for critical notifications that require immediate user action or awareness. It can be dismissed by users if the `isDismissable` prop is set.
+
+<Canvas of={Alert.Banner} />
+
+### Inline Alert
+
+The **Inline Alert** is designed to provide contextual information within specific sections of a page. It does not disrupt the overall layout, making it suitable for conveying messages related to specific content or actions. This alert type is perfect for non-intrusive notifications that still need to be acknowledged by users.
+
+For demonstration purposes, the Inline Alert examples are wrapped in a fixed width of 500 pixels. This ensures that the layout remains consistent and visually appealing, allowing you to see how the Inline Alert behaves within a confined space.
+
+<Canvas of={Alert.Inline} />
+
+## Call To Action
+
+Both the **Banner Alert** and **Inline Alert support** customisable call-to-action (CTA) elements by allowing you to pass buttons, links, or other interactive components as children. This provides flexibility to tailor the alert's functionality and appearance to your specific needs.
+
+## Button Alert
+
+The Button Alert can include a button passed as a child to the Alert component, allowing flexibility for call-to-action (CTA). This button can be fully customised through the children prop, making it adaptable to various use cases. The button is a Primary button example.
+
+## <Canvas of={Alert.BannerButton} /> <Canvas of={Alert.InlineButton} />
+
+## Link Alert
+
+The Link Alert includes a link passed as a child through the children prop. This gives developers
+the ability to customise the content inside the alert while maintaining layout flexibility for links
+or other interactive elements. The link is a Tertiary button example.
+
+## <Canvas of={Alert.BannerLink} /> <Canvas of={Alert.InlineLink} />
+
+## States
+
+### Success Alert
+
+The **Success Alert** indicates that an action has been successfully completed. It provides users with positive feedback, reinforcing their actions and encouraging continued engagement. This alert can also offer additional details about the successful operation.
+
+<Canvas of={Alert.AlertSuccess} />
+
+### Info Alert
+
+The **Info Alert** is used to provide users with useful information that may help in their interactions. This alert type is non-intrusive and typically includes helpful tips or important notes that do not require immediate action but enhance user understanding.
+
+<Canvas of={Alert.AlertInfo} />
+
+### Warning Alert
+
+The **Warning Alert** serves to inform users of potential issues that require attention. It acts as a cautionary notice, prompting users to verify their actions or entries to avoid possible mistakes. This alert can guide users towards making better decisions.
+
+<Canvas of={Alert.AlertWarning} />
+
+### Error Alert
+
+The **Error Alert** communicates a problem that has occurred during a process or action. It clearly indicates that something went wrong and usually provides guidance on how to resolve the issue. This alert is critical for user awareness and helps them navigate errors effectively.
+
+<Canvas of={Alert.AlertError} />
+
+# Rich Text Alert
+
+The `Rich Text Alert` component is a versatile alert that communicates important information effectively. It can be rendered as either a full-width banner or inline, making it suitable for various notifications and announcements. This design captures user attention in a visually appealing way.
+
+The `subtext` of this example showcases rich text and includes:
+
+- A bolded first line: `line one`, emphasised for importance.
+- An italicised second line: `line two`, providing additional context.
+- A clickable link, `"View details"`, which enables users to navigate for more information, utilising the `Link` or `Paragraph` components as needed.
+
+  <Canvas of={Alert.RichTextBanner} /> <Canvas of={Alert.RichTextInline} />
+
+## Custom Alert
+
+The **Custom Alert** is a flexible alert component that provides customisable styles and behaviors. This example demonstrates a banner alert with a specific background color and icon accent color to enhance visibility and aesthetic appeal.
+
+<Canvas of={Alert.CustomBanner} /> <Canvas of={Alert.CustomInline} />

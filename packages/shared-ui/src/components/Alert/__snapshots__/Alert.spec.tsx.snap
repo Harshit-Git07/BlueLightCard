@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Alert Component renders correctly for Banner variant 1`] = `
+<div
+  className="
+        false 
+        w-full
+        bg-colour-success-bright-light dark:bg-colour-success-container-dark 
+        sticky top-0 left-0 z-50 px-[1rem] tablet:px-[3.5rem] laptop:px-[6.5rem] py-[1rem] 
+        flex-col rounded 
+        justify-between 
+      "
+  data-testid="alert"
+>
+  <div
+    className="flex basis-full flex-row"
+    data-testid="alertBanner"
+  >
+    <div
+      className="flex items-start tablet:items-center"
+    >
+      <div
+        className="text-colour-success-light dark:text-colour-success-dark"
+        data-testid="alert-icon"
+      >
+        <svg
+          aria-hidden="true"
+          className="svg-inline--fa fa-circle-check text-[20px] flex content-start pt-1 tablet:pt-[0px] tablet:text-[24px]"
+          data-icon="circle-check"
+          data-prefix="fas"
+          data-testid="icon"
+          focusable="false"
+          role="img"
+          style={{}}
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+            fill="currentColor"
+            style={{}}
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      className="tablet:flex tablet:mx-6 mx-4 m-auto tablet:justify-between w-full"
+    >
+      <div
+        className="flex-col content-center tablet:pr-[16px] max-w-[750px]"
+      >
+        <p
+          className="w-full text-colour-onSurface-light dark:text-colour-onSurface-dark break-words font-typography-title-small font-typography-title-small-weight text-typography-title-small leading-typography-title-small tracking-typography-title-small tablet:font-typography-title-medium-semibold tablet:font-typography-title-medium-semibold-weight tablet:text-typography-title-medium-semibold tablet:leading-typography-title-medium-semibold tablet:tracking-typography-title-medium-semibold"
+        >
+          This is a banner alert!
+        </p>
+        <div
+          className="flex-col w-full pt-2 font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small tablet:font-typography-body tablet:font-typography-body-weight tablet:text-typography-body tablet:leading-typography-body tablet:tracking-typography-body text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark break-words"
+        >
+          <p>
+            Operation completed successfully.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex items-start  tablet:items-center"
+    >
+      <button
+        aria-label="Close"
+        className="content-center text-center rounded-full text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark"
+        onClick={[Function]}
+      >
+        <svg
+          aria-hidden="true"
+          className="svg-inline--fa fa-xmark text-[20px]"
+          data-icon="xmark"
+          data-prefix="far"
+          focusable="false"
+          role="img"
+          style={{}}
+          viewBox="0 0 384 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M345 137c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-119 119L73 103c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l119 119L39 375c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l119-119L311 409c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-119-119L345 137z"
+            fill="currentColor"
+            style={{}}
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Alert Component renders correctly for Inline variant 1`] = `
+<div
+  className="
+        false 
+        mx-auto
+        bg-colour-info-bright-light dark:bg-colour-info-bright-dark 
+        relative  px-[0.75rem] py-[0.75rem] 
+        flex-col rounded 
+        justify-between 
+      "
+  data-testid="alert"
+>
+  <div
+    className="flex basis-full flex-row"
+    data-testid="alertInline"
+  >
+    <div
+      className="flex items-start "
+    >
+      <div
+        className="text-colour-onInfo-container-light dark:text-colour-onInfo-container-dark"
+        data-testid="alert-icon"
+      >
+        <svg
+          aria-hidden="true"
+          className="svg-inline--fa fa-circle-info text-[20px] flex content-start pt-1 tablet:pt-[5px]"
+          data-icon="circle-info"
+          data-prefix="fas"
+          data-testid="icon"
+          focusable="false"
+          role="img"
+          style={{}}
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+            fill="currentColor"
+            style={{}}
+          />
+        </svg>
+      </div>
+    </div>
+    <div
+      className=" mx-4 m-auto tablet:justify-between w-full"
+    >
+      <div
+        className="flex-col content-center tablet:pr-[16px] max-w-[750px]"
+      >
+        <p
+          className="w-full text-colour-onSurface-light dark:text-colour-onSurface-dark break-words font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold  "
+        >
+          This is an inline alert!
+        </p>
+        <div
+          className="flex-col w-full pt-1 font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark break-words"
+        >
+          <p>
+            Some important information here.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

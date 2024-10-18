@@ -21,6 +21,9 @@ const createOffersDataTable = (stack: Stack) =>
     },
     primaryIndex: { partitionKey: '_id' },
     globalIndexes: {
+      companyId: {
+        partitionKey: 'companyId',
+      },
       legacyId: {
         partitionKey: 'offerId',
         sortKey: 'companyId',

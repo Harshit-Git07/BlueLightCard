@@ -32,3 +32,14 @@ export async function getOffer(id: string) {
 
   return item.Items[0] as Offer;
 }
+
+export async function getOffersByCompanyId(companyId: string) {
+  const res = await db.query({
+    TableName: Table.cmsOffersData.tableName,
+    IndexName: 'companyId',
+    ExpressionAttributeValues: { ':id': companyId },
+    KeyConditionExpression: 'companyId = :id',
+  });
+
+  return res.Items as Offer[];
+}

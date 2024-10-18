@@ -25,10 +25,7 @@ describe('VaultService', () => {
   const defaultVaultId = `vlt-${faker.string.uuid()}`;
   const defaultRedemptionId = `rdm-${faker.string.uuid()}`;
   const defaultOfferId = faker.string.uuid();
-  const defaultCampaignId = faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  });
+  const defaultCampaignId = faker.string.uuid();
 
   type MakeVaultServiceOptions = {
     overrides: {
@@ -418,7 +415,7 @@ describe('VaultService', () => {
         // Arrange
         const event = vaultCreatedEventFactory.build({
           detail: {
-            eeCampaignId: faker.number.int(500),
+            eeCampaignId: faker.string.uuid(),
             ucCampaignId: undefined,
           },
         });
@@ -444,7 +441,7 @@ describe('VaultService', () => {
         const event = vaultCreatedEventFactory.build({
           detail: {
             eeCampaignId: undefined,
-            ucCampaignId: faker.number.int(500),
+            ucCampaignId: faker.string.uuid(),
           },
         });
         await connection.db.insert(redemptionsTable).values({

@@ -20,12 +20,7 @@ export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDe
   companyId: faker.string.uuid(),
   companyName: faker.company.name(),
   directCode: faker.helpers.maybe(() => faker.string.alphanumeric(10)),
-  eeCampaignId: faker.helpers.maybe(() =>
-    faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
-  ),
+  eeCampaignId: faker.string.uuid(),
   link: faker.helpers.maybe(() => faker.internet.url()),
   linkId: faker.helpers.maybe(() =>
     faker.number.int({
@@ -43,12 +38,7 @@ export const vaultCreatedEventDetailFactory = Factory.define<VaultCreatedEventDe
   offerId: faker.string.uuid(),
   platform: faker.helpers.arrayElement(BRANDS),
   showQR: faker.datatype.boolean(),
-  ucCampaignId: faker.helpers.maybe(() =>
-    faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
-  ),
+  ucCampaignId: faker.string.uuid(),
   vaultId: faker.string.uuid(),
   vaultStatus: faker.datatype.boolean(),
 }));
@@ -69,12 +59,7 @@ export const vaultUpdatedEventDetailFactory = Factory.define<VaultUpdatedEventDe
   brand: faker.company.name(),
   companyId: faker.string.uuid(),
   companyName: faker.company.name(),
-  eeCampaignId: faker.helpers.maybe(() =>
-    faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
-  ),
+  eeCampaignId: faker.string.uuid(),
   link: faker.helpers.maybe(() => faker.internet.url()),
   linkId: faker.helpers.maybe(() =>
     faker.number.int({
@@ -86,12 +71,7 @@ export const vaultUpdatedEventDetailFactory = Factory.define<VaultUpdatedEventDe
   maxPerUser: faker.number.int(500),
   offerId: faker.string.uuid(),
   showQR: faker.datatype.boolean(),
-  ucCampaignId: faker.helpers.maybe(() =>
-    faker.number.int({
-      min: 1,
-      max: 1_000_000,
-    }),
-  ),
+  ucCampaignId: faker.string.uuid(),
   vaultStatus: faker.datatype.boolean(),
   platform: faker.helpers.arrayElement(BRANDS),
 }));

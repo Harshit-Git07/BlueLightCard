@@ -254,7 +254,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       integration: isValidIntegrationType(request.vault.integration)
         ? (request.vault.integration as Integration)
         : null,
-      integrationId: isValidIntegrationType(request.vault.integration) ? Number(request.vault.integrationId) : null,
+      integrationId: isValidIntegrationType(request.vault.integration) ? request.vault.integrationId : null,
     };
 
     const vaultId: Partial<Pick<VaultEntity, 'id'>> | undefined = await vaultsTransaction.updateOneById(

@@ -96,7 +96,7 @@ export const vaultsTable = pgTable('vaults', {
   created: timestamp('created').defaultNow().notNull(),
   email: varchar('email'),
   integration: integrationEnum('integration'),
-  integrationId: integer('integrationId'),
+  integrationId: varchar('integrationId'),
   maxPerUser: integer('maxPerUser'),
   showQR: boolean('showQR').default(false).notNull(),
   status: statusEnum('status').notNull(),

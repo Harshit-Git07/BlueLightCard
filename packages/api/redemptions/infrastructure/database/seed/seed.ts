@@ -80,6 +80,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       showQR: false,
       status: 'active',
       vaultType: 'standard',
+      integrationId: '123456',
     },
     {
       id: `${vaultsPrefix}-a3fa14f4-81e2-45be-a5da-f1445641f378`,
@@ -91,6 +92,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       showQR: false,
       status: 'active',
       vaultType: 'legacy',
+      integrationId: '123456',
     },
     {
       id: `${vaultsPrefix}-a4fa25f5-92e3-56be-a6da-f2555752f378`,
@@ -103,7 +105,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       status: 'active',
       vaultType: 'standard',
       integration: 'eagleeye',
-      integrationId: 123456,
+      integrationId: '123456',
     },
   ] satisfies (typeof vaultsTable.$inferInsert)[];
   await db.insert(vaultsTable).values(vaultsData).onConflictDoNothing();

@@ -16,14 +16,14 @@ const VaultCreatedEventDetailSchema = z.object({
   brand: z.string(),
   companyId: z.coerce.string(),
   companyName: z.string(),
-  eeCampaignId: NON_NEGATIVE_INT.nullable().optional(),
+  eeCampaignId: z.coerce.string().nullable().optional(),
   link: OPTIONAL_URL_SCHEMA,
   linkId: NON_NEGATIVE_INT.nullable().optional(),
   managerId: NON_NEGATIVE_INT.nullable().optional(),
   maxPerUser: NON_NEGATIVE_INT,
   offerId: z.coerce.string(),
   showQR: z.boolean(),
-  ucCampaignId: NON_NEGATIVE_INT.nullable().optional(),
+  ucCampaignId: z.coerce.string().nullable().optional(),
   vaultStatus: z.boolean(),
 });
 const VaultCreatedEventSchema = eventSchema(

@@ -12,10 +12,7 @@ export const vaultEntityFactory = Factory.define<VaultEntity>(() => ({
   created: new Date('2024-07-16'),
   email: faker.internet.email(),
   vaultType: 'standard',
-  integrationId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  integrationId: faker.string.uuid(),
   integration: 'eagleeye',
   maxPerUser: faker.number.int({
     min: 1,
@@ -30,10 +27,7 @@ export const newVaultEntityFactory = Factory.define<NewVaultEntity>(() => ({
   alertBelow: 10,
   email: faker.internet.email(),
   vaultType: 'standard',
-  integrationId: faker.number.int({
-    min: 1,
-    max: 1_000_000,
-  }),
+  integrationId: faker.string.uuid(),
   integration: 'eagleeye',
   maxPerUser: faker.number.int({
     min: 1,

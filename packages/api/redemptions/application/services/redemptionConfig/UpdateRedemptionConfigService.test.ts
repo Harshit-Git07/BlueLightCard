@@ -244,7 +244,8 @@ describe('UpdateRedemptionConfigService', () => {
       | 'RedemptionTypeMismatch'
       | 'GenericNotFound'
       | 'GenericCodeEmpty'
-      | 'VaultNotFound',
+      | 'VaultNotFound'
+      | 'MaxPerUserError',
     message: string,
   ): UpdateRedemptionConfigError {
     return {
@@ -590,7 +591,64 @@ describe('UpdateRedemptionConfigService', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('should return kind "Ok" when the vault offer redemptions and vault records update correctly', async () => {
+  it.each([
+    [faker.string.uuid(), 'uniqodo'],
+    [faker.string.uuid(), 'eagleeye'],
+    [null, null],
+  ])(
+    'should return kind "Ok" when the vault offer redemptions and vault records update correctly',
+    async (integrationId: string | null, integration: string | null) => {
+      mockRedemptionConfigExist(true, 'vault');
+
+      //mock repo(s) responses/resolves that execute inside transactionManager(s)
+      mockVaultExist(true);
+      mockVaultBatches();
+      mockVaultFindOneById();
+      mockVaultUpdateSucceeds(true);
+      mockVaultTransaction();
+
+      mockRedemptionConfigUpdateSucceeds(true, {
+        id: testRedemptionId,
+        offerId: testVaultBody.offerId,
+        redemptionType: testVaultBody.redemptionType,
+        connection: testVaultBody.connection,
+        companyId: testVaultBody.companyId,
+        affiliate: testVaultBody.affiliate,
+        url: testVaultBody.url,
+        offerType: 'online',
+      });
+      mockRedemptionConfigTransaction();
+
+      mockRedemptionConfigTransformer.transformToRedemptionConfig = jest
+        .fn()
+        .mockReturnValue(testVaultRedemptionConfig);
+
+      const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+        createTestLogger(),
+        { ...testVaultBody, vault: { ...testVaultBody.vault, integrationId, integration } },
+      );
+
+      expect(actual.kind).toEqual('Ok');
+      expect(actual.data).toEqual(testVaultRedemptionConfig);
+    },
+  );
+
+  it('should return kind "Error" when the redemption type is invalid', async () => {
+    mockRedemptionConfigExist(true, 'invalid' as unknown as RedemptionType);
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
+      createSilentLogger(),
+      { ...testGenericBody, redemptionType: 'invalid' as unknown as RedemptionType },
+    );
+
+    const expected: UpdateRedemptionConfigError = getExpectedError(
+      'Error',
+      'invalid is an unrecognised redemptionType',
+    );
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return kind "MaxPerUserError" when the maxPerUser is less than 1', async () => {
     mockRedemptionConfigExist(true, 'vault');
 
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
@@ -615,12 +673,16 @@ describe('UpdateRedemptionConfigService', () => {
 
     mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(testVaultRedemptionConfig);
 
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(
-      createTestLogger(),
-      testVaultBody,
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError = await callService(createTestLogger(), {
+      ...testVaultBody,
+      vault: { ...testVaultBody.vault, maxPerUser: 0 },
+    });
+
+    const expected: UpdateRedemptionConfigError = getExpectedError(
+      'MaxPerUserError',
+      'max limit per user cannot be less than 1',
     );
 
-    expect(actual.kind).toEqual('Ok');
-    expect(actual.data).toEqual(testVaultRedemptionConfig);
+    expect(actual).toEqual(expected);
   });
 });

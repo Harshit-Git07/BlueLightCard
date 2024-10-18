@@ -1,0 +1,1 @@
+ALTER TABLE "vaults" ALTER COLUMN "integrationId" SET DATA TYPE varchar;

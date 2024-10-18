@@ -69,7 +69,7 @@ export const VaultModel = createZodNamedType(
     alertBelow: z.number().positive(),
     status: z.enum(['active', 'in-active']),
     maxPerUser: z.number().positive(),
-    integrationId: z.number().nullable(),
+    integrationId: z.coerce.string().nullable(),
     email: z.string().email(),
     integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
   }),

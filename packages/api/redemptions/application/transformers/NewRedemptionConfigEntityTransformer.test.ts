@@ -28,7 +28,7 @@ const vaultQRRequestBody: PostRedemptionConfigModel = {
     maxPerUser: faker.number.int(),
     email: faker.internet.email(),
     integration: 'eagleeye',
-    integrationId: faker.number.int(),
+    integrationId: faker.string.uuid(),
   },
 };
 
@@ -53,7 +53,7 @@ const vaultRequestBody: PostRedemptionConfigModel = {
     maxPerUser: faker.number.int(),
     email: faker.internet.email(),
     integration: 'eagleeye',
-    integrationId: faker.number.int(),
+    integrationId: faker.string.uuid(),
   },
 };
 

@@ -1,0 +1,312 @@
+name: Payments
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/api/payments/**
+      - packages/api/core/**
+      - stacks/**
+      - .github/workflows/payments.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+  pull_request:
+    paths:
+      - packages/api/payments/**
+      - packages/api/core/**
+      - stacks/**
+      - .github/workflows/payments.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+
+permissions: write-all
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # test:
+  #   name: Test
+  #   runs-on: ubuntu-latest
+  #   needs: install
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Setup
+  #       uses: ./.github/actions/setup
+  #     - name: Generate SST Types
+  #       env:
+  #         BRAND: BLC_UK
+  #       run: npx sst types --stage staging
+  #     - name: Test
+  #       run: npm run test:coverage -w packages/api/payments
+  #     # - name: Test Cloud flare
+  #     #   run: npm run test:cloudflare -w packages/api/payments
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@master
+  #       if: github.actor != 'dependabot[bot]'
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         projectBaseDir: packages/api/payments
+
+  format:
+    name: Check Formatting
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Check Formatting
+        run: npm run format:check -w packages/api/payments
+
+  lint:
+    name: Check Linting
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Check Linting
+        run: npm run lint -w packages/api/payments
+
+  typecheck:
+    name: Check Types
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
+        run: npx sst types --stage staging
+      - name: Check Types
+        run: npm run typecheck -w packages/api/payments
+
+  changelog:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: googleapis/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/api/payments
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/payments
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      # - test
+      - format
+      - lint
+      - typecheck
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build
+        run: npm run build
+
+  staging:
+    name: Staging Deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: Staging
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+          - brand: BLC_AU
+            region: ap-southeast-2
+            stage: staging
+          - brand: DDS_UK
+            region: eu-west-2
+            stage: staging-dds
+    needs:
+      - install
+      # - test
+      - build
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: ${{ matrix.deployment.region }}
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+          DD_VERSION: '${{ vars.DD_VERSION }}'
+          DD_ENV: '${{ vars.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ vars.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ vars.DD_GIT_COMMIT_SHA }}'
+          DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
+          USE_DATADOG_AGENT: 'true'
+        run: npx sst deploy global --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}} && npx sst deploy payments --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'staging'
+          service_name: 'payments'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
+      - name: Send Slack message on failure
+        if: ${{ failure() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
+          title: ":x: :test_tube: Staging deployment failed for payments (${{matrix.deployment.brand}})!"
+      - name: Send Slack message on success
+        if: ${{ success() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+          title: ":white_check_mark: :test_tube: Staging deployment for payments (${{matrix.deployment.brand}}) was successful!"
+
+#   e2e-redemptions:
+#     name: Run E2E tests (redemptions)
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         deployment:
+#           - brand: BLC_UK
+#             region: eu-west-2
+#             stage: staging
+# #          - brand: BLC_AU
+# #            region: ap-southeast-2
+# #            stage: staging
+# #          - brand: DDS_UK
+# #            region: eu-west-2
+# #            stage: staging-dds
+#     needs:
+#       - install
+#       - staging
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+#       - name: Setup
+#         uses: ./.github/actions/setup
+#       - name: Configure Non Prod AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+#           aws-region: ${{ matrix.deployment.region }}
+#       - name: Install Session Manager Plugin
+#         run: |
+#           curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+#           sudo dpkg -i session-manager-plugin.deb
+#       - name: Run E2E tests
+#         working-directory: packages/api/redemptions
+#         env:
+#           BRAND: ${{ matrix.deployment.brand }}
+#           REDEMPTIONS_DATABASE_PORT: 5432
+#           REDEMPTIONS_DATABASE_NAME: redemptions
+#           REDEMPTIONS_DATABASE_TYPE: AURORA_PG_CLUSTER
+#         run: npx sst bind --stage ${{ matrix.deployment.stage }} vitest
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: production
+          - brand: BLC_AU
+            region: ap-southeast-2
+            stage: production
+          - brand: DDS_UK
+            region: eu-west-2
+            stage: production-dds
+    needs:
+      - install
+      # - test
+      - staging
+      - changelog
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ matrix.deployment.region }}
+          role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+          DD_VERSION: '${{ env.DD_VERSION }}'
+          DD_ENV: '${{ env.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
+          DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
+          USE_DATADOG_AGENT: 'true'
+        run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy payments --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'production'
+          service_name: 'payments'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
+      - name: Send Slack message on failure
+        if: ${{ failure() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
+          title: ":x: Production deployment failed for payments (${{matrix.deployment.brand}})!"
+      - name: Send Slack message on success
+        if: ${{ success() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+          title: ":white_check_mark: Production deployment for payments (${{matrix.deployment.brand}}) was successful!"

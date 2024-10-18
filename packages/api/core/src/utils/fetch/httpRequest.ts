@@ -3,7 +3,7 @@ export enum HTTPRequestMethods {
   GET = "GET",
   POST = "POST",
   PATCH = "PATCH",
-  PUT= "PUT",
+  PUT = "PUT",
   DELETE = "DELETE"
 }
 
@@ -11,7 +11,7 @@ export type headers = {
   [header: string]: string
 }
 
-export type RequestResponse = {data?: any, status: number, message?: string | undefined}
+export type RequestResponse = { data?: any, status: number, message?: string | undefined }
 type RequestMethods = keyof typeof HTTPRequestMethods
 
 
@@ -22,13 +22,13 @@ export type FetchParams = {
   headers?: headers
 }
 
-const enum SupportedFormats  {
-   json = 'application/json',
-   text = 'text/plain'
+const enum SupportedFormats {
+  json = 'application/json',
+  text = 'text/plain'
 
 }
 
-const enum ErrorMessages  {
+const enum ErrorMessages {
   invalidContentType = 'Invalid content type header'
 }
 
@@ -36,7 +36,7 @@ type RequestHandlerParams = (endpoint: string, data: any, method: RequestMethods
 type SimpleRequestParams = (endpoint: string, headers: headers | undefined) => Promise<any>
 
 type MethodHandlers = {
-  GET : SimpleRequestParams
+  GET: SimpleRequestParams
   POST: RequestHandlerParams
   PUT: RequestHandlerParams
   PATCH: RequestHandlerParams
@@ -48,13 +48,13 @@ type MethodHandlers = {
  * @param response
  * @returns {RequestResponse}
  */
-const determineResponse = async (response: Response): Promise<RequestResponse> => {
+export const determineResponse = async (response: Response): Promise<RequestResponse> => {
   const contentType = response.headers.get('Content-Type') || ''
-  if(contentType.includes(SupportedFormats.json)) {
+  if (contentType.includes(SupportedFormats.json)) {
     return { data: await response.json(), status: response.status }
   }
-  else if(contentType.includes(SupportedFormats.text)) {
-    return  { data: await response.text(), status: response.status }
+  else if (contentType.includes(SupportedFormats.text)) {
+    return { data: await response.text(), status: response.status }
   }
   else {
     return { message: ErrorMessages.invalidContentType, status: response.status };
@@ -95,16 +95,16 @@ const handleSimpleRequest =  async (endpoint : string, headers?:  headers | unde
     return determineResponse(response)
   }
   catch (exception) {
-   throw exception
+    throw exception
   }
 }
 
 
 
-const methodHandlers:MethodHandlers  = {
+const methodHandlers: MethodHandlers = {
   GET: handleSimpleRequest,
   POST: handleRequest,
-  PUT:  handleRequest,
+  PUT: handleRequest,
   PATCH: handleRequest,
   DELETE: handleSimpleRequest
 }
@@ -125,7 +125,7 @@ const methodHandlers:MethodHandlers  = {
  *
  * @return {RequestMethods}
  */
-export const httpRequest = async ({ data, method, endpoint, headers }: FetchParams): Promise<RequestResponse| undefined> => {
+export const httpRequest = async ({ data, method, endpoint, headers }: FetchParams): Promise<RequestResponse | undefined> => {
   if (method === HTTPRequestMethods.GET) {
     return methodHandlers.GET(endpoint, headers);
   } else if (method === HTTPRequestMethods.POST) {

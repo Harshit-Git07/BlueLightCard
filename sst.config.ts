@@ -5,6 +5,8 @@ import { OffersCMS } from '@blc-mono/offers-cms/stack';
 import { Web } from 'client/stack';
 import { Shared } from './stacks/stack';
 import { Redemptions } from '@blc-mono/redemptions/infrastructure/stack';
+import { Payments } from '@blc-mono/payments/infrastructure/stack';
+import { Orders } from '@blc-mono/orders/infrastructure/stack';
 import { MemberServicesHub } from 'member-services-hub/stack';
 import { Discovery } from '@blc-mono/discovery/infrastructure/stack';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
@@ -37,6 +39,8 @@ export default {
       app.stack(Offers, { id: 'offers' }),
       app.stack(Discovery, { id: 'discovery' }),
       app.stack(OffersCMS, { id: 'offers-cms' }),
+      app.stack(Payments, { id: 'payments' }),
+      app.stack(Orders, { id: 'orders' }),
     ]);
 
     app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });

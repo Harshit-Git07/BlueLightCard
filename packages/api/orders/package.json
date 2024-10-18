@@ -1,0 +1,23 @@
+{
+  "name": "@blc-mono/orders",
+  "version": "1.26.0",
+  "scripts": {
+    "test": "npm run test:unit --",
+    "test:coverage": "npm run test -- --coverage",
+    "test:unit": "jest",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "format:staged": "prettier --ignore-unknown --write",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:staged": "eslint --fix"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "istanbul-merge": "2.0.0",
+    "prettier": "3.2.5"
+  },
+  "dependencies": {}
+}

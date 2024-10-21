@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMagnifyingGlass } from '@fortawesome/pro-regular-svg-icons';
 
-// Oringinal Header imports
+// Original Header imports
 import MobileNavigation from '../Header/MobileNavigation';
 import DesktopNavigation from '../Header/DesktopNavigation';
 
@@ -16,12 +16,20 @@ import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks'
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 import getDeviceFingerprint from '../../utils/amplitude/getDeviceFingerprint';
 import { useLogGlobalNavigationOffersClicked } from '@/hooks/useLogGlobalNavigation';
+import { getAuth0FeatureFlagBasedOnBrand } from '@/utils/amplitude/getAuth0FeatureFlagBasedOnBrand';
+import { BRAND } from '@/global-vars';
 
 const Navigation: FC<NavProp> = ({ authenticated }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
   const cognitoUIExperiment = useAmplitudeExperiment(
     AmplitudeExperimentFlags.IDENTITY_COGNITO_UI_ENABLED,
     'control',
+    getDeviceFingerprint()
+  );
+
+  const auth0Experiment = useAmplitudeExperiment(
+    getAuth0FeatureFlagBasedOnBrand(BRAND),
+    'off',
     getDeviceFingerprint()
   );
 
@@ -33,6 +41,8 @@ const Navigation: FC<NavProp> = ({ authenticated }) => {
   const isZendeskV1BlcUkEnabled = zendeskExperiment.data?.variantName === 'on';
 
   const isCognitoUIEnabled = cognitoUIExperiment.data?.variantName === 'treatment';
+
+  const isAuth0LoginLogoutWebEnabled = auth0Experiment.data?.variantName === 'on';
 
   const router = useRouter();
   const { q } = router.query;
@@ -46,7 +56,7 @@ const Navigation: FC<NavProp> = ({ authenticated }) => {
     useLogGlobalNavigationOffersClicked();
 
   const { loggedIn, loggedOut } = getNavItems(
-    isCognitoUIEnabled,
+    { isAuth0LoginLogoutWebEnabled, isCognitoUIEnabled },
     logOffersClicked,
     logBrowseCategoriesClicked,
     logMyCardClicked,

@@ -64,7 +64,8 @@ const HeaderTemplate: StoryFn = ({ isAuthenticated, isSticky, isZendeskV1BlcUkEn
   const navigationItems = getNavigationItems(
     BRAND as BRANDS,
     isAuthenticated,
-    isZendeskV1BlcUkEnabled
+    isZendeskV1BlcUkEnabled,
+    { isAuth0LoginLogoutWebEnabled: false, isCognitoUIEnabled: false }
   );
   return (
     <div className="border">

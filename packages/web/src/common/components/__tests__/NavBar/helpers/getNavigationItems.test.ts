@@ -17,6 +17,16 @@ import { NavigationItem } from '@/components/NavBar/types';
 
 const isZendeskV1BlcUkEnabled = true;
 const isCognitoUIEnabled = true;
+const isAuth0LoginLogoutWebEnabled = false;
+
+jest.mock('@/global-vars', () => ({
+  AUTH0_LOGIN_URL: '/auth0/login',
+  AUTH0_LOGOUT_URL: '/auth0/logout',
+  COGNITO_LOGIN_URL: '/cognito/login',
+  COGNITO_LOGOUT_URL: '/cognito/logout',
+  ZENDESK_V1_BLC_UK_URL: 'https://bluelightcard.zendesk.com/hc/en-gb/signin',
+  HOLIDAY_URL: 'https://holiday-discounts.bluelightcard.co.uk',
+}));
 
 const navigationScenarios = [
   {
@@ -60,12 +70,15 @@ describe('getNavigationItems', () => {
         authenticated,
         brand,
         'https://bluelightcard.zendesk.com/hc/en-gb/signin',
-        COGNITO_LOGOUT_URL,
+        '/logout.php',
         isZendeskV1BlcUkEnabled,
         isCognitoUIEnabled
       );
       expect(
-        getNavigationItems(brand, authenticated, isZendeskV1BlcUkEnabled, isCognitoUIEnabled)
+        getNavigationItems(brand, authenticated, isZendeskV1BlcUkEnabled, {
+          isAuth0LoginLogoutWebEnabled,
+          isCognitoUIEnabled,
+        })
       ).toStrictEqual(updatedList);
     }
   );
@@ -84,9 +97,12 @@ describe('getNavigationItems > without Zendesk', () => {
         false,
         isCognitoUIEnabled
       );
-      expect(getNavigationItems(brand, authenticated, false, isCognitoUIEnabled)).toStrictEqual(
-        updatedList
-      );
+      expect(
+        getNavigationItems(brand, authenticated, false, {
+          isAuth0LoginLogoutWebEnabled,
+          isCognitoUIEnabled,
+        })
+      ).toStrictEqual(updatedList);
     }
   );
 });
@@ -105,7 +121,57 @@ describe('getNavigationItems > without Cognito UI', () => {
         false
       );
       expect(
-        getNavigationItems(brand, authenticated, isZendeskV1BlcUkEnabled, false)
+        getNavigationItems(brand, authenticated, isZendeskV1BlcUkEnabled, {
+          isCognitoUIEnabled: false,
+          isAuth0LoginLogoutWebEnabled: false,
+        })
+      ).toStrictEqual(updatedList);
+    }
+  );
+});
+
+describe('getNavigationItems > with Cognito UI', () => {
+  it.each(navigationScenarios)(
+    '$brand > authenticated: $authenticated > should return the correct navigation config',
+    ({ authenticated, brand, expectedNavigationItems }) => {
+      const updatedList = UpdateNavigationList(
+        expectedNavigationItems,
+        authenticated,
+        brand,
+        'https://bluelightcard.zendesk.com/hc/en-gb/signin',
+        'logout.php',
+        isZendeskV1BlcUkEnabled,
+        true
+      );
+      expect(
+        getNavigationItems(brand, authenticated, isZendeskV1BlcUkEnabled, {
+          isCognitoUIEnabled: true,
+          isAuth0LoginLogoutWebEnabled: false,
+        })
+      ).toStrictEqual(updatedList);
+    }
+  );
+});
+
+describe('getNavigationItems > with Auth0 UI', () => {
+  it.each(navigationScenarios)(
+    '$brand > authenticated: $authenticated > should return the correct navigation config',
+    ({ authenticated, brand, expectedNavigationItems }) => {
+      const updatedList = UpdateNavigationList(
+        expectedNavigationItems,
+        authenticated,
+        brand,
+        'https://bluelightcard.zendesk.com/hc/en-gb/signin',
+        '/auth0/logout',
+        isZendeskV1BlcUkEnabled,
+        false,
+        true
+      );
+      expect(
+        getNavigationItems(brand, authenticated, isZendeskV1BlcUkEnabled, {
+          isAuth0LoginLogoutWebEnabled: true,
+          isCognitoUIEnabled: false,
+        })
       ).toStrictEqual(updatedList);
     }
   );
@@ -197,7 +263,10 @@ describe('getNavigationItems', () => {
         url: '/logout.php',
       },
     ];
-    const results = getNavigationItems(BRANDS.BLC_UK, true, false, false);
+    const results = getNavigationItems(BRANDS.BLC_UK, true, false, {
+      isCognitoUIEnabled: false,
+      isAuth0LoginLogoutWebEnabled: false,
+    });
     expect(results).toStrictEqual(expectedResults);
   });
 });
@@ -207,9 +276,10 @@ function UpdateNavigationList(
   authenticated: boolean,
   brand: BRANDS,
   zendeskUrl: string,
-  logoutUrl: string,
+  defaultLegacyLogout: string,
   updateZendesk: boolean = false,
-  updateLogoutToCongito: boolean = false
+  updateLogoutToCognito: boolean = false,
+  updateLogoutToAuth0: boolean = false
 ) {
   const updatedList = expectedNavigationItems;
   //This is only due to us knowing exactly which item should change without having to duplicate the nav items
@@ -218,12 +288,16 @@ function UpdateNavigationList(
   }
 
   const logoutNavItemIndex = updatedList.findIndex(({ id }) => id === 'sign-out');
-  if (updateLogoutToCongito && logoutNavItemIndex && updatedList[logoutNavItemIndex]) {
-    updatedList[logoutNavItemIndex].url = logoutUrl;
+  if (!updateLogoutToCognito && logoutNavItemIndex && updatedList[logoutNavItemIndex]) {
+    updatedList[logoutNavItemIndex].url = defaultLegacyLogout;
   }
 
-  if (!updateLogoutToCongito && logoutNavItemIndex && updatedList[logoutNavItemIndex]) {
-    updatedList[logoutNavItemIndex].url = logoutUrl;
+  if (updateLogoutToCognito && logoutNavItemIndex && updatedList[logoutNavItemIndex]) {
+    updatedList[logoutNavItemIndex].url = '/cognito/logout';
+  }
+
+  if (updateLogoutToAuth0 && logoutNavItemIndex && updatedList[logoutNavItemIndex]) {
+    updatedList[logoutNavItemIndex].url = '/auth0/logout';
   }
 
   return updatedList;

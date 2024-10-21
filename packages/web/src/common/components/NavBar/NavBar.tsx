@@ -8,6 +8,7 @@ import { BRANDS } from '@/types/brands.enum';
 import { NavBarProps } from './types';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
+import { getAuth0FeatureFlagBasedOnBrand } from '@/utils/amplitude/getAuth0FeatureFlagBasedOnBrand';
 
 const NavBar = ({
   isAuthenticated,
@@ -45,11 +46,19 @@ const NavBar = ({
 
   const isCognitoUIEnabled = cognitoUIExperiment.data?.variantName === 'treatment';
 
+  const auth0Experiment = useAmplitudeExperiment(
+    getAuth0FeatureFlagBasedOnBrand(BRAND),
+    'off',
+    getDeviceFingerprint()
+  );
+
+  const isAuth0LoginLogoutWebEnabled = auth0Experiment.data?.variantName === 'on';
+
   const navigationItems = getNavigationItems(
     BRAND as BRANDS,
     isAuthenticated,
     isZendeskV1BlcUkEnabled,
-    isCognitoUIEnabled
+    { isAuth0LoginLogoutWebEnabled, isCognitoUIEnabled }
   );
 
   return (

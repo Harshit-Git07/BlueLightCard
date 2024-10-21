@@ -59,6 +59,13 @@ function MockLogin() {
 
         const redirect = router.query.redirect as string;
 
+        if (!localStorage.getItem('deviceFingerprint')) {
+          const { deviceFingerprint } = getCookies();
+
+          if (deviceFingerprint) {
+            localStorage.setItem('deviceFingerprint', deviceFingerprint);
+          }
+        }
         router.push(redirect ? redirect : '/members-home');
         setIsLoading(false);
       })
@@ -123,3 +130,11 @@ export default withAuthProviderLayout(MockLogin, {
   requireAuth: false,
   seo: { title: 'Dev Env login' },
 });
+
+const getCookies = (): Record<string, string> => {
+  return document.cookie.split(';').reduce((acc, cookie) => {
+    const [key, value] = cookie.split('=').map((c) => c.trim());
+    acc[key] = value || '';
+    return acc;
+  }, {} as Record<string, string>);
+};

@@ -70,6 +70,10 @@ const BRAZE_SDK_API_KEY = process.env.NEXT_PUBLIC_BRAZE_SDK_API_KEY ?? '';
 const ZENDESK_V1_BLC_UK_URL =
   process.env.NEXT_ZENDESK_V1_BLC_UK_URL ?? 'https://bluelightcard.zendesk.com/hc/en-gb/signin';
 
+//Auth0
+const AUTH0_LOGIN_URL = process.env.NEXT_PUBLIC_AUTH0_LOGIN_URL ?? '';
+const AUTH0_LOGOUT_URL = process.env.NEXT_PUBLIC_AUTH0_LOGOUT_URL ?? '';
+
 /*
  * Language is made up of the lng and region
  * Example: [lng]-[region]
@@ -134,4 +138,6 @@ module.exports = {
   BRAND_URL,
   ZENDESK_V1_BLC_UK_URL,
   HOLIDAY_URL,
+  AUTH0_LOGIN_URL,
+  AUTH0_LOGOUT_URL,
 };

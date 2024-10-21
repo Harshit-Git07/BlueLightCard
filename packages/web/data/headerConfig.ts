@@ -2,12 +2,11 @@ import { NavItems } from '@/components/Header/types';
 import {
   BLACK_FRIDAY_TIME_LOCK_END_DATE,
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
-  COGNITO_LOGIN_URL,
-  COGNITO_LOGOUT_URL,
   ZENDESK_V1_BLC_UK_URL,
   HOLIDAY_URL,
 } from '@/global-vars';
 import { redirect } from '@/utils/externalRedirect';
+import { AuthProviderFlags, getLoginUrl, getLogoutUrl } from '@/root/src/common/auth/authUrls';
 
 const blackFridayLink = {
   text: 'Black Friday',
@@ -24,7 +23,7 @@ export const navLinks = {
 };
 
 export const getNavItems = (
-  isCognitoUIEnabled: boolean = false,
+  authProviderFlags: AuthProviderFlags,
   logOffersClicked: (navigationTarget: string) => Promise<void>,
   logBrowseCategoriesClicked: (navigationTarget: string) => Promise<void>,
   logMyCardClicked: () => Promise<void>,
@@ -57,7 +56,7 @@ export const getNavItems = (
     },
     {
       text: 'Login',
-      link: isCognitoUIEnabled ? COGNITO_LOGIN_URL : '/login.php',
+      link: getLoginUrl(authProviderFlags),
     },
     {
       text: 'Discover savings',
@@ -177,7 +176,7 @@ export const getNavItems = (
     },
     {
       text: 'Logout',
-      link: isCognitoUIEnabled ? COGNITO_LOGOUT_URL : '/logout.php',
+      link: getLogoutUrl(authProviderFlags),
     },
   ],
 });

@@ -12,6 +12,8 @@ import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks'
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 import getDeviceFingerprint from '../../utils/amplitude/getDeviceFingerprint';
 import { useLogGlobalNavigationOffersClicked } from '@/hooks/useLogGlobalNavigation';
+import { getAuth0FeatureFlagBasedOnBrand } from '@/utils/amplitude/getAuth0FeatureFlagBasedOnBrand';
+import { BRAND } from '@/global-vars';
 
 const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearch }) => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
@@ -19,6 +21,12 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
   const cognitoUIExperiment = useAmplitudeExperiment(
     AmplitudeExperimentFlags.IDENTITY_COGNITO_UI_ENABLED,
     'control',
+    getDeviceFingerprint()
+  );
+
+  const auth0Experiment = useAmplitudeExperiment(
+    getAuth0FeatureFlagBasedOnBrand(BRAND),
+    'off',
     getDeviceFingerprint()
   );
 
@@ -31,6 +39,8 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
 
   const isCognitoUIEnabled = cognitoUIExperiment.data?.variantName === 'treatment';
 
+  const isAuth0LoginLogoutWebEnabled = auth0Experiment.data?.variantName === 'on';
+
   function dropdownMenuHandler() {
     setDropdownMenu(!dropdownMenu);
   }
@@ -42,7 +52,7 @@ const Navigation: FC<NavProp> = ({ authenticated, displaySearch, setDisplaySearc
     useLogGlobalNavigationOffersClicked();
 
   const { loggedIn, loggedOut } = getNavItems(
-    isCognitoUIEnabled,
+    { isAuth0LoginLogoutWebEnabled, isCognitoUIEnabled },
     logOffersClicked,
     logBrowseCategoriesClicked,
     logMyCardClicked,

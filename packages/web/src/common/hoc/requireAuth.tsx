@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
-import { COGNITO_LOGOUT_URL, LOGOUT_ROUTE } from '@/global-vars';
+import { BRAND, LOGOUT_ROUTE } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
@@ -10,6 +10,8 @@ import AuthTokensService from '../services/authTokensService';
 import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeDeviceExperimentClient from '../utils/amplitude/AmplitudeDeviceExperimentClient';
 import { nowInSecondsSinceEpoch } from '@/utils/dates';
+import { getAuth0FeatureFlagBasedOnBrand } from '@/utils/amplitude/getAuth0FeatureFlagBasedOnBrand';
+import { getLogoutUrl } from '@/root/src/common/auth/authUrls';
 
 export async function redirectToLogin(router: NextRouter) {
   const deviceExperimentClient = await AmplitudeDeviceExperimentClient.Instance();
@@ -17,11 +19,19 @@ export async function redirectToLogin(router: NextRouter) {
     AmplitudeExperimentFlags.IDENTITY_COGNITO_UI_ENABLED,
     'control'
   );
+  const auth0ExperimentVariant = deviceExperimentClient.variant(
+    getAuth0FeatureFlagBasedOnBrand(BRAND),
+    'off'
+  );
 
   const isCognitoUIEnabled = cognitoUIExperimentVariant.value === 'treatment';
+  const isAuth0LoginLogoutWebEnabled = auth0ExperimentVariant.value === 'on';
 
   const legacyLogoutUrl = `${LOGOUT_ROUTE}?redirect=${router.asPath}`;
-  const logoutUrl = isCognitoUIEnabled ? COGNITO_LOGOUT_URL : legacyLogoutUrl;
+  const logoutUrl = getLogoutUrl(
+    { isAuth0LoginLogoutWebEnabled, isCognitoUIEnabled },
+    legacyLogoutUrl
+  );
 
   if (process.env.NODE_ENV === 'production') {
     window.location.replace(logoutUrl);

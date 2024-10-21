@@ -4,4 +4,7 @@ export enum AmplitudeExperimentFlags {
   BRAZE_CONTENT_CARDS_ENABLED = 'web-braze-content-cards',
   ZENDESK_V1_BLCUK = 'zendesk-v1-blcuk',
   ENABLE_NEW_HEADER_AND_FOOTER = 'homepage-header-and-footer',
+  ENABLE_AUTH0_LOGIN_LOGOUT_WEB_BLC_UK = 'enable-auth0-login-logout-web-blc-uk',
+  ENABLE_AUTH0_LOGIN_LOGOUT_WEB_BLC_AU = 'enable-auth0-login-logout-web-blc-au',
+  ENABLE_AUTH0_LOGIN_LOGOUT_WEB_DDS_UK = 'enable-auth0-login-logout-web-dds-uk',
 }

@@ -7,9 +7,10 @@ type TypographyProps = {
     | 'display-small-text'
     | 'headline'
     | 'headline-bold'
+    | 'headline-small-bold'
     | 'title-large'
     | 'title-medium'
-    | 'title-semibold'
+    | 'title-medium-semibold'
     | 'title-small'
     | 'body'
     | 'body-light'
@@ -42,13 +43,16 @@ const Typography: FC<TypographyProps> = ({ variant, className, children }) => {
     case 'headline-bold':
       classes = `${defaultClasses} font-typography-headline-bold font-typography-headline-bold-weight text-typography-headline-bold leading-typography-headline-bold tracking-typography-headline-bold ${className}`;
       break;
+    case 'headline-small-bold':
+      classes = `${defaultClasses} font-typography-headline-small-bold font-typography-headline-small-bold-weight text-typography-headline-small-bold leading-typography-headline-small-bold tracking-typography-headline-small-bold ${className}`;
+      break;
     case 'title-large':
       classes = `${defaultClasses} font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large ${className}`;
       break;
     case 'title-medium':
       classes = `${defaultClasses} font-typography-title-medium font-typography-title-medium-weight text-typography-title-medium leading-typography-title-medium tracking-typography-title-medium ${className}`;
       break;
-    case 'title-semibold':
+    case 'title-medium-semibold':
       classes = `${defaultClasses} font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold ${className}`;
       break;
     case 'title-small':

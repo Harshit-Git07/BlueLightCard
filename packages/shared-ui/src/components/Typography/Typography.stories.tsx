@@ -46,6 +46,13 @@ HeadlineBold.args = {
   children: <h5>Headline Bold</h5>,
 };
 
+export const HeadlineSmallBold = TypographyTemplate.bind({});
+
+HeadlineSmallBold.args = {
+  variant: 'headline-small-bold',
+  children: <h6>Headline Small Bold</h6>,
+};
+
 export const TitleLarge = TypographyTemplate.bind({});
 
 TitleLarge.args = {
@@ -60,11 +67,11 @@ TitleMedium.args = {
   children: <h2>Title Medium</h2>,
 };
 
-export const TitleSemiBold = TypographyTemplate.bind({});
+export const TitleMediumSemiBold = TypographyTemplate.bind({});
 
-TitleSemiBold.args = {
-  variant: 'title-semibold',
-  children: <h1>Title SemiBold</h1>,
+TitleMediumSemiBold.args = {
+  variant: 'title-medium-semibold',
+  children: <h1>Title Medium SemiBold</h1>,
 };
 
 export const TitleSmall = TypographyTemplate.bind({});

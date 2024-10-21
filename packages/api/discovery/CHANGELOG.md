@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.11.0...bluelightcard/discovery-v1.12.0) (2024-10-21)
+
+
+### Features
+
+* [DISCO-1004] Add pagination to DynamoDB query call ([#2526](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2526)) ([b5e6ce9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b5e6ce96df0919258fa195639a107e55f15185d7))
+* [DISCO-1032]  Create endpoint for /menus which exposes mock data to the frontend ([#2479](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2479)) ([aa99f40](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aa99f401fb3be199a06a4da8405ab0ba5fb9e717))
+* [DISCO-1037] Create Mappers for Menu Data ([#2503](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2503)) ([731de79](https://github.com/bluelightcard/BlueLightCard-2.0/commit/731de79466ea4ec69478749f79e997ac1a2705b6))
+* [DISCO-1051] Add legacy company ID to search results and index ([#2543](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2543)) ([0d201a2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0d201a289e97840b2818bff044870169ae3d0854))
+* [DISCO-999] Enable opensearch cluster and associated lambdas in production ([#2529](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2529)) ([eb043df](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eb043df0b484db8a85b15632829c3c732f35cc37))
+* Disco-1035 - Create Menu Entities & Factories for Menus ([#2482](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2482)) ([b67c10c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b67c10c185b4df3e10ea2fbb0430d757481438c7))
+
+
+### Bug Fixes
+
+* [DISCO-1004] Add CORS headers to search API ([#2535](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2535)) ([6bb8fed](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6bb8fed8ecc48985797cdb3ff52fe0193e6c914b))
+* [DISCO-1004] Add legacy ID to search results ([#2501](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2501)) ([857ea53](https://github.com/bluelightcard/BlueLightCard-2.0/commit/857ea53793b5c2697dc6de4298f86be62ac6e45a))
+* [DISCO-1004] Increase wait to 15 seconds to allow index to build ([#2527](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2527)) ([69bc694](https://github.com/bluelightcard/BlueLightCard-2.0/commit/69bc6946bdd6aa38bac074b6bac15c02c6bc3bfa))
+* [DISCO-1004] Refactor dynamodb client usage ([#2512](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2512)) ([cebf5b0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cebf5b0a1fb7d71e5d3096295cdf7c0f368be08c))
+
 ## [1.11.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.10.0...bluelightcard/discovery-v1.11.0) (2024-10-15)
 
 

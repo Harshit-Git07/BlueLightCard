@@ -28,7 +28,7 @@ export const UK_FOOTER_CONFIG_AUTHENTICATED: FooterConfig = {
       navLinks: [
         { label: 'Add a discount', url: '/addaforcesdiscount.php' },
         { label: 'Mobile App', url: '/bluelightcardmobileapp.php' },
-        { label: 'Competitions', url: 'https://prizedraw-terms-conditions.bluelightcard.co.uk/' },
+        { label: 'Competitions', url: 'https://prizedraw-terms-conditions.bluelightcard.co.uk/' }, 
         { label: 'Sitemap', url: '/sitemap.php' },
         { label: 'Contact Us', url: '/support.php' },
         { label: 'Careers at Blue Light Card', url: 'https://careers.bluelightcard.co.uk' },

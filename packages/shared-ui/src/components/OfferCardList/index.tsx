@@ -4,21 +4,6 @@ import getCDNUrl from '../../utils/getCDNUrl';
 import { OfferCardListProps } from './types';
 import { useCSSMerge, useCSSConditional } from '../../hooks/useCSS';
 import OfferCardPlaceholder from './OfferCardPlaceholder';
-import { faker } from '@faker-js/faker';
-
-export const getOfferTypeFromIndex = (tagIndex: number) => {
-  switch (tagIndex) {
-    case 0:
-      return 'Online';
-    case 2:
-      return 'Giftcards';
-    case 5:
-    case 6:
-      return 'In-store';
-    default:
-      return 'Online';
-  }
-};
 
 const OfferCardList: FC<OfferCardListProps> = ({
   status,
@@ -36,20 +21,23 @@ const OfferCardList: FC<OfferCardListProps> = ({
   const css = useCSSMerge('grid', dynCss);
 
   if (status === 'loading') {
-    switch (columns) {
-      case 1:
-        return [...Array(3)].map((_) => (
-          <OfferCardPlaceholder key={faker.string.uuid()} columns={1} variant={'vertical'} />
-        ));
-      case 2:
-        return [...Array(4)].map((_) => (
-          <OfferCardPlaceholder key={faker.string.uuid()} columns={2} variant={'vertical'} />
-        ));
-      default:
-        return [...Array(6)].map((_) => (
-          <OfferCardPlaceholder key={faker.string.uuid()} columns={3} variant={'vertical'} />
-        ));
-    }
+    let placeholderCount = 6;
+    if (columns === 1) placeholderCount = 3;
+    if (columns === 2) placeholderCount = 4;
+
+    const placeholders = Array.from(Array(placeholderCount).keys());
+
+    return (
+      <div className={css}>
+        {placeholders.map((placeholder) => (
+          <OfferCardPlaceholder
+            key={`offer-card-placeholder-${placeholder}`}
+            columns={1}
+            variant={'vertical'}
+          />
+        ))}
+      </div>
+    );
   }
 
   if (status === 'error') {
@@ -60,18 +48,18 @@ const OfferCardList: FC<OfferCardListProps> = ({
     <div className={css}>
       {offers.map((offer) => {
         return (
-          <div key={offer.id}>
+          <div key={offer.offerID}>
             <ResponsiveOfferCard
-              id={offer.id}
-              type={getOfferTypeFromIndex(offer.OfferType)}
-              name={offer.OfferName}
+              id={offer.offerID}
+              type={offer.offerType}
+              name={offer.offerName}
               image={
-                offer.imageSrc !== ''
-                  ? offer.imageSrc
-                  : getCDNUrl(`/companyimages/complarge/retina/${offer.CompID}.jpg`)
+                offer.imageURL !== ''
+                  ? offer.imageURL
+                  : getCDNUrl(`/companyimages/complarge/retina/${offer.companyID}.jpg`)
               }
-              companyId={offer.CompID}
-              companyName={offer.CompanyName}
+              companyId={Number(offer.companyID)}
+              companyName={offer.companyName}
               onClick={() => onOfferClick(offer)}
               variant={variant}
             />

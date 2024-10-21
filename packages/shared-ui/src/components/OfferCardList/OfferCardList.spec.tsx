@@ -1,26 +1,27 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import OfferCardList, { getOfferTypeFromIndex } from './index';
+import OfferCardList from './index';
+import type { Offer } from '../../types';
 
 describe('OfferCardList', () => {
   const mockOnOfferClick = jest.fn();
 
-  const offers = [
+  const offers: Offer[] = [
     {
-      id: 123,
-      CompID: 4016,
-      CompanyName: 'Samsung',
-      OfferType: 1,
-      OfferName: 'Get 10% off and free Galaxy Buds2 with any Galaxy Tab S9 Series tablet',
-      imageSrc: '/assets/forest.jpeg',
+      offerID: 123,
+      companyID: '4016',
+      companyName: 'Samsung',
+      offerType: 'Online',
+      offerName: 'Get 10% off and free Galaxy Buds2 with any Galaxy Tab S9 Series tablet',
+      imageURL: '/assets/forest.jpeg',
     },
     {
-      id: 124,
-      CompID: 4017,
-      CompanyName: 'Apple',
-      OfferType: 2,
-      OfferName: 'Get 15% off on all Apple products',
-      imageSrc: '/assets/apple.jpeg',
+      offerID: 124,
+      companyID: '4017',
+      companyName: 'Apple',
+      offerType: 'In-store',
+      offerName: 'Get 15% off on all Apple products',
+      imageURL: '/assets/apple.jpeg',
     },
   ];
 
@@ -47,37 +48,13 @@ describe('OfferCardList', () => {
     );
 
     offers.forEach((offer) => {
-      expect(screen.getByText(offer.OfferName)).toBeInTheDocument();
+      expect(screen.getByText(offer.offerName)).toBeInTheDocument();
     });
 
-    const firstOffer = screen.getByText(offers[0].OfferName);
+    const firstOffer = screen.getByText(offers[0].offerName);
     fireEvent.click(firstOffer);
 
     expect(mockOnOfferClick).toHaveBeenCalledWith(offers[0]);
-  });
-
-  it('should return "Online" for index 0', () => {
-    expect(getOfferTypeFromIndex(0)).toBe('Online');
-  });
-
-  it('should return "Giftcards" for index 2', () => {
-    expect(getOfferTypeFromIndex(2)).toBe('Giftcards');
-  });
-
-  it('should return "In-store" for index 5', () => {
-    expect(getOfferTypeFromIndex(5)).toBe('In-store');
-  });
-
-  it('should return "In-store" for index 6', () => {
-    expect(getOfferTypeFromIndex(6)).toBe('In-store');
-  });
-
-  it('should return "Online" for any other index', () => {
-    expect(getOfferTypeFromIndex(1)).toBe('Online');
-    expect(getOfferTypeFromIndex(3)).toBe('Online');
-    expect(getOfferTypeFromIndex(4)).toBe('Online');
-    expect(getOfferTypeFromIndex(7)).toBe('Online');
-    expect(getOfferTypeFromIndex(-1)).toBe('Online');
   });
 });
 

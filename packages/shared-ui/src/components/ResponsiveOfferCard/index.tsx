@@ -2,9 +2,9 @@ import { FC, KeyboardEvent, useEffect, useState } from 'react';
 import Image from '../Image';
 import Badge from '../Badge';
 import getCDNUrl from '../../utils/getCDNUrl';
-import { PlatformVariant, SharedProps } from '../../types';
+import { PlatformVariant, SharedProps, OfferTypeStrLiterals } from '../../types';
 import { useCSSConditional, useCSSMerge } from '../../hooks/useCSS';
-import { offerTypeParser, OfferTypeStrLiterals } from '../../utils/offers/offerSheetParser';
+import { offerTypeParser } from '../../utils/offers/offerSheetParser';
 import { useOfferSheetControls } from '../../context/OfferSheet/hooks';
 
 export type BgColorString = `bg-${string}`;

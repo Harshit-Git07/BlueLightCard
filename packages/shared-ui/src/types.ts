@@ -48,4 +48,20 @@ export type AmplitudeArg = {
   params: AmplitudeLogParams;
 };
 
+export type ComponentStatus = 'loading' | 'error' | 'success';
+
+export type OfferTypeStrLiterals = 'Online' | 'In-store' | 'Giftcards';
+
+/**
+ * New offer type from CMS data sources to use going forward
+ */
+export type Offer = {
+  offerID: number;
+  companyID: string;
+  companyName: string;
+  offerType: OfferTypeStrLiterals;
+  offerName: string;
+  imageURL: string;
+};
+
 export type AmplitudeEvent = (properties: AmplitudeArg) => void;

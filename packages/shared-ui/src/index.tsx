@@ -13,6 +13,7 @@ export { default as Badge } from './components/Badge';
 export { default as CampaignCard } from './components/CampaignCard';
 export { default as ShareButton } from './components/ShareButton';
 export { default as Link } from './components/Link';
+export { default as OfferCardList } from './components/OfferCardList';
 export { default as OfferSheet } from './components/OfferSheet';
 export { default as MagicButton } from './components/MagicButton';
 export { default as Label } from './components/Label';

@@ -1,4 +1,4 @@
-export type OfferTypeStrLiterals = 'Online' | 'In-store' | 'Giftcards';
+import { OfferTypeStrLiterals } from '../../types';
 
 export type OfferTypeParserObj = {
   [key in OfferTypeStrLiterals]: {

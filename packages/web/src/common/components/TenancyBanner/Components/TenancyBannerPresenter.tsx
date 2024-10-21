@@ -1,44 +1,41 @@
 import { FC } from 'react';
-import { CampaignCard, SwiperCarousel } from '@bluelightcard/shared-ui';
-import { BannerDataType, CombinedBannersType } from '../types';
-import { faker } from '@faker-js/faker';
-export interface Props {
+import { CampaignCard, SwiperCarousel, useCSSConditional } from '@bluelightcard/shared-ui';
+import { CombinedBannersType, TenancyBannerProps } from '../types';
+
+export interface Props extends TenancyBannerProps {
   bannersData: CombinedBannersType;
-  variant?: 'large' | 'small';
 }
+
 /**
  * Presenter renders the banners data
  * @param {Props} props.bannersData - array of bannersData provided by its container
  * @param {Props} props.variant - defines the size of the component
  */
 const TenancyBannerPresenter: FC<Props> = ({ bannersData, variant = 'large' }: Props) => {
+  const banners = variant === 'small' ? bannersData.small : bannersData.large;
+
+  const dynCss: string = useCSSConditional({
+    'desktop:h-[400px]': variant === 'small',
+    'desktop:h-[600px]': variant !== 'small',
+  });
+
   return (
     <SwiperCarousel
-      elementsPerPageLaptop={1}
-      elementsPerPageDesktop={1}
-      elementsPerPageTablet={1}
+      elementsPerPageLaptop={variant === 'small' ? 2 : 1}
+      elementsPerPageDesktop={variant === 'small' ? 2 : 1}
+      elementsPerPageTablet={variant === 'small' ? 2 : 1}
       elementsPerPageMobile={1}
       navigation
     >
-      {variant === 'small'
-        ? bannersData.small.map((banner: BannerDataType, index: number) => (
-            <CampaignCard
-              key={faker.string.uuid()}
-              image={banner.imageSource}
-              linkUrl={banner.link}
-              name={`banner-${index}`}
-              className="h-[200px]"
-            />
-          ))
-        : bannersData.large.map((banner: BannerDataType, index: number) => (
-            <CampaignCard
-              key={banner.legacyCompanyId}
-              image={banner.imageSource}
-              linkUrl={banner.link}
-              name={`banner-${index}`}
-              className="h-[600px]"
-            />
-          ))}
+      {banners.map((banner, index) => (
+        <CampaignCard
+          key={banner.link}
+          image={banner.imageSource}
+          linkUrl={banner.link}
+          name={`banner-${index}`}
+          className={`h-[150px] ${dynCss}`}
+        />
+      ))}
     </SwiperCarousel>
   );
 };

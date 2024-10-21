@@ -4,21 +4,38 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ThemeVariant, ThemeColorTokens } from '@/app/common/types/theme';
 import { cssUtil } from '@/app/common/utils/cssUtil';
 
+// New color definitions
+const COLORS = {
+  PRIMARY: {
+    BG: 'bg-blue-500',
+    HOVER: 'hover:bg-blue-600',
+    TEXT: 'text-white',
+    FOCUS: 'focus:ring-blue-300',
+  },
+  SECONDARY: {
+    BG: 'bg-white',
+    HOVER: 'hover:bg-gray-100',
+    TEXT: 'text-gray-700',
+    FOCUS: 'focus:ring-gray-300',
+    BORDER: 'border border-gray-300',
+  },
+};
+
 const colorVariants: ThemeColorTokens = {
   [ThemeVariant.Primary]: {
     base: {
-      hover: 'hover:bg-button-primary-bg-hover',
-      bg: 'bg-background-button-standard-primary-enabled-base',
-      text: 'text-background-dark',
-      focus: 'focus:ring-button-primary-outline-focus',
+      hover: COLORS.PRIMARY.HOVER,
+      bg: COLORS.PRIMARY.BG,
+      text: COLORS.PRIMARY.TEXT,
+      focus: COLORS.PRIMARY.FOCUS,
     },
   },
   [ThemeVariant.Secondary]: {
     base: {
-      hover: 'hover:bg-primary-type-1-500',
-      bg: 'bg-primary-type-1-base',
-      text: 'text-font-cta-standard-tertiary-base',
-      focus: 'focus:ring-primary-type-2-base',
+      hover: COLORS.SECONDARY.HOVER,
+      bg: COLORS.SECONDARY.BG,
+      text: COLORS.SECONDARY.TEXT,
+      focus: COLORS.SECONDARY.FOCUS,
     },
   },
   [ThemeVariant.Tertiary]: {
@@ -52,25 +69,17 @@ const Button: FC<ButtonProps> = ({
   const classes = cssUtil([
     disabled ? 'opacity-25 ' : colorVariants[variant].base.hover,
     colorVariants[variant].base.bg,
-    'transition rounded-md min-w-btn ring-offset-2 focus:ring-2',
+    'transition rounded-md ring-offset-2 focus:ring-2',
     'h-6 justify-center items-center gap-2 inline-flex',
-    variant == ThemeVariant.Primary ? 'px-10 py-3.5' : '',
-    variant == ThemeVariant.Tertiary ? 'px-6 py-2' : '',
-    'tracking-tight',
+    'px-10 py-3.5',
+    'text-lg font-semibold leading-normal tracking-tight',
     colorVariants[variant].base.focus,
-    className
-      ? className
-      : colorVariants[variant].base.text + 'text-lg font-semibold leading-normal',
+    variant == ThemeVariant.Secondary ? COLORS.SECONDARY.BORDER : '',
+    className ? `${colorVariants[variant].base.text} ${className}` : colorVariants[variant].base.text,
   ]);
+
   return (
-    <button
-      id={id}
-      aria-label={name}
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={classes}
-    >
+    <button id={id} aria-label={name} type={type} onClick={onClick} disabled={disabled} className={classes}>
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}
       {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}

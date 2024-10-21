@@ -9,7 +9,7 @@ const config = {
     '^tokens/(.*)$': '<rootDir>/tokens/$1',
   },
   testMatch: ['**/__tests__/**/*.(spec|test).[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
-  testPathIgnorePatterns: ['.rollup.cache', 'dist'],
+  testPathIgnorePatterns: ['dist'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
 

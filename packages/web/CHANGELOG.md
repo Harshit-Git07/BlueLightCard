@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.76.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.75.0...bluelightcard/web-v1.76.0) (2024-10-21)
+
+
+### Features
+
+* Add local support for Storybook Composed  ([#2283](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2283)) ([5294246](https://github.com/bluelightcard/BlueLightCard-2.0/commit/529424659451f9a2926e2f8c2e2f78bd151c341e))
+* added TenancyBanner component ([#2463](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2463)) ([f71403c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f71403ca3b8648c23972870f7344720d581161b9))
+* Checkbox UI element ([#2431](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2431)) ([1d39b1a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1d39b1a2feefa11e0d80f395d8860a5b17ea8362))
+* COT-938 updated footer link in UK ([#2544](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2544)) ([435d573](https://github.com/bluelightcard/BlueLightCard-2.0/commit/435d573e132dccfdb55cfc119a0e63b7ebddadc1))
+* COT-938 updated footer link in UK resolving lint error ([#2546](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2546)) ([502c141](https://github.com/bluelightcard/BlueLightCard-2.0/commit/502c141cad5ca0c8235a7a2575e566ff0d0bf1cf))
+* MAMA-6 - Password input field and floating placeholder components ([#2433](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2433)) ([8568a68](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8568a68c8e57b82e6a0f3d1a5e63102c73f0c03f))
+* MAMA-7-radio-buttons ([#2442](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2442)) ([e600961](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e600961f1c32e2c4ad6bebda4c56c86ab59fb089))
+* New button-MER-1 ([#2488](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2488)) ([e3a45e3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e3a45e3582b3331a52e82d008350b1ade8af8852))
+
+
+### Bug Fixes
+
+* DISCO-1022 - Remove State from Pill Group ([#2424](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2424)) ([d148d89](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d148d893de27bdfe6ecef72d3b67b1b40927b126))
+* DISCO-896 Added cancelling to search useEffects to fix flaky test ([#2471](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2471)) ([3e8b5a4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3e8b5a45979939f56d734b3537f35152d2b33081))
+
 ## [1.75.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.74.0...bluelightcard/web-v1.75.0) (2024-10-14)
 
 

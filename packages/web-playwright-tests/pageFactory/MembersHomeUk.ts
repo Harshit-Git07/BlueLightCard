@@ -19,6 +19,33 @@ export class MembersHomeUk {
   private readonly MOBILE_FIELD_UK: Locator;
   private readonly UPDATE_BUTTON_UK: Locator;
 
+    //Footer Locators
+
+    private readonly ONLINE_DISCOUNTS: Locator;
+    private readonly GIFTCARD_DISCOUNTS: Locator;
+    private readonly HIGH_STREET_OFFERS: Locator;
+    private readonly POPULAR_DISCOUNTS: Locator;
+    private readonly OFFERS_NEAR_YOU: Locator;
+    private readonly DEALS_OF_THE_WEEK: Locator;
+    private readonly BLUE_LIGHT_CARD_FOUNDATION: Locator;
+    private readonly LATEST_NEWS_AND_BLOGS: Locator;
+    private readonly ABOUT_US: Locator;
+    private readonly FREE_TICKETS: Locator;
+    private readonly COMPLIANCE: Locator;
+    private readonly ADD_A_DISCOUNT: Locator;
+    private readonly MOBILE_APP: Locator;
+    private readonly COMPETITIONS: Locator;
+    private readonly SITEMAP: Locator;
+    private readonly CONTACT_US: Locator;
+    private readonly CAREERS_AT_BLUE_LIGHT_CARD: Locator;
+    private readonly LEGAL_AND_REGULATORY: Locator;
+    private readonly TERMS_AND_CONDITIONS: Locator;
+    private readonly PRIVACY_NOTICE: Locator;
+    private readonly CANDIDATE_PRIVACY_NOTICE: Locator;
+    private readonly COOKIES_POLICY: Locator;
+    private readonly MANAGE_COOKIES: Locator;
+    private readonly MODERN_SLAVERY_ACT_STATEMENT: Locator;
+
 
   // Additional locators for assertions
   private readonly UK_FLAG_BUTTON_UK: Locator;
@@ -75,6 +102,33 @@ export class MembersHomeUk {
     this.DISCOVERMORE_NAVBAR_UK = page.locator('[data-testid="navigation-dropdown-discover-more"]');
     this.LOGOUT_NAVBAR_UK = page.getByRole('link', { name: 'Logout' });
 
+        //Footer Locators
+
+        this.ONLINE_DISCOUNTS = page.locator('[data-testid="Online Discounts-link"]');
+        this.GIFTCARD_DISCOUNTS = page.locator('[data-testid="Giftcard Discounts-link"]');
+        this.HIGH_STREET_OFFERS = page.locator('[data-testid="High Street Offers-link"]');
+        this.POPULAR_DISCOUNTS = page.locator('[data-testid="Popular Discounts-link"]');
+        this.OFFERS_NEAR_YOU = page.locator('[data-testid="Offers Near You-link"]');
+        this.DEALS_OF_THE_WEEK = page.locator('[data-testid="Deals of the Week-link"]');
+        this.BLUE_LIGHT_CARD_FOUNDATION = page.locator('[data-testid="Blue Light Card Foundation-link"]');
+        this.LATEST_NEWS_AND_BLOGS = page.locator('[data-testid="Latest News & Blogs-link"]');
+        this.ABOUT_US = page.locator('[data-testid="About Us-link"]');
+        this.FREE_TICKETS = page.locator('[data-testid="Free Tickets-link"]');
+        this.COMPLIANCE = page.locator('[data-testid="Compliance-link"]');
+        this.ADD_A_DISCOUNT = page.locator('[data-testid="Add a discount-link"]');
+        this.MOBILE_APP = page.locator('[data-testid="Mobile App-link"]');
+        this.COMPETITIONS = page.locator('[data-testid="Competitions-link"]');
+        this.SITEMAP = page.locator('[data-testid="Sitemap-link"]');
+        this.CONTACT_US = page.locator('[data-testid="Contact Us-link"]');
+        this.CAREERS_AT_BLUE_LIGHT_CARD = page.locator('[data-testid="Careers at Blue Light Card-link"]');
+        this.LEGAL_AND_REGULATORY = page.locator('[data-testid="Legal and Regulatory-link"]');
+        this.TERMS_AND_CONDITIONS = page.locator('[data-testid="Terms and Conditions-link"]');
+        this.PRIVACY_NOTICE = page.locator('[data-testid="Privacy Notice-link"]');
+        this.CANDIDATE_PRIVACY_NOTICE = page.locator('[data-testid="Candidate Privacy Notice-link"]');
+        this.COOKIES_POLICY = page.locator('[data-testid="Cookies Policy-link"]');
+        this.MANAGE_COOKIES = page.locator('[data-testid="Manage Cookies-link"]');
+        this.MODERN_SLAVERY_ACT_STATEMENT = page.locator('[data-testid="Modern Slavery Act Statement-link"]');
+
     // Search options
     this.SEARCH_BUTTON_UK = page.getByTestId('searchBtn').locator('svg');
     this.SEARCH_OPTION_COMPANY_UK = page.getByTestId('byCompany');
@@ -92,6 +146,128 @@ export class MembersHomeUk {
   async navigateToUrlUk(): Promise<void> {
     await this.page.goto(process.env.MEMBERS_HOME_URL_UK, { waitUntil: 'load' });
   }
+
+  // Footer Navigation methods
+
+async clickOnlineDiscounts(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.ONLINE_DISCOUNTS.click();
+}
+
+async clickGiftcardDiscounts(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.GIFTCARD_DISCOUNTS.click();
+}
+
+async clickHighStreetOffers(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.HIGH_STREET_OFFERS.click();
+}
+
+async clickPopularDiscounts(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.POPULAR_DISCOUNTS.click();
+}
+
+async clickOffersNearYou(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.OFFERS_NEAR_YOU.click();
+}
+
+async clickDealsOfTheWeek(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.DEALS_OF_THE_WEEK.click();
+}
+
+async clickBlueLightCardFoundation(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.BLUE_LIGHT_CARD_FOUNDATION.click();
+}
+
+async clickLatestNewsAndBlogs(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.LATEST_NEWS_AND_BLOGS.click();
+}
+
+async clickAboutUs(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.ABOUT_US.click();
+}
+
+async clickFreeTickets(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.FREE_TICKETS.click();
+}
+
+async clickCompliance(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.COMPLIANCE.click();
+}
+
+async clickAddADiscount(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.ADD_A_DISCOUNT.click();
+}
+
+async clickMobileApp(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.MOBILE_APP.click();
+}
+
+async clickCompetitions(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.COMPETITIONS.click();
+}
+
+async clickSitemap(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.SITEMAP.click();
+}
+
+async clickContactUs(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.CONTACT_US.click();
+}
+
+async clickCareersAtBlueLightCard(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.CAREERS_AT_BLUE_LIGHT_CARD.click();
+}
+
+async clickLegalAndRegulatory(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.LEGAL_AND_REGULATORY.click();
+}
+
+async clickTermsAndConditions(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.TERMS_AND_CONDITIONS.click();
+}
+
+async clickPrivacyNotice(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.PRIVACY_NOTICE.click();
+}
+
+async clickCandidatePrivacyNotice(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.CANDIDATE_PRIVACY_NOTICE.click();
+}
+
+async clickCookiesPolicy(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.COOKIES_POLICY.click();
+}
+
+async clickManageCookies(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.MANAGE_COOKIES.click();
+}
+
+async clickModernSlaveryActStatement(): Promise<void> {
+  await this.page.waitForLoadState('networkidle');
+  await this.MODERN_SLAVERY_ACT_STATEMENT.click();
+}
 
  
   // Cookie handling

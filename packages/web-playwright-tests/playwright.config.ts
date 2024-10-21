@@ -49,6 +49,10 @@ const config: PlaywrightTestConfig = {
         headless: true,
         viewport: { width: 1280, height: 720 },
         ignoreHTTPSErrors: true,
+        acceptDownloads: true,            // Allow file downloads during tests
+        screenshot: `only-on-failure`,    // Take screenshots only when tests fail
+        video: `retain-on-failure`,       // Record video only for failed tests
+        trace: `retain-on-failure`,       // Retain traces only for failed tests
  
         },
       },

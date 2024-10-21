@@ -172,3 +172,4 @@ packages/web/public/local/newSearch
 .devcontainer
 .devcontainer/
 
+BlueLightCard-2.0/packages/web-playwright-tests/allure-results/

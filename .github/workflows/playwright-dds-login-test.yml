@@ -2,7 +2,7 @@ name: Playwright DDS Login Test
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Run every 10 minutes
+    - cron: '*/50 * * * *' # Run every 50 minutes
   workflow_dispatch:
 
 jobs:

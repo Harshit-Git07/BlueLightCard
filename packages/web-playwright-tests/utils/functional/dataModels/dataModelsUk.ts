@@ -233,7 +233,29 @@ function generateUKPostcode(): string {
     chance.integer({ min: 0, max: 9 }) + chance.character({ pool: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' });
   return `${postcodeArea} ${postcodeDistrict}`;
 }
+function generateUKService(): { service: number; text: string } {
+  const items = [
+    { service: 0, text: "Airedale NHS Foundation Trust" },
+    { service: 1, text: "Abbey Hospitals" },
+    { service: 2, text: "Atos Healthcare" },
+    { service: 3, text: "Aintree University Hospitals NHS Foundation Trust" },
+    { service: 4, text: "Alder Hey Children's NHS Foundation Trust" },
+    { service: 5, text: "Ashford and St Peter's Hospitals NHS Trust" },
+    { service: 6, text: "Barking Havering and Redbridge University Hospitals NHS Trust" },
+    { service: 7, text: "Baxter Healthcare" },
+    { service: 8, text: "Barnsley Hospital NHS Foundation Trust" },
+    { service: 9, text: "Bedford Hospital NHS Trust" },
+    { service: 10, text: "Bridgewater Hospital (Manchester) Ltd" },
+    { service: 11, text: "Bpas (Head Office)" },
+    { service: 12, text: "Basildon and Thurrock University Hospitals NHS Foundation Trust" }
+  ];
+
+  const randomIndex = Math.floor(Math.random() * items.length);
+  const selectedItem = items[randomIndex];
+
+  return { service: selectedItem.service, text: selectedItem.text };
+}
 
 
 
-export { User, Address, generateRandomEmail };
+export { User, Address, generateRandomEmail, generateUKService };

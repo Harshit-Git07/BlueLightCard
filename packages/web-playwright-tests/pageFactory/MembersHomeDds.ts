@@ -17,6 +17,28 @@ export class MembersHomeDds {
   private readonly MOBILE_FIELD_DDS: Locator;
   private readonly UPDATE_BUTTON_DDS: Locator;
 
+   //Footer locators
+
+  private readonly DDS_CHARITY: Locator;
+  private readonly VETERANS_GATEWAY: Locator;
+  private readonly DDS_IN_THE_PRESS: Locator;
+  private readonly DDS_NEWS: Locator;
+  private readonly ARMED_FORCES_COVENANT: Locator;
+
+  private readonly LEGAL_AND_REGULATORY: Locator;
+  private readonly TERMS_AND_CONDITIONS: Locator;
+  private readonly PRIVACY_NOTICE: Locator;
+  private readonly COOKIES_POLICY: Locator;
+  private readonly MANAGE_COOKIES: Locator;
+  private readonly MODERN_SLAVERY_ACT_STATEMENT: Locator;
+
+  private readonly ADD_A_DISCOUNT: Locator;
+  private readonly MOBILE_APP: Locator;
+  private readonly COMPETITIONS: Locator;
+  private readonly COMPLIANCE: Locator;
+  private readonly SITEMAP: Locator;
+  private readonly TICKETS: Locator;
+
 
 
   // Search options
@@ -55,6 +77,28 @@ export class MembersHomeDds {
     //Personal Infomation
     this.MOBILE_FIELD_DDS = page.getByPlaceholder('Mobile Number');
     this.UPDATE_BUTTON_DDS = page.locator("button[id='detailsbutton']");
+
+        //Footer Locators
+
+        this.DDS_CHARITY = page.getByRole('link', { name: 'DDS Charity' });
+        this.VETERANS_GATEWAY = page.getByRole('link', { name: 'Veterans Gateway' });
+        this.DDS_IN_THE_PRESS = page.getByRole('link', { name: 'DDS in the Press' });
+        this.DDS_NEWS = page.getByRole('link', { name: 'DDS News' });
+        this.ARMED_FORCES_COVENANT = page.getByRole('link', { name: 'Armed Forces Covenant' });
+    
+        this.LEGAL_AND_REGULATORY = page.getByRole('link', { name: 'Legal and Regulatory' });
+        this.TERMS_AND_CONDITIONS = page.getByRole('link', { name: 'Terms and Conditions' });
+        this.PRIVACY_NOTICE = page.getByRole('link', { name: 'Privacy Notice' });
+        this.COOKIES_POLICY = page.getByRole('link', { name: 'Cookies Policy' });
+        this.MANAGE_COOKIES = page.locator('a').filter({ hasText: 'Manage Cookies' }); 
+        this.MODERN_SLAVERY_ACT_STATEMENT = page.getByRole('link', { name: 'Modern Slavery Act Statement' });
+    
+        this.ADD_A_DISCOUNT = page.getByRole('link', { name: 'Add a Discount' });
+        this.MOBILE_APP = page.getByRole('link', { name: 'Mobile App' });
+        this.COMPETITIONS = page.getByRole('link', { name: 'Competitions' });
+        this.COMPLIANCE = page.getByRole('link', { name: 'Compliance' });
+        this.SITEMAP = page.getByRole('link', { name: 'Sitemap' });
+        this.TICKETS = page.getByRole('link', { name: 'Tickets' });
 
     // Additional locators for assertions
     this.DEALS_OF_THE_WEEK_HEADING_DDS = page.getByRole('heading', { name: 'Deals of the Week' });
@@ -153,6 +197,91 @@ export class MembersHomeDds {
     expect(offerPage.url()).toContain(newPageUrl);
 
 
+  }
+
+  async clickDDSCharityAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.DDS_CHARITY.click();
+  }
+  
+  async clickVeteransGatewayAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.VETERANS_GATEWAY.click();
+  }
+  
+  async clickDDSInThePressAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.DDS_IN_THE_PRESS.click();
+  }
+  
+  async clickDDSNewsAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.DDS_NEWS.click();
+  }
+  
+  async clickArmedForcesCovenantAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.ARMED_FORCES_COVENANT.click();
+  }
+  
+  async clickLegalAndRegulatoryAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.LEGAL_AND_REGULATORY.click();
+  }
+  
+  async clickTermsAndConditionsAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.TERMS_AND_CONDITIONS.click();
+  }
+  
+  async clickPrivacyNoticeAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.PRIVACY_NOTICE.click();
+  }
+  
+  async clickCookiesPolicyAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.COOKIES_POLICY.click();
+  }
+  
+  async clickManageCookiesAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.MANAGE_COOKIES.click();
+  }
+  
+  async clickModernSlaveryActStatementAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.MODERN_SLAVERY_ACT_STATEMENT.click();
+  }
+  
+  async clickAddADiscountAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.ADD_A_DISCOUNT.click();
+  }
+  
+  async clickMobileAppAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.MOBILE_APP.click();
+  }
+  
+  async clickCompetitionsAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.COMPETITIONS.click();
+  }
+  
+  async clickComplianceAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.COMPLIANCE.click();
+  }
+  
+  async clickSitemapAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.SITEMAP.click();
+  }
+  
+  async clickTicketsAndVerify(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+    await this.TICKETS.click();
   }
 
 

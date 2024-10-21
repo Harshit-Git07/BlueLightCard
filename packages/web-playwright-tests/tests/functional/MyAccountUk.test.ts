@@ -1,7 +1,7 @@
 
 
 import test from '@lib/BaseTest';
-import { generateUKMobileNumber } from 'utils/functional/dataModels/dataModelsUk';
+import { generateUKMobileNumber, generateUKService } from 'utils/functional/dataModels/dataModelsUk';
 
 test.beforeEach(async ({ homePagePreLoginUK }) => {
   await test.step(`Logging in to BLC UK`, async () => {
@@ -17,3 +17,13 @@ test(`@Uk @SmokeTest @Web - User changes mobile number`, async ({ myAccountPageU
     await myAccountPageUk.verifyMobileNumberUpdated(newMobileNumber);
   });
 });
+
+test(`@Uk @SmokeTest @Web - User changes selected Service`, async ({ myAccountPageUk }) => {
+  await test.step('Change UK Service', async () => {
+    const { service, text } = generateUKService();
+    await myAccountPageUk.navigateToMyAccountUk();
+    await myAccountPageUk.updateSelectedService(service, text);
+    await myAccountPageUk.verifyServiceUpdated(text);
+  });
+});
+

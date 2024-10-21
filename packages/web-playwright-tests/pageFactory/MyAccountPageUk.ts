@@ -18,6 +18,10 @@ export class MyAccountPageUk {
       readonly MOBILE_FIELD_UK: Locator;
       readonly UPDATE_BUTTON_UK: Locator;
 
+      //Service Locators
+
+      readonly AVAILABLE_SERVICE_DROPDOWN_UK: Locator;
+
 
       constructor(page: Page, context: BrowserContext) {
         // Assigns the passed-in 'page' (browser page) to the instance's 'page' property
@@ -29,11 +33,13 @@ export class MyAccountPageUk {
         // Initialises a new instance of 'WebActions' class, passing 'page' and 'context' to handle web interactions
         webActions = new WebActions(this.page, this.context);
 
-    // Initialize locators
+    // Initialise locators
 
-    
+    // Service Locator - Initialise
 
-    //Searchbar options - Initilisa
+        this.AVAILABLE_SERVICE_DROPDOWN_UK = this.page.locator('button.btn.dropdown-toggle.selectpicker[data-id="trust"]');
+
+    //Searchbar options - Initialise
     this.MAGNIFIER_SEARCHBAR = this.page.locator(".search-trigger");
     this.CATEGORYOPTION_SEARCHBAR = this.page.getByRole("button", {
       name: "or by category",
@@ -85,5 +91,33 @@ async verifyMobileNumberUpdated(newMobileNumber: string): Promise<void> {
   
   // Verify that the new mobile number is visible
   await expect(mobileNumberLocator).toBeVisible();
+}
+
+
+async clickUpdateButtonUK(): Promise<void> {
+  await this.UPDATE_BUTTON_UK.click(); // Clicks the update button to save the changes
+}
+
+async updateSelectedService(rel: number, serviceText: string): Promise<void> {
+  // Create a locator for the dropdown option based on the provided rel number
+  const serviceDropdownList = this.page.locator(`//li[@rel="${rel}"]/a[span[contains(text(), "${serviceText}")]]`);;
+
+  // Click the dropdown to open the list of available services
+  await this.AVAILABLE_SERVICE_DROPDOWN_UK.click();
+
+  // Click the specific service option from the dropdown list
+  await serviceDropdownList.click({ force: true });
+
+  // Call the method to click the update button
+  this.clickUpdateButtonUK();
+}
+
+// Separate method to verify that the selected service was updated correctly
+async verifyServiceUpdated(service: string): Promise<void> {
+  // Create a locator for the button that displays the updated service
+  const updatedService = this.page.locator(`button[data-id="trust"][title="${service}"]`);
+
+  // Verify that the updated service button is visible on the page
+  await expect(updatedService).toBeVisible();
 }
 }

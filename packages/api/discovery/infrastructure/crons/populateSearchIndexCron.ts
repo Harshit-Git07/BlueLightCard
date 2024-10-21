@@ -10,6 +10,6 @@ export function populateSearchIndexCron(stack: Stack, functionDefinition: Functi
       function: functionDefinition,
     },
     schedule: EVERY_HOUR_AT_15_MINUTES_PAST,
-    enabled: false,
+    enabled: true,
   });
 }

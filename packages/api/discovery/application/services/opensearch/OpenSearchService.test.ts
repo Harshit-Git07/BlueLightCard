@@ -158,6 +158,7 @@ describe('OpenSearchService', () => {
         OfferType: '1',
         offerimg: 'img',
         CompID: '456',
+        LegacyCompanyID: undefined,
         CompanyName: 'CompanyName',
       },
     ]);
@@ -174,6 +175,7 @@ describe('OpenSearchService', () => {
         offer_type: '1',
         offer_image: 'img',
         company_id: '456',
+        legacy_company_id: 789,
         company_name: 'CompanyName',
         restricted_to: [],
       },
@@ -197,6 +199,7 @@ describe('OpenSearchService', () => {
         OfferType: '1',
         offerimg: 'img',
         CompID: '456',
+        LegacyCompanyID: 789,
         CompanyName: 'CompanyName',
       },
     ]);

@@ -106,7 +106,7 @@ describe('populateSearchIndex', () => {
           excludedTrusts: [],
           company: {
             id: 'company-1',
-            legacyCompanyId: 1,
+            legacyCompanyId: 2,
             name: 'Company 1',
             logo: 'http://example.com/logo1.jpg',
             ageRestrictions: 'None',
@@ -164,6 +164,7 @@ describe('populateSearchIndex', () => {
           offer_expires: offer.offerEnd ?? '',
           offer_tags: ['tag1', 'tag2'],
           company_id: 'company-1',
+          legacy_company_id: 2,
           company_name: 'Company 1',
           company_name_stripped: 'Company 1',
           company_small_logo: 'http://example.com/logo1.jpg',

@@ -19,6 +19,7 @@ export type OpenSearchBody = {
   offer_start?: string;
   offer_tags: string[];
   company_id: string;
+  legacy_company_id?: number;
   company_name: string;
   company_name_stripped: string;
   company_small_logo: string;
@@ -47,6 +48,7 @@ export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
   offer_start: offer.offerStart,
   offer_tags: offer.tags,
   company_id: offer.company.id,
+  legacy_company_id: offer.company.legacyCompanyId,
   company_name: offer.company.name,
   company_name_stripped: offer.company.name.trim() || '',
   company_small_logo: offer.company.logo,

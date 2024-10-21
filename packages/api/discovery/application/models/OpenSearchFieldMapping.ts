@@ -24,6 +24,7 @@ export const openSearchFieldMapping: OpenSearchFieldMapping = {
   offer_start: { type: 'date' },
   offer_tags: { type: 'text' },
   company_id: { type: 'text' },
+  legacy_company_id: { type: 'long' },
   company_name: { type: 'text' },
   company_name_stripped: { type: 'text' },
   company_small_logo: { type: 'text' },

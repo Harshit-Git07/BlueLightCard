@@ -9,6 +9,7 @@ export interface SearchResult {
   OfferType: string;
   offerimg: string;
   CompID: string;
+  LegacyCompanyID?: number;
   CompanyName: string;
 }
 
@@ -25,6 +26,7 @@ export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
         OfferType: hit._source?.offer_type ?? '',
         offerimg: hit._source?.offer_image ?? '',
         CompID: hit._source?.company_id ?? '',
+        LegacyCompanyID: hit._source?.legacy_company_id,
         CompanyName: hit._source?.company_name ?? '',
       });
     });

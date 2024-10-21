@@ -187,6 +187,7 @@ jobs:
           BLC_UK_OLD_COGNITO_USER_POOL_ID: 'eu-west-2_rNmQEiFS4'
           DDS_COGNITO_USER_POOL_ID: 'eu-west-2_VdsvVVUrI'
           DDS_OLD_COGNITO_USER_POOL_ID: 'eu-west-2_jbLX0JEdN'
+          BLC_UK_IDENTITY_API_ID: 'tr1afrar24'
         run: npx sst deploy global --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}} && npx sst deploy orders --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog
@@ -299,6 +300,7 @@ jobs:
           BLC_UK_OLD_COGNITO_USER_POOL_ID: 'eu-west-2_jrwTfFRgM'
           DDS_COGNITO_USER_POOL_ID: 'eu-west-2_3WlS5ZkAh'
           DDS_OLD_COGNITO_USER_POOL_ID: 'eu-west-2_y2KyCUbVT'
+          BLC_UK_IDENTITY_API_ID: 'ue8dcieh75'
         run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy orders --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog

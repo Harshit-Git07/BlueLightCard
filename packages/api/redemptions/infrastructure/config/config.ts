@@ -354,7 +354,7 @@ export class RedemptionsStackConfigResolver {
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.ddsstaging.bluelightcard.tech', 'http://localhost:3000'],
           redemptionsWebHost: 'https://www.ddsstaging.bluelightcard.tech',
-          identityApiUrl: 'https://staging-identity.blcshine.io',
+          identityApiUrl: 'https://staging-identity-dds.blcshine.io',
         },
         lambdaScriptsConfig: {
           ...commonLambdaScriptsConfig,

@@ -26,29 +26,8 @@ async function batchWriteItems(items) {
                 "sk": {
                     "S": item.sk
                 },
-                "Name": {
-                    "S": item.Name
-                },
-                "Type": {
-                    "NULL": true
-                },
-                "IdRequirements": {
-                    "NULL": true
-                },
-                "IdUploadCount": {
-                    "N": item.IdUploadCount.toString()
-                },
-                "BypassPayment": {
-                    "BOOL": item.BypassPayment
-                },
-                "BypassId": {
-                    "BOOL": item.BypassId
-                },
-                "Active": {
-                    "BOOL": item.Active
-                },
-                "Updated": {
-                    "S": item.Updated
+                "Override": {
+                    "BOOL": item.Override
                 }
             },
         }
@@ -65,8 +44,8 @@ async function batchWriteItems(items) {
     return response;
 };
 
-async function addEmployers() {
-    const lines = fs.readFileSync('data/membercodes_emps_upload.json', 'utf-8').split(/\r?\n/);
+async function addOrganisations() {
+    const lines = fs.readFileSync('data/membercodes_orgs_tds_upload.json', 'utf-8').split(/\r?\n/);
     const items = lines.map(line => JSON.parse(line));
 
     while (items.length) {
@@ -79,4 +58,4 @@ async function addEmployers() {
     }
 }
 
-addEmployers();
+addOrganisations();

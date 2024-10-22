@@ -4,9 +4,17 @@ import { ApiGatewayV1Api, StackContext, use, Table } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 
 import { Shared } from '../../../../stacks/stack';
-import { MemberStackConfigResolver, MemberStackRegion } from './config/config';
+import {
+  MemberStackConfigResolver,
+  MemberStackRegion,
+} from '@blc-mono/members/infrastructure/config/config';
 
+import { createMemberAdminTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberAdminTable';
+import { createMemberBatchesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberBatchesTable';
 import { createMemberCodesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberCodesTable';
+import { createMemberNotesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberNotesTable';
+import { createMemberPromosTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberPromosTable';
+import { createMemberProfilesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberProfilesTable';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { MemberProfileModel } from '../application/models/memberProfileModel';
@@ -77,7 +85,12 @@ export async function Members({ stack, app }: StackContext) {
     },
   });
 
+  const memberAdminTable = createMemberAdminTable(stack);
+  const memberBatchesTable = createMemberBatchesTable(stack);
   const memberCodesTable = createMemberCodesTable(stack);
+  const memberNotesTable = createMemberNotesTable(stack);
+  const memberPromosTable = createMemberPromosTable(stack);
+  const memberProfilesTable = createMemberProfilesTable(stack);
 
   const restApi = membersApi.cdk.restApi;
 

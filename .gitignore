@@ -173,3 +173,4 @@ packages/web/public/local/newSearch
 .devcontainer/
 
 BlueLightCard-2.0/packages/web-playwright-tests/allure-results/
+/packages/shared-ui/.rollup.cache/

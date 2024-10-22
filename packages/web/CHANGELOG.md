@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.77.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.76.0...bluelightcard/web-v1.77.0) (2024-10-22)
+
+
+### Features
+
+* (AUT-80) Adding Auth0 feature flag to web for 3 brands ([#2483](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2483)) ([45f3a12](https://github.com/bluelightcard/BlueLightCard-2.0/commit/45f3a12de5caeba52c8c6b68c04f885dc28dde82))
+* fixed issue on pill group title typography token  ([#2533](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2533)) ([b6195e3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b6195e3cd3028fd0d03109adf6d957b23b1a3826))
+
+
+### Other Changes
+
+* DISCO-707 `TenancyBanner` refactoring and fixes ([#2536](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2536)) ([bb22e9f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bb22e9ff9871e62356f26e13b1b9252e911b5039))
+
 ## [1.76.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.75.0...bluelightcard/web-v1.76.0) (2024-10-21)
 
 

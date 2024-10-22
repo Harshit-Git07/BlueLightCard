@@ -16,6 +16,7 @@ interface BodyPayload {
   message: string;
   data?: any;
   errors?: APIError[];
+  error?: string;
 }
 
 export class Response {

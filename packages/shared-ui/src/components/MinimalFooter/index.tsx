@@ -2,9 +2,10 @@ import { FC } from 'react';
 import { MinimalFooterProps } from './types';
 import * as React from 'react';
 import Link from 'next/link';
+import { env } from '../../env';
 const MinimalFooter: FC<MinimalFooterProps> = ({ navItems }) => {
   const copyrightText =
-    process.env.BRAND === 'dds-uk'
+    env.APP_BRAND === 'dds-uk'
       ? `© Defence Discount Service 2012 - ${new Date().getFullYear()} Operated by Blue Light Card Ltd`
       : `©Blue Light Card 2008 - ${new Date().getFullYear()}`;
 

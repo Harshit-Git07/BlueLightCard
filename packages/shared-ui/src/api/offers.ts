@@ -15,7 +15,7 @@ export type OfferData = z.infer<typeof OfferDataSchema>;
 
 export async function getOffer(
   platformAdapter: IPlatformAdapter,
-  offerId: number,
+  offerId: number | string,
 ): Promise<OfferData> {
   const result = await platformAdapter.invokeV5Api(`/eu/offers/offers/${offerId.toString()}`, {
     method: 'GET',

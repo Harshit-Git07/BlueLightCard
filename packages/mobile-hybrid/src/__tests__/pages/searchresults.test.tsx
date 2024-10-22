@@ -121,7 +121,7 @@ describe('Search Results', () => {
           queryParameters: {
             query: 'test search value',
             organisation: 'test-organisation',
-            isAgeGated: 'true',
+            dob: '1990-01-01',
           },
           cachePolicy: 'auto',
         });
@@ -176,7 +176,10 @@ describe('Search Results', () => {
             <JotaiTestProvider
               initialValues={[
                 [experimentsAndFeatureFlags, featureFlags],
-                [userProfile, { service: 'test-organisation', isAgeGated: true }],
+                [
+                  userProfile,
+                  { service: 'test-organisation', isAgeGated: true, dob: '1990-01-01' },
+                ],
               ]}
             >
               <WithSpinner>

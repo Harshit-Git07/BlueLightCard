@@ -1,4 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
@@ -11,14 +11,11 @@ import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { spinner } from '@/modules/Spinner/store';
 import useSearch from '@/hooks/useSearch';
 import { usePlatformAdapter } from '../../../shared-ui/src/adapters';
-import { userProfile } from '@/components/UserProfileProvider/store';
 
 const SearchResultsPage: NextPage = () => {
   const router = useRouter();
   const searchQueryValue = (router.query?.search as string) ?? '';
   const setSpinner = useSetAtom(spinner);
-
-  const userProfileValue = useAtomValue(userProfile);
 
   const platformAdapter = usePlatformAdapter();
   const { doSearch } = useSearch(platformAdapter);
@@ -37,7 +34,7 @@ const SearchResultsPage: NextPage = () => {
   useEffect(() => {
     const search = async () => {
       setSpinner(true);
-      await doSearch(searchQueryValue, userProfileValue?.service, userProfileValue?.isAgeGated);
+      await doSearch(searchQueryValue);
       setSpinner(false);
     };
 

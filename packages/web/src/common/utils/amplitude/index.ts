@@ -107,9 +107,9 @@ export function logSearchResultsViewed(searchTerm?: string, resultsCount?: numbe
 }
 
 export function logSearchCardClicked(
-  companyId: number,
+  companyId: number | string,
   companyName: string,
-  offerId: number,
+  offerId: number | string,
   offerName: string,
   searchTerm: string,
   resultsCount: number,

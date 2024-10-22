@@ -8,6 +8,7 @@ export type AmplitudeProviderProps = PropsWithChildren & {
 export enum AmplitudeExperimentState {
   Control = 'control',
   Treatment = 'treatment',
+  DarkRead = 'dark-read',
 }
 
 export enum AmplitudeFeatureFlagState {

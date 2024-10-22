@@ -6,8 +6,8 @@ import { initializeOfferSheetAtom, offerSheetAtom } from '../OfferSheet/store';
 import { PlatformVariant } from '../../types';
 
 type OfferData = {
-  offerId: number;
-  companyId: number;
+  offerId: number | string;
+  companyId: number | string;
   companyName: string;
   platform: PlatformVariant;
   amplitudeCtx?: Amplitude | null | undefined;

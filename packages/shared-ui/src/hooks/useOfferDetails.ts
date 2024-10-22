@@ -3,7 +3,7 @@ import { usePlatformAdapter } from '../adapters';
 import { OfferData, getOffer } from '../api';
 
 export type useOfferDetailsOptions = {
-  offerId: number;
+  offerId: number | string;
 };
 
 export function useOfferDetails(options: useOfferDetailsOptions): UseQueryResult<OfferData, Error> {

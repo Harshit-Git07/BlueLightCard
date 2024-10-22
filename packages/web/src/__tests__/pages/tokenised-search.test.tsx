@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import '@testing-library/jest-dom';
-import { makeSearch } from '../../common/utils/API/makeSearch';
+import { makeSearch } from '@/utils/API/makeSearch';
 import TokenisedSearch from '../../pages/tokenised-search';
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
@@ -10,17 +10,23 @@ import UserContext, { UserContextType } from '../../common/context/User/UserCont
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import userEvent from '@testing-library/user-event';
-import { makeQuery, makeNavbarQueryWithDislikeRestrictions } from '../../graphql/makeQuery';
+import { makeNavbarQueryWithDislikeRestrictions, makeQuery } from '../../graphql/makeQuery';
 import {
   AuthedAmplitudeExperimentProvider,
   useAmplitudeExperiment,
-} from '../../common/context/AmplitudeExperiment';
+} from '@/context/AmplitudeExperiment';
 import { as } from '@core/utils/testing';
-import { ExperimentClient } from '@amplitude/experiment-js-client';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Factory } from 'fishery';
 import _noop from 'lodash/noop';
 import { logSearchCardClicked } from '@/utils/amplitude';
+import {
+  IPlatformAdapter,
+  PlatformAdapterProvider,
+  useMockPlatformAdapter,
+} from '@bluelightcard/shared-ui/adapters';
+import { experimentMakeSearch } from '@/utils/API/experimentMakeSearch';
+import { PlatformVariant } from '@bluelightcard/shared-ui/types';
 
 expect.extend(toHaveNoViolations);
 
@@ -30,6 +36,7 @@ jest.mock('@amplitude/analytics-browser', () => ({
 }));
 
 jest.mock('../../common/utils/API/makeSearch');
+jest.mock('../../common/utils/API/experimentMakeSearch');
 jest.mock('../../graphql/makeQuery');
 jest.mock('@/utils/amplitude', () => ({
   logSearchCategoryEvent: jest.fn(),
@@ -45,6 +52,7 @@ jest.mock('@/context/AmplitudeExperiment', () => ({
 }));
 
 const makeSearchMock = jest.mocked(makeSearch);
+const experimentMakeSearchMock = jest.mocked(experimentMakeSearch);
 const makeQueryMock = jest.mocked(makeQuery);
 const makeNavbarQueryMock = jest.mocked(makeNavbarQueryWithDislikeRestrictions);
 const mockRouter: Partial<NextRouter> = {
@@ -68,9 +76,19 @@ const userContextTypeFactory = Factory.define<UserContextType>(() => ({
     uuid: 'mock-uuid',
   },
 }));
+let mockPlatformAdapter: IPlatformAdapter;
 
 describe('SearchPage', () => {
+  mockPlatformAdapter = useMockPlatformAdapter(200, { data: [] }, PlatformVariant.Web);
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   beforeEach(() => {
+    makeSearchMock.mockResolvedValue({ results: [] });
+    experimentMakeSearchMock.mockResolvedValue({ results: [] });
+
     makeQueryMock.mockResolvedValue({
       data: [],
       loading: false,
@@ -88,165 +106,221 @@ describe('SearchPage', () => {
     });
   });
 
-  it('Renders loading placeholders', async () => {
-    makeSearchMock.mockReturnValue(new Promise((resolve) => setTimeout(resolve, 2000)));
-    whenSearchPageIsRendered('control');
+  describe('Experiments', () => {
+    it('should call "makeSearch" only when "search V5" experiment is "control"', () => {
+      givenExperimentsReturn('control', 'control');
 
-    const [offerCardPlaceholder] = await screen.findAllByTestId('offer-card-placeholder');
+      whenSearchPageIsRendered();
 
-    expect(offerCardPlaceholder).toBeInTheDocument();
-  });
-
-  it('Renders no results message', async () => {
-    makeSearchMock.mockResolvedValue({ results: [] });
-    whenSearchPageIsRendered('control');
-
-    const noResults = await screen.findByText('No results found');
-
-    expect(noResults).toBeInTheDocument();
-  });
-
-  it('Renders results', async () => {
-    givenResultsAreReturned();
-    whenSearchPageIsRendered('control');
-
-    const offerCard = await screen.findByTestId('offer-card-123');
-
-    expect(offerCard).toBeInTheDocument();
-  });
-
-  describe('Offer types', () => {
-    it('Renders offer type 0 as an Online offer', async () => {
-      givenResultsAreReturned();
-      whenSearchPageIsRendered('control');
-
-      const [onlineOffer] = await screen.findAllByText('Online');
-
-      expect(onlineOffer).toBeInTheDocument();
-      expect(onlineOffer.parentElement).toHaveTextContent('Online Offer 1');
+      expect(makeSearchMock).toHaveBeenCalled();
+      expect(experimentMakeSearchMock).not.toHaveBeenCalled();
     });
 
-    it('Renders offer type 2 as a Gift Card offer', async () => {
-      givenResultsAreReturned();
-      whenSearchPageIsRendered('control');
+    it('should call both "makeSearch" and "experimentMakeSearch" when "search V5" experiment is "dark-read"', () => {
+      givenExperimentsReturn('control', 'dark-read');
 
-      const [giftcardOffer] = await screen.findAllByText('Gift card');
+      whenSearchPageIsRendered();
 
-      expect(giftcardOffer).toBeInTheDocument();
-      expect(giftcardOffer.parentElement).toHaveTextContent('Gift Card Offer 1');
+      expect(makeSearchMock).toHaveBeenCalled();
+      expect(experimentMakeSearchMock).toHaveBeenCalled();
     });
 
-    it('Renders offer type 5 as an In-store offer', async () => {
-      givenResultsAreReturned();
-      whenSearchPageIsRendered('control');
+    it('should call "experimentMakeSearch" only when "search V5" experiment is "treatment"', () => {
+      givenExperimentsReturn('control', 'treatment');
 
-      const [instoreOffer] = await screen.findAllByText('In-store');
+      whenSearchPageIsRendered();
 
-      expect(instoreOffer).toBeInTheDocument();
-      expect(instoreOffer.parentElement).toHaveTextContent('In-store Offer 1');
-    });
-
-    it('Renders offer type 6 as an In-store offer', async () => {
-      givenResultsAreReturned();
-      whenSearchPageIsRendered('control');
-
-      const [_, instoreOffer2] = await screen.findAllByText('In-store');
-
-      expect(instoreOffer2).toBeInTheDocument();
-      expect(instoreOffer2.parentElement).toHaveTextContent('In-store Offer 2');
-    });
-
-    it('Renders other offer types as an Online offer', async () => {
-      givenResultsAreReturned();
-      whenSearchPageIsRendered('control');
-
-      const [_, onlineOffer2] = await screen.findAllByText('Online');
-
-      expect(onlineOffer2).toBeInTheDocument();
-      expect(onlineOffer2.parentElement).toHaveTextContent('Apple');
+      expect(makeSearchMock).not.toHaveBeenCalled();
+      expect(experimentMakeSearchMock).toHaveBeenCalled();
     });
   });
 
-  it('Renders categories section', async () => {
-    givenResultsAreReturned();
-    makeNavbarQueryMock.mockResolvedValue({
-      data: {
-        response: {
-          categories: [
-            { id: '1', name: 'Category One' },
-            { id: '2', name: 'Category Two' },
-          ],
-          companies: [],
+  describe('and "search V5" experiment is not enabled', () => {
+    it('Renders loading placeholders', async () => {
+      makeSearchMock.mockReturnValue(new Promise((resolve) => setTimeout(resolve, 2000)));
+      givenExperimentsReturn('control', 'control');
+
+      whenSearchPageIsRendered();
+
+      const [offerCardPlaceholder] = await screen.findAllByTestId('offer-card-placeholder');
+      expect(offerCardPlaceholder).toBeInTheDocument();
+    });
+
+    it('Renders no results message', async () => {
+      makeSearchMock.mockResolvedValue({ results: [] });
+      givenExperimentsReturn('control', 'control');
+
+      whenSearchPageIsRendered();
+
+      const noResults = await screen.findByText('No results found');
+      expect(noResults).toBeInTheDocument();
+    });
+
+    it('Renders results', async () => {
+      givenResultsAreReturned();
+      givenExperimentsReturn('control', 'control');
+
+      whenSearchPageIsRendered();
+
+      const offerCard = await screen.findByTestId('offer-card-123');
+      expect(offerCard).toBeInTheDocument();
+    });
+
+    describe('Offer types', () => {
+      it('Renders offer type 0 as an Online offer', async () => {
+        givenResultsAreReturned();
+        givenExperimentsReturn('control', 'control');
+
+        whenSearchPageIsRendered();
+
+        const [onlineOffer] = await screen.findAllByText('Online');
+        expect(onlineOffer).toBeInTheDocument();
+        expect(onlineOffer.parentElement).toHaveTextContent('Online Offer 1');
+      });
+
+      it('Renders offer type 2 as a Gift Card offer', async () => {
+        givenResultsAreReturned();
+        givenExperimentsReturn('control', 'control');
+
+        whenSearchPageIsRendered();
+
+        const [giftcardOffer] = await screen.findAllByText('Gift card');
+        expect(giftcardOffer).toBeInTheDocument();
+        expect(giftcardOffer.parentElement).toHaveTextContent('Gift Card Offer 1');
+      });
+
+      it('Renders offer type 5 as an In-store offer', async () => {
+        givenResultsAreReturned();
+        givenExperimentsReturn('control', 'control');
+
+        whenSearchPageIsRendered();
+
+        const [instoreOffer] = await screen.findAllByText('In-store');
+        expect(instoreOffer).toBeInTheDocument();
+        expect(instoreOffer.parentElement).toHaveTextContent('In-store Offer 1');
+      });
+
+      it('Renders offer type 6 as an In-store offer', async () => {
+        givenResultsAreReturned();
+        givenExperimentsReturn('control', 'control');
+
+        whenSearchPageIsRendered();
+
+        const [_, instoreOffer2] = await screen.findAllByText('In-store');
+        expect(instoreOffer2).toBeInTheDocument();
+        expect(instoreOffer2.parentElement).toHaveTextContent('In-store Offer 2');
+      });
+
+      it('Renders other offer types as an Online offer', async () => {
+        givenResultsAreReturned();
+        givenExperimentsReturn('control', 'control');
+
+        whenSearchPageIsRendered();
+
+        const [_, onlineOffer2] = await screen.findAllByText('Online');
+        expect(onlineOffer2).toBeInTheDocument();
+        expect(onlineOffer2.parentElement).toHaveTextContent('Apple');
+      });
+    });
+
+    it('Renders categories section', async () => {
+      givenResultsAreReturned();
+      givenExperimentsReturn('control', 'control');
+      makeNavbarQueryMock.mockResolvedValue({
+        data: {
+          response: {
+            categories: [
+              {
+                id: '1',
+                name: 'Category One',
+              },
+              {
+                id: '2',
+                name: 'Category Two',
+              },
+            ],
+            companies: [],
+          },
         },
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+        loading: false,
+        networkStatus: NetworkStatus.ready,
+      });
+
+      whenSearchPageIsRendered();
+
+      const categoryOne = await screen.findByText('Category One');
+      expect(categoryOne).toBeInTheDocument();
     });
 
-    whenSearchPageIsRendered('control');
-
-    const categoryOne = await screen.findByText('Category One');
-
-    expect(categoryOne).toBeInTheDocument();
-  });
-
-  it('Navigates to the category page when a category is clicked', async () => {
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: 'https://localhost',
-        pathname: '',
-      },
-      writable: true,
-    });
-
-    givenResultsAreReturned();
-    makeNavbarQueryMock.mockResolvedValue({
-      data: {
-        response: {
-          categories: [
-            { id: '1', name: 'Category One' },
-            { id: '2', name: 'Category Two' },
-          ],
-          companies: [],
+    it('Navigates to the category page when a category is clicked', async () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          href: 'https://localhost',
+          pathname: '',
         },
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+        writable: true,
+      });
+      givenExperimentsReturn('control', 'control');
+      givenResultsAreReturned();
+      makeNavbarQueryMock.mockResolvedValue({
+        data: {
+          response: {
+            categories: [
+              {
+                id: '1',
+                name: 'Category One',
+              },
+              {
+                id: '2',
+                name: 'Category Two',
+              },
+            ],
+            companies: [],
+          },
+        },
+        loading: false,
+        networkStatus: NetworkStatus.ready,
+      });
+
+      whenSearchPageIsRendered();
+
+      const categoryOne = await screen.findByText('Category One');
+      await userEvent.click(categoryOne);
+      expect(window.location.href).toEqual('/offers.php?cat=true&type=1');
     });
 
-    whenSearchPageIsRendered('control');
+    it('Renders tenancy adverts', async () => {
+      givenResultsAreReturned();
+      givenExperimentsReturn('control', 'control');
+      makeQueryMock.mockResolvedValue({
+        data: {
+          banners: [
+            {
+              imageSource: 'https://test1.image',
+              link: 'https://test1.link',
+            },
+          ],
+        },
+        loading: false,
+        networkStatus: NetworkStatus.ready,
+      });
 
-    const categoryOne = await screen.findByText('Category One');
-    await userEvent.click(categoryOne);
+      whenSearchPageIsRendered();
 
-    expect(window.location.href).toEqual('/offers.php?cat=true&type=1');
-  });
-
-  it('Renders tenancy adverts', async () => {
-    givenResultsAreReturned();
-    makeQueryMock.mockResolvedValue({
-      data: {
-        banners: [{ imageSource: 'https://test1.image', link: 'https://test1.link' }],
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+      const advertImage = await screen.findByAltText("0 + 'banner' banner");
+      expect(advertImage).toBeInTheDocument();
+      expect(advertImage).toHaveAttribute('src', 'https://test1.image/?width=3840&quality=75');
     });
 
-    whenSearchPageIsRendered('control');
+    it('Has no accessibility violations', async () => {
+      givenResultsAreReturned();
+      givenExperimentsReturn('control', 'control');
 
-    const advertImage = await screen.findByAltText("0 + 'banner' banner");
+      const { container } = whenSearchPageIsRendered();
 
-    expect(advertImage).toBeInTheDocument();
-    expect(advertImage).toHaveAttribute('src', 'https://test1.image/?width=3840&quality=75');
-  });
-
-  it('Has no accessibility violations', async () => {
-    givenResultsAreReturned();
-
-    const { container } = whenSearchPageIsRendered('control');
-    const results = await axe(container);
-
-    expect(results).toHaveNoViolations();
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
   });
 });
 
@@ -261,7 +335,9 @@ describe('Analytics', () => {
   });
   it.each(['treatment', 'control'])('should logSearchCardClicked event', async (variant) => {
     givenResultsAreReturned();
-    whenSearchPageIsRendered(variant);
+    givenExperimentsReturn(variant, 'control');
+
+    whenSearchPageIsRendered();
 
     await whenOfferCardClicked();
     thenAmplitudeEventFired();
@@ -315,7 +391,21 @@ const givenResultsAreReturned = () => {
   });
 };
 
-const whenSearchPageIsRendered = (variant: string) => {
+const givenExperimentsReturn = (categorySearch: string, v5Search: string) => {
+  (useAmplitudeExperiment as jest.Mock).mockImplementation((experimentFlag, defaultVariant) => {
+    if (experimentFlag === 'category_level_three_search') {
+      return { data: { variantName: categorySearch } };
+    }
+
+    if (experimentFlag === 'search_v5') {
+      return { data: { variantName: v5Search } };
+    }
+
+    return { data: { variantName: defaultVariant } };
+  });
+};
+
+const whenSearchPageIsRendered = () => {
   const mockAuthContext: Partial<AuthContextType> = {
     authState: {
       idToken: '23123',
@@ -327,27 +417,20 @@ const whenSearchPageIsRendered = (variant: string) => {
   };
   const userContext = userContextTypeFactory.build();
 
-  const mockExperimentClient = {
-    variant: jest.fn().mockReturnValue({ variant }),
-  } satisfies Pick<ExperimentClient, 'variant'>;
-
-  (useAmplitudeExperiment as jest.Mock).mockReturnValue({ data: { variantName: variant } });
-
-  const experimentClientMock: () => Promise<ExperimentClient> = () =>
-    Promise.resolve(as(mockExperimentClient));
-
   return render(
     <QueryClientProvider client={new QueryClient()}>
       <UserContext.Provider value={userContext}>
-        <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
-          <RouterContext.Provider value={mockRouter as NextRouter}>
-            <AuthContext.Provider value={mockAuthContext as AuthContextType}>
-              <UserContext.Provider value={userContext}>
-                <TokenisedSearch />
-              </UserContext.Provider>
-            </AuthContext.Provider>
-          </RouterContext.Provider>
-        </AuthedAmplitudeExperimentProvider>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <AuthedAmplitudeExperimentProvider>
+            <RouterContext.Provider value={mockRouter as NextRouter}>
+              <AuthContext.Provider value={mockAuthContext as AuthContextType}>
+                <UserContext.Provider value={userContext}>
+                  <TokenisedSearch />
+                </UserContext.Provider>
+              </AuthContext.Provider>
+            </RouterContext.Provider>
+          </AuthedAmplitudeExperimentProvider>
+        </PlatformAdapterProvider>
       </UserContext.Provider>
     </QueryClientProvider>
   );

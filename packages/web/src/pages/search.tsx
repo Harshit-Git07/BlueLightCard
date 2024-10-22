@@ -35,9 +35,9 @@ type BannerDataType = {
 };
 
 const onSearchCardClick = async (
-  companyId: number,
+  companyId: number | string,
   comapanyName: string,
-  offerId: number,
+  offerId: number | string,
   offerName: string,
   searchTerm: string,
   numberOfResults: number,

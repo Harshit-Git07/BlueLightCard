@@ -1,8 +1,10 @@
-import { act, renderHook } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
+import { act } from 'react';
 import { useHydrateAtoms } from 'jotai/utils';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import useSearch, { statusAtom, searchTermAtom, searchResultsAtom } from '../useSearch';
-import { IPlatformAdapter, useMockPlatformAdapter } from '../../../../shared-ui/src/adapters';
+import { IPlatformAdapter, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
+import { userProfile } from '@/components/UserProfileProvider/store';
 
 const renderWithHydratedAtoms = (mockPlatformAdapter: IPlatformAdapter, atomValues: any[] = []) => {
   return renderHook(() => {
@@ -71,25 +73,55 @@ describe('useSearch', () => {
     ]);
   });
 
+  it('has a status of "error" when V4 search fails', async () => {
+    const requestMock = jest
+      .spyOn(InvokeNativeAPICall.prototype, 'requestDataAsync')
+      .mockResolvedValue({
+        success: false,
+        data: [],
+      });
+
+    const mockPlatformAdapter = useMockPlatformAdapter();
+    const state = renderWithHydratedAtoms(mockPlatformAdapter);
+
+    await act(async () => {
+      await state.result.current.doSearch('test V4 search value');
+    });
+
+    expect(requestMock).toHaveBeenCalledWith('/api/4/offer/search.php', {
+      term: 'test V4 search value',
+    });
+    expect(state.result.current.status).toEqual('ERROR');
+  });
+
   it('executes V5 searches for searchV5 experiment', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, {
       data: [
         {
-          ID: 2,
+          ID: '3',
+          LegacyID: 2,
           OfferName: 'Test Offer 2',
           CompanyName: 'Test Company Name 2',
           CompID: 'test-company-id-2',
-          S3Logos: 's3-logo-2.jpg',
-          TypeID: 4,
+          LegacyCompanyID: 4,
+          offerimg: 's3-logo-2.jpg',
         },
       ],
     });
     mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
 
-    const state = renderWithHydratedAtoms(mockPlatformAdapter);
+    const state = renderWithHydratedAtoms(mockPlatformAdapter, [
+      [
+        userProfile,
+        {
+          service: 'test-organisation',
+          dob: '1990-01-01',
+        },
+      ],
+    ]);
 
     await act(async () => {
-      await state.result.current.doSearch('test V5 search value', 'test-organisation', true);
+      await state.result.current.doSearch('test V5 search value');
     });
 
     expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/eu/discovery/search', {
@@ -97,7 +129,7 @@ describe('useSearch', () => {
       queryParameters: {
         query: 'test V5 search value',
         organisation: 'test-organisation',
-        isAgeGated: 'true',
+        dob: '1990-01-01',
       },
       cachePolicy: 'auto',
     });
@@ -108,11 +140,10 @@ describe('useSearch', () => {
         id: 2,
         offername: 'Test Offer 2',
         companyname: 'Test Company Name 2',
-        compid: 'test-company-id-2',
+        compid: 4,
         s3logos: 's3-logo-2.jpg',
         logos: 's3-logo-2.jpg',
         absoluteLogos: 's3-logo-2.jpg',
-        typeid: 4,
       },
     ]);
   });

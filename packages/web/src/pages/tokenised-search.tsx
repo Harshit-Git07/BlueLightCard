@@ -12,10 +12,10 @@ import AuthContext from '@/context/Auth/AuthContext';
 import UserContext from '@/context/User/UserContext';
 import getCDNUrl from '@/utils/getCDNUrl';
 import OfferCardPlaceholder from '@/offers/components/OfferCard/OfferCardPlaceholder';
-import { SearchOfferType, makeSearch } from '@/utils/API/makeSearch';
+import { makeSearch, SearchOfferType } from '@/utils/API/makeSearch';
 import {
-  logSearchCategoryEvent,
   logSearchCardClicked,
+  logSearchCategoryEvent,
   logSearchPage,
   logSerpSearchStarted,
 } from '@/utils/amplitude';
@@ -32,11 +32,14 @@ import {
   PlatformVariant,
   ResponsiveOfferCard,
   useOfferDetails,
+  usePlatformAdapter,
 } from '@bluelightcard/shared-ui';
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { z } from 'zod';
 import useFetchCompaniesOrCategories from '../common/hooks/useFetchCompaniesOrCategories';
-import { isCategorySelected } from '../page-components/SearchDropDown/isCategorySelected';
+import { isCategorySelected } from '@/page-components/SearchDropDown/isCategorySelected';
+import { experimentMakeSearch } from '@/utils/API/experimentMakeSearch';
+import { darkRead } from '@bluelightcard/shared-ui/utils/darkRead/darkRead';
 
 const he = require('he');
 
@@ -51,9 +54,9 @@ const onSearchCategoryChange = async (categoryId: string, categoryName: string) 
 };
 
 const onSearchCardClick = async (
-  companyId: number,
-  comapanyName: string,
-  offerId: number,
+  companyId: number | string,
+  companyName: string,
+  offerId: number | string,
   offerName: string,
   searchTerm: string,
   numberOfResults: number,
@@ -61,7 +64,7 @@ const onSearchCardClick = async (
 ) => {
   await logSearchCardClicked(
     companyId,
-    comapanyName,
+    companyName,
     offerId,
     offerName,
     searchTerm,
@@ -86,9 +89,14 @@ export const TokenisedSearch: NextPage = () => {
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
 
-  const searchExperiment = useAmplitudeExperiment('category_level_three_search', 'control');
+  const categoryLevelThreeSearchExperiment = useAmplitudeExperiment(
+    'category_level_three_search',
+    'control'
+  );
+  const searchV5Experiment = useAmplitudeExperiment('search_v5', 'control');
   const { viewOffer } = useOfferDetails();
   const { categories } = useFetchCompaniesOrCategories(userCtx);
+  const platformAdapter = usePlatformAdapter();
 
   useEffect(() => {
     let cancelled = false;
@@ -106,14 +114,31 @@ export const TokenisedSearch: NextPage = () => {
 
       setIsLoading(true);
 
-      // Search Query
-      const searchResults = await makeSearch(
-        query,
-        authCtx.authState.idToken ?? '',
-        // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
-        userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false,
-        userCtx.user?.profile.organisation ?? '',
-        searchExperiment.data?.variantName === 'treatment'
+      const currentMakeSearchFunction = async () =>
+        makeSearch(
+          query,
+          authCtx.authState.idToken ?? '',
+          // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
+          userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false,
+          userCtx.user?.profile.organisation ?? '',
+          categoryLevelThreeSearchExperiment.data?.variantName === 'treatment'
+        );
+
+      const experimentMakeSearchFunction = async () =>
+        experimentMakeSearch(
+          query,
+          userCtx.user?.profile.dob ?? '',
+          userCtx.user?.profile.organisation ?? '',
+          platformAdapter
+        );
+
+      const searchResults = await darkRead(
+        {
+          darkReadEnabled: searchV5Experiment.data?.variantName === 'dark-read',
+          experimentEnabled: searchV5Experiment.data?.variantName === 'treatment',
+        },
+        currentMakeSearchFunction,
+        experimentMakeSearchFunction
       );
 
       // Abort if this useEffect call has already been cancelled before the query resolved
@@ -147,7 +172,17 @@ export const TokenisedSearch: NextPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [authCtx, userCtx, router, query, searchExperiment, usedQuery]);
+  }, [
+    authCtx,
+    userCtx,
+    router.isReady,
+    router.query.issuer,
+    query,
+    categoryLevelThreeSearchExperiment,
+    usedQuery,
+    searchV5Experiment,
+    platformAdapter,
+  ]);
 
   useEffect(() => {
     setQuery((router.query.q as string) ?? '');

@@ -20,6 +20,7 @@ export { default as Label } from './components/Label';
 export { default as SwiperCarousel } from './components/SwiperCarousel';
 export { default as PillGroup } from './components/PillGroup';
 export { default as Typography } from './components/Typography';
+export { default as PaginationControls } from './components/PaginationControls';
 export { default as EventBus } from './lib/eventBus';
 
 export * from './adapters';

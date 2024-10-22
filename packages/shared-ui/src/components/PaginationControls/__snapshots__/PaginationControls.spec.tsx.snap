@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PaginationControls component renders correctly and matches snapshot 1`] = `
+<DocumentFragment>
+  <section
+    class="flex justify-center items-center gap-2"
+  >
+    <button
+      class="border flex justify-center items-center rounded h-[35px] w-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface-disabled-light dark:text-colour-onSurface-disabled-dark border-colour-onSurface-disabled-light dark:border-colour-onSurface-disabled-dark cursor-pointer-none"
+    >
+      <span>
+        Icon
+      </span>
+    </button>
+    <button
+      class="border flex items-center justify-center rounded cursor-pointer w-[35px] h-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body bg-colour-primary-light dark:bg-colour-primary-dark text-colour-onPrimary-light dark:text-colour-onPrimary-dark border-colour-primary-light dark:border-colour-primary-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+    >
+      1
+    </button>
+    <button
+      class="border flex items-center justify-center rounded cursor-pointer w-[35px] h-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark hover:bg-colour-surface-container-light hover:bg-colour-surface-container-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+    >
+      2
+    </button>
+    <button
+      class="border flex items-center justify-center rounded cursor-pointer w-[35px] h-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark hover:bg-colour-surface-container-light hover:bg-colour-surface-container-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+    >
+      3
+    </button>
+    <button
+      class="border flex items-center justify-center rounded cursor-pointer w-[35px] h-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark hover:bg-colour-surface-container-light hover:bg-colour-surface-container-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+    >
+      4
+    </button>
+    <button
+      class="border flex items-center justify-center rounded cursor-pointer w-[35px] h-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark hover:bg-colour-surface-container-light hover:bg-colour-surface-container-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+    >
+      5
+    </button>
+    <li
+      class="border flex items-center justify-center rounded w-[35px] h-[35px] border-colour-onSurface-outline-light dark:boder-colour-onSurface-outline-dark text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark cursor-default font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body"
+    >
+      …
+    </li>
+    <button
+      class="border flex items-center justify-center rounded cursor-pointer w-[35px] h-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark hover:bg-colour-surface-container-light hover:bg-colour-surface-container-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+    >
+      50
+    </button>
+    <button
+      class="border flex justify-center items-center rounded h-[35px] w-[35px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body border-colour-onSurface-outline-light dark:boder-colour-onSurface-outline-dark text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark hover:bg-colour-surface-container-light hover:bg-colour-surface-container-dark"
+    >
+      <span>
+        Icon
+      </span>
+    </button>
+  </section>
+</DocumentFragment>
+`;

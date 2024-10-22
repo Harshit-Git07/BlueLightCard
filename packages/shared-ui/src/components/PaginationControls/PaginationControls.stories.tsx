@@ -1,9 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
+import PaginationControls from './index';
 
 const componentMeta: Meta = {
   title: 'Molecules/Pagination Controls',
   args: {
-    totalPages: 15,
+    totalPages: 50,
     currentPage: 1,
     disabled: false,
   },
@@ -29,7 +30,7 @@ const componentMeta: Meta = {
     },
   },
   parameters: {
-    status: 'unimplemented',
+    status: 'done',
     design: {
       type: 'figma',
       url: 'https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/ts9XtrAAIbvPNJnZ56INRi/Globalisation?node-id=4396-25232&t=DtuguYq6CHhYQY3C-4',
@@ -37,7 +38,14 @@ const componentMeta: Meta = {
   },
 };
 
-const DefaultTemplate: StoryFn = (args) => <div {...args} />;
+const DefaultTemplate: StoryFn = (args) => (
+  <PaginationControls
+    onPageChange={args.onPageChange}
+    totalPages={args.totalCount}
+    currentPage={args.currentPage}
+    {...args}
+  />
+);
 
 export const Default = DefaultTemplate.bind({});
 

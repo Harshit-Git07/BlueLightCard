@@ -186,7 +186,7 @@ jobs:
             auth0_login_url: 'https://staging-access.blcshine.io/authorize?response_type=code&client_id=RykFoOxMBh3AGX8o13qSkT063SuUOn58&redirect_uri=https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://staging-access.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php'
           - brand: 'blc-au'
-            brand_url: 'develop.bluelightcard.com.au'
+            brand_url: 'www.develop.bluelightcard.com.au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
             identity_api_url: 'https://staging-identity-au.blcshine.io'

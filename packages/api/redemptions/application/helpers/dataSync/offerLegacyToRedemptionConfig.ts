@@ -16,14 +16,28 @@ import { isSpotifyUrl } from '../isSpotifyUrl';
 /**
  * vaultUrlHostname is used in legacy as an identifier
  * the value is stored in tblalloffers.OfferURL as either:
+ * BLC_UK
  * http://thevault.bluelightcard.co.uk
  * https://thevault.bluelightcard.co.uk
+ *
+ * BLC_AU
+ * http://thevault.bluelightcard.com.au
+ * https://thevault.bluelightcard.com.au
+ *
+ * DDS_UK
+ * http://thevault.defencediscountservice.co.uk
+ * https://thevault.defencediscountservice.co.uk
  *
  * the vault URL identifier will not render in the browser window
  * the URL associated to a vault that will render in a browser window (vault link)
  * is stored in tblpromotions.link in legacy
  */
-const vaultUrlHostname = 'thevault.bluelightcard.co.uk';
+const vaultUrlHostnames = [
+  'thevault.bluelightcard.co.uk',
+  'thevault.bluelightcard.com.au',
+  'thevault.defencediscountservice.co.uk',
+];
+
 type NewRedemption = typeof redemptionsTable.$inferInsert;
 
 /**
@@ -47,7 +61,7 @@ export function parseRedemptionType(
   if (offerUrl) {
     const parsedUrl = getParsedUrl(offerUrl);
     if (parsedUrl !== null) {
-      if (parsedUrl.hostname === vaultUrlHostname || isSpotifyUrl(offerUrl)) {
+      if (vaultUrlHostnames.includes(parsedUrl.hostname) || isSpotifyUrl(offerUrl)) {
         //online or in-store, codes stored DB.vaults/vaultBatches/vaultCodes
         return {
           redemptionType: 'vault',
@@ -95,7 +109,7 @@ export function parseConnection(offerUrl: string | null): Pick<NewRedemption, 'c
   if (offerUrl) {
     const parsedUrl = getParsedUrl(offerUrl);
     if (parsedUrl !== null) {
-      if (parsedUrl.hostname === vaultUrlHostname) {
+      if (vaultUrlHostnames.includes(parsedUrl.hostname)) {
         return {
           connection: 'none',
         };

@@ -8,29 +8,6 @@ const meta: Meta<typeof MinimalFooter> = {
 
 const FooterTemplate: StoryFn<typeof MinimalFooter> = (args) => <MinimalFooter {...args} />;
 export const Default = FooterTemplate.bind({});
-Default.args = {
-  navItems: [
-    {
-      text: 'Terms & Conditions',
-      link: '/terms',
-    },
-    {
-      text: 'Privacy Notice',
-      link: '/about',
-    },
-    {
-      text: 'Candidate Privacy Notice',
-      link: '/contact',
-    },
-    {
-      text: 'Cookie Policy',
-      link: '/cookie',
-    },
-    {
-      text: 'Legal and Regulatory',
-      link: '/privacy',
-    },
-  ],
-};
+Default.args = {};
 
 export default meta;

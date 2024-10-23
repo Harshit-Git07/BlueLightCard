@@ -20,7 +20,7 @@ const MinimalFooter: FC<MinimalFooterProps> = () => {
             aria-label={item.text + ' footer link'}
             key={item.text}
             href={item.link}
-            className={`text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light ${
+            className={`mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light ${
               navItems.length % 2 !== 0 && index === navItems.length - 1
                 ? 'col-span-2 justify-self-center md:col-span-1'
                 : 'w-full md:w-auto'

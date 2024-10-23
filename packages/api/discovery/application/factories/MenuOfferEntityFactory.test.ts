@@ -1,3 +1,5 @@
+import { OfferType } from '../models/Offer';
+
 import { menuOfferEntityFactory } from './MenuOfferEntityFactory';
 
 describe('Offer Entity Factory', () => {
@@ -12,7 +14,7 @@ describe('Offer Entity Factory', () => {
       legacyOfferId: 101,
       name: 'Sample Offer',
       status: 'active',
-      offerType: 'online',
+      offerType: OfferType.ONLINE,
       offerDescription: 'Sample offer description',
       image: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',
       offerStart: '2024-09-01',

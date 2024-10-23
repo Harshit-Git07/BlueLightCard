@@ -1,5 +1,7 @@
 import { offerEntityFactory } from '@blc-mono/discovery/application/factories/OfferEntityFactory';
 
+import { OfferType } from '../models/Offer';
+
 describe('Offer Entity Factory', () => {
   it('should build a default Offer Entity object', () => {
     const offerEntity = offerEntityFactory.build();
@@ -14,7 +16,7 @@ describe('Offer Entity Factory', () => {
       legacyOfferId: 101,
       name: 'Sample Offer',
       status: 'active',
-      offerType: 'online',
+      offerType: OfferType.ONLINE,
       offerDescription: 'Sample offer description',
       image: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',
       offerStart: '2024-09-01',

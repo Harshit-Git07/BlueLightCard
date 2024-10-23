@@ -11,7 +11,6 @@ const logger = new LambdaLogger({ serviceName: 'company-service' });
 export async function insertCompany(company: Company): Promise<void> {
   try {
     const companyEntity = mapCompanyToCompanyEntity(company);
-    logger.info({ message: `Inserting new Company with id: [${company.id}]` });
     await new CompanyRepository().insert(companyEntity);
     logger.info({ message: `Inserted new Company with id: [${company.id}]` });
   } catch (error) {
@@ -21,7 +20,6 @@ export async function insertCompany(company: Company): Promise<void> {
 
 export async function getCompanyById(id: string): Promise<Company | undefined> {
   try {
-    logger.info({ message: `Retrieving Company by id: [${id}]` });
     const result = await new CompanyRepository().retrieveById(id);
     logger.info({ message: `Retrieved Company with id: [${id}]` });
     return result ? mapCompanyEntityToCompany(result) : undefined;

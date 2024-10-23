@@ -1,6 +1,5 @@
 import { EventBus as AwsEventBus } from 'aws-cdk-lib/aws-events';
 import { AccountPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { LogGroup } from 'aws-cdk-lib/aws-logs';
 import { Api, Config, EventBus, Function, type StackContext, use } from 'sst/constructs';
 import { z } from 'zod';
 
@@ -47,7 +46,6 @@ export function OffersCMS({ stack }: StackContext) {
     cliLogger.info({ message: 'Discovery Event Bus not set. Offers CMS events will not be sent.' });
   }
 
-  const cmsBusLogGroup = new LogGroup(stack, 'cms-bus');
   const cmsEvents = new EventBus(stack, CMS_BUS_NAME, {
     rules: {
       sanityRule: {
@@ -55,12 +53,6 @@ export function OffersCMS({ stack }: StackContext) {
         targets: {
           consumerTarget: {
             function: consumerFunction,
-          },
-          eventLogs: {
-            type: 'log_group',
-            cdk: {
-              logGroup: cmsBusLogGroup,
-            },
           },
         },
       },

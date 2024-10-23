@@ -8,9 +8,10 @@ const MinimalFooter: FC<MinimalFooterProps> = ({ navItems }) => {
     env.APP_BRAND === 'dds-uk'
       ? `© Defence Discount Service 2012 - ${new Date().getFullYear()} Operated by Blue Light Card Ltd`
       : `©Blue Light Card 2008 - ${new Date().getFullYear()}`;
-  console.log('env.APP_BRAND', env);
+  console.log('env.APP_BRAND', process.env.STORYBOOK_APP_BRAND);
+
   return (
-    <div className="w-full max-w-[374px] flex flex-col items-center gap-4 px-4 pb-4 md:max-w-full md:px-4 lg:px-[160px] lg:flex-row lg:justify-between lg:items-center lg:max-w-[1728px] bg-colour-surface dark:bg-colour-surface-dark">
+    <div className="w-full max-w-[374px] flex flex-col items-center gap-4 px-4 pb-4 md:max-w-full md:px-4 lg:px-[56px] lg:flex-row lg:justify-between lg:items-center lg:max-w-[1728px] bg-colour-surface dark:bg-colour-surface-dark">
       <p className="text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-lg font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full">
         {copyrightText}
       </p>

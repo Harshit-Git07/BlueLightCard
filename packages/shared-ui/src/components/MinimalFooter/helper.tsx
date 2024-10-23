@@ -1,5 +1,4 @@
 import { env } from '../../env';
-import { en } from '@faker-js/faker';
 export const getCopyrightText = () => {
   const currentYear = new Date().getFullYear();
 
@@ -82,6 +81,6 @@ export const getNavItems = () => {
     case 'blc-au':
       return blcAuNavItems;
     default:
-      return blcAuNavItems;
+      return blcUkNavItems;
   }
 };

@@ -1,10 +1,9 @@
 import { FC } from 'react';
-import { MinimalFooterProps } from './types';
 import * as React from 'react';
 import Link from 'next/link';
 import { getCopyrightText, getNavItems } from './helper';
 
-const MinimalFooter: FC<MinimalFooterProps> = () => {
+const MinimalFooter = () => {
   const copyrightText = getCopyrightText(),
     navItems = getNavItems();
 

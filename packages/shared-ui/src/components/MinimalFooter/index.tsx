@@ -9,8 +9,8 @@ const MinimalFooter: FC<MinimalFooterProps> = () => {
     navItems = getNavItems();
 
   return (
-    <div className="w-full max-w-[374px] flex flex-col items-center gap-4 px-4 pb-4 md:max-w-full md:px-4 lg:px-[56px] lg:flex-row lg:justify-between lg:items-center lg:max-w-[1728px] bg-colour-surface dark:bg-colour-surface-dark">
-      <p className="text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-lg font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full">
+    <div className="w-full max-w-[374px] flex flex-col items-center gap-4 px-4 pb-4 md:max-w-full md:px-4 lg:px-[56px] lg:flex-row lg:justify-between lg:items-center lg:max-w-[1728px] bg-colour-surface dark:bg-colour-surface-dark border-t-[1px] border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark ">
+      <p className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-lg font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full">
         {copyrightText}
       </p>
       <div className="grid grid-cols-2 gap-4 justify-items-center w-full text-center md:grid-cols-none md:grid-rows-none md:flex md:flex-row md:justify-center lg:justify-end lg:gap-[16px]">

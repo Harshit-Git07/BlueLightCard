@@ -41,12 +41,12 @@ const blcAuNavItems = [
     link: 'https://www.bluelightcard.com.au/terms_and_conditions.php',
   },
   {
-    text: 'Privacy Notice',
-    link: 'https://www.bluelightcard.com.au/privacy-notice.php',
-  },
-  {
     text: 'Candidate Privacy Notice',
     link: 'https://www.bluelightcard.com.au/candidate-privacy-notice.php',
+  },
+  {
+    text: 'Privacy Notice',
+    link: 'https://www.bluelightcard.com.au/privacy-notice.php',
   },
   {
     text: 'Cookie Policy',
@@ -60,16 +60,16 @@ const ddsUkNavItems = [
     link: 'https://www.defencediscountservice.co.uk/terms_and_conditions.php',
   },
   {
+    text: 'Legal and Regulatory',
+    link: 'https://www.defencediscountservice.co.uk/legal-and-regulatory.php',
+  },
+  {
     text: 'Privacy Notice',
     link: 'https://www.defencediscountservice.co.uk/privacy-notice.php',
   },
   {
     text: 'Cookie Policy',
     link: 'https://www.defencediscountservice.co.uk/cookies_policy.php',
-  },
-  {
-    text: 'Legal and Regulatory',
-    link: 'https://www.defencediscountservice.co.uk/legal-and-regulatory.php',
   },
 ];
 

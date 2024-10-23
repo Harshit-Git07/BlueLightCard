@@ -10,6 +10,7 @@ export const generateFakeJWT = (cardStatus?: string | undefined) => {
   const payload = {
     'custom:blc_old_id': faker.lorem.words(5),
     'custom:blc_old_uuid': faker.string.uuid(),
+    email: faker.internet.email(),
     card_status: cardStatus,
   };
   return `Bearer ${jwt.sign(payload, 'secret')}`;
@@ -40,4 +41,5 @@ export const redeemEventFactory = Factory.define<ParsedRequest>(() => ({
   },
   memberId: faker.lorem.words(5),
   brazeExternalUserId: faker.string.uuid(),
+  memberEmail: faker.internet.email(),
 }));

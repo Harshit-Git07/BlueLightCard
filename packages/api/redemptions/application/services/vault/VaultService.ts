@@ -252,14 +252,14 @@ export class VaultService implements IVaultService {
     if (detail?.eeCampaignId) {
       return {
         integration: 'eagleeye',
-        integrationId: detail?.eeCampaignId,
+        integrationId: String(detail?.eeCampaignId),
       };
     }
 
     if (detail?.ucCampaignId) {
       return {
         integration: 'uniqodo',
-        integrationId: detail?.ucCampaignId,
+        integrationId: String(detail?.ucCampaignId),
       };
     }
 

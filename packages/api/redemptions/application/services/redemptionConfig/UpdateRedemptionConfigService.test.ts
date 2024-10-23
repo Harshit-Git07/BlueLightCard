@@ -76,7 +76,7 @@ describe('UpdateRedemptionConfigService', () => {
       status: 'active' as Status,
       maxPerUser: 5,
       email: faker.internet.email(),
-      integration: 'eagleEye' as Integration,
+      integration: 'eagleeye' as Integration,
       integrationId: faker.string.numeric(8),
     },
   } satisfies UpdateVaultRedemptionSchema;

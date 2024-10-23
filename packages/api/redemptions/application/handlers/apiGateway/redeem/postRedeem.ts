@@ -5,8 +5,10 @@ import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { CardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
+import { IntegrationCodesRepository } from '@blc-mono/redemptions/application/repositories/IntegrationCodesRepository';
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import { RedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
+import { UniqodoApiRepository } from '@blc-mono/redemptions/application/repositories/UniqodoApiRepository';
 import { VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
@@ -37,6 +39,8 @@ const controller = createInjector()
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)
   .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
   .provideClass(RedemptionsEventsRepository.key, RedemptionsEventsRepository)
+  .provideClass(UniqodoApiRepository.key, UniqodoApiRepository)
+  .provideClass(IntegrationCodesRepository.key, IntegrationCodesRepository)
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)

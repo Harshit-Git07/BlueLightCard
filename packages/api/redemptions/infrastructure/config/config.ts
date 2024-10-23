@@ -17,6 +17,7 @@ type NetworkConfig = {
 
 type SecretsManagerConfig = {
   secretsManagerName: string;
+  uniqodoSecretsManagerName: string;
 };
 
 type LambdaScriptsCommonConfig = {
@@ -66,6 +67,10 @@ type FeatureFlagsConfig = {
   enableStandardVault: string;
 };
 
+type UniqodoConfig = {
+  uniqodoClaimUrl: string;
+};
+
 type IntegrationProviderConfig = {
   secretsManagerConfig: {
     name: string;
@@ -83,11 +88,13 @@ export type RedemptionsStackConfig = {
   sesConfig: SESConfig;
   featureFlagsConfig: FeatureFlagsConfig;
   integrationProviderConfig: IntegrationProviderConfig;
+  uniqodoConfig: UniqodoConfig;
 };
 
 export type PerBrandStaticValues = {
   secretManagerName: SecretsManagerConfig['secretsManagerName'];
   integrationProviderSecretsManagerName: IntegrationProviderConfig['secretsManagerConfig']['name'];
+  uniqodoSecretManagerName: SecretsManagerConfig['uniqodoSecretsManagerName'];
 };
 
 export type StaticValues = {
@@ -125,6 +132,7 @@ export class RedemptionsStackConfigResolver {
         },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_UK_BRAND).secretManagerName,
+          uniqodoSecretsManagerName: this.fromPerBrandStaticValues(BLC_UK_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.bluelightcard.co.uk'],
@@ -159,6 +167,9 @@ export class RedemptionsStackConfigResolver {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
           redemptionsEmailDomain: 'bluelightcard.co.uk',
         },
+        uniqodoConfig: {
+          uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
       },
       [BLC_AU_BRAND]: {
         integrationProviderConfig: {
@@ -168,6 +179,7 @@ export class RedemptionsStackConfigResolver {
         },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_AU_BRAND).secretManagerName,
+          uniqodoSecretsManagerName: this.fromPerBrandStaticValues(BLC_AU_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au'],
@@ -202,6 +214,9 @@ export class RedemptionsStackConfigResolver {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
           redemptionsEmailDomain: 'bluelightcard.co.uk', // Add email config per brand later
         },
+        uniqodoConfig: {
+          uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
       },
       [DDS_UK_BRAND]: {
         integrationProviderConfig: {
@@ -211,6 +226,7 @@ export class RedemptionsStackConfigResolver {
         },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(DDS_UK_BRAND).secretManagerName,
+          uniqodoSecretsManagerName: this.fromPerBrandStaticValues(DDS_UK_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.defencediscountservice.co.uk'],
@@ -245,6 +261,9 @@ export class RedemptionsStackConfigResolver {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
           redemptionsEmailDomain: 'bluelightcard.co.uk', // Add email config per brand later
         },
+        uniqodoConfig: {
+          uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
       },
     };
   }
@@ -264,6 +283,7 @@ export class RedemptionsStackConfigResolver {
         },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_UK_BRAND).secretManagerName,
+          uniqodoSecretsManagerName: this.fromPerBrandStaticValues(BLC_UK_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.staging.bluelightcard.co.uk', 'http://localhost:3000'],
@@ -298,6 +318,9 @@ export class RedemptionsStackConfigResolver {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
           redemptionsEmailDomain: 'bluelightcard.co.uk',
         },
+        uniqodoConfig: {
+          uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
       },
       [BLC_AU_BRAND]: {
         integrationProviderConfig: {
@@ -307,6 +330,7 @@ export class RedemptionsStackConfigResolver {
         },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(BLC_AU_BRAND).secretManagerName,
+          uniqodoSecretsManagerName: this.fromPerBrandStaticValues(BLC_AU_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.develop.bluelightcard.com.au', 'http://localhost:3000'],
@@ -341,6 +365,9 @@ export class RedemptionsStackConfigResolver {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
           redemptionsEmailDomain: 'bluelightcard.co.uk', // Add email config per brand later
         },
+        uniqodoConfig: {
+          uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
       },
       [DDS_UK_BRAND]: {
         integrationProviderConfig: {
@@ -350,6 +377,7 @@ export class RedemptionsStackConfigResolver {
         },
         secretsManagerConfig: {
           secretsManagerName: this.fromPerBrandStaticValues(DDS_UK_BRAND).secretManagerName,
+          uniqodoSecretsManagerName: this.fromPerBrandStaticValues(DDS_UK_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.ddsstaging.bluelightcard.tech', 'http://localhost:3000'],
@@ -384,6 +412,9 @@ export class RedemptionsStackConfigResolver {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
           redemptionsEmailDomain: 'bluelightcard.co.uk', // Add email config per brand later
         },
+        uniqodoConfig: {
+          uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
       },
     };
   }
@@ -397,6 +428,7 @@ export class RedemptionsStackConfigResolver {
       },
       secretsManagerConfig: {
         secretsManagerName: 'blc-mono-redemptions/NewVaultSecrets',
+        uniqodoSecretsManagerName: 'blc-mono-redemptions/uniqodo-api-blc-uk',
       },
       networkConfig: {
         apiDefaultAllowedOrigins: ['*'],
@@ -433,6 +465,9 @@ export class RedemptionsStackConfigResolver {
         redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
         redemptionsEmailDomain: 'bluelightcard.co.uk',
       },
+      uniqodoConfig: {
+        uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+      },
     };
   }
 
@@ -445,6 +480,7 @@ export class RedemptionsStackConfigResolver {
       },
       secretsManagerConfig: {
         secretsManagerName: this.fromPerBrandStaticValues(brand).secretManagerName,
+        uniqodoSecretsManagerName: this.fromPerBrandStaticValues(brand).uniqodoSecretManagerName,
       },
       networkConfig: {
         apiDefaultAllowedOrigins: getEnvValidated(
@@ -515,6 +551,9 @@ export class RedemptionsStackConfigResolver {
         redemptionsEmailFrom: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_FROM),
         redemptionsEmailDomain: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EMAIL_DOMAIN),
       },
+      uniqodoConfig: {
+        uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+      },
     };
   }
 
@@ -523,14 +562,17 @@ export class RedemptionsStackConfigResolver {
       [BLC_AU_BRAND]: {
         secretManagerName: 'blc-mono-redemptions/NewVaultSecrets-blc-au',
         integrationProviderSecretsManagerName: 'blc-mono-redemptions/integrationProviderSecrets-blc-au',
+        uniqodoSecretManagerName: 'blc-mono-redemptions/uniqodo-api-blc-au',
       },
       [BLC_UK_BRAND]: {
         secretManagerName: 'blc-mono-redemptions/NewVaultSecrets',
         integrationProviderSecretsManagerName: 'blc-mono-redemptions/integrationProviderSecrets',
+        uniqodoSecretManagerName: 'blc-mono-redemptions/uniqodo-api-blc-uk',
       },
       [DDS_UK_BRAND]: {
         secretManagerName: 'blc-mono-redemptions/NewVaultSecrets-dds-uk',
         integrationProviderSecretsManagerName: 'blc-mono-redemptions/integrationProviderSecrets-dds-uk',
+        uniqodoSecretManagerName: 'blc-mono-redemptions/uniqodo-api-dds-uk',
       },
     };
 

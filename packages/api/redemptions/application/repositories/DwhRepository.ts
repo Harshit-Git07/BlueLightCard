@@ -10,7 +10,14 @@ import { EagleEyeModel, UniqodoModel } from '@blc-mono/redemptions/libs/models/p
 export interface IDwhRepository {
   logOfferView(offerId: string, companyId: string, memberId: string, clientType: ClientType): Promise<void>;
   logRedemptionAttempt(offerId: string, companyId: string, memberId: string, clientType: ClientType): Promise<void>;
-  logVaultRedemption(offerId: string, companyId: string, memberId: string, code: string): Promise<void>;
+  logVaultRedemption(
+    offerId: string,
+    companyId: string,
+    memberId: string,
+    code: string,
+    integration: string | null | undefined,
+    integrationId: string | null | undefined,
+  ): Promise<void>;
   logRedemption(dto: MemberRedemptionParamsDto): Promise<void>;
   logCallbackEagleEyeVaultRedemption(data: EagleEyeModel): Promise<void>;
   logCallbackUniqodoVaultRedemption(data: UniqodoModel): Promise<void>;
@@ -96,7 +103,14 @@ export class DwhRepository implements IDwhRepository {
     await this.client.send(command);
   }
 
-  async logVaultRedemption(offerId: string, companyId: string, memberId: string, code: string): Promise<void> {
+  async logVaultRedemption(
+    offerId: string,
+    companyId: string,
+    memberId: string,
+    code: string,
+    integration: string | null,
+    integrationId: string | null,
+  ): Promise<void> {
     const command = new PutRecordCommand({
       DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME),
       Record: {
@@ -107,6 +121,8 @@ export class DwhRepository implements IDwhRepository {
             uid: memberId,
             whenrequested: new Date().toISOString(),
             offer_id: offerId.toString(),
+            integration: integration,
+            integration_id: integrationId,
           }),
         ),
       },
@@ -128,6 +144,8 @@ export class DwhRepository implements IDwhRepository {
             offerid: dto.data.offerId.toString(),
             redemptiontype: dto.data.redemptionType,
             clienttype: dto.data.clientType,
+            integration: dto.data.integration,
+            integration_id: dto.data.integrationId,
             origin: 'new stack',
           }),
         ),

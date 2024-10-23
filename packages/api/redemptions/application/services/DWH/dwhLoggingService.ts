@@ -3,6 +3,7 @@ import { ClientType } from '@blc-mono/core/schemas/domain';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 
+import { isValidIntegrationType } from '../../helpers/isValidIntegrationType';
 import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
 
 export type MemberRetrievedRedemptionDetailsParams = {
@@ -36,12 +37,22 @@ interface MemberRedemptionBaseParams {
 export type MemberRedemptionParams = MemberRedemptionBaseParams &
   (
     | {
-        redemptionType: 'generic' | 'vault' | 'vaultQR';
+        redemptionType: 'generic';
         code: string;
+        integration?: never;
+        integrationId?: never;
+      }
+    | {
+        redemptionType: 'vault' | 'vaultQR';
+        code: string;
+        integration: string | null | undefined;
+        integrationId: string | null | undefined;
       }
     | {
         redemptionType: 'showCard' | 'preApplied';
         code?: never;
+        integration?: never;
+        integrationId?: never;
       }
   );
 
@@ -56,14 +67,22 @@ export class MemberRedemptionParamsDto {
       memberId: event.detail.memberDetails.memberId,
       offerId: redemptionDetails.offerId,
     };
+    const isValidIntegration = isValidIntegrationType(redemptionDetails.vaultDetails?.integration);
     switch (redemptionDetails.redemptionType) {
       case 'generic':
+        return new MemberRedemptionParamsDto({
+          ...baseParams,
+          redemptionType: redemptionDetails.redemptionType,
+          code: redemptionDetails.code,
+        });
       case 'vault':
       case 'vaultQR':
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
           code: redemptionDetails.code,
+          integration: isValidIntegration ? redemptionDetails.vaultDetails?.integration : null,
+          integrationId: isValidIntegration ? redemptionDetails.vaultDetails?.integrationId : null,
         });
       case 'showCard':
       case 'preApplied':
@@ -100,6 +119,8 @@ export class DwhLoggingService implements IDwhLoggingService {
         dto.data.companyId,
         dto.data.memberId,
         dto.data.code,
+        dto.data.integration,
+        dto.data.integrationId,
       );
     }
 

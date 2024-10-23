@@ -1,6 +1,6 @@
 import { integrationEnum } from '@blc-mono/redemptions/libs/database/schema';
 
-export const isValidIntegrationType = (integration: string | null): boolean => {
+export const isValidIntegrationType = (integration: string | null | undefined): boolean => {
   if (!integration) {
     return false;
   }

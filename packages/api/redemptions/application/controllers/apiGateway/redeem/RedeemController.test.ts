@@ -10,7 +10,7 @@ import {
 import { createSilentLogger, createTestLogger } from '../../../../libs/test/helpers/logger';
 import { IRedeemService, RedeemResult } from '../../../services/redeem/RedeemService';
 
-import { RedeemController } from './RedeemController';
+import { ParsedRequest, RedeemController } from './RedeemController';
 
 type parsedResults = {
   data: {
@@ -53,7 +53,8 @@ describe('RedeemController', () => {
     } satisfies RedeemResult);
 
     // Act
-    const result = await controller.handle(redeemEventFactory.build());
+    const redeemEvent = redeemEventFactory.build() as ParsedRequest;
+    const result = await controller.handle(redeemEvent);
 
     // Assert
     expect(result.statusCode).toEqual(200);
@@ -84,7 +85,7 @@ describe('RedeemController', () => {
     } satisfies RedeemResult);
 
     // Act
-    const result = await controller.handle(redeemEventFactory.build());
+    const result = await controller.handle(redeemEventFactory.build() as ParsedRequest);
 
     // Assert
     expect(result.statusCode).toEqual(404);

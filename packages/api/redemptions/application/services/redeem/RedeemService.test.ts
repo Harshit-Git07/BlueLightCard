@@ -30,6 +30,7 @@ describe('RedeemService', () => {
     companyName: faker.string.sample(5),
     offerName: faker.string.sample(5),
     clientType: faker.helpers.arrayElement(['web', 'mobile']),
+    memberEmail: faker.internet.email(),
   };
   function callRedeemMethod(
     offerId: string,

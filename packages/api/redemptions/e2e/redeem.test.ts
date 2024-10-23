@@ -11,6 +11,7 @@ import {
   createVaultBatchesIdE2E,
   createVaultCodesIdE2E,
   createVaultIdE2E,
+  integrationCodesTable,
   redemptionsTable,
   vaultBatchesTable,
   vaultCodesTable,
@@ -36,6 +37,8 @@ const executeAsyncSequence = (...asyncFunctions: (() => Promise<void>)[]) => {
     return promise.then(current);
   }, Promise.resolve());
 };
+
+const uniqodoPromotionId = '43c3780817f7ccb92012e519f0814c0b'; //vaults with uniqodo must use this static promotionId provided
 
 describe('POST /member/redeem', () => {
   let connectionManager: E2EDatabaseConnectionManager;
@@ -71,6 +74,8 @@ describe('POST /member/redeem', () => {
       redemptionId: redemptionId,
       status: 'active',
       vaultType: 'standard',
+      integrationId: null,
+      integration: null,
     });
     const vaultBatch = vaultBatchEntityFactory.build({
       id: createVaultBatchesIdE2E(),
@@ -96,6 +101,30 @@ describe('POST /member/redeem', () => {
       cleanup: async () => {
         await connectionManager.connection.db.delete(vaultCodesTable).where(eq(vaultCodesTable.id, vaultCode.id));
         await connectionManager.connection.db.delete(vaultBatchesTable).where(eq(vaultBatchesTable.id, vaultBatch.id));
+        await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, vault.id));
+      },
+    };
+  };
+
+  const buildIntegrationVault = (redemptionId: string, integration: 'eagleeye' | 'uniqodo', integrationId: string) => {
+    const vault = vaultEntityFactory.build({
+      id: createVaultIdE2E(),
+      redemptionId: redemptionId,
+      status: 'active',
+      vaultType: 'standard',
+      integrationId: integrationId,
+      integration: integration,
+    });
+
+    return {
+      vault,
+      insert: async () => {
+        await connectionManager.connection.db.insert(vaultsTable).values(vault);
+      },
+      cleanup: async () => {
+        await connectionManager.connection.db
+          .delete(integrationCodesTable)
+          .where(eq(integrationCodesTable.vaultId, vault.id));
         await connectionManager.connection.db.delete(vaultsTable).where(eq(vaultsTable.id, vault.id));
       },
     };
@@ -230,6 +259,34 @@ describe('POST /member/redeem', () => {
       statusCode: 200,
     });
     expect(result.status).toBe(200);
+  });
+
+  test('should redeem a uniqodo standard vault offer', async () => {
+    // Arrange
+    const { redemption, ...redemptionTestHooks } = buildTestRedemption('vault');
+    const { ...vaultTestHooks } = buildIntegrationVault(redemption.id, 'uniqodo', uniqodoPromotionId);
+
+    onTestFinished(() => executeAsyncSequence(vaultTestHooks.cleanup, redemptionTestHooks.cleanup));
+    await executeAsyncSequence(redemptionTestHooks.insert, vaultTestHooks.insert);
+
+    const companyName = faker.company.name();
+    const offerName = faker.commerce.productName();
+
+    // Act
+    const result = await sendRedemptionRequest({
+      offerId: redemption.offerId,
+      companyName,
+      offerName,
+    });
+
+    expect(result.status).toBe(200);
+
+    const body = await result.json();
+
+    expect(body).toHaveProperty('data.kind', 'Ok');
+    expect(body).toHaveProperty('data.redemptionType', 'vault');
+    expect(body).toHaveProperty('data.redemptionDetails.url', redemption.url);
+    expect(body).toHaveProperty('data.redemptionDetails.code'); //this will be a random value we cannot assess
   });
 
   test('should redeem a preApplied offer', async () => {

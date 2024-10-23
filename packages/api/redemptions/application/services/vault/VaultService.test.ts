@@ -224,7 +224,7 @@ describe('VaultService', () => {
           id: defaultVaultId,
           redemptionId: defaultRedemptionId,
           status: 'active',
-          integrationId: defaultCampaignId,
+          integrationId: String(defaultCampaignId),
         });
 
         // Act
@@ -234,7 +234,7 @@ describe('VaultService', () => {
         const vaults = await connection.db.select().from(vaultsTable).execute();
         expect(vaults).toHaveLength(1);
         expect(vaults.at(0)?.integration).toBe('eagleeye');
-        expect(vaults.at(0)?.integrationId).toBe(defaultCampaignId);
+        expect(vaults.at(0)?.integrationId).toBe(String(defaultCampaignId));
       });
       it('when ucCampaignId is sent, integration of vault should be uniqodo and integrationId equal to ucCampaignId', async () => {
         // Arrange
@@ -258,7 +258,7 @@ describe('VaultService', () => {
           id: defaultVaultId,
           redemptionId: defaultRedemptionId,
           status: 'active',
-          integrationId: defaultCampaignId,
+          integrationId: String(defaultCampaignId),
         });
 
         // Act
@@ -268,7 +268,7 @@ describe('VaultService', () => {
         const vaults = await connection.db.select().from(vaultsTable).execute();
         expect(vaults).toHaveLength(1);
         expect(vaults.at(0)?.integration).toBe('uniqodo');
-        expect(vaults.at(0)?.integrationId).toBe(defaultCampaignId);
+        expect(vaults.at(0)?.integrationId).toBe(String(defaultCampaignId));
       });
       it('when eeCampaignId is null, integration of vault should be null and integrationId equal to null', async () => {
         // Arrange
@@ -293,7 +293,7 @@ describe('VaultService', () => {
           redemptionId: defaultRedemptionId,
           status: 'active',
           integration: 'eagleeye',
-          integrationId: defaultCampaignId,
+          integrationId: String(defaultCampaignId),
         });
 
         // Act
@@ -328,7 +328,7 @@ describe('VaultService', () => {
           redemptionId: defaultRedemptionId,
           status: 'active',
           integration: 'eagleeye',
-          integrationId: defaultCampaignId,
+          integrationId: String(defaultCampaignId),
         });
 
         // Act
@@ -434,7 +434,7 @@ describe('VaultService', () => {
         const vaults = await connection.db.select().from(vaultsTable).execute();
         expect(vaults).toHaveLength(1);
         expect(vaults[0].integration).toBe('eagleeye');
-        expect(vaults[0].integrationId).toBe(event.detail.eeCampaignId);
+        expect(vaults[0].integrationId).toBe(String(event.detail.eeCampaignId));
       });
       it('for Uniqodo vaults', async () => {
         // Arrange
@@ -459,7 +459,7 @@ describe('VaultService', () => {
         const vaults = await connection.db.select().from(vaultsTable).execute();
         expect(vaults).toHaveLength(1);
         expect(vaults[0].integration).toBe('uniqodo');
-        expect(vaults[0].integrationId).toBe(event.detail.ucCampaignId);
+        expect(vaults[0].integrationId).toBe(String(event.detail.ucCampaignId));
       });
       it('for active vaults', async () => {
         // Arrange

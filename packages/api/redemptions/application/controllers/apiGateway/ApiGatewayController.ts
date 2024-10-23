@@ -20,6 +20,7 @@ export enum ParseErrorKind {
   RequestValidationCardStatus = 'RequestValidationCardStatus',
   RequestValidationMemberId = 'RequestValidationMemberId',
   RequestValidationBrazeExternalUserId = 'RequestValidationBrazeExternalUserId',
+  RequestValidationMemberEmail = 'RequestValidationMemberEmail',
 }
 
 export type ParseErrorKindType = keyof typeof ParseErrorKind;
@@ -121,14 +122,8 @@ export abstract class APIGatewayController<ParsedRequest = APIGatewayProxyEventV
           },
         });
       case ParseErrorKind.RequestValidationMemberId:
-        return Promise.resolve({
-          statusCode: 400,
-          body: JSON.stringify(payload),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
       case ParseErrorKind.RequestValidationBrazeExternalUserId:
+      case ParseErrorKind.RequestValidationMemberEmail:
         return Promise.resolve({
           statusCode: 400,
           body: JSON.stringify(payload),

@@ -30,8 +30,8 @@ export const CommonModel = (redemptionType: RedemptionType) =>
     id: z.string(),
     redemptionType: z.literal(redemptionType),
     connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
-    offerId: z.coerce.string(),
-    companyId: z.coerce.string(),
+    offerId: z.union([z.string(), z.number()]).transform((value) => String(value)),
+    companyId: z.union([z.string(), z.number()]).transform((value) => String(value)),
     affiliate: z
       .enum([
         'awin',

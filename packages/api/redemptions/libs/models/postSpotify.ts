@@ -5,8 +5,8 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 export const PostSpotifyModel = createZodNamedType(
   'PostSpotifyModel',
   z.object({
-    companyId: z.coerce.string(),
-    offerId: z.coerce.string(),
+    companyId: z.union([z.string(), z.number()]).transform((value) => String(value)),
+    offerId: z.union([z.string(), z.number()]).transform((value) => String(value)),
     memberId: z.string(),
     url: z.string(),
   }),

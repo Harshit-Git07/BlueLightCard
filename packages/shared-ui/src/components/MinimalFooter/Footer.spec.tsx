@@ -3,15 +3,9 @@ import renderer from 'react-test-renderer';
 import { env } from '../../env';
 
 describe('MinimalFooter', () => {
-  const originalEnv = process.env;
-  console.log('originalEnv', originalEnv);
   beforeEach(() => {
     jest.resetModules();
-    process.env = { ...originalEnv };
-  });
-
-  afterEach(() => {
-    process.env = originalEnv;
+    env.APP_BRAND = 'blc-uk';
   });
 
   describe('snapshot Test', () => {
@@ -31,7 +25,7 @@ describe('MinimalFooter', () => {
 
   it('renders a dds-uk footer', () => {
     env.APP_BRAND = 'dds-uk';
-    console.log('dds env', process.env.NEXT_PUBLIC_APP_BRAND);
+
     const component = renderer.create(<MinimalFooter />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();

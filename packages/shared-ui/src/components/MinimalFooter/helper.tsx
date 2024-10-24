@@ -1,4 +1,5 @@
 import { env } from '../../env';
+import { BRAND } from '../../types';
 export const getCopyrightText = () => {
   const currentYear = new Date().getFullYear();
 
@@ -73,12 +74,12 @@ const ddsUkNavItems = [
   },
 ];
 
-export const getNavItems = () => {
+export const getNavigationItems = () => {
   const brand = env.APP_BRAND;
   switch (brand) {
-    case 'dds-uk':
+    case BRAND.DDS_UK:
       return ddsUkNavItems;
-    case 'blc-au':
+    case BRAND.BLC_AU:
       return blcAuNavItems;
     default:
       return blcUkNavItems;

@@ -65,3 +65,9 @@ export type Offer = {
 };
 
 export type AmplitudeEvent = (properties: AmplitudeArg) => void;
+
+export enum BRAND {
+  BLC_UK = 'blc-uk',
+  BLC_AU = 'blc-au',
+  DDS_UK = 'dds-uk',
+}

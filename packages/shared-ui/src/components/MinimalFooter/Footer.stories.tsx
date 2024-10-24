@@ -6,7 +6,7 @@ const meta: Meta<typeof MinimalFooter> = {
   component: MinimalFooter,
 };
 
-const FooterTemplate: StoryFn<typeof MinimalFooter> = (args) => <MinimalFooter {...args} />;
+const FooterTemplate: StoryFn<typeof MinimalFooter> = (args) => <MinimalFooter />;
 export const Default = FooterTemplate.bind({});
 Default.args = {};
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.79.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.78.1...bluelightcard/web-v1.79.0) (2024-10-24)
+
+
+### Features
+
+* Feature/disco 1001 amplitude logging for carousel ([#2595](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2595)) ([2888891](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2888891f56588204d7214a11d1834390a9f18d49))
+
 ## [1.78.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.78.0...bluelightcard/web-v1.78.1) (2024-10-24)
 
 

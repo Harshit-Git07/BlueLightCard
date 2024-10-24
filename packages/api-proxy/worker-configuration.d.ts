@@ -8,6 +8,9 @@ interface Env {
   OFFERS_API_BLC_UK: string;
   OFFERS_API_BLC_AU: string;
   OFFERS_API_DDS_UK: string;
+  OFFERS_CMS_API_BLC_UK: string;
+  OFFERS_CMS_API_BLC_AU: string;
+  OFFERS_CMS_API_DDS_UK: string;
   REDEMPTIONS_API_UK: string;
   DISCOVERY_API_UK: string;
 }

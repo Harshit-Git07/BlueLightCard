@@ -11,5 +11,10 @@ npx wrangler dev --var \
   OFFERS_API_BLC_UK:https://$1-offers.blcshine.io \
   OFFERS_API_BLC_AU:https://$1-offers-au.blcshine.io \
   OFFERS_API_DDS_UK:https://$1-offers-dds-uk.blcshine.io \
+  OFFERS_CMS_API_BLC_UK:https://$1-offers.blcshine.io \
+  OFFERS_CMS_API_BLC_AU:https://$1-offers-au.blcshine.io \
+  OFFERS_CMS_API_DDS_UK:https://$1-offers-dds-uk.blcshine.io \
   REDEMPTIONS_API_UK:https://$1-redemptions.blcshine.io \
   DISCOVERY_API_UK:https://$1-discovery.blcshine.io \
+
+# TODO: Update OFFER_CMS_... values once we have the valid URLS

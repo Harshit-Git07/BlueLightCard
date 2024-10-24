@@ -21,6 +21,9 @@ export interface Env {
 	IDENTITY_API_BLC_UK: string;
 	IDENTITY_API_BLC_AU: string;
 	IDENTITY_API_DDS_UK: string;
+	OFFERS_CMS_API_BLC_UK: string;
+	OFFERS_CMS_API_BLC_AU: string;
+	OFFERS_CMS_API_DDS_UK: string;
 	OFFERS_API_BLC_UK: string;
 	OFFERS_API_BLC_AU: string;
 	OFFERS_API_DDS_UK: string;
@@ -49,6 +52,7 @@ const getUrlByBrand = (url: URL, env: Env, brand: string): URL => {
 	const routes: RoutesWithBrand = {
 		'/auth': { BLC_UK: env.AUTH_API_BLC_UK, BLC_AU: env.AUTH_API_BLC_AU, DDS_UK: env.AUTH_API_DDS_UK },
 		'/identity': { BLC_UK: env.IDENTITY_API_BLC_UK, BLC_AU: env.IDENTITY_API_BLC_AU, DDS_UK: env.IDENTITY_API_DDS_UK },
+		'/offers/v2': { BLC_UK: env.OFFERS_CMS_API_BLC_UK, BLC_AU: env.OFFERS_CMS_API_BLC_AU, DDS_UK: env.OFFERS_CMS_API_DDS_UK },
 		'/offers': { BLC_UK: env.OFFERS_API_BLC_UK, BLC_AU: env.OFFERS_API_BLC_AU, DDS_UK: env.OFFERS_API_DDS_UK },
 		'/redemptions': { BLC_UK: env.REDEMPTIONS_API_BLC_UK, BLC_AU: env.REDEMPTIONS_API_BLC_AU, DDS_UK: env.REDEMPTIONS_API_DDS_UK },
 		'/discovery': { BLC_UK: env.DISCOVERY_API_BLC_UK, BLC_AU: env.DISCOVERY_API_BLC_AU, DDS_UK: env.DISCOVERY_API_DDS_UK },
@@ -79,6 +83,9 @@ const getUrlByPrefix = (url: URL, env: Env): URL => {
 		'/eu/offers/dds': env.OFFERS_API_DDS_UK,
 		'/eu/offers': env.OFFERS_API_BLC_UK,
 		'/au/offers': env.OFFERS_API_BLC_AU,
+		'/eu/offers/dds/v*': env.OFFERS_CMS_API_DDS_UK,
+		'/eu/offers2/v*': env.OFFERS_CMS_API_BLC_UK,
+		'/au/offers2/v*': env.OFFERS_CMS_API_BLC_AU,
 		'/eu/redemptions': env.REDEMPTIONS_API_BLC_UK,
 		'/eu/discovery': env.DISCOVERY_API_BLC_UK,
 	};

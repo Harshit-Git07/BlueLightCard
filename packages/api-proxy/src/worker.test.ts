@@ -11,6 +11,9 @@ export const testEnv: Env = {
 	IDENTITY_API_BLC_UK: 'https://identity.blc.uk',
 	IDENTITY_API_BLC_AU: 'https://identity.blc.au',
 	IDENTITY_API_DDS_UK: 'https://identity.dds.uk',
+	OFFERS_CMS_API_BLC_UK: 'https://offers-cms.blc.uk',
+	OFFERS_CMS_API_BLC_AU: 'https://offers-cms.blc.au',
+	OFFERS_CMS_API_DDS_UK: 'https://offers-cms.dds.uk',
 	OFFERS_API_BLC_UK: 'https://offers.blc.uk',
 	OFFERS_API_BLC_AU: 'https://offers.blc.au',
 	OFFERS_API_DDS_UK: 'https://offers.dds.uk',
@@ -114,6 +117,24 @@ describe('worker', () => {
 				expectedDomain: 'https://discovery.dds.uk',
 				brandHeader: 'DDS_UK',
 				expectedPath: '/discovery-endpoint',
+			},
+			{
+				route: '/offers/v2/offers-endpoint',
+				expectedDomain: 'https://offers-cms.blc.uk',
+				brandHeader: 'BLC_UK',
+				expectedPath: '/offers-endpoint',
+			},
+			{
+				route: '/offers/v2/offers-endpoint',
+				expectedDomain: 'https://offers-cms.blc.au',
+				brandHeader: 'BLC_AU',
+				expectedPath: '/offers-endpoint',
+			},
+			{
+				route: '/offers/v2/offers-endpoint',
+				expectedDomain: 'https://offers-cms.dds.uk',
+				brandHeader: 'DDS_UK',
+				expectedPath: '/offers-endpoint',
 			},
 		])('maps request to brand environment: $brandHeader for route: $route', async (testParams) => {
 			nock(testParams.expectedDomain).post(testParams.expectedPath).reply(200);

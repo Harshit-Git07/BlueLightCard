@@ -4,6 +4,7 @@ import { unpackJWT } from '@core/utils/unpackJWT';
 import { AMPLITUDE_API_KEY, BRAND } from '@/global-vars';
 import EVENTS from './events';
 import { AMPLITUDE_LOG_LEVEL, AMPLITUDE_SERVER_ZONE } from '@/utils/amplitude/amplitude';
+import { PlatformVariant } from '@bluelightcard/shared-ui/types';
 
 export async function initialiseAmplitude() {
   const idToken = localStorage.getItem('idToken') ?? '';
@@ -135,4 +136,52 @@ export function logSerpSearchStarted(searchTerm?: string, resultsCount?: number)
     brand: BRAND,
   };
   amplitude.track(EVENTS.SERP_SEARCH_STARTED, searchResultsEvent);
+}
+
+export function trackHomepageCarouselInteraction(carouselType: string, carouselName: string) {
+  try {
+    amplitude.track('homepage_carousel_interacted', {
+      brand: BRAND,
+      platform: PlatformVariant.Web,
+      carousel_type: carouselType,
+      carousel_name: carouselName,
+    });
+  } catch (error) {
+    console.error('Error tracking homepage_carousel_interacted:', error);
+  }
+}
+
+export function trackHomepageCarouselClick(
+  carouselType: string,
+  carouselName: string,
+  offerId: number,
+  companyId: number,
+  companyName: string
+) {
+  try {
+    amplitude.track('homepage_carousel_card_clicked', {
+      brand: BRAND,
+      platform: PlatformVariant.Web,
+      carousel_type: carouselType,
+      carousel_name: carouselName,
+      company_id: companyId,
+      brand_name: companyName,
+      brand_offer: offerId,
+    });
+  } catch (error) {
+    console.error('Error tracking homepage_carousel_card_clicked:', error);
+  }
+}
+
+export function trackTenancyClick(tenancyType: string, link: string) {
+  try {
+    amplitude.track('tenancy_clicked', {
+      brand: BRAND,
+      platform: PlatformVariant.Web,
+      tenancyType,
+      link,
+    });
+  } catch (error) {
+    console.error('Error tracking tenancy_clicked:', error);
+  }
 }

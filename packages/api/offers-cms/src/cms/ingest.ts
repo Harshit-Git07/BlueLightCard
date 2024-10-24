@@ -35,8 +35,8 @@ export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
     TableName: Table.cmsOffersData.tableName,
     Item: {
       ...record,
-      offerId: record.offerId?.toString() ?? '',
-      companyId: record.company?._id.toString() ?? '',
+      offerId: record.offerId?.toString(),
+      companyId: record.company?._id.toString(),
     },
   });
 }
@@ -57,7 +57,7 @@ export async function ingestCompany(record: Record<'company'>, logger: ILogger) 
     TableName: Table.cmsCompanyData.tableName,
     Item: {
       ...record,
-      companyId: brand.companyId?.toString() ?? '',
+      companyId: brand.companyId?.toString(),
     },
   });
 }

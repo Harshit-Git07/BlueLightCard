@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.37.0...bluelightcard/mobile-hybrid-v1.38.0) (2024-10-24)
+
+
+### Features
+
+* [DISCO-1039] Add dark read to web & mobile-hybrid search apis ([#2516](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2516)) ([df3e0e0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/df3e0e07b69c94a3f79d1dc4cce18c6f08c33816))
+* Add local support for Storybook Composed  ([#2283](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2283)) ([5294246](https://github.com/bluelightcard/BlueLightCard-2.0/commit/529424659451f9a2926e2f8c2e2f78bd151c341e))
+* Added native mock hook for hybrid ([#2397](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2397)) ([ae4c4cc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae4c4cce581cce27909b060af3d8f1427c00f319))
+* New button-MER-1 ([#2488](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2488)) ([e3a45e3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e3a45e3582b3331a52e82d008350b1ade8af8852))
+
 ## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.36.1...bluelightcard/mobile-hybrid-v1.37.0) (2024-10-14)
 
 

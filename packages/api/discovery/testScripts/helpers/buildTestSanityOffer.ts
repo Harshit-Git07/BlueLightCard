@@ -9,6 +9,7 @@ export function buildTestSanityOffer(): SanityOffer {
     _rev: 'HxAzVxEm31DYQTCb4WY0L5',
     _type: 'offer',
     _updatedAt: new Date().toISOString(),
+    offerId: 1,
     boostDetails: {
       _type: 'boost.type',
       boost: {

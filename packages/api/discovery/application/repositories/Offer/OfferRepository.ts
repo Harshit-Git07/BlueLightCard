@@ -3,10 +3,8 @@ import { OFFER_PREFIX } from '@blc-mono/discovery/application/repositories/const
 import { DynamoDBService } from '@blc-mono/discovery/application/services/DynamoDbService';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
+import { GSI1_NAME, GSI2_NAME } from '../constants/DynamoDBConstants';
 import { OfferEntity, OfferKeyBuilders } from '../schemas/OfferEntity';
-
-const GSI1_NAME = 'gsi1';
-const GSI2_NAME = 'gsi2';
 
 export class OfferRepository {
   private readonly tableName: string;
@@ -22,19 +20,7 @@ export class OfferRepository {
   }
 
   async batchInsert(offerEntities: OfferEntity[]): Promise<void> {
-    const DYNAMODB_MAX_BATCH_SIZE = 25;
-    for (let i = 0; i < offerEntities.length; i += DYNAMODB_MAX_BATCH_SIZE) {
-      const chunk = offerEntities.slice(i, i + DYNAMODB_MAX_BATCH_SIZE);
-      await DynamoDBService.batchWrite({
-        RequestItems: {
-          [this.tableName]: chunk.map((offerEntity) => ({
-            PutRequest: {
-              Item: offerEntity,
-            },
-          })),
-        },
-      });
-    }
+    await DynamoDBService.batchInsert(offerEntities, this.tableName);
   }
 
   async delete(id: string, companyId: string): Promise<void> {

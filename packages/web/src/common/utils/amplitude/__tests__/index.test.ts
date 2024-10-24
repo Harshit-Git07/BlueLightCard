@@ -273,3 +273,114 @@ describe('scrolledToBlock function', () => {
     });
   });
 });
+
+describe('trackHomepageCarouselInteraction', () => {
+  it('should call amplitude.track with the correct parameters', () => {
+    const carouselType = 'deals_of_the_week';
+    const carouselName = 'Deals of the Week';
+
+    const trackMock = jest.spyOn(amplitude, 'track');
+
+    target.trackHomepageCarouselInteraction(carouselType, carouselName);
+
+    expect(trackMock).toHaveBeenCalledWith('homepage_carousel_interacted', {
+      brand: 'blc-uk',
+      platform: 'web',
+      carousel_type: carouselType,
+      carousel_name: carouselName,
+    });
+  });
+
+  it('should log an error if amplitude.track throws an error', () => {
+    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+    const trackMock = jest.spyOn(amplitude, 'track').mockImplementation(() => {
+      throw new Error('Track error');
+    });
+
+    target.trackHomepageCarouselInteraction('carouselType', 'carouselName');
+
+    expect(consoleErrorMock).toHaveBeenCalledWith(
+      'Error tracking homepage_carousel_interacted:',
+      expect.any(Error)
+    );
+
+    trackMock.mockRestore();
+    consoleErrorMock.mockRestore();
+  });
+});
+
+describe('trackHomepageCarouselClick', () => {
+  it('should call amplitude.track with the correct parameters', () => {
+    const carouselType = 'deals_of_the_week';
+    const carouselName = 'Deals of the Week';
+    const offerId = 123;
+    const companyId = 456;
+    const companyName = 'Test Company';
+
+    const trackMock = jest.spyOn(amplitude, 'track');
+
+    target.trackHomepageCarouselClick(carouselType, carouselName, offerId, companyId, companyName);
+
+    expect(trackMock).toHaveBeenCalledWith('homepage_carousel_card_clicked', {
+      brand: 'blc-uk',
+      platform: 'web',
+      carousel_type: carouselType,
+      carousel_name: carouselName,
+      company_id: companyId,
+      brand_name: companyName,
+      brand_offer: offerId,
+    });
+  });
+
+  it('should log an error if amplitude.track throws an error', () => {
+    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+    const trackMock = jest.spyOn(amplitude, 'track').mockImplementation(() => {
+      throw new Error('Track error');
+    });
+
+    target.trackHomepageCarouselClick('carouselType', 'carouselName', 123, 456, 'Test Company');
+
+    expect(consoleErrorMock).toHaveBeenCalledWith(
+      'Error tracking homepage_carousel_card_clicked:',
+      expect.any(Error)
+    );
+
+    trackMock.mockRestore();
+    consoleErrorMock.mockRestore();
+  });
+});
+
+describe('trackTenancyClick', () => {
+  it('should call amplitude.track with the correct parameters', () => {
+    const tenancyType = 'takeover_banner';
+    const link = 'https://example.com';
+
+    const trackMock = jest.spyOn(amplitude, 'track');
+
+    target.trackTenancyClick(tenancyType, link);
+
+    expect(trackMock).toHaveBeenCalledWith('tenancy_clicked', {
+      brand: 'blc-uk',
+      platform: 'web',
+      tenancyType: tenancyType,
+      link: link,
+    });
+  });
+
+  it('should log an error if amplitude.track throws an error', () => {
+    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+    const trackMock = jest.spyOn(amplitude, 'track').mockImplementation(() => {
+      throw new Error('Track error');
+    });
+
+    target.trackTenancyClick('tenancyType', 'https://example.com');
+
+    expect(consoleErrorMock).toHaveBeenCalledWith(
+      'Error tracking tenancy_clicked:',
+      expect.any(Error)
+    );
+
+    trackMock.mockRestore();
+    consoleErrorMock.mockRestore();
+  });
+});

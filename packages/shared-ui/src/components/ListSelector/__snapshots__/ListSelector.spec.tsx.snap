@@ -1,0 +1,297 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListSelector component should render default list selector with hidden description 1`] = `
+<button
+  aria-label="Button for Default List Selector"
+  className="w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  <div
+    className="flex flex-col items-start w-full text-left"
+  >
+    <div
+      className="flex items-center gap-2 mb-1 w-full"
+    >
+      <h4
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal text-left"
+      >
+        Default List Selector
+      </h4>
+      <span>
+        <div
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+        >
+          <span
+            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+          />
+        </div>
+      </span>
+    </div>
+  </div>
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    data-icon="arrow-right"
+    data-prefix="far"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M440.6 273.4c4.7-4.5 7.4-10.8 7.4-17.4s-2.7-12.8-7.4-17.4l-176-168c-9.6-9.2-24.8-8.8-33.9 .8s-8.8 24.8 .8 33.9L364.1 232 24 232c-13.3 0-24 10.7-24 24s10.7 24 24 24l340.1 0L231.4 406.6c-9.6 9.2-9.9 24.3-.8 33.9s24.3 9.9 33.9 .8l176-168z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;
+
+exports[`ListSelector component should render default list selector with hidden tag 1`] = `
+<button
+  aria-label="Button for Default List Selector"
+  className="w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  <div
+    className="flex flex-col items-start w-full text-left"
+  >
+    <div
+      className="flex items-center gap-2 mb-1 w-full"
+    >
+      <h4
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal text-left"
+      >
+        Default List Selector
+      </h4>
+    </div>
+    <p
+      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
+    >
+      This is a default list selector
+    </p>
+  </div>
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    data-icon="arrow-right"
+    data-prefix="far"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M440.6 273.4c4.7-4.5 7.4-10.8 7.4-17.4s-2.7-12.8-7.4-17.4l-176-168c-9.6-9.2-24.8-8.8-33.9 .8s-8.8 24.8 .8 33.9L364.1 232 24 232c-13.3 0-24 10.7-24 24s10.7 24 24 24l340.1 0L231.4 406.6c-9.6 9.2-9.9 24.3-.8 33.9s24.3 9.9 33.9 .8l176-168z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;
+
+exports[`ListSelector component should render default list selector with hidden trailing icon 1`] = `
+<button
+  aria-label="Button for Default List Selector"
+  className="w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  <div
+    className="flex flex-col items-start w-full text-left"
+  >
+    <div
+      className="flex items-center gap-2 mb-1 w-full"
+    >
+      <h4
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal text-left"
+      >
+        Default List Selector
+      </h4>
+      <span>
+        <div
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+        >
+          <span
+            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+          />
+        </div>
+      </span>
+    </div>
+    <p
+      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
+    >
+      This is a default list selector
+    </p>
+  </div>
+</button>
+`;
+
+exports[`ListSelector component should render default list selector with in hover state 1`] = `
+<button
+  aria-label="List Selector"
+  className="w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-primary-hover dark:border-colour-primary-dark min-w-full sm:min-w-[500px]"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+  role="button"
+>
+  <div
+    className="flex flex-col items-start w-full text-left"
+  >
+    <div
+      className="flex items-center gap-2 mb-1 w-full"
+    >
+      <h4
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal text-left"
+      >
+        Default List Selector
+      </h4>
+      <span>
+        <div
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+        >
+          <span
+            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+          />
+        </div>
+      </span>
+    </div>
+  </div>
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    data-icon="arrow-right"
+    data-prefix="far"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M440.6 273.4c4.7-4.5 7.4-10.8 7.4-17.4s-2.7-12.8-7.4-17.4l-176-168c-9.6-9.2-24.8-8.8-33.9 .8s-8.8 24.8 .8 33.9L364.1 232 24 232c-13.3 0-24 10.7-24 24s10.7 24 24 24l340.1 0L231.4 406.6c-9.6 9.2-9.9 24.3-.8 33.9s24.3 9.9 33.9 .8l176-168z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;
+
+exports[`ListSelector component should render default list selector with in selected state 1`] = `
+<button
+  aria-label="Button for Default List Selector"
+  className="w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-primary dark:border-colour-primary-dark bg-colour-surface-container-light dark:bg-colour-surface-container-dark min-w-full sm:min-w-[500px]"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  <div
+    className="flex flex-col items-start w-full text-left"
+  >
+    <div
+      className="flex items-center gap-2 mb-1 w-full"
+    >
+      <h4
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal text-left"
+      >
+        Default List Selector
+      </h4>
+      <span>
+        <div
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+        >
+          <span
+            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+          />
+        </div>
+      </span>
+    </div>
+  </div>
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-pen h-5 text-colour-primary dark:text-colour-primary-dark"
+    data-icon="pen"
+    data-prefix="fas"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 512 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;
+
+exports[`ListSelector component should render default list selector with title, description, tag and trailing icon   1`] = `
+<button
+  aria-label="Button for Default List Selector"
+  className="w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  <div
+    className="flex flex-col items-start w-full text-left"
+  >
+    <div
+      className="flex items-center gap-2 mb-1 w-full"
+    >
+      <h4
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal text-left"
+      >
+        Default List Selector
+      </h4>
+      <span>
+        <div
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+        >
+          <span
+            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+          />
+        </div>
+      </span>
+    </div>
+    <p
+      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
+    >
+      This is a default list selector
+    </p>
+  </div>
+  <svg
+    aria-hidden="true"
+    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    data-icon="arrow-right"
+    data-prefix="far"
+    focusable="false"
+    role="img"
+    style={{}}
+    viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M440.6 273.4c4.7-4.5 7.4-10.8 7.4-17.4s-2.7-12.8-7.4-17.4l-176-168c-9.6-9.2-24.8-8.8-33.9 .8s-8.8 24.8 .8 33.9L364.1 232 24 232c-13.3 0-24 10.7-24 24s10.7 24 24 24l340.1 0L231.4 406.6c-9.6 9.2-9.9 24.3-.8 33.9s24.3 9.9 33.9 .8l176-168z"
+      fill="currentColor"
+      style={{}}
+    />
+  </svg>
+</button>
+`;

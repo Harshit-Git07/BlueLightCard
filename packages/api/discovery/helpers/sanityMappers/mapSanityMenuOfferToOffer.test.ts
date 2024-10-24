@@ -5,7 +5,7 @@ import {
   Offer as SanityOffer,
 } from '@bluelightcard/sanity-types';
 
-import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { Offer, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 
 import { mapSanityMenuOfferToOffer } from './mapSanityMenuOfferToOffer';
@@ -257,7 +257,7 @@ describe('mapSanityMenuOfferToOffer', () => {
         legacyOfferId: 123,
         name: 'Test Offer',
         status: 'live',
-        offerType: 'online',
+        offerType: OfferType.ONLINE,
         offerDescription: 'This is a heading↵ This is a paragraph.↵ ',
         image: 'https://example.com/image.jpg',
         offerStart: '2023-01-01',

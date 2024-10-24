@@ -173,7 +173,7 @@ jobs:
           - brand: 'blc-au'
             cloudflare_pages_name: 'mobile-hybrid-blc-au'
             branch: 'staging'
-            brand_url: 'develop.bluelightcard.com.au'
+            brand_url: 'www.develop.bluelightcard.com.au'
           - brand: 'dds-uk'
             cloudflare_pages_name: 'mobile-hybrid-dds'
             branch: 'staging'

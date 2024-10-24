@@ -2,7 +2,10 @@ import { z } from 'zod';
 import { IPlatformAdapter } from '../adapters';
 import { RedemptionTypeSchema } from '../components/OfferSheet/types';
 
-export async function getRedemptionDetails(platformAdapter: IPlatformAdapter, offerId: number) {
+export async function getRedemptionDetails(
+  platformAdapter: IPlatformAdapter,
+  offerId: number | string,
+) {
   const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redemptionDetails', {
     method: 'GET',
     queryParameters: {

@@ -5,9 +5,18 @@ describe('UpdateRedemptionConfigService - isValidIntegrationType', () => {
     const actual = isValidIntegrationType('eagleeye');
     expect(actual).toBe(true);
   });
+  it('should return true when the integration type is valid', () => {
+    const actual = isValidIntegrationType('uniqodo');
+    expect(actual).toBe(true);
+  });
 
   it('should return false when the integration type is invalid', () => {
     const actual = isValidIntegrationType('invalid');
+    expect(actual).toBe(false);
+  });
+
+  it('should return false when the integration type is undefined', () => {
+    const actual = isValidIntegrationType(undefined);
     expect(actual).toBe(false);
   });
 

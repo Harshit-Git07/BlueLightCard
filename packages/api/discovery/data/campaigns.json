@@ -78,5 +78,25 @@
     },
     "startDate": "2024-10-21T10:00:00Z",
     "endDate": "2024-10-28T09:59:59.997Z"
+  },
+  {
+    "id": "8",
+    "campaignType": "thankyouCampaign",
+    "content": {
+      "imageURL": "https://cdn.bluelightcard.co.uk/big+rewards-appbanner-wk8.jpg",
+      "iframeURL": "https://campaign.odicci.com/#/4bc166e3ffa585c76c35"
+    },
+    "startDate": "2024-10-28T10:00:00Z",
+    "endDate": "2024-11-04T09:59:59.997Z"
+  },
+  {
+    "id": "9",
+    "campaignType": "thankyouCampaign",
+    "content": {
+      "imageURL": "https://cdn.bluelightcard.co.uk/big+rewards-appbanner-wk5.jpg",
+      "iframeURL": "https://campaign.odicci.com/#/4f3426b165643b724f95"
+    },
+    "startDate": "2024-11-04T10:00:00Z",
+    "endDate": "2024-11-07T09:59:59.997Z"
   }
 ]

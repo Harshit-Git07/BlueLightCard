@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
 export interface OfferMeta {
-  companyId?: number | undefined;
+  companyId?: LegacyOrModernId;
   companyName?: string | undefined;
-  offerId?: number | undefined;
+  offerId?: LegacyOrModernId;
 }
 export interface OfferDetails {
-  companyId?: number | undefined;
+  companyId?: LegacyOrModernId;
   companyLogo?: string | undefined;
   description?: string | undefined;
   expiry?: string | undefined;
-  id?: number | undefined;
+  id?: LegacyOrModernId;
   name?: string | undefined;
   terms?: string | undefined;
   type?: string | undefined;
@@ -36,3 +36,5 @@ export const RedemptionTypeSchema = z.union([
   z.literal('vaultQR'),
 ]);
 export type RedemptionType = z.infer<typeof RedemptionTypeSchema>;
+
+type LegacyOrModernId = number | string | undefined;

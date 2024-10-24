@@ -6,14 +6,14 @@ import {
 } from '@bluelightcard/sanity-types';
 
 import { HomepageMenu } from '@blc-mono/discovery/application/models/HomepageMenu';
-import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { Offer, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { mapSanityMenuOfferToHomepageMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToHomepageMenu';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToHomepageMenu');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer');
 
-import { mapMenuOfferToMenusAndOffers } from './mapMenuOfferToMenusAndOffers';
+import { mapSanityMenuOfferToMenusAndOffers } from './mapSanityMenuOfferToMenusAndOffers';
 
 describe('mapSanityMenuToMenuAndOffers', () => {
   const homepageMenu: HomepageMenu = {
@@ -30,7 +30,7 @@ describe('mapSanityMenuToMenuAndOffers', () => {
       legacyOfferId: 1,
       name: 'Test Offer',
       status: 'active',
-      offerType: 'discount',
+      offerType: OfferType.ONLINE,
       offerDescription: 'Test Description',
       image: 'image_url',
       offerStart: new Date().toLocaleDateString(),
@@ -313,7 +313,7 @@ describe('mapSanityMenuToMenuAndOffers', () => {
     (mapSanityMenuOfferToHomepageMenu as jest.Mock).mockReturnValue(homepageMenu);
     (mapSanityOfferToOffer as jest.Mock).mockReturnValue(offers[0]);
 
-    const result = mapMenuOfferToMenusAndOffers(menuOffer);
+    const result = mapSanityMenuOfferToMenusAndOffers(menuOffer);
 
     expect(result.menu).toEqual(homepageMenu);
     expect(result.offers).toEqual(offers);
@@ -322,7 +322,7 @@ describe('mapSanityMenuToMenuAndOffers', () => {
   it('should return an empty array for offers if inclusions are undefined', () => {
     (mapSanityMenuOfferToHomepageMenu as jest.Mock).mockReturnValue(homepageMenu);
 
-    const result = mapMenuOfferToMenusAndOffers(menuOffer);
+    const result = mapSanityMenuOfferToMenusAndOffers(menuOffer);
 
     const offers: Offer[] = menuOffer?.inclusions?.map(mapSanityOfferToOffer) ?? [];
 

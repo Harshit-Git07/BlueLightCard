@@ -1,5 +1,6 @@
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { updateOfferInMenus } from '@blc-mono/discovery/application/repositories/Menu/service/MenuService';
 import {
   deleteOffer,
   getOfferById,
@@ -9,10 +10,12 @@ import {
 import * as target from './OfferEventHandler';
 
 jest.mock('@blc-mono/discovery/application/repositories/Offer/service/OfferService');
+jest.mock('@blc-mono/discovery/application/repositories/Menu/service/MenuService');
 
 const getOfferByIdMock = jest.mocked(getOfferById);
 const insertOfferMock = jest.mocked(insertOffer);
 const deleteOfferMock = jest.mocked(deleteOffer);
+const updateOfferInMenusMock = jest.mocked(updateOfferInMenus);
 
 describe('OfferEventHandler', () => {
   const loggerSpy = jest.spyOn(LambdaLogger.prototype, 'info');
@@ -27,6 +30,7 @@ describe('OfferEventHandler', () => {
       await target.handleOfferUpdated(newOfferRecord);
 
       expect(insertOfferMock).toHaveBeenCalledWith(newOfferRecord);
+      expect(updateOfferInMenusMock).toHaveBeenCalledWith(newOfferRecord);
     });
 
     describe('and current record exists', () => {
@@ -46,6 +50,7 @@ describe('OfferEventHandler', () => {
         await target.handleOfferUpdated(newOfferRecord);
 
         expect(insertOfferMock).toHaveBeenCalledWith(newOfferRecord);
+        expect(updateOfferInMenusMock).toHaveBeenCalledWith(newOfferRecord);
       });
 
       it('should not insert offer record if offer record is not newer version', async () => {
@@ -56,6 +61,8 @@ describe('OfferEventHandler', () => {
         await target.handleOfferUpdated(newOfferRecord);
 
         expect(insertOfferMock).not.toHaveBeenCalledWith(newOfferRecord);
+        expect(updateOfferInMenusMock).not.toHaveBeenCalledWith(newOfferRecord);
+
         expect(loggerSpy).toHaveBeenCalledWith({
           message: `Offer record with id: [${newOfferRecord.id}] is not newer than current stored record, so will not be overwritten.`,
         });

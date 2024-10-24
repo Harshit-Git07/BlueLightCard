@@ -1,57 +1,118 @@
-import { FC, useState } from 'react';
-import MinusSvg from './MinusSvg';
-import PlusSvg from './PlusSvg';
-import { useAtomValue } from 'jotai';
-import { offerSheetAtom } from '../OfferSheet/store';
 import { AmplitudeArg } from '../../types';
+import { FC, ReactNode, useEffect, useId, useRef, useState, useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus, IconDefinition } from '@fortawesome/pro-solid-svg-icons';
+import { offerSheetAtom } from '../OfferSheet/store';
+import { useAtom, useAtomValue } from 'jotai';
+import { focusableElements } from '../../constants';
+import { accordionAtom } from './store';
+import styles from './styles';
+
+const getClasses = styles;
 
 export type Props = {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
   amplitudeDetails?: AmplitudeArg;
+  groupId?: string;
+  isOpenDefault?: boolean;
+  openIcon?: IconDefinition;
+  closeIcon?: IconDefinition;
 };
 
-const Accordion: FC<Props> = ({ title, children, amplitudeDetails }) => {
-  const [active, setActive] = useState(false);
+const Accordion: FC<Props> = ({
+  title,
+  children,
+  amplitudeDetails = undefined,
+  groupId: providedGroupId = undefined,
+  isOpenDefault = false,
+  openIcon = faPlus,
+  closeIcon = faMinus,
+}) => {
+  const accordionId: string = `accordion-${useId()}`;
+  const [accordionGroups, setActiveAccordion] = useAtom(accordionAtom);
   const { amplitudeEvent } = useAtomValue(offerSheetAtom);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const innerContentRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState<number | undefined>(0);
+
+  const fallbackId = useId();
+  const groupId = providedGroupId ?? fallbackId;
+  const isOpen: boolean = accordionGroups[groupId] === accordionId;
+  const { accordionClasses, buttonClasses, titleClasses, contentWrapperClasses, contentClasses } =
+    getClasses(isOpen, !!providedGroupId);
+
+  const toggleFocusableElements = (makeFocusable: boolean) => {
+    const elements = contentRef.current?.querySelectorAll(
+      focusableElements.join(', ') + '[tabindex]:not([tabindex="-1"])',
+    );
+    elements?.forEach((element) => {
+      if (makeFocusable) {
+        (element as HTMLElement).removeAttribute('tabIndex');
+      } else {
+        (element as HTMLElement).setAttribute('tabIndex', '-1');
+      }
+    });
+  };
+
+  const updateHeight = useCallback(() => {
+    if (isOpen && innerContentRef.current) {
+      const newHeight = innerContentRef.current.offsetHeight;
+      setHeight(newHeight);
+    } else {
+      setHeight(0);
+    }
+  }, [isOpen]);
 
   const handleToggle = () => {
-    setActive(!active);
-    if (!active && amplitudeEvent && amplitudeDetails) {
+    setActiveAccordion({ ...accordionGroups, [groupId]: isOpen ? undefined : accordionId });
+
+    if (!isOpen && amplitudeEvent && amplitudeDetails) {
       amplitudeEvent(amplitudeDetails);
     }
   };
 
-  return (
-    <div className="w-full leading-6">
-      <button
-        className="flex w-full text-left py-3 px-1 items-center border-b-[0.5px] border-b-accordion-divider-colour-light dark:border-b-accordion-divider-colour-dark border-solid"
-        onClick={() => handleToggle()}
-      >
-        <div className="w-full">
-          <h4 className="text-accordion-label-colour-light dark:text-accordion-label-colour-dark font-accordion-label-font text-accordion-label-font font-accordion-label-font-weight tracking-accordion-label-font leading-accordion-label-font">
-            {title}
-          </h4>
-        </div>
-        <div className="flex max-w-[40px] items-center justify-end text-accordion-icon-colour-light dark:text-accordion-icon-colour-dark">
-          {active ? (
-            <div style={{ width: 14, height: 14 }}>
-              <MinusSvg />
-            </div>
-          ) : (
-            <div style={{ width: 15, height: 15 }}>
-              <PlusSvg />
-            </div>
-          )}
-        </div>
-      </button>
+  useEffect(() => {
+    setActiveAccordion({ ...accordionGroups, [groupId]: isOpenDefault ? accordionId : undefined });
+  }, []);
 
-      <div
-        className={`duration-200 ease-in-out ${
-          active ? 'block' : 'hidden'
-        } py-3 break-words whitespace-pre-wrap text-accordion-text-colour-light dark:text-accordion-text-colour-dark font-accordion-text-font text-accordion-text-font font-accordion-text-font-weight tracking-accordion-text-font leading-accordion-text-font`}
+  useEffect(() => {
+    updateHeight();
+    toggleFocusableElements(isOpen);
+
+    const handleResize = () => {
+      updateHeight();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isOpen, updateHeight]);
+
+  return (
+    <div className={accordionClasses}>
+      <button
+        className={buttonClasses}
+        onClick={handleToggle}
+        aria-label={isOpen ? 'Hide content' : 'Expand content'}
+        aria-expanded={isOpen}
+        aria-controls={accordionId}
       >
-        {children}
+        <span className={titleClasses}>{title}</span>
+        <FontAwesomeIcon icon={isOpen ? closeIcon : openIcon} aria-hidden="true" />
+      </button>
+      <div
+        id={accordionId}
+        ref={contentRef}
+        className={contentWrapperClasses}
+        style={{ height: `${height}px` }}
+        aria-hidden={!isOpen}
+      >
+        <div ref={innerContentRef} className={contentClasses} aria-hidden={!isOpen}>
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -47,14 +47,14 @@ export const MemberRedemptionEventDetailSchema = z.object({
       offerName: z.string(),
       affiliate: z.string().nullable(),
       clientType: ClientTypeSchema,
-      vaultDetails: z
-        .object({
-          id: z.string(),
-          alertBelow: NON_NEGATIVE_INT,
-          vaultType: z.union([z.literal('standard'), z.literal('legacy')]),
-          email: z.string().email(),
-        })
-        .optional(),
+      vaultDetails: z.object({
+        id: z.string(),
+        alertBelow: NON_NEGATIVE_INT,
+        vaultType: z.union([z.literal('standard'), z.literal('legacy')]),
+        email: z.string().email(),
+        integration: z.string().nullable().optional(),
+        integrationId: z.string().nullable().optional(),
+      }).optional(),
     }),
     z.union([
       z.object({

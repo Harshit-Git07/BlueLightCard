@@ -7,7 +7,6 @@ import {
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
   BLACK_FRIDAY_TIME_LOCK_END_DATE,
   OFFERS_BRAND,
-  CDN_URL,
 } from '@/global-vars';
 import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
 import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
@@ -19,7 +18,12 @@ import {
   MarketPlaceItemType,
   MarketPlaceMenuType,
 } from '@/page-types/members-home';
-import { logMembersHomePage } from '@/utils/amplitude';
+import {
+  logMembersHomePage,
+  trackHomepageCarouselInteraction,
+  trackHomepageCarouselClick,
+  trackTenancyClick,
+} from '@/utils/amplitude';
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
 import AlertBox from '@/components/AlertBox/AlertBox';
 import Container from '@/components/Container/Container';
@@ -34,7 +38,6 @@ import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
-import { useRouter } from 'next/router';
 import { useBrazeContentCards } from '@/hooks/useBrazeContentCards';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeContext from '../common/context/AmplitudeContext';
@@ -45,9 +48,10 @@ const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   endTime: BLACK_FRIDAY_TIME_LOCK_END_DATE,
 };
 
-function cleanText(text: string) {
+function cleanText(text: string | null | undefined) {
+  if (!text) return ''; // Return an empty string if the text is null or undefined
   return text
-    .replace(/&nbsp;/g, ' ') // Might not matter, but just in case
+    .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&pound;/g, '£');
 }
@@ -71,14 +75,13 @@ const HomePage: NextPage<any> = () => {
   // Store data states
   const [banners, setBanners] = useState<BannerType[]>([]);
   const [dealsOfTheWeek, setDealsOfTheWeek] = useState<DealsOfTheWeekType[]>([]);
-  const [marketplaceMenus, setMarketplaceMenus] = useState<MarketPlaceMenuType[]>([]);
+  const [marketplaceMenus, setMarketplaceMenus] = useState<MarketPlaceMenuType[]>([]); // Ensure non-null initial state
   const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
   const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const { viewOffer } = useOfferDetails();
 
   const contentCards = useBrazeContentCards();
-  const router = useRouter();
   const isMobile = useMedia('(max-width: 500px)');
 
   const brazeContentCardsEnabled = useAmplitudeExperiment(
@@ -123,7 +126,7 @@ const HomePage: NextPage<any> = () => {
       setBanners(slicedBanners as BannerType[]);
 
       setDealsOfTheWeek(homePage.offerMenus?.deals as DealsOfTheWeekType[]);
-      setMarketplaceMenus(homePage.offerMenus?.marketPlace as MarketPlaceMenuType[]);
+      setMarketplaceMenus(homePage.offerMenus?.marketplaceMenus ?? []);
       setFlexibleMenu(homePage.offerMenus?.flexible as FlexibleMenuType[]);
       setFeaturedOffers(homePage.offerMenus.features as FeaturedOffersType[]);
       setLoadingError(false);
@@ -155,6 +158,7 @@ const HomePage: NextPage<any> = () => {
   }
 
   // Format carousel data
+
   const dealsOfTheWeekOffersData = dealsOfTheWeek.map((offer: DealsOfTheWeekType) => ({
     offername: cleanText(offer.offername),
     companyname: cleanText(offer.companyname),
@@ -163,7 +167,16 @@ const HomePage: NextPage<any> = () => {
     offerId: offer.id,
     companyId: offer.compid,
     hasLink: false,
-    onClick: async () => await onSelectOffer(offer.id, offer.compid, offer.companyname),
+    onClick: () => {
+      trackHomepageCarouselClick(
+        'deals_of_the_week',
+        'Deals of the Week',
+        offer.id,
+        offer.compid,
+        offer.companyname
+      );
+      onSelectOffer(offer.id, offer.compid, offer.companyname);
+    },
   }));
 
   const flexibleOffersData = flexibleMenu
@@ -183,7 +196,19 @@ const HomePage: NextPage<any> = () => {
     offerId: offer.id,
     companyId: offer.compid,
     hasLink: false,
-    onClick: async () => await onSelectOffer(offer.id, offer.compid, offer.companyname),
+    onClick: () => {
+      trackHomepageCarouselClick(
+        'featured_offers',
+        'Featured Offers',
+        offer.id,
+        offer.compid,
+        offer.companyname
+      );
+      onSelectOffer(offer.id, offer.compid, offer.companyname);
+    },
+    onInteracted: () => {
+      trackHomepageCarouselInteraction('featured_offers', 'Featured Offers');
+    },
   }));
 
   const isBlackFriday = inTimePeriod(BLACK_FRIDAY_TIMELOCK_SETTINGS);
@@ -218,6 +243,7 @@ const HomePage: NextPage<any> = () => {
                   image={banner.imageSource}
                   href={banner.link}
                   id={'promoBanner' + index}
+                  onClick={() => trackTenancyClick('homepage_sponsor_banner', banner.link)}
                 />
               ))
             ) : (
@@ -246,6 +272,7 @@ const HomePage: NextPage<any> = () => {
                     image={card.imageUrl}
                     href={card.href}
                     id={'brazeBanner' + index}
+                    onClick={() => trackTenancyClick('braze_carousel', card.href)}
                   />
                 ))
             ) : (
@@ -266,6 +293,9 @@ const HomePage: NextPage<any> = () => {
             title="Deals of the week"
             itemsToShow={2}
             offers={dealsOfTheWeekOffersData}
+            onCarouselInteracted={() => {
+              trackHomepageCarouselInteraction('deals_of_the_week', 'Deals of the Week');
+            }}
           />
         </Container>
       )}
@@ -280,42 +310,57 @@ const HomePage: NextPage<any> = () => {
           <CardCarousel
             title={flexibleMenuTitle}
             itemsToShow={3}
-            useSmallCards
             offers={flexibleOffersData}
+            useSmallCards
+            onCarouselInteracted={() => {
+              trackHomepageCarouselInteraction('flexi_menu', flexibleMenuTitle);
+            }}
           />
         </Container>
       )}
 
       {/* Marketplace carousels */}
-      {marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
-        if (menu.items.length === 0 || menu.hidden) return <></>;
-        return (
-          <Container
-            className="py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
-            addBottomHorizontalLine
-            key={index}
-            data-testid={`marketplace-menu-carousel-${index}`}
-          >
-            <CardCarousel
-              title={menu.name}
-              itemsToShow={3}
-              offers={menu.items.map(({ item }: MarketPlaceItemType) => {
-                return {
-                  offername: cleanText(item.offername),
-                  companyname: cleanText(item.companyname),
-                  imageUrl: handleImageFallbacks(item.image, item.logos),
-                  href: `/offerdetails.php?cid=${item.compid}&oid=${item.offerId}`,
-                  offerId: item.offerId,
-                  companyId: item.compid,
-                  hasLink: false,
-                  onClick: async () =>
-                    await onSelectOffer(item.offerId, item.compid, item.companyname),
-                };
-              })}
-            />
-          </Container>
-        );
-      })}
+      {marketplaceMenus.length > 0 &&
+        marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
+          if (menu.items.length === 0 || menu.hidden) return <></>;
+          return (
+            <Container
+              className="py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+              addBottomHorizontalLine
+              key={index}
+              data-testid={`marketplace-menu-carousel-${index}`}
+            >
+              <CardCarousel
+                title={menu.name}
+                itemsToShow={3}
+                offers={menu.items.map(({ item }: MarketPlaceItemType) => {
+                  return {
+                    offername: cleanText(item.offername),
+                    companyname: cleanText(item.companyname),
+                    imageUrl: handleImageFallbacks(item.image, item.logos),
+                    href: `/offerdetails.php?cid=${item.compid}&oid=${item.offerId}`,
+                    offerId: item.offerId,
+                    companyId: item.compid,
+                    hasLink: false,
+                    onClick: async () => {
+                      await onSelectOffer(item.offerId, item.compid, item.companyname);
+                      trackHomepageCarouselClick(
+                        'marketplace_menu',
+                        menu.name,
+                        item.offerId,
+                        item.compid,
+                        cleanText(item.companyname)
+                      );
+                    },
+                  };
+                })}
+                onCarouselInteracted={() => {
+                  trackHomepageCarouselInteraction('marketplace_menu', menu.name);
+                }}
+              />
+            </Container>
+          );
+        })}
 
       {/* Featured offers carousel */}
       {(featuredOffersData.length > 0 || !hasLoaded) && (
@@ -324,7 +369,14 @@ const HomePage: NextPage<any> = () => {
           addBottomHorizontalLine
           data-testid="featured-menu-carousel"
         >
-          <CardCarousel title="Featured Offers" itemsToShow={3} offers={featuredOffersData} />
+          <CardCarousel
+            title="Featured Offers"
+            itemsToShow={3}
+            offers={featuredOffersData}
+            onCarouselInteracted={() => {
+              trackHomepageCarouselInteraction('featured_offers', 'Featured Offers');
+            }}
+          />
         </Container>
       )}
     </>

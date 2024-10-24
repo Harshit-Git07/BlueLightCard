@@ -26,7 +26,11 @@ const RedeemRequestModel = z.object({
   }),
 });
 
-export type ParsedRequest = z.infer<typeof RedeemRequestModel> & { memberId: string; brazeExternalUserId: string };
+export type ParsedRequest = z.infer<typeof RedeemRequestModel> & {
+  memberId: string;
+  brazeExternalUserId: string;
+  memberEmail: string;
+};
 
 export class RedeemController extends APIGatewayController<ParsedRequest> {
   static readonly inject = [Logger.key, RedeemService.key, CardStatusHelper.key] as const;
@@ -68,6 +72,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
 
     const memberId = tokenPayloadResult.value['custom:blc_old_id'];
     const brazeExternalUserId = tokenPayloadResult.value['custom:blc_old_uuid'];
+    const memberEmail = tokenPayloadResult.value['email'];
 
     if (typeof memberId !== 'string')
       return Result.err({ kind: ParseErrorKind.RequestValidationMemberId, message: 'Invalid memberId in token' });
@@ -76,6 +81,8 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
         kind: ParseErrorKind.RequestValidationBrazeExternalUserId,
         message: 'Invalid brazeExternalUserId in token',
       });
+    if (typeof memberEmail !== 'string')
+      return Result.err({ kind: ParseErrorKind.RequestValidationMemberEmail, message: 'Invalid memberEmail in token' });
 
     const isValidCardStatus = await this.cardStatus.validateCardStatus(parsedBearerToken);
 
@@ -83,7 +90,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
       return Result.err({ kind: ParseErrorKind.RequestValidationCardStatus, message: 'Ineligible card status' });
     }
 
-    return Result.ok({ ...parsedRequest.value, memberId, brazeExternalUserId });
+    return Result.ok({ ...parsedRequest.value, memberId, brazeExternalUserId, memberEmail });
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
@@ -93,6 +100,7 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
       companyName: request.body.companyName,
       offerName: request.body.offerName,
       clientType: request.headers['x-client-type'] ?? 'web',
+      memberEmail: request.memberEmail,
     });
 
     switch (result.kind) {

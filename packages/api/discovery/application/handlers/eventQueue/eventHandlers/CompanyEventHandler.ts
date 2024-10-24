@@ -5,6 +5,7 @@ import {
   getCompanyById,
   insertCompany,
 } from '@blc-mono/discovery/application/repositories/Company/service/CompanyService';
+import { updateOfferInMenus } from '@blc-mono/discovery/application/repositories/Menu/service/MenuService';
 import {
   getOffersByCompany,
   insertOffers,
@@ -22,7 +23,12 @@ export async function handleCompanyUpdated(newCompanyRecord: Company): Promise<v
 
     const updatedOfferRecords = updateOffersWithNewCompanyDetails(currentOfferRecords, newCompanyRecord);
 
-    if (updatedOfferRecords.length > 0) await insertOffers(updatedOfferRecords);
+    if (updatedOfferRecords.length > 0) {
+      await insertOffers(updatedOfferRecords);
+      updatedOfferRecords.forEach(async (newOfferRecord) => {
+        await updateOfferInMenus(newOfferRecord);
+      });
+    }
   } else {
     logger.info({
       message: `Offer record with id: [${newCompanyRecord.id}] is not newer than current stored record, so will not be overwritten.`,

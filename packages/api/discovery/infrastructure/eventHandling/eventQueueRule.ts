@@ -13,6 +13,9 @@ export function eventRule(stack: Stack, queue: Queue): EventBusRuleProps {
         Events.OFFER_DELETED,
         Events.COMPANY_CREATED,
         Events.COMPANY_UPDATED,
+        Events.MENU_OFFER_CREATED,
+        Events.MENU_OFFER_UPDATED,
+        Events.MENU_OFFER_DELETED,
       ],
     },
     targets: {

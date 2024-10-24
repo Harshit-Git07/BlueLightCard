@@ -104,7 +104,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       showQR: false,
       status: 'active',
       vaultType: 'standard',
-      integration: 'eagleeye',
+      integration: 'uniqodo',
       integrationId: '123456',
     },
   ] satisfies (typeof vaultsTable.$inferInsert)[];

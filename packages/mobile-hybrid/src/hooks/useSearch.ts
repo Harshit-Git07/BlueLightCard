@@ -1,13 +1,16 @@
 import { atom, useAtom } from 'jotai';
-import { APIUrl, CDN_URL, V5_API_URL } from '@/globals';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { IPlatformAdapter } from '../../../shared-ui/src/adapters';
+import { APIUrl, V5_API_URL } from '@/globals';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { darkRead, IPlatformAdapter } from '@bluelightcard/shared-ui';
 import InvokeNativeAPICall from '@/invoke/apiCall';
+import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
+import { useAtomValue } from 'jotai/index';
+import { userProfile } from '@/components/UserProfileProvider/store';
 
 export interface SearchResult {
-  id: number;
+  id: number | string;
   catid?: number;
-  compid: number;
+  compid: number | string;
   typeid: number;
   offername: string;
   companyname: string;
@@ -17,15 +20,15 @@ export interface SearchResult {
 }
 
 export interface SearchResultV5 {
-  ID: number;
+  ID: number | string;
+  LegacyID: number;
   CatID: number;
-  CompID: number;
+  CompID: number | string;
+  LegacyCompanyID: number;
   TypeID: number;
   OfferName: string;
   CompanyName: string;
-  Logos: string;
-  AbsoluteLogos: string;
-  S3Logos: string;
+  offerimg: string;
 }
 
 export interface SearchResultResponse {
@@ -52,34 +55,27 @@ export const searchResultsAtom = atom<SearchResult[]>(initialState.searchResults
 
 const invokeNativeApiCall = new InvokeNativeAPICall();
 
-const mapV5SearchResults = (searchResults: SearchResultV5[]) => {
+const mapV5SearchResults = (
+  searchResults: SearchResultV5[],
+  useLegacyIds: boolean,
+): SearchResult[] => {
   return searchResults.map((offer) => ({
-    id: offer.ID,
+    id: useLegacyIds ? offer.LegacyID : offer.ID,
     offername: offer.OfferName,
     companyname: offer.CompanyName,
-    compid: offer.CompID,
-    s3logos: getSearchResultLogo(offer),
-    logos: offer.S3Logos,
-    absoluteLogos: offer.S3Logos,
+    compid: useLegacyIds ? offer.LegacyCompanyID : offer.CompID,
+    s3logos: offer.offerimg,
+    logos: offer.offerimg,
+    absoluteLogos: offer.offerimg,
     typeid: offer.TypeID,
   }));
-};
-
-const getSearchResultLogo = (searchResult: SearchResultV5) => {
-  if (searchResult.S3Logos && searchResult.S3Logos !== '') {
-    return searchResult.S3Logos;
-  } else {
-    return `${CDN_URL}/companyimages/complarge/retina/${searchResult.CompID}.jpg`;
-  }
 };
 
 const useSearch = (platformAdapter: IPlatformAdapter) => {
   const [status, setStatus] = useAtom(statusAtom);
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
   const [searchResults, setSearchResults] = useAtom(searchResultsAtom);
-
-  const withSearchV5Experiment =
-    platformAdapter.getAmplitudeFeatureFlag(Experiments.SEARCH_V5) === 'treatment';
+  const userProfileValue = useAtomValue(userProfile);
 
   const doSearch = async (term: string) => {
     setSearchTerm(term);
@@ -87,50 +83,25 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
     setSearchResults([]);
 
     try {
-      const results = await invokeNativeApiCall.requestDataAsync<SearchResultResponse>(
-        APIUrl.Search,
-        { term },
+      const results: SearchResultResponse = await darkRead(
+        {
+          experimentEnabled:
+            platformAdapter.getAmplitudeFeatureFlag(FeatureFlags.SEARCH_V5_ENABLED) ===
+            AmplitudeExperimentState.Treatment,
+          darkReadEnabled:
+            platformAdapter.getAmplitudeFeatureFlag(FeatureFlags.SEARCH_V5_ENABLED) ===
+            AmplitudeExperimentState.DarkRead,
+        },
+        async () => v4Search(term),
+        async () =>
+          v5Search(platformAdapter, term, userProfileValue?.service, userProfileValue?.dob),
       );
-
-      if (!results?.success) {
-        throw new Error('Error in search results response');
-      }
 
       setSearchResults(results.data);
       setStatus(Status.Success);
     } catch (err) {
-      console.error('Error requesting V4 search results', err);
+      console.error('Error requesting search results', err);
       setStatus(Status.Error);
-    }
-  };
-
-  const doSearchWithSearchV5Experiment = async (
-    term: string,
-    organisation: string = '',
-    isAgeGated: boolean = false,
-  ) => {
-    setSearchTerm(term);
-    setStatus(Status.Loading);
-    setSearchResults([]);
-
-    try {
-      const results = await platformAdapter.invokeV5Api(V5_API_URL.Search, {
-        method: 'GET',
-        queryParameters: {
-          query: term,
-          organisation,
-          isAgeGated: isAgeGated ? 'true' : 'false',
-        },
-        cachePolicy: 'auto',
-      });
-
-      const parsedSearchResults = JSON.parse(results.data).data;
-      const mappedSearchResults = mapV5SearchResults(parsedSearchResults);
-      setSearchResults(mappedSearchResults);
-      setStatus(Status.Success);
-    } catch (err) {
-      console.error('Error requesting V5 search results, falling back to V4', err);
-      await doSearch(term);
     }
   };
 
@@ -144,8 +115,44 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
     status,
     searchTerm,
     searchResults,
-    doSearch: withSearchV5Experiment ? doSearchWithSearchV5Experiment : doSearch,
+    doSearch,
     resetSearch,
+  };
+};
+
+const v4Search = async (term: string): Promise<SearchResultResponse> => {
+  const results = await invokeNativeApiCall.requestDataAsync<SearchResultResponse>(APIUrl.Search, {
+    term,
+  });
+
+  if (!results?.success) {
+    throw new Error('Error in search results response');
+  }
+
+  return results;
+};
+
+const v5Search = async (
+  platformAdapter: IPlatformAdapter,
+  term: string,
+  organisation: string = '',
+  dob: string = '',
+  useLegacyId = true,
+): Promise<SearchResultResponse> => {
+  const results = await platformAdapter.invokeV5Api(V5_API_URL.Search, {
+    method: 'GET',
+    queryParameters: {
+      query: term,
+      organisation,
+      dob,
+    },
+    cachePolicy: 'auto',
+  });
+
+  const parsedSearchResults = JSON.parse(results.data).data;
+  return {
+    success: true,
+    data: mapV5SearchResults(parsedSearchResults, useLegacyId),
   };
 };
 

@@ -3,7 +3,7 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { MenuResponse } from '@blc-mono/discovery/application/models/MenuResponse';
 
-import { handler } from '../../../application/handlers/Menus/getMenus';
+import { dummyMenuResponse, handler } from './getMenus';
 
 describe('getMenus handler', () => {
   it('should return the full menu response when no ids are provided', async () => {
@@ -16,59 +16,9 @@ describe('getMenus handler', () => {
 
     const result = await handler(event as APIGatewayEvent);
 
-    const menuResponse: MenuResponse = {
-      dealsOfTheWeek: {
-        offers: [
-          {
-            offerID: '1',
-            offerName: 'Deal of the Week 1',
-            offerDescription: 'Description for Deal of the Week 1',
-            imageURL: 'http://example.com/image1.jpg',
-            companyID: 'company1',
-            companyName: 'Company 1',
-          },
-        ],
-      },
-      featured: {
-        offers: [
-          {
-            offerID: '2',
-            offerName: 'Featured Offer 1',
-            offerDescription: 'Description for Featured Offer 1',
-            imageURL: 'http://example.com/image2.jpg',
-            companyID: 'company2',
-            companyName: 'Company 2',
-          },
-        ],
-      },
-      marketplace: [
-        {
-          menuName: 'Marketplace Menu 1',
-          hidden: false,
-          offers: [
-            {
-              offerID: '3',
-              offerName: 'Marketplace Offer 1',
-              offerDescription: 'Description for Marketplace Offer 1',
-              imageURL: 'http://example.com/image3.jpg',
-              companyID: 'company3',
-              companyName: 'Company 3',
-            },
-          ],
-        },
-      ],
-      flexible: [
-        {
-          listID: 'list1',
-          title: 'Flexible List 1',
-          imageURL: 'http://example.com/image4.jpg',
-        },
-      ],
-    };
-
     const expectedResponse = Response.OK({
       message: 'successful',
-      data: menuResponse,
+      data: dummyMenuResponse,
     });
 
     expect(result).toEqual(expectedResponse);
@@ -87,32 +37,8 @@ describe('getMenus handler', () => {
     const result = await handler(event as APIGatewayEvent);
 
     const menuResponse: MenuResponse = {
-      dealsOfTheWeek: {
-        offers: [
-          {
-            offerID: '1',
-            offerName: 'Deal of the Week 1',
-            offerDescription: 'Description for Deal of the Week 1',
-            imageURL: 'http://example.com/image1.jpg',
-            companyID: 'company1',
-            companyName: 'Company 1',
-          },
-        ],
-      },
-      featured: {
-        offers: [
-          {
-            offerID: '2',
-            offerName: 'Featured Offer 1',
-            offerDescription: 'Description for Featured Offer 1',
-            imageURL: 'http://example.com/image2.jpg',
-            companyID: 'company2',
-            companyName: 'Company 2',
-          },
-        ],
-      },
-      marketplace: [],
-      flexible: [],
+      dealsOfTheWeek: dummyMenuResponse.dealsOfTheWeek,
+      featured: dummyMenuResponse.featured,
     };
 
     const expectedResponse = Response.OK({

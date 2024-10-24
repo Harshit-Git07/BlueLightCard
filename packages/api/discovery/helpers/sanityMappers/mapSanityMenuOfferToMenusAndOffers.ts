@@ -5,7 +5,7 @@ import { Offer } from '@blc-mono/discovery/application/models/Offer';
 import { mapSanityMenuOfferToHomepageMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToHomepageMenu';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 
-export const mapMenuOfferToMenusAndOffers = (menuOffer: MenuOffer): { menu: HomepageMenu; offers: Offer[] } => {
+export const mapSanityMenuOfferToMenusAndOffers = (menuOffer: MenuOffer): { menu: HomepageMenu; offers: Offer[] } => {
   return {
     menu: mapSanityMenuOfferToHomepageMenu(menuOffer),
     offers: menuOffer?.inclusions?.map(mapSanityOfferToOffer) ?? [],

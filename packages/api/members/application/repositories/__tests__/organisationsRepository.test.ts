@@ -56,7 +56,7 @@ const paramsWithOrgId = {
 const paramsWithoutOrgId = {
   TableName: 'testTable',
   IndexName: 'gsi1',
-  KeyConditionExpression: '#sk= :sk And begins_with(#pk, :pk)',
+  KeyConditionExpression: '#sk = :sk AND begins_with(#pk, :pk)',
   ExpressionAttributeNames: {
     '#sk': 'sk',
     '#pk': 'pk',
@@ -77,7 +77,7 @@ describe('OrganisationsRepository', () => {
     repository = new OrganisationsRepository(mockDynamoDB as any, 'testTable');
   });
 
-  it('should return validated organisation when found and orgId is present', async () => {
+  it('should return validated organisation when found and organisationId is present', async () => {
     const mockQueryResult = {
       Items: mockOrganisationList,
     } as never;
@@ -90,7 +90,7 @@ describe('OrganisationsRepository', () => {
     expect(result).toEqual(mockTransformedOrganisationList);
   });
 
-  it('should return validated organisations when found and orgId is not present', async () => {
+  it('should return validated organisations when found and organisationId is not present', async () => {
     const mockQueryResult = {
       Items: mockOrganisationList,
     } as never;
@@ -107,7 +107,7 @@ describe('OrganisationsRepository', () => {
     expect(result).toEqual(mockTransformedOrganisationList);
   });
 
-  it('should return an empty array when no organizations are found', async () => {
+  it('should return an empty array when no organisations are found', async () => {
     const mockQueryResult = {
       Items: [],
     };

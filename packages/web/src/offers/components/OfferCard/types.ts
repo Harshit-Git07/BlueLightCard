@@ -12,8 +12,8 @@ export interface OfferCardProps {
   upperCaseTitle?: boolean;
   showFindOutMore?: boolean;
   fallbackImage?: string;
-  offerId?: number;
-  companyId?: number;
+  offerId?: number | string;
+  companyId?: number | string;
   hasLink?: boolean;
   onClick?: () => void;
 }

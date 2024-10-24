@@ -1,0 +1,18 @@
+meta {
+  name: GetEmployersById
+  type: http
+  seq: 2
+}
+
+get {
+  url: "https://{{api_key_sst}}.execute-api.eu-west-2.amazonaws.com/v1/members/v5/orgs/employers/{{brand}}/{{organisation_id}}/{{employer_id}}"
+  body: none
+  auth: apikey
+}
+
+auth:apikey {
+  key: x-api-key
+  value: {{api_key_aws}}
+  placement: header
+}
+

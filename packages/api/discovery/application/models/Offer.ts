@@ -4,12 +4,20 @@ import { Boost } from './Boost';
 import { Category } from './Category';
 import { Discount } from './Discount';
 
+export enum OfferType {
+  GIFT_CARD = 'gift-card',
+  IN_STORE = 'in-store',
+  LOCAL = 'local',
+  ONLINE = 'online',
+  OTHER = 'other',
+}
+
 export type Offer = {
   id: string;
   legacyOfferId?: number;
   name: string;
   status: string;
-  offerType: string;
+  offerType: OfferType;
   offerDescription: string;
   image: string;
   offerStart?: string;

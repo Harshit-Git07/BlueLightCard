@@ -46,7 +46,6 @@ describe('FloatingPlaceholder', () => {
   });
 
   it('applies correct classes when focused', async () => {
-    const user = userEvent.setup();
     render(
       <FloatingPlaceholder {...defaultProps}>
         <input type="text" />
@@ -54,7 +53,7 @@ describe('FloatingPlaceholder', () => {
     );
 
     const input = screen.getByRole('textbox');
-    await user.click(input);
+    await userEvent.click(input);
 
     const label = screen.getByText('Test Label');
     expect(label).toHaveClass('top-[4px] text-xs mocked-light-font-style');
@@ -62,7 +61,6 @@ describe('FloatingPlaceholder', () => {
   });
 
   it('applies correct classes when not focused but has value', async () => {
-    const user = userEvent.setup();
     render(
       <FloatingPlaceholder {...defaultProps}>
         <input type="text" />
@@ -70,8 +68,8 @@ describe('FloatingPlaceholder', () => {
     );
 
     const input = screen.getByRole('textbox');
-    await user.type(input, 'Test Value');
-    await user.tab();
+    await userEvent.type(input, 'Test Value');
+    await userEvent.tab();
 
     const label = screen.getByText('Test Label');
     expect(label).toHaveClass('top-[4px] text-xs mocked-light-font-style');
@@ -92,7 +90,6 @@ describe('FloatingPlaceholder', () => {
   });
 
   it('handles input events correctly', async () => {
-    const user = userEvent.setup();
     render(
       <FloatingPlaceholder {...defaultProps}>
         <input type="text" />
@@ -106,25 +103,24 @@ describe('FloatingPlaceholder', () => {
     expect(label).toHaveClass('top-1/2 -translate-y-1/2 py-[12px]');
 
     // Focus
-    await user.click(input);
+    await userEvent.click(input);
     expect(label).toHaveClass('top-[4px] text-xs mocked-light-font-style');
 
     // Type
-    await user.type(input, 'Test');
+    await userEvent.type(input, 'Test');
     expect(label).toHaveClass('top-[4px] text-xs mocked-light-font-style');
 
     // Blur with value
-    await user.tab();
+    await userEvent.tab();
     expect(label).toHaveClass('top-[4px] text-xs mocked-light-font-style');
 
     // Clear and blur
-    await user.clear(input);
-    await user.tab();
+    await userEvent.clear(input);
+    await userEvent.tab();
     expect(label).toHaveClass('top-1/2 -translate-y-1/2 py-[12px]');
   });
 
   it('calls child component event handlers', async () => {
-    const user = userEvent.setup();
     const onChangeMock = jest.fn();
     const onFocusMock = jest.fn();
     const onBlurMock = jest.fn();
@@ -138,15 +134,15 @@ describe('FloatingPlaceholder', () => {
     const input = screen.getByRole('textbox');
 
     // Test focus
-    await user.click(input);
+    await userEvent.click(input);
     expect(onFocusMock).toHaveBeenCalledTimes(1);
 
     // Test change
-    await user.type(input, 'Test');
+    await userEvent.type(input, 'Test');
     expect(onChangeMock).toHaveBeenCalledTimes(4); // Once for each character
 
     // Test blur
-    await user.tab();
+    await userEvent.tab();
     expect(onBlurMock).toHaveBeenCalledTimes(1);
   });
 

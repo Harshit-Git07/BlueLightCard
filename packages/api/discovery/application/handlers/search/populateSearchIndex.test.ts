@@ -7,7 +7,7 @@ import { OpenSearchService } from '@blc-mono/discovery/application/services/open
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { offerFactory } from '../../factories/OfferFactory';
-import { Offer } from '../../models/Offer';
+import { Offer, OfferType } from '../../models/Offer';
 
 import { handler } from './populateSearchIndex';
 
@@ -95,7 +95,7 @@ describe('populateSearchIndex', () => {
           legacyOfferId: 1,
           name: 'Offer 1',
           status: 'active',
-          offerType: 'discount',
+          offerType: OfferType.ONLINE,
           offerDescription: 'Description for offer 1',
           image: 'http://example.com/image1.jpg',
           offerStart: TODAY,
@@ -156,7 +156,7 @@ describe('populateSearchIndex', () => {
           legacy_offer_id: 1,
           offer_name: 'Offer 1',
           offer_status: 'active',
-          offer_type: 'discount',
+          offer_type: OfferType.ONLINE,
           offer_description: 'Description for offer 1',
           offer_description_stripped: 'Description for offer 1',
           offer_image: 'http://example.com/image1.jpg',

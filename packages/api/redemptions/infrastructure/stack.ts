@@ -191,6 +191,9 @@ async function RedemptionsStack({ app, stack }: StackContext) {
         [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: bus.eventBusName,
         [RedemptionsStackEnvironmentKeys.IDENTITY_API_URL]: config.networkConfig.identityApiUrl,
         [RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT]: config.featureFlagsConfig.enableStandardVault,
+        [RedemptionsStackEnvironmentKeys.UNIQODO_CLAIM_URL]: config.uniqodoConfig.uniqodoClaimUrl,
+        [RedemptionsStackEnvironmentKeys.UNIQODO_SECRETS_MANAGER_NAME]:
+          config.secretsManagerConfig.uniqodoSecretsManagerName,
       },
       defaultAllowedOrigins: config.networkConfig.apiDefaultAllowedOrigins,
       permissions: [

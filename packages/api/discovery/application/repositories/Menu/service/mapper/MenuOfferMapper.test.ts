@@ -1,4 +1,4 @@
-import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { Offer, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { MenuOfferEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
 import { mapMenuOfferEntityToOffer, mapOfferToMenuOfferEntity } from './MenuOfferMapper';
@@ -8,7 +8,7 @@ const offer: Offer = {
   legacyOfferId: 1,
   name: 'Test Offer',
   status: 'active',
-  offerType: 'discount',
+  offerType: OfferType.ONLINE,
   offerDescription: 'Test Description',
   image: 'image_url',
   offerStart: new Date(Date.now() - 24 * 3600000).toLocaleDateString(),

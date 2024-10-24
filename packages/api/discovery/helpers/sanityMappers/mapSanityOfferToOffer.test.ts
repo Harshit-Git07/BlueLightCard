@@ -4,7 +4,7 @@ import {
   Offer as SanityOffer,
 } from '@bluelightcard/sanity-types';
 
-import { Offer } from '../../application/models/Offer';
+import { Offer, OfferType } from '../../application/models/Offer';
 
 import { mapSanityOfferToOffer } from './mapSanityOfferToOffer';
 
@@ -15,7 +15,7 @@ describe('mapSanityOfferToOffer', () => {
       legacyOfferId: 123,
       name: 'Test Offer',
       status: 'live',
-      offerType: 'online',
+      offerType: OfferType.ONLINE,
       offerDescription: 'This is a heading↵ This is a paragraph.↵ ',
       image: 'https://example.com/image.jpg',
       offerStart: '2023-01-01',
@@ -187,7 +187,7 @@ it('should map boost with default values', () => {
 it('should skip trusts with no code value', () => {
   const sanityOfferWithOtherDiscount: Partial<SanityOffer> = {
     ...validSanityOffer,
-    includedTrust: [
+    includedTrusts: [
       {
         _id: 'service-id',
         _type: 'trust',
@@ -208,7 +208,7 @@ it('should skip trusts with no code value', () => {
 it('should map trusts with no values', () => {
   const sanityOfferWithOtherDiscount: Partial<SanityOffer> = {
     ...validSanityOffer,
-    includedTrust: undefined,
+    includedTrusts: undefined,
   };
 
   const result = mapSanityOfferToOffer(sanityOfferWithOtherDiscount as SanityOffer);

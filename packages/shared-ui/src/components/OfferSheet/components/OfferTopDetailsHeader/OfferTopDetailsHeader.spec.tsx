@@ -137,7 +137,7 @@ describe('smoke test', () => {
       </SharedUIConfigProvider>,
     );
 
-    expect(getByRole('button', { name: /terms & conditions/i })).toBeTruthy();
+    expect(getByRole('button', { name: 'Expand content' })).toBeTruthy();
   });
 
   it('should render terms & conditions accordion correctly', () => {
@@ -150,7 +150,7 @@ describe('smoke test', () => {
       </SharedUIConfigProvider>,
     );
 
-    const tcAccordion = getByRole('button', { name: /terms & conditions/i });
+    const tcAccordion = getByRole('button', { name: 'Expand content' });
 
     expect(tcAccordion).toBeTruthy();
 

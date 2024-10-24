@@ -24,7 +24,7 @@ describe('Offer Repository', () => {
   });
 
   const mockSave = jest.fn().mockResolvedValue(() => Promise.resolve());
-  const mockBatchWrite = jest.fn().mockResolvedValue(() => Promise.resolve());
+  const mockBatchInsert = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockDelete = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockGet = jest.fn();
   const mockQuery = jest.fn();
@@ -44,28 +44,13 @@ describe('Offer Repository', () => {
   });
 
   describe('batchInsert', () => {
-    DynamoDBService.batchWrite = mockBatchWrite;
+    DynamoDBService.batchInsert = mockBatchInsert;
     it('should call "BatchWrite" method with correct parameters', async () => {
       const offerEntities = offerEntityFactory.buildList(2);
 
       await new OfferRepository().batchInsert(offerEntities);
 
-      expect(mockBatchWrite).toHaveBeenCalledWith({
-        RequestItems: {
-          ['search-offer-company-table']: [
-            { PutRequest: { Item: offerEntities[0] } },
-            { PutRequest: { Item: offerEntities[1] } },
-          ],
-        },
-      });
-    });
-
-    it('should batch over 25 offers into multiple "BatchWrite" calls', async () => {
-      const offerEntities = offerEntityFactory.buildList(60);
-
-      await new OfferRepository().batchInsert(offerEntities);
-
-      expect(mockBatchWrite).toHaveBeenCalledTimes(3);
+      expect(mockBatchInsert).toHaveBeenCalledWith(offerEntities, 'search-offer-company-table');
     });
   });
 

@@ -6,9 +6,9 @@ export type LogOfferViewParams = {
   userUuid?: string;
   eventSource: string;
   origin: string;
-  offerId?: number;
+  offerId?: number | string;
   offerName?: string;
-  companyId?: number;
+  companyId?: number | string;
   companyName?: string;
 };
 

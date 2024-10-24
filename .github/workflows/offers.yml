@@ -126,7 +126,7 @@ jobs:
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             cmsAccount: '971422711515'
-            stagingBaseUrl: https://develop.bluelightcard.com.au
+            stagingBaseUrl: https://www.develop.bluelightcard.com.au
             legacyApiRetrieveOffersEndpoint: api/4/offer/retrieve.php
             offersHomepageMenuBrandPrefix: blc-aus
             cdnUrl: 'https://blc-au-img-dev.s3.ap-southeast-2.amazonaws.com'
@@ -191,13 +191,13 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-          title: ":x: :test_tube: Staging deployment failed for Offers (${{matrix.brand}})!"
+          title: ':x: :test_tube: Staging deployment failed for Offers (${{matrix.brand}})!'
       - name: Send Slack message on success
         if: ${{ success() }}
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ":white_check_mark: :test_tube: Staging deployment for Offers (${{matrix.brand}}) was successful!"
+          title: ':white_check_mark: :test_tube: Staging deployment for Offers (${{matrix.brand}}) was successful!'
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
@@ -293,10 +293,10 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-          title: ":x: Production deployment failed for Offers (${{matrix.brand}})!"
+          title: ':x: Production deployment failed for Offers (${{matrix.brand}})!'
       - name: Send Slack message on success
         if: ${{ success() }}
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ":white_check_mark: Production deployment for Offers (${{matrix.brand}}) was successful!"
+          title: ':white_check_mark: Production deployment for Offers (${{matrix.brand}}) was successful!'

@@ -2,7 +2,6 @@ import 'aws-sdk-client-mock-jest';
 
 import {
   BatchWriteCommand,
-  BatchWriteCommandInput,
   DeleteCommand,
   DeleteCommandInput,
   DynamoDBDocumentClient,
@@ -17,6 +16,11 @@ import { mockClient } from 'aws-sdk-client-mock';
 
 import { DynamoDBService } from '@blc-mono/discovery/application/services/DynamoDbService';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
+
+import { offerEntityFactory } from '../factories/OfferEntityFactory';
+
+const mockOffer = offerEntityFactory.buildList(1);
+const mockOffers = offerEntityFactory.buildList(60);
 
 describe('DynamoDB Service', () => {
   jest.mock('@blc-mono/core/utils/getEnv', () => ({
@@ -55,22 +59,61 @@ describe('DynamoDB Service', () => {
     });
   });
 
-  describe('batchWrite', () => {
-    it('should call "batchWrite" command', async () => {
+  describe('batchInsert', () => {
+    it('should call batchWrite command', async () => {
       mockDynamoDB.on(BatchWriteCommand).resolves({});
-
-      await DynamoDBService.batchWrite({} as BatchWriteCommandInput);
-
-      expect(mockDynamoDB).toHaveReceivedCommand(BatchWriteCommand);
+      await DynamoDBService.batchInsert(mockOffer, 'mock-table-name');
+      expect(mockDynamoDB).toHaveReceivedCommandWith(BatchWriteCommand, {
+        RequestItems: {
+          'mock-table-name': mockOffer.map((item) => ({
+            PutRequest: {
+              Item: item,
+            },
+          })),
+        },
+      });
     });
 
+    it('should call it the correct number of times if the number of items is greater than the max batch size', async () => {
+      mockDynamoDB.on(BatchWriteCommand).resolves({});
+      await DynamoDBService.batchInsert(mockOffers, 'mock-table-name');
+      expect(mockDynamoDB).toHaveReceivedCommandTimes(BatchWriteCommand, 3);
+    });
+  });
+
+  describe('batchDelete', () => {
+    it('should call "batchWrite" command', async () => {
+      mockDynamoDB.on(BatchWriteCommand).resolves({});
+      await DynamoDBService.batchDelete(mockOffer, 'mock-table-name');
+      expect(mockDynamoDB).toHaveReceivedCommandWith(BatchWriteCommand, {
+        RequestItems: {
+          'mock-table-name': mockOffer.map((item) => ({
+            DeleteRequest: {
+              Key: {
+                partitionKey: item.partitionKey,
+                sortKey: item.sortKey,
+              },
+            },
+          })),
+        },
+      });
+    });
+
+    it('should call it the correct number of times if the number of items is greater than the max batch size', async () => {
+      mockDynamoDB.on(BatchWriteCommand).resolves({});
+      await DynamoDBService.batchDelete(mockOffers, 'mock-table-name');
+      expect(mockDynamoDB).toHaveReceivedCommandTimes(BatchWriteCommand, 3);
+    });
+  });
+
+  describe('batchWrite', () => {
     it('should call "batchWrite" command again with unprocessed items', async () => {
       const unprocessedItems = {
         table: [{ PutRequest: { Item: dataAttributes } }],
       };
       mockDynamoDB.on(BatchWriteCommand).resolvesOnce({ UnprocessedItems: unprocessedItems }).resolves({});
 
-      await DynamoDBService.batchWrite({} as BatchWriteCommandInput);
+      await DynamoDBService.batchInsert(mockOffer, 'mock-table-name');
 
       expect(mockDynamoDB).toHaveReceivedCommandTimes(BatchWriteCommand, 2);
       expect(mockDynamoDB).toHaveReceivedNthCommandWith(2, BatchWriteCommand, {
@@ -82,7 +125,7 @@ describe('DynamoDB Service', () => {
       const error = new Error('DynamoDB error');
       mockDynamoDB.on(BatchWriteCommand).rejects(error);
 
-      await expect(DynamoDBService.batchWrite({} as BatchWriteCommandInput)).rejects.toThrow(
+      await expect(DynamoDBService.batchInsert(mockOffer, 'mock-table-name')).rejects.toThrow(
         `Error trying to batch write records using DynamoDB service: [${error}]`,
       );
     });

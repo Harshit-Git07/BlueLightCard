@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.78.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.77.0...bluelightcard/web-v1.78.0) (2024-10-24)
+
+
+### Features
+
+* [DISCO-1039] Add dark read to web & mobile-hybrid search apis ([#2516](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2516)) ([df3e0e0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/df3e0e07b69c94a3f79d1dc4cce18c6f08c33816))
+* added amplitude homepage carousel click and interaction tracking as w… ([#2528](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2528)) ([6cefd9b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6cefd9b20f0efa013356b656b86b6baad94e8ed1))
+* MAMA-10 - Accordion Groups ([#2534](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2534)) ([4a34b53](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4a34b532f13a71fe33037210202d2b57e38715ab))
+
 ## [1.77.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.76.0...bluelightcard/web-v1.77.0) (2024-10-22)
 
 

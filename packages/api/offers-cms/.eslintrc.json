@@ -7,7 +7,7 @@
     // Use an ILogger instance instead of console.log and variants
     "no-console": ["error"],
     "simple-import-sort/imports": [
-      "error",
+      "warn",
       {
         "groups": [
           // Side effect imports.

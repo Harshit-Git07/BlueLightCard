@@ -3,11 +3,9 @@ import { type WebhookEventResult } from '@bluelightcard/sanity-types';
 
 import { type ILogger } from '@blc-mono/core/utils/logger';
 
-import { createEBClient } from '../lib/eventbridge';
+import { eventBridge } from '../lib/eventbridge';
 
 const EB_DETAIL_TYPE = 'sanityEvent';
-
-const eb = createEBClient();
 
 type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
@@ -23,7 +21,7 @@ export async function publishToEventBus(
   logger: ILogger,
 ) {
   const source = generateSource(record);
-  const putOutput = await eb.send(
+  const putOutput = await eventBridge.send(
     new PutEventsCommand({
       Entries: [
         {

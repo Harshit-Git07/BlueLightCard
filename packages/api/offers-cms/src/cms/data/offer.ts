@@ -1,9 +1,7 @@
 import { type Offer } from '@bluelightcard/sanity-types';
 import { Table } from 'sst/node/table';
 
-import { createDbConnection } from '../lib/db';
-
-const db = createDbConnection();
+import { dynamo } from '../../lib/dynamo';
 
 export async function getOffer(id: string) {
   const cmsTable = Table.cmsOffersData.tableName;
@@ -24,7 +22,7 @@ export async function getOffer(id: string) {
 
   const query = isNaN(Number(id)) ? modernQueryCommand : legacyQueryCommand;
 
-  const item = await db.query(query);
+  const item = await dynamo.query(query);
 
   if (!item.Items) {
     return null;
@@ -34,7 +32,7 @@ export async function getOffer(id: string) {
 }
 
 export async function getOffersByCompanyId(companyId: string) {
-  const res = await db.query({
+  const res = await dynamo.query({
     TableName: Table.cmsOffersData.tableName,
     IndexName: 'companyId',
     ExpressionAttributeValues: { ':id': companyId },

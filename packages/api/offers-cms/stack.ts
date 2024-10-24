@@ -1,19 +1,15 @@
 import { EventBus as AwsEventBus } from 'aws-cdk-lib/aws-events';
 import { AccountPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Api, Config, EventBus, Function, type StackContext, use } from 'sst/constructs';
-import { z } from 'zod';
 
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
-import { getEnvOrDefaultValidated, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 import { CliLogger } from '@blc-mono/core/utils/logger';
 import { Identity } from '@blc-mono/identity/stack';
-import { OffersCMSStackEnvironmentKeys } from '@blc-mono/offers-cms/src/constants/environment';
-import { SharedStackEnvironmentKeys } from '@blc-mono/shared/infra/environment';
 
 import { createTables } from './infrastructure/dynamo';
+import { env } from './src/lib/env';
 
 const CMS_BUS_NAME = 'offers-cms-bus';
-const API_FUNCTION_NAME = 'offers-cms-api-function';
 const CONSUMER_FUNCTION_NAME = 'offers-cms-consumer-function';
 const API_GATEWAY_NAME = 'offers-http';
 const EVENT_BUS_ID = 'Discovery Event Bus';
@@ -22,17 +18,14 @@ const cliLogger = new CliLogger();
 
 export function OffersCMS({ stack }: StackContext) {
   const { authorizer } = use(Identity);
-  const discoveryBusName = getEnv(OffersCMSStackEnvironmentKeys.DISCOVERY_EVENT_BUS_NAME, '');
+  const discoveryBusName = env.OFFERS_DISCOVERY_EVENT_BUS_NAME || '';
 
   const { rawDataTable, offersDataTable, companyDataTable } = createTables(stack);
 
   const consumerFunction = new Function(stack, CONSUMER_FUNCTION_NAME, {
     handler: 'packages/api/offers-cms/lambda/consumer.handler',
     bind: [rawDataTable, offersDataTable, companyDataTable],
-    environment: {
-      OFFERS_BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
-      DISCOVERY_EVENT_BUS_NAME: discoveryBusName,
-    },
+    environment: env,
   });
 
   if (discoveryBusName.length > 0) {
@@ -59,31 +52,20 @@ export function OffersCMS({ stack }: StackContext) {
     },
   });
 
-  const cmsAccountId = getEnv(OffersCMSStackEnvironmentKeys.CMS_ACCOUNT, '');
-
-  if (cmsAccountId.length > 0) {
+  if (env.OFFERS_CMS_ACCOUNT) {
     const awsCmsBus = cmsEvents.cdk.eventBus as AwsEventBus;
     awsCmsBus.addToResourcePolicy(
       new PolicyStatement({
         sid: `Allow-CMS-Account-To-${awsCmsBus.eventBusName}`,
         actions: ['events:PutEvents'],
         effect: Effect.ALLOW,
-        principals: [new AccountPrincipal(cmsAccountId)],
+        principals: [new AccountPrincipal(env.OFFERS_CMS_ACCOUNT)],
         resources: [awsCmsBus.eventBusArn],
       }),
     );
   } else {
     cliLogger.info({ message: 'CMS Account not set. Skipping resource policy creation.' });
   }
-
-  const apiFunction = new Function(stack, API_FUNCTION_NAME, {
-    handler: 'packages/api/offers-cms/lambda/api.handler',
-    bind: [offersDataTable, companyDataTable],
-    url: true,
-    environment: {
-      BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
-    },
-  });
 
   const api = new Api(stack, API_GATEWAY_NAME, {
     routes: {
@@ -100,37 +82,20 @@ export function OffersCMS({ stack }: StackContext) {
     defaults: {
       function: {
         bind: [offersDataTable, companyDataTable],
-        environment: {
-          BRAND: getEnv(SharedStackEnvironmentKeys.BRAND),
-        },
+        environment: env,
       },
       authorizer: 'offersAuthorizer',
     },
   });
 
   stack.addOutputs({
-    api: apiFunction.url,
     ingest: cmsEvents.eventBusArn,
     ingestProcessor: consumerFunction.functionArn,
     offersCmsApiGateway: api.url,
   });
 
   return {
-    apiFunction,
     consumerFunction,
     cmsEvents,
   };
-}
-
-function getEnv(value: string, defaultValue?: string): string {
-  try {
-    if (defaultValue || defaultValue === '') {
-      return getEnvOrDefaultValidated(value, defaultValue, z.string());
-    } else {
-      return getEnvValidated(value, z.string());
-    }
-  } catch (error) {
-    cliLogger.error({ message: `Error retrieving environment variable "${value}"`, error });
-    throw error;
-  }
 }

@@ -1,9 +1,13 @@
+import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
-export const zEnv = z.object({
-  VERSION: z.string().default('unknown'),
-  ENVIRONMENT: z.enum(['development', 'preview', 'production', 'local']).default('development'),
-  BRAND: z.string(),
-});
+export const env = createEnv({
+  server: {
+    BRAND: z.string(),
+    OFFERS_DISCOVERY_EVENT_BUS_NAME: z.string().optional(),
+    OFFERS_CMS_ACCOUNT: z.string().optional(),
+  },
 
-export type Env = z.infer<typeof zEnv>;
+  runtimeEnv: process.env,
+  emptyStringAsUndefined: true,
+});

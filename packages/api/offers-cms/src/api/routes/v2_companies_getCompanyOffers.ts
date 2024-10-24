@@ -1,0 +1,69 @@
+import { createRoute, z } from '@hono/zod-openapi';
+import invariant from 'tiny-invariant';
+
+import { getOffersByCompanyId } from '../../cms/data/offer';
+import { notFound } from '../errors/helpers';
+import { openApiErrorResponses } from '../errors/openapi_responses';
+import { type App } from '../hono/app';
+import { OfferSchema } from '../schema';
+
+const route = createRoute({
+  tags: ['offers'],
+  operationId: 'getCompanyOffers',
+  method: 'get',
+  path: '/v2/companies/{id}/offers',
+  request: {
+    params: z.object({
+      id: z.string().min(1).openapi({
+        description: 'The id of the company to fetch',
+        example: '123456',
+      }),
+    }),
+  },
+  responses: {
+    200: {
+      description: 'Offers',
+      content: {
+        'application/json': {
+          schema: z.array(OfferSchema),
+        },
+      },
+    },
+    ...openApiErrorResponses,
+  },
+});
+
+export type Route = typeof route;
+export type V2CompaniesGetCompanyOffersResponse = z.infer<
+  (typeof route.responses)[200]['content']['application/json']['schema']
+>;
+
+export const registerV2CompaniesGetCompanyOffers = (app: App) =>
+  app.openapi(route, async (c) => {
+    const { id } = c.req.valid('param');
+    const item = await getOffersByCompanyId(id);
+
+    if (!item) {
+      notFound();
+    }
+
+    const offers = item.map((offer) => {
+      invariant(offer.name, 'Missing `offer.name`');
+      invariant(offer.offerDescription, 'Missing `offer.offerDescription`');
+      invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');
+      invariant(offer.expires, 'Missing `offer.expires`');
+      invariant(offer.termsAndConditions, 'Missing `offer.termsAndConditions`');
+
+      return {
+        id: offer._id,
+        name: offer.name,
+        description: offer.offerDescription,
+        type: offer.offerType.offerType,
+        expires: offer.expires,
+        termsAndConditions: offer.termsAndConditions,
+        image: offer.image?.default?.asset?.url,
+      };
+    });
+
+    return c.json(offers);
+  });

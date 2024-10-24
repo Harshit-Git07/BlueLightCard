@@ -3,10 +3,8 @@ import { Table } from 'sst/node/table';
 
 import { type ILogger } from '@blc-mono/core/utils/logger';
 
-import { createDbConnection } from '../lib/db';
+import { dynamo } from '../lib/dynamo';
 import { type SanityChangeEvent } from '../lib/events';
-
-const db = createDbConnection();
 
 type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
@@ -33,7 +31,7 @@ export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
     return;
   }
 
-  await db.put({
+  await dynamo.put({
     TableName: Table.cmsOffersData.tableName,
     Item: {
       ...record,
@@ -55,7 +53,7 @@ export async function ingestCompany(record: Record<'company'>, logger: ILogger) 
     return;
   }
 
-  await db.put({
+  await dynamo.put({
     TableName: Table.cmsCompanyData.tableName,
     Item: {
       ...record,
@@ -65,7 +63,7 @@ export async function ingestCompany(record: Record<'company'>, logger: ILogger) 
 }
 
 export async function ingestRawRecord(record: WebhookResultRecord) {
-  await db.put({
+  await dynamo.put({
     TableName: Table.cmsRawData.tableName,
     Item: record,
   });

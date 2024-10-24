@@ -1,5 +1,7 @@
 export interface NotificationItemProps {
+  id: string;
   title: string;
   subtext: string;
-  onClick: () => void;
+  isClicked: boolean;
+  onClick: (id: string) => Promise<void>;
 }

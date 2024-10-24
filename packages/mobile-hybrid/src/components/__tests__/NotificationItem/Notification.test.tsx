@@ -7,8 +7,10 @@ import { faBell as faBellSolid } from '@fortawesome/pro-solid-svg-icons';
 
 describe('NotificationItem', () => {
   const mockProps = {
+    id: 'test-notification-one',
     title: 'Test Title',
     subtext: 'Test Subtext',
+    isClicked: false,
     onClick: jest.fn(),
   };
 
@@ -19,24 +21,24 @@ describe('NotificationItem', () => {
     expect(screen.getByText('Test Subtext')).toBeInTheDocument();
   });
 
-  it('calls onClick when clicked', async () => {
+  it('calls onClick with the given ID when clicked', async () => {
     render(<NotificationItem {...mockProps} />);
 
     fireEvent.click(screen.getByRole('button'));
 
-    expect(mockProps.onClick).toHaveBeenCalled();
+    expect(mockProps.onClick).toHaveBeenCalledWith('test-notification-one');
   });
 
-  it('renders the correct icon based on isClicked state', () => {
-    const { rerender } = render(<NotificationItem {...mockProps} />);
+  it('renders the correct icon when notification is clicked', () => {
+    render(<NotificationItem {...mockProps} isClicked={true} />);
     expect(screen.getByRole('img', { hidden: true })).toHaveAttribute(
       'data-icon',
       faBellRegular.iconName,
     );
+  });
 
-    fireEvent.click(screen.getByRole('button'));
-
-    rerender(<NotificationItem {...mockProps} />);
+  it('renders the correct icon when notification is not clicked', () => {
+    render(<NotificationItem {...mockProps} isClicked={false} />);
     expect(screen.getByRole('img', { hidden: true })).toHaveAttribute(
       'data-icon',
       faBellSolid.iconName,

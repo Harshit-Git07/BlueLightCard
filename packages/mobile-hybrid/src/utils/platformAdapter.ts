@@ -95,8 +95,8 @@ export class MobilePlatformAdapter implements IPlatformAdapter {
     analytics.logAnalyticsEvent({ event, parameters });
   }
 
-  navigate(path: string): void {
-    navigation.navigate(path);
+  navigate(path: string, allowOverride: boolean = false): void {
+    navigation.navigate(path, allowOverride);
   }
 
   navigateExternal(path: string): IPlatformWindowHandle {

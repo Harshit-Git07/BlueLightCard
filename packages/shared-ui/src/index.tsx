@@ -31,6 +31,7 @@ export * from './hooks/useMediaQuery';
 export * from './utils/cssUtil';
 export * from './utils/storyUtils';
 export * from './utils/getCDNUrl';
+export * from './utils/getPathFromUrl';
 export * from './utils/ageUtils';
 export * from './lib/rewriters';
 export * from './lib/invoke';

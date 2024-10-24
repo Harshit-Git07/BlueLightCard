@@ -70,7 +70,7 @@ export interface IPlatformAdapter {
   /**
    * Navigate to a route within the app
    */
-  navigate(path: string): void;
+  navigate(path: string, allowOverride?: boolean): void;
   /**
    * Navigate to an external URL
    */

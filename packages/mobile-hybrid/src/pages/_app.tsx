@@ -17,6 +17,7 @@ import { MobilePlatformAdapter } from '@/utils/platformAdapter';
 import { QueryClient } from '@tanstack/react-query';
 import { QueryClientProvider } from '@tanstack/react-query';
 import UserProfileProvider from '@/components/UserProfileProvider/UserProfileProvider';
+import DeeplinkOverrideRouter from '@/components/DeeplinkOverrideRouter/DeeplinkOverrideRouter';
 import useNativeMock from '@/hooks/mocks/useNativeMock';
 
 dayjs.extend(CustomParseFormat);
@@ -45,7 +46,9 @@ export default function App({ Component, pageProps }: AppProps) {
             <UserProfileProvider>
               <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
                 <ViewOfferProvider>
-                  <Component {...pageProps} />
+                  <DeeplinkOverrideRouter>
+                    <Component {...pageProps} />
+                  </DeeplinkOverrideRouter>
                 </ViewOfferProvider>
                 <Spinner />
               </main>

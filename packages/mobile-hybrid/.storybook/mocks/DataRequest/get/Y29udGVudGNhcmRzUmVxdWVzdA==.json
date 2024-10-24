@@ -1,0 +1,16 @@
+[
+  {
+    "id": "test-notification-one",
+    "title": "Test Notification 1",
+    "description": "This is the first test notification",
+    "isClicked": "false",
+    "href": ""
+  },
+  {
+    "id": "test-notification-two",
+    "title": "Test Notification 2",
+    "description": "This is the second test notification",
+    "isClicked": "true",
+    "href": ""
+  }
+]

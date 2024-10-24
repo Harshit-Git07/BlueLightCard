@@ -3,7 +3,7 @@ declare namespace NativeNavigation {
   function onRootBackClicked(): void;
 
   export abstract class Navigation {
-    public static navigate(url: string): void;
+    public static navigate(url: string, allowOverride: boolean = false): void;
     public static onRootBackClicked(): void;
   }
 

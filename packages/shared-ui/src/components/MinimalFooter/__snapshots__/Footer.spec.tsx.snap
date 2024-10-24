@@ -8,7 +8,7 @@ exports[`MinimalFooter renders a blc-au footer 1`] = `
     className="w-fit border-t-[1px] border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark flex flex-col lg:flex-row lg:justify-between items-center w-full"
   >
     <p
-      className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-lg font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
+      className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
     >
       ©Blue Light Card 2008 - 2024
     </p>
@@ -17,7 +17,7 @@ exports[`MinimalFooter renders a blc-au footer 1`] = `
     >
       <a
         aria-label="Terms & Conditions footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.com.au/terms_and_conditions.php"
         id="Terms & Conditions-nav-item"
         onClick={[Function]}
@@ -28,7 +28,7 @@ exports[`MinimalFooter renders a blc-au footer 1`] = `
       </a>
       <a
         aria-label="Candidate Privacy Notice footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.com.au/candidate-privacy-notice.php"
         id="Candidate Privacy Notice-nav-item"
         onClick={[Function]}
@@ -39,7 +39,7 @@ exports[`MinimalFooter renders a blc-au footer 1`] = `
       </a>
       <a
         aria-label="Privacy Notice footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.com.au/privacy-notice.php"
         id="Privacy Notice-nav-item"
         onClick={[Function]}
@@ -50,7 +50,7 @@ exports[`MinimalFooter renders a blc-au footer 1`] = `
       </a>
       <a
         aria-label="Cookie Policy footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.com.au/cookies_policy.php"
         id="Cookie Policy-nav-item"
         onClick={[Function]}
@@ -72,7 +72,7 @@ exports[`MinimalFooter renders a dds-uk footer 1`] = `
     className="w-fit border-t-[1px] border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark flex flex-col lg:flex-row lg:justify-between items-center w-full"
   >
     <p
-      className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-lg font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
+      className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
     >
       <span
         className="block"
@@ -90,7 +90,7 @@ exports[`MinimalFooter renders a dds-uk footer 1`] = `
     >
       <a
         aria-label="Terms & Conditions footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.defencediscountservice.co.uk/terms_and_conditions.php"
         id="Terms & Conditions-nav-item"
         onClick={[Function]}
@@ -101,7 +101,7 @@ exports[`MinimalFooter renders a dds-uk footer 1`] = `
       </a>
       <a
         aria-label="Legal and Regulatory footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.defencediscountservice.co.uk/legal-and-regulatory.php"
         id="Legal and Regulatory-nav-item"
         onClick={[Function]}
@@ -112,7 +112,7 @@ exports[`MinimalFooter renders a dds-uk footer 1`] = `
       </a>
       <a
         aria-label="Privacy Notice footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.defencediscountservice.co.uk/privacy-notice.php"
         id="Privacy Notice-nav-item"
         onClick={[Function]}
@@ -123,7 +123,7 @@ exports[`MinimalFooter renders a dds-uk footer 1`] = `
       </a>
       <a
         aria-label="Cookie Policy footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.defencediscountservice.co.uk/cookies_policy.php"
         id="Cookie Policy-nav-item"
         onClick={[Function]}
@@ -145,7 +145,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
     className="w-fit border-t-[1px] border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark flex flex-col lg:flex-row lg:justify-between items-center w-full"
   >
     <p
-      className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-lg font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
+      className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
     >
       ©Blue Light Card 2008 - 2024
     </p>
@@ -154,7 +154,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
     >
       <a
         aria-label="Terms & Conditions footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.co.uk/terms_and_conditions.php"
         id="Terms & Conditions-nav-item"
         onClick={[Function]}
@@ -165,7 +165,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
       </a>
       <a
         aria-label="Privacy Notice footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.co.uk/privacy-notice.php"
         id="Privacy Notice-nav-item"
         onClick={[Function]}
@@ -176,7 +176,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
       </a>
       <a
         aria-label="Candidate Privacy Notice footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.co.uk/candidate-privacy-notice.php"
         id="Candidate Privacy Notice-nav-item"
         onClick={[Function]}
@@ -187,7 +187,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
       </a>
       <a
         aria-label="Cookie Policy footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light w-full md:w-auto"
         href="https://www.bluelightcard.co.uk/cookies_policy.php"
         id="Cookie Policy-nav-item"
         onClick={[Function]}
@@ -198,7 +198,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
       </a>
       <a
         aria-label="Legal and Regulatory footer link"
-        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light col-span-2 justify-self-center md:col-span-1"
+        className="mt-6 text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light col-span-2 justify-self-center md:col-span-1"
         href="https://www.bluelightcard.co.uk/legal-and-regulatory.php"
         id="Legal and Regulatory-nav-item"
         onClick={[Function]}

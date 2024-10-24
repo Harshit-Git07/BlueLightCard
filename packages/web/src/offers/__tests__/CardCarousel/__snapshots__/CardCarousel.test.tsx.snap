@@ -3,27 +3,23 @@
 exports[`CardCarousel should render with 1 element visbile 1`] = `
 <div
   className="h-[400px]"
-  data-testid="carousel"
 />
 `;
 
 exports[`CardCarousel should render with 3 elements visbile 1`] = `
 <div
   className="h-[400px]"
-  data-testid="carousel"
 />
 `;
 
 exports[`CardCarousel should render with a loading spinner when offers is empty 1`] = `
 <div
   className="h-[400px]"
-  data-testid="carousel"
 />
 `;
 
 exports[`CardCarousel should render with small cards visbile 1`] = `
 <div
   className="h-[400px]"
-  data-testid="carousel"
 />
 `;

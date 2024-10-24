@@ -15,9 +15,5 @@
       "directory": "packages/mobile-hybrid",
       "changeProcessCWD": true
     }
-  ],
-  "sonarlint.connectedMode.project": {
-    "connectionId": "bluelightcard",
-    "projectKey": "BlueLightCard-2.0_web"
-  }
+  ]
 }

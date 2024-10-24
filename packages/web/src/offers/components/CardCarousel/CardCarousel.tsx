@@ -6,17 +6,7 @@ import { CardCarouselProps } from './types';
 import OfferCardPlaceholder from '../OfferCard/OfferCardPlaceholder';
 import { SwiperCarousel } from '@bluelightcard/shared-ui';
 
-interface ExtendedCardCarouselProps extends CardCarouselProps {
-  onCarouselInteracted?: () => void;
-}
-
-const CardCarousel = ({
-  title,
-  itemsToShow,
-  offers,
-  useSmallCards,
-  onCarouselInteracted,
-}: ExtendedCardCarouselProps) => {
+const CardCarousel = ({ title, itemsToShow, offers, useSmallCards }: CardCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const isVisible = useIsVisible(carouselRef);
 
@@ -28,28 +18,8 @@ const CardCarousel = ({
     if (isVisible) setClassName('');
   }, [isVisible]);
 
-  useEffect(() => {
-    const handleInteraction = () => {
-      if (onCarouselInteracted) onCarouselInteracted();
-    };
-
-    const carouselElement = carouselRef.current;
-
-    if (carouselElement) {
-      carouselElement.addEventListener('scroll', handleInteraction);
-      carouselElement.addEventListener('touchmove', handleInteraction);
-      carouselElement.addEventListener('mousedown', handleInteraction);
-
-      return () => {
-        carouselElement.removeEventListener('scroll', handleInteraction);
-        carouselElement.removeEventListener('touchmove', handleInteraction);
-        carouselElement.removeEventListener('mousedown', handleInteraction);
-      };
-    }
-  }, [onCarouselInteracted]);
-
   return (
-    <div className={className} ref={carouselRef} data-testid="carousel">
+    <div className={className} ref={carouselRef}>
       {isVisible && (
         <>
           {title && (

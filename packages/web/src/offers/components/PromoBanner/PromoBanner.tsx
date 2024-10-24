@@ -1,11 +1,10 @@
-import React from 'react';
 import Link from '@/components/Link/Link';
 import Image from '@/components/Image/Image';
 import { PromoBannerProps } from './types';
 
-const PromoBanner: React.FC<PromoBannerProps> = ({ image, href, id, onClick }) => {
+const PromoBanner = ({ image, href, id }: PromoBannerProps) => {
   return (
-    <button className="w-full relative" onClick={onClick} aria-label="Promo banner">
+    <div className="w-full relative">
       <Link href={href} useLegacyRouting data-testid={id}>
         <Image
           src={image}
@@ -14,11 +13,11 @@ const PromoBanner: React.FC<PromoBannerProps> = ({ image, href, id, onClick }) =
           width="0"
           height="0"
           sizes="100vw"
-          className="h-auto w-full"
+          className={'h-auto w-full'}
           quality={75}
         />
       </Link>
-    </button>
+    </div>
   );
 };
 

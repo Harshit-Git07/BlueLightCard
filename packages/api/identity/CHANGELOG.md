@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.102.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.101.0...bluelightcard/identity-v1.102.0) (2024-10-24)
+
+
+### Features
+
+* (AUT-75) Adding identity stack config resolver to help manage auth0 config ([#2584](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2584)) ([e367c72](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e367c7218b64648e954c4c17295463d80dfe1383))
+
 ## [1.101.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.100.0...bluelightcard/identity-v1.101.0) (2024-10-07)
 
 

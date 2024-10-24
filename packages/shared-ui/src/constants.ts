@@ -21,3 +21,5 @@ export const CharacterEntities: Record<string, string> = {
 export const IS_STORYBOOK_LIFECYCLE =
   process.env.npm_lifecycle_event === 'storybook' ||
   process.env.npm_lifecycle_event === 'build-storybook';
+
+export const focusableElements = ['button', 'a', 'input', 'textarea', 'select'];

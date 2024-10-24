@@ -2,6 +2,11 @@ import React, { FC, useEffect, useState } from 'react';
 import { AccordionProps } from '@/components/Accordion/types';
 import Image from '../Image/Image';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/Accordion/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 const Accordion: FC<AccordionProps> = ({ title, children, onClickOpen }) => {
   const [active, setActive] = useState(false);
 

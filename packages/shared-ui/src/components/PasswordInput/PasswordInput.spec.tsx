@@ -48,9 +48,8 @@ describe('PasswordInput Component', () => {
 
     expect(input).toHaveAttribute('type', 'password');
 
-    const user = userEvent.setup();
     await act(async () => {
-      await user.click(eyeButton);
+      await userEvent.click(eyeButton);
     });
 
     expect(screen.getByLabelText('Hide password')).toBeInTheDocument();
@@ -62,9 +61,8 @@ describe('PasswordInput Component', () => {
 
     const input = screen.getByLabelText('Password');
 
-    const user = userEvent.setup();
     await act(async () => {
-      await user.type(input, 'password123');
+      await userEvent.type(input, 'password123');
     });
 
     expect(onChangeMock).toHaveBeenCalledWith('password123');
@@ -80,21 +78,20 @@ describe('PasswordInput Component', () => {
     expect(screen.queryByText('Your password must contain:')).toBeNull();
 
     // Focus event should show rules
-    const user = userEvent.setup();
     await act(async () => {
-      await user.click(input);
+      await userEvent.click(input);
     });
     expect(screen.getByText('Your password must contain:')).toBeInTheDocument();
 
     // Blur event should hide rules
     await act(async () => {
-      await user.tab();
+      await userEvent.tab();
     });
     expect(screen.queryByText('Your password must contain:')).toBeNull();
 
     // Form dirty state should keep rules visible
     await act(async () => {
-      await user.type(input, 'password123');
+      await userEvent.type(input, 'password123');
     });
     expect(screen.getByText('Your password must contain:')).toBeInTheDocument();
   });
@@ -106,9 +103,8 @@ describe('PasswordInput Component', () => {
     expect(input).toBeDisabled();
 
     const eyeButton = screen.getByLabelText('Show password');
-    const user = userEvent.setup();
     await act(async () => {
-      await user.click(eyeButton);
+      await userEvent.click(eyeButton);
     });
     expect(input).toHaveAttribute('type', 'password'); // No change since input is disabled
   });
@@ -117,9 +113,8 @@ describe('PasswordInput Component', () => {
     render(<PasswordInput {...defaultProps} hideRequirements={true} />);
 
     const input = screen.getByLabelText('Password');
-    const user = userEvent.setup();
     await act(async () => {
-      await user.click(input);
+      await userEvent.click(input);
     });
 
     expect(screen.queryByText('Your password must contain:')).toBeNull();
@@ -129,9 +124,8 @@ describe('PasswordInput Component', () => {
     render(<PasswordInput {...defaultProps} />);
 
     const input = screen.getByLabelText('Password');
-    const user = userEvent.setup();
     await act(async () => {
-      await user.click(input);
+      await userEvent.click(input);
     });
 
     expect(screen.getByText('Your password must contain:')).toBeInTheDocument();
@@ -188,12 +182,11 @@ describe('PasswordInput Component', () => {
   test('displays validation message with role alert and aria-live', async () => {
     render(<PasswordInput {...defaultProps} isValid infoMessage="Password is invalid" />);
 
-    const user = userEvent.setup();
     const input = screen.getByLabelText('Password');
 
     // Type a password
     await act(async () => {
-      await user.type(input, '123pass');
+      await userEvent.type(input, '123pass');
     });
 
     const alert = screen.getByRole('alert');
@@ -205,9 +198,8 @@ describe('PasswordInput Component', () => {
     render(<PasswordInput {...defaultProps} isValid />);
     const toggleButton = screen.getByLabelText('Show password');
     expect(toggleButton).toHaveAttribute('title', 'Show password');
-    const user = userEvent.setup();
     await act(async () => {
-      await user.click(toggleButton);
+      await userEvent.click(toggleButton);
     });
     expect(toggleButton).toHaveAttribute('title', 'Hide password');
   });

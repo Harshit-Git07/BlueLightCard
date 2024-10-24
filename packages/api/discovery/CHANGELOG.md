@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.12.0...bluelightcard/discovery-v1.13.0) (2024-10-24)
+
+
+### Features
+
+* DISCO-1025: Add week 8 & 9 Thank you campaign data ([#2576](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2576)) ([e727dbc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e727dbc2adf937d37e36994689da2bdee8b018ec))
+* Disco-1033 Create Menu Repository & Service ([#2496](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2496)) ([7e49ed5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7e49ed574bdb94f60c43b54aaf086dcdf0aeaecc))
+
+
+### Bug Fixes
+
+* [DISCO-1074] Fix Discovery e2e test ([#2587](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2587)) ([bf7f6fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bf7f6fbf115df1cc10eb31f66b57cf26b761b9f7))
+* [DISCO-1074] Update Sanity Company mapping ([#2582](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2582)) ([a4d3084](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a4d30844a7adf50c4625f84194c5b38bb54c8970))
+
 ## [1.12.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.11.0...bluelightcard/discovery-v1.12.0) (2024-10-21)
 
 

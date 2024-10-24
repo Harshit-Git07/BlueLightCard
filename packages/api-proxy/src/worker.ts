@@ -83,9 +83,9 @@ const getUrlByPrefix = (url: URL, env: Env): URL => {
 		'/eu/offers/dds': env.OFFERS_API_DDS_UK,
 		'/eu/offers': env.OFFERS_API_BLC_UK,
 		'/au/offers': env.OFFERS_API_BLC_AU,
-		'/eu/offers/dds/v*': env.OFFERS_CMS_API_DDS_UK,
-		'/eu/offers2/v*': env.OFFERS_CMS_API_BLC_UK,
-		'/au/offers2/v*': env.OFFERS_CMS_API_BLC_AU,
+		'/eu/offers/dds/v2': env.OFFERS_CMS_API_DDS_UK,
+		'/eu/offers/v2': env.OFFERS_CMS_API_BLC_UK,
+		'/au/offers/v2': env.OFFERS_CMS_API_BLC_AU,
 		'/eu/redemptions': env.REDEMPTIONS_API_BLC_UK,
 		'/eu/discovery': env.DISCOVERY_API_BLC_UK,
 	};

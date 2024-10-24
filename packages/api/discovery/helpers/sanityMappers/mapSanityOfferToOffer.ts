@@ -44,8 +44,8 @@ export const mapSanityOfferToOffer = (sanityOffer: SanityOffer): Offer => {
     offerEnd: sanityOffer.expires,
     evergreen: sanityOffer.evergreen ?? false,
     tags: sanityOffer.tags?.map((tag) => tag._key) ?? [],
-    includedTrusts: mapSanityTrustToTrust(sanityOffer.includedTrust),
-    excludedTrusts: mapSanityTrustToTrust(sanityOffer.excludedTrust),
+    includedTrusts: mapSanityTrustToTrust(sanityOffer.includedTrusts),
+    excludedTrusts: mapSanityTrustToTrust(sanityOffer.excludedTrusts),
     company: mapSanityCompanyToCompany(sanityOffer.company),
     categories:
       sanityOffer.categorySelection?.map((category) => ({

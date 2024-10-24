@@ -187,7 +187,7 @@ it('should map boost with default values', () => {
 it('should skip trusts with no code value', () => {
   const sanityOfferWithOtherDiscount: Partial<SanityOffer> = {
     ...validSanityOffer,
-    includedTrust: [
+    includedTrusts: [
       {
         _id: 'service-id',
         _type: 'trust',
@@ -208,7 +208,7 @@ it('should skip trusts with no code value', () => {
 it('should map trusts with no values', () => {
   const sanityOfferWithOtherDiscount: Partial<SanityOffer> = {
     ...validSanityOffer,
-    includedTrust: undefined,
+    includedTrusts: undefined,
   };
 
   const result = mapSanityOfferToOffer(sanityOfferWithOtherDiscount as SanityOffer);

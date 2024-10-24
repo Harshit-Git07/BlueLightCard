@@ -49,6 +49,7 @@ export function buildTestSanityOffer(): SanityOffer {
       _updatedAt: '2024-08-05T16:50:14Z',
       _rev: '',
       _id: v4().toString(),
+      companyId: 1,
       brandCompanyDetails: [
         {
           _key: '',
@@ -116,8 +117,8 @@ export function buildTestSanityOffer(): SanityOffer {
       _type: 'offer.type',
       offerType: 'online',
     },
-    includedTrust: [],
-    excludedTrust: [],
+    includedTrusts: [],
+    excludedTrusts: [],
     start: '2024-08-04',
     status: 'live',
     termsAndConditions: {

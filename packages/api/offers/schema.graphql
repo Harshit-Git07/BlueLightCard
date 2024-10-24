@@ -1,9 +1,9 @@
-type Brand @aws_cognito_user_pools {
+type Brand @aws_cognito_user_pools @aws_oidc {
   id: ID!
   name: String
 }
 
-type Offer @aws_cognito_user_pools {
+type Offer @aws_cognito_user_pools @aws_oidc {
   id: ID!
   legacyId: String
   brands: [Brand]!
@@ -31,7 +31,7 @@ type Offer @aws_cognito_user_pools {
   openMethod: String!
 }
 
-type Company @aws_cognito_user_pools {
+type Company @aws_cognito_user_pools @aws_oidc {
   id: ID!
   legacyId: String
   name: String!
@@ -60,14 +60,14 @@ type Company @aws_cognito_user_pools {
   categories: [Category]!
 }
 
-type OfferType @aws_cognito_user_pools {
+type OfferType @aws_cognito_user_pools @aws_oidc {
   id: ID!
   legacyId: Int # OfferId in legacy DB
   name: String!
   isSearched: Int!
 }
 
-type Category @aws_cognito_user_pools {
+type Category @aws_cognito_user_pools @aws_oidc {
   id: ID!,
   legacyId: String,
   parentCategoryId: ID!,
@@ -78,7 +78,7 @@ type Category @aws_cognito_user_pools {
 }
 
 # This type is temporary and related to Menu Items in S3
-type MarketPlaceMenus @aws_cognito_user_pools {
+type MarketPlaceMenus @aws_cognito_user_pools @aws_oidc {
   name: String
   hidden: Boolean
   tag: String
@@ -87,13 +87,13 @@ type MarketPlaceMenus @aws_cognito_user_pools {
 }
 
 # This type is temporary and related to Menu Items in S3
-type MarketPlaceItemEntry @aws_cognito_user_pools {
+type MarketPlaceItemEntry @aws_cognito_user_pools @aws_oidc {
   id: String
   item: MarketPlaceMenusItem
 }
 
 # This type is temporary and related to Menu Items in S3
-type MarketPlaceMenusItem @aws_cognito_user_pools {
+type MarketPlaceMenusItem @aws_cognito_user_pools @aws_oidc {
   offerId: Int
   compid: Int
   typeid: Int
@@ -107,7 +107,7 @@ type MarketPlaceMenusItem @aws_cognito_user_pools {
 }
 
 # This type is temporary and related to Menu Items in S3
-type FlexibleMenu @aws_cognito_user_pools {
+type FlexibleMenu @aws_cognito_user_pools @aws_oidc {
   title: String
   imagehome: String
   imagedetail: String
@@ -120,7 +120,7 @@ type FlexibleMenu @aws_cognito_user_pools {
 }
 
 # This type is temporary and related to Menu Items in S3
-type FlexibleMenuItems @aws_cognito_user_pools {
+type FlexibleMenuItems @aws_cognito_user_pools @aws_oidc {
   mode: String
   imagelist: String
   title: String
@@ -137,7 +137,7 @@ type FlexibleMenuItems @aws_cognito_user_pools {
 }
 
 # This type is temporary and related to Menu Items in S3
-type DealOfTheWeek @aws_cognito_user_pools {
+type DealOfTheWeek @aws_cognito_user_pools @aws_oidc {
   id: Int
   compid: Int
   typeid: Int
@@ -150,7 +150,7 @@ type DealOfTheWeek @aws_cognito_user_pools {
 }
 
 # This type is temporary and related to Menu Items in S3
-type FeatureMenu @aws_cognito_user_pools {
+type FeatureMenu @aws_cognito_user_pools @aws_oidc {
   id: Int
   compid: Int
   typeid: Int
@@ -163,14 +163,14 @@ type FeatureMenu @aws_cognito_user_pools {
 }
 
 # This type is temporary and related to Menu Items in S3
-type OfferMenuList @aws_cognito_user_pools {
+type OfferMenuList @aws_cognito_user_pools @aws_oidc {
   marketPlace: [MarketPlaceMenus!]!
   flexible: [FlexibleMenu!]!
   deals: [DealOfTheWeek!]!
   features: [FeatureMenu!]!
 }
 
-type Banner @aws_cognito_user_pools {
+type Banner @aws_cognito_user_pools @aws_oidc {
   id: ID!
   legacyId: Int
   name: String!
@@ -185,7 +185,7 @@ type Banner @aws_cognito_user_pools {
   brand: String!
 }
 
-type Tag @aws_cognito_user_pools {
+type Tag @aws_cognito_user_pools @aws_oidc {
   id: ID!
   name: String!
   createdAt: Int!
@@ -193,29 +193,29 @@ type Tag @aws_cognito_user_pools {
 }
 
 # TODO: Temporary until we migrate categories and companies to DynamoDB
-type CategoryMenu @aws_cognito_user_pools {
+type CategoryMenu @aws_cognito_user_pools @aws_oidc {
   id: ID!
   name: String!
 }
 
-type CompanyMenu @aws_cognito_user_pools {
+type CompanyMenu @aws_cognito_user_pools @aws_oidc {
   id: ID!
   name: String!
 }
 
-type CompaniesCategoriesMenuList @aws_cognito_user_pools {
+type CompaniesCategoriesMenuList @aws_cognito_user_pools @aws_oidc {
   categories: [CategoryMenu]
   companies: [CompanyMenu]
 }
 
 type Query {
-  getOfferMenusByBrandId(brandId: ID!, input: OfferRestrictionInput): OfferMenuList @aws_cognito_user_pools
-  getBanners(input: BannersQueryInput): [Banner!]! @aws_cognito_user_pools
-  getCategoriesAndCompaniesByBrandId(brandId: ID!, input: OfferRestrictionInput): CompaniesCategoriesMenuList! @aws_cognito_user_pools
-  getOffersByType(offerType: ID!): [Offer!]! @aws_cognito_user_pools
-  getOfferById(id: ID!): Offer! @aws_cognito_user_pools
-  getCompanyById(id: ID!): Company! @aws_cognito_user_pools
-  getAllCompaniesByBrandId(brandId: ID!): [Company!]! @aws_cognito_user_pools
+  getOfferMenusByBrandId(brandId: ID!, input: OfferRestrictionInput): OfferMenuList @aws_cognito_user_pools @aws_oidc
+  getBanners(input: BannersQueryInput): [Banner!]! @aws_cognito_user_pools @aws_oidc
+  getCategoriesAndCompaniesByBrandId(brandId: ID!, input: OfferRestrictionInput): CompaniesCategoriesMenuList! @aws_cognito_user_pools @aws_oidc
+  getOffersByType(offerType: ID!): [Offer!]! @aws_cognito_user_pools @aws_oidc
+  getOfferById(id: ID!): Offer! @aws_cognito_user_pools @aws_oidc
+  getCompanyById(id: ID!): Company! @aws_cognito_user_pools @aws_oidc
+  getAllCompaniesByBrandId(brandId: ID!): [Company!]! @aws_cognito_user_pools @aws_oidc
 }
 
 input OfferRestrictionInput {

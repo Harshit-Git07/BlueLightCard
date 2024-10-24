@@ -1,9 +1,8 @@
 import { Stack } from 'sst/constructs';
 import { AuthorizationType, FieldLogLevel, GraphqlApi, SchemaFile } from 'aws-cdk-lib/aws-appsync';
 import { IUserPool } from 'aws-cdk-lib/aws-cognito';
-import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { isProduction } from '../../../core/src/utils/checkEnvironment';
 import { SecretManager } from './secret-manager';
+import { IdentityStackConfigResolver } from "@blc-mono/identity/src/config/config";
 
 /**
  * This class creates the GraphQL API for the Offers API
@@ -32,6 +31,7 @@ export class OffersApi {
   }
 
   private createApi() {
+    const identityConfig = IdentityStackConfigResolver.for(this.stack);
     const certificateArn: string = this.secrets.appSyncCertificateArn;
     return new GraphqlApi(this.stack, 'Api', {
       name: `cms-api-${this.stack.stage}`,
@@ -49,6 +49,12 @@ export class OffersApi {
             userPoolConfig: {
               userPool: this.newUserPool,
             },
+          },
+          {
+            authorizationType: AuthorizationType.OIDC,
+            openIdConnectConfig: {
+              oidcProvider: identityConfig.graphQlConfig.auth0OidcProvider,
+            }
           },
         ],
       },

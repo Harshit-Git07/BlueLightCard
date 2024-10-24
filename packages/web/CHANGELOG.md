@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.78.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.78.0...bluelightcard/web-v1.78.1) (2024-10-24)
+
+
+### Bug Fixes
+
+* [DISCO-1001] Revert ([#2593](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2593)) ([4446efd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4446efd6fd0d5f15d0d99b5938981168d2969624))
+
 ## [1.78.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.77.0...bluelightcard/web-v1.78.0) (2024-10-24)
 
 

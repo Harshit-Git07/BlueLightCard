@@ -23,8 +23,8 @@ export type Props = {
 
 export const getShareButtonTargetPage = (
   companyPageExperiment: string | undefined,
-  companyId: number | undefined,
-  offerId: number | undefined,
+  companyId: number | string | undefined,
+  offerId: number | string | undefined,
 ) => {
   let targetUrl = '/';
 

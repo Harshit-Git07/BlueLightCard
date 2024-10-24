@@ -8,12 +8,13 @@ export type MenuResponse = {
     offers: MenuOfferResponse[];
   };
   marketplace?: {
-    menuName: string;
+    title: string;
+    description: string;
     hidden: boolean;
     offers: MenuOfferResponse[];
   }[];
   flexible?: {
-    listID: string;
+    id: string;
     title: string;
     imageURL: string;
   }[];

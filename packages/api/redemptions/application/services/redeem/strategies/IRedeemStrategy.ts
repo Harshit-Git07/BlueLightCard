@@ -55,6 +55,8 @@ export type RedeemVaultStrategyResult =
           alertBelow: number;
           vaultType: 'legacy' | 'standard';
           email: string;
+          integration?: string | null;
+          integrationId?: string | null;
         };
       };
     }
@@ -66,6 +68,7 @@ export type RedeemParams = {
   companyName: string;
   offerName: string;
   clientType: ClientType;
+  memberEmail: string;
 };
 
 export interface IRedeemStrategy {

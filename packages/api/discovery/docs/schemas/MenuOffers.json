@@ -2,22 +2,25 @@
   "MenuOffer": {
     "type": "object",
     "properties": {
-      "OfferID": {
+      "offerID": {
         "type": "integer"
       },
-      "OfferName": {
+      "offerType": {
+        "$ref": "#/enums/OfferType"
+      },
+      "offerName": {
         "type": "string"
       },
-      "OfferDescription": {
+      "offerDescription": {
         "type": "string"
       },
-      "ImageURL": {
+      "imageURL": {
         "type": "string"
       },
-      "CompanyID": {
+      "companyID": {
         "type": "string"
       },
-      "CompanyName": {
+      "companyName": {
         "type": "string"
       }
     }
@@ -49,7 +52,10 @@
     "items": {
       "type": "object",
       "properties": {
-        "menuName": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "hidden": {
@@ -69,7 +75,7 @@
     "items": {
       "type": "object",
       "properties": {
-        "listID": {
+        "id": {
           "type": "string"
         },
         "title": {
@@ -85,6 +91,10 @@
     "MenuID": {
       "type": "string",
       "enum": ["flexible", "dealsOfTheWeek", "featured", "marketplace"]
+    },
+    "OfferType": {
+      "type": "string",
+      "enum": ["gift-card", "in-store", "local", "online", "other"]
     }
   }
 }

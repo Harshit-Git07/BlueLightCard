@@ -3,8 +3,8 @@ import { DynamoDBDocumentClient, QueryCommandInput, QueryCommand } from '@aws-sd
 import { OrganisationModel } from 'application/models/organisationModel';
 
 export class OrganisationsRepository {
-  private dynamoDBDocClient: DynamoDBDocumentClient;
-  private tableName: string;
+  private readonly dynamoDBDocClient: DynamoDBDocumentClient;
+  private readonly tableName: string;
 
   constructor(dynamoDB: DynamoDBDocumentClient, tableName: string) {
     this.dynamoDBDocClient = dynamoDB;

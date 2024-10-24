@@ -84,6 +84,8 @@ describe('Search E2E Event Handling', async () => {
       OfferType: 'online',
       offerimg: 'https://testimage.com',
       CompID: companyId.toString(),
+      LegacyID: 1,
+      LegacyCompanyID: 1,
       CompanyName: companyName,
     },
   ];

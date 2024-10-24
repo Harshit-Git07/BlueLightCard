@@ -1,7 +1,7 @@
 export interface SearchResult {
-  id: number;
+  id: number | string;
   catid?: number;
-  compid: number;
+  compid: number | string;
   typeid: number;
   offername: string;
   companyname: string;
@@ -23,9 +23,9 @@ export interface SearchResultV5 {
 }
 
 export interface OfferListItem {
-  companyId: number;
+  companyId: number | string;
   companyName: string;
-  offerId: number;
+  offerId: number | string;
   offerName: string;
   searchResultNumber: number;
 }

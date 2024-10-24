@@ -72,6 +72,8 @@ describe('DwhMemberRedemptionController', () => {
           offerId: mockEvent.detail.redemptionDetails.offerId,
           memberId: mockEvent.detail.memberDetails.memberId,
           redemptionType: mockEvent.detail.redemptionDetails.redemptionType,
+          integration: null,
+          integrationId: null,
         },
       });
 
@@ -84,6 +86,8 @@ describe('DwhMemberRedemptionController', () => {
             offerId: mockEvent.detail.redemptionDetails.offerId,
             memberId: mockEvent.detail.memberDetails.memberId,
             redemptionType: mockEvent.detail.redemptionDetails.redemptionType,
+            integration: null,
+            integrationId: null,
           },
         }),
       );

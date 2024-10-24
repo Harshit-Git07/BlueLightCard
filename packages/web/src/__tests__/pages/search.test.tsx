@@ -17,6 +17,11 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { Factory } from 'fishery';
 import _noop from 'lodash/noop';
 import { logSearchCardClicked } from '@/utils/amplitude';
+import {
+  IPlatformAdapter,
+  PlatformAdapterProvider,
+  useMockPlatformAdapter,
+} from '@bluelightcard/shared-ui/adapters';
 
 jest.mock('@amplitude/analytics-browser', () => ({
   Types: { LogLevel: {} },
@@ -56,8 +61,11 @@ const userContextTypeFactory = Factory.define<UserContextType>(() => ({
     uuid: 'mock-uuid',
   },
 }));
+let mockPlatformAdapter: IPlatformAdapter;
 
 describe('SearchPage', () => {
+  mockPlatformAdapter = useMockPlatformAdapter();
+
   beforeEach(() => {
     makeQueryMock.mockResolvedValue({
       data: [],
@@ -150,15 +158,17 @@ const whenSearchPageIsRendered = (variant: string) => {
   render(
     <QueryClientProvider client={new QueryClient()}>
       <UserContext.Provider value={userContext}>
-        <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
-          <RouterContext.Provider value={mockRouter as NextRouter}>
-            <AuthContext.Provider value={mockAuthContext as AuthContextType}>
-              <UserContext.Provider value={userContext}>
-                <Search />
-              </UserContext.Provider>
-            </AuthContext.Provider>
-          </RouterContext.Provider>
-        </AuthedAmplitudeExperimentProvider>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
+            <RouterContext.Provider value={mockRouter as NextRouter}>
+              <AuthContext.Provider value={mockAuthContext as AuthContextType}>
+                <UserContext.Provider value={userContext}>
+                  <Search />
+                </UserContext.Provider>
+              </AuthContext.Provider>
+            </RouterContext.Provider>
+          </AuthedAmplitudeExperimentProvider>
+        </PlatformAdapterProvider>
       </UserContext.Provider>
     </QueryClientProvider>
   );

@@ -2,7 +2,7 @@ import * as Factory from 'factory.ts';
 
 import { companyFactory } from '@blc-mono/discovery/application/factories/CompanyFactory';
 
-import { Offer } from '../models/Offer';
+import { Offer, OfferType } from '../models/Offer';
 
 import { boostFactory } from './BoostFactory';
 import { categoryFactory } from './CategoryFactory';
@@ -13,7 +13,7 @@ export const offerFactory = Factory.Sync.makeFactory<Offer>({
   legacyOfferId: 101,
   name: 'Sample Offer',
   status: 'active',
-  offerType: 'online',
+  offerType: OfferType.ONLINE,
   offerDescription: 'Sample offer description',
   image: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',
   offerStart: '2024-09-01',

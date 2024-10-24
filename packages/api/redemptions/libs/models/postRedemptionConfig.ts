@@ -24,9 +24,9 @@ export const PostRedemptionConfigBaseModel = createZodNamedType(
         ])
         .optional()
         .nullable(),
-      companyId: z.coerce.string(),
+      companyId: z.union([z.string(), z.number()]).transform((value) => String(value)),
       connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
-      offerId: z.coerce.string(),
+      offerId: z.union([z.string(), z.number()]).transform((value) => String(value)),
     })
     .strict(),
 );
@@ -69,7 +69,10 @@ export const VaultModel = createZodNamedType(
     alertBelow: z.number().positive(),
     status: z.enum(['active', 'in-active']),
     maxPerUser: z.number().positive(),
-    integrationId: z.coerce.string().nullable(),
+    integrationId: z
+      .union([z.string(), z.number()])
+      .transform((value) => String(value))
+      .nullable(),
     email: z.string().email(),
     integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
   }),

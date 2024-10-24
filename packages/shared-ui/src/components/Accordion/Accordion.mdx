@@ -1,5 +1,4 @@
-import { Meta, Canvas, Controls } from '@storybook/blocks';
-
+import { Meta, Canvas, Controls, ComponentStatus } from '@storybook/blocks';
 import * as Accordion from './Accordion.stories';
 
 <Meta of={Accordion} />
@@ -8,28 +7,65 @@ import * as Accordion from './Accordion.stories';
 
 - [Overview](#overview)
 - [Props](#props)
-- [Usage](#usage)
+- [State](#state)
+- [Implementation](#implementation)
 
 ## Overview
-Overview description of the Accordion component...
+
+Accordion component accepting any children components as content, with dynamic sizing and group capabilties. It can optionally fire
+an amplitude event when the accordion is opened and the icons for open/expand, and close/collapse, are customisable. 
 
 ## Props
+
 <Controls />
 
-## Usage
-➡️ Usage instruction one
+## State
 
-➡️ Usage instruction two
+### Single Accordion
 
-➡️ Usage instruction three
+<Canvas of={Accordion.Default} />
 
-➡️ Usage instruction four
+### Multiple Accordions
 
-## Variants
-List of variants can be shown below here.
+Accordions are grouped by specifying a value for the `groupId` prop and have slightly different styles for readability in a group,
+including a slighty bolder title font, a content background colours and alternative spacing.
 
-### Accordion Box
-<Canvas of={Accordion.AccordionBox} />
+<Canvas of={Accordion.Groups} />
 
-### Accordion Box Markdown Bold
-<Canvas of={Accordion.AccordionBoxMarkdownBold} />
+## Implementation
+Usage example using jsx
+
+**NOTE:** accordions sharing the same `groupId` will only be able to be opened one at a time, regardless of visual grouping. Likewise,
+a visual group of accordions will be able to open independantly of each other if the `groupId` is not set.
+
+```jsx
+const MyComponentWithAccordions: FC<Props> = () => {
+  return (
+    <>
+      <section>
+        <h2>Accordion Group 1</h2>
+        <Accordion
+          title="Accordion #1 : Custom icons for open/close "
+          groupId="group1"
+          openIcon={faEye}
+          closeIcon={faEyeSlash}
+        >
+          {content}
+        </Accordion>
+        <Accordion
+          title="Accordion #2 : Render any content or components, in any layout"
+          groupId="group1"
+        >
+          {content}
+        </Accordion>
+      </section>
+
+      <section>
+        <h2>Ungrouped Accordions</h2>
+        <Accordion title="Accordion #5 : I can be opened independent of #6">{content}</Accordion>
+        <Accordion title="Accordion #6 : I can be opened independent of #5">{content}</Accordion>
+      </section>
+    </>
+  );
+};
+```

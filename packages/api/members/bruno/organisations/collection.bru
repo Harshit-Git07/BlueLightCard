@@ -1,0 +1,13 @@
+auth {
+  mode: apikey
+}
+
+auth:apikey {
+  key: x-api-key
+  value: {{api_key_aws}}
+  placement: header
+}
+vars:pre-request {
+  organisation_id: 05e843e2-7967-4e40-b2af-8bf5a766ee60
+  brand: BLC_UK
+}

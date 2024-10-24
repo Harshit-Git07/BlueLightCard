@@ -2,6 +2,7 @@
   "name": "@blc-mono/members",
   "version": "1.0.0",
   "scripts": {
+    "dev": "sst dev",
     "typecheck": "tsc -noEmit",
     "test": "jest application/ --coverage"
   },

@@ -27,9 +27,11 @@ export const colours = {
 export const fonts = {
   body: 'font-typography-body text-typography-body tracking-typography-body leading-typography-body font-typography-body-weight',
   bodyLight:
-    'font-typography-body-light text-typography-body-light tracking-typography-body-light leading-typography-body-light font-typography-body-small-light',
+    'font-typography-body-light text-typography-body-light tracking-typography-body-light leading-typography-body-light font-typography-body-light-weight',
   bodySmall:
     'font-typography-body-small text-typography-body-small tracking-typography-body-small leading-typography-body-small font-typography-body-small-weight',
+  bodySemiBold:
+    'font-typography-body-semibold text-typography-body-semibold tracking-typography-body-semibold leading-typography-body-semibold font-typography-body-semibold-weight',
   label:
     'font-typography-label text-typography-label tracking-typography-label leading-typography-label font-typography-label-weight',
 };

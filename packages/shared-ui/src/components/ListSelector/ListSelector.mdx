@@ -1,0 +1,60 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as ListSelector from './ListSelector.stories';
+
+<Meta of={ListSelector} />
+
+# ListSelector
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+
+## Overview
+
+OList selectors are used to add more information to the user’s options without adding clutter. When options are explicitly separated into cards, it’s obvious which elements belong to which group and easier to quickly distinguish between list options. It also allows quick editing functionality when used in a form - like allowing user to select their employment status or relevant ID to upload during Sign up on in the MyAccount area.
+
+## Props
+<Controls />
+
+###States
+List of states can be found below here.
+
+### Default
+<Canvas of={ListSelector.Default} />
+
+### Selected
+<Canvas of={ListSelector.Selected} />
+
+### Hover
+<Canvas of={ListSelector.Hover} />
+
+## Implementation
+Usage example using jsx
+
+```jsx
+const ListSelector: FC = () => {
+  return <></>;
+};
+```
+
+## Usage Guidelines
+
+➡️ ListSelector may contain icon, on the right side optionally - usually on used on desktop and omitted in default state on mobile due to touch capability.
+
+➡️ ListSelector should be used in a group - to allow user to select ONE from a list of items - not stand alone. Two selectors in a list cannot both be in the selected state at the same time
+
+➡️ Height of list selector should hug the contents.
+
+➡️ Width of list selector usually fills width or parent container but on desktop screen min width is 500px.
+
+➡️ Title in list selector should be kept short.
+
+## Design
+Use the `<FigmaEmbed />` component.
+
+Please see the [Figma design](<https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=587-4815&t=yzSssj6IsbylKbTM-4>) for the design of the ListSelector component.

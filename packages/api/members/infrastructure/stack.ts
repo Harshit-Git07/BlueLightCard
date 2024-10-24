@@ -4,9 +4,17 @@ import { ApiGatewayV1Api, StackContext, use, Table } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 
 import { Shared } from '../../../../stacks/stack';
-import { MemberStackConfigResolver, MemberStackRegion } from './config/config';
+import {
+  MemberStackConfigResolver,
+  MemberStackRegion,
+} from '@blc-mono/members/infrastructure/config/config';
 
+import { createMemberAdminTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberAdminTable';
+import { createMemberBatchesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberBatchesTable';
 import { createMemberCodesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberCodesTable';
+import { createMemberNotesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberNotesTable';
+import { createMemberPromosTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberPromosTable';
+import { createMemberProfilesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberProfilesTable';
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { MemberProfileModel } from '../application/models/memberProfileModel';
@@ -24,6 +32,10 @@ import { OrganisationModel } from 'application/models/organisationModel';
 import { ReusableCrudGetRoute } from './routes/ReusableCrudGetRoute';
 import { MemberApplicationExternalModel } from '../application/models/reusableCrudPayloadModels';
 import { ReusableCrudUpdateRoute } from './routes/ReusableCrudUpdateRoute';
+
+import { EmployerModel } from '../application/models/employerModel';
+import { GetEmployersRoute } from './routes/GetEmployersRoute';
+
 
 export async function Members({ stack, app }: StackContext) {
   const identityTableName = `${app.stage}-${app.name}-identityTable`;
@@ -77,7 +89,12 @@ export async function Members({ stack, app }: StackContext) {
     },
   });
 
+  const memberAdminTable = createMemberAdminTable(stack);
+  const memberBatchesTable = createMemberBatchesTable(stack);
   const memberCodesTable = createMemberCodesTable(stack);
+  const memberNotesTable = createMemberNotesTable(stack);
+  const memberPromosTable = createMemberPromosTable(stack);
+  const memberProfilesTable = createMemberProfilesTable(stack);
 
   const restApi = membersApi.cdk.restApi;
 
@@ -98,6 +115,8 @@ export async function Members({ stack, app }: StackContext) {
 
   const agOrganisationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(OrganisationModel);
+
+  const agEmployerModel = apiGatewayModelGenerator.generateModelFromZodEffect(EmployerModel);
 
   membersApi.addRoutes(stack, {
     'GET /members/v5/profiles': new GetMemberProfilesRoute(
@@ -179,6 +198,16 @@ export async function Members({ stack, app }: StackContext) {
     'GET /members/v5/orgs/{brand}/{organisationId}': new GetOrganisationsRoute(
       apiGatewayModelGenerator,
       agOrganisationModel,
+      identityTableName,
+    ).getRouteDetails(),
+    'GET /members/v5/orgs/employers/{brand}/{organisationId}': new GetEmployersRoute(
+      apiGatewayModelGenerator,
+      agEmployerModel,
+      identityTableName,
+    ).getRouteDetails(),
+    'GET /members/v5/orgs/employers/{brand}/{organisationId}/{employerId}': new GetEmployersRoute(
+      apiGatewayModelGenerator,
+      agEmployerModel,
       identityTableName,
     ).getRouteDetails(),
   });

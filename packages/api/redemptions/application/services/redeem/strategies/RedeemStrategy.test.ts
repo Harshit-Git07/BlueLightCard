@@ -4,12 +4,14 @@ import { beforeAll } from '@jest/globals';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
 import { IGenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
+import { IIntegrationCodesRepository } from '@blc-mono/redemptions/application/repositories/IntegrationCodesRepository';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
 import {
   IRedemptionConfigRepository,
   RedemptionConfigEntity,
 } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { IRedemptionsEventsRepository } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
+import { IUniqodoApiRepository } from '@blc-mono/redemptions/application/repositories/UniqodoApiRepository';
 import { IVaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { IVaultsRepository, VaultEntity } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
@@ -38,6 +40,7 @@ describe('Redemption Strategies', () => {
     memberId: faker.string.sample(8),
     offerName: faker.lorem.words(3),
     clientType: faker.helpers.arrayElement(['web', 'mobile']),
+    memberEmail: faker.internet.url(),
   };
   // Repository mocks
   function mockRedemptionsEventsRepository(): IRedemptionsEventsRepository {
@@ -92,6 +95,20 @@ describe('Redemption Strategies', () => {
       getCodesRedeemed: jest.fn(),
       checkVaultStock: jest.fn(),
       viewVaultBatches: jest.fn(),
+    };
+  }
+
+  function mockIntegrationCodesRepository(): IIntegrationCodesRepository {
+    return {
+      create: jest.fn(),
+      countCodesClaimedByMember: jest.fn(),
+      withTransaction: jest.fn(),
+    };
+  }
+
+  function mockUniqodoApiRepository(): IUniqodoApiRepository {
+    return {
+      getCode: jest.fn(),
     };
   }
 
@@ -318,7 +335,25 @@ describe('Redemption Strategies', () => {
       redemptionId: testVaultRedemption.id,
       vaultType: 'standard',
       maxPerUser: 99,
+      integration: null,
+      integrationId: null,
     });
+    const testStandardUniqodoVault = vaultEntityFactory.build({
+      redemptionId: testVaultRedemption.id,
+      vaultType: 'standard',
+      maxPerUser: 3,
+      integration: 'uniqodo',
+      integrationId: '98765',
+    });
+    const mockedUniqodoClaimSuccessResponse = {
+      kind: 'Ok',
+      data: {
+        code: 'uniqodo-code',
+        createdAt: new Date(),
+        expiresAt: new Date(),
+        promotionId: faker.string.numeric(8),
+      },
+    };
     const testStandardVaultCode = vaultCodeEntityFactory.build({
       vaultId: testStandardVault.id,
     });
@@ -357,6 +392,18 @@ describe('Redemption Strategies', () => {
       },
     });
 
+    const testRedemptionEventParamsStandard = (vault: VaultEntity, vaultCode: { code: string }) => ({
+      ...testRedemptionEventParams(vault, vaultCode),
+      redemptionDetails: {
+        ...testRedemptionEventParams(vault, vaultCode).redemptionDetails,
+        vaultDetails: {
+          ...testRedemptionEventParams(vault, vaultCode).redemptionDetails.vaultDetails,
+          integration: vault.integration,
+          integrationId: String(vault.integrationId),
+        },
+      },
+    });
+
     function callVaultRedeemStrategy(
       redemptionConfigEntity: RedemptionConfigEntity,
       logger: ILogger,
@@ -366,6 +413,8 @@ describe('Redemption Strategies', () => {
         vaultsRepository?: IVaultsRepository;
         vaultCodesRepository?: IVaultCodesRepository;
         legacyVaultApiRepository?: ILegacyVaultApiRepository;
+        integrationCodesRepository?: IIntegrationCodesRepository;
+        uniqodoApiRepository?: IUniqodoApiRepository;
       },
     ) {
       const mockedRedemptionsEventsRepository =
@@ -373,11 +422,16 @@ describe('Redemption Strategies', () => {
       const mockedVaultsRepository = overrides?.vaultsRepository || mockVaultsRepository();
       const mockedVaultCodesRepository = overrides?.vaultCodesRepository || mockVaultCodesRepository();
       const mockedLegacyVaultApiRepository = overrides?.legacyVaultApiRepository || mockLegacyVaultApiRepository();
+      const mockedIntegrationCodesRepository =
+        overrides?.integrationCodesRepository || mockIntegrationCodesRepository();
+      const mockedUniqodoApiRepository = overrides?.uniqodoApiRepository || mockUniqodoApiRepository();
       const service = new RedeemVaultStrategy(
         as(mockedVaultsRepository),
         mockedVaultCodesRepository,
         mockedLegacyVaultApiRepository,
         mockedRedemptionsEventsRepository,
+        as(mockedUniqodoApiRepository),
+        as(mockedIntegrationCodesRepository),
         logger,
       );
 
@@ -399,7 +453,7 @@ describe('Redemption Strategies', () => {
       await expect(result).rejects.toThrow();
     });
 
-    describe('Standard vault flow', () => {
+    describe('Standard vault flow - integration set to null', () => {
       it('Should throw when no matching active vault exists', async () => {
         // Arrange
         const mockedSilentLogger = createSilentLogger();
@@ -502,6 +556,103 @@ describe('Redemption Strategies', () => {
           redemptionDetails: {
             url: testVaultRedemption.url,
             code: testStandardVaultCode.code,
+          },
+        });
+      });
+    });
+
+    describe('Standard vault flow - integration set to uniqodo', () => {
+      it('Should throw when no matching active vault exists', async () => {
+        // Arrange
+        const mockedSilentLogger = createSilentLogger();
+        const inactiveVault = vaultEntityFactory.build({
+          redemptionId: testVaultRedemption.id,
+          status: 'in-active',
+        });
+        const mockedVaultsRepository = mockVaultsRepository();
+        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(inactiveVault);
+
+        // Act & Assert
+        await expect(() =>
+          callVaultRedeemStrategy(testVaultRedemption, mockedSilentLogger, {
+            vaultsRepository: as(mockedVaultsRepository),
+          }),
+        ).rejects.toThrow();
+      });
+      it('Should return kind equals to "MaxPerUserReached" when max per user is reached', async () => {
+        // Arrange
+        const mockedLogger = createTestLogger();
+        const mockedVaultsRepository = mockVaultsRepository();
+        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testStandardUniqodoVault);
+
+        const mockedIntegrationCodesRepository = mockIntegrationCodesRepository();
+        mockedIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(3);
+
+        // Act
+        const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
+          vaultsRepository: as(mockedVaultsRepository),
+          integrationCodesRepository: as(mockedIntegrationCodesRepository),
+        });
+
+        // Assert
+        expect(result.kind).toBe('MaxPerUserReached');
+      });
+      it('Should return kind equals to "Ok" when a vault code is found', async () => {
+        // Arrange
+        const mockedLogger = createTestLogger();
+        const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
+        mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
+        const mockedVaultsRepository = mockVaultsRepository();
+        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testStandardUniqodoVault);
+        const mockedIntegrationCodesRepository = mockIntegrationCodesRepository();
+        mockedIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(2);
+        const mockedUniqodoApiRepository = mockUniqodoApiRepository();
+        mockedUniqodoApiRepository.getCode = jest.fn().mockResolvedValue(mockedUniqodoClaimSuccessResponse);
+
+        // Act
+        const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
+          vaultsRepository: as(mockedVaultsRepository),
+          integrationCodesRepository: as(mockedIntegrationCodesRepository),
+          uniqodoApiRepository: mockedUniqodoApiRepository,
+          redemptionEventsRepository: mockedRedemptionsEventsRepository,
+        });
+
+        // Assert
+        expect(result.kind).toBe('Ok');
+        expect(result.redemptionType).toEqual('vault');
+        expect(result.redemptionDetails?.url).toEqual(testVaultRedemption.url);
+        expect(result.redemptionDetails?.code).toEqual(mockedUniqodoClaimSuccessResponse.data.code);
+      });
+      it('Should publish a redemption event', async () => {
+        // Arrange
+        const mockedLogger = createTestLogger();
+        const mockedRedemptionsEventsRepository = mockRedemptionsEventsRepository();
+        mockedRedemptionsEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
+        const mockedVaultsRepository = mockVaultsRepository();
+        mockedVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(testStandardUniqodoVault);
+        const mockedIntegrationCodesRepository = mockIntegrationCodesRepository();
+        const mockedUniqodoApiRepository = mockUniqodoApiRepository();
+        mockedUniqodoApiRepository.getCode = jest.fn().mockResolvedValue(mockedUniqodoClaimSuccessResponse);
+
+        // Act
+        const result = await callVaultRedeemStrategy(testVaultRedemption, mockedLogger, {
+          vaultsRepository: as(mockedVaultsRepository),
+          integrationCodesRepository: as(mockedIntegrationCodesRepository),
+          uniqodoApiRepository: mockedUniqodoApiRepository,
+          redemptionEventsRepository: mockedRedemptionsEventsRepository,
+        });
+
+        // Assert
+        expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledTimes(1);
+        expect(mockedRedemptionsEventsRepository.publishRedemptionEvent).toHaveBeenCalledWith(
+          testRedemptionEventParamsStandard(testStandardUniqodoVault, mockedUniqodoClaimSuccessResponse.data),
+        );
+        expect(result).toStrictEqual({
+          kind: 'Ok',
+          redemptionType: 'vault',
+          redemptionDetails: {
+            url: testVaultRedemption.url,
+            code: mockedUniqodoClaimSuccessResponse.data.code,
           },
         });
       });

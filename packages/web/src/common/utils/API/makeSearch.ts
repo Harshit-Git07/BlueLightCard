@@ -5,10 +5,12 @@ import { getSiteIdFromBrandId } from '../getSiteIdFromBrandId';
 const he = require('he');
 
 export type SearchOfferType = {
-  ID: number;
+  ID: number | string;
+  LegacyID?: number;
   OfferName: string;
   offerimg: string;
-  CompID: number;
+  CompID: number | string;
+  LegacyCompanyID?: number;
   CompanyName: string;
   OfferType: number;
 };

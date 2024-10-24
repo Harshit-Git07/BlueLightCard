@@ -49,7 +49,7 @@ describe('MemberCardService', () => {
         {
           uuid: `${queryWithoutCardNo.uuid}`,
           cardNumber: `123`,
-          card_status: CardStatus.POSTED,
+          card_status: CardStatus.PHYSICAL_CARD,
           expiry_date: '12/12/2025',
           name_on_card: 'Mike',
           posted_date: null,
@@ -72,7 +72,7 @@ describe('MemberCardService', () => {
         {
           uuid: `${queryWithoutCardNo.uuid}`,
           cardNumber: `123`,
-          card_status: CardStatus.POSTED,
+          card_status: CardStatus.PHYSICAL_CARD,
           expiry_date: '12/12/2025',
           name_on_card: 'Mike',
           posted_date: null,
@@ -112,7 +112,7 @@ describe('MemberCardService', () => {
     it('should update card with valid data', async () => {
       const payload: MemberCardUpdatePayload = {
         name_on_card: 'Mike',
-        card_status: CardStatus.POSTED,
+        card_status: CardStatus.PHYSICAL_CARD,
         expiry_date: '2025-12-12T00:00:00Z',
         posted_date: '2024-12-12T00:00:00Z',
         purchase_time: '2024-12-12T00:00:00Z',
@@ -128,7 +128,7 @@ describe('MemberCardService', () => {
     it('should throw an error if data is invalid', async () => {
       const invalidPayload = {
         name_on_card: 'Jo',
-        card_status: CardStatus.POSTED,
+        card_status: CardStatus.PHYSICAL_CARD,
         expiry_date: 'invalid-date',
         posted_date: '2024-12-12T00:00:00Z',
         purchase_time: '08:00:00Z',

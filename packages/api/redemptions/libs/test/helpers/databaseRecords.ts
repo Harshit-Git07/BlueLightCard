@@ -3,11 +3,13 @@ import { faker } from '@faker-js/faker';
 import { VaultCodeEntity } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import {
+  integrationCodesTable,
   redemptionsTable,
   vaultBatchesTable,
   vaultCodesTable,
   vaultsTable,
 } from '@blc-mono/redemptions/libs/database/schema';
+import { integrationCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/integrationCodeEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultCodeEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultCodeEntity.factory';
@@ -109,4 +111,20 @@ export async function createVaultCodeRecordsExpired(
   });
   await connection.db.insert(vaultCodesTable).values(vaultCodes).execute();
   return vaultCodes;
+}
+
+export async function createManyIntegrationCodesRecords(
+  connection: DatabaseConnection,
+  vaultId: string,
+  integrationId: string,
+  memberId: string,
+  count: number,
+): Promise<(typeof integrationCodesTable.$inferSelect)[]> {
+  const integrationCodes = integrationCodeEntityFactory.buildList(count, {
+    vaultId: vaultId,
+    integrationId: integrationId,
+    memberId: memberId,
+  });
+  await connection.db.insert(integrationCodesTable).values(integrationCodes).execute();
+  return integrationCodes;
 }

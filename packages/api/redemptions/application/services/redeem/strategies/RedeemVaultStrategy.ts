@@ -2,6 +2,7 @@ import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
+import { IntegrationCodesRepository } from '@blc-mono/redemptions/application/repositories/IntegrationCodesRepository';
 import {
   ILegacyVaultApiRepository,
   LegacyVaultApiRepository,
@@ -10,6 +11,7 @@ import {
   IRedemptionsEventsRepository,
   RedemptionsEventsRepository,
 } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
+import { UniqodoApiRepository } from '@blc-mono/redemptions/application/repositories/UniqodoApiRepository';
 import {
   IVaultCodesRepository,
   VaultCodesRepository,
@@ -33,6 +35,8 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     VaultCodesRepository.key,
     LegacyVaultApiRepository.key,
     RedemptionsEventsRepository.key,
+    UniqodoApiRepository.key,
+    IntegrationCodesRepository.key,
     Logger.key,
   ] as const;
 
@@ -43,12 +47,14 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     private readonly vaultCodesRepository: IVaultCodesRepository,
     private readonly legacyVaultApiRepository: ILegacyVaultApiRepository,
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
+    private readonly uniqodoRepository: UniqodoApiRepository,
+    private readonly integrationCodesRepository: IntegrationCodesRepository,
     private readonly logger: ILogger,
   ) {}
 
   async redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemVaultStrategyResult> {
     const { id, redemptionType, url, companyId, offerId } = redemption;
-    const { memberId } = params;
+    const { memberId, memberEmail } = params;
     if (!(redemptionType === 'vault' || redemptionType === 'vaultQR')) {
       throw new Error('Unexpected redemption type');
     }
@@ -74,7 +80,11 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     let result: RedeemVaultStrategyResult;
     switch (vault.vaultType) {
       case 'standard':
-        result = await this.handleRedeemStandardVault(vault, redemptionType, url, memberId);
+        if (vault.integration === 'uniqodo' || vault.integration === 'eagleeye') {
+          result = await this.handleRedeemIntegrationVault(vault, redemptionType, url, memberId, memberEmail);
+        } else {
+          result = await this.handleRedeemStandardVault(vault, redemptionType, url, memberId);
+        }
         break;
       case 'legacy':
         result = await this.handleRedeemLegacyVault(vault, redemptionType, url, companyId, offerId, memberId);
@@ -109,6 +119,87 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     return result;
   }
 
+  private async handleRedeemIntegrationVault(
+    vault: VaultEntity,
+    redemptionType: 'vault' | 'vaultQR',
+    redemptionUrl: string | null,
+    memberId: string,
+    memberEmail: string,
+  ): Promise<RedeemVaultStrategyResult> {
+    if (vault.integrationId === null) {
+      throw new Error(`${vault.integration} integrationId is blank/null`);
+    }
+
+    const countCodesClaimedByMember = await this.integrationCodesRepository.countCodesClaimedByMember(
+      vault.id,
+      String(vault.integrationId),
+      memberId,
+    );
+
+    const maxPerUser = vault.maxPerUser ?? 1;
+
+    if (countCodesClaimedByMember >= maxPerUser) {
+      return {
+        kind: 'MaxPerUserReached',
+      };
+    }
+
+    let claimedCode;
+    if (vault.integration == 'uniqodo') {
+      claimedCode = await this.uniqodoRepository.getCode(String(vault.integrationId), memberId, memberEmail);
+    } else {
+      //claimedCode = await this.eagleeyeRepository.getCode(vault.integrationId ?? 0, memberId, memberEmail);
+      throw new Error('Eagleeye integration not supported');
+    }
+
+    if (claimedCode.kind !== 'Ok') {
+      this.logger.error({
+        message: `${claimedCode.data.message} error - vaultId: "${vault.id}", memberId: "${memberId}"`,
+        context: {
+          vaultId: vault.id,
+          memberId,
+        },
+      });
+      throw new Error(`No vault code retrieved for ${vault.integration} vault`);
+    }
+
+    await this.integrationCodesRepository.create({
+      vaultId: vault.id,
+      memberId: memberId,
+      code: claimedCode.data.code,
+      created: claimedCode.data.createdAt,
+      expiry: claimedCode.data.expiresAt,
+      integration: vault.integration,
+      integrationId: String(vault.integrationId),
+    });
+
+    const redemptionDetails = {
+      code: claimedCode.data.code,
+      vaultDetails: {
+        id: vault.id,
+        alertBelow: vault.alertBelow,
+        email: vault.email ?? '',
+        vaultType: vault.vaultType,
+        integration: vault.integration,
+        integrationId: String(vault.integrationId),
+      },
+    };
+    const vaultResponse: RedeemVaultStrategyResult = {
+      kind: 'Ok',
+      redemptionType,
+      redemptionDetails,
+    };
+
+    if (redemptionType != 'vaultQR' && redemptionUrl) {
+      const parsedUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemptionUrl, memberId);
+      return {
+        ...vaultResponse,
+        redemptionDetails: { ...redemptionDetails, url: parsedUrl },
+      };
+    }
+    return vaultResponse;
+  }
+
   private async handleRedeemStandardVault(
     vault: VaultEntity,
     redemptionType: 'vault' | 'vaultQR',
@@ -130,7 +221,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     const claimedCode = await this.vaultCodesRepository.claimVaultCode(vault.id, memberId);
     if (!claimedCode) {
       this.logger.error({
-        message: `No vault code not found for the given vaultId "${vault.id}" and memberId "${memberId}"`,
+        message: `No vault code found for standard vault with vaultId "${vault.id}", memberId "${memberId}"`,
         context: {
           vaultId: vault.id,
           memberId,

@@ -5,8 +5,13 @@ import { AccordionProps } from './types';
 import Markdown from '../Markdown/Markdown';
 import IconListItem from '../IconListItem/IconListItem';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/Accordion/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 export default {
-  title: 'Component System/Accordion',
+  title: 'Deprecated/Component System/Accordion - Deprecated',
   component: Accordion,
 } as Meta;
 

@@ -177,6 +177,8 @@ describe('DwhLoggingService', () => {
           data.companyId,
           data.memberId,
           data.code,
+          data.integration,
+          data.integrationId,
         );
       },
     );

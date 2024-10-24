@@ -16,6 +16,7 @@ import {
 } from '@blc-mono/redemptions/libs/database/connection';
 import {
   genericsTable,
+  integrationCodesTable,
   redemptionsTable,
   vaultBatchesTable,
   vaultCodesTable,
@@ -95,6 +96,7 @@ export class RedemptionsTestDatabase {
   public async reset(specificConnection?: DatabaseConnection): Promise<void> {
     const connection = specificConnection ?? (await this.getConnection());
     // The order of deletion is important due to foreign key constraints
+    await connection.db.delete(integrationCodesTable).execute();
     await connection.db.delete(vaultCodesTable).execute();
     await connection.db.delete(vaultBatchesTable).execute();
     await connection.db.delete(vaultsTable).execute();

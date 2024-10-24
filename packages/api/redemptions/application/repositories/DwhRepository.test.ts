@@ -192,11 +192,13 @@ describe('DwhRepository', () => {
       const companyId = faker.string.uuid();
       const code = 'code';
       const memberId = '3';
+      const integration = 'uniqodo';
+      const integrationId = 'uniqodo-id';
       mockFirehoseClient.on(PutRecordCommand);
       const dwhRepository = new DwhRepository();
 
       // Act
-      await dwhRepository.logVaultRedemption(offerId, companyId, memberId, code);
+      await dwhRepository.logVaultRedemption(offerId, companyId, memberId, code, integration, integrationId);
 
       // Assert
       const calls = mockFirehoseClient.calls();
@@ -210,6 +212,8 @@ describe('DwhRepository', () => {
         uid: '3',
         whenrequested: '2021-09-01T00:00:00.000Z',
         offer_id: offerId,
+        integration: 'uniqodo',
+        integration_id: 'uniqodo-id',
       });
     });
     it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
@@ -219,11 +223,13 @@ describe('DwhRepository', () => {
       const companyId = faker.string.uuid();
       const code = 'code';
       const memberId = '3';
+      const integration = 'uniqodo';
+      const integrationId = faker.string.numeric(10);
       mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');
       const dwhRepository = new DwhRepository();
 
       // Act
-      const result = dwhRepository.logVaultRedemption(offerId, companyId, memberId, code);
+      const result = dwhRepository.logVaultRedemption(offerId, companyId, memberId, code, integration, integrationId);
 
       // Assert
       await expect(result).rejects.toThrow();
@@ -245,6 +251,8 @@ describe('DwhRepository', () => {
         companyId: companyId,
         memberId: '3',
         offerId: '1',
+        integration: 'uniqodo',
+        integrationId: 'uniqodo-id',
       });
 
       // Act
@@ -266,6 +274,8 @@ describe('DwhRepository', () => {
         memberid: '3',
         offerid: '1',
         origin: 'new stack',
+        integration: 'uniqodo',
+        integration_id: 'uniqodo-id',
       });
     });
     it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
@@ -280,6 +290,8 @@ describe('DwhRepository', () => {
         companyId: companyId,
         memberId: '3',
         offerId: '1',
+        integration: 'uniqodo',
+        integrationId: 'uniqodo-id',
       });
 
       mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');

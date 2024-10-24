@@ -53,7 +53,9 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
     return EmptyOfferDetails;
   }
 
-  async function setRedemptionsDetails(offerId: number): Promise<RedemptionType | undefined> {
+  async function setRedemptionsDetails(
+    offerId: number | string,
+  ): Promise<RedemptionType | undefined> {
     try {
       const response = await getRedemptionDetails(platformAdapter, offerId);
       setOfferSheetAtom((prev) => ({
@@ -70,8 +72,8 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   }
 
   async function updateOfferDetailsComponent(offerData: {
-    offerId: number;
-    companyId: number;
+    offerId: number | string;
+    companyId: number | string;
     companyName: string;
     platform: PlatformVariant;
     amplitudeCtx?: Amplitude | null | undefined;

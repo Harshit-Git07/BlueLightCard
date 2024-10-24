@@ -5,7 +5,7 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 export const PostRedeemModel = createZodNamedType(
   'PostRedeemModel',
   z.object({
-    offerId: z.coerce.string(),
+    offerId: z.union([z.string(), z.number()]).transform((value) => String(value)),
     companyName: z.string(),
     offerName: z.string(),
   }),

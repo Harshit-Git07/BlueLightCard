@@ -19,6 +19,12 @@ import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 
+import {
+  DYNAMODB_MAX_BATCH_SIZE,
+  MAX_BASE_DELAY,
+  MAX_BATCH_RETRY_ATTEMPTS,
+} from '../repositories/constants/DynamoDBConstants';
+
 const logger = new LambdaLogger({ serviceName: 'dynamoDB' });
 
 export class DynamoDBService {
@@ -40,12 +46,9 @@ export class DynamoDBService {
     }
   }
 
-  static async batchWrite(params: BatchWriteCommandInput): Promise<void> {
-    const maxAttempts = 5;
-    const baseDelay = 1000;
-
+  private static async batchWrite(params: BatchWriteCommandInput): Promise<void> {
     const getBackoffDelayWithJitter = (attempt: number): number => {
-      const delay = baseDelay * Math.pow(2, attempt);
+      const delay = MAX_BASE_DELAY * Math.pow(2, attempt);
 
       return delay + Math.random() * delay;
     };
@@ -56,7 +59,11 @@ export class DynamoDBService {
 
       let attempt = 0;
 
-      while (data.UnprocessedItems && Object.keys(data.UnprocessedItems).length > 0 && attempt < maxAttempts) {
+      while (
+        data.UnprocessedItems &&
+        Object.keys(data.UnprocessedItems).length > 0 &&
+        attempt < MAX_BATCH_RETRY_ATTEMPTS
+      ) {
         attempt++;
         const delay = getBackoffDelayWithJitter(attempt);
 
@@ -78,6 +85,21 @@ export class DynamoDBService {
     }
   }
 
+  static async batchInsert<T>(items: Record<string, T>[], tableName: string): Promise<void> {
+    for (let i = 0; i < items.length; i += DYNAMODB_MAX_BATCH_SIZE) {
+      const chunk = items.slice(i, i + DYNAMODB_MAX_BATCH_SIZE);
+      await this.batchWrite({
+        RequestItems: {
+          [tableName]: chunk.map((item) => ({
+            PutRequest: {
+              Item: item,
+            },
+          })),
+        },
+      });
+    }
+  }
+
   static async delete(params: DeleteCommandInput): Promise<Record<string, NativeAttributeValue> | undefined> {
     try {
       const data = await this.dynamodb.send(new DeleteCommand(params));
@@ -86,6 +108,24 @@ export class DynamoDBService {
       const message = 'Error trying to delete record using DynamoDB service';
       logger.error({ message, body: error });
       throw new Error(`${message}: [${error}]`);
+    }
+  }
+
+  static async batchDelete(items: { partitionKey: string; sortKey: string }[], tableName: string): Promise<void> {
+    for (let i = 0; i < items.length; i += DYNAMODB_MAX_BATCH_SIZE) {
+      const chunk = items.slice(i, i + DYNAMODB_MAX_BATCH_SIZE);
+      await DynamoDBService.batchWrite({
+        RequestItems: {
+          [tableName]: chunk.map((item) => ({
+            DeleteRequest: {
+              Key: {
+                partitionKey: item.partitionKey,
+                sortKey: item.sortKey,
+              },
+            },
+          })),
+        },
+      });
     }
   }
 

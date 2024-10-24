@@ -115,7 +115,6 @@ describe('mapSanityCompanyToCompany', () => {
               },
             },
           },
-          companyId: 123,
           ageRestrictions: [
             {
               _id: '1',
@@ -163,7 +162,6 @@ describe('mapSanityCompanyToCompany', () => {
               },
             },
           },
-          companyId: 123,
           ageRestrictions: undefined,
         },
       ],
@@ -181,6 +179,7 @@ const sanityCompany: SanityCompany = {
   _createdAt: '2023-01-01T00:00:00Z',
   _updatedAt: '2023-01-02T00:00:00Z',
   _rev: 'rev-id',
+  companyId: 123,
   brandCompanyDetails: [
     {
       _key: 'brand-key',
@@ -198,7 +197,6 @@ const sanityCompany: SanityCompany = {
           },
         },
       },
-      companyId: 123,
       ageRestrictions: [
         {
           _id: '1',

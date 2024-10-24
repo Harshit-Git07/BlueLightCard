@@ -184,9 +184,9 @@ jobs:
             offers_brand: 'blc-uk'
             zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin'
             auth0_login_url: 'https://staging-access.blcshine.io/authorize?response_type=code&client_id=RykFoOxMBh3AGX8o13qSkT063SuUOn58&redirect_uri=https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://staging-access.blcshine.io/logout'
+            auth0_logout_url: 'https://staging-access.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php'
           - brand: 'blc-au'
-            brand_url: 'develop.bluelightcard.com.au'
+            brand_url: 'www.develop.bluelightcard.com.au'
             identity_brand: 'blc_au'
             identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
             identity_api_url: 'https://staging-identity-au.blcshine.io'
@@ -198,7 +198,7 @@ jobs:
             offers_api_gateway_endpoint: 'https://staging-offers-au.blcshine.io'
             offers_brand: 'blc-aus'
             auth0_login_url: 'https://staging-access-au.blcshine.io/authorize?response_type=code&client_id=iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4&redirect_uri=https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://staging-access-au.blcshine.io/logout'
+            auth0_logout_url: 'https://staging-access-au.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.develop.bluelightcard.com.au%2Flogout.php'
           - brand: 'dds-uk'
             brand_url: 'ddsstaging.bluelightcard.tech'
             identity_brand: 'dds_uk'
@@ -212,7 +212,7 @@ jobs:
             offers_api_gateway_endpoint: 'https://staging-offers-dds-uk.blcshine.io'
             offers_brand: 'dds-uk'
             auth0_login_url: 'https://staging-access-dds.blcshine.io/authorize?response_type=code&client_id=EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf&redirect_uri=https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://staging-access-dds.blcshine.io/logout'
+            auth0_logout_url: 'https://staging-access-dds.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.ddsstaging.bluelightcard.tech%2Flogout.php'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -316,7 +316,7 @@ jobs:
             offers_brand: 'blc-uk'
             zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin'
             auth0_login_url: 'https://access.blcshine.io/authorize?response_type=code&client_id=pU6O3irGF7dKqSmFHXyzvogwH4gEmkyz&redirect_uri=https://www.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://access.blcshine.io/logout'
+            auth0_logout_url: 'https://access.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.bluelightcard.co.uk%2Flogout.php'
           - brand: 'blc-au'
             brand_url: 'bluelightcard.com.au'
             identity_brand: 'blc_au'
@@ -330,7 +330,7 @@ jobs:
             offers_api_gateway_endpoint: 'https://offers-au.blcshine.io'
             offers_brand: 'blc-aus'
             auth0_login_url: 'https://access-au.blcshine.io/authorize?response_type=code&client_id=IE1gORi8ZUHdy8gUoEOLRT9bEHjso0SM&redirect_uri=https://www.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://access-au.blcshine.io/logout'
+            auth0_logout_url: 'https://access-au.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.bluelightcard.com.au%2Flogout.php'
           - brand: 'dds-uk'
             brand_url: 'defencediscountservice.co.uk'
             identity_brand: 'dds_uk'
@@ -344,7 +344,7 @@ jobs:
             offers_api_gateway_endpoint: 'https://offers-dds-uk.blcshine.io'
             offers_brand: 'dds-uk'
             auth0_login_url: 'https://access-dds.blcshine.io/authorize?response_type=code&client_id=j2IUeRhSBUO1ySiSHi8YZ4NEifaHv40p&redirect_uri=https://www.defencediscountservice.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://access-dds.blcshine.io/logout'
+            auth0_logout_url: 'https://access-dds.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.defencediscountservice.co.uk%2Flogout.php'
     environment: Production
     runs-on: ubuntu-latest
     needs:

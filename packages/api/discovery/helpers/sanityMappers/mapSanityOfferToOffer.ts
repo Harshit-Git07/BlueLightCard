@@ -8,7 +8,7 @@ import { mapSanityTrustToTrust } from '@blc-mono/discovery/helpers/sanityMappers
 
 import { Boost } from '../../application/models/Boost';
 import { Discount } from '../../application/models/Discount';
-import { Offer } from '../../application/models/Offer';
+import { Offer, OfferType } from '../../application/models/Offer';
 
 import { mapSanityCompanyToCompany } from './mapSanityCompanyToCompany';
 
@@ -37,15 +37,15 @@ export const mapSanityOfferToOffer = (sanityOffer: SanityOffer): Offer => {
     legacyOfferId: sanityOffer.offerId,
     name: sanityOffer.name,
     status: sanityOffer.status,
-    offerType: sanityOffer.offerType?.offerType,
+    offerType: sanityOffer.offerType?.offerType as OfferType,
     offerDescription: getBlockText(sanityOffer.offerDescription.content),
     image: sanityOffer.image?.default?.asset?.url ?? '',
     offerStart: sanityOffer.start,
     offerEnd: sanityOffer.expires,
     evergreen: sanityOffer.evergreen ?? false,
     tags: sanityOffer.tags?.map((tag) => tag._key) ?? [],
-    includedTrusts: mapSanityTrustToTrust(sanityOffer.includedTrust),
-    excludedTrusts: mapSanityTrustToTrust(sanityOffer.excludedTrust),
+    includedTrusts: mapSanityTrustToTrust(sanityOffer.includedTrusts),
+    excludedTrusts: mapSanityTrustToTrust(sanityOffer.excludedTrusts),
     company: mapSanityCompanyToCompany(sanityOffer.company),
     categories:
       sanityOffer.categorySelection?.map((category) => ({

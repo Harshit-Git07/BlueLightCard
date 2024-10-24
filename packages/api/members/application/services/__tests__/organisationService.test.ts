@@ -1,13 +1,15 @@
+import { APIErrorCode } from '../../enums/APIErrorCode';
+import { APIError } from '../../models/APIError';
 import { OrganisationsRepository } from '../../repositories/organisationsRepository';
 import { OrganisationService } from '../organisationsService';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger } from '@blc-mono/core/src/utils/logger/lambdaLogger';
 
 jest.mock('../../repositories/organisationsRepository');
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 
 describe('organisationService', () => {
   let mockRepository: jest.MockedObject<OrganisationsRepository>;
-  let mockLogger: jest.MockedObject<Logger>;
+  let mockLogger: jest.MockedObject<LambdaLogger>;
   let organisationService: OrganisationService;
 
   beforeEach(() => {
@@ -18,48 +20,55 @@ describe('organisationService', () => {
     mockLogger = {
       info: jest.fn(),
       error: jest.fn(),
-    } as unknown as jest.MockedObject<Logger>;
+    } as unknown as jest.MockedObject<LambdaLogger>;
     organisationService = new OrganisationService(mockRepository, mockLogger);
   });
 
-  test('should return data when getOrgs is called successfully', async () => {
+  test('should return data when getOrganisations is called successfully', async () => {
     const mockData = [
       {
-        organisationId: '123',
+        organisationId: '0001',
         name: 'Highway Traffic Officers',
         type: 'HIGHWAYS',
         active: true,
-        volunteer: true,
+        volunteer: false,
+        idRequirements: 'idRequirement',
         retired: false,
-        idRequirements: 'idRequirements',
-        trustedDomains: ['string1', 'string2'],
+        trustedDomains: [],
       },
     ] as never;
 
     mockRepository.getOrganisations.mockResolvedValue(mockData);
 
-    const result = await organisationService.getOrganisations({
+    const { organisationList, errorSet } = await organisationService.getOrganisations({
       brand: 'BLC_UK',
       organisationId: '123',
     });
 
-    expect(result).toEqual(mockData);
+    const expectedErrorSet: APIError[] = [];
+
+    expect(organisationList).toEqual(mockData);
+    expect(errorSet).toEqual(expectedErrorSet);
     expect(mockRepository.getOrganisations).toHaveBeenCalledWith({
       brand: 'BLC_UK',
       organisationId: '123',
     });
   });
 
-  test('should log an error and throw when get fails', async () => {
+  test('should log an error and return empty list when getOrganisations fails', async () => {
     const errorMessage = 'Error fetching organisations';
     mockRepository.getOrganisations.mockRejectedValue(new Error(errorMessage));
-    try {
-      await expect(
-        organisationService.getOrganisations({ brand: 'BLC_UK', organisationId: '123' }),
-      ).rejects.toThrow('Error fetching organisations');
-    } catch (error) {
-      expect(mockLogger.error).toHaveBeenCalled();
-      expect((error as Error).message).toEqual(errorMessage);
-    }
+
+    const { organisationList, errorSet } = await organisationService.getOrganisations({
+      brand: 'BLC_UK',
+      organisationId: '123',
+    });
+    const expectedErrorSet: APIError[] = [
+      new APIError(APIErrorCode.GENERIC_ERROR, 'getOrganisations', 'Error fetching organisations'),
+    ];
+
+    expect(organisationList).toEqual([]);
+    expect(errorSet).toEqual(expectedErrorSet);
+    expect(mockLogger.error).toHaveBeenCalled();
   });
 });

@@ -35,7 +35,7 @@ describe('MemberCardRepository', () => {
             uuid: '12345678-1234-1234-12345678',
             cardNumber: '12345678',
             name_on_card: 'Test Cardholder',
-            card_status: CardStatus.POSTED,
+            card_status: CardStatus.PHYSICAL_CARD,
             expiry_date: '2025-12-12T00:00:00Z',
             posted_date: '2024-12-12T00:00:00Z',
             purchase_time: '2024-12-12T00:00:00Z',
@@ -61,7 +61,7 @@ describe('MemberCardRepository', () => {
           uuid: '12345678-1234-1234-12345678',
           cardNumber: '12345678',
           name_on_card: 'Test Cardholder',
-          card_status: CardStatus.POSTED,
+          card_status: CardStatus.PHYSICAL_CARD,
           expiry_date: '2025-12-12',
           posted_date: '2024-12-12',
           purchase_time: '2024-12-12',
@@ -130,7 +130,7 @@ describe('MemberCardRepository', () => {
 
       const payload: MemberCardUpdatePayload = {
         name_on_card: 'Mike',
-        card_status: CardStatus.POSTED,
+        card_status: CardStatus.PHYSICAL_CARD,
         expiry_date: '2025-12-12T00:00:00Z',
         posted_date: '2024-12-12T00:00:00Z',
         purchase_time: '2024-12-12T00:00:00Z',
@@ -151,7 +151,7 @@ describe('MemberCardRepository', () => {
           'SET name_on_card = :name_on_card, card_status = :card_status, expiry_date = :expiry_date, posted_date = :posted_date, purchase_time = :purchase_time, payment_status = :payment_status, batch_number = :batch_number ',
         ExpressionAttributeValues: {
           ':name_on_card': 'Mike',
-          ':card_status': 'POSTED',
+          ':card_status': 'PHYSICAL_CARD',
           ':expiry_date': '2025-12-12T00:00:00Z',
           ':posted_date': '2024-12-12T00:00:00Z',
           ':purchase_time': '2024-12-12T00:00:00Z',
@@ -170,7 +170,7 @@ describe('MemberCardRepository', () => {
 
       const payload: MemberCardUpdatePayload = {
         name_on_card: 'Mike',
-        card_status: CardStatus.POSTED,
+        card_status: CardStatus.PHYSICAL_CARD,
         expiry_date: '2025-12-12T00:00:00Z',
         posted_date: '2024-12-12T00:00:00Z',
         purchase_time: '2024-12-12T00:00:00Z',

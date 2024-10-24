@@ -56,9 +56,7 @@ describe('mapSanityOfferToOffer', () => {
       commonExclusions: ['Exclusion Name'],
       boost: {
         type: 'boost.type',
-        boostStart: '2023-01-01',
-        boostEnd: '2023-12-31',
-        updatedAt: expect.any(String),
+        boosted: false,
       },
       updatedAt: '2023-01-02T00:00:00Z',
     };
@@ -180,8 +178,7 @@ it('should map boost with default values', () => {
   const result = mapSanityOfferToOffer(sanityOfferWithOtherDiscount as SanityOffer);
 
   expect(result.boost?.type).toStrictEqual('');
-  expect(result.boost?.boostEnd).toStrictEqual('');
-  expect(result.boost?.boostStart).toStrictEqual('');
+  expect(result.boost?.boosted).toStrictEqual(false);
 });
 
 it('should skip trusts with no code value', () => {

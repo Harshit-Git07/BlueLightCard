@@ -112,8 +112,6 @@ export function getBlockText(
 const mapSanityBoostToBoost = (sanityBoost: SanityBoostType): Boost => {
   return {
     type: sanityBoost._type ?? '',
-    boostStart: sanityBoost.start ?? '',
-    boostEnd: sanityBoost.expires ?? '',
-    updatedAt: new Date().toISOString(),
+    boosted: sanityBoost.boosted ?? false,
   };
 };

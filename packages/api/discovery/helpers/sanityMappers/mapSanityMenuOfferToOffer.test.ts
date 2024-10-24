@@ -298,9 +298,7 @@ describe('mapSanityMenuOfferToOffer', () => {
         commonExclusions: ['Exclusion Name'],
         boost: {
           type: 'boost.type',
-          boostStart: '2023-01-01',
-          boostEnd: '2023-12-31',
-          updatedAt: expect.any(String),
+          boosted: false,
         },
         updatedAt: '2023-01-02T00:00:00Z',
       },

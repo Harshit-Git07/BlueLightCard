@@ -12,6 +12,7 @@ export function buildTestSanityOffer(): SanityOffer {
     offerId: 1,
     boostDetails: {
       _type: 'boost.type',
+      boosted: false,
       boost: {
         _rev: '37a0497b-9acc-4725-847e-ce707ffbe8de',
         _id: '37a0497b-9acc-4725-847e-ce707ffbe8de',
@@ -19,8 +20,6 @@ export function buildTestSanityOffer(): SanityOffer {
         _createdAt: '',
         _updatedAt: '',
       },
-      expires: '2024-07-22T09:15:00.000Z',
-      start: '2024-07-15T09:00:58.658Z',
     },
     brands: [
       {

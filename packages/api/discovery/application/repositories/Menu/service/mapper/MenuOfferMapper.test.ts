@@ -40,9 +40,7 @@ const offer: Offer = {
   commonExclusions: ['exclusion1'],
   boost: {
     type: 'percentage',
-    boostStart: new Date(Date.now() - 24 * 3600000).toLocaleDateString(),
-    boostEnd: new Date(Date.now() + 24 * 3600000).toLocaleDateString(),
-    updatedAt: new Date().toLocaleDateString(),
+    boosted: true,
   },
   updatedAt: new Date().toLocaleDateString(),
 };

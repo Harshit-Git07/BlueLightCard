@@ -62,9 +62,7 @@ describe('mapSanityMenuToMenuAndOffers', () => {
       commonExclusions: ['exclusion1'],
       boost: {
         type: 'percentage',
-        boostStart: new Date().toISOString(),
-        boostEnd: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        boosted: true,
       },
       updatedAt: new Date().toLocaleDateString(),
     },

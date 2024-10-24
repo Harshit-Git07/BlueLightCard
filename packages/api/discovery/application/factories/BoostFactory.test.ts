@@ -5,9 +5,7 @@ describe('Boost Factory', () => {
     const boost = boostFactory.build();
     expect(boost).toEqual({
       type: 'boost',
-      boostStart: '2024-09-01',
-      boostEnd: '2024-09-30',
-      updatedAt: '2024-09-01T00:00:00',
+      boosted: false,
     });
   });
 

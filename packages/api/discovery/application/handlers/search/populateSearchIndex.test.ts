@@ -88,7 +88,6 @@ describe('populateSearchIndex', () => {
       it('should map an offer to OpenSearchType correctly', () => {
         const TODAY = new Date().toISOString();
         const TOMORROW = new Date(Date.now() + 86400000).toISOString();
-        const ONE_HOUR_LATER = new Date(Date.now() + 3600000).toISOString();
 
         const offer: Offer = {
           id: 'offer-1',
@@ -144,9 +143,7 @@ describe('populateSearchIndex', () => {
           commonExclusions: ['exclusion1', 'exclusion2'],
           boost: {
             type: 'temporary',
-            boostStart: TODAY,
-            boostEnd: ONE_HOUR_LATER,
-            updatedAt: TODAY,
+            boosted: true,
           },
           updatedAt: TODAY,
         };

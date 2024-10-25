@@ -1,9 +1,31 @@
 import { Meta, StoryFn } from '@storybook/react';
 import VerticalMenuItem from './';
+import { faArrowUpRightFromSquare, faCoffee, faHome } from '@fortawesome/pro-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+const icons = { faArrowUpRightFromSquare, faCoffee, faHome };
+library.add(...Object.values(icons));
+
+const iconArgSelect = {
+  options: ['none'].concat(...Object.keys(icons)),
+  mapping: { none: undefined, ...icons },
+  control: {
+    type: 'select',
+    labels: {
+      none: 'No Icon',
+      faArrowUpRightFromSquare: 'Link',
+      faCoffee: 'Coffee',
+      faHome: 'Home',
+    },
+  },
+};
 
 const componentMeta: Meta<typeof VerticalMenuItem> = {
   title: 'Component System/VerticalMenuItem',
   component: VerticalMenuItem,
+  argTypes: {
+    icon: { description: 'Icon name from FontAwesomeSolidIcons (Optional)', ...iconArgSelect },
+  },
 };
 
 const DefaultTemplate: StoryFn<typeof VerticalMenuItem> = (args) => (
@@ -34,4 +56,11 @@ Selected.args = {
   selected: true,
 };
 
+export const Icon = DefaultTemplate.bind({});
+
+Icon.args = {
+  label: 'Selected Menu Item',
+  onClick: () => "I've been Clicked!",
+  icon: faArrowUpRightFromSquare,
+};
 export default componentMeta;

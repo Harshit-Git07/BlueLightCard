@@ -1,6 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { FC, useState } from 'react';
 import VerticalMenuItem, { Props as VerticalMenuItemProps } from './';
+import { faArrowUpRightFromSquare, faCoffee, faHome } from '@fortawesome/pro-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import _L from 'lodash';
 
 type ExampleVerticalMenuProps = {
@@ -31,10 +33,29 @@ const ExampleVerticalMenu: FC<ExampleVerticalMenuProps> = ({
   );
 };
 
+const icons = { faArrowUpRightFromSquare, faCoffee, faHome };
+library.add(...Object.values(icons));
+
+const iconArgSelect = {
+  options: ['none'].concat(...Object.keys(icons)),
+  mapping: { none: undefined, ...icons },
+  control: {
+    type: 'select',
+    labels: {
+      none: 'No Icon',
+      faArrowUpRightFromSquare: 'Link',
+      faCoffee: 'Coffee',
+      faHome: 'Home',
+    },
+  },
+};
+
 const componentMeta: Meta = {
   title: 'Component System/ExampleVerticalMenu',
   component: ExampleVerticalMenu,
   argTypes: {
+    icon: { description: 'Icon name from FontAwesomeSolidIcons (Optional)', ...iconArgSelect },
+    href: { description: 'Link to navigate to', type: 'string' },
     numberOfItems: {
       name: 'Number of Items',
       control: {
@@ -64,6 +85,15 @@ Hover.args = {
   label: 'MenuItem',
   onClick: undefined,
   href: '/',
+};
+
+export const Icon = DefaultTemplate.bind({});
+Icon.args = {
+  numberOfItems: 2,
+  label: 'MenuItem',
+  onClick: undefined,
+  href: '/',
+  icon: faArrowUpRightFromSquare,
 };
 
 export default componentMeta;

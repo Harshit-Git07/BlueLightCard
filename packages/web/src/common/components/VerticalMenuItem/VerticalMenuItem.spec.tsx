@@ -1,7 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import VerticalMenuItem, { Props } from './';
+import { faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import userEvent from '@testing-library/user-event';
+
+jest.mock('@fortawesome/react-fontawesome', () => ({
+  FontAwesomeIcon: ({ icon }: { icon: any }) => (
+    <span data-testid="font-awesome-icon" data-icon={icon.iconName}>
+      FontAwesomeIcon
+    </span>
+  ),
+}));
 
 describe('VerticalMenuItem component', () => {
   const defaultOnClickProps: Props = {
@@ -14,6 +23,13 @@ describe('VerticalMenuItem component', () => {
     label: 'test',
     href: '/',
     selected: false,
+  };
+
+  const defaultIconProps: Props = {
+    label: 'test',
+    href: '/',
+    selected: false,
+    icon: faArrowUpRightFromSquare,
   };
 
   // smoke test
@@ -40,6 +56,20 @@ describe('VerticalMenuItem component', () => {
     const linkItem = screen.getByRole('link');
 
     expect(linkItem).toBeTruthy();
+  });
+
+  it('renders an icon when passed icon', async () => {
+    const { getByTestId } = render(<VerticalMenuItem {...defaultIconProps} />);
+
+    const icon = getByTestId('font-awesome-icon');
+    expect(icon).toBeInTheDocument();
+  });
+
+  it('should not render an icon by default', async () => {
+    const { queryByTestId } = render(<VerticalMenuItem {...defaultOnClickProps} />);
+
+    const icon = queryByTestId('font-awesome-icon');
+    expect(icon).not.toBeInTheDocument();
   });
 
   it('matches snapshot in its default state', async () => {

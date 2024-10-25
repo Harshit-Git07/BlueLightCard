@@ -56,9 +56,10 @@ export class VaultBatchCreatedService implements IVaultBatchCreatedService {
       vaultId: vaultId,
       batchId: event.detail.batchId,
       fileName: event.detail.fileName,
-      countCodeInsertSuccess: event.detail.countCodeInsertSuccess,
-      countCodeInsertFail: event.detail.countCodeInsertFail,
+      numberOfCodeInsertSuccesses: event.detail.numberOfCodeInsertSuccesses,
+      numberOfCodeInsertFailures: event.detail.numberOfCodeInsertFailures,
       codeInsertFailArray: event.detail.codeInsertFailArray,
+      numberOfDuplicateCodes: event.detail.numberOfDuplicateCodes,
     } satisfies VaultBatchCreatedEmailParams);
   }
 }

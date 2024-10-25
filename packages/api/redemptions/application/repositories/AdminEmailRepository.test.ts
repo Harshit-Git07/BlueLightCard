@@ -31,9 +31,10 @@ describe('AdminEmailRepository', () => {
     vaultId: `vlt-${faker.string.uuid()}`,
     batchId: `vbt-${faker.string.uuid()}`,
     fileName: 'test.json',
-    countCodeInsertSuccess: 10,
-    countCodeInsertFail: 2,
+    numberOfCodeInsertSuccesses: 10,
+    numberOfCodeInsertFailures: 2,
     codeInsertFailArray: ['code_1', 'code_2'],
+    numberOfDuplicateCodes: 3,
   } satisfies VaultBatchCreatedEmailParams;
 
   it('should send email to the admin', async () => {

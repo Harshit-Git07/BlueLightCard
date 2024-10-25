@@ -33,9 +33,10 @@ describe('VaultBatchCreatedController', () => {
           vaultId: `vlt-${faker.string.uuid()}`,
           batchId: `vbt-${faker.string.uuid()}`,
           fileName: `test${UPLOAD_FILE_TYPE}`,
-          countCodeInsertSuccess: 10,
-          countCodeInsertFail: 2,
+          numberOfCodeInsertSuccesses: 10,
+          numberOfCodeInsertFailures: 2,
           codeInsertFailArray: ['code_01', 'code_02'],
+          numberOfDuplicateCodes: 5,
         },
       } satisfies UnknownEventBridgeEvent;
 

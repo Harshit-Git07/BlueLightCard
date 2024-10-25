@@ -18,9 +18,10 @@ const VaultBatchCreatedDetailSchema = z.object({
   vaultId: z.string(),
   batchId: z.string(),
   fileName: z.string(), //name of file that the admin uploads - this is not the same as file name uploaded to S3
-  countCodeInsertSuccess: z.number(), //logged as codes are inserted
-  countCodeInsertFail: z.number(), //logged as codes fail to insert (duplicates, if check is required)
+  numberOfCodeInsertSuccesses: z.number(), //logged as codes are inserted
+  numberOfCodeInsertFailures: z.number(), //logged as codes fail to insert (duplicates, if check is required)
   codeInsertFailArray: z.array(z.string()), //array that is listed in email for admin info
+  numberOfDuplicateCodes: z.number(), //logged as duplicate codes are found
 });
 
 const VaultBatchCreatedEventSchema = eventSchema(

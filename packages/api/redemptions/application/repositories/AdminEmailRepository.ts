@@ -25,9 +25,10 @@ export type VaultBatchCreatedEmailParams = {
   vaultId: string;
   batchId: string;
   fileName: string;
-  countCodeInsertSuccess: number;
-  countCodeInsertFail: number;
+  numberOfCodeInsertSuccesses: number;
+  numberOfCodeInsertFailures: number;
   codeInsertFailArray: string[] | null;
+  numberOfDuplicateCodes: number;
 };
 
 export interface IAdminEmailRepository {
@@ -93,9 +94,10 @@ export class AdminEmailRepository implements IAdminEmailRepository {
       vaultId: params.vaultId,
       batchId: params.batchId,
       fileName: params.fileName,
-      countCodeInsertSuccess: params.countCodeInsertSuccess,
-      countCodeInsertFail: params.countCodeInsertFail,
+      numberOfCodeInsertSuccesses: params.numberOfCodeInsertSuccesses,
+      numberOfCodeInsertFailures: params.numberOfCodeInsertFailures,
       codeInsertFailArray: params.codeInsertFailArray,
+      numberOfDuplicateCodes: params.numberOfDuplicateCodes,
     } satisfies VaultBatchCreatedBodyParams);
 
     try {

@@ -115,9 +115,10 @@ describe('RedemptionsEventsRepository', () => {
       batchId: faker.string.uuid(),
       vaultId: faker.string.uuid(),
       codeInsertFailArray: [],
-      countCodeInsertFail: 0,
-      countCodeInsertSuccess: 0,
+      numberOfCodeInsertFailures: 0,
+      numberOfCodeInsertSuccesses: 0,
       fileName: faker.system.fileName(),
+      numberOfDuplicateCodes: 0,
     };
 
     it('should publish an event to the correct event bus', async () => {

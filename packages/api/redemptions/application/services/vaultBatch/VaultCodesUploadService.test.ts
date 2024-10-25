@@ -143,8 +143,9 @@ describe('VaultCodesUploadService', () => {
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: [],
-      countCodeInsertFail: 0,
-      countCodeInsertSuccess: 3,
+      numberOfCodeInsertFailures: 0,
+      numberOfCodeInsertSuccesses: 3,
+      numberOfDuplicateCodes: 0,
       fileName: defaultFileName,
     });
   });
@@ -215,9 +216,10 @@ describe('VaultCodesUploadService', () => {
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: [],
-      countCodeInsertFail: 0,
-      countCodeInsertSuccess: 4,
+      numberOfCodeInsertFailures: 0,
+      numberOfCodeInsertSuccesses: 4,
       fileName: defaultFileName,
+      numberOfDuplicateCodes: 0,
     });
   });
 
@@ -252,9 +254,10 @@ describe('VaultCodesUploadService', () => {
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: [],
-      countCodeInsertFail: 0,
-      countCodeInsertSuccess: 2,
+      numberOfCodeInsertFailures: 0,
+      numberOfCodeInsertSuccesses: 2,
       fileName: defaultFileName,
+      numberOfDuplicateCodes: 2,
     });
 
     expect(mockedLogger.warn).toHaveBeenCalledTimes(1);
@@ -287,9 +290,10 @@ describe('VaultCodesUploadService', () => {
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: ['AAA', 'BBB', 'CCC', 'DDD'],
-      countCodeInsertFail: 4,
-      countCodeInsertSuccess: 0,
+      numberOfCodeInsertFailures: 4,
+      numberOfCodeInsertSuccesses: 0,
       fileName: defaultFileName,
+      numberOfDuplicateCodes: 0,
     });
   });
 
@@ -323,9 +327,10 @@ describe('VaultCodesUploadService', () => {
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: ['code1', 'code2'],
-      countCodeInsertFail: 2,
-      countCodeInsertSuccess: 1,
+      numberOfCodeInsertFailures: 2,
+      numberOfCodeInsertSuccesses: 1,
       fileName: defaultFileName,
+      numberOfDuplicateCodes: 0,
     });
   });
 

@@ -87,13 +87,14 @@ export class VaultCodesUploadService implements IVaultCodesUploadService {
       });
     }
 
-    this.redemptionsEventsRepository.publishVaultBatchCreatedEvent({
+    await this.redemptionsEventsRepository.publishVaultBatchCreatedEvent({
       vaultId,
       batchId,
       codeInsertFailArray: codeInsertFailArray,
-      countCodeInsertFail: countCodeInsertFail,
-      countCodeInsertSuccess: countCodeInsertSuccess,
+      numberOfCodeInsertFailures: countCodeInsertFail,
+      numberOfCodeInsertSuccesses: countCodeInsertSuccess,
       fileName: vaultBatch.file,
+      numberOfDuplicateCodes: countCodeDuplicates,
     });
   }
 

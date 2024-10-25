@@ -27,15 +27,16 @@ const mockEvent = {
     vaultId: `vlt-${faker.string.uuid()}`,
     batchId: `vbt-${faker.string.uuid()}`,
     fileName: faker.string.alpha(5),
-    countCodeInsertSuccess: faker.number.int({
+    numberOfCodeInsertSuccesses: faker.number.int({
       min: 1,
       max: 1_000_000,
     }),
-    countCodeInsertFail: faker.number.int({
+    numberOfCodeInsertFailures: faker.number.int({
       min: 1,
       max: 1_000_000,
     }),
     codeInsertFailArray: [],
+    numberOfDuplicateCodes: 0,
   },
 } satisfies VaultBatchCreatedEvent;
 

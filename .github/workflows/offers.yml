@@ -149,8 +149,8 @@ jobs:
       DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
       DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
       BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
-      OFFERS_CMS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
-      OFFERS_CMS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
+      OFFERS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
+      OFFERS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -15,7 +15,7 @@ enum VpcName {
 }
 
 enum VpcStage {
-  BLC = 'dev',
+  BLC = 'development',
   DDS = 'dev-dds',
 }
 

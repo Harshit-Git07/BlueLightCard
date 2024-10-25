@@ -12,7 +12,7 @@ import { transformObjVariants } from '../../utils/amplitude/transformObjVariants
 
 export const amplitudeStore = createStore();
 async function _initExperimentClient(user: User): Promise<ExperimentClient> {
-  await amplitudeExperimentClient.start({ user_id: user.uuid });
+  await amplitudeExperimentClient.start({ user_id: user.uuid, device_id: getDeviceFingerprint() });
 
   const variants = transformObjVariants(amplitudeExperimentClient.all());
   amplitudeStore.set(experimentsAndFeatureFlags, variants);

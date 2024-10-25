@@ -592,12 +592,12 @@ describe('UpdateRedemptionConfigService', () => {
   });
 
   it.each([
-    [faker.string.uuid(), 'uniqodo'],
-    [faker.string.uuid(), 'eagleeye'],
+    [faker.string.uuid(), 'uniqodo' as const],
+    [faker.string.uuid(), 'eagleeye' as const],
     [null, null],
   ])(
     'should return kind "Ok" when the vault offer redemptions and vault records update correctly',
-    async (integrationId: string | null, integration: string | null) => {
+    async (integrationId: string | null, integration: 'uniqodo' | 'eagleeye' | null) => {
       mockRedemptionConfigExist(true, 'vault');
 
       //mock repo(s) responses/resolves that execute inside transactionManager(s)

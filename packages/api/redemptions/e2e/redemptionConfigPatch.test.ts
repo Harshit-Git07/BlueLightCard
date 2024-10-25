@@ -98,7 +98,7 @@ describe('PATCH /redemptions/{offerId}', () => {
       status: 'active',
       maxPerUser: 1,
       email: faker.internet.email(),
-      integration: 'non existent integration type',
+      integration: 'eagleeye',
       integrationId: faker.string.numeric(8),
     },
   } satisfies UpdateVaultRedemptionSchema;
@@ -442,7 +442,7 @@ describe('PATCH /redemptions/{offerId}', () => {
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
   });
 
-  it('should return 200 and correct redemptionConfig for vault redemptionType on update success', async () => {
+  it('should return 200 and correct redemptionConfig for vault redemptionType on update successshould return 200 and correct redemptionConfig for vault redemptionType on update success', async () => {
     const vaultEntity: VaultEntity = vaultEntityFactory.build({
       id: testVaultBody.vault.id,
       redemptionId: testVaultBody.id,
@@ -475,8 +475,8 @@ describe('PATCH /redemptions/{offerId}', () => {
           maxPerUser: testVaultBody.vault.maxPerUser,
           createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/),
           email: testVaultBody.vault.email,
-          integration: null,
-          integrationId: null,
+          integration: testVaultBody.vault.integration,
+          integrationId: testVaultBody.vault.integrationId,
           batches: [
             {
               id: vaultBatchesEntity.id,

@@ -9,7 +9,7 @@ export const VaultModel = z.object({
     status: z.enum(['active', 'in-active']),
     maxPerUser: z.number(),
     email: z.string().email(),
-    integration: z.string().nullable(),
+    integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
     integrationId: z.string().nullable(),
   }),
 });

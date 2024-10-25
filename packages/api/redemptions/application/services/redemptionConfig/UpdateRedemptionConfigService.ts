@@ -7,7 +7,7 @@ import {
   ITransactionManager,
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
-import { Affiliate, Integration, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
+import { Affiliate, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
   PatchGenericModel,
   PatchPreAppliedModel,
@@ -15,7 +15,6 @@ import {
   PatchVaultOrVaultQRModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
-import { isValidIntegrationType } from '../../helpers/isValidIntegrationType';
 import { GenericEntity, GenericsRepository, UpdateGenericEntity } from '../../repositories/GenericsRepository';
 import {
   RedemptionConfigEntity,
@@ -251,10 +250,8 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       status: request.vault.status,
       maxPerUser: request.vault.maxPerUser,
       email: request.vault.email,
-      integration: isValidIntegrationType(request.vault.integration)
-        ? (request.vault.integration as Integration)
-        : null,
-      integrationId: isValidIntegrationType(request.vault.integration) ? request.vault.integrationId : null,
+      integration: request.vault.integration,
+      integrationId: request.vault.integrationId,
     };
 
     const vaultId: Partial<Pick<VaultEntity, 'id'>> | undefined = await vaultsTransaction.updateOneById(

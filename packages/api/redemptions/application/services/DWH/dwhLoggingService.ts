@@ -3,7 +3,6 @@ import { ClientType } from '@blc-mono/core/schemas/domain';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 
-import { isValidIntegrationType } from '../../helpers/isValidIntegrationType';
 import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
 
 export type MemberRetrievedRedemptionDetailsParams = {
@@ -67,7 +66,7 @@ export class MemberRedemptionParamsDto {
       memberId: event.detail.memberDetails.memberId,
       offerId: redemptionDetails.offerId,
     };
-    const isValidIntegration = isValidIntegrationType(redemptionDetails.vaultDetails?.integration);
+
     switch (redemptionDetails.redemptionType) {
       case 'generic':
         return new MemberRedemptionParamsDto({
@@ -81,8 +80,8 @@ export class MemberRedemptionParamsDto {
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
           code: redemptionDetails.code,
-          integration: isValidIntegration ? redemptionDetails.vaultDetails?.integration : null,
-          integrationId: isValidIntegration ? redemptionDetails.vaultDetails?.integrationId : null,
+          integration: redemptionDetails.vaultDetails?.integration,
+          integrationId: redemptionDetails.vaultDetails?.integrationId,
         });
       case 'showCard':
       case 'preApplied':

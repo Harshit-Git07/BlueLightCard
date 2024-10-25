@@ -14,6 +14,11 @@ enum VpcName {
   DDS = 'vpc-shared-dds',
 }
 
+enum VpcStage {
+  BLC = 'dev',
+  DDS = 'dev-dds',
+}
+
 export class Network {
   private readonly _vpc: IVpc;
 
@@ -63,10 +68,12 @@ export class Network {
    */
   private retrieveSharedVPC(): IVpc {
     const vpcName = isDdsUkBrand() ? VpcName.DDS : VpcName.BLC;
+    const vpcStage = isDdsUkBrand() ? VpcStage.DDS : VpcStage.BLC;
 
     return Vpc.fromLookup(this.stack, vpcName, {
       tags: {
         'Name': vpcName,
+        'sst:stage': vpcStage
       },
     });
   }

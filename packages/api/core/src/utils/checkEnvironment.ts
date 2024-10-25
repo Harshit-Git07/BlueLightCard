@@ -9,7 +9,7 @@ export function isEphemeralSharedStack(stage: string): boolean {
 }
 
 export function isDevelopmentSharedStack(stage: string): boolean {
-  return stage == 'dev';
+  return stage == 'dev' || stage === 'dev-dds';
 }
 
 export function isProduction(stage: string): boolean {

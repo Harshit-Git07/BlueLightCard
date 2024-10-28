@@ -1,12 +1,13 @@
 import { EventBus as AwsEventBus } from 'aws-cdk-lib/aws-events';
 import { AccountPrincipal, Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Api, Config, EventBus, Function, type StackContext, use } from 'sst/constructs';
+import { Api, Config, Function, type StackContext, use } from 'sst/constructs';
 
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { CliLogger } from '@blc-mono/core/utils/logger';
 import { Identity } from '@blc-mono/identity/stack';
 
 import { createTables } from './infrastructure/dynamo';
+import { createCMSEventBus } from './infrastructure/eventbridge';
 import { env } from './src/lib/env';
 
 const CMS_BUS_NAME = 'offers-cms-bus';
@@ -39,18 +40,7 @@ export function OffersCMS({ stack }: StackContext) {
     cliLogger.info({ message: 'Discovery Event Bus not set. Offers CMS events will not be sent.' });
   }
 
-  const cmsEvents = new EventBus(stack, CMS_BUS_NAME, {
-    rules: {
-      sanityRule: {
-        pattern: { source: ['lambda.sanity.webhook'] },
-        targets: {
-          consumerTarget: {
-            function: consumerFunction,
-          },
-        },
-      },
-    },
-  });
+  const cmsEvents = createCMSEventBus(stack, CMS_BUS_NAME, { consumerFunction });
 
   if (env.OFFERS_CMS_ACCOUNT) {
     const awsCmsBus = cmsEvents.cdk.eventBus as AwsEventBus;

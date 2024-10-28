@@ -83,7 +83,7 @@ jobs:
       - name: Destroy Global
         env:
           BRAND: DDS_UK
-        run: npx sst remove --stage PR_PREFIX_DDS
+        run: npx sst remove --stage $PR_PREFIX_DDS
       - name: Notify
         if: failure()
         run: |

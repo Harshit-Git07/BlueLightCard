@@ -147,13 +147,20 @@ export const createRoleForHostedUi = (
   return uiCustomizationRole;
 };
 
-export const createE2EClient = (stack: Stack, cognito: Cognito) => {
-  const e2eClient = cognito.cdk.userPool.addClient('e2eClientNew', {
+export const createE2EClient = (stack: Stack, cognito: Cognito, isDDS: boolean) => {
+  const e2eClient = cognito.cdk.userPool.addClient(isDDS ? 'e2eClientNew-dds' : 'e2eClientNew', {
     authFlows: {
       adminUserPassword: true,
     },
   });
-  return new Config.Parameter(stack, 'IDENTITY_COGNITO_E2E_CLIENT_ID', {
+
+  if (isDDS) {
+    stack.addOutputs({
+      DdsIdentityCognitoE2eClientId: e2eClient.userPoolClientId,
+    })
+  }
+
+  return new Config.Parameter(stack, isDDS ? 'DDS_IDENTITY_COGNITO_E2E_CLIENT_ID' : 'IDENTITY_COGNITO_E2E_CLIENT_ID', {
     value: e2eClient.userPoolClientId,
   });
 };

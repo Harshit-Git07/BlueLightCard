@@ -34,6 +34,7 @@ import {
 } from '../identity/src/helpers/cognitoClientHelperOld';
 import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
+import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 
 const getBlcShineCertificateArn = (appSecret: ISecret) =>
   appSecret.secretValueFromJson('blc_shine_certificate_arn').toString();
@@ -183,8 +184,8 @@ export function createNewCognito(
   // used to issue tokens. We don't want to use the web client for this as it
   // would couple the E2E tests for other stacks to the configuration of the
   // web client.
-  if (stack.stage !== STAGES.PRODUCTION && !isDDS) {
-    createE2EClient(stack, cognito);
+  if (!isProduction(stack.stage)) {
+    createE2EClient(stack, cognito, isDDS);
   }
   const brandName = isDDS ? BRANDS.DDS_UK : blcBrand;
   createDomain(stack, cognito, region, appSecret, brandName, brandPrefix);

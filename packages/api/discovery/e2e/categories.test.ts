@@ -1,7 +1,7 @@
 import { ApiGatewayV1Api } from 'sst/node/api';
 
 import { SimpleCategory } from '@blc-mono/discovery/application/models/SimpleCategory';
-import { TestUser } from '@blc-mono/redemptions/libs/test/helpers/identity';
+import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 
 describe('GET /categories', async () => {
   const testUserTokens = await TestUser.authenticate();

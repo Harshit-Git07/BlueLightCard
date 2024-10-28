@@ -1,6 +1,7 @@
 import { Stack } from 'sst/constructs';
 
 import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
+import { isBlcAuBrand, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { isEphemeral, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnv, getEnvOrDefault, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
@@ -75,9 +76,19 @@ export class DiscoveryStackConfigResolver {
   public static forPrStage(): DiscoveryStackConfig {
     return {
       apiDefaultAllowedOrigins: ['*'],
-      openSearchDomainEndpoint: 'https://vpc-staging-search-j27gjrqey5noueu2um3rqvpmba.eu-west-2.es.amazonaws.com',
+      openSearchDomainEndpoint: this.getOpenSearchDomainEndpoint(),
       timezoneOffset: UK_TIMEZONE_OFFSET,
     };
+  }
+
+  private static getOpenSearchDomainEndpoint(): string {
+    if (isDdsUkBrand()) {
+      return 'dds_placeholder';
+    }
+    if (isBlcAuBrand()) {
+      return 'au_placeholder';
+    }
+    return 'https://vpc-staging-search-j27gjrqey5noueu2um3rqvpmba.eu-west-2.es.amazonaws.com';
   }
 
   public static fromEnvironmentVariables(): DiscoveryStackConfig {

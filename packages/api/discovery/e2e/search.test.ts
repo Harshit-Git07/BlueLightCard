@@ -4,11 +4,11 @@ import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
+import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
-import { TestUser } from '@blc-mono/redemptions/libs/test/helpers/identity';
 
 const getSearchEndpoint = () => {
   if (ENDPOINTS.SEARCH === undefined || ENDPOINTS.SEARCH === '') {

@@ -1,6 +1,6 @@
 import { ApiGatewayV1Api } from 'sst/node/api';
 
-import { TestUser } from '@blc-mono/redemptions/libs/test/helpers/identity';
+import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 
 describe('GET /campaigns', async () => {
   const testUserTokens = await TestUser.authenticate();

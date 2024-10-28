@@ -1,7 +1,7 @@
 import { ApiGatewayV1Api } from 'sst/node/api';
 
+import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
-import { TestUser } from '@blc-mono/redemptions/libs/test/helpers/identity';
 
 const getMenuEndpoint = () => {
   if (ENDPOINTS.MENU === undefined || ENDPOINTS.MENU === '') {

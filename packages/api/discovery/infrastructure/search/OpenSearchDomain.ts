@@ -28,7 +28,7 @@ export class OpenSearchDomain {
 
   private async buildDomain(): Promise<Domain> {
     const domain = new Domain(this.stack, 'searchDomain', {
-      domainName: `${this.stack.stage}-search`,
+      domainName: this.buildDomainName(),
       version: EngineVersion.OPENSEARCH_2_9,
       ebs: {
         volumeSize: 10,
@@ -64,5 +64,9 @@ export class OpenSearchDomain {
     domain.connections.allowFromAnyIpv4(Port.tcp(443));
 
     return domain;
+  }
+
+  private buildDomainName(): string {
+    return this.stack.region === 'ap-southeast-2' ? `${this.stack.stage}-aus-search` : `${this.stack.stage}-search`;
   }
 }

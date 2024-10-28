@@ -4,6 +4,7 @@ import { Table } from 'sst/node/table';
 import { type ILogger } from '@blc-mono/core/utils/logger';
 
 import { dynamo } from '../lib/dynamo';
+import { env } from '../lib/env';
 import { type SanityChangeEvent } from '../lib/events';
 
 type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
@@ -22,11 +23,11 @@ type Record<type extends RecordType> = Extract<
 >;
 
 export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
-  const brand = record.brands?.find((brand) => brand?.code === process.env.OFFERS_BRAND);
+  const brand = record.brands?.find((brand) => brand?.code === env.BRAND);
 
   if (!brand) {
     logger.warn({
-      message: `offer ${record._id} doesn't exist for brand ${process.env.OFFERS_BRAND}`,
+      message: `offer ${record._id} doesn't exist for brand ${env.BRAND}`,
     });
     return;
   }
@@ -42,13 +43,11 @@ export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
 }
 
 export async function ingestCompany(record: Record<'company'>, logger: ILogger) {
-  const brand = record.brandCompanyDetails?.find(
-    (company) => company.brand?.code === process.env.OFFERS_BRAND,
-  );
+  const brand = record.brandCompanyDetails?.find((company) => company.brand?.code === env.BRAND);
 
   if (!brand) {
     logger.warn({
-      message: `company ${record._id} doesn't exist for brand ${process.env.OFFERS_BRAND}`,
+      message: `company ${record._id} doesn't exist for brand ${env.BRAND}`,
     });
     return;
   }
@@ -57,7 +56,7 @@ export async function ingestCompany(record: Record<'company'>, logger: ILogger) 
     TableName: Table.cmsCompanyData.tableName,
     Item: {
       ...record,
-      companyId: brand.companyId?.toString(),
+      companyId: record.companyId?.toString(),
     },
   });
 }

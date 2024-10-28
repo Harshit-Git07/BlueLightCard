@@ -4,6 +4,7 @@ import { LambdaLogger } from '@blc-mono/core/utils/logger';
 
 import { publishToEventBus } from '../src/cms/emit';
 import { extractEvent, ingestCompany, ingestOffer, ingestRawRecord } from '../src/cms/ingest';
+import { env } from '../src/lib/env';
 import type { SanityChangeEvent } from '../src/lib/events';
 
 const UNPUBLISHED_WARNING = 'Discovery event bus not set. Event not published.';
@@ -24,8 +25,8 @@ export async function handler(event: EventBridgeEvent<'SanityChangeEvent', Sanit
     await ingestCompany(record, logger);
   }
 
-  if (process.env.DISCOVERY_EVENT_BUS_NAME) {
-    await publishToEventBus(record, process.env.DISCOVERY_EVENT_BUS_NAME, logger);
+  if (env.OFFERS_DISCOVERY_EVENT_BUS_NAME) {
+    await publishToEventBus(record, env.OFFERS_DISCOVERY_EVENT_BUS_NAME, logger);
   } else {
     logger.warn({ message: UNPUBLISHED_WARNING });
   }

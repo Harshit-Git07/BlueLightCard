@@ -83,7 +83,7 @@ export class DiscoveryStackConfigResolver {
 
   private static getOpenSearchDomainEndpoint(): string {
     if (isDdsUkBrand()) {
-      return 'dds_placeholder';
+      return 'https://vpc-staging-dds-search-jzvveojmz4yqw7vge5tkidvpvm.eu-west-2.es.amazonaws.com';
     }
     if (isBlcAuBrand()) {
       return 'au_placeholder';

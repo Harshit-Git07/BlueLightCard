@@ -157,10 +157,6 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
-          - deployment: 'blc-au-staging'
-            region: 'ap-southeast-2'
-            brand: 'BLC_AU'
-            stage: staging
     needs:
       - install
       - test

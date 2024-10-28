@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.80.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.79.0...bluelightcard/web-v1.80.0) (2024-10-28)
+
+
+### Features
+
+* Adding device id to amplitude client to help with experiments for logged in and logged out users ([#2604](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2604)) ([0050a96](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0050a96e91122ddcd7054eb09647f8517859575b))
+* MAMA-143-my-account-vertical-menu-item-external-link-and-icon ([#2599](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2599)) ([f9405f7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f9405f7362d5c1b8adcaea2ffc01656466a9d0dc))
+
 ## [1.79.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.78.1...bluelightcard/web-v1.79.0) (2024-10-24)
 
 

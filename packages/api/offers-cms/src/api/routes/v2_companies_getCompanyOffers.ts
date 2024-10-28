@@ -41,13 +41,13 @@ export type V2CompaniesGetCompanyOffersResponse = z.infer<
 export const registerV2CompaniesGetCompanyOffers = (app: App) =>
   app.openapi(route, async (c) => {
     const { id } = c.req.valid('param');
-    const item = await getOffersByCompanyId(id);
+    const items = await getOffersByCompanyId(id);
 
-    if (!item) {
+    if (items.length === 0) {
       notFound();
     }
 
-    const offers = item.map((offer) => {
+    const offers = items.map((offer) => {
       invariant(offer.name, 'Missing `offer.name`');
       invariant(offer.offerDescription, 'Missing `offer.offerDescription`');
       invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');

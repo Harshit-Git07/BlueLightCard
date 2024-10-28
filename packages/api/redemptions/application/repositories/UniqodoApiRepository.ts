@@ -96,7 +96,7 @@ export class UniqodoApiRepository implements IUniqodoApiRepository {
             id: memberId,
             email: memberEmail,
           },
-          promotionId: '43c3780817f7ccb92012e519f0814c0b', //promotionId,
+          promotionId: promotionId,
         }),
         headers: {
           'Content-Type': 'application/json',

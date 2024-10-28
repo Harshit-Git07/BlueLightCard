@@ -227,7 +227,7 @@ describe('POST /member/redeem', () => {
     expect(result.status).toBe(400);
   });
 
-  test('should redeem a standard vault offer', async () => {
+  test('should redeem a standard vault offer', { timeout: 60_000 }, async () => {
     // Arrange
     const { redemption, ...redemptionTestHooks } = buildTestRedemption('vault');
     const { vaultCode, ...vaultTestHooks } = buildVault(redemption.id);

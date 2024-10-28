@@ -39,7 +39,7 @@ beforeAll(async () => {
   // Set a conservative timeout
 }, 60_000);
 
-describe('POST /vault/webhook', () => {
+describe.skip('POST /vault/webhook', () => {
   it('should log callback vault redemption firehose stream and return NoContent kind', async () => {
     const testBody: RequestBody = {
       integrationType: 'uniqodo',

@@ -433,7 +433,7 @@ export class RedemptionsStackConfigResolver {
       networkConfig: {
         apiDefaultAllowedOrigins: ['*'],
         redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
-        identityApiUrl: 'https://staging-identity.blcshine.io',
+        identityApiUrl: 'dynamic-via-build-script',
       },
       lambdaScriptsConfig: {
         redemptionsLambdaScriptsEnvironment: 'develop',
@@ -488,7 +488,7 @@ export class RedemptionsStackConfigResolver {
           JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
         ),
         redemptionsWebHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST),
-        identityApiUrl: getEnv(RedemptionsStackEnvironmentKeys.IDENTITY_API_URL),
+        identityApiUrl: 'dynamic-via-build-script',
       },
       lambdaScriptsConfig: {
         redemptionsLambdaScriptsHost: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_LAMBDA_SCRIPTS_HOST),

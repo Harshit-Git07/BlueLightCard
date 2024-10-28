@@ -6,11 +6,9 @@ import { getFlagValue } from '../utils';
 import { BRANDS } from '@blc-mono/core/types/brands.enum';
 import { triggerBannersEvent, triggerCognitoMigration } from './eventBridge';
 import { uploadTestFilesS3 } from './s3';
+import { SEED_ACCOUNT_ID } from '../providers/environment';
 
 type BrandsEnumKey = keyof typeof BRANDS;
-
-// This is the dev account id and only account script will need to use.
-const ACCOUNT_ID = '314658777488';
 
 export const seedData = async (
   devName: string,
@@ -27,7 +25,7 @@ export const seedData = async (
   const legacyUserId = 12345;
   const brand = getFlagValue('brand') ?? BRANDS.BLC_UK;
 
-  const s3MenusBucket = `menus-${devName}-${REGION}-${ACCOUNT_ID}`;
+  const s3MenusBucket = `menus-${devName}-${REGION}-${SEED_ACCOUNT_ID}`;
 
   logger.info({ message: 'Started to seed environment' });
   logger.info({

@@ -3,9 +3,6 @@ import { EOL } from 'os';
 import { seedData } from './functions/seedData';
 import { STACK_COGNITO_POOL_CLIENT } from './constants';
 
-// This is the dev account id and only account script will need to use.
-const ACCOUNT_ID = '314658777488';
-
 export const ciSeed = async (devName: string) => {
   const identityApiEndpoint = process.env.IDENTITY_API_URL; // this is either the deployed pr url or the fallback url in which will be staging env for the moment
   const cognitoUserPoolWebClient = process.env.COGNITO_POOL_WEB_CLIENT;

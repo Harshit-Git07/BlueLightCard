@@ -3,9 +3,6 @@ import { logger } from './instances';
 import { ciSeed } from './ciSeed';
 import { localSeed } from './localSeed';
 
-// This is the dev account id and only account script will need to use.
-const ACCOUNT_ID = '314658777488';
-
 async function main() {
   /* 
     The npm run seed script still works as it used.

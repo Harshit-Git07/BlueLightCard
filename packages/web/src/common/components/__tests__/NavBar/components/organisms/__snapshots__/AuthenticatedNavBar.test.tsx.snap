@@ -81,7 +81,7 @@ exports[`AuthenticatedNavBar renders correctly without error 1`] = `
               class="hidden tablet:block tablet:w-[343px] w-full"
             >
               <form
-                class="px-2 z-10 w-full py-4"
+                class="px-2 z-10 w-full py-4 "
               >
                 <div
                   class="relative"
@@ -103,7 +103,8 @@ exports[`AuthenticatedNavBar renders correctly without error 1`] = `
                   </svg>
                   <input
                     autocomplete="off"
-                    class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+                    class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font
+          border border-searchBar-outline-colour-light"
                     enterkeyhint="search"
                     id="searchInput"
                     placeholder="Search for offers or companies"
@@ -212,7 +213,7 @@ exports[`AuthenticatedNavBar renders correctly without error 1`] = `
       class="tablet:hidden bg-colour-surface dark:bg-colour-surface-dark"
     >
       <form
-        class="px-2 z-10 w-full py-4"
+        class="px-2 z-10 w-full py-4 "
       >
         <div
           class="relative"
@@ -234,7 +235,8 @@ exports[`AuthenticatedNavBar renders correctly without error 1`] = `
           </svg>
           <input
             autocomplete="off"
-            class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+            class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font
+          border border-searchBar-outline-colour-light"
             enterkeyhint="search"
             id="searchInput"
             placeholder="Search for offers or companies"

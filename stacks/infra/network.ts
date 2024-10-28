@@ -1,8 +1,7 @@
 import { GatewayVpcEndpointAwsService, IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
 import {
-  isDevelopmentSharedStack,
-  isEphemeralSharedStack,
+  isDevelopmentStack,
   isProduction,
   isStaging,
 } from '@blc-mono/core/src/utils/checkEnvironment';
@@ -14,18 +13,12 @@ enum VpcName {
   DDS = 'vpc-shared-dds',
 }
 
-enum VpcStage {
-  BLC = 'development',
-  DDS = 'dev-dds',
-}
-
 export class Network {
   private readonly _vpc: IVpc;
 
   constructor(private readonly stack: Stack) {
     switch (true) {
-      case isDevelopmentSharedStack(stack.stage):
-      case isEphemeralSharedStack(stack.stage):
+      case isDevelopmentStack(stack.stage):
       case isProduction(stack.stage):
       case isStaging(stack.stage):
         this._vpc = this.createVpc();
@@ -68,12 +61,10 @@ export class Network {
    */
   private retrieveSharedVPC(): IVpc {
     const vpcName = isDdsUkBrand() ? VpcName.DDS : VpcName.BLC;
-    const vpcStage = isDdsUkBrand() ? VpcStage.DDS : VpcStage.BLC;
 
     return Vpc.fromLookup(this.stack, vpcName, {
       tags: {
         'Name': vpcName,
-        'sst:stage': vpcStage
       },
     });
   }

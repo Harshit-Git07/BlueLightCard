@@ -4,11 +4,7 @@ export function isDev(stage: string): boolean {
   return !isProduction(stage) && !isStaging(stage);
 }
 
-export function isEphemeralSharedStack(stage: string): boolean {
-  return stage == 'pr';
-}
-
-export function isDevelopmentSharedStack(stage: string): boolean {
+export function isDevelopmentStack(stage: string): boolean {
   return stage == 'dev' || stage === 'dev-dds';
 }
 

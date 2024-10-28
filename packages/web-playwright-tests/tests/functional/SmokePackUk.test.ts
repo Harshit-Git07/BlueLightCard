@@ -18,10 +18,26 @@ test(`@Uk @SmokeTest @Web - BLC UK Existing User - Redeem offer - 004`, async ({
   });
 
   await test.step(`Clicking the Discount button and asserting the code is copied and correct website is displayed`, async () => {
-    await membersHomeUk.clickToSeeTheDiscount('BLC10', 'petsathome.com');
+    await membersHomeUk.clickToSeeTheDiscount('petsathome.com');
+    await membersHomeUk.readFromClipboardAndAssert('BLC10');
   });
 
 });
+
+ test(`@Uk @SmokeTest @Web - BLC UK Existing User - Redeem offer - 005`, async ({ membersHomeUk }) => {
+
+
+   await test.step(`Performing the search for 883 Police`, async () => {
+     await membersHomeUk.searchForCompanyCategoryOrPhrase('Company', '883 Police');
+   });
+
+  await test.step(`Clicking the Discount button and asserting the code is copied and correct website is displayed`, async () => {
+    await membersHomeUk.visitWebsiteAndVerifyUrl('883police.com'); 
+    await membersHomeUk.readFromClipboardAndAssert('BLUELIGHT10');
+    
+   });
+
+ });
 
 test(`@Uk @SmokeTest @Web - Verify that BLC UK Online Discounts Footer Button is Functional`, async ({ membersHomeUk }) => {
   await membersHomeUk.clickOnlineDiscounts();

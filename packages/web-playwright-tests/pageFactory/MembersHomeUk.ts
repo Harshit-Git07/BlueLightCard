@@ -1,4 +1,5 @@
 import { Page, BrowserContext, Locator, expect } from '@playwright/test';
+import { verifyOfferPageLoad } from 'utils/functional/verifyUtils';
 
 export class MembersHomeUk {
   readonly page: Page;
@@ -338,34 +339,40 @@ async clickModernSlaveryActStatement(): Promise<void> {
       this.page.getByRole('heading', { name: searchTerm, exact: true }).first(),
     ).toBeVisible();
   }
-
-  async clickToSeeTheDiscount(expectedDiscountCode: string, newPageUrl: string): Promise<void> {
+  async clickToSeeTheDiscount(newPageUrl: string): Promise<void> {
     await this.CLICK_HERE_TO_SEE_DISCOUNT_UK.click();
-    const offerPagePromise = this.page.waitForEvent('popup');
-    await this.VISIT_WEBSITE_UK.click();
+   
+  
+    await this.visitWebsiteAndVerifyUrl(newPageUrl);
 
-    const offerPage = await offerPagePromise;
-    await offerPage.waitForLoadState('load');
-    expect(offerPage.url()).toContain(newPageUrl);
+    
+}
 
-    // Ensure the clipboard has the expected value by reading it and asserting expected vs actual
-    await this.context.grantPermissions(['clipboard-read', 'clipboard-write']);
-    const clipboardText = await offerPage.evaluate(async () => {
-      return await navigator.clipboard.readText();
-    });
+ async visitWebsiteAndVerifyUrl(newPageUrl: string): Promise<void> {
+  
+  const offerPagePromise = this.page.waitForEvent('popup');
+  
+  await this.VISIT_WEBSITE_UK.click();
+  
+  await verifyOfferPageLoad(offerPagePromise, newPageUrl);
 
-    expect(clipboardText).toBe(expectedDiscountCode);
-  }
-  // Asserts that all the carousels on the home screen are visible when the user is logged in
-  async assertCarouselsVisibleHomeScreenLoggedIn(): Promise<void> {
+   
+}
+
+// Asserts that all the carousels on the home screen are visible when the user is logged in
+async assertCarouselsVisibleHomeScreenLoggedIn(): Promise<void> {
     await expect(this.SPONSOR_BANNER_UK).toBeVisible();
     await expect(this.DEAL_OF_THE_WEEK_UK).toBeVisible();
     await expect(this.FLEXI_MENU_UK).toBeVisible();
     await expect(this.MARKETPLACE_MENU_UK).toBeVisible();
     await expect(this.FEATURE_CAROUSEL_UK).toBeVisible();
-  }
-
 }
 
-
+ async readFromClipboardAndAssert(expectedDiscountCode: string): Promise<void> {
+    const clipboardText = await this.page.evaluate(async () => {
+        return await navigator.clipboard.readText();
+    });
+    expect(clipboardText).toBe(expectedDiscountCode);
+}
+}
 

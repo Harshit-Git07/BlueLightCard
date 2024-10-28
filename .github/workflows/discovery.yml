@@ -221,7 +221,7 @@ jobs:
             brand: BLC_UK
             region: eu-west-2
             stage: staging
-            e2e_test_password: ${{ secrets.E2E_TESTS_PASSWORD_BLC_UK }}
+            e2e_test_password: E2E_TESTS_PASSWORD_BLC_UK
     needs:
       - install
       - test
@@ -243,7 +243,7 @@ jobs:
         env:
           BRAND: ${{ matrix.brand }}
           REGION : ${{ matrix.region }}
-          E2E_TESTS_PASSWORD: ${{ matrix.e2e_test_password }}
+          E2E_TESTS_PASSWORD: ${{ secrets[matrix.e2e_test_password] }}
         run: npx sst bind --stage ${{ matrix.stage }} vitest e2e
 
   release:

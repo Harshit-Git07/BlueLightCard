@@ -43,13 +43,16 @@ export class ReusableCrudRepository<T1 extends NamedZodType<z.ZodEffects<z.ZodOb
 
     // Parse each item against the Zod schema and transform it
     const validatedItems = queryResult.Items.map((item) => {
-      const transformedItem = Object.keys(item).reduce((acc, key) => {
-        const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1);
-        if (this.zodType._def.schema._def.shape().hasOwnProperty(lowerCaseKey)) {
-          acc[lowerCaseKey] = item[key];
-        }
-        return acc;
-      }, {} as { [key: string]: any });
+      const transformedItem = Object.keys(item).reduce(
+        (acc, key) => {
+          const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1);
+          if (this.zodType._def.schema._def.shape().hasOwnProperty(lowerCaseKey)) {
+            acc[lowerCaseKey] = item[key];
+          }
+          return acc;
+        },
+        {} as { [key: string]: any },
+      );
       return this.zodType.parse(transformedItem) as T1;
     });
 

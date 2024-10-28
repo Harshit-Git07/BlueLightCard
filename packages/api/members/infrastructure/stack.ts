@@ -19,25 +19,24 @@ import { createMemberProfilesTable } from '@blc-mono/members/infrastructure/dyna
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { MemberProfileModel } from '../application/models/memberProfileModel';
 import { GetMemberProfilesRoute } from './routes/GetMemberProfilesRoute';
+import { CreateCustomerProfilesRoute } from './routes/CreateCustomerProfilesRoute';
 import { GetMemberCardRoute } from './routes/GetMemberCardRoute';
 import { GetMemberApplicationRoute } from './routes/GetMemberApplicationRoute';
 import { UpdateMemberApplicationRoute } from './routes/UpdateMemberApplicationRoute';
 import { UpdateMemberCardRoute } from './routes/UpdateMemberCardRoute';
 import { MemberCardModel } from '../application/models/memberCardModel';
-
 import { MemberApplicationModel } from '../application/models/memberApplicationModel';
-
 import { GetOrganisationsRoute } from './routes/GetOrganisationsRoute';
 import { OrganisationModel } from 'application/models/organisationModel';
 import { ReusableCrudGetRoute } from './routes/ReusableCrudGetRoute';
 import { MemberApplicationExternalModel } from '../application/models/reusableCrudPayloadModels';
 import { ReusableCrudUpdateRoute } from './routes/ReusableCrudUpdateRoute';
-
+import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 import { EmployerModel } from '../application/models/employerModel';
 import { GetEmployersRoute } from './routes/GetEmployersRoute';
 
-
-export async function Members({ stack, app }: StackContext) {
+async function MembersStack({ stack, app }: StackContext) {
   const identityTableName = `${app.stage}-${app.name}-identityTable`;
 
   const { certificateArn } = use(Shared);
@@ -103,8 +102,7 @@ export async function Members({ stack, app }: StackContext) {
   const agMembersProfileModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberProfileModel);
 
-  const agMemberCardModel =
-    apiGatewayModelGenerator.generateModelFromZodEffect(MemberCardModel);
+  const agMemberCardModel = apiGatewayModelGenerator.generateModelFromZodEffect(MemberCardModel);
 
   const agMemberApplicationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberApplicationModel);
@@ -120,6 +118,11 @@ export async function Members({ stack, app }: StackContext) {
 
   membersApi.addRoutes(stack, {
     'GET /members/v5/profiles': new GetMemberProfilesRoute(
+      apiGatewayModelGenerator,
+      agMembersProfileModel,
+      identityTableName,
+    ).getRouteDetails(),
+    'POST /members/v5/customers/{brand}': new CreateCustomerProfilesRoute(
       apiGatewayModelGenerator,
       agMembersProfileModel,
       identityTableName,
@@ -247,3 +250,8 @@ const getAustraliaDomainName = (stage: string) =>
 
 const getUKDomainName = (stage: string) =>
   stage === 'production' ? 'members.blcshine.io' : `${stage}-members.blcshine.io`;
+
+export const Members =
+  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
+    ? MembersStack
+    : () => Promise.resolve();

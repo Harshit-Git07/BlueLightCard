@@ -6,7 +6,10 @@ import { APIError } from '../models/APIError';
 import { APIErrorCode } from '../enums/APIErrorCode';
 
 export class OrganisationService {
-  constructor(private repository: OrganisationsRepository, private logger: LambdaLogger) {}
+  constructor(
+    private repository: OrganisationsRepository,
+    private logger: LambdaLogger,
+  ) {}
 
   async getOrganisations({ brand, organisationId }: OrganisationsQueryPayload): Promise<{
     organisationList: OrganisationModel[];

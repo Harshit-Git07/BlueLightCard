@@ -10,6 +10,7 @@ import { Orders } from '@blc-mono/orders/infrastructure/stack';
 import { MemberServicesHub } from 'member-services-hub/stack';
 import { Discovery } from '@blc-mono/discovery/infrastructure/stack';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { Members } from '@blc-mono/members/infrastructure/stack';
 
 export default {
   config(_input) {
@@ -39,6 +40,7 @@ export default {
       app.stack(Offers, { id: 'offers' }),
       app.stack(Discovery, { id: 'discovery' }),
       app.stack(OffersCMS, { id: 'offers-cms' }),
+      app.stack(Members, { id: 'members' }),
       app.stack(Payments, { id: 'payments' }),
       app.stack(Orders, { id: 'orders' }),
     ]);

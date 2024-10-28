@@ -1,11 +1,15 @@
 import { DynamoDB } from 'aws-sdk';
 import { MemberProfilesRepository } from '../memberProfilesRepository';
-import { AddressInsertPayload, ProfileUpdatePayload } from '../../types/memberProfilesTypes';
+import {
+  AddressInsertPayload,
+  ProfileUpdatePayload,
+  CreateProfilePayload,
+} from '../../types/memberProfilesTypes';
 import { MemberProfileDBSchema } from '../../models/memberProfileModel';
 
 jest.mock('aws-sdk');
 jest.mock('../../models/memberProfileModel', () => ({
-  MembersProfilesDBSchema: {
+  MemberProfileDBSchema: {
     parse: jest.fn(),
   },
 }));
@@ -29,35 +33,163 @@ describe('MemberProfileRepository', () => {
     repository = new MemberProfilesRepository(mockDynamoDB, 'TestTable');
   });
 
-  describe('getMembersProfiles', () => {
+  describe('createCustomerProfiles', () => {
+    const brand = 'BLC_UK';
+    const payload: CreateProfilePayload = {
+      firstName: 'John',
+      lastName: 'Doe',
+      dateOfBirth: '1990-01-01',
+      emailAddress: 'test@mail.com',
+    };
+
+    it('should create a member profile, brand entry, and signup application successfully', async () => {
+      const mockMemberUUID = '123e4567-e89b-12d3-a456-426614174000';
+      const mockProfileUUID = '223e4567-e89b-12d3-a456-426614174001';
+      const mockApplicationUUID = '323e4567-e89b-12d3-a456-426614174002';
+      const mockUuids = jest
+        .fn()
+        .mockReturnValueOnce(mockMemberUUID)
+        .mockReturnValueOnce(mockProfileUUID)
+        .mockReturnValueOnce(mockApplicationUUID);
+
+      Object.defineProperty(global, 'crypto', {
+        value: { randomUUID: mockUuids },
+      });
+
+      jest
+        .spyOn(global.crypto, 'randomUUID')
+        .mockReturnValueOnce(mockMemberUUID)
+        .mockReturnValueOnce(mockProfileUUID)
+        .mockReturnValueOnce(mockApplicationUUID);
+
+      const fixedDate = new Date('2024-07-19T00:00:00.000Z');
+      jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
+
+      const mockMappedBrand = 'blc-uk';
+      jest.mock('../../../../core/src/constants/common', () => ({
+        MAP_BRAND: {
+          BLC_UK: mockMappedBrand,
+        },
+      }));
+      jest.mock('../../../../core/src/schemas/common', () => ({
+        BRAND_SCHEMA: {
+          parse: jest.fn().mockReturnValue('BLC_UK'),
+        },
+      }));
+
+      await repository.createCustomerProfiles(payload, brand);
+
+      expect(mockDynamoDB.transactWrite).toHaveBeenCalledWith({
+        TransactItems: [
+          {
+            Put: {
+              TableName: 'TestTable',
+              Item: {
+                pk: `MEMBER#${mockMemberUUID}`,
+                sk: `PROFILE#${mockProfileUUID}`,
+                firstName: payload.firstName,
+                lastName: payload.lastName,
+                dateOfBirth: payload.dateOfBirth,
+                emailAddress: payload.emailAddress,
+              },
+            },
+          },
+          {
+            Put: {
+              TableName: 'TestTable',
+              Item: {
+                pk: `MEMBER#${mockMemberUUID}`,
+                sk: `BRAND#${mockMappedBrand}`,
+              },
+            },
+          },
+          {
+            Put: {
+              TableName: 'TestTable',
+              Item: {
+                pk: `MEMBER#${mockMemberUUID}`,
+                sk: `APPLICATION#${mockApplicationUUID}`,
+                startDate: fixedDate.toISOString(),
+                eligibilityStatus: 'INELIGIBLE',
+                applicationReason: 'SIGNUP',
+                verificationMethod: '',
+              },
+            },
+          },
+        ],
+      });
+    });
+
+    it('should return the member_uuid without the MEMBER# prefix', async () => {
+      const mockMemberUUID = '123e4567-e89b-12d3-a456-426614174000';
+      const mockProfileUUID = '223e4567-e89b-12d3-a456-426614174001';
+      const mockApplicationUUID = '323e4567-e89b-12d3-a456-426614174002';
+
+      jest
+        .spyOn(global.crypto, 'randomUUID')
+        .mockReturnValueOnce(mockMemberUUID)
+        .mockReturnValueOnce(mockProfileUUID)
+        .mockReturnValueOnce(mockApplicationUUID);
+
+      const fixedDate = new Date('2024-07-19T00:00:00.000Z');
+      jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
+
+      const mockMappedBrand = 'mapped-brand-id';
+      jest.mock('../../../../core/src/constants/common', () => ({
+        MAP_BRAND: {
+          BLC_UK: mockMappedBrand,
+        },
+      }));
+      jest.mock('../../../../core/src/schemas/common', () => ({
+        BRAND_SCHEMA: {
+          parse: jest.fn().mockReturnValue('BLC_UK'),
+        },
+      }));
+
+      const result = await repository.createCustomerProfiles(payload, brand);
+      expect(result).toBe(mockMemberUUID);
+    });
+
+    it('should throw an error if transactWrite fails', async () => {
+      (mockDynamoDB.transactWrite as jest.Mock).mockReturnValue({
+        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
+      });
+      await expect(repository.createCustomerProfiles(payload, brand)).rejects.toThrow(
+        'Failed to create member profiles',
+      );
+    });
+  });
+
+  describe('getMemberProfiles', () => {
     it('should return profile information when profile is found', async () => {
       const mockProfile = {
         pk: 'MEMBER#456',
         sk: 'PROFILE#',
-        firstname: 'John',
-        surname: 'Doe',
-        dob: '1990-01-01',
+        firstName: 'John',
+        lastName: 'Doe',
+        dateOfBirth: '1990-01-01',
         gender: 'male',
         mobile: '1234567890',
-        email: 'john@example.com',
-        email_validated: 1,
+        emailAddress: 'john@example.com',
+        emailValidated: 1,
+        spareEmailValidated: 0,
         organisation: 'TestOrg',
         employer: 'TestEmployer',
-        employer_id: '123',
-        ga_key: 'test-ga-key',
+        employerId: '123',
+        gaKey: 'test-ga-key',
         county: 'TestCounty',
-        employment_type: 'Full-time',
-        jobtitle: 'Developer',
+        employmentType: 'Full-time',
+        jobTitle: 'Developer',
         reference: 'REF123',
-        signup_date: '2023-01-01',
-        signup_source: 'Web',
-        last_ip: '192.168.1.1',
-        last_login: '2023-09-01',
+        signupDate: '2023-01-01',
+        signupSource: 'Web',
+        lastIp: '192.168.1.1',
+        lastLogin: '2023-09-01',
         blocked: false,
-        card_number: '1234',
-        card_expire: '2025-12-31',
-        card_status: 'Active',
-        card_payment_status: 'PAID_CARD',
+        cardNumber: '1234',
+        cardExpire: '2025-12-31',
+        cardStatus: 'Active',
+        cardPaymentStatus: 'PAID_CARD',
       };
 
       const mockQueryResult = {
@@ -166,8 +298,8 @@ describe('MemberProfileRepository', () => {
 
       const payload: ProfileUpdatePayload = {
         firstName: 'John',
-        surname: 'Doe',
-        dob: '1990-01-01',
+        lastName: 'Doe',
+        dateOfBirth: '1990-01-01',
         mobile: '1234567890',
         gender: 'male',
       };
@@ -181,10 +313,10 @@ describe('MemberProfileRepository', () => {
           sk: 'PROFILE#123',
         },
         UpdateExpression:
-          'SET firstName = :fn, surname = :sn, dob = :dob, mobile = :mob, gender = :gen',
+          'SET firstName = :fn, lastName = :ln, dateOfBirth = :dob, mobile = :mob, gender = :gen',
         ExpressionAttributeValues: {
           ':fn': 'John',
-          ':sn': 'Doe',
+          ':ln': 'Doe',
           ':dob': '1990-01-01',
           ':mob': '1234567890',
           ':gen': 'male',
@@ -199,8 +331,8 @@ describe('MemberProfileRepository', () => {
 
       const payload: ProfileUpdatePayload = {
         firstName: 'John',
-        surname: 'Doe',
-        dob: '1990-01-01',
+        lastName: 'Doe',
+        dateOfBirth: '1990-01-01',
         mobile: '1234567890',
         gender: 'male',
       };
@@ -279,14 +411,11 @@ describe('MemberProfileRepository', () => {
   });
 
   describe('insertCard', () => {
-    beforeEach(() => {
-      // July 19, 2024 00:00:00 UTC
-      jest.spyOn(Date, 'now').mockImplementation(() => 1721030400000);
-    });
-
     afterEach(() => {
       jest.restoreAllMocks();
     });
+    const fixedDate = new Date('2024-07-19T00:00:00.000Z');
+    jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
 
     it('should insert a card successfully', async () => {
       mockDynamoDB.put.mockReturnValue({
@@ -301,7 +430,7 @@ describe('MemberProfileRepository', () => {
           pk: 'MEMBER#123456',
           sk: 'CARD#123456',
           status: 'active',
-          timeRequested: 1721030400, // July 19, 2024 00:00:00 UTC in UNIX timestamp
+          timeRequested: fixedDate.toISOString(),
         },
       });
     });

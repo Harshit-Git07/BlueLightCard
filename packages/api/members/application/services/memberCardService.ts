@@ -10,7 +10,10 @@ import { MemberCardModel } from '../models/memberCardModel';
  *   description: Service for managing member cards
  */
 export class MemberCardService {
-  constructor(private repository: MemberCardRepository, private logger: Logger) {}
+  constructor(
+    private repository: MemberCardRepository,
+    private logger: Logger,
+  ) {}
 
   /**
    * @swagger

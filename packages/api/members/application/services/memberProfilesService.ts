@@ -4,11 +4,31 @@ import {
   AddressInsertPayload,
   CardCreatePayload,
   ProfileUpdatePayload,
+  CreateProfilePayload,
 } from '../types/memberProfilesTypes';
 import { MemberProfileApp, transformDBToApp } from '../models/memberProfileModel';
 
 export class MemberProfilesService {
-  constructor(private repository: MemberProfilesRepository, private logger: Logger) {}
+  constructor(
+    private repository: MemberProfilesRepository,
+    private logger: Logger,
+  ) {}
+
+  async createCustomerProfiles(payload: CreateProfilePayload, brand: string): Promise<string> {
+    try {
+      const memberUuid = await this.repository.createCustomerProfiles(payload, brand);
+      this.logger.info('Profile created successfully', { memberUuid });
+      return memberUuid;
+    } catch (error) {
+      if (error instanceof Error) {
+        this.logger.error('Error creating profile:', { error: error.message });
+        throw error;
+      } else {
+        this.logger.error('Unknown error creating profile:', { error });
+        throw new Error('Unknown error occurred while creating profile');
+      }
+    }
+  }
 
   async getMemberProfiles(uuid: string): Promise<MemberProfileApp | null> {
     try {

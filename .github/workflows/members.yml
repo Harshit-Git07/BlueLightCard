@@ -1,0 +1,95 @@
+name: Members
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/api/members/**
+      - packages/api/core/**
+      - stacks/**
+      - .github/workflows/members.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+  pull_request:
+    paths:
+      - packages/api/members/**
+      - packages/api/core/**
+      - stacks/**
+      - .github/workflows/members.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+
+permissions: write-all
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
+        run: npx sst types --stage staging
+      - name: Test
+        run: npm run test:coverage -w packages/api/members
+
+  format:
+    name: Check Formatting
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Check Formatting
+        run: npm run format:check -w packages/api/members
+
+  lint:
+    name: Check Linting
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Check Linting
+        run: npm run lint -w packages/api/members
+
+  typecheck:
+    name: Check Types
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
+        run: npx sst types --stage staging
+      - name: Check Types
+        run: npm run typecheck -w packages/api/members

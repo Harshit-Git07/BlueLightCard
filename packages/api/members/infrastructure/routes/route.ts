@@ -46,13 +46,15 @@ export class Route {
     apiKeyRequired,
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer' | 'none' | string> {
     const requestModels = model ? { 'application/json': model.getModel() } : undefined;
-    const methodResponses = MethodResponses.toMethodResponses(
-      [
-        model ? new ResponseModel('200', model) : undefined,
-        apiGatewayModelGenerator.getError404(),
-        apiGatewayModelGenerator.getError500(),
-      ].filter(Boolean),
-    );
+    const methodResponses = model
+      ? MethodResponses.toMethodResponses(
+          [
+            new ResponseModel('200', model),
+            apiGatewayModelGenerator.getError404(),
+            apiGatewayModelGenerator.getError500(),
+          ].filter(Boolean),
+        )
+      : undefined;
 
     return {
       authorizer: authorizer ? authorizer : 'memberAuthorizer',

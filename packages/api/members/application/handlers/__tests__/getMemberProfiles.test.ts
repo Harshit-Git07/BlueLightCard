@@ -15,8 +15,8 @@ describe('Get Member Profile Lambda Handler', () => {
   let mockContext: Context;
 
   beforeAll(async () => {
-    const module = await import('../profile/getMembersProfiles');
-    handler = module.handler;
+    const getMemberProfiles = await import('../profile/getMemberProfiles');
+    handler = getMemberProfiles.handler;
   });
 
   beforeEach(() => {
@@ -33,11 +33,11 @@ describe('Get Member Profile Lambda Handler', () => {
     const mockProfile: MemberProfileApp = {
       uuid: '456',
       firstname: 'John',
-      surname: 'Doe',
-      dob: '1990-01-01',
+      lastName: 'Doe',
+      dateOfBirth: '1990-01-01',
       gender: 'male',
       mobile: '1234567890',
-      email: 'john@example.com',
+      emailAddress: 'john@example.com',
       emailValidated: 1,
       spareEmail: 'john.spare@example.com',
       spareEmailValidated: 0,

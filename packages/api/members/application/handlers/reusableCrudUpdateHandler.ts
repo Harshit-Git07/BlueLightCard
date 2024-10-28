@@ -35,7 +35,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
 
     type PayloadModelName = keyof typeof reusableCrudPayloadModels;
     const payloadModelName = process.env.MODEL_NAME as PayloadModelName;
-    const model = reusableCrudPayloadModels[payloadModelName];
+    const model = reusableCrudPayloadModels[payloadModelName] as unknown as NamedZodType<
+      z.ZodEffects<z.ZodObject<any>>
+    >;
 
     const crudRepository = new ReusableCrudRepository<
       NamedZodType<z.ZodEffects<z.ZodObject<any>>>,

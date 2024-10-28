@@ -47,11 +47,14 @@ export class MemberApplicationRepository {
 
     // Parse each item against the Zod schema and transform it
     const validatedItems = queryResult.Items.map((item) => {
-      const transformedItem = Object.keys(item).reduce((acc, key) => {
-        const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1);
-        acc[lowerCaseKey] = item[key];
-        return acc;
-      }, {} as { [key: string]: any });
+      const transformedItem = Object.keys(item).reduce(
+        (acc, key) => {
+          const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1);
+          acc[lowerCaseKey] = item[key];
+          return acc;
+        },
+        {} as { [key: string]: any },
+      );
       return MemberApplicationModel.parse(transformedItem);
     });
 

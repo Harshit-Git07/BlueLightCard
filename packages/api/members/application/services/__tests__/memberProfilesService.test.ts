@@ -5,6 +5,7 @@ import {
   ProfileUpdatePayload,
   AddressInsertPayload,
   CardCreatePayload,
+  CreateProfilePayload,
 } from '../../types/memberProfilesTypes';
 import { MemberProfileApp, MemberProfileDB } from '../../models/memberProfileModel';
 import { transformDBToApp } from '../../models/memberProfileModel';
@@ -24,11 +25,12 @@ describe('MemberProfileService', () => {
 
   beforeEach(() => {
     mockRepository = {
+      createCustomerProfiles: jest.fn(),
+      getMemberProfiles: jest.fn(),
       getProfileSortKey: jest.fn(),
       updateProfile: jest.fn(),
       insertAddressAndUpdateProfile: jest.fn(),
       insertCard: jest.fn(),
-      getMembersProfiles: jest.fn(),
     } as unknown as jest.MockedObject<MemberProfilesRepository>;
 
     mockLogger = {
@@ -40,7 +42,57 @@ describe('MemberProfileService', () => {
     service = new MemberProfilesService(mockRepository, mockLogger);
   });
 
-  describe('getMembersProfiles', () => {
+  describe('createCustomerProfiles', () => {
+    const brand = 'BLC_UK';
+    const payload: CreateProfilePayload = {
+      firstName: 'John',
+      lastName: 'Doe',
+      dateOfBirth: '1990-01-01',
+      emailAddress: 'test@mail.com',
+    };
+    const memberUuid = 'uuid-1234';
+
+    it('should create a member profile successfully and return memberUuid', async () => {
+      mockRepository.createCustomerProfiles.mockResolvedValue(memberUuid);
+
+      const result = await service.createCustomerProfiles(payload, brand);
+
+      expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload, brand);
+      expect(mockLogger.info).toHaveBeenCalledWith('Profile created successfully', {
+        memberUuid,
+      });
+      expect(result).toBe(memberUuid); // Check that the correct memberUuid is returned
+    });
+
+    it('should log and throw an error if profile creation fails', async () => {
+      const error = new Error('Database error');
+      mockRepository.createCustomerProfiles.mockRejectedValue(error);
+
+      await expect(service.createCustomerProfiles(payload, brand)).rejects.toThrow(
+        'Database error',
+      );
+
+      expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload, brand);
+      expect(mockLogger.error).toHaveBeenCalledWith('Error creating profile:', {
+        error: 'Database error',
+      });
+    });
+
+    it('should log and throw an unknown error if the error is not an instance of Error', async () => {
+      const unknownError = 'Something went wrong';
+      mockRepository.createCustomerProfiles.mockRejectedValue(unknownError);
+
+      await expect(service.createCustomerProfiles(payload, brand)).rejects.toThrow(
+        'Unknown error occurred while creating profile',
+      );
+
+      expect(mockLogger.error).toHaveBeenCalledWith('Unknown error creating profile:', {
+        error: unknownError,
+      });
+    });
+  });
+
+  describe('getMemberProfiles', () => {
     const uuid = '123456';
 
     it('should return a transformed member profile when found', async () => {
@@ -90,8 +142,8 @@ describe('MemberProfileService', () => {
       const memberUUID = '456';
       const payload: ProfileUpdatePayload = {
         firstName: 'John',
-        surname: 'Doe',
-        dob: '1990-01-01',
+        lastName: 'Doe',
+        dateOfBirth: '1990-01-01',
         mobile: '1234567890',
         gender: 'male',
       };

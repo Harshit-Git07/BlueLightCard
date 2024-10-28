@@ -34,9 +34,7 @@ export class MemberStackConfigResolver {
   public static forProductionStage(region: MemberStackRegion): MemberStackConfig {
     if (region === 'ap-southeast-2') {
       return {
-        apiDefaultAllowedOrigins: [
-          'https://www.bluelightcard.com.au'
-        ],
+        apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au'],
       };
     }
     return {
@@ -52,7 +50,7 @@ export class MemberStackConfigResolver {
       return {
         apiDefaultAllowedOrigins: [
           'https://www.develop.bluelightcard.com.au',
-          'http://localhost:3000'
+          'http://localhost:3000',
         ],
       };
     }

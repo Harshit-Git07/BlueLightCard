@@ -1,9 +1,16 @@
 export interface ProfileUpdatePayload {
   firstName: string;
-  surname: string;
-  dob: string;
+  lastName: string;
+  dateOfBirth: string;
   mobile: string;
   gender?: string;
+}
+
+export interface CreateProfilePayload {
+  emailAddress: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
 }
 
 export interface AddressInsertPayload {

@@ -5,7 +5,7 @@ import { MemberProfilesRepository } from '../../repositories/memberProfilesRepos
 import { DynamoDB } from 'aws-sdk';
 import { Table } from 'sst/node/table';
 import { validateRequest } from '../../utils/requestValidator';
-import { ProfileUpdatePayload } from '../../types/memberProfileTypes';
+import { ProfileUpdatePayload } from '../../types/memberProfilesTypes';
 
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-updateProfile` });

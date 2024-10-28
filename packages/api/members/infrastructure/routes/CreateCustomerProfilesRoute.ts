@@ -7,17 +7,17 @@ import {
 } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
-export class GetMemberProfilesRoute {
+export class CreateCustomerProfilesRoute {
   constructor(
     private apiGatewayModelGenerator: ApiGatewayModelGenerator,
-    private agMemberProfileModel: Model,
+    private agMemberApplicationModel: Model,
     private identityTableName: string,
   ) {}
 
   getRouteDetails(): ApiGatewayV1ApiRouteProps<never> {
     return {
       function: {
-        handler: 'packages/api/members/application/handlers/profile/getMemberProfiles.handler',
+        handler: 'packages/api/members/application/handlers/profile/createCustomerProfiles.handler',
         environment: {
           SERVICE: 'member',
           IDENTITY_TABLE_NAME: this.identityTableName,
@@ -25,7 +25,7 @@ export class GetMemberProfilesRoute {
         permissions: [
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ['dynamodb:Query'],
+            actions: ['dynamodb:PutItem'],
             resources: [`arn:aws:dynamodb:*:*:table/${this.identityTableName}`],
           }),
         ],
@@ -33,9 +33,9 @@ export class GetMemberProfilesRoute {
       authorizer: 'none',
       cdk: {
         method: {
-          requestModels: { 'application/json': this.agMemberProfileModel.getModel() },
+          requestModels: { 'application/json': this.agMemberApplicationModel.getModel() },
           methodResponses: MethodResponses.toMethodResponses([
-            new ResponseModel('200', this.agMemberProfileModel),
+            new ResponseModel('200', this.agMemberApplicationModel),
             this.apiGatewayModelGenerator.getError400(),
             this.apiGatewayModelGenerator.getError404(),
             this.apiGatewayModelGenerator.getError500(),

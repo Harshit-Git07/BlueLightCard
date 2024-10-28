@@ -1,9 +1,73 @@
 import { DynamoDB } from 'aws-sdk';
-import { ProfileUpdatePayload, AddressInsertPayload } from '../types/memberProfilesTypes';
+import {
+  ProfileUpdatePayload,
+  AddressInsertPayload,
+  CreateProfilePayload,
+} from '../types/memberProfilesTypes';
 import { MemberProfileDB, MemberProfileDBSchema } from '../models/memberProfileModel';
-
+import { MAP_BRAND } from '../../../core/src/constants/common';
+import { BRAND_SCHEMA } from '../../../core/src/schemas/common';
+import { EligibilityStatus } from '../enums/EligibilityStatus';
+import { ApplicationReason } from '../enums/ApplicationReason';
 export class MemberProfilesRepository {
-  constructor(private dynamoDB: DynamoDB.DocumentClient, private tableName: string) {}
+  constructor(
+    private dynamoDB: DynamoDB.DocumentClient,
+    private tableName: string,
+  ) {}
+
+  async createCustomerProfiles(payload: CreateProfilePayload, brand: string): Promise<string> {
+    try {
+      const memberKey = `MEMBER#${crypto.randomUUID()}`;
+      const profileSK = `PROFILE#${crypto.randomUUID()}`;
+      const brandSK = `BRAND#${MAP_BRAND[BRAND_SCHEMA.parse(brand)]}`;
+
+      const params = {
+        TransactItems: [
+          {
+            Put: {
+              TableName: this.tableName,
+              Item: {
+                pk: memberKey,
+                sk: profileSK,
+                firstName: payload.firstName,
+                lastName: payload.lastName,
+                ...(payload.dateOfBirth && { dateOfBirth: payload.dateOfBirth }),
+                emailAddress: payload.emailAddress,
+              },
+            },
+          },
+          {
+            Put: {
+              TableName: this.tableName,
+              Item: {
+                pk: memberKey,
+                sk: brandSK,
+              },
+            },
+          },
+          {
+            Put: {
+              TableName: this.tableName,
+              Item: {
+                pk: memberKey,
+                sk: `APPLICATION#${crypto.randomUUID()}`,
+                startDate: new Date().toISOString(),
+                eligibilityStatus: EligibilityStatus.INELIGIBLE,
+                applicationReason: ApplicationReason.SIGNUP,
+                verificationMethod: '',
+              },
+            },
+          },
+        ],
+      };
+
+      await this.dynamoDB.transactWrite(params).promise();
+      const prefixSeparator = '#';
+      return memberKey.split(prefixSeparator)[1];
+    } catch (error) {
+      throw new Error('Failed to create member profiles');
+    }
+  }
 
   async getMemberProfiles(uuid: string): Promise<MemberProfileDB | null> {
     const queryParams = {
@@ -62,11 +126,11 @@ export class MemberProfilesRepository {
         sk: profileSK,
       },
       UpdateExpression:
-        'SET firstName = :fn, surname = :sn, dob = :dob, mobile = :mob, gender = :gen',
+        'SET firstName = :fn, lastName = :ln, dateOfBirth = :dob, mobile = :mob, gender = :gen',
       ExpressionAttributeValues: {
         ':fn': payload.firstName,
-        ':sn': payload.surname,
-        ':dob': payload.dob,
+        ':ln': payload.lastName,
+        ':dob': payload.dateOfBirth,
         ':mob': payload.mobile,
         ':gen': payload.gender,
       },
@@ -115,7 +179,7 @@ export class MemberProfilesRepository {
 
   async insertCard(memberUUID: string, cardStatus: string): Promise<void> {
     const cardNumber = '123456'; // Placeholder value
-    const now = Math.floor(Date.now() / 1000); // UNIX timestamp
+    const now = new Date().toISOString();
     const params = {
       TableName: this.tableName,
       Item: {

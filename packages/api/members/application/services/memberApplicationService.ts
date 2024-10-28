@@ -16,7 +16,10 @@ import { ZodError } from 'zod';
  *   description: Service for managing member applications
  */
 export class MemberApplicationService {
-  constructor(private repository: MemberApplicationRepository, private logger: Logger) {}
+  constructor(
+    private repository: MemberApplicationRepository,
+    private logger: Logger,
+  ) {}
 
   /**
    * @swagger

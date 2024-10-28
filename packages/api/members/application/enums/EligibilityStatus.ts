@@ -1,0 +1,5 @@
+export enum EligibilityStatus {
+  INELIGIBLE = 'INELIGIBLE',
+  AWAITING_ID_APPROVAL = 'AWAITING_ID_APPROVAL',
+  ELIGIBLE = 'ELIGIBLE',
+}

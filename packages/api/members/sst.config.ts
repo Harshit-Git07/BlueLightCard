@@ -28,8 +28,6 @@ export default {
     app.stack(Shared, { id: 'global' });
     app.stack(Identity, { id: 'identity' });
 
-    await Promise.all([
-      app.stack(Members, { id: 'members' }),
-    ]);
+    await Promise.all([app.stack(Members, { id: 'members' })]);
   },
 } satisfies SSTConfig;

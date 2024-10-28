@@ -87,10 +87,7 @@ describe('Get Organisations Lambda Handler', () => {
 
     const mockError = {
       statusCode: 500,
-      body: JSON.stringify({
-        message: 'Error',
-        error: 'Error occurred while fetching organisations',
-      }),
+      body: JSON.stringify({ message: 'Error occurred processing request' }),
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

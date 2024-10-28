@@ -2,9 +2,15 @@
   "name": "@blc-mono/members",
   "version": "1.0.0",
   "scripts": {
-    "dev": "sst dev",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "npm run test:unit",
+    "test:coverage": "npm run test:unit -- --coverage",
+    "test:unit": "jest",
     "typecheck": "tsc -noEmit",
-    "test": "jest application/ --coverage"
+    "dev": "sst dev"
   },
   "devDependencies": {
     "@aws-sdk/client-firehose": "3.606.0",
@@ -17,7 +23,10 @@
     "@types/nodemailer": "^6.4.13",
     "@types/stream-buffers": "3.0.7",
     "@types/uuid": "9.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "5.2.1",
     "mysql2": "3.2.4",
+    "prettier": "3.2.5",
     "runtypes": "6.7.0",
     "sst": "2.38.7",
     "stream-buffers": "3.0.2"

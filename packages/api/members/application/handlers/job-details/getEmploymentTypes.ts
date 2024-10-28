@@ -1,9 +1,9 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { DynamoDB } from 'aws-sdk';
-import { Table } from 'sst/node/table';
+// import { DynamoDB } from 'aws-sdk';
+// import { Table } from 'sst/node/table';
 
-const dynamoDB = new DynamoDB.DocumentClient();
-const tableName = Table.referenceData.tableName;
+// const dynamoDB = new DynamoDB.DocumentClient();
+// const tableName = Table.referenceData.tableName;
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const brand = event.pathParameters?.brand;

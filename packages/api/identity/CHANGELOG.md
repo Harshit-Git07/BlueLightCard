@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.103.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.102.0...bluelightcard/identity-v1.103.0) (2024-10-28)
+
+
+### Features
+
+* [DISCO-305] Enable Aus and DDS discovery deploys ([#2563](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2563)) ([c23902c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c23902cd7a3c2a4b1b9eb6fddbffd98876f940c4))
+
 ## [1.102.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.101.0...bluelightcard/identity-v1.102.0) (2024-10-24)
 
 

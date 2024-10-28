@@ -5,9 +5,11 @@ variable "TFC_WORKSPACE_NAME" {
   default = ""
 }
 
-variable "app" {
-  type        = string
-  description = "APP name"
+variable "aws_availability_zones" {
+  type        = list(string)
+  description = "AWS Region"
+
+  default = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 }
 
 variable "aws_region" {

@@ -4,7 +4,7 @@ terraform {
     organization = "bluelightcard"
 
     workspaces {
-      prefix = "blc-2-0-shared-"
+      prefix = "blc-mono-blc-au-shared-"
     }
   }
 

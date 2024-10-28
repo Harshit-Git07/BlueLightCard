@@ -152,6 +152,11 @@ jobs:
             region: 'eu-west-2'
             brand: 'DDS_UK'
             stage: staging-dds
+            blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
+            blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
+            ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
+            ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
+            blcUkIdentityApiId: 'tr1afrar24'
           - deployment: 'blc-au-staging'
             region: 'ap-southeast-2'
             brand: 'BLC_AU'
@@ -188,6 +193,11 @@ jobs:
           DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
           DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
           USE_DATADOG_AGENT: 'true'
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.blcUkCognitoUserPoolId }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.blcUkOldCognitoUserPoolId }}
+          DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
+          BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
         run: npx sst deploy global --stage ${{ matrix.stage }} && npx sst deploy discovery --stage ${{ matrix.stage }}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog

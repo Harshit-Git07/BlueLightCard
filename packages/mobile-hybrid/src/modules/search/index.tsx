@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { backNavagationalPaths } from './paths';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { usePlatformAdapter } from '../../../../shared-ui/src/adapters';
+import { GetSearchVariant } from '@/experiments/getSearchVariant';
 
 const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   const router = useRouter();
@@ -43,9 +44,12 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
     resetSearch();
   }, [resetSearch]);
 
+  const searchVariant = GetSearchVariant();
+
   return (
     <>
       <div className="flex items-center px-2 pt-2 justify-between">
+        {/* Conversion experiment */}
         <SearchBar
           onFocus={onSearchInputFocus}
           onBackButtonClick={onBack}
@@ -54,6 +58,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
           value={searchTerm}
           showBackArrow={canBackNav}
           onSearch={onSearch}
+          experimentalSearchVariant={searchVariant}
         />
       </div>
       {searchOverlayOpen && (

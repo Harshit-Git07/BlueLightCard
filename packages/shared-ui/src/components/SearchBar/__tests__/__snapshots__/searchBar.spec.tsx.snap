@@ -3,7 +3,7 @@
 exports[`clears the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="px-2 z-10 w-full py-4 "
   >
     <div
       class="relative"
@@ -32,7 +32,8 @@ exports[`clears the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font
+          border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder=""
@@ -47,7 +48,7 @@ exports[`clears the search bar 1`] = `
 exports[`edits the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="px-2 z-10 w-full py-4 "
   >
     <div
       class="relative"
@@ -76,7 +77,8 @@ exports[`edits the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font
+          border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder=""
@@ -111,7 +113,7 @@ exports[`edits the search bar 1`] = `
 exports[`renders the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="px-2 z-10 w-full py-4 "
   >
     <div
       class="relative"
@@ -134,7 +136,8 @@ exports[`renders the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font
+          border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder="Search for offers or companies"
@@ -149,7 +152,7 @@ exports[`renders the search bar 1`] = `
 exports[`resets the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="px-2 z-10 w-full py-4 "
   >
     <div
       class="relative"
@@ -172,7 +175,8 @@ exports[`resets the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font
+          border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder="Search for offers or companies"
@@ -187,7 +191,7 @@ exports[`resets the search bar 1`] = `
 exports[`submits the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="px-2 z-10 w-full py-4 "
   >
     <div
       class="relative"
@@ -210,7 +214,8 @@ exports[`submits the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font
+          border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder="Search for offers or companies"

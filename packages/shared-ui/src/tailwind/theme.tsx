@@ -25,15 +25,41 @@ export const colours = {
  * Each key returns the 4 css classes required to set a font style.
  */
 export const fonts = {
-  body: 'font-typography-body text-typography-body tracking-typography-body leading-typography-body font-typography-body-weight',
+  displayLargeText:
+    'font-typography-display-large font-typography-display-large-weight text-typography-display-large leading-typography-display-large tracking-typography-display-large',
+  displayMediumText:
+    'font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium leading-typography-display-medium tracking-typography-display-medium',
+  displaySmallText:
+    'font-typography-display-small font-typography-display-small-weight text-typography-display-small leading-typography-display-small tracking-typography-display-small',
+  headline:
+    'font-typography-headline font-typography-headline-weight text-typography-headline leading-typography-headline tracking-typography-headline',
+  headlineBold:
+    'font-typography-headline-bold font-typography-headline-bold-weight text-typography-headline-bold leading-typography-headline-bold tracking-typography-headline-bold',
+  headlineSmallBold:
+    'font-typography-headline-small-bold font-typography-headline-small-bold-weight text-typography-headline-small-bold leading-typography-headline-small-bold tracking-typography-headline-small-bold',
+  titleLarge:
+    'font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large',
+  titleMedium:
+    'font-typography-title-medium font-typography-title-medium-weight text-typography-title-medium leading-typography-title-medium tracking-typography-title-medium',
+  titleMediumSemiBold:
+    'font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold',
+  titleSmall:
+    'font-typography-title-small font-typography-title-small-weight text-typography-title-small leading-typography-title-small tracking-typography-title-small',
+  body: 'font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body',
   bodyLight:
-    'font-typography-body-light text-typography-body-light tracking-typography-body-light leading-typography-body-light font-typography-body-light-weight',
-  bodySmall:
-    'font-typography-body-small text-typography-body-small tracking-typography-body-small leading-typography-body-small font-typography-body-small-weight',
+    'font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light tracking-typography-body-light',
   bodySemiBold:
-    'font-typography-body-semibold text-typography-body-semibold tracking-typography-body-semibold leading-typography-body-semibold font-typography-body-semibold-weight',
+    'font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold',
+  bodySmall:
+    'font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small',
+  bodySmallSemiBold:
+    'font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold',
   label:
-    'font-typography-label text-typography-label tracking-typography-label leading-typography-label font-typography-label-weight',
+    'font-typography-label font-typography-label-weight text-typography-label leading-typography-label tracking-typography-label',
+  labelSemiBold:
+    'font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold tracking-typography-label-semibold',
+  button:
+    'font-typography-button font-typography-button-weight text-typography-button leading-typography-button tracking-typography-button',
 };
 
 /**

@@ -1,10 +1,40 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Typography from './';
+import { fonts } from '../../tailwind/theme';
 
 const componentMeta: Meta<typeof Typography> = {
   title: 'Component System/Typography',
   component: Typography,
   argTypes: {},
+};
+
+const usageExample = `
+  import { fonts } from '../../tailwind/theme';
+  export const someComponent:FC = () => {
+    return <h2 className={fonts.titleSmall}>Heading</h2> 
+  }
+`;
+
+export const All: StoryFn<typeof Typography> = () => {
+  const fontsWithoutDocGenInfo = Object.entries(fonts).filter(([k]) => !k.startsWith('_'));
+
+  return (
+    <div>
+      <p>Usage</p>
+      <pre>
+        <code>{usageExample}</code>
+      </pre>
+      {fontsWithoutDocGenInfo.map(([key, classes]) => (
+        <div key={key} className={'mb-6'}>
+          <h2 className={classes}>{key}</h2>
+          <p className={fonts.bodySmall}>fonts.{key}</p>
+          <pre className={`${fonts.bodySmall} text-colour-onSurface-subtle`}>
+            <code>{classes}</code>
+          </pre>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 const TypographyTemplate: StoryFn<typeof Typography> = (args) => (

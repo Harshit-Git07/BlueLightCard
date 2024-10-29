@@ -232,6 +232,11 @@ jobs:
             region: eu-west-2
             stage: staging
             e2e_test_password: E2E_TESTS_PASSWORD_BLC_UK
+          - deployment: 'blc-au-staging'
+            brand: BLC_AU
+            region: ap-southeast-2
+            stage: staging
+            e2e_test_password: E2E_TESTS_PASSWORD_BLC_AU
     needs:
       - install
       - test
@@ -254,7 +259,7 @@ jobs:
           BRAND: ${{ matrix.brand }}
           REGION : ${{ matrix.region }}
           E2E_TESTS_PASSWORD: ${{ secrets[matrix.e2e_test_password] }}
-        run: npx sst bind --stage ${{ matrix.stage }} vitest e2e
+        run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created

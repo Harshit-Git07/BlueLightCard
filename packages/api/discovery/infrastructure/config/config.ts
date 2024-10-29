@@ -86,7 +86,7 @@ export class DiscoveryStackConfigResolver {
       return 'https://vpc-staging-dds-search-jzvveojmz4yqw7vge5tkidvpvm.eu-west-2.es.amazonaws.com';
     }
     if (isBlcAuBrand()) {
-      return 'au_placeholder';
+      return 'https://vpc-staging-aus-search-5va2flmi377nrzsgktko36upgq.ap-southeast-2.es.amazonaws.com';
     }
     return 'https://vpc-staging-search-j27gjrqey5noueu2um3rqvpmba.eu-west-2.es.amazonaws.com';
   }

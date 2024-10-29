@@ -64,6 +64,14 @@ export type Offer = {
   imageURL: string;
 };
 
+export type FlexibleOfferData = {
+  id: string;
+  title: string;
+  description: string;
+  imageURL: string;
+  offers: Offer[];
+};
+
 export type AmplitudeEvent = (properties: AmplitudeArg) => void;
 
 export enum BRAND {

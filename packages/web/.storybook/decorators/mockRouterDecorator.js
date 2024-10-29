@@ -1,13 +1,15 @@
 import * as nextRouter from 'next/router';
 
-const useRouter = () => ({
-  route: '/',
-  pathname: '',
-  query: {},
-  asPath: '',
-});
+const mockRouterDecorator = (Story, { parameters }) => {
+  const useRouter = () => ({
+    isReady: true,
+    route: '/',
+    pathname: '',
+    query: {},
+    asPath: '',
+    ...parameters.router,
+  });
 
-const mockRouterDecorator = (Story) => {
   nextRouter.useRouter = useRouter;
   return <Story />;
 };

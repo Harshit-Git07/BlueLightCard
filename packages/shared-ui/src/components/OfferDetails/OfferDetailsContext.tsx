@@ -17,7 +17,7 @@ type OfferData = {
 type IOfferDetailsContext = {
   viewOffer: (offerData: OfferData) => Promise<void>;
 };
-const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
+export const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
   viewOffer: (offerData: OfferData) => Promise.resolve(),
 });
 export const useOfferDetails = () => useContext(OfferDetailsContext);

@@ -1,10 +1,10 @@
-import { z } from '@hono/zod-openapi'
-import type { Context } from 'hono'
-import { HTTPException } from 'hono/http-exception'
-import type { StatusCode } from 'hono/utils/http-status'
-import type { ZodError } from 'zod'
+import { z } from '@hono/zod-openapi';
+import type { Context } from 'hono';
+import { HTTPException } from 'hono/http-exception';
+import type { StatusCode } from 'hono/utils/http-status';
+import type { ZodError } from 'zod';
 
-import type { HonoEnv } from '../hono/env'
+import type { HonoEnv } from '../hono/env';
 
 const ErrorCode = z.enum([
   'BAD_REQUEST',
@@ -21,7 +21,7 @@ const ErrorCode = z.enum([
   'METHOD_NOT_ALLOWED',
   'EXPIRED',
   'DELETE_PROTECTED',
-])
+]);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function errorSchemaFactory(code: z.ZodEnum<any>) {
@@ -40,7 +40,7 @@ export function errorSchemaFactory(code: z.ZodEnum<any>) {
         example: '1234',
       }),
     }),
-  })
+  });
 }
 
 export const ErrorSchema = z.object({
@@ -57,77 +57,77 @@ export const ErrorSchema = z.object({
       example: '1234',
     }),
   }),
-})
+});
 
-export type ErrorResponse = z.infer<typeof ErrorSchema>
+export type ErrorResponse = z.infer<typeof ErrorSchema>;
 
 function codeToStatus(code: z.infer<typeof ErrorCode>): StatusCode {
   switch (code) {
     case 'BAD_REQUEST':
-      return 400
+      return 400;
     case 'FORBIDDEN':
     case 'DISABLED':
     case 'UNAUTHORIZED':
     case 'INSUFFICIENT_PERMISSIONS':
     case 'USAGE_EXCEEDED':
     case 'EXPIRED':
-      return 403
+      return 403;
     case 'NOT_FOUND':
-      return 404
+      return 404;
     case 'METHOD_NOT_ALLOWED':
-      return 405
+      return 405;
     case 'NOT_UNIQUE':
-      return 409
+      return 409;
     case 'DELETE_PROTECTED':
     case 'PRECONDITION_FAILED':
-      return 412
+      return 412;
     case 'RATE_LIMITED':
-      return 429
+      return 429;
     case 'INTERNAL_SERVER_ERROR':
-      return 500
+      return 500;
   }
 }
 
 function statusToCode(status: StatusCode): z.infer<typeof ErrorCode> {
   switch (status) {
     case 400:
-      return 'BAD_REQUEST'
+      return 'BAD_REQUEST';
     case 401:
-      return 'UNAUTHORIZED'
+      return 'UNAUTHORIZED';
     case 403:
-      return 'FORBIDDEN'
+      return 'FORBIDDEN';
 
     case 404:
-      return 'NOT_FOUND'
+      return 'NOT_FOUND';
 
     case 405:
-      return 'METHOD_NOT_ALLOWED'
+      return 'METHOD_NOT_ALLOWED';
     case 500:
-      return 'INTERNAL_SERVER_ERROR'
+      return 'INTERNAL_SERVER_ERROR';
     default:
-      return 'INTERNAL_SERVER_ERROR'
+      return 'INTERNAL_SERVER_ERROR';
   }
 }
 
 export class ApiError extends HTTPException {
-  public readonly code: z.infer<typeof ErrorCode>
+  public readonly code: z.infer<typeof ErrorCode>;
 
   constructor({ code, message }: { code: z.infer<typeof ErrorCode>; message: string }) {
-    super(codeToStatus(code), { message })
-    this.code = code
+    super(codeToStatus(code), { message });
+    this.code = code;
   }
 }
 
 export function handleZodError(
   result:
     | {
-        success: true
+        success: true;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data: any
+        data: any;
       }
     | {
-        success: false
-        error: ZodError
+        success: false;
+        error: ZodError;
       },
   c: Context,
 ) {
@@ -141,7 +141,7 @@ export function handleZodError(
         },
       },
       { status: 400 },
-    )
+    );
   }
 }
 
@@ -159,7 +159,7 @@ export function handleError(err: Error, c: Context<HonoEnv>): Response {
         },
       },
       { status: err.status },
-    )
+    );
   }
 
   /**
@@ -167,7 +167,7 @@ export function handleError(err: Error, c: Context<HonoEnv>): Response {
    * message
    */
   if (err instanceof HTTPException) {
-    const code = statusToCode(err.status)
+    const code = statusToCode(err.status);
     return c.json<z.infer<typeof ErrorSchema>>(
       {
         error: {
@@ -177,7 +177,7 @@ export function handleError(err: Error, c: Context<HonoEnv>): Response {
         },
       },
       { status: err.status },
-    )
+    );
   }
 
   return c.json<z.infer<typeof ErrorSchema>>(
@@ -189,7 +189,7 @@ export function handleError(err: Error, c: Context<HonoEnv>): Response {
       },
     },
     { status: 500 },
-  )
+  );
 }
 
 export function errorResponse(c: Context, code: z.infer<typeof ErrorCode>, message: string) {
@@ -202,18 +202,18 @@ export function errorResponse(c: Context, code: z.infer<typeof ErrorCode>, messa
       },
     },
     { status: codeToStatus(code) },
-  )
+  );
 }
 
 export function parseZodErrorMessage(err: z.ZodError): string {
   try {
     const arr = JSON.parse(err.message) as Array<{
-      message: string
-      path: Array<string>
-    }>
-    const { path, message } = arr[0]
-    return `${path.join('.')}: ${message}`
+      message: string;
+      path: Array<string>;
+    }>;
+    const { path, message } = arr[0];
+    return `${path.join('.')}: ${message}`;
   } catch {
-    return err.message
+    return err.message;
   }
 }

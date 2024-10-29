@@ -1,17 +1,17 @@
-import { newApp } from './hono/app'
-import { registerV2CompaniesGetCompany } from './routes/v2_companies_getCompany'
-import { registerV2CompaniesGetCompanyOffers } from './routes/v2_companies_getCompanyOffers'
-import { registerV2OffersGetOffer } from './routes/v2_offers_getOffer'
+import { newApp } from './hono/app';
+import { registerV2CompaniesGetCompany } from './routes/v2_companies_getCompany';
+import { registerV2CompaniesGetCompanyOffers } from './routes/v2_companies_getCompanyOffers';
+import { registerV2OffersGetOffer } from './routes/v2_offers_getOffer';
 
-const app = newApp()
+const app = newApp();
 
 // company apis
-registerV2CompaniesGetCompany(app)
-registerV2CompaniesGetCompanyOffers(app)
+registerV2CompaniesGetCompany(app);
+registerV2CompaniesGetCompanyOffers(app);
 
 // offer apis
-registerV2OffersGetOffer(app)
+registerV2OffersGetOffer(app);
 
-export default app
+export default app;
 
-export type OffersApp = typeof app
+export type OffersApp = typeof app;

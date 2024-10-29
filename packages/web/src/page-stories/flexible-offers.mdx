@@ -1,0 +1,55 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as FlexibleOffers from './flexible-offers.stories';
+
+<Meta title="Pages/Flexible Offers" of={FlexibleOffers} />
+
+# Flexible Offers
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Usage](#usage)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+- This page renders the content for a single flexible menu on the path of `/flexible-offers?id=[menuId]`
+- The page includes different visual states for: loading, error, and success
+- The page is responsive and will scale to fit mobile, tablet, and desktop
+- The page is accessible so each offer in the list can be focused and read by screen readers
+- The page is tokenised according to the design system
+
+## Props
+
+<Controls />
+
+## State
+
+The page uses Suspense and React Query to manage all of the data fetching and related state. It manages no specific state of its own.
+
+## Design
+
+<FigmaEmbed />
+
+## Variants
+
+List of variants can be shown below here.
+
+### Success
+
+<Canvas of={FlexibleOffers.Success} />
+
+### Loading
+
+<Canvas of={FlexibleOffers.Loading} />
+
+### Error
+
+<Canvas of={FlexibleOffers.Error} />

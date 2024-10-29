@@ -1,6 +1,6 @@
-import { z } from '@hono/zod-openapi'
+import { z } from '@hono/zod-openapi';
 
-import { errorSchemaFactory } from './http'
+import { errorSchemaFactory } from './http';
 
 export const openApiErrorResponses = {
   400: {
@@ -72,4 +72,4 @@ export const openApiErrorResponses = {
       },
     },
   },
-} as const
+} as const;

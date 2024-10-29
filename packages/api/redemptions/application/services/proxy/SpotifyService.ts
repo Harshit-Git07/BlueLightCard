@@ -26,7 +26,11 @@ export class SpotifyService implements ISpotifyService {
 
   public async redeem(companyId: string, offerId: string, memberId: string, url: string): Promise<RedeemSpotifyResult> {
     // Check if user has already redeemed a code
-    const codesRedeemed = await this.legacyVaultApiRepository.getCodesRedeemed(companyId, offerId, memberId);
+    const codesRedeemed = await this.legacyVaultApiRepository.getCodesRedeemed(
+      Number(companyId),
+      Number(offerId),
+      memberId,
+    );
 
     // If so, return the tracking URL with the already redeemed code
     if (codesRedeemed.length) {
@@ -43,7 +47,11 @@ export class SpotifyService implements ISpotifyService {
     }
 
     // Otherwise, assign a new code to the user
-    const { code } = await this.legacyVaultApiRepository.assignCodeToMember(memberId, companyId, offerId);
+    const { code } = await this.legacyVaultApiRepository.assignCodeToMember(
+      memberId,
+      Number(companyId),
+      Number(offerId),
+    );
     const trackingUrl = this.getTrackingUrl(url, code);
 
     return {

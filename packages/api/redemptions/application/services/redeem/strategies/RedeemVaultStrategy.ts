@@ -265,8 +265,8 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
   ): Promise<RedeemVaultStrategyResult> {
     const codesIssuedByMember = await this.legacyVaultApiRepository.getNumberOfCodesIssuedByMember(
       memberId,
-      redemptionCompanyId,
-      redemptionOfferId,
+      Number(redemptionCompanyId),
+      Number(redemptionOfferId),
     );
 
     if (codesIssuedByMember >= (vault.maxPerUser ?? 0)) {
@@ -275,8 +275,8 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
 
     const assignCodeResponse = await this.legacyVaultApiRepository.assignCodeToMemberWithErrorHandling(
       memberId,
-      redemptionCompanyId,
-      redemptionOfferId,
+      Number(redemptionCompanyId),
+      Number(redemptionOfferId),
     );
 
     if (assignCodeResponse.kind === 'NoCodesAvailable') {

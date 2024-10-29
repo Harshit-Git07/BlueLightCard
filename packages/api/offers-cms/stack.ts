@@ -37,10 +37,14 @@ export function OffersCMS({ stack }: StackContext) {
     consumerFunction.bind([wrappedDiscoBus]);
     consumerFunction.attachPermissions([[discoBus, 'grantPutEventsTo']]);
   } else {
-    cliLogger.info({ message: 'Discovery Event Bus not set. Offers CMS events will not be sent.' });
+    cliLogger.info({
+      message: 'Discovery Event Bus not set. Offers CMS events will not be sent.',
+    });
   }
 
-  const cmsEvents = createCMSEventBus(stack, CMS_BUS_NAME, { consumerFunction });
+  const cmsEvents = createCMSEventBus(stack, CMS_BUS_NAME, {
+    consumerFunction,
+  });
 
   if (env.OFFERS_CMS_ACCOUNT) {
     const awsCmsBus = cmsEvents.cdk.eventBus as AwsEventBus;
@@ -54,7 +58,9 @@ export function OffersCMS({ stack }: StackContext) {
       }),
     );
   } else {
-    cliLogger.info({ message: 'CMS Account not set. Skipping resource policy creation.' });
+    cliLogger.info({
+      message: 'CMS Account not set. Skipping resource policy creation.',
+    });
   }
 
   const api = new Api(stack, API_GATEWAY_NAME, {
@@ -65,10 +71,11 @@ export function OffersCMS({ stack }: StackContext) {
       offersAuthorizer: {
         type: 'lambda',
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore .function exists. The typings are incorrect
+        // @ts-ignore .function exists. The types are incorrect
         function: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer).function,
       },
     },
+    cors: false,
     defaults: {
       function: {
         bind: [offersDataTable, companyDataTable],

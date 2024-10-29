@@ -4,8 +4,9 @@ import { Stack } from 'sst/constructs';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 export function createSearchOfferCompanyTable(stack: Stack): TableV2 {
-  return new TableV2(stack, `${stack}-searchOfferCompany`, {
-    tableName: `${stack}-searchOfferCompany`,
+  const tableName = buildTableName(stack, 'searchOfferCompany');
+  return new TableV2(stack, tableName, {
+    tableName,
     pointInTimeRecovery: true,
     deletionProtection: isProduction(stack.stage) || isStaging(stack.stage),
     partitionKey: {
@@ -41,4 +42,8 @@ export function createSearchOfferCompanyTable(stack: Stack): TableV2 {
       },
     ],
   });
+}
+
+function buildTableName(stack: Stack, name: string): string {
+  return stack.region === 'ap-southeast-2' ? `${stack}-aus-${name}` : `${stack}-${name}`;
 }

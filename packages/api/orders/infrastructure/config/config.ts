@@ -22,7 +22,7 @@ type NetworkConfig = {
 
 export type OrdersStackConfig = {
   // This should be in smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency)
-  membershipPrice: number;
+  membershipPrice: string;
   networkConfig: NetworkConfig;
 };
 
@@ -44,7 +44,7 @@ export class OrdersStackConfigResolver {
   public static forProductionStage(): Record<Brand, OrdersStackConfig> {
     return {
       [BLC_UK_BRAND]: {
-        membershipPrice: 499,
+        membershipPrice: '499',
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.bluelightcard.co.uk'],
           ordersWebHost: 'https://www.bluelightcard.co.uk',
@@ -53,7 +53,7 @@ export class OrdersStackConfigResolver {
         },
       },
       [BLC_AU_BRAND]: {
-        membershipPrice: 499,
+        membershipPrice: '499',
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au'],
           ordersWebHost: 'https://www.bluelightcard.com.au',
@@ -62,7 +62,7 @@ export class OrdersStackConfigResolver {
         },
       },
       [DDS_UK_BRAND]: {
-        membershipPrice: 499,
+        membershipPrice: '499',
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.defencediscountservice.co.uk'],
           ordersWebHost: 'https://www.defencediscountservice.co.uk',
@@ -76,7 +76,7 @@ export class OrdersStackConfigResolver {
   public static forStagingStage(): Record<Brand, OrdersStackConfig> {
     return {
       [BLC_UK_BRAND]: {
-        membershipPrice: 499,
+        membershipPrice: '499',
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.staging.bluelightcard.co.uk', 'http://localhost:3000'],
           ordersWebHost: 'https://staging.bluelightcard.co.uk',
@@ -85,7 +85,7 @@ export class OrdersStackConfigResolver {
         },
       },
       [BLC_AU_BRAND]: {
-        membershipPrice: 499,
+        membershipPrice: '499',
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.develop.bluelightcard.com.au', 'http://localhost:3000'],
           ordersWebHost: 'https://www.develop.bluelightcard.com.au',
@@ -94,7 +94,7 @@ export class OrdersStackConfigResolver {
         },
       },
       [DDS_UK_BRAND]: {
-        membershipPrice: 499,
+        membershipPrice: '499',
         networkConfig: {
           apiDefaultAllowedOrigins: ['https://www.ddsstaging.bluelightcard.tech', 'http://localhost:3000'],
           ordersWebHost: 'https://www.ddsstaging.bluelightcard.tech',
@@ -107,7 +107,7 @@ export class OrdersStackConfigResolver {
 
   public static forPrStage(): OrdersStackConfig {
     return {
-      membershipPrice: 499,
+      membershipPrice: '499',
       networkConfig: {
         apiDefaultAllowedOrigins: ['*'],
         ordersWebHost: 'https://staging.bluelightcard.co.uk',
@@ -119,7 +119,7 @@ export class OrdersStackConfigResolver {
 
   public static fromEnvironmentVariables(stage: string, brand: string): OrdersStackConfig {
     return {
-      membershipPrice: Number(getEnv(OrdersStackEnvironmentKeys.MEMBERSHIP_PRICE)),
+      membershipPrice: getEnv(OrdersStackEnvironmentKeys.MEMBERSHIP_PRICE),
       networkConfig: {
         apiDefaultAllowedOrigins: getEnvValidated(
           OrdersStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,

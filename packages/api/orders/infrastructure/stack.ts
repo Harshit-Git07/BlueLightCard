@@ -109,6 +109,7 @@ function OrdersStack({ stack }: StackContext) {
       environment: {
         [OrdersStackEnvironmentKeys.IDENTITY_API_URL]: config.networkConfig.identityApiUrl,
         [OrdersStackEnvironmentKeys.PAYMENTS_API_URL]: config.networkConfig.paymentsApiUrl,
+        [OrdersStackEnvironmentKeys.MEMBERSHIP_PRICE]: config.membershipPrice,
       },
       defaultAllowedOrigins: config.networkConfig.apiDefaultAllowedOrigins,
       permissions: [executeApiPolicy],

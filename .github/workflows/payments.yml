@@ -36,33 +36,31 @@ jobs:
           restore_cache: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  # test:
-  #   name: Test
-  #   runs-on: ubuntu-latest
-  #   needs: install
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Setup
-  #       uses: ./.github/actions/setup
-  #     - name: Generate SST Types
-  #       env:
-  #         BRAND: BLC_UK
-  #       run: npx sst types --stage staging
-  #     - name: Test
-  #       run: npm run test:coverage -w packages/api/payments
-  #     # - name: Test Cloud flare
-  #     #   run: npm run test:cloudflare -w packages/api/payments
-  #     - name: SonarCloud Scan
-  #       uses: SonarSource/sonarcloud-github-action@master
-  #       if: github.actor != 'dependabot[bot]'
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         projectBaseDir: packages/api/payments
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
+        run: npx sst types --stage staging
+      - name: Test
+        run: npm run test:coverage -w packages/api/payments
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   if: github.actor != 'dependabot[bot]'
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     projectBaseDir: packages/api/payments
 
   format:
     name: Check Formatting
@@ -158,7 +156,7 @@ jobs:
             stage: staging-dds
     needs:
       - install
-      # - test
+      - test
       - build
       - changelog
     steps:
@@ -210,47 +208,6 @@ jobs:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
           title: ':white_check_mark: :test_tube: Staging deployment for payments (${{matrix.deployment.brand}}) was successful!'
 
-  #   e2e-redemptions:
-  #     name: Run E2E tests (redemptions)
-  #     runs-on: ubuntu-latest
-  #     strategy:
-  #       matrix:
-  #         deployment:
-  #           - brand: BLC_UK
-  #             region: eu-west-2
-  #             stage: staging
-  # #          - brand: BLC_AU
-  # #            region: ap-southeast-2
-  # #            stage: staging
-  # #          - brand: DDS_UK
-  # #            region: eu-west-2
-  # #            stage: staging-dds
-  #     needs:
-  #       - install
-  #       - staging
-  #     steps:
-  #       - name: Checkout
-  #         uses: actions/checkout@v4
-  #       - name: Setup
-  #         uses: ./.github/actions/setup
-  #       - name: Configure Non Prod AWS Credentials
-  #         uses: aws-actions/configure-aws-credentials@v4
-  #         with:
-  #           role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-  #           aws-region: ${{ matrix.deployment.region }}
-  #       - name: Install Session Manager Plugin
-  #         run: |
-  #           curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
-  #           sudo dpkg -i session-manager-plugin.deb
-  #       - name: Run E2E tests
-  #         working-directory: packages/api/redemptions
-  #         env:
-  #           BRAND: ${{ matrix.deployment.brand }}
-  #           REDEMPTIONS_DATABASE_PORT: 5432
-  #           REDEMPTIONS_DATABASE_NAME: redemptions
-  #           REDEMPTIONS_DATABASE_TYPE: AURORA_PG_CLUSTER
-  #         run: npx sst bind --stage ${{ matrix.deployment.stage }} vitest
-
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release
@@ -270,7 +227,7 @@ jobs:
             stage: production-dds
     needs:
       - install
-      # - test
+      - test
       - staging
       - changelog
       - build

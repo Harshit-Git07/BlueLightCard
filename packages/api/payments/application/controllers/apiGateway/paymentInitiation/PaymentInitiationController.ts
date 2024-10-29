@@ -56,47 +56,45 @@ export class PaymentInitiationController extends APIGatewayController<ParsedRequ
     return Result.ok({ ...parsedRequest.value });
   }
 
-  public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const result = await this.paymentInitiationService.InitiatePayment(
-      request.body.idempotencyKey,
-      request.body.amount,
-      request.body.metadata,
-    );
+  handleError(error: unknown): APIGatewayResult {
+    let errorMessage = 'An unknown error occurred';
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    }
 
     return {
-      statusCode: 200,
-      data: result,
+      statusCode: 500,
+      data: {
+        message: 'Internal Server Error',
+        error: errorMessage,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
     };
+  }
 
-    //TODO: error handling
-    // switch (result.kind) {
-    //   case 'Ok':
-    //     return {
-    //       statusCode: 200,
-    //       data: {
-    //         kind: result.kind,
-    //         redemptionType: result.redemptionType,
-    //         redemptionDetails: result.redemptionDetails,
-    //       },
-    //     };
-    //   case 'RedemptionNotFound':
-    //     return {
-    //       statusCode: 404,
-    //       data: {
-    //         kind: result.kind,
-    //         message: 'No redemption found for the given offerId',
-    //       },
-    //     };
-    //   case 'MaxPerUserReached':
-    //     return {
-    //       statusCode: 403,
-    //       data: {
-    //         kind: result.kind,
-    //         message: 'Max per user reached for the given offerId',
-    //       },
-    //     };
-    //   default:
-    //     exhaustiveCheck(result, 'Unhandled result kind');
-    // }
+  public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
+    try {
+      const result = await this.paymentInitiationService.InitiatePayment(
+        request.body.idempotencyKey,
+        request.body.user,
+        request.body.amount,
+        request.body.metadata,
+        request.body.description,
+      );
+
+      return {
+        statusCode: 200,
+        data: result,
+      };
+    } catch (err) {
+      this.logger.error({ message: 'Error in payment initiation', error: err });
+
+      return this.handleError(err);
+    }
   }
 }

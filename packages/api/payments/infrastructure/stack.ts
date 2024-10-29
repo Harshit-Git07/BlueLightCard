@@ -1,7 +1,8 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
+import { ApiGatewayV1Api, Queue, StackContext, use } from 'sst/constructs';
 
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { MAP_BRAND } from '@blc-mono/core/constants/common';
@@ -16,7 +17,9 @@ import { PostPaymentInitiationModel } from '../application/models/postPaymentIni
 import { PaymentsStackConfigResolver } from './config/config';
 import { productionDomainNames, stagingDomainNames } from './constants/domains';
 import { PaymentsStackEnvironmentKeys } from './constants/environment';
+import { SSTFunction } from './constructs/SSTFunction';
 import { createTransactionsEventTable } from './database/createTransactionsEventsTable';
+import { StripeEventBridge } from './eventBridge/stripeEventBridge';
 import { Route } from './routes/route';
 
 function PaymentsStack({ app, stack }: StackContext) {
@@ -98,6 +101,13 @@ function PaymentsStack({ app, stack }: StackContext) {
 
   const transactionsEventsTable = createTransactionsEventTable(stack);
 
+  const USE_DATADOG_AGENT = getEnvOrDefault(PaymentsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
+  // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+  const layers =
+    USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
+      ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`]
+      : undefined;
+
   api.addRoutes(stack, {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -112,6 +122,8 @@ function PaymentsStack({ app, stack }: StackContext) {
       environment: {
         [PaymentsStackEnvironmentKeys.CURRENCY_CODE]: config.currencyCode,
         [PaymentsStackEnvironmentKeys.TRANSACTIONS_EVENTS_TABLE]: transactionsEventsTable.tableName ?? '',
+        // Event Bus
+        [PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME]: bus.eventBusName,
       },
       permissions: [
         new PolicyStatement({
@@ -124,9 +136,47 @@ function PaymentsStack({ app, stack }: StackContext) {
           effect: Effect.ALLOW,
           resources: [stripeApiKey.secretArn + '-??????'],
         }),
+        new PolicyStatement({
+          actions: ['events:PutEvents'],
+          effect: Effect.ALLOW,
+          resources: [bus.eventBusArn],
+        }),
       ],
+      layers,
     }),
   });
+
+  const queue = new Queue(stack, 'DLQPaymentsStripeEventsHandler');
+  const stripeEventHandler = new LambdaFunction(
+    new SSTFunction(stack, 'StripeEventsHandler', {
+      permissions: [
+        new PolicyStatement({
+          actions: ['dynamodb:*'],
+          effect: Effect.ALLOW,
+          resources: [transactionsEventsTable.tableArn],
+        }),
+        new PolicyStatement({
+          actions: ['events:PutEvents'],
+          effect: Effect.ALLOW,
+          resources: [bus.eventBusArn],
+        }),
+      ],
+      handler: 'packages/api/payments/application/handlers/eventBridge/paymentEvents/paymentEventsHandler.handler',
+      retryAttempts: 2,
+      deadLetterQueueEnabled: true,
+      deadLetterQueue: queue.cdk.queue,
+      environment: {
+        [PaymentsStackEnvironmentKeys.CURRENCY_CODE]: config.currencyCode,
+        [PaymentsStackEnvironmentKeys.TRANSACTIONS_EVENTS_TABLE]: transactionsEventsTable.tableName ?? '',
+        // Event Bus
+        [PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME]: bus.eventBusName,
+        [PaymentsStackEnvironmentKeys.STRIPE_EVENT_SOURCE_PREFIX]: config.stripeEventSourcePrefix,
+      },
+      layers,
+    }),
+  );
+
+  new StripeEventBridge(stack, config.stripeEventBusArn, config.stripeEventSourcePrefix, stripeEventHandler);
 
   stack.addOutputs({
     PaymentsApiEndpoint: api.url,

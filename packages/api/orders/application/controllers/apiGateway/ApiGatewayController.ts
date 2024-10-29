@@ -20,6 +20,7 @@ export enum ParseErrorKind {
   RequestValidationCardStatus = 'RequestValidationCardStatus',
   RequestValidationMemberId = 'RequestValidationMemberId',
   RequestValidationBrazeExternalUserId = 'RequestValidationBrazeExternalUserId',
+  RequestValidationName = 'RequestValidationName',
 }
 
 export type ParseErrorKindType = keyof typeof ParseErrorKind;

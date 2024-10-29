@@ -14,6 +14,7 @@ export const PostCheckoutModel = createZodNamedType(
       }),
     ),
     source: z.union([z.literal('web'), z.literal('mobile')]),
+    description: z.string().optional(),
   }),
 );
 

@@ -11,6 +11,8 @@ import { PR_STAGE_REGEX } from '../constants/sst';
 
 export type PaymentsStackConfig = {
   currencyCode: string;
+  stripeEventBusArn: string;
+  stripeEventSourcePrefix: string;
 };
 
 export class PaymentsStackConfigResolver {
@@ -29,42 +31,71 @@ export class PaymentsStackConfigResolver {
   }
 
   public static forProductionStage(): Record<Brand, PaymentsStackConfig> {
+    const staticConfig = {
+      stripeEventSourcePrefix: 'aws.partner/stripe.com',
+    };
     return {
       [BLC_UK_BRAND]: {
+        ...staticConfig,
         currencyCode: 'GBP',
+        stripeEventBusArn:
+          'arn:aws:events:eu-west-2:676719682338:event-bus/aws.partner/stripe.com/ed_61RNBkMtVPI8dQngN16PB075XLE9pY8GiImUkqT68S2y',
       },
       [BLC_AU_BRAND]: {
+        ...staticConfig,
         currencyCode: 'AUD',
+        stripeEventBusArn:
+          'arn:aws:events:eu-west-2:676719682338:event-bus/aws.partner/stripe.com/ed_61RNBiG2RCcllCmxI16PANAFCi8S6oqsDrldIF09wMTo',
       },
       [DDS_UK_BRAND]: {
+        ...staticConfig,
         currencyCode: 'GBP',
+        stripeEventBusArn:
+          'arn:aws:events:eu-west-2:676719682338:event-bus/aws.partner/stripe.com/ed_61RNBlZWIas1CUcD416PE3tWQ5E9EJyeug65YV4uuUE4',
       },
     };
   }
 
   public static forStagingStage(): Record<Brand, PaymentsStackConfig> {
+    const staticConfig = {
+      stripeEventSourcePrefix: 'aws.partner/stripe.com',
+    };
     return {
       [BLC_UK_BRAND]: {
+        ...staticConfig,
         currencyCode: 'GBP',
+        stripeEventBusArn:
+          'arn:aws:events:eu-west-2:314658777488:event-bus/aws.partner/stripe.com/ed_test_61RJx7rBwGcuafnIw16RJaKQXLE9MdjNBOSF4d4I42RM',
       },
       [BLC_AU_BRAND]: {
+        ...staticConfig,
         currencyCode: 'AUD',
+        stripeEventBusArn:
+          'arn:aws:events:eu-west-2:314658777488:event-bus/aws.partner/stripe.com/ed_test_61RNBexF1UtCF6zUI16RNBP2Ci8SlYaDlGfEynW3M3I0',
       },
       [DDS_UK_BRAND]: {
+        ...staticConfig,
         currencyCode: 'GBP',
+        stripeEventBusArn:
+          'arn:aws:events:eu-west-2:314658777488:event-bus/aws.partner/stripe.com/ed_test_61RNBa0Z90abKY8kK16RNBSiQ5E98SKWrtKHkuPMuIFM',
       },
     };
   }
 
   public static forPrStage(): PaymentsStackConfig {
     return {
+      stripeEventSourcePrefix: 'aws.partner/stripe.com',
       currencyCode: 'GBP',
+      stripeEventBusArn:
+        'arn:aws:events:eu-west-2:314658777488:event-bus/aws.partner/stripe.com/ed_test_61RJx7rBwGcuafnIw16RJaKQXLE9MdjNBOSF4d4I42RM',
     };
   }
 
   public static fromEnvironmentVariables(stage: string, brand: string): PaymentsStackConfig {
     return {
+      stripeEventSourcePrefix: 'aws.partner/stripe.com',
       currencyCode: getEnv(PaymentsStackEnvironmentKeys.CURRENCY_CODE),
+      stripeEventBusArn: getEnv(PaymentsStackEnvironmentKeys.STRIPE_EVENT_BUS_ARN),
     };
   }
 }

@@ -7,7 +7,7 @@ type EventBridgeEventShape = {
 
 type DetailTypeConstraint = z.ZodEnum<[string, ...string[]]> | z.ZodString | z.ZodLiteral<string>;
 export function eventSchema<DetailType extends DetailTypeConstraint, Detail extends z.AnyZodObject>(
-  source: string,
+  source: string | { prefix: string },
   eventDetailType: DetailType,
   detail: Detail,
 ) {
@@ -19,7 +19,7 @@ export function eventSchema<DetailType extends DetailTypeConstraint, Detail exte
     region: z.string(),
     resources: z.array(z.string()),
     source: z.string().refine(
-      (s) => s === source,
+      (s) => typeof source === "string" ? s === source: s.startsWith(source.prefix),
       (s) => ({ message: `Unexpected event source (${s}), expected ${source}` }),
     ),
     time: z.string().datetime(),

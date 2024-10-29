@@ -26,6 +26,7 @@ export type RouteOptions = {
   stack: Stack;
   bind?: SSTConstruct[];
   permissions?: PolicyStatement[];
+  layers: string[] | undefined;
 };
 
 export class Route {
@@ -39,6 +40,7 @@ export class Route {
     restApi,
     stack,
     permissions,
+    layers,
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'none' | 'iam'> {
     const requestModels = model ? { 'application/json': model.getModel() } : undefined;
 
@@ -49,13 +51,6 @@ export class Route {
         apiGatewayModelGenerator.getError500(),
       ].filter(Boolean),
     );
-
-    const USE_DATADOG_AGENT = getEnvOrDefault(PaymentsStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
-    // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
-    const layers =
-      USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
-        ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`]
-        : undefined;
 
     return {
       authorizer: 'iam',

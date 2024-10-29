@@ -1,5 +1,4 @@
 export enum OrdersStackEnvironmentKeys {
-  MEMBERSHIP_PRICE = 'MEMBERSHIP_PRICE',
   ORDERS_WEB_HOST = 'ORDERS_WEB_HOST',
   DD_VERSION = 'DD_VERSION',
   DD_ENV = 'DD_ENV',
@@ -15,6 +14,7 @@ export enum OrdersStackEnvironmentKeys {
 
   //Payments
   PAYMENTS_API_URL = 'PAYMENTS_API_URL',
+  MEMBERSHIP_PRICE = 'MEMBERSHIP_PRICE',
 
   // Environment
   USE_DATADOG_AGENT = 'USE_DATADOG_AGENT',

@@ -41,7 +41,6 @@ export class SecretRepository implements ISecretRepository {
         publishableKey: secretObj['publishable_key'],
       };
     } catch (error) {
-      //TODO: logging
       this.logger.error({ message: 'Error fetching stripe secrets', error });
       throw error;
     }

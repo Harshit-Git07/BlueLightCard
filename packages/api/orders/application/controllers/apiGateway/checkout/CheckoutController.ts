@@ -24,7 +24,9 @@ const CheckoutRequestModel = z.object({
   }),
 });
 
-export type ParsedRequest = z.infer<typeof CheckoutRequestModel> & { memberId: string; brazeExternalUserId: string };
+export type UserContext = { memberId: string; brazeExternalId: string; name: string };
+
+export type ParsedRequest = z.infer<typeof CheckoutRequestModel> & { user: UserContext };
 
 export class CheckoutController extends APIGatewayController<ParsedRequest> {
   static readonly inject = [Logger.key, CheckoutService.key] as const;
@@ -64,21 +66,30 @@ export class CheckoutController extends APIGatewayController<ParsedRequest> {
     }
 
     const memberId = tokenPayloadResult.value['custom:blc_old_id'];
-    const brazeExternalUserId = tokenPayloadResult.value['custom:blc_old_uuid'];
+    const brazeExternalId = tokenPayloadResult.value['custom:blc_old_uuid'];
+    const firstName = tokenPayloadResult.value['firstname'];
+    const surName = tokenPayloadResult.value['surname'];
 
     if (typeof memberId !== 'string')
       return Result.err({ kind: ParseErrorKind.RequestValidationMemberId, message: 'Invalid memberId in token' });
-    if (typeof brazeExternalUserId !== 'string')
+    if (typeof brazeExternalId !== 'string')
       return Result.err({
         kind: ParseErrorKind.RequestValidationBrazeExternalUserId,
         message: 'Invalid brazeExternalUserId in token',
       });
+    if (typeof firstName !== 'string' || typeof surName !== 'string')
+      return Result.err({
+        kind: ParseErrorKind.RequestValidationName,
+        message: 'Invalid firstname and surname in token',
+      });
 
-    return Result.ok({ ...parsedRequest.value, memberId, brazeExternalUserId });
+    const name = `${firstName} ${surName}`;
+
+    return Result.ok({ ...parsedRequest.value, user: { memberId, brazeExternalId, name } });
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const result = await this.checkoutService.checkout(request.body, request.memberId);
+    const result = await this.checkoutService.checkout(request.body, request.user);
 
     return {
       statusCode: 200,

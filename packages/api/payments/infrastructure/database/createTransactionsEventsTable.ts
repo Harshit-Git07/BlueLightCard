@@ -9,17 +9,21 @@ export function createTransactionsEventTable(stack: Stack): TableV2 {
     pointInTimeRecovery: true,
     deletionProtection: isProduction(stack.stage) || isStaging(stack.stage),
     partitionKey: {
-      name: 'pk-memberId',
+      name: 'pk',
       type: AttributeType.STRING,
     },
     sortKey: {
-      name: 'sk-eventType_objectId',
+      name: 'sk',
       type: AttributeType.STRING,
     },
     globalSecondaryIndexes: [
       {
         indexName: 'gsi1',
         partitionKey: {
+          name: 'eventType',
+          type: AttributeType.STRING,
+        },
+        sortKey: {
           name: 'objectId',
           type: AttributeType.STRING,
         },

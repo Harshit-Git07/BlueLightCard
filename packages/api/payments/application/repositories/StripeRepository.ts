@@ -1,10 +1,13 @@
 import Stripe from 'stripe';
 
-import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { PaymentsStackEnvironmentKeys } from '@blc-mono/payments/infrastructure/constants/environment';
+
+import { PaymentEvent } from '../models/paymentEvent';
+import { PaymentExternalEventModel } from '../services/paymentEvents/PaymentEventsHandlerService';
 
 import { ISecretRepository, SecretRepository } from './SecretRepository';
+
+export type Currency = 'gbp' | 'aud';
 
 export type PaymentIntentCreated = {
   paymentIntentId: string;
@@ -15,9 +18,15 @@ export type PaymentIntentCreated = {
 export interface IStripeRepository {
   createPaymentIntent(
     idempotencyKey: string,
+    currency: Currency,
+    customerId: string,
     amount: number,
     metadata: Record<string, string>,
+    description?: string,
   ): Promise<PaymentIntentCreated>;
+  createEphemeralKey(customerId: string): Promise<string>;
+  createCustomer(name: string, metadata: Record<string, string>): Promise<string>;
+  translateEvent(event: PaymentExternalEventModel): PaymentEvent | null;
 }
 
 export class StripeRepository implements IStripeRepository {
@@ -50,30 +59,60 @@ export class StripeRepository implements IStripeRepository {
     return this.stripePublishableKey;
   };
 
+  public createEphemeralKey = async (customerId: string): Promise<string> => {
+    const client = await this.client();
+
+    const response = await client.ephemeralKeys.create({ customer: customerId }, { apiVersion: '2013-08-12' });
+
+    if (!response.secret) throw new Error('No secret returned from stripe for Ephemeral Key');
+
+    return response.secret;
+  };
+
+  public createCustomer = async (name: string, metadata: Record<string, string>): Promise<string> => {
+    const client = await this.client();
+
+    const response = await client.customers.create({
+      name,
+      metadata,
+    });
+
+    return response.id;
+  };
+
   public createPaymentIntent = async (
     idempotencyKey: string,
+    currency: Currency,
+    customerId: string,
     amount: number,
     metadata: Record<string, string>,
+    description?: string,
   ): Promise<PaymentIntentCreated> => {
     const client = await this.client();
 
-    //TODO: error handling
-    //TODO: how to do idempotency?
-    //TODO: attach customer and use setup_future_usage for saving payment method??
+    //TODO: do we use setup_future_usage for saving payment method??
     try {
-      const paymentIntent = await client.paymentIntents.create({
-        amount: amount,
-        currency: getEnv(PaymentsStackEnvironmentKeys.CURRENCY_CODE),
-        automatic_payment_methods: {
-          enabled: true,
+      const paymentIntent = await client.paymentIntents.create(
+        {
+          customer: customerId,
+          description,
+          amount: amount,
+          currency,
+          automatic_payment_methods: {
+            enabled: true,
+          },
+          metadata: metadata,
         },
-        metadata: metadata,
-      });
+        {
+          idempotencyKey,
+        },
+      );
+
+      if (!paymentIntent.client_secret) throw new Error('No client secret returned from stripe for payment method');
 
       return {
         paymentIntentId: paymentIntent.id,
-        //TOOD: throw if client secret is falsy?
-        clientSecret: paymentIntent.client_secret || '',
+        clientSecret: paymentIntent.client_secret,
         publishableKey: await this.fetchStripePublishableKey(),
       };
     } catch (err) {
@@ -82,6 +121,58 @@ export class StripeRepository implements IStripeRepository {
         error: err,
       });
       throw err;
+    }
+  };
+
+  public translateEvent = (event: PaymentExternalEventModel): PaymentEvent | null => {
+    switch (event.type) {
+      case 'payment_intent.created':
+        return {
+          eventId: event.id,
+          externalCustomerId: event.data.object.customer,
+          type: 'paymentInitiated',
+          currency: event.data.object.currency,
+          paymentIntentId: event.data.object.id,
+          created: event.created,
+          metadata: event.data.object.metadata,
+          amount: event.data.object.amount,
+        };
+      case 'payment_intent.succeeded':
+        return {
+          eventId: event.id,
+          externalCustomerId: event.data.object.customer,
+          type: 'paymentSucceeded',
+          currency: event.data.object.currency,
+          paymentIntentId: event.data.object.id,
+          created: event.created,
+          metadata: event.data.object.metadata,
+          amount: event.data.object.amount,
+          paymentMethodId: event.data.object.payment_method,
+        };
+      case 'payment_intent.payment_failed':
+        return {
+          eventId: event.id,
+          externalCustomerId: event.data.object.customer,
+          type: 'paymentFailed',
+          currency: event.data.object.currency,
+          paymentIntentId: event.data.object.id,
+          created: event.created,
+          metadata: event.data.object.metadata,
+          amount: event.data.object.amount,
+          paymentMethodId: event.data.object.payment_method,
+        };
+      case 'customer.created':
+        return {
+          eventId: event.id,
+          type: 'customerCreated',
+          externalCustomerId: event.data.object.id,
+          created: event.created,
+          metadata: event.data.object.metadata,
+          name: event.data.object.name,
+          email: event.data.object.email,
+        };
+      default:
+        return null;
     }
   };
 }

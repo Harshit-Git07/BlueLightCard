@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.30.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.30.0...bluelightcard/redemptions-v1.30.1) (2024-10-29)
+
+
+### Bug Fixes
+
+* TR-977 - chnage offerId and compnayId to be number when calling legacy api ([#2655](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2655)) ([debf8a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/debf8a10f1c2871dbd412b0ed5aeb578b689ccb3))
+
 ## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.29.0...bluelightcard/redemptions-v1.30.0) (2024-10-29)
 
 

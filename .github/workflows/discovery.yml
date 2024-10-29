@@ -237,6 +237,17 @@ jobs:
             region: ap-southeast-2
             stage: staging
             e2e_test_password: E2E_TESTS_PASSWORD_BLC_AU
+          - deployment: 'dds-uk-staging'
+            brand: DDS_UK
+            region: eu-west-2
+            stage: staging-dds
+            e2e_test_password: E2E_TESTS_PASSWORD_DDS_UK
+            blc-uk-cognito-user-pool-id: 'eu-west-2_Ow2L8azIb'
+            blc-uk-old-cognito-user-pool-id: 'eu-west-2_rNmQEiFS4'
+            dds-cognito-user-pool-id: 'eu-west-2_VdsvVVUrI'
+            dds-old-cognito-user-pool-id: 'eu-west-2_jbLX0JEdN'
+            identity-api-id: 'tr1afrar24'
+            dds-identity-cognito-e2e-client-id: '7jpmpphent2tulhit3c8sngk54'
     needs:
       - install
       - test
@@ -259,6 +270,13 @@ jobs:
           BRAND: ${{ matrix.brand }}
           REGION : ${{ matrix.region }}
           E2E_TESTS_PASSWORD: ${{ secrets[matrix.e2e_test_password] }}
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.blc-uk-cognito-user-pool-id }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.blc-uk-old-cognito-user-pool-id }}
+          DDS_COGNITO_USER_POOL_ID: ${{ matrix.dds-cognito-user-pool-id }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.dds-old-cognito-user-pool-id }}
+          BLC_UK_IDENTITY_API_ID: ${{ matrix.identity-api-id }}
+          IDENTITY_COGNITO_E2E_CLIENT_ID: ${{ matrix.dds-identity-cognito-e2e-client-id }}
+          IDENTITY_COGNITO_E2E_USER_POOL_ID: ${{ matrix.dds-cognito-user-pool-id }}
         run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e
 
   release:

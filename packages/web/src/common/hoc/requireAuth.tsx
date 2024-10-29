@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
 import { BRAND, LOGOUT_ROUTE } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
@@ -12,6 +12,7 @@ import AmplitudeDeviceExperimentClient from '../utils/amplitude/AmplitudeDeviceE
 import { nowInSecondsSinceEpoch } from '@/utils/dates';
 import { getAuth0FeatureFlagBasedOnBrand } from '@/utils/amplitude/getAuth0FeatureFlagBasedOnBrand';
 import { getLogoutUrl } from '@/root/src/common/auth/authUrls';
+import { Auth0Service } from '@/root/src/common/services/auth0Service';
 
 export async function redirectToLogin(router: NextRouter) {
   const deviceExperimentClient = await AmplitudeDeviceExperimentClient.Instance();
@@ -41,13 +42,17 @@ export async function redirectToLogin(router: NextRouter) {
 }
 
 async function isAuthenticated(idToken: string, refreshToken: string) {
-  const { exp: tokenExpiryInSecondsSinceEpoch, sub: usernameFromToken } = unpackJWT(idToken);
-
+  const {
+    exp: tokenExpiryInSecondsSinceEpoch,
+    sub: usernameFromToken,
+    iss: issuer,
+  } = unpackJWT(idToken);
   if (nowInSecondsSinceEpoch() >= tokenExpiryInSecondsSinceEpoch) {
     //refresh token and update storage and return true or false based on if it works
-    return await reAuthFromRefreshToken(usernameFromToken, refreshToken);
+    return Auth0Service.isAuth0Issuer(issuer)
+      ? await Auth0Service.updateTokensUsingRefreshToken(refreshToken)
+      : await reAuthFromRefreshToken(usernameFromToken, refreshToken);
   }
-
   return true;
 }
 
@@ -55,10 +60,12 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
   const Component: React.FC<any> = (props: any) => {
     const authContext = useContext(AuthContext);
     const router = useRouter();
+    const authenticating = useRef(false);
 
     useEffect(() => {
       async function performTokenRefreshIfRequired() {
         if (AuthTokensService.authTokensPresent()) {
+          authenticating.current = true;
           const refreshToken = AuthTokensService.getRefreshToken();
           const username = AuthTokensService.getUsername();
           const idToken = AuthTokensService.getIdToken();
@@ -68,17 +75,20 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
           // need to get the idToken again as it may have been refreshed
           authContext.authState.idToken = AuthTokensService.getIdToken();
           authContext.authState.accessToken = AuthTokensService.getAccessToken();
-          authContext.authState.refreshToken = refreshToken;
+          authContext.authState.refreshToken = AuthTokensService.getRefreshToken();
           authContext.authState.username = username;
           authContext.isReady = isAuthed;
           authContext.isUserAuthenticated = () => isAuthed;
+          authenticating.current = false;
         }
 
         if (authContext.isReady && !authContext.isUserAuthenticated()) {
           await redirectToLogin(router);
         }
       }
-      performTokenRefreshIfRequired();
+      if (!authenticating.current) {
+        performTokenRefreshIfRequired();
+      }
     }, [authContext, router]);
 
     return (

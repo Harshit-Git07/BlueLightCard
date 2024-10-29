@@ -4,6 +4,7 @@ export type JWT = {
   sub: string;
   phone_number: string;
   exp: number;
+  iss: string;
   iat: number;
   email: string;
   'custom:blc_old_uuid': string;

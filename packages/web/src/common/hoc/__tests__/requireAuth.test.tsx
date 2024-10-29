@@ -5,6 +5,7 @@ import requireAuth from '@/hoc/requireAuth';
 import { NextPage } from 'next';
 import React, { FC, useContext, useEffect } from 'react';
 import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
+import { Auth0Service } from '@/root/src/common/services/auth0Service';
 
 const futureJWT =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjEwMDAwMDAwMDAwMDAwMDAwfQ.SM2xcm771CPS2CqOCUS91SF9ntftQl6cvoOCA11qSJA';
@@ -42,6 +43,16 @@ jest.mock('next/router', () => ({
 jest.mock('@/utils/reAuthFromRefreshToken', () => ({
   reAuthFromRefreshToken: jest.fn(() => Promise.resolve(true)),
 }));
+
+jest.spyOn(Auth0Service, 'updateTokensUsingRefreshToken');
+
+jest.spyOn(Auth0Service, 'config', 'get').mockReturnValue({
+  issuer: 'issuer',
+  tokenUrl: 'mockTokenUrl',
+  clientId: 'mockClientId',
+  clientSecret: 'mockClientSecret',
+  redirectUrl: 'mockRedirectUrl',
+});
 
 describe('withAuth HOC', () => {
   const originalEnv = process.env;
@@ -198,5 +209,30 @@ describe('withAuth HOC', () => {
     await waitFor(() => {
       expect(replaceMock).toHaveBeenCalled();
     });
+  });
+
+  it('should refresh auth0 id token when it is expired and then show the component', () => {
+    const text = 'Hello World';
+    const Comp: NextPage<any> = () => {
+      return <h1>{text}</h1>;
+    };
+
+    const PageWithAuth = requireAuth(Comp);
+    const pastJWT =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpc3N1ZXIiLCJleHAiOjE3Mjk4Nzk1ODUsInN1YiI6ImF1dGgwfDY2ZjQwODI2Y2I0YTk4YWQ0NTI5MWI4YSJ9.YbQu_6UTUV3ZD0hqDwZdUWQOZs_9FhV7zPn8dwTMnFQ';
+
+    localStorage.setItem('accessToken', pastJWT);
+    localStorage.setItem('idToken', pastJWT);
+    localStorage.setItem('refreshToken', 'refreshToken');
+    localStorage.setItem('username', 'username');
+
+    render(
+      <AuthProvider isUserAuthenticated={() => true}>
+        <PageWithAuth />
+      </AuthProvider>
+    );
+
+    expect(screen.queryByText(text)).toBeTruthy();
+    expect(Auth0Service.updateTokensUsingRefreshToken).toHaveBeenCalled();
   });
 });

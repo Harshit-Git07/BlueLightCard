@@ -424,6 +424,10 @@ jobs:
             zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin'
             auth0_login_url: 'https://staging-access.blcshine.io/authorize?response_type=code&client_id=RykFoOxMBh3AGX8o13qSkT063SuUOn58&redirect_uri=https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://staging-access.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php'
+            auth0_domain: 'staging-access.blcshine.io'
+            auth0_redirect_url: 'https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'RykFoOxMBh3AGX8o13qSkT063SuUOn58'
+            auth0_client_secret: 'BLC_UK_AUTH0_CLIENT_SECRET'
             # Brand Specific Variables needed for Seeding of QA Environment
             event_bus_name: staging-blc-mono-eventBus
             cognito_web_pool_client: eu-west-2_Ow2L8azIb
@@ -441,6 +445,10 @@ jobs:
             offers_brand: 'blc-aus'
             auth0_login_url: 'https://staging-access-au.blcshine.io/authorize?response_type=code&client_id=iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4&redirect_uri=https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://staging-access-au.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.develop.bluelightcard.com.au%2Flogout.php'
+            auth0_domain: 'staging-access-au.blcshine.io'
+            auth0_redirect_url: 'https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4'
+            auth0_client_secret: 'BLC_AU_AUTH0_CLIENT_SECRET'
             # Brand Specific Variables needed for Seeding of QA Environment
             event_bus_name: staging-blc-mono-eventBus
             cognito_web_pool_client: ap-southeast-2_CDHxjtsV3
@@ -458,6 +466,10 @@ jobs:
             offers_brand: 'dds-uk'
             auth0_login_url: 'https://staging-access-dds.blcshine.io/authorize?response_type=code&client_id=EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf&redirect_uri=https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://staging-access-dds.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.ddsstaging.bluelightcard.tech%2Flogout.php'
+            auth0_domain: 'staging-access-dds.blcshine.io'
+            auth0_redirect_url: 'https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf'
+            auth0_client_secret: 'DDS_UK_AUTH0_CLIENT_SECRET'
             # Brand Specific Variables needed for Seeding of QA Environment
             event_bus_name: staging-blc-mono-eventBus
             cognito_web_pool_client: eu-west-2_VdsvVVUrI
@@ -498,6 +510,10 @@ jobs:
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
       NEXT_PUBLIC_AUTH0_LOGIN_URL: ${{matrix.auth0_login_url}}
       NEXT_PUBLIC_AUTH0_LOGOUT_URL: ${{matrix.auth0_logout_url}}
+      NEXT_PUBLIC_AUTH0_DOMAIN: ${{matrix.auth0_domain}}
+      NEXT_PUBLIC_AUTH0_CLIENT_ID: ${{matrix.auth0_client_id}}
+      NEXT_PUBLIC_AUTH0_CLIENT_SECRET: ${{secrets[matrix.auth0_client_secret]}}
+      NEXT_PUBLIC_AUTH0_REDIRECT_URL: ${{matrix.auth0_redirect_url}}
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2

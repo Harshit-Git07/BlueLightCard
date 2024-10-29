@@ -185,6 +185,10 @@ jobs:
             zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin'
             auth0_login_url: 'https://staging-access.blcshine.io/authorize?response_type=code&client_id=RykFoOxMBh3AGX8o13qSkT063SuUOn58&redirect_uri=https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://staging-access.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php'
+            auth0_domain: 'staging-access.blcshine.io'
+            auth0_redirect_url: 'https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'RykFoOxMBh3AGX8o13qSkT063SuUOn58'
+            auth0_client_secret: 'BLC_UK_AUTH0_CLIENT_SECRET'
           - brand: 'blc-au'
             brand_url: 'www.develop.bluelightcard.com.au'
             identity_brand: 'blc_au'
@@ -199,6 +203,10 @@ jobs:
             offers_brand: 'blc-aus'
             auth0_login_url: 'https://staging-access-au.blcshine.io/authorize?response_type=code&client_id=iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4&redirect_uri=https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://staging-access-au.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.develop.bluelightcard.com.au%2Flogout.php'
+            auth0_domain: 'staging-access-au.blcshine.io'
+            auth0_redirect_url: 'https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4'
+            auth0_client_secret: 'BLC_AU_AUTH0_CLIENT_SECRET'
           - brand: 'dds-uk'
             brand_url: 'ddsstaging.bluelightcard.tech'
             identity_brand: 'dds_uk'
@@ -213,6 +221,10 @@ jobs:
             offers_brand: 'dds-uk'
             auth0_login_url: 'https://staging-access-dds.blcshine.io/authorize?response_type=code&client_id=EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf&redirect_uri=https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://staging-access-dds.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.ddsstaging.bluelightcard.tech%2Flogout.php'
+            auth0_domain: 'staging-access-dds.blcshine.io'
+            auth0_redirect_url: 'https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf'
+            auth0_client_secret: 'DDS_UK_AUTH0_CLIENT_SECRET'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -251,6 +263,10 @@ jobs:
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
       NEXT_PUBLIC_AUTH0_LOGIN_URL: ${{matrix.auth0_login_url}}
       NEXT_PUBLIC_AUTH0_LOGOUT_URL: ${{matrix.auth0_logout_url}}
+      NEXT_PUBLIC_AUTH0_DOMAIN: ${{matrix.auth0_domain}}
+      NEXT_PUBLIC_AUTH0_CLIENT_ID: ${{matrix.auth0_client_id}}
+      NEXT_PUBLIC_AUTH0_CLIENT_SECRET: ${{secrets[matrix.auth0_client_secret]}}
+      NEXT_PUBLIC_AUTH0_REDIRECT_URL: ${{matrix.auth0_redirect_url}}
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
@@ -317,6 +333,10 @@ jobs:
             zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin'
             auth0_login_url: 'https://access.blcshine.io/authorize?response_type=code&client_id=pU6O3irGF7dKqSmFHXyzvogwH4gEmkyz&redirect_uri=https://www.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://access.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.bluelightcard.co.uk%2Flogout.php'
+            auth0_domain: 'access.blcshine.io'
+            auth0_redirect_url: 'https://www.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'pU6O3irGF7dKqSmFHXyzvogwH4gEmkyz'
+            auth0_client_secret: 'BLC_UK_AUTH0_CLIENT_SECRET'
           - brand: 'blc-au'
             brand_url: 'bluelightcard.com.au'
             identity_brand: 'blc_au'
@@ -331,6 +351,10 @@ jobs:
             offers_brand: 'blc-aus'
             auth0_login_url: 'https://access-au.blcshine.io/authorize?response_type=code&client_id=IE1gORi8ZUHdy8gUoEOLRT9bEHjso0SM&redirect_uri=https://www.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://access-au.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.bluelightcard.com.au%2Flogout.php'
+            auth0_domain: 'access-au.blcshine.io'
+            auth0_redirect_url: 'https://www.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'IE1gORi8ZUHdy8gUoEOLRT9bEHjso0SM'
+            auth0_client_secret: 'BLC_AU_AUTH0_CLIENT_SECRET'
           - brand: 'dds-uk'
             brand_url: 'defencediscountservice.co.uk'
             identity_brand: 'dds_uk'
@@ -345,6 +369,10 @@ jobs:
             offers_brand: 'dds-uk'
             auth0_login_url: 'https://access-dds.blcshine.io/authorize?response_type=code&client_id=j2IUeRhSBUO1ySiSHi8YZ4NEifaHv40p&redirect_uri=https://www.defencediscountservice.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
             auth0_logout_url: 'https://access-dds.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.defencediscountservice.co.uk%2Flogout.php'
+            auth0_domain: 'access-dds.blcshine.io'
+            auth0_redirect_url: 'https://www.defencediscountservice.co.uk/auth/callback.php%3Fprovider%3Dauth0'
+            auth0_client_id: 'j2IUeRhSBUO1ySiSHi8YZ4NEifaHv40p'
+            auth0_client_secret: 'DDS_UK_AUTH0_CLIENT_SECRET'
     environment: Production
     runs-on: ubuntu-latest
     needs:
@@ -382,6 +410,10 @@ jobs:
       NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://auth.blcshine.io/logout?client_id=7b854of9jqjte75vglfnm1gd3t&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.bluelightcard.co.uk%2Flogout.php
       NEXT_PUBLIC_AUTH0_LOGIN_URL: ${{matrix.auth0_login_url}}
       NEXT_PUBLIC_AUTH0_LOGOUT_URL: ${{matrix.auth0_logout_url}}
+      NEXT_PUBLIC_AUTH0_DOMAIN: ${{matrix.auth0_domain}}
+      NEXT_PUBLIC_AUTH0_CLIENT_ID: ${{matrix.auth0_client_id}}
+      NEXT_PUBLIC_AUTH0_CLIENT_SECRET: ${{secrets[matrix.auth0_client_secret]}}
+      NEXT_PUBLIC_AUTH0_REDIRECT_URL: ${{matrix.auth0_redirect_url}}
       NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2

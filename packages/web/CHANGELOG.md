@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.81.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.80.0...bluelightcard/web-v1.81.0) (2024-10-29)
+
+
+### Features
+
+* (AUT-123) Adjust mock login page to handle auth0 ([#2631](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2631)) ([85f3aae](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85f3aae677fe43c8394ee4bbbbf08536a45d4115))
+* DISCO-707 Added Web Flexible Offers page ([#2614](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2614)) ([470c18a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/470c18af228a70aafaf0da1ce739345445afe2ab))
+
+
+### Bug Fixes
+
+* fixed failing unit tests ([#2628](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2628)) ([55def86](https://github.com/bluelightcard/BlueLightCard-2.0/commit/55def868670616ab8ae09316fc81344f014a8594))
+
 ## [1.80.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.79.0...bluelightcard/web-v1.80.0) (2024-10-28)
 
 

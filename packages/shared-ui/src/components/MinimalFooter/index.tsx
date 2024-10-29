@@ -11,6 +11,7 @@ const MinimalFooter = () => {
       <div className="w-fit border-t-[1px] border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark flex flex-col lg:flex-row lg:justify-between items-center w-full">
         <p
           className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
+          role="contentinfo"
           aria-label="Copyright Information"
         >
           {copyrightText}

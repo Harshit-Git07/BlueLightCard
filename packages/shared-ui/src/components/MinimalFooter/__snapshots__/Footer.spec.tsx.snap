@@ -10,6 +10,7 @@ exports[`MinimalFooter renders a blc-au footer 1`] = `
     <p
       aria-label="Copyright Information"
       className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
+      role="contentinfo"
     >
       ©Blue Light Card 2008 - 2024
     </p>
@@ -75,6 +76,7 @@ exports[`MinimalFooter renders a dds-uk footer 1`] = `
     <p
       aria-label="Copyright Information"
       className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
+      role="contentinfo"
     >
       <span
         className="block"
@@ -149,6 +151,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
     <p
       aria-label="Copyright Information"
       className="mt-6 text-center text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark text-base font-typography-body-light font-typography-body-light-weight tracking-typography-body-light leading-typography-body-light leading-7 tracking-tight whitespace-nowrap max-w-full"
+      role="contentinfo"
     >
       ©Blue Light Card 2008 - 2024
     </p>

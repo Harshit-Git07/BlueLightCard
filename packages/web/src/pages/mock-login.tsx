@@ -1,4 +1,4 @@
-import Button from '@/components/Button/Button';
+import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import Heading from '@/components/Heading/Heading';
 import React, { useContext, useEffect, useState } from 'react';
 import { secretHash } from '@/utils/secret_hash';
@@ -7,9 +7,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import { useRouter } from 'next/router';
 import AuthContext from '@/context/Auth/AuthContext';
-import { COGNITO_CLIENT_ID, COGNITO_CLIENT_REGION, COGNITO_CLIENT_SECRET } from '@/global-vars';
+import {
+  COGNITO_CLIENT_ID,
+  COGNITO_CLIENT_REGION,
+  COGNITO_CLIENT_SECRET,
+  AUTH0_LOGIN_URL,
+  BRAND,
+} from '@/global-vars';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import withAuthProviderLayout from '../common/hoc/withAuthProviderLayout';
+import { Auth0Service } from '@/root/src/common/services/auth0Service';
+import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
+import { getAuth0FeatureFlagBasedOnBrand } from '@/utils/amplitude/getAuth0FeatureFlagBasedOnBrand';
+import getDeviceFingerprint from '@/utils/amplitude/getDeviceFingerprint';
 
 function MockLogin() {
   // As this exposes client_secret which should not be exposed.
@@ -86,10 +96,46 @@ function MockLogin() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    async function performTokenCodeExchangeIfRequired() {
+      if (router.query['code']) {
+        const code = router.query['code'];
+        if (code && typeof code === 'string') {
+          const success = await Auth0Service.getTokensUsingCode(code);
+          if (success) {
+            await router.push('/members-home');
+          }
+        }
+      }
+    }
+    performTokenCodeExchangeIfRequired();
+  }, [router]);
+
+  const auth0Experiment = useAmplitudeExperiment(
+    getAuth0FeatureFlagBasedOnBrand(BRAND),
+    'off',
+    getDeviceFingerprint()
+  );
+
+  const isAuth0LoginLogoutWebEnabled = auth0Experiment.data?.variantName === 'on';
+
   return (
     <div className="flex justify-center">
       <div className="px-auto py-16 min-w-[600px] flex flex-col gap-4">
-        <Heading headingLevel={'h1'}>Login</Heading>
+        {isAuth0LoginLogoutWebEnabled && (
+          <>
+            <Button
+              onClick={() => {
+                router.push(AUTH0_LOGIN_URL);
+              }}
+            >
+              Login with Auth0
+            </Button>
+            <hr />
+          </>
+        )}
+
+        <Heading headingLevel={'h1'}>Login with Cognito</Heading>
 
         <hr />
 

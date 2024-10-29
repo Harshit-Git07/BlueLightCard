@@ -8,6 +8,18 @@ export default class AuthTokensService {
     );
   }
 
+  public static setTokens(
+    idToken: string,
+    accessToken: string,
+    refreshToken: string,
+    username: string
+  ) {
+    localStorage.setItem('idToken', idToken);
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('username', username);
+  }
+
   public static clearTokens() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');

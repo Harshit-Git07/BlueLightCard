@@ -20,6 +20,7 @@ const customJestConfig = {
     '^@/utils/(.*)$': '<rootDir>/src/common/utils/$1',
     '^@/types/(.*)$': '<rootDir>/src/common/types/$1',
     '^@/context/(.*)$': '<rootDir>/src/common/context/$1',
+    '^@core/(.*)$': '<rootDir>/../api/core/src/$1',
     '^src/(.*)$': '<rootDir>/src/$1',
     '^.+\\.(svg)$': '<rootDir>/src/__mocks__/SvgrMock.js',
     '\\.(scss|sass|css)$': 'identity-obj-proxy',

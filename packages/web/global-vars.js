@@ -73,6 +73,10 @@ const ZENDESK_V1_BLC_UK_URL =
 //Auth0
 const AUTH0_LOGIN_URL = process.env.NEXT_PUBLIC_AUTH0_LOGIN_URL ?? '';
 const AUTH0_LOGOUT_URL = process.env.NEXT_PUBLIC_AUTH0_LOGOUT_URL ?? '';
+const AUTH0_CLIENT_ID = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID ?? '';
+const AUTH0_CLIENT_SECRET = process.env.NEXT_PUBLIC_AUTH0_CLIENT_SECRET ?? '';
+const AUTH0_DOMAIN = process.env.NEXT_PUBLIC_AUTH0_DOMAIN ?? '';
+const AUTH0_REDIRECT_URL = process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URL ?? '';
 
 /*
  * Language is made up of the lng and region
@@ -140,4 +144,8 @@ module.exports = {
   HOLIDAY_URL,
   AUTH0_LOGIN_URL,
   AUTH0_LOGOUT_URL,
+  AUTH0_DOMAIN,
+  AUTH0_CLIENT_ID,
+  AUTH0_CLIENT_SECRET,
+  AUTH0_REDIRECT_URL,
 };

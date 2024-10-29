@@ -1,7 +1,9 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import invariant from 'tiny-invariant';
 
+import { getCompany } from '../../cms/data/company';
 import { getOffersByCompanyId } from '../../cms/data/offer';
+import { coerceNumber } from '../../lib/utils';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
 import { type App } from '../hono/app';
@@ -41,9 +43,20 @@ export type V2CompaniesGetCompanyOffersResponse = z.infer<
 export const registerV2CompaniesGetCompanyOffers = (app: App) =>
   app.openapi(route, async (c) => {
     const { id } = c.req.valid('param');
-    const items = await getOffersByCompanyId(id);
 
-    if (items.length === 0) {
+    let _id = coerceNumber(id);
+
+    if (typeof _id === 'number') {
+      const c = await getCompany(_id);
+
+      invariant(c, 'Could not map legacy id');
+
+      _id = c._id;
+    }
+
+    const items = await getOffersByCompanyId(_id);
+
+    if (!items) {
       notFound();
     }
 

@@ -1,11 +1,14 @@
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import { Stack } from 'sst/constructs';
 
+import { MAP_BRAND } from '@blc-mono/core/constants/common';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 export function createTransactionsEventTable(stack: Stack): TableV2 {
-  return new TableV2(stack, `${stack}-transaction-events`, {
-    tableName: `${stack}-transaction-events`,
+  const brandSuffix = MAP_BRAND[getBrandFromEnv()];
+  return new TableV2(stack, `${stack}-transaction-events-${brandSuffix}`, {
+    tableName: `${stack}-transaction-events-${brandSuffix}`,
     pointInTimeRecovery: true,
     deletionProtection: isProduction(stack.stage) || isStaging(stack.stage),
     partitionKey: {

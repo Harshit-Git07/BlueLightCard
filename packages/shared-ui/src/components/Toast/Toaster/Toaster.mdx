@@ -1,0 +1,127 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as Toaster from './Toaster.stories';
+
+<Meta of={Toaster} />
+
+# Toaster and useToast
+
+- [Status](#status)
+- [Usage](#usage)
+- [Overview](#overview)
+- [Props](#props)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+
+
+## Status
+Use the `<ComponentStatus />` component
+
+## Usage
+
+Use toast notifications immediately after a specific event such as a user action that does not relate to an object on the page. Toast used as a feedback loop to a user’s action
+
+- Always be concise, write a short and clear message
+- Where possible, give follow up actions to allow the user to become more informed or resolve the issue
+- Toast should overlay permanent UI elements without blocking important actions.
+
+## Overview
+
+The Toaster component is just a wrapper into which Toast notifications will appear it should live near the top of the element tree the position of the Toaster affects where the Toast popups will be shown.
+
+To control what appears in the Toaster there is the useToaster hook.
+
+## Props
+
+Toaster has no props to control toast message use the hook `useToaster`
+
+### useToaster
+
+useToaster provides two functions, openToast and closeToast
+```jsx
+const {openToast, closeToast} = useToaster();
+```
+
+### openToast
+
+openToast accepts two parameters
+
+- A react node component - eg the Toast to display
+- an options object (Optional)
+    - duration: number (Optional) in ms the message should be displayed for - default 7000
+    - position: ToastPosition (Optional) where to show the toast relative to ToastHolder - default TopLeft
+
+```jsx
+openToast(<Toast test={"hello"} />, { duration: 1000, position: ToastPosition.TopLeft });
+```
+
+### closeToast
+
+closeToast accepts no arguments and simply clears whatever toast is showing
+```jsx
+closeToast();
+```
+
+## Variants and States
+
+Toaster has no variants or states, below is a working example launching toast messages from interaction with the buttons listed.
+
+<Canvas of={Toaster.ToasterExample} />
+<Controls />
+
+## Implementation
+
+### Step 1: Include the Toaster component
+
+The Toaster component needs to live high up in the component/element tree as the positioning of toast messages is based on the confines of the Toaster element.
+
+```jsx
+const SomeTopLevelComponent:FC =() => {
+  return (
+    <div>
+      <Toaster />
+      <h1>Page content</h1>
+      ...lots of other elements...
+    </div>
+  );
+}
+````
+
+### Step 2: Fire toast messages
+
+Opening a new toast message
+
+```jsx
+const SomePageOrComponent: FC = () => {
+  // get the method to show new toast messages from the hook
+  const { openToast } = useToaster();
+
+  // create the toast message we want to display
+  const toastMsg = <Toast text={'Ok'} status={ToastStatus.Success} />;
+
+  const handleClick = () => {
+    // call the openToast with the toastMsg
+    // options are optional, duration defaults to 7000 position default to TopRight
+    openToast(toastMsg, {duration: 5000, position: ToastPosition.TopCenter}:ToastOptions)
+  }
+  return (<button onClick={handleClick}>Toast it</button>);
+};
+```
+
+### Step 3: Close toast
+
+By default every toast has a close button unless the prop `hasClose={false}` and will timeout if the duration option is not set or greater than 0.
+
+However if your toast message contains button actions then you may use call `closeToast()` as part of the handlers attached to those buttons.
+
+```jsx
+const SomePageOrComponent: FC = () => {
+  // get the method to show new toast messages from the hook
+  const { closeToast } = useToaster();
+
+  const handleClick = () => {
+    // call the closeToast function
+    closeToast();
+  }
+  return (<button onClick={handleClick}>Close it</button>);
+};
+```

@@ -1,0 +1,70 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as Toast from './Toast.stories';
+
+<Meta of={Toast} />
+
+# Toast
+
+- [Overview](#overview)
+- [Usage](#usage)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+
+## Overview
+
+This component is concerned only with the rendering of the toast message, it does not have methods to open, close or position toast messages.
+
+<Canvas of={Toast.Default} />
+
+## Usage
+
+Use toast notifications immediately after a specific event such as a user action that does not relate to an object on the page. Toast used as a feedback loop to a user’s action
+
+- Always be concise, write a short and clear message
+- Where possible, give follow up actions to allow the user to become more informed or resolve the issue
+- Toast should overlay permanent UI elements without blocking important actions.
+
+
+## Props
+
+<Controls />
+
+## State
+
+## Variants and States
+
+With no children (buttons):
+<Canvas of={Toast.NoButtonChildren} />
+
+With a single button (child):
+<Canvas of={Toast.WithAButton} />
+
+With a multiple buttons (children):
+<Canvas of={Toast.WithButtons} />
+
+The status prop:
+<Canvas of={Toast.ToastStates} />
+
+## Implementation
+
+```jsx
+const SomePageOrComponent: FC = () => {
+  // get the method to show new toast messages from the hook
+  const { openToast } = useToaster();
+
+  // create the toast message we want to display
+  const toastMsg = (
+    <Toast title={'Ok'} text="everything is great!" status={ToastStatus.Success}>
+      <Button>Do something</Button>
+    </Toast>
+  );
+
+  // launch the toast
+  openToast(toastMsg);
+
+  return <p>Some Page Or Component</p>;
+}
+```
+

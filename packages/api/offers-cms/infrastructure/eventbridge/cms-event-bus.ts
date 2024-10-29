@@ -8,7 +8,7 @@ export function createCMSEventBus(
   const { consumerFunction } = dependencies;
   const cmsEventBus = new EventBus(stack, busName);
 
-  const sanityRule = {
+  const sanityWebhookRule = {
     pattern: { source: ['lambda.sanity.webhook'] },
     targets: {
       consumerTarget: {
@@ -37,7 +37,7 @@ export function createCMSEventBus(
       },
     },
   };
-  const dataWarehoseMenuRule = {
+  const dataWarehouseMenuRule = {
     pattern: {
       source: ['lambda.sanity.webhook'],
       detail: {
@@ -49,10 +49,10 @@ export function createCMSEventBus(
   };
 
   cmsEventBus.addRules(stack, {
-    sanityRule,
+    sanityWebhookRule,
     dataWarehouseOfferRule,
     dataWarehouseCompanyRule,
-    dataWarehoseMenuRule,
+    dataWarehouseMenuRule,
   });
 
   return cmsEventBus;

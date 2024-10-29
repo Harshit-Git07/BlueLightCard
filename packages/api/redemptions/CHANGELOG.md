@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.30.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.29.0...bluelightcard/redemptions-v1.30.0) (2024-10-29)
+
+
+### Features
+
+* [TR-977] update column data type - companyId ([#2511](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2511)) ([f907d2c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f907d2ce585748b477ff2711070dff93940c02cb))
+* [TR-977] update column data type - offerId ([#2470](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2470)) ([31a0315](https://github.com/bluelightcard/BlueLightCard-2.0/commit/31a0315d4dbcf87d6a305d042948b3272b80fd5d))
+* [TR-979] change Vault Batches endpoints ([#2445](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2445)) ([91cc3b2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/91cc3b21ac529b0557bba0124df4a636f565fd7a))
+* added duplication to email template ([#2558](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2558)) ([85d4f05](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85d4f050c09ca03490c3d623a4fe50aca599ea88))
+* data sync change so all vault identity URL are recognised (BLC_UK, BLC_AU, DDS_UK) ([#2541](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2541)) ([b3f9eed](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b3f9eed34b1b00b27ad0f6f9db6a12776ec2628f))
+* task/1041 integration update fix ([#2572](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2572)) ([68dd77c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/68dd77cd45bd2ccdefcb296db3131b62e204cfad))
+* TR-1029 update integration id column data type ([#2525](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2525)) ([614ed0b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/614ed0b9a604956c4666003dbe7e46313c085692))
+* TR-915 Integrate uniqodo into standard vault type redeem endpoint ([#2499](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2499)) ([94644c6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/94644c66764a25709833e113ebff39393d191d84))
+* update identity url for dds ([#2556](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2556)) ([5161a1b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5161a1bb813d57262bb2c447a3aab297fe72caf3))
+
+
+### Bug Fixes
+
+* [TR-961] resolve failing E2E tests in PR environments ([#2590](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2590)) ([db8332e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/db8332ef481a7d28584b772eb5f37989ac8d9c2b))
+* [TR-977] allow strings and numbers in Models ([#2552](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2552)) ([41320e2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/41320e2d33a0d8c7dc1a71182447d89839d9ce10))
+
 ## [1.29.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.28.0...bluelightcard/redemptions-v1.29.0) (2024-10-15)
 
 

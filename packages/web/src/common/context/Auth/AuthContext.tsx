@@ -9,7 +9,7 @@ export type AuthState = {
 
 export type AuthContextType = {
   authState: AuthState;
-  updateAuthTokens: any;
+  updateAuthTokens: (tokens: AuthState) => void;
   isUserAuthenticated: () => boolean;
   isReady: boolean;
 };
@@ -22,9 +22,7 @@ const AuthContext = React.createContext<AuthContextType>({
     username: '',
   },
   updateAuthTokens: () => {},
-  isUserAuthenticated: () => {
-    return false;
-  },
+  isUserAuthenticated: () => false,
   isReady: false,
 });
 

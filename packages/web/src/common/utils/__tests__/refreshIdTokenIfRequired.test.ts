@@ -14,6 +14,7 @@ jest.mock('../../../../../api/core/src/utils/unpackJWT');
 
 const reAuthFromRefreshTokenMock = jest.mocked(reAuthFromRefreshToken);
 const mockedUnpackJWT = jest.mocked(unpackJWT);
+const mockedSetTokens = jest.mocked(AuthTokensService.setTokens);
 
 jest.useFakeTimers({ now: new Date('2023-01-11T09:15:18.000Z') });
 
@@ -46,7 +47,11 @@ describe('refreshIdTokenIfRequired', () => {
     const result = await refreshIdTokenIfRequired();
 
     expect(result).toBe(refreshedIdToken);
-    expect(reAuthFromRefreshTokenMock).toHaveBeenCalledWith(username, refreshToken);
+    expect(reAuthFromRefreshTokenMock).toHaveBeenCalledWith(
+      username,
+      refreshToken,
+      mockedSetTokens
+    );
     expect(AuthTokensService.getIdToken).toHaveBeenCalledTimes(2);
   });
 
@@ -58,7 +63,11 @@ describe('refreshIdTokenIfRequired', () => {
     const result = await refreshIdTokenIfRequired();
 
     expect(result).toBe(idToken);
-    expect(reAuthFromRefreshTokenMock).toHaveBeenCalledWith(username, refreshToken);
+    expect(reAuthFromRefreshTokenMock).toHaveBeenCalledWith(
+      username,
+      refreshToken,
+      mockedSetTokens
+    );
     expect(AuthTokensService.getIdToken).toHaveBeenCalledTimes(1);
   });
 

@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { NextRouter, useRouter } from 'next/router';
 import { useContext, useEffect, useRef } from 'react';
-import AuthContext from '@/context/Auth/AuthContext';
+import AuthContext, { AuthState } from '@/context/Auth/AuthContext';
 import { BRAND, LOGOUT_ROUTE } from '@/global-vars';
 import LoadingPlaceholder from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { unpackJWT } from '@core/utils/unpackJWT';
@@ -41,7 +41,11 @@ export async function redirectToLogin(router: NextRouter) {
   }
 }
 
-async function isAuthenticated(idToken: string, refreshToken: string) {
+async function isAuthenticated(
+  idToken: string,
+  refreshToken: string,
+  updateAuthTokens: (tokens: AuthState) => void
+) {
   const {
     exp: tokenExpiryInSecondsSinceEpoch,
     sub: usernameFromToken,
@@ -50,8 +54,8 @@ async function isAuthenticated(idToken: string, refreshToken: string) {
   if (nowInSecondsSinceEpoch() >= tokenExpiryInSecondsSinceEpoch) {
     //refresh token and update storage and return true or false based on if it works
     return Auth0Service.isAuth0Issuer(issuer)
-      ? await Auth0Service.updateTokensUsingRefreshToken(refreshToken)
-      : await reAuthFromRefreshToken(usernameFromToken, refreshToken);
+      ? await Auth0Service.updateTokensUsingRefreshToken(refreshToken, updateAuthTokens)
+      : await reAuthFromRefreshToken(usernameFromToken, refreshToken, updateAuthTokens);
   }
   return true;
 }
@@ -70,7 +74,11 @@ const requireAuth = function (AuthComponent: NextPage<any> | React.FC<any>) {
           const username = AuthTokensService.getUsername();
           const idToken = AuthTokensService.getIdToken();
 
-          const isAuthed = await isAuthenticated(idToken, refreshToken);
+          const isAuthed = await isAuthenticated(
+            idToken,
+            refreshToken,
+            authContext.updateAuthTokens
+          );
 
           // need to get the idToken again as it may have been refreshed
           authContext.authState.idToken = AuthTokensService.getIdToken();

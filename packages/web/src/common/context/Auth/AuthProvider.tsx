@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { unpackJWT } from '@core/utils/unpackJWT';
-import AuthContext from './AuthContext';
+import AuthContext, { AuthState } from './AuthContext';
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -21,17 +21,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
     username: '',
   });
 
-  const setUserAuthInfo = ({
-    accessToken,
-    idToken,
-    refreshToken,
-    username,
-  }: {
-    accessToken: string;
-    idToken: string;
-    refreshToken: string;
-    username: string;
-  }) => {
+  const setUserAuthInfo = ({ accessToken, idToken, refreshToken, username }: AuthState) => {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('idToken', idToken);
     localStorage.setItem('refreshToken', refreshToken);

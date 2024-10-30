@@ -5,8 +5,13 @@ import {
   InitiateAuthCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import AuthTokensService from '../services/authTokensService';
+import { AuthState } from '@/context/Auth/AuthContext';
 
-export async function reAuthFromRefreshToken(username: string, refreshToken: string) {
+export async function reAuthFromRefreshToken(
+  username: string,
+  refreshToken: string,
+  updateAuthTokens: (tokens: AuthState) => void
+) {
   const params = {
     AuthFlow: 'REFRESH_TOKEN_AUTH',
     ClientId: COGNITO_CLIENT_ID,
@@ -22,11 +27,12 @@ export async function reAuthFromRefreshToken(username: string, refreshToken: str
   try {
     const data = await cognito.send(command);
     const { AuthenticationResult } = data;
-
-    localStorage.setItem('idToken', AuthenticationResult?.IdToken ?? '');
-    localStorage.setItem('accessToken', AuthenticationResult?.AccessToken ?? '');
-    localStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('username', username);
+    updateAuthTokens({
+      idToken: AuthenticationResult?.IdToken ?? '',
+      accessToken: AuthenticationResult?.AccessToken ?? '',
+      refreshToken,
+      username,
+    });
   } catch (err) {
     AuthTokensService.clearTokens();
     return false;

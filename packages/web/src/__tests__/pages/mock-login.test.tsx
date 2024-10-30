@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import AuthContext, { AuthContextType } from '@/context/Auth/AuthContext';
+import AuthContext, { AuthContextType, AuthState } from '@/context/Auth/AuthContext';
 import { useRouter } from 'next/router';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import axios from 'axios';
@@ -25,7 +25,7 @@ jest.mock('@/global-vars', () => ({
 
 describe('MockLogin Component', () => {
   const mockRouterPush = jest.fn();
-  const mockUpdateAuthTokens = jest.fn();
+  const mockUpdateAuthTokens: (tokens: AuthState) => void = jest.fn();
   const mockAuthContext = { updateAuthTokens: mockUpdateAuthTokens };
   const mockAmplitudeExperiment = { data: { variantName: 'on' } };
   const code = 'test-auth-code';
@@ -69,7 +69,7 @@ describe('MockLogin Component', () => {
     renderComponent();
 
     await waitFor(() => {
-      expect(Auth0Service.getTokensUsingCode).toHaveBeenCalledWith(code);
+      expect(Auth0Service.getTokensUsingCode).toHaveBeenCalledWith(code, mockUpdateAuthTokens);
       expect(mockRouterPush).toHaveBeenCalledWith('/members-home');
     });
   });
@@ -80,7 +80,7 @@ describe('MockLogin Component', () => {
     renderComponent();
 
     await waitFor(() => {
-      expect(Auth0Service.getTokensUsingCode).toHaveBeenCalledWith(code);
+      expect(Auth0Service.getTokensUsingCode).toHaveBeenCalledWith(code, mockUpdateAuthTokens);
       expect(mockRouterPush).not.toHaveBeenCalled();
     });
   });

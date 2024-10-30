@@ -7,6 +7,7 @@ import {
 import AuthTokensService from '@/root/src/common/services/authTokensService';
 import { unpackJWT } from '@core/utils/unpackJWT';
 import axios from 'axios';
+import { AuthState } from '@/context/Auth/AuthContext';
 
 interface TokenResponse {
   access_token: string;
@@ -38,7 +39,10 @@ export class Auth0Service {
     return this._config;
   }
 
-  public static async getTokensUsingCode(code: string): Promise<boolean> {
+  public static async getTokensUsingCode(
+    code: string,
+    updateAuthTokens: (tokens: AuthState) => void
+  ): Promise<boolean> {
     try {
       const {
         data: { id_token, access_token, refresh_token },
@@ -50,7 +54,12 @@ export class Auth0Service {
         code,
       });
       const { sub } = unpackJWT(id_token);
-      AuthTokensService.setTokens(id_token, access_token, refresh_token, sub);
+      updateAuthTokens({
+        accessToken: access_token,
+        idToken: id_token,
+        refreshToken: refresh_token,
+        username: sub,
+      });
       return true;
     } catch (error) {
       console.error('Failed to retrieve tokens:', error);
@@ -58,7 +67,10 @@ export class Auth0Service {
     }
   }
 
-  public static async updateTokensUsingRefreshToken(refreshToken: string): Promise<boolean> {
+  public static async updateTokensUsingRefreshToken(
+    refreshToken: string,
+    updateAuthTokens: (tokens: AuthState) => void
+  ): Promise<boolean> {
     try {
       const {
         data: { id_token, access_token, refresh_token },
@@ -69,7 +81,12 @@ export class Auth0Service {
         refresh_token: refreshToken,
       });
       const { sub } = unpackJWT(id_token);
-      AuthTokensService.setTokens(id_token, access_token, refresh_token, sub);
+      updateAuthTokens({
+        accessToken: access_token,
+        idToken: id_token,
+        refreshToken: refresh_token,
+        username: sub,
+      });
     } catch (error) {
       AuthTokensService.clearTokens();
       return false;

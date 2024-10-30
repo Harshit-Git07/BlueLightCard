@@ -1,3 +1,5 @@
+import { AuthState } from '@/context/Auth/AuthContext';
+
 export default class AuthTokensService {
   public static authTokensPresent() {
     return (
@@ -8,12 +10,7 @@ export default class AuthTokensService {
     );
   }
 
-  public static setTokens(
-    idToken: string,
-    accessToken: string,
-    refreshToken: string,
-    username: string
-  ) {
+  public static setTokens({ idToken, accessToken, refreshToken, username }: AuthState) {
     localStorage.setItem('idToken', idToken);
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);

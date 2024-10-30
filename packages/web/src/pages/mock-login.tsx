@@ -101,7 +101,7 @@ function MockLogin() {
       if (router.query['code']) {
         const code = router.query['code'];
         if (code && typeof code === 'string') {
-          const success = await Auth0Service.getTokensUsingCode(code);
+          const success = await Auth0Service.getTokensUsingCode(code, authContext.updateAuthTokens);
           if (success) {
             await router.push('/members-home');
           }
@@ -109,7 +109,7 @@ function MockLogin() {
       }
     }
     performTokenCodeExchangeIfRequired();
-  }, [router]);
+  }, [authContext, router]);
 
   const auth0Experiment = useAmplitudeExperiment(
     getAuth0FeatureFlagBasedOnBrand(BRAND),

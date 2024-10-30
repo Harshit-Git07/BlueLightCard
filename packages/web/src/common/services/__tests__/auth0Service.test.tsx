@@ -11,6 +11,7 @@ describe('Auth0Service', () => {
   const mockAxios = axios as jest.Mocked<typeof axios>;
   const mockAuthTokensService = AuthTokensService as jest.Mocked<typeof AuthTokensService>;
   const mockUnpackJWT = unpackJWT as jest.Mock;
+  const mockUpdateAuthTokens = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -30,7 +31,7 @@ describe('Auth0Service', () => {
       mockAxios.post.mockResolvedValueOnce(mockTokenResponse);
       mockUnpackJWT.mockReturnValue({ sub: 'mockSub' });
 
-      const result = await Auth0Service.getTokensUsingCode(mockCode);
+      const result = await Auth0Service.getTokensUsingCode(mockCode, mockUpdateAuthTokens);
 
       expect(result).toBe(true);
       expect(mockAxios.post).toHaveBeenCalledWith(
@@ -44,12 +45,12 @@ describe('Auth0Service', () => {
         })
       );
       expect(mockUnpackJWT).toHaveBeenCalledWith('mockIdToken');
-      expect(mockAuthTokensService.setTokens).toHaveBeenCalledWith(
-        'mockIdToken',
-        'mockAccessToken',
-        'mockRefreshToken',
-        'mockSub'
-      );
+      expect(mockUpdateAuthTokens).toHaveBeenCalledWith({
+        accessToken: 'mockAccessToken',
+        idToken: 'mockIdToken',
+        refreshToken: 'mockRefreshToken',
+        username: 'mockSub',
+      });
     });
 
     it('should return false and log error if request fails', async () => {
@@ -57,11 +58,11 @@ describe('Auth0Service', () => {
       console.error = jest.fn();
       mockAxios.post.mockRejectedValueOnce(error);
 
-      const result = await Auth0Service.getTokensUsingCode(mockCode);
+      const result = await Auth0Service.getTokensUsingCode(mockCode, mockUpdateAuthTokens);
 
       expect(result).toBe(false);
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve tokens:', error);
-      expect(mockAuthTokensService.setTokens).not.toHaveBeenCalled();
+      expect(mockUpdateAuthTokens).not.toHaveBeenCalled();
     });
   });
 
@@ -79,7 +80,10 @@ describe('Auth0Service', () => {
       mockAxios.post.mockResolvedValueOnce(mockTokenResponse);
       mockUnpackJWT.mockReturnValue({ sub: 'mockSub' });
 
-      const result = await Auth0Service.updateTokensUsingRefreshToken(mockRefreshToken);
+      const result = await Auth0Service.updateTokensUsingRefreshToken(
+        mockRefreshToken,
+        mockUpdateAuthTokens
+      );
 
       expect(result).toBe(true);
       expect(mockAxios.post).toHaveBeenCalledWith(
@@ -92,20 +96,25 @@ describe('Auth0Service', () => {
         })
       );
       expect(mockUnpackJWT).toHaveBeenCalledWith('mockIdToken');
-      expect(mockAuthTokensService.setTokens).toHaveBeenCalledWith(
-        'mockIdToken',
-        'mockAccessToken',
-        'mockRefreshToken',
-        'mockSub'
-      );
+      expect(mockUpdateAuthTokens).toHaveBeenCalledWith({
+        accessToken: 'mockAccessToken',
+        idToken: 'mockIdToken',
+        refreshToken: 'mockRefreshToken',
+        username: 'mockSub',
+      });
+      expect(mockAuthTokensService.clearTokens).not.toHaveBeenCalled();
     });
 
     it('should return false and clear tokens if request fails', async () => {
       mockAxios.post.mockRejectedValueOnce(new Error('Request failed'));
 
-      const result = await Auth0Service.updateTokensUsingRefreshToken(mockRefreshToken);
+      const result = await Auth0Service.updateTokensUsingRefreshToken(
+        mockRefreshToken,
+        mockUpdateAuthTokens
+      );
 
-      expect(result).toBe(false);
+      expect(result).toBeFalsy();
+      expect(mockUpdateAuthTokens).not.toHaveBeenCalled();
       expect(mockAuthTokensService.clearTokens).toHaveBeenCalled();
     });
   });

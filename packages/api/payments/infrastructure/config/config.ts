@@ -45,7 +45,7 @@ export class PaymentsStackConfigResolver {
         ...staticConfig,
         currencyCode: 'AUD',
         stripeEventBusArn:
-          'arn:aws:events:eu-west-2:676719682338:event-bus/aws.partner/stripe.com/ed_61RNBiG2RCcllCmxI16PANAFCi8S6oqsDrldIF09wMTo',
+          'arn:aws:events:ap-southeast-2:676719682338:event-bus/aws.partner/stripe.com/ed_61ROhhIVzYs0946wF16PANAFCi8S6oqsDrldIF09w4Yi',
       },
       [DDS_UK_BRAND]: {
         ...staticConfig,
@@ -71,7 +71,7 @@ export class PaymentsStackConfigResolver {
         ...staticConfig,
         currencyCode: 'AUD',
         stripeEventBusArn:
-          'arn:aws:events:eu-west-2:314658777488:event-bus/aws.partner/stripe.com/ed_test_61RNBexF1UtCF6zUI16RNBP2Ci8SlYaDlGfEynW3M3I0',
+          'arn:aws:events:ap-southeast-2:314658777488:event-bus/aws.partner/stripe.com/ed_test_61ROhdB8vpukSfP3S16RNBP2Ci8SlYaDlGfEynW3M7ia',
       },
       [DDS_UK_BRAND]: {
         ...staticConfig,

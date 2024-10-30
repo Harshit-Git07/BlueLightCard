@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.14.0...bluelightcard/discovery-v1.14.1) (2024-10-30)
+
+
+### Bug Fixes
+
+* [DISCO-305] Update logic to set API gateway custom domain name for DDS ([#2682](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2682)) ([248d690](https://github.com/bluelightcard/BlueLightCard-2.0/commit/248d690bb7614cc05ec1a319a2e02efb97d1b353))
+
 ## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.13.0...bluelightcard/discovery-v1.14.0) (2024-10-30)
 
 

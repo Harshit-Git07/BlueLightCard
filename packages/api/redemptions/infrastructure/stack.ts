@@ -194,6 +194,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
           : config.networkConfig.identityApiUrl,
         [RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT]: config.featureFlagsConfig.enableStandardVault,
         [RedemptionsStackEnvironmentKeys.UNIQODO_CLAIM_URL]: config.uniqodoConfig.uniqodoClaimUrl,
+        [RedemptionsStackEnvironmentKeys.EAGLE_EYE_API_URL]: config.eagleEyeConfig.eagleEyeApiUrl,
         [RedemptionsStackEnvironmentKeys.UNIQODO_SECRETS_MANAGER_NAME]:
           config.secretsManagerConfig.uniqodoSecretsManagerName,
       },

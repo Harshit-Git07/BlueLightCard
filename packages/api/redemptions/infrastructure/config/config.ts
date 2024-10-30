@@ -37,6 +37,10 @@ type LambdaScriptsPathsConfig = {
   redemptionsLambdaScriptsCheckVaultStockPath: string;
 };
 
+type EagleEyeConfig = {
+  eagleEyeApiUrl: string;
+};
+
 type BrazeConfig = {
   brazeApiUrl: string;
 };
@@ -89,6 +93,7 @@ export type RedemptionsStackConfig = {
   featureFlagsConfig: FeatureFlagsConfig;
   integrationProviderConfig: IntegrationProviderConfig;
   uniqodoConfig: UniqodoConfig;
+  eagleEyeConfig: EagleEyeConfig;
 };
 
 export type PerBrandStaticValues = {
@@ -170,6 +175,9 @@ export class RedemptionsStackConfigResolver {
         uniqodoConfig: {
           uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
         },
+        eagleEyeConfig: {
+          eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
+        },
       },
       [BLC_AU_BRAND]: {
         integrationProviderConfig: {
@@ -217,6 +225,9 @@ export class RedemptionsStackConfigResolver {
         uniqodoConfig: {
           uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
         },
+        eagleEyeConfig: {
+          eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
+        },
       },
       [DDS_UK_BRAND]: {
         integrationProviderConfig: {
@@ -263,6 +274,9 @@ export class RedemptionsStackConfigResolver {
         },
         uniqodoConfig: {
           uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
+        eagleEyeConfig: {
+          eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
         },
       },
     };
@@ -318,8 +332,12 @@ export class RedemptionsStackConfigResolver {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
           redemptionsEmailDomain: 'bluelightcard.co.uk',
         },
+
         uniqodoConfig: {
           uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
+        eagleEyeConfig: {
+          eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
         },
       },
       [BLC_AU_BRAND]: {
@@ -368,6 +386,9 @@ export class RedemptionsStackConfigResolver {
         uniqodoConfig: {
           uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
         },
+        eagleEyeConfig: {
+          eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
+        },
       },
       [DDS_UK_BRAND]: {
         integrationProviderConfig: {
@@ -414,6 +435,9 @@ export class RedemptionsStackConfigResolver {
         },
         uniqodoConfig: {
           uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+        },
+        eagleEyeConfig: {
+          eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
         },
       },
     };
@@ -467,6 +491,9 @@ export class RedemptionsStackConfigResolver {
       },
       uniqodoConfig: {
         uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+      },
+      eagleEyeConfig: {
+        eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
       },
     };
   }
@@ -553,6 +580,9 @@ export class RedemptionsStackConfigResolver {
       },
       uniqodoConfig: {
         uniqodoClaimUrl: 'https://reward.uniqodo.io/v2/claims',
+      },
+      eagleEyeConfig: {
+        eagleEyeApiUrl: 'https://consumer.uk.eagleeye.com',
       },
     };
   }

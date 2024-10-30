@@ -2,6 +2,10 @@ import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
+import {
+  EagleEyeApiRepository,
+  IEagleEyeApiRepository,
+} from '@blc-mono/redemptions/application/repositories/EagleEyeApiRepository';
 import { IntegrationCodesRepository } from '@blc-mono/redemptions/application/repositories/IntegrationCodesRepository';
 import {
   ILegacyVaultApiRepository,
@@ -35,19 +39,21 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     VaultCodesRepository.key,
     LegacyVaultApiRepository.key,
     RedemptionsEventsRepository.key,
+    EagleEyeApiRepository.key,
     UniqodoApiRepository.key,
     IntegrationCodesRepository.key,
     Logger.key,
   ] as const;
 
-  private enableStandardVault = getEnv(RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT) === 'true';
+  private readonly enableStandardVault = getEnv(RedemptionsStackEnvironmentKeys.ENABLE_STANDARD_VAULT) === 'true';
 
   constructor(
     private readonly vaultsRepository: IVaultsRepository,
     private readonly vaultCodesRepository: IVaultCodesRepository,
     private readonly legacyVaultApiRepository: ILegacyVaultApiRepository,
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
-    private readonly uniqodoRepository: UniqodoApiRepository,
+    private readonly eagleEyeApiRepository: IEagleEyeApiRepository,
+    private readonly uniqodoApiRepository: UniqodoApiRepository,
     private readonly integrationCodesRepository: IntegrationCodesRepository,
     private readonly logger: ILogger,
   ) {}
@@ -145,11 +151,29 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     }
 
     let claimedCode;
-    if (vault.integration == 'uniqodo') {
-      claimedCode = await this.uniqodoRepository.getCode(String(vault.integrationId), memberId, memberEmail);
-    } else {
-      //claimedCode = await this.eagleeyeRepository.getCode(vault.integrationId ?? 0, memberId, memberEmail);
-      throw new Error('Eagleeye integration not supported');
+    const integration = vault.integration;
+    switch (integration) {
+      case 'uniqodo':
+        claimedCode = await this.uniqodoApiRepository.getCode(vault.integrationId, memberId, memberEmail);
+        break;
+      case 'eagleeye': {
+        const resourceId = Number(vault.integrationId);
+        if (isNaN(resourceId)) {
+          this.logger.error({
+            message: `integrationId must be a number when calling eagleeye`,
+            context: {
+              vaultId: vault.id,
+              integrationId: vault.integrationId,
+              memberId,
+            },
+          });
+          throw new Error(`integrationId: "${vault.integrationId}" must be a number when calling eagleeye`);
+        }
+        claimedCode = await this.eagleEyeApiRepository.getCode(resourceId, memberId);
+        break;
+      }
+      case null:
+        throw new Error('Integration must be either eagleEye or uniqodo');
     }
 
     if (claimedCode.kind !== 'Ok') {
@@ -169,7 +193,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
       code: claimedCode.data.code,
       created: claimedCode.data.createdAt,
       expiry: claimedCode.data.expiresAt,
-      integration: vault.integration,
+      integration: integration,
       integrationId: String(vault.integrationId),
     });
 
@@ -219,6 +243,7 @@ export class RedeemVaultStrategy implements IRedeemStrategy {
     }
 
     const claimedCode = await this.vaultCodesRepository.claimVaultCode(vault.id, memberId);
+
     if (!claimedCode) {
       this.logger.error({
         message: `No vault code found for standard vault with vaultId "${vault.id}", memberId "${memberId}"`,

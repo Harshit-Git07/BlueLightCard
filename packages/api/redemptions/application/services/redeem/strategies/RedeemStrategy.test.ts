@@ -3,6 +3,7 @@ import { beforeAll } from '@jest/globals';
 
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
+import { IEagleEyeApiRepository } from '@blc-mono/redemptions/application/repositories/EagleEyeApiRepository';
 import { IGenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { IIntegrationCodesRepository } from '@blc-mono/redemptions/application/repositories/IntegrationCodesRepository';
 import { ILegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
@@ -107,6 +108,12 @@ describe('Redemption Strategies', () => {
   }
 
   function mockUniqodoApiRepository(): IUniqodoApiRepository {
+    return {
+      getCode: jest.fn(),
+    };
+  }
+
+  function mockEagleEyeApiRepository(): IEagleEyeApiRepository {
     return {
       getCode: jest.fn(),
     };
@@ -430,6 +437,7 @@ describe('Redemption Strategies', () => {
         mockedVaultCodesRepository,
         mockedLegacyVaultApiRepository,
         mockedRedemptionsEventsRepository,
+        as(mockEagleEyeApiRepository),
         as(mockedUniqodoApiRepository),
         as(mockedIntegrationCodesRepository),
         logger,
@@ -597,6 +605,7 @@ describe('Redemption Strategies', () => {
         // Assert
         expect(result.kind).toBe('MaxPerUserReached');
       });
+
       it('Should return kind equals to "Ok" when a vault code is found', async () => {
         // Arrange
         const mockedLogger = createTestLogger();

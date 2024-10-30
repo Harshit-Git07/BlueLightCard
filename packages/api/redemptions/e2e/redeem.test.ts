@@ -39,6 +39,7 @@ const executeAsyncSequence = (...asyncFunctions: (() => Promise<void>)[]) => {
 };
 
 const uniqodoPromotionId = '43c3780817f7ccb92012e519f0814c0b'; //vaults with uniqodo must use this static promotionId provided
+const eagleEyeResourceId = '62577'; //This is a static value that is set up in eagle eye staging account.
 
 describe('POST /member/redeem', () => {
   let connectionManager: E2EDatabaseConnectionManager;
@@ -259,6 +260,34 @@ describe('POST /member/redeem', () => {
       statusCode: 200,
     });
     expect(result.status).toBe(200);
+  });
+
+  test('should redeem a eagleeye standard vault offer', async () => {
+    // Arrange
+    const { redemption, ...redemptionTestHooks } = buildTestRedemption('vault');
+    const { ...vaultTestHooks } = buildIntegrationVault(redemption.id, 'eagleeye', eagleEyeResourceId);
+
+    onTestFinished(() => executeAsyncSequence(vaultTestHooks.cleanup, redemptionTestHooks.cleanup));
+    await executeAsyncSequence(redemptionTestHooks.insert, vaultTestHooks.insert);
+
+    const companyName = faker.company.name();
+    const offerName = faker.commerce.productName();
+
+    // Act
+    const result = await sendRedemptionRequest({
+      offerId: redemption.offerId,
+      companyName,
+      offerName,
+    });
+
+    expect(result.status).toBe(200);
+
+    const body = await result.json();
+
+    expect(body).toHaveProperty('data.kind', 'Ok');
+    expect(body).toHaveProperty('data.redemptionType', 'vault');
+    expect(body).toHaveProperty('data.redemptionDetails.url', redemption.url);
+    expect(body).toHaveProperty('data.redemptionDetails.code'); //this will be a random value we cannot assess
   });
 
   test('should redeem a uniqodo standard vault offer', async () => {

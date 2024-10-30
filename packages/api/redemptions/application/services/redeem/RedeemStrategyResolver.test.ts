@@ -2,6 +2,7 @@ import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
 import { createTestLogger } from '../../../libs/test/helpers/logger';
+import { EagleEyeApiRepository } from '../../repositories/EagleEyeApiRepository';
 import { GenericsRepository } from '../../repositories/GenericsRepository';
 import { IntegrationCodesRepository } from '../../repositories/IntegrationCodesRepository';
 import { LegacyVaultApiRepository } from '../../repositories/LegacyVaultApiRepository';
@@ -40,6 +41,7 @@ describe('RedeemStrategyResolver', () => {
   const legacyVaultApiRepo = new LegacyVaultApiRepository(mockedLogger, as(mockedSecretsManager));
   const integrationCodesRepository = new IntegrationCodesRepository(as(mockedConnection));
   const uniqodoApiRepo = new UniqodoApiRepository(mockedLogger, as(mockedSecretsManager));
+  const eagleEyeApiRepo = new EagleEyeApiRepository(mockedLogger, as(mockedSecretsManager));
 
   it.each([
     ['generic', RedeemGenericStrategy],
@@ -60,6 +62,7 @@ describe('RedeemStrategyResolver', () => {
           vaultCodesRepo,
           legacyVaultApiRepo,
           mockedRedemptionsEventsRepository,
+          eagleEyeApiRepo,
           uniqodoApiRepo,
           integrationCodesRepository,
           mockedLogger,
@@ -85,6 +88,7 @@ describe('RedeemStrategyResolver', () => {
         vaultCodesRepo,
         legacyVaultApiRepo,
         mockedRedemptionsEventsRepository,
+        eagleEyeApiRepo,
         uniqodoApiRepo,
         integrationCodesRepository,
         mockedLogger,

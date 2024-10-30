@@ -4,6 +4,7 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { CardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
+import { EagleEyeApiRepository } from '@blc-mono/redemptions/application/repositories/EagleEyeApiRepository';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { IntegrationCodesRepository } from '@blc-mono/redemptions/application/repositories/IntegrationCodesRepository';
 import { LegacyVaultApiRepository } from '@blc-mono/redemptions/application/repositories/LegacyVaultApiRepository';
@@ -39,8 +40,10 @@ const controller = createInjector()
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)
   .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
   .provideClass(RedemptionsEventsRepository.key, RedemptionsEventsRepository)
+
   .provideClass(UniqodoApiRepository.key, UniqodoApiRepository)
   .provideClass(IntegrationCodesRepository.key, IntegrationCodesRepository)
+  .provideClass(EagleEyeApiRepository.key, EagleEyeApiRepository)
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)

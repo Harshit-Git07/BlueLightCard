@@ -3,7 +3,7 @@ import { Stack } from 'sst/constructs';
 import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { isBlcAuBrand, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { isEphemeral, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { getEnv, getEnvOrDefault, getEnvValidated } from '@blc-mono/core/utils/getEnv';
+import { getEnv, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { DiscoveryStackEnvironmentKeys } from '../constants/environment';
 
@@ -18,11 +18,7 @@ export type DiscoveryStackConfig = {
   apiDefaultAllowedOrigins: string[];
   openSearchDomainEndpoint?: string;
   searchOfferCompanyTable?: string;
-  timezoneOffset: string;
 };
-
-const UK_TIMEZONE_OFFSET = '+00:00';
-const AUS_TIMEZONE_OFFSET = '+10:00';
 
 export class DiscoveryStackConfigResolver {
   public static for(stack: Stack, region: DiscoveryStackRegion): DiscoveryStackConfig {
@@ -42,7 +38,6 @@ export class DiscoveryStackConfigResolver {
     if (region === 'ap-southeast-2') {
       return {
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au'],
-        timezoneOffset: AUS_TIMEZONE_OFFSET,
       };
     }
     return {
@@ -51,7 +46,6 @@ export class DiscoveryStackConfigResolver {
         'https://www.bluelightcard.com.au',
         'https://www.defencediscountservice.co.uk',
       ],
-      timezoneOffset: UK_TIMEZONE_OFFSET,
     };
   }
 
@@ -59,7 +53,6 @@ export class DiscoveryStackConfigResolver {
     if (region === 'ap-southeast-2') {
       return {
         apiDefaultAllowedOrigins: ['https://www.bluelightcard.com.au', 'http://localhost:3000'],
-        timezoneOffset: AUS_TIMEZONE_OFFSET,
       };
     }
     return {
@@ -69,7 +62,6 @@ export class DiscoveryStackConfigResolver {
         'https://www.ddsstaging.bluelightcard.tech',
         'http://localhost:3000',
       ],
-      timezoneOffset: UK_TIMEZONE_OFFSET,
     };
   }
 
@@ -77,7 +69,6 @@ export class DiscoveryStackConfigResolver {
     return {
       apiDefaultAllowedOrigins: ['*'],
       openSearchDomainEndpoint: this.getOpenSearchDomainEndpoint(),
-      timezoneOffset: UK_TIMEZONE_OFFSET,
     };
   }
 
@@ -99,7 +90,6 @@ export class DiscoveryStackConfigResolver {
       ),
       openSearchDomainEndpoint: getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT),
       searchOfferCompanyTable: getEnv(DiscoveryStackEnvironmentKeys.SEARCH_OFFER_COMPANY_TABLE_NAME),
-      timezoneOffset: getEnvOrDefault(DiscoveryStackEnvironmentKeys.TIMEZONE_OFFSET, UK_TIMEZONE_OFFSET),
     };
   }
 }

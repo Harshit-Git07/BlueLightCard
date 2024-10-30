@@ -7,7 +7,7 @@ import {
   companyNameInCompaniesAllQuery,
   companyNameQuery,
   offerNameQuery,
-  offerNotExpiredQuery,
+  offerNotExpiredAndEvergreenQuery,
   offerTagQuery,
   offerTypeQuery,
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchQueries';
@@ -51,7 +51,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       companyNameQuery(this.searchTerm),
-      offerNotExpiredQuery(),
+      offerNotExpiredAndEvergreenQuery(),
     ];
 
     if (this.offerType) {
@@ -91,7 +91,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       offerTagQuery(this.searchTerm),
-      offerNotExpiredQuery(),
+      offerNotExpiredAndEvergreenQuery(),
     ];
 
     if (this.offerType) {
@@ -113,7 +113,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       offerNameQuery(this.searchTerm),
-      offerNotExpiredQuery(),
+      offerNotExpiredAndEvergreenQuery(),
     ];
 
     if (this.offerType) {
@@ -135,7 +135,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       companyNameFuzzyQuery(this.searchTerm),
-      offerNotExpiredQuery(),
+      offerNotExpiredAndEvergreenQuery(),
     ];
 
     if (this.offerType) {

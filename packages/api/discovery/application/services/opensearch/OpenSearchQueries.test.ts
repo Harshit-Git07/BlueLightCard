@@ -6,6 +6,7 @@ import {
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
+  offerEvergreenQuery,
   offerNameQuery,
   offerNotExpiredQuery,
   offerTagQuery,
@@ -146,14 +147,34 @@ describe('OpenSearchQueries', () => {
 
   it('should build an offer not expired query', () => {
     const expectedQuery = {
-      range: {
-        offer_expires: {
-          time_zone: '+00:00',
-          gte: 'now',
-        },
+      bool: {
+        filter: [
+          {
+            range: {
+              offer_expires: {
+                gte: 'now', // Condition for future dates
+              },
+            },
+          },
+        ],
       },
     };
     const query = offerNotExpiredQuery();
+
+    expect(query).toEqual(expectedQuery);
+  });
+
+  it('should build an offer evergreen query', () => {
+    const expectedQuery = {
+      bool: {
+        must_not: {
+          exists: {
+            field: 'offer_expires', // Condition for documents without offer_expires
+          },
+        },
+      },
+    };
+    const query = offerEvergreenQuery();
 
     expect(query).toEqual(expectedQuery);
   });

@@ -69,45 +69,112 @@ describe('GET /search', async () => {
 
 describe('Search E2E Event Handling', async () => {
   const testUserTokens = await TestUser.authenticate();
-  const generatedUUID = `test-${randomUUID().toString()}`;
-  const openSearchQuery = { query: generatedUUID, dob: '1990-01-01', organisation: 'DEN' };
-  const offers: SanityOffer[] = [buildTestSanityOffer()];
-  offers[0]._id = generatedUUID;
-  offers[0].name = generatedUUID;
-  const companyName = offers[0].company?.brandCompanyDetails?.[0]?.companyName ?? '';
-  const companyId = offers[0].company?._id ?? 0;
 
-  const expectedSearchResult: SearchResult[] = [
+  const activeOfferUUID = `test-${randomUUID().toString()}`;
+  const expiredOfferUUID = `test-${randomUUID().toString()}`;
+  const evergreenOfferUUID = `test-${randomUUID().toString()}`;
+
+  const offers: SanityOffer[] = [
     {
-      ID: generatedUUID,
-      OfferName: generatedUUID,
+      ...buildTestSanityOffer(),
+      _id: activeOfferUUID,
+      name: activeOfferUUID,
+      start: new Date(Date.now()).toISOString(),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
+    },
+    {
+      ...buildTestSanityOffer(),
+      _id: expiredOfferUUID,
+      name: expiredOfferUUID,
+      start: new Date(Date.now()).toISOString(),
+      expires: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+    },
+    {
+      ...buildTestSanityOffer(),
+      _id: evergreenOfferUUID,
+      name: evergreenOfferUUID,
+      start: new Date(Date.now()).toISOString(),
+      evergreen: true,
+      expires: undefined,
+    },
+  ];
+
+  afterAll(async () => {
+    await sendTestEvents({ source: Events.OFFER_DELETED, events: offers });
+  });
+
+  beforeAll(async () => {
+    await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    await sendTestEvents({ source: Events.OPENSEARCH_POPULATE_INDEX, events: offers });
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  });
+
+  it('should consume offer created event with offer expires set', async () => {
+    const companyName = offers[0].company?.brandCompanyDetails?.[0]?.companyName ?? '';
+    const companyId = offers[0].company?._id ?? 0;
+    const expectedSearchResult: SearchResult = {
+      ID: activeOfferUUID,
+      OfferName: activeOfferUUID,
       OfferType: 'online',
       offerimg: 'https://testimage.com',
       CompID: companyId.toString(),
       LegacyID: 1,
       LegacyCompanyID: 1,
       CompanyName: companyName,
-    },
-  ];
-
-  afterEach(async () => {
-    await sendTestEvents({ source: Events.OFFER_DELETED, events: offers });
-  });
-
-  it('should consume offer created event and populate search index', async () => {
-    await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    await sendTestEvents({ source: Events.OPENSEARCH_POPULATE_INDEX, events: offers });
-    await new Promise((resolve) => setTimeout(resolve, 15000));
+    };
 
     const result = await whenSearchIsCalledWith(
-      { ...openSearchQuery },
+      { query: activeOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 
     const results = (await result.json()) as { data: SearchResult[] };
-    const searchResult = results.data.find((result) => result.ID === generatedUUID);
 
+    const searchResult = results.data.find((result) => result.ID === activeOfferUUID);
+
+    expect(searchResult).toStrictEqual(expectedSearchResult);
+  });
+
+  it('should not return expired offers in search results', async () => {
+    const result = await whenSearchIsCalledWith(
+      { query: expiredOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === expiredOfferUUID);
+
+    expect([searchResult]).toStrictEqual([undefined]);
+  });
+
+  it('should consume offer created event with offer expires as undefined', async () => {
+    const companyName = offers[2].company?.brandCompanyDetails?.[0]?.companyName ?? '';
+    const companyId = offers[2].company?._id ?? 0;
+
+    const expectedSearchResult: SearchResult[] = [
+      {
+        ID: evergreenOfferUUID,
+        OfferName: evergreenOfferUUID,
+        OfferType: 'online',
+        offerimg: 'https://testimage.com',
+        CompID: companyId.toString(),
+        LegacyID: 1,
+        LegacyCompanyID: 1,
+        CompanyName: companyName,
+      },
+    ];
+
+    const result = await whenSearchIsCalledWith(
+      { query: evergreenOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === evergreenOfferUUID);
     expect([searchResult]).toStrictEqual(expectedSearchResult);
   });
 });

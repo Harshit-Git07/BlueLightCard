@@ -49,12 +49,32 @@ describe('OpenSearchSearchRequests', () => {
     },
   };
 
-  const expectedOfferExpiryRangeQuery: QueryDslQueryContainer = {
-    range: {
-      offer_expires: {
-        gte: 'now',
-        time_zone: '+00:00',
-      },
+  const expectedOfferNotExpiredAndEvergreenQuery: QueryDslQueryContainer = {
+    bool: {
+      should: [
+        {
+          bool: {
+            must_not: {
+              exists: {
+                field: 'offer_expires', // Condition for documents without offer_expires
+              },
+            },
+          },
+        },
+        {
+          bool: {
+            filter: [
+              {
+                range: {
+                  offer_expires: {
+                    gte: 'now', // Condition for future dates
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ],
     },
   };
 
@@ -147,7 +167,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedCompanyNameQuery,
-      expectedOfferExpiryRangeQuery,
+      expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
     const result = target.build();
@@ -172,7 +192,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedTagsQuery,
-      expectedOfferExpiryRangeQuery,
+      expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
     const result = target.build();
@@ -185,7 +205,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedOfferNameQuery,
-      expectedOfferExpiryRangeQuery,
+      expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
     const result = target.build();
@@ -198,7 +218,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedCompanyNameFuzzyQuery,
-      expectedOfferExpiryRangeQuery,
+      expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
     const result = target.build();

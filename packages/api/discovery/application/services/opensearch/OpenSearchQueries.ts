@@ -1,10 +1,6 @@
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 
-import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { AgeRestriction } from '@blc-mono/discovery/application/models/AgeRestrictions';
-import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
-
-const TIMEZONE_OFFSET = getEnvOrDefault(DiscoveryStackEnvironmentKeys.TIMEZONE_OFFSET, '+00:00');
 
 export const offerTypeQuery = (offerType?: string): QueryDslQueryContainer => {
   if (offerType) {
@@ -104,13 +100,38 @@ export const offerNameQuery = (searchTerm: string): QueryDslQueryContainer => {
   };
 };
 
+export const offerNotExpiredAndEvergreenQuery = (): QueryDslQueryContainer => {
+  return {
+    bool: {
+      should: [offerEvergreenQuery(), offerNotExpiredQuery()],
+    },
+  };
+};
+
+export const offerEvergreenQuery = (): QueryDslQueryContainer => {
+  return {
+    bool: {
+      must_not: {
+        exists: {
+          field: 'offer_expires', // Condition for documents without offer_expires
+        },
+      },
+    },
+  };
+};
+
 export const offerNotExpiredQuery = (): QueryDslQueryContainer => {
   return {
-    range: {
-      offer_expires: {
-        time_zone: TIMEZONE_OFFSET,
-        gte: 'now',
-      },
+    bool: {
+      filter: [
+        {
+          range: {
+            offer_expires: {
+              gte: 'now', // Condition for future dates
+            },
+          },
+        },
+      ],
     },
   };
 };

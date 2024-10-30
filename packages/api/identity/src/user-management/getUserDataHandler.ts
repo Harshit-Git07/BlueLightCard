@@ -2,11 +2,11 @@ import { APIGatewayEvent, APIGatewayProxyStructuredResultV2, Context } from 'aws
 import { Logger } from '@aws-lambda-powertools/logger';
 import { Response } from '../../../core/src/utils/restResponse/response';
 import { isNull } from 'lodash';
-import { unpackJWT } from './unpackJWT';
 
 import { UserService } from 'src/services/UserService';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
+import { unpackJWT } from '@blc-mono/core/utils/unpackJWT';
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 

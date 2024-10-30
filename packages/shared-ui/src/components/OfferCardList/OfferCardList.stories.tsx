@@ -18,7 +18,7 @@ const componentMeta: Meta<typeof OfferCardList> = {
         imageURL: '/assets/forest.jpeg',
       },
       {
-        offerID: 123,
+        offerID: 124,
         companyID: '2016',
         companyName: 'JD Sports',
         offerType: 'In-store',
@@ -26,7 +26,7 @@ const componentMeta: Meta<typeof OfferCardList> = {
         imageURL: '/assets/forest.jpeg',
       },
       {
-        offerID: 123,
+        offerID: 125,
         companyID: '1012',
         companyName: 'Apple',
         offerType: 'Giftcards',
@@ -34,7 +34,7 @@ const componentMeta: Meta<typeof OfferCardList> = {
         imageURL: '/assets/forest.jpeg',
       },
       {
-        offerID: 123,
+        offerID: 126,
         companyID: '4016',
         companyName: 'Samsung',
         offerType: 'Online',
@@ -42,7 +42,7 @@ const componentMeta: Meta<typeof OfferCardList> = {
         imageURL: '/assets/forest.jpeg',
       },
       {
-        offerID: 123,
+        offerID: 127,
         companyID: '2016',
         companyName: 'JD Sports',
         offerType: 'In-store',
@@ -50,7 +50,7 @@ const componentMeta: Meta<typeof OfferCardList> = {
         imageURL: '/assets/forest.jpeg',
       },
       {
-        offerID: 123,
+        offerID: 128,
         companyID: '1012',
         companyName: 'Apple',
         offerType: 'Giftcards',
@@ -135,6 +135,14 @@ export const Loading = DefaultTemplate.bind({});
 
 Loading.args = {
   columns: 3,
+  status: 'loading',
+};
+
+export const LoadingHorizontal = DefaultTemplate.bind({});
+
+LoadingHorizontal.args = {
+  columns: 1,
+  variant: 'horizontal',
   status: 'loading',
 };
 

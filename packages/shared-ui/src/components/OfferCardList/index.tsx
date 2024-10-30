@@ -33,7 +33,7 @@ const OfferCardList: FC<OfferCardListProps> = ({
           <OfferCardPlaceholder
             key={`offer-card-placeholder-${placeholder}`}
             columns={1}
-            variant={'vertical'}
+            variant={variant}
           />
         ))}
       </div>

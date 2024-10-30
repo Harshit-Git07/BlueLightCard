@@ -19,7 +19,7 @@ import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 const FlexibleOffersSkeleton: FC = () => {
   const isMobile = useMobileMediaQuery();
 
-  const viewBox = isMobile ? '0 0 300 350' : '0 0 300 180';
+  const viewBox = isMobile ? '0 0 300 300' : '0 0 300 180';
 
   return (
     <>
@@ -37,7 +37,7 @@ const FlexibleOffersSkeleton: FC = () => {
 
       <OfferCardList
         offers={[]}
-        columns={3}
+        columns={isMobile ? 1 : 3}
         variant={isMobile ? 'horizontal' : 'vertical'}
         status="loading"
         onOfferClick={() => {}}
@@ -80,7 +80,7 @@ const FlexibleOffersContent: FC = () => {
 
       <OfferCardList
         offers={data.offers}
-        columns={3}
+        columns={isMobile ? 1 : 3}
         variant={isMobile ? 'horizontal' : 'vertical'}
         status="success"
         onOfferClick={(offer) =>
@@ -101,7 +101,6 @@ const FlexibleOffersPage: NextPage = () => {
     <Container
       className="py-0 mb-0 laptop:py-6"
       nestedClassName="mx-0 px-0 laptop:mx-auto laptop:px-5 flex flex-col gap-6"
-      addBottomHorizontalLine={true}
     >
       <ErrorBoundary fallback={<p>Something went wrong</p>}>
         <Suspense fallback={<FlexibleOffersSkeleton />}>

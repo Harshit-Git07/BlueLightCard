@@ -61,33 +61,45 @@ describe('OfferCardList', () => {
 describe('OfferCardList', () => {
   const mockOnOfferClick = jest.fn();
 
-  const renderComponent = (status: 'error' | 'loading' | 'success', columns: 1 | 2 | 3) => {
+  const renderComponent = (
+    status: 'error' | 'loading' | 'success',
+    columns: 1 | 2 | 3,
+    variant: 'vertical' | 'horizontal' = 'vertical',
+  ) => {
     render(
       <OfferCardList
         status={status}
         onOfferClick={mockOnOfferClick}
         offers={[]}
         columns={columns}
+        variant={variant}
       />,
     );
   };
 
-  it('renders 3 OfferCardPlaceholder components when columns is 1 and status is loading', () => {
-    renderComponent('loading', 1);
+  it('renders 3 horizontal OfferCardPlaceholder components when columns is 1 and status is loading', () => {
+    renderComponent('loading', 1, 'horizontal');
 
     const placeholders = screen.getAllByTestId('offer-card-placeholder');
     expect(placeholders).toHaveLength(3);
   });
 
-  it('renders 4 OfferCardPlaceholder components when columns is 2 and status is loading', () => {
-    renderComponent('loading', 2);
+  it('renders 3 vertical OfferCardPlaceholder components when columns is 1 and status is loading', () => {
+    renderComponent('loading', 1, 'vertical');
+
+    const placeholders = screen.getAllByTestId('offer-card-placeholder');
+    expect(placeholders).toHaveLength(3);
+  });
+
+  it('renders 4 vertical OfferCardPlaceholder components when columns is 2 and status is loading', () => {
+    renderComponent('loading', 2, 'vertical');
 
     const placeholders = screen.getAllByTestId('offer-card-placeholder');
     expect(placeholders).toHaveLength(4);
   });
 
-  it('renders 6 OfferCardPlaceholder components when columns is 3 and status is loading', () => {
-    renderComponent('loading', 3);
+  it('renders 6 vertical OfferCardPlaceholder components when columns is 3 and status is loading', () => {
+    renderComponent('loading', 3, 'vertical');
 
     const placeholders = screen.getAllByTestId('offer-card-placeholder');
     expect(placeholders).toHaveLength(6);

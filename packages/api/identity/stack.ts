@@ -47,6 +47,7 @@ import {
 } from '@blc-mono/core/identity/identityStackOutputs';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
+import { IdentityStackConfigResolver } from "./src/config/config";
 
 const SERVICE_NAME = 'identity';
 
@@ -57,6 +58,7 @@ const USE_DATADOG_AGENT: string = getEnvOrDefault(
 
 export function Identity({ stack }: StackContext) {
   const globalConfig = GlobalConfigResolver.for(stack.stage);
+  const identityConfig = IdentityStackConfigResolver.for(stack);
   const { certificateArn, bus, webACL } = use(Shared);
 
   // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
@@ -245,6 +247,7 @@ export function Identity({ stack }: StackContext) {
       [REGIONS.AP_SOUTHEAST_2]: 'identity-au.blcshine.io',
     };
 
+    // Authorizer Lambda which will be used by the identity API which is used by both DDS UK and BLC UK brands
     const identityCustomAuthenticatorLambda = new Function(stack, 'Authorizer', {
       handler:
         './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
@@ -253,6 +256,8 @@ export function Identity({ stack }: StackContext) {
         OLD_USER_POOL_ID_DDS: oldCognitoDds.cognito.userPoolId,
         USER_POOL_ID: cognito.userPoolId,
         USER_POOL_ID_DDS: cognito_dds.userPoolId,
+        [IdentityStackEnvironmentKeys.AUTH0_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0Issuer,
+        [IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0ExtraIssuer ?? '',
       },
     });
 
@@ -498,6 +503,7 @@ export function Identity({ stack }: StackContext) {
 }
 
 function deployDdsSpecificResources(stack: Stack) {
+  const identityConfig = IdentityStackConfigResolver.for(stack);
   // All user pools currently in use until authorizer is split by brand
   const BLC_UK_COGNITO_USER_POOL_ID = getEnv(
     IdentityStackEnvironmentKeys.BLC_UK_COGNITO_USER_POOL_ID,
@@ -529,6 +535,7 @@ function deployDdsSpecificResources(stack: Stack) {
     DDS_COGNITO_USER_POOL_ID,
   );
 
+  // DDS Authorizer Lambda which will be used by all DDS APIs expect identity API
   const identityCustomAuthenticatorLambda = new Function(stack, 'Authorizer', {
     handler:
       './packages/api/identity/src/authenticator/lambdas/constructs/customAuthenticatorLambdaHandler.handler',
@@ -537,6 +544,7 @@ function deployDdsSpecificResources(stack: Stack) {
       OLD_USER_POOL_ID_DDS: DDS_OLD_COGNITO_USER_POOL_ID,
       USER_POOL_ID: BLC_UK_COGNITO_USER_POOL_ID,
       USER_POOL_ID_DDS: DDS_COGNITO_USER_POOL_ID,
+      [IdentityStackEnvironmentKeys.AUTH0_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0Issuer
     },
   });
 

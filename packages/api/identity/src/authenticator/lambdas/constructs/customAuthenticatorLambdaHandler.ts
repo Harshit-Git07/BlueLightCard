@@ -12,6 +12,7 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { datadog } from 'datadog-lambda-js';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { authenticateAuth0Token } from "./auth0/auth0TokenVerification";
 
 const BEARER_PREFIX = 'Bearer ';
 
@@ -35,6 +36,8 @@ const handlerUnwrapped = async function (
   const OLD_USER_POOL_ID_DDS = getEnv(IdentityStackEnvironmentKeys.OLD_USER_POOL_ID_DDS);
   const USER_POOL_ID = getEnv(IdentityStackEnvironmentKeys.USER_POOL_ID);
   const USER_POOL_ID_DDS = getEnv(IdentityStackEnvironmentKeys.USER_POOL_ID_DDS);
+  const auth0Issuer = getEnv(IdentityStackEnvironmentKeys.AUTH0_ISSUER);
+  const auth0ExtraIssuer = getEnvOrDefault(IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER, '');
 
   logger.debug(`event => ${JSON.stringify(event)}`);
 
@@ -43,6 +46,13 @@ const handlerUnwrapped = async function (
   try {
     const decodedToken: any = jwtDecode(authToken);
     logger.debug(decodedToken);
+
+    const mainIssuerMatch = decodedToken?.iss === auth0Issuer;
+    const extraIssuerMatch = auth0ExtraIssuer && decodedToken?.iss === auth0ExtraIssuer;
+
+    if (mainIssuerMatch || extraIssuerMatch) {
+      return await authenticateAuth0Token(event, decodedToken.iss);
+    }
 
     const cognitoJwtVerifier = CognitoJwtVerifier.create([
       {

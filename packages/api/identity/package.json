@@ -38,6 +38,7 @@
     "axios": "1.4.0",
     "base-64": "1.0.0",
     "date-fns": "2.30.0",
+    "jwks-rsa": "3.1.0",
     "libphonenumber-js": "1.10.37",
     "ts-node": "^10.9.1",
     "uuid": "9.0.1",

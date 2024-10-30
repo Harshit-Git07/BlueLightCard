@@ -4,7 +4,7 @@ export function isDev(stage: string): boolean {
   return !isProduction(stage) && !isStaging(stage);
 }
 
-export function isDevelopmentStack(stage: string): boolean {
+export function isDevelopment(stage: string): boolean {
   return stage == 'dev' || stage === 'dev-dds';
 }
 

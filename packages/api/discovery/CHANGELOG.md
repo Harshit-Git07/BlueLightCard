@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.14.1...bluelightcard/discovery-v1.14.2) (2024-10-30)
+
+
+### Bug Fixes
+
+* [DISCO-305] Update custom domain names for aus and DDS ([#2689](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2689)) ([2a2fc80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2a2fc80e6b02744437dd3d6fc989ba4403d926ee))
+
 ## [1.14.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.14.0...bluelightcard/discovery-v1.14.1) (2024-10-30)
 
 

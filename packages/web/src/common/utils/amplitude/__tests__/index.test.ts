@@ -16,6 +16,7 @@ import {
 } from '../../amplitude/index';
 
 const mockedUserId = '1234';
+const deviceId = 'deviceId';
 
 jest.mock('jwt-decode');
 jest.mock('@amplitude/analytics-browser');
@@ -34,6 +35,7 @@ describe('Initialise Amplitude', () => {
 
   describe('When an "idToken" exists in local storage', () => {
     beforeEach(() => {
+      localStorage.setItem('deviceFingerprint', deviceId);
       localStorage.setItem('idToken', 'validIdToken');
       jwtDecodeMock.mockReturnValue({ 'custom:blc_old_uuid': mockedUserId } as any);
       amplitudeMock.init.mockReturnValue({ promise: Promise.resolve() });
@@ -44,6 +46,7 @@ describe('Initialise Amplitude', () => {
       target.initialiseAmplitude();
 
       expect(amplitudeMock.init).toHaveBeenCalledWith('API_KEY', mockedUserId, {
+        deviceId: deviceId,
         serverZone: 'EU',
         logLevel: amplitude.Types.LogLevel.Warn,
         transport: 'beacon',

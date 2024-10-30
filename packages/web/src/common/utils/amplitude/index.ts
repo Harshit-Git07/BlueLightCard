@@ -5,6 +5,7 @@ import { AMPLITUDE_API_KEY, BRAND } from '@/global-vars';
 import EVENTS from './events';
 import { AMPLITUDE_LOG_LEVEL, AMPLITUDE_SERVER_ZONE } from '@/utils/amplitude/amplitude';
 import { PlatformVariant } from '@bluelightcard/shared-ui/types';
+import getDeviceFingerprint from '@/utils/amplitude/getDeviceFingerprint';
 
 export async function initialiseAmplitude() {
   const idToken = localStorage.getItem('idToken') ?? '';
@@ -14,6 +15,7 @@ export async function initialiseAmplitude() {
     let { 'custom:blc_old_uuid': userId } = unpackJWT(idToken);
     userId = userId ?? null;
     amplitude.init(AMPLITUDE_API_KEY, userId, {
+      deviceId: getDeviceFingerprint(),
       serverZone: AMPLITUDE_SERVER_ZONE,
       logLevel: AMPLITUDE_LOG_LEVEL,
       transport: 'beacon',

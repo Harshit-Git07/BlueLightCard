@@ -1,6 +1,7 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { ServerZoneType } from '@amplitude/analytics-types/lib/esm/server-zone';
 import { BRAND } from '@/global-vars';
+import getDeviceFingerprint from '@/utils/amplitude/getDeviceFingerprint';
 
 const { LogLevel } = amplitude.Types;
 
@@ -23,6 +24,7 @@ export class Amplitude {
     const sessionId = sessionStorage.getItem('amplitude_session_id');
 
     const initResult = amplitude.init(apiKey, {
+      deviceId: getDeviceFingerprint(),
       serverZone: AMPLITUDE_SERVER_ZONE,
       logLevel: AMPLITUDE_LOG_LEVEL,
       transport: 'beacon',

@@ -63,9 +63,19 @@ export function OffersCMS({ stack }: StackContext) {
     });
   }
 
+  const hono = new Function(stack, 'OffersApi', {
+    handler: 'packages/api/offers-cms/lambda/api.handler',
+    bind: [offersDataTable, companyDataTable],
+    environment: env,
+  });
+
   const api = new Api(stack, API_GATEWAY_NAME, {
     routes: {
-      $default: 'packages/api/offers-cms/lambda/api.handler',
+      'OPTIONS /{proxy+}': hono,
+      $default: {
+        function: hono,
+        authorizer: 'offersAuthorizer',
+      },
     },
     authorizers: {
       offersAuthorizer: {
@@ -76,13 +86,6 @@ export function OffersCMS({ stack }: StackContext) {
       },
     },
     cors: false,
-    defaults: {
-      function: {
-        bind: [offersDataTable, companyDataTable],
-        environment: env,
-      },
-      authorizer: 'offersAuthorizer',
-    },
   });
 
   stack.addOutputs({

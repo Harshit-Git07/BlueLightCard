@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.14.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.13.0...bluelightcard/discovery-v1.14.0) (2024-10-30)
+
+
+### Features
+
+* [DISCO-1021] updated the pack for the sanity types  ([#2589](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2589)) ([71998ff](https://github.com/bluelightcard/BlueLightCard-2.0/commit/71998ff0c74216be11c58bbda5d0760bfc500a7b))
+* [DISCO-10721] Support Evergreen and Boosted Offers ([#2588](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2588)) ([e3e49d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e3e49d2ff388ef3b958e677a792f24612b610001))
+* [DISCO-305] Enable Aus and DDS discovery deploys ([#2563](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2563)) ([c23902c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c23902cd7a3c2a4b1b9eb6fddbffd98876f940c4))
+
+
+### Bug Fixes
+
+* [DISCO-305] Add Aus specific opensearch domain name ([#2639](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2639)) ([e36328b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e36328bb8af033cf52ece1e17d558ffed7868593))
+* [DISCO-305] Add Opensearch staging endpoint for DDS, disable Aus deploy ([#2623](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2623)) ([618798d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/618798d55dfc0171632a1aa3166afc62c30c6cdb))
+* [DISCO-305] Enable e2e tests for Aus in Discovery ([#2649](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2649)) ([a8b31fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a8b31fbda1f143076e0bc3e089e031276b522154))
+* [DISCO-305] Update disco table name to support Aus ([#2644](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2644)) ([50475e1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/50475e141f4bad1929c2a1e7a5e90ea6181999b7))
+* [DISCO-794] Remove menu insert on offer updated ([#2641](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2641)) ([0213280](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0213280e48b4c12308c0c41e6d030bb3888f8dff))
+
 ## [1.13.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.12.0...bluelightcard/discovery-v1.13.0) (2024-10-24)
 
 

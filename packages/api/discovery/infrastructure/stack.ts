@@ -205,13 +205,13 @@ const getDomainName = (stage: string, region: string) => {
 };
 
 const getAustraliaDomainName = (stage: string) =>
-  isProduction(stage) ? 'discovery-au.blcshine.io' : `${stage}-discovery-au.blcshine.io`;
+  isProduction(stage) ? 'discovery-blc-au.blcshine.io' : `${stage}-discovery-blc-au.blcshine.io`;
 
 const getUKDomainName = (stage: string) => {
   if (isProduction(stage)) {
     return isDdsUkBrand() ? 'discovery-dds-uk.blcshine.io' : 'discovery.blcshine.io';
   } else {
-    return `${stage}-discovery.blcshine.io`;
+    return isDdsUkBrand() ? `staging-discovery-dds-uk.blcshine.io` : `staging-discovery.blcshine.io`;
   }
 };
 

@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { eq } from 'drizzle-orm';
 
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
@@ -6,7 +7,12 @@ import { redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
 import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
-import { RedemptionConfigRepository, UpdateRedemptionConfigEntity } from './RedemptionConfigRepository';
+import {
+  NewRedemptionConfigEntity,
+  RedemptionConfigEntity,
+  RedemptionConfigRepository,
+  UpdateRedemptionConfigEntity,
+} from './RedemptionConfigRepository';
 
 describe('RedemptionConfigRepository', () => {
   let database: RedemptionsTestDatabase;
@@ -254,6 +260,44 @@ describe('RedemptionConfigRepository', () => {
       const updatePayload: UpdateRedemptionConfigEntity = redemptionConfigEntityFactory.build();
       const updatedRecord = await repository.updateOneById('non-exist-id', updatePayload);
       expect(updatedRecord).toBe(null);
+    });
+  });
+
+  describe('createRedemption', () => {
+    it('should add new redemption record to database', async () => {
+      const repository = new RedemptionConfigRepository(connection);
+      const newRedemptionEntity: NewRedemptionConfigEntity = {
+        offerId: faker.string.uuid(),
+        companyId: faker.string.uuid(),
+        redemptionType: 'generic',
+        connection: 'direct',
+        offerType: 'online',
+        url: 'https://www.direct.com',
+        affiliate: 'awin',
+      };
+
+      const actualRedemptionConfigEntity: RedemptionConfigEntity =
+        await repository.createRedemption(newRedemptionEntity);
+
+      const actualRedemptionConfigEntityFromDatabase = await connection.db
+        .select()
+        .from(redemptionsTable)
+        .where(eq(redemptionsTable.id, actualRedemptionConfigEntity.id))
+        .limit(1)
+        .execute();
+
+      const expectedRedemptionConfigEntity: RedemptionConfigEntity = {
+        id: actualRedemptionConfigEntity.id,
+        offerId: newRedemptionEntity.offerId,
+        companyId: newRedemptionEntity.companyId,
+        redemptionType: newRedemptionEntity.redemptionType,
+        connection: newRedemptionEntity.connection,
+        offerType: newRedemptionEntity.offerType,
+        affiliate: newRedemptionEntity.affiliate!,
+        url: newRedemptionEntity.url!,
+      };
+
+      expect(actualRedemptionConfigEntityFromDatabase).toEqual([expectedRedemptionConfigEntity]);
     });
   });
 });

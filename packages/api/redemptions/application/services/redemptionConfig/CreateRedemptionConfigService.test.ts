@@ -56,7 +56,7 @@ const stubTransactionManager: Partial<TransactionManager> = {
 
 const mockDatabaseTransactionOperator: Partial<DatabaseTransactionOperator> = {};
 
-const mockLogger: Partial<ILogger> = createTestLogger();
+const mockLogger: ILogger = createTestLogger();
 
 const validRedemptionConfigRequest: CreateRedemptionConfigSchema = {
   companyId: faker.string.uuid(),
@@ -98,7 +98,7 @@ const newRedemptionConfigEntity: NewRedemptionConfigEntity = {
 const redemptionConfig: RedemptionConfig = redemptionConfigFactory.build();
 
 const service = new CreateRedemptionConfigService(
-  as(mockLogger),
+  mockLogger,
   as(mockRedemptionsRepository),
   as(mockGenericsRepository),
   as(mockVaultsRepository),

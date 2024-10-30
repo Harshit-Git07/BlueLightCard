@@ -7,6 +7,7 @@ import {
 } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 import {
   IVaultCodesRepository,
+  NewVaultCodeEntity,
   VaultCodesRepository,
 } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { IS3ClientProvider, S3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
@@ -58,16 +59,15 @@ export class VaultCodesUploadService implements IVaultCodesUploadService {
     for (let i = 0; i < codes.length; i += batchSize) {
       const batchVaultCodes = codes.slice(i, i + batchSize);
       try {
-        const result = await this.vaultCodesRepo.createMany(
-          batchVaultCodes.map((code) => ({
-            vaultId,
-            batchId,
-            code,
-            created,
-            expiry: vaultBatch.expiry,
-            memberId: null,
-          })),
-        );
+        const newVaultCodeEntities: NewVaultCodeEntity[] = batchVaultCodes.map((code) => ({
+          vaultId,
+          batchId,
+          code,
+          created,
+          expiry: vaultBatch.expiry,
+          memberId: null,
+        }));
+        const result = await this.vaultCodesRepo.createMany(newVaultCodeEntities);
 
         countCodeInsertSuccess += result.length;
         countCodeDuplicates += batchVaultCodes.length - result.length;

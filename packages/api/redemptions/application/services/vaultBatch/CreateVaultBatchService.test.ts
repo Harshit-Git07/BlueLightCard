@@ -1,13 +1,14 @@
 import { faker } from '@faker-js/faker';
 
 import { as } from '@blc-mono/core/utils/testing';
-import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
-import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
+import {
+  DatabaseTransactionOperator,
+  TransactionManager,
+} from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { IS3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
-import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
 import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { ParsedRequest } from '../../controllers/adminApiGateway/vaultBatch/CreateVaultBatchController';
@@ -26,103 +27,55 @@ jest.mock('@blc-mono/core/utils/getEnv', () => ({
   }),
 }));
 
+const putObjectSignedUrl = 'https://stage-brand-vault-codes-upload.s3.amazonaws.com/bucket/key?sign-data';
+
+function getTestEvent(vaultId: string) {
+  return {
+    pathParameters: {
+      vaultId: vaultId,
+    },
+    body: {
+      expiry: faker.date.future().setMilliseconds(0).toString(),
+    },
+  } satisfies ParsedRequest;
+}
+
+const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {};
+
+const mockVaultsRepository: Partial<IVaultsRepository> = {};
+
+const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {};
+const mockVaultBatchesTransactionalRepository: Partial<IVaultBatchesRepository> = {};
+
+const stubTransactionManager: Partial<TransactionManager> = {
+  withTransaction(callback) {
+    return callback(as(mockDatabaseTransactionOperator));
+  },
+};
+
+const mockDatabaseTransactionOperator: Partial<DatabaseTransactionOperator> = {};
+
+const mockS3ClientProvider: Partial<IS3ClientProvider> = {
+  getClient: jest.fn(),
+};
+
+const mockS3SignedUrl: Partial<S3SignedUrl> = {};
+
+const createVaultBatchService: CreateVaultBatchService = new CreateVaultBatchService(
+  createSilentLogger(),
+  as(mockRedemptionsRepository),
+  as(mockVaultsRepository),
+  as(mockVaultBatchesRepository),
+  as(stubTransactionManager),
+  as(mockS3ClientProvider),
+  as(mockS3SignedUrl),
+);
+
 describe('CreateVaultBatchService', () => {
-  let database: RedemptionsTestDatabase;
-  let connection: DatabaseConnection;
-
-  beforeAll(async () => {
-    database = await RedemptionsTestDatabase.start();
-    connection = await database.getConnection();
-  }, 60_000);
-
-  afterAll(async () => {
-    await database?.down?.();
+  beforeEach(() => {
+    jest.resetAllMocks();
+    mockVaultBatchesRepository.withTransaction = jest.fn().mockReturnValue(mockVaultBatchesTransactionalRepository);
   });
-
-  const putObjectSignedUrl = 'https://stage-brand-vault-codes-upload.s3.amazonaws.com/bucket/key?sign-data';
-
-  function getTestEvent(vaultId: string) {
-    return {
-      pathParameters: {
-        vaultId: vaultId,
-      },
-      body: {
-        expiry: faker.date.future().setMilliseconds(0).toString(),
-      },
-    } satisfies ParsedRequest;
-  }
-
-  const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {
-    findOneByOfferId: jest.fn(),
-    findOneById: jest.fn(),
-    updateManyByOfferId: jest.fn(),
-    updateOneByOfferId: jest.fn(),
-    updateOneById: jest.fn(),
-    createRedemption: jest.fn(),
-    withTransaction: jest.fn(),
-  };
-
-  const mockVaultsRepository: Partial<IVaultsRepository> = {
-    findOneByRedemptionId: jest.fn(),
-    findOneById: jest.fn(),
-    updateOneById: jest.fn(),
-    createMany: jest.fn(),
-    create: jest.fn(),
-    withTransaction: jest.fn(),
-  };
-
-  const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {
-    create: jest.fn(),
-    findByVaultId: jest.fn(),
-    getCodesRemaining: jest.fn(),
-    withTransaction: jest.fn(),
-    updateOneById: jest.fn(),
-    findOneById: jest.fn(),
-    deleteById: jest.fn(),
-  };
-
-  const mockS3ClientProvider: Partial<IS3ClientProvider> = {
-    getClient: jest.fn(),
-  };
-
-  const mockS3SignedUrl: S3SignedUrl = {
-    getPutObjectSignedUrl: jest.fn().mockResolvedValue(putObjectSignedUrl),
-  };
-
-  async function callService(testEvent: ParsedRequest): Promise<CreateVaultBatchResult | CreateVaultBatchError> {
-    const transactionManager = new TransactionManager(connection);
-
-    const service: CreateVaultBatchService = new CreateVaultBatchService(
-      createSilentLogger(),
-      as(mockRedemptionsRepository),
-      as(mockVaultsRepository),
-      as(mockVaultBatchesRepository),
-      transactionManager,
-      as(mockS3ClientProvider),
-      mockS3SignedUrl,
-    );
-    return await service.createVaultBatch(testEvent);
-  }
-
-  function getExpectedError(message: string): CreateVaultBatchError {
-    return {
-      kind: 'Error',
-      data: {
-        message: message,
-      },
-    };
-  }
-
-  function getExpectedSuccess(batchId: string, vaultId: string): CreateVaultBatchResult {
-    return {
-      kind: 'Ok',
-      data: {
-        id: batchId,
-        vaultId: vaultId,
-        uploadUrl: putObjectSignedUrl,
-      },
-    };
-  }
 
   /**
    * fail/error tests - legacy and standard vaultId's
@@ -132,7 +85,8 @@ describe('CreateVaultBatchService', () => {
     const legacyVaultId = 'vault#BLC';
     const testEvent = getTestEvent(legacyVaultId);
 
-    const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
+    const actual: CreateVaultBatchResult | CreateVaultBatchError =
+      await createVaultBatchService.createVaultBatch(testEvent);
 
     const expected: CreateVaultBatchError = getExpectedError(
       `CreateVaultBatch - legacy vaultId is incorrectly formatted (vaultId=${legacyVaultId})`,
@@ -145,7 +99,8 @@ describe('CreateVaultBatchService', () => {
     const legacyVaultId = 'vault#12345#BLC';
     const testEvent = getTestEvent(legacyVaultId);
 
-    const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
+    const actual: CreateVaultBatchResult | CreateVaultBatchError =
+      await createVaultBatchService.createVaultBatch(testEvent);
 
     const expected: CreateVaultBatchError = getExpectedError(
       `CreateVaultBatch - legacy vaultId is missing companyId and/or offerId (vaultId=${legacyVaultId})`,
@@ -160,7 +115,8 @@ describe('CreateVaultBatchService', () => {
 
     mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
 
-    const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
+    const actual: CreateVaultBatchResult | CreateVaultBatchError =
+      await createVaultBatchService.createVaultBatch(testEvent);
 
     const expected: CreateVaultBatchError = getExpectedError(
       `CreateVaultBatch - redemption does not exist for legacy vault (vaultId=${legacyVaultId})`,
@@ -176,7 +132,8 @@ describe('CreateVaultBatchService', () => {
     mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemptionConfigEntityFactory.build());
     mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(null);
 
-    const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
+    const actual: CreateVaultBatchResult | CreateVaultBatchError =
+      await createVaultBatchService.createVaultBatch(testEvent);
 
     const expected: CreateVaultBatchError = getExpectedError(
       `CreateVaultBatch - vault does not exist for legacy vault redemptionId (vaultId=${legacyVaultId})`,
@@ -191,7 +148,8 @@ describe('CreateVaultBatchService', () => {
 
     mockVaultsRepository.findOneById = jest.fn().mockResolvedValue(null);
 
-    const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
+    const actual: CreateVaultBatchResult | CreateVaultBatchError =
+      await createVaultBatchService.createVaultBatch(testEvent);
 
     const expected: CreateVaultBatchError = getExpectedError(
       `CreateVaultBatch - vault does not exist for standard vaultId (vaultId=${modernVaultId})`,
@@ -200,9 +158,9 @@ describe('CreateVaultBatchService', () => {
     expect(actual).toEqual(expected);
   });
 
-  /**
-   * success tests - legacy and standard vaultId's
-   */
+  // /**
+  //  * success tests - legacy and standard vaultId's
+  //  */
 
   it('should return kind "Ok" when legacy vaultId redemptions and vaults records exist', async () => {
     const legacyVaultId = 'vault#12345-67890#BLC';
@@ -215,11 +173,12 @@ describe('CreateVaultBatchService', () => {
     mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(vault);
 
     const vaultBatch = vaultBatchEntityFactory.build({ vaultId: vault.id });
-    mockVaultBatchesRepository.withTransaction = jest.fn().mockReturnValue({
-      create: jest.fn().mockResolvedValue({ id: vaultBatch.id }),
-    });
+    mockVaultBatchesTransactionalRepository.create = jest.fn().mockResolvedValue({ id: vaultBatch.id });
 
-    const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
+    mockS3SignedUrl.getPutObjectSignedUrl = jest.fn().mockResolvedValue(putObjectSignedUrl);
+
+    const actual: CreateVaultBatchResult | CreateVaultBatchError =
+      await createVaultBatchService.createVaultBatch(testEvent);
 
     const expected: CreateVaultBatchResult = getExpectedSuccess(vaultBatch.id, vault.id);
 
@@ -231,15 +190,36 @@ describe('CreateVaultBatchService', () => {
     mockVaultsRepository.findOneById = jest.fn().mockResolvedValue(vault);
 
     const vaultBatch = vaultBatchEntityFactory.build({ vaultId: vault.id });
-    mockVaultBatchesRepository.withTransaction = jest.fn().mockReturnValue({
-      create: jest.fn().mockResolvedValue({ id: vaultBatch.id }),
-    });
+    mockVaultBatchesTransactionalRepository.create = jest.fn().mockResolvedValue({ id: vaultBatch.id });
+
+    mockS3SignedUrl.getPutObjectSignedUrl = jest.fn().mockResolvedValue(putObjectSignedUrl);
 
     const testEvent = getTestEvent(vault.id);
-    const actual: CreateVaultBatchResult | CreateVaultBatchError = await callService(testEvent);
+    const actual: CreateVaultBatchResult | CreateVaultBatchError =
+      await createVaultBatchService.createVaultBatch(testEvent);
 
     const expected: CreateVaultBatchResult = getExpectedSuccess(vaultBatch.id, vault.id);
 
     expect(actual).toEqual(expected);
   });
 });
+
+function getExpectedError(message: string): CreateVaultBatchError {
+  return {
+    kind: 'Error',
+    data: {
+      message: message,
+    },
+  };
+}
+
+function getExpectedSuccess(batchId: string, vaultId: string): CreateVaultBatchResult {
+  return {
+    kind: 'Ok',
+    data: {
+      id: batchId,
+      vaultId: vaultId,
+      uploadUrl: putObjectSignedUrl,
+    },
+  };
+}

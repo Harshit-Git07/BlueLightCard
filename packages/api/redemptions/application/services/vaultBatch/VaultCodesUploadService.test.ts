@@ -2,144 +2,70 @@ import { faker } from '@faker-js/faker';
 
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
-import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { IS3ClientProvider } from '@blc-mono/redemptions/libs/storage/S3ClientProvider';
-import { RedemptionsTestDatabase } from '@blc-mono/redemptions/libs/test/helpers/database';
-import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import {
-  IRedemptionsEventsRepository,
-  RedemptionsEventsRepository,
-} from '../../repositories/RedemptionsEventsRepository';
-import { IVaultBatchesRepository, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
-import { IVaultCodesRepository, VaultCodesRepository } from '../../repositories/VaultCodesRepository';
+import { IRedemptionsEventsRepository } from '../../repositories/RedemptionsEventsRepository';
+import { IVaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
+import { IVaultCodesRepository } from '../../repositories/VaultCodesRepository';
 
 import { VaultCodesUploadService } from './VaultCodesUploadService';
 
+const defaultBucketName = 'bucket-name';
+const defaultBatchId = `vbt-${faker.string.uuid()}`;
+const defaultVaultId = `vlt-${faker.string.uuid()}`;
+const defaultFileName = faker.system.fileName();
+const defaultS3Path = `${defaultVaultId}/${defaultBatchId}/${faker.date.anytime().toISOString()}.csv`;
+
+const mockLogger: ILogger = createTestLogger();
+
+const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {};
+const mockVaultCodesRepository: Partial<IVaultCodesRepository> = {};
+const mockRedemptionsEventsRepository: Partial<IRedemptionsEventsRepository> = {};
+const mockS3ClientProvider: Partial<IS3ClientProvider> = {};
+
+const vaultCodesUploadService = new VaultCodesUploadService(
+  mockLogger,
+  as(mockVaultCodesRepository),
+  as(mockVaultBatchesRepository),
+  as(mockRedemptionsEventsRepository),
+  as(mockS3ClientProvider),
+);
+
 describe('VaultCodesUploadService', () => {
-  const defaultBucketName = 'bucket-name';
-  const defaultBatchId = `vbt-${faker.string.uuid()}`;
-  const defaultVaultId = `vlt-${faker.string.uuid()}`;
-  const defaultFileName = faker.system.fileName();
-  const defaultS3Path = `${defaultVaultId}/${defaultBatchId}/${faker.date.anytime().toISOString()}.csv`;
-
-  let database: RedemptionsTestDatabase;
-  let connection: DatabaseConnection;
-
-  beforeAll(async () => {
-    database = await RedemptionsTestDatabase.start();
-    connection = await database.getConnection();
-    process.env.AWS_REGION = 'eu-west-2';
-  }, 60_000);
-
-  afterEach(async () => {
-    await database.reset(connection);
+  beforeEach(() => {
+    jest.resetAllMocks();
   });
-
-  afterAll(async () => {
-    await database?.down?.();
-    delete process.env.AWS_REGION;
-  });
-
-  function makeService(
-    logger: ILogger,
-    override: {
-      vaultCodesRepo?: IVaultCodesRepository;
-      redemptionsEventsRepo?: IRedemptionsEventsRepository;
-      vaultBatchesRepo?: IVaultBatchesRepository;
-      s3ClientProvider?: IS3ClientProvider;
-    },
-  ) {
-    const vaultCodesRepo = override.vaultCodesRepo ? override.vaultCodesRepo : new VaultCodesRepository(connection);
-    const redemptionsEventsRepo = override.redemptionsEventsRepo
-      ? override.redemptionsEventsRepo
-      : new RedemptionsEventsRepository();
-    const vaultBatchesRepo = override.vaultBatchesRepo
-      ? override.vaultBatchesRepo
-      : new VaultBatchesRepository(connection);
-    const s3ClientProvider = override.s3ClientProvider ? override.s3ClientProvider : ({} as IS3ClientProvider);
-    return new VaultCodesUploadService(
-      logger,
-      vaultCodesRepo,
-      vaultBatchesRepo,
-      redemptionsEventsRepo,
-      s3ClientProvider,
-    );
-  }
-
-  function mockS3ClientProvider(body: string | undefined = undefined): IS3ClientProvider {
-    return {
-      getClient: jest.fn().mockReturnValue({
-        send: jest.fn().mockResolvedValue({
-          Body: {
-            transformToString: () => body ?? 'code1\ncode2\ncode3',
-          },
-        }),
-      }),
-    };
-  }
-
-  function mockVaultBatchesRepo(): Partial<IVaultBatchesRepository> {
-    return {
-      create: jest.fn(),
-      findOneById: jest.fn().mockResolvedValue({
-        batchId: defaultBatchId,
-        file: defaultFileName,
-        vaultId: defaultVaultId,
-      }),
-      withTransaction: jest.fn(),
-      updateOneById: jest.fn(),
-    };
-  }
-
-  function mockVaultCodesRepo(): IVaultCodesRepository {
-    return {
-      create: jest.fn(),
-      checkIfMemberReachedMaxCodeClaimed: jest.fn(),
-      checkVaultCodesRemaining: jest.fn(),
-      claimVaultCode: jest.fn(),
-      createMany: jest.fn((codes) => Promise.resolve(codes.map((code, index) => ({ id: `vcd-${index}`, code })))),
-      withTransaction: jest.fn(),
-      findManyByBatchId: jest.fn(),
-      updateManyByBatchId: jest.fn(),
-      findClaimedCodesByBatchId: jest.fn(),
-      findUnclaimedCodesByBatchId: jest.fn(),
-      deleteUnclaimedCodesByBatchId: jest.fn(),
-    };
-  }
-
-  function mockRedemptionsEventsRepo(): IRedemptionsEventsRepository {
-    return {
-      publishMemberRedeemIntentEvent: jest.fn(),
-      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
-      publishRedemptionEvent: jest.fn(),
-      publishVaultBatchCreatedEvent: jest.fn(),
-    };
-  }
 
   it('should process all codes in the batch and send event', async () => {
     // Arrange
-    const mockedLogger = createTestLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider();
-    const mockedVaultBatchesRepo = mockVaultBatchesRepo();
-    const mockedVaultCodesRepo = mockVaultCodesRepo();
-
-    const mockedRedemptionsEventsRepo = mockRedemptionsEventsRepo();
-
-    const service = makeService(mockedLogger, {
-      vaultCodesRepo: mockedVaultCodesRepo,
-      redemptionsEventsRepo: mockedRedemptionsEventsRepo,
-      vaultBatchesRepo: as(mockedVaultBatchesRepo),
-      s3ClientProvider: mockedS3ClientProvider,
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => 'code1\ncode2\ncode3',
+        },
+      }),
     });
 
+    mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue({
+      batchId: defaultBatchId,
+      file: defaultFileName,
+      vaultId: defaultVaultId,
+    });
+
+    mockVaultCodesRepository.createMany = jest.fn((codes) =>
+      Promise.resolve(codes.map((code, index) => ({ id: `vcd-${index}`, code }))),
+    );
+
+    mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent = jest.fn();
+
     // Act
-    await service.handle(defaultBucketName, defaultS3Path, 1000);
+    await vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, 1000);
 
     // Assert
-    expect(mockedVaultCodesRepo.createMany).toHaveBeenCalledTimes(1);
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
+    expect(mockVaultCodesRepository.createMany).toHaveBeenCalledTimes(1);
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: [],
@@ -152,67 +78,73 @@ describe('VaultCodesUploadService', () => {
 
   it('should throw error if fail to get s3 file', async () => {
     // Arrange
-    const mockedSilentLogger = createSilentLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider();
-    mockedS3ClientProvider.getClient = jest.fn().mockReturnValue({
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
       send: jest.fn().mockRejectedValue(new Error('Failed to get file')),
-    });
-    const service = makeService(mockedSilentLogger, {
-      s3ClientProvider: mockedS3ClientProvider,
     });
 
     // Act & Assert
-    await expect(service.handle(defaultBucketName, defaultS3Path, 1000)).rejects.toThrow(
+    await expect(vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, 1000)).rejects.toThrow(
       'Vault code upload - Failed to get s3 file',
     );
   });
 
   it('should throw error if empty file', async () => {
     // Arrange
-    const mockedSilentLogger = createSilentLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider('');
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => '',
+        },
+      }),
+    });
 
-    const service = makeService(mockedSilentLogger, {
-      s3ClientProvider: mockedS3ClientProvider,
+    mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue({
+      batchId: defaultBatchId,
+      file: defaultFileName,
+      vaultId: defaultVaultId,
     });
 
     // Act & Assert
-    await expect(service.handle(defaultBucketName, defaultS3Path, 1000)).rejects.toThrow(
+    await expect(vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, 1000)).rejects.toThrow(
       'Vault code upload - Empty file',
     );
   });
 
   it('should throw error if fail to extract file name info', async () => {
-    // Arrange
-    const mockedSilentLogger = createSilentLogger();
-    const service = makeService(mockedSilentLogger, {});
-
     // Act & Assert
-    await expect(service.handle(defaultBucketName, 'invalid-path', 1000)).rejects.toThrow(
+    await expect(vaultCodesUploadService.handle(defaultBucketName, 'invalid-path', 1000)).rejects.toThrow(
       'Vault code upload - Invalid file path',
     );
   });
 
   it('counts successful vault code insertions', async () => {
-    const mockedLogger = createTestLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider(['AAA', 'BBB', 'CCC', 'DDD'].join('\n'));
-    const mockedVaultBatchesRepo = mockVaultBatchesRepo();
-    const mockedVaultCodesRepo = mockVaultCodesRepo();
-
-    const mockedRedemptionsEventsRepo = mockRedemptionsEventsRepo();
-
-    const service = makeService(mockedLogger, {
-      vaultCodesRepo: mockedVaultCodesRepo,
-      redemptionsEventsRepo: mockedRedemptionsEventsRepo,
-      vaultBatchesRepo: as(mockedVaultBatchesRepo),
-      s3ClientProvider: mockedS3ClientProvider,
+    // Arrange
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => ['AAA', 'BBB', 'CCC', 'DDD'].join('\n'),
+        },
+      }),
     });
-    await service.handle(defaultBucketName, defaultS3Path, 1000);
 
-    expect(mockedVaultCodesRepo.createMany).toHaveBeenCalledTimes(1);
+    mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue({
+      batchId: defaultBatchId,
+      file: defaultFileName,
+      vaultId: defaultVaultId,
+    });
 
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
+    mockVaultCodesRepository.createMany = jest.fn((codes) =>
+      Promise.resolve(codes.map((code, index) => ({ id: `vcd-${index}`, code }))),
+    );
+
+    mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent = jest.fn();
+
+    await vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, 1000);
+
+    expect(mockVaultCodesRepository.createMany).toHaveBeenCalledTimes(1);
+
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: [],
@@ -224,11 +156,22 @@ describe('VaultCodesUploadService', () => {
   });
 
   it('warns when duplicate codes are not inserted', async () => {
-    const mockedLogger = createSilentLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider(['AAA', 'BBB', 'CCC', 'DDD'].join('\n'));
-    const mockedVaultBatchesRepo = mockVaultBatchesRepo();
-    const mockedVaultCodesRepo = mockVaultCodesRepo();
-    mockedVaultCodesRepo.createMany = jest.fn((codes) => {
+    // Arrange
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => ['AAA', 'BBB', 'CCC', 'DDD'].join('\n'),
+        },
+      }),
+    });
+
+    mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue({
+      batchId: defaultBatchId,
+      file: defaultFileName,
+      vaultId: defaultVaultId,
+    });
+
+    mockVaultCodesRepository.createMany = jest.fn((codes) => {
       const duplicatesToFilter = ['BBB', 'DDD'];
       return Promise.resolve(
         codes
@@ -237,20 +180,14 @@ describe('VaultCodesUploadService', () => {
       );
     });
 
-    const mockedRedemptionsEventsRepo = mockRedemptionsEventsRepo();
+    mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent = jest.fn();
 
-    const service = makeService(mockedLogger, {
-      vaultCodesRepo: mockedVaultCodesRepo,
-      redemptionsEventsRepo: mockedRedemptionsEventsRepo,
-      vaultBatchesRepo: as(mockedVaultBatchesRepo),
-      s3ClientProvider: mockedS3ClientProvider,
-    });
-    await service.handle(defaultBucketName, defaultS3Path, 1000);
+    await vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, 1000);
 
-    expect(mockedVaultCodesRepo.createMany).toHaveBeenCalledTimes(1);
+    expect(mockVaultCodesRepository.createMany).toHaveBeenCalledTimes(1);
 
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: [],
@@ -260,33 +197,39 @@ describe('VaultCodesUploadService', () => {
       numberOfDuplicateCodes: 2,
     });
 
-    expect(mockedLogger.warn).toHaveBeenCalledTimes(1);
-    expect(mockedLogger.warn).toHaveBeenCalledWith({
+    expect(mockLogger.warn).toHaveBeenCalledTimes(1);
+    expect(mockLogger.warn).toHaveBeenCalledWith({
       message: 'Vault code upload - 2 duplicate vault codes were not inserted',
     });
-    expect(mockedLogger.error).not.toHaveBeenCalled();
+    expect(mockLogger.error).not.toHaveBeenCalled();
   });
 
   it('counts failed vault code insertions', async () => {
-    const mockedLogger = createTestLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider(['AAA', 'BBB', 'CCC', 'DDD'].join('\n'));
-    const mockedVaultBatchesRepo = mockVaultBatchesRepo();
-    const mockedVaultCodesRepo = mockVaultCodesRepo();
-    mockedVaultCodesRepo.createMany = jest.fn().mockRejectedValue(new Error('Failed to insert codes'));
-    const mockedRedemptionsEventsRepo = mockRedemptionsEventsRepo();
-
-    const service = makeService(mockedLogger, {
-      vaultCodesRepo: mockedVaultCodesRepo,
-      redemptionsEventsRepo: mockedRedemptionsEventsRepo,
-      vaultBatchesRepo: as(mockedVaultBatchesRepo),
-      s3ClientProvider: mockedS3ClientProvider,
+    // Arrange
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => ['AAA', 'BBB', 'CCC', 'DDD'].join('\n'),
+        },
+      }),
     });
-    await service.handle(defaultBucketName, defaultS3Path, 1000);
 
-    expect(mockedVaultCodesRepo.createMany).toHaveBeenCalledTimes(1);
+    mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue({
+      batchId: defaultBatchId,
+      file: defaultFileName,
+      vaultId: defaultVaultId,
+    });
 
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
+    mockVaultCodesRepository.createMany = jest.fn().mockRejectedValue(new Error('Failed to insert codes'));
+
+    mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent = jest.fn();
+
+    await vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, 1000);
+
+    expect(mockVaultCodesRepository.createMany).toHaveBeenCalledTimes(1);
+
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: ['AAA', 'BBB', 'CCC', 'DDD'],
@@ -300,30 +243,34 @@ describe('VaultCodesUploadService', () => {
   it('totals vault code insertion attempts across multiple batches', async () => {
     // Arrange
     const batchSize = 2;
-    const mockedLogger = createTestLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider();
-    const mockedVaultBatchesRepo = mockVaultBatchesRepo();
-    const mockedVaultCodesRepo = mockVaultCodesRepo();
-    mockedVaultCodesRepo.createMany = jest
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => 'code1\ncode2\ncode3',
+        },
+      }),
+    });
+
+    mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue({
+      batchId: defaultBatchId,
+      file: defaultFileName,
+      vaultId: defaultVaultId,
+    });
+
+    mockVaultCodesRepository.createMany = jest
       .fn()
       .mockRejectedValueOnce(new Error('Failed to insert codes'))
       .mockResolvedValue([{ id: 'vcd-1', code: 'code3' }]);
-    const mockedRedemptionsEventsRepo = mockRedemptionsEventsRepo();
 
-    const service = makeService(mockedLogger, {
-      vaultCodesRepo: mockedVaultCodesRepo,
-      redemptionsEventsRepo: mockedRedemptionsEventsRepo,
-      vaultBatchesRepo: as(mockedVaultBatchesRepo),
-      s3ClientProvider: mockedS3ClientProvider,
-    });
+    mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent = jest.fn();
 
     // Act
-    await service.handle(defaultBucketName, defaultS3Path, batchSize);
+    await vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, batchSize);
 
     // Assert
-    expect(mockedVaultCodesRepo.createMany).toHaveBeenCalledTimes(batchSize);
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
-    expect(mockedRedemptionsEventsRepo.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
+    expect(mockVaultCodesRepository.createMany).toHaveBeenCalledTimes(batchSize);
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledTimes(1);
+    expect(mockRedemptionsEventsRepository.publishVaultBatchCreatedEvent).toHaveBeenCalledWith({
       vaultId: defaultVaultId,
       batchId: defaultBatchId,
       codeInsertFailArray: ['code1', 'code2'],
@@ -336,28 +283,32 @@ describe('VaultCodesUploadService', () => {
 
   it('should throw error if codes contain spaces', async () => {
     // Arrange
-    const mockedSilentLogger = createSilentLogger();
-    const mockedS3ClientProvider = mockS3ClientProvider('co de1\ncod e3\nc ode2');
 
-    const mockedVaultBatchesRepo = mockVaultBatchesRepo();
-    const service = makeService(mockedSilentLogger, {
-      s3ClientProvider: mockedS3ClientProvider,
-      vaultBatchesRepo: as(mockedVaultBatchesRepo),
+    mockS3ClientProvider.getClient = jest.fn().mockReturnValue({
+      send: jest.fn().mockResolvedValue({
+        Body: {
+          transformToString: () => 'co de1\ncod e3\nc ode2',
+        },
+      }),
+    });
+
+    mockVaultBatchesRepository.findOneById = jest.fn().mockResolvedValue({
+      batchId: defaultBatchId,
+      file: defaultFileName,
+      vaultId: defaultVaultId,
     });
 
     // Act & Assert
-    await expect(service.handle(defaultBucketName, defaultS3Path, 1000)).rejects.toThrow(
+    await expect(vaultCodesUploadService.handle(defaultBucketName, defaultS3Path, 1000)).rejects.toThrow(
       'Vault code upload - Invalid blank space in code',
     );
   });
 
   it('should throw error if file path is invalid', async () => {
     // Arrange
-    const mockedSilentLogger = createSilentLogger();
-    const service = makeService(mockedSilentLogger, {});
 
     // Act & Assert
-    await expect(service.handle(defaultBucketName, 'invalid-path', 1000)).rejects.toThrow(
+    await expect(vaultCodesUploadService.handle(defaultBucketName, 'invalid-path', 1000)).rejects.toThrow(
       'Vault code upload - Invalid file path',
     );
   });

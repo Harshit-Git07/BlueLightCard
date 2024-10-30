@@ -1,6 +1,6 @@
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import Heading from '@/components/Heading/Heading';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { secretHash } from '@/utils/secret_hash';
 import InputTextFieldWithRef from '@/components/InputTextField/InputTextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -96,9 +96,12 @@ function MockLogin() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const authenticating = useRef(false);
+
   useEffect(() => {
     async function performTokenCodeExchangeIfRequired() {
       if (router.query['code']) {
+        authenticating.current = true;
         const code = router.query['code'];
         if (code && typeof code === 'string') {
           const success = await Auth0Service.getTokensUsingCode(code, authContext.updateAuthTokens);
@@ -106,9 +109,12 @@ function MockLogin() {
             await router.push('/members-home');
           }
         }
+        authenticating.current = false;
       }
     }
-    performTokenCodeExchangeIfRequired();
+    if (!authenticating.current) {
+      performTokenCodeExchangeIfRequired();
+    }
   }, [authContext, router]);
 
   const auth0Experiment = useAmplitudeExperiment(

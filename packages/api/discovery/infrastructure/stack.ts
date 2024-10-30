@@ -5,6 +5,7 @@ import { ApiGatewayV1Api, Function, FunctionDefinition, StackContext, use } from
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
+import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
@@ -206,8 +207,13 @@ const getDomainName = (stage: string, region: string) => {
 const getAustraliaDomainName = (stage: string) =>
   isProduction(stage) ? 'discovery-au.blcshine.io' : `${stage}-discovery-au.blcshine.io`;
 
-const getUKDomainName = (stage: string) =>
-  isProduction(stage) ? 'discovery.blcshine.io' : `${stage}-discovery.blcshine.io`;
+const getUKDomainName = (stage: string) => {
+  if (isProduction(stage)) {
+    return isDdsUkBrand() ? 'discovery-dds-uk.blcshine.io' : 'discovery.blcshine.io';
+  } else {
+    return `${stage}-discovery.blcshine.io`;
+  }
+};
 
 export const Discovery =
   getEnvRaw(DiscoveryStackEnvironmentKeys.SKIP_DISCOVERY_STACK) !== 'true' ? DiscoveryStack : () => Promise.resolve();

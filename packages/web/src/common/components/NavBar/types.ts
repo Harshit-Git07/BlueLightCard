@@ -24,8 +24,10 @@ export type NavigationItem = {
 
 export type NavigationBarProps = {
   navigationItems: NavigationItem[];
+  onBack?: () => void;
 };
 
 export type NavigationItemProps = {
   item: NavigationItem;
+  onBack?: () => void;
 };

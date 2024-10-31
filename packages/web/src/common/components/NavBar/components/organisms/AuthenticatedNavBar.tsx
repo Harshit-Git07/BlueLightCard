@@ -98,7 +98,7 @@ const AuthenticatedNavBar = ({
           <Logo className="h-[35px] tablet:h-[42px] laptop:h-[55px]" url="/members-home" />
           <div className="flex gap-7 h-full items-center">
             <div className="hidden desktop:flex desktop:h-full">
-              <DesktopNavigation navigationItems={navigationItems} />
+              <DesktopNavigation navigationItems={navigationItems} onBack={onBack} />
             </div>
             <div className="flex gap-5 items-center">
               <div className="hidden tablet:block tablet:w-[343px] w-full">

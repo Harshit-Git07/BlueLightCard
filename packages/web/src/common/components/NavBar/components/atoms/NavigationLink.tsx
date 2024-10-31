@@ -3,7 +3,7 @@ import { NavigationItemProps } from '../../types';
 import Link from '../../../Link/Link';
 import { useNavigationTracking } from '../../hooks/useNavigationTracking';
 
-const NavigationLink = ({ item }: NavigationItemProps) => {
+const NavigationLink = ({ item, onBack }: NavigationItemProps) => {
   const { trackNavigationEvent } = useNavigationTracking();
   return (
     <Link
@@ -16,7 +16,9 @@ const NavigationLink = ({ item }: NavigationItemProps) => {
           item.onClick();
         }
         trackNavigationEvent(item.id);
+        onBack && onBack();
       }}
+      data-testid={`navigationLink-${item.id}`}
     >
       {item.label}
     </Link>

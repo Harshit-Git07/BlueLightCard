@@ -68,10 +68,13 @@ export const SearchDropDownPresenter = ({
         <div className="mx-auto tablet:pt-[54px] pb-[100px] max-w-[1408px]">
           <div className="flex gap-2 px-4 py-[10px]">
             <Link tabIndex={0} href={`/nearme.php`} useLegacyRouting>
-              <FontAwesomeIcon icon={faLocationDot} size="lg" className="mr-2" />
-              <span className="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body">
+              <button
+                onClick={onClose}
+                className="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body"
+              >
+                <FontAwesomeIcon icon={faLocationDot} size="lg" className="mr-2" />
                 Offers near you
-              </span>
+              </button>
             </Link>
           </div>
           <div className="my-[22px] px-4">

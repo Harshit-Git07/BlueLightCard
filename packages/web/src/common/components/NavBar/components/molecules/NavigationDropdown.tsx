@@ -6,7 +6,7 @@ import LinkList from '../../../LinkList/LinkList';
 import { useNavigationTracking } from '../../hooks/useNavigationTracking';
 import Link from '../../../Link/Link';
 
-const NavigationDropdown = ({ item }: NavigationItemProps) => {
+const NavigationDropdown = ({ item, onBack }: NavigationItemProps) => {
   const [showDropdown, setShowDropdown] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const dropdownTriggerRef = React.useRef<HTMLButtonElement>(null);
@@ -82,6 +82,7 @@ const NavigationDropdown = ({ item }: NavigationItemProps) => {
                     }
                     trackNavigationEvent(i.id);
                     hideDropdowns();
+                    onBack && onBack();
                   },
                 }))
               : []

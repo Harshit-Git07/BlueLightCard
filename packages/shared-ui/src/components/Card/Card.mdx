@@ -1,0 +1,91 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as Card from './Card.stories';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+
+<Meta of={Card} />
+
+# Card
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Status
+<ComponentStatus />
+
+## Overview
+
+Card used to display content in a structured way. It can contain an image, title, and description.
+
+## Props
+
+<Controls />
+
+## Variants and States
+
+List of variants can be shown below here.
+
+**Default**
+<Canvas of={Card.Default} />
+
+**Selected**
+<Canvas of={Card.Selected} />
+
+**Hover**
+<Canvas of={Card.Hover} />
+
+**Hidden Image**
+<Canvas of={Card.HiddenImage} />
+
+**Hidden Description**
+<Canvas of={Card.HiddenDescription} />
+
+**Center Aligned**
+<Canvas of={Card.CenterAligned} />
+
+**Title Only**
+<Canvas of={Card.TitleOnly} />
+
+**Title and Description**
+<Canvas of={Card.TitleAndDescription} />
+
+**Full Width**
+<Canvas of={Card.FullWidthDefault} />
+
+## Implementation
+
+Usage example using jsx:
+
+```jsx
+const ExampleCard = () => {
+  return (
+    <Card
+      cardTitle="Example Card"
+      description="This is an example card description that shows how to use the component."
+      buttonTitle="Click Me"
+      imageSrc="/example-image.jpg"
+      imageAlt="Example"
+      showImage={true}
+      showDescription={true}
+      showButton={true}
+      onClick={() => console.log('Card clicked')}
+    />
+  );
+};
+```
+
+## Usage Guidelines
+
+➡️ Square variant must contain image vs horizontal variant which can optional hide/ show image
+
+➡️ Text can be center aligned in horizontal variant
+
+➡️ Min width is 288px on desktop or wide screens otherwise should be set to fill width of parent container
+
+## Design
+- [Figma: Card](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=587-15897&node-type=frame&m=dev)

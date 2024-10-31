@@ -107,7 +107,7 @@ const Button: FC<ButtonProps> = ({
   }
 
   const classes = cssUtil([
-    'px-5 rounded-md transition border-2',
+    'px-5 rounded transition border-2',
     sizeClass,
     disabled ? colourToken.disabled : '',
     colourToken.text,

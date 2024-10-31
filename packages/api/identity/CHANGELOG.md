@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.104.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.103.0...bluelightcard/identity-v1.104.0) (2024-10-30)
+
+
+### Features
+
+* (AUT-75) Update Shared Authoriser to authorise with Auth0 token as well ([#2573](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2573)) ([6a820da](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6a820da329413878b9bbe21b8de4d5fbbff1465e))
+* (AUT-84) Web: Handle new user ids auth0 claims ([#2688](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2688)) ([111bae5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/111bae5b8b93ae0464480e7b41768995941292bf))
+
 ## [1.103.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.102.0...bluelightcard/identity-v1.103.0) (2024-10-28)
 
 

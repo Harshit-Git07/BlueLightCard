@@ -304,7 +304,11 @@ export class RedemptionsStackConfigResolver {
           uniqodoSecretsManagerName: this.fromPerBrandStaticValues(BLC_UK_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
-          adminApiDefaultAllowedOrigins: ['https://cms-staging.blcshine.io'],
+          adminApiDefaultAllowedOrigins: [
+            'http://localhost:3333',
+            'https://cms-sandbox.blcshine.io',
+            'https://cms-staging.blcshine.io',
+          ],
           apiDefaultAllowedOrigins: ['https://www.staging.bluelightcard.co.uk', 'http://localhost:3000'],
           redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
           identityApiUrl: 'https://staging-identity.blcshine.io',
@@ -356,7 +360,11 @@ export class RedemptionsStackConfigResolver {
           uniqodoSecretsManagerName: this.fromPerBrandStaticValues(BLC_AU_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
-          adminApiDefaultAllowedOrigins: ['https://cms-sandbox.blcshine.io'],
+          adminApiDefaultAllowedOrigins: [
+            'http://localhost:3333',
+            'https://cms-sandbox.blcshine.io',
+            'https://cms-staging.blcshine.io',
+          ],
           apiDefaultAllowedOrigins: ['https://www.develop.bluelightcard.com.au', 'http://localhost:3000'],
           redemptionsWebHost: 'https://www.develop.bluelightcard.com.au',
           identityApiUrl: 'https://staging-identity-au.blcshine.io',
@@ -407,7 +415,11 @@ export class RedemptionsStackConfigResolver {
           uniqodoSecretsManagerName: this.fromPerBrandStaticValues(DDS_UK_BRAND).uniqodoSecretManagerName,
         },
         networkConfig: {
-          adminApiDefaultAllowedOrigins: ['https://cms-sandbox.blcshine.io'],
+          adminApiDefaultAllowedOrigins: [
+            'http://localhost:3333',
+            'https://cms-sandbox.blcshine.io',
+            'https://cms-staging.blcshine.io',
+          ],
           apiDefaultAllowedOrigins: ['https://www.ddsstaging.bluelightcard.tech', 'http://localhost:3000'],
           redemptionsWebHost: 'https://www.ddsstaging.bluelightcard.tech',
           identityApiUrl: 'https://staging-identity.blcshine.io',

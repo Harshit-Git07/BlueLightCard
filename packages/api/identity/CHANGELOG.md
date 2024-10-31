@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.105.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.104.0...bluelightcard/identity-v1.105.0) (2024-10-31)
+
+
+### Features
+
+* Add some logging to ensure api usage ([#2710](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2710)) ([5f0a767](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5f0a767955a3f5ad6592bf04b31acfcf88404d52))
+
 ## [1.104.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.103.0...bluelightcard/identity-v1.104.0) (2024-10-30)
 
 

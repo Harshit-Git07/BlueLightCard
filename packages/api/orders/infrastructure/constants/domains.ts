@@ -1,11 +1,11 @@
 export const productionDomainNames = {
-  BLC_UK: 'orders.blcshine.io', // TODO: Update this later to follow below format (backward compatibility required)
+  BLC_UK: 'orders-blc-uk.blcshine.io',
   BLC_AU: 'orders-blc-au.blcshine.io',
   DDS_UK: 'orders-dds-uk.blcshine.io',
 };
 
 export const stagingDomainNames = {
-  BLC_UK: 'staging-orders.blcshine.io', // TODO: Update this later to follow below format (backward compatibility required)
+  BLC_UK: 'staging-orders-blc-uk.blcshine.io',
   BLC_AU: 'staging-orders-blc-au.blcshine.io',
   DDS_UK: 'staging-orders-dds-uk.blcshine.io',
 };

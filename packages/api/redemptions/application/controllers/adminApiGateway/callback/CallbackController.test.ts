@@ -3,6 +3,7 @@ import {
   ICallbackResponse,
   ICallbackService,
 } from '@blc-mono/redemptions/application/services/callback/CallbackService';
+import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 import { eagleEyeModelFactory, uniqodoModelFactory } from '@blc-mono/redemptions/libs/test/factories/callback.factory';
 import { createSilentLogger, createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
@@ -11,11 +12,13 @@ import { CallbackController } from './CallbackController';
 
 describe('CallbackController', () => {
   beforeAll(() => {
-    process.env.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME = 'secrets-manager-name';
+    process.env[RedemptionsStackEnvironmentKeys.ADMIN_API_DEFAULT_ALLOWED_ORIGINS] = '["*"]';
+    process.env[RedemptionsStackEnvironmentKeys.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME] = 'secrets-manager-name';
   });
 
   afterAll(() => {
-    delete process.env.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME;
+    delete process.env[RedemptionsStackEnvironmentKeys.ADMIN_API_DEFAULT_ALLOWED_ORIGINS];
+    delete process.env[RedemptionsStackEnvironmentKeys.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME];
   });
 
   const mockedCallbackService = {
@@ -90,7 +93,7 @@ describe('CallbackController', () => {
 
     it('Throws an error if unhandled kind is returned', async () => {
       // Arrange
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       mockedCallbackService.handle.mockResolvedValue(
         as({
           kind: 'UnhandledKind',
@@ -112,6 +115,15 @@ describe('CallbackController', () => {
         message: 'Internal Server Error',
         meta: {},
       });
+      expect(mockedLogger.warn).not.toHaveBeenCalled();
+      expect(mockedLogger.error).toHaveBeenCalledTimes(1);
+      expect(mockedLogger.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          context: expect.objectContaining({
+            error: expect.stringContaining('[Error] Unhandled result kind: UnhandledKind'),
+          }),
+        }),
+      );
     });
 
     it('Throws an error if invalid API key is provided', async () => {

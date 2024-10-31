@@ -1,5 +1,4 @@
-import { ApiKeySourceType, RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { EndpointType } from 'aws-cdk-lib/aws-apigateway';
+import { ApiKeySourceType, EndpointType, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1Api, Stack } from 'sst/constructs';
@@ -10,7 +9,7 @@ import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastru
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
 import { DwhKenisisFirehoseStreams } from '@blc-mono/shared/infra/firehose/DwhKenisisFirehoseStreams';
 
-import { RedemptionsStackConfigResolver } from '../config/config';
+import { RedemptionsStackConfig } from '../config/config';
 import { productionAdminDomainNames, stagingAdminDomainNames } from '../constants/domains';
 import { IDatabase } from '../database/adapter';
 import { VaultCodesUpload } from '../s3/vaultCodesUpload';
@@ -33,14 +32,19 @@ type AdminApiRoutesParams = {
   permissions?: PolicyStatement[];
 };
 
-const createRoutesFactory = (baseParams: baseParams) => {
+const createRoutesFactory = (config: RedemptionsStackConfig, baseParams: baseParams) => {
   return ({ name, handler, environment, permissions }: AdminApiRoutesParams) => {
     return AdminRoute.createRoute({
       ...baseParams,
       functionName: `${name}Handler`,
       handler,
       requestValidatorName: `${name}Validator`,
-      environment,
+      environment: {
+        ...environment,
+        [RedemptionsStackEnvironmentKeys.ADMIN_API_DEFAULT_ALLOWED_ORIGINS]: JSON.stringify(
+          config.networkConfig.adminApiDefaultAllowedOrigins,
+        ),
+      },
       permissions,
     });
   };
@@ -48,6 +52,7 @@ const createRoutesFactory = (baseParams: baseParams) => {
 
 export function createAdminApi(
   stack: Stack,
+  config: RedemptionsStackConfig,
   globalConfig: GlobalConfig,
   certificateArn: string | undefined,
   database: IDatabase,
@@ -55,7 +60,6 @@ export function createAdminApi(
   vaultCodesUpload: VaultCodesUpload,
   dwhKenisisFirehoseStreams: DwhKenisisFirehoseStreams,
 ): ApiGatewayV1Api<Record<string, never>> {
-  const config = RedemptionsStackConfigResolver.for(stack);
   const adminApi = new ApiGatewayV1Api(stack, 'redemptionsAdmin', {
     cdk: {
       restApi: {
@@ -74,6 +78,12 @@ export function createAdminApi(
           metricsEnabled: true,
         },
         apiKeySourceType: ApiKeySourceType.HEADER,
+        defaultCorsPreflightOptions: {
+          allowOrigins: config.networkConfig.apiDefaultAllowedOrigins,
+          allowHeaders: ['*'],
+          allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+          allowCredentials: true,
+        },
       },
     },
   });
@@ -149,7 +159,7 @@ export function createAdminApi(
     resources: ['*'],
   });
 
-  const routeFactory = createRoutesFactory(baseParams);
+  const routeFactory = createRoutesFactory(config, baseParams);
 
   adminApi.addRoutes(stack, {
     'GET /vaults/{vaultId}/batches': routeFactory({

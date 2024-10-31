@@ -260,6 +260,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
 
   const adminApi = createAdminApi(
     stack,
+    config,
     globalConfig,
     certificateArn,
     database,

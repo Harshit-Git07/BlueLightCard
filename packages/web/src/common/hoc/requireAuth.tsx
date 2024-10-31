@@ -9,7 +9,6 @@ import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
 import AuthTokensService from '../services/authTokensService';
 import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeDeviceExperimentClient from '../utils/amplitude/AmplitudeDeviceExperimentClient';
-import { nowInSecondsSinceEpoch } from '@/utils/dates';
 import { getAuth0FeatureFlagBasedOnBrand } from '@/utils/amplitude/getAuth0FeatureFlagBasedOnBrand';
 import { getLogoutUrl } from '@/root/src/common/auth/authUrls';
 import { Auth0Service } from '@/root/src/common/services/auth0Service';
@@ -51,7 +50,7 @@ async function isAuthenticated(
     sub: usernameFromToken,
     iss: issuer,
   } = unpackJWT(idToken);
-  if (nowInSecondsSinceEpoch() >= tokenExpiryInSecondsSinceEpoch) {
+  if (AuthTokensService.expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
     //refresh token and update storage and return true or false based on if it works
     return Auth0Service.isAuth0Issuer(issuer)
       ? await Auth0Service.updateTokensUsingRefreshToken(refreshToken, updateAuthTokens)

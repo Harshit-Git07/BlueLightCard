@@ -1,6 +1,5 @@
 import { unpackJWT } from '@core/utils/unpackJWT';
 import { reAuthFromRefreshToken } from '@/utils/reAuthFromRefreshToken';
-import { nowInSecondsSinceEpoch } from '@/utils/dates';
 import AuthTokensService from '@/root/src/common/services/authTokensService';
 import { Auth0Service } from '@/root/src/common/services/auth0Service';
 
@@ -15,7 +14,7 @@ export async function refreshIdTokenIfRequired(): Promise<string> {
       iss: issuer,
     } = unpackJWT(idToken);
 
-    if (expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
+    if (AuthTokensService.expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
       // Token has expired so re-authentication is required
       const refreshedSuccessfully = Auth0Service.isAuth0Issuer(issuer)
         ? await Auth0Service.updateTokensUsingRefreshToken(
@@ -39,6 +38,3 @@ export async function refreshIdTokenIfRequired(): Promise<string> {
 
   return idToken;
 }
-
-const expiryTimeHasPassed = (tokenExpiryInSecondsSinceEpoch: number) =>
-  nowInSecondsSinceEpoch() >= tokenExpiryInSecondsSinceEpoch;

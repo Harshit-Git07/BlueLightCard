@@ -1,12 +1,15 @@
 import { AuthState } from '@/context/Auth/AuthContext';
+import { nowInSecondsSinceEpoch } from '@/utils/dates';
+
+const TOKEN_EXPIRY_LEEWAY_IN_SECONDS = 5;
 
 export default class AuthTokensService {
   public static authTokensPresent() {
-    return (
+    return Boolean(
       AuthTokensService.getIdToken() &&
-      AuthTokensService.getAccessToken() &&
-      AuthTokensService.getRefreshToken() &&
-      AuthTokensService.getUsername()
+        AuthTokensService.getAccessToken() &&
+        AuthTokensService.getRefreshToken() &&
+        AuthTokensService.getUsername()
     );
   }
 
@@ -38,5 +41,11 @@ export default class AuthTokensService {
 
   public static getUsername(): string {
     return localStorage.getItem('username') as string;
+  }
+
+  public static expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch: number): boolean {
+    return (
+      nowInSecondsSinceEpoch() >= tokenExpiryInSecondsSinceEpoch - TOKEN_EXPIRY_LEEWAY_IN_SECONDS
+    );
   }
 }

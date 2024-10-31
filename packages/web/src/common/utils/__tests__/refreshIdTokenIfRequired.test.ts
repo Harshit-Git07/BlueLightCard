@@ -23,6 +23,7 @@ describe('refreshIdTokenIfRequired', () => {
     jest.clearAllMocks();
     AuthTokensService.getRefreshToken = jest.fn().mockReturnValue(refreshToken);
     AuthTokensService.getUsername = jest.fn().mockReturnValue(username);
+    AuthTokensService.expiryTimeHasPassed = jest.fn().mockReturnValue(false);
   });
 
   it('should not refresh idToken if token has not expired', async () => {
@@ -41,6 +42,7 @@ describe('refreshIdTokenIfRequired', () => {
       .fn()
       .mockReturnValueOnce(idToken)
       .mockReturnValueOnce(refreshedIdToken);
+    AuthTokensService.expiryTimeHasPassed = jest.fn().mockReturnValue(true);
     reAuthFromRefreshTokenMock.mockResolvedValue(true);
     mockedUnpackJWT.mockReturnValue({ exp: 1573428519, sub: username } as JWT);
 
@@ -57,6 +59,7 @@ describe('refreshIdTokenIfRequired', () => {
 
   it('should return the existing id token if the refresh fails', async () => {
     AuthTokensService.getIdToken = jest.fn().mockReturnValueOnce(idToken);
+    AuthTokensService.expiryTimeHasPassed = jest.fn().mockReturnValue(true);
     reAuthFromRefreshTokenMock.mockResolvedValue(false);
     mockedUnpackJWT.mockReturnValue({ exp: 1573428519, sub: username } as JWT);
 

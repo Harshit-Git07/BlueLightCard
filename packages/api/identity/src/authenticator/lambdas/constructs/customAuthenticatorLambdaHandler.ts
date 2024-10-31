@@ -50,6 +50,11 @@ const handlerUnwrapped = async function (
     const mainIssuerMatch = decodedToken?.iss === auth0Issuer;
     const extraIssuerMatch = auth0ExtraIssuer && decodedToken?.iss === auth0ExtraIssuer;
 
+    logger.info(
+      'Custom authorizer called',
+      { methodArn: event.methodArn, issuer: decodedToken.iss, clientId: decodedToken.aud }
+    );
+
     if (mainIssuerMatch || extraIssuerMatch) {
       return await authenticateAuth0Token(event, decodedToken.iss);
     }

@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { UniqodoModel } from '../libs/models/postCallback';
+import { UniqodoModel } from '../../libs/models/postCallback';
 
 type RequestBody = UniqodoModel;
 

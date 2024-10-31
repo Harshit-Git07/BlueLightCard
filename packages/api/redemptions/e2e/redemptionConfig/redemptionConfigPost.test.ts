@@ -1,18 +1,18 @@
 import { faker } from '@faker-js/faker';
-import AWS from 'aws-sdk';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { E2EDatabaseConnectionManager } from '@blc-mono/redemptions/e2e/helpers/database';
 import { DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 
-import { GenericsRepository } from '../application/repositories/GenericsRepository';
-import { RedemptionConfigCombinedRepository } from '../application/repositories/RedemptionConfigCombinedRepository';
-import { RedemptionConfigRepository } from '../application/repositories/RedemptionConfigRepository';
-import { VaultBatchesRepository } from '../application/repositories/VaultBatchesRepository';
-import { VaultsRepository } from '../application/repositories/VaultsRepository';
+import { GenericsRepository } from '../../application/repositories/GenericsRepository';
+import { RedemptionConfigCombinedRepository } from '../../application/repositories/RedemptionConfigCombinedRepository';
+import { RedemptionConfigRepository } from '../../application/repositories/RedemptionConfigRepository';
+import { VaultBatchesRepository } from '../../application/repositories/VaultBatchesRepository';
+import { VaultsRepository } from '../../application/repositories/VaultsRepository';
+import { getApiKey } from '../helpers/adminApi';
 
-describe('POST /redemptions/', () => {
+describe('POST Redemption Config', () => {
   let connectionManager: E2EDatabaseConnectionManager;
   let apiKey: string;
 
@@ -23,7 +23,6 @@ describe('POST /redemptions/', () => {
   let redemptionRepositoryHelper: RedemptionConfigCombinedRepository;
 
   beforeAll(async () => {
-    // eslint-disable-next-line no-console
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
 
     vaultsRepository = new VaultsRepository(connectionManager.connection);
@@ -37,22 +36,14 @@ describe('POST /redemptions/', () => {
       genericsRepository,
     );
 
-    const APIGateway = new AWS.APIGateway();
-    const keyLookup = `${process.env.SST_STAGE}-redemptions-admin`;
-    apiKey = await new Promise((resolve) => {
-      APIGateway.getApiKeys({ nameQuery: keyLookup, includeValues: true }, (_err, data) => {
-        if (!data.items![0].value) {
-          throw new Error('Unable to find API key: ' + keyLookup);
-        }
-
-        resolve(data.items![0].value);
-      });
-    });
-
     await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds(['101', '102', '103', '104', '105']);
 
     // Set a conservative timeout
   }, 60_000);
+
+  beforeAll(async () => {
+    apiKey = await getApiKey(`${process.env.SST_STAGE}-redemptions-admin`);
+  });
 
   afterAll(async () => {
     await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds(['101', '102', '103', '104', '105']);

@@ -91,9 +91,11 @@ describe('CallbackController', () => {
     it('Throws an error if unhandled kind is returned', async () => {
       // Arrange
       const mockedLogger = createTestLogger();
-      mockedCallbackService.handle.mockResolvedValue({
-        kind: 'UnhandledKind' as any,
-      } satisfies ICallbackResponse);
+      mockedCallbackService.handle.mockResolvedValue(
+        as({
+          kind: 'UnhandledKind',
+        }) satisfies ICallbackResponse,
+      );
       const controller = new CallbackController(mockedLogger, mockedSecretsManager, mockedCallbackService);
 
       // Act

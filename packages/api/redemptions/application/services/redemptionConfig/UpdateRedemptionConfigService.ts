@@ -51,11 +51,13 @@ export type UpdatePreAppliedRedemptionSchema = z.infer<typeof PatchPreAppliedMod
 export type UpdateGenericRedemptionSchema = z.infer<typeof PatchGenericModel>;
 export type UpdateVaultRedemptionSchema = z.infer<typeof PatchVaultOrVaultQRModel>;
 
-let requestPayload:
+export type UpdateRedemptionRequestPayload =
   | UpdateShowCardRedemptionSchema
   | UpdatePreAppliedRedemptionSchema
   | UpdateGenericRedemptionSchema
   | UpdateVaultRedemptionSchema;
+
+let requestPayload: UpdateRedemptionRequestPayload;
 
 export interface IUpdateRedemptionConfigService {
   updateRedemptionConfig(

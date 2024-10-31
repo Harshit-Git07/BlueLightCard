@@ -9,6 +9,8 @@ export default defineConfig({
     exclude: [],
   },
   test: {
+    globals: true,
     include: ['./e2e/**/*.test.ts'],
+    testTimeout: 10000,
   },
 });

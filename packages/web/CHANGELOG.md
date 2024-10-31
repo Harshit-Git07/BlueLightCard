@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.83.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.82.0...bluelightcard/web-v1.83.0) (2024-10-31)
+
+
+### Features
+
+* **AUT-77:** centralise token expiry check in AuthTokensService with leeway ([#2697](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2697)) ([2bbfc20](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2bbfc20379d8a740eff923a306734c12296bf5a3))
+
 ## [1.82.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.81.0...bluelightcard/web-v1.82.0) (2024-10-31)
 
 

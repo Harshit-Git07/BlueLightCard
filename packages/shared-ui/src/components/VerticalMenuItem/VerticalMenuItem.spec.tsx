@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import VerticalMenuItem, { Props } from './';
 import { faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import userEvent from '@testing-library/user-event';
+import VerticalMenuItem, { Props } from './index';
 
 jest.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: ({ icon }: { icon: any }) => (

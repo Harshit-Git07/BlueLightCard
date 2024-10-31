@@ -2,7 +2,7 @@ import { FC, MouseEventHandler } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/pro-solid-svg-icons';
 import NextLink from 'next/link';
-import { conditionalStrings } from '@bluelightcard/shared-ui/utils/conditionalStrings';
+import { conditionalStrings } from '../../utils/conditionalStrings';
 
 export type Props = {
   label: string;

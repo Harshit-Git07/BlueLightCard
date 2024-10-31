@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import VerticalMenuItem from './';
+import VerticalMenuItem from './index';
 import { faArrowUpRightFromSquare, faCoffee, faHome } from '@fortawesome/pro-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 

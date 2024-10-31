@@ -2,7 +2,7 @@ import { ResponsiveOfferCard, PlatformVariant, useOfferDetails } from '@blueligh
 import { useAtom } from 'jotai';
 import { FC } from 'react';
 import { companyDataAtom, selectedFilter } from '../atoms';
-import { OfferModel } from '../types';
+import { OfferModel, CMSOfferModel } from '../types';
 import { useMedia } from 'react-use';
 
 const CompanyOffers: FC = () => {
@@ -19,9 +19,9 @@ const CompanyOffers: FC = () => {
   const filteredOffers =
     offers && selectedType === 'All'
       ? offers
-      : offers && offers.filter((offer: OfferModel) => offer.type === selectedType);
+      : offers && offers.filter((offer: OfferModel | CMSOfferModel) => offer.type === selectedType);
 
-  const onClickEvent = (offerId: number) => {
+  const onClickEvent = (offerId: number | string) => {
     if (companyId) {
       try {
         viewOffer({
@@ -39,7 +39,7 @@ const CompanyOffers: FC = () => {
   return (
     <>
       {filteredOffers &&
-        filteredOffers.map((offer: OfferModel, index: number) => {
+        filteredOffers.map((offer: OfferModel | CMSOfferModel, index: number) => {
           return (
             <div key={index} className="pb-2">
               <ResponsiveOfferCard

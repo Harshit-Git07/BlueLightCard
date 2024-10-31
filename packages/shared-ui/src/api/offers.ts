@@ -1,7 +1,7 @@
 import { IPlatformAdapter } from '../adapters';
 import { z } from 'zod';
 
-export const OfferDataSchema = z.object({
+export const OfferDataGetSchema = z.object({
   id: z.number(),
   companyId: z.number(),
   companyLogo: z.string(),
@@ -11,7 +11,7 @@ export const OfferDataSchema = z.object({
   terms: z.string(),
   type: z.string(),
 });
-export type OfferData = z.infer<typeof OfferDataSchema>;
+export type OfferData = z.infer<typeof OfferDataGetSchema>;
 
 export async function getOffer(
   platformAdapter: IPlatformAdapter,
@@ -26,5 +26,5 @@ export async function getOffer(
   }
 
   const resultData = JSON.parse(result.data);
-  return OfferDataSchema.parse(resultData.data);
+  return OfferDataGetSchema.parse(resultData.data);
 }

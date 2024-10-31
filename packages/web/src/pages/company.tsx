@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useMedia } from 'react-use';
+import { toPlainText } from '@portabletext/react';
 import { advertQuery } from 'src/graphql/advertQuery';
 import { makeQuery } from 'src/graphql/makeQuery';
 import { shuffle } from 'lodash';
@@ -16,8 +17,9 @@ import {
   PlatformVariant,
   CampaignCard,
   useOfferDetails,
+  CMS_SERVICES,
+  apiRequest,
 } from '@bluelightcard/shared-ui';
-import { getCompany, getOffersByCompany } from '../common/utils/company/companyData';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import AmplitudeContext from '@/context/AmplitudeContext';
 import amplitudeEvents from '@/utils/amplitude/events';
@@ -33,6 +35,9 @@ import CompanyPageFilters, {
 } from '../page-components/company/CompanyPageFilters';
 import CompanyPageOffers from '../page-components/company/CompanyPageOffers';
 import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
+import { useQueryCustomHook } from '@bluelightcard/shared-ui/hooks/useQueryCustomHook';
+import { useAmplitudeExperiment } from '../common/context/AmplitudeExperiment';
+import { WebPlatformAdapter } from '../common/utils/WebPlatformAdapter';
 
 type CompanyPageProps = {};
 
@@ -47,6 +52,37 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
   const defaultCompanyPropertyValue = '';
+
+  const adapter = new WebPlatformAdapter();
+
+  const cmsFlagResult = useAmplitudeExperiment('cms-offers', 'off');
+  const isCmsFlagOn = cmsFlagResult.data?.variantName === 'on';
+
+  // Fetches company data with react query custom hook
+  const fetchCompanyData = useQueryCustomHook({
+    enabled: !!authCtx.authState.idToken && !!companyId && cmsFlagResult.isSuccess,
+    queryKeyArr: ['companyData', companyId as string],
+    queryFnCall: async () =>
+      apiRequest({
+        service: CMS_SERVICES.COMPANY_DATA,
+        adapter,
+        isCmsFlagOn,
+        companyId: companyId as string,
+      }),
+  });
+
+  // Fetches company offers data with react query custom hook
+  const fetchCompanyOffersData = useQueryCustomHook({
+    enabled: !!authCtx.authState.idToken && !!companyId && cmsFlagResult.isSuccess,
+    queryKeyArr: ['offersByCompany', companyId as string],
+    queryFnCall: async () =>
+      apiRequest({
+        service: CMS_SERVICES.OFFERS_BY_COMPANY_DATA,
+        adapter,
+        isCmsFlagOn,
+        companyId: companyId as string,
+      }),
+  });
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [query] = useState<string>((router.query.q as string) ?? '');
@@ -110,6 +146,13 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authCtx.authState.idToken, userCtx.isAgeGated, userCtx.user, router.isReady, query]);
 
+  // HANDLES COMPANY DATA
+  useEffect(() => {
+    if (fetchCompanyData.isSuccess && !companyData.name) {
+      setCompanyData(fetchCompanyData.data);
+    }
+  }, [fetchCompanyData, companyData]);
+
   useEffect(() => {
     const handleCompanyView = (eventSource: string, companyId: string, companyName: string) => {
       logCompanyView({
@@ -122,43 +165,21 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
       });
     };
 
-    const fetchCompanyData = async () => {
-      setIsLoading(true);
-
-      // Company data
-      const companyDataResponse = await getCompany(authCtx.authState.idToken, companyId);
-
-      if (companyDataResponse !== null || companyDataResponse) {
-        setCompanyData(companyDataResponse);
-        if (userCtx.user?.uuid) {
-          handleCompanyView('companyPage', companyDataResponse.id, companyDataResponse.name);
-        }
-      } else {
-        setErrorMessage('Company could not be found.');
-      }
-    };
-
-    if (authCtx.authState.idToken && companyId) {
-      fetchCompanyData();
+    if (companyData && userCtx.user?.uuid) {
+      handleCompanyView('companyPage', companyData.id, companyData.name);
     }
-  }, [amplitude, authCtx.authState.idToken, companyId, pathname, userCtx.user?.uuid]);
+  }, [companyData, userCtx.user?.uuid, amplitude, pathname]);
 
+  // HANDLES COMPANY OFFERS DATA
   useEffect(() => {
-    const fetchOfferData = async () => {
-      setIsLoading(true);
-
-      //Offers data
-      const offerDataResponse = await getOffersByCompany(authCtx.authState.idToken, companyId);
-      if (offerDataResponse || offerDataResponse !== null) {
-        setOfferData(offerDataResponse.offers);
-      }
-    };
-
-    if (authCtx.authState.idToken && companyId) {
-      fetchOfferData();
+    if (fetchCompanyOffersData.isSuccess && !offerData) {
+      setOfferData(fetchCompanyOffersData.data);
+    } else if (fetchCompanyOffersData.isError && !offerData) {
+      setOfferData([]);
     }
-  }, [authCtx.authState.idToken, companyId]);
+  }, [fetchCompanyOffersData, offerData]);
 
+  // Removes loading spinner when all data is fetched
   useEffect(() => {
     if (adverts && companyData && offerData) {
       setIsLoading(false);
@@ -220,7 +241,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
             {!isMobile && (
               <div className="w-full">
                 <CompanyAbout
-                  CompanyDescription={companyData.description}
+                  CompanyDescription={
+                    isCmsFlagOn ? toPlainText(companyData.description) : companyData.description
+                  }
                   platform={PlatformVariant.Web}
                 />
               </div>
@@ -275,7 +298,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
               <div className="my-4">
                 <CompanyAbout
                   CompanyName={`About ${companyData.name}`}
-                  CompanyDescription={companyData.description}
+                  CompanyDescription={
+                    isCmsFlagOn ? toPlainText(companyData.description) : companyData.description
+                  }
                   platform={PlatformVariant.MobileHybrid}
                 />
               </div>

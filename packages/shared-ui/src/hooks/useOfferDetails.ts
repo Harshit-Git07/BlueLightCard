@@ -6,6 +6,8 @@ export type useOfferDetailsOptions = {
   offerId: number | string;
 };
 
+// TODO: DEPRECATED - DO NOT USE. USE useQueryCustomHook() instead.
+// BE SURE TO CHECK IF THIS FILE CAN BE REMOVED BEFORE MERGING IN STAGING
 export function useOfferDetails(options: useOfferDetailsOptions): UseQueryResult<OfferData, Error> {
   const adapter = usePlatformAdapter();
 

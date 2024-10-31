@@ -12,18 +12,28 @@ export type OfferModel = {
   image: string;
 };
 
+export type CMSOfferModel = {
+  id: string;
+  description: any; // TODO: Fix this any type
+  name: string;
+  type: OfferTypeStrLiterals;
+  expires: string;
+  termsAndConditions: any; // TODO: Fix this any type
+  image: string;
+};
+
 export type CompanyModel = {
   companyId: number;
   companyName: string;
-  companyDescription: string;
-  offers: OfferModel[];
+  companyDescription: any; // TODO: Fix this any type (can be string or any)
+  offers: OfferModel[] | CMSOfferModel[];
 };
 
 // Zod Types
 export const ZodCompanyModel = z.object({
-  description: z.string(),
+  description: z.any(), // TODO: Fix this any type
   name: z.string(),
-  id: z.number(),
+  id: z.any(), // TODO: Fix this any type (can be string or number)
 });
 
 export const ZodOfferModel = z.object({
@@ -42,6 +52,18 @@ export const ZodOfferResponseModel = z.object({
     offers: z.array(ZodOfferModel),
   }),
 });
+
+export const CMSZodOfferResponseModel = z.array(
+  z.object({
+    id: z.string(),
+    description: z.any(), // TODO: Fix this any type
+    name: z.string(),
+    type: z.string(),
+    expires: z.string(),
+    termsAndConditions: z.any(), // TODO: Fix this any type
+    image: z.string(),
+  }),
+);
 
 export const ZodCompanyResponseModel = z.object({
   message: z.string(),

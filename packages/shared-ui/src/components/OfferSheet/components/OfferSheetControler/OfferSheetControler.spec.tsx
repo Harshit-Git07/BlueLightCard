@@ -3,7 +3,7 @@ import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../ada
 import OfferSheetControler from '.';
 import { render, waitFor } from '@testing-library/react';
 import { QueryClientProvider, QueryClient, useQuery } from '@tanstack/react-query';
-import { useOfferDetails } from '../../../../hooks/useOfferDetails';
+import { useQueryCustomHook } from '../../../../hooks/useQueryCustomHook';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
 
@@ -41,7 +41,7 @@ function renderComponent() {
   );
 }
 
-jest.mock('../../../../hooks/useOfferDetails');
+jest.mock('../../../../hooks/useQueryCustomHook');
 
 describe('smoke test', () => {
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe('smoke test', () => {
   });
 
   it('should render correct screen for pending offer status', () => {
-    jest.mocked(useOfferDetails as jest.Mock).mockReturnValue({
+    jest.mocked(useQueryCustomHook as jest.Mock).mockReturnValue({
       status: 'pending',
     });
     const { container } = renderComponent();
@@ -66,7 +66,7 @@ describe('smoke test', () => {
   });
 
   it('should render correct screen for error offer status', () => {
-    jest.mocked(useOfferDetails as jest.Mock).mockReturnValue({
+    jest.mocked(useQueryCustomHook as jest.Mock).mockReturnValue({
       status: 'error',
     });
     const { getByRole, getByText } = renderComponent();
@@ -79,7 +79,7 @@ describe('smoke test', () => {
   });
 
   it('should render correct screen for success offer status', async () => {
-    jest.mocked(useOfferDetails as jest.Mock).mockReturnValue({
+    jest.mocked(useQueryCustomHook as jest.Mock).mockReturnValue({
       data: {
         id: 1,
         companyId: 1,

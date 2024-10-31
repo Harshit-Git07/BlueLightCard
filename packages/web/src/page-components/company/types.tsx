@@ -12,7 +12,7 @@ export type OfferData = {
 export type CompanyData = {
   id: string;
   name: string;
-  description: string;
+  description: string | any; // TODO: Fix this any type
 };
 
 export type BannerDataType = {

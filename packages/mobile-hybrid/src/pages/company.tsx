@@ -3,14 +3,23 @@ import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { CompanyAbout, PlatformVariant } from '@bluelightcard/shared-ui';
+import { toPlainText } from '@portabletext/react';
+import {
+  CMS_SERVICES,
+  CompanyAbout,
+  PlatformVariant,
+  apiDynamicPath,
+} from '@bluelightcard/shared-ui';
 import { companyDataAtom } from '@/page-components/company/atoms';
 import CompanyPageHeader from '@/page-components/company/components/CompanyPageHeader';
 import PillsController from '@/page-components/company/components/PillsController';
 import CompanyOffers from '@/page-components/company/components/CompanyOffers';
 import { MobilePlatformAdapter } from '@/utils/platformAdapter';
 import {
+  CMSOfferModel,
+  CMSZodOfferResponseModel,
   OfferModel,
+  ZodCompanyModel,
   ZodCompanyResponseModel,
   ZodOfferResponseModel,
 } from '@/page-components/company/types';
@@ -36,15 +45,33 @@ const Company: NextPage<any> = () => {
 
   const [hasError, setHasError] = useState<boolean>(false);
 
+  const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
+  let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
+  let isCmsFlagOn = amplitudeExperiments[FeatureFlags.CMS_OFFERS] === 'on';
+
   useEffect(() => {
     const getOffers = async () => {
       const platformAdapter = new MobilePlatformAdapter();
-      const offersRetrieve = platformAdapter.invokeV5Api(`/eu/offers/company/${cid}/offers`, {
-        method: 'GET',
-      });
-      const companyRetrieve = platformAdapter.invokeV5Api(`/eu/offers/company/${cid}`, {
-        method: 'GET',
-      });
+      const companyRetrieve = platformAdapter.invokeV5Api(
+        apiDynamicPath({
+          service: CMS_SERVICES.COMPANY_DATA,
+          isCmsFlagOn,
+          companyId: cid as string,
+        }),
+        {
+          method: 'GET',
+        },
+      );
+      const offersRetrieve = platformAdapter.invokeV5Api(
+        apiDynamicPath({
+          service: CMS_SERVICES.OFFERS_BY_COMPANY_DATA,
+          isCmsFlagOn,
+          companyId: cid as string,
+        }),
+        {
+          method: 'GET',
+        },
+      );
 
       const [companyResponse, offersResponse] = await Promise.all([
         companyRetrieve,
@@ -58,30 +85,47 @@ const Company: NextPage<any> = () => {
         return;
       }
 
-      const company = ZodCompanyResponseModel.parse(JSON.parse(companyResponse.data));
-      const offers = ZodOfferResponseModel.parse(JSON.parse(offersResponse.data));
+      if (isCmsFlagOn) {
+        const company = ZodCompanyModel.parse(JSON.parse(companyResponse.data));
+        const offers = CMSZodOfferResponseModel.parse(JSON.parse(offersResponse.data));
+        console.log('company', company);
+        setCompany({
+          companyId: company.id,
+          companyName: company.name,
+          companyDescription: company.description,
+          offers: offers as CMSOfferModel[],
+        });
 
-      setCompany({
-        companyId: company.data.id,
-        companyName: company.data.name,
-        companyDescription: company.data.description,
-        offers: offers.data.offers as OfferModel[],
-      });
+        analytics.logAnalyticsEvent({
+          event: AmplitudeEvents.COMPANYPAGE_VIEWED,
+          parameters: {
+            company_id: cid,
+            company_name: company.name,
+            origin: 'mobile-hybrid',
+          },
+        });
+      } else {
+        const company = ZodCompanyResponseModel.parse(JSON.parse(companyResponse.data));
+        const offers = ZodOfferResponseModel.parse(JSON.parse(offersResponse.data));
+        setCompany({
+          companyId: company.data.id,
+          companyName: company.data.name,
+          companyDescription: company.data.description,
+          offers: offers.data.offers as OfferModel[],
+        });
 
-      analytics.logAnalyticsEvent({
-        event: AmplitudeEvents.COMPANYPAGE_VIEWED,
-        parameters: {
-          company_id: cid,
-          company_name: company.data.name,
-          origin: 'mobile-hybrid',
-        },
-      });
+        analytics.logAnalyticsEvent({
+          event: AmplitudeEvents.COMPANYPAGE_VIEWED,
+          parameters: {
+            company_id: cid,
+            company_name: company.data.name,
+            origin: 'mobile-hybrid',
+          },
+        });
+      }
 
       setSpinner(false);
     };
-
-    const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
-    let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
 
     // Give up trying to refetch the data from the hybrid event-bus after maxRetry count
     if (retries > maxRetries) {
@@ -104,7 +148,7 @@ const Company: NextPage<any> = () => {
     } else {
       getOffers();
     }
-  }, [cid, retries, setCompany, setSpinner]);
+  }, [cid, retries, setCompany, setSpinner, v5FlagOn, isCmsFlagOn]);
 
   return (
     <div className="px-4">
@@ -118,7 +162,11 @@ const Company: NextPage<any> = () => {
           <div className="mt-4">
             <CompanyAbout
               CompanyName={`About ${company?.companyName ?? ''}`}
-              CompanyDescription={company?.companyDescription ?? ''}
+              CompanyDescription={
+                isCmsFlagOn && company?.companyDescription
+                  ? toPlainText(company.companyDescription)
+                  : company?.companyDescription ?? ''
+              }
               platform={PlatformVariant.MobileHybrid}
             />
           </div>

@@ -5,18 +5,31 @@ import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { offerSheetAtom } from '../../store';
 import { exhaustiveCheck } from '../../../../utils/exhaustiveCheck';
-import { useOfferDetails } from '../../../../hooks/useOfferDetails';
 import { OfferDetails } from '../../types';
+import { useQueryCustomHook } from '../../../../hooks/useQueryCustomHook';
+import { apiRequest, CMS_SERVICES } from '../../../../services/apiRequestService';
+import { usePlatformAdapter } from '../../../../adapters';
 
 const OfferSheetController: FC = () => {
-  const { offerDetails, showRedemptionPage, offerMeta } = useAtomValue(offerSheetAtom);
+  const adapter = usePlatformAdapter();
+  const { offerDetails, showRedemptionPage, offerMeta, isOpen } = useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
-  const offerQuery = useOfferDetails({
-    offerId: offerMeta.offerId!,
+  const cmsFlagResult = adapter.getAmplitudeFeatureFlag('cms-offers');
+
+  const offerQuery = useQueryCustomHook({
+    enabled: !!offerMeta.offerId && isOpen,
+    queryKeyArr: ['offerDetails', offerMeta.offerId?.toString() as string],
+    queryFnCall: async () =>
+      apiRequest({
+        service: CMS_SERVICES.OFFER_DETAILS_DATA,
+        adapter,
+        offerId: offerMeta.offerId?.toString() as string,
+        isCmsFlagOn: cmsFlagResult === 'on',
+      }),
   });
 
   useEffect(() => {
-    if (offerQuery.status === 'success') {
+    if (offerQuery.isSuccess) {
       setOfferSheetAtom((prev) => ({
         ...prev,
         offerDetails: offerQuery.data as OfferDetails,
@@ -27,7 +40,8 @@ const OfferSheetController: FC = () => {
         },
       }));
     }
-  }, [offerQuery.status]);
+  }, [offerQuery.isSuccess]);
+
   switch (offerQuery.status) {
     case 'pending':
       if (showRedemptionPage) {

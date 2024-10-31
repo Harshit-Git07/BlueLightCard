@@ -22,8 +22,8 @@ jest.mock('@tanstack/react-query', () => {
   };
 });
 
-jest.mock('../../hooks/useOfferDetails', () => ({
-  useOfferDetails: jest.fn().mockReturnValue({
+jest.mock('../../hooks/useQueryCustomHook', () => ({
+  useQueryCustomHook: jest.fn().mockReturnValue({
     data: {
       id: 1,
       companyId: 1,

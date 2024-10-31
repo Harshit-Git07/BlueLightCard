@@ -30,6 +30,8 @@ export * from './adapters';
 export * from './api';
 export * from './components/OfferDetails';
 export * from './hooks/useCSS';
+export * from './hooks/useQueryCustomHook';
+export * from './services/apiRequestService';
 export * from './hooks/useMediaQuery';
 export * from './utils/cssUtil';
 export * from './utils/storyUtils';

@@ -5,6 +5,13 @@ variable "TFC_WORKSPACE_NAME" {
   default = ""
 }
 
+variable "aws_acm_domain_name" {
+  type        = string
+  description = "AWS ACM Domain Name"
+
+  default = "*.blcshine.io"
+}
+
 variable "aws_availability_zones" {
   type        = list(string)
   description = "AWS Region"
@@ -17,6 +24,12 @@ variable "aws_region" {
   description = "AWS Region"
 
   default = "eu-west-2"
+}
+
+variable "aws_wafv2_web_acl_name" {
+  # TODO
+  type        = string
+  description = "TEMPORARY: AWS WAF WebACL name"
 }
 
 variable "stage" {

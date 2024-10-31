@@ -1,6 +1,6 @@
-# Import
+# VPC
 
-## BLC: Develop
+## Develop
 
 ### VPC
 terraform import module.vpc.aws_vpc.main vpc-03c90090cd3995daf
@@ -63,7 +63,7 @@ terraform import module.vpc.aws_route_table_association.public[0] subnet-021b4c7
 terraform import module.vpc.aws_route_table_association.public[1] subnet-0afc4cdb466ea1f6d/rtb-0f512adbc4bfb36d4
 terraform import module.vpc.aws_route_table_association.public[2] subnet-0e9649bcb8ea83d91/rtb-0829a02d21652d447
 
-## BLC: Staging
+## Staging
 
 ### VPC
 terraform import module.vpc.aws_vpc.main vpc-00d892607dde1f397
@@ -126,7 +126,7 @@ terraform import module.vpc.aws_route_table_association.public[0] subnet-05e3283
 terraform import module.vpc.aws_route_table_association.public[1] subnet-02c23f3654b408c6e/rtb-0d034e316fdf7627f
 terraform import module.vpc.aws_route_table_association.public[2] subnet-02dea6c36abde459f/rtb-0227d8164ff236a67
 
-## BLC: Production
+## Production
 
 ### VPC
 terraform import module.vpc.aws_vpc.main vpc-018ad1074fd3adc53

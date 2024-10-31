@@ -6,27 +6,54 @@ locals {
 
 # vpc
 module "vpc" {
-  source = "git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc?ref=v1.2.0"
-
-  app = local.app
+  source = "git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc?ref=v1.3.0"
 
   aws_availability_zones = var.aws_availability_zones
   aws_region             = var.aws_region
   aws_vpc_name           = "vpc-shared"
 
-  default_tags = {
-    "sst:app"   = local.app
-    "sst:stage" = var.stage
-  }
-
+  defaults = {
+    app   = local.app
   stage = var.stage
+  }
 }
 
-# ses
 # shared iam roles
 # event bus
+resource "aws_cloudwatch_event_bus" "default" {
+  name = "${var.stage}-${local.app}-eventBus"
+}
+
 # acm certificates
+resource "aws_acm_certificate" "default" {
+  domain_name = var.aws_acm_domain_name
+
+  tags = {
+    Name = "${var.stage}-${local.app}-global/Certificate"
+  }
+
+  validation_method = "DNS"
+}
+
 # opensearch
 # redshift
 # s3
 # streams
+# waf webacl
+resource "aws_wafv2_web_acl" "default" {
+  # TODO
+  # name = "WebACL-${var.stage}-${local.app}"
+  name = var.aws_wafv2_web_acl_name
+
+  default_action {
+    allow {}
+  }
+
+  scope = "REGIONAL"
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "waf"
+    sampled_requests_enabled   = true
+  }
+}

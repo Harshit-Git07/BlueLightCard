@@ -1,6 +1,6 @@
-# Import
+# VPC
 
-## DDS: Develop
+## Develop
 
 ### VPC
 terraform import module.vpc.aws_vpc.main vpc-0b527bcbb3e4541d7
@@ -63,7 +63,7 @@ terraform import module.vpc.aws_route_table_association.public[0] subnet-09ce44b
 terraform import module.vpc.aws_route_table_association.public[1] subnet-079c477d738a8134f/rtb-0168e669fff1f8f6f
 terraform import module.vpc.aws_route_table_association.public[2] subnet-053293ff4091c0441/rtb-0c6f27decc88689b3
 
-## DDS: Staging
+## Staging
 
 ### VPC
 terraform import module.vpc.aws_vpc.main vpc-01168db3f0a95b8c9
@@ -126,7 +126,7 @@ terraform import module.vpc.aws_route_table_association.public[0] subnet-0f6aeb4
 terraform import module.vpc.aws_route_table_association.public[1] subnet-0c7e45a073df45b5b/rtb-088ff42f448e5a861
 terraform import module.vpc.aws_route_table_association.public[2] subnet-045fa355f36313b9c/rtb-0cb743bf47de3db44
 
-## DDS: Production
+## Production
 
 ### VPC
 terraform import module.vpc.aws_vpc.main vpc-001d7030f18b0d7e8

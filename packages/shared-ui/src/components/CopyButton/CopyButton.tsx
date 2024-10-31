@@ -69,7 +69,7 @@ const CopyButton: FC<Props> = ({ copyText, disabled, className }) => {
           <FontAwesomeIcon className="ml-2" icon={faCopy} />
         </button>
       ) : (
-        <div className="ml-3 mt-1.5 flex items-center text-colour-success-light dark:text-colour-success-dark">
+        <div className="ml-3 flex items-center text-colour-success-light dark:text-colour-success-dark">
           <div className={`${font} tracking-typography-label-semibold`}>Copied to clipboard</div>
           <FontAwesomeIcon className="ml-2" icon={faCheckCircle} size="xs" />
         </div>

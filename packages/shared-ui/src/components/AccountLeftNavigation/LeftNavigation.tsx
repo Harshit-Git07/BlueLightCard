@@ -13,7 +13,7 @@ const LeftNavigation = ({ isOpen, onLinkSelection, onCloseDrawer }: Props) => {
   return (
     <>
       <div
-        className={`mobile:block tablet:hidden absolute z-10 flex flex-col gap-3 w-[370px] h-full p-4 bg-white delay-400 duration-500 ease-in-out transition-all ${
+        className={`mobile:block tablet:hidden absolute z-10 flex w-[370px] h-full p-4 bg-white delay-400 duration-500 ease-in-out transition-all ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -23,7 +23,9 @@ const LeftNavigation = ({ isOpen, onLinkSelection, onCloseDrawer }: Props) => {
           </button>
         </div>
 
-        <UserDetails />
+        <div className="my-5">
+          <UserDetails />
+        </div>
 
         <LeftNavigationLinks onSelection={onLinkSelection} />
       </div>

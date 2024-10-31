@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/payments-v1.0.0...bluelightcard/payments-v1.1.0) (2024-10-31)
+
+
+### Features
+
+* change blc-uk custom domains ([#2706](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2706)) ([fbcda48](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fbcda48af74f4bdc2fa92878997b5a8bf31520b9))
+
 ## 1.0.0 (2024-10-30)
 
 

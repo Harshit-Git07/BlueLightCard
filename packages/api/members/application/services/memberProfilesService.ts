@@ -2,7 +2,6 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import { MemberProfilesRepository } from '../repositories/memberProfilesRepository';
 import {
   AddressInsertPayload,
-  CardCreatePayload,
   ProfileUpdatePayload,
   CreateProfilePayload,
 } from '../types/memberProfilesTypes';
@@ -81,19 +80,6 @@ export class MemberProfilesService {
         this.logger.error('Unknown error inserting address:', { error });
         throw new Error('Unknown error occurred while inserting address');
       }
-    }
-  }
-
-  async createCard(memberUUID: string, payload: CardCreatePayload): Promise<void> {
-    try {
-      await this.repository.insertCard(memberUUID, payload.cardStatus);
-    } catch (error) {
-      this.logger.error('Error creating card:', {
-        error:
-          error instanceof Error ? error.message : 'Unknown error occurred while creating card',
-        memberUUID: memberUUID,
-      });
-      throw new Error('Failed to create card');
     }
   }
 

@@ -1,17 +1,22 @@
-import { DynamoDB } from 'aws-sdk';
+import {
+  DynamoDBDocument,
+  QueryCommand,
+  TransactWriteCommand,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import {
   ProfileUpdatePayload,
   AddressInsertPayload,
   CreateProfilePayload,
 } from '../types/memberProfilesTypes';
 import { MemberProfileDB, MemberProfileDBSchema } from '../models/memberProfileModel';
-import { MAP_BRAND } from '../../../core/src/constants/common';
-import { BRAND_SCHEMA } from '../../../core/src/schemas/common';
+import { MAP_BRAND } from '@blc-mono/core/constants/common';
+import { BRAND_SCHEMA } from '@blc-mono/core/schemas/common';
 import { EligibilityStatus } from '../enums/EligibilityStatus';
 import { ApplicationReason } from '../enums/ApplicationReason';
 export class MemberProfilesRepository {
   constructor(
-    private dynamoDB: DynamoDB.DocumentClient,
+    private dynamoDB: DynamoDBDocument,
     private tableName: string,
   ) {}
 
@@ -61,7 +66,7 @@ export class MemberProfilesRepository {
         ],
       };
 
-      await this.dynamoDB.transactWrite(params).promise();
+      await this.dynamoDB.send(new TransactWriteCommand(params));
       const prefixSeparator = '#';
       return memberKey.split(prefixSeparator)[1];
     } catch (error) {
@@ -83,7 +88,7 @@ export class MemberProfilesRepository {
       },
     };
 
-    const queryResult = await this.dynamoDB.query(queryParams).promise();
+    const queryResult = await this.dynamoDB.send(new QueryCommand(queryParams));
 
     if (!queryResult.Items || queryResult.Items.length === 0) {
       return null;
@@ -105,7 +110,7 @@ export class MemberProfilesRepository {
       },
     };
 
-    const queryResult = await this.dynamoDB.query(queryParams).promise();
+    const queryResult = await this.dynamoDB.send(new QueryCommand(queryParams));
 
     if (!queryResult.Items || queryResult.Items.length === 0) {
       return null;
@@ -136,7 +141,7 @@ export class MemberProfilesRepository {
       },
     };
 
-    await this.dynamoDB.update(updateParams).promise();
+    await this.dynamoDB.send(new UpdateCommand(updateParams));
   }
 
   async insertAddressAndUpdateProfile(
@@ -174,22 +179,6 @@ export class MemberProfilesRepository {
       },
     ];
 
-    await this.dynamoDB.transactWrite({ TransactItems: transactionItems }).promise();
-  }
-
-  async insertCard(memberUUID: string, cardStatus: string): Promise<void> {
-    const cardNumber = '123456'; // Placeholder value
-    const now = new Date().toISOString();
-    const params = {
-      TableName: this.tableName,
-      Item: {
-        pk: `MEMBER#${memberUUID}`,
-        sk: `CARD#${cardNumber}`,
-        status: cardStatus,
-        timeRequested: now,
-      },
-    };
-
-    await this.dynamoDB.put(params).promise();
+    await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: transactionItems }));
   }
 }

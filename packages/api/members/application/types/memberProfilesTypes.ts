@@ -20,7 +20,3 @@ export interface AddressInsertPayload {
   county: string;
   postcode: string;
 }
-
-export interface CardCreatePayload {
-  cardStatus: string;
-}

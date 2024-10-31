@@ -1,4 +1,9 @@
-import { DynamoDB } from 'aws-sdk';
+import {
+  DynamoDBDocument,
+  QueryCommand,
+  QueryCommandInput,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 
 import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { z } from 'zod';
@@ -6,7 +11,7 @@ import { ReusableCrudQueryPayload } from '../types/reusableCrudQueryPayload';
 
 export class ReusableCrudRepository<T1 extends NamedZodType<z.ZodEffects<z.ZodObject<any>>>, T2> {
   constructor(
-    private readonly dynamoDB: DynamoDB.DocumentClient,
+    private readonly dynamoDB: DynamoDBDocument,
     private readonly tableName: string,
     private readonly zodType: T1,
     private readonly pkPrefix: string,
@@ -14,7 +19,7 @@ export class ReusableCrudRepository<T1 extends NamedZodType<z.ZodEffects<z.ZodOb
   ) {}
 
   async get(query: ReusableCrudQueryPayload): Promise<T1[] | null> {
-    const queryParams: DynamoDB.DocumentClient.QueryInput = {
+    const queryParams: QueryCommandInput = {
       TableName: this.tableName,
       KeyConditionExpression: '#pk = :pk',
       ExpressionAttributeNames: {
@@ -35,7 +40,7 @@ export class ReusableCrudRepository<T1 extends NamedZodType<z.ZodEffects<z.ZodOb
       queryParams.ExpressionAttributeValues![':skPrefix'] = `${this.skPrefix}#`;
     }
 
-    const queryResult = await this.dynamoDB.query(queryParams).promise();
+    const queryResult = await this.dynamoDB.send(new QueryCommand(queryParams));
 
     if (!queryResult.Items || queryResult.Items.length === 0) {
       return null;
@@ -97,6 +102,6 @@ export class ReusableCrudRepository<T1 extends NamedZodType<z.ZodEffects<z.ZodOb
       },
     };
 
-    await this.dynamoDB.update(updateParams).promise();
+    await this.dynamoDB.send(new UpdateCommand(updateParams));
   }
 }

@@ -1,6 +1,7 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { validateRequest } from '../../utils/requestValidator';
 import {
   MemberApplicationQueryPayload,
@@ -16,7 +17,7 @@ const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-updateMemberApplication` });
 
 const tableName = process.env.APPLICATION_TABLE_NAME as string;
-const dynamoDB = new DynamoDB.DocumentClient({ region: process.env.REGION ?? 'eu-west-2' });
+const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
 
 const repository = new MemberApplicationRepository(dynamoDB, tableName);
 const applicationService = new MemberApplicationService(repository, logger);

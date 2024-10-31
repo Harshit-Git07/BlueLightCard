@@ -2,7 +2,8 @@ import { APIGatewayProxyHandler } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { MemberProfilesService } from '../../services/memberProfilesService';
 import { MemberProfilesRepository } from '../../repositories/memberProfilesRepository';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { Table } from 'sst/node/table';
 import { validateRequest } from '../../utils/requestValidator';
 import { ProfileUpdatePayload } from '../../types/memberProfilesTypes';
@@ -10,7 +11,7 @@ import { ProfileUpdatePayload } from '../../types/memberProfilesTypes';
 const service: string = process.env.service as string;
 const logger = new Logger({ serviceName: `${service}-updateProfile` });
 
-const dynamoDB = new DynamoDB.DocumentClient();
+const dynamoDB = DynamoDBDocument.from(new DynamoDB());
 const repository = new MemberProfilesRepository(dynamoDB, Table.identityTable.tableName);
 const profileService = new MemberProfilesService(repository, logger);
 

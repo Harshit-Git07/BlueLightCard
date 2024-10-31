@@ -5,6 +5,7 @@ import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agMo
 import { z } from 'zod';
 import { ReusableCrudQueryPayload } from '../../types/reusableCrudQueryPayload';
 import { ReusableCrudService } from '../reusableCrudService';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 jest.mock('../../repositories/reusableCrudRepository');
 jest.mock('@aws-lambda-powertools/logger');
@@ -14,7 +15,7 @@ describe('ReusableCrudService', () => {
   let mockRepository: jest.Mocked<ReusableCrudRepository<any, any>>;
   let mockLogger: jest.Mocked<Logger>;
   let mockZodType: NamedZodType<z.ZodEffects<z.ZodObject<any>>>;
-  let dynamoDB: AWS.DynamoDB.DocumentClient;
+  let dynamoDB: DynamoDBDocument;
   let tableName: string;
 
   beforeEach(() => {
@@ -30,7 +31,7 @@ describe('ReusableCrudService', () => {
       parse: jest.fn() as jest.Mock,
     } as unknown as NamedZodType<z.ZodEffects<z.ZodObject<any>>>;
 
-    dynamoDB = {} as AWS.DynamoDB.DocumentClient;
+    dynamoDB = {} as DynamoDBDocument;
     tableName = 'testTable';
 
     service = new ReusableCrudService(

@@ -1,28 +1,21 @@
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { MemberCardRepository } from '../memberCardRepository';
 import { MemberCardQueryPayload, MemberCardUpdatePayload } from '../../types/memberCardTypes';
 import { CardStatus } from 'application/enums/CardStatus';
 import { PaymentStatus } from 'application/enums/PaymentStatus';
-
-jest.mock('aws-sdk');
+import { mockClient } from 'aws-sdk-client-mock';
+import 'aws-sdk-client-mock-jest';
 
 describe('MemberCardRepository', () => {
   let repository: MemberCardRepository;
-  let mockDynamoDB: jest.Mocked<DynamoDB.DocumentClient>;
+  const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
   beforeEach(() => {
-    mockDynamoDB = {
-      query: jest.fn(),
-      update: jest.fn(),
-      put: jest.fn(),
-      transactWrite: jest.fn(),
-    } as unknown as jest.Mocked<DynamoDB.DocumentClient>;
+    repository = new MemberCardRepository(mockDynamoDB as any, 'TestTable');
+  });
 
-    (mockDynamoDB.transactWrite as jest.Mock).mockReturnValue({
-      promise: jest.fn().mockResolvedValue({}),
-    });
-
-    repository = new MemberCardRepository(mockDynamoDB, 'TestTable');
+  afterEach(() => {
+    mockDynamoDB.reset();
   });
 
   describe('getMemberCards', () => {
@@ -44,9 +37,7 @@ describe('MemberCardRepository', () => {
           },
         ],
       };
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockResolvedValue(mockQueryResult),
-      } as any);
+      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
       const mockQuery: MemberCardQueryPayload = {
         uuid: '12345678-1234-1234-12345678',
@@ -69,7 +60,7 @@ describe('MemberCardRepository', () => {
           batch_number: '1',
         },
       ]);
-      expect(mockDynamoDB.query).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
         TableName: 'TestTable',
         KeyConditionExpression: '#pk = :pk AND #sk = :sk',
         ExpressionAttributeNames: {
@@ -84,12 +75,8 @@ describe('MemberCardRepository', () => {
     });
 
     it('should return null when card is not found', async () => {
-      const mockQueryResult = {
-        Items: [],
-      };
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockResolvedValue(mockQueryResult),
-      } as any);
+      const mockQueryResult = { Items: [] };
+      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
       const mockQuery: MemberCardQueryPayload = {
         uuid: '12345678-1234-2134-12345678',
@@ -103,9 +90,7 @@ describe('MemberCardRepository', () => {
     });
 
     it('should throw an error when query fails', async () => {
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
+      mockDynamoDB.on(QueryCommand).rejects(new Error('DynamoDB error'));
 
       const mockQuery: MemberCardQueryPayload = {
         uuid: '12345678-1234-2134-12345678',
@@ -123,10 +108,9 @@ describe('MemberCardRepository', () => {
       uuid: '12345678-1234-1234-12345678',
       brand: 'blc-uk',
     };
+
     it('should update the card successfully', async () => {
-      mockDynamoDB.update.mockReturnValue({
-        promise: jest.fn().mockResolvedValue({}),
-      } as any);
+      mockDynamoDB.on(UpdateCommand).resolves({});
 
       const payload: MemberCardUpdatePayload = {
         name_on_card: 'Mike',
@@ -140,7 +124,7 @@ describe('MemberCardRepository', () => {
 
       await repository.updateMemberCard(queryWithCardNo, payload);
 
-      expect(mockDynamoDB.update).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(UpdateCommand, {
         ConditionExpression: 'pk = :pk AND sk = :sk',
         TableName: 'TestTable',
         Key: {
@@ -164,9 +148,7 @@ describe('MemberCardRepository', () => {
     });
 
     it('should throw an error when update fails', async () => {
-      mockDynamoDB.update.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
+      mockDynamoDB.on(UpdateCommand).rejects(new Error('DynamoDB error'));
 
       const payload: MemberCardUpdatePayload = {
         name_on_card: 'Mike',

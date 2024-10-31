@@ -1,4 +1,9 @@
-import { DynamoDB } from 'aws-sdk';
+import {
+  DynamoDBDocumentClient,
+  QueryCommand,
+  TransactWriteCommand,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { MemberProfilesRepository } from '../memberProfilesRepository';
 import {
   AddressInsertPayload,
@@ -6,8 +11,9 @@ import {
   CreateProfilePayload,
 } from '../../types/memberProfilesTypes';
 import { MemberProfileDBSchema } from '../../models/memberProfileModel';
+import { mockClient } from 'aws-sdk-client-mock';
+import 'aws-sdk-client-mock-jest';
 
-jest.mock('aws-sdk');
 jest.mock('../../models/memberProfileModel', () => ({
   MemberProfileDBSchema: {
     parse: jest.fn(),
@@ -16,21 +22,14 @@ jest.mock('../../models/memberProfileModel', () => ({
 
 describe('MemberProfileRepository', () => {
   let repository: MemberProfilesRepository;
-  let mockDynamoDB: jest.Mocked<DynamoDB.DocumentClient>;
+  const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
   beforeEach(() => {
-    mockDynamoDB = {
-      query: jest.fn(),
-      update: jest.fn(),
-      put: jest.fn(),
-      transactWrite: jest.fn(),
-    } as unknown as jest.Mocked<DynamoDB.DocumentClient>;
+    repository = new MemberProfilesRepository(mockDynamoDB as any, 'TestTable');
+  });
 
-    (mockDynamoDB.transactWrite as jest.Mock).mockReturnValue({
-      promise: jest.fn().mockResolvedValue({}),
-    });
-
-    repository = new MemberProfilesRepository(mockDynamoDB, 'TestTable');
+  afterEach(() => {
+    mockDynamoDB.reset();
   });
 
   describe('createCustomerProfiles', () => {
@@ -41,31 +40,29 @@ describe('MemberProfileRepository', () => {
       dateOfBirth: '1990-01-01',
       emailAddress: 'test@mail.com',
     };
+    const mockMemberUUID = '123e4567-e89b-12d3-a456-426614174000';
+    const mockProfileUUID = '223e4567-e89b-12d3-a456-426614174001';
+    const mockApplicationUUID = '323e4567-e89b-12d3-a456-426614174002';
+    const fixedDate = new Date('2024-07-19T00:00:00.000Z');
+    const mockMappedBrand = 'blc-uk';
 
-    it('should create a member profile, brand entry, and signup application successfully', async () => {
-      const mockMemberUUID = '123e4567-e89b-12d3-a456-426614174000';
-      const mockProfileUUID = '223e4567-e89b-12d3-a456-426614174001';
-      const mockApplicationUUID = '323e4567-e89b-12d3-a456-426614174002';
+    beforeEach(() => {
       const mockUuids = jest
         .fn()
+        .mockReturnValueOnce(mockMemberUUID)
+        .mockReturnValueOnce(mockProfileUUID)
+        .mockReturnValueOnce(mockApplicationUUID)
         .mockReturnValueOnce(mockMemberUUID)
         .mockReturnValueOnce(mockProfileUUID)
         .mockReturnValueOnce(mockApplicationUUID);
 
       Object.defineProperty(global, 'crypto', {
+        configurable: true,
         value: { randomUUID: mockUuids },
       });
 
-      jest
-        .spyOn(global.crypto, 'randomUUID')
-        .mockReturnValueOnce(mockMemberUUID)
-        .mockReturnValueOnce(mockProfileUUID)
-        .mockReturnValueOnce(mockApplicationUUID);
-
-      const fixedDate = new Date('2024-07-19T00:00:00.000Z');
       jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
 
-      const mockMappedBrand = 'blc-uk';
       jest.mock('../../../../core/src/constants/common', () => ({
         MAP_BRAND: {
           BLC_UK: mockMappedBrand,
@@ -76,10 +73,12 @@ describe('MemberProfileRepository', () => {
           parse: jest.fn().mockReturnValue('BLC_UK'),
         },
       }));
+    });
 
+    it('should create a member profile, brand entry, and signup application successfully', async () => {
       await repository.createCustomerProfiles(payload, brand);
 
-      expect(mockDynamoDB.transactWrite).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(TransactWriteCommand, {
         TransactItems: [
           {
             Put: {
@@ -121,39 +120,14 @@ describe('MemberProfileRepository', () => {
     });
 
     it('should return the member_uuid without the MEMBER# prefix', async () => {
-      const mockMemberUUID = '123e4567-e89b-12d3-a456-426614174000';
-      const mockProfileUUID = '223e4567-e89b-12d3-a456-426614174001';
-      const mockApplicationUUID = '323e4567-e89b-12d3-a456-426614174002';
-
-      jest
-        .spyOn(global.crypto, 'randomUUID')
-        .mockReturnValueOnce(mockMemberUUID)
-        .mockReturnValueOnce(mockProfileUUID)
-        .mockReturnValueOnce(mockApplicationUUID);
-
-      const fixedDate = new Date('2024-07-19T00:00:00.000Z');
-      jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
-
-      const mockMappedBrand = 'mapped-brand-id';
-      jest.mock('../../../../core/src/constants/common', () => ({
-        MAP_BRAND: {
-          BLC_UK: mockMappedBrand,
-        },
-      }));
-      jest.mock('../../../../core/src/schemas/common', () => ({
-        BRAND_SCHEMA: {
-          parse: jest.fn().mockReturnValue('BLC_UK'),
-        },
-      }));
-
       const result = await repository.createCustomerProfiles(payload, brand);
+
       expect(result).toBe(mockMemberUUID);
     });
 
     it('should throw an error if transactWrite fails', async () => {
-      (mockDynamoDB.transactWrite as jest.Mock).mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      });
+      mockDynamoDB.on(TransactWriteCommand).rejects(new Error('DynamoDB error'));
+
       await expect(repository.createCustomerProfiles(payload, brand)).rejects.toThrow(
         'Failed to create member profiles',
       );
@@ -196,16 +170,14 @@ describe('MemberProfileRepository', () => {
         Items: [mockProfile],
       };
 
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockResolvedValue(mockQueryResult),
-      } as any);
+      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
       (MemberProfileDBSchema.parse as jest.Mock).mockReturnValue(mockProfile);
 
       const result = await repository.getMemberProfiles('456');
 
       expect(result).toEqual(mockProfile);
-      expect(mockDynamoDB.query).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
         TableName: 'TestTable',
         KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
         ExpressionAttributeNames: {
@@ -221,12 +193,8 @@ describe('MemberProfileRepository', () => {
     });
 
     it('should return null when profile is not found', async () => {
-      const mockQueryResult = {
-        Items: [],
-      };
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockResolvedValue(mockQueryResult),
-      } as any);
+      const mockQueryResult = { Items: [] };
+      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
       const result = await repository.getMemberProfiles('456');
 
@@ -234,9 +202,7 @@ describe('MemberProfileRepository', () => {
     });
 
     it('should throw an error when query fails', async () => {
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
+      mockDynamoDB.on(QueryCommand).rejects(new Error('DynamoDB error'));
 
       await expect(repository.getMemberProfiles('456')).rejects.toThrow('DynamoDB error');
     });
@@ -247,14 +213,12 @@ describe('MemberProfileRepository', () => {
       const mockQueryResult = {
         Items: [{ sk: 'PROFILE#123' }],
       };
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockResolvedValue(mockQueryResult),
-      } as any);
+      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
       const result = await repository.getProfileSortKey('MEMBER#456');
 
       expect(result).toBe('PROFILE#123');
-      expect(mockDynamoDB.query).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
         TableName: 'TestTable',
         KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
         ExpressionAttributeNames: {
@@ -269,12 +233,8 @@ describe('MemberProfileRepository', () => {
     });
 
     it('should return null when profile is not found', async () => {
-      const mockQueryResult = {
-        Items: [],
-      };
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockResolvedValue(mockQueryResult),
-      } as any);
+      const mockQueryResult = { Items: [] };
+      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
       const result = await repository.getProfileSortKey('MEMBER#456');
 
@@ -282,9 +242,7 @@ describe('MemberProfileRepository', () => {
     });
 
     it('should throw an error when query fails', async () => {
-      mockDynamoDB.query.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
+      mockDynamoDB.on(QueryCommand).rejects(new Error('DynamoDB error'));
 
       await expect(repository.getProfileSortKey('MEMBER#456')).rejects.toThrow('DynamoDB error');
     });
@@ -292,10 +250,7 @@ describe('MemberProfileRepository', () => {
 
   describe('updateProfile', () => {
     it('should update the profile successfully', async () => {
-      mockDynamoDB.update.mockReturnValue({
-        promise: jest.fn().mockResolvedValue({}),
-      } as any);
-
+      mockDynamoDB.on(UpdateCommand).resolves({});
       const payload: ProfileUpdatePayload = {
         firstName: 'John',
         lastName: 'Doe',
@@ -306,7 +261,7 @@ describe('MemberProfileRepository', () => {
 
       await repository.updateProfile('MEMBER#456', 'PROFILE#123', payload);
 
-      expect(mockDynamoDB.update).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(UpdateCommand, {
         TableName: 'TestTable',
         Key: {
           pk: 'MEMBER#456',
@@ -325,9 +280,7 @@ describe('MemberProfileRepository', () => {
     });
 
     it('should throw an error when update fails', async () => {
-      mockDynamoDB.update.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
+      mockDynamoDB.on(UpdateCommand).rejects(new Error('DynamoDB error'));
 
       const payload: ProfileUpdatePayload = {
         firstName: 'John',
@@ -345,9 +298,7 @@ describe('MemberProfileRepository', () => {
 
   describe('insertAddressAndUpdateProfile', () => {
     it('should insert address and update profile successfully', async () => {
-      mockDynamoDB.transactWrite.mockReturnValue({
-        promise: jest.fn().mockResolvedValue({}),
-      } as any);
+      mockDynamoDB.on(TransactWriteCommand).resolves({});
 
       const payload: AddressInsertPayload = {
         addressLine1: 'Address 1',
@@ -359,7 +310,7 @@ describe('MemberProfileRepository', () => {
 
       await repository.insertAddressAndUpdateProfile('MEMBER#456', 'PROFILE#123', payload);
 
-      expect(mockDynamoDB.transactWrite).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(TransactWriteCommand, {
         TransactItems: [
           {
             Update: {
@@ -393,9 +344,7 @@ describe('MemberProfileRepository', () => {
     });
 
     it('should throw an error when transactWrite fails', async () => {
-      mockDynamoDB.transactWrite.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
+      mockDynamoDB.on(TransactWriteCommand).rejects(new Error('DynamoDB error'));
 
       const payload: AddressInsertPayload = {
         addressLine1: 'Address 1',
@@ -407,40 +356,6 @@ describe('MemberProfileRepository', () => {
       await expect(
         repository.insertAddressAndUpdateProfile('MEMBER#456', 'PROFILE#123', payload),
       ).rejects.toThrow('DynamoDB error');
-    });
-  });
-
-  describe('insertCard', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-    const fixedDate = new Date('2024-07-19T00:00:00.000Z');
-    jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
-
-    it('should insert a card successfully', async () => {
-      mockDynamoDB.put.mockReturnValue({
-        promise: jest.fn().mockResolvedValue({}),
-      } as any);
-
-      await repository.insertCard('123456', 'active');
-
-      expect(mockDynamoDB.put).toHaveBeenCalledWith({
-        TableName: 'TestTable',
-        Item: {
-          pk: 'MEMBER#123456',
-          sk: 'CARD#123456',
-          status: 'active',
-          timeRequested: fixedDate.toISOString(),
-        },
-      });
-    });
-
-    it('should throw an error when put operation fails', async () => {
-      mockDynamoDB.put.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
-
-      await expect(repository.insertCard('123456', 'active')).rejects.toThrow('DynamoDB error');
     });
   });
 });

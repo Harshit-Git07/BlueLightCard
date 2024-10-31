@@ -1,6 +1,7 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { validateRequest } from '../../utils/requestValidator';
 import { MemberCardQueryPayload, MemberCardUpdatePayload } from '../../types/memberCardTypes';
 import { MemberCardRepository } from '../../../application/repositories/memberCardRepository';
@@ -10,7 +11,7 @@ const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-updateMemberCard` });
 
 const tableName = process.env.IDENTITY_TABLE_NAME as string;
-const dynamoDB = new DynamoDB.DocumentClient({ region: process.env.REGION ?? 'eu-west-2' });
+const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
 
 const repository = new MemberCardRepository(dynamoDB, tableName);
 const cardService = new MemberCardService(repository, logger);

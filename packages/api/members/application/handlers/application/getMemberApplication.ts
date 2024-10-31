@@ -1,6 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { Response } from '../../utils/restResponse/response';
 import { MemberApplicationRepository } from 'application/repositories/memberApplicationRepository';
 import { MemberApplicationService } from 'application/services/memberApplicationService';
@@ -12,7 +13,7 @@ const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-getMemberApplication` });
 
 const tableName = process.env.APPLICATION_TABLE_NAME as string;
-const dynamoDB = new DynamoDB.DocumentClient({ region: process.env.REGION ?? 'eu-west-2' });
+const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
 
 const repository = new MemberApplicationRepository(dynamoDB, tableName);
 const applicationService = new MemberApplicationService(repository, logger);

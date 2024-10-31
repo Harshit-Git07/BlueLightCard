@@ -1,26 +1,35 @@
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { z } from 'zod';
 import { ReusableCrudQueryPayload } from '../../types/reusableCrudQueryPayload';
 import { ReusableCrudRepository } from '../reusableCrudRepository';
-
-jest.mock('aws-sdk');
+import { mockClient } from 'aws-sdk-client-mock';
+import 'aws-sdk-client-mock-jest';
 
 describe('ReusableCrudRepository', () => {
+  const mockDynamoDB = mockClient(DynamoDBDocumentClient);
   let repository: ReusableCrudRepository<any, any>;
-  let mockDynamoDB: jest.Mocked<DynamoDB.DocumentClient>;
   let mockZodType: jest.Mocked<NamedZodType<z.ZodEffects<z.ZodObject<any>>>>;
   let tableName: string;
 
   beforeEach(() => {
-    mockDynamoDB = new DynamoDB.DocumentClient() as jest.Mocked<DynamoDB.DocumentClient>;
     mockZodType = {
       parse: jest.fn(),
     } as unknown as jest.Mocked<NamedZodType<z.ZodEffects<z.ZodObject<any>>>>;
 
     tableName = 'testTable';
 
-    repository = new ReusableCrudRepository(mockDynamoDB, tableName, mockZodType, 'PK', 'SK');
+    repository = new ReusableCrudRepository(
+      mockDynamoDB as any,
+      tableName,
+      mockZodType as any,
+      'PK',
+      'SK',
+    );
+  });
+
+  afterEach(() => {
+    mockDynamoDB.reset();
   });
 
   describe('upsert', () => {
@@ -33,9 +42,7 @@ describe('ReusableCrudRepository', () => {
       const payload = { data: 'test' };
 
       mockZodType.parse.mockReturnValue({ success: true });
-      mockDynamoDB.update.mockReturnValue({
-        promise: jest.fn().mockResolvedValue({}),
-      } as any);
+      mockDynamoDB.on(UpdateCommand).resolves({});
 
       await repository.upsert(query, payload, true);
 
@@ -44,7 +51,7 @@ describe('ReusableCrudRepository', () => {
         sk: 'SK#456',
         ...payload,
       });
-      expect(mockDynamoDB.update).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(UpdateCommand, {
         TableName: tableName,
         Key: {
           pk: 'PK#123',
@@ -69,9 +76,7 @@ describe('ReusableCrudRepository', () => {
       const payload = { data: 'test' };
 
       mockZodType.parse.mockReturnValue({ success: true });
-      mockDynamoDB.update.mockReturnValue({
-        promise: jest.fn().mockResolvedValue({}),
-      } as any);
+      mockDynamoDB.on(UpdateCommand).resolves({});
 
       await repository.upsert(query, payload, false);
 
@@ -80,7 +85,7 @@ describe('ReusableCrudRepository', () => {
         sk: 'SK#456',
         ...payload,
       });
-      expect(mockDynamoDB.update).toHaveBeenCalledWith({
+      expect(mockDynamoDB).toHaveReceivedCommandWith(UpdateCommand, {
         TableName: tableName,
         Key: {
           pk: 'PK#123',
@@ -126,9 +131,7 @@ describe('ReusableCrudRepository', () => {
       const payload = { data: 'test' };
 
       mockZodType.parse.mockReturnValue({ success: true });
-      mockDynamoDB.update.mockReturnValue({
-        promise: jest.fn().mockRejectedValue(new Error('DynamoDB error')),
-      } as any);
+      mockDynamoDB.on(UpdateCommand).rejects(new Error('DynamoDB error'));
 
       await expect(repository.upsert(query, payload, true)).rejects.toThrow('DynamoDB error');
 

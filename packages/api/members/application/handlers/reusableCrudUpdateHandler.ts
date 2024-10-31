@@ -1,6 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { Response } from '../utils/restResponse/response';
 import { APIErrorCode } from '../enums/APIErrorCode';
 import { APIError } from '../models/APIError';
@@ -25,7 +26,7 @@ const pkQueryKey = process.env.PK_QUERY_KEY as string;
 const skQueryKey = process.env.SK_QUERY_KEY as string;
 
 const tableName = process.env.ENTITY_TABLE_NAME as string;
-const dynamoDB = new DynamoDB.DocumentClient({ region: process.env.REGION ?? 'eu-west-2' });
+const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) => {
   try {
@@ -35,9 +36,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
 
     type PayloadModelName = keyof typeof reusableCrudPayloadModels;
     const payloadModelName = process.env.MODEL_NAME as PayloadModelName;
-    const model = reusableCrudPayloadModels[payloadModelName] as unknown as NamedZodType<
-      z.ZodEffects<z.ZodObject<any>>
-    >;
+    const model: NamedZodType<any> = reusableCrudPayloadModels[payloadModelName];
 
     const crudRepository = new ReusableCrudRepository<
       NamedZodType<z.ZodEffects<z.ZodObject<any>>>,

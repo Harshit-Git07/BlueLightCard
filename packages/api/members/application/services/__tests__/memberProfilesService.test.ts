@@ -4,7 +4,6 @@ import { MemberProfilesService } from '../memberProfilesService';
 import {
   ProfileUpdatePayload,
   AddressInsertPayload,
-  CardCreatePayload,
   CreateProfilePayload,
 } from '../../types/memberProfilesTypes';
 import { MemberProfileApp, MemberProfileDB } from '../../models/memberProfileModel';
@@ -248,48 +247,6 @@ describe('MemberProfileService', () => {
 
         expect(mockLogger.error).toHaveBeenCalledWith('Error inserting address:', {
           error: 'Insert failed',
-        });
-      });
-    });
-
-    describe('createCard', () => {
-      const memberUUID = '123456';
-      const payload: CardCreatePayload = {
-        cardStatus: 'active',
-      };
-
-      it('should create a card successfully', async () => {
-        mockRepository.insertCard.mockResolvedValue(undefined);
-
-        await service.createCard(memberUUID, payload);
-
-        expect(mockRepository.insertCard).toHaveBeenCalledWith(memberUUID, 'active');
-      });
-
-      it('should throw an error when insertCard fails', async () => {
-        const insertError = new Error('Insert failed');
-        mockRepository.insertCard.mockRejectedValue(insertError);
-
-        await expect(service.createCard(memberUUID, payload)).rejects.toThrow(
-          'Failed to create card',
-        );
-
-        expect(mockLogger.error).toHaveBeenCalledWith('Error creating card:', {
-          error: 'Insert failed',
-          memberUUID: memberUUID,
-        });
-      });
-
-      it('should handle unknown errors', async () => {
-        mockRepository.insertCard.mockRejectedValue('Unknown error');
-
-        await expect(service.createCard(memberUUID, payload)).rejects.toThrow(
-          'Failed to create card',
-        );
-
-        expect(mockLogger.error).toHaveBeenCalledWith('Error creating card:', {
-          error: 'Unknown error occurred while creating card',
-          memberUUID: memberUUID,
         });
       });
     });

@@ -1,6 +1,7 @@
 import { mockClient } from 'aws-sdk-client-mock';
 import { OrganisationsRepository } from '../organisationsRepository';
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import 'aws-sdk-client-mock-jest';
 
 const idRequirements = [
   {
@@ -86,7 +87,7 @@ describe('OrganisationsRepository', () => {
     const result = await repository.getOrganisations({ brand: 'BLC_UK', organisationId: '123' });
 
     expect(mockDynamoDB.calls()).toHaveLength(1);
-    expect(mockDynamoDB.call(0).args[0].input).toEqual(paramsWithOrgId);
+    expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, paramsWithOrgId);
     expect(result).toEqual(mockTransformedOrganisationList);
   });
 
@@ -103,7 +104,7 @@ describe('OrganisationsRepository', () => {
     });
 
     expect(mockDynamoDB.calls()).toHaveLength(1);
-    expect(mockDynamoDB.call(0).args[0].input).toEqual(paramsWithoutOrgId);
+    expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, paramsWithoutOrgId);
     expect(result).toEqual(mockTransformedOrganisationList);
   });
 
@@ -117,7 +118,7 @@ describe('OrganisationsRepository', () => {
     const result = await repository.getOrganisations({ brand: 'BLC_UK', organisationId: '123' });
 
     expect(mockDynamoDB.calls()).toHaveLength(1);
-    expect(mockDynamoDB.call(0).args[0].input).toEqual(paramsWithOrgId);
+    expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, paramsWithOrgId);
     expect(result).toEqual([]);
   });
 });

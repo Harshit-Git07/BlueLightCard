@@ -1,5 +1,9 @@
-import { DynamoDB } from 'aws-sdk';
-
+import {
+  DynamoDBDocument,
+  QueryCommand,
+  QueryCommandInput,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import {
   MemberApplicationUpdatePayload,
   MemberApplicationQueryPayload,
@@ -7,10 +11,10 @@ import {
 import { MemberApplicationModel } from '../models/memberApplicationModel';
 
 export class MemberApplicationRepository {
-  private dynamoDB: DynamoDB.DocumentClient;
+  private dynamoDB: DynamoDBDocument;
   private tableName: string;
 
-  constructor(dynamoDB: DynamoDB.DocumentClient, tableName: string) {
+  constructor(dynamoDB: DynamoDBDocument, tableName: string) {
     this.dynamoDB = dynamoDB;
     this.tableName = tableName;
   }
@@ -18,7 +22,7 @@ export class MemberApplicationRepository {
   async getMemberApplications(
     query: MemberApplicationQueryPayload,
   ): Promise<MemberApplicationModel[] | null> {
-    const queryParams: DynamoDB.DocumentClient.QueryInput = {
+    const queryParams: QueryCommandInput = {
       TableName: this.tableName,
       KeyConditionExpression: '#pk = :pk',
       ExpressionAttributeNames: {
@@ -39,7 +43,7 @@ export class MemberApplicationRepository {
       queryParams.ExpressionAttributeValues![':skPrefix'] = 'APPLICATION#';
     }
 
-    const queryResult = await this.dynamoDB.query(queryParams).promise();
+    const queryResult = await this.dynamoDB.send(new QueryCommand(queryParams));
 
     if (!queryResult.Items || queryResult.Items.length === 0) {
       return null;
@@ -98,6 +102,6 @@ export class MemberApplicationRepository {
       },
     };
 
-    await this.dynamoDB.update(updateParams).promise();
+    await this.dynamoDB.send(new UpdateCommand(updateParams));
   }
 }

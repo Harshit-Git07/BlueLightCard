@@ -1,19 +1,24 @@
-import { DynamoDB } from 'aws-sdk';
+import {
+  DynamoDBDocument,
+  QueryCommand,
+  QueryCommandInput,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { MemberCardModel } from '../models/memberCardModel';
 
 import { MemberCardUpdatePayload, MemberCardQueryPayload } from '../types/memberCardTypes';
 
 export class MemberCardRepository {
-  private dynamoDB: DynamoDB.DocumentClient;
+  private dynamoDB: DynamoDBDocument;
   private tableName: string;
 
-  constructor(dynamoDB: DynamoDB.DocumentClient, tableName: string) {
+  constructor(dynamoDB: DynamoDBDocument, tableName: string) {
     this.dynamoDB = dynamoDB;
     this.tableName = tableName;
   }
 
   async getMemberCards(query: MemberCardQueryPayload): Promise<MemberCardModel[] | null> {
-    const queryParams: DynamoDB.DocumentClient.QueryInput = {
+    const queryParams: QueryCommandInput = {
       TableName: this.tableName,
       KeyConditionExpression: '#pk = :pk',
       ExpressionAttributeNames: {
@@ -30,7 +35,7 @@ export class MemberCardRepository {
       queryParams.ExpressionAttributeValues![':sk'] = `CARD#${query.cardNumber}`;
     }
 
-    const queryResult = await this.dynamoDB.query(queryParams).promise();
+    const queryResult = await this.dynamoDB.send(new QueryCommand(queryParams));
 
     if (!queryResult.Items || queryResult.Items.length === 0) {
       return null;
@@ -100,6 +105,6 @@ export class MemberCardRepository {
       },
     };
 
-    await this.dynamoDB.update(updateParams).promise();
+    await this.dynamoDB.send(new UpdateCommand(updateParams));
   }
 }

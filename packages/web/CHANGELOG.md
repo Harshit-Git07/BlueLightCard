@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.82.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.81.0...bluelightcard/web-v1.82.0) (2024-10-31)
+
+
+### Features
+
+* **AUT-77:** add Auth0 token refresh and code exchange integration ([#2618](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2618)) ([5c11f17](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5c11f17fb057b3a55f355d7a5631ea4ee5b30e4c))
+* **AUT-77:** auth0 token handling with context-driven updates ([#2676](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2676)) ([1a3e615](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1a3e615c4107ead1c39cae05c80c4c454b81c16b))
+* close SearchDropdown when going back to homepage ([#2681](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2681)) ([105725d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/105725dadedd37fe3d74c7e854f80926e80feae4))
+
+
+### Bug Fixes
+
+* Adding device id for amplitude client ([#2695](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2695)) ([9635ac8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9635ac8e4e9cc618ad946a2118c761a8cbaeb890))
+* Adding ureRef logic to stop fetching token multiple times ([#2696](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2696)) ([1d7b916](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1d7b9168fed4e032c3a430001feb58b415182e58))
+* DISCO-1104 Added offer card horizontal loading state ([#2680](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2680)) ([68c529e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/68c529efcbf4f8051290715bb1d14dc82a641f80))
+
 ## [1.81.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.80.0...bluelightcard/web-v1.81.0) (2024-10-29)
 
 

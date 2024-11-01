@@ -1,0 +1,41 @@
+on:
+  - pull_request
+
+jobs:
+  dependabot-notification:
+    name: Dependabot Notification
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Changed Files
+        id: changes
+        shell: bash
+        # 1. Get the files changed by dependabot (Dependabot only creates a single commit for its changes)
+        # 2. filter to only package.json
+        # 3. match the directory containing changes to a package.json file
+        # 4. replace top level package.json with 'monorepo'
+        run: |
+          echo "changed_packages=$(
+            git diff --name-only HEAD~1 \
+            | grep package.json \
+            | sed -E 's|.*/([^/]+)/package.json|\1|' \
+            | sed 's/package.json/monorepo/g' \
+            | tr '\n' ' '\
+          )" >> $GITHUB_OUTPUT
+      - name: Notify Slack
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "text": ":warning: *Dependabot Change Request*\n\n*Packages*: ${{ steps.changes.outputs.changed_packages }}\n\n${{ github.event.pull_request.html_url }}",
+              "mrkdwn": true
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.CI_DEPENDABOT_NOTIFICATIONS_WEBHOOK }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+

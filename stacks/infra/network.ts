@@ -2,6 +2,7 @@ import { GatewayVpcEndpointAwsService, IVpc, SubnetType, Vpc } from 'aws-cdk-lib
 import { Stack } from 'sst/constructs';
 import {
   isDevelopment,
+  isPr,
   isProduction,
   isStaging,
 } from '@blc-mono/core/src/utils/checkEnvironment';
@@ -19,6 +20,7 @@ export class Network {
   constructor(private readonly stack: Stack) {
     switch (true) {
       case isDevelopment(stack.stage):
+      case isPr(stack.stage):
       case isProduction(stack.stage):
       case isStaging(stack.stage):
         this._vpc = this.createVpc();

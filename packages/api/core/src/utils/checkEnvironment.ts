@@ -8,6 +8,10 @@ export function isDevelopment(stage: string): boolean {
   return stage == 'dev' || stage === 'dev-dds';
 }
 
+export function isPr(stage: string): boolean {
+  return stage == 'pr' || stage === 'pr-dds';
+}
+
 export function isProduction(stage: string): boolean {
   return stage === 'production' || stage === 'production-dds';
 }

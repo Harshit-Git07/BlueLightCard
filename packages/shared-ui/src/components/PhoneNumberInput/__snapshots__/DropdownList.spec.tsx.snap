@@ -1,0 +1,365 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DropdownList component matches open/closed snapshots 1`] = `
+<div>
+  <ul
+    class="hidden top-[58px] p-[2px] absolute w-full bg-colour-surface-container-light dark:bg-colour-surface-container-dark undefined"
+  >
+    <div
+      class="sticky top-0 bg-inherit"
+    >
+      <span
+        class="py-2 px-5 flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark font-typography-body text-typography-body font-typography-body-weight group"
+      >
+        <img
+          alt="Flag of Afghanistan"
+          class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+          data-country="af"
+          draggable="false"
+          loading="lazy"
+          src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1eb.svg"
+        />
+        <input
+          aria-label="country-search"
+          class="w-full bg-inherit focus:outline-none cursor-text [&::-webkit-search-cancel-button]:hidden text-colour-onSurface dark:text-colour-onSurface-dark placeholder:text-colour-onSurface-subtle dark:placeholder:text-colour-onSurface-subtle-dark"
+          placeholder="Afghanistan"
+          spellcheck="false"
+          type="search"
+          value=""
+        />
+        <p
+          class="ml-auto text-colour-primary dark:text-colour-primary-dark"
+        >
+          +
+          93
+        </p>
+      </span>
+      <div
+        class="w-full bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark rounded"
+      />
+    </div>
+    <div
+      class="max-h-[125px] m-[1px] rounded  pr-0  overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
+    >
+      <li>
+        <button
+          aria-label="al 355"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Albania"
+          tabindex="0"
+          title="Albania"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="al"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1f1.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Albania
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              355
+            </p>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="dz 213"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Algeria"
+          tabindex="0"
+          title="Algeria"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="dz"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e9-1f1ff.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Algeria
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              213
+            </p>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="ad 376"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Andorra"
+          tabindex="0"
+          title="Andorra"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="ad"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1e9.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Andorra
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              376
+            </p>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="ao 244"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Angola"
+          tabindex="0"
+          title="Angola"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="ao"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1f4.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Angola
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              244
+            </p>
+          </span>
+        </button>
+      </li>
+    </div>
+  </ul>
+</div>
+`;
+
+exports[`DropdownList component matches open/closed snapshots 2`] = `
+<div>
+  <ul
+    class="block top-[58px] p-[2px] absolute w-full bg-colour-surface-container-light dark:bg-colour-surface-container-dark undefined"
+  >
+    <div
+      class="sticky top-0 bg-inherit"
+    >
+      <span
+        class="py-2 px-5 flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark font-typography-body text-typography-body font-typography-body-weight group"
+      >
+        <img
+          alt="Flag of Afghanistan"
+          class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+          data-country="af"
+          draggable="false"
+          loading="lazy"
+          src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1eb.svg"
+        />
+        <input
+          aria-label="country-search"
+          class="w-full bg-inherit focus:outline-none cursor-text [&::-webkit-search-cancel-button]:hidden text-colour-onSurface dark:text-colour-onSurface-dark placeholder:text-colour-onSurface-subtle dark:placeholder:text-colour-onSurface-subtle-dark"
+          placeholder="Afghanistan"
+          spellcheck="false"
+          type="search"
+          value=""
+        />
+        <p
+          class="ml-auto text-colour-primary dark:text-colour-primary-dark"
+        >
+          +
+          93
+        </p>
+      </span>
+      <div
+        class="w-full bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark rounded"
+      />
+    </div>
+    <div
+      class="max-h-[125px] m-[1px] rounded  pr-0  overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
+    >
+      <li>
+        <button
+          aria-label="al 355"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Albania"
+          tabindex="0"
+          title="Albania"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="al"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1f1.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Albania
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              355
+            </p>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="dz 213"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Algeria"
+          tabindex="0"
+          title="Algeria"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="dz"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e9-1f1ff.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Algeria
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              213
+            </p>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="ad 376"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Andorra"
+          tabindex="0"
+          title="Andorra"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="ad"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1e9.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Andorra
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              376
+            </p>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="ao 244"
+          class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+          data-country="Angola"
+          tabindex="0"
+          title="Angola"
+        >
+          <span
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+          >
+            <img
+              alt=""
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+              data-country="ao"
+              data-testid="flag-image"
+              draggable="false"
+              loading="lazy"
+              src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e6-1f1f4.svg"
+            />
+            <p
+              class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              Angola
+            </p>
+            <p
+              class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+            >
+              +
+              244
+            </p>
+          </span>
+        </button>
+      </li>
+    </div>
+  </ul>
+</div>
+`;

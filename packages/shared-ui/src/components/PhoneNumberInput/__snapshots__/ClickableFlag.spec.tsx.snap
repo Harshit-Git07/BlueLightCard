@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ClickableFlag component matches open and closed snapshots: ClickableFlag - closed state 1`] = `
+<div>
+  <button
+    aria-controls="countryDropdown"
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-label="Country selector"
+    class="flex flex-row items-center cursor-pointer "
+    data-country="gb"
+    title="United Kingdom"
+    type="button"
+  >
+    <img
+      alt=""
+      class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+      data-country="gb"
+      draggable="false"
+      loading="lazy"
+      src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ec-1f1e7.svg"
+    />
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-caret-down fa-2xs h-3 w-3 text-colour-onSurface-light dark:text-colour-onSurface-dark p-1"
+      data-icon="caret-down"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      viewBox="0 0 320 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`ClickableFlag component matches open and closed snapshots: ClickableFlag - open state 1`] = `
+<div>
+  <button
+    aria-controls="countryDropdown"
+    aria-expanded="true"
+    aria-haspopup="listbox"
+    aria-label="Country selector"
+    class="flex flex-row items-center cursor-pointer "
+    data-country="gb"
+    title="United Kingdom"
+    type="button"
+  >
+    <img
+      alt=""
+      class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+      data-country="gb"
+      draggable="false"
+      loading="lazy"
+      src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ec-1f1e7.svg"
+    />
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-caret-up fa-2xs h-3 w-3 text-colour-onSurface-light dark:text-colour-onSurface-dark p-1"
+      data-icon="caret-up"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      viewBox="0 0 320 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+</div>
+`;

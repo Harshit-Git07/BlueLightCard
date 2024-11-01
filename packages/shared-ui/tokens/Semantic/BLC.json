@@ -362,6 +362,16 @@
       },
       "type": "typography"
     },
+    "body-large": {
+      "value": {
+        "fontFamily": "{fontfamily.blc}",
+        "fontWeight": "{fontweight.blc.light}",
+        "fontSize": "{fontsize.18px}",
+        "lineHeight": "{fontsize.base} + {lineheight.loose}",
+        "letterSpacing": "{letterspacing.default}"
+      },
+      "type": "typography"
+    },
     "body": {
       "value": {
         "fontFamily": "{fontfamily.blc}",

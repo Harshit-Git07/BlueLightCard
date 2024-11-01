@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RowItem component matches snapshots 1`] = `
+<div>
+  <button
+    aria-label="gb 44"
+    class="flex w-full bg-colour-surface dark:bg-colour-surface-dark hover:bg-colour-surface-container hover:dark:bg-colour-surface-container-dark "
+    data-country="United Kingdom"
+    tabindex="0"
+    title="United Kingdom"
+  >
+    <span
+      class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+    >
+      <div
+        data-testid="flag-image"
+      />
+      <p
+        class="text-colour-onSurface dark:text-colour-onSurface-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+      >
+        United Kingdom
+      </p>
+      <p
+        class="ml-auto text-colour-primary dark:text-colour-primary-dark group-hover:text-colour-primary-hover group-hover:dark:text-colour-primary-hover-dark"
+      >
+        +
+        44
+      </p>
+    </span>
+  </button>
+</div>
+`;

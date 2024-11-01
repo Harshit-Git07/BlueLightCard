@@ -1,0 +1,163 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as PhoneNumberInput from './PhoneNumberInput.stories';
+
+<Meta of={PhoneNumberInput} />
+
+# PhoneNumberInput
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Overview
+
+The PhoneNumberInput component allows users to enter their phone number along with an international dialing code. It provides validation and optional help text to enhance the user experience.
+
+## Props
+
+<Controls />
+
+## Validation
+
+Phone number validation in the `PhoneNumberInput` uses `libphonenumber-js` to ensure validity. The full number is created by combining the dial code and the user's local phone input. If the local input is empty, an error message (configurable via the `emptyErrorMessage` prop) is shown. The `parsePhoneNumberFromString` function checks if the number is valid, displaying an error (via `invalidErrorMessage`) if it's not, ensuring proper validation across various country formats.
+
+## DefaultCountry
+
+Default Country Handling
+The PhoneNumberInput component includes a defaultCountry prop, allowing developers to pre-set the default country for the input field. This prop accepts a country code (e.g., 'us', 'gb') and ensures that the phone number input starts with the corresponding dial code.
+
+For now, if no defaultCountry is provided, the component intelligently defaults to the user’s locale, determined via the browser’s navigator.language property. A mapping is used to link the locale (e.g., 'en-GB', 'en-AU') to the corresponding country dial code, ensuring a tailored experience based on the user’s region. If no match is found, the component falls back to 'us' by default. This feature enhances user convenience by pre-filling the dial code relevant to their location.
+
+## Variants and States
+
+The PhoneNumberInput component can have the following states by changing the phone number input:
+
+- **Default**: The initial state with no user interaction.
+- **Filled**: Indicates that the user has entered a phone number.
+- **Active**: is Selectable is set to true.
+- **Error State**: Indicates validation errors with specific messages.
+
+### Default State
+
+<Canvas of={PhoneNumberInput.Default} />
+
+### Error State
+
+The `PhoneNumberInput` component provides a clear and user-friendly way to handle validation errors. It displays error messages to guide users in entering valid phone numbers.
+
+- **showErrors**: set to true
+- **emptyErrorMessage**: If the user fails to input a phone number, the component shows a customisable `emptyErrorMessage`. This ensures users are prompted to fill in the required information.
+- **invalidErrorMessage**: When the entered phone number format is incorrect or doesn't pass validation (utilising `libphonenumber-js` for parsing), the component will display an `invalidErrorMessage`. This feedback helps users correct their input and ensures the number is valid for the selected country.
+
+You can customise both messages to suit your application's requirements, enhancing the user experience and ensuring clarity in form interactions.
+
+<Canvas of={PhoneNumberInput.Validation} />
+
+## Disabled State
+
+The PhoneNumberInput component provides a disabled prop, which can be used to disable the entire phone number input. When this prop is set to true, the input fields, including the country selector and phone number input, are rendered in a disabled state, preventing any user interaction.
+
+In the disabled state:
+
+The input fields are visually styled to indicate that they are inactive, using muted colors and reduced opacity.
+The helpText, label, and helpIcon are hidden to reduce visual clutter for disabled fields.
+The user cannot change the dial code, country, or input a phone number, making the component read-only in this mode.
+This is useful when a form or field is conditionally non-editable, ensuring users are guided through the correct form behavior.
+
+<Canvas of={PhoneNumberInput.Disabled} />
+
+## Country Selection (isSelectable)
+
+The isSelectable prop in the PhoneNumberInput component controls whether users can manually select the country for their phone number input. When isSelectable is set to true, a dropdown with a list of countries becomes available, allowing users to pick the appropriate country, which updates both the flag icon and the dial code.
+
+Enabled Dropdown: Users can toggle a dropdown to see a list of countries and their corresponding flags. Upon selection, the country and its dial code update accordingly.
+Non-Selectable: If isSelectable is false, the country and dial code are fixed, preventing users from changing them. This is useful in cases where the country is pre-defined or should not be editable.
+The dropdown feature is helpful for forms that support international numbers, offering flexibility in selecting different countries while ensuring correct formatting.
+
+<Canvas of={PhoneNumberInput.ClickableDropdown} />
+
+### Additional Information Display
+
+The `PhoneNumberInput` component provides several props to enhance the user experience with supplementary information:
+
+- **`label`:** This prop displays a descriptive label above the phone number input field. It helps users understand the purpose of the input field, such as "Phone Number" or "Contact Number." If `disabled` is true, the label will not be rendered.
+
+- **`helpText`:** This optional prop adds a small explanatory text below the label to provide more context or guidance about what should be entered in the field. For example, it could explain the expected format or provide additional instructions. Like `label`, this is hidden if `disabled` is true.
+
+- **`helpIcon`:** When set to `true`, a small icon is displayed alongside the `helpText`. This is typically used to draw attention to the help information or to indicate that more details are available. It will not be shown if `disabled` is set to `true`.
+
+- **`messageText`:** This prop allows you to show a custom message below the input field. It can be used to provide feedback to the user, such as a confirmation message or additional instructions. The message appears only if no validation errors are shown. This adds flexibility for showing contextual information.
+
+These props work together to make the form more user-friendly by providing contextual help and feedback, improving clarity and usability for the input field.
+
+<Canvas of={PhoneNumberInput.HelpTextWithMessage} />
+
+## Implementation
+
+Usage example using jsx
+
+```jsx
+import React, { useState } from 'react';
+import PhoneNumberInput from './PhoneNumberInput';
+
+const PhoneNumberForm = () => {
+  const [formData, setFormData] = useState({
+    dialCode: '',
+    phoneNumber: '',
+  });
+
+  const handleChange = (newDialCode, newPhoneNumber) => {
+    // Update formData state with new dial code and phone number
+    setFormData({
+      dialCode: newDialCode,
+      phoneNumber: newPhoneNumber,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Combine the dial code and phone number for submission
+    const fullPhoneNumber = `${formData.dialCode}${formData.phoneNumber}`;
+    console.log('Submitting Phone Number:', fullPhoneNumber);
+    // Here you could send the fullPhoneNumber to an API or perform other actions
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PhoneNumberInput
+        disabled={false}
+        showErrors={true}
+        defaultCountry="us"
+        emptyErrorMessage="Please enter a phone number"
+        invalidErrorMessage="Please enter a valid phone number"
+        label="Phone Number"
+        helpText="Please enter your phone number."
+        helpIcon={true}
+        messageText="We will use this number for verification."
+        isSelectable={true}
+        onChange={handleChange} // Pass handleChange to update formData
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+export default PhoneNumberForm;
+```
+
+## Usage Guidelines
+
+- **Clear Guidance:** Clearly specify the required format for telephone numbers to ensure users understand what is needed.
+
+- **Transparency:** Inform users why their phone number is necessary and how it will be utilised within the application.
+
+- **Automatic Formatting:** Automatically update the flag and country code based on the user's location for a familiar input experience.
+
+- **Validation Support:** Provide real-time validation messages to assist users in entering their phone number in the correct format, reducing errors.
+
+## Design
+
+[Figma] (https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=243-2042&node-type=frame&t=2Mu7dBaWN6TRGCdh-0)

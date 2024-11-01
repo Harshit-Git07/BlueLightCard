@@ -79,7 +79,7 @@ export function createAdminApi(
         },
         apiKeySourceType: ApiKeySourceType.HEADER,
         defaultCorsPreflightOptions: {
-          allowOrigins: config.networkConfig.apiDefaultAllowedOrigins,
+          allowOrigins: config.networkConfig.adminApiDefaultAllowedOrigins,
           allowHeaders: ['*'],
           allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
           allowCredentials: true,

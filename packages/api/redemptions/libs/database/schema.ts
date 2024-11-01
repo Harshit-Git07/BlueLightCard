@@ -215,6 +215,6 @@ export const ballotEntriesTable = pgTable('ballotEntries', {
   // Other
   entryDate: timestamp('entryDate').notNull(),
   memberId: integer('memberId').notNull(),
-  status: ballotEntryStatusEnum('ballotEntryStatus').notNull(),
+  status: ballotEntryStatusEnum('status').notNull(),
   created: timestamp('created').defaultNow().notNull(),
 });

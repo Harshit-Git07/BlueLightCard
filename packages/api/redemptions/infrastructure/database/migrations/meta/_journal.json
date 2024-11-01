@@ -106,6 +106,13 @@
       "when": 1730286251732,
       "tag": "0014_petite_young_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1730473962519,
+      "tag": "0015_daffy_katie_power",
+      "breakpoints": true
     }
   ]
 }

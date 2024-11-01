@@ -8,7 +8,7 @@ import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
 
 type RedemptionType = (typeof redemptionTypeEnum.enumValues)[number];
-export const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED] = redemptionTypeEnum.enumValues;
+export const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED, BALLOT] = redemptionTypeEnum.enumValues;
 export type RedeemStrategies = Record<RedemptionType, IRedeemStrategy>;
 
 export interface IRedeemStrategyResolver {
@@ -42,6 +42,8 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
       case VAULT:
       case VAULTQR:
         return this.redeemVaultStrategy;
+      case BALLOT:
+        return this.redeemGenericStrategy;
       default:
         exhaustiveCheck(redemptionType, 'Unhandled redemptionType');
     }

@@ -40,6 +40,14 @@ export const offerTypeEnum = pgEnum('offerType', ['online', 'in-store']);
 export const redemptionTypeEnum = pgEnum('redemptionType', REDEMPTION_TYPES);
 export const statusEnum = pgEnum('status', ['active', 'in-active']);
 export const vaultTypeEnum = pgEnum('vaultType', ['standard', 'legacy']);
+export const ballotEntryStatusEnum = pgEnum('ballotEntryStatus', [
+  'pending',
+  'unsuccessful',
+  'unconfirmed',
+  'confirmed',
+  'cancelled',
+  'expired',
+]);
 
 export type Affiliate = (typeof affiliateEnum.enumValues)[number];
 export type Integration = (typeof integrationEnum.enumValues)[number];
@@ -48,6 +56,7 @@ export type RedemptionType = (typeof redemptionTypeEnum.enumValues)[number];
 export type Status = (typeof statusEnum.enumValues)[number];
 export type VaultType = (typeof vaultTypeEnum.enumValues)[number];
 export type Connection = (typeof connectionEnum.enumValues)[number];
+export type BallotEntryStatus = (typeof ballotEntryStatusEnum.enumValues)[number];
 
 export const redemptionsPrefix = 'rdm';
 export const createRedemptionsId = (): string => `${redemptionsPrefix}-${uuidv4()}`;
@@ -174,3 +183,38 @@ export const integrationCodesTable = pgTable(
     icMemberIdx: index('ic_member_idx').on(table.memberId),
   }),
 );
+
+export const ballotsPrefix = 'bal';
+export const createBallotsId = (): string => `${ballotsPrefix}-${uuidv4()}`;
+export const createBallotsIdE2E = (): string => `e2e:${createBallotsId()}`;
+export const ballotsTable = pgTable('ballots', {
+  // PK
+  id: varchar('id').primaryKey().$defaultFn(createBallotsId),
+  // FK
+  redemptionId: varchar('redemptionId')
+    .references(() => redemptionsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+    .notNull(),
+  // Other
+  drawDate: timestamp('drawDate').notNull(),
+  totalTickets: integer('totalTickets').default(0).notNull(),
+  eventDate: timestamp('eventDate').notNull(),
+  offerName: varchar('offerName').notNull(),
+  created: timestamp('created').defaultNow().notNull(),
+});
+
+export const ballotEntriesPrefix = 'bae';
+export const createBallotEntriesId = (): string => `${ballotEntriesPrefix}-${uuidv4()}`;
+export const createBallotEntriesIdE2E = (): string => `e2e:${createBallotEntriesId()}`;
+export const ballotEntriesTable = pgTable('ballotEntries', {
+  // PK
+  id: varchar('id').primaryKey().$defaultFn(createBallotEntriesId),
+  // FK
+  ballotId: varchar('ballotId')
+    .references(() => ballotsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+    .notNull(),
+  // Other
+  entryDate: timestamp('entryDate').notNull(),
+  memberId: integer('memberId').notNull(),
+  status: ballotEntryStatusEnum('ballotEntryStatus').notNull(),
+  created: timestamp('created').defaultNow().notNull(),
+});

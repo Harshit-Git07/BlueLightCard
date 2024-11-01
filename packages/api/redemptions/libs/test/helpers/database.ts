@@ -15,6 +15,8 @@ import {
   RawDatabaseCredentials,
 } from '@blc-mono/redemptions/libs/database/connection';
 import {
+  ballotEntriesTable,
+  ballotsTable,
   genericsTable,
   integrationCodesTable,
   redemptionsTable,
@@ -102,5 +104,7 @@ export class RedemptionsTestDatabase {
     await connection.db.delete(vaultsTable).execute();
     await connection.db.delete(genericsTable).execute();
     await connection.db.delete(redemptionsTable).execute();
+    await connection.db.delete(ballotsTable).execute();
+    await connection.db.delete(ballotEntriesTable).execute();
   }
 }

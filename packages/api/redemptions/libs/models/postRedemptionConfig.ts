@@ -65,17 +65,28 @@ export const PostGenericModel = createZodNamedType(
 
 export const VaultModel = createZodNamedType(
   'VaultModel',
-  z.object({
-    alertBelow: z.number().positive(),
-    status: z.enum(['active', 'in-active']),
-    maxPerUser: z.number().positive(),
-    integrationId: z
-      .union([z.string(), z.number()])
-      .transform((value) => String(value))
-      .nullable(),
-    email: z.string().email(),
-    integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
-  }),
+  z
+    .object({
+      alertBelow: z.number().positive(),
+      status: z.enum(['active', 'in-active']),
+      maxPerUser: z.number().positive(),
+      integrationId: z
+        .union([z.string(), z.number()])
+        .transform((value) => String(value))
+        .nullable(),
+      email: z.string().email(),
+      integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
+    })
+    .superRefine((val, ctx) => {
+      if ((val.integration === 'eagleeye' || val.integration === 'uniqodo') && !val.integrationId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'integrationId must be provided when integration is eagleeye or uniqodo',
+          fatal: true,
+        });
+        return z.NEVER;
+      }
+    }),
 );
 
 export type VaultModel = z.infer<typeof VaultModel>;

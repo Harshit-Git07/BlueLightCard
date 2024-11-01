@@ -263,6 +263,57 @@ describe('PATCH Redemption Config', () => {
   });
 
   describe('Vault Config Type', () => {
+    it.each(['eagleeye', 'uniqodo'] as const)(
+      'returns 400 if integrationId is empty when integration is %s',
+      async (integration) => {
+        const requestBody: UpdateRedemptionRequestPayload = {
+          id: 'rdm-987250ee-b4a3-48ab-91f8-c7bd4321f7cc',
+          offerId: '1234567',
+          redemptionType: 'vault',
+          connection: 'affiliate',
+          companyId: '12367',
+          affiliate: 'awin',
+          url: 'https://www.awin1.com',
+          vault: {
+            id: 'vlt-221b66e2-d197-4a33-834d-5a154952c530',
+            alertBelow: 1000,
+            status: 'active',
+            maxPerUser: 5,
+            email: 'ferenc@blc.co.uk',
+            integration: integration,
+            integrationId: '',
+          },
+        };
+
+        const result = await callPatchRedemptionConfigEndpoint(requestBody, requestBody.offerId);
+
+        expect(result.status).toBe(400);
+
+        const actualResponseBody = await result.json();
+
+        const expectedResponseBody = {
+          meta: {
+            tracingId: expect.any(String),
+          },
+          message: 'Bad Request',
+          error: {
+            cause: 'Request validation failed',
+            message:
+              'Validation error: integrationId must be provided when integration is eagleeye or uniqodo at "body.vault"',
+            errors: [
+              {
+                path: ['body', 'vault'],
+                message: 'integrationId must be provided when integration is eagleeye or uniqodo',
+                code: 'custom',
+                fatal: true,
+              },
+            ],
+          },
+        };
+        expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+      },
+    );
+
     it('returns 404 if vault record cannot be found', async () => {
       const { redemptionConfig, vault, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
         redemptionType: 'vault',

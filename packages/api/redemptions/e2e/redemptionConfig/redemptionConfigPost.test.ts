@@ -213,6 +213,56 @@ describe('POST Redemption Config', () => {
       expect(result.status).toBe(409);
     });
 
+    it.each(['eagleeye', 'uniqodo'] as const)(
+      'POST /redemptions returns 400 when integrationId is empty when integration is %s',
+      async (integration) => {
+        const redemptionConfigRequest = {
+          offerId: 1234567,
+          redemptionType: 'vault',
+          connection: 'affiliate',
+          companyId: 12367,
+          affiliate: 'awin',
+          url: 'https://www.awin1.com',
+          vault: {
+            alertBelow: 1000,
+            status: 'active',
+            maxPerUser: 5,
+            createdAt: '2024-12-12',
+            email: 'ferenc@blc.co.uk',
+            integration: integration,
+            integrationId: '',
+          },
+        };
+
+        const result = await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
+
+        expect(result.status).toBe(400);
+
+        const actualResponseBody = await result.json();
+
+        const expectedResponseBody = {
+          meta: {
+            tracingId: expect.any(String),
+          },
+          message: 'Bad Request',
+          error: {
+            cause: 'Request validation failed',
+            message:
+              'Validation error: integrationId must be provided when integration is eagleeye or uniqodo at "body.vault"',
+            errors: [
+              {
+                path: ['body', 'vault'],
+                message: 'integrationId must be provided when integration is eagleeye or uniqodo',
+                code: 'custom',
+                fatal: true,
+              },
+            ],
+          },
+        };
+        expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+      },
+    );
+
     it('POST /redemptions returns 400 when a redemptionConfig has not been created due to a schema validation error', async () => {
       const redemptionConfigRequest = {
         affiliate: null,

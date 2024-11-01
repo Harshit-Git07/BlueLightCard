@@ -3,15 +3,26 @@ import { z } from 'zod';
 import { RedemptionType } from '../database/schema';
 
 export const VaultModel = z.object({
-  vault: z.object({
-    id: z.string(),
-    alertBelow: z.number(),
-    status: z.enum(['active', 'in-active']),
-    maxPerUser: z.number(),
-    email: z.string().email(),
-    integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
-    integrationId: z.string().nullable(),
-  }),
+  vault: z
+    .object({
+      id: z.string(),
+      alertBelow: z.number(),
+      status: z.enum(['active', 'in-active']),
+      maxPerUser: z.number(),
+      email: z.string().email(),
+      integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
+      integrationId: z.string().nullable(),
+    })
+    .superRefine((val, ctx) => {
+      if ((val.integration === 'eagleeye' || val.integration === 'uniqodo') && !val.integrationId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'integrationId must be provided when integration is eagleeye or uniqodo',
+          fatal: true,
+        });
+        return z.NEVER;
+      }
+    }),
 });
 
 export const GenericModel = z.object({

@@ -6,7 +6,7 @@ import { getOffersByCompanyId } from '../../cms/data/offer';
 import { coerceNumber } from '../../lib/utils';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
-import { type App } from '../hono/app';
+import type { App } from '../hono/app';
 import { OfferSchema } from '../schema';
 
 const route = createRoute({
@@ -64,17 +64,15 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
       invariant(offer.name, 'Missing `offer.name`');
       invariant(offer.offerDescription, 'Missing `offer.offerDescription`');
       invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');
-      invariant(offer.expires, 'Missing `offer.expires`');
-      invariant(offer.termsAndConditions, 'Missing `offer.termsAndConditions`');
 
       return {
         id: offer._id,
         name: offer.name,
         description: offer.offerDescription,
         type: offer.offerType.offerType,
-        expires: offer.expires,
-        termsAndConditions: offer.termsAndConditions,
-        image: offer.image?.default?.asset?.url,
+        expires: offer.expires || null,
+        termsAndConditions: offer.termsAndConditions || null,
+        image: offer.image?.default?.asset?.url || null,
       };
     });
 

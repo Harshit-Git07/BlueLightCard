@@ -1,16 +1,19 @@
 import { z } from '@hono/zod-openapi';
 
 const RichtextModuleSchema = (description: string) =>
-  z.any().openapi({
-    description,
-    format: 'PortableText',
-    externalDocs: {
-      url: 'https://www.sanity.io/docs/presenting-block-text',
-      description: 'Sanity Docs',
-    },
-    example:
-      'Save 20% off every single Fortnite skin. Adorn a new look and take on the competition in style!',
-  });
+  z
+    .any()
+    .nullable()
+    .openapi({
+      description,
+      format: 'PortableText',
+      externalDocs: {
+        url: 'https://www.sanity.io/docs/presenting-block-text',
+        description: 'Sanity Docs',
+      },
+      example:
+        'Save 20% off every single Fortnite skin. Adorn a new look and take on the competition in style!',
+    });
 
 export const CompanySchema = z.object({
   id: z.string().openapi({
@@ -38,11 +41,11 @@ export const OfferSchema = z.object({
     description: 'Type of offer',
     example: 'gift-card',
   }),
-  expires: z.string().openapi({
+  expires: z.string().nullable().openapi({
     description: 'Date the offer expires ',
   }),
   termsAndConditions: RichtextModuleSchema('terms and conditions of offer'),
-  image: z.string().optional().openapi({
+  image: z.string().nullable().openapi({
     description: 'Offer image',
   }),
 });

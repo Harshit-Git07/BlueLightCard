@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 import { getOffer } from '../../cms/data/offer';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
-import { type App } from '../hono/app';
+import type { App } from '../hono/app';
 import { OfferSchema } from '../schema';
 
 const route = createRoute({
@@ -50,16 +50,14 @@ export const registerV2OffersGetOffer = (app: App) =>
     invariant(item.name, 'Missing `offer.name`');
     invariant(item.offerDescription, 'Missing `offer.offerDescription`');
     invariant(item.offerType?.offerType, 'Missing `offer.offerType`');
-    invariant(item.expires, 'Missing `offer.expires`');
-    invariant(item.termsAndConditions, 'Missing `offer.termsAndConditions`');
 
     return c.json({
       id: item._id,
       name: item.name,
       description: item.offerDescription,
       type: item.offerType.offerType,
-      expires: item.expires,
-      termsAndConditions: item.termsAndConditions,
-      image: item.image?.default?.asset?.url,
+      expires: item.expires || null,
+      termsAndConditions: item.termsAndConditions || null,
+      image: item.image?.default?.asset?.url || null,
     });
   });

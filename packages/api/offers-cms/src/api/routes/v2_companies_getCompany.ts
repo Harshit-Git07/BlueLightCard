@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 import { extractBrand, getCompany } from '../../cms/data/company';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
-import { type App } from '../hono/app';
+import type { App } from '../hono/app';
 import { CompanySchema } from '../schema';
 
 const route = createRoute({

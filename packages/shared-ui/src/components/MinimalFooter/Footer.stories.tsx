@@ -1,13 +1,13 @@
 import { Meta, StoryFn } from '@storybook/react';
-import MinimalFooter from '.';
+import MainContainer from '.';
 
-const meta: Meta<typeof MinimalFooter> = {
-  title: 'Component System/Minimal Footer',
-  component: MinimalFooter,
+const meta: Meta<typeof MainContainer> = {
+  title: 'MER/Minimal Footer',
+  component: MainContainer,
 };
 
-const FooterTemplate: StoryFn<typeof MinimalFooter> = (args) => <MinimalFooter />;
-export const Default = FooterTemplate.bind({});
+const MainContainerTemplate: StoryFn<typeof MainContainer> = (args) => <MainContainer />;
+export const Default = MainContainerTemplate.bind({});
 Default.args = {};
 
 export default meta;

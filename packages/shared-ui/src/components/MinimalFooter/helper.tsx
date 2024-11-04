@@ -23,16 +23,16 @@ const blcUkNavItems = [
     link: 'https://www.bluelightcard.co.uk/privacy-notice.php',
   },
   {
-    text: 'Candidate Privacy Notice',
-    link: 'https://www.bluelightcard.co.uk/candidate-privacy-notice.php',
+    text: 'Legal and Regulatory',
+    link: 'https://www.bluelightcard.co.uk/legal-and-regulatory.php',
   },
   {
     text: 'Cookie Policy',
     link: 'https://www.bluelightcard.co.uk/cookies_policy.php',
   },
   {
-    text: 'Legal and Regulatory',
-    link: 'https://www.bluelightcard.co.uk/legal-and-regulatory.php',
+    text: 'Candidate Privacy Notice',
+    link: 'https://www.bluelightcard.co.uk/candidate-privacy-notice.php',
   },
 ];
 

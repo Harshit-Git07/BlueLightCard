@@ -1,3 +1,4 @@
+export { default as AmplitudeEvents } from './utils/amplitude/events';
 export { default as Button } from './components/Button';
 export { default as Search } from './components/Search';
 export { default as SearchBar } from './components/SearchBar';

@@ -6,7 +6,12 @@ import { composeStories } from '@storybook/react';
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { OfferDetailsContext, flexibleOfferMock } from '@bluelightcard/shared-ui';
+import {
+  AmplitudeEvents,
+  OfferDetailsContext,
+  flexibleOfferMock,
+  storybookPlatformAdapter,
+} from '@bluelightcard/shared-ui';
 import * as stories from '../../page-stories/flexible-offers.stories';
 
 const viewOfferMock = jest.fn();
@@ -22,6 +27,8 @@ const mockRouter: Partial<NextRouter> = {
 };
 
 const wrapper: RenderOptions['wrapper'] = ({ children }) => {
+  storybookPlatformAdapter.logAnalyticsEvent = jest.fn();
+
   return (
     <QueryClientProvider client={new QueryClient()}>
       <RouterContext.Provider value={mockRouter as NextRouter}>
@@ -73,10 +80,11 @@ describe('Flexible Offers page', () => {
   });
 
   describe('it renders a success state', () => {
+    let result: RenderResult;
     let container: RenderResult['container'];
 
     beforeEach(() => {
-      const result = render(<Success />, { wrapper });
+      result = render(<Success />, { wrapper });
       container = result.container;
     });
 
@@ -112,6 +120,48 @@ describe('Flexible Offers page', () => {
       await userEvent.click(offer);
 
       expect(viewOfferMock).toHaveBeenCalled();
+    });
+
+    test('and logs an analytics event when the page is viewed', async () => {
+      await within(container).findByText(flexibleOfferMock.title);
+
+      expect(storybookPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(
+        AmplitudeEvents.FLEXIBLE_OFFERS.PAGE_VIEWED,
+        {
+          flexi_menu_id: flexibleOfferMock.id,
+          flexi_menu_title: flexibleOfferMock.title,
+          brand: 'blc-uk',
+        }
+      );
+    });
+
+    test('and does not log an analytics event on re-renders', async () => {
+      await within(container).findByText(flexibleOfferMock.title);
+      result.rerender(<Success />);
+
+      expect(storybookPlatformAdapter.logAnalyticsEvent).not.toHaveBeenCalled();
+    });
+
+    test('and logs an analytics event when an offer is clicked', async () => {
+      const offer = await within(container).findByLabelText(
+        `${flexibleOfferMock.offers[0].companyName}: ${flexibleOfferMock.offers[0].offerName}`
+      );
+      await userEvent.click(offer);
+
+      const mockOfferData = flexibleOfferMock.offers[0];
+
+      expect(storybookPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(
+        AmplitudeEvents.FLEXIBLE_OFFERS.OFFER_CARD_CLICKED,
+        {
+          flexi_menu_id: flexibleOfferMock.id,
+          flexi_menu_title: flexibleOfferMock.title,
+          brand: 'blc-uk',
+          company_name: mockOfferData.companyName,
+          company_id: mockOfferData.companyID,
+          offer_name: mockOfferData.offerName,
+          offer_id: mockOfferData.offerID,
+        }
+      );
     });
 
     test('and has no accessibility violations', async () => {

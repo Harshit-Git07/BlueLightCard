@@ -2,20 +2,28 @@ import { Decorator } from '@storybook/react';
 import { IPlatformAdapter, PlatformAdapterProvider } from './PlatformAdapter';
 import { PlatformVariant } from '../types';
 
+export const storybookPlatformAdapter: IPlatformAdapter = {
+  getAmplitudeFeatureFlag: () => 'control',
+  invokeV5Api: (path: string) => Promise.resolve({ status: 200, data: '{}' }),
+  logAnalyticsEvent: () => {},
+  navigate: () => {},
+  navigateExternal: () => ({
+    isOpen: () => true,
+  }),
+  writeTextToClipboard: () => Promise.resolve(),
+  getBrandURL: () => '',
+  platform: PlatformVariant.MobileHybrid,
+} satisfies IPlatformAdapter;
+
 export const StorybookPlatformAdapterDecorator: Decorator = (Story, { parameters }) => {
-  const storybookPlatformAdapter = {
-    getAmplitudeFeatureFlag: () => 'control',
-    invokeV5Api: (path: string) => Promise.resolve({ statusCode: 200, body: '{}' }),
-    logAnalyticsEvent: () => {},
-    navigate: () => {},
-    navigateExternal: () => {},
-    platform: PlatformVariant.MobileHybrid,
+  const platformAdapter = {
+    ...storybookPlatformAdapter,
     ...parameters.platformAdapter,
-  } satisfies IPlatformAdapter;
+  };
 
   return (
-    <PlatformAdapterProvider adapter={storybookPlatformAdapter}>
-      <Story platformAdapter={storybookPlatformAdapter} />
+    <PlatformAdapterProvider adapter={platformAdapter}>
+      <Story platformAdapter={platformAdapter} />
     </PlatformAdapterProvider>
   );
 };

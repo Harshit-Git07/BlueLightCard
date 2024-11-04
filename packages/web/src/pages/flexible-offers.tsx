@@ -1,8 +1,10 @@
-import { FC, Suspense } from 'react';
+import { FC, Suspense, useRef } from 'react';
 import { NextPage } from 'next';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
+  AmplitudeEvents,
   Image,
+  Offer,
   OfferCardList,
   Typography,
   useMobileMediaQuery,
@@ -10,6 +12,7 @@ import {
   usePlatformAdapter,
 } from '@bluelightcard/shared-ui';
 import { useRouter } from 'next/router';
+import { BRAND } from '@/root/global-vars';
 import ContentLoader from 'react-content-loader';
 import Container from '@/components/Container/Container';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
@@ -52,11 +55,42 @@ const FlexibleOffersContent: FC = () => {
   const platformAdapter = usePlatformAdapter();
   const { viewOffer } = useOfferDetails();
 
+  const pageViewLogged = useRef<boolean>(false);
+
   // Throw a promise NOT an error for Suspense
   if (!router.isReady) throw new Promise(() => {});
 
   const flexiMenuId = String(router.query.id);
-  const { data } = useFlexibleOffersData(flexiMenuId);
+  const { data, isSuccess } = useFlexibleOffersData(flexiMenuId);
+
+  // only log a page view once when data has loaded
+  if (isSuccess && data.id && data.title && !pageViewLogged.current) {
+    pageViewLogged.current = true;
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.PAGE_VIEWED, {
+      flexi_menu_id: data.id,
+      flexi_menu_title: data.title,
+      brand: BRAND,
+    });
+  }
+
+  const onOfferClick = (offer: Offer) => {
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.OFFER_CARD_CLICKED, {
+      flexi_menu_id: data.id,
+      flexi_menu_title: data.title,
+      brand: BRAND,
+      company_name: offer.companyName,
+      company_id: offer.companyID,
+      offer_name: offer.offerName,
+      offer_id: offer.offerID,
+    });
+
+    viewOffer({
+      offerId: offer.offerID,
+      companyId: offer.companyID,
+      companyName: offer.companyName,
+      platform: platformAdapter.platform,
+    });
+  };
 
   return (
     <>
@@ -83,14 +117,7 @@ const FlexibleOffersContent: FC = () => {
         columns={isMobile ? 1 : 3}
         variant={isMobile ? 'horizontal' : 'vertical'}
         status="success"
-        onOfferClick={(offer) =>
-          viewOffer({
-            offerId: offer.offerID,
-            companyId: offer.companyID,
-            companyName: offer.companyName,
-            platform: platformAdapter.platform,
-          })
-        }
+        onOfferClick={onOfferClick}
       />
     </>
   );

@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import { AmplitudeEvents } from '@bluelightcard/shared-ui';
 import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
 import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
 import * as FlexibleOffers from './flexible-offers.stories';
@@ -11,7 +12,7 @@ import * as FlexibleOffers from './flexible-offers.stories';
 - [Overview](#overview)
 - [Props](#props)
 - [State](#state)
-- [Usage](#usage)
+- [Analytics](#analytics)
 - [Design](#design)
 
 ## Status
@@ -33,6 +34,15 @@ import * as FlexibleOffers from './flexible-offers.stories';
 ## State
 
 The page uses Suspense and React Query to manage all of the data fetching and related state. It manages no specific state of its own.
+
+## Analytics
+
+The page logs two analytics events to Amplitude:
+
+- <code>{AmplitudeEvents.FLEXIBLE_OFFERS.PAGE_VIEWED}</code> is logged once after the page has successfully
+  loaded data
+- <code>{AmplitudeEvents.FLEXIBLE_OFFERS.OFFER_CARD_CLICKED}</code> is logged every time a user clicks
+  on an offer card
 
 ## Design
 

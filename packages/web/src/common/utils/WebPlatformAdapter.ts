@@ -7,9 +7,8 @@ import {
   V5RequestOptions,
   V5Response,
 } from '@bluelightcard/shared-ui';
-import { Amplitude } from './amplitude/amplitude';
+import { amplitudeServiceAtom, experimentsAndFeatureFlags } from './amplitude/store';
 import Router from 'next/router';
-import { experimentsAndFeatureFlags } from './amplitude/store';
 import { amplitudeStore } from '../context/AmplitudeExperiment';
 import { API_PROXY_URL, BRAND_URL } from '@/root/global-vars';
 import assert from 'assert';
@@ -39,14 +38,9 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     };
   }
 
-  logAnalyticsEvent(
-    event: string,
-    parameters: AmplitudeLogParams,
-    amplitude: Amplitude | null | undefined
-  ): void {
-    // TODO: Refactor this - should not need to pass native amplitude context
-    //                       otherwise platform adapter serves no purpose
-    if (amplitude) amplitude.trackEventAsync(event, parameters);
+  logAnalyticsEvent(event: string, parameters: AmplitudeLogParams): void {
+    const amplitudeService = amplitudeStore.get(amplitudeServiceAtom);
+    amplitudeService.trackEventAsync(event, parameters);
   }
 
   navigate(path: string): void {

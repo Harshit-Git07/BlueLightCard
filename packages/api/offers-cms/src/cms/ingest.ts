@@ -33,7 +33,7 @@ export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
   }
 
   await dynamo.put({
-    TableName: Table.cmsOffersData.tableName,
+    TableName: Table.cmsOffer.tableName,
     Item: {
       ...record,
       offerId: record.offerId?.toString(),
@@ -53,7 +53,7 @@ export async function ingestCompany(record: Record<'company'>, logger: ILogger) 
   }
 
   await dynamo.put({
-    TableName: Table.cmsCompanyData.tableName,
+    TableName: Table.cmsCompany.tableName,
     Item: {
       ...record,
       companyId: record.companyId?.toString(),
@@ -63,7 +63,7 @@ export async function ingestCompany(record: Record<'company'>, logger: ILogger) 
 
 export async function ingestRawRecord(record: WebhookResultRecord) {
   await dynamo.put({
-    TableName: Table.cmsRawData.tableName,
+    TableName: Table.cmsAll.tableName,
     Item: record,
   });
 }

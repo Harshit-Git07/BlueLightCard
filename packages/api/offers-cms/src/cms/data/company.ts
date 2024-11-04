@@ -7,7 +7,7 @@ import { coerceNumber } from '../../lib/utils';
 
 async function _legacy_getCompany(id: number) {
   const res = await dynamo.query({
-    TableName: Table.cmsCompanyData.tableName,
+    TableName: Table.cmsCompany.tableName,
     IndexName: 'legacyId',
     ExpressionAttributeNames: { '#id': '_id' },
     ExpressionAttributeValues: { ':legacyId': id },
@@ -22,7 +22,7 @@ async function _legacy_getCompany(id: number) {
 
 async function _modern_getCompany(id: string) {
   const res = await dynamo.get({
-    TableName: Table.cmsCompanyData.tableName,
+    TableName: Table.cmsCompany.tableName,
     Key: {
       _id: id,
     },

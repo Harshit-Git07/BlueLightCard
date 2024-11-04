@@ -56,7 +56,7 @@ export const CMSOfferDataSchema = z.object({
   name: z.string(),
   termsAndConditions: z.any(), // TODO: Fix this any type
   type: z.string(),
-  image: z.string(),
+  image: z.string().nullable(),
 });
 
 export const CompanyOffersSchema = z.array(
@@ -79,7 +79,7 @@ export const CMSCompanyOffersSchema = z.array(
     name: z.string(),
     termsAndConditions: z.any(), // TODO: Fix this any type
     type: z.string(),
-    image: z.string(),
+    image: z.string().nullable(),
   }),
 );
 

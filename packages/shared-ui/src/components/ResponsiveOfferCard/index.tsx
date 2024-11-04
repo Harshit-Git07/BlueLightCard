@@ -13,7 +13,7 @@ export type Props = SharedProps & {
   id: number | string;
   type: OfferTypeStrLiterals;
   name: string;
-  image: string;
+  image: string | null;
   companyId: number | string;
   companyName: string;
   variant?: 'vertical' | 'horizontal';

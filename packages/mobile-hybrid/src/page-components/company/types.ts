@@ -20,7 +20,7 @@ export type CMSOfferModel = {
   type: OfferTypeStrLiterals;
   expires: string;
   termsAndConditions: PortableTextBlock;
-  image: string;
+  image: string | null;
 };
 
 export type CompanyModel = {
@@ -62,7 +62,7 @@ export const CMSZodOfferResponseModel = z.array(
     type: z.string(),
     expires: z.string(),
     termsAndConditions: z.any(), // TODO: Fix this any type
-    image: z.string(),
+    image: z.string().nullable(),
   }),
 );
 

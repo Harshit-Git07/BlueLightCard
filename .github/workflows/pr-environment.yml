@@ -37,6 +37,7 @@ jobs:
       backend-offers: ${{ steps.filter.outputs.backend-offers }}
       backend-redemptions: ${{ steps.filter.outputs.backend-redemptions }}
       backend-discovery: ${{ steps.filter.outputs.backend-discovery }}
+      backend-members: ${{ steps.filter.outputs.backend-members }}
       frontend-web: ${{ steps.filter.outputs.frontend-web }}
       frontend-hybrid: ${{ steps.filter.outputs.frontend-hybrid }}
     steps:
@@ -75,6 +76,14 @@ jobs:
               - package.json
             backend-discovery:
               - packages/api/discovery/**
+              - packages/api/core/**
+              - stacks/**
+              - .github/workflows/pr-environment.yml
+              - package-lock.json
+              - sst.config.ts
+              - package.json
+            backend-members:
+              - packages/api/members/**
               - packages/api/core/**
               - stacks/**
               - .github/workflows/pr-environment.yml
@@ -393,6 +402,45 @@ jobs:
       - name: Echo outputs
         run: |
           echo ${{ steps.sst-discovery-dds-outputs.outputs.ddsDiscoveryApiUrl }}
+
+  backend-members:
+    needs:
+      - changes
+      - install
+      - backend-shared
+    name: Deploy Backend for PR (members)
+    if: ${{ needs.changes.outputs.backend-members == 'true' && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region: ['eu-west-2']
+    outputs:
+      members-api-endpoint: ${{ steps.sst-members-outputs.outputs.membersApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::361769569967:role/github-actions-role
+          aws-region: ${{matrix.region}}
+      - run: npm run build
+      - name: Deploy Members
+        env:
+          BRAND: BLC_UK
+          SKIP_MEMBERS_STACK: false
+        run: npx sst deploy members --stage $PR_PREFIX --region ${{matrix.region}}
+      - name: Extract Api URL and set output
+        id: sst-members-outputs
+        run: |
+          cat .sst/outputs.json
+          MEMBERS_URL=$(jq -r '.[].MembersApiEndpoint | select(. != null)' .sst/outputs.json)
+          echo "membersApiUrl=$MEMBERS_URL" >> $GITHUB_OUTPUT
+      - name: Echo outputs
+        run: |
+          echo ${{ steps.sst-members-outputs.outputs.membersApiUrl }}
 
   # Deploy the frontend
   # Matrix Deployment for each brand does not allow dynamic outputs which is needed to be able to create the comment
@@ -852,6 +900,42 @@ jobs:
             </td></tr>
             </table>
 
+  
+  commentBackendMembers:
+    name: Comment Backend Members on PR
+    if: github.actor!= 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    needs:
+      - backend-members
+    steps:
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        if: success() && github.event.number
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: '🚀 Successfully Backend Members Preview Environment'
+
+      - name: Create Comment
+        uses: peter-evans/create-or-update-comment@v4
+        if: success() && github.event.number
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            ## 🚀 Successfully Backend Members Preview Environment
+
+            <table><tr><td><strong>Latest commit:</strong> </td><td>
+            <code>${{ github.sha }}</code>
+            </td></tr>
+            <tr><td><strong>Members API URL:</strong></td><td>
+            <a href='${{ needs.backend-members.outputs.members-api-endpoint }}'>
+              ${{ needs.backend-members.outputs.members-api-endpoint }}
+            </a>
+            </td></tr>
+            </table>
+
   e2e-redemptions:
     name: Run E2E tests (redemptions)
     runs-on: ubuntu-latest
@@ -960,6 +1044,30 @@ jobs:
           IDENTITY_COGNITO_E2E_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-cognito-user-pool-id }}
           E2E_TESTS_PASSWORD: ${{ secrets.E2E_TESTS_PASSWORD_DDS_UK }}
         run: npx sst bind --stage $PR_PREFIX_DDS vitest e2e
+  
+  # e2e-members:
+  #   name: Run E2E tests (members)
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - install
+  #     - backend-members
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Setup
+  #       uses: ./.github/actions/setup
+  #     - name: Configure Non Prod AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: arn:aws:iam::361769569967:role/github-actions-role
+  #         aws-region: eu-west-2
+  #     - name: Run E2E tests
+  #       working-directory: packages/api/members
+  #       env:
+  #         BRAND: BLC_UK
+  #         REGION: eu-west-2
+  #         E2E_TESTS_PASSWORD: ${{ secrets.E2E_TESTS_PASSWORD_BLC_UK }}
+  #       run: npx sst bind --stage $PR_PREFIX vitest e2e
 
   # Lighthouse Audit of Web frontend
   # TODO: Currently not working with authenticated pages due to being redirected to login page

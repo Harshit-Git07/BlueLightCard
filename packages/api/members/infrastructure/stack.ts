@@ -35,9 +35,10 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 import { EmployerModel } from '../application/models/employerModel';
 import { GetEmployersRoute } from './routes/GetEmployersRoute';
+import { createMemberCardsTable } from './dynamodb/createMemberCardsTable';
 
 async function MembersStack({ stack, app }: StackContext) {
-  const identityTableName = `${app.stage}-${app.name}-identityTable`;
+  const identityTableName = `${stack.stage}-${app.name}-memberProfiles`;
 
   const { certificateArn } = use(Shared);
 
@@ -94,6 +95,7 @@ async function MembersStack({ stack, app }: StackContext) {
   const memberNotesTable = createMemberNotesTable(stack);
   const memberPromosTable = createMemberPromosTable(stack);
   const memberProfilesTable = createMemberProfilesTable(stack);
+  const memberCardsTable = createMemberCardsTable(stack);
 
   const restApi = membersApi.cdk.restApi;
 

@@ -12,7 +12,7 @@ import { MemberApplicationModel } from '../models/memberApplicationModel';
 
 export class MemberApplicationRepository {
   private dynamoDB: DynamoDBDocument;
-  private tableName: string;
+  public tableName: string;
 
   constructor(dynamoDB: DynamoDBDocument, tableName: string) {
     this.dynamoDB = dynamoDB;

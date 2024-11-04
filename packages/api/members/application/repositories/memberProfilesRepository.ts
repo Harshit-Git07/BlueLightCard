@@ -14,6 +14,7 @@ import { MAP_BRAND } from '@blc-mono/core/constants/common';
 import { BRAND_SCHEMA } from '@blc-mono/core/schemas/common';
 import { EligibilityStatus } from '../enums/EligibilityStatus';
 import { ApplicationReason } from '../enums/ApplicationReason';
+import { v4 as uuidv4 } from 'uuid';
 export class MemberProfilesRepository {
   constructor(
     private dynamoDB: DynamoDBDocument,
@@ -22,8 +23,8 @@ export class MemberProfilesRepository {
 
   async createCustomerProfiles(payload: CreateProfilePayload, brand: string): Promise<string> {
     try {
-      const memberKey = `MEMBER#${crypto.randomUUID()}`;
-      const profileSK = `PROFILE#${crypto.randomUUID()}`;
+      const memberKey = `MEMBER#${uuidv4()}`;
+      const profileSK = `PROFILE#${uuidv4()}`;
       const brandSK = `BRAND#${MAP_BRAND[BRAND_SCHEMA.parse(brand)]}`;
 
       const params = {
@@ -55,7 +56,7 @@ export class MemberProfilesRepository {
               TableName: this.tableName,
               Item: {
                 pk: memberKey,
-                sk: `APPLICATION#${crypto.randomUUID()}`,
+                sk: `APPLICATION#${uuidv4()}`,
                 startDate: new Date().toISOString(),
                 eligibilityStatus: EligibilityStatus.INELIGIBLE,
                 applicationReason: ApplicationReason.SIGNUP,
@@ -70,7 +71,20 @@ export class MemberProfilesRepository {
       const prefixSeparator = '#';
       return memberKey.split(prefixSeparator)[1];
     } catch (error) {
-      throw new Error('Failed to create member profiles');
+      if (error instanceof Error) {
+        throw new Error(
+          JSON.stringify({
+            message: 'Failed to create member profiles',
+            error: {
+              name: (error as Error).name,
+              message: (error as Error).message,
+              stack: (error as Error).stack,
+            },
+          }),
+        );
+      } else {
+        throw new Error('Failed to create member profiles');
+      }
     }
   }
 

@@ -21,7 +21,7 @@ export class UpdateMemberApplicationRoute {
           'packages/api/members/application/handlers/application/updateMemberApplication.handler',
         environment: {
           SERVICE: 'member',
-          APPLICATION_TABLE_NAME: this.applicationTableName,
+          IDENTITY_TABLE_NAME: this.applicationTableName,
         },
         permissions: [
           new PolicyStatement({

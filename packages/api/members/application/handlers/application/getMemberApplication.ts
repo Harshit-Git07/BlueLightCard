@@ -12,7 +12,7 @@ import { APIError } from '../../models/APIError';
 const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-getMemberApplication` });
 
-const tableName = process.env.APPLICATION_TABLE_NAME as string;
+const tableName = process.env.IDENTITY_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
 
 const repository = new MemberApplicationRepository(dynamoDB, tableName);

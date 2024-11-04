@@ -1,19 +1,13 @@
 meta {
-  name: CreateCustomerProfiles
+  name: CreateCustomerProfile
   type: http
-  seq: 3
+  seq: 1
 }
 
 post {
   url: https://{{api_key_sst}}.execute-api.eu-west-2.amazonaws.com/v1/members/v5/customers/{{brand}}
   body: json
-  auth: apikey
-}
-
-auth:apikey {
-  key: x-api-key
-  value: {{api_key_aws}}
-  placement: header
+  auth: none
 }
 
 body:json {

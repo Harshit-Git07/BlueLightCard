@@ -120,6 +120,9 @@ export class MemberApplicationService {
 
       if (errorSet.length > 0) return;
 
+      this.logger.info(`Attempting to ${action}ate application to ${this.repository.tableName}`, {
+        query,
+      });
       await this.repository.upsertMemberApplication(query, updatedApplication, isInsert);
       this.logger.info(`Application ${action}ated successfully`, { query });
     } catch (error) {

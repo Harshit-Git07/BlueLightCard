@@ -13,11 +13,16 @@ import {
 import { MemberProfileDBSchema } from '../../models/memberProfileModel';
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
+import { v4 as uuidv4 } from 'uuid';
 
 jest.mock('../../models/memberProfileModel', () => ({
   MemberProfileDBSchema: {
     parse: jest.fn(),
   },
+}));
+
+jest.mock('uuid', () => ({
+  v4: jest.fn(),
 }));
 
 describe('MemberProfileRepository', () => {
@@ -47,32 +52,12 @@ describe('MemberProfileRepository', () => {
     const mockMappedBrand = 'blc-uk';
 
     beforeEach(() => {
-      const mockUuids = jest
-        .fn()
-        .mockReturnValueOnce(mockMemberUUID)
-        .mockReturnValueOnce(mockProfileUUID)
-        .mockReturnValueOnce(mockApplicationUUID)
+      (uuidv4 as jest.Mock)
         .mockReturnValueOnce(mockMemberUUID)
         .mockReturnValueOnce(mockProfileUUID)
         .mockReturnValueOnce(mockApplicationUUID);
 
-      Object.defineProperty(global, 'crypto', {
-        configurable: true,
-        value: { randomUUID: mockUuids },
-      });
-
       jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
-
-      jest.mock('../../../../core/src/constants/common', () => ({
-        MAP_BRAND: {
-          BLC_UK: mockMappedBrand,
-        },
-      }));
-      jest.mock('../../../../core/src/schemas/common', () => ({
-        BRAND_SCHEMA: {
-          parse: jest.fn().mockReturnValue('BLC_UK'),
-        },
-      }));
     });
 
     it('should create a member profile, brand entry, and signup application successfully', async () => {

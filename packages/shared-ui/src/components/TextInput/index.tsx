@@ -12,7 +12,7 @@ const getInputClasses = (state: TextInputState) => {
     case 'Filled':
       return `${baseClasses} border-colour-primary dark:border-colour-primary-dark bg-transparent`;
     case 'Error':
-      return `${baseClasses} border-colour-error dark:border-colour-error bg-transparent`;
+      return `${baseClasses} border-colour-error dark:border-colour-error-dark bg-transparent`;
     case 'Disabled':
       return `${baseClasses} bg-colour-surface-container border-colour-onSurface-outline-subtle dark:bg-colour-surface-container-dark dark:border-colour-onSurface-outline-subtle-dark`;
     default:
@@ -30,6 +30,7 @@ const getPlaceholderClasses = (state: TextInputState) => {
   switch (state) {
     case 'Active':
     case 'Filled':
+    case 'Error':
       return `${baseClasses} ${activeClasses} text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark`;
     case 'Disabled':
       return `${baseClasses} ${inactiveClasses} text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark`;
@@ -160,6 +161,7 @@ const TextInput: FC<TextInputProps> = ({
           aria-invalid={state === 'Error'}
           aria-required={required}
           aria-describedby={getAriaDescribedBy()}
+          aria-label={ariaLabel ?? label ?? placeholder}
         />
         <span className={getPlaceholderClasses(inputState)}>{placeholder}</span>
       </div>

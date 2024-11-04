@@ -9,6 +9,7 @@ exports[`TextInput component snapshot tests renders default input correctly 1`] 
   >
     <input
       aria-invalid={false}
+      aria-label="Test-label"
       aria-required={false}
       className="w-full rounded-md px-4 border focus:outline-none pt-6 pb-2 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent text-colour-onSurface dark:text-colour-onSurface-dark h-full"
       disabled={false}
@@ -40,8 +41,9 @@ exports[`TextInput component snapshot tests renders input in error state 1`] = `
     <input
       aria-describedby="test-input-info"
       aria-invalid={true}
+      aria-label="Test-label"
       aria-required={false}
-      className="w-full rounded-md px-4 border focus:outline-none pt-6 pb-2 border-colour-error dark:border-colour-error bg-transparent text-colour-onSurface dark:text-colour-onSurface-dark h-full"
+      className="w-full rounded-md px-4 border focus:outline-none pt-6 pb-2 border-colour-error dark:border-colour-error-dark bg-transparent text-colour-onSurface dark:text-colour-onSurface-dark h-full"
       disabled={false}
       id="test-input"
       maxLength={200}
@@ -53,7 +55,7 @@ exports[`TextInput component snapshot tests renders input in error state 1`] = `
       value=""
     />
     <span
-      className="absolute left-4 transition-all duration-200 pointer-events-none font-typography-body font-typography-body-weight text-typography-body leading-typography-body top-1/2 -translate-y-1/2 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+      className="absolute left-4 transition-all duration-200 pointer-events-none font-typography-label font-typography-label-weight text-typography-label leading-typography-label top-2 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
     >
       Enter text
     </span>
@@ -105,6 +107,7 @@ exports[`TextInput component snapshot tests renders input with label and icon 1`
   >
     <input
       aria-invalid={false}
+      aria-label="Test-label"
       aria-required={false}
       className="w-full rounded-md px-4 border focus:outline-none pt-6 pb-2 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent text-colour-onSurface dark:text-colour-onSurface-dark h-full"
       disabled={false}

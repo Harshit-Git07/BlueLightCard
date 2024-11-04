@@ -7,7 +7,7 @@ const meta: Meta<typeof TextInput> = {
   title: 'Component System/TextInput',
   component: TextInput,
   parameters: {
-    status: 'wip',
+    status: 'done',
   },
   argTypes: {
     state: {

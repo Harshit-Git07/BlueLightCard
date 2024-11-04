@@ -5,7 +5,7 @@ export type TextInputState = 'Default' | 'Active' | 'Filled' | 'Error' | 'Disabl
 export interface TextInputProps {
   id?: string;
   name?: string;
-  state: TextInputState;
+  state?: TextInputState;
   value?: string;
   required?: boolean;
   maxChars?: number;
@@ -17,7 +17,7 @@ export interface TextInputProps {
   showCharCount?: boolean;
   min?: number;
   max?: number;
-  label: string;
+  label?: string;
   showLabel?: boolean;
   showIcon?: boolean;
   helpMessage?: string;

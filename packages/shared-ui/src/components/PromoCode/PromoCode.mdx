@@ -1,0 +1,112 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as PromoCode from './PromoCode.stories';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+
+<Meta of={PromoCode} />
+
+# PromoCode
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Status
+<ComponentStatus />
+
+## Overview
+
+PromoCode component for displaying a promo code input for skipping ID verification step.
+
+## Props
+
+<Controls />
+
+## Variants and States
+
+**Default**
+<Canvas of={PromoCode.Default} />
+
+**Open**
+<Canvas of={PromoCode.Open} />
+
+**Filled**
+<Canvas of={PromoCode.Filled} />
+
+**Error**
+<Canvas of={PromoCode.Error} />
+
+**Success**
+<Canvas of={PromoCode.Success} />
+
+## Implementation
+Usage example using jsx
+
+```jsx
+import React, { useState } from 'react';
+import PromoCode from './PromoCode';
+
+const ExampleComponent = () => {
+  const [promoCode, setPromoCode] = useState('');
+  const [variant, setVariant] = useState('default');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleChange = (e) => {
+    setPromoCode(e.target.value);
+    if (variant === 'error') {
+      setVariant('open');
+      setErrorMessage('');
+    }
+  };
+
+  const handleApply = (code) => {
+    if (code.toUpperCase() === 'INVALID') {
+      setVariant('error');
+      setErrorMessage('Invalid promo code. Please try again.');
+    } else {
+      setVariant('success');
+      setErrorMessage('');
+    }
+  };
+
+  const handleStateChange = (newVariant) => {
+    setVariant(newVariant);
+    if (newVariant === 'default') {
+      setPromoCode('');
+      setErrorMessage('');
+    }
+  };
+
+  const handleRemove = () => {
+    setVariant('default');
+    setPromoCode('');
+    setErrorMessage('');
+  };
+
+  return (
+    <div className="p-4">
+      <PromoCode
+        variant={variant}
+        value={promoCode}
+        onChange={handleChange}
+        onApply={handleApply}
+        onStateChange={handleStateChange}
+        onRemove={handleRemove}
+        errorMessage={errorMessage}
+        label="Add your promo code"
+        infoMessage="Enter a valid promo code to skip ID verification"
+        icon={true}
+      />
+    </div>
+  );
+};
+
+export default ExampleComponent;
+```
+
+## Design
+- [Figma: PromoCode](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=419-422&node-type=frame&m=dev)

@@ -1,8 +1,8 @@
-import jwtDecode from 'jwt-decode';
 import z from 'zod';
 
 import { JsonObject } from '@blc-mono/core/types/json';
 import { Result } from '@blc-mono/core/types/result';
+import { unpackJWT } from '@blc-mono/core/utils/unpackJWT';
 
 const BEARER_PREFIX = 'Bearer ';
 
@@ -31,7 +31,7 @@ export class TokenHelper {
 
   static extractDataFromToken(token: string): Result<TokenPayload, unknown> {
     try {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = unpackJWT(token);
 
       const parsedToken = tokenPayloadSchema.parse(decodedToken);
       return Result.ok(parsedToken);
@@ -56,7 +56,7 @@ export class TokenHelper {
   static unsafeExtractDataFromToken(token: string): Result<JsonObject, unknown> {
     try {
       // SAFETY: this assumes the return value of `jwtDecode` will be a JsonObject
-      return Result.ok(jwtDecode(token));
+      return Result.ok(unpackJWT(token));
     } catch (err) {
       return Result.err(err);
     }

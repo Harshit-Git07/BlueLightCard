@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { unpackJWT, JWT, Auth0Jwt } from "../unpackJWT";
 
 jest.mock("jwt-decode");
@@ -29,7 +29,7 @@ describe("unpackJWT", () => {
   });
 
   it("should correctly decode and transform an Auth0 token", () => {
-    (jwt_decode as jest.Mock).mockReturnValue(mockAuth0Token);
+    (jwtDecode as jest.Mock).mockReturnValue(mockAuth0Token);
 
     const result = unpackJWT("auth0TokenString");
 
@@ -41,7 +41,7 @@ describe("unpackJWT", () => {
   });
 
   it("should correctly decode a standard JWT token", () => {
-    (jwt_decode as jest.Mock).mockReturnValue(mockStandardToken);
+    (jwtDecode as jest.Mock).mockReturnValue(mockStandardToken);
 
     const result = unpackJWT("standardTokenString");
 
@@ -49,7 +49,7 @@ describe("unpackJWT", () => {
   });
 
   it("should throw an error if jwt_decode throws an error", () => {
-    (jwt_decode as jest.Mock).mockImplementation(() => {
+    (jwtDecode as jest.Mock).mockImplementation(() => {
       throw new Error("Invalid token");
     });
 

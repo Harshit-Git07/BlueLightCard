@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 export type JWT = {
   sub: string;
@@ -25,7 +25,7 @@ export type Auth0Jwt = {
 
 export function unpackJWT(jwt: string): JWT {
   try {
-    const decodedToken = jwt_decode(jwt)
+    const decodedToken = jwtDecode(jwt)
 
     if (isAuth0Jwt(decodedToken)) {
       return {

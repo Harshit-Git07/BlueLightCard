@@ -1,6 +1,6 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import * as target from '../index';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import EVENTS from '../../amplitude/events';
 import {
   logMembersHomePageScrollDepth,
@@ -25,7 +25,7 @@ jest.mock('@/global-vars', () => ({
   BRAND: 'blc-uk',
 }));
 
-const jwtDecodeMock = jest.mocked(jwt_decode);
+const jwtDecodeMock = jest.mocked(jwtDecode);
 const amplitudeMock = jest.mocked(amplitude);
 
 describe('Initialise Amplitude', () => {

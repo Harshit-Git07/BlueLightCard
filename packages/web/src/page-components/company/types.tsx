@@ -1,4 +1,5 @@
 import { OfferTypeStrLiterals } from '@bluelightcard/shared-ui/index';
+import { PortableTextBlock } from '@portabletext/types';
 
 export type OfferData = {
   id: number;
@@ -12,7 +13,7 @@ export type OfferData = {
 export type CompanyData = {
   id: string;
   name: string;
-  description: string | any; // TODO: Fix this any type
+  description: string | PortableTextBlock;
 };
 
 export type BannerDataType = {

@@ -1,4 +1,5 @@
 import { OfferTypeStrLiterals, offerTypeParser } from '@bluelightcard/shared-ui';
+import { PortableTextBlock } from '@portabletext/types';
 import { z } from 'zod';
 
 // Model
@@ -14,18 +15,18 @@ export type OfferModel = {
 
 export type CMSOfferModel = {
   id: string;
-  description: any; // TODO: Fix this any type
+  description: PortableTextBlock;
   name: string;
   type: OfferTypeStrLiterals;
   expires: string;
-  termsAndConditions: any; // TODO: Fix this any type
+  termsAndConditions: PortableTextBlock;
   image: string;
 };
 
 export type CompanyModel = {
-  companyId: number;
+  companyId: number | string;
   companyName: string;
-  companyDescription: any; // TODO: Fix this any type (can be string or any)
+  companyDescription: string | PortableTextBlock;
   offers: OfferModel[] | CMSOfferModel[];
 };
 
@@ -33,7 +34,7 @@ export type CompanyModel = {
 export const ZodCompanyModel = z.object({
   description: z.any(), // TODO: Fix this any type
   name: z.string(),
-  id: z.any(), // TODO: Fix this any type (can be string or number)
+  id: z.union([z.string(), z.number()]),
 });
 
 export const ZodOfferModel = z.object({

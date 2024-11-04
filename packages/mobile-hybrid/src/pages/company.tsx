@@ -3,7 +3,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { toPlainText } from '@portabletext/react';
+import { PortableTextBlock, toPlainText } from '@portabletext/react';
 import {
   CMS_SERVICES,
   CompanyAbout,
@@ -164,7 +164,7 @@ const Company: NextPage<any> = () => {
               CompanyName={`About ${company?.companyName ?? ''}`}
               CompanyDescription={
                 isCmsFlagOn && company?.companyDescription
-                  ? toPlainText(company.companyDescription)
+                  ? toPlainText(company.companyDescription as PortableTextBlock)
                   : company?.companyDescription ?? ''
               }
               platform={PlatformVariant.MobileHybrid}

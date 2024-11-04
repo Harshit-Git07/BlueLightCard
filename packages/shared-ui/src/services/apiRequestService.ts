@@ -84,7 +84,7 @@ export const CMSCompanyOffersSchema = z.array(
 );
 
 export const CompanyDataSchema = z.object({
-  id: z.any(), // TODO: Fix this any type
+  id: z.union([z.string(), z.number()]),
   name: z.string(),
   description: z.any(), // TODO: Fix this any type
 });

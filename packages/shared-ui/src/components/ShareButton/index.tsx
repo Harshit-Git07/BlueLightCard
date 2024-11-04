@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faX } from '@fortawesome/pro-solid-svg-icons';
+import { PortableTextBlock } from '@portabletext/types';
 import Button from '../Button';
 import { AmplitudeArg, PlatformVariant, ThemeVariant } from '../../types';
 import CheckSvg from './CheckSvg';
@@ -16,7 +17,7 @@ type Props = {
   showShareLabel?: boolean;
   shareDetails: {
     name: string | undefined;
-    description: string | undefined;
+    description: string | PortableTextBlock | undefined;
     url: string;
   };
   shareLabel?: string;

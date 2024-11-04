@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useMedia } from 'react-use';
-import { toPlainText } from '@portabletext/react';
+import { PortableTextBlock, toPlainText } from '@portabletext/react';
 import { advertQuery } from 'src/graphql/advertQuery';
 import { makeQuery } from 'src/graphql/makeQuery';
 import { shuffle } from 'lodash';
@@ -242,7 +242,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
               <div className="w-full">
                 <CompanyAbout
                   CompanyDescription={
-                    isCmsFlagOn ? toPlainText(companyData.description) : companyData.description
+                    isCmsFlagOn
+                      ? toPlainText(companyData.description as PortableTextBlock)
+                      : companyData.description
                   }
                   platform={PlatformVariant.Web}
                 />
@@ -299,7 +301,9 @@ const CompanyPage: NextPage<CompanyPageProps> = () => {
                 <CompanyAbout
                   CompanyName={`About ${companyData.name}`}
                   CompanyDescription={
-                    isCmsFlagOn ? toPlainText(companyData.description) : companyData.description
+                    isCmsFlagOn
+                      ? toPlainText(companyData.description as PortableTextBlock)
+                      : companyData.description
                   }
                   platform={PlatformVariant.MobileHybrid}
                 />

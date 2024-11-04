@@ -6,10 +6,25 @@ import { env } from '../../lib/env';
 import { coerceNumber } from '../../lib/utils';
 
 async function _legacy_getCompany(id: number) {
+  const res = await dynamo.query({
+    TableName: Table.cmsCompanyData.tableName,
+    IndexName: 'legacyId',
+    ExpressionAttributeNames: { '#id': '_id' },
+    ExpressionAttributeValues: { ':legacyId': id },
+    KeyConditionExpression: '#id = :legacyId',
+  });
+
+  if (!res.Items || res.Items.length === 0) {
+    return null;
+  }
+  return res.Items[0] as Company;
+}
+
+async function _modern_getCompany(id: string) {
   const res = await dynamo.get({
     TableName: Table.cmsCompanyData.tableName,
     Key: {
-      companyId: String(id),
+      _id: id,
     },
   });
 
@@ -18,22 +33,6 @@ async function _legacy_getCompany(id: number) {
   }
 
   return res.Item as Company;
-}
-
-async function _modern_getCompany(id: string) {
-  const res = await dynamo.query({
-    TableName: Table.cmsCompanyData.tableName,
-    IndexName: 'cmsId',
-    ExpressionAttributeNames: { '#id': '_id' },
-    ExpressionAttributeValues: { ':modernId': id },
-    KeyConditionExpression: '#id = :modernId',
-  });
-
-  if (!res.Items || res.Items.length === 0) {
-    return null;
-  }
-
-  return res.Items[0] as Company;
 }
 
 export async function getCompany(id: string | number) {

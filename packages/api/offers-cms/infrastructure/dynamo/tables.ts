@@ -37,8 +37,8 @@ const createCompanyDataTable = (stack: Stack) =>
       _id: 'string',
       companyId: 'string',
     },
-    primaryIndex: { partitionKey: 'companyId' },
-    globalIndexes: { cmsId: { partitionKey: '_id' } },
+    primaryIndex: { partitionKey: '_id' },
+    globalIndexes: { legacyId: { partitionKey: 'companyId' } },
   });
 
 export const createTables = (stack: Stack) => ({

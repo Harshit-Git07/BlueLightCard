@@ -18,6 +18,7 @@ export interface CardProps {
   onClick?: () => void;
   ariaLabel?: string;
   className?: string;
+  'data-testid'?: string;
 }
 
 export interface CardContentProps {

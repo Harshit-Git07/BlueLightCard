@@ -19,6 +19,7 @@ const Card: FC<CardProps> = ({
   onClick,
   ariaLabel,
   className,
+  ...props
 }) => {
   const [cardState, setCardState] = useState<CardState>(initialCardState);
   const [isHovered, setIsHovered] = useState(false);
@@ -107,6 +108,7 @@ const Card: FC<CardProps> = ({
       className={`w-full min-w-[275px] group ${className ?? ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      data-testid={props['data-testid']}
     >
       <div
         className={`flex flex-col border rounded overflow-hidden ${styles.border} w-full transition-colors duration-200`}

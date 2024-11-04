@@ -17,4 +17,5 @@ export type ButtonProps = PropsWithChildren & {
   withoutFocus?: boolean;
   borderless?: boolean;
   size?: string;
+  'data-testid'?: string;
 };

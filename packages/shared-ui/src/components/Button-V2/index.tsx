@@ -90,6 +90,7 @@ const Button: FC<ButtonProps> = ({
   withoutHover = false,
   withoutFocus = false,
   size = 'small',
+  ...props
 }) => {
   const colourToken = ButtonColour[variant].base;
 
@@ -127,6 +128,7 @@ const Button: FC<ButtonProps> = ({
       disabled={ButtonTag === 'button' ? disabled : undefined} // Apply disabled only for buttons
       className={`${classes} text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font`}
       onClick={ButtonTag === 'button' ? onClick : undefined} // Apply onClick only for buttons
+      data-testid={props['data-testid']}
     >
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}

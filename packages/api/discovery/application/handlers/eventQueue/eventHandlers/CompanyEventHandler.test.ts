@@ -5,6 +5,7 @@ import {
   getCompanyById,
   insertCompany,
 } from '@blc-mono/discovery/application/repositories/Company/service/CompanyService';
+import { updateOfferInMenus } from '@blc-mono/discovery/application/repositories/Menu/service/MenuService';
 import {
   getOffersByCompany,
   insertOffers,
@@ -14,11 +15,13 @@ import * as target from './CompanyEventHandler';
 
 jest.mock('@blc-mono/discovery/application/repositories/Offer/service/OfferService');
 jest.mock('@blc-mono/discovery/application/repositories/Company/service/CompanyService');
+jest.mock('@blc-mono/discovery/application/repositories/Menu/service/MenuService');
 
 const insertOffersMock = jest.mocked(insertOffers);
 const insertCompanyMock = jest.mocked(insertCompany);
 const getCompanyByIdMock = jest.mocked(getCompanyById);
 const getOffersByCompanyMock = jest.mocked(getOffersByCompany);
+const updateOfferInMenusMock = jest.mocked(updateOfferInMenus);
 
 describe('CompanyEventHandler', () => {
   describe('handleCompanyUpdated', () => {
@@ -34,6 +37,7 @@ describe('CompanyEventHandler', () => {
 
         expect(insertCompanyMock).toHaveBeenCalledWith(newCompanyRecord);
         expect(insertOffersMock).not.toHaveBeenCalled();
+        expect(updateOfferInMenusMock).not.toHaveBeenCalled();
       });
     });
 
@@ -89,6 +93,7 @@ describe('CompanyEventHandler', () => {
           await target.handleCompanyUpdated(updateCompanyRecord);
 
           expect(insertOffersMock).toHaveBeenCalledWith([updateOfferRecord]);
+          expect(updateOfferInMenusMock).toHaveBeenCalledWith(updateOfferRecord);
         });
       });
     });

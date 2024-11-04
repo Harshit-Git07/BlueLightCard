@@ -1,5 +1,6 @@
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { updateOfferInMenus } from '@blc-mono/discovery/application/repositories/Menu/service/MenuService';
 import {
   deleteOffer,
   getOfferById,
@@ -13,8 +14,7 @@ export async function handleOfferUpdated(newOfferRecord: Offer): Promise<void> {
 
   if (!currentOfferRecord || isNewerOfferVersion(newOfferRecord, currentOfferRecord)) {
     await insertOffer(newOfferRecord);
-    // Uncomment this when we have the Menu table created
-    // await updateOfferInMenus(newOfferRecord);
+    await updateOfferInMenus(newOfferRecord);
   } else {
     logger.info({
       message: `Offer record with id: [${newOfferRecord.id}] is not newer than current stored record, so will not be overwritten.`,

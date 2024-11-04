@@ -27,6 +27,7 @@ describe('Offer Repository', () => {
   const mockBatchInsert = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockDelete = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockGet = jest.fn();
+  const mockBatchGet = jest.fn();
   const mockQuery = jest.fn();
 
   describe('insert', () => {
@@ -124,6 +125,44 @@ describe('Offer Repository', () => {
         TableName: 'search-offer-company-table',
       });
       expect(result).toEqual(offerEntities);
+    });
+  });
+
+  describe('retriveByIds', () => {
+    DynamoDBService.batchGet = mockBatchGet;
+    it('should call "BatchGet" method with correct parameters', async () => {
+      const offerEntity = offerEntityFactory.build();
+      mockBatchGet.mockResolvedValue([offerEntity]);
+      const companyId = 'companyId';
+      const offerId = 'offerId';
+      const result = await new OfferRepository().retrieveByIds([{ id: offerId, companyId }]);
+      expect(mockBatchGet).toHaveBeenCalledWith(
+        [
+          {
+            partitionKey: OfferKeyBuilders.buildPartitionKey(offerId),
+            sortKey: OfferKeyBuilders.buildSortKey(companyId),
+          },
+        ],
+        'search-offer-company-table',
+      );
+      expect(result).toEqual([offerEntity]);
+    });
+
+    it('should return empty array if no results', async () => {
+      mockBatchGet.mockResolvedValue(undefined);
+      const companyId = 'companyId';
+      const offerId = 'offerId';
+      const result = await new OfferRepository().retrieveByIds([{ id: offerId, companyId }]);
+      expect(mockBatchGet).toHaveBeenCalledWith(
+        [
+          {
+            partitionKey: OfferKeyBuilders.buildPartitionKey(offerId),
+            sortKey: OfferKeyBuilders.buildSortKey(companyId),
+          },
+        ],
+        'search-offer-company-table',
+      );
+      expect(result).toEqual([]);
     });
   });
 });

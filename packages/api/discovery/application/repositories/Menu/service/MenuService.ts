@@ -1,20 +1,24 @@
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
-import { HomepageMenu } from '@blc-mono/discovery/application/models/HomepageMenu';
+import { Menu, MenuWithOffers } from '@blc-mono/discovery/application/models/Menu';
+import { AVAILABLE_MENU_TYPES } from '@blc-mono/discovery/application/models/MenuResponse';
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
 
 import { buildErrorMessage } from '../../Company/service/utils/ErrorMessageBuilder';
-import { MenuEntity } from '../../schemas/MenuEntity';
 import { MenuOfferEntity } from '../../schemas/MenuOfferEntity';
-import { MenuRepository } from '../MenuRepository';
+import { groupMenusWithOffers, MenuRepository } from '../MenuRepository';
 
-import { mapHomepageMenuToMenuEntity } from './mapper/MenuMapper';
-import { mapOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
+import {
+  mapMenuEntityToMenu,
+  mapMenuEntityWithOfferEntitiesToMenuWithOffers,
+  mapMenuToMenuEntity,
+} from './mapper/MenuMapper';
+import { mapMenuOfferEntityToOffer, mapOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
 
 const logger = new LambdaLogger({ serviceName: 'menu-service' });
 
-export async function insertMenuWithOffers(menu: HomepageMenu, menuOffers: Offer[]): Promise<void> {
-  const menuEntity = mapHomepageMenuToMenuEntity(menu);
-  const menuOffersEntity = menuOffers.map((menuOffer) => mapOfferToMenuOfferEntity(menuOffer, menu.id));
+export async function insertMenuWithOffers(menu: Menu, menuOffers: Offer[]): Promise<void> {
+  const menuEntity = mapMenuToMenuEntity(menu);
+  const menuOffersEntity = menuOffers.map((menuOffer) => mapOfferToMenuOfferEntity(menuOffer, menu.id, menu.menuType));
   const itemsToInsert = [menuEntity, ...menuOffersEntity];
   try {
     await new MenuRepository().batchInsert(itemsToInsert);
@@ -39,22 +43,22 @@ export async function deleteMenuWithOffers(menuId: string): Promise<void> {
   }
 }
 
-export async function getMenuById(menuId: string): Promise<MenuEntity> {
+export async function getMenuById(menuId: string): Promise<Menu | undefined> {
   try {
     const menu = await new MenuRepository().retrieveMenuData(menuId);
     logger.info({ message: `Got menu with id: [${menuId}]` });
-    return menu;
+    return menu ? mapMenuEntityToMenu(menu) : undefined;
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred getting menu with id: [${menuId}]`));
   }
 }
 
-export async function getMenuAndOffersByMenuId(
-  menuId: string,
-): Promise<{ menu: MenuEntity; offers: MenuOfferEntity[] } | undefined> {
+export async function getMenuAndOffersByMenuId(menuId: string): Promise<MenuWithOffers | undefined> {
   try {
     const result = await new MenuRepository().retrieveMenuWithOffers(menuId);
-    return result;
+    if (!result) return;
+    const { offers, ...menu } = result;
+    return { ...mapMenuEntityToMenu(menu), offers: offers.map(mapMenuOfferEntityToOffer) };
   } catch (error) {
     throw new Error(
       buildErrorMessage(logger, error, `Error occurred getting menu with id: [${menuId}] and its offers`),
@@ -72,7 +76,7 @@ export async function updateOfferInMenus(newOfferRecord: Offer): Promise<void> {
       return;
     }
     const newMenuOfferEntities = updateMenuOfferEntities(menuOffers, newOfferRecord);
-    if (menuOffers.length > 1) {
+    if (newMenuOfferEntities.length > 1) {
       await new MenuRepository().batchInsert(newMenuOfferEntities);
       logger.info({ message: `Batch updated offers in menus with offer id: [${newOfferRecord.id}]` });
       return;
@@ -90,12 +94,61 @@ export async function updateOfferInMenus(newOfferRecord: Offer): Promise<void> {
   }
 }
 
+export async function getMenusByMenuType(menuType: string): Promise<{ [menuType: string]: MenuWithOffers[] }> {
+  try {
+    const menuWithOffers = await new MenuRepository().retrieveMenusWithOffersByMenuType(menuType);
+    logger.info({ message: `Got menus with menuType: [${menuType}]` });
+    return { [menuType]: menuWithOffers.map(mapMenuEntityWithOfferEntitiesToMenuWithOffers) };
+  } catch (error) {
+    throw new Error(buildErrorMessage(logger, error, `Error occurred getting menu with menu type: [${menuType}]`));
+  }
+}
+
+export async function getMenusByMenuTypes(menuTypes: string[]): Promise<{ [menuType: string]: MenuWithOffers[] }> {
+  try {
+    const menusWithOffers = await new MenuRepository().retrieveAllMenusAndOffers();
+    const groupedMenusWithOffersEntities = groupMenusWithOffers(menusWithOffers);
+    const groupedMenusWithOffers = groupedMenusWithOffersEntities.map(mapMenuEntityWithOfferEntitiesToMenuWithOffers);
+    if (menuTypes.length === 0) {
+      const groupedByMenuType = groupByMenuType(groupedMenusWithOffers);
+      const menusByMenuType: { [menuType: string]: MenuWithOffers[] } = {};
+      AVAILABLE_MENU_TYPES.forEach((menuType) => {
+        menusByMenuType[menuType] = groupedByMenuType[menuType] || [];
+      });
+      return menusByMenuType;
+    }
+    const filteredMenusAndOffers = groupedMenusWithOffers.filter((menu) => menuTypes.includes(menu.menuType));
+    const groupedByMenuType = groupByMenuType(filteredMenusAndOffers);
+    const menusByMenuType: { [menuType: string]: MenuWithOffers[] } = {};
+    menuTypes.forEach((menuType) => {
+      menusByMenuType[menuType] = groupedByMenuType[menuType] || [];
+    });
+    return menusByMenuType;
+  } catch (error) {
+    throw new Error(buildErrorMessage(logger, error, `Error occurred retrieving all menus.`));
+  }
+}
+
 export function updateMenuOfferEntities(menuOffers: MenuOfferEntity[], newOfferRecord: Offer): MenuOfferEntity[] {
-  return menuOffers.map(({ partitionKey, sortKey, gsi1PartitionKey, gsi1SortKey }) => ({
+  return menuOffers.map(({ partitionKey, sortKey, gsi1PartitionKey, gsi1SortKey, gsi2PartitionKey, gsi2SortKey }) => ({
     partitionKey,
     sortKey,
     gsi1PartitionKey,
     gsi1SortKey,
+    gsi2PartitionKey,
+    gsi2SortKey,
     ...newOfferRecord,
   }));
+}
+
+export function groupByMenuType(menuAndOffers: MenuWithOffers[]): Record<string, MenuWithOffers[]> {
+  const groupedMenus = {} as Record<string, MenuWithOffers[]>;
+  menuAndOffers.forEach((menuWithOffer) => {
+    if (!groupedMenus[menuWithOffer.menuType]) {
+      groupedMenus[menuWithOffer.menuType] = [menuWithOffer];
+    } else {
+      groupedMenus[menuWithOffer.menuType].push(menuWithOffer);
+    }
+  });
+  return groupedMenus;
 }

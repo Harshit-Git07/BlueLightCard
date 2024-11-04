@@ -1,6 +1,8 @@
 import 'aws-sdk-client-mock-jest';
 
 import {
+  BatchGetCommand,
+  BatchGetCommandOutput,
   BatchWriteCommand,
   DeleteCommand,
   DeleteCommandInput,
@@ -11,6 +13,9 @@ import {
   PutCommandInput,
   QueryCommand,
   QueryCommandInput,
+  ScanCommand,
+  ScanCommandInput,
+  ScanCommandOutput,
 } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 
@@ -39,6 +44,33 @@ describe('DynamoDB Service', () => {
 
   const dataAttributes = { id: 1, name: 'test' };
 
+  const mockScanOutput: ScanCommandOutput = {
+    Items: [dataAttributes],
+    $metadata: {
+      httpStatusCode: 200,
+      requestId: 'mock-request-id',
+      extendedRequestId: 'mock-extended-request-id',
+      cfId: 'mock-cf-id',
+      attempts: 1,
+      totalRetryDelay: 0,
+    },
+  };
+
+  const mockBatchGetOutput: BatchGetCommandOutput = {
+    Responses: {
+      'mock-table-name': [dataAttributes],
+    },
+    UnprocessedKeys: {},
+    $metadata: {
+      httpStatusCode: 200,
+      requestId: 'mock-request-id',
+      extendedRequestId: 'mock-extended-request-id',
+      cfId: 'mock-cf-id',
+      attempts: 1,
+      totalRetryDelay: 0,
+    },
+  };
+
   describe('put', () => {
     it('should call "put" command', async () => {
       mockDynamoDB.on(PutCommand).resolves({ Attributes: dataAttributes });
@@ -56,6 +88,105 @@ describe('DynamoDB Service', () => {
       await expect(DynamoDBService.put({} as PutCommandInput)).rejects.toThrow(
         `Error trying to put record using DynamoDB service: [${error}]`,
       );
+    });
+  });
+
+  describe('scan', () => {
+    it('should call "scan" command', async () => {
+      mockDynamoDB.on(ScanCommand).resolves(mockScanOutput);
+
+      const result = await DynamoDBService.scan({} as ScanCommandInput);
+
+      expect(mockDynamoDB).toHaveReceivedCommand(ScanCommand);
+      expect(result).toEqual([dataAttributes]);
+    });
+
+    it('should call "scan" command again with lastEvaluatedKey', async () => {
+      mockDynamoDB
+        .on(ScanCommand)
+        .resolvesOnce({ Items: [{ ...dataAttributes }], LastEvaluatedKey: { key: 'key' } })
+        .resolves({ Items: [{ ...dataAttributes }] });
+
+      const result = await DynamoDBService.scan({} as ScanCommandInput);
+
+      expect(mockDynamoDB).toHaveReceivedCommandTimes(ScanCommand, 2);
+      expect(mockDynamoDB).toHaveReceivedNthCommandWith(2, ScanCommand, {
+        ExclusiveStartKey: { key: 'key' },
+      });
+      expect(result).toEqual([dataAttributes, dataAttributes]);
+    });
+
+    it('should throw error on failed "scan" command', async () => {
+      const error = new Error('DynamoDB error');
+      mockDynamoDB.on(ScanCommand).rejects(error);
+
+      await expect(DynamoDBService.scan({} as ScanCommandInput)).rejects.toThrow(
+        `Error trying to scan record using DynamoDB service: [${error}]`,
+      );
+    });
+  });
+
+  describe('batchGet', () => {
+    it('should call batchGet command and return the items', async () => {
+      mockDynamoDB.on(BatchGetCommand).resolves(mockBatchGetOutput);
+      const result = await DynamoDBService.batchGet(
+        [{ partitionKey: 'mockPartitionKey', sortKey: 'mockSortKey' }],
+        'mock-table-name',
+      );
+      expect(mockDynamoDB).toHaveReceivedCommandWith(BatchGetCommand, {
+        RequestItems: {
+          'mock-table-name': {
+            Keys: [{ partitionKey: 'mockPartitionKey', sortKey: 'mockSortKey' }],
+          },
+        },
+      });
+      expect(result).toEqual([dataAttributes]);
+    });
+
+    it('should call batch get command twice if items are larger than max batch size, returning the correct number of items', async () => {
+      mockDynamoDB.on(BatchGetCommand).resolves(mockBatchGetOutput);
+      const items = Array.from({ length: 101 }, (_, i) => ({
+        partitionKey: `mockPartitionKey${i}`,
+        sortKey: `mockSortKey${i}`,
+      }));
+      const result = await DynamoDBService.batchGet(items, 'mock-table-name');
+      expect(mockDynamoDB).toHaveReceivedCommandTimes(BatchGetCommand, 2);
+      expect(result).toStrictEqual([dataAttributes, dataAttributes]);
+    });
+
+    it('should call batch get command again if unprocessed keys are returned', async () => {
+      mockDynamoDB
+        .on(BatchGetCommand)
+        .resolvesOnce({
+          ...mockBatchGetOutput,
+          Responses: {},
+          UnprocessedKeys: {
+            'mock-table-name': {
+              Keys: [
+                {
+                  partitionKey: { S: 'mockPartitionKey1' },
+                  sortKey: { S: 'mockSortKey1' },
+                },
+              ],
+            },
+          },
+        })
+        .resolves(mockBatchGetOutput);
+      const result = await DynamoDBService.batchGet(
+        [{ partitionKey: 'mockPartitionKey', sortKey: 'mockSortKey' }],
+        'mock-table-name',
+      );
+      expect(mockDynamoDB).toHaveReceivedCommandTimes(BatchGetCommand, 2);
+      expect(result).toStrictEqual([dataAttributes]);
+    });
+
+    it('should throw error on failed batchGet command', async () => {
+      const error = new Error('DynamoDB error');
+      mockDynamoDB.on(BatchGetCommand).rejects(error);
+
+      await expect(
+        DynamoDBService.batchGet([{ partitionKey: 'mockPartitionKey', sortKey: 'mockSortKey' }], 'mock-table-name'),
+      ).rejects.toThrow(`Error trying to batch get records using DynamoDB service: [${error}]`);
     });
   });
 

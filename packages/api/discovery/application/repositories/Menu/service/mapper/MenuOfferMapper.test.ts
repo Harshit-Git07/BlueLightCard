@@ -1,3 +1,4 @@
+import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { Offer, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { MenuOfferEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
@@ -49,12 +50,14 @@ const menuOfferEntity: MenuOfferEntity = {
   ...offer,
   partitionKey: 'MENU-offer1',
   sortKey: 'OFFER-offer1',
-  gsi1PartitionKey: 'OFFER-offer1',
-  gsi1SortKey: 'MENU-offer1',
+  gsi1PartitionKey: 'MENU_TYPE-marketplace',
+  gsi1SortKey: 'MENU_TYPE-marketplace',
+  gsi2PartitionKey: 'OFFER-offer1',
+  gsi2SortKey: 'MENU-offer1',
 };
 describe('MenuOfferMapper', () => {
   it('should map Offer to MenuOfferEntity', () => {
-    const result = mapOfferToMenuOfferEntity(offer, 'offer1');
+    const result = mapOfferToMenuOfferEntity(offer, 'offer1', MenuType.MARKETPLACE);
     expect(result).toEqual(menuOfferEntity);
   });
 

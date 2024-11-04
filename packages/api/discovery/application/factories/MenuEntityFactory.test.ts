@@ -1,3 +1,5 @@
+import { MenuType } from '../models/MenuResponse';
+
 import { menuEntityFactory } from './MenuEntityFactory';
 
 describe('Menu Entity Factory', () => {
@@ -6,11 +8,14 @@ describe('Menu Entity Factory', () => {
     expect(menuEntity).toStrictEqual({
       partitionKey: 'MENU-1',
       sortKey: 'MENU-1',
+      gsi1PartitionKey: `MENU_TYPE-${MenuType.MARKETPLACE}`,
+      gsi1SortKey: `MENU_TYPE-${MenuType.MARKETPLACE}`,
+      menuType: MenuType.MARKETPLACE,
       id: `1`,
       name: 'Sample Menu',
-      startTime: '2024-09-01T00:00:00',
+      startTime: '2022-09-01T00:00:00',
       endTime: '2024-09-30T23:59:59',
-      updatedAt: '2024-09-01T00:00:00',
+      updatedAt: '2022-09-01T00:00:00',
     });
   });
 

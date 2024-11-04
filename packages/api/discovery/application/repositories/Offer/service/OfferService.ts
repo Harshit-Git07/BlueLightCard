@@ -43,8 +43,11 @@ export async function deleteOffer(id: string, companyId: string): Promise<void> 
 export async function getOfferById(id: string, companyId: string): Promise<Offer | undefined> {
   try {
     const result = await new OfferRepository().retrieveById(id, companyId);
+    if (!result) {
+      return;
+    }
     logger.info({ message: `Retrieved Offer with id: [${id}]` });
-    return result ? mapOfferEntityToOffer(result) : undefined;
+    return mapOfferEntityToOffer(result);
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred retrieving Offer by id: [${id}]`));
   }
@@ -69,5 +72,15 @@ export async function getOffersByCompany(companyId: string): Promise<Offer[]> {
     throw new Error(
       buildErrorMessage(logger, error, `Error occurred retrieving Offers for a Company by companyId: [${companyId}]`),
     );
+  }
+}
+
+export async function getOffersByIds(ids: { id: string; companyId: string }[]): Promise<Offer[]> {
+  try {
+    const result = await new OfferRepository().retrieveByIds(ids);
+    logger.info({ message: `Retrieved Offers by ids. Size [${result.length}]` });
+    return result.map(mapOfferEntityToOffer);
+  } catch (error) {
+    throw new Error(buildErrorMessage(logger, error, `Error occurred retrieving Offers by ids`));
   }
 }

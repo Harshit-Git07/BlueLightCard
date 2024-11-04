@@ -9,8 +9,8 @@ export type MenuResponse = {
   };
   marketplace?: {
     title: string;
-    description: string;
-    hidden: boolean;
+    description?: string;
+    hidden?: boolean;
     offers: MenuOfferResponse[];
   }[];
   flexible?: {
@@ -21,8 +21,15 @@ export type MenuResponse = {
 };
 
 export enum MenuType {
-  dealsOfTheWeek = 'dealsOfTheWeek',
-  featured = 'featured',
-  marketplace = 'marketplace',
-  flexible = 'flexible',
+  DEALS_OF_THE_WEEK = 'dealsOfTheWeek',
+  FEATURED = 'featured',
+  MARKETPLACE = 'marketplace',
+  FLEXIBLE = 'flexible',
 }
+
+export const AVAILABLE_MENU_TYPES = [
+  MenuType.DEALS_OF_THE_WEEK,
+  MenuType.FEATURED,
+  MenuType.MARKETPLACE,
+  MenuType.FLEXIBLE,
+];

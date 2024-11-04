@@ -69,6 +69,7 @@ describe('GET /search', async () => {
 
 describe('Search E2E Event Handling', async () => {
   const testUserTokens = await TestUser.authenticate();
+  const generatedCompanyUUID = `test-company-${randomUUID().toString()}`;
 
   const activeOfferUUID = `test-${randomUUID().toString()}`;
   const expiredOfferUUID = `test-${randomUUID().toString()}`;
@@ -76,22 +77,19 @@ describe('Search E2E Event Handling', async () => {
 
   const offers: SanityOffer[] = [
     {
-      ...buildTestSanityOffer(),
-      _id: activeOfferUUID,
+      ...buildTestSanityOffer(activeOfferUUID, generatedCompanyUUID),
       name: activeOfferUUID,
       start: new Date(Date.now()).toISOString(),
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
     },
     {
-      ...buildTestSanityOffer(),
-      _id: expiredOfferUUID,
+      ...buildTestSanityOffer(expiredOfferUUID, generatedCompanyUUID),
       name: expiredOfferUUID,
       start: new Date(Date.now()).toISOString(),
       expires: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
     },
     {
-      ...buildTestSanityOffer(),
-      _id: evergreenOfferUUID,
+      ...buildTestSanityOffer(evergreenOfferUUID, generatedCompanyUUID),
       name: evergreenOfferUUID,
       start: new Date(Date.now()).toISOString(),
       evergreen: true,
@@ -100,7 +98,10 @@ describe('Search E2E Event Handling', async () => {
   ];
 
   afterAll(async () => {
-    await sendTestEvents({ source: Events.OFFER_DELETED, events: offers });
+    await sendTestEvents({
+      source: Events.OFFER_DELETED,
+      events: offers.map((offer) => ({ ...offer, _updatedAt: new Date(Date.now()).toISOString() })),
+    });
   });
 
   beforeAll(async () => {
@@ -113,13 +114,12 @@ describe('Search E2E Event Handling', async () => {
 
   it('should consume offer created event with offer expires set', async () => {
     const companyName = offers[0].company?.brandCompanyDetails?.[0]?.companyName ?? '';
-    const companyId = offers[0].company?._id ?? 0;
     const expectedSearchResult: SearchResult = {
       ID: activeOfferUUID,
       OfferName: activeOfferUUID,
       OfferType: 'online',
       offerimg: 'https://testimage.com',
-      CompID: companyId.toString(),
+      CompID: generatedCompanyUUID,
       LegacyID: 1,
       LegacyCompanyID: 1,
       CompanyName: companyName,

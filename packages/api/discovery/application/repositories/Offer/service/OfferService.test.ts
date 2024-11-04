@@ -207,4 +207,30 @@ describe('Offer Service', () => {
       jest.spyOn(OfferRepository.prototype, 'retrieveByCompanyId').mockRejectedValue(new Error('DynamoDB error'));
     };
   });
+
+  describe('getOffersByIds', () => {
+    it('should getOffersByIds successfully', async () => {
+      const offers = offerFactory.buildList(3);
+      givenOfferRepositoryRetrieveByIdsReturns(offers);
+      const result = await target.getOffersByIds([{ id: 'offerId', companyId: 'companyId' }]);
+      expect(result).toEqual(offers);
+    });
+
+    it('should throw error when failure in retrieving offer by ids', async () => {
+      givenOfferRepositoryRetrieveByIdsReturnsThrowsAnError();
+
+      await expect(target.getOffersByIds([{ id: 'offerId', companyId: 'companyId' }])).rejects.toThrow(
+        `Error occurred retrieving Offers by ids: [Error: DynamoDB error]`,
+      );
+    });
+
+    const givenOfferRepositoryRetrieveByIdsReturns = (offers: Offer[]) => {
+      const offerEntities = offers.map(mapOfferToOfferEntity);
+
+      jest.spyOn(OfferRepository.prototype, 'retrieveByIds').mockResolvedValue(offerEntities);
+    };
+    const givenOfferRepositoryRetrieveByIdsReturnsThrowsAnError = () => {
+      jest.spyOn(OfferRepository.prototype, 'retrieveByIds').mockRejectedValue(new Error('DynamoDB error'));
+    };
+  });
 });

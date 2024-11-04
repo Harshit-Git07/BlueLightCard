@@ -66,4 +66,13 @@ export class OfferRepository {
     });
     return results as OfferEntity[];
   }
+
+  async retrieveByIds(offerIds: { id: string; companyId: string }[]): Promise<OfferEntity[]> {
+    const keys = offerIds.map(({ id, companyId }) => ({
+      partitionKey: OfferKeyBuilders.buildPartitionKey(id),
+      sortKey: OfferKeyBuilders.buildSortKey(companyId),
+    }));
+    const results = await DynamoDBService.batchGet(keys, this.tableName);
+    return results ? (results as OfferEntity[]) : [];
+  }
 }

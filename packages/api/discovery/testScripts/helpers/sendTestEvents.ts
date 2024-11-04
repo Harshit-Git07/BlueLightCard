@@ -1,7 +1,7 @@
 import '../../../../../.sst/types/index';
 
 import { EventBridgeClient, PutEventsCommand, PutEventsCommandInput } from '@aws-sdk/client-eventbridge';
-import { Company, Offer } from '@bluelightcard/sanity-types';
+import { Company, MenuOffer, Offer } from '@bluelightcard/sanity-types';
 import { EventBus } from 'sst/node/event-bus';
 
 import { getEnv } from '@blc-mono/core/src/utils/getEnv';
@@ -9,7 +9,7 @@ import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructur
 
 interface TestEvents {
   source: string;
-  events: Offer[] | Company[];
+  events: Offer[] | Company[] | MenuOffer[];
 }
 
 export async function sendTestEvents(testEvents: TestEvents, eventBusName?: string): Promise<void> {

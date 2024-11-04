@@ -1,11 +1,11 @@
 import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { v4 } from 'uuid';
 
-export function buildTestSanityOffer(): SanityOffer {
+export function buildTestSanityOffer(id?: string, companyId?: string): SanityOffer {
   return {
     tags: [],
     _createdAt: '2024-07-30T09:36:14Z',
-    _id: v4(),
+    _id: id ?? v4(),
     _rev: 'HxAzVxEm31DYQTCb4WY0L5',
     _type: 'offer',
     _updatedAt: new Date().toISOString(),
@@ -48,7 +48,7 @@ export function buildTestSanityOffer(): SanityOffer {
       _createdAt: '',
       _updatedAt: '2024-08-05T16:50:14Z',
       _rev: '',
-      _id: v4().toString(),
+      _id: companyId ?? v4().toString(),
       companyId: 1,
       brandCompanyDetails: [
         {
@@ -91,7 +91,7 @@ export function buildTestSanityOffer(): SanityOffer {
         },
       },
     },
-    name: `Test Offer ${v4().toString()}`,
+    name: `Test Offer ${id ?? v4().toString()}`,
     offerDescription: {
       _type: 'richtext-module',
       content: [

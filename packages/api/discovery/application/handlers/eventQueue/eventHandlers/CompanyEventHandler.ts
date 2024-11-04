@@ -5,6 +5,7 @@ import {
   getCompanyById,
   insertCompany,
 } from '@blc-mono/discovery/application/repositories/Company/service/CompanyService';
+import { updateOfferInMenus } from '@blc-mono/discovery/application/repositories/Menu/service/MenuService';
 import {
   getOffersByCompany,
   insertOffers,
@@ -24,10 +25,9 @@ export async function handleCompanyUpdated(newCompanyRecord: Company): Promise<v
 
     if (updatedOfferRecords.length > 0) {
       await insertOffers(updatedOfferRecords);
-      // Uncomment this when we have the Menu table created
-      // updatedOfferRecords.forEach(async (newOfferRecord) => {
-      //   await updateOfferInMenus(newOfferRecord);
-      // });
+      updatedOfferRecords.forEach(async (newOfferRecord) => {
+        await updateOfferInMenus(newOfferRecord);
+      });
     }
   } else {
     logger.info({

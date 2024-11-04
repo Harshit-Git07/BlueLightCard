@@ -1,16 +1,14 @@
 import {
   BoostType as SanityBoostType,
   DiscountType as SanityDiscountType,
-  MenuOffer,
+  MenuOffer as SanityMenuOffer,
   Offer as SanityOffer,
 } from '@bluelightcard/sanity-types';
 
-import { Offer, OfferType } from '@blc-mono/discovery/application/models/Offer';
-import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
+import { MenuOffer } from '@blc-mono/discovery/application/models/Menu';
+import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 
-import { mapSanityMenuOfferToOffer } from './mapSanityMenuOfferToOffer';
-
-jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer');
+import { mapSanityMenuOfferToMenuOffer } from './mapSanityMenuOfferToMenuOffer';
 
 describe('mapSanityMenuOfferToOffer', () => {
   const richTextModuleData = {
@@ -241,87 +239,92 @@ describe('mapSanityMenuOfferToOffer', () => {
     } as SanityBoostType,
   };
 
-  it('should map inclusions correctly', () => {
-    const sanityMenuOffer: MenuOffer = {
-      _id: 'menu1',
-      _type: 'menu.offer',
-      _rev: 'rev1',
-      _updatedAt: '2023-01-02T00:00:00Z',
-      _createdAt: '2023-01-02T00:00:00Z',
-      inclusions: [validSanityOffer],
-    };
+  const sanityMenuOffer: SanityMenuOffer = {
+    _id: 'menu1',
+    _type: 'menu.offer',
+    _rev: 'rev1',
+    title: 'Test Menu',
+    start: '2023-01-01T00:00:00Z',
+    end: '2023-12-31T00:00:00Z',
+    _updatedAt: '2023-01-02T00:00:00Z',
+    _createdAt: '2023-01-02T00:00:00Z',
+    inclusions: [validSanityOffer],
+  };
 
-    const expected: Offer[] = [
+  const expectedDefaultResponse: MenuOffer = {
+    id: 'menu1',
+    name: 'Test Menu',
+    startTime: '2023-01-01T00:00:00Z',
+    endTime: '2023-12-31T00:00:00Z',
+    updatedAt: '2023-01-02T00:00:00Z',
+    menuType: MenuType.MARKETPLACE,
+    offers: [
       {
         id: '1',
-        legacyOfferId: 123,
-        name: 'Test Offer',
-        status: 'live',
-        offerType: OfferType.ONLINE,
-        offerDescription: 'This is a heading↵ This is a paragraph.↵ ',
-        image: 'https://example.com/image.jpg',
-        offerStart: '2023-01-01',
-        offerEnd: '2023-12-31',
-        evergreen: true,
-        tags: ['tag1', 'tag2'],
-        includedTrusts: [],
-        excludedTrusts: [],
         company: {
           id: 'company1',
-          name: 'Test Company',
-          legacyCompanyId: undefined,
-          logo: 'logo-ref',
-          ageRestrictions: 'none',
-          alsoKnownAs: [],
-          includedTrusts: ['trust-service-code'],
-          excludedTrusts: [],
-          categories: [],
-          local: false,
-          updatedAt: expect.any(String),
         },
-        categories: [
-          {
-            id: 1,
-            name: 'Category Item Name',
-            parentCategoryIds: [],
-            level: 1,
-            updatedAt: expect.any(String),
-          },
-        ],
-        local: false,
-        discount: {
-          type: 'percentage',
-          description: 'free-entry',
-          coverage: 'all-site',
-          updatedAt: expect.any(String),
-        },
-        commonExclusions: ['Exclusion Name'],
-        boost: {
-          type: 'boost.type',
-          boosted: false,
-        },
-        updatedAt: '2023-01-02T00:00:00Z',
       },
-    ];
+    ],
+  };
 
-    (mapSanityOfferToOffer as jest.Mock).mockReturnValue(expected[0]);
+  it('should map sanity menu offer to menu offer correctly', () => {
+    const result = mapSanityMenuOfferToMenuOffer(sanityMenuOffer);
 
-    const result = mapSanityMenuOfferToOffer(sanityMenuOffer);
-
-    expect(result).toEqual(expected);
+    expect(result).toEqual(expectedDefaultResponse);
   });
 
-  it('should return an empty array if inclusions are not present', () => {
-    const sanityMenuOffer: MenuOffer = {
-      _id: 'menu2',
-      _type: 'menu.offer',
-      _rev: 'rev2',
-      _updatedAt: '2023-01-02T00:00:00Z',
-      _createdAt: '2023-01-02T00:00:00Z',
+  const errorCases = [
+    {
+      field: 'title',
+      menuOffer: {
+        ...sanityMenuOffer,
+        title: undefined,
+      },
+    },
+    {
+      field: 'start',
+      menuOffer: {
+        ...sanityMenuOffer,
+        start: undefined,
+      },
+    },
+    {
+      field: 'end',
+      menuOffer: {
+        ...sanityMenuOffer,
+        end: undefined,
+      },
+    },
+    {
+      field: 'company',
+      menuOffer: {
+        ...sanityMenuOffer,
+        inclusions: [
+          {
+            ...validSanityOffer,
+            company: undefined,
+          },
+        ],
+      },
+    },
+  ];
+  it.each(errorCases)('should throw an error if %s is not present', ({ field, menuOffer }) => {
+    expect(() => mapSanityMenuOfferToMenuOffer(menuOffer)).toThrow(`Missing sanity field: ${field}`);
+  });
+
+  it('should return an empty array if inclusions are undefined', () => {
+    const sanityMenuOfferWithoutInclusions = {
+      ...sanityMenuOffer,
+      inclusions: undefined,
+    };
+    const expected = {
+      ...expectedDefaultResponse,
+      offers: [],
     };
 
-    const result = mapSanityMenuOfferToOffer(sanityMenuOffer);
+    const result = mapSanityMenuOfferToMenuOffer(sanityMenuOfferWithoutInclusions);
 
-    expect(result).toEqual([]);
+    expect(result).toEqual(expected);
   });
 });

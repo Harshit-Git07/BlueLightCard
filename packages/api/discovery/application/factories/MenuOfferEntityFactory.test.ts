@@ -8,8 +8,10 @@ describe('Offer Entity Factory', () => {
     expect(menuOfferEntity).toEqual({
       partitionKey: 'MENU-1',
       sortKey: 'OFFER-1',
-      gsi1PartitionKey: 'OFFER-1',
-      gsi1SortKey: 'MENU-1',
+      gsi1PartitionKey: 'MENU_TYPE-1',
+      gsi1SortKey: 'MENU_TYPE-1',
+      gsi2PartitionKey: 'OFFER-1',
+      gsi2SortKey: 'MENU-1',
       id: '1',
       legacyOfferId: 101,
       name: 'Sample Offer',

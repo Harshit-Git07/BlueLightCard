@@ -20,6 +20,7 @@ import { Shared } from '../../../../stacks/stack';
 import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '../infrastructure/config/config';
 
 import { populateSearchIndexCron } from './crons/populateSearchIndexCron';
+import { createMenusTable } from './database/createMenusTable';
 import { eventQueue } from './eventHandling/eventQueue';
 import { Route } from './routes/route';
 async function DiscoveryStack({ stack, app }: StackContext) {
@@ -90,6 +91,9 @@ async function DiscoveryStack({ stack, app }: StackContext) {
 
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(api.cdk.restApi);
 
+  const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);
+  const menusTable = createMenusTable(stack);
+
   api.addRoutes(stack, {
     'GET /search': Route.createRoute({
       apiGatewayModelGenerator,
@@ -132,10 +136,12 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       handler: 'packages/api/discovery/application/handlers/Menus/getMenus.handler',
       requestValidatorName: 'GetMenusValidator',
       defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+      permissions: ['dynamodb:*', menusTable.tableName],
+      environment: {
+        MENUS_TABLE_NAME: menusTable.tableName,
+      },
     }),
   });
-
-  const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);
 
   const populateSearchIndexFunction: FunctionDefinition = {
     permissions: ['dynamodb:Query', searchOfferCompanyTable.tableName, 'es'],
@@ -177,10 +183,14 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     handler: 'packages/api/discovery/application/handlers/eventQueue/eventQueueListener.handler',
     environment: {
       SEARCH_OFFER_COMPANY_TABLE_NAME: searchOfferCompanyTable.tableName,
+      MENUS_TABLE_NAME: menusTable.tableName,
       REGION: stack.region,
     },
   });
+
   searchOfferCompanyTable.grantReadWriteData(eventQueueListener);
+  menusTable.grantReadWriteData(eventQueueListener);
+
   eventQueueListener.addEventSource(
     new SqsEventSource(discoveryEventQueue.cdk.queue, {
       batchSize: 10,

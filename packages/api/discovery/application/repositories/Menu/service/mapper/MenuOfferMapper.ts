@@ -1,3 +1,4 @@
+import { MenuOfferResponse } from '@blc-mono/discovery/application/models/MenuOfferResponse';
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
 import {
   MenuOfferEntity,
@@ -29,12 +30,26 @@ export function mapMenuOfferEntityToOffer(menuOfferEntity: MenuOfferEntity): Off
   };
 }
 
-export function mapOfferToMenuOfferEntity(offer: Offer, menuId: string): MenuOfferEntity {
+export function mapOfferToMenuOfferEntity(offer: Offer, menuId: string, menuType: string): MenuOfferEntity {
   return {
     ...offer,
     partitionKey: MenuOfferKeyBuilders.buildPartitionKey(menuId),
     sortKey: MenuOfferKeyBuilders.buildSortKey(offer.id),
-    gsi1PartitionKey: MenuOfferKeyBuilders.buildGsi1PartitionKey(offer.id),
-    gsi1SortKey: MenuOfferKeyBuilders.buildGsi1SortKey(menuId),
+    gsi1PartitionKey: MenuOfferKeyBuilders.buildGsi1PartitionKey(menuType),
+    gsi1SortKey: MenuOfferKeyBuilders.buildGsi1SortKey(menuType),
+    gsi2PartitionKey: MenuOfferKeyBuilders.buildGsi2PartitionKey(offer.id),
+    gsi2SortKey: MenuOfferKeyBuilders.buildGsi2SortKey(menuId),
+  };
+}
+
+export function mapOfferToMenuOfferResponse(offer: Offer): MenuOfferResponse {
+  return {
+    offerID: offer.id,
+    offerName: offer.name,
+    offerDescription: offer.offerDescription,
+    offerType: offer.offerType,
+    imageURL: offer.image,
+    companyID: offer.company.id,
+    companyName: offer.company.name,
   };
 }

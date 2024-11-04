@@ -30,6 +30,9 @@ export interface Env {
 	REDEMPTIONS_API_BLC_UK: string;
 	REDEMPTIONS_API_BLC_AU: string;
 	REDEMPTIONS_API_DDS_UK: string;
+	ORDERS_API_BLC_UK: string;
+	ORDERS_API_BLC_AU: string;
+	ORDERS_API_DDS_UK: string;
 	DISCOVERY_API_BLC_UK: string;
 	DISCOVERY_API_BLC_AU: string;
 	DISCOVERY_API_DDS_UK: string;
@@ -55,6 +58,7 @@ const getUrlByBrand = (url: URL, env: Env, brand: string): URL => {
 		'/offers/v2': { BLC_UK: env.OFFERS_CMS_API_BLC_UK, BLC_AU: env.OFFERS_CMS_API_BLC_AU, DDS_UK: env.OFFERS_CMS_API_DDS_UK },
 		'/offers': { BLC_UK: env.OFFERS_API_BLC_UK, BLC_AU: env.OFFERS_API_BLC_AU, DDS_UK: env.OFFERS_API_DDS_UK },
 		'/redemptions': { BLC_UK: env.REDEMPTIONS_API_BLC_UK, BLC_AU: env.REDEMPTIONS_API_BLC_AU, DDS_UK: env.REDEMPTIONS_API_DDS_UK },
+		'/orders': { BLC_UK: env.ORDERS_API_BLC_UK, BLC_AU: env.ORDERS_API_BLC_AU, DDS_UK: env.ORDERS_API_DDS_UK },
 		'/discovery': { BLC_UK: env.DISCOVERY_API_BLC_UK, BLC_AU: env.DISCOVERY_API_BLC_AU, DDS_UK: env.DISCOVERY_API_DDS_UK },
 	};
 
@@ -86,6 +90,8 @@ const getUrlByPrefix = (url: URL, env: Env): URL => {
 		'/eu/offers/dds': env.OFFERS_API_DDS_UK,
 		'/eu/offers': env.OFFERS_API_BLC_UK,
 		'/au/offers': env.OFFERS_API_BLC_AU,
+		'/eu/orders': env.ORDERS_API_BLC_UK,
+		'/au/orders': env.ORDERS_API_BLC_AU,
 		'/eu/redemptions': env.REDEMPTIONS_API_BLC_UK,
 		'/eu/discovery': env.DISCOVERY_API_BLC_UK,
 	};

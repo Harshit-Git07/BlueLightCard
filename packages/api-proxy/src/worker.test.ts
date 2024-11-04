@@ -20,6 +20,9 @@ export const testEnv: Env = {
 	REDEMPTIONS_API_BLC_UK: 'https://redemptions.blc.uk',
 	REDEMPTIONS_API_BLC_AU: 'https://redemptions.blc.au',
 	REDEMPTIONS_API_DDS_UK: 'https://redemptions.dds.uk',
+	ORDERS_API_BLC_UK: 'https://orders.blc.uk',
+	ORDERS_API_BLC_AU: 'https://orders.blc.au',
+	ORDERS_API_DDS_UK: 'https://orders.dds.uk',
 	DISCOVERY_API_BLC_UK: 'https://discovery.blc.uk',
 	DISCOVERY_API_BLC_AU: 'https://discovery.blc.au',
 	DISCOVERY_API_DDS_UK: 'https://discovery.dds.uk',
@@ -99,6 +102,24 @@ describe('worker', () => {
 				expectedDomain: 'https://redemptions.dds.uk',
 				brandHeader: 'DDS_UK',
 				expectedPath: '/redeem',
+			},
+			{
+				route: '/orders/checkout',
+				expectedDomain: 'https://orders.blc.uk',
+				brandHeader: 'BLC_UK',
+				expectedPath: '/checkout',
+			},
+			{
+				route: '/orders/checkout',
+				expectedDomain: 'https://orders.blc.au',
+				brandHeader: 'BLC_AU',
+				expectedPath: '/checkout',
+			},
+			{
+				route: '/orders/checkout',
+				expectedDomain: 'https://orders.dds.uk',
+				brandHeader: 'DDS_UK',
+				expectedPath: '/checkout',
 			},
 			{
 				route: '/discovery/discovery-endpoint',
@@ -249,6 +270,16 @@ describe('worker', () => {
 				api: testEnv.REDEMPTIONS_API_BLC_UK,
 				pathPart: '/redemptionDetails',
 				route: '/eu/redemptions/redemptionDetails',
+			},
+			{
+				api: testEnv.ORDERS_API_BLC_UK,
+				pathPart: '/checkout',
+				route: '/eu/orders/checkout',
+			},
+			{
+				api: testEnv.ORDERS_API_BLC_AU,
+				pathPart: '/checkout',
+				route: '/au/orders/checkout',
 			},
 		])(`(GET) maps route: $route to api request: $api`, async (testParams) => {
 			nock(testParams.api).get(testParams.pathPart).reply(200);

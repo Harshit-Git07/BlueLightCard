@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProgressBar component visual states renders completed progress bar with completion label 1`] = `
+<div
+  className="w-full "
+>
+  <div
+    className="flex justify-between mb-0.5"
+  >
+    <div
+      className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold text-colour-onSurface dark:text-colour-onSurface-dark"
+    >
+      Done!
+    </div>
+  </div>
+  <div
+    className="relative"
+  >
+    <div
+      aria-label="Step completed"
+      aria-valuenow={100}
+      className="w-full h-[5px] bg-colour-primary-container dark:bg-colour-primary-container-dark"
+      role="progressbar"
+    >
+      <div
+        className="h-full transition-all bg-colour-primary dark:bg-colour-primary-dark duration-150"
+        style={
+          {
+            "width": "100%",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ProgressBar component visual states renders multi-step progress bar correctly 1`] = `
+<div
+  className="w-full "
+>
+  <div
+    className="relative"
+  >
+    <div
+      aria-label="First step"
+      aria-valuenow={33}
+      className="w-full h-[5px] bg-colour-primary-container dark:bg-colour-primary-container-dark"
+      role="progressbar"
+    >
+      <div
+        className="h-full transition-all bg-colour-primary dark:bg-colour-primary-dark duration-300"
+        style={
+          {
+            "width": "33%",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ProgressBar component visual states renders single-step progress bar correctly 1`] = `
+<div
+  className="w-full "
+>
+  <div
+    className="flex justify-between mb-0.5"
+  >
+    <div
+      className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold text-colour-onSurface dark:text-colour-onSurface-dark"
+    >
+      Single Step
+    </div>
+  </div>
+  <div
+    className="relative"
+  >
+    <div
+      aria-label="Single step"
+      aria-valuenow={0}
+      className="w-full h-[5px] bg-colour-primary-container dark:bg-colour-primary-container-dark"
+      role="progressbar"
+    >
+      <div
+        className="h-full transition-all bg-colour-primary dark:bg-colour-primary-dark duration-150"
+        style={
+          {
+            "width": "0%",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

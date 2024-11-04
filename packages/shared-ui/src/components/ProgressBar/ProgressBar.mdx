@@ -1,0 +1,72 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as ProgressBar from './ProgressBar.stories';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+
+<Meta of={ProgressBar} />
+
+# ProgressBar
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Status
+<ComponentStatus />
+
+## Overview
+
+ProgressBar is a component that displays the progress of a multi-step process. It is used to indicate the current step in a sequence of steps.
+
+## Props
+
+<Controls />
+
+## Variants and States
+
+List of variants for the ProgressBar component.
+
+**Default**
+<Canvas of={ProgressBar.Default} />
+
+**Default With Controls**
+<Canvas of={ProgressBar.DefaultWithControls} />
+
+**Single Step**
+<Canvas of={ProgressBar.SingleStep} />
+
+**Without Labels**
+<Canvas of={ProgressBar.WithoutLabels} />
+
+**Unfilled start**
+<Canvas of={ProgressBar.UnfilledStart} />
+
+## Implementation
+Usage example using jsx
+
+```jsx
+const ExampleUsage = () => {
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    { label: 'Step 1', ariaLabel: 'Step 1 of 3' },
+    { label: 'Step 2', ariaLabel: 'Step 2 of 3' },
+    { label: 'Step 3', ariaLabel: 'Step 3 of 3' },
+  ];
+
+  return (
+    <ProgressBar
+      steps={steps}
+      currentStep={currentStep}
+      showLabels={true}
+    />
+  );
+};
+```
+
+## Design
+- [Figma: ProgressBar](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=85-11508&node-type=canvas&m=dev)

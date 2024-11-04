@@ -152,26 +152,35 @@ exports[`SearchDropDown renders the dropdown 1`] = `
             Browse companies
           </p>
           <div
-            class="relative inline-block w-full"
+            class="group relative inline-block w-full"
           >
             <div
-              class="w-full rounded-[4px] bg-colour-surface-light dark:bg-colour-surface-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark border cursor-pointer flex justify-between items-center"
+              class="relative w-full rounded-[4px] bg-colour-surface-light dark:bg-colour-surface-dark border-colour-onSurface-outline-subtle-light dark:border-colour-onSurface-outline-subtle-dark  border cursor-pointer flex justify-between items-center"
             >
               <input
                 aria-controls=""
+                aria-describedby=":r2:"
                 aria-expanded="false"
+                aria-label="Search for a company"
                 autocomplete="off"
-                class="w-full h-12 px-4 py-3 rounded-[4px] text-left bg-colour-surface-light dark:bg-colour-surface-dark placeholder-colour-onSurface-light dark:placeholder-colour-onSurface-dark text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
-                placeholder="Search for a company"
+                class=" bg-colour-surface-light dark:bg-colour-surface-dark text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark  w-full h-12 px-4 pt-3 rounded-[4px] text-left group-focus-within:border-colour-primary dark:group-focus-within:border-colour-dds-denim-400 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent dark:placeholder-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+                data-testid="combobox"
+                id=":r0:"
                 role="combobox"
                 spellcheck="false"
                 tabindex="0"
                 type="text"
                 value=""
               />
+              <span
+                class="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark absolute left-4 transition-all duration-200 pointer-events-none font-typography-body font-typography-body-weight text-typography-body leading-typography-body group-focus-within:top-3 group-focus-within:-translate-y-1/2 group-focus-within:font-typography-label group-focus-within:font-typography-label-weight group-focus-within:text-typography-label group-focus-within:leading-typography-label"
+                id=":r2:"
+              >
+                Search for a company
+              </span>
               <svg
                 aria-hidden="true"
-                class="svg-inline--fa fa-chevron-down fa-sm text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body px-4 py-3"
+                class="svg-inline--fa fa-chevron-down fa-sm text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body px-4 py-3"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"

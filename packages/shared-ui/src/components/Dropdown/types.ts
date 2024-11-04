@@ -1,14 +1,27 @@
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
 export type DropdownProps = {
-  options: KeyValue[];
+  options: DropdownOptions;
   placeholder: string;
   disabled?: boolean;
   searchable?: boolean;
   customClass?: string;
-  onSelect: (option: KeyValue) => void;
-  onOpen?: (listbox: HTMLDivElement) => void;
+  onSelect: (option: DropdownOption) => void;
+  onOpen?: (listbox: HTMLElement) => void;
+  label?: string;
+  showTooltipIcon?: boolean;
+  tooltipIcon?: IconDefinition;
+  tooltipText?: string;
+  helpText?: string;
+  message?: string;
+  error?: boolean;
+  selectedValue?: string;
+  maxItemsShown?: number;
 };
 
-export type KeyValue = {
+export type DropdownOptions = DropdownOption[];
+
+export type DropdownOption = {
   id: string;
   label: string;
 };

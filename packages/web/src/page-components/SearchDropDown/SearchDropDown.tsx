@@ -77,6 +77,7 @@ export const SearchDropDownPresenter = ({
               </button>
             </Link>
           </div>
+
           <div className="my-[22px] px-4">
             <PillGroup
               title={'Browse categories'}
@@ -88,6 +89,7 @@ export const SearchDropDownPresenter = ({
               }}
             />
           </div>
+
           <div className="px-4">
             <p className="mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark">
               Browse companies
@@ -100,7 +102,7 @@ export const SearchDropDownPresenter = ({
                 label: cat.name,
               }))}
               placeholder="Search for a company"
-              searchable={true}
+              searchable
               onSelect={(option) => {
                 if (option) {
                   onSearchCompanyChange(option.id, option.label);

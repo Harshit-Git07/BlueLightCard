@@ -1,63 +1,84 @@
-import { ChangeEventHandler, FC, KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
-import { DropdownProps, KeyValue } from './types';
+import {
+  ChangeEventHandler,
+  FC,
+  KeyboardEvent,
+  MouseEventHandler,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { DropdownOption, DropdownProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/pro-solid-svg-icons';
+import DropdownLabel from './components/DropdownLabel';
+import DropdownList from './components/DropdownList';
+import { getSelectedOption } from './utils/DropdownPlaceholderBuilder';
 
-const Dropdown: FC<DropdownProps> = (props) => {
-  const { options, placeholder, disabled, searchable, customClass, onSelect, onOpen } = props;
-
-  const [selected, setSelected] = useState(placeholder);
+const Dropdown: FC<DropdownProps> = ({
+  options,
+  placeholder,
+  disabled,
+  searchable,
+  customClass,
+  onSelect,
+  onOpen,
+  label,
+  showTooltipIcon,
+  tooltipIcon,
+  tooltipText,
+  helpText,
+  message,
+  error = false,
+  selectedValue,
+  maxItemsShown,
+}) => {
+  const [selectedOption, setSelectedOption] = useState(
+    getSelectedOption(options, placeholder, selectedValue),
+  );
   const [isListboxOpen, setIsListboxOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [filteredOptions, setFilteredOptions] = useState(options);
 
   const dropdownId = useId();
+  const labelId = useId();
+  const dropdownPlaceholderId = useId();
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const comboboxRef = useRef<HTMLInputElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
 
-  const createArrayAndMap = (source: KeyValue[]) => {
-    const map = new Map(source.map((source) => [source.id, { ...source }]));
+  const selectedOptionOrPlaceholder = useMemo(() => {
+    if (selectedOption) return selectedOption;
 
-    return { array: source, map };
-  };
+    return {
+      id: placeholder,
+      label: placeholder,
+    };
+  }, [placeholder, selectedOption]);
 
-  // Create a new reference to the options array and a Map version.
-  // This allows easier access of individual selected options
-  // While also ensuring state of both types stays in sync.
-  const [optionsState, setOptionsState] = useState(createArrayAndMap(options));
-  const { array: optionsArray, map: optionsMap } = optionsState;
+  const onInputClicked: MouseEventHandler = (event): void => {
+    // We do not want to show the dropdown options whenever it is in search mode
+    if (searchable) return;
 
-  const selectedOption =
-    selected === placeholder ? { id: placeholder, label: placeholder } : optionsMap.get(selected);
-
-  const openListbox = () => {
-    setIsListboxOpen(true);
-  };
-
-  const closeListbox = () => {
-    setIsListboxOpen(false);
-  };
-
-  const toggleListbox = () => {
-    if (!isListboxOpen) return openListbox();
-
-    closeListbox();
+    setIsListboxOpen(!isListboxOpen);
   };
 
   const onComboboxKeyDown = (event: KeyboardEvent) => {
-    if (searchable && searchTerm === '') return;
-
-    const openKeys = ['Enter', 'ArrowDown', 'ArrowUp', ' '];
-
+    const openKeys = ['Enter', 'ArrowDown', 'ArrowUp'];
     if (!openKeys.includes(event.key)) return;
 
+    event.preventDefault();
+
     if (!isListboxOpen) {
-      openListbox();
+      setIsListboxOpen(true);
       return;
     }
 
-    if (isListboxOpen && event.key === 'ArrowDown' && listboxRef.current) {
-      const listbox = listboxRef.current;
+    const listbox = listboxRef.current;
+    if (event.key === 'ArrowDown' && listbox) {
       if (!listbox.children) return;
 
       const firstOption = listbox?.children?.item(0) as HTMLElement;
@@ -66,33 +87,33 @@ const Dropdown: FC<DropdownProps> = (props) => {
       return;
     }
 
-    closeListbox();
+    setIsListboxOpen(false);
   };
 
   const onComboboxChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchTerm(event.target.value);
 
     if (event.target.value === '') {
-      closeListbox();
-      setOptionsState(createArrayAndMap(options));
+      setIsListboxOpen(false);
+      setFilteredOptions(options);
       return;
     }
 
     const filteredOptions = options.filter((option) =>
       option.label.toLowerCase().startsWith(event.target.value.toLowerCase()),
     );
+    setFilteredOptions(filteredOptions);
 
-    setOptionsState(createArrayAndMap(filteredOptions));
-    openListbox();
+    setIsListboxOpen(true);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      closeListbox();
+      setIsListboxOpen(false);
     }
   };
 
-  const onOptionKeyDown = (newSelectedOption: KeyValue) => (event: KeyboardEvent) => {
+  const onOptionKeyDown = (event: KeyboardEvent, newSelectedOption: DropdownOption) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -101,7 +122,7 @@ const Dropdown: FC<DropdownProps> = (props) => {
     }
 
     if (event.key === 'Escape') {
-      closeListbox();
+      setIsListboxOpen(false);
       (comboboxRef.current as HTMLElement)?.focus();
     }
 
@@ -114,12 +135,12 @@ const Dropdown: FC<DropdownProps> = (props) => {
     }
   };
 
-  const handleSelectOption = (option: KeyValue) => {
+  const handleSelectOption = (option: DropdownOption) => {
     if (disabled) return;
 
     setSearchTerm(option.label);
-    setSelected(option.id);
-    closeListbox();
+    setSelectedOption(option);
+    setIsListboxOpen(false);
     onSelect(option);
   };
 
@@ -135,71 +156,121 @@ const Dropdown: FC<DropdownProps> = (props) => {
     if (!isListboxOpen || !onOpen || !listboxRef.current) return;
 
     onOpen(listboxRef.current);
-  }, [onOpen, listboxRef.current]);
+  }, [onOpen, isListboxOpen]);
+
+  const inputClassName = useMemo(() => {
+    const opacityClasses =
+      selectedOptionOrPlaceholder?.label === placeholder && !searchable
+        ? ' opacity-0 group-focus-within:opacity-100 group-focus-within:text-opacity-0 '
+        : '';
+
+    const disabledClasses = disabled
+      ? ' bg-colour-surface-container text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark'
+      : 'bg-colour-surface-light dark:bg-colour-surface-dark text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark';
+
+    const outlineClasses = searchable ? '' : 'outline-none';
+
+    return `${opacityClasses} ${disabledClasses} ${outlineClasses} w-full h-12 px-4 pt-3 rounded-[4px] text-left group-focus-within:border-colour-primary dark:group-focus-within:border-colour-dds-denim-400 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent dark:placeholder-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body`;
+  }, [selectedOptionOrPlaceholder, placeholder, searchable, disabled]);
+
+  const placeholderClassName = useMemo(() => {
+    const positionClasses =
+      selectedOptionOrPlaceholder?.label !== placeholder || searchTerm !== ''
+        ? 'top-3 -translate-y-1/2 font-typography-label font-typography-label-weight text-typography-label leading-typography-label '
+        : '';
+
+    const disabledClasses = disabled
+      ? 'text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark'
+      : 'text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark';
+
+    return `${positionClasses}${disabledClasses} absolute left-4 transition-all duration-200 pointer-events-none font-typography-body font-typography-body-weight text-typography-body leading-typography-body group-focus-within:top-3 group-focus-within:-translate-y-1/2 group-focus-within:font-typography-label group-focus-within:font-typography-label-weight group-focus-within:text-typography-label group-focus-within:leading-typography-label`;
+  }, [selectedOptionOrPlaceholder?.label, placeholder, searchTerm, disabled]);
+
+  const messageClassName = useMemo(() => {
+    const errorStyles = error
+      ? 'text-colour-error'
+      : 'text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark';
+
+    return `${errorStyles} group-focus-within:text-colour-primary dark:group-focus-within:text-colour-dds-denim-400 my-[8px] flex font-typography-body text-typography-body-small font-typography-body-weight leading-typography-body-small tracking-typography-body`;
+  }, [error]);
 
   return (
-    <div className="relative inline-block w-full" ref={dropdownRef}>
-      <div className="w-full rounded-[4px] bg-colour-surface-light dark:bg-colour-surface-dark border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark border cursor-pointer flex justify-between items-center">
+    <div className="group relative inline-block w-full" ref={dropdownRef}>
+      {label && (
+        <DropdownLabel
+          labelId={labelId}
+          dropdownId={dropdownId}
+          label={label}
+          tooltipText={tooltipText}
+          tooltipOpen={tooltipOpen}
+          showTooltipIcon={showTooltipIcon}
+          tooltipIcon={tooltipIcon}
+          onTooltipClicked={() => setTooltipOpen(!tooltipOpen)}
+        />
+      )}
+
+      {helpText && (
+        <div className="my-[8px] flex text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body">
+          {helpText}
+        </div>
+      )}
+
+      <div
+        className={`relative w-full rounded-[4px] ${disabled ? 'bg-colour-surface-container dark:bg-colour-surface-container-dark' : 'bg-colour-surface-light dark:bg-colour-surface-dark'} ${error ? 'border-colour-error' : 'border-colour-onSurface-outline-subtle-light dark:border-colour-onSurface-outline-subtle-dark '} border cursor-pointer flex justify-between items-center`}
+      >
         <input
+          id={dropdownId}
           ref={comboboxRef}
-          className="w-full h-12 px-4 py-3 rounded-[4px] text-left bg-colour-surface-light dark:bg-colour-surface-dark placeholder-colour-onSurface-light dark:placeholder-colour-onSurface-dark text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+          className={inputClassName}
           role="combobox"
+          disabled={disabled}
           autoComplete="off"
           spellCheck={false}
           tabIndex={0}
           aria-controls={isListboxOpen ? `dropdown-listbox-${dropdownId}` : ''}
           aria-expanded={isListboxOpen}
-          placeholder={placeholder}
+          aria-describedby={dropdownPlaceholderId}
+          aria-label={placeholder}
+          aria-labelledby={label ? labelId : undefined}
           type={searchable ? 'text' : 'button'}
-          onClick={searchable ? undefined : toggleListbox}
           onChange={onComboboxChange}
+          onClick={onInputClicked}
           onKeyDown={onComboboxKeyDown}
-          value={searchable ? searchTerm : selectedOption?.label}
+          value={searchable ? searchTerm : selectedOptionOrPlaceholder?.label}
+          data-testid="combobox"
         />
 
+        <span id={dropdownPlaceholderId} className={placeholderClassName}>
+          {placeholder}
+        </span>
+
         <FontAwesomeIcon
-          className="text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body px-4 py-3"
+          className={`${disabled ? 'text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark cursor-default' : 'text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark'} font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body px-4 py-3`}
           size="sm"
           icon={isListboxOpen ? faChevronUp : faChevronDown}
-          onClick={toggleListbox}
+          onClick={() => {
+            if (disabled) return;
+
+            setIsListboxOpen(!isListboxOpen);
+          }}
         />
       </div>
 
       {isListboxOpen && (
-        <div
-          ref={listboxRef}
-          id={`dropdown-listbox-${dropdownId}`}
-          role="listbox"
-          tabIndex={0}
-          className={`w-full mt-2 overflow-y-auto focus:outline-none rounded-[4px] cursor-pointer border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark border bg-colour-surface-light dark:bg-colour-surface-dark text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body ${customClass}`}
-        >
-          {optionsArray.length > 0 &&
-            optionsArray.map((option, index) => (
-              <div
-                role="option"
-                aria-disabled={disabled}
-                aria-selected={selected === option.id}
-                tabIndex={index + 1}
-                key={option.id}
-                className={`flex h-7 items-center cursor-pointer p-5 focus:text-dropDownItem-text-active-colour focus:border-b-dropDownItem-border-active-colour focus:border-b hover:border-b hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:focus:text-dropDownItem-text-active-colour-dark dark:focus:border-b-dropDownItem-border-active-colour-dark dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark  dark:hover:border-b-dropDownItem-divider-hover-colour-dark font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark ${
-                  selected === option.id
-                    ? 'border-b border-b-dropDownItem-bg-colour dark:border-b-dropDownItem-bg-colour-dark'
-                    : ''
-                }`}
-                onClick={() => handleSelectOption(option)}
-                onKeyDown={onOptionKeyDown(option)}
-              >
-                {option.label}
-              </div>
-            ))}
-
-          {optionsArray.length < 1 && (
-            <div className="w-full flex h-7 p-5 items-center font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font text-dropDownItem-text-colour text-center text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark">
-              No results found
-            </div>
-          )}
-        </div>
+        <DropdownList
+          className={customClass}
+          listboxRef={listboxRef}
+          dropdownId={dropdownId}
+          maxItemsShown={maxItemsShown}
+          options={filteredOptions}
+          disabled={disabled}
+          selectedOption={selectedOptionOrPlaceholder}
+          onSelected={handleSelectOption}
+          onOptionKeyDown={onOptionKeyDown}
+        />
       )}
+
+      {message && <div className={messageClassName}>{message}</div>}
     </div>
   );
 };

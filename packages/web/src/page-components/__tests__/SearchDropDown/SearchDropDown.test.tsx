@@ -32,7 +32,10 @@ describe('SearchDropDown', () => {
     const category = within(container).getByText('Children and toys');
     fireEvent.click(category);
 
-    const companySearch = within(container).getByPlaceholderText('Search for a company');
+    const companySearch = within(container).getByRole('combobox', {
+      description: 'Search for a company',
+      hidden: true,
+    });
     await act(() => userEvent.type(companySearch, 'you'));
 
     const company = await within(container).findByText('Youth & Earth');
@@ -81,7 +84,10 @@ describe('SearchDropDown', () => {
       />
     );
 
-    const companySearch = within(container).getByPlaceholderText('Search for a company');
+    const companySearch = within(container).getByRole('combobox', {
+      description: 'Search for a company',
+      hidden: true,
+    });
     await act(() => userEvent.type(companySearch, 'you'));
 
     const company = await within(container).findByText('Youth & Earth');

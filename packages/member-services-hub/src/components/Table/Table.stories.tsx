@@ -15,7 +15,7 @@ const Template: StoryFn<typeof Table> = (args) => {
     args.data.map((row) => ({
       ...row,
       id: `${uniquePrefix}-${row.id}`,
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const Template: StoryFn<typeof Table> = (args) => {
       args.data.map((row) => ({
         ...row,
         id: `${uniquePrefix}-${row.id}`,
-      }))
+      })),
     );
   }, [args.data, uniquePrefix]);
 
@@ -35,8 +35,8 @@ const Template: StoryFn<typeof Table> = (args) => {
               ...row,
               checked: !row.checked,
             }
-          : row
-      )
+          : row,
+      ),
     );
   };
 
@@ -231,7 +231,10 @@ CustomDropdownItems.parameters = {
 export const DynamicDropdownItems = Template.bind({});
 DynamicDropdownItems.args = {
   ...Default.args,
-  customiseDropdownItems: (items: ActionDropdownItem[], rowData: TableData): ActionDropdownItem[] => {
+  customiseDropdownItems: (
+    items: ActionDropdownItem[],
+    rowData: TableData,
+  ): ActionDropdownItem[] => {
     if (rowData.userStatus === 'Suspended') {
       return [
         {

@@ -22,7 +22,9 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ trail }) => {
                       {breadcrumb.name}
                     </a>
                   )}
-                  {index < trail.length - 1 && <span className="px-3 text-body-color dark:text-dark-6">&gt;</span>}
+                  {index < trail.length - 1 && (
+                    <span className="px-3 text-body-color dark:text-dark-6">&gt;</span>
+                  )}
                 </li>
               ))}
             </ul>

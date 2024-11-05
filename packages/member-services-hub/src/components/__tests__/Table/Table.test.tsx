@@ -112,7 +112,7 @@ describe('TableBody Component', () => {
           dropdownItems={mockDropdownItems}
           checkboxPosition={0}
         />
-      </table>
+      </table>,
     );
     const rows = screen.getAllByRole('row');
     expect(rows.length).toBe(data.length);
@@ -124,7 +124,7 @@ describe('TableHead Component', () => {
     render(
       <table>
         <TableHead headers={headers} showCheckbox={true} showActions={true} checkboxPosition={0} />
-      </table>
+      </table>,
     );
     expect(screen.getByRole('row')).toBeTruthy();
   });
@@ -182,7 +182,7 @@ describe('TableDropdown Component', () => {
       userStatus: 'Suspended',
     };
     const suspendedDropdownItems = dropdownItemsWithOnClick.filter((item) =>
-      item.condition ? item.condition(suspendedUserData) : true
+      item.condition ? item.condition(suspendedUserData) : true,
     );
     render(<TableDropdown items={suspendedDropdownItems} rowData={suspendedUserData} />);
     fireEvent.click(screen.getByRole('button'));

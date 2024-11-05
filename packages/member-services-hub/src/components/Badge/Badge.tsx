@@ -2,42 +2,18 @@ import { FC } from 'react';
 import { BadgeProps } from './types';
 
 const Badge: FC<BadgeProps> = ({ type, text }) => {
-  const textColour = () => {
-    switch (type) {
-      case 'danger':
-        return 'text-[#D41121]';
-      case 'warning':
-        return 'text-[#B35600]';
-      case 'success':
-        return 'text-[#166F4E]';
-      case 'disabled':
-        return 'text-[#32363C]';
-      default:
-        return 'text-[#32363C]';
-    }
+  const colourStyle = {
+    danger: 'outline-red-600 text-red-600',
+    warning: 'outline-amber-600 text-amber-600',
+    success: 'outline-green-700 text-green-700',
+    info: 'outline-cyan-700 text-cyan-700',
+    default: 'outline-gray-700 text-gray-700',
   };
-  const bgColour = () => {
-    switch (type) {
-      case 'danger':
-        return 'bg-[#FFF0F1]';
-      case 'warning':
-        return 'bg-[#FFF5EC]';
-      case 'success':
-        return 'bg-[#E1F0EA]';
-      case 'disabled':
-        return 'bg-[#DCDFE3]';
-      default:
-        return 'bg-[#DCDFE3]';
-    }
-  };
-
-  const backgroundColour = bgColour();
-  const colour = textColour();
 
   return (
     <span
-      className={`inline-block rounded py-2 px-3 text-xs font-medium rounded-full ${colour} ${backgroundColour}`}
-      data-testid="danger-badge"
+      className={`inline-block py-1 px-3 text-xs font-semibold rounded-full outline outline-1 ${colourStyle[type]}`}
+      data-testid={`${type}-badge`}
     >
       {text}
     </span>

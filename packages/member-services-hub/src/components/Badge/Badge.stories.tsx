@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Badge from './Badge';
-import { BadgeVariant } from '@/app/common/types/theme';
+import { ColourVariant } from '@/app/common/types/theme';
 
 const componentMeta: Meta<typeof Badge> = {
   title: 'member-services-hub/Badge Component',
@@ -16,7 +16,7 @@ const Template: StoryFn<typeof Badge> = (args) => (
 export const Default = Template.bind({});
 
 Default.args = {
-  type: BadgeVariant.Danger,
+  type: ColourVariant.Danger,
   text: 'Danger',
 };
 

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { ChevronProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';

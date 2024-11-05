@@ -1,5 +1,4 @@
 import { PropsWithChildren } from 'react';
-import { ProfileCardProps } from '../ProfileCard/types';
 
 export type TabBarProps = PropsWithChildren & {
   items: TabItemProps[];

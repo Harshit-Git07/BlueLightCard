@@ -9,7 +9,11 @@ export const TableDropdown: React.FC<TableDropdownProps> = ({ items, rowData }) 
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdown.current) return;
-      if (!dropdownOpen || dropdown.current.contains(target as Node) || trigger.current?.contains(target as Node)) {
+      if (
+        !dropdownOpen ||
+        dropdown.current.contains(target as Node) ||
+        trigger.current?.contains(target as Node)
+      ) {
         return;
       }
       setDropdownOpen(false);
@@ -36,7 +40,13 @@ export const TableDropdown: React.FC<TableDropdownProps> = ({ items, rowData }) 
         aria-haspopup="true"
         aria-expanded={dropdownOpen}
       >
-        <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width={24}
+          height={24}
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -77,7 +87,7 @@ export const TableDropdown: React.FC<TableDropdownProps> = ({ items, rowData }) 
                 >
                   {item.label}
                 </button>
-              )
+              ),
           )}
         </div>
       )}

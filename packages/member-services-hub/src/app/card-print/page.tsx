@@ -3,14 +3,12 @@ import React from 'react';
 import { NextPage } from 'next';
 import GlobalNavigation from '../../components/GlobalNavigation/GlobalNavigation';
 import CardPrintingImg from '@assets/CardPrintingImg.svg';
-import HeaderBar from '@/components/HeaderBar/HeaderBar';
 
 const Card: NextPage<any> = (props) => {
   return (
     <main className="flex flex-row bg-[#FAFAFA]">
       <GlobalNavigation />
       <div className="w-full flex flex-col flex-grow-1">
-        <HeaderBar firstname="Daniel" surname="Cook" email="danielcook@bluelightcard.co.uk" />
         <div className="h-[994px] pb-36 flex-col justify-center items-center inline-flex">
           <div className="flex-col justify-center items-center gap-6 flex">
             <CardPrintingImg height={340} width={340} />

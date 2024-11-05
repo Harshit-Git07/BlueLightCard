@@ -1,7 +1,12 @@
 import React from 'react';
 import { TableHeadProps } from './types';
 
-export const TableHead: React.FC<TableHeadProps> = ({ headers, showCheckbox, showActions, checkboxPosition }) => {
+export const TableHead: React.FC<TableHeadProps> = ({
+  headers,
+  showCheckbox,
+  showActions,
+  checkboxPosition,
+}) => {
   return (
     <thead>
       <tr className="bg-blue-600 text-left">
@@ -16,7 +21,9 @@ export const TableHead: React.FC<TableHeadProps> = ({ headers, showCheckbox, sho
           </th>
         ))}
         {showActions && (
-          <th className="min-w-[100px] py-4 px-4 last:pr-11 text-base font-medium text-white text-right">Actions</th>
+          <th className="min-w-[100px] py-4 px-4 last:pr-11 text-base font-medium text-white text-right">
+            Actions
+          </th>
         )}
       </tr>
     </thead>

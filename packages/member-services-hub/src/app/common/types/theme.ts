@@ -4,6 +4,14 @@ export enum ThemeVariant {
   Tertiary = 'tertiary',
 }
 
+export enum ColourVariant {
+  Success = 'success',
+  Danger = 'danger',
+  Warning = 'warning',
+  Info = 'info',
+  Default = 'default',
+}
+
 export type ThemeColorTokens = Record<
   string,
   {

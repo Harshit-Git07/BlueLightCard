@@ -75,11 +75,20 @@ const Button: FC<ButtonProps> = ({
     'text-lg font-semibold leading-normal tracking-tight',
     colorVariants[variant].base.focus,
     variant == ThemeVariant.Secondary ? COLORS.SECONDARY.BORDER : '',
-    className ? `${colorVariants[variant].base.text} ${className}` : colorVariants[variant].base.text,
+    className
+      ? `${colorVariants[variant].base.text} ${className}`
+      : colorVariants[variant].base.text,
   ]);
 
   return (
-    <button id={id} aria-label={name} type={type} onClick={onClick} disabled={disabled} className={classes}>
+    <button
+      id={id}
+      aria-label={name}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={classes}
+    >
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}
       {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}

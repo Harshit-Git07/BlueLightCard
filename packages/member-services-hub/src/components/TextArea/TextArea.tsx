@@ -2,7 +2,7 @@
 import { ChangeEvent, FC, useState } from 'react';
 import { TextAreaProps } from './types';
 import { ZodSchema } from 'zod';
-import getSchema from '@/app/_zodSchemas/zodSchemaLibrary';
+import getSchema from '@/app/validation/schemas';
 
 const TextArea: FC<TextAreaProps> = ({
   label,
@@ -58,7 +58,10 @@ const TextArea: FC<TextAreaProps> = ({
 
   return (
     <>
-      <label data-testid="text-area-label" className="mb-[10px] block text-base font-medium text-dark">
+      <label
+        data-testid="text-area-label"
+        className="mb-[10px] block text-base font-medium text-dark"
+      >
         {label}
       </label>
       <div className={`relative`}>
@@ -76,7 +79,11 @@ const TextArea: FC<TextAreaProps> = ({
         ></textarea>
         <div className={`${textStatusColour}`}>
           <div>
-            <p>{status !== undefined && showStatus === true && disabled !== true ? statusMessage : ''}</p>
+            <p>
+              {status !== undefined && showStatus === true && disabled !== true
+                ? statusMessage
+                : ''}
+            </p>
           </div>
         </div>
       </div>
@@ -98,7 +105,7 @@ function validationCheck(
   setStatus: React.Dispatch<React.SetStateAction<string>>,
   showStatusSet: React.Dispatch<React.SetStateAction<boolean>>,
   validationType: string | undefined,
-  setValidationMessage: React.Dispatch<React.SetStateAction<string>>
+  setValidationMessage: React.Dispatch<React.SetStateAction<string>>,
 ) {
   if (validationType !== undefined && value !== '') {
     let zodValidation: ZodSchema | undefined = getSchema(validationType);

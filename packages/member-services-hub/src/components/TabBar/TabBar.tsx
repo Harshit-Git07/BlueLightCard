@@ -12,9 +12,9 @@ const TabBar: FC<TabBarProps> = ({ items, defaultOpen, onTabClick, selected }) =
           <button
             onClick={() => onTabClick(category)}
             className={cssUtil([
-              'flex border-b-2 py-3 px-6 text-sm font-medium md:text-base lg:py-4 lg:px-10',
+              'flex border-b-1 font-semibold min-w-[150px] h-[60px] justify-center items-center',
               selected === category
-                ? 'px-47 py-18 border-primary bg-opacity-10 text-palette-primary border-blue-900'
+                ? 'border-primary bg-opacity-10 text-palette-primary border-blue-900'
                 : 'text-shade-greyscale-grey-500 border-[#FFFFFF] hover:border-primary hover:text-palette-primary',
             ])}
           >

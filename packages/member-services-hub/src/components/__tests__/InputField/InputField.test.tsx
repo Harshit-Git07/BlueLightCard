@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { faUser } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { VALIDATION_ENUM } from '@/app/_zodSchemas/validationEnum';
+import { VALIDATION_ENUM } from '@/app/validation/schemas';
 
 describe('Input field component', () => {
   let props: InputFieldProps;

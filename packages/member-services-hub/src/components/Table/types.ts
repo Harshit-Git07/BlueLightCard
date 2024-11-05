@@ -26,7 +26,10 @@ export interface TableProps<T extends TableData = TableData> {
   checkboxPosition?: number;
   checkboxHeader?: TableHeader;
   dropdownItems?: ActionDropdownItem[];
-  customiseDropdownItems?: (items: ActionDropdownItem[], rowData: TableData) => ActionDropdownItem[];
+  customiseDropdownItems?: (
+    items: ActionDropdownItem[],
+    rowData: TableData,
+  ) => ActionDropdownItem[];
 }
 
 export interface TableHeadProps {
@@ -47,7 +50,10 @@ export interface TableBodyProps<T extends TableData = TableData> {
   onAction: (action: string, rowId: string) => void;
   checkboxPosition: number;
   dropdownItems: ActionDropdownItem[];
-  customizeDropdownItems?: (items: ActionDropdownItem[], rowData: TableData) => ActionDropdownItem[];
+  customizeDropdownItems?: (
+    items: ActionDropdownItem[],
+    rowData: TableData,
+  ) => ActionDropdownItem[];
 }
 
 export interface TableCheckboxProps {

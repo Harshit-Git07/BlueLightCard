@@ -4,7 +4,7 @@ import { InputFieldProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleExclamation } from '@fortawesome/pro-regular-svg-icons';
 import { ZodSchema } from 'zod';
-import getSchema from '@/app/_zodSchemas/zodSchemaLibrary';
+import getSchema from '@/app/validation/schemas';
 
 const InputField: FC<InputFieldProps> = ({
   label,
@@ -21,7 +21,8 @@ const InputField: FC<InputFieldProps> = ({
   const [showStatus, showStatusSet] = useState(false);
   const iconSpacing = icon !== undefined && disabled !== true ? 'ps-[2.3rem] pr-4' : 'px-4';
   const disabledTailwind = disabled !== undefined ? tailwindForDisabled(disabled) : '';
-  const statusIcon = status !== undefined && status !== '' && disabled !== true ? iconForStatus(status) : '';
+  const statusIcon =
+    status !== undefined && status !== '' && disabled !== true ? iconForStatus(status) : '';
   const errorOveride =
     status === undefined || status === 'none' || disabled !== undefined || disabled === false
       ? `focus:border-blue-400 active:border-blue-400 hover:border-blue-400`
@@ -66,7 +67,13 @@ const InputField: FC<InputFieldProps> = ({
           disabled={disabled !== undefined ? disabled : false}
           maxLength={50}
           onChange={(e) => {
-            validationCheck(e.target.value, setStatus, showStatusSet, validationType, setValidationMessage);
+            validationCheck(
+              e.target.value,
+              setStatus,
+              showStatusSet,
+              validationType,
+              setValidationMessage,
+            );
           }}
         />
         <div className={`${textStatusColour}`}>
@@ -76,7 +83,11 @@ const InputField: FC<InputFieldProps> = ({
             </div>
           </div>
           <div>
-            <p>{status !== undefined && showStatus === true && disabled !== true ? statusMessage : ''}</p>
+            <p>
+              {status !== undefined && showStatus === true && disabled !== true
+                ? statusMessage
+                : ''}
+            </p>
           </div>
         </div>
       </div>
@@ -106,7 +117,7 @@ function validationCheck(
   setStatus: React.Dispatch<React.SetStateAction<string>>,
   showStatusSet: React.Dispatch<React.SetStateAction<boolean>>,
   validationType: string | undefined,
-  setValidationMessage: React.Dispatch<React.SetStateAction<string>>
+  setValidationMessage: React.Dispatch<React.SetStateAction<string>>,
 ) {
   if (validationType !== undefined && value !== '') {
     let zodValidation: ZodSchema | undefined = getSchema(validationType);

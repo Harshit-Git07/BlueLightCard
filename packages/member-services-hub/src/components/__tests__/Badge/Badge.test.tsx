@@ -1,4 +1,4 @@
-import { BadgeVariant } from '@/app/common/types/theme';
+import { ColourVariant } from '@/app/common/types/theme';
 import { render, screen } from '@testing-library/react';
 import { BadgeProps } from '@/components/Badge/types';
 import Badge from '@/components/Badge/Badge';
@@ -9,7 +9,7 @@ describe('Badge component', () => {
   beforeEach(() => {
     props = {
       text: 'Danger',
-      type: BadgeVariant.Danger,
+      type: ColourVariant.Danger,
     };
   });
 

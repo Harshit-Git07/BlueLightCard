@@ -32,7 +32,7 @@ const nextConfig = {
         issuer: /\.[jt]sx?$/,
         resourceQuery: { not: /url/ }, // exclude if *.svg?url
         use: ['@svgr/webpack'],
-      }
+      },
     );
     fileLoaderRule.exclude = /\.svg$/i;
     config.resolve.alias = {
@@ -45,7 +45,7 @@ const nextConfig = {
     config.plugins.push(
       new CopyPlugin({
         patterns: [{ from: assetsFolder, to: 'static/assets' }],
-      })
+      }),
     );
     return config;
   },

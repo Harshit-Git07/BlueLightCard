@@ -40,7 +40,7 @@ const config: Config = {
   },
   plugins: [
     plugin(({ addBase }) =>
-      addFontStyles({ font: themeTokens.asset.font, baseSrcUrl: staticFolderPrefix, addBase })
+      addFontStyles({ font: themeTokens.asset.font, baseSrcUrl: staticFolderPrefix, addBase }),
     ),
   ],
 };

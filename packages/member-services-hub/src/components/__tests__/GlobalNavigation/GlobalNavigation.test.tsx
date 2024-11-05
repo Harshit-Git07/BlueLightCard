@@ -28,7 +28,7 @@ describe('NavItem component', () => {
         icon={<FontAwesomeIcon icon={faGrid2} />}
         menu="Dashboard"
         submenu={false}
-      />
+      />,
     );
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
   });
@@ -36,7 +36,7 @@ describe('NavItem component', () => {
     render(
       <NavItem link="/#" icon={<FontAwesomeIcon icon={faGrid2} />} menu="Dashboard" submenu={true}>
         <DropdownItem link="/#" menu="Test" />
-      </NavItem>
+      </NavItem>,
     );
     const button = screen.getByText('Dashboard');
     await act(() => user.click(button));

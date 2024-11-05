@@ -3,26 +3,36 @@ import { TableBodyProps, TableData } from './types';
 import { TableCheckbox } from './TableCheckbox';
 import { TableDropdown } from './TableDropdown';
 import Badge from '../Badge/Badge';
-import { BadgeVariant } from '@/app/common/types/theme';
+import { ColourVariant } from '@/app/common/types/theme';
 
-// Badge type mapping
-const badgeTypeMap: Record<BadgeVariant, Set<string>> = {
-  [BadgeVariant.Success]: new Set(['confirmed', 'approved']),
-  [BadgeVariant.Warning]: new Set(['awaiting approval', 'awaiting id approval', 'awaiting id upload', 'unvalidated']),
-  [BadgeVariant.Danger]: new Set(['rejected', 'not eligible', 'declined', 'suspended']),
-  [BadgeVariant.Disabled]: new Set(),
+const badgeTypeMap: Record<ColourVariant, Set<string>> = {
+  [ColourVariant.Success]: new Set(['confirmed', 'approved', 'active', 'posted & paid']),
+  [ColourVariant.Warning]: new Set([
+    'unvalidated, pending refund, awaiting printing',
+    'awaiting payment',
+  ]),
+  [ColourVariant.Danger]: new Set([
+    'awaiting id approval',
+    'awaiting approval',
+    'awaiting id',
+    'suspended',
+    'expired',
+    'lost',
+  ]),
+  [ColourVariant.Info]: new Set([]),
+  [ColourVariant.Default]: new Set([]),
 };
 
-const getBadgeType = (value: string): BadgeVariant => {
+const getBadgeType = (value: string): ColourVariant => {
   const lowerValue = value.toLowerCase();
 
   for (const [badgeType, values] of Object.entries(badgeTypeMap)) {
     if (values.has(lowerValue)) {
-      return badgeType as BadgeVariant;
+      return badgeType as ColourVariant;
     }
   }
 
-  return BadgeVariant.Disabled;
+  return ColourVariant.Default;
 };
 
 export const TableBody = <T extends TableData>({
@@ -42,7 +52,9 @@ export const TableBody = <T extends TableData>({
     <tbody>
       {data.map((row) => {
         const rowId = row.id;
-        const finalDropdownItems = customizeDropdownItems ? customizeDropdownItems(dropdownItems, row) : dropdownItems;
+        const finalDropdownItems = customizeDropdownItems
+          ? customizeDropdownItems(dropdownItems, row)
+          : dropdownItems;
 
         const dropdownItemsWithOnClick = finalDropdownItems.map((item) => ({
           ...item,
@@ -53,7 +65,9 @@ export const TableBody = <T extends TableData>({
           <tr
             key={rowId}
             className={`border-b border-stroke dark:border-dark-3 hover:bg-primary/5 ${
-              highlightCheckedRows && row.checked && showCheckbox ? 'bg-blue-100 dark:bg-blue-900/20' : ''
+              highlightCheckedRows && row.checked && showCheckbox
+                ? 'bg-blue-100 dark:bg-blue-900/20'
+                : ''
             }`}
           >
             {headers.map((header, index) => {
@@ -61,21 +75,32 @@ export const TableBody = <T extends TableData>({
                 return (
                   <td
                     key={`${rowId}-checkbox`}
-                    className={`py-5 ${index === 0 ? 'pl-11' : 'px-4'} min-w-[180px] whitespace-nowrap`}
+                    className={`py-5 ${
+                      index === 0 ? 'pl-11' : 'px-4'
+                    } min-w-[180px] whitespace-nowrap`}
                   >
-                    <TableCheckbox id={rowId} isChecked={row.checked || false} onChange={() => onRowSelect(rowId)} />
+                    <TableCheckbox
+                      id={rowId}
+                      isChecked={row.checked || false}
+                      onChange={() => onRowSelect(rowId)}
+                    />
                   </td>
                 );
               }
               return (
                 <td
                   key={`${rowId}-${header.key}`}
-                  className={`py-5 ${index === 0 ? 'pl-11' : 'px-4'} min-w-[180px] whitespace-nowrap`}
+                  className={`py-5 ${
+                    index === 0 ? 'pl-11' : 'px-4'
+                  } min-w-[180px] whitespace-nowrap`}
                 >
                   {renderCell ? (
                     renderCell(header, row)
                   ) : header.showBadge ? (
-                    <Badge type={getBadgeType(row[header.key] as string)} text={row[header.key] as string} />
+                    <Badge
+                      type={getBadgeType(row[header.key] as string)}
+                      text={row[header.key] as string}
+                    />
                   ) : (
                     <p className="text-base text-body-color dark:text-black">{row[header.key]}</p>
                   )}

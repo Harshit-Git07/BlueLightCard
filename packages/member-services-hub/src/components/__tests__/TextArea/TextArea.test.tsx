@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/pro-regular-svg-icons';
-import { VALIDATION_ENUM } from '@/app/_zodSchemas/validationEnum';
+import { VALIDATION_ENUM } from '@/app/validation/schemas';
 
 describe('Text area component', () => {
   let props: TextAreaProps;
@@ -16,6 +16,8 @@ describe('Text area component', () => {
       disabled: false,
       width: '250px',
       icon: <FontAwesomeIcon icon={faUser} />,
+      value: '',
+      onChange: () => jest.fn(),
       validationType: VALIDATION_ENUM.MINIMUM_OF_3,
       validationSuccessMessage: 'Input Valid',
     };

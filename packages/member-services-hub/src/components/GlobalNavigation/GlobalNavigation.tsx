@@ -27,7 +27,12 @@ const GlobalNavigation = () => {
             </Link>
           </div>
           <nav>
-            <NavItem link="/" icon={<FontAwesomeIcon icon={faGrid2} />} menu="Dashboard" submenu={false} />
+            <NavItem
+              link="/"
+              icon={<FontAwesomeIcon icon={faGrid2} />}
+              menu="Dashboard"
+              submenu={false}
+            />
             <NavItem
               link="/members"
               icon={<FontAwesomeIcon icon={faUsersRectangle} />}
@@ -40,9 +45,24 @@ const GlobalNavigation = () => {
               menu="Card Printing"
               submenu={false}
             />
-            <NavItem link="/" icon={<FontAwesomeIcon icon={faBuildings} />} menu="Orgs & Employers" submenu={false} />
-            <NavItem link="/" icon={<FontAwesomeIcon icon={faTicketsSimple} />} menu="Promo Codes" submenu={false} />
-            <NavItem link="/" icon={<FontAwesomeIcon icon={faAt} />} menu="Trusted Domains" submenu={false} />
+            <NavItem
+              link="/"
+              icon={<FontAwesomeIcon icon={faBuildings} />}
+              menu="Orgs & Employers"
+              submenu={false}
+            />
+            <NavItem
+              link="/"
+              icon={<FontAwesomeIcon icon={faTicketsSimple} />}
+              menu="Promo Codes"
+              submenu={false}
+            />
+            <NavItem
+              link="/"
+              icon={<FontAwesomeIcon icon={faAt} />}
+              menu="Trusted Domains"
+              submenu={false}
+            />
             <NavItem
               link="/"
               icon={<FontAwesomeIcon icon={faUserTieHairLong} />}
@@ -56,7 +76,12 @@ const GlobalNavigation = () => {
               menu="My Account"
               submenu={false}
             />
-            <NavItem link="/" icon={<FontAwesomeIcon icon={faArrowRightFromBracket} />} menu="Logout" submenu={false} />
+            <NavItem
+              link="/"
+              icon={<FontAwesomeIcon icon={faArrowRightFromBracket} />}
+              menu="Logout"
+              submenu={false}
+            />
           </nav>
         </div>
       </div>
@@ -76,7 +101,8 @@ export const NavItem: FC<NavItemProps> = ({ link, menu, icon, submenu, children 
   useEffect(() => {
     const clickHandler = ({ target }: any) => {
       if (!dropdown.current) return;
-      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current?.contains(target)) return;
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current?.contains(target))
+        return;
       setDropdownOpen(false);
     };
     document.addEventListener('click', clickHandler);

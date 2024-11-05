@@ -50,6 +50,14 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run Unit Tests
         run: npm test -w packages/${{ env.PKG_NAME }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        if: github.actor != 'dependabot[bot]'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: packages/${{ env.PKG_NAME }}
 
   lint:
     name: Linting
@@ -65,26 +73,26 @@ jobs:
       - name: Styles
         run: npm run lint:style -w packages/${{ env.PKG_NAME }}
 
-  storybook:
-    name: Storybook Preview
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-      - name: Build
-        run: npm run build-storybook -w packages/${{ env.PKG_NAME }}
-      - name: Publish
-        uses: cloudflare/pages-action@1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ env.STORYBOOK_PROJECT_NAME }}
-          directory: packages/${{ env.PKG_NAME }}/${{ env.STORYBOOK_BUILD_OUTPUT }}
-          branch: ${{ github.ref_name }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+  # storybook:
+  #   name: Storybook Preview
+  #   runs-on: ubuntu-latest
+  #   needs: install
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Setup
+  #       uses: ./.github/actions/setup
+  #     - name: Build
+  #       run: npm run build-storybook -w packages/${{ env.PKG_NAME }}
+  #     - name: Publish
+  #       uses: cloudflare/pages-action@1
+  #       with:
+  #         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  #         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  #         projectName: ${{ env.STORYBOOK_PROJECT_NAME }}
+  #         directory: packages/${{ env.PKG_NAME }}/${{ env.STORYBOOK_BUILD_OUTPUT }}
+  #         branch: ${{ github.ref_name }}
+  #         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

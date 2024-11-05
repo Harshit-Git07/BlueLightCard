@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import InputField from './InputField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faIdCard } from '@fortawesome/pro-regular-svg-icons';
-import { VALIDATION_ENUM } from '@/app/_zodSchemas/validationEnum';
+import { VALIDATION_ENUM } from '@/app/validation/schemas';
 
 const componentMeta: Meta<typeof InputField> = {
   title: 'member-services-hub/InputField',

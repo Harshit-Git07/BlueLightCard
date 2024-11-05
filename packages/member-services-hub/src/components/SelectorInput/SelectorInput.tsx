@@ -2,11 +2,18 @@
 import { FC, useState } from 'react';
 import { SelectorInputProps } from './types';
 
-const SelectorInput: FC<SelectorInputProps> = ({ label, disabled, placeholder, options, width, onChange }) => {
+const SelectorInput: FC<SelectorInputProps> = ({
+  label,
+  disabled,
+  placeholder,
+  options,
+  width,
+  onChange,
+}) => {
   const disabledTailwind = disabled !== undefined ? tailwindForDisabled(disabled) : '';
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownText, setDropdownText] = useState(
-    placeholder !== undefined ? placeholder : 'no text set for placeholder'
+    placeholder !== undefined ? placeholder : 'no text set for placeholder',
   );
   const widthField = width !== undefined ? width : '250px';
 
@@ -20,7 +27,10 @@ const SelectorInput: FC<SelectorInputProps> = ({ label, disabled, placeholder, o
 
   return (
     <>
-      <label data-testid="selector-label" className="mb-[10px] block text-base font-medium text-dark">
+      <label
+        data-testid="selector-label"
+        className="mb-[10px] block text-base font-medium text-dark"
+      >
         {label}
       </label>
       <div className={`relative`}>

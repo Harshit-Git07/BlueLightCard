@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.30.1...bluelightcard/redemptions-v1.31.0) (2024-11-04)
+
+
+### Features
+
+* [TR-1051] add CORS headers to Admin API ([#2703](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2703)) ([2ee9a4d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ee9a4d03ba40daa0471510b82ea48c2ce7f7cae))
+* Add db schema for redemption type ballot ([#2692](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2692)) ([349597a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/349597aa7818af71fd66764af1db8ffe8cffc997))
+* Rename status column in ballot ([#2727](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2727)) ([fd5f77b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fd5f77bd7b685bb3cdf629a28ac3e8e87d7cc0c5))
+
+
+### Bug Fixes
+
+* [TR-1051] update domains for Staging environments ([#2717](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2717)) ([dfd22c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dfd22c32389033ec06fa334dd62adefe6e9618ad))
+* [TR-1051] use correct default domain for Redemptions CORS requests ([#2723](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2723)) ([c16f406](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c16f406cb4d3a30fd7af1c04f48b09f86621581f))
+* [TR-961] rework of Redemptions E2E tests ([#2699](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2699)) ([f8c6522](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8c6522aa0171babcdb466c8861a4a1b317e22f8))
+* Adjusting redemptions to use core unpack jwt ([#2733](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2733)) ([9eb9b99](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9eb9b998694cf65f459e5c17ba696d42ea0449cc))
+* change staging url ([#2650](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2650)) ([d9853f1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9853f12cb25b2f057a6cd9bcc85a06954de6685))
+* TR-1041 POST and PATCH redmeption config do not allow empty integrationId when integration is set ([#2724](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2724)) ([cec2d0a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cec2d0a2c62fbe4b812c3f7abddeeeb3af51e54e))
+* TR-916 - add eagle eye api repository for calling eagle to get redemption codes ([#2494](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2494)) ([32508da](https://github.com/bluelightcard/BlueLightCard-2.0/commit/32508da13ad716478e2040253d24976d7ecbe2b8))
+* TR-995 - refactor service tests to be unit tests ([#2624](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2624)) ([6003018](https://github.com/bluelightcard/BlueLightCard-2.0/commit/60030189a1fbfd8de20cc1a51db8ab4dddff2177))
+
 ## [1.30.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.30.0...bluelightcard/redemptions-v1.30.1) (2024-10-29)
 
 

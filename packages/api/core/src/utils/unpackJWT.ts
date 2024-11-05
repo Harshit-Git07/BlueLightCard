@@ -10,7 +10,7 @@ export type JWT = {
   'custom:blc_old_id': string;
   phone_number?: string;
   memberUuid?: string;
-  legacyUserId?: string;
+  legacyUserId?: number;
 }
 
 export type Auth0Jwt = {
@@ -20,7 +20,7 @@ export type Auth0Jwt = {
   iat: number;
   email: string;
   memberUuid: string;
-  legacyUserId?: string;
+  legacyUserId?: number;
 }
 
 export function unpackJWT(jwt: string): JWT {
@@ -31,7 +31,7 @@ export function unpackJWT(jwt: string): JWT {
       return {
         ...decodedToken,
         'custom:blc_old_uuid': decodedToken.memberUuid,
-        'custom:blc_old_id': decodedToken.legacyUserId,
+        'custom:blc_old_id': String(decodedToken.legacyUserId),
       } as JWT
     }
     return decodedToken as JWT;

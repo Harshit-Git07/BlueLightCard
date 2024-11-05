@@ -10,7 +10,7 @@ const mockAuth0Token: Auth0Jwt = {
   iat: 999999999,
   email: "user@example.com",
   memberUuid: "auth0-member-uuid",
-  legacyUserId: "auth0-legacy-user-id",
+  legacyUserId: 1234,
 };
 
 const mockStandardToken: JWT = {
@@ -20,7 +20,7 @@ const mockStandardToken: JWT = {
   iat: 999999999,
   email: "user@example.com",
   'custom:blc_old_uuid': "legacy-uuid",
-  'custom:blc_old_id': "legacy-id",
+  'custom:blc_old_id': "1234",
 };
 
 describe("unpackJWT", () => {
@@ -36,7 +36,7 @@ describe("unpackJWT", () => {
     expect(result).toEqual({
       ...mockAuth0Token,
       'custom:blc_old_uuid': mockAuth0Token.memberUuid,
-      'custom:blc_old_id': mockAuth0Token.legacyUserId,
+      'custom:blc_old_id': String(mockAuth0Token.legacyUserId),
     });
   });
 

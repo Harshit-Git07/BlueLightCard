@@ -1,6 +1,6 @@
-import * as QRCode from 'qr-image';
+import * as QRCode from 'qrcode';
 
-export const handleRequest = (request: Request): Response => {
+export const handleRequest = async (request: Request): Promise<Response> => {
   try {
     const { searchParams } = new URL(request.url);
 
@@ -8,7 +8,7 @@ export const handleRequest = (request: Request): Response => {
     if (!code) {
       return new Response('Missing code parameter', { status: 400 });
     }
-    const buffer = QRCode.imageSync(code, { type: 'png' });
+    const buffer = await QRCode.toString(code);
 
     return new Response(buffer, { headers: { 'Content-Type': 'image/png' } });
   } catch (err) {

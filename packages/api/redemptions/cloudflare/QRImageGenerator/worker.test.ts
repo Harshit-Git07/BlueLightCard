@@ -1,7 +1,7 @@
-import * as QRCode from 'qr-image';
+import * as QRCode from 'qrcode';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('qr-image');
+vi.mock('qrcode');
 
 describe('Fetch event', () => {
   beforeEach(() => {
@@ -17,29 +17,41 @@ describe('Fetch event', () => {
   it('returns a QR code image when code query parameter is present', async () => {
     const { handleRequest } = await import('./worker.ts');
     const code = '123456';
+    const mockToString = vi.fn().mockImplementation((): string => {
+      return code;
+    });
+
+    vi.spyOn(QRCode, 'toString').mockImplementation(mockToString);
+
+    const expectedOutput = await QRCode.toString(code);
     const request = new Request(`http://localhost?code=${code}`);
-    const response = handleRequest(request);
-    vi.mocked(QRCode.imageSync).mockReturnValue(Buffer.from(code));
-    const buffer = QRCode.imageSync(code, { type: 'png' });
-    expect(typeof response.body).toEqual(typeof buffer);
-    expect(QRCode.imageSync).toHaveBeenCalledWith(code, { type: 'png' });
-    expect(response.headers.get('Content-Type')).toEqual('image/png');
+    const response = await handleRequest(request);
+    const responseBody = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get('Content-Type')).toBe('image/png');
+    expect(responseBody).toBe(expectedOutput);
   });
 
   it('returns an error when code query is missing', async () => {
     const { handleRequest } = await import('./worker.ts');
     const request = new Request(`http://localhost`);
-    const response = handleRequest(request);
+    const response = await handleRequest(request);
+
     expect(response.status).toEqual(400);
   });
 
   it('returns an error qr code fails', async () => {
-    vi.spyOn(QRCode, 'imageSync').mockImplementation(() => {
+    const { handleRequest } = await import('./worker.ts');
+    const mockToString = vi.fn().mockImplementation(() => {
       throw new Error('QR code failed');
     });
-    const { handleRequest } = await import('./worker.ts');
+
+    vi.spyOn(QRCode, 'toString').mockImplementation(mockToString);
+
     const request = new Request(`http://localhost?code=3413`);
-    const response = handleRequest(request);
+    const response = await handleRequest(request);
+
     expect(response.status).toEqual(500);
   });
 });

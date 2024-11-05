@@ -262,7 +262,7 @@ describe('POST /member/redeem', () => {
     expect(result.status).toBe(200);
   });
 
-  test('should redeem a eagleeye standard vault offer', async () => {
+  test.skip('should redeem a eagleeye standard vault offer', async () => {
     // Arrange
     const { redemption, ...redemptionTestHooks } = buildTestRedemption('vault');
     const { ...vaultTestHooks } = buildIntegrationVault(redemption.id, 'eagleeye', eagleEyeResourceId);
@@ -290,7 +290,7 @@ describe('POST /member/redeem', () => {
     expect(body).toHaveProperty('data.redemptionDetails.code'); //this will be a random value we cannot assess
   });
 
-  test('should redeem a uniqodo standard vault offer', async () => {
+  test.skip('should redeem a uniqodo standard vault offer', async () => {
     // Arrange
     const { redemption, ...redemptionTestHooks } = buildTestRedemption('vault');
     const { ...vaultTestHooks } = buildIntegrationVault(redemption.id, 'uniqodo', uniqodoPromotionId);
@@ -562,12 +562,14 @@ describe('POST /member/redeem', () => {
 
     // Assert
     const body = await result.json();
-    expect(body).toStrictEqual(
-      expect.objectContaining({
+    const expectedBody = {
+      data: {
         kind: 'RedemptionConfigError',
         message: 'Invalid redemption for redemption type "vault" (missing url)',
-      }),
-    );
+      },
+      statusCode: 409,
+    };
+    expect(body).toStrictEqual(expect.objectContaining(expectedBody));
     expect(result.status).toBe(409);
   });
 

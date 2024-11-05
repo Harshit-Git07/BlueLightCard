@@ -3,7 +3,7 @@ import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Domain, EngineVersion, TLSSecurityPolicy } from 'aws-cdk-lib/aws-opensearchservice';
 import { Stack } from 'sst/constructs';
 
-import { isCreateNewOpenSearchDomainTrue, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isCreateNewOpenSearchDomainTrue, isPr, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { DiscoveryStackConfigResolver, DiscoveryStackRegion } from '@blc-mono/discovery/infrastructure/config/config';
 
 export class OpenSearchDomain {
@@ -23,7 +23,7 @@ export class OpenSearchDomain {
   }
 
   private isOwnOpenSearchDomainNeeded(stage: string): boolean {
-    return isCreateNewOpenSearchDomainTrue() || isStaging(stage) || isProduction(stage);
+    return isCreateNewOpenSearchDomainTrue() || isStaging(stage) || isProduction(stage) || isPr(stage);
   }
 
   private async buildDomain(): Promise<Domain> {

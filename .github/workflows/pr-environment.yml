@@ -126,7 +126,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       # TODO: Should the build be cached?
       - run: npm run build
@@ -182,7 +182,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - run: npm run build
       - name: Deploy DDS Global
@@ -227,7 +227,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - run: npm run build
       - name: Deploy Offers
@@ -267,7 +267,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - run: npm run build
       - name: Deploy Offers
@@ -302,7 +302,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - run: npm run build
       - name: Deploy Redemptions
@@ -340,7 +340,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: ${{matrix.region}}
       - run: npm run build
       - name: Deploy Discovery
@@ -380,7 +380,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: ${{matrix.region}}
       - run: npm run build
       - name: Build Discovery DDS
@@ -424,7 +424,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::361769569967:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: ${{matrix.region}}
       - run: npm run build
       - name: Deploy Members
@@ -588,7 +588,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: ${{matrix.region}}
       - name: Create Username & Password For QA Environment
         id: seeding-script-outputs
@@ -950,7 +950,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - name: Install Session Manager Plugin
         run: |
@@ -979,7 +979,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - name: Run E2E Test
         working-directory: packages/api/identity
@@ -1001,7 +1001,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - name: Run E2E tests
         working-directory: packages/api/discovery
@@ -1028,7 +1028,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
       - name: Run E2E tests
         working-directory: packages/api/discovery

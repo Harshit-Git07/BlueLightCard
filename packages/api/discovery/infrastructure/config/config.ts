@@ -2,7 +2,7 @@ import { Stack } from 'sst/constructs';
 
 import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { isBlcAuBrand, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
-import { isEphemeral, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isEphemeral, isPr, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnv, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { DiscoveryStackEnvironmentKeys } from '../constants/environment';
@@ -27,6 +27,8 @@ export class DiscoveryStackConfigResolver {
         return this.forProductionStage(region);
       case isStaging(stack.stage):
         return this.forStagingStage(region);
+      case isPr(stack.stage):
+        return this.forPrAccount();
       case isEphemeral(stack.stage):
         return this.forPrStage();
       default:
@@ -72,14 +74,20 @@ export class DiscoveryStackConfigResolver {
     };
   }
 
+  public static forPrAccount(): DiscoveryStackConfig {
+    return {
+      apiDefaultAllowedOrigins: ['*'],
+    };
+  }
+
   private static getOpenSearchDomainEndpoint(): string {
     if (isDdsUkBrand()) {
-      return 'https://vpc-staging-dds-search-jzvveojmz4yqw7vge5tkidvpvm.eu-west-2.es.amazonaws.com';
+      return 'https://vpc-pr-dds-search-j2ng55ajjivnpizl4vmlndpvvi.eu-west-2.es.amazonaws.com';
     }
     if (isBlcAuBrand()) {
-      return 'https://vpc-staging-aus-search-5va2flmi377nrzsgktko36upgq.ap-southeast-2.es.amazonaws.com';
+      return 'https://vpc-pr-aus-search-lr23p7ks6qcz6myx3foywtfbui.ap-southeast-2.es.amazonaws.com';
     }
-    return 'https://vpc-staging-search-j27gjrqey5noueu2um3rqvpmba.eu-west-2.es.amazonaws.com';
+    return 'https://vpc-pr-search-m7rbjpwa5lfwirp6m6wnyba674.eu-west-2.es.amazonaws.com';
   }
 
   public static fromEnvironmentVariables(): DiscoveryStackConfig {

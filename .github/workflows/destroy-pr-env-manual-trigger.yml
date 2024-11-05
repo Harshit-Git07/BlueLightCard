@@ -6,10 +6,17 @@ on:
       pr_number:
         description: 'Pull Request Number'
         required: true
+      aws_account:
+        description: 'AWS account'
+        type: choice
+        options:
+          - PR account
+          - Staging account
 
 env:
   PR_PREFIX: pr-${{ inputs.pr_number }}-blc-mono
   PR_PREFIX_DDS: pr-${{ inputs.pr_number }}-blc-mono-dds
+  AWS_ACCOUNT: ${{ inputs.aws_account == 'Staging account' && 314658777488 || 982534385136 }}
 
 permissions:
   id-token: write
@@ -26,7 +33,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-role
           aws-region: eu-west-2
       - name: Destroy Global
         env:
@@ -78,7 +85,7 @@ jobs:
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/github-actions-role
           aws-region: eu-west-2
       - name: Destroy Global
         env:

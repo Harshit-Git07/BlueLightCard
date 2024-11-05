@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzFrontend';
+import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
 
 export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -47,6 +47,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
+      numberOfStepsCompleted={3}
       screenTitle="Verification Method Screen"
       figmaLink={figmaLink}
       eligibilityDetailsState={eligibilityDetailsState}

@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzFrontend';
+import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
 
 export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -32,6 +32,7 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
+      numberOfStepsCompleted={4}
       screenTitle="Work Email Verification Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-53082&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

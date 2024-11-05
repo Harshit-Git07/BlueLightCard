@@ -5,11 +5,13 @@ import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { EligibilityScreen } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityBody } from '@/root/src/member-eligibility/sign-up/screens/shared/components/body/EligibilityBody';
+import ProgressBar from '@bluelightcard/shared-ui/components/ProgressBar';
 
 interface Props {
   screenTitle: string;
   figmaLink: string;
   eligibilityDetailsState: EligibilityDetailsState;
+  numberOfStepsCompleted: number;
   buttons?: FuzzFrontendButtonProps[];
   onBack?: () => void;
 }
@@ -23,6 +25,7 @@ export const FuzzyFrontend: FC<Props> = ({
   screenTitle,
   figmaLink,
   eligibilityDetailsState,
+  numberOfStepsCompleted,
   buttons = [],
   onBack,
 }) => {
@@ -38,6 +41,8 @@ export const FuzzyFrontend: FC<Props> = ({
 
           <div className={`${fonts.body} text-center italic`}>Fuzzy frontend</div>
         </div>
+
+        <ProgressBar numberOfCompletedSteps={numberOfStepsCompleted} totalNumberOfSteps={7} />
 
         <Link
           className={`${fonts.titleMediumSemiBold} text-rose-300`}

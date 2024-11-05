@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzFrontend';
+import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
 import { EligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-eligibility-details/types/EligibilityDetails';
 
 const promoCode = 'NHS2021';
@@ -77,6 +77,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
 
   return (
     <FuzzyFrontend
+      numberOfStepsCompleted={2}
       screenTitle="Job Details Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-49661&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

@@ -3,7 +3,7 @@ import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign
 import {
   FuzzFrontendButtonProps,
   FuzzyFrontend,
-} from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzFrontend';
+} from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
 
 export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -49,6 +49,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
+      numberOfStepsCompleted={4}
       screenTitle="File Upload Verification Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=9141-41804&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

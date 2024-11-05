@@ -1,199 +1,159 @@
-import { render, screen } from '@testing-library/react';
+import { render, RenderResult, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProgressBar from './index';
 import renderer from 'react-test-renderer';
+import { ProgressBarProps } from './types';
 
-describe('ProgressBar component', () => {
-  const defaultSteps: ProgressStepProps[] = [
-    {
-      label: 'Step 1',
-      ariaLabel: 'First step',
-    },
-    {
-      label: 'Step 2',
-      ariaLabel: 'Second step',
-    },
-    {
-      label: 'Step 3',
-      ariaLabel: 'Third step',
-    },
-  ];
+const threeStepProgressBar: ProgressBarProps = {
+  numberOfCompletedSteps: 0,
+  totalNumberOfSteps: 3,
+  label: 'Step 1',
+  ariaLabel: 'Test',
+  showLabels: false,
+};
 
-  const props: ProgressBarProps = {
-    steps: defaultSteps,
-    numberOfCompletedSteps: 0,
-    showLabels: false,
-  };
+describe('given component is rendered with three total steps and labels disabled', () => {
+  const props: ProgressBarProps = { ...threeStepProgressBar };
 
-  describe('smoke test', () => {
-    it('should render component without error', () => {
-      const { baseElement } = render(<ProgressBar {...props} />);
+  let renderResult: RenderResult;
+  let progressBarContainer: HTMLElement;
 
-      expect(baseElement).toBeTruthy();
+  beforeEach(() => {
+    renderResult = render(<ProgressBar {...props} />);
+    progressBarContainer = renderResult.container;
+  });
+
+  it('should render without error', async () => {
+    expect(await screen.findByTestId('progressbar')).toBeInTheDocument();
+  });
+
+  it('should render correct progress percentage', () => {
+    const progressBar = screen.getByRole('progressbar');
+    expect(progressBar).toHaveAttribute('aria-valuenow', '0');
+  });
+
+  it('should have aria label', () => {
+    const progressBar = screen.getByRole('progressbar');
+    expect(progressBar).toHaveAttribute('aria-label', 'Test');
+  });
+
+  it('should not show labels', () => {
+    expect(screen.queryByText('Step 1')).not.toBeInTheDocument();
+  });
+
+  it('should have correct transition duration', () => {
+    const progressBar = progressBarContainer.querySelector('.transition-all');
+    expect(progressBar).toHaveClass('duration-300');
+  });
+
+  it('should match the snapshot', () => {
+    const component = renderer.create(<ProgressBar {...props} />);
+    const tree = component.toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  describe('when first step is completed', () => {
+    beforeEach(() => {
+      renderResult.rerender(<ProgressBar {...props} numberOfCompletedSteps={1} />);
+    });
+
+    it('should render correct progress percentage', () => {
+      const progressBar = screen.getByRole('progressbar');
+      expect(progressBar).toHaveAttribute('aria-valuenow', '33');
     });
   });
 
-  describe('multi-step progress', () => {
-    it('should render correct progress percentage for first step', () => {
-      render(<ProgressBar {...props} />);
-      const progressBar = screen.getByRole('progressbar');
-
-      expect(progressBar).toHaveAttribute('aria-valuenow', '33');
+  describe('when second step is completed', () => {
+    beforeEach(() => {
+      renderResult.rerender(<ProgressBar {...props} numberOfCompletedSteps={2} />);
     });
 
-    it('should render correct progress percentage for middle step', () => {
-      const middleStep = 1;
-
-      render(<ProgressBar {...props} numberOfCompletedSteps={middleStep} />);
+    it('should render correct progress percentage', () => {
       const progressBar = screen.getByRole('progressbar');
       expect(progressBar).toHaveAttribute('aria-valuenow', '67');
     });
+  });
 
-    it('should render correct progress percentage for last step', () => {
-      const lastStep = 2;
+  describe('when all steps are completed', () => {
+    beforeEach(() => {
+      renderResult.rerender(<ProgressBar {...props} numberOfCompletedSteps={3} />);
+    });
 
-      render(<ProgressBar {...props} numberOfCompletedSteps={lastStep} />);
+    it('should render correct progress percentage', () => {
       const progressBar = screen.getByRole('progressbar');
       expect(progressBar).toHaveAttribute('aria-valuenow', '100');
     });
+  });
+});
 
-    it('should show correct aria-label for current step', () => {
-      const middleStep = 1;
+describe('given component is rendered with a single steps and labels disabled', () => {
+  const props: ProgressBarProps = {
+    ...threeStepProgressBar,
+    totalNumberOfSteps: 1,
+  };
 
-      render(<ProgressBar {...props} numberOfCompletedSteps={middleStep} />);
-      const progressBar = screen.getByRole('progressbar');
+  let renderResult: RenderResult;
+  let progressBarContainer: HTMLElement;
 
-      expect(progressBar).toHaveAttribute('aria-label', 'Second step');
-    });
+  beforeEach(() => {
+    renderResult = render(<ProgressBar {...props} />);
+    progressBarContainer = renderResult.container;
   });
 
-  describe('single-step progress', () => {
-    const singleStepProps: ProgressBarProps = {
-      steps: [
-        {
-          label: 'Single Step',
-          ariaLabel: 'Single step in progress',
-        },
-      ],
-      numberOfCompletedSteps: 0,
-      showLabels: false,
-    };
+  it('should render without error', async () => {
+    expect(await screen.findByTestId('progressbar')).toBeInTheDocument();
+  });
 
-    it('should show 0% progress when not completed', () => {
-      render(<ProgressBar {...singleStepProps} numberOfCompletedSteps={0} />);
-      const progressBar = screen.getByRole('progressbar');
+  it('should render correct progress percentage', () => {
+    const progressBar = screen.getByRole('progressbar');
+    expect(progressBar).toHaveAttribute('aria-valuenow', '0');
+  });
 
-      expect(progressBar).toHaveAttribute('aria-valuenow', '0');
+  it('should have aria label', () => {
+    const progressBar = screen.getByRole('progressbar');
+    expect(progressBar).toHaveAttribute('aria-label', 'Test');
+  });
+
+  it('should not show labels', () => {
+    expect(screen.queryByText('Step 1')).not.toBeInTheDocument();
+  });
+
+  it('should have correct transition duration', () => {
+    const progressBar = progressBarContainer.querySelector('.transition-all');
+    expect(progressBar).toHaveClass('duration-150');
+  });
+
+  it('should match the snapshot', () => {
+    const component = renderer.create(<ProgressBar {...props} />);
+    const tree = component.toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  describe('when first step is completed', () => {
+    beforeEach(() => {
+      renderResult.rerender(<ProgressBar {...props} numberOfCompletedSteps={1} />);
     });
 
-    it('should show 100% progress when completed', () => {
-      const completedStep = 1;
-
-      render(<ProgressBar {...singleStepProps} numberOfCompletedSteps={completedStep} />);
+    it('should render correct progress percentage', () => {
       const progressBar = screen.getByRole('progressbar');
-
       expect(progressBar).toHaveAttribute('aria-valuenow', '100');
     });
+  });
+});
 
-    it('should show completion label when provided and step is complete', () => {
-      const completionLabel = 'Completed!';
+describe('given component is rendered with labels enabled', () => {
+  const props: ProgressBarProps = {
+    ...threeStepProgressBar,
+    showLabels: true,
+  };
 
-      render(
-        <ProgressBar
-          {...singleStepProps}
-          numberOfCompletedSteps={1}
-          showLabels={true}
-          completionLabel={completionLabel}
-        />,
-      );
-
-      expect(screen.getByText(completionLabel)).toBeInTheDocument();
-    });
-
-    it('should show original label when step is not complete', () => {
-      render(<ProgressBar {...singleStepProps} numberOfCompletedSteps={0} showLabels={true} />);
-
-      expect(screen.getByText('Single Step')).toBeInTheDocument();
-    });
+  beforeEach(() => {
+    render(<ProgressBar {...props} />);
   });
 
-  describe('labels', () => {
-    it('should not show labels when showLabels is false', () => {
-      render(<ProgressBar {...props} />);
-
-      expect(screen.queryByText('Step 1')).not.toBeInTheDocument();
-    });
-
-    it('should show current step label when showLabels is true', () => {
-      const currentStep = 1;
-
-      render(<ProgressBar {...props} showLabels={true} numberOfCompletedSteps={currentStep} />);
-
-      expect(screen.getByText('Step 2')).toBeInTheDocument();
-    });
-  });
-
-  describe('transitions', () => {
-    it('should have correct transition duration for multi-step', () => {
-      const { container } = render(<ProgressBar {...props} />);
-      const progressBar = container.querySelector('.transition-all');
-
-      expect(progressBar).toHaveClass('duration-300');
-    });
-
-    it('should have correct transition duration for single-step', () => {
-      const singleStep = [{ label: 'Single Step' }];
-
-      const { container } = render(<ProgressBar {...props} steps={singleStep} />);
-      const progressBar = container.querySelector('.transition-all');
-
-      expect(progressBar).toHaveClass('duration-150');
-    });
-  });
-
-  describe('visual states', () => {
-    it('renders multi-step progress bar correctly', () => {
-      const component = renderer.create(<ProgressBar {...props} />);
-      const tree = component.toJSON();
-
-      expect(tree).toMatchSnapshot();
-    });
-
-    it('renders single-step progress bar correctly', () => {
-      const singleStepProps = {
-        steps: [
-          {
-            label: 'Single Step',
-            ariaLabel: 'Single step',
-          },
-        ],
-        numberOfCompletedSteps: 0,
-        showLabels: true,
-      };
-
-      const component = renderer.create(<ProgressBar {...singleStepProps} />);
-      const tree = component.toJSON();
-
-      expect(tree).toMatchSnapshot();
-    });
-
-    it('renders completed progress bar with completion label', () => {
-      const completedProps = {
-        steps: [
-          {
-            label: 'Single Step',
-            ariaLabel: 'Single step',
-          },
-        ],
-        numberOfCompletedSteps: 1,
-        showLabels: true,
-        completionLabel: 'Done!',
-      };
-
-      const component = renderer.create(<ProgressBar {...completedProps} />);
-      const tree = component.toJSON();
-
-      expect(tree).toMatchSnapshot();
-    });
+  it('should show current step label', () => {
+    expect(screen.getByText('Step 1')).toBeInTheDocument();
   });
 });

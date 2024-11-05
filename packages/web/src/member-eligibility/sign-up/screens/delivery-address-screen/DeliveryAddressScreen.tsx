@@ -4,7 +4,7 @@ import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign
 import {
   FuzzFrontendButtonProps,
   FuzzyFrontend,
-} from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzFrontend';
+} from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
 
 const stubAddress: EligibilityDetailsAddress = {
   line1: 'Charnwood Edge Business Park',
@@ -69,6 +69,7 @@ export const DeliveryAddressScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
+      numberOfStepsCompleted={5}
       screenTitle="Delivery Address Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-48062&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

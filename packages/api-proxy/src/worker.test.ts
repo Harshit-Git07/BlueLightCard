@@ -103,41 +103,59 @@ describe('worker', () => {
 				brandHeader: 'DDS_UK',
 				expectedPath: '/redeem',
 			},
-			{
-				route: '/orders/checkout',
+		  {
+			  route: '/orders/checkout',
 				expectedDomain: 'https://orders.blc.uk',
 				brandHeader: 'BLC_UK',
 				expectedPath: '/checkout',
-			},
-			{
+		  },
+		  {
 				route: '/orders/checkout',
 				expectedDomain: 'https://orders.blc.au',
 				brandHeader: 'BLC_AU',
 				expectedPath: '/checkout',
-			},
-			{
+		  },
+		  {
 				route: '/orders/checkout',
 				expectedDomain: 'https://orders.dds.uk',
 				brandHeader: 'DDS_UK',
 				expectedPath: '/checkout',
-			},
+		  },
+		  {
+				route: '/orders/checkout',
+				expectedDomain: 'https://orders.blc.uk',
+				brandHeader: 'BLC_UK',
+				expectedPath: '/checkout',
+		  },
+		  {
+				route: '/orders/checkout',
+				expectedDomain: 'https://orders.blc.au',
+				brandHeader: 'BLC_AU',
+				expectedPath: '/checkout',
+		  },
+		  {
+				route: '/orders/checkout',
+				expectedDomain: 'https://orders.dds.uk',
+				brandHeader: 'DDS_UK',
+				expectedPath: '/checkout',
+		  },
 			{
-				route: '/discovery/discovery-endpoint',
+				route: '/discovery/search',
 				expectedDomain: 'https://discovery.blc.uk',
 				brandHeader: 'BLC_UK',
-				expectedPath: '/discovery-endpoint',
+				expectedPath: '/search',
 			},
 			{
-				route: '/discovery/discovery-endpoint',
+				route: '/discovery/search',
 				expectedDomain: 'https://discovery.blc.au',
 				brandHeader: 'BLC_AU',
-				expectedPath: '/discovery-endpoint',
+				expectedPath: '/search',
 			},
 			{
-				route: '/discovery/discovery-endpoint',
+				route: '/discovery/search',
 				expectedDomain: 'https://discovery.dds.uk',
 				brandHeader: 'DDS_UK',
-				expectedPath: '/discovery-endpoint',
+				expectedPath: '/search',
 			},
 			{
 				route: '/offers/v2/offers-endpoint',
@@ -257,6 +275,9 @@ describe('worker', () => {
 			{ api: testEnv.OFFERS_API_BLC_AU, pathPart: '/company', route: '/au/offers/company' },
 			{ api: testEnv.OFFERS_API_DDS_UK, pathPart: '/company', route: '/eu/offers/dds/company' },
 			{ api: testEnv.REDEMPTIONS_API_BLC_UK, pathPart: '/redeem', route: '/eu/redemptions/redeem' },
+			{ api: testEnv.DISCOVERY_API_BLC_UK, pathPart: '/search', route: '/eu/discovery/search' },
+			{ api: testEnv.DISCOVERY_API_BLC_AU, pathPart: '/search', route: '/au/discovery/search' },
+			{ api: testEnv.DISCOVERY_API_DDS_UK, pathPart: '/search', route: '/eu/discovery/dds/search' },
 		])(`(POST) maps route: $route to api request: $api`, async (testParams) => {
 			nock(testParams.api).post(testParams.pathPart).reply(200);
 

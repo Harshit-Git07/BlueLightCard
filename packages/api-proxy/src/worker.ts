@@ -93,7 +93,9 @@ const getUrlByPrefix = (url: URL, env: Env): URL => {
 		'/eu/orders': env.ORDERS_API_BLC_UK,
 		'/au/orders': env.ORDERS_API_BLC_AU,
 		'/eu/redemptions': env.REDEMPTIONS_API_BLC_UK,
+		'/eu/discovery/dds': env.DISCOVERY_API_DDS_UK,
 		'/eu/discovery': env.DISCOVERY_API_BLC_UK,
+		'/au/discovery': env.DISCOVERY_API_BLC_AU,
 	};
 
 	const params = searchParams.size > 0 ? `?${searchParams}` : '';

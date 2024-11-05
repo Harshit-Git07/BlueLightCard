@@ -32,7 +32,7 @@ Modify the wrangler.toml file to include the necessary environment variables for
 Update the src/worker.ts file to customize the proxy logic based on your requirements. This worker currently forwards requests to different API Gateway URLs based on the request path.
 
 ## Usage
-Once the Cloudflare Worker is running, it will act as a proxy for forwarding requests to different API Gateway URLs based on the request path and envronment variables set. You can use the local worker by sending HTTP requests to the Cloudflare Worker URL.
+Once the Cloudflare Worker is running, it will act as a proxy for forwarding requests to different API Gateway URLs based on the request path and environment variables set. You can use the local worker by sending HTTP requests to the Cloudflare Worker URL.
 
 ### For example:
 
@@ -43,6 +43,19 @@ If you deploy the worker to the PR environment, you can send requests to https:/
 If you deploy the worker to the staging environment, you can send requests to https://staging-api.bluelightcard.workers.dev.
 
 If you deploy the worker to the production environment, you can send requests to https://api.bluelightcard.workers.dev.
+
+### Supporting Additional Brands
+The naming format for supporting additional brands in our URLs is as follows:
+```
+https://${domain}-${brand}.blcshine.io
+```
+So for the Discovery domain in UK, DDS UK and Australia the URL would look like:
+```
+https://discovery.blcshine.io
+https://discovery-dds-uk.blcshine.io
+https://discovery-blc-au.blcshine.io
+```
+
 
 ## Additional Notes
 * You can use Postman to send HTTP requests.

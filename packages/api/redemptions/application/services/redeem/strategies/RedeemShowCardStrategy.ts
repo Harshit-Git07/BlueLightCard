@@ -6,23 +6,29 @@ import {
 
 import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
-import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemParams, RedeemShowCardStrategyResult } from './IRedeemStrategy';
+import { MemberRedemptionEventDetailBuilder } from './MemberRedemptionEventDetailBuilder';
 
 export class RedeemShowCardStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemShowCardStrategy' as const;
-  static readonly inject = [RedemptionsEventsRepository.key, Logger.key] as const;
+  static readonly inject = [
+    RedemptionsEventsRepository.key,
+    MemberRedemptionEventDetailBuilder.key,
+    Logger.key,
+  ] as const;
 
   constructor(
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
+    private readonly memberRedemptionEventDetailBuilder: MemberRedemptionEventDetailBuilder,
     private readonly logger: ILogger,
   ) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemShowCardStrategyResult> {
-    const event = createMemberRedemptionEvent(redemption, params, {
-      redemptionType: 'showCard',
+    const memberRedemptionEventDetail = this.memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
+      redemptionConfigEntity: redemption,
+      params,
     });
-    await this.redemptionsEventsRepository.publishRedemptionEvent(event).catch((error) => {
+    await this.redemptionsEventsRepository.publishRedemptionEvent(memberRedemptionEventDetail).catch((error) => {
       this.logger.error({
         message: '[UNHANDLED ERROR] Error while publishing member redeem intent event',
         error,

@@ -12,7 +12,7 @@ export type UniqodoApiConfigError = {
   };
 };
 
-export type UniqodApiConfigSuccess = {
+export type UniqodoApiConfigSuccess = {
   kind: 'Ok';
   data: {
     code: string;
@@ -53,7 +53,7 @@ export interface IUniqodoApiRepository {
     promotionId: string,
     memberId: string,
     memberEmail: string,
-  ): Promise<UniqodApiConfigSuccess | UniqodoApiConfigError>;
+  ): Promise<UniqodoApiConfigSuccess | UniqodoApiConfigError>;
 }
 
 export class UniqodoApiRepository implements IUniqodoApiRepository {
@@ -69,7 +69,7 @@ export class UniqodoApiRepository implements IUniqodoApiRepository {
     promotionId: string,
     memberId: string,
     memberEmail: string,
-  ): Promise<UniqodApiConfigSuccess | UniqodoApiConfigError> {
+  ): Promise<UniqodoApiConfigSuccess | UniqodoApiConfigError> {
     let uniqodoApiJson;
     try {
       uniqodoApiJson = await this.awsSecretsMangerClient.getSecretValueJson(

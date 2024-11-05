@@ -12,6 +12,11 @@ import { RedemptionsEventsRepository } from '@blc-mono/redemptions/application/r
 import { UniqodoApiRepository } from '@blc-mono/redemptions/application/repositories/UniqodoApiRepository';
 import { VaultCodesRepository } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
+import { MemberRedemptionEventDetailBuilder } from '@blc-mono/redemptions/application/services/redeem/strategies/MemberRedemptionEventDetailBuilder';
+import { RedeemIntegrationVaultHandler } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/RedeemIntegrationVaultHandler';
+import { RedeemLegacyVaultHandler } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/RedeemLegacyVaultHandler';
+import { RedeemStandardVaultHandler } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/RedeemStandardVaultHandler';
+import { RedeemVaultStrategyRedemptionDetailsBuilder } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/RedeemVaultStrategyRedemptionDetailsBuilder';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 import { SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
@@ -40,15 +45,23 @@ const controller = createInjector()
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)
   .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
   .provideClass(RedemptionsEventsRepository.key, RedemptionsEventsRepository)
-
   .provideClass(UniqodoApiRepository.key, UniqodoApiRepository)
-  .provideClass(IntegrationCodesRepository.key, IntegrationCodesRepository)
   .provideClass(EagleEyeApiRepository.key, EagleEyeApiRepository)
+  .provideClass(IntegrationCodesRepository.key, IntegrationCodesRepository)
+
+  .provideClass(MemberRedemptionEventDetailBuilder.key, MemberRedemptionEventDetailBuilder)
+  .provideClass(RedeemVaultStrategyRedemptionDetailsBuilder.key, RedeemVaultStrategyRedemptionDetailsBuilder)
+
+  .provideClass(RedeemStandardVaultHandler.key, RedeemStandardVaultHandler)
+  .provideClass(RedeemLegacyVaultHandler.key, RedeemLegacyVaultHandler)
+  .provideClass(RedeemIntegrationVaultHandler.key, RedeemIntegrationVaultHandler)
+
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)
   .provideClass(RedeemShowCardStrategy.key, RedeemShowCardStrategy)
   .provideClass(RedeemVaultStrategy.key, RedeemVaultStrategy)
+
   .provideClass(RedeemStrategyResolver.key, RedeemStrategyResolver)
   // card status helper
   .provideClass(CardStatusHelper.key, CardStatusHelper)

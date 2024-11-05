@@ -43,22 +43,26 @@ export type RedeemShowCardStrategyResult = {
   redemptionDetails: Record<never, never>;
 };
 
+export type VaultDetails = {
+  id: string;
+  alertBelow: number;
+  vaultType: 'legacy' | 'standard';
+  email: string;
+  integration?: string | null;
+  integrationId?: string | null;
+};
+
+export type RedeemVaultStrategyRedemptionDetails = {
+  url?: string;
+  code: string;
+  vaultDetails?: VaultDetails;
+};
+
 export type RedeemVaultStrategyResult =
   | {
       kind: 'Ok';
       redemptionType: RedeemVaultRedemptionType;
-      redemptionDetails: {
-        url?: string;
-        code: string;
-        vaultDetails?: {
-          id: string;
-          alertBelow: number;
-          vaultType: 'legacy' | 'standard';
-          email: string;
-          integration?: string | null;
-          integrationId?: string | null;
-        };
-      };
+      redemptionDetails: RedeemVaultStrategyRedemptionDetails;
     }
   | { kind: 'MaxPerUserReached'; redemptionType?: never; redemptionDetails?: never };
 

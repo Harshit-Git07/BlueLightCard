@@ -181,7 +181,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       functionName: 'PostRedeemHandler',
       restApi,
       database,
-      handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeem.handler',
+      handler: 'packages/api/redemptions/application/handlers/apiGateway/redeem/postRedeemHandler.handler',
       requestValidatorName: 'PostRedeemValidator',
       environment: {
         // Lambda Script Integration

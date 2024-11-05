@@ -66,24 +66,17 @@ describe('RedeemService', () => {
     return service.redeem(offerId, mockedParams);
   }
 
-  it('should return a RedemptionNotFound result if the redemption is not found', async () => {
-    // Arrange
-
+  it('throws if the redemption is not found', async () => {
     mockedRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
 
-    // Act
-    const result = await callRedeemMethod(defaultOfferId, {
-      redemptionConfigRepository: mockedRedemptionConfigRepository,
-    });
-
-    // Assert
-    expect(result).toEqual({
-      kind: 'RedemptionNotFound',
-    });
+    await expect(() =>
+      callRedeemMethod(defaultOfferId, {
+        redemptionConfigRepository: mockedRedemptionConfigRepository,
+      }),
+    ).rejects.toThrow();
   });
 
-  it('should return an Ok result when the redemption is found and redeemed successfully', async () => {
-    // Arrange
+  it('returns an Ok result when the redemption is found and redeemed successfully', async () => {
     const redemption = redemptionConfigEntityFactory.build();
     const redeemedResult: RedeemedStrategyResult = {
       kind: 'Ok',
@@ -102,14 +95,12 @@ describe('RedeemService', () => {
 
     mockedRedemptionEventsRepository.publishMemberRedeemIntentEvent = jest.fn().mockResolvedValue(undefined);
 
-    // Act
     const result = await callRedeemMethod(defaultOfferId, {
       redemptionConfigRepository: mockedRedemptionConfigRepository,
       redeemStrategyResolver,
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });
 
-    // Assert
     expect(result).toEqual({
       kind: 'Ok',
       redemptionType: 'preApplied',
@@ -117,8 +108,7 @@ describe('RedeemService', () => {
     });
   });
 
-  it('should publish member redeem intent event', async () => {
-    // Arrange
+  it('publishes member redeem intent event', async () => {
     const redemption = redemptionConfigEntityFactory.build({
       offerId: defaultOfferId,
       affiliate: 'awin',
@@ -144,14 +134,12 @@ describe('RedeemService', () => {
     mockedRedemptionEventsRepository.publishMemberRedeemIntentEvent = jest.fn().mockResolvedValue(undefined);
     mockedRedemptionEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
 
-    // Act
     await callRedeemMethod(defaultOfferId, {
       redemptionConfigRepository: mockedRedemptionConfigRepository,
       redeemStrategyResolver,
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });
 
-    // Assert
     expect(mockedRedemptionEventsRepository.publishMemberRedeemIntentEvent).toHaveBeenCalledWith({
       memberDetails: {
         memberId: defaultParams.memberId,
@@ -165,8 +153,7 @@ describe('RedeemService', () => {
     });
   });
 
-  it('should send data for DWH (logRedemptionAttempt) and generic code Braze email to event bus', async () => {
-    // Arrange
+  it('sends data for DWH (logRedemptionAttempt) and generic code Braze email to event bus', async () => {
     const redemption = redemptionConfigEntityFactory.build({
       offerId: defaultOfferId,
       affiliate: 'awin',
@@ -191,14 +178,12 @@ describe('RedeemService', () => {
     mockedRedemptionEventsRepository.publishMemberRedeemIntentEvent = jest.fn().mockResolvedValue(undefined);
     mockedRedemptionEventsRepository.publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
 
-    // Act
     await callRedeemMethod(defaultOfferId, {
       redemptionConfigRepository: mockedRedemptionConfigRepository,
       redeemStrategyResolver,
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });
 
-    // Assert
     expect(mockedRedemptionEventsRepository.publishMemberRedeemIntentEvent).toHaveBeenCalledWith({
       memberDetails: {
         memberId: defaultParams.memberId,
@@ -212,8 +197,7 @@ describe('RedeemService', () => {
     });
   });
 
-  it('should complete successfully when publishMemberRedeemIntentEvent (DWH - logRedemptionAttempt) fails', async () => {
-    // Arrange
+  it('completes successfully when publishMemberRedeemIntentEvent (DWH - logRedemptionAttempt) fails', async () => {
     const redemption = redemptionConfigEntityFactory.build({
       offerId: defaultOfferId,
     });
@@ -237,7 +221,6 @@ describe('RedeemService', () => {
     const mockedRedemptionEventsRepository = mockRedemptionEventsRepository();
     mockedRedemptionEventsRepository.publishMemberRedeemIntentEvent = jest.fn().mockRejectedValue(new Error());
 
-    // Act
     const result = await callRedeemMethod(defaultOfferId, {
       logger: silentLogger,
       redemptionConfigRepository: mockedRedemptionConfigRepository,
@@ -245,7 +228,6 @@ describe('RedeemService', () => {
       redemptionEventsRepository: mockedRedemptionEventsRepository,
     });
 
-    // Assert
     expect(result).toEqual({
       kind: 'Ok',
       redemptionType: 'preApplied',

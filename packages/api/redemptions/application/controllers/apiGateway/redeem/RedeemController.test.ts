@@ -1,6 +1,9 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 import { ICardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
+import { MaxPerUserReachedError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/MaxPerUserReachedError';
+import { NoCodesAvailableError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/NoCodesAvailableError';
+import { NotFoundError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/NotFoundError';
 import {
   generateFakeJWT,
   redeemEventFactory,
@@ -68,30 +71,74 @@ describe('RedeemController', () => {
     });
   });
 
-  it('Maps RedemptionNotFound response correctly', async () => {
-    // Arrange
-    const logger = createTestLogger();
-    const redeemService = {
-      redeem: jest.fn(),
-    } satisfies IRedeemService;
+  describe('Error handling', () => {
+    it.each(['GenericNotFound', 'RedemptionNotFound', 'VaultNotFound'])(
+      'returns a 404 status code for %s errors',
+      async (kind) => {
+        // Arrange
+        const logger = createTestLogger();
+        const redeemService = {
+          redeem: jest.fn(),
+        } satisfies IRedeemService;
 
-    const cardStatusHelper = {
-      validateCardStatus: jest.fn(),
-    } satisfies ICardStatusHelper;
+        const cardStatusHelper = {
+          validateCardStatus: jest.fn(),
+        } satisfies ICardStatusHelper;
 
-    const controller = new RedeemController(logger, redeemService, cardStatusHelper);
-    redeemService.redeem.mockResolvedValue({
-      kind: 'RedemptionNotFound',
-    } satisfies RedeemResult);
+        const controller = new RedeemController(logger, redeemService, cardStatusHelper);
+        redeemService.redeem.mockRejectedValue(new NotFoundError('Not found', kind));
 
-    // Act
-    const result = await controller.handle(redeemEventFactory.build() as ParsedRequest);
+        // Act
+        const result = await controller.handle(redeemEventFactory.build() as ParsedRequest);
 
-    // Assert
-    expect(result.statusCode).toEqual(404);
-    expect(result.data).toEqual({
-      kind: 'RedemptionNotFound',
-      message: 'No redemption found for the given offerId',
+        // Assert
+        expect(result.statusCode).toEqual(404);
+        expect(result.data).toEqual({ kind, message: 'Not found' });
+      },
+    );
+
+    it('returns a 403 status code for MaxPerUserReachedError errors', async () => {
+      // Arrange
+      const logger = createTestLogger();
+      const redeemService = {
+        redeem: jest.fn(),
+      } satisfies IRedeemService;
+
+      const cardStatusHelper = {
+        validateCardStatus: jest.fn(),
+      } satisfies ICardStatusHelper;
+
+      const controller = new RedeemController(logger, redeemService, cardStatusHelper);
+      redeemService.redeem.mockRejectedValue(new MaxPerUserReachedError('Max per user reached'));
+
+      // Act
+      const result = await controller.handle(redeemEventFactory.build() as ParsedRequest);
+
+      // Assert
+      expect(result.statusCode).toEqual(403);
+      expect(result.data).toEqual({ kind: 'MaxPerUserReachedError', message: 'Max per user reached' });
+    });
+
+    it('returns a 403 status code for NoCodesAvailableError errors', async () => {
+      // Arrange
+      const logger = createTestLogger();
+      const redeemService = {
+        redeem: jest.fn(),
+      } satisfies IRedeemService;
+
+      const cardStatusHelper = {
+        validateCardStatus: jest.fn(),
+      } satisfies ICardStatusHelper;
+
+      const controller = new RedeemController(logger, redeemService, cardStatusHelper);
+      redeemService.redeem.mockRejectedValue(new NoCodesAvailableError('No codes available'));
+
+      // Act
+      const result = await controller.handle(redeemEventFactory.build() as ParsedRequest);
+
+      // Assert
+      expect(result.statusCode).toEqual(403);
+      expect(result.data).toEqual({ kind: 'NoCodesAvailableError', message: 'No codes available' });
     });
   });
 

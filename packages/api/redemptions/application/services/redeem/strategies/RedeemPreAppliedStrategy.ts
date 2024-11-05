@@ -7,39 +7,50 @@ import {
 
 import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
-import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemParams, RedeemPreAppliedStrategyResult } from './IRedeemStrategy';
+import { MemberRedemptionEventDetailBuilder } from './MemberRedemptionEventDetailBuilder';
+import { RedemptionConfigError } from './redeemVaultStrategy/helpers/RedemptionConfigError';
 
 export class RedeemPreAppliedStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemPreAppliedStrategy' as const;
-  static readonly inject = [RedemptionsEventsRepository.key, Logger.key] as const;
+  static readonly inject = [
+    RedemptionsEventsRepository.key,
+    MemberRedemptionEventDetailBuilder.key,
+    Logger.key,
+  ] as const;
 
   constructor(
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
+    private readonly memberRedemptionEventDetailBuilder: MemberRedemptionEventDetailBuilder,
     private readonly logger: ILogger,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async redeem(redemption: RedemptionConfigEntity, params: RedeemParams): Promise<RedeemPreAppliedStrategyResult> {
-    if (!redemption.url) {
+  async redeem(
+    redemptionConfigEntity: RedemptionConfigEntity,
+    params: RedeemParams,
+  ): Promise<RedeemPreAppliedStrategyResult> {
+    if (!redemptionConfigEntity.url) {
       this.logger.error({
         message: 'Redemption URL was missing but required for pre-applied redemption',
         context: {
-          redemptionId: redemption.id,
-          redemption,
+          redemptionId: redemptionConfigEntity.id,
+          redemption: redemptionConfigEntity,
           params,
         },
       });
-      throw new Error('Redemption URL was missing but required for pre-applied redemption');
+      throw new RedemptionConfigError('Redemption URL was missing but required for pre-applied redemption');
     }
 
-    const trackingUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemption.url, params.memberId);
+    const trackingUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemptionConfigEntity.url, params.memberId);
 
-    const event = createMemberRedemptionEvent(redemption, params, {
-      redemptionType: 'preApplied',
+    const memberRedemptionEventDetail = this.memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
+      redemptionConfigEntity: redemptionConfigEntity,
+      params,
       url: trackingUrl,
     });
-    await this.redemptionsEventsRepository.publishRedemptionEvent(event).catch((error) => {
+
+    await this.redemptionsEventsRepository.publishRedemptionEvent(memberRedemptionEventDetail).catch((error) => {
       this.logger.error({
         message: '[UNHANDLED ERROR] Error while publishing member redeem intent event',
         error,

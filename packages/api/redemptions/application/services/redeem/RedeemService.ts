@@ -12,12 +12,9 @@ import {
 
 import { IRedeemStrategyResolver, RedeemStrategyResolver } from './RedeemStrategyResolver';
 import { RedeemedStrategyResult, RedeemParams } from './strategies/IRedeemStrategy';
+import { NotFoundError } from './strategies/redeemVaultStrategy/helpers/NotFoundError';
 
-export type RedeemResult =
-  | RedeemedStrategyResult
-  | {
-      kind: 'RedemptionNotFound';
-    };
+export type RedeemResult = RedeemedStrategyResult;
 
 export interface IRedeemService {
   redeem(offerId: string, params: RedeemParams): Promise<RedeemResult>;
@@ -44,9 +41,7 @@ export class RedeemService implements IRedeemService {
       await this.redemptionConfigRepository.findOneByOfferId(offerId);
 
     if (!redemptionConfigEntity) {
-      return {
-        kind: 'RedemptionNotFound',
-      };
+      throw new NotFoundError('No redemption found for the given offerId', 'RedemptionNotFound');
     }
 
     await this.redemptionsEventsRepository

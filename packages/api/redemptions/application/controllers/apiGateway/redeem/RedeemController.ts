@@ -3,10 +3,14 @@ import { z } from 'zod';
 
 import { JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { Result } from '@blc-mono/core/types/result';
-import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { CardStatusHelper, ICardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
 import { TokenHelper } from '@blc-mono/redemptions/application/helpers/TokenHelper';
+import { DomainError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/DomainError';
+import { MaxPerUserReachedError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/MaxPerUserReachedError';
+import { NoCodesAvailableError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/NoCodesAvailableError';
+import { NotFoundError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/NotFoundError';
+import { RedemptionConfigError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/RedemptionConfigError';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
 
 import { IRedeemService, RedeemService } from '../../../services/redeem/RedeemService';
@@ -94,43 +98,51 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
   }
 
   public async handle(request: ParsedRequest): Promise<APIGatewayResult> {
-    const result = await this.redeemService.redeem(request.body.offerId, {
-      memberId: request.memberId,
-      brazeExternalUserId: request.brazeExternalUserId,
-      companyName: request.body.companyName,
-      offerName: request.body.offerName,
-      clientType: request.headers['x-client-type'] ?? 'web',
-      memberEmail: request.memberEmail,
-    });
+    try {
+      const result = await this.redeemService.redeem(request.body.offerId, {
+        memberId: request.memberId,
+        brazeExternalUserId: request.brazeExternalUserId,
+        companyName: request.body.companyName,
+        offerName: request.body.offerName,
+        clientType: request.headers['x-client-type'] ?? 'web',
+        memberEmail: request.memberEmail,
+      });
 
-    switch (result.kind) {
-      case 'Ok':
-        return {
-          statusCode: 200,
-          data: {
-            kind: result.kind,
-            redemptionType: result.redemptionType,
-            redemptionDetails: result.redemptionDetails,
-          },
-        };
-      case 'RedemptionNotFound':
-        return {
-          statusCode: 404,
-          data: {
-            kind: result.kind,
-            message: 'No redemption found for the given offerId',
-          },
-        };
-      case 'MaxPerUserReached':
-        return {
-          statusCode: 403,
-          data: {
-            kind: result.kind,
-            message: 'Max per user reached for the given offerId',
-          },
-        };
-      default:
-        exhaustiveCheck(result, 'Unhandled result kind');
+      return {
+        statusCode: 200,
+        data: {
+          kind: result.kind,
+          redemptionType: result.redemptionType,
+          redemptionDetails: result.redemptionDetails,
+        },
+      };
+    } catch (e) {
+      if (!(e instanceof DomainError)) {
+        throw e;
+      }
+
+      const statusCode = this.getStatusCodeFromError(e);
+      if (!statusCode) {
+        throw e;
+      }
+
+      return {
+        statusCode,
+        data: {
+          kind: e.kind ?? e.name,
+          message: e.message,
+        },
+      };
     }
+  }
+
+  private getStatusCodeFromError(e: DomainError) {
+    const statusCodeMap = new Map<string, number>();
+    statusCodeMap.set(NotFoundError.name, 404);
+    statusCodeMap.set(MaxPerUserReachedError.name, 403);
+    statusCodeMap.set(NoCodesAvailableError.name, 403);
+    statusCodeMap.set(RedemptionConfigError.name, 409);
+
+    return statusCodeMap.get(e.name);
   }
 }

@@ -11,16 +11,23 @@ import {
 
 import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
 
-import { createMemberRedemptionEvent } from './helpers';
 import { IRedeemStrategy, RedeemGenericStrategyResult, RedeemParams } from './IRedeemStrategy';
+import { MemberRedemptionEventDetailBuilder } from './MemberRedemptionEventDetailBuilder';
+import { NotFoundError } from './redeemVaultStrategy/helpers/NotFoundError';
 
 export class RedeemGenericStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemGenericStrategy' as const;
-  static readonly inject = [GenericsRepository.key, RedemptionsEventsRepository.key, Logger.key] as const;
+  static readonly inject = [
+    GenericsRepository.key,
+    RedemptionsEventsRepository.key,
+    MemberRedemptionEventDetailBuilder.key,
+    Logger.key,
+  ] as const;
 
   constructor(
     private readonly genericsRepository: IGenericsRepository,
     private readonly redemptionsEventsRepository: IRedemptionsEventsRepository,
+    private readonly memberRedemptionEventDetailBuilder: MemberRedemptionEventDetailBuilder,
     private readonly logger: ILogger,
   ) {}
 
@@ -34,15 +41,17 @@ export class RedeemGenericStrategy implements IRedeemStrategy {
           redemptionId: redemption.id,
         },
       });
-      throw new Error('Generic code not found');
+      throw new NotFoundError('Generic code not found', 'GenericNotFound');
     }
 
-    const event = createMemberRedemptionEvent(redemption, params, {
-      redemptionType: 'generic',
+    const memberRedemptionEventDetail = this.memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
+      redemptionConfigEntity: redemption,
+      params,
       code: generic.code,
       url: parsedUrl,
     });
-    await this.redemptionsEventsRepository.publishRedemptionEvent(event).catch((error) => {
+
+    await this.redemptionsEventsRepository.publishRedemptionEvent(memberRedemptionEventDetail).catch((error) => {
       this.logger.error({
         message: '[UNHANDLED ERROR] Error while publishing member redeem intent event',
         error,

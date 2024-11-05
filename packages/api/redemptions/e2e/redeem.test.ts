@@ -562,13 +562,13 @@ describe('POST /member/redeem', () => {
 
     // Assert
     const body = await result.json();
-    expect(body).toStrictEqual({
-      message: 'Internal Server Error',
-      meta: expect.objectContaining({
-        tracingId: expect.any(String),
+    expect(body).toStrictEqual(
+      expect.objectContaining({
+        kind: 'RedemptionConfigError',
+        message: 'Invalid redemption for redemption type "vault" (missing url)',
       }),
-    });
-    expect(result.status).toBe(500);
+    );
+    expect(result.status).toBe(409);
   });
 
   // removed test until identity api is ready

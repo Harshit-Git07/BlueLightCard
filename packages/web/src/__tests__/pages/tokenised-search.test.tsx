@@ -133,6 +133,36 @@ describe('SearchPage', () => {
       expect(makeSearchMock).not.toHaveBeenCalled();
       expect(experimentMakeSearchMock).toHaveBeenCalled();
     });
+
+    it('should call "experimentMakeSearch" with useLegacyId as false when offers cms is enabled', () => {
+      givenExperimentsReturn('control', 'treatment', 'on');
+
+      whenSearchPageIsRendered();
+
+      expect(makeSearchMock).not.toHaveBeenCalled();
+      expect(experimentMakeSearchMock).toHaveBeenCalledWith(
+        'Apple',
+        'mock-dob',
+        'mock-organisation',
+        expect.anything(),
+        false
+      );
+    });
+
+    it('should call "experimentMakeSearch" with useLegacyId as true when offers cms is disabled', () => {
+      givenExperimentsReturn('control', 'treatment', 'off');
+
+      whenSearchPageIsRendered();
+
+      expect(makeSearchMock).not.toHaveBeenCalled();
+      expect(experimentMakeSearchMock).toHaveBeenCalledWith(
+        'Apple',
+        'mock-dob',
+        'mock-organisation',
+        expect.anything(),
+        true
+      );
+    });
   });
 
   describe('and "search V5" experiment is not enabled', () => {
@@ -391,7 +421,7 @@ const givenResultsAreReturned = () => {
   });
 };
 
-const givenExperimentsReturn = (categorySearch: string, v5Search: string) => {
+const givenExperimentsReturn = (categorySearch: string, v5Search: string, cmsOffers = 'off') => {
   (useAmplitudeExperiment as jest.Mock).mockImplementation((experimentFlag, defaultVariant) => {
     if (experimentFlag === 'category_level_three_search') {
       return { data: { variantName: categorySearch } };
@@ -399,6 +429,10 @@ const givenExperimentsReturn = (categorySearch: string, v5Search: string) => {
 
     if (experimentFlag === 'search_v5') {
       return { data: { variantName: v5Search } };
+    }
+
+    if (experimentFlag === 'cms-offers') {
+      return { data: { variantName: cmsOffers } };
     }
 
     return { data: { variantName: defaultVariant } };

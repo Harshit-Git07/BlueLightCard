@@ -94,6 +94,7 @@ export const TokenisedSearch: NextPage = () => {
     'control'
   );
   const searchV5Experiment = useAmplitudeExperiment('search_v5', 'control');
+  const offersCmsExperiment = useAmplitudeExperiment('cms-offers', 'off');
   const { viewOffer } = useOfferDetails();
   const { categories } = useFetchCompaniesOrCategories(userCtx);
   const platformAdapter = usePlatformAdapter();
@@ -129,7 +130,8 @@ export const TokenisedSearch: NextPage = () => {
           query,
           userCtx.user?.profile.dob ?? '',
           userCtx.user?.profile.organisation ?? '',
-          platformAdapter
+          platformAdapter,
+          offersCmsExperiment.data?.variantName !== 'on'
         );
 
       const searchResults = await darkRead(
@@ -181,6 +183,7 @@ export const TokenisedSearch: NextPage = () => {
     categoryLevelThreeSearchExperiment,
     usedQuery,
     searchV5Experiment,
+    offersCmsExperiment,
     platformAdapter,
   ]);
 

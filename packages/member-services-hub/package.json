@@ -27,7 +27,7 @@
     "react": "latest",
     "react-dom": "latest",
     "storybook-addon-designs": "^6.3.1",
-    "typescript": "^5.2.2"
+    "typescript": "5.6.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.20",

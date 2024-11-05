@@ -109,7 +109,7 @@
     "sst": "2.38.7",
     "swagger-autogen": "^2.23.6",
     "testcontainers": "10.7.1",
-    "typescript": "5.3.3",
+    "typescript": "5.6.3",
     "vite-node": "1.6.0",
     "vite-tsconfig-paths": "4.3.2",
     "vitest": "1.4.0",

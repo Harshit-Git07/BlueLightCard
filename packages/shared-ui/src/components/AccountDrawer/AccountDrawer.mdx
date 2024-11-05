@@ -1,0 +1,60 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as AccountDrawer from './AccountDrawer.stories';
+
+<Meta of={AccountDrawer} />
+
+# AccountDrawer
+
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Implementation](#implementation)
+
+## Overview
+
+The `AccountDrawer` component is a versatile slider drawer that provides an area for users to perform actions related to their account. It can display customisable content and supports both enabled and disabled states, allowing for dynamic interactions.
+
+## Props
+
+<Controls />
+
+## State
+
+### Default AccountDrawer
+
+This example demonstrates the default state of the `AccountDrawer`, which opens with no title and mandatory buttons.
+
+<Canvas of={AccountDrawer.Default} />
+
+### Disabled AccountDrawer
+
+This example shows the `AccountDrawer` in a disabled state, where users cannot interact with the Action button.
+
+<Canvas of={AccountDrawer.Disabled} />
+
+## Implementation
+
+Here’s an example of how to use the `AccountDrawer` component in your application.
+
+```jsx
+import AccountDrawer from './AccountDrawer';
+import useDrawer from "@bluelightcard/shared-ui/src/components/Drawer/useDrawer";
+
+const MyComponentWithAccountDrawer = () => {
+  const { open, close } = useDrawer();
+
+  const drawerContent = (
+    <AccountDrawer
+      title="My Account"
+      primaryButtonLabel="Save Changes"
+      primaryButtonOnClick={() => alert('Changes saved')}
+      secondaryButtonLabel="Close"
+      secondaryButtonOnClick={() => close()}
+    >
+      <p>Here you can manage your account settings.</p>
+    </AccountDrawer>
+  );
+
+  return <Button onClick={() => open(drawerContent)}>Open</Button>;
+};
+```

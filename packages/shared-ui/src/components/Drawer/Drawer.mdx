@@ -1,0 +1,56 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as Drawer from './Drawer.stories';
+
+<Meta of={Drawer} />
+
+# Drawer
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+
+## Overview
+
+The Drawer component needs to be placed near the top of the element tree, and can be controlled using the hook: `useDrawer`
+
+<Canvas of={Drawer.DrawerExample} />
+
+## useDrawer hook
+
+```jsx
+const { open, close, showCloseButton, children } = useDrawer();
+```
+
+
+| name              | type              | description                                                                                                              |
+|-------------------|-------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `open`            | method            | open the drawer, it takes two parameters<br/>`children`: ReactNode<br/>`showCloseButton`: boolean which defaults to true |
+| `close`           | method            | close the drawer it takes no parameters                                                                                  |
+| `showCloseButton` | boolean           | indicates if the drawer is currently set to show the close X button                                                      |
+| `children`        | ReactNode or Null | the current child node of the drawer                                                                                     |
+
+## Implementation
+
+```jsx
+import useDrawer from "@bluelightcard/shared-ui/src/components/Drawer/useDrawer";
+
+export const SomeDrawerContentComponent: FC = () => {
+  const { close } = useDrawer();
+  return (
+    <div>
+      <h2>My Content</h2>
+      <Button onClick={() => close()}>Close</Button>
+    </div>
+  )
+}
+
+const SomePageOrComponentNeedingToLaunchTheDrawer: FC = () => {
+  const { open, close } = useDrawer();
+
+  const onOpen = () => {
+    open({children: <SomeDrawerContentComponent />});
+  }
+
+  return <Button onClick={onOpen}>Open</Button>
+}
+```
+

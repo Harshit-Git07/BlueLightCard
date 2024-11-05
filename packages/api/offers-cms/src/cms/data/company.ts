@@ -9,9 +9,8 @@ async function _legacy_getCompany(id: number) {
   const res = await dynamo.query({
     TableName: Table.cmsCompany.tableName,
     IndexName: 'legacyId',
-    ExpressionAttributeNames: { '#id': '_id' },
-    ExpressionAttributeValues: { ':legacyId': id },
-    KeyConditionExpression: '#id = :legacyId',
+    ExpressionAttributeValues: { ':legacyId': String(id) },
+    KeyConditionExpression: 'companyId = :legacyId',
   });
 
   if (!res.Items || res.Items.length === 0) {

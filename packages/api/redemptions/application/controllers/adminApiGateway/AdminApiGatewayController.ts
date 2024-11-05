@@ -6,6 +6,7 @@ import { getEnvValidated } from '@blc-mono/core/utils/getEnv';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 
 import { BaseApiGatewayController } from '../BaseApiGatewayController';
+import { getCorsHeaders } from '../helpers';
 
 export type APIGatewayResult = {
   statusCode: number;
@@ -43,6 +44,7 @@ export abstract class APIGatewayController<
       }),
       headers: {
         'Content-Type': 'application/json',
+        ...getCorsHeaders(this.getAllowedOrigin(), request),
       },
     });
   }

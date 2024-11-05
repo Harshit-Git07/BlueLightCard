@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 import { IUpdateVaultBatchService } from '@blc-mono/redemptions/application/services/vaultBatch/UpdateVaultBatchService';
+import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { generateFakeJWT } from '@blc-mono/redemptions/libs/test/factories/redeemRequest.factory';
 import { updateVaultBatchEventFactory } from '@blc-mono/redemptions/libs/test/factories/updateVaultBatch.factory';
 import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
@@ -10,6 +11,14 @@ import { UpdateVaultBatchController } from './UpdateVaultBatchController';
 
 describe('UpdateVaultBatchController', () => {
   const testSilentLogger = createSilentLogger();
+
+  beforeAll(() => {
+    process.env[RedemptionsStackEnvironmentKeys.ADMIN_API_DEFAULT_ALLOWED_ORIGINS] = '["*"]';
+  });
+
+  afterAll(() => {
+    delete process.env[RedemptionsStackEnvironmentKeys.ADMIN_API_DEFAULT_ALLOWED_ORIGINS];
+  });
 
   it.each([
     ['NoContent', undefined, 204],

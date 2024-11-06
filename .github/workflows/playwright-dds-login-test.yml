@@ -3,11 +3,14 @@ name: Playwright DDS Login Test
 on:
   schedule:
     - cron: '*/50 * * * *' # Run every 50 minutes
-  workflow_dispatch:
+  workflow_dispatch:  # Allows manual triggering of the workflow
+  pull_request:  # Trigger on pull requests
+    branches:
+      - main  # Run on pull requests targeting the main branch
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ui-automation
     environment: Production
     steps:
       # Checkout repo and install dependencies
@@ -16,6 +19,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
         working-directory: packages/web-playwright-tests
@@ -66,7 +71,7 @@ jobs:
           PASSWORD_DDS: ${{ secrets.PASSWORD_DDS }}
         run: |
           for i in {1..2}; do
-            if npx playwright test -g "@Dds @SmokeTest @Web @NeedsTestCase - Login to dds home page"; then
+            if npx playwright test -g "@Dds @SmokeTest @Web @NeedsTestCase - Login to dds home page" --project=Firefox; then
               echo "Test passed on attempt $i."
               break
             fi
@@ -94,4 +99,4 @@ jobs:
           curl -X POST -H 'Content-type: application/json' --data '{
             "text": "*Playwright Web test `Login to DDS home page` has failed after 3 attempts against production - Login may not be functioning correctly. Check the workflow run report ('"$WORKFLOW_URL"') for further details.*",
             "mrkdwn": true
-          }' ${{ vars.CI_NOTIFICATIONS_WEBHOOK }}
+          }' ${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}

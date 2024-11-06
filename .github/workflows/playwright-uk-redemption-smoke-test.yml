@@ -1,13 +1,13 @@
-name: Playwright UK Redemption Journey test 005 - Visit Site + Discount Code Copied
+name: Playwright UK Redemption Journey Test - Firefox Only
 
 on:
   schedule:
-    - cron: '0 */12 * * *' # Run every 12 hours
+    - cron: '0 2 * * *' # Run every day at 2 AM
   workflow_dispatch:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ui-automation
     environment: Production
     steps:
       # Checkout repo and install dependencies
@@ -16,6 +16,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
         working-directory: packages/web-playwright-tests
@@ -56,8 +58,8 @@ jobs:
             echo "PASSWORD_UK secret is set."
           fi
 
-      # Run specified Playwright test with retry logic, using secrets for credentials
-      - name: Run Playwright test - Redeem Offer for Existing User
+      # Run specified Playwright test with retry logic, using Firefox only
+      - name: Run Playwright test - Redeem Offer for Existing User (Firefox)
         working-directory: packages/web-playwright-tests
         id: playwright
         env:
@@ -66,7 +68,7 @@ jobs:
           PASSWORD_UK: ${{ secrets.PASSWORD_UK }}
         run: |
           for i in {1..2}; do
-            if npx playwright test -g "@Uk @SmokeTest @Web - BLC UK Existing User - Redeem offer - 005"; then
+            if npx playwright test -g "@Uk @SmokeTest @Web - BLC UK Existing User - Redeem offer - 004" --project=Firefox; then
               echo "Test passed on attempt $i."
               break
             fi
@@ -92,6 +94,6 @@ jobs:
         run: |
           WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "*Playwright Web test `Redeem Offer for Existing User` has failed after 3 attempts against production - Login may not be functioning correctly. Check the workflow run report ('"$WORKFLOW_URL"') for further details.*",
+            "text": "*Playwright Web test `Redeem Offer for Existing User` has failed after 2 attempts on Firefox against production. Check the workflow run report ('"$WORKFLOW_URL"') for further details.*",
             "mrkdwn": true
-          }' ${{ vars.CI_NOTIFICATIONS_WEBHOOK }}
+          }' ${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}

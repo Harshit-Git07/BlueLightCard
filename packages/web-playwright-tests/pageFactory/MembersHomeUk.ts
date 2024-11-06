@@ -333,6 +333,8 @@ async clickModernSlaveryActStatement(): Promise<void> {
     await this.page.waitForLoadState('load');
 
     //Check the heading is correct
+
+   
     await expect(this.page.getByRole('heading', { name: searchTerm }).first()).toBeVisible();
 
     await expect(

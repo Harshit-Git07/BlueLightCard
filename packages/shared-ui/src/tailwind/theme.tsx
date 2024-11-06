@@ -6,18 +6,24 @@ export const colours = {
   textOnSurface: 'text-colour-onSurface dark:text-colour-onSurface-dark',
   textOnSurfaceSubtle: 'text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark',
   textOnSurfaceDisabled: 'text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark',
+  textPrimary: 'text-colour-primary dark:text-colour-primary-dark',
+  textPrimaryHover: 'text-colour-primary-hover dark:text-colour-primary-hover-dark',
   textSuccess: 'text-colour-success dark:text-colour-success-dark',
   textError: 'text-colour-error dark:text-colour-error-dark',
 
+  backgroundPrimaryContainer:
+    'bg-colour-primary-container-light dark:bg-colour-primary-container-dark',
   backgroundSurfaceContainer:
     'bg-colour-surface-container-light dark:bg-colour-surface-container-dark',
 
-  borderError: 'border-colour-error dark:border-colour-error-dark',
   borderPrimaryOnFocus: 'focus:border-colour-primary dark:focus:border-colour-primary-dark',
+  borderPrimaryHover: 'border-colour-primary-hover dark:border-colour-primary-hover-dark',
   borderOnSurfaceOutline:
     'border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark',
   borderOnSurfaceOutlineSubtle:
     'border-colour-onSurface-outline-subtle dark:border-colour-onSurface-outline-subtle-dark',
+  borderSuccess: 'border-colour-success dark:border-colour-success-dark',
+  borderError: 'border-colour-error dark:border-colour-error-dark',
 };
 
 /**

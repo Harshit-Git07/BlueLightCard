@@ -1,0 +1,44 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as ExampleUploadWrapper from './ExampleUploadWrapper.stories';
+
+<Meta of={ExampleUploadWrapper} />
+
+# FileUpload
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Overview
+This is an *_EXAMPLE_* component
+to show what a FileUpload component could look like on a page.
+This is only a reference for designers to see the components interact,
+and for developers to see an example of how to tie the components together in code.
+
+## Props
+
+<Controls />
+
+## Variants and States
+There are no variants of this component.
+<Canvas of={ExampleUploadWrapper.Default} />
+
+## Implementation
+This component should not be implemented directly.
+Developers are able to copy parts of this component to use
+when they build the form that surrounds the FileUpload component.
+
+## Usage Guidelines
+When building the surrounding form component, you should:
+- control the state of selected files
+  - provide the `FileUploadBody` component a way to add files to the selection
+  - provide the `FileUploadStatusCard` components a way to remove its respective file from the selection
+- manage the file upload process
+- update state in the `FileUploadStatusCard`s as uploads are accepted / rejected by the server
+  - provide errors to the `FileUploadStatusCard` where relevant via the `message` prop
+
+## Design
+[Figma](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=100-28667&node-type=canvas&t=l1nT8MfPdmiTrK4d-0)

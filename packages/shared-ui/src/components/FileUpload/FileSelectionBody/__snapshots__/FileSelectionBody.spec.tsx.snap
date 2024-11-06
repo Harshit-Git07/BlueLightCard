@@ -1,0 +1,403 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileSelectionBody component matches snapshot 1`] = `
+<div>
+  <section
+    aria-label="Dropzone to Upload Files"
+    class="p-6 flex flex-col items-center gap-3 border border-dashed rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+  >
+    <div
+      class="w-full flex flex-col items-center gap-6"
+    >
+      <div
+        class="w-full flex flex-col items-center gap-3"
+      >
+        <label
+          class="w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark hover:cursor-pointer text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark leading-button-label-font font-button-label-font-weight"
+          for="Upload File"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-upload "
+            data-icon="upload"
+            data-prefix="far"
+            focusable="false"
+            role="img"
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M280 360c0 13.3-10.7 24-24 24s-24-10.7-24-24V81.9l-95 95c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 7c9.4-9.4 24.6-9.4 33.9 0L409 143c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-95-95V360zm32-8V304H448c35.3 0 64 28.7 64 64v80c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V368c0-35.3 28.7-64 64-64H200v48H64c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H312zm72 56a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"
+              fill="currentColor"
+            />
+          </svg>
+          Choose file
+          <input
+            accept="image/png,image/jpeg,application/pdf"
+            class="h-0 w-0"
+            id="Upload File"
+            multiple=""
+            tabindex="0"
+            title="Choose file"
+            type="file"
+          />
+        </label>
+        <p
+          class="hidden laptop:block text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          or
+        </p>
+        <p
+          class="hidden laptop:block font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          Drag and drop in here
+        </p>
+      </div>
+      <p
+        class="text-center font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+      >
+        Max file size is 
+        20MB
+        . Supported file types are
+         
+        .PNG, .JPEG or .PDF
+      </p>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`FileSelectionBody component matches snapshot when disabled 1`] = `
+<div>
+  <section
+    aria-label="Dropzone to Upload Files"
+    class="p-6 flex flex-col items-center gap-3 border border-dashed rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+  >
+    <div
+      class="w-full flex flex-col items-center gap-6"
+    >
+      <div
+        class="w-full flex flex-col items-center gap-3"
+      >
+        <label
+          class="w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md bg-button-primary-disabled-bg-colour dark:bg-button-primary-disabled-bg-colour-dark text-button-primary-disabled-label-colour dark:text-button-primary-disabled-label-colour-dark  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark leading-button-label-font font-button-label-font-weight"
+          for="Upload File"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-upload "
+            data-icon="upload"
+            data-prefix="far"
+            focusable="false"
+            role="img"
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M280 360c0 13.3-10.7 24-24 24s-24-10.7-24-24V81.9l-95 95c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 7c9.4-9.4 24.6-9.4 33.9 0L409 143c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-95-95V360zm32-8V304H448c35.3 0 64 28.7 64 64v80c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V368c0-35.3 28.7-64 64-64H200v48H64c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H312zm72 56a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"
+              fill="currentColor"
+            />
+          </svg>
+          Choose file
+          <input
+            accept="image/png,image/jpeg,application/pdf"
+            class="h-0 w-0"
+            disabled=""
+            id="Upload File"
+            multiple=""
+            tabindex="0"
+            title="Choose file"
+            type="file"
+          />
+        </label>
+        <p
+          class="hidden laptop:block text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark"
+        >
+          or
+        </p>
+        <p
+          class="hidden laptop:block font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark"
+        >
+          Drag and drop in here
+        </p>
+      </div>
+      <p
+        class="text-center font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark"
+      >
+        Max file size is 
+        20MB
+        . Supported file types are
+         
+        .PNG, .JPEG or .PDF
+      </p>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`FileSelectionBody component matches snapshot when hovering a file 1`] = `
+<div>
+  <section
+    aria-label="Dropzone to Upload Files"
+    class="p-6 flex flex-col items-center gap-3 border border-dashed rounded bg-colour-primary-container-light dark:bg-colour-primary-container-dark border-colour-primary-hover dark:border-colour-primary-hover-dark"
+  >
+    <div
+      class="w-full flex flex-col items-center gap-6"
+    >
+      <div
+        class="w-full flex flex-col items-center gap-3"
+      >
+        <label
+          class="w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark hover:cursor-pointer text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark leading-button-label-font font-button-label-font-weight"
+          for="Upload File"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-upload "
+            data-icon="upload"
+            data-prefix="far"
+            focusable="false"
+            role="img"
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M280 360c0 13.3-10.7 24-24 24s-24-10.7-24-24V81.9l-95 95c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 7c9.4-9.4 24.6-9.4 33.9 0L409 143c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-95-95V360zm32-8V304H448c35.3 0 64 28.7 64 64v80c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V368c0-35.3 28.7-64 64-64H200v48H64c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H312zm72 56a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"
+              fill="currentColor"
+            />
+          </svg>
+          Choose file
+          <input
+            accept="image/png,image/jpeg,application/pdf"
+            class="h-0 w-0"
+            id="Upload File"
+            multiple=""
+            tabindex="0"
+            title="Choose file"
+            type="file"
+          />
+        </label>
+        <p
+          class="hidden laptop:block text-colour-primary-hover dark:text-colour-primary-hover-dark"
+        >
+          or
+        </p>
+        <p
+          class="hidden laptop:block font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold text-colour-primary-hover dark:text-colour-primary-hover-dark"
+        >
+          Drag and drop in here
+        </p>
+      </div>
+      <p
+        class="text-center font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small text-colour-primary-hover dark:text-colour-primary-hover-dark"
+      >
+        Max file size is 
+        20MB
+        . Supported file types are
+         
+        .PNG, .JPEG or .PDF
+      </p>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`FileSelectionBody component matches snapshot with different allowedFileTypes and maxFileSize 1`] = `
+<div>
+  <section
+    aria-label="Dropzone to Upload Files"
+    class="p-6 flex flex-col items-center gap-3 border border-dashed rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+  >
+    <div
+      class="w-full flex flex-col items-center gap-6"
+    >
+      <div
+        class="w-full flex flex-col items-center gap-3"
+      >
+        <label
+          class="w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark hover:cursor-pointer text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark leading-button-label-font font-button-label-font-weight"
+          for="Upload File"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-upload "
+            data-icon="upload"
+            data-prefix="far"
+            focusable="false"
+            role="img"
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M280 360c0 13.3-10.7 24-24 24s-24-10.7-24-24V81.9l-95 95c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 7c9.4-9.4 24.6-9.4 33.9 0L409 143c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-95-95V360zm32-8V304H448c35.3 0 64 28.7 64 64v80c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V368c0-35.3 28.7-64 64-64H200v48H64c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H312zm72 56a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"
+              fill="currentColor"
+            />
+          </svg>
+          Choose file
+          <input
+            accept=""
+            class="h-0 w-0"
+            id="Upload File"
+            multiple=""
+            tabindex="0"
+            title="Choose file"
+            type="file"
+          />
+        </label>
+        <p
+          class="hidden laptop:block text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          or
+        </p>
+        <p
+          class="hidden laptop:block font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          Drag and drop in here
+        </p>
+      </div>
+      <p
+        class="text-center font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+      >
+        Max file size is 
+        0 bytes
+        . Supported file types are
+         
+      </p>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`FileSelectionBody component matches snapshot with different allowedFileTypes and maxFileSize 2`] = `
+<div>
+  <section
+    aria-label="Dropzone to Upload Files"
+    class="p-6 flex flex-col items-center gap-3 border border-dashed rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+  >
+    <div
+      class="w-full flex flex-col items-center gap-6"
+    >
+      <div
+        class="w-full flex flex-col items-center gap-3"
+      >
+        <label
+          class="w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark hover:cursor-pointer text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark leading-button-label-font font-button-label-font-weight"
+          for="Upload File"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-upload "
+            data-icon="upload"
+            data-prefix="far"
+            focusable="false"
+            role="img"
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M280 360c0 13.3-10.7 24-24 24s-24-10.7-24-24V81.9l-95 95c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 7c9.4-9.4 24.6-9.4 33.9 0L409 143c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-95-95V360zm32-8V304H448c35.3 0 64 28.7 64 64v80c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V368c0-35.3 28.7-64 64-64H200v48H64c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H312zm72 56a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"
+              fill="currentColor"
+            />
+          </svg>
+          Choose file
+          <input
+            accept="image/png"
+            class="h-0 w-0"
+            id="Upload File"
+            multiple=""
+            tabindex="0"
+            title="Choose file"
+            type="file"
+          />
+        </label>
+        <p
+          class="hidden laptop:block text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          or
+        </p>
+        <p
+          class="hidden laptop:block font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          Drag and drop in here
+        </p>
+      </div>
+      <p
+        class="text-center font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+      >
+        Max file size is 
+        2KB
+        . Supported file types are
+         
+        .PNG
+      </p>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`FileSelectionBody component matches snapshot with different allowedFileTypes and maxFileSize 3`] = `
+<div>
+  <section
+    aria-label="Dropzone to Upload Files"
+    class="p-6 flex flex-col items-center gap-3 border border-dashed rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+  >
+    <div
+      class="w-full flex flex-col items-center gap-6"
+    >
+      <div
+        class="w-full flex flex-col items-center gap-3"
+      >
+        <label
+          class="w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark hover:cursor-pointer text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark leading-button-label-font font-button-label-font-weight"
+          for="Upload File"
+        >
+          <svg
+            aria-hidden="true"
+            class="svg-inline--fa fa-upload "
+            data-icon="upload"
+            data-prefix="far"
+            focusable="false"
+            role="img"
+            viewBox="0 0 512 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M280 360c0 13.3-10.7 24-24 24s-24-10.7-24-24V81.9l-95 95c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 7c9.4-9.4 24.6-9.4 33.9 0L409 143c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-95-95V360zm32-8V304H448c35.3 0 64 28.7 64 64v80c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V368c0-35.3 28.7-64 64-64H200v48H64c-8.8 0-16 7.2-16 16v80c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H312zm72 56a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"
+              fill="currentColor"
+            />
+          </svg>
+          Choose file
+          <input
+            accept="image/png,application/pdf"
+            class="h-0 w-0"
+            id="Upload File"
+            multiple=""
+            tabindex="0"
+            title="Choose file"
+            type="file"
+          />
+        </label>
+        <p
+          class="hidden laptop:block text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          or
+        </p>
+        <p
+          class="hidden laptop:block font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold text-colour-onSurface dark:text-colour-onSurface-dark"
+        >
+          Drag and drop in here
+        </p>
+      </div>
+      <p
+        class="text-center font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+      >
+        Max file size is 
+        2GB
+        . Supported file types are
+         
+        .PNG or .PDF
+      </p>
+    </div>
+  </section>
+</div>
+`;

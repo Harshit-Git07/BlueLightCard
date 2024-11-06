@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileUploadCounter matches snapshot 1`] = `
+<div>
+  <p
+    class="w-full text-colour-onSurface dark:text-colour-onSurface-dark"
+  >
+    0
+     of 
+    3
+     uploaded
+  </p>
+</div>
+`;

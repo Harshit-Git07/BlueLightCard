@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileUploadLabel matches snapshot 1`] = `
+<div>
+  <span
+    class="flex flex-col gap-2"
+  >
+    <p
+      class="w-full text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold"
+    >
+      LABEL
+    </p>
+    <p
+      class="w-full text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    >
+      Remember to place on plain, well lit surface with no obstructions, blur or glare
+    </p>
+  </span>
+</div>
+`;

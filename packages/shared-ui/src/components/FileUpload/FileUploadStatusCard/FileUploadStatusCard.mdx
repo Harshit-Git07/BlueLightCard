@@ -1,0 +1,41 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as FileUploadStatusCard from './FileUploadStatusCard.stories';
+
+<Meta of={FileUploadStatusCard} />
+
+# FileUpload
+- [Overview](#overview)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Design](#design)
+
+## Overview
+The status card that informs a user of what state their file upload is in.
+
+The visual states are:
+- Loading
+- Success
+- Error
+
+## Variants and States
+The Loading State that is shown when a file is being uploaded.
+<Canvas of={FileUploadStatusCard.Loading} />
+
+The Success State that is shown after a file has successfully been uploaded.
+<Canvas of={FileUploadStatusCard.Success} />
+
+The Error State that is shown after a file failed to upload.
+A message can be optionally added.
+<Canvas of={FileUploadStatusCard.ErrorWithMessage} />
+
+## Implementation
+Provide the following props:
+- `fileName` - displays the filename to the user
+- `uploadStatus` - determines icon and colours to render
+- `removeFile` - callback when the 'x' button is pressed
+- `message` - optional message to display errors (can be used for success if needed)
+
+See the *ExampleUploadWrapper* for an example of Implementation.
+
+## Design
+[Figma](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=100-28667&node-type=canvas&t=l1nT8MfPdmiTrK4d-0)

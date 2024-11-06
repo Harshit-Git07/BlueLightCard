@@ -1,0 +1,52 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as FileUploadBody from './FileSelectionBody.stories';
+
+<Meta of={FileUploadBody} />
+
+# FileUpload
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Design](#design)
+
+## Overview
+
+The main selection area of the FileUpload.
+This component allows a user to select a set of files,
+either by them dragging those files into the drop area,
+or by selecting them after clicking a button.
+
+This component does not manage file uploads,
+or the state of file selection.
+It relies on its parent to manage these.
+See *ExampleUploadWrapper* for an example of upload management.
+
+The component is configurable on
+which filetypes are allowed to be selected,
+how many files are allowed to be selected in one go,
+and how large uploaded files can be.
+
+The component has a default and disabled state.
+
+The text that informs a user that the area is able to receive files
+is removed on tablet and mobile sizes.
+
+## Props
+
+<Controls />
+
+## Variants and States
+
+The default state shown to a user when they are selecting files.
+<Canvas of={FileUploadBody.Enabled} />
+
+The state shown when the selector is disabled.
+<Canvas of={FileUploadBody.Disabled} />
+
+## Implementation
+See the *ExampleUploadWrapper* for an example of Implementation.
+
+## Design
+[Figma](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=100-28667&node-type=canvas&t=l1nT8MfPdmiTrK4d-0)

@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileUploadCounter component matches snapshot for uploadStatus error 1`] = `
+<div>
+  <div>
+    <div
+      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-error dark:border-colour-error-dark"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-circle-xmark h-6 w-6 text-colour-error dark:text-colour-error-dark"
+        data-icon="circle-xmark"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+          fill="currentColor"
+        />
+      </svg>
+      <p
+        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+      >
+        testFile.name
+      </p>
+      <button
+        class="ml-auto flex"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          data-icon="xmark"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 384 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FileUploadCounter component matches snapshot for uploadStatus loading 1`] = `
+<div>
+  <div>
+    <div
+      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-spinner fa-spin h-6 w-6 text-colour-primary dark:text-colour-primary-dark"
+        data-icon="spinner"
+        data-prefix="far"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M288 32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm0 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM448 256a32 32 0 1 0 64 0 32 32 0 1 0 -64 0zM32 288a32 32 0 1 0 0-64 32 32 0 1 0 0 64zM75 437a32 32 0 1 0 45.3-45.3A32 32 0 1 0 75 437zm316.8 0A32 32 0 1 0 437 391.8 32 32 0 1 0 391.8 437zM75 75a32 32 0 1 0 45.3 45.3A32 32 0 1 0 75 75z"
+          fill="currentColor"
+        />
+      </svg>
+      <p
+        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+      >
+        testFile.name
+      </p>
+      <button
+        class="ml-auto flex"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          data-icon="xmark"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 384 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FileUploadCounter component matches snapshot for uploadStatus ready 1`] = `
+<div>
+  <div>
+    <div
+      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-spinner fa-spin h-6 w-6 text-colour-primary dark:text-colour-primary-dark"
+        data-icon="spinner"
+        data-prefix="far"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M288 32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm0 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM448 256a32 32 0 1 0 64 0 32 32 0 1 0 -64 0zM32 288a32 32 0 1 0 0-64 32 32 0 1 0 0 64zM75 437a32 32 0 1 0 45.3-45.3A32 32 0 1 0 75 437zm316.8 0A32 32 0 1 0 437 391.8 32 32 0 1 0 391.8 437zM75 75a32 32 0 1 0 45.3 45.3A32 32 0 1 0 75 75z"
+          fill="currentColor"
+        />
+      </svg>
+      <p
+        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+      >
+        testFile.name
+      </p>
+      <button
+        class="ml-auto flex"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          data-icon="xmark"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 384 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`FileUploadCounter component matches snapshot for uploadStatus success 1`] = `
+<div>
+  <div>
+    <div
+      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-success dark:border-colour-success-dark"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-circle-check h-6 w-6 text-colour-success dark:text-colour-success-dark"
+        data-icon="circle-check"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+          fill="currentColor"
+        />
+      </svg>
+      <p
+        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+      >
+        testFile.name
+      </p>
+      <button
+        class="ml-auto flex"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          data-icon="xmark"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 384 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;

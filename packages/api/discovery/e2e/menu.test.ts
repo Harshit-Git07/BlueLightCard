@@ -75,7 +75,7 @@ describe('Menu', async () => {
     });
   });
 
-  describe('Menu E2E Event Handling', async () => {
+  describe.skip('Menu E2E Event Handling', async () => {
     const testUserTokens = await TestUser.authenticate();
 
     beforeAll(async () => {

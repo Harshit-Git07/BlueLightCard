@@ -126,7 +126,7 @@ describe('POST Redemption Config', () => {
       const expectedResponseBody = {
         statusCode: 200,
         data: {
-          affiliate: null,
+          affiliate: 'awin',
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: '2024',

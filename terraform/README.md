@@ -17,6 +17,18 @@ Every directory contains all required terraform code for that brand, usually cal
 
 ## Resources per Brand
 
+### ACM
+
+* ACM Certificate
+
+### BastionHost
+
+* EC2 Instance
+
+### EventBus
+
+* Cloudwatch Event Bus
+
 ### VPC
 
 * VPC
@@ -25,9 +37,9 @@ Every directory contains all required terraform code for that brand, usually cal
 * NAT Gateways and associated Elastic IPS
 * Route tables and their associations
 
-### ACM
+### WebACL
 
-* ACM Certificate
+* WAF Web ACL 
 
 ## Resources per AWS account
 

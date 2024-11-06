@@ -126,6 +126,69 @@ terraform import module.vpc.aws_route_table_association.public[0] subnet-0f6aeb4
 terraform import module.vpc.aws_route_table_association.public[1] subnet-0c7e45a073df45b5b/rtb-088ff42f448e5a861
 terraform import module.vpc.aws_route_table_association.public[2] subnet-045fa355f36313b9c/rtb-0cb743bf47de3db44
 
+## PR
+
+### VPC
+terraform import module.vpc.aws_vpc.main vpc-0371be6ee2c480498
+
+#### Internet Gateway
+terraform import module.vpc.aws_internet_gateway.main igw-05156f9f8adcda6e3
+
+#### Elastic IP
+terraform import module.vpc.aws_eip.public[0] eipalloc-0146784da6aaa7108
+terraform import module.vpc.aws_eip.public[1] eipalloc-0d9cf659ea2a9e7ae
+terraform import module.vpc.aws_eip.public[2] eipalloc-0cdf3e71353d46090
+
+#### NAT Gateway
+terraform import module.vpc.aws_nat_gateway.public[0] nat-049d799cb33df98f3
+terraform import module.vpc.aws_nat_gateway.public[1] nat-0898f28044d7993d4
+terraform import module.vpc.aws_nat_gateway.public[2] nat-033765c4bd67964a5
+
+#### Subnet: Isolated
+terraform import module.vpc.aws_subnet.isolated[0] subnet-04b89d487a489d645
+terraform import module.vpc.aws_subnet.isolated[1] subnet-08c5e3886e4ed259a
+terraform import module.vpc.aws_subnet.isolated[2] subnet-04f7290aae67de702
+
+#### Subnet: Private
+terraform import module.vpc.aws_subnet.private[0] subnet-0d31b0c1da418ee9e
+terraform import module.vpc.aws_subnet.private[1] subnet-06955b318f1c59ff9
+terraform import module.vpc.aws_subnet.private[2] subnet-065f5fb235dc6ad4a
+
+#### Subnet: Public
+terraform import module.vpc.aws_subnet.public[0] subnet-0fe07fd16b1023e4f
+terraform import module.vpc.aws_subnet.public[1] subnet-08a310e302840257a
+terraform import module.vpc.aws_subnet.public[2] subnet-0d1691b09188ef6d8
+
+#### Route Table: Isolated
+terraform import module.vpc.aws_route_table.isolated[0] rtb-0053c4d0e5354f8b2
+terraform import module.vpc.aws_route_table.isolated[1] rtb-06a0e4e064c21c638
+terraform import module.vpc.aws_route_table.isolated[2] rtb-0a5796f06ee272181
+
+#### Route Table: Private
+terraform import module.vpc.aws_route_table.private[0] rtb-004c3a8d014992652
+terraform import module.vpc.aws_route_table.private[1] rtb-0c55d9ba06531c45c
+terraform import module.vpc.aws_route_table.private[2] rtb-0071442dd62cf90c4
+
+#### Route Table: Public
+terraform import module.vpc.aws_route_table.public[0] rtb-057b4f0cfe1000a78
+terraform import module.vpc.aws_route_table.public[1] rtb-0fea5fb0d427b9bf7
+terraform import module.vpc.aws_route_table.public[2] rtb-05d1dc8fe683e68b8
+
+#### Route Table Association: Isolated
+terraform import module.vpc.aws_route_table_association.isolated[0] subnet-04b89d487a489d645/rtb-0053c4d0e5354f8b2
+terraform import module.vpc.aws_route_table_association.isolated[1] subnet-08c5e3886e4ed259a/rtb-06a0e4e064c21c638
+terraform import module.vpc.aws_route_table_association.isolated[2] subnet-04f7290aae67de702/rtb-0a5796f06ee272181
+
+#### Route Table Association: Private
+terraform import module.vpc.aws_route_table_association.private[0] subnet-0d31b0c1da418ee9e/rtb-004c3a8d014992652
+terraform import module.vpc.aws_route_table_association.private[1] subnet-06955b318f1c59ff9/rtb-0c55d9ba06531c45c
+terraform import module.vpc.aws_route_table_association.private[2] subnet-065f5fb235dc6ad4a/rtb-0071442dd62cf90c4
+
+#### Route Table Association: Public
+terraform import module.vpc.aws_route_table_association.public[0] subnet-0fe07fd16b1023e4f/rtb-057b4f0cfe1000a78
+terraform import module.vpc.aws_route_table_association.public[1] subnet-08a310e302840257a/rtb-0fea5fb0d427b9bf7
+terraform import module.vpc.aws_route_table_association.public[2] subnet-0d1691b09188ef6d8/rtb-05d1dc8fe683e68b8
+
 ## Production
 
 ### VPC

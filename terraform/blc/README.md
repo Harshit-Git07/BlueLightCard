@@ -19,7 +19,8 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc | v1.3.0 |
+| <a name="module_bastionhost"></a> [bastionhost](#module\_bastionhost) | git@github.com:bluelightcard/terraform-modules.git//aws/ec2/bastionhost | v1.5.1 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc | v1.5.1 |
 
 ## Resources
 

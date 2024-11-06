@@ -1,12 +1,13 @@
 locals {
-  app = "blc-mono"
+  app   = "blc-mono"
+  brand = "blc-au"
 
-  my_workspace_env = var.TFC_WORKSPACE_NAME != "" ? trimprefix(var.TFC_WORKSPACE_NAME, "${local.app}-blc-au-shared-") : terraform.workspace
+  my_workspace_env = var.TFC_WORKSPACE_NAME != "" ? trimprefix(var.TFC_WORKSPACE_NAME, "${local.app}-${local.brand}-shared-") : terraform.workspace
 }
 
 # vpc
 module "vpc" {
-  source = "git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc?ref=v1.3.0"
+  source = "git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc?ref=v1.5.1"
 
   aws_availability_zones = var.aws_availability_zones
   aws_region             = var.aws_region
@@ -14,7 +15,7 @@ module "vpc" {
 
   defaults = {
     app   = local.app
-  stage = var.stage
+    stage = var.stage
   }
 }
 
@@ -55,5 +56,18 @@ resource "aws_wafv2_web_acl" "default" {
     cloudwatch_metrics_enabled = true
     metric_name                = "waf"
     sampled_requests_enabled   = true
+  }
+}
+
+# bastionhost
+module "bastionhost" {
+  source = "git@github.com:bluelightcard/terraform-modules.git//aws/ec2/bastionhost?ref=v1.5.1"
+
+  aws_region = var.aws_region
+  aws_vpc_id = module.vpc.vpc.id
+
+  defaults = {
+    app   = local.app
+    stage = var.stage
   }
 }

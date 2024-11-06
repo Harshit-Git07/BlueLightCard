@@ -28,7 +28,7 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
 
   return (
     <FuzzyFrontend
-      numberOfStepsCompleted={6}
+      numberOfStepsCompleted={5}
       screenTitle="Payment Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-42602&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

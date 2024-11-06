@@ -32,7 +32,7 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
-      numberOfStepsCompleted={4}
+      numberOfStepsCompleted={3}
       screenTitle="Work Email Verification Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-53082&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

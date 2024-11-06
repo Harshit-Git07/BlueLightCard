@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
 import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
+import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 
 export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -16,6 +17,20 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails.requireMultipleIds]);
 
   const buttons = useMemo(() => {
+    if (eligibilityDetails.requireMultipleIds) {
+      return [
+        {
+          onClick: () => {
+            setEligibilityDetails({
+              ...eligibilityDetails,
+              currentScreen: 'File Upload Verification Screen',
+            });
+          },
+          text: 'Go to "File Upload Verification" screen',
+        },
+      ];
+    }
+
     return [
       {
         onClick: () => {
@@ -46,13 +61,17 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails, setEligibilityDetails]);
 
   return (
-    <FuzzyFrontend
-      numberOfStepsCompleted={3}
-      screenTitle="Verification Method Screen"
-      figmaLink={figmaLink}
-      eligibilityDetailsState={eligibilityDetailsState}
-      buttons={buttons}
-      onBack={onBack}
-    />
+    <>
+      <FuzzyFrontend
+        numberOfStepsCompleted={2}
+        screenTitle="Verification Method Screen"
+        figmaLink={figmaLink}
+        eligibilityDetailsState={eligibilityDetailsState}
+        buttons={buttons}
+        onBack={onBack}
+      />
+
+      <FuzzyFrontendButtons buttons={buttons} putInFloatingDock />
+    </>
   );
 };

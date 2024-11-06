@@ -31,7 +31,7 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
-      numberOfStepsCompleted={1}
+      numberOfStepsCompleted={0}
       screenTitle="Employment Status Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-49236&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

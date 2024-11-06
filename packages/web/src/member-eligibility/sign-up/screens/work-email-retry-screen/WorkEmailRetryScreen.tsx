@@ -1,16 +1,14 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import {
-  FuzzFrontendButtonProps,
-  FuzzyFrontend,
-} from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
+import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
+import { FuzzyFrontendButtonProps } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 
 export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
 
-  const buttons = useMemo<FuzzFrontendButtonProps[]>(() => {
+  const buttons = useMemo<FuzzyFrontendButtonProps[]>(() => {
     if (!eligibilityDetails.requireMultipleIds || eligibilityDetails.fileVerification) {
       return [
         {
@@ -48,7 +46,7 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
-      numberOfStepsCompleted={4}
+      numberOfStepsCompleted={3}
       screenTitle="Work Email Retry Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-53246&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

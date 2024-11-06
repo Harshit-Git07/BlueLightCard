@@ -6,19 +6,19 @@ import { EligibilityScreen } from '@/root/src/member-eligibility/sign-up/screens
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityBody } from '@/root/src/member-eligibility/sign-up/screens/shared/components/body/EligibilityBody';
 import ProgressBar from '@bluelightcard/shared-ui/components/ProgressBar';
+import {
+  FuzzyFrontendButtonProps,
+  FuzzyFrontendButtons,
+} from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
+import { totalNumberOfProgressBarSteps } from '@/root/src/member-eligibility/sign-up/constants/TotalNumberOfProgressBarSteps';
 
 interface Props {
   screenTitle: string;
   figmaLink: string;
   eligibilityDetailsState: EligibilityDetailsState;
   numberOfStepsCompleted: number;
-  buttons?: FuzzFrontendButtonProps[];
+  buttons?: FuzzyFrontendButtonProps[];
   onBack?: () => void;
-}
-
-export interface FuzzFrontendButtonProps {
-  onClick: () => void;
-  text: string;
 }
 
 export const FuzzyFrontend: FC<Props> = ({
@@ -42,7 +42,10 @@ export const FuzzyFrontend: FC<Props> = ({
           <div className={`${fonts.body} text-center italic`}>Fuzzy frontend</div>
         </div>
 
-        <ProgressBar numberOfCompletedSteps={numberOfStepsCompleted} totalNumberOfSteps={7} />
+        <ProgressBar
+          numberOfCompletedSteps={numberOfStepsCompleted}
+          totalNumberOfSteps={totalNumberOfProgressBarSteps}
+        />
 
         <Link
           className={`${fonts.titleMediumSemiBold} text-rose-300`}
@@ -67,17 +70,7 @@ export const FuzzyFrontend: FC<Props> = ({
             </Button>
           )}
 
-          {buttons.map((button, index) => (
-            <Button
-              data-testid={`next-button-${index + 1}`}
-              key={button.text}
-              onClick={button.onClick}
-              size="Large"
-              withoutHover
-            >
-              {button.text}
-            </Button>
-          ))}
+          <FuzzyFrontendButtons buttons={buttons} />
         </div>
       </EligibilityBody>
     </EligibilityScreen>

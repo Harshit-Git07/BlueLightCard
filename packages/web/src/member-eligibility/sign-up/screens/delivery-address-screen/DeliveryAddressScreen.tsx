@@ -1,10 +1,8 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { EligibilityDetailsAddress } from '@/root/src/member-eligibility/sign-up/hooks/use-eligibility-details/types/EligibilityDetails';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import {
-  FuzzFrontendButtonProps,
-  FuzzyFrontend,
-} from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
+import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
+import { FuzzyFrontendButtonProps } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 
 const stubAddress: EligibilityDetailsAddress = {
   line1: 'Charnwood Edge Business Park',
@@ -18,7 +16,7 @@ export const DeliveryAddressScreen: FC<VerifyEligibilityScreenProps> = ({
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
-  const buttons = useMemo<FuzzFrontendButtonProps[]>(() => {
+  const buttons = useMemo<FuzzyFrontendButtonProps[]>(() => {
     if (eligibilityDetails.canSkipPayment) {
       return [
         {
@@ -69,7 +67,7 @@ export const DeliveryAddressScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <FuzzyFrontend
-      numberOfStepsCompleted={5}
+      numberOfStepsCompleted={4}
       screenTitle="Delivery Address Screen"
       figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-48062&t=XRae5vPnKJi8i8kq-4"
       eligibilityDetailsState={eligibilityDetailsState}

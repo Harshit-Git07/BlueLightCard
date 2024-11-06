@@ -48,6 +48,9 @@ export const OfferSchema = z.object({
   image: z.string().nullable().openapi({
     description: 'Offer image',
   }),
+  companyId: z.string().nullable().openapi({
+    description: 'Company ID',
+  }),
 });
 
 export type Offer = z.infer<typeof OfferSchema>;

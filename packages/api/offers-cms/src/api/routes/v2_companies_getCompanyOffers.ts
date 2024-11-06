@@ -73,6 +73,7 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
         expires: offer.expires || null,
         termsAndConditions: offer.termsAndConditions || null,
         image: offer.image?.default?.asset?.url || null,
+        companyId: offer.company?._id || null,
       };
     });
 

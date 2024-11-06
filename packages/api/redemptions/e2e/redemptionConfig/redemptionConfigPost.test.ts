@@ -36,7 +36,14 @@ describe('POST Redemption Config', () => {
       genericsRepository,
     );
 
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds(['101', '102', '103', '104', '105']);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([
+      '101',
+      '102',
+      '103',
+      '104',
+      '105',
+      '106',
+    ]);
 
     // Set a conservative timeout
   }, 60_000);
@@ -46,7 +53,14 @@ describe('POST Redemption Config', () => {
   });
 
   afterAll(async () => {
-    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds(['101', '102', '103', '104', '105']);
+    await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([
+      '101',
+      '102',
+      '103',
+      '104',
+      '105',
+      '106',
+    ]);
     await connectionManager?.cleanup();
   });
 
@@ -112,7 +126,7 @@ describe('POST Redemption Config', () => {
         affiliate: 'awin',
         companyId: faker.string.uuid(),
         connection: 'affiliate',
-        offerId: 2024,
+        offerId: 106,
         redemptionType: 'giftCard',
         url: 'https://www.gift-cards.co.uk/',
       };
@@ -129,7 +143,7 @@ describe('POST Redemption Config', () => {
           affiliate: 'awin',
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
-          offerId: '2024',
+          offerId: '106',
           id: expect.any(String),
           redemptionType: redemptionConfigRequest.redemptionType,
           url: redemptionConfigRequest.url,

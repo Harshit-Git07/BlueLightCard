@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import { as } from '@blc-mono/core/utils/testing';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
+import { giftCardFactory } from '@blc-mono/redemptions/libs/test/factories/giftCard.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
@@ -137,6 +138,27 @@ describe('GetRedemptionConfigService', () => {
     expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledWith({
       redemptionConfigEntity: genericRedemptionConfigEntity,
       genericEntity: genericEntity,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+    });
+  });
+
+  it('should call transformToRedemptionConfig when redemptionType is giftCard', async () => {
+    const giftCardPayloadFactory: giftCardFactory = giftCardFactory.build();
+
+    const giftCardRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'giftCard',
+    });
+
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValue(giftCardRedemptionConfigEntity);
+    mockGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(giftCardPayloadFactory);
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(redemptionConfig);
+
+    await getRedemptionConfigService.getRedemptionConfig(giftCardRedemptionConfigEntity.offerId);
+
+    expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledWith({
+      redemptionConfigEntity: giftCardRedemptionConfigEntity,
+      genericEntity: null,
       vaultEntity: null,
       vaultBatchEntities: [],
     });

@@ -133,7 +133,6 @@ export class MemberRedemptionEventDetailBuilder {
           },
         };
         return memberRedemptionEventDetail;
-
       default:
         exhaustiveCheck(redemptionConfigEntity.redemptionType, 'Invalid redemption type');
     }

@@ -69,7 +69,7 @@ export class RedemptionConfigTransformer {
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;
     }
 
-    if (redemptionType === 'preApplied') {
+    if (redemptionType === 'preApplied' || redemptionType === 'giftCard') {
       redemptionProperties.url = redemptionConfigDto.redemptionConfigEntity.url;
       redemptionProperties.affiliate = redemptionConfigDto.redemptionConfigEntity.affiliate;
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;

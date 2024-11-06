@@ -1,17 +1,17 @@
-import { MenuOfferResponse } from '@blc-mono/discovery/application/models/MenuOfferResponse';
+import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 
 export type MenuResponse = {
   dealsOfTheWeek?: {
-    offers: MenuOfferResponse[];
+    offers: OfferResponse[];
   };
   featured?: {
-    offers: MenuOfferResponse[];
+    offers: OfferResponse[];
   };
   marketplace?: {
     title: string;
     description?: string;
     hidden?: boolean;
-    offers: MenuOfferResponse[];
+    offers: OfferResponse[];
   }[];
   flexible?: {
     id: string;

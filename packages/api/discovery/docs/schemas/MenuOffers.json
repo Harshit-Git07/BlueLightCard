@@ -3,6 +3,9 @@
     "type": "object",
     "properties": {
       "offerID": {
+        "type": "string"
+      },
+      "legacyOfferID": {
         "type": "integer"
       },
       "offerType": {
@@ -19,6 +22,9 @@
       },
       "companyID": {
         "type": "string"
+      },
+      "legacyCompanyID": {
+        "type": "integer"
       },
       "companyName": {
         "type": "string"

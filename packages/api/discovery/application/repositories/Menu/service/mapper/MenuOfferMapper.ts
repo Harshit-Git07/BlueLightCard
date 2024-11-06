@@ -1,5 +1,5 @@
-import { MenuOfferResponse } from '@blc-mono/discovery/application/models/MenuOfferResponse';
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 import {
   MenuOfferEntity,
   MenuOfferKeyBuilders,
@@ -42,7 +42,7 @@ export function mapOfferToMenuOfferEntity(offer: Offer, menuId: string, menuType
   };
 }
 
-export function mapOfferToMenuOfferResponse(offer: Offer): MenuOfferResponse {
+export function mapOfferToMenuOfferResponse(offer: Offer): OfferResponse {
   return {
     offerID: offer.id,
     offerName: offer.name,

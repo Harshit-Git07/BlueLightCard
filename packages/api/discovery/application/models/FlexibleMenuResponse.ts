@@ -1,8 +1,8 @@
-import { MenuOfferResponse } from './MenuOfferResponse';
+import { OfferResponse } from './OfferResponse';
 
 export type FlexibleMenuResponse = {
   title: string;
   description: string;
   imageURL: string;
-  offers: MenuOfferResponse[];
+  offers: OfferResponse[];
 };

@@ -14,7 +14,7 @@
       "data": {
         "type": "array",
         "items": {
-          "$ref": "./Offer.json#/Offer"
+          "$ref": "./MenuOffers.json#/MenuOffer"
         }
       }
     }

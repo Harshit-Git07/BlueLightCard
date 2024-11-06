@@ -7,7 +7,9 @@ import { datadog } from 'datadog-lambda-js';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { categories } from '@blc-mono/discovery/application/handlers/categories/getCategories';
-import { CategoryOffer, CategoryResponse } from '@blc-mono/discovery/application/models/CategoryResponse';
+import { CategoryResponse } from '@blc-mono/discovery/application/models/CategoryResponse';
+import { OfferType } from '@blc-mono/discovery/application/models/Offer';
+import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const logger = new LambdaLogger({ serviceName: 'categories-get' });
@@ -34,16 +36,17 @@ const getCategory = (categoryId: string): CategoryResponse => {
   };
 };
 
-export const buildDummyOffer = (id: number): CategoryOffer => {
+export const buildDummyOffer = (id: number): OfferResponse => {
   return {
-    ID: '189f3060626368d0a716f0e795d8f2c7',
-    LegacyID: 9487,
-    OfferName: `Get 20% off your food bill, valid Monday - Friday = ${id}`,
-    OfferType: 'in-store',
-    offerimg: 'https://cdn.sanity.io/images/td1j6hke/staging/c92d0d548e09b08e4659cb5a4a2a55fa9fc2f11c-640x320.jpg',
-    CompID: '24069b9c8eb7591046d066ef57e26a94',
-    LegacyCompanyID: 9694,
-    CompanyName: 'Stonehouse Pizza & Carvery',
+    offerID: '189f3060626368d0a716f0e795d8f2c7',
+    legacyOfferID: 9487,
+    offerName: `Get 20% off your food bill, valid Monday - Friday = ${id}`,
+    offerType: OfferType.IN_STORE,
+    offerDescription: 'Offer Description',
+    imageURL: 'https://cdn.sanity.io/images/td1j6hke/staging/c92d0d548e09b08e4659cb5a4a2a55fa9fc2f11c-640x320.jpg',
+    companyID: '24069b9c8eb7591046d066ef57e26a94',
+    legacyCompanyID: 9694,
+    companyName: 'Stonehouse Pizza & Carvery',
   };
 };
 

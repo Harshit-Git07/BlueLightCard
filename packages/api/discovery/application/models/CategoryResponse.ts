@@ -1,16 +1,7 @@
-export type CategoryOffer = {
-  ID: string;
-  LegacyID?: number;
-  OfferName: string;
-  OfferType: string;
-  offerimg: string;
-  CompID: string;
-  LegacyCompanyID?: number;
-  CompanyName: string;
-};
+import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 
 export type CategoryResponse = {
   id: string;
   name: string;
-  data: CategoryOffer[];
+  data: OfferResponse[];
 };

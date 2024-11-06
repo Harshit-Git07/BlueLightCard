@@ -1,8 +1,9 @@
 import {
   ChangeEventHandler,
   FC,
-  KeyboardEvent,
+  KeyboardEvent as ReactKeyboardEvent,
   MouseEventHandler,
+  useCallback,
   useEffect,
   useId,
   useMemo,
@@ -66,7 +67,7 @@ const Dropdown: FC<DropdownProps> = ({
     setIsListboxOpen(!isListboxOpen);
   };
 
-  const onComboboxKeyDown = (event: KeyboardEvent) => {
+  const onComboboxKeyDown = (event: ReactKeyboardEvent) => {
     const openKeys = ['Enter', 'ArrowDown', 'ArrowUp'];
     if (!openKeys.includes(event.key)) return;
 
@@ -107,13 +108,7 @@ const Dropdown: FC<DropdownProps> = ({
     setIsListboxOpen(true);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setIsListboxOpen(false);
-    }
-  };
-
-  const onOptionKeyDown = (event: KeyboardEvent, newSelectedOption: DropdownOption) => {
+  const onOptionKeyDown = (event: ReactKeyboardEvent, newSelectedOption: DropdownOption) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -144,11 +139,34 @@ const Dropdown: FC<DropdownProps> = ({
     onSelect(option);
   };
 
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsListboxOpen(false);
+      }
+    },
+    [dropdownRef.current],
+  );
+
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
 
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
+
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      setIsListboxOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown, true);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, []);
 

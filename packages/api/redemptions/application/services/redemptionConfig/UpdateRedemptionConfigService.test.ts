@@ -12,6 +12,12 @@ import {
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { Integration, RedemptionType, Status } from '@blc-mono/redemptions/libs/database/schema';
+import {
+  PatchRedemptionConfigGenericModel,
+  PatchRedemptionConfigPreAppliedModel,
+  PatchRedemptionConfigShowCardModel,
+  PatchRedemptionConfigVaultModel,
+} from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
@@ -23,13 +29,9 @@ import { IVaultsRepository } from '../../repositories/VaultsRepository';
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
 import {
-  UpdateGenericRedemptionSchema,
-  UpdatePreAppliedRedemptionSchema,
   UpdateRedemptionConfigError,
   UpdateRedemptionConfigService,
   UpdateRedemptionConfigSuccess,
-  UpdateShowCardRedemptionSchema,
-  UpdateVaultRedemptionSchema,
 } from './UpdateRedemptionConfigService';
 
 const testRedemptionId = `rdm-${faker.string.uuid()}`;
@@ -63,7 +65,7 @@ const testVaultBody = {
     integration: 'eagleeye' as Integration,
     integrationId: faker.string.numeric(8),
   },
-} satisfies UpdateVaultRedemptionSchema;
+} satisfies PatchRedemptionConfigVaultModel;
 
 const testVaultRedemptionConfig: RedemptionConfig = {
   ...testVaultBody,
@@ -94,7 +96,7 @@ const testGenericBody = {
     id: testGenericId,
     code: 'DISCOUNT_CODE_01',
   },
-} satisfies UpdateGenericRedemptionSchema;
+} satisfies PatchRedemptionConfigGenericModel;
 
 const testGenericRedemptionConfig: RedemptionConfig = {
   ...testGenericBody,
@@ -110,7 +112,7 @@ const testPreAppliedBody = {
   companyId: testCompanyId,
   affiliate: null,
   url: 'https://www.whatever.com/',
-} satisfies UpdatePreAppliedRedemptionSchema;
+} satisfies PatchRedemptionConfigPreAppliedModel;
 
 const testPreAppliedRedemptionConfig: RedemptionConfig = {
   ...testPreAppliedBody,
@@ -125,7 +127,7 @@ const testShowCardBody = {
   connection: 'none',
   companyId: testCompanyId,
   affiliate: null,
-} satisfies UpdateShowCardRedemptionSchema;
+} satisfies PatchRedemptionConfigShowCardModel;
 
 const testShowCardRedemptionConfig: RedemptionConfig = {
   ...testShowCardBody,
@@ -501,22 +503,6 @@ describe('UpdateRedemptionConfigService', () => {
       expect(actual.data).toEqual(testVaultRedemptionConfig);
     },
   );
-
-  it('should return kind "Error" when the redemption type is invalid', async () => {
-    mockRedemptionConfigExist(true, 'invalid' as unknown as RedemptionType);
-
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
-      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), {
-        ...testGenericBody,
-        redemptionType: 'invalid' as unknown as RedemptionType,
-      });
-
-    const expected: UpdateRedemptionConfigError = getExpectedError(
-      'Error',
-      'invalid is an unrecognised redemptionType',
-    );
-    expect(actual).toEqual(expected);
-  });
 
   it('should return kind "MaxPerUserError" when the maxPerUser is less than 1', async () => {
     mockRedemptionConfigExist(true, 'vault');

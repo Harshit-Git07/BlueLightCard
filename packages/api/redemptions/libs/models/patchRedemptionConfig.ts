@@ -1,9 +1,73 @@
 import { z } from 'zod';
 
-import { RedemptionType } from '../database/schema';
+import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
+import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 
-export const VaultModel = z.object({
-  vault: z
+export const PatchRedemptionConfigBaseModel = createZodNamedType(
+  'PatchRedemptionConfigBaseModel',
+  z
+    .object({
+      affiliate: z
+        .enum([
+          'awin',
+          'affiliateFuture',
+          'rakuten',
+          'affilinet',
+          'webgains',
+          'partnerize',
+          'impactRadius',
+          'adtraction',
+          'affiliateGateway',
+          'optimiseMedia',
+          'commissionJunction',
+          'tradedoubler',
+        ])
+        .optional()
+        .nullable(),
+      id: z.string(),
+      companyId: z.union([z.string(), z.number()]).transform((value) => String(value)),
+      connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
+      offerId: z.union([z.string(), z.number()]).transform((value) => String(value)),
+    })
+    .strict(),
+);
+
+export const PatchShowCardModel = createZodNamedType(
+  'PatchShowCardModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[3]),
+    })
+    .strict(),
+);
+
+export const PatchPreAppliedModel = createZodNamedType(
+  'PatchPreAppliedModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[4]),
+      url: z.string().url(),
+    })
+    .strict(),
+);
+
+export const PatchGenericModel = createZodNamedType(
+  'PatchGenericModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[0]),
+      url: z.string().url(),
+      generic: z.object({
+        id: z.string(),
+        code: z.string().min(1),
+      }),
+    })
+    .strict(),
+);
+
+export const VaultModel = createZodNamedType(
+  'VaultModel',
+  z
     .object({
       id: z.string(),
       alertBelow: z.number(),
@@ -23,56 +87,71 @@ export const VaultModel = z.object({
         return z.NEVER;
       }
     }),
-});
+);
 
-export const GenericModel = z.object({
-  generic: z.object({
-    id: z.string(),
-    code: z.string(),
-  }),
-});
+export type VaultModel = z.infer<typeof VaultModel>;
 
-export const UrlModel = z.object({
-  url: z.string().url(),
-});
+export const PatchVaultModel = createZodNamedType(
+  'PatchVaultModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[1]),
+      url: z.string().url(),
+      vault: VaultModel,
+    })
+    .strict(),
+);
 
-export const CommonModel = (redemptionType: RedemptionType) =>
-  z.object({
-    id: z.string(),
-    redemptionType: z.literal(redemptionType),
-    connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
-    offerId: z.union([z.string(), z.number()]).transform((value) => String(value)),
-    companyId: z.union([z.string(), z.number()]).transform((value) => String(value)),
-    affiliate: z
-      .enum([
-        'awin',
-        'affiliateFuture',
-        'rakuten',
-        'affilinet',
-        'webgains',
-        'partnerize',
-        'impactRadius',
-        'adtraction',
-        'affiliateGateway',
-        'optimiseMedia',
-        'commissionJunction',
-        'tradedoubler',
-      ])
-      .nullable(),
-  });
+export const PatchVaultQRModel = createZodNamedType(
+  'PatchVaultModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[2]),
+      vault: VaultModel,
+    })
+    .strict(),
+);
 
-export const PatchShowCardModel = CommonModel('showCard');
-export const PatchPreAppliedModel = CommonModel('preApplied').merge(UrlModel);
-export const PatchVaultModel = CommonModel('vault').merge(UrlModel).merge(VaultModel);
-export const PatchVaultQRModel = CommonModel('vaultQR').merge(VaultModel);
-export const PatchGenericModel = CommonModel('generic').merge(UrlModel).merge(GenericModel);
+export const PatchRedemptionConfigShowCardModel = createZodNamedType(
+  'PatchRedemptionConfigShowCardModel',
+  PatchRedemptionConfigBaseModel.merge(PatchShowCardModel),
+);
 
-export const PatchVaultOrVaultQRModel = z.union([PatchVaultModel, PatchVaultQRModel]);
+export const PatchRedemptionConfigPreAppliedModel = createZodNamedType(
+  'PatchRedemptionConfigPreAppliedModel',
+  PatchRedemptionConfigBaseModel.merge(PatchPreAppliedModel),
+);
 
-export const PatchRedemptionConfigModel = z.discriminatedUnion('redemptionType', [
-  PatchShowCardModel,
-  PatchPreAppliedModel,
-  PatchVaultModel,
-  PatchVaultQRModel,
-  PatchGenericModel,
-]);
+export const PatchRedemptionConfigGenericModel = createZodNamedType(
+  'PatchRedemptionConfigGenericModel',
+  PatchRedemptionConfigBaseModel.merge(PatchGenericModel),
+);
+
+export const PatchRedemptionConfigVaultModel = createZodNamedType(
+  'PatchRedemptionConfigVaultModel',
+  PatchRedemptionConfigBaseModel.merge(PatchVaultModel),
+);
+
+export const PatchRedemptionConfigVaultQRModel = createZodNamedType(
+  'PatchRedemptionConfigVaultQRModel',
+  PatchRedemptionConfigBaseModel.merge(PatchVaultQRModel),
+);
+
+export const PatchRedemptionConfigModel = createZodNamedType(
+  'PatchRedemptionConfigModel',
+  z.discriminatedUnion('redemptionType', [
+    PatchRedemptionConfigShowCardModel,
+    PatchRedemptionConfigPreAppliedModel,
+    PatchRedemptionConfigGenericModel,
+    PatchRedemptionConfigVaultModel,
+    PatchRedemptionConfigVaultQRModel,
+  ]),
+);
+
+export type PatchRedemptionConfigModel = z.infer<typeof PatchRedemptionConfigModel>;
+
+export type PatchRedemptionConfigShowCardModel = z.infer<typeof PatchRedemptionConfigShowCardModel>;
+export type PatchRedemptionConfigPreAppliedModel = z.infer<typeof PatchRedemptionConfigPreAppliedModel>;
+export type PatchRedemptionConfigGenericModel = z.infer<typeof PatchRedemptionConfigGenericModel>;
+export type PatchRedemptionConfigVaultModel = z.infer<typeof PatchRedemptionConfigVaultModel>;
+export type PatchRedemptionConfigVaultQRModel = z.infer<typeof PatchRedemptionConfigVaultQRModel>;

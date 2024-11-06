@@ -1,18 +1,18 @@
-import { z } from 'zod';
-
 import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
+import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
-import { ParsedRequest } from '@blc-mono/redemptions/application/controllers/adminApiGateway/redemptionConfig/UpdateRedemptionConfigController';
 import {
   ITransactionManager,
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { Affiliate, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
-  PatchGenericModel,
-  PatchPreAppliedModel,
-  PatchShowCardModel,
-  PatchVaultOrVaultQRModel,
+  PatchRedemptionConfigGenericModel,
+  PatchRedemptionConfigModel,
+  PatchRedemptionConfigPreAppliedModel,
+  PatchRedemptionConfigShowCardModel,
+  PatchRedemptionConfigVaultModel,
+  PatchRedemptionConfigVaultQRModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
 import { GenericEntity, GenericsRepository, UpdateGenericEntity } from '../../repositories/GenericsRepository';
@@ -46,23 +46,10 @@ export type UpdateRedemptionConfigSuccess = {
   data: RedemptionConfig;
 };
 
-export type UpdateShowCardRedemptionSchema = z.infer<typeof PatchShowCardModel>;
-export type UpdatePreAppliedRedemptionSchema = z.infer<typeof PatchPreAppliedModel>;
-export type UpdateGenericRedemptionSchema = z.infer<typeof PatchGenericModel>;
-export type UpdateVaultRedemptionSchema = z.infer<typeof PatchVaultOrVaultQRModel>;
-
-export type UpdateRedemptionRequestPayload =
-  | UpdateShowCardRedemptionSchema
-  | UpdatePreAppliedRedemptionSchema
-  | UpdateGenericRedemptionSchema
-  | UpdateVaultRedemptionSchema;
-
-let requestPayload: UpdateRedemptionRequestPayload;
-
 export interface IUpdateRedemptionConfigService {
   updateRedemptionConfig(
     offerId: string,
-    request: ParsedRequest['body'],
+    patchRedemptionConfigModel: PatchRedemptionConfigModel,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError>;
 }
 
@@ -90,36 +77,42 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
 
   public async updateRedemptionConfig(
     offerId: string,
-    request: ParsedRequest['body'],
+    patchRedemptionConfigModel: PatchRedemptionConfigModel,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
-    requestPayload = request;
-
-    if (offerId !== String(request.offerId)) {
+    if (offerId !== String(patchRedemptionConfigModel.offerId)) {
       return this.updateRedemptionConfigError(
         'UrlPayloadOfferIdMismatch',
-        request.id,
+        patchRedemptionConfigModel,
         'offerId in URL and payload do not match',
       );
     }
 
-    const redemptionConfigEntity = await this.redemptionConfigRepository.findOneById(request.id);
+    const existingRedemptionConfigEntity: RedemptionConfigEntity | null =
+      await this.redemptionConfigRepository.findOneById(patchRedemptionConfigModel.id);
 
-    if (!redemptionConfigEntity) {
-      return this.updateRedemptionConfigError('RedemptionNotFound', request.id, 'redemptionId does not exist');
+    if (!existingRedemptionConfigEntity) {
+      return this.updateRedemptionConfigError(
+        'RedemptionNotFound',
+        patchRedemptionConfigModel,
+        'redemptionId does not exist',
+      );
     }
 
-    if (request.offerId !== redemptionConfigEntity.offerId || request.companyId !== redemptionConfigEntity.companyId) {
+    if (
+      patchRedemptionConfigModel.offerId !== existingRedemptionConfigEntity.offerId ||
+      patchRedemptionConfigModel.companyId !== existingRedemptionConfigEntity.companyId
+    ) {
       return this.updateRedemptionConfigError(
         'RedemptionOfferCompanyIdMismatch',
-        request.id,
+        patchRedemptionConfigModel,
         'offerId/companyId do not match for this redemption',
       );
     }
 
-    if (request.redemptionType !== redemptionConfigEntity.redemptionType) {
+    if (patchRedemptionConfigModel.redemptionType !== existingRedemptionConfigEntity.redemptionType) {
       return this.updateRedemptionConfigError(
         'RedemptionTypeMismatch',
-        request.id,
+        patchRedemptionConfigModel,
         'redemption type do not match for this redemption',
       );
     }
@@ -130,159 +123,194 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
       const genericsTransaction = this.genericsRepository.withTransaction(transactionConnection);
       const vaultsTransaction = this.vaultsRepository.withTransaction(transactionConnection);
-      switch (request.redemptionType) {
+
+      switch (patchRedemptionConfigModel.redemptionType) {
         case 'showCard':
-          return await this.updateShowCard(request as UpdateShowCardRedemptionSchema, redemptionTransaction);
+          return await this.updateShowCard(patchRedemptionConfigModel, redemptionTransaction);
         case 'preApplied':
-          return await this.updatePreApplied(request as UpdatePreAppliedRedemptionSchema, redemptionTransaction);
+          return await this.updatePreApplied(patchRedemptionConfigModel, redemptionTransaction);
         case 'generic':
-          return await this.updateGeneric(
-            request as UpdateGenericRedemptionSchema,
-            redemptionTransaction,
-            genericsTransaction,
-          );
+          return await this.updateGeneric(patchRedemptionConfigModel, redemptionTransaction, genericsTransaction);
         case 'vault':
         case 'vaultQR':
           return await this.updateVaultOrVaultQR(
-            request as UpdateVaultRedemptionSchema,
+            patchRedemptionConfigModel,
             redemptionTransaction,
             vaultsTransaction,
-            request.redemptionType,
+            patchRedemptionConfigModel.redemptionType,
           );
         default:
-          return this.updateRedemptionConfigError(
-            'Error',
-            request.id,
-            `${request.redemptionType} is an unrecognised redemptionType`,
-          );
+          exhaustiveCheck(patchRedemptionConfigModel, 'Unhandled redemptionType');
       }
     });
   }
 
   private async updateShowCard(
-    request: UpdateShowCardRedemptionSchema,
+    patchRedemptionConfigShowCardModel: PatchRedemptionConfigShowCardModel,
     redemptionTransaction: RedemptionConfigRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
-    const redemptionPayload: UpdateRedemptionConfigEntity = {
-      affiliate: request.affiliate,
-      connection: request.connection,
+    const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {
+      affiliate: patchRedemptionConfigShowCardModel.affiliate,
+      connection: patchRedemptionConfigShowCardModel.connection,
     };
 
-    return await this.updateRedemption(request.id, redemptionPayload, redemptionTransaction, null, null, []);
+    return await this.updateRedemption(
+      patchRedemptionConfigShowCardModel,
+      updateRedemptionConfigEntity,
+      redemptionTransaction,
+      null,
+      null,
+      [],
+    );
   }
 
   private async updatePreApplied(
-    request: UpdatePreAppliedRedemptionSchema,
+    patchRedemptionConfigPreAppliedModel: PatchRedemptionConfigPreAppliedModel,
     redemptionTransaction: RedemptionConfigRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
-    const redemptionPayload: UpdateRedemptionConfigEntity = {
-      affiliate: request.affiliate,
-      connection: request.connection,
-      url: request.url,
+    const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {
+      affiliate: patchRedemptionConfigPreAppliedModel.affiliate,
+      connection: patchRedemptionConfigPreAppliedModel.connection,
+      url: patchRedemptionConfigPreAppliedModel.url,
     };
 
-    return await this.updateRedemption(request.id, redemptionPayload, redemptionTransaction, null, null, []);
+    return await this.updateRedemption(
+      patchRedemptionConfigPreAppliedModel,
+      updateRedemptionConfigEntity,
+      redemptionTransaction,
+      null,
+      null,
+      [],
+    );
   }
 
   private async updateGeneric(
-    request: UpdateGenericRedemptionSchema,
+    patchRedemptionConfigGenericModel: PatchRedemptionConfigGenericModel,
     redemptionTransaction: RedemptionConfigRepository,
     genericsTransaction: GenericsRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
-    if (request.generic.code === '') {
-      return this.updateRedemptionConfigError('GenericCodeEmpty', request.id, 'generic code cannot be blank');
+    if (patchRedemptionConfigGenericModel.generic.code === '') {
+      return this.updateRedemptionConfigError(
+        'GenericCodeEmpty',
+        patchRedemptionConfigGenericModel,
+        'generic code cannot be blank',
+      );
     }
 
-    const genericRecord = await genericsTransaction.findOneByRedemptionId(request.id);
-    if (!genericRecord || genericRecord.id !== request.generic.id) {
+    const existingGenericEntity: GenericEntity | null = await genericsTransaction.findOneByRedemptionId(
+      patchRedemptionConfigGenericModel.id,
+    );
+    if (!existingGenericEntity || existingGenericEntity.id !== patchRedemptionConfigGenericModel.generic.id) {
       return this.updateRedemptionConfigError(
         'GenericNotFound',
-        request.id,
+        patchRedemptionConfigGenericModel,
         "generic record does not exist with corresponding id's",
       );
     }
 
-    const genericsPayload: UpdateGenericEntity = {
-      code: request.generic.code,
+    const updateGenericEntity: UpdateGenericEntity = {
+      code: patchRedemptionConfigGenericModel.generic.code,
     };
 
     const genericEntity: GenericEntity | null = await genericsTransaction.updateOneById(
-      request.generic.id,
-      genericsPayload,
+      patchRedemptionConfigGenericModel.generic.id,
+      updateGenericEntity,
     );
 
     if (!genericEntity) {
-      return this.updateRedemptionConfigError('Error', request.id, 'generics record failed to update');
+      return this.updateRedemptionConfigError(
+        'Error',
+        patchRedemptionConfigGenericModel,
+        'generics record failed to update',
+      );
     }
 
-    const redemptionPayload: UpdateRedemptionConfigEntity = {
-      affiliate: request.affiliate,
-      connection: request.connection,
-      url: request.url,
+    const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {
+      affiliate: patchRedemptionConfigGenericModel.affiliate,
+      connection: patchRedemptionConfigGenericModel.connection,
+      url: patchRedemptionConfigGenericModel.url,
     };
 
-    return await this.updateRedemption(request.id, redemptionPayload, redemptionTransaction, genericEntity, null, []);
+    return await this.updateRedemption(
+      patchRedemptionConfigGenericModel,
+      updateRedemptionConfigEntity,
+      redemptionTransaction,
+      genericEntity,
+      null,
+      [],
+    );
   }
 
   private async updateVaultOrVaultQR(
-    request: UpdateVaultRedemptionSchema,
+    patchRedemptionConfigVaultOrVaultQRModel: PatchRedemptionConfigVaultModel | PatchRedemptionConfigVaultQRModel,
     redemptionTransaction: RedemptionConfigRepository,
     vaultsTransaction: VaultsRepository,
     redemptionType: RedemptionType,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
-    const vaultRecord = await vaultsTransaction.findOneByRedemptionId(request.id);
-    if (!vaultRecord || vaultRecord.id !== request.vault.id) {
+    const existingVaultEntity: VaultEntity | null = await vaultsTransaction.findOneByRedemptionId(
+      patchRedemptionConfigVaultOrVaultQRModel.id,
+    );
+    if (!existingVaultEntity || existingVaultEntity.id !== patchRedemptionConfigVaultOrVaultQRModel.vault.id) {
       return this.updateRedemptionConfigError(
         'VaultNotFound',
-        request.id,
+        patchRedemptionConfigVaultOrVaultQRModel,
         "vault record does not exist with corresponding id's",
       );
     }
 
-    if (request.vault.maxPerUser < 1) {
+    if (patchRedemptionConfigVaultOrVaultQRModel.vault.maxPerUser < 1) {
       return this.updateRedemptionConfigError(
         'MaxPerUserError',
-        request.id,
+        patchRedemptionConfigVaultOrVaultQRModel,
         'max limit per user cannot be less than 1',
       );
     }
 
-    const vaultPayload: UpdateVaultEntity = {
-      alertBelow: request.vault.alertBelow,
-      status: request.vault.status,
-      maxPerUser: request.vault.maxPerUser,
-      email: request.vault.email,
-      integration: request.vault.integration,
-      integrationId: request.vault.integrationId,
+    const updateVaultEntity: UpdateVaultEntity = {
+      alertBelow: patchRedemptionConfigVaultOrVaultQRModel.vault.alertBelow,
+      status: patchRedemptionConfigVaultOrVaultQRModel.vault.status,
+      maxPerUser: patchRedemptionConfigVaultOrVaultQRModel.vault.maxPerUser,
+      email: patchRedemptionConfigVaultOrVaultQRModel.vault.email,
+      integration: patchRedemptionConfigVaultOrVaultQRModel.vault.integration,
+      integrationId: patchRedemptionConfigVaultOrVaultQRModel.vault.integrationId,
     };
 
     const vaultId: Partial<Pick<VaultEntity, 'id'>> | undefined = await vaultsTransaction.updateOneById(
-      request.vault.id,
-      vaultPayload,
+      patchRedemptionConfigVaultOrVaultQRModel.vault.id,
+      updateVaultEntity,
     );
 
     if (!vaultId) {
-      return this.updateRedemptionConfigError('Error', request.id, 'vault record failed to update');
+      return this.updateRedemptionConfigError(
+        'Error',
+        patchRedemptionConfigVaultOrVaultQRModel,
+        'vault record failed to update',
+      );
     }
 
-    const vaultBatchEntities: VaultBatchEntity[] | [] = await this.vaultBatchesRepository.findByVaultId(
-      request.vault.id,
+    const vaultBatchEntities: VaultBatchEntity[] = await this.vaultBatchesRepository.findByVaultId(
+      patchRedemptionConfigVaultOrVaultQRModel.vault.id,
     );
 
-    const vaultEntity: VaultEntity | null = await vaultsTransaction.findOneById(request.vault.id);
+    const vaultEntity: VaultEntity | null = await vaultsTransaction.findOneById(
+      patchRedemptionConfigVaultOrVaultQRModel.vault.id,
+    );
 
-    let redemptionPayload: UpdateRedemptionConfigEntity = {
-      affiliate: request.affiliate as Affiliate,
-      connection: request.connection,
+    let updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {
+      affiliate: patchRedemptionConfigVaultOrVaultQRModel.affiliate as Affiliate,
+      connection: patchRedemptionConfigVaultOrVaultQRModel.connection,
     };
 
-    if (redemptionType !== REDEMPTION_TYPES[2] && 'url' in request) {
-      redemptionPayload = { ...redemptionPayload, url: request.url };
+    if (redemptionType !== REDEMPTION_TYPES[2] && 'url' in patchRedemptionConfigVaultOrVaultQRModel) {
+      updateRedemptionConfigEntity = {
+        ...updateRedemptionConfigEntity,
+        url: patchRedemptionConfigVaultOrVaultQRModel.url,
+      };
     }
 
     return await this.updateRedemption(
-      request.id,
-      redemptionPayload,
+      patchRedemptionConfigVaultOrVaultQRModel,
+      updateRedemptionConfigEntity,
       redemptionTransaction,
       null,
       vaultEntity,
@@ -291,20 +319,24 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
   }
 
   private async updateRedemption(
-    redemptionId: string,
-    redemptionPayload: UpdateRedemptionConfigEntity,
+    patchRedemptionConfigModel: PatchRedemptionConfigModel,
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
     redemptionTransaction: RedemptionConfigRepository,
     genericEntity: GenericEntity | null,
     vaultEntity: VaultEntity | null,
     vaultBatchEntities: VaultBatchEntity[] | [],
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
     const redemptionConfigEntity: RedemptionConfigEntity | null = await redemptionTransaction.updateOneById(
-      redemptionId,
-      redemptionPayload,
+      patchRedemptionConfigModel.id,
+      updateRedemptionConfigEntity,
     );
 
     if (!redemptionConfigEntity) {
-      return this.updateRedemptionConfigError('Error', redemptionId, 'redemption record failed to update');
+      return this.updateRedemptionConfigError(
+        'Error',
+        patchRedemptionConfigModel,
+        'redemption record failed to update',
+      );
     }
 
     return {
@@ -329,20 +361,20 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       | 'GenericCodeEmpty'
       | 'VaultNotFound'
       | 'MaxPerUserError',
-    redemptionId: string,
+    patchRedemptionConfigModel: PatchRedemptionConfigModel,
     message: string,
   ): UpdateRedemptionConfigError {
     this.logger.error({
       message: message,
       context: {
-        redemptionId: redemptionId,
-        requestPayload: requestPayload,
+        redemptionId: patchRedemptionConfigModel.id,
+        requestPayload: patchRedemptionConfigModel,
       },
     });
     return {
       kind: kind,
       data: {
-        message: `Redemption Config Update - ${message}: ${redemptionId}`,
+        message: `Redemption Config Update - ${message}: ${patchRedemptionConfigModel.id}`,
       },
     };
   }

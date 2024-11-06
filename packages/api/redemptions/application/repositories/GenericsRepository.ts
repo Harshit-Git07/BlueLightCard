@@ -17,7 +17,7 @@ export interface IGenericsRepository {
     redemptionId: string,
     updateGenericEntity: UpdateGenericEntity,
   ): Promise<Pick<GenericEntity, 'id'>[]>;
-  updateOneById(id: string, genericData: UpdateGenericEntity): Promise<GenericEntity | null>;
+  updateOneById(id: string, genericEntity: UpdateGenericEntity): Promise<GenericEntity | null>;
   deleteById(id: string): Promise<Pick<GenericEntity, 'id'>[]>;
   deleteByRedemptionId(redemptionId: string): Promise<Pick<GenericEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): GenericsRepository;
@@ -38,27 +38,27 @@ export class GenericsRepository extends Repository implements IGenericsRepositor
     return this.atMostOne(results);
   }
 
-  public async createGeneric(genericData: NewGenericEntity): Promise<GenericEntity> {
-    return this.exactlyOne(await this.connection.db.insert(genericsTable).values(genericData).returning().execute());
+  public async createGeneric(genericEntity: NewGenericEntity): Promise<GenericEntity> {
+    return this.exactlyOne(await this.connection.db.insert(genericsTable).values(genericEntity).returning().execute());
   }
 
   public async updateByRedemptionId(
     redemptionId: string,
-    genericData: UpdateGenericEntity,
+    genericEntity: UpdateGenericEntity,
   ): Promise<Pick<GenericEntity, 'id'>[]> {
     return await this.connection.db
       .update(genericsTable)
-      .set(genericData)
+      .set(genericEntity)
       .where(eq(genericsTable.redemptionId, redemptionId))
       .returning({ id: genericsTable.id })
       .execute();
   }
 
-  public async updateOneById(id: string, genericData: UpdateGenericEntity): Promise<GenericEntity | null> {
+  public async updateOneById(id: string, genericEntity: UpdateGenericEntity): Promise<GenericEntity | null> {
     return this.atMostOne(
       await this.connection.db
         .update(genericsTable)
-        .set(genericData)
+        .set(genericEntity)
         .where(eq(genericsTable.id, id))
         .returning({
           id: genericsTable.id,

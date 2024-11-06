@@ -7,31 +7,33 @@ import { NewRedemptionConfigEntity } from '../repositories/RedemptionConfigRepos
 export class NewRedemptionConfigEntityTransformer {
   static readonly key = 'NewRedemptionConfigEntityTransformer';
 
-  public transformToNewRedemptionConfigEntity(requestData: PostRedemptionConfigModel): NewRedemptionConfigEntity {
-    const { redemptionType } = requestData;
+  public transformToNewRedemptionConfigEntity(
+    postRedemptionConfigModel: PostRedemptionConfigModel,
+  ): NewRedemptionConfigEntity {
+    const { redemptionType } = postRedemptionConfigModel;
     switch (redemptionType) {
       case REDEMPTION_TYPES[3]:
       case REDEMPTION_TYPES[2]:
         return {
-          affiliate: requestData.affiliate,
-          companyId: requestData.companyId,
-          connection: requestData.connection,
-          offerId: requestData.offerId,
+          affiliate: postRedemptionConfigModel.affiliate,
+          companyId: postRedemptionConfigModel.companyId,
+          connection: postRedemptionConfigModel.connection,
+          offerId: postRedemptionConfigModel.offerId,
           offerType: 'in-store',
-          redemptionType: requestData.redemptionType,
+          redemptionType: postRedemptionConfigModel.redemptionType,
         };
       case REDEMPTION_TYPES[0]:
       case REDEMPTION_TYPES[1]:
       case REDEMPTION_TYPES[4]:
       case REDEMPTION_TYPES[6]:
         return {
-          affiliate: requestData.affiliate,
-          companyId: requestData.companyId,
-          connection: requestData.connection,
-          offerId: requestData.offerId,
+          affiliate: postRedemptionConfigModel.affiliate,
+          companyId: postRedemptionConfigModel.companyId,
+          connection: postRedemptionConfigModel.connection,
+          offerId: postRedemptionConfigModel.offerId,
           offerType: 'online',
-          redemptionType: requestData.redemptionType,
-          url: requestData.url,
+          redemptionType: postRedemptionConfigModel.redemptionType,
+          url: postRedemptionConfigModel.url,
         };
       default:
         exhaustiveCheck(redemptionType);

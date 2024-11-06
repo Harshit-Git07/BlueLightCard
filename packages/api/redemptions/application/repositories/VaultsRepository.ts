@@ -19,7 +19,7 @@ export interface IVaultsRepository {
   findOneByRedemptionId(redemptionId: string, filters?: VaultFilters): Promise<VaultEntity | null>;
   findOneById(id: string): Promise<VaultEntity | null>;
   updateOneById(id: string, updateVaultEntity: UpdateVaultEntity): Promise<Pick<VaultEntity, 'id'> | undefined>;
-  createMany(NewVaultEntities: NewVaultEntity[]): Promise<VaultEntity[]>;
+  createMany(newVaultEntities: NewVaultEntity[]): Promise<VaultEntity[]>;
   create(newVaultEntity: NewVaultEntity): Promise<VaultEntity>;
   deleteById(id: string): Promise<Pick<VaultEntity, 'id'>[]>;
   withTransaction(transaction: DatabaseTransactionConnection): VaultsRepository;
@@ -57,11 +57,11 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
 
   public async updateOneById(
     id: string,
-    vaultDataToUpdate: UpdateVaultEntity,
+    updateVaultEntity: UpdateVaultEntity,
   ): Promise<Pick<VaultEntity, 'id'> | undefined> {
     return await this.connection.db
       .update(vaultsTable)
-      .set(vaultDataToUpdate)
+      .set(updateVaultEntity)
       .where(eq(vaultsTable.id, id))
       .returning({
         id: vaultsTable.id,
@@ -70,13 +70,13 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .then((result) => result?.at(0));
   }
 
-  public async createMany(vaults: NewVaultEntity[]): Promise<VaultEntity[]> {
+  public async createMany(newVaultEntities: NewVaultEntity[]): Promise<VaultEntity[]> {
     const date = new Date();
 
     return await this.connection.db
       .insert(vaultsTable)
       .values(
-        vaults.map((vault) => ({
+        newVaultEntities.map((vault) => ({
           ...vault,
           created: date,
         })),
@@ -85,12 +85,12 @@ export class VaultsRepository extends Repository implements IVaultsRepository {
       .execute();
   }
 
-  public async create(vault: NewVaultEntity): Promise<VaultEntity> {
+  public async create(newVaultEntity: NewVaultEntity): Promise<VaultEntity> {
     const date = new Date();
     return this.exactlyOne(
       await this.connection.db
         .insert(vaultsTable)
-        .values({ ...vault, created: date })
+        .values({ ...newVaultEntity, created: date })
         .returning()
         .execute(),
     );

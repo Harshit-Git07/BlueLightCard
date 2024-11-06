@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -46,10 +44,8 @@ export class DuplicateError extends Error {
   }
 }
 
-export type CreateRedemptionConfigSchema = z.infer<typeof PostRedemptionConfigModel>;
-
 export interface ICreateRedemptionConfigService {
-  createRedemptionConfig(request: PostRedemptionConfigModel): Promise<CreateRedemptionConfigResponse>;
+  createRedemptionConfig(postRedemptionConfigModel: PostRedemptionConfigModel): Promise<CreateRedemptionConfigResponse>;
 }
 
 export class CreateRedemptionConfigService implements ICreateRedemptionConfigService {
@@ -74,13 +70,18 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     private readonly transactionManager: ITransactionManager,
   ) {}
 
-  public async createRedemptionConfig(request: CreateRedemptionConfigSchema): Promise<CreateRedemptionConfigResponse> {
-    const { redemptionType } = request;
+  public async createRedemptionConfig(
+    postRedemptionConfigModel: PostRedemptionConfigModel,
+  ): Promise<CreateRedemptionConfigResponse> {
+    const { redemptionType } = postRedemptionConfigModel;
     let genericEntity: GenericEntity | null = null;
     let vaultEntity: VaultEntity | null = null;
 
-    if (await this.redemptionConfigRepository.findOneByOfferId(request.offerId))
-      throw new DuplicateError(request.offerId.toString(), 'RedemptionConfig already exists for this offerId');
+    if (await this.redemptionConfigRepository.findOneByOfferId(postRedemptionConfigModel.offerId))
+      throw new DuplicateError(
+        postRedemptionConfigModel.offerId.toString(),
+        'RedemptionConfig already exists for this offerId',
+      );
 
     return await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
@@ -90,8 +91,8 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
       const transactionalVaultsRepository = this.vaultsRepository.withTransaction(transactionConnection);
 
       const redemptionConfigEntity: RedemptionConfigEntity = await this.createRedemptionConfigEntity(
-        request,
-        request.offerId,
+        postRedemptionConfigModel,
+        postRedemptionConfigModel.offerId,
         transactionalRedemptionConfigRepository,
       );
 
@@ -102,7 +103,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
           break;
         case REDEMPTION_TYPES[0]: //generic
           genericEntity = await this.createGenericEntity(
-            request.generic.code,
+            postRedemptionConfigModel.generic.code,
             redemptionConfigEntity.id,
             transactionalGenericsRepository,
           );
@@ -110,8 +111,8 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
         case REDEMPTION_TYPES[1]: //vault
         case REDEMPTION_TYPES[2]: //vaultqr
           vaultEntity = await this.createVaultEntity(
-            request.redemptionType,
-            request.vault,
+            postRedemptionConfigModel.redemptionType,
+            postRedemptionConfigModel.vault,
             redemptionConfigEntity.id,
             transactionalVaultsRepository,
           );
@@ -133,15 +134,15 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
   }
 
   private async createRedemptionConfigEntity(
-    requestData: PostRedemptionConfigModel,
+    postRedemptionConfigModel: PostRedemptionConfigModel,
     offerId: string,
     transactionalRedemptionConfigRepository: RedemptionConfigRepository,
   ) {
-    const redemptionConfigRequestData: NewRedemptionConfigEntity =
-      this.newRedemptionConfigEntityTransformer.transformToNewRedemptionConfigEntity(requestData);
+    const redemptionConfigEntity: NewRedemptionConfigEntity =
+      this.newRedemptionConfigEntityTransformer.transformToNewRedemptionConfigEntity(postRedemptionConfigModel);
 
     try {
-      return await transactionalRedemptionConfigRepository.createRedemption(redemptionConfigRequestData);
+      return await transactionalRedemptionConfigRepository.createRedemption(redemptionConfigEntity);
     } catch (e) {
       this.logger.error({
         message: 'Failed to create redemption with given offerId',
@@ -158,12 +159,12 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     redemptionId: string,
     transactionalGenericsRepository: GenericsRepository,
   ) {
-    const genericRequestData: NewGenericEntity = {
+    const genericEntity: NewGenericEntity = {
       code: genericCode,
       redemptionId: redemptionId,
     };
     try {
-      return await transactionalGenericsRepository.createGeneric(genericRequestData);
+      return await transactionalGenericsRepository.createGeneric(genericEntity);
     } catch (e) {
       throw new FailedToCreateError('createGenericEntity', 'Failed to create generic');
     }
@@ -175,7 +176,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     redemptionId: string,
     transactionalVaultsRepository: VaultsRepository,
   ) {
-    const vaultRequestData: NewVaultEntity = {
+    const vaultEntity: NewVaultEntity = {
       redemptionId: redemptionId,
       alertBelow: vault.alertBelow,
       email: vault.email,
@@ -188,7 +189,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     };
 
     try {
-      return await transactionalVaultsRepository.create(vaultRequestData);
+      return await transactionalVaultsRepository.create(vaultEntity);
     } catch (e) {
       throw new FailedToCreateError('createVaultEntity', 'Failed to create vault');
     }

@@ -2,14 +2,17 @@ import { faker } from '@faker-js/faker';
 
 import {
   IUpdateRedemptionConfigService,
-  UpdateGenericRedemptionSchema,
-  UpdatePreAppliedRedemptionSchema,
   UpdateRedemptionConfigError,
   UpdateRedemptionConfigSuccess,
-  UpdateShowCardRedemptionSchema,
-  UpdateVaultRedemptionSchema,
 } from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
 import { RedemptionConfig } from '@blc-mono/redemptions/application/transformers/RedemptionConfigTransformer';
+import {
+  PatchRedemptionConfigGenericModel,
+  PatchRedemptionConfigModel,
+  PatchRedemptionConfigPreAppliedModel,
+  PatchRedemptionConfigShowCardModel,
+  PatchRedemptionConfigVaultModel,
+} from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
 import { createTestLogger } from '../../../../libs/test/helpers/logger';
 
@@ -28,7 +31,7 @@ describe('UpdateRedemptionConfigController', () => {
       id: `gnr-${faker.string.uuid()}`,
       code: 'DISCOUNT_CODE_01',
     },
-  } satisfies UpdateGenericRedemptionSchema;
+  } satisfies PatchRedemptionConfigGenericModel;
 
   const testGenericRedemptionConfig: RedemptionConfig = {
     ...testGenericBody,
@@ -44,7 +47,7 @@ describe('UpdateRedemptionConfigController', () => {
     companyId: faker.string.uuid(),
     affiliate: null,
     url: 'https://www.whatever.com/',
-  } satisfies UpdatePreAppliedRedemptionSchema;
+  } satisfies PatchRedemptionConfigPreAppliedModel;
 
   const testPreAppliedRedemptionConfig: RedemptionConfig = {
     ...testPreAppliedBody,
@@ -59,7 +62,7 @@ describe('UpdateRedemptionConfigController', () => {
     connection: 'none',
     companyId: faker.string.uuid(),
     affiliate: null,
-  } satisfies UpdateShowCardRedemptionSchema;
+  } satisfies PatchRedemptionConfigShowCardModel;
 
   const testShowCardRedemptionConfig: RedemptionConfig = {
     ...testShowCardBody,
@@ -67,10 +70,7 @@ describe('UpdateRedemptionConfigController', () => {
     companyId: testGenericBody.companyId,
   };
 
-  function getParsedRequest(
-    offerId: string,
-    body: UpdateGenericRedemptionSchema | UpdatePreAppliedRedemptionSchema | UpdateShowCardRedemptionSchema,
-  ): ParsedRequest {
+  function getParsedRequest(offerId: string, body: PatchRedemptionConfigModel): ParsedRequest {
     return {
       pathParameters: {
         offerId: offerId,
@@ -96,7 +96,7 @@ describe('UpdateRedemptionConfigController', () => {
       integrationId: faker.string.numeric(8),
       alertBelow: faker.number.int({ max: 100 }),
     },
-  } satisfies UpdateVaultRedemptionSchema;
+  } satisfies PatchRedemptionConfigVaultModel;
 
   const testVaultBodyWithInvalidMaxPerUser = {
     ...testVaultBody,
@@ -104,7 +104,7 @@ describe('UpdateRedemptionConfigController', () => {
       ...testVaultBody.vault,
       maxPerUser: 0,
     },
-  } satisfies UpdateVaultRedemptionSchema;
+  } satisfies PatchRedemptionConfigVaultModel;
 
   const testVaultRedemptionConfig: RedemptionConfig = {
     ...testVaultBody,

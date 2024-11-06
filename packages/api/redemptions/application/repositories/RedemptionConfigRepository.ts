@@ -14,10 +14,19 @@ export type RedemptionConfigIdEntity = Pick<RedemptionConfigEntity, 'id'>;
 export interface IRedemptionConfigRepository {
   findOneById(id: string): Promise<RedemptionConfigEntity | null>;
   findOneByOfferId(offerId: string): Promise<RedemptionConfigEntity | null>;
-  updateManyByOfferId(offerIds: string[], update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity[]>;
-  updateOneByOfferId(offerId: string, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
-  updateOneById(id: string, update: UpdateRedemptionConfigEntity): Promise<RedemptionConfigIdEntity | null>;
-  createRedemption(redemptionData: NewRedemptionConfigEntity): Promise<RedemptionConfigIdEntity>;
+  updateManyByOfferId(
+    offerIds: string[],
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
+  ): Promise<RedemptionConfigIdEntity[]>;
+  updateOneByOfferId(
+    offerId: string,
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
+  ): Promise<RedemptionConfigIdEntity | null>;
+  updateOneById(
+    id: string,
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
+  ): Promise<RedemptionConfigIdEntity | null>;
+  createRedemption(newRedemptionConfigEntity: NewRedemptionConfigEntity): Promise<RedemptionConfigIdEntity>;
   withTransaction(transaction: DatabaseTransactionConnection): IRedemptionConfigRepository;
   deleteById(id: string): Promise<Pick<RedemptionConfigEntity, 'id'>[]>;
 }
@@ -58,11 +67,11 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
 
   public async updateManyByOfferId(
     offerIds: string[],
-    updateRedemptionEntity: UpdateRedemptionConfigEntity,
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
   ): Promise<RedemptionConfigIdEntity[]> {
     return await this.connection.db
       .update(redemptionsTable)
-      .set(updateRedemptionEntity)
+      .set(updateRedemptionConfigEntity)
       .where(and(inArray(redemptionsTable.offerId, offerIds)))
       .returning({
         id: redemptionsTable.id,
@@ -72,12 +81,12 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
 
   public async updateOneByOfferId(
     offerId: string,
-    updateRedemptionEntity: UpdateRedemptionConfigEntity,
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
   ): Promise<RedemptionConfigIdEntity | null> {
     return this.atMostOne(
       await this.connection.db
         .update(redemptionsTable)
-        .set(updateRedemptionEntity)
+        .set(updateRedemptionConfigEntity)
         .where(eq(redemptionsTable.offerId, offerId))
         .returning({
           id: redemptionsTable.id,
@@ -88,30 +97,21 @@ export class RedemptionConfigRepository extends Repository implements IRedemptio
 
   public async updateOneById(
     id: string,
-    updateRedemptionEntity: UpdateRedemptionConfigEntity,
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
   ): Promise<RedemptionConfigEntity | null> {
     return this.atMostOne(
       await this.connection.db
         .update(redemptionsTable)
-        .set(updateRedemptionEntity)
+        .set(updateRedemptionConfigEntity)
         .where(eq(redemptionsTable.id, id))
-        .returning({
-          id: redemptionsTable.id,
-          affiliate: redemptionsTable.affiliate,
-          connection: redemptionsTable.connection,
-          offerType: redemptionsTable.offerType,
-          redemptionType: redemptionsTable.redemptionType,
-          url: redemptionsTable.url,
-          companyId: redemptionsTable.companyId,
-          offerId: redemptionsTable.offerId,
-        })
+        .returning()
         .execute(),
     );
   }
 
-  public async createRedemption(newRedemptionEntity: NewRedemptionConfigEntity): Promise<RedemptionConfigEntity> {
+  public async createRedemption(newRedemptionConfigEntity: NewRedemptionConfigEntity): Promise<RedemptionConfigEntity> {
     return this.exactlyOne(
-      await this.connection.db.insert(redemptionsTable).values(newRedemptionEntity).returning().execute(),
+      await this.connection.db.insert(redemptionsTable).values(newRedemptionConfigEntity).returning().execute(),
     );
   }
 

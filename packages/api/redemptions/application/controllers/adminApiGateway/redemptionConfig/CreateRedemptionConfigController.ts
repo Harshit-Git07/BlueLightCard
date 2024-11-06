@@ -19,10 +19,6 @@ const CreateRedemptionConfigRequestModel = z.object({
 });
 
 export type ParsedRequest = z.infer<typeof CreateRedemptionConfigRequestModel>;
-export type APIResponse = {
-  statusCode: number;
-  data: string;
-};
 
 export class CreateRedemptionConfigController extends APIGatewayController<ParsedRequest> {
   static readonly inject = [Logger.key, CreateRedemptionConfigService.key] as const;

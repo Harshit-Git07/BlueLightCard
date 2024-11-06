@@ -6,6 +6,7 @@ import {
   DatabaseTransactionOperator,
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
+import { PostRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
 import {
   genericRedemptionConfigFactory,
   redemptionConfigFactory,
@@ -25,7 +26,7 @@ import { IVaultsRepository } from '../../repositories/VaultsRepository';
 import { NewRedemptionConfigEntityTransformer } from '../../transformers/NewRedemptionConfigEntityTransformer';
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
 
-import { CreateRedemptionConfigSchema, CreateRedemptionConfigService } from './CreateRedemptionConfigService';
+import { CreateRedemptionConfigService } from './CreateRedemptionConfigService';
 
 const mockRedemptionsTransactionRepository: Partial<IRedemptionConfigRepository> = {};
 const mockRedemptionsRepository: Partial<IRedemptionConfigRepository> = {};
@@ -58,7 +59,7 @@ const mockDatabaseTransactionOperator: Partial<DatabaseTransactionOperator> = {}
 
 const mockLogger: ILogger = createTestLogger();
 
-const validRedemptionConfigRequest: CreateRedemptionConfigSchema = {
+const validRedemptionConfigRequest: PostRedemptionConfigModel = {
   companyId: faker.string.uuid(),
   offerId: faker.string.uuid(),
   connection: 'none',
@@ -120,7 +121,7 @@ describe('CreateRedemptionConfigService', () => {
       redemptionType: undefined,
     });
 
-    const undefinedRedemptionRequestBody: CreateRedemptionConfigSchema = {
+    const undefinedRedemptionRequestBody: PostRedemptionConfigModel = {
       companyId: faker.string.uuid(),
       offerId: faker.string.uuid(),
       connection: 'none',
@@ -130,7 +131,7 @@ describe('CreateRedemptionConfigService', () => {
       generic: {
         code: 'generic-code',
       },
-    } as CreateRedemptionConfigSchema;
+    } as PostRedemptionConfigModel;
 
     mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
     mockRedemptionsTransactionRepository.createRedemption = jest.fn().mockResolvedValue(redemptionConfigEntity);
@@ -161,7 +162,7 @@ describe('CreateRedemptionConfigService', () => {
         redemptionType,
       });
 
-      const showCardRedemptionRequestBody: CreateRedemptionConfigSchema = {
+      const showCardRedemptionRequestBody: PostRedemptionConfigModel = {
         companyId: faker.string.uuid(),
         offerId: faker.string.uuid(),
         connection: 'none',
@@ -194,7 +195,7 @@ describe('CreateRedemptionConfigService', () => {
         redemptionType,
       });
 
-      const vaultRedemptionRequestBody: CreateRedemptionConfigSchema = {
+      const vaultRedemptionRequestBody: PostRedemptionConfigModel = {
         companyId: faker.string.uuid(),
         offerId: faker.string.uuid(),
         connection: 'none',
@@ -229,7 +230,7 @@ describe('CreateRedemptionConfigService', () => {
         redemptionType,
       });
 
-      const vaultRedemptionRequestBody: CreateRedemptionConfigSchema = {
+      const vaultRedemptionRequestBody: PostRedemptionConfigModel = {
         companyId: faker.string.uuid(),
         offerId: faker.string.uuid(),
         connection: 'none',
@@ -276,7 +277,7 @@ describe('CreateRedemptionConfigService', () => {
       redemptionType: 'generic',
     });
 
-    const genericRedemptionRequestBody: CreateRedemptionConfigSchema = {
+    const genericRedemptionRequestBody: PostRedemptionConfigModel = {
       companyId: faker.string.uuid(),
       offerId: faker.string.uuid(),
       connection: 'none',
@@ -303,7 +304,7 @@ describe('CreateRedemptionConfigService', () => {
       redemptionType: 'generic',
     });
 
-    const genericRedemptionRequestBody: CreateRedemptionConfigSchema = {
+    const genericRedemptionRequestBody: PostRedemptionConfigModel = {
       companyId: faker.string.uuid(),
       offerId: faker.string.uuid(),
       connection: 'none',

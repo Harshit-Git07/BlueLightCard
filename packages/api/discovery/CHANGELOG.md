@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.14.2...bluelightcard/discovery-v1.15.0) (2024-11-06)
+
+
+### Features
+
+* [DISCO-1138] Add get category API docs and stub implementation ([#2770](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2770)) ([d68c301](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d68c301567cc7fa17b7687ac04a5aa71125d2b8c))
+* [DISCO-1138] Refactor categories response model ([#2775](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2775)) ([99c01a5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99c01a5d56d538245699d793d2b39b809d1e88f9))
+* Disco-795 - Create Menus API ([#2607](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2607)) ([ed24e86](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed24e8693703bc3c10ed742fd502540203e21ba5))
+
+
+### Bug Fixes
+
+* [DISCO-1154] Disable menu e2e tests temporarily, will be re-enabled as part of DISCO-1067 ([#2785](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2785)) ([bab946c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bab946cf8f23a784dd324d1ee2e9f80f49c82299))
+* [DISCO-1154] Update image for week 9 of thank you campaign ([#2777](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2777)) ([2c5d07f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2c5d07f8518af10f24271c35d5c6b2e72817021d))
+* [NO-TICKET] Update cron schedule in staging ([#2719](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2719)) ([e9627ab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e9627abf8ebeea2394e0d7767a5b2917ef33688e))
+
+
+### Other Changes
+
+* Deploy pr envs to the pr account ([#2730](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2730)) ([c3e1993](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c3e19936af3020ccb405326d74103d42d8d43722))
+
 ## [1.14.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.14.1...bluelightcard/discovery-v1.14.2) (2024-10-30)
 
 

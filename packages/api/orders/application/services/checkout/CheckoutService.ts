@@ -39,7 +39,7 @@ export class CheckoutService implements ICheckoutService {
       HTTPRequestMethods.POST,
     );
 
-    const responseData = response.data.data;
+    const responseData = JSON.parse(response.data).data;
 
     return {
       clientSecret: responseData.clientSecret,

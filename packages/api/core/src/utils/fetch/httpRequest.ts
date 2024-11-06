@@ -48,7 +48,7 @@ type MethodHandlers = {
  * @param response
  * @returns {RequestResponse}
  */
-export const determineResponse = async (response: Response): Promise<RequestResponse> => {
+const determineResponse = async (response: Response): Promise<RequestResponse> => {
   const contentType = response.headers.get('Content-Type') || ''
   if (contentType.includes(SupportedFormats.json)) {
     return { data: await response.json(), status: response.status }

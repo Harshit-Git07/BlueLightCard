@@ -1,14 +1,8 @@
 
-import { AwsClient } from 'aws4fetch'
 import { getEnv } from '../getEnv'
-import { determineResponse, HTTPRequestMethods, RequestResponse } from './httpRequest'
-
-
-const aws = new AwsClient({
-    accessKeyId: getEnv("AWS_ACCESS_KEY_ID") || getEnv("AWS_ACCESS_KEY"),
-    secretAccessKey: getEnv("AWS_SECRET_ACCESS_KEY") || getEnv("AWS_SECRET_KEY"),
-    sessionToken: getEnv("AWS_SESSION_TOKEN"),
-})
+import { HTTPRequestMethods, RequestResponse } from './httpRequest'
+import aws4 from 'aws4'
+import https from 'https'
 
 type headers = {
     [header: string]: string
@@ -23,12 +17,47 @@ type headers = {
  */
 export const signAndHandleRequest = async (endpoint: string, data: any, method: HTTPRequestMethods, headers?: headers | undefined): Promise<RequestResponse> => {
 
-    const request = await aws.sign(endpoint, {
-        headers,
-        method,
+    const url = new URL(endpoint);
+
+    const options = {
+        host: url.hostname,
+        path: url.pathname + url.search,
+        service: 'execute-api',
+        region: getEnv("AWS_REGION"),
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json',
+            'host': url.host
+        },
         body: JSON.stringify(data),
+        method,
+    };
+
+    aws4.sign(options, {
+        accessKeyId: getEnv('AWS_ACCESS_KEY_ID') || getEnv('AWS_ACCESS_KEY'),
+        secretAccessKey: getEnv('AWS_SECRET_ACCESS_KEY') || getEnv('AWS_SECRET_KEY'),
+        sessionToken: getEnv('AWS_SESSION_TOKEN'),
     })
 
-    const response = await fetch(request);
-    return determineResponse(response);
+    return new Promise((resolve, reject) => {
+        const req = https.request(options, (res) => { 
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                resolve({
+                    status: res.statusCode ?? 500,
+                    data,
+                  });
+            });
+        }).on('error', (e) => {
+            reject(e);
+        });
+
+        req.end(options.body || '')
+
+    });
 }

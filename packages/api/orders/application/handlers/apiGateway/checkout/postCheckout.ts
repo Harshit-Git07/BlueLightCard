@@ -9,8 +9,6 @@ import { CheckoutService } from '@blc-mono/orders/application/services/checkout/
 const service: string = getEnvRaw('SERVICE_NAME') ?? 'orders';
 const logger = new LambdaLogger({ serviceName: `${service}-checkout-post` });
 
-global.crypto = require('node:crypto');
-
 const controller = createInjector()
   // Common
   .provideValue(Logger.key, logger)

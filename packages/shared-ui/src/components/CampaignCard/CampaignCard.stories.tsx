@@ -4,7 +4,9 @@ import CampaignCard from '.';
 const componentMeta: Meta<typeof CampaignCard> = {
   title: 'Component System/CampaignCard',
   component: CampaignCard,
-  argTypes: {},
+  argTypes: {
+    onClick: { action: 'Card clicked' },
+  },
 };
 
 const CampaignCardTemplate: StoryFn<typeof CampaignCard> = (args) => <CampaignCard {...args} />;

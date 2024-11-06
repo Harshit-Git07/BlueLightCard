@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CampaignCard, { CampaignCardProps } from '.';
 
@@ -16,5 +16,15 @@ describe('CampaignCard component', () => {
     render(<CampaignCard {...args} />);
     const image = screen.getByRole('img');
     expect(image).toBeTruthy();
+  });
+
+  it('Should register click events for the CampaignCard', () => {
+    const onClick = jest.fn();
+    render(<CampaignCard {...args} onClick={onClick} />);
+
+    const image = screen.getByRole('img');
+    fireEvent.click(image);
+
+    expect(onClick).toHaveBeenCalled();
   });
 });

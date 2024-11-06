@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import AuthContext, { AuthContextType } from '@/context/Auth/AuthContext';
 import { as } from '@core/utils/testing';
 import _noop from 'lodash/noop';
@@ -29,6 +30,14 @@ jest.mock('@bluelightcard/shared-ui', () => {
       getInstance: () => eventBus,
       _eventBus: eventBus,
     },
+    CampaignCard: ({ name, linkUrl }: any) => (
+      <div
+        data-testid="campaign-card"
+        onClick={() => mockTrackTenancyClick('braze_carousel', linkUrl)}
+      >
+        <img alt={`${name} banner`} />
+      </div>
+    ),
     SwiperCarousel: ({ children, onSlideChange }: any) => (
       <div data-testid="swiper-carousel">
         {children}
@@ -55,6 +64,7 @@ jest.mock('@bluelightcard/shared-ui', () => {
     rewriters: {
       rewriteUrl: jest.fn(),
     },
+    useCSSConditional: jest.fn().mockReturnValue(''),
     invoke: jest.fn(),
     OfferCardList: ({ children }: any) => <div>{children}</div>,
     Button: ({ children, onClick }: any) => <button onClick={onClick}>{children}</button>,
@@ -126,9 +136,10 @@ jest.mock('@/hooks/useBrazeContentCards', () => ({
   useBrazeContentCards: jest.fn().mockReturnValue([
     {
       imageUrl: 'test-image.jpg',
-      href: 'test-link',
+      url: 'test-link',
+      title: 'Test Braze Card',
       isControl: false,
-      extras: { location: 'top-banner' },
+      extras: { destination: 'takeover-banner' },
     },
   ]),
 }));
@@ -157,6 +168,68 @@ const userContextTypeFactory = Factory.define<UserContextType>(() => ({
     uuid: 'mock-uuid',
   },
 }));
+
+describe('Members-Home Page Tenancy Banner', () => {
+  it('renders a promo banner placeholder while Braze experiment is loading', async () => {
+    whenMembersHomePageIsRendered('control');
+
+    const placeholder = screen.getByTestId('tenancy-banner-experiment-placeholder');
+    expect(placeholder).toBeInTheDocument();
+  });
+
+  describe('GraphQL banner', () => {
+    beforeEach(() => {
+      makeHomePageQueryMock.mockResolvedValue({
+        data: {
+          offerMenus: {
+            deals: [],
+            flexible: [],
+            features: [],
+            marketPlace: [],
+          },
+          banners: [
+            {
+              imageSource: 'banner.jpg',
+              link: 'banner-link',
+            },
+          ],
+        },
+        loading: false,
+        networkStatus: NetworkStatus.ready,
+      });
+
+      whenMembersHomePageIsRendered('control');
+    });
+
+    it('renders when Braze experiment is control', async () => {
+      const graphQLCarousel = await screen.findByTestId('homepage-sponsor-banners');
+      expect(graphQLCarousel).toBeInTheDocument();
+    });
+
+    it('does not render the Braze banner', async () => {
+      await screen.findByTestId('homepage-sponsor-banners');
+      const brazeCarousel = screen.queryByTestId('braze-tenancy-banner');
+      expect(brazeCarousel).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Braze banner', () => {
+    beforeEach(() => {
+      whenMembersHomePageIsRendered('treatment');
+    });
+
+    it('renders when Braze experiment is treatment', async () => {
+      const brazeCarousel = await screen.findByTestId('braze-tenancy-banner');
+      expect(brazeCarousel).toBeInTheDocument();
+    });
+
+    it('does not render the GraphQL banner', async () => {
+      await screen.findByTestId('braze-tenancy-banner');
+      const graphQLCarousel = screen.queryByTestId('homepage-sponsor-banners');
+      expect(graphQLCarousel).not.toBeInTheDocument();
+    });
+  });
+});
 
 describe('Members-Home Page Tracking', () => {
   const useIsVisible = require('@/hooks/useIsVisible');
@@ -293,7 +366,7 @@ describe('Members-Home Page Tracking', () => {
 
     whenMembersHomePageIsRendered('treatment');
 
-    const brazeBanner = await screen.findByTestId('promo-banner-brazeBanner0');
+    const brazeBanner = await screen.findByAltText('Test Braze Card banner');
     fireEvent.click(brazeBanner);
 
     await waitFor(() => {

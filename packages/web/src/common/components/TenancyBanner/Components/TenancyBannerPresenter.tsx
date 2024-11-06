@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { CampaignCard, SwiperCarousel, useCSSConditional } from '@bluelightcard/shared-ui';
-import { CombinedBannersType, TenancyBannerProps } from '../types';
+import { BannerDataType, CombinedBannersType, TenancyBannerProps } from '../types';
+import { trackTenancyClick } from '@/utils/amplitude';
 
 export interface Props extends TenancyBannerProps {
   bannersData: CombinedBannersType;
@@ -10,14 +11,26 @@ export interface Props extends TenancyBannerProps {
  * Presenter renders the banners data
  * @param {Props} props.bannersData - array of bannersData provided by its container
  * @param {Props} props.variant - defines the size of the component
+ * @param {Props} props.title - title of the carousel to use for tracking events
  */
-const TenancyBannerPresenter: FC<Props> = ({ bannersData, variant = 'large' }: Props) => {
+const TenancyBannerPresenter: FC<Props> = ({
+  bannersData,
+  variant = 'large',
+  title = `${variant}_banner`,
+}: Props) => {
   const banners = variant === 'small' ? bannersData.small : bannersData.large;
 
   const dynCss: string = useCSSConditional({
     'desktop:h-[400px]': variant === 'small',
     'desktop:h-[600px]': variant !== 'small',
   });
+
+  const onBannerClick = (banner: BannerDataType) => () => {
+    trackTenancyClick(title, banner.link);
+
+    if (!banner.logClick) return;
+    banner.logClick();
+  };
 
   return (
     <SwiperCarousel
@@ -32,8 +45,9 @@ const TenancyBannerPresenter: FC<Props> = ({ bannersData, variant = 'large' }: P
           key={banner.link}
           image={banner.imageSource}
           linkUrl={banner.link}
-          name={`banner-${index}`}
+          name={banner.title ? banner.title : `banner-${index}`}
           className={`h-[150px] ${dynCss}`}
+          onClick={onBannerClick(banner)}
         />
       ))}
     </SwiperCarousel>

@@ -38,10 +38,10 @@ import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
-import { useBrazeContentCards } from '@/hooks/useBrazeContentCards';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { useMedia } from 'react-use';
+import TenancyBanner from '../common/components/TenancyBanner';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -81,7 +81,6 @@ const HomePage: NextPage<any> = () => {
   const [hasLoaded, setHasLoaded] = useState(false);
   const { viewOffer } = useOfferDetails();
 
-  const contentCards = useBrazeContentCards();
   const isMobile = useMedia('(max-width: 500px)');
 
   const brazeContentCardsEnabled = useAmplitudeExperiment(
@@ -226,59 +225,53 @@ const HomePage: NextPage<any> = () => {
         </Container>
       )}
 
-      {/* Promo banner carousel */}
-      {(banners.length > 0 || !hasLoaded) && (
-        <Container className="py-5" data-testid="homepage-sponsor-banners" addBottomHorizontalLine>
-          <SwiperCarousel
-            elementsPerPageLaptop={1}
-            elementsPerPageDesktop={1}
-            elementsPerPageTablet={1}
-            elementsPerPageMobile={1}
-            navigation
-          >
-            {banners.length > 0 ? (
-              banners.map((banner: any, index: number) => (
-                <PromoBanner
-                  key={index}
-                  image={banner.imageSource}
-                  href={banner.link}
-                  id={'promoBanner' + index}
-                  onClick={() => trackTenancyClick('homepage_sponsor_banner', banner.link)}
-                />
-              ))
-            ) : (
-              <PromoBannerPlaceholder />
-            )}
-          </SwiperCarousel>
+      {/* Promo banner placeholder while experiment value is loading */}
+      {brazeContentCardsEnabled.status === 'pending' && (
+        <Container
+          className="py-5"
+          data-testid="tenancy-banner-experiment-placeholder"
+          addBottomHorizontalLine
+        >
+          <PromoBannerPlaceholder />
         </Container>
       )}
 
-      {/* Example braze carousel */}
-      {brazeContentCardsEnabled.data?.variantName === 'treatment' && (
-        <Container className="py-5" data-testid="example-braze-carousel" addBottomHorizontalLine>
-          <SwiperCarousel
-            elementsPerPageLaptop={1}
-            elementsPerPageDesktop={1}
-            elementsPerPageTablet={1}
-            elementsPerPageMobile={1}
-            navigation
+      {/* Promo banner carousel */}
+      {brazeContentCardsEnabled.data?.variantName === 'control' &&
+        (banners.length > 0 || !hasLoaded) && (
+          <Container
+            className="py-5"
+            data-testid="homepage-sponsor-banners"
+            addBottomHorizontalLine
           >
-            {contentCards.length > 0 ? (
-              contentCards
-                .filter((card) => !card.isControl && card.extras?.location === 'top-banner')
-                .map((card: any, index: number) => (
+            <SwiperCarousel
+              elementsPerPageLaptop={1}
+              elementsPerPageDesktop={1}
+              elementsPerPageTablet={1}
+              elementsPerPageMobile={1}
+              navigation
+            >
+              {banners.length > 0 ? (
+                banners.map((banner: any, index: number) => (
                   <PromoBanner
                     key={index}
-                    image={card.imageUrl}
-                    href={card.href}
-                    id={'brazeBanner' + index}
-                    onClick={() => trackTenancyClick('braze_carousel', card.href)}
+                    image={banner.imageSource}
+                    href={banner.link}
+                    id={'promoBanner' + index}
+                    onClick={() => trackTenancyClick('homepage_sponsor_banner', banner.link)}
                   />
                 ))
-            ) : (
-              <PromoBannerPlaceholder />
-            )}
-          </SwiperCarousel>
+              ) : (
+                <PromoBannerPlaceholder />
+              )}
+            </SwiperCarousel>
+          </Container>
+        )}
+
+      {/* Braze tenancy banner carousel */}
+      {brazeContentCardsEnabled.data?.variantName === 'treatment' && (
+        <Container className="py-5" data-testid="braze-tenancy-banner" addBottomHorizontalLine>
+          <TenancyBanner title="homepage_sponsor_banner" variant="large" />
         </Container>
       )}
 

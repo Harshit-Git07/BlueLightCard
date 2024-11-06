@@ -9,13 +9,16 @@ jest.mock('@/utils/braze/importBrazeFunctions');
 
 const useAmplitudeExperimentMock = jest.mocked(useAmplitudeExperiment);
 const importBrazeFunctionsMock = jest.mocked(importBrazeFunctions);
+const logContentCardClickMock = jest.fn();
 
 const contentCard = {
   id: '1',
   imageUrl: 'imageUrl',
-  href: 'href',
+  url: 'href',
+  title: 'Test Braze card',
   isControl: false,
   extras: {},
+  logClick: expect.any(Function),
 };
 
 describe('Use braze content cards', () => {
@@ -51,6 +54,16 @@ describe('Use braze content cards', () => {
 
       await thenContentCardsAreReturnedFromTheHook(brazeContentCards);
     });
+
+    it('should log content card clicks to the Braze SDK', async () => {
+      givenBrazeReturnsUpdatedContentCards();
+      const brazeContentCards = renderHook(() => target.useBrazeContentCards());
+      await thenContentCardsAreReturnedFromTheHook(brazeContentCards);
+
+      brazeContentCards.result.current[0].logClick();
+
+      expect(logContentCardClickMock).toHaveBeenCalledWith(contentCard);
+    });
   });
 
   const givenFeatureFlagReturns = (value: string): void => {
@@ -71,6 +84,7 @@ describe('Use braze content cards', () => {
           cards: [contentCard, contentCard],
         }),
         initialize: jest.fn(),
+        logContentCardClick: logContentCardClickMock,
       })
     );
   };
@@ -90,6 +104,7 @@ describe('Use braze content cards', () => {
           cards: [],
         }),
         initialize: jest.fn(),
+        logContentCardClick: logContentCardClickMock,
       })
     );
   };

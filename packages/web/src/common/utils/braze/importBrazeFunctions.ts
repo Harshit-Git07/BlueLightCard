@@ -1,3 +1,5 @@
+export type LogContentCardClick = (card: any) => boolean;
+
 // Braze requires dynamic importing due to NextJS server side rendering
 // https://www.braze.com/docs/developer_guide/platform_integration_guides/web/initial_sdk_setup/#ssr
 export const importBrazeFunctions = async (): Promise<{
@@ -6,6 +8,7 @@ export const importBrazeFunctions = async (): Promise<{
   openSession: () => void;
   getCachedContentCards: () => any;
   initialize: (apiKey: string, options: any) => boolean;
+  logContentCardClick: LogContentCardClick;
 }> => {
   const {
     initialize,
@@ -13,6 +16,7 @@ export const importBrazeFunctions = async (): Promise<{
     openSession,
     getCachedContentCards,
     subscribeToContentCardsUpdates,
+    logContentCardClick,
   } = await import('@braze/web-sdk');
 
   return {
@@ -21,5 +25,6 @@ export const importBrazeFunctions = async (): Promise<{
     subscribeToContentCardsUpdates,
     initialize,
     requestContentCardsRefresh,
+    logContentCardClick,
   };
 };

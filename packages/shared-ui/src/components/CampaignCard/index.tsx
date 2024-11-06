@@ -8,9 +8,10 @@ export type CampaignCardProps = {
   image: string;
   linkUrl: string;
   className?: string;
+  onClick?: () => void;
 };
 
-const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl, className }) => {
+const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl, className, onClick }) => {
   const fallbackImage = getCDNUrl(`/misc/Logo_coming_soon.jpg`);
 
   const [imageSource, setImageSource] = useState(image);
@@ -19,9 +20,14 @@ const CampaignCard: FC<CampaignCardProps> = ({ name, image, linkUrl, className }
     setImageSource(getCDNUrl(image));
   }
 
+  const onCardClick = () => {
+    if (!onClick) return;
+    onClick();
+  };
+
   return (
     <div className={`relative w-full ${className}`}>
-      <Link href={linkUrl}>
+      <Link href={linkUrl} onClick={onCardClick}>
         <Image
           src={image}
           alt={`${name} banner`}

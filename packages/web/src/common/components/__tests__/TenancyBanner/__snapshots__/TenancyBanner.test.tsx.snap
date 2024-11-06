@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TenancyBanner component Should render TenancyBanner component with no errors 1`] = `
+exports[`TenancyBanner component Should render large TenancyBanner component with no errors 1`] = `
 <div>
   <div
     class="swiper swiper-initialized swiper-horizontal"
@@ -8,7 +8,158 @@ exports[`TenancyBanner component Should render TenancyBanner component with no e
     <div
       class="swiper-wrapper"
       style="cursor: grab; transition-duration: 0ms; transition-delay: 0ms; transform: translate3d(NaNpx, 0px, 0px);"
+    >
+      <div
+        class="swiper-slide"
+        data-swiper-slide-index="0"
+      >
+        <div
+          class="relative w-full h-[150px] desktop:h-[600px]"
+        >
+          <a
+            class="dark:text-palette-secondary"
+            data-testid="anchor-link"
+            href="www.google.com"
+          >
+            <img
+              alt="Test banner title 1 banner"
+              class="w-full h-auto object-contain"
+              data-nimg="fill"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+              src="http://localhost/_next/static/assets/forest.jpeg?width=3840&quality=75"
+              srcset="_next/static/assets/forest.jpeg?width=640&quality=75 640w, _next/static/assets/forest.jpeg?width=750&quality=75 750w, _next/static/assets/forest.jpeg?width=828&quality=75 828w, _next/static/assets/forest.jpeg?width=1080&quality=75 1080w, _next/static/assets/forest.jpeg?width=1200&quality=75 1200w, _next/static/assets/forest.jpeg?width=1920&quality=75 1920w, _next/static/assets/forest.jpeg?width=2048&quality=75 2048w, _next/static/assets/forest.jpeg?width=3840&quality=75 3840w"
+              style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        class="swiper-slide"
+        data-swiper-slide-index="1"
+      >
+        <div
+          class="relative w-full h-[150px] desktop:h-[600px]"
+        >
+          <a
+            class="dark:text-palette-secondary"
+            data-testid="anchor-link"
+            href="www.google.com"
+          >
+            <img
+              alt="banner-1 banner"
+              class="w-full h-auto object-contain"
+              data-nimg="fill"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+              src="http://localhost/_next/static/assets/forest.jpeg?width=3840&quality=75"
+              srcset="_next/static/assets/forest.jpeg?width=640&quality=75 640w, _next/static/assets/forest.jpeg?width=750&quality=75 750w, _next/static/assets/forest.jpeg?width=828&quality=75 828w, _next/static/assets/forest.jpeg?width=1080&quality=75 1080w, _next/static/assets/forest.jpeg?width=1200&quality=75 1200w, _next/static/assets/forest.jpeg?width=1920&quality=75 1920w, _next/static/assets/forest.jpeg?width=2048&quality=75 2048w, _next/static/assets/forest.jpeg?width=3840&quality=75 3840w"
+              style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        class="swiper-slide"
+        data-swiper-slide-index="2"
+      >
+        <div
+          class="relative w-full h-[150px] desktop:h-[600px]"
+        >
+          <a
+            class="dark:text-palette-secondary"
+            data-testid="anchor-link"
+            href="www.apple.com"
+          >
+            <img
+              alt="banner-2 banner"
+              class="w-full h-auto object-contain"
+              data-nimg="fill"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+              src="http://localhost/_next/static/assets/forest.jpeg?width=3840&quality=75"
+              srcset="_next/static/assets/forest.jpeg?width=640&quality=75 640w, _next/static/assets/forest.jpeg?width=750&quality=75 750w, _next/static/assets/forest.jpeg?width=828&quality=75 828w, _next/static/assets/forest.jpeg?width=1080&quality=75 1080w, _next/static/assets/forest.jpeg?width=1200&quality=75 1200w, _next/static/assets/forest.jpeg?width=1920&quality=75 1920w, _next/static/assets/forest.jpeg?width=2048&quality=75 2048w, _next/static/assets/forest.jpeg?width=3840&quality=75 3840w"
+              style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      class="swiper-button-prev"
     />
+    <div
+      class="swiper-button-next"
+    />
+  </div>
+</div>
+`;
+
+exports[`TenancyBanner component Should render small TenancyBanner component with no errors 1`] = `
+<div>
+  <div
+    class="swiper swiper-initialized swiper-horizontal"
+  >
+    <div
+      class="swiper-wrapper"
+      style="cursor: grab; transition-duration: 0ms; transition-delay: 0ms; transform: translate3d(NaNpx, 0px, 0px);"
+    >
+      <div
+        class="swiper-slide"
+        data-swiper-slide-index="0"
+      >
+        <div
+          class="relative w-full h-[150px] desktop:h-[400px]"
+        >
+          <a
+            class="dark:text-palette-secondary"
+            data-testid="anchor-link"
+            href="www.google.com"
+          >
+            <img
+              alt="banner-0 banner"
+              class="w-full h-auto object-contain"
+              data-nimg="fill"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+              src="http://localhost/_next/static/assets/forest.jpeg?width=3840&quality=75"
+              srcset="_next/static/assets/forest.jpeg?width=640&quality=75 640w, _next/static/assets/forest.jpeg?width=750&quality=75 750w, _next/static/assets/forest.jpeg?width=828&quality=75 828w, _next/static/assets/forest.jpeg?width=1080&quality=75 1080w, _next/static/assets/forest.jpeg?width=1200&quality=75 1200w, _next/static/assets/forest.jpeg?width=1920&quality=75 1920w, _next/static/assets/forest.jpeg?width=2048&quality=75 2048w, _next/static/assets/forest.jpeg?width=3840&quality=75 3840w"
+              style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+            />
+          </a>
+        </div>
+      </div>
+      <div
+        class="swiper-slide"
+        data-swiper-slide-index="1"
+      >
+        <div
+          class="relative w-full h-[150px] desktop:h-[400px]"
+        >
+          <a
+            class="dark:text-palette-secondary"
+            data-testid="anchor-link"
+            href="www.apple.com"
+          >
+            <img
+              alt="banner-1 banner"
+              class="w-full h-auto object-contain"
+              data-nimg="fill"
+              decoding="async"
+              loading="lazy"
+              sizes="100vw"
+              src="http://localhost/_next/static/assets/forest.jpeg?width=3840&quality=75"
+              srcset="_next/static/assets/forest.jpeg?width=640&quality=75 640w, _next/static/assets/forest.jpeg?width=750&quality=75 750w, _next/static/assets/forest.jpeg?width=828&quality=75 828w, _next/static/assets/forest.jpeg?width=1080&quality=75 1080w, _next/static/assets/forest.jpeg?width=1200&quality=75 1200w, _next/static/assets/forest.jpeg?width=1920&quality=75 1920w, _next/static/assets/forest.jpeg?width=2048&quality=75 2048w, _next/static/assets/forest.jpeg?width=3840&quality=75 3840w"
+              style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
     <div
       class="swiper-button-prev"
     />

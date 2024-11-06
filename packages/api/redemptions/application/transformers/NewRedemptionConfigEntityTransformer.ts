@@ -23,6 +23,7 @@ export class NewRedemptionConfigEntityTransformer {
       case REDEMPTION_TYPES[0]:
       case REDEMPTION_TYPES[1]:
       case REDEMPTION_TYPES[4]:
+      case REDEMPTION_TYPES[6]:
         return {
           affiliate: requestData.affiliate,
           companyId: requestData.companyId,

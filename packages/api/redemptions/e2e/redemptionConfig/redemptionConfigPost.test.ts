@@ -107,6 +107,37 @@ describe('POST Redemption Config', () => {
       expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     });
 
+    it('POST /redemptions returns 200 for giftCard redemptionType', async () => {
+      const redemptionConfigRequest = {
+        affiliate: 'awin',
+        companyId: faker.string.uuid(),
+        connection: 'affiliate',
+        offerId: 2024,
+        redemptionType: 'giftCard',
+        url: 'https://www.gift-cards.co.uk/',
+      };
+
+      const result = await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
+
+      expect(result.status).toBe(200);
+
+      const actualResponseBody = await result.json();
+
+      const expectedResponseBody = {
+        statusCode: 200,
+        data: {
+          affiliate: null,
+          companyId: redemptionConfigRequest.companyId,
+          connection: redemptionConfigRequest.connection,
+          offerId: '2024',
+          id: expect.any(String),
+          redemptionType: redemptionConfigRequest.redemptionType,
+          url: redemptionConfigRequest.url,
+        },
+      };
+      expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    });
+
     it('POST /redemptions returns 200 for generic redemptionType', async () => {
       const redemptionConfigRequest = {
         affiliate: null,

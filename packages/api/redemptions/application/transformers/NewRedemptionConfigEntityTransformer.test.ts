@@ -69,6 +69,15 @@ const genericRequestBody: PostRedemptionConfigModel = {
   },
 };
 
+const giftCardRequestBody: PostRedemptionConfigModel = {
+  companyId: faker.string.uuid(),
+  offerId: faker.string.uuid(),
+  connection: 'none',
+  redemptionType: 'giftCard',
+  affiliate: 'awin',
+  url: 'www.url.com',
+};
+
 describe('transformToNewRedemptionConfigEntity', () => {
   it.each([
     ['showCard' as const, showCardRequestBody],
@@ -93,6 +102,7 @@ describe('transformToNewRedemptionConfigEntity', () => {
     ['preApplied' as const, preAppliedRequestBody],
     ['vault' as const, vaultRequestBody],
     ['generic' as const, genericRequestBody],
+    ['giftCard' as const, giftCardRequestBody],
   ])('maps %s to "online" offerType', (redemptionType, redemptionConfigRequestBody) => {
     const expectedNewRedemptionConfigEntity: NewRedemptionConfigEntity = {
       companyId: redemptionConfigRequestBody.companyId,

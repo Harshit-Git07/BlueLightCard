@@ -1,4 +1,4 @@
-import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
+import { GENERIC, GIFTCARD, PREAPPLIED, REDEMPTION_TYPES, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
 
 import { GenericEntity } from '../repositories/GenericsRepository';
 import { RedemptionConfigEntity } from '../repositories/RedemptionConfigRepository';
@@ -52,7 +52,7 @@ export class RedemptionConfigTransformer {
       companyId: String(redemptionConfigEntity.companyId),
     };
 
-    if (redemptionType === 'generic') {
+    if (redemptionType === GENERIC) {
       let redemptionGenericConfig: RedemptionGenericConfig | null = null;
 
       if (genericEntity) {
@@ -69,18 +69,18 @@ export class RedemptionConfigTransformer {
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;
     }
 
-    if (redemptionType === 'preApplied' || redemptionType === 'giftCard') {
+    if (redemptionType === PREAPPLIED || redemptionType === GIFTCARD) {
       redemptionProperties.url = redemptionConfigDto.redemptionConfigEntity.url;
       redemptionProperties.affiliate = redemptionConfigDto.redemptionConfigEntity.affiliate;
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;
     }
 
-    if (redemptionType === 'vault' || redemptionType === 'vaultQR') {
+    if (redemptionType === VAULT || redemptionType === VAULTQR) {
       redemptionProperties.vault = vaultEntity
         ? this.redemptionVaultConfigTransformer.transformToRedemptionVaultConfig(vaultEntity, vaultBatchEntities)
         : null;
 
-      if (redemptionType === 'vault') redemptionProperties.url = redemptionConfigEntity.url;
+      if (redemptionType === VAULT) redemptionProperties.url = redemptionConfigEntity.url;
       redemptionProperties.affiliate = redemptionConfigDto.redemptionConfigEntity.affiliate;
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;
     }

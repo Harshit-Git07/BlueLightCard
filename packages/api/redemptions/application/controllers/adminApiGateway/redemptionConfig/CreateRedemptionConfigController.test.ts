@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 import { ICreateRedemptionConfigService } from '@blc-mono/redemptions/application/services/redemptionConfig/CreateRedemptionConfigService';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -15,6 +17,16 @@ const validRequestBody = {
   redemptionType: 'preApplied',
   affiliate: 'awin',
   url: 'some-url',
+} as const;
+
+const validRequestBodyForGiftCard = {
+  companyId: '1234',
+  offerId: '4321',
+  connection: 'none',
+  offerType: 'in-store',
+  redemptionType: 'giftCard',
+  affiliate: 'awin',
+  url: faker.internet.url(),
 } as const;
 
 describe('CreateRedemptionConfigController', () => {
@@ -36,6 +48,22 @@ describe('CreateRedemptionConfigController', () => {
     expect(result.statusCode).toEqual(200);
     expect(result.data).toStrictEqual({ some: 'data' });
     expect(MockCreateRedemptionConfigService.createRedemptionConfig).toHaveBeenCalledWith(validRequestBody);
+  });
+
+  it('returns 200 for a successful gift card request', async () => {
+    const logger = createTestLogger();
+
+    MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
+      kind: 'Ok',
+      data: { some: 'data' },
+    });
+
+    const controller = new CreateRedemptionConfigController(logger, MockCreateRedemptionConfigService);
+    const result = await controller.handle({ body: validRequestBodyForGiftCard });
+
+    expect(result.statusCode).toEqual(200);
+    expect(result.data).toStrictEqual({ some: 'data' });
+    expect(MockCreateRedemptionConfigService.createRedemptionConfig).toHaveBeenCalledWith(validRequestBodyForGiftCard);
   });
 
   it('returns 500 for an error request', async () => {

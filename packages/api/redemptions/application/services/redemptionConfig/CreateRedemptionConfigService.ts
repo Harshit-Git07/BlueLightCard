@@ -98,6 +98,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
       switch (redemptionType) {
         case REDEMPTION_TYPES[3]: //showcard
         case REDEMPTION_TYPES[4]: //preapplied
+        case REDEMPTION_TYPES[6]: //giftcard
           break;
         case REDEMPTION_TYPES[0]: //generic
           genericEntity = await this.createGenericEntity(

@@ -94,15 +94,19 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   const searchOfferCompanyTable = createSearchOfferCompanyTable(stack);
   const menusTable = createMenusTable(stack);
 
+  const baseRouteParams = {
+    apiGatewayModelGenerator,
+    stack,
+    restApi,
+    defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+  };
+
   api.addRoutes(stack, {
     'GET /search': Route.createRoute({
-      apiGatewayModelGenerator,
-      stack,
+      ...baseRouteParams,
       functionName: 'GetSearchHandler',
-      restApi,
       handler: 'packages/api/discovery/application/handlers/search/getSearch.handler',
       requestValidatorName: 'GetSearchValidator',
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: ['es'],
       environment: {
         OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
@@ -111,31 +115,28 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       vpc,
     }),
     'GET /campaigns': Route.createRoute({
-      apiGatewayModelGenerator,
-      stack,
+      ...baseRouteParams,
       functionName: 'GetActiveCampaignHandler',
-      restApi,
       handler: 'packages/api/discovery/application/handlers/campaigns/getActiveCampaigns.handler',
       requestValidatorName: 'GetCampaignEventValidator',
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
     }),
     'GET /categories': Route.createRoute({
-      apiGatewayModelGenerator,
-      stack,
-      functionName: 'GetCatgoriesHandler',
-      restApi,
+      ...baseRouteParams,
+      functionName: 'GetCategoriesHandler',
       handler: 'packages/api/discovery/application/handlers/categories/getCategories.handler',
       requestValidatorName: 'GetCategoriesValidator',
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+    }),
+    'GET /categories/{id}': Route.createRoute({
+      ...baseRouteParams,
+      functionName: 'GetCategoryHandler',
+      handler: 'packages/api/discovery/application/handlers/categories/getCategory.handler',
+      requestValidatorName: 'GetCategoryValidator',
     }),
     'GET /menus': Route.createRoute({
-      apiGatewayModelGenerator,
-      stack,
+      ...baseRouteParams,
       functionName: 'GetMenusHandler',
-      restApi,
       handler: 'packages/api/discovery/application/handlers/Menus/getMenus.handler',
       requestValidatorName: 'GetMenusValidator',
-      defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
       permissions: ['dynamodb:*', menusTable.tableName],
       environment: {
         MENUS_TABLE_NAME: menusTable.tableName,

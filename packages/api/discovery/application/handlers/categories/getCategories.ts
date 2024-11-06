@@ -3,22 +3,20 @@ import 'dd-trace/init';
 import { datadog } from 'datadog-lambda-js';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { SimpleCategory } from '@blc-mono/discovery/application/models/SimpleCategory';
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const logger = new LambdaLogger({ serviceName: 'categories-get' });
 
+export const categories = getCategories();
+
 const handlerUnwrapped = async () => {
   logger.info({ message: `Getting categories` });
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      data: getCategories(),
-    }),
-  };
+  return Response.OK({ message: 'Success', data: categories });
 };
 
-const getCategories = (): SimpleCategory[] => {
+function getCategories(): SimpleCategory[] {
   return [
     buildSimpleCategory('11', 'Children and toys'),
     buildSimpleCategory('3', 'Days out'),
@@ -38,13 +36,13 @@ const getCategories = (): SimpleCategory[] => {
     buildSimpleCategory('13', 'Shoes and accessories'),
     buildSimpleCategory('12', 'Sport and leisure'),
   ];
-};
+}
 
-const buildSimpleCategory = (id: string, name: string): SimpleCategory => {
+function buildSimpleCategory(id: string, name: string): SimpleCategory {
   return {
     id,
     name,
   };
-};
+}
 
 export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

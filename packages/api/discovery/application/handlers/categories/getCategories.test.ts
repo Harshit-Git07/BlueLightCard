@@ -73,8 +73,12 @@ describe('getCategories Handler', () => {
       },
     ];
     const expectedResponse = {
-      body: JSON.stringify({ data: expectedCategories }),
+      body: JSON.stringify({ message: 'Success', data: expectedCategories }),
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
     };
 
     const result = await handler();

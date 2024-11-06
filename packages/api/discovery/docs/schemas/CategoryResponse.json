@@ -1,0 +1,22 @@
+{
+  "CategoryResponse": {
+    "type": "object",
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "data": {
+        "type": "array",
+        "items": {
+          "$ref": "./Offer.json#/Offer"
+        }
+      }
+    }
+  }
+}

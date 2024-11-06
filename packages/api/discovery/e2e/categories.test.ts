@@ -1,5 +1,7 @@
 import { ApiGatewayV1Api } from 'sst/node/api';
 
+import { buildDummyOffer } from '@blc-mono/discovery/application/handlers/categories/getCategory';
+import { CategoryResponse } from '@blc-mono/discovery/application/models/CategoryResponse';
 import { SimpleCategory } from '@blc-mono/discovery/application/models/SimpleCategory';
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 
@@ -101,5 +103,47 @@ describe('GET /categories', async () => {
     const resultBody = (await result.json()) as { data: SimpleCategory[] };
 
     expect(resultBody.data).toStrictEqual(expectedCategories);
+  });
+});
+
+describe('GET /categories/${id}', async () => {
+  const testUserTokens = await TestUser.authenticate();
+
+  const whenCategoryIsCalledWith = async (headers: Record<string, string>, categoryId: string) => {
+    const categoriesEndpoint = `${ApiGatewayV1Api.discovery.url}categories/${categoryId}`;
+    return fetch(categoriesEndpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+    });
+  };
+
+  it.each([
+    [200, 'A valid request is sent', { Authorization: `Bearer ${testUserTokens.idToken}` }, '1'],
+    [401, 'No authorization header is provided', {}, '1'],
+    [401, 'Invalid authorization header is provided', { Authorization: `Bearer invalidToken` }, '1'],
+    [400, 'Invalid category ID is provided', { Authorization: `Bearer ${testUserTokens.idToken}` }, 'Invalid'],
+  ])('should return with response code %s when %s', async (statusCode, _description, headers, categoryId) => {
+    const result = await whenCategoryIsCalledWith(headers, categoryId);
+    expect(result.status).toBe(statusCode);
+  });
+
+  it('should return the expected category', async () => {
+    const expectedCategories = [
+      buildDummyOffer(1),
+      buildDummyOffer(2),
+      buildDummyOffer(3),
+      buildDummyOffer(4),
+      buildDummyOffer(5),
+    ];
+
+    const result = await whenCategoryIsCalledWith({ Authorization: `Bearer ${testUserTokens.idToken}` }, '1');
+    const resultBody = (await result.json()) as { data: CategoryResponse };
+
+    expect(resultBody.data.id).toStrictEqual('1');
+    expect(resultBody.data.name).toStrictEqual('Electrical and phones');
+    expect(resultBody.data.data).toStrictEqual(expectedCategories);
   });
 });

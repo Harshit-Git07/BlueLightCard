@@ -8,7 +8,7 @@ export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEnti
   ({ params: { redemptionType } }) => {
     const onlineRedemptionType = ['vault', 'preApplied', 'generic'];
     const type =
-      redemptionType ?? faker.helpers.arrayElement(['showCard', 'vaultQR', 'vault', 'preApplied', 'generic']);
+      redemptionType ?? faker.helpers.arrayElement(['showCard', 'vaultQR', 'vault', 'preApplied', 'generic', 'ballot']);
 
     return {
       id: createRedemptionsId(),

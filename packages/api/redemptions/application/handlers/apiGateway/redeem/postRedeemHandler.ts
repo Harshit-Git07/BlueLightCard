@@ -4,6 +4,8 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { CardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
+import { BallotEntriesRepository } from '@blc-mono/redemptions/application/repositories/BallotEntriesRepository';
+import { BallotsRepository } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
 import { EagleEyeApiRepository } from '@blc-mono/redemptions/application/repositories/EagleEyeApiRepository';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { IntegrationCodesRepository } from '@blc-mono/redemptions/application/repositories/IntegrationCodesRepository';
@@ -24,6 +26,7 @@ import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemC
 import { RedemptionConfigRepository } from '../../../repositories/RedemptionConfigRepository';
 import { RedeemService } from '../../../services/redeem/RedeemService';
 import { RedeemStrategyResolver } from '../../../services/redeem/RedeemStrategyResolver';
+import { RedeemBallotStrategy } from '../../../services/redeem/strategies/RedeemBallotStrategy';
 import { RedeemGenericStrategy } from '../../../services/redeem/strategies/RedeemGenericStrategy';
 import { RedeemPreAppliedStrategy } from '../../../services/redeem/strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from '../../../services/redeem/strategies/RedeemShowCardStrategy';
@@ -45,6 +48,8 @@ const controller = createInjector()
   .provideClass(VaultCodesRepository.key, VaultCodesRepository)
   .provideClass(LegacyVaultApiRepository.key, LegacyVaultApiRepository)
   .provideClass(RedemptionsEventsRepository.key, RedemptionsEventsRepository)
+  .provideClass(BallotsRepository.key, BallotsRepository)
+  .provideClass(BallotEntriesRepository.key, BallotEntriesRepository)
   .provideClass(UniqodoApiRepository.key, UniqodoApiRepository)
   .provideClass(EagleEyeApiRepository.key, EagleEyeApiRepository)
   .provideClass(IntegrationCodesRepository.key, IntegrationCodesRepository)
@@ -61,6 +66,7 @@ const controller = createInjector()
   .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)
   .provideClass(RedeemShowCardStrategy.key, RedeemShowCardStrategy)
   .provideClass(RedeemVaultStrategy.key, RedeemVaultStrategy)
+  .provideClass(RedeemBallotStrategy.key, RedeemBallotStrategy)
 
   .provideClass(RedeemStrategyResolver.key, RedeemStrategyResolver)
   // card status helper

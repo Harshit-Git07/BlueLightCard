@@ -40,7 +40,16 @@ export class MemberRedemptionEventDetailBuilder {
 
     switch (redemptionConfigEntity.redemptionType) {
       case 'ballot':
-        throw new Error('Not implemented');
+        memberRedemptionEventDetail = {
+          memberDetails,
+          redemptionDetails: {
+            ...baseRedemptionDetails,
+            redemptionType: 'generic',
+            code: '',
+            url: '',
+          },
+        };
+        return memberRedemptionEventDetail;
 
       case 'generic':
         if (!code) {

@@ -48,7 +48,7 @@ export type MemberRedemptionParams = MemberRedemptionBaseParams &
         integrationId: string | null | undefined;
       }
     | {
-        redemptionType: 'showCard' | 'preApplied';
+        redemptionType: 'showCard' | 'preApplied' | 'ballot';
         code?: never;
         integration?: never;
         integrationId?: never;
@@ -85,6 +85,11 @@ export class MemberRedemptionParamsDto {
         });
       case 'showCard':
       case 'preApplied':
+        return new MemberRedemptionParamsDto({
+          ...baseParams,
+          redemptionType: redemptionDetails.redemptionType,
+        });
+      case 'ballot':
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,

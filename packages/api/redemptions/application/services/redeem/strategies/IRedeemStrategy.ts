@@ -1,5 +1,6 @@
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import {
+  BALLOT,
   GENERIC,
   PREAPPLIED,
   SHOWCARD,
@@ -13,9 +14,16 @@ export type RedeemedStrategyResult =
   | RedeemGenericStrategyResult
   | RedeemPreAppliedStrategyResult
   | RedeemShowCardStrategyResult
-  | RedeemVaultStrategyResult;
+  | RedeemVaultStrategyResult
+  | RedeemBallotStrategyResult;
 
 export type RedeemVaultRedemptionType = typeof VAULTQR | typeof VAULT;
+
+export type RedeemBallotStrategyResult = {
+  kind: 'Ok';
+  redemptionType: typeof BALLOT;
+  redemptionDetails: Record<never, never>;
+};
 
 export type RedeemGenericStrategyResult = {
   kind: 'Ok';

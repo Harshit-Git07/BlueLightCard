@@ -113,6 +113,13 @@
       "when": 1730473962519,
       "tag": "0015_daffy_katie_power",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1730717474966,
+      "tag": "0016_closed_garia",
+      "breakpoints": true
     }
   ]
 }

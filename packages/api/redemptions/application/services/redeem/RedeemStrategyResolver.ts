@@ -2,6 +2,7 @@ import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
 
 import { IRedeemStrategy } from './strategies/IRedeemStrategy';
+import { RedeemBallotStrategy } from './strategies/RedeemBallotStrategy';
 import { RedeemGenericStrategy } from './strategies/RedeemGenericStrategy';
 import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
@@ -22,6 +23,7 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
     RedeemPreAppliedStrategy.key,
     RedeemShowCardStrategy.key,
     RedeemVaultStrategy.key,
+    RedeemBallotStrategy.key,
   ] as const;
 
   constructor(
@@ -29,6 +31,7 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
     private readonly redeemPreAppliedStrategy: RedeemPreAppliedStrategy,
     private readonly redeemShowCardStrategy: RedeemShowCardStrategy,
     private readonly redeemVaultStrategy: RedeemVaultStrategy,
+    private readonly redeemBallotStrategy: RedeemBallotStrategy,
   ) {}
 
   getRedemptionStrategy(redemptionType: RedemptionType): IRedeemStrategy {
@@ -43,7 +46,7 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
       case VAULTQR:
         return this.redeemVaultStrategy;
       case BALLOT:
-        return this.redeemGenericStrategy;
+        return this.redeemBallotStrategy;
       default:
         exhaustiveCheck(redemptionType, 'Unhandled redemptionType');
     }

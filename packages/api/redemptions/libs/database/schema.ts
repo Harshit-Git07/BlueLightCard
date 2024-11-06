@@ -205,16 +205,23 @@ export const ballotsTable = pgTable('ballots', {
 export const ballotEntriesPrefix = 'bae';
 export const createBallotEntriesId = (): string => `${ballotEntriesPrefix}-${uuidv4()}`;
 export const createBallotEntriesIdE2E = (): string => `e2e:${createBallotEntriesId()}`;
-export const ballotEntriesTable = pgTable('ballotEntries', {
-  // PK
-  id: varchar('id').primaryKey().$defaultFn(createBallotEntriesId),
-  // FK
-  ballotId: varchar('ballotId')
-    .references(() => ballotsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
-    .notNull(),
-  // Other
-  entryDate: timestamp('entryDate').notNull(),
-  memberId: integer('memberId').notNull(),
-  status: ballotEntryStatusEnum('status').notNull(),
-  created: timestamp('created').defaultNow().notNull(),
-});
+export const ballotEntriesTable = pgTable(
+  'ballotEntries',
+  {
+    // PK
+    id: varchar('id').primaryKey().$defaultFn(createBallotEntriesId),
+    // FK
+    ballotId: varchar('ballotId')
+      .references(() => ballotsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+      .notNull(),
+    // Other
+    entryDate: timestamp('entryDate').notNull(),
+    memberId: varchar('memberId').notNull(),
+    status: ballotEntryStatusEnum('status').notNull(),
+    created: timestamp('created').defaultNow().notNull(),
+  },
+  (table) => ({
+    icBallotIdx: index('ba_ballot_idx').on(table.ballotId),
+    icMemberIdx: index('ba_member_idx').on(table.memberId),
+  }),
+);

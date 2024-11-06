@@ -2,6 +2,7 @@ import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
 import { RedeemStrategyResolver } from './RedeemStrategyResolver';
+import { RedeemBallotStrategy } from './strategies/RedeemBallotStrategy';
 import { RedeemGenericStrategy } from './strategies/RedeemGenericStrategy';
 import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
@@ -12,6 +13,7 @@ describe('RedeemStrategyResolver', () => {
   const redeemPreAppliedStrategy: Partial<RedeemPreAppliedStrategy> = {};
   const redeemShowCardStrategy: Partial<RedeemShowCardStrategy> = {};
   const redeemVaultStrategy: Partial<RedeemVaultStrategy> = {};
+  const redeemBallotStrategy: Partial<RedeemBallotStrategy> = {};
 
   it.each([
     ['generic', redeemGenericStrategy],
@@ -19,6 +21,7 @@ describe('RedeemStrategyResolver', () => {
     ['showCard', redeemShowCardStrategy],
     ['vault', redeemVaultStrategy],
     ['vaultQR', redeemVaultStrategy],
+    ['ballot', redeemBallotStrategy],
   ] satisfies [RedemptionType, unknown][])(
     'returns the correct strategy for each redemption type (%s)',
     (redemptionType, strategy) => {
@@ -28,6 +31,7 @@ describe('RedeemStrategyResolver', () => {
         as(redeemPreAppliedStrategy),
         as(redeemShowCardStrategy),
         as(redeemVaultStrategy),
+        as(redeemBallotStrategy),
       );
 
       // Act
@@ -45,6 +49,7 @@ describe('RedeemStrategyResolver', () => {
       as(redeemPreAppliedStrategy),
       as(redeemShowCardStrategy),
       as(redeemVaultStrategy),
+      as(redeemBallotStrategy),
     );
 
     // Act

@@ -79,6 +79,11 @@ export const MemberRedemptionEventDetailSchema = z.object({
         redemptionType: z.literal('preApplied'),
         url: z.string(),
       }),
+      z.object({
+        redemptionType: z.literal('ballot'),
+        code: z.string(),
+        url: z.string(),
+      }),
     ]),
   ),
 });

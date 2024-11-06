@@ -103,8 +103,8 @@ export class RedemptionsTestDatabase {
     await connection.db.delete(vaultBatchesTable).execute();
     await connection.db.delete(vaultsTable).execute();
     await connection.db.delete(genericsTable).execute();
-    await connection.db.delete(redemptionsTable).execute();
-    await connection.db.delete(ballotsTable).execute();
     await connection.db.delete(ballotEntriesTable).execute();
+    await connection.db.delete(ballotsTable).execute();
+    await connection.db.delete(redemptionsTable).execute();
   }
 }

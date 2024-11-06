@@ -1,18 +1,23 @@
+import { GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
+import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import {
   IRedemptionsEventsRepository,
   RedemptionsEventsRepository,
 } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 
-import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
-
-import { IRedeemStrategy, RedeemParams, RedeemPreAppliedStrategyResult } from './IRedeemStrategy';
+import {
+  IRedeemStrategy,
+  RedeemGiftCardStrategyResult,
+  RedeemParams,
+  RedeemPreAppliedStrategyResult,
+} from './IRedeemStrategy';
 import { MemberRedemptionEventDetailBuilder } from './MemberRedemptionEventDetailBuilder';
 import { RedemptionConfigError } from './redeemVaultStrategy/helpers/RedemptionConfigError';
 
-export class RedeemPreAppliedStrategy implements IRedeemStrategy {
-  static readonly key = 'RedeemPreAppliedStrategy' as const;
+export class RedeemAffiliateStrategy implements IRedeemStrategy {
+  static readonly key = 'RedeemAffiliateStrategy';
   static readonly inject = [
     RedemptionsEventsRepository.key,
     MemberRedemptionEventDetailBuilder.key,
@@ -29,17 +34,23 @@ export class RedeemPreAppliedStrategy implements IRedeemStrategy {
   async redeem(
     redemptionConfigEntity: RedemptionConfigEntity,
     params: RedeemParams,
-  ): Promise<RedeemPreAppliedStrategyResult> {
+  ): Promise<RedeemGiftCardStrategyResult | RedeemPreAppliedStrategyResult> {
+    if (redemptionConfigEntity.redemptionType !== GIFTCARD && redemptionConfigEntity.redemptionType !== PREAPPLIED) {
+      throw new Error('Unexpected redemption type');
+    }
+
     if (!redemptionConfigEntity.url) {
       this.logger.error({
-        message: 'Redemption URL was missing but required for pre-applied redemption',
+        message: `Redemption URL was missing but required for ${redemptionConfigEntity.redemptionType} Affiliate redemption`,
         context: {
           redemptionId: redemptionConfigEntity.id,
           redemption: redemptionConfigEntity,
           params,
         },
       });
-      throw new RedemptionConfigError('Redemption URL was missing but required for pre-applied redemption');
+      throw new RedemptionConfigError(
+        `Redemption URL was missing but required for ${redemptionConfigEntity.redemptionType} Affiliate redemption`,
+      );
     }
 
     const trackingUrl = AffiliateHelper.checkAffiliateAndGetTrackingUrl(redemptionConfigEntity.url, params.memberId);
@@ -59,7 +70,7 @@ export class RedeemPreAppliedStrategy implements IRedeemStrategy {
 
     return {
       kind: 'Ok',
-      redemptionType: 'preApplied',
+      redemptionType: redemptionConfigEntity.redemptionType,
       redemptionDetails: {
         url: trackingUrl,
       },

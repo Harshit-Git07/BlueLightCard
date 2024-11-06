@@ -116,16 +116,19 @@ export class MemberRedemptionEventDetailBuilder {
           },
         };
         return memberRedemptionEventDetail;
+      case 'giftCard':
       case 'preApplied':
         if (!url) {
-          throw new RedemptionConfigError('Url is required to build a preApplied MemberRedemptionEventDetail');
+          throw new RedemptionConfigError(
+            `Url is required to build a ${redemptionConfigEntity.redemptionType} MemberRedemptionEventDetail`,
+          );
         }
 
         memberRedemptionEventDetail = {
           memberDetails,
           redemptionDetails: {
             ...baseRedemptionDetails,
-            redemptionType: 'preApplied',
+            redemptionType: redemptionConfigEntity.redemptionType,
             url,
           },
         };

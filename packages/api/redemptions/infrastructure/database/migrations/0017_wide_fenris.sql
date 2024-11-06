@@ -1,0 +1,1 @@
+ALTER TYPE "redemptionType" ADD VALUE 'giftCard';

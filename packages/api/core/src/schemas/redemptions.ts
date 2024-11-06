@@ -84,6 +84,10 @@ export const MemberRedemptionEventDetailSchema = z.object({
         code: z.string(),
         url: z.string(),
       }),
+      z.object({
+        redemptionType: z.literal('giftCard'),
+        url: z.string(),
+      }),
     ]),
   ),
 });

@@ -1,21 +1,8 @@
+import { BALLOT, GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
 import { ClientType } from '@blc-mono/core/schemas/domain';
-import {
-  BALLOT,
-  GENERIC,
-  PREAPPLIED,
-  SHOWCARD,
-  VAULT,
-  VAULTQR,
-} from '@blc-mono/redemptions/application/services/redeem/RedeemStrategyResolver';
+import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
 import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRepository';
-
-export type RedeemedStrategyResult =
-  | RedeemGenericStrategyResult
-  | RedeemPreAppliedStrategyResult
-  | RedeemShowCardStrategyResult
-  | RedeemVaultStrategyResult
-  | RedeemBallotStrategyResult;
 
 export type RedeemVaultRedemptionType = typeof VAULTQR | typeof VAULT;
 
@@ -34,17 +21,18 @@ export type RedeemGenericStrategyResult = {
   };
 };
 
-// TODO: This is a placeholder for the future implementation
-export type RedeemPreAppliedStrategyResult = {
+export type RedeemAffiliateStrategyResult<AffiliateRedemptionType extends RedemptionType = RedemptionType> = {
   kind: 'Ok';
-  redemptionType: typeof PREAPPLIED;
+  redemptionType: AffiliateRedemptionType;
   redemptionDetails: {
     url: string;
     code?: never;
   };
 };
 
-// TODO: This is a placeholder for the future implementation
+export type RedeemPreAppliedStrategyResult = RedeemAffiliateStrategyResult<typeof PREAPPLIED>;
+export type RedeemGiftCardStrategyResult = RedeemAffiliateStrategyResult<typeof GIFTCARD>;
+
 export type RedeemShowCardStrategyResult = {
   kind: 'Ok';
   redemptionType: typeof SHOWCARD;
@@ -73,6 +61,14 @@ export type RedeemVaultStrategyResult =
       redemptionDetails: RedeemVaultStrategyRedemptionDetails;
     }
   | { kind: 'MaxPerUserReached'; redemptionType?: never; redemptionDetails?: never };
+
+export type RedeemedStrategyResult =
+  | RedeemGenericStrategyResult
+  | RedeemGiftCardStrategyResult
+  | RedeemPreAppliedStrategyResult
+  | RedeemShowCardStrategyResult
+  | RedeemVaultStrategyResult
+  | RedeemBallotStrategyResult;
 
 export type RedeemParams = {
   memberId: string;

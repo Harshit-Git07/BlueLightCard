@@ -1,7 +1,8 @@
-import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
+import { BALLOT, GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
+import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
 
 import { DwhRepository, IDwhRepository } from '../../repositories/DwhRepository';
 
@@ -26,7 +27,7 @@ export interface IDwhLoggingService {
 }
 
 interface MemberRedemptionBaseParams {
-  redemptionType: (typeof REDEMPTION_TYPES)[number];
+  redemptionType: (typeof redemptionTypeEnum.enumValues)[number];
   clientType: ClientType;
   offerId: string;
   companyId: string;
@@ -36,19 +37,19 @@ interface MemberRedemptionBaseParams {
 export type MemberRedemptionParams = MemberRedemptionBaseParams &
   (
     | {
-        redemptionType: 'generic';
+        redemptionType: typeof GENERIC;
         code: string;
         integration?: never;
         integrationId?: never;
       }
     | {
-        redemptionType: 'vault' | 'vaultQR';
+        redemptionType: typeof VAULT | typeof VAULTQR;
         code: string;
         integration: string | null | undefined;
         integrationId: string | null | undefined;
       }
     | {
-        redemptionType: 'showCard' | 'preApplied' | 'ballot';
+        redemptionType: typeof GIFTCARD | typeof PREAPPLIED | typeof SHOWCARD | typeof BALLOT;
         code?: never;
         integration?: never;
         integrationId?: never;
@@ -68,14 +69,14 @@ export class MemberRedemptionParamsDto {
     };
 
     switch (redemptionDetails.redemptionType) {
-      case 'generic':
+      case GENERIC:
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
           code: redemptionDetails.code,
         });
-      case 'vault':
-      case 'vaultQR':
+      case VAULT:
+      case VAULTQR:
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
@@ -83,13 +84,14 @@ export class MemberRedemptionParamsDto {
           integration: redemptionDetails.vaultDetails?.integration,
           integrationId: redemptionDetails.vaultDetails?.integrationId,
         });
-      case 'showCard':
-      case 'preApplied':
+      case GIFTCARD:
+      case PREAPPLIED:
+      case SHOWCARD:
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
         });
-      case 'ballot':
+      case BALLOT:
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,

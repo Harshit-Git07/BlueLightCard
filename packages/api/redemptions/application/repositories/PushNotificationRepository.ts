@@ -19,22 +19,23 @@ export interface IPushNotificationRepository {
 }
 
 export class PushNotificationRepository implements IPushNotificationRepository {
-  static key = 'PushNotificationRepository' as const;
-  static inject = [Logger.key, BrazeEmailClientProvider.key] as const;
+  static readonly key = 'PushNotificationRepository' as const;
+  static readonly inject = [Logger.key, BrazeEmailClientProvider.key] as const;
 
   private brazeApiClient: Braze | undefined;
-  private config = {
+  private readonly config = {
     vault: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_PUSH_NOTIFICATION_CAMPAIGN_ID),
     vaultQR: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_QR_PUSH_NOTIFICATION_CAMPAIGN_ID),
     preApplied: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_PRE_APPLIED_PUSH_NOTIFICATION_CAMPAIGN_ID),
     generic: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GENERIC_PUSH_NOTIFICATION_CAMPAIGN_ID),
     showCard: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID),
     ballot: '',
+    giftCard: 'TODO',
   };
 
   constructor(
-    private logger: ILogger,
-    private clientProvider: IBrazeEmailClientProvider,
+    private readonly logger: ILogger,
+    private readonly clientProvider: IBrazeEmailClientProvider,
   ) {}
 
   private async getClient() {

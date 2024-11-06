@@ -26,9 +26,9 @@ import { RedeemController } from '../../../controllers/apiGateway/redeem/RedeemC
 import { RedemptionConfigRepository } from '../../../repositories/RedemptionConfigRepository';
 import { RedeemService } from '../../../services/redeem/RedeemService';
 import { RedeemStrategyResolver } from '../../../services/redeem/RedeemStrategyResolver';
+import { RedeemAffiliateStrategy } from '../../../services/redeem/strategies/RedeemAffiliateStrategy';
 import { RedeemBallotStrategy } from '../../../services/redeem/strategies/RedeemBallotStrategy';
 import { RedeemGenericStrategy } from '../../../services/redeem/strategies/RedeemGenericStrategy';
-import { RedeemPreAppliedStrategy } from '../../../services/redeem/strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from '../../../services/redeem/strategies/RedeemShowCardStrategy';
 import { RedeemVaultStrategy } from '../../../services/redeem/strategies/RedeemVaultStrategy';
 
@@ -63,7 +63,7 @@ const controller = createInjector()
 
   // Redemption strategies
   .provideClass(RedeemGenericStrategy.key, RedeemGenericStrategy)
-  .provideClass(RedeemPreAppliedStrategy.key, RedeemPreAppliedStrategy)
+  .provideClass(RedeemAffiliateStrategy.key, RedeemAffiliateStrategy)
   .provideClass(RedeemShowCardStrategy.key, RedeemShowCardStrategy)
   .provideClass(RedeemVaultStrategy.key, RedeemVaultStrategy)
   .provideClass(RedeemBallotStrategy.key, RedeemBallotStrategy)

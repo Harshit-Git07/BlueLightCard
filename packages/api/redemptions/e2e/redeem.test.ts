@@ -318,9 +318,9 @@ describe('POST /member/redeem', () => {
     expect(body).toHaveProperty('data.redemptionDetails.code'); //this will be a random value we cannot assess
   });
 
-  test('should redeem a preApplied offer', async () => {
+  test.each(['giftCard', 'preApplied'] as const)('should redeem a %s Affiliate offer', async (redemptionType) => {
     // Arrange
-    const { redemption, ...redemptionTestHooks } = buildTestRedemption('preApplied');
+    const { redemption, ...redemptionTestHooks } = buildTestRedemption(redemptionType);
 
     onTestFinished(redemptionTestHooks.cleanup);
     await redemptionTestHooks.insert();
@@ -337,7 +337,7 @@ describe('POST /member/redeem', () => {
     expect(body).toEqual({
       data: {
         kind: 'Ok',
-        redemptionType: 'preApplied',
+        redemptionType: redemptionType,
         redemptionDetails: {
           url: redemption.url,
         },

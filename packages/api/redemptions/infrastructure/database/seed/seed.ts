@@ -72,6 +72,16 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       redemptionType: 'ballot',
       url: 'https://www.eagle-eye-vault.com/',
     },
+    {
+      id: `${redemptionsPrefix}-1s245ga-13a8-4cf3-a072-giftcardconf`,
+      affiliate: 'awin',
+      companyId: 'company-9179',
+      connection: 'affiliate',
+      offerId: '8726',
+      offerType: 'online',
+      redemptionType: 'giftCard',
+      url: 'https://www.awin1.com/',
+    },
   ] satisfies (typeof redemptionsTable.$inferInsert)[];
   await db.insert(redemptionsTable).values(redemptionsData).onConflictDoNothing();
 

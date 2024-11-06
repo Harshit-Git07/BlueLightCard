@@ -1,34 +1,37 @@
+import { BALLOT, GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
 import { RedeemStrategyResolver } from './RedeemStrategyResolver';
+import { IRedeemStrategy } from './strategies/IRedeemStrategy';
+import { RedeemAffiliateStrategy } from './strategies/RedeemAffiliateStrategy';
 import { RedeemBallotStrategy } from './strategies/RedeemBallotStrategy';
 import { RedeemGenericStrategy } from './strategies/RedeemGenericStrategy';
-import { RedeemPreAppliedStrategy } from './strategies/RedeemPreAppliedStrategy';
 import { RedeemShowCardStrategy } from './strategies/RedeemShowCardStrategy';
 import { RedeemVaultStrategy } from './strategies/RedeemVaultStrategy';
 
 describe('RedeemStrategyResolver', () => {
   const redeemGenericStrategy: Partial<RedeemGenericStrategy> = {};
-  const redeemPreAppliedStrategy: Partial<RedeemPreAppliedStrategy> = {};
+  const redeemAffiliateStrategy: Partial<RedeemAffiliateStrategy> = {};
   const redeemShowCardStrategy: Partial<RedeemShowCardStrategy> = {};
   const redeemVaultStrategy: Partial<RedeemVaultStrategy> = {};
   const redeemBallotStrategy: Partial<RedeemBallotStrategy> = {};
 
   it.each([
-    ['generic', redeemGenericStrategy],
-    ['preApplied', redeemPreAppliedStrategy],
-    ['showCard', redeemShowCardStrategy],
-    ['vault', redeemVaultStrategy],
-    ['vaultQR', redeemVaultStrategy],
-    ['ballot', redeemBallotStrategy],
-  ] satisfies [RedemptionType, unknown][])(
+    [GENERIC, redeemGenericStrategy],
+    [GIFTCARD, redeemAffiliateStrategy],
+    [PREAPPLIED, redeemAffiliateStrategy],
+    [SHOWCARD, redeemShowCardStrategy],
+    [VAULT, redeemVaultStrategy],
+    [VAULTQR, redeemVaultStrategy],
+    [BALLOT, redeemBallotStrategy],
+  ] satisfies [RedemptionType, Partial<IRedeemStrategy>][])(
     'returns the correct strategy for each redemption type (%s)',
     (redemptionType, strategy) => {
       // Arrange
       const resolver = new RedeemStrategyResolver(
         as(redeemGenericStrategy),
-        as(redeemPreAppliedStrategy),
+        as(redeemAffiliateStrategy),
         as(redeemShowCardStrategy),
         as(redeemVaultStrategy),
         as(redeemBallotStrategy),
@@ -46,7 +49,7 @@ describe('RedeemStrategyResolver', () => {
     // Arrange
     const resolver = new RedeemStrategyResolver(
       as(redeemGenericStrategy),
-      as(redeemPreAppliedStrategy),
+      as(redeemAffiliateStrategy),
       as(redeemShowCardStrategy),
       as(redeemVaultStrategy),
       as(redeemBallotStrategy),

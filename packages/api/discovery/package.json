@@ -7,6 +7,7 @@
     "test:coverage": "npm run test:unit -- --coverage",
     "test:unit": "jest",
     "e2e:discovery": "dotenv -e ../../../.env -- npx sst bind vitest e2e",
+    "e2e:discovery:staging": "dotenv -e ../../../.env -- npx sst bind vitest e2e/staging",
     "typecheck": "tsc --noEmit",
     "format": "prettier . --write",
     "format:check": "prettier . --check",

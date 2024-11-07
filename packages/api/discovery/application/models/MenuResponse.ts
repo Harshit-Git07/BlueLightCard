@@ -2,12 +2,15 @@ import { OfferResponse } from '@blc-mono/discovery/application/models/OfferRespo
 
 export type MenuResponse = {
   dealsOfTheWeek?: {
+    id: string;
     offers: OfferResponse[];
   };
   featured?: {
+    id: string;
     offers: OfferResponse[];
   };
   marketplace?: {
+    id: string;
     title: string;
     description?: string;
     hidden?: boolean;

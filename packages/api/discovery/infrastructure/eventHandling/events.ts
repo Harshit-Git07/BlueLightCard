@@ -2,6 +2,9 @@ export enum Events {
   OFFER_CREATED = 'offer.created',
   OFFER_UPDATED = 'offer.updated',
   OFFER_DELETED = 'offer.deleted',
+  SITE_CREATED = 'site.created',
+  SITE_UPDATED = 'site.updated',
+  SITE_DELETED = 'site.deleted',
   COMPANY_CREATED = 'company.created',
   COMPANY_UPDATED = 'company.updated',
   MENU_OFFER_CREATED = 'menu.offer.created',
@@ -17,4 +20,8 @@ export enum Events {
   MENU_THEMED_OFFER_UPDATED = 'menu.themed.offer.updated',
   MENU_THEMED_OFFER_DELETED = 'menu.themed.offer.deleted',
   OPENSEARCH_POPULATE_INDEX = 'opensearch.populate.index',
+}
+
+export enum DetailTypes {
+  INTEGRATION_TEST = 'test-event',
 }

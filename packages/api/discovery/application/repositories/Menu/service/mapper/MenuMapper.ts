@@ -21,11 +21,16 @@ export function mapMenuEntityToMenu(menuEntity: MenuEntity): Menu {
 
 export function mapMenuToMenuEntity(menu: Menu): MenuEntity {
   return {
-    ...menu,
     partitionKey: MenuKeyBuilders.buildPartitionKey(menu.id),
     sortKey: MenuKeyBuilders.buildSortKey(menu.id),
     gsi1PartitionKey: MenuKeyBuilders.buildGsi1PartitionKey(menu.menuType),
     gsi1SortKey: MenuKeyBuilders.buildGsi1SortKey(menu.menuType),
+    id: menu.id,
+    name: menu.name,
+    menuType: menu.menuType,
+    startTime: menu.startTime,
+    endTime: menu.endTime,
+    updatedAt: menu.updatedAt,
   };
 }
 
@@ -44,9 +49,10 @@ export function mapMenuAndOfferToSingletonMenuResponse(menuWithOffers: MenuWithO
     throw new Error('Expected exactly one or less menu and offer');
   }
   if (menuWithOffers.length === 0) {
-    return { offers: [] };
+    return undefined;
   }
   return {
+    id: menuWithOffers[0].id,
     offers: menuWithOffers[0].offers.map(mapOfferToMenuOfferResponse),
   };
 }
@@ -61,6 +67,7 @@ export function mapMenuWithOffersToFlexibleMenuResponse(menuWithOffers: MenuWith
 
 export function mapMenuWithOffersToMarketplaceMenuResponses(menuWithOffers: MenuWithOffers[]) {
   return menuWithOffers.map(({ offers, ...menu }) => ({
+    id: menu.id,
     title: menu.name,
     offers: offers.map(mapOfferToMenuOfferResponse),
   }));

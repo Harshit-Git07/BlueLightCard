@@ -4,6 +4,8 @@ import { MenuWithOffers } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import * as MenuRepositoryFile from '@blc-mono/discovery/application/repositories/Menu/MenuRepository';
 
+import { MenuEntity, MenuEntityWithOfferEntities } from '../../schemas/MenuEntity';
+
 import { mapMenuToMenuEntity } from './mapper/MenuMapper';
 import { mapOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
 import * as target from './MenuService';
@@ -301,6 +303,94 @@ describe('Menu Service', () => {
           ...newOfferRecord,
         },
       ]);
+    });
+  });
+
+  describe('updateSingletonMenuId', () => {
+    const marketplaceMenu = menuFactory.build({ menuType: MenuType.MARKETPLACE });
+    const marketplaceMenuEntity = mapMenuToMenuEntity(marketplaceMenu);
+    const newStaticMenu = mapMenuToMenuEntity({ ...marketplaceMenu, menuType: MenuType.DEALS_OF_THE_WEEK });
+    const oldStaticMenu = menuFactory.build({ menuType: MenuType.DEALS_OF_THE_WEEK });
+    const oldStaticMenuEntity = mapMenuToMenuEntity(oldStaticMenu);
+
+    let mockRetrieveMenuData: jest.SpyInstance;
+    let mockRetrieveMenusWithOffersByMenuType: jest.SpyInstance;
+    let mockTransactWrite: jest.SpyInstance;
+    let mockDeleteMenuWithOffers: jest.SpyInstance;
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      mockTransactWrite = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'transactWrite').mockResolvedValue();
+      mockDeleteMenuWithOffers = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'deleteMenuWithOffers')
+        .mockResolvedValue();
+    });
+
+    const givenMenuDataIs = (menuEntity?: MenuEntity) => {
+      mockRetrieveMenuData = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveMenuData')
+        .mockResolvedValue(menuEntity);
+    };
+
+    const givenMenuWithOffersIs = (menuWithOffers: MenuEntityWithOfferEntities[]) => {
+      mockRetrieveMenusWithOffersByMenuType = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveMenusWithOffersByMenuType')
+        .mockResolvedValue(menuWithOffers);
+    };
+
+    it('should find & update menu to be of new static menu type', async () => {
+      givenMenuDataIs(marketplaceMenuEntity);
+      givenMenuWithOffersIs([{ ...oldStaticMenuEntity, offers: [menuOfferEntity] }]);
+
+      await target.updateSingletonMenuId(marketplaceMenuEntity.id, MenuType.DEALS_OF_THE_WEEK);
+
+      expect(mockRetrieveMenuData).toHaveBeenCalledWith(marketplaceMenuEntity.id);
+      expect(mockRetrieveMenusWithOffersByMenuType).toHaveBeenCalledWith(MenuType.DEALS_OF_THE_WEEK);
+      expect(mockTransactWrite).toHaveBeenCalledWith([newStaticMenu], [oldStaticMenuEntity]);
+      expect(mockDeleteMenuWithOffers).toHaveBeenCalled();
+    });
+
+    it('should call transactWrite with an empty array if no menuToUpdate is found', async () => {
+      givenMenuDataIs();
+      givenMenuWithOffersIs([{ ...oldStaticMenuEntity, offers: [menuOfferEntity] }]);
+
+      await target.updateSingletonMenuId(marketplaceMenuEntity.id, MenuType.DEALS_OF_THE_WEEK);
+
+      expect(mockRetrieveMenuData).toHaveBeenCalledWith(marketplaceMenuEntity.id);
+      expect(mockRetrieveMenusWithOffersByMenuType).toHaveBeenCalledWith(MenuType.DEALS_OF_THE_WEEK);
+      expect(mockTransactWrite).toHaveBeenCalledWith([], [oldStaticMenuEntity]);
+      expect(mockDeleteMenuWithOffers).toHaveBeenCalled();
+    });
+
+    it('should call transactWrite with an empty array if no menuToDelete is found', async () => {
+      givenMenuDataIs(marketplaceMenuEntity);
+      givenMenuWithOffersIs([]);
+
+      await target.updateSingletonMenuId(marketplaceMenuEntity.id, MenuType.DEALS_OF_THE_WEEK);
+
+      expect(mockRetrieveMenuData).toHaveBeenCalledWith(marketplaceMenuEntity.id);
+      expect(mockRetrieveMenusWithOffersByMenuType).toHaveBeenCalledWith(MenuType.DEALS_OF_THE_WEEK);
+      expect(mockTransactWrite).toHaveBeenCalledWith([newStaticMenu], []);
+      expect(mockDeleteMenuWithOffers).not.toHaveBeenCalled();
+    });
+
+    it('should delete current singleton menu offers', async () => {
+      givenMenuDataIs(marketplaceMenuEntity);
+      givenMenuWithOffersIs([{ ...oldStaticMenuEntity, offers: [menuOfferEntity] }]);
+
+      await target.updateSingletonMenuId(marketplaceMenuEntity.id, MenuType.DEALS_OF_THE_WEEK);
+
+      expect(mockDeleteMenuWithOffers).toHaveBeenCalledWith(oldStaticMenuEntity.id);
+    });
+
+    it('should not call transactWrite if no menusToDelete are found', async () => {
+      givenMenuDataIs();
+      givenMenuWithOffersIs([]);
+
+      await target.updateSingletonMenuId(marketplaceMenuEntity.id, MenuType.DEALS_OF_THE_WEEK);
+
+      expect(mockDeleteMenuWithOffers).not.toHaveBeenCalled();
+      expect(mockTransactWrite).not.toHaveBeenCalled();
     });
   });
 

@@ -9,9 +9,10 @@ import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environm
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 import { buildTestSanityMenuOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuOffer';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
+import { buildTestSanitySite } from '@blc-mono/discovery/testScripts/helpers/buildTestSanitySite';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 
-import { getBlockText } from '../helpers/sanityMappers/mapSanityOfferToOffer';
+import { getBlockText } from '../../helpers/sanityMappers/mapSanityOfferToOffer';
 
 const getMenuEndpoint = () => {
   if (ENDPOINTS.MENU === undefined || ENDPOINTS.MENU === '') {
@@ -35,50 +36,30 @@ const whenMenuIsCalledWith = async (params: Record<string, string>, headers: Rec
 };
 
 const generatedOfferUUID = `test-${randomUUID().toString()}`;
-const generatedMenuUUID = `test-${randomUUID().toString()}`;
 const generatedCompanyUUID = `test-company-${randomUUID().toString()}`;
+const marketplaceGeneratedMenuUUID = `test-${randomUUID().toString()}`;
+const dealsOfTheWeekGeneratedMenuUUID = `test-${randomUUID().toString()}`;
+const featuredOffersGeneratedMenuUUID = `test-${randomUUID().toString()}`;
 const offers: SanityOffer[] = [buildTestSanityOffer(generatedOfferUUID, generatedCompanyUUID)];
-const menus: SanityMenuOffer[] = [buildTestSanityMenuOffer(offers, generatedMenuUUID)];
+const marketplaceSanityMenuOffer = buildTestSanityMenuOffer(offers, marketplaceGeneratedMenuUUID);
+const dealsOfTheWeekSanityMenuOffer = buildTestSanityMenuOffer(offers, dealsOfTheWeekGeneratedMenuUUID);
+const featuredOffersSanityMenuOffer = buildTestSanityMenuOffer(offers, featuredOffersGeneratedMenuUUID);
+const menus: SanityMenuOffer[] = [
+  marketplaceSanityMenuOffer,
+  dealsOfTheWeekSanityMenuOffer,
+  featuredOffersSanityMenuOffer,
+];
 
 describe('Menu', async () => {
-  describe('GET /menu', async () => {
-    const testUserTokens = await TestUser.authenticate();
-
-    it.each([
-      [
-        200,
-        'A valid request is sent',
-        {
-          id: 'dealsOfTheWeek',
-        },
-        { Authorization: `Bearer ${testUserTokens.idToken}` },
-      ],
-      [
-        400,
-        'An Invalid request is sent',
-        {
-          id: 'noValidID',
-        },
-        { Authorization: `Bearer ${testUserTokens.idToken}` },
-      ],
-      [401, 'No authorization header is provided', { id: 'dealsOfTheWeek,featured' }, {}],
-      [
-        401,
-        'Invalid authorization header is provided',
-        { id: 'dealsOfTheWeek,featured' },
-        { Authorization: `Bearer invalidToken` },
-      ],
-      [200, "No menu id's provided", {}, { Authorization: `Bearer ${testUserTokens.idToken}` }],
-    ])('should return with response code %s when %s', async (statusCode, _description, params, headers) => {
-      const result = await whenMenuIsCalledWith(params, headers);
-      expect(result.status).toBe(statusCode);
-    });
-  });
-
-  describe.skip('Menu E2E Event Handling', async () => {
+  describe('Menu E2E Event Handling', async () => {
     const testUserTokens = await TestUser.authenticate();
 
     beforeAll(async () => {
+      await sendTestEvents({
+        source: Events.SITE_CREATED,
+        events: [buildTestSanitySite(dealsOfTheWeekGeneratedMenuUUID, featuredOffersGeneratedMenuUUID)],
+      });
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
       await new Promise((resolve) => setTimeout(resolve, 2000));
       await sendTestEvents({ source: Events.MENU_OFFER_CREATED, events: menus });
@@ -88,12 +69,20 @@ describe('Menu', async () => {
     afterAll(async () => {
       await sendTestEvents({
         source: Events.MENU_OFFER_DELETED,
-        events: [buildTestSanityMenuOffer(offers, generatedMenuUUID)],
+        events: [
+          buildTestSanityMenuOffer(offers, marketplaceGeneratedMenuUUID),
+          buildTestSanityMenuOffer(offers, dealsOfTheWeekGeneratedMenuUUID),
+          buildTestSanityMenuOffer(offers, featuredOffersGeneratedMenuUUID),
+        ],
       });
       await new Promise((resolve) => setTimeout(resolve, 2000));
       await sendTestEvents({
         source: Events.OFFER_DELETED,
         events: [buildTestSanityOffer(generatedOfferUUID, generatedCompanyUUID)],
+      });
+      await sendTestEvents({
+        source: Events.SITE_DELETED,
+        events: [buildTestSanitySite(dealsOfTheWeekGeneratedMenuUUID, featuredOffersGeneratedMenuUUID)],
       });
     });
 
@@ -105,24 +94,27 @@ describe('Menu', async () => {
 
       const result = (await response.json()) as { data: MenuResponse };
 
-      expect(result.data.marketplace).toEqual([
-        {
-          title: menus[0].title,
-          offers: [
-            {
-              offerID: offers[0]._id,
-              offerName: offers[0].name,
-              offerDescription: offers[0]?.offerDescription?.content
-                ? getBlockText(offers[0].offerDescription.content)
-                : '',
-              offerType: offers[0].offerType?.offerType,
-              imageURL: offers[0].image?.default?.asset?.url,
-              companyID: offers[0].company?._id,
-              companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
-            },
-          ],
-        },
-      ]);
+      const expectedMarketplaceMenu = result.data.marketplace?.find(
+        (menu) => menu.id === marketplaceSanityMenuOffer._id,
+      );
+
+      expect(expectedMarketplaceMenu).toEqual({
+        id: marketplaceSanityMenuOffer._id,
+        title: menus[0].title,
+        offers: [
+          {
+            offerID: offers[0]._id,
+            offerName: offers[0].name,
+            offerDescription: offers[0]?.offerDescription?.content
+              ? getBlockText(offers[0].offerDescription.content)
+              : '',
+            offerType: offers[0].offerType?.offerType,
+            imageURL: offers[0].image?.default?.asset?.url,
+            companyID: offers[0].company?._id,
+            companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
+          },
+        ],
+      });
     });
 
     it('should consume menu and offer events and return all menus in the response', async () => {
@@ -131,14 +123,42 @@ describe('Menu', async () => {
 
       expect(result.data).toEqual({
         dealsOfTheWeek: {
-          offers: [],
+          id: dealsOfTheWeekGeneratedMenuUUID,
+          offers: [
+            {
+              companyID: offers[0].company?._id,
+              companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
+              imageURL: offers[0].image?.default?.asset?.url,
+              offerDescription: offers[0]?.offerDescription?.content
+                ? getBlockText(offers[0].offerDescription.content)
+                : '',
+              offerID: offers[0]._id,
+              offerName: offers[0].name,
+              offerType: offers[0].offerType?.offerType,
+            },
+          ],
         },
         featured: {
-          offers: [],
+          id: featuredOffersGeneratedMenuUUID,
+          offers: [
+            {
+              companyID: offers[0].company?._id,
+              companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
+              imageURL: offers[0].image?.default?.asset?.url,
+              offerDescription: offers[0]?.offerDescription?.content
+                ? getBlockText(offers[0].offerDescription.content)
+                : '',
+              offerID: offers[0]._id,
+              offerName: offers[0].name,
+              offerType: offers[0].offerType?.offerType,
+            },
+          ],
         },
         flexible: [],
         marketplace: [
           {
+            id: marketplaceSanityMenuOffer._id,
+            title: menus[0].title,
             offers: [
               {
                 offerID: offers[0]._id,
@@ -152,7 +172,6 @@ describe('Menu', async () => {
                 companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
               },
             ],
-            title: menus[0].title,
           },
         ],
       });

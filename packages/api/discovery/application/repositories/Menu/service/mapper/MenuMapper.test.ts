@@ -54,13 +54,14 @@ describe('MenuMapper', () => {
     it('should map menuAndOfferToSingletonMenuResponse', () => {
       const result = mapMenuAndOfferToSingletonMenuResponse([{ ...menu, offers: [offer] }]);
       expect(result).toEqual({
+        id: menu.id,
         offers: [mapOfferToMenuOfferResponse(offer)],
       });
     });
 
     it('should return an empty array of offers if the length of the array is 0', () => {
       const result = mapMenuAndOfferToSingletonMenuResponse([]);
-      expect(result).toEqual({ offers: [] });
+      expect(result).toEqual(undefined);
     });
 
     it('should throw an error if the length of the array is not greater than 1', () => {
@@ -78,6 +79,7 @@ describe('MenuMapper', () => {
       const result = mapMenuWithOffersToMarketplaceMenuResponses([{ ...menu, offers: [offer] }]);
       expect(result).toEqual([
         {
+          id: menu.id,
           title: menu.name,
           offers: [mapOfferToMenuOfferResponse(offer)],
         },

@@ -19,6 +19,8 @@ import {
   ScanCommand,
   ScanCommandInput,
   ScanCommandOutput,
+  TransactWriteCommand,
+  TransactWriteCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import type { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 
@@ -118,6 +120,16 @@ export class DynamoDBService {
       }
     } catch (error) {
       const message = 'Error trying to batch write records using DynamoDB service';
+      logger.error({ message, body: error });
+      throw new Error(`${message}: [${error}]`);
+    }
+  }
+
+  static async transactWrite(params: TransactWriteCommandInput): Promise<void> {
+    try {
+      await this.dynamodb.send(new TransactWriteCommand(params));
+    } catch (error) {
+      const message = 'Error trying to transact write records using DynamoDB service';
       logger.error({ message, body: error });
       throw new Error(`${message}: [${error}]`);
     }

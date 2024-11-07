@@ -277,7 +277,7 @@ jobs:
           BLC_UK_IDENTITY_API_ID: ${{ matrix.identity-api-id }}
           IDENTITY_COGNITO_E2E_CLIENT_ID: ${{ matrix.dds-identity-cognito-e2e-client-id }}
           IDENTITY_COGNITO_E2E_USER_POOL_ID: ${{ matrix.dds-cognito-user-pool-id }}
-        run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e
+        run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e/staging
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created

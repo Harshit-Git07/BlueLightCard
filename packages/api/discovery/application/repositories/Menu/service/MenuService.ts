@@ -1,6 +1,6 @@
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
 import { Menu, MenuWithOffers } from '@blc-mono/discovery/application/models/Menu';
-import { AVAILABLE_MENU_TYPES } from '@blc-mono/discovery/application/models/MenuResponse';
+import { AVAILABLE_MENU_TYPES, MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
 
 import { buildErrorMessage } from '../../Company/service/utils/ErrorMessageBuilder';
@@ -139,6 +139,28 @@ export function updateMenuOfferEntities(menuOffers: MenuOfferEntity[], newOfferR
     gsi2SortKey,
     ...newOfferRecord,
   }));
+}
+
+export async function updateSingletonMenuId(
+  newMenuId: string,
+  menuType: MenuType.DEALS_OF_THE_WEEK | MenuType.FEATURED,
+): Promise<void> {
+  const retrievedMenu = await getMenuById(newMenuId);
+  const retrievedMenuByType = await getMenusByMenuType(menuType);
+
+  if (!retrievedMenu && retrievedMenuByType[menuType].length === 0) {
+    return;
+  }
+
+  const menusToUpdate = retrievedMenu ? [mapMenuToMenuEntity({ ...retrievedMenu, menuType })] : [];
+  const menusToDelete =
+    retrievedMenuByType[menuType].length > 0 ? [mapMenuToMenuEntity(retrievedMenuByType[menuType][0])] : [];
+
+  await new MenuRepository().transactWrite(menusToUpdate, menusToDelete);
+
+  if (menusToDelete.length > 0) {
+    await new MenuRepository().deleteMenuWithOffers(menusToDelete[0].id);
+  }
 }
 
 export function groupByMenuType(menuAndOffers: MenuWithOffers[]): Record<string, MenuWithOffers[]> {

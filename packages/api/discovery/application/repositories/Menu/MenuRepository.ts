@@ -29,6 +29,33 @@ export class MenuRepository {
     await DynamoDBService.batchDelete(items, this.tableName);
   }
 
+  async transactWrite(
+    itemsToPut: (MenuEntity | MenuOfferEntity)[],
+    itemsToDelete: (MenuEntity | MenuOfferEntity)[],
+  ): Promise<void> {
+    const transactWriteCommandInput = [
+      ...itemsToPut.map((item) => ({
+        Put: {
+          Item: item,
+          TableName: this.tableName,
+        },
+      })),
+      ...itemsToDelete.map((item) => ({
+        Delete: {
+          Key: {
+            partitionKey: item.partitionKey,
+            sortKey: item.sortKey,
+          },
+          TableName: this.tableName,
+        },
+      })),
+    ];
+
+    await DynamoDBService.transactWrite({
+      TransactItems: transactWriteCommandInput,
+    });
+  }
+
   async retrieveAllMenusAndOffers(): Promise<(MenuEntity | MenuOfferEntity)[]> {
     const data = await DynamoDBService.scan({ TableName: this.tableName });
     if (!data) {

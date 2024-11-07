@@ -16,6 +16,8 @@ import {
   ScanCommand,
   ScanCommandInput,
   ScanCommandOutput,
+  TransactWriteCommand,
+  TransactWriteCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 
@@ -122,6 +124,25 @@ describe('DynamoDB Service', () => {
 
       await expect(DynamoDBService.scan({} as ScanCommandInput)).rejects.toThrow(
         `Error trying to scan record using DynamoDB service: [${error}]`,
+      );
+    });
+  });
+
+  describe('transactWrite', () => {
+    it('should call "transactWrite" command', async () => {
+      mockDynamoDB.on(TransactWriteCommand).resolves({});
+
+      await DynamoDBService.transactWrite({} as TransactWriteCommandInput);
+
+      expect(mockDynamoDB).toHaveReceivedCommand(TransactWriteCommand);
+    });
+
+    it('should throw error on failed "transactWrite" command', async () => {
+      const error = new Error('DynamoDB error');
+      mockDynamoDB.on(TransactWriteCommand).rejects(error);
+
+      await expect(DynamoDBService.transactWrite({} as TransactWriteCommandInput)).rejects.toThrow(
+        `Error trying to transact write records using DynamoDB service: [${error}]`,
       );
     });
   });

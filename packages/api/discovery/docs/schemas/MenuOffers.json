@@ -34,6 +34,9 @@
   "dealsOfTheWeek": {
     "type": "object",
     "properties": {
+      "id": {
+        "type": "string"
+      },
       "offers": {
         "type": "array",
         "items": {
@@ -45,6 +48,9 @@
   "featured": {
     "type": "object",
     "properties": {
+      "id": {
+        "type": "string"
+      },
       "offers": {
         "type": "array",
         "items": {
@@ -58,6 +64,9 @@
     "items": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "title": {
           "type": "string"
         },

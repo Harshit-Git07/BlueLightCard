@@ -44,6 +44,7 @@ describe('Menu Repository', () => {
   const mockSave = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockBatchInsert = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockBatchDelete = jest.fn().mockResolvedValue(() => Promise.resolve());
+  const mockTransactWrite = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockDelete = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockGet = jest.fn();
   const mockQuery = jest.fn();
@@ -91,6 +92,39 @@ describe('Menu Repository', () => {
 
       expect(mockBatchDelete).toHaveBeenCalled();
       expect(mockBatchDelete).toHaveBeenCalledWith(items, 'menus-table');
+    });
+  });
+
+  describe('transactWrite', () => {
+    DynamoDBService.transactWrite = mockTransactWrite;
+    it('should call "TransactWrite" method with correct parameters', async () => {
+      await new MenuRepository().transactWrite([menuEntity, menuEntity], [menuOfferEntity]);
+
+      expect(mockTransactWrite).toHaveBeenCalledWith({
+        TransactItems: [
+          {
+            Put: {
+              Item: menuEntity,
+              TableName: 'menus-table',
+            },
+          },
+          {
+            Put: {
+              Item: menuEntity,
+              TableName: 'menus-table',
+            },
+          },
+          {
+            Delete: {
+              Key: {
+                partitionKey: menuOfferEntity.partitionKey,
+                sortKey: menuOfferEntity.sortKey,
+              },
+              TableName: 'menus-table',
+            },
+          },
+        ],
+      });
     });
   });
 

@@ -192,7 +192,9 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       SEARCH_OFFER_COMPANY_TABLE_NAME: searchOfferCompanyTable.tableName,
       MENUS_TABLE_NAME: menusTable.tableName,
       REGION: stack.region,
+      STAGE: stack.stage,
     },
+    permissions: ['ssm:GetParameter', 'ssm:PutParameter', 'ssm:DeleteParameter'],
   });
 
   searchOfferCompanyTable.grantReadWriteData(eventQueueListener);

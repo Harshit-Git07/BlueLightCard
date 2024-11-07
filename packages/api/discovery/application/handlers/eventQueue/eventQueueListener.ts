@@ -3,6 +3,7 @@ import {
   Company as SanityCompany,
   MenuOffer as SanityMenuOffer,
   Offer as SanityOffer,
+  Site as SanitySite,
 } from '@bluelightcard/sanity-types';
 import { EventBridgeEvent, SQSEvent } from 'aws-lambda';
 
@@ -14,9 +15,11 @@ import {
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
+import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
+import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
 
 const logger = new Logger({ serviceName: 'event-queue-listener' });
 
@@ -39,11 +42,20 @@ const unwrappedHandler = async (event: SQSEvent) => {
           break;
         case Events.MENU_OFFER_CREATED:
         case Events.MENU_OFFER_UPDATED: {
-          await handleMenusUpdated(mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuOffer));
+          await handleMenusUpdated(await mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuOffer));
           break;
         }
         case Events.MENU_OFFER_DELETED: {
-          await handleMenusDeleted(mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuOffer));
+          await handleMenusDeleted(await mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuOffer));
+          break;
+        }
+        case Events.SITE_CREATED:
+        case Events.SITE_UPDATED: {
+          await handleSiteUpdated(mapSanitySiteToSite(body.detail as SanitySite));
+          break;
+        }
+        case Events.SITE_DELETED: {
+          await handleSiteDeleted(mapSanitySiteToSite(body.detail as SanitySite));
           break;
         }
         default:

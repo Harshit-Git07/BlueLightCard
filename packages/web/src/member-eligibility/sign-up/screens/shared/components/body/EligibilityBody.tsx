@@ -8,7 +8,7 @@ interface MainContainerProps {
 export const EligibilityBody: FC<MainContainerProps> = ({ children, className = '' }) => {
   return (
     <main
-      className={`flex-grow flex flex-col justify-start items-center md:w-[500px] sm:w-full mx-auto pt-[32px] md:pt-12 ${className}`}
+      className={`flex-grow flex flex-col justify-start items-center min-h-[100vh] md:min-h-fit md:w-[500px] sm:w-full mx-auto pt-[32px] md:pt-12 ${className}`}
     >
       {children}
     </main>

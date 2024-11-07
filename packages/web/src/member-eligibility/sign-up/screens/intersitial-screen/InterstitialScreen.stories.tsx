@@ -5,6 +5,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof InterstitialScreen> = {
   title: 'Pages/Signup Eligibility Flow/Interstitial Screen',
   component: InterstitialScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof InterstitialScreen> = () => {

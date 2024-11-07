@@ -6,6 +6,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof WorkEmailRetryScreen> = {
   title: 'Pages/Signup Eligibility Flow/Work Email Retry Screen',
   component: WorkEmailRetryScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof WorkEmailRetryScreen> = () => {

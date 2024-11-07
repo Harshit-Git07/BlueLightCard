@@ -5,6 +5,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof FileUploadVerificationScreen> = {
   title: 'Pages/Signup Eligibility Flow/File Upload Verification Screen',
   component: FileUploadVerificationScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {

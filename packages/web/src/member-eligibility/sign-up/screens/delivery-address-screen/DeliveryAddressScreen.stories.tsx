@@ -5,6 +5,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof DeliveryAddressScreen> = {
   title: 'Pages/Signup Eligibility Flow/Delivery Address Screen',
   component: DeliveryAddressScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof DeliveryAddressScreen> = () => {

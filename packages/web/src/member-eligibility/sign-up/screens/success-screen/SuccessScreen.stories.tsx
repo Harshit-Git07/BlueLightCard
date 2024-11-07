@@ -6,6 +6,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof SuccessScreen> = {
   title: 'Pages/Signup Eligibility Flow/Success Screen',
   component: SuccessScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof SuccessScreen> = () => {

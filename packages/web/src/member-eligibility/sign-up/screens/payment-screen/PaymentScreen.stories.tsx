@@ -6,6 +6,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof PaymentScreen> = {
   title: 'Pages/Signup Eligibility Flow/Payment Screen',
   component: PaymentScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof PaymentScreen> = () => {

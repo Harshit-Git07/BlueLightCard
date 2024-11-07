@@ -5,6 +5,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof EmploymentStatusScreen> = {
   title: 'Pages/Signup Eligibility Flow/Employment Status Screen',
   component: EmploymentStatusScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof EmploymentStatusScreen> = () => {

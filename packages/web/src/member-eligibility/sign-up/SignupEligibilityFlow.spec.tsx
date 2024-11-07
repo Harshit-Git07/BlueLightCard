@@ -23,15 +23,38 @@ describe('given a signing up member that needs to prove their eligibility to use
       });
 
       it('should navigate to the employment status screen', () => {
-        const title = screen.getByTestId('fuzzy-frontend-title');
-        expect(title.textContent).toEqual('Employment Status Screen');
+        const title = screen.getByText('Verify Eligibility');
+        expect(title).toBeInTheDocument();
       });
 
-      // TODO: Perhaps cover the other employment status types?
-      describe('when the employment status screen is completed', () => {
+      describe('when selecting Volunteer as employment status', () => {
         beforeEach(async () => {
-          const nextButton = screen.getByTestId('next-button-1');
-          act(() => nextButton.click());
+          const volunteerButton = screen.getByText('Volunteer');
+          act(() => volunteerButton.click());
+        });
+
+        it('should navigate to the job details screen', () => {
+          const title = screen.getByTestId('fuzzy-frontend-title');
+          expect(title.textContent).toEqual('Job Details Screen');
+        });
+      });
+
+      describe('when selecting Retired as employment status', () => {
+        beforeEach(async () => {
+          const retiredButton = screen.getByText('Retired');
+          act(() => retiredButton.click());
+        });
+
+        it('should navigate to the job details screen', () => {
+          const title = screen.getByTestId('fuzzy-frontend-title');
+          expect(title.textContent).toEqual('Job Details Screen');
+        });
+      });
+
+      describe('when selecting Employed as employment status', () => {
+        beforeEach(async () => {
+          const employedButton = screen.getByText('Employed');
+          act(() => employedButton.click());
         });
 
         it('should navigate to the job details screen', () => {

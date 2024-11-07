@@ -6,6 +6,9 @@ import { useEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hoo
 const componentMeta: Meta<typeof VerificationMethodScreen> = {
   title: 'Pages/Signup Eligibility Flow/Verification Method Screen',
   component: VerificationMethodScreen,
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 const ScreenTemplate: StoryFn<typeof VerificationMethodScreen> = () => {

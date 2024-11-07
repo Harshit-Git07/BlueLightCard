@@ -170,7 +170,9 @@ export const injectedStyles = `
       text-align: center!important;
     }
 
-    .circle-logo {
+    .circle-logo{
+      height: 100px;
+      width: 100px;
       border-radius: 50%!important;
       box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15)!important;
     }

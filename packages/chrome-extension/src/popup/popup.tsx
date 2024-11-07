@@ -116,7 +116,7 @@ const Popup = () => {
           </p>
           <div className="settings-body-container">
             <p style={{ maxWidth: '70%' }}>
-              By clicking on the switch box you allow BLC chrome extension to track of your usage.
+             By clicking on the switch box you allow the Blue Light Card Chrome extension to keep track of your usage.
             </p>
             <div onClick={toggleSwitch} style={switchStyle}>
               <div style={toggleStyle}></div>

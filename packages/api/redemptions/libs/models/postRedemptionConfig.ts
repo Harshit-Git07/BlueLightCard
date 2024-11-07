@@ -83,9 +83,10 @@ export const VaultModel = createZodNamedType(
       integrationId: z
         .union([z.string(), z.number()])
         .transform((value) => String(value))
-        .nullable(),
+        .nullable()
+        .optional(),
       email: z.string().email(),
-      integration: z.enum(['eagleeye', 'uniqodo']).nullable(),
+      integration: z.enum(['eagleeye', 'uniqodo']).nullable().optional(),
     })
     .superRefine((val, ctx) => {
       if ((val.integration === 'eagleeye' || val.integration === 'uniqodo') && !val.integrationId) {

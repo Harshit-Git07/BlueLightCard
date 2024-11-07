@@ -49,7 +49,7 @@ export const handler = async (event: APIGatewayEvent) => {
   }
 
   const companyId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
- 
+
   const queryParams = `cid=${companyId}&uid=${uid}`;
 
   try {

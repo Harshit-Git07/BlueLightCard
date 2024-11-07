@@ -108,6 +108,7 @@ jobs:
             stage: staging
             discoveryEventBusName: 'staging-blc-mono-eventBus'
             cmsAccount: '971422711515'
+            userProfileEndpoint: https://staging-identity.blcshine.io/user
           - deployment: 'dds-uk-staging'
             region: 'eu-west-2'
             stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
@@ -123,6 +124,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
+            userProfileEndpoint: https://staging-identity.blcshine.io/user
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             cmsAccount: '971422711515'
@@ -133,6 +135,7 @@ jobs:
             brand: BLC_AU
             stage: staging
             discoveryEventBusName: 'staging-blc-mono-eventBus'
+            userProfileEndpoint: https://staging-identity.blcshine.io/user
     needs:
       - install
       - test
@@ -151,6 +154,7 @@ jobs:
       BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
       OFFERS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
       OFFERS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
+      USER_PROFILE_ENDPOINT: ${{ matrix.userProfileEndpoint }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -215,6 +219,7 @@ jobs:
             cdnUrl: 'https://cdn.bluelightcard.co.uk'
             brand: BLC_UK
             stage: production
+            userProfileEndpoint: https://identity.blcshine.io/user
           - deployment: 'dds-uk-production'
             region: 'eu-west-2'
             prodBaseUrl: https://www.defencediscountservice.co.uk
@@ -228,6 +233,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
             ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
             blcUkIdentityApiId: 'ue8dcieh75'
+            userProfileEndpoint: https://identity.blcshine.io/user
           - namespace: 'blc-aus-production'
             region: 'ap-southeast-2'
             prodBaseUrl: https://www.bluelightcard.com.au
@@ -236,6 +242,7 @@ jobs:
             cdnUrl: 'https://cdn.bluelightcard.com.au'
             brand: BLC_AU
             stage: production
+            userProfileEndpoint: https://identity.blcshine.io/user
     needs:
       - install
       - test
@@ -253,6 +260,7 @@ jobs:
       DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
       DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
       BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
+      USER_PROFILE_ENDPOINT: ${{ matrix.userProfileEndpoint }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

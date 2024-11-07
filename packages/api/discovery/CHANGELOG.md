@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.15.0...bluelightcard/discovery-v1.16.0) (2024-11-07)
+
+
+### Features
+
+* [DISCO-1162] Add get all companies stub ([#2794](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2794)) ([fc47fa6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fc47fa6cf7ffee882bc5d432b8fc646f65a2f868))
+* DISCO-1067 Storying Featured & Deals of the Week IDs ([#2757](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2757)) ([aa355ac](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aa355acf3104baebb7c59af5aedcec7bba96c7ed))
+
+
+### Bug Fixes
+
+* [PS-1058] Update end date for week 9 campaign ([#2810](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2810)) ([4c88af2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4c88af202c2b536c95ec8f7c8b1540df1edd04b1))
+
 ## [1.15.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.14.2...bluelightcard/discovery-v1.15.0) (2024-11-06)
 
 

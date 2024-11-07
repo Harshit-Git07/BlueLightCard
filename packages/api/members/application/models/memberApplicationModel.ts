@@ -15,7 +15,6 @@ export const MemberApplicationModel = createZodNamedType(
         .refine(
           (val) => {
             const uuid = val.replace('MEMBER#', '');
-            const x = uuid;
             return z.string().uuid().safeParse(uuid).success;
           },
           {

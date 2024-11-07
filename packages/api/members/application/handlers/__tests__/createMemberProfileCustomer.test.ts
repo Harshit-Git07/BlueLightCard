@@ -1,13 +1,13 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context as LambdaContext } from 'aws-lambda';
-import { MemberProfilesService } from '../../services/memberProfilesService';
+import { memberProfileCustomerCreateService } from '../../services/memberProfileCustomerCreateService';
 import { CreateProfilePayload } from '../../types/memberProfilesTypes';
 
 jest.mock('@aws-lambda-powertools/logger');
-jest.mock('../../repositories/memberProfilesRepository');
-jest.mock('../../services/memberProfilesService');
+jest.mock('../../repositories/memberProfileCustomerCreateRepository');
+jest.mock('../../services/memberProfileCustomerCreateService');
 
 const mockCreateCustomerProfiles = jest.fn();
-MemberProfilesService.prototype.createCustomerProfiles = mockCreateCustomerProfiles;
+memberProfileCustomerCreateService.prototype.createCustomerProfiles = mockCreateCustomerProfiles;
 
 describe('Create Profile Lambda Handler', () => {
   let handler: (
@@ -24,7 +24,7 @@ describe('Create Profile Lambda Handler', () => {
   };
 
   beforeAll(async () => {
-    const profileModule = await import('../profile/createCustomerProfiles');
+    const profileModule = await import('../profile/createMemberProfileCustomer');
     handler = profileModule.handler;
   });
 
@@ -40,11 +40,12 @@ describe('Create Profile Lambda Handler', () => {
     } as unknown as APIGatewayProxyEvent;
 
     const memberUuid = '123e4567-e89b-12d3-a456-426614174000';
-    mockCreateCustomerProfiles.mockResolvedValue(memberUuid);
+    const profileUuid = '223e4567-e89b-12d3-a456-426614174000';
+    mockCreateCustomerProfiles.mockResolvedValue([memberUuid, profileUuid]);
 
     const response = await handler(mockEvent, mockContext);
     expect(response.statusCode).toBe(200);
-    expect(JSON.parse(response.body)).toEqual({ message: memberUuid });
+    expect(JSON.parse(response.body)).toEqual({ memberUuid: memberUuid, profileUuid: profileUuid });
   });
 
   it('should return a 400 if brand is missing from pathParameters', async () => {

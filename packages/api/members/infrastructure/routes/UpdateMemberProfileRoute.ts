@@ -7,26 +7,26 @@ import {
 } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
-export class GetMemberProfilesRoute {
+export class UpdateMemberProfileRoute {
   constructor(
     private apiGatewayModelGenerator: ApiGatewayModelGenerator,
     private agMemberProfileModel: Model,
-    private identityTableName: string,
+    private profileTableName: string,
   ) {}
 
   getRouteDetails(): ApiGatewayV1ApiRouteProps<never> {
     return {
       function: {
-        handler: 'packages/api/members/application/handlers/profile/getMemberProfiles.handler',
+        handler: 'packages/api/members/application/handlers/profile/updateMemberProfile.handler',
         environment: {
           SERVICE: 'member',
-          IDENTITY_TABLE_NAME: this.identityTableName,
+          PROFILE_TABLE_NAME: this.profileTableName,
         },
         permissions: [
           new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ['dynamodb:Query'],
-            resources: [`arn:aws:dynamodb:*:*:table/${this.identityTableName}`],
+            actions: ['dynamodb:Query', 'dynamodb:UpdateItem'],
+            resources: [`arn:aws:dynamodb:*:*:table/${this.profileTableName}`],
           }),
         ],
       },

@@ -4,7 +4,7 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 import { Gender } from '../enums/Gender';
 
 // Database schema
-export const MemberProfileModel = createZodNamedType(
+export const MemberProfileCustomerModel = createZodNamedType(
   'MemberProfileModel',
   z
     .object({
@@ -36,8 +36,6 @@ export const MemberProfileModel = createZodNamedType(
             message: 'sk must be a valid UUID after PROFILE#',
           },
         ),
-      firstName: z.string(),
-      lastName: z.string(),
       dateOfBirth: z
         .string()
         .refine(
@@ -57,50 +55,29 @@ export const MemberProfileModel = createZodNamedType(
           {
             message: 'Date of birth must be before today',
           },
-        ),
-      gender: z.nativeEnum(Gender).nullable(),
-      phoneNumber: z.string().nullable(),
-      county: z.string(),
-      emailAddress: z.string().email(),
-      emailValidated: z.number().default(0),
-      spareEmail: z.string().email().optional(),
-      spareEmailValidated: z.number().optional().default(0),
-      employmentType: z.string(),
-      organisationId: z.string().uuid(),
-      employerId: z.string().uuid(),
-      employerName: z.string(),
-      jobTitle: z.string(),
-      jobReference: z.string(),
-      signupDate: z.string().datetime().nullable(),
-      gaKey: z.string().optional(),
-      profileStatus: z.string().optional(),
-      lastLogin: z.string(),
-      lastIpAddress: z.string(),
+        )
+        .optional(),
+      gender: z.nativeEnum(Gender).nullable().optional(),
+      phoneNumber: z.string().nullable().optional(),
+      county: z.string().optional(),
+      employmentType: z.string().optional(),
+      organisationId: z.string().uuid().optional(),
+      employerId: z.string().uuid().optional(),
+      jobTitle: z.string().optional(),
+      jobReference: z.string().optional(),
     })
     .transform((profile) => ({
       memberId: profile.pk.replace('MEMBER#', ''),
       profileId: profile.sk.replace('PROFILE#', ''),
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      dateOfBirth: transformDateToFormatYYYYMMDD(profile.dateOfBirth),
+      dateOfBirth: transformDateToFormatYYYYMMDD(profile.dateOfBirth ?? null),
       gender: profile.gender,
       phoneNumber: profile.phoneNumber,
-      emailAddress: profile.emailAddress,
-      emailValidated: profile.emailValidated,
-      spareEmail: profile.spareEmail,
-      spareEmailValidated: profile.spareEmailValidated,
       employmentType: profile.employmentType,
       organisationId: profile.organisationId,
       employerId: profile.employerId,
-      employerName: profile.employerName,
       jobTitle: profile.jobTitle,
       jobReference: profile.jobReference,
-      signupDate: transformDateToFormatYYYYMMDD(profile.signupDate),
-      gaKey: profile.gaKey,
-      profileStatus: profile.profileStatus,
-      lastLogin: profile.lastLogin,
-      lastIpAddress: profile.lastIpAddress,
     })),
 );
 
-export type MemberProfileModel = z.infer<typeof MemberProfileModel>;
+export type MemberProfileCustomerModel = z.infer<typeof MemberProfileCustomerModel>;

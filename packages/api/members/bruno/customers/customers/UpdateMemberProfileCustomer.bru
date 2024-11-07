@@ -1,0 +1,30 @@
+meta {
+  name: UpdateMemberProfileCustomer
+  type: http
+  seq: 1
+}
+
+put {
+  url: https://{{api_key_sst}}.execute-api.eu-west-2.amazonaws.com/v1/members/v5/customers/{{brand}}/{{member_id}}/{{profile_id}}
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: x-api-key
+  value: {{api_key_aws}}
+  placement: header
+}
+
+body:json {
+  {
+    "dateOfBirth": "1960-01-01T00:00:00.000Z",
+    "phoneNumber": "123-456-7890",
+    "gender": "MALE",
+    "county": "Antrim 2",
+    "organisationId": "22a8282a-5aee-44a3-ad8e-02b4293fe14e",
+    "employerId": "99995678-1234-1264-1234-123456781234",
+    "jobTitle": "Software Engineer",
+    "jobReference": "REF123"
+  }
+}

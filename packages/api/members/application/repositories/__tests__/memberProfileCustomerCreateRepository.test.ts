@@ -1,21 +1,13 @@
-import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-  TransactWriteCommand,
-  UpdateCommand,
-} from '@aws-sdk/lib-dynamodb';
-import { MemberProfilesRepository } from '../memberProfilesRepository';
-import {
-  AddressInsertPayload,
-  ProfileUpdatePayload,
-  CreateProfilePayload,
-} from '../../types/memberProfilesTypes';
-import { MemberProfileDBSchema } from '../../models/memberProfileModel';
+import { DynamoDBDocumentClient, QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
+import { memberProfileCustomerCreateRepository } from '../memberProfileCustomerCreateRepository';
+import { AddressInsertPayload, CreateProfilePayload } from '../../types/memberProfilesTypes';
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
 import { v4 as uuidv4 } from 'uuid';
+import { ApplicationReason } from '../../enums/ApplicationReason';
+import { EligibilityStatus } from '../../enums/EligibilityStatus';
 
-jest.mock('../../models/memberProfileModel', () => ({
+jest.mock('../../models/memberProfilesModel', () => ({
   MemberProfileDBSchema: {
     parse: jest.fn(),
   },
@@ -25,12 +17,12 @@ jest.mock('uuid', () => ({
   v4: jest.fn(),
 }));
 
-describe('MemberProfileRepository', () => {
-  let repository: MemberProfilesRepository;
+describe('memberProfileCustomerCreateRepository', () => {
+  let repository: memberProfileCustomerCreateRepository;
   const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
   beforeEach(() => {
-    repository = new MemberProfilesRepository(mockDynamoDB as any, 'TestTable');
+    repository = new memberProfileCustomerCreateRepository(mockDynamoDB as any, 'TestTable');
   });
 
   afterEach(() => {
@@ -94,8 +86,8 @@ describe('MemberProfileRepository', () => {
                 pk: `MEMBER#${mockMemberUUID}`,
                 sk: `APPLICATION#${mockApplicationUUID}`,
                 startDate: fixedDate.toISOString(),
-                eligibilityStatus: 'INELIGIBLE',
-                applicationReason: 'SIGNUP',
+                eligibilityStatus: EligibilityStatus.INELIGIBLE,
+                applicationReason: ApplicationReason.SIGNUP,
                 verificationMethod: '',
               },
             },
@@ -107,7 +99,7 @@ describe('MemberProfileRepository', () => {
     it('should return the member_uuid without the MEMBER# prefix', async () => {
       const result = await repository.createCustomerProfiles(payload, brand);
 
-      expect(result).toBe(mockMemberUUID);
+      expect(result).toStrictEqual([mockMemberUUID, mockProfileUUID]);
     });
 
     it('should throw an error if transactWrite fails', async () => {
@@ -116,80 +108,6 @@ describe('MemberProfileRepository', () => {
       await expect(repository.createCustomerProfiles(payload, brand)).rejects.toThrow(
         'Failed to create member profiles',
       );
-    });
-  });
-
-  describe('getMemberProfiles', () => {
-    it('should return profile information when profile is found', async () => {
-      const mockProfile = {
-        pk: 'MEMBER#456',
-        sk: 'PROFILE#',
-        firstName: 'John',
-        lastName: 'Doe',
-        dateOfBirth: '1990-01-01',
-        gender: 'male',
-        mobile: '1234567890',
-        emailAddress: 'john@example.com',
-        emailValidated: 1,
-        spareEmailValidated: 0,
-        organisation: 'TestOrg',
-        employer: 'TestEmployer',
-        employerId: '123',
-        gaKey: 'test-ga-key',
-        county: 'TestCounty',
-        employmentType: 'Full-time',
-        jobTitle: 'Developer',
-        reference: 'REF123',
-        signupDate: '2023-01-01',
-        signupSource: 'Web',
-        lastIp: '192.168.1.1',
-        lastLogin: '2023-09-01',
-        blocked: false,
-        cardNumber: '1234',
-        cardExpire: '2025-12-31',
-        cardStatus: 'Active',
-        cardPaymentStatus: 'PAID_CARD',
-      };
-
-      const mockQueryResult = {
-        Items: [mockProfile],
-      };
-
-      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
-
-      (MemberProfileDBSchema.parse as jest.Mock).mockReturnValue(mockProfile);
-
-      const result = await repository.getMemberProfiles('456');
-
-      expect(result).toEqual(mockProfile);
-      expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
-        TableName: 'TestTable',
-        KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': 'MEMBER#456',
-          ':sk': 'PROFILE#',
-        },
-      });
-      expect(MemberProfileDBSchema.parse).toHaveBeenCalledWith(mockProfile);
-    });
-
-    it('should return null when profile is not found', async () => {
-      const mockQueryResult = { Items: [] };
-      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
-
-      const result = await repository.getMemberProfiles('456');
-
-      expect(result).toBeNull();
-    });
-
-    it('should throw an error when query fails', async () => {
-      mockDynamoDB.on(QueryCommand).rejects(new Error('DynamoDB error'));
-
-      await expect(repository.getMemberProfiles('456')).rejects.toThrow('DynamoDB error');
     });
   });
 
@@ -230,54 +148,6 @@ describe('MemberProfileRepository', () => {
       mockDynamoDB.on(QueryCommand).rejects(new Error('DynamoDB error'));
 
       await expect(repository.getProfileSortKey('MEMBER#456')).rejects.toThrow('DynamoDB error');
-    });
-  });
-
-  describe('updateProfile', () => {
-    it('should update the profile successfully', async () => {
-      mockDynamoDB.on(UpdateCommand).resolves({});
-      const payload: ProfileUpdatePayload = {
-        firstName: 'John',
-        lastName: 'Doe',
-        dateOfBirth: '1990-01-01',
-        mobile: '1234567890',
-        gender: 'male',
-      };
-
-      await repository.updateProfile('MEMBER#456', 'PROFILE#123', payload);
-
-      expect(mockDynamoDB).toHaveReceivedCommandWith(UpdateCommand, {
-        TableName: 'TestTable',
-        Key: {
-          pk: 'MEMBER#456',
-          sk: 'PROFILE#123',
-        },
-        UpdateExpression:
-          'SET firstName = :fn, lastName = :ln, dateOfBirth = :dob, mobile = :mob, gender = :gen',
-        ExpressionAttributeValues: {
-          ':fn': 'John',
-          ':ln': 'Doe',
-          ':dob': '1990-01-01',
-          ':mob': '1234567890',
-          ':gen': 'male',
-        },
-      });
-    });
-
-    it('should throw an error when update fails', async () => {
-      mockDynamoDB.on(UpdateCommand).rejects(new Error('DynamoDB error'));
-
-      const payload: ProfileUpdatePayload = {
-        firstName: 'John',
-        lastName: 'Doe',
-        dateOfBirth: '1990-01-01',
-        mobile: '1234567890',
-        gender: 'male',
-      };
-
-      await expect(repository.updateProfile('MEMBER#456', 'PROFILE#123', payload)).rejects.toThrow(
-        'DynamoDB error',
-      );
     });
   });
 

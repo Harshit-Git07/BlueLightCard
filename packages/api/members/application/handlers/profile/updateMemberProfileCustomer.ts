@@ -2,11 +2,11 @@ import { APIGatewayProxyHandler } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { validateRequest } from '../../utils/requestValidator';
 import {
-  MemberProfileQueryPayload,
-  MemberProfileUpdatePayload,
-} from '../../types/memberProfileTypes';
-import { MemberProfileRepository } from '../../repositories/memberProfileRepository';
-import { MemberProfileService } from '../../services/memberProfileService';
+  MemberProfileCustomerQueryPayload,
+  MemberProfileCustomerUpdatePayload,
+} from '../../types/memberProfileCustomerTypes';
+import { MemberProfileCustomerRepository } from '../../repositories/memberProfileCustomerRepository';
+import { MemberProfileCustomerService } from '../../services/memberProfileCustomerService';
 import { Response } from '../../utils/restResponse/response';
 import { APIErrorCode } from '../../enums/APIErrorCode';
 import { APIError } from '../../models/APIError';
@@ -16,17 +16,17 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { EmployersRepository } from '../../repositories/employersRepository';
 
 const service: string = process.env.SERVICE as string;
-const logger = new Logger({ serviceName: `${service}-updateMemberProfile` });
+const logger = new Logger({ serviceName: `${service}-updateMemberProfileCustomer` });
 
 const tableName = process.env.PROFILE_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: process.env.REGION ?? 'eu-west-2' }),
 );
 
-const repository = new MemberProfileRepository(dynamoDB, tableName);
+const repository = new MemberProfileCustomerRepository(dynamoDB, tableName);
 const organisationsRepository = new OrganisationsRepository(dynamoDB, tableName);
 const employersRepository = new EmployersRepository(dynamoDB, tableName);
-const profileService = new MemberProfileService(
+const profileService = new MemberProfileCustomerService(
   repository,
   organisationsRepository,
   employersRepository,
@@ -66,16 +66,21 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
 
     const { body } = validationResult;
-    const queryPayload: MemberProfileQueryPayload = {
+    const queryPayload: MemberProfileCustomerQueryPayload = {
       memberUUID: memberUUID,
       profileId: profileId,
     };
-    const updatePayload: MemberProfileUpdatePayload = body;
+    const updatePayload: MemberProfileCustomerUpdatePayload = body;
 
     const isInsert = event.httpMethod === 'POST';
 
     try {
-      await profileService.upsertMemberProfile(queryPayload, updatePayload, isInsert, errorSet);
+      await profileService.upsertMemberProfileCustomer(
+        queryPayload,
+        updatePayload,
+        isInsert,
+        errorSet,
+      );
     } catch (error) {
       if (
         error instanceof Error &&

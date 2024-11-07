@@ -18,8 +18,6 @@ import { createMemberProfilesTable } from '@blc-mono/members/infrastructure/dyna
 
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { MemberProfileModel } from '../application/models/memberProfileModel';
-import { GetMemberProfilesRoute } from './routes/GetMemberProfilesRoute';
-import { CreateCustomerProfilesRoute } from './routes/CreateCustomerProfilesRoute';
 import { GetMemberCardRoute } from './routes/GetMemberCardRoute';
 import { GetMemberApplicationRoute } from './routes/GetMemberApplicationRoute';
 import { UpdateMemberApplicationRoute } from './routes/UpdateMemberApplicationRoute';
@@ -35,7 +33,14 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 import { EmployerModel } from '../application/models/employerModel';
 import { GetEmployersRoute } from './routes/GetEmployersRoute';
+import { MemberProfileCustomerModel } from '../application/models/memberProfileCustomerModel';
+import { UpdateMemberProfileRoute } from './routes/UpdateMemberProfileRoute';
+import { UpdateMemberProfileCustomerRoute } from './routes/UpdateMemberProfileCustomerRoute';
+import { CreateMemberProfileCustomerRoute } from './routes/CreateMemberProfileCustomerRoute';
 import { createMemberCardsTable } from './dynamodb/createMemberCardsTable';
+
+import { GetCustomerProfileRoute } from './routes/GetCustomerProfileRoute';
+import { CustomerProfileModel } from '../application/models/customer/customerProfileModel';
 
 async function MembersStack({ stack, app }: StackContext) {
   const identityTableName = `${stack.stage}-${app.name}-memberProfiles`;
@@ -108,6 +113,11 @@ async function MembersStack({ stack, app }: StackContext) {
 
   const agMemberApplicationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(MemberApplicationModel);
+  const agMemberProfileModel =
+    apiGatewayModelGenerator.generateModelFromZodEffect(MemberProfileModel);
+  const agMemberProfileCustomerModel = apiGatewayModelGenerator.generateModelFromZodEffect(
+    MemberProfileCustomerModel,
+  );
 
   const agMemberApplicationExternalModel = apiGatewayModelGenerator.generateModelFromZodEffect(
     MemberApplicationExternalModel,
@@ -116,19 +126,23 @@ async function MembersStack({ stack, app }: StackContext) {
   const agOrganisationModel =
     apiGatewayModelGenerator.generateModelFromZodEffect(OrganisationModel);
 
+  const agCustomerProfileModel =
+    apiGatewayModelGenerator.generateModelFromZodEffect(CustomerProfileModel);
+
   const agEmployerModel = apiGatewayModelGenerator.generateModelFromZodEffect(EmployerModel);
 
   membersApi.addRoutes(stack, {
-    'GET /members/v5/profiles': new GetMemberProfilesRoute(
+    'POST /members/v5/customers/{brand}': new CreateMemberProfileCustomerRoute(
       apiGatewayModelGenerator,
-      agMembersProfileModel,
+      agMemberProfileModel,
       identityTableName,
     ).getRouteDetails(),
-    'POST /members/v5/customers/{brand}': new CreateCustomerProfilesRoute(
-      apiGatewayModelGenerator,
-      agMembersProfileModel,
-      identityTableName,
-    ).getRouteDetails(),
+    'PUT /members/v5/customers/{brand}/{memberUUID}/{profileId}':
+      new UpdateMemberProfileCustomerRoute(
+        apiGatewayModelGenerator,
+        agMemberProfileModel,
+        identityTableName,
+      ).getRouteDetails(),
     'GET /members/v5/cards/{brand}/{uuid}': new GetMemberCardRoute(
       apiGatewayModelGenerator,
       agMemberCardModel,
@@ -161,6 +175,11 @@ async function MembersStack({ stack, app }: StackContext) {
         agMemberApplicationModel,
         identityTableName,
       ).getRouteDetails(),
+    'PUT /members/v5/profiles/{memberUUID}/{profileId}': new UpdateMemberProfileRoute(
+      apiGatewayModelGenerator,
+      agMemberProfileModel,
+      identityTableName,
+    ).getRouteDetails(),
     'POST /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new UpdateMemberApplicationRoute(
         apiGatewayModelGenerator,
@@ -203,6 +222,11 @@ async function MembersStack({ stack, app }: StackContext) {
     'GET /members/v5/orgs/{brand}/{organisationId}': new GetOrganisationsRoute(
       apiGatewayModelGenerator,
       agOrganisationModel,
+      identityTableName,
+    ).getRouteDetails(),
+    'GET /members/v5/customer/{brand}/{memberUuid}/{profileUuid}': new GetCustomerProfileRoute(
+      apiGatewayModelGenerator,
+      agCustomerProfileModel,
       identityTableName,
     ).getRouteDetails(),
     'GET /members/v5/orgs/employers/{brand}/{organisationId}': new GetEmployersRoute(

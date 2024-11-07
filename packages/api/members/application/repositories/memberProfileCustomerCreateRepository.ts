@@ -9,19 +9,22 @@ import {
   AddressInsertPayload,
   CreateProfilePayload,
 } from '../types/memberProfilesTypes';
-import { MemberProfileDB, MemberProfileDBSchema } from '../models/memberProfileModel';
+import { MemberProfileDB, MemberProfileDBSchema } from '../models/memberProfilesModel';
 import { MAP_BRAND } from '@blc-mono/core/constants/common';
 import { BRAND_SCHEMA } from '@blc-mono/core/schemas/common';
 import { EligibilityStatus } from '../enums/EligibilityStatus';
 import { ApplicationReason } from '../enums/ApplicationReason';
 import { v4 as uuidv4 } from 'uuid';
-export class MemberProfilesRepository {
+export class memberProfileCustomerCreateRepository {
   constructor(
     private dynamoDB: DynamoDBDocument,
     private tableName: string,
   ) {}
 
-  async createCustomerProfiles(payload: CreateProfilePayload, brand: string): Promise<string> {
+  async createCustomerProfiles(
+    payload: CreateProfilePayload,
+    brand: string,
+  ): Promise<[string, string]> {
     try {
       const memberKey = `MEMBER#${uuidv4()}`;
       const profileSK = `PROFILE#${uuidv4()}`;
@@ -69,7 +72,7 @@ export class MemberProfilesRepository {
 
       await this.dynamoDB.send(new TransactWriteCommand(params));
       const prefixSeparator = '#';
-      return memberKey.split(prefixSeparator)[1];
+      return [memberKey.split(prefixSeparator)[1], profileSK.split(prefixSeparator)[1]];
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(
@@ -86,28 +89,6 @@ export class MemberProfilesRepository {
         throw new Error('Failed to create member profiles');
       }
     }
-  }
-
-  async getMemberProfiles(uuid: string): Promise<MemberProfileDB | null> {
-    const queryParams = {
-      TableName: this.tableName,
-      KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `MEMBER#${uuid}`,
-        ':sk': 'PROFILE#',
-      },
-    };
-
-    const queryResult = await this.dynamoDB.send(new QueryCommand(queryParams));
-
-    if (!queryResult.Items || queryResult.Items.length === 0) {
-      return null;
-    }
-    return MemberProfileDBSchema.parse(queryResult.Items[0]);
   }
 
   async getProfileSortKey(memberKey: string): Promise<string | null> {
@@ -131,31 +112,6 @@ export class MemberProfilesRepository {
     }
 
     return queryResult.Items[0].sk;
-  }
-
-  async updateProfile(
-    memberKey: string,
-    profileSK: string,
-    payload: ProfileUpdatePayload,
-  ): Promise<void> {
-    const updateParams = {
-      TableName: this.tableName,
-      Key: {
-        pk: memberKey,
-        sk: profileSK,
-      },
-      UpdateExpression:
-        'SET firstName = :fn, lastName = :ln, dateOfBirth = :dob, mobile = :mob, gender = :gen',
-      ExpressionAttributeValues: {
-        ':fn': payload.firstName,
-        ':ln': payload.lastName,
-        ':dob': payload.dateOfBirth,
-        ':mob': payload.mobile,
-        ':gen': payload.gender,
-      },
-    };
-
-    await this.dynamoDB.send(new UpdateCommand(updateParams));
   }
 
   async insertAddressAndUpdateProfile(

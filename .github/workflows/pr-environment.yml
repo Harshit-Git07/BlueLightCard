@@ -49,6 +49,7 @@ jobs:
               - packages/api/discovery/**
               - packages/api/offers/**
               - packages/api/offers-cms/**
+              - packages/api/members/**
               - packages/api/redemptions/**
               - packages/api/identity/**
               - packages/api/core/**

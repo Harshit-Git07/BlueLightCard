@@ -57,7 +57,7 @@ describe('ReusableCrudRepository', () => {
           pk: 'PK#123',
           sk: 'SK#456',
         },
-        UpdateExpression: 'SET Data = :data ',
+        UpdateExpression: 'SET data = :data ',
         ConditionExpression: 'pk <> :pk OR sk <> :sk',
         ExpressionAttributeValues: {
           ':data': 'test',
@@ -91,7 +91,7 @@ describe('ReusableCrudRepository', () => {
           pk: 'PK#123',
           sk: 'SK#456',
         },
-        UpdateExpression: 'SET Data = :data ',
+        UpdateExpression: 'SET data = :data ',
         ConditionExpression: 'pk = :pk AND sk = :sk',
         ExpressionAttributeValues: {
           ':data': 'test',

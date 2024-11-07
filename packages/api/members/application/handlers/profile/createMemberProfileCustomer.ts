@@ -1,17 +1,17 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { MemberProfilesService } from '../../services/memberProfilesService';
-import { MemberProfilesRepository } from '../../repositories/memberProfilesRepository';
+import { memberProfileCustomerCreateService } from '../../services/memberProfileCustomerCreateService';
+import { memberProfileCustomerCreateRepository } from '../../repositories/memberProfileCustomerCreateRepository';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { CreateProfilePayload } from '../../types/memberProfilesTypes';
 
 const service: string = process.env.service as string;
-const logger = new Logger({ serviceName: `${service}-createProfile` });
+const logger = new Logger({ serviceName: `${service}-createMemberProfileCustomer` });
 const tableName = process.env.IDENTITY_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
-const repository = new MemberProfilesRepository(dynamoDB, tableName);
-const profileService = new MemberProfilesService(repository, logger);
+const repository = new memberProfileCustomerCreateRepository(dynamoDB, tableName);
+const profileService = new memberProfileCustomerCreateService(repository, logger);
 
 export const handler = async (event: APIGatewayProxyEvent) => {
   try {
@@ -31,11 +31,11 @@ export const handler = async (event: APIGatewayProxyEvent) => {
     }
     const payload: CreateProfilePayload = JSON.parse(event.body);
 
-    const memberUuid = await profileService.createCustomerProfiles(payload, brand);
+    const [memberUuid, profileUuid] = await profileService.createCustomerProfiles(payload, brand);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: memberUuid }),
+      body: JSON.stringify({ memberUuid: memberUuid, profileUuid: profileUuid }),
     };
   } catch (error) {
     logger.error('Error creating customer profile:', {

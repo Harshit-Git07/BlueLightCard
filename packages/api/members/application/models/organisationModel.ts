@@ -7,7 +7,7 @@ export const OrganisationModel = createZodNamedType(
     .object({
       pk: z.string().startsWith('ORGANISATION#'),
       name: z.string(),
-      code: z.string().nullable(),
+      type: z.string().nullable().optional(),
       active: z.string().default('TRUE'),
       volunteers: z.string().nullable(),
       retired: z.string().nullable(),
@@ -26,7 +26,7 @@ export const OrganisationModel = createZodNamedType(
     .transform((organisation) => ({
       organisationId: organisation.pk.replace('ORGANISATION#', ''),
       name: organisation.name,
-      type: organisation.code,
+      type: organisation.type,
       active: organisation.active === 'TRUE',
       volunteer: organisation.volunteers === 'TRUE',
       retired: organisation.retired === 'TRUE',

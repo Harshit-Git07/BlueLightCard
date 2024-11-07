@@ -15,7 +15,7 @@ const idRequirements = [
 const mockOrganisationList = [
   {
     volunteers: 'FALSE',
-    code: 'HIGHWAYS',
+    type: 'HIGHWAYS',
     idRequirements: idRequirements,
     maxUploads: '1',
     trustedDomain: 'FALSE',

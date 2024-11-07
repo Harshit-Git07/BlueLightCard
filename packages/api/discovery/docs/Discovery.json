@@ -243,6 +243,50 @@
           }
         ]
       }
+    },
+    "/companies": {
+      "get": {
+        "tags": ["Companies"],
+        "summary": "Get all companies",
+        "description": "Get IDs and names of all companies with valid offers",
+        "parameters": [
+          {
+            "name": "organisation",
+            "in": "query",
+            "description": "The organisation the user belongs to",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dob",
+            "in": "query",
+            "description": "The users DOB in YYYY-MM-DD format",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./schemas/CompaniesResponse.json#/CompaniesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {

@@ -132,6 +132,12 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       handler: 'packages/api/discovery/application/handlers/categories/getCategory.handler',
       requestValidatorName: 'GetCategoryValidator',
     }),
+    'GET /companies': Route.createRoute({
+      ...baseRouteParams,
+      functionName: 'GetCompaniesHandler',
+      handler: 'packages/api/discovery/application/handlers/companies/getCompanies.handler',
+      requestValidatorName: 'GetCompaniesValidator',
+    }),
     'GET /menus': Route.createRoute({
       ...baseRouteParams,
       functionName: 'GetMenusHandler',

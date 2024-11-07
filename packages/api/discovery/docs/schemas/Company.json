@@ -1,0 +1,16 @@
+{
+  "CompanySummary": {
+    "type": "object",
+    "properties": {
+      "companyID": {
+        "type": "string"
+      },
+      "legacyCompanyID": {
+        "type": "integer"
+      },
+      "companyName": {
+        "type": "string"
+      }
+    }
+  }
+}

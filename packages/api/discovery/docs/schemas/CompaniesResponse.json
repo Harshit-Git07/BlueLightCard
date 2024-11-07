@@ -1,0 +1,16 @@
+{
+  "CompaniesResponse": {
+    "type": "object",
+    "properties": {
+      "success": {
+        "type": "boolean"
+      },
+      "data": {
+        "type": "array",
+        "items": {
+          "$ref": "./Company.json#/CompanySummary"
+        }
+      }
+    }
+  }
+}

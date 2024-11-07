@@ -11,6 +11,7 @@ import { checkIfEnvironmentVariablesExist } from '../../utils/validation';
 import { Logger } from '../../../../core/src/utils/logger/logger';
 import { DI_KEYS } from '../../utils/diTokens';
 import { decodeJWT } from '../../utils/decodeJWT';
+import { UserProfile } from '../../services/UserProfile';
 
 let isEnvironmentVariableExist = false;
 const service = getEnvRaw('SERVICE');
@@ -59,7 +60,23 @@ export const handler = async (event: APIGatewayEvent) => {
     return Response.Unauthorized({ message: "Missing required information" });
   }
 
-  const queryParams = `id=${offerId}&uid=${uid}`;
+  let serviceParams = '';
+
+  try {
+    const userProfile = new UserProfile(authToken);
+    const userProfileData = await userProfile.getUserProfileRequest();
+    if(userProfileData?.data?.data?.profile?.organisation) {
+      serviceParams = `&service=${userProfileData.data.data.profile.organisation}`; 
+    } else {
+      serviceParams = `&service=`;
+    }
+  } catch (error: any) {
+    logger.error({ message: 'Error fetching user profile', body: error });
+    logger.error({ message: 'Error fetching company details', body: error });
+    return Response.Error(error as Error);
+  }
+
+  const queryParams = `id=${offerId}&uid=${uid}${serviceParams}`;
 
   try {
     const data = await companyOffersService.getOfferById<LegacyCompanyOffersResponse>(

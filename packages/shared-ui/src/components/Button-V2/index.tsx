@@ -1,8 +1,9 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ThemeColorTokens, ThemeVariant } from '../../types';
 import { cssUtil } from '../../utils/cssUtil';
-import { ButtonProps } from './types';
+import { ButtonProps, ButtonSize } from './types';
+import { fonts } from '../../tailwind/theme';
 
 const BUTTON_PRIMARY = 'button-primary';
 const BUTTON_SECONDARY = 'button-secondary';
@@ -77,6 +78,18 @@ export const ButtonColour: ThemeColorTokens = {
   },
 };
 
+const sizeStyles: Record<ButtonSize, string> = {
+  Large: 'h-10 flex items-center justify-center gap-2',
+  XSmall: `h-7 flex items-center justify-center gap-2 ${fonts.labelSemiBold}`,
+  Small: 'h-8 flex items-center justify-center gap-2',
+};
+
+const sizeSpecificPadding: Record<ButtonSize, string> = {
+  Large: 'py-2 px-6',
+  XSmall: 'py-2 px-2',
+  Small: 'py-1 px-3',
+};
+
 const Button: FC<ButtonProps> = ({
   iconLeft,
   iconRight,
@@ -89,27 +102,26 @@ const Button: FC<ButtonProps> = ({
   onClick,
   withoutHover = false,
   withoutFocus = false,
-  size = 'small',
+  size = 'Small',
   ...props
 }) => {
   const colourToken = ButtonColour[variant].base;
 
-  const sizeClasses: Record<string, string> = {
-    Large: 'py-2 px-6 h-10 flex items-center justify-center gap-2',
-    XSmall:
-      'py-2 px-2 h-7 flex items-center justify-center gap-2 font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold',
-    Small: 'py-1 px-3 h-8 flex items-center justify-center gap-2',
-  };
-  let sizeClass = sizeClasses[size] || sizeClasses.Small;
+  const sizeSpecificStyles = useMemo(() => {
+    const styles = sizeStyles[size];
 
-  // Tertiary and TertiaryDanger variants - no left of right padding is needed as per designs
-  if (variant === ThemeVariant.Tertiary || variant === ThemeVariant.TertiaryDanger) {
-    sizeClass = sizeClass.substring(10);
-  }
+    // Tertiary and TertiaryDanger variants - no left of right padding is needed as per designs
+    if (variant === ThemeVariant.Tertiary || variant === ThemeVariant.TertiaryDanger) {
+      return styles;
+    }
+
+    const paddingForSpecificSize = sizeSpecificPadding[size];
+    return `${paddingForSpecificSize} ${styles}`;
+  }, []);
 
   const classes = cssUtil([
     'px-5 rounded transition border-2',
-    sizeClass,
+    sizeSpecificStyles,
     disabled ? colourToken.disabled : '',
     colourToken.text,
     !disabled && !withoutHover ? colourToken.hover : '',

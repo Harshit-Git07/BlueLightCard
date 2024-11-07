@@ -15,8 +15,8 @@ export const EligibilityHeading: FC<EligibilityHeadingProps> = ({
   numberOfCompletedSteps,
 }) => {
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-[16px] self-stretch">
+      <div className="flex flex-col gap-[4px]">
         <p className={`${fonts.titleLarge} ${colours.textOnSurface}`}>{title}</p>
 
         <p className={`${fonts.body} ${colours.textOnSurfaceSubtle}`}>{subtitle}</p>

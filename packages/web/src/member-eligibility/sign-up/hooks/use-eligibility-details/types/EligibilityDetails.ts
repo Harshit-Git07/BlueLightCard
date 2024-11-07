@@ -1,6 +1,6 @@
 export interface EligibilityDetails {
   currentScreen: EligibilityScreen;
-  employmentStatus?: string;
+  employmentStatus?: EmploymentStatus;
   organisation?: string;
   employer?: string;
   jobTitle?: string;
@@ -24,6 +24,8 @@ export type EligibilityScreen =
   | 'Delivery Address Screen'
   | 'Payment Screen'
   | 'Success Screen';
+
+export type EmploymentStatus = 'Employed' | 'Retired' | 'Volunteer';
 
 export interface EligibilityDetailsAddress {
   line1: string;

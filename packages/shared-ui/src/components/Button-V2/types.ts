@@ -3,10 +3,10 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { ThemeVariant } from '../../types';
 
 export type ButtonProps = PropsWithChildren & {
+  className?: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
   slim?: boolean;
-  className?: string;
   variant?: ThemeVariant;
   invertColor?: boolean;
   iconLeft?: IconDefinition;
@@ -16,6 +16,8 @@ export type ButtonProps = PropsWithChildren & {
   withoutHover?: boolean;
   withoutFocus?: boolean;
   borderless?: boolean;
-  size?: string;
+  size?: ButtonSize;
   'data-testid'?: string;
 };
+
+export type ButtonSize = 'XSmall' | 'Small' | 'Large';

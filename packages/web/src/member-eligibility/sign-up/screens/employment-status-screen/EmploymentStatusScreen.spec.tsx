@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import EmploymentStatusScreen from './EmploymentStatusScreen';
+import { EmploymentStatusScreen } from './EmploymentStatusScreen';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
 
 const mockSetEligibilityDetails = jest.fn();

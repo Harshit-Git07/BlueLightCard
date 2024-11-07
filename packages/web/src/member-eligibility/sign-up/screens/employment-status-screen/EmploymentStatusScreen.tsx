@@ -7,6 +7,7 @@ import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { EligibilityHeading } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/components/EligibilityHeading';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
+import { EmploymentStatus } from '@/root/src/member-eligibility/sign-up/hooks/use-eligibility-details/types/EligibilityDetails';
 
 export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -14,7 +15,7 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
   const onEmploymentStatusSelect = useCallback(
-    (employmentStatus: string) => {
+    (employmentStatus: EmploymentStatus) => {
       setEligibilityDetails({
         ...eligibilityDetails,
         currentScreen: 'Job Details Screen',
@@ -33,30 +34,30 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <EligibilityScreen>
-      <EligibilityBody className="px-[18px]">
-        <div className="flex flex-col gap-6">
-          <EligibilityHeading
-            title={'Verify Eligibility'}
-            subtitle={'Provide details about your employment status and job role'}
-            numberOfCompletedSteps={0}
-          />
+      <EligibilityBody>
+        <EligibilityHeading
+          title="Verify Eligibility"
+          subtitle="Provide details about your employment status and job role"
+          numberOfCompletedSteps={0}
+        />
 
-          <div className="flex flex-col gap-4">
-            <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
+        <div className="flex flex-col gap-[16px]">
+          <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
-            <ListSelector title="Employed" onClick={() => onEmploymentStatusSelect('Employed')} />
-            <ListSelector title="Retired" onClick={() => onEmploymentStatusSelect('Retired')} />
-            <ListSelector title="Volunteer" onClick={() => onEmploymentStatusSelect('Volunteer')} />
-          </div>
-          <div>
-            <Button variant={ThemeVariant.Secondary} className="max-h-10" onClick={onBack}>
-              Back
-            </Button>
-          </div>
+          <ListSelector title="Employed" onClick={() => onEmploymentStatusSelect('Employed')} />
+          <ListSelector title="Retired" onClick={() => onEmploymentStatusSelect('Retired')} />
+          <ListSelector title="Volunteer" onClick={() => onEmploymentStatusSelect('Volunteer')} />
         </div>
+
+        <Button
+          className="max-h-10 w-fit self-start"
+          variant={ThemeVariant.Secondary}
+          size="Large"
+          onClick={onBack}
+        >
+          Back
+        </Button>
       </EligibilityBody>
     </EligibilityScreen>
   );
 };
-
-export default EmploymentStatusScreen;

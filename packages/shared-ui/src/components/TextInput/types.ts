@@ -25,4 +25,5 @@ export interface TextInputProps {
   infoMessage?: string;
   showInfoMessage?: boolean;
   ariaLabel?: string;
+  className?: string;
 }

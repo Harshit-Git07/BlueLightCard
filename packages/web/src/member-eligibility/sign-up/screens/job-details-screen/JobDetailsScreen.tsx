@@ -1,88 +1,138 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
-import { EligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-eligibility-details/types/EligibilityDetails';
-
-const promoCode = 'NHS2021';
+import { EligibilityScreen } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/EligibilityScreen';
+import { EligibilityBody } from '@/root/src/member-eligibility/sign-up/screens/shared/components/body/EligibilityBody';
+import Typography from '@bluelightcard/shared-ui/components/Typography';
+import ProgressBar from '@bluelightcard/shared-ui/components/ProgressBar';
+import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
+import { ListSelectorState } from '@bluelightcard/shared-ui/components/ListSelector/types';
+import Dropdown from '@bluelightcard/shared-ui/components/Dropdown';
+import Button from '@bluelightcard/shared-ui/components/Button-V2';
+import TextInput from '@bluelightcard/shared-ui/components/TextInput';
+import PromoCode from '@bluelightcard/shared-ui/components/PromoCode';
+import { useIsNextButtonDisabled } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseIsButtonDisabled';
+import { useEmployers } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseEmployers';
+import { useOrganisations } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseOrganisations';
+import { useOnPromoCodeChange } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseOnPromoCodeChange';
+import { useOnJobTitleChange } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseOnJobTitleChange';
+import { useEmployerChanged } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseEmployerChanged';
+import { useOnOrganisationChanged } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseOnOrganisationChanged';
+import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
+import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseFuzzyFrontEndButtons';
 
 export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
+  const isNextButtonDisabled = useIsNextButtonDisabled(eligibilityDetails);
+  const employers = useEmployers(eligibilityDetails.organisation);
+  const organisations = useOrganisations();
 
-  const stubJobDetails = useMemo<EligibilityDetails>(() => {
-    return {
-      ...eligibilityDetails,
-      organisation: 'NHS',
-      employer: 'Abbey Hospitals',
-      jobTitle: 'Nurse',
-      promoCode: undefined,
-      requireMultipleIds: undefined,
-      canSkipIdVerification: undefined,
-      canSkipPayment: undefined,
-    };
-  }, [eligibilityDetails]);
+  const { onOrganisationSelected } = useOnOrganisationChanged(eligibilityDetailsState);
+  const { onEmployerSelected } = useEmployerChanged(eligibilityDetailsState);
+  const { onJobTitleChange } = useOnJobTitleChange(eligibilityDetailsState);
+  const { promoCode, onPromoCodeChange } = useOnPromoCodeChange(eligibilityDetailsState);
+  const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
-  const buttons = useMemo(() => {
-    return [
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...stubJobDetails,
-            currentScreen: 'Verification Method Screen',
-          });
-        },
-        text: "Can't skip verification",
-      },
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...stubJobDetails,
-            currentScreen: 'Verification Method Screen',
-            requireMultipleIds: true,
-          });
-        },
-        text: 'Require multiple IDs',
-      },
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...stubJobDetails,
-            currentScreen: 'Delivery Address Screen',
-            promoCode,
-            canSkipIdVerification: true,
-          });
-        },
-        text: 'Skip verification',
-      },
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...stubJobDetails,
-            currentScreen: 'Delivery Address Screen',
-            promoCode,
-            canSkipIdVerification: true,
-            canSkipPayment: true,
-          });
-        },
-        text: 'Skip verification and payment',
-      },
-    ];
-  }, [setEligibilityDetails, stubJobDetails]);
+  // This will be replaced by logic from APIs - for now it's just displaying the fact that promo codes are not available to every type of organisation
+  const showPromoCode = eligibilityDetails.organisation !== 'Police';
 
   const onBack = useCallback(() => {
     setEligibilityDetails({
-      ...stubJobDetails,
+      ...eligibilityDetails,
       currentScreen: 'Employment Status Screen',
     });
-  }, [setEligibilityDetails, stubJobDetails]);
+  }, [setEligibilityDetails, eligibilityDetails]);
 
   return (
-    <FuzzyFrontend
-      numberOfStepsCompleted={1}
-      screenTitle="Job Details Screen"
-      figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-49661&t=XRae5vPnKJi8i8kq-4"
-      eligibilityDetailsState={eligibilityDetailsState}
-      buttons={buttons}
-      onBack={onBack}
-    />
+    <EligibilityScreen data-testid="job-details-screen">
+      <EligibilityBody className="px-[18px]">
+        <div className="flex flex-col items-start">
+          <Typography variant="title-large" className="text-left md:text-nowrap">
+            Verify Eligibility
+          </Typography>
+
+          <Typography variant="body" className="mt-[4px] text-left md:text-nowrap">
+            Provide details about your employment status and job role
+          </Typography>
+
+          <ProgressBar
+            totalNumberOfSteps={3}
+            numberOfCompletedSteps={1}
+            className="mb-[24px] mt-[16px]"
+          />
+
+          <Typography variant="body-small-semibold" className="text-left md:text-nowrap">
+            EMPLOYMENT STATUS
+          </Typography>
+
+          <ListSelector
+            title="Employed"
+            className="mt-[12px] mb-[16px]"
+            state={ListSelectorState.Selected}
+            onClick={onBack}
+          />
+
+          <Typography variant="body-small-semibold" className="text-left md:text-nowrap">
+            JOB DETAILS
+          </Typography>
+
+          <Dropdown
+            options={organisations}
+            className={'mt-[12px]'}
+            showTooltipIcon={true}
+            maxItemsShown={5}
+            placeholder={'Select your organisation'}
+            onSelect={(option) => {
+              onOrganisationSelected(option.label);
+            }}
+          />
+
+          {employers !== undefined && employers.length !== 0 && (
+            <Dropdown
+              className={'mt-[16px]  mt-4'}
+              options={employers}
+              placeholder={'Select your employer'}
+              onSelect={(option) => {
+                onEmployerSelected(option.label);
+              }}
+            />
+          )}
+
+          {(employers?.length === 0 || eligibilityDetails.employer) && (
+            <>
+              <TextInput
+                className={'mt-[16px] w-full'}
+                placeholder={'Enter job title'}
+                onChange={onJobTitleChange}
+              />
+              {showPromoCode && (
+                <PromoCode
+                  onApply={() => {}}
+                  onChange={onPromoCodeChange}
+                  className={'mt-[24px] w-full'}
+                  infoMessage={'This will allow you to skip some steps'}
+                  icon={true}
+                  value={promoCode}
+                />
+              )}
+            </>
+          )}
+
+          <Button
+            size={'Large'}
+            className={'mt-[24px] w-full'}
+            disabled={!isNextButtonDisabled}
+            onClick={() => {
+              setEligibilityDetails({
+                ...eligibilityDetails,
+                currentScreen: 'Delivery Address Screen',
+              });
+            }}
+          >
+            Next
+          </Button>
+        </div>
+      </EligibilityBody>
+      <FuzzyFrontendButtons buttons={fuzzyFrontEndButtons} putInFloatingDock />
+    </EligibilityScreen>
   );
 };

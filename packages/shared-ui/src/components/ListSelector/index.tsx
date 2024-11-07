@@ -12,6 +12,7 @@ const ListSelector: FC<ListSelectorProps> = ({
   tag,
   description,
   showTrailingIcon = true,
+  className = '',
 }) => {
   const [currentState, setCurrentState] = useState(state);
 
@@ -64,7 +65,7 @@ const ListSelector: FC<ListSelectorProps> = ({
   return (
     <button
       aria-label={ariaLabel ?? `Button for ${title}`}
-      className={`w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border ${getStyles()} min-w-full sm:min-w-[500px]`}
+      className={`${className} w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border ${getStyles()} min-w-full sm:min-w-[500px]`}
       role={onClick ? 'button' : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -72,8 +73,8 @@ const ListSelector: FC<ListSelectorProps> = ({
       onMouseLeave={handleMouseLeave}
     >
       <div className="flex flex-col items-start w-full text-left">
-        <div className="flex items-center gap-2 mb-1 w-full">
-          <h4 className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal text-left">
+        <div className="flex items-center gap-2 w-full">
+          <h4 className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal">
             {title}
           </h4>
           {tag && <span>{tag}</span>}

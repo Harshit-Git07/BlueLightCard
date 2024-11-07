@@ -14,4 +14,5 @@ export interface ListSelectorProps {
   tag?: ReactNode;
   description?: string;
   showTrailingIcon?: boolean;
+  className?: string;
 }

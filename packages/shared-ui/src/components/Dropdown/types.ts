@@ -17,6 +17,7 @@ export type DropdownProps = {
   error?: boolean;
   selectedValue?: string;
   maxItemsShown?: number;
+  className?: string;
 };
 
 export type DropdownOptions = DropdownOption[];

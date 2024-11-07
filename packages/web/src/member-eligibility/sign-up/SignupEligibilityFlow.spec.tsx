@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { SignupEligibilityFlow } from '@/root/src/member-eligibility/sign-up/SignupEligibilityFlow';
 
 jest.mock('react-use');
@@ -34,8 +34,8 @@ describe('given a signing up member that needs to prove their eligibility to use
         });
 
         it('should navigate to the job details screen', () => {
-          const title = screen.getByTestId('fuzzy-frontend-title');
-          expect(title.textContent).toEqual('Job Details Screen');
+          const jobDetailsScreen = screen.getByTestId('job-details-screen');
+          expect(jobDetailsScreen).toBeInTheDocument();
         });
       });
 
@@ -46,8 +46,8 @@ describe('given a signing up member that needs to prove their eligibility to use
         });
 
         it('should navigate to the job details screen', () => {
-          const title = screen.getByTestId('fuzzy-frontend-title');
-          expect(title.textContent).toEqual('Job Details Screen');
+          const jobDetailsScreen = screen.getByTestId('job-details-screen');
+          expect(jobDetailsScreen).toBeInTheDocument();
         });
       });
 
@@ -58,13 +58,15 @@ describe('given a signing up member that needs to prove their eligibility to use
         });
 
         it('should navigate to the job details screen', () => {
-          const title = screen.getByTestId('fuzzy-frontend-title');
-          expect(title.textContent).toEqual('Job Details Screen');
+          const jobDetailsScreen = screen.getByTestId('job-details-screen');
+          expect(jobDetailsScreen).toBeInTheDocument();
         });
 
         // TODO: Multi-ID tests
         describe('when the job details screen is completed, and single id verification is required', () => {
+          // TODO: Fill this in with real behaviour once end to end flow is implemented
           beforeEach(async () => {
+            fireEvent.keyDown(window, { key: '.', ctrlKey: true });
             const nextButton = screen.getByTestId('next-button-1');
             act(() => nextButton.click());
           });
@@ -193,7 +195,9 @@ describe('given a signing up member that needs to prove their eligibility to use
         });
 
         describe('when the job details screen is completed, and no id is required', () => {
+          // TODO: Fill this in with real behaviour once end to end flow is implemented
           beforeEach(async () => {
+            fireEvent.keyDown(window, { key: '.', ctrlKey: true });
             const nextButton = screen.getByTestId('next-button-3');
             act(() => nextButton.click());
           });
@@ -229,7 +233,9 @@ describe('given a signing up member that needs to prove their eligibility to use
         });
 
         describe('when the job details screen is completed, and no id or payment is required', () => {
+          // TODO: Fill this in with real behaviour once end to end flow is implemented
           beforeEach(async () => {
+            fireEvent.keyDown(window, { key: '.', ctrlKey: true });
             const nextButton = screen.getByTestId('next-button-4');
             act(() => nextButton.click());
           });

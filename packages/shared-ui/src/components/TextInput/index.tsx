@@ -71,6 +71,7 @@ const TextInput: FC<TextInputProps> = ({
   infoMessage,
   showInfoMessage = false,
   ariaLabel,
+  className = '',
 }) => {
   const [inputState, setInputState] = useState<TextInputState>(state);
   const remainingChars = maxChars - (value?.length ?? 0);
@@ -113,7 +114,7 @@ const TextInput: FC<TextInputProps> = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div className={`space-y-2 ${className}`}>
       {showLabel && (
         <div className="flex items-center gap-2">
           {showLabel && (

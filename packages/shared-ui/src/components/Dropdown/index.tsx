@@ -34,6 +34,7 @@ const Dropdown: FC<DropdownProps> = ({
   error = false,
   selectedValue,
   maxItemsShown,
+  className = '',
 }) => {
   const [selectedOption, setSelectedOption] = useState(
     getSelectedOption(options, placeholder, selectedValue),
@@ -213,7 +214,7 @@ const Dropdown: FC<DropdownProps> = ({
   }, [error]);
 
   return (
-    <div className="group relative inline-block w-full" ref={dropdownRef}>
+    <div className={`group relative inline-block w-full ${className}`} ref={dropdownRef}>
       {label && (
         <DropdownLabel
           labelId={labelId}

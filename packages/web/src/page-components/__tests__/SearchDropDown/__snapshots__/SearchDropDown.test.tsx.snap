@@ -152,7 +152,7 @@ exports[`SearchDropDown renders the dropdown 1`] = `
             Browse companies
           </p>
           <div
-            class="group relative inline-block w-full"
+            class="group relative inline-block w-full "
           >
             <div
               class="relative w-full rounded-[4px] bg-colour-surface-light dark:bg-colour-surface-dark border-colour-onSurface-outline-subtle-light dark:border-colour-onSurface-outline-subtle-dark  border cursor-pointer flex justify-between items-center"

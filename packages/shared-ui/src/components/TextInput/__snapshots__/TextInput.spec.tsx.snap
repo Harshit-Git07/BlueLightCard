@@ -2,7 +2,7 @@
 
 exports[`TextInput component snapshot tests renders default input correctly 1`] = `
 <div
-  className="space-y-2"
+  className="space-y-2 "
 >
   <div
     className="relative h-[50px]"
@@ -33,7 +33,7 @@ exports[`TextInput component snapshot tests renders default input correctly 1`] 
 
 exports[`TextInput component snapshot tests renders input in error state 1`] = `
 <div
-  className="space-y-2"
+  className="space-y-2 "
 >
   <div
     className="relative h-[50px]"
@@ -73,7 +73,7 @@ exports[`TextInput component snapshot tests renders input in error state 1`] = `
 
 exports[`TextInput component snapshot tests renders input with label and icon 1`] = `
 <div
-  className="space-y-2"
+  className="space-y-2 "
 >
   <div
     className="flex items-center gap-2"

@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.0.0...bluelightcard/offers-v1.1.0) (2024-11-07)
+
+
+### Features
+
+* (AUT-101) Adding Auth0 provider to offers graphQL API ([#2564](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2564)) ([512fd93](https://github.com/bluelightcard/BlueLightCard-2.0/commit/512fd93df46de25f63ed1bda95c108a19598c708))
+* dummy update testing pr ([#2632](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2632)) ([ec1e038](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ec1e0387b270b95cbb3a35401613c5f66a16d394))
+
+
+### Bug Fixes
+
+* Add suffix to Offers custom domain name ([#2429](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2429)) ([ea3fc1e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ea3fc1e294722dc74673515851d58c40a3eaf51d))
+* include service in offer query ([#2796](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2796)) ([1ce6b3f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1ce6b3f232117023dc196cd4bdbedb949c2c5903))
+* include service in offer query ([#2808](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2808)) ([16ba293](https://github.com/bluelightcard/BlueLightCard-2.0/commit/16ba2934822e26d82d29c17d697f7d390ca842a6))
+* include service revert ([#2803](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2803)) ([56e2e80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/56e2e800f273bd7b5689ad793da45a73af480152))
+* Injected variables ([#2812](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2812)) ([53b24a6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/53b24a6c93908e05996a2095679e53dfaed8513d))
+
+
+### Other Changes
+
+* **main:** release bluelightcard/offers 1.0.0 ([#2440](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2440)) ([220e9f3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/220e9f36b2697929e9e4020516fe716c459b4c2f))
+
 ## 1.0.0 (2024-11-07)
 
 

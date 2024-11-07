@@ -15,6 +15,7 @@ const NavBar = ({
   onSearchCategoryChange,
   onSearchCompanyChange,
   onSearchTerm,
+  onToggleMobileSideBar,
 }: NavBarProps) => {
   const [isSticky, setIsSticky] = useState(false);
 
@@ -62,12 +63,13 @@ const NavBar = ({
   );
 
   return (
-    <header className="sticky top-0 z-10">
+    <header className="sticky top-0 z-20">
       {isAuthenticated ? (
         <AuthenticatedNavBar
           onSearchCategoryChange={onSearchCategoryChange}
           onSearchCompanyChange={onSearchCompanyChange}
           onSearchTerm={onSearchTerm}
+          onToggleMobileSideBar={onToggleMobileSideBar}
           navigationItems={navigationItems}
           isSticky={isSticky}
         />

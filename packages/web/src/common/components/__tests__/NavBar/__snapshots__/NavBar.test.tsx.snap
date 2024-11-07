@@ -3,7 +3,7 @@
 exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated is true 1`] = `
 <div>
   <header
-    class="sticky top-0 z-10"
+    class="sticky top-0 z-20"
   >
     <div
       data-testid="authenticated-navbar"
@@ -82,6 +82,25 @@ exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated i
                   </div>
                 </form>
               </div>
+              <button
+                class="flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-window-frame-open "
+                  data-icon="window-frame-open"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M480 224V64c0-35.3-28.7-64-64-64H96C60.7 0 32 28.7 32 64V224v64H96 416h64V224zm-64 0H280V64H416V224zm-184 0H96V64H232V224zM96 448V320H32V448c-17.7 0-32 14.3-32 32s14.3 32 32 32H64 448h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V320H416V448H96z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
               <a
                 aria-label="Notifications"
                 class="flex h-full justify-center items-center gap-1 cursor-pointer text-NavBar-icon-colour hover:text-NavBar-link-hover-colour dark:text-NavBar-icon-colour-dark dark:hover:text-NavBar-link-hover-colour-dark"
@@ -187,7 +206,7 @@ exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated i
 exports[`Navbar renders the unauthenticated header when isAuthenticated if false 1`] = `
 <div>
   <header
-    class="sticky top-0 z-10"
+    class="sticky top-0 z-20"
   >
     <div
       data-testid="unauthenticated-navbar"

@@ -3,40 +3,70 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
 import { cssUtil } from '../../utils/cssUtil';
 import { usePlatformAdapter } from '../../adapters';
+import { ThemeColorTokens, ThemeVariant } from '../../types';
 
-const BUTTON_TERTIARY = 'button-tertiary';
-
-const colourToken = {
-  hover: `hover:text-${BUTTON_TERTIARY}-hover-label-colour-light dark:hover:text-${BUTTON_TERTIARY}-hover-label-colour-dark`,
-  text: `text-${BUTTON_TERTIARY}-default-label-colour-light dark:text-${BUTTON_TERTIARY}-default-label-colour-dark`,
-  border: 'border-none',
-  disabled: `disabled:text-${BUTTON_TERTIARY}-disabled-label-colour-light disabled:dark:text-${BUTTON_TERTIARY}-disabled-label-colour-dark`,
-};
-
-const font =
+const fontCss =
   'font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold';
 
-const padding = 'py-1 px-3';
+const ButtonColour: ThemeColorTokens = {
+  [ThemeVariant.Primary]: {
+    base: {
+      bg: `bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark`,
+      hover: `hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark`,
+      focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
+      text: `text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark`,
+      border: 'border-none rounded transition border-2',
+      padding: 'py-2 px-3',
+      disabled: `disabled:bg-button-primary-disabled-bg-colour-light disabled:dark:bg-button-primary-disabled-bg-colour-dark disabled:text-button-primary-disabled-label-colour-light disabled:dark:text-button-primary-disabled-label-colour-dark`,
+    },
+  },
+  [ThemeVariant.Tertiary]: {
+    base: {
+      hover: `hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark`,
+      text: `text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark`,
+      border: 'border-none',
+      padding: 'py-0',
+      disabled: `disabled:text-button-tertiary-disabled-label-colour-light disabled:dark:text-button-tertiary-disabled-label-colour-dark`,
+    },
+  },
+};
 
 export interface Props {
+  variant: ThemeVariant.Primary | ThemeVariant.Tertiary;
+  label?: string;
   copyText: string;
+  fullWidth?: boolean;
   disabled?: boolean;
   className?: string;
+  defaultStateClassName?: string;
 }
 
-const CopyButton: FC<Props> = ({ copyText, disabled, className }) => {
+const CopyButton: FC<Props> = ({
+  variant,
+  label = 'Copy',
+  copyText,
+  fullWidth = false,
+  disabled,
+  className,
+  defaultStateClassName,
+}) => {
   const platformAdapter = usePlatformAdapter();
-
   const [accountNumberCopied, setAccountNumberCopied] = useState(false);
 
+  const colourToken = ButtonColour[variant].base;
+  const width = fullWidth ? 'w-full' : '';
+
   const classes = cssUtil([
-    font,
-    padding,
+    fontCss,
     disabled ? colourToken.disabled : '',
     colourToken.text,
-    !disabled ? colourToken.hover : '',
-    colourToken.border,
-    className ?? '',
+    colourToken.hover,
+    colourToken.bg ?? '',
+    colourToken.border ?? '',
+    colourToken.padding,
+    defaultStateClassName ?? '',
+    width,
+    'text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font',
   ]);
 
   const clickHandler = async () => {
@@ -47,7 +77,7 @@ const CopyButton: FC<Props> = ({ copyText, disabled, className }) => {
 
         setTimeout(() => {
           setAccountNumberCopied(false);
-        }, 4000);
+        }, 2000);
 
         return true;
       })
@@ -55,26 +85,28 @@ const CopyButton: FC<Props> = ({ copyText, disabled, className }) => {
   };
 
   return (
-    <>
+    <div className={`${className} flex items-center`}>
       {!accountNumberCopied ? (
         <button
           type="button"
           name="copy"
           aria-label="copy"
           disabled={disabled}
-          className={`${classes} text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font`}
+          className={classes}
           onClick={clickHandler}
         >
-          Copy
+          {label}
           <FontAwesomeIcon className="ml-2" icon={faCopy} />
         </button>
       ) : (
-        <div className="ml-3 flex items-center text-colour-success-light dark:text-colour-success-dark">
-          <div className={`${font} tracking-typography-label-semibold`}>Copied to clipboard</div>
+        <div
+          className={`${colourToken.padding} ${width} flex items-center justify-center text-colour-success-light dark:text-colour-success-dark`}
+        >
+          <p className={`${fontCss} tracking-typography-label-semibold`}>Copied to clipboard</p>
           <FontAwesomeIcon className="ml-2" icon={faCheckCircle} size="xs" />
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import userEvent from '@testing-library/user-event';
-import VerticalMenuItem, { Props } from './index';
+import VerticalMenuItem from './index';
+import VerticalMenuItemProps from './types';
 
 jest.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: ({ icon }: { icon: any }) => (
@@ -13,19 +14,19 @@ jest.mock('@fortawesome/react-fontawesome', () => ({
 }));
 
 describe('VerticalMenuItem component', () => {
-  const defaultOnClickProps: Props = {
+  const defaultOnClickProps: VerticalMenuItemProps = {
     label: 'test',
     onClick: () => undefined,
     selected: false,
   };
 
-  const defaultHRefProps: Props = {
+  const defaultHRefProps: VerticalMenuItemProps = {
     label: 'test',
     href: '/',
     selected: false,
   };
 
-  const defaultIconProps: Props = {
+  const defaultIconProps: VerticalMenuItemProps = {
     label: 'test',
     href: '/',
     selected: false,

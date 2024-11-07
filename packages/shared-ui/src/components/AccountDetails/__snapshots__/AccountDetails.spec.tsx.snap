@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccountDetails should render AccountDetails correctly 1`] = `
+<div
+  className="flex flex-col"
+>
+  <div
+    className="text-heading-colour dark:text-heading-colour-dark font-typography-headline font-typography-headline-weight text-typography-headline leading-typography-headline tracking-typography-headline hidden tablet:block"
+  >
+    Hi Name Last-name,
+  </div>
+  <div
+    className="text-heading-colour dark:text-heading-colour-dark font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large block tablet:hidden"
+  >
+    Hi Name Last-name,
+  </div>
+  <div
+    className="mt-2 flex items-center gap-2"
+  >
+    <div
+      className="text-heading-colour dark:text-heading-colour-dark font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold tracking-typography-label-semibold text-colour-onSurface-light dark:text-colour-onSurface-dark"
+    >
+      Card number
+    </div>
+    <div
+      className="text-heading-colour dark:text-heading-colour-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light tracking-typography-body-light text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark"
+    >
+      BLC0000000
+    </div>
+    <div
+      className="ml-1 flex items-center"
+    >
+      <button
+        aria-label="copy"
+        className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark  border-none py-0   text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+        name="copy"
+        onClick={[Function]}
+        type="button"
+      >
+        Copy
+        <svg
+          aria-hidden="true"
+          className="svg-inline--fa fa-copy ml-2"
+          data-icon="copy"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          style={{}}
+          viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M208 0H332.1c12.7 0 24.9 5.1 33.9 14.1l67.9 67.9c9 9 14.1 21.2 14.1 33.9V336c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V48c0-26.5 21.5-48 48-48zM48 128h80v64H64V448H256V416h64v48c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48z"
+            fill="currentColor"
+            style={{}}
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;

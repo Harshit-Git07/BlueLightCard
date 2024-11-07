@@ -3,12 +3,14 @@ export type NavBarProps = {
   onSearchCompanyChange: (companyId: string, company: string) => void;
   onSearchCategoryChange: (categoryId: string, company: string) => void;
   onSearchTerm: (searchTerm: string) => void;
+  onToggleMobileSideBar?: () => void;
 };
 
 export type AuthenticatedNavBarProps = {
   onSearchCompanyChange: (companyId: string, company: string) => void;
   onSearchCategoryChange: (categoryId: string, company: string) => void;
   onSearchTerm: (searchTerm: string) => void;
+  onToggleMobileSideBar?: () => void;
   navigationItems: NavigationItem[];
   isSticky?: boolean;
 };

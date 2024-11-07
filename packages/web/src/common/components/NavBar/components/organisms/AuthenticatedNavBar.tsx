@@ -7,6 +7,8 @@ import MobileNavigation from './MobileNavigation';
 import Logo from '@/components/Logo';
 import SearchDropDown from '@/page-components/SearchDropDown/SearchDropDown';
 import { SearchBar } from '@bluelightcard/shared-ui';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWindowFrameOpen } from '@fortawesome/pro-solid-svg-icons';
 
 const AuthenticatedNavBar = ({
   navigationItems,
@@ -14,6 +16,7 @@ const AuthenticatedNavBar = ({
   onSearchTerm,
   onSearchCategoryChange,
   onSearchCompanyChange,
+  onToggleMobileSideBar,
 }: AuthenticatedNavBarProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [term, setTerm] = useState('');
@@ -113,7 +116,16 @@ const AuthenticatedNavBar = ({
                 />
               </div>
 
+              {/* this is a temporary button to display the left navigation drawer for the purpose of the Skeleton page */}
+              <button
+                className={`flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark`}
+                onClick={onToggleMobileSideBar}
+              >
+                <FontAwesomeIcon icon={faWindowFrameOpen} />
+              </button>
+
               <NotificationButton href="/notifications.php" />
+
               <MobileNavToggleButton
                 onIconClick={onShowMobileMenuClick}
                 isMenuOpen={showMobileMenu}

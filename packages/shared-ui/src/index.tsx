@@ -1,5 +1,6 @@
 export { default as AmplitudeEvents } from './utils/amplitude/events';
 export { default as Button } from './components/Button';
+export { default as ButtonV2 } from './components/Button-V2';
 export { default as Search } from './components/Search';
 export { default as SearchBar } from './components/SearchBar';
 export { default as Iso } from './components/Iso';
@@ -13,6 +14,10 @@ export { default as ResponsiveOfferCard } from './components/ResponsiveOfferCard
 export { default as Badge } from './components/Badge';
 export { default as CampaignCard } from './components/CampaignCard';
 export { default as ShareButton } from './components/ShareButton';
+export { default as VerticalMenuItem } from './components/VerticalMenuItem';
+export type { default as VerticalMenuItemProps } from './components/VerticalMenuItem/types';
+export { default as CopyButton } from './components/CopyButton/CopyButton';
+export { default as AccountDetails } from './components/AccountDetails';
 export { default as Link } from './components/Link';
 export { default as OfferCardList } from './components/OfferCardList';
 export { default as OfferSheet } from './components/OfferSheet';
@@ -23,9 +28,6 @@ export { default as PillGroup } from './components/PillGroup';
 export { default as Typography } from './components/Typography';
 export { default as PaginationControls } from './components/PaginationControls';
 export { default as EventBus } from './lib/eventBus';
-export { default as LeftNavigation } from './components/AccountLeftNavigation/LeftNavigation';
-export { default as LeftNavigationLinks } from './components/AccountLeftNavigation/LeftNavigationLinks';
-export { default as NavigationUserDetails } from './components/AccountLeftNavigation/UserDetails';
 
 export * from './adapters';
 export * from './api';

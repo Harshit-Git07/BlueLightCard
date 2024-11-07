@@ -1,8 +1,9 @@
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../adapters';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import CopyButton from './CopyButton';
+import { ThemeVariant } from '../../types';
 
 describe('CopyButton Page', () => {
   const mockPlatformAdapter = useMockPlatformAdapter();
@@ -12,7 +13,7 @@ describe('CopyButton Page', () => {
   test('should render correctly', async () => {
     render(
       <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <CopyButton copyText={accountNumber} />
+        <CopyButton variant={ThemeVariant.Primary} copyText={accountNumber} />
       </PlatformAdapterProvider>,
     );
 
@@ -23,7 +24,7 @@ describe('CopyButton Page', () => {
   test('should copy the account number to clipboard', async () => {
     render(
       <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <CopyButton copyText={accountNumber} />
+        <CopyButton variant={ThemeVariant.Primary} copyText={accountNumber} />
       </PlatformAdapterProvider>,
     );
 
@@ -33,5 +34,17 @@ describe('CopyButton Page', () => {
     await userEvent.click(btn);
 
     expect(mockPlatformAdapter.writeTextToClipboard).toHaveBeenCalledWith(accountNumber);
+
+    expect(screen.getByText('Copied to clipboard')).toBeInTheDocument();
+
+    let button = screen.queryByRole('button', { name: 'copy' });
+    expect(button).not.toBeInTheDocument();
+
+    await waitForElementToBeRemoved(() => screen.queryByText('Copied to clipboard'), {
+      timeout: 3000,
+    });
+
+    button = screen.queryByRole('button', { name: 'copy' });
+    expect(button).toBeInTheDocument();
   });
 });

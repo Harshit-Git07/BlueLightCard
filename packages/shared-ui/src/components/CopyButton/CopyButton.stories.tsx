@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import CopyButton, { Props } from './CopyButton';
-import { PlatformVariant } from '../../types';
+import { PlatformVariant, ThemeVariant } from '../../types';
 import { IPlatformAdapter, PlatformAdapterProvider } from '../../adapters';
 
 export default {
@@ -19,7 +19,7 @@ const mockPlatformAdapter = {
   }),
   writeTextToClipboard: () => Promise.resolve(),
   getBrandURL: () => 'https://bluelightcard.co.uk',
-  platform: PlatformVariant.Web,
+  platform: PlatformVariant.MobileHybrid,
 } satisfies IPlatformAdapter;
 
 const Template: StoryFn<Props> = (args) => (
@@ -28,14 +28,46 @@ const Template: StoryFn<Props> = (args) => (
   </PlatformAdapterProvider>
 );
 
-export const Default = Template.bind({});
-Default.args = {
-  copyText: 'BLC0000000',
+const label = 'Copy card number';
+const copyText = 'BLC0000000';
+
+export const TertiaryEnabled = Template.bind({});
+TertiaryEnabled.args = {
+  variant: ThemeVariant.Tertiary,
+  label,
+  copyText,
   disabled: false,
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  copyText: 'BLC0000000',
+export const TertiaryDisabled = Template.bind({});
+TertiaryDisabled.args = {
+  variant: ThemeVariant.Tertiary,
+  label,
+  copyText,
   disabled: true,
+};
+
+export const PrimaryEnabled = Template.bind({});
+PrimaryEnabled.args = {
+  variant: ThemeVariant.Primary,
+  label,
+  copyText,
+  disabled: false,
+};
+
+export const PrimaryDisabled = Template.bind({});
+PrimaryDisabled.args = {
+  variant: ThemeVariant.Primary,
+  label,
+  copyText,
+  disabled: true,
+};
+
+export const PrimaryStretched = Template.bind({});
+PrimaryStretched.args = {
+  variant: ThemeVariant.Primary,
+  label,
+  copyText,
+  fullWidth: true,
+  disabled: false,
 };

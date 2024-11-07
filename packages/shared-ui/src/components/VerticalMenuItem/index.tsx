@@ -1,19 +1,17 @@
-import { FC, MouseEventHandler } from 'react';
+import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition } from '@fortawesome/pro-solid-svg-icons';
 import NextLink from 'next/link';
 import { conditionalStrings } from '../../utils/conditionalStrings';
+import VerticalMenuItemProps from './types';
 
-export type Props = {
-  label: string;
-  selected: boolean;
-  onClick?: MouseEventHandler<HTMLElement>;
-  href?: string;
-  isExternalLink?: boolean;
-  icon?: IconDefinition;
-};
-
-const VerticalMenuItem: FC<Props> = ({ label, selected, onClick, href, isExternalLink, icon }) => {
+const VerticalMenuItem: FC<VerticalMenuItemProps> = ({
+  label,
+  selected,
+  onClick,
+  href,
+  isExternalLink,
+  icon,
+}) => {
   const selectedBorderStyles = 'border-r border-colour-primary dark:border-colour-primary-dark';
   const selectedTextStyles = 'text-colour-primary dark:text-colour-primary-dark';
   const selectedBackgroundStyles =

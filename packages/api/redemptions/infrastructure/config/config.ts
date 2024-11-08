@@ -60,6 +60,7 @@ type BrazePushNotificationRedemptionCampaignsConfig = {
   brazeRedemptionPreAppliedPushNotificationCampaignId: string;
   brazeRedemptionGenericPushNotificationCampaignId: string;
   brazeRedemptionShowCardPushNotificationCampaignId: string;
+  brazeRedemptionGiftCardPushNotificationCampaignId: string;
 };
 
 type SESConfig = {
@@ -169,6 +170,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionPreAppliedPushNotificationCampaignId: 'f0e25e82-1436-4357-b198-c2b69fd98cf4',
           brazeRedemptionGenericPushNotificationCampaignId: '378d0b0e-aa79-4b7e-a1a8-96459db8379a',
           brazeRedemptionShowCardPushNotificationCampaignId: '90df7afd-5d1d-48d5-a4a5-a71c9279c1d0',
+          brazeRedemptionGiftCardPushNotificationCampaignId: '656a2dc3-7350-48cd-b492-eaa91c59e6e4',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
@@ -220,6 +222,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionPreAppliedPushNotificationCampaignId: '',
           brazeRedemptionGenericPushNotificationCampaignId: '',
           brazeRedemptionShowCardPushNotificationCampaignId: '',
+          brazeRedemptionGiftCardPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -271,6 +274,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionPreAppliedPushNotificationCampaignId: '',
           brazeRedemptionGenericPushNotificationCampaignId: '',
           brazeRedemptionShowCardPushNotificationCampaignId: '',
+          brazeRedemptionGiftCardPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -336,6 +340,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
           brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
           brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
+          brazeRedemptionGiftCardPushNotificationCampaignId: '758714b3-8913-4ce7-aa76-16f82c835399',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
@@ -392,6 +397,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionPreAppliedPushNotificationCampaignId: '',
           brazeRedemptionGenericPushNotificationCampaignId: '',
           brazeRedemptionShowCardPushNotificationCampaignId: '',
+          brazeRedemptionGiftCardPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -447,6 +453,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionPreAppliedPushNotificationCampaignId: '',
           brazeRedemptionGenericPushNotificationCampaignId: '',
           brazeRedemptionShowCardPushNotificationCampaignId: '',
+          brazeRedemptionGiftCardPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -504,6 +511,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionPreAppliedPushNotificationCampaignId: 'a76d8340-15b0-4460-adfe-941edd261149',
         brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
         brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
+        brazeRedemptionGiftCardPushNotificationCampaignId: '758714b3-8913-4ce7-aa76-16f82c835399',
       },
       sesConfig: {
         redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
@@ -597,6 +605,9 @@ export class RedemptionsStackConfigResolver {
         ),
         brazeRedemptionVaultQRPushNotificationCampaignId: getEnv(
           RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VAULT_QR_PUSH_NOTIFICATION_CAMPAIGN_ID,
+        ),
+        brazeRedemptionGiftCardPushNotificationCampaignId: getEnv(
+          RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID,
         ),
       },
       sesConfig: {

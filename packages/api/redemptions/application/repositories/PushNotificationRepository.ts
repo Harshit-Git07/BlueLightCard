@@ -30,7 +30,7 @@ export class PushNotificationRepository implements IPushNotificationRepository {
     generic: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GENERIC_PUSH_NOTIFICATION_CAMPAIGN_ID),
     showCard: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID),
     ballot: '',
-    giftCard: 'TODO',
+    giftCard: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID),
   };
 
   constructor(

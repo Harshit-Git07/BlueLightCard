@@ -1,6 +1,14 @@
 import { faker } from '@faker-js/faker';
 
-import { RedemptionTypes } from '@blc-mono/core/constants/redemptions';
+import {
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  RedemptionTypes,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { IBrazeEmailClientProvider } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
@@ -19,6 +27,8 @@ beforeEach(() => {
     'generic_env_val';
   process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID] =
     'showCard_env_val';
+  process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID] =
+    'giftCard_env_val';
 });
 
 afterEach(() => {
@@ -28,6 +38,7 @@ afterEach(() => {
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_PRE_APPLIED_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GENERIC_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
+  delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
 });
 
 describe('PushNotificationRepository', () => {
@@ -36,11 +47,12 @@ describe('PushNotificationRepository', () => {
 
   describe('sendRedemptionPushNotification', () => {
     it.each([
-      ['generic', 'generic_env_val'],
-      ['vault', 'vault_env_val'],
-      ['vaultQR', 'vaultQR_env_val'],
-      ['preApplied', 'preApplied_env_val'],
-      ['showCard', 'showCard_env_val'],
+      [GENERIC, 'generic_env_val'],
+      [VAULT, 'vault_env_val'],
+      [VAULTQR, 'vaultQR_env_val'],
+      [PREAPPLIED, 'preApplied_env_val'],
+      [SHOWCARD, 'showCard_env_val'],
+      [GIFTCARD, 'giftCard_env_val'],
     ])('should send push notification with redemptionType %s', async (redemptionType, campaignEnvVar) => {
       // Arrange
       const logger = createTestLogger();

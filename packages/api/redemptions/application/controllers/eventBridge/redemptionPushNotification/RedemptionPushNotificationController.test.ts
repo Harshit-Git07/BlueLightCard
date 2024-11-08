@@ -1,3 +1,12 @@
+import {
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  RedemptionTypes,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { IPushNotificationService } from '@blc-mono/redemptions/application/services/pushNotification/PushNotificationService';
 import { memberRedemptionEventFactory } from '@blc-mono/redemptions/libs/test/factories/memberRedemptionEvent.factory';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
@@ -5,7 +14,7 @@ import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger
 import { RedemptionPushNotificationController } from './RedemptionPushNotificationController';
 
 describe('RedemptionPushNotificationController', () => {
-  it.each(['vault', 'vaultQR', 'generic', 'preApplied', 'showCard'])(
+  it.each([VAULT, VAULTQR, GENERIC, PREAPPLIED, SHOWCARD, GIFTCARD])(
     `should send push notification for redemption type %s`,
     async (redemptionType) => {
       // Arrange
@@ -18,7 +27,7 @@ describe('RedemptionPushNotificationController', () => {
       const event = memberRedemptionEventFactory.build({
         detail: {
           redemptionDetails: {
-            redemptionType: redemptionType as 'vault' | 'vaultQR' | 'generic' | 'preApplied' | 'showCard',
+            redemptionType: redemptionType as RedemptionTypes,
             url: defaultUrl,
             clientType: 'mobile',
           },

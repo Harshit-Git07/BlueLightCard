@@ -1,7 +1,17 @@
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
-import { RedemptionEventDetailType, REDEMPTIONS_EVENT_SOURCE } from '@blc-mono/core/constants/redemptions';
+import {
+  BALLOT,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  RedemptionEventDetailType,
+  REDEMPTIONS_EVENT_SOURCE,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { RedemptionsStackConfig } from '@blc-mono/redemptions/infrastructure/config/config';
 
 import { RedemptionsStackEnvironmentKeys } from '../../constants/environment';
@@ -37,6 +47,8 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionGenericPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID]:
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionShowCardPushNotificationCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID]:
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionGiftCardPushNotificationCampaignId,
     },
     permissions: [getSecretValueSecretsManager],
   });
@@ -46,7 +58,7 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: ['vault', 'vaultQR', 'generic', 'preApplied', 'showCard'],
+          redemptionType: [VAULT, VAULTQR, GENERIC, PREAPPLIED, SHOWCARD, BALLOT, GIFTCARD],
         },
       },
     },

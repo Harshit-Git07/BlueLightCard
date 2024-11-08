@@ -41,7 +41,7 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
           numberOfCompletedSteps={0}
         />
 
-        <div className="flex flex-col gap-[16px]">
+        <div className="flex flex-col gap-[16px] w-full">
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
           <ListSelector title="Employed" onClick={() => onEmploymentStatusSelect('Employed')} />

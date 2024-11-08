@@ -2,8 +2,6 @@ import React, { FC, useCallback } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityScreen } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/sign-up/screens/shared/components/body/EligibilityBody';
-import Typography from '@bluelightcard/shared-ui/components/Typography';
-import ProgressBar from '@bluelightcard/shared-ui/components/ProgressBar';
 import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
 import { ListSelectorState } from '@bluelightcard/shared-ui/components/ListSelector/types';
 import Dropdown from '@bluelightcard/shared-ui/components/Dropdown';
@@ -19,6 +17,8 @@ import { useEmployerChanged } from '@/root/src/member-eligibility/sign-up/screen
 import { useOnOrganisationChanged } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseOnOrganisationChanged';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/job-details-screen/hooks/UseFuzzyFrontEndButtons';
+import { EligibilityHeading } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/components/EligibilityHeading';
+import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 
 export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
@@ -44,25 +44,15 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
 
   return (
     <EligibilityScreen data-testid="job-details-screen">
-      <EligibilityBody className="px-[18px]">
-        <div className="flex flex-col items-start">
-          <Typography variant="title-large" className="text-left md:text-nowrap">
-            Verify Eligibility
-          </Typography>
+      <EligibilityBody>
+        <EligibilityHeading
+          title="Verify Eligibility"
+          subtitle="Provide details about your employment status and job role"
+          numberOfCompletedSteps={1}
+        ></EligibilityHeading>
 
-          <Typography variant="body" className="mt-[4px] text-left md:text-nowrap">
-            Provide details about your employment status and job role
-          </Typography>
-
-          <ProgressBar
-            totalNumberOfSteps={3}
-            numberOfCompletedSteps={1}
-            className="mb-[24px] mt-[16px]"
-          />
-
-          <Typography variant="body-small-semibold" className="text-left md:text-nowrap">
-            EMPLOYMENT STATUS
-          </Typography>
+        <div className="flex flex-col items-start w-full">
+          <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
           <ListSelector
             title="Employed"
@@ -71,9 +61,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
             onClick={onBack}
           />
 
-          <Typography variant="body-small-semibold" className="text-left md:text-nowrap">
-            JOB DETAILS
-          </Typography>
+          <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>JOB DETAILS</p>
 
           <Dropdown
             options={organisations}

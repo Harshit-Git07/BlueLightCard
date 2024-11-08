@@ -7,8 +7,13 @@ import { VaultEntity } from '@blc-mono/redemptions/application/repositories/Vaul
 import { RedeemVaultStrategyRedemptionDetails, RedeemVaultStrategyResult } from '../IRedeemStrategy';
 
 import { MaxPerUserReachedError } from './helpers/MaxPerUserReachedError';
-import { NoCodesAvailableError } from './helpers/NoCodesAvailableError';
 import { RedeemVaultStrategyRedemptionDetailsBuilder } from './RedeemVaultStrategyRedemptionDetailsBuilder';
+
+export type IntegrationCode = {
+  code: string;
+  createdAt: Date;
+  expiresAt: Date;
+};
 
 export class RedeemIntegrationVaultHandler {
   static readonly key = 'RedeemIntegrationVaultHandler' as const;
@@ -35,62 +40,39 @@ export class RedeemIntegrationVaultHandler {
     memberId: string,
     memberEmail: string,
   ): Promise<RedeemVaultStrategyResult> {
-    if (vaultEntity.integrationId === null) {
-      throw new Error(`${vaultEntity.integration} integrationId is blank/null`);
+    const integration = vaultEntity.integration;
+    const integrationId = vaultEntity.integrationId;
+
+    if (integration !== 'eagleeye' && integration !== 'uniqodo') {
+      throw new Error('Integration must be either eagleEye or uniqodo');
+    }
+
+    if (integrationId === null) {
+      throw new Error(`${integration} integrationId is blank/null`);
     }
 
     const numberOfCodesClaimedByMember = await this.integrationCodesRepository.countCodesClaimedByMember(
       vaultEntity.id,
-      String(vaultEntity.integrationId),
+      integrationId,
       memberId,
     );
 
-    const maxPerUser = vaultEntity.maxPerUser ?? 1;
+    const maxNumberOfCodesAllowedPerUser = vaultEntity.maxPerUser ?? 1;
 
-    if (numberOfCodesClaimedByMember >= maxPerUser) {
+    if (numberOfCodesClaimedByMember >= maxNumberOfCodesAllowedPerUser) {
       throw new MaxPerUserReachedError('Maximum codes claimed for this vault');
     }
 
-    let claimedCode;
-    if (vaultEntity.integration == 'uniqodo') {
-      claimedCode = await this.uniqodoRepository.getCode(String(vaultEntity.integrationId), memberId, memberEmail);
-    } else if (vaultEntity.integration == 'eagleeye') {
-      const resourceId = Number(vaultEntity.integrationId);
-      if (isNaN(resourceId)) {
-        this.logger.error({
-          message: `integrationId must be a number when calling eagleeye`,
-          context: {
-            vaultId: vaultEntity.id,
-            integrationId: vaultEntity.integrationId,
-            memberId,
-          },
-        });
-        throw new Error(`integrationId: "${vaultEntity.integrationId}" must be a number when calling eagleeye`);
-      }
-      claimedCode = await this.eagleEyeApiRepository.getCode(resourceId, memberId);
-    } else {
-      throw new Error('Integration must be either eagleEye or uniqodo');
-    }
-
-    if (claimedCode.kind !== 'Ok') {
-      this.logger.error({
-        message: `${claimedCode.data.message} error - vaultId: "${vaultEntity.id}", memberId: "${memberId}"`,
-        context: {
-          vaultId: vaultEntity.id,
-          memberId,
-        },
-      });
-      throw new NoCodesAvailableError(`No vault code retrieved for ${vaultEntity.integration} vault`);
-    }
+    const integrationCode: IntegrationCode = await this.getIntegrationCode(vaultEntity, memberId, memberEmail);
 
     await this.integrationCodesRepository.create({
       vaultId: vaultEntity.id,
       memberId: memberId,
-      code: claimedCode.data.code,
-      created: claimedCode.data.createdAt,
-      expiry: claimedCode.data.expiresAt,
-      integration: vaultEntity.integration,
-      integrationId: String(vaultEntity.integrationId),
+      code: integrationCode.code,
+      created: integrationCode.createdAt,
+      expiry: integrationCode.expiresAt,
+      integration: integration,
+      integrationId: integrationId,
     });
 
     const redeemVaultStrategyRedemptionDetails: RedeemVaultStrategyRedemptionDetails =
@@ -99,7 +81,7 @@ export class RedeemIntegrationVaultHandler {
         redemptionType,
         redemptionUrl,
         memberId,
-        claimedCode.data.code,
+        integrationCode.code,
       );
 
     return {
@@ -107,5 +89,37 @@ export class RedeemIntegrationVaultHandler {
       redemptionType,
       redemptionDetails: redeemVaultStrategyRedemptionDetails,
     };
+  }
+
+  private async getIntegrationCode(
+    vaultEntity: VaultEntity,
+    memberId: string,
+    memberEmail: string,
+  ): Promise<IntegrationCode> {
+    switch (vaultEntity.integration) {
+      case 'uniqodo':
+        return await this.uniqodoRepository.getCode(String(vaultEntity.integrationId), memberId, memberEmail);
+      case 'eagleeye': {
+        const resourceId = Number(vaultEntity.integrationId);
+
+        if (isNaN(resourceId)) {
+          this.logger.error({
+            message: `integrationId must be a number when calling eagleeye`,
+            context: {
+              vaultId: vaultEntity.id,
+              integrationId: vaultEntity.integrationId,
+              memberId,
+            },
+          });
+
+          throw new Error(`integrationId: "${vaultEntity.integrationId}" must be a number when calling eagleeye`);
+        }
+
+        return await this.eagleEyeApiRepository.getCode(resourceId, memberId);
+      }
+
+      default:
+        throw new Error('Integration must be either eagleEye or uniqodo');
+    }
   }
 }

@@ -2,28 +2,24 @@ import { createHash } from 'crypto';
 import { z } from 'zod';
 
 import { MAP_BRAND } from '@blc-mono/core/constants/common';
-import { Brand } from '@blc-mono/core/schemas/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { ISecretsManager, SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
-export type EagleEyeApiConfigError = {
-  kind: 'EagleEyeAPIRequestError' | 'Error';
-  data: {
-    message: string;
+import { NoCodesAvailableError } from '../services/redeem/strategies/redeemVaultStrategy/helpers/NoCodesAvailableError';
+import { IntegrationCode } from '../services/redeem/strategies/redeemVaultStrategy/RedeemIntegrationVaultHandler';
+
+type EagleEyeRequestBody = {
+  resourceType: string;
+  resourceId: number;
+  consumerIdentifier: {
+    reference: string;
   };
 };
 
-export type EagleEyeApiConfigSuccess = {
-  kind: 'Ok';
-  data: {
-    code: string;
-    createdAt: Date;
-    expiresAt: Date;
-  };
-};
+type EagleEyeHeaders = { 'X-EES-AUTH-CLIENT-ID': string; 'X-EES-AUTH-HASH': string };
 
 const EagleEyeCredentialsSecretSchema = z.object({
   clientSecret: z.string().min(1),
@@ -54,8 +50,10 @@ export const EagleEyeResponseSchema = z.object({
   consumerId: z.number(),
 });
 
+export type EagleEyeResponseData = z.infer<typeof EagleEyeResponseSchema>;
+
 export interface IEagleEyeApiRepository {
-  getCode(resourceId: number, memberId: string): Promise<EagleEyeApiConfigSuccess | EagleEyeApiConfigError>;
+  getCode(resourceId: number, memberId: string): Promise<IntegrationCode>;
 }
 
 export class EagleEyeApiRepository implements IEagleEyeApiRepository {
@@ -67,49 +65,39 @@ export class EagleEyeApiRepository implements IEagleEyeApiRepository {
     private readonly awsSecretsManagerClient: ISecretsManager,
   ) {}
 
-  async getCode(resourceId: number, memberId: string): Promise<EagleEyeApiConfigSuccess | EagleEyeApiConfigError> {
-    const eagleEyeApiUrl = getEnv(RedemptionsStackEnvironmentKeys.EAGLE_EYE_API_URL);
+  async getCode(resourceId: number, memberId: string): Promise<IntegrationCode> {
     const requestUriPath = '/2.0/token/create';
-    const url = `${eagleEyeApiUrl}${requestUriPath}`;
 
-    let eagleEyeClientId;
-    let eagleEyeClientSecret;
     const brand = getBrandFromEnv();
-    try {
-      const secrets = await this.awsSecretsManagerClient.getSecretValueJson(
-        `blc-mono-redemptions/eagle-eye-api-${MAP_BRAND[brand]}`,
-      );
-      const eagleEyeSecrets = EagleEyeCredentialsSecretSchema.parse(secrets);
-      eagleEyeClientId = eagleEyeSecrets.clientId;
-      eagleEyeClientSecret = eagleEyeSecrets.clientSecret;
-    } catch (error) {
-      this.logger.error({
-        message: 'Failed to fetch Eagle Eye API secrets',
-      });
-      return {
-        kind: 'Error',
-        data: {
-          message: 'Failed to fetch Eagle Eye API secrets',
-        },
-      };
-    }
-    const reference = brand === 'DDS_UK' ? `DDS-${memberId}` : `BLC-${memberId}`;
 
-    //62577, working resource id
-    const requestBody = JSON.stringify({
-      resourceType: 'CAMPAIGN',
-      resourceId: resourceId,
-      consumerIdentifier: {
-        reference: reference,
-      },
-    });
+    const requestBody: string = this.createRequestBody(brand, memberId, resourceId);
 
-    const securityHash = this.calculateSecurityHashHeaderValue(requestUriPath, requestBody, eagleEyeClientSecret);
+    const { eagleEyeClientId, eagleEyeClientSecret } = await this.fetchEagleEyeApiCredentials(brand);
 
-    const headers = {
-      'X-EES-AUTH-CLIENT-ID': eagleEyeClientId,
-      'X-EES-AUTH-HASH': securityHash,
-    };
+    const securityHash: string = this.calculateSecurityHashHeaderValue(
+      requestUriPath,
+      requestBody,
+      eagleEyeClientSecret,
+    );
+
+    const headers: EagleEyeHeaders = this.generateEagleEyeHeaders(eagleEyeClientId, securityHash);
+
+    const eagleEyeResponseData: EagleEyeResponseData = await this.fetchEagleEyeCode(
+      requestUriPath,
+      headers,
+      requestBody,
+    );
+
+    return this.buildIntegrationCode(eagleEyeResponseData);
+  }
+
+  private async fetchEagleEyeCode(
+    requestUriPath: string,
+    headers: EagleEyeHeaders,
+    requestBody: string,
+  ): Promise<EagleEyeResponseData> {
+    const eagleEyeApiUrl = getEnv(RedemptionsStackEnvironmentKeys.EAGLE_EYE_API_URL);
+    const url = `${eagleEyeApiUrl}${requestUriPath}`;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -128,7 +116,8 @@ export class EagleEyeApiRepository implements IEagleEyeApiRepository {
           },
         },
       });
-      return { kind: 'EagleEyeAPIRequestError', data: { message: `Eagle Eye API request failed - ${responseText}` } };
+
+      throw new NoCodesAvailableError('Failed to get code from EagleEye API');
     }
 
     const responseJson = await response.json();
@@ -142,14 +131,57 @@ export class EagleEyeApiRepository implements IEagleEyeApiRepository {
         },
       },
     });
+
+    return EagleEyeResponseSchema.parse(responseJson);
+  }
+
+  private buildIntegrationCode(eagleEyeResponse: EagleEyeResponseData): IntegrationCode {
     return {
-      kind: 'Ok',
-      data: {
-        code: EagleEyeResponseSchema.parse(responseJson).token,
-        createdAt: new Date(EagleEyeResponseSchema.parse(responseJson).tokenDates.start),
-        expiresAt: new Date(EagleEyeResponseSchema.parse(responseJson).tokenDates.end),
+      code: eagleEyeResponse.token,
+      createdAt: new Date(eagleEyeResponse.tokenDates.start),
+      expiresAt: new Date(eagleEyeResponse.tokenDates.end),
+    };
+  }
+
+  private generateEagleEyeHeaders(eagleEyeClientId: string, securityHash: string): EagleEyeHeaders {
+    return {
+      'X-EES-AUTH-CLIENT-ID': eagleEyeClientId,
+      'X-EES-AUTH-HASH': securityHash,
+    };
+  }
+
+  private createRequestBody(brand: string, memberId: string, resourceId: number) {
+    const reference: string = brand === 'DDS_UK' ? `DDS-${memberId}` : `BLC-${memberId}`;
+
+    //62577, working resource id
+    const requestBody: EagleEyeRequestBody = {
+      resourceType: 'CAMPAIGN',
+      resourceId: resourceId,
+      consumerIdentifier: {
+        reference: reference,
       },
     };
+
+    return JSON.stringify(requestBody);
+  }
+
+  private async fetchEagleEyeApiCredentials(brand: keyof typeof MAP_BRAND) {
+    const secretId = `blc-mono-redemptions/eagle-eye-api-${MAP_BRAND[brand]}`;
+    try {
+      const secrets = await this.awsSecretsManagerClient.getSecretValueJson(secretId);
+      const eagleEyeSecrets = EagleEyeCredentialsSecretSchema.parse(secrets);
+      const eagleEyeClientId = eagleEyeSecrets.clientId;
+      const eagleEyeClientSecret = eagleEyeSecrets.clientSecret;
+
+      return { eagleEyeClientId, eagleEyeClientSecret };
+    } catch (error) {
+      this.logger.error({
+        message: 'Failed to fetch Eagle Eye API secrets',
+        context: { secretId, brand },
+      });
+
+      throw new Error('failed to fetch eagle eye api secrets');
+    }
   }
 
   private calculateSecurityHashHeaderValue(requestUriPath: string, requestBody: string, eagleEyeClientSecret: string) {

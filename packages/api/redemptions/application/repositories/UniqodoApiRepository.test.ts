@@ -5,6 +5,8 @@ import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastru
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
+import { IntegrationCode } from '../services/redeem/strategies/redeemVaultStrategy/RedeemIntegrationVaultHandler';
+
 import { UniqodoApiRepository } from './UniqodoApiRepository';
 
 const promotionId = '43c3780817f7ccb92012e519f0814c0b';
@@ -34,7 +36,6 @@ function mockEnv(values: Record<string, string>): {
 
 describe('UniqodoApiRepository', () => {
   const mockedEnv = mockEnv({
-    //['UNIQODO_SECRETS_MANAGER_NAME']: 'test-uniqodo-secret-manager-name',
     [RedemptionsStackEnvironmentKeys.UNIQODO_SECRETS_MANAGER_NAME]: 'test-uniqodo-secret-manager-name',
     [RedemptionsStackEnvironmentKeys.UNIQODO_CLAIM_URL]: 'https://tired.au/abc/claims',
   });
@@ -47,27 +48,26 @@ describe('UniqodoApiRepository', () => {
     mockedEnv.unset();
   });
 
-  it('should return kind error when retrieving the secret manager fails', async () => {
-    // Arrange
-    const expected = {
-      kind: 'Error',
-      data: {
-        message: 'Failed to fetch Uniqodo API secrets',
-      },
-    };
+  it('throws error when retrieving the secret manager fails', async () => {
     const mockedSecretsManager = {
       getSecretValueJson: jest.fn().mockRejectedValue(new Error('Secrets Manager error')),
     } as unknown as ISecretsManager;
 
     // Act
     const uniqodoApiRepository = new UniqodoApiRepository(logger, mockedSecretsManager);
-    const result = await uniqodoApiRepository.getCode(promotionId, memberId, memberEmail);
 
     // Assert
-    expect(result).toEqual(expected);
+    await expect(() => uniqodoApiRepository.getCode(promotionId, memberId, memberEmail)).rejects.toThrow(
+      'failed to fetch Uniqodo api secrets',
+    );
+
+    expect(logger.error).toHaveBeenCalledWith({
+      message: 'Failed to fetch Uniqodo secrets',
+      context: { secretId: 'test-uniqodo-secret-manager-name' },
+    });
   });
 
-  it('should return unauthorized error when the api keys are incorrect', async () => {
+  it('throws error when the api keys are incorrect', async () => {
     const mockedSecretsManager = {
       getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
@@ -94,21 +94,27 @@ describe('UniqodoApiRepository', () => {
       .reply(function (url, body, cb) {
         cb(null, [401, { message: 'Unauthorized' }]);
       });
-    const expected = {
-      kind: 'UniqodoAPIRequestError',
-      data: {
-        message: 'Uniqodo API request failed - {"message":"Unauthorized"}',
-      },
-    };
+
     // Act
     const uniqodoApiRepository = new UniqodoApiRepository(logger, mockedSecretsManager);
-    const result = await uniqodoApiRepository.getCode(promotionId, memberId, memberEmail);
+
     // Assert
-    expect(result).toEqual(expected);
-    nock.cleanAll();
+    await expect(() => uniqodoApiRepository.getCode(promotionId, memberId, memberEmail)).rejects.toThrow(
+      'Failed to get code from Uniqodo API',
+    );
+
+    expect(logger.error).toHaveBeenCalledWith({
+      message: 'Uniqodo API request failed',
+      context: {
+        response: {
+          data: '{"message":"Unauthorized"}',
+          status: 401,
+        },
+      },
+    });
   }, 60000);
 
-  it('should return a code when all ok', async () => {
+  it('returns a code when all ok', async () => {
     const mockedSecretsManager = {
       getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
@@ -147,14 +153,10 @@ describe('UniqodoApiRepository', () => {
       .times(1)
       .reply(201, JSON.stringify(uniqodoResponse));
 
-    const expected = {
-      kind: 'Ok',
-      data: {
-        code: uniqodoResponse.claim.code,
-        createdAt: new Date(uniqodoResponse.claim.createdAt),
-        expiresAt: new Date(uniqodoResponse.promotion.endDate),
-        promotionId: promotionId,
-      },
+    const expected: IntegrationCode = {
+      code: uniqodoResponse.claim.code,
+      createdAt: new Date(uniqodoResponse.claim.createdAt),
+      expiresAt: new Date(uniqodoResponse.promotion.endDate),
     };
 
     // Act
@@ -163,10 +165,9 @@ describe('UniqodoApiRepository', () => {
     const result = await uniqodoApiRepository.getCode(promotionId, memberId, memberEmail);
     // Assert
     expect(result).toEqual(expected);
-    nock.cleanAll();
   }, 60000);
 
-  it('should return an error when the api call fails', async () => {
+  it('throws an error when the api call fails', async () => {
     const mockedSecretsManager = {
       getSecretValueJson: jest.fn().mockResolvedValue(
         Promise.resolve({
@@ -174,6 +175,7 @@ describe('UniqodoApiRepository', () => {
         }),
       ),
     } satisfies ISecretsManager;
+    const error: Error = new Error('errorMessage');
     // Arrange
     nock('https://tired.au', {
       reqheaders: {
@@ -190,17 +192,19 @@ describe('UniqodoApiRepository', () => {
         promotionId: promotionId,
       })
       .times(1)
-      .replyWithError('errorMessage');
-    const expected = {
-      kind: 'Error',
-      data: {
-        message: 'Failed to fetch Uniqodo code - Error: errorMessage',
-      },
-    };
+      .replyWithError(error);
+
     // Act
     const uniqodoApiRepository = new UniqodoApiRepository(logger, mockedSecretsManager);
-    const result = await uniqodoApiRepository.getCode(promotionId, memberId, memberEmail);
+
     // Assert
-    expect(result).toEqual(expected);
+    await expect(() => uniqodoApiRepository.getCode(promotionId, memberId, memberEmail)).rejects.toThrow(
+      'Failed to get code from Uniqodo API',
+    );
+
+    expect(logger.error).toHaveBeenCalledWith({
+      message: 'Error fetching uniqodo code',
+      error,
+    });
   }, 60000);
 });

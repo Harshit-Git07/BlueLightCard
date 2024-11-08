@@ -5,22 +5,18 @@ import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { ISecretsManager, SecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 
-export type UniqodoApiConfigError = {
-  kind: 'UniqodoAPIRequestError' | 'Error';
-  data: {
-    message: string;
+import { NoCodesAvailableError } from '../services/redeem/strategies/redeemVaultStrategy/helpers/NoCodesAvailableError';
+import { IntegrationCode } from '../services/redeem/strategies/redeemVaultStrategy/RedeemIntegrationVaultHandler';
+
+type UniqodoRequestBody = {
+  customer: {
+    id: string;
+    email: string;
   };
+  promotionId: string;
 };
 
-export type UniqodoApiConfigSuccess = {
-  kind: 'Ok';
-  data: {
-    code: string;
-    createdAt: Date;
-    expiresAt: Date;
-    promotionId: string;
-  };
-};
+type UniqodoHeaders = { 'Content-Type': string; 'UQD-ACCESS-KEY': string };
 
 export const SecretsSchema = z.object({
   apiKey: z.string(),
@@ -48,12 +44,10 @@ export const UniqodoResponseSchema = z.object({
   }),
 });
 
+export type UniqodoResponseData = z.infer<typeof UniqodoResponseSchema>;
+
 export interface IUniqodoApiRepository {
-  getCode(
-    promotionId: string,
-    memberId: string,
-    memberEmail: string,
-  ): Promise<UniqodoApiConfigSuccess | UniqodoApiConfigError>;
+  getCode(promotionId: string, memberId: string, memberEmail: string): Promise<IntegrationCode>;
 }
 
 export class UniqodoApiRepository implements IUniqodoApiRepository {
@@ -65,61 +59,39 @@ export class UniqodoApiRepository implements IUniqodoApiRepository {
     private readonly awsSecretsMangerClient: ISecretsManager,
   ) {}
 
-  async getCode(
-    promotionId: string,
-    memberId: string,
-    memberEmail: string,
-  ): Promise<UniqodoApiConfigSuccess | UniqodoApiConfigError> {
-    let uniqodoApiJson;
-    try {
-      uniqodoApiJson = await this.awsSecretsMangerClient.getSecretValueJson(
-        getEnv(RedemptionsStackEnvironmentKeys.UNIQODO_SECRETS_MANAGER_NAME),
-      );
-    } catch (error) {
-      this.logger.error({
-        message: 'Failed to fetch Uniqodo API secrets',
-      });
-      return {
-        kind: 'Error',
-        data: {
-          message: 'Failed to fetch Uniqodo API secrets',
-        },
-      };
-    }
+  async getCode(promotionId: string, memberId: string, memberEmail: string): Promise<IntegrationCode> {
+    const requestBody: string = this.createRequestBody(memberId, memberEmail, promotionId);
 
-    let response;
+    const headers: UniqodoHeaders = await this.createHeaders();
+
+    const response: UniqodoResponseData = await this.fetchUniqodoCode(requestBody, headers);
+
+    return this.buildIntegrationCode(response);
+  }
+
+  private async fetchUniqodoCode(requestBody: string, headers: UniqodoHeaders): Promise<UniqodoResponseData> {
+    const url = getEnv(RedemptionsStackEnvironmentKeys.UNIQODO_CLAIM_URL);
+
+    let response: Response;
     try {
-      response = await fetch(getEnv(RedemptionsStackEnvironmentKeys.UNIQODO_CLAIM_URL), {
+      response = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify({
-          customer: {
-            id: memberId,
-            email: memberEmail,
-          },
-          promotionId: promotionId,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'UQD-ACCESS-KEY': `${SecretsSchema.parse(uniqodoApiJson).apiKey}`,
-        },
+        body: requestBody,
+        headers: headers,
       });
     } catch (error) {
       this.logger.error({
         message: 'Error fetching uniqodo code',
         error,
       });
-      return {
-        kind: 'Error',
-        data: {
-          message: `Failed to fetch Uniqodo code - ${error}`,
-        },
-      };
+
+      throw new NoCodesAvailableError('Failed to get code from Uniqodo API');
     }
 
     if (!response.ok) {
       const message = await response.text();
       this.logger.error({
-        message: ` Uniqodo API request failed`,
+        message: `Uniqodo API request failed`,
         context: {
           response: {
             status: response.status,
@@ -127,8 +99,10 @@ export class UniqodoApiRepository implements IUniqodoApiRepository {
           },
         },
       });
-      return { kind: 'UniqodoAPIRequestError', data: { message: `Uniqodo API request failed - ${message}` } };
+
+      throw new NoCodesAvailableError('Failed to get code from Uniqodo API');
     }
+
     const data = await response.json();
     this.logger.info({
       message: 'Uniqodo API response',
@@ -139,14 +113,53 @@ export class UniqodoApiRepository implements IUniqodoApiRepository {
         },
       },
     });
+
+    return UniqodoResponseSchema.parse(data);
+  }
+
+  private buildIntegrationCode(uniqodoResponseData: UniqodoResponseData): IntegrationCode {
     return {
-      kind: 'Ok',
-      data: {
-        code: UniqodoResponseSchema.parse(data).claim.code,
-        createdAt: new Date(UniqodoResponseSchema.parse(data).claim.createdAt),
-        expiresAt: new Date(UniqodoResponseSchema.parse(data).promotion.endDate),
-        promotionId: UniqodoResponseSchema.parse(data).promotion.id,
-      },
+      code: uniqodoResponseData.claim.code,
+      createdAt: new Date(uniqodoResponseData.claim.createdAt),
+      expiresAt: new Date(uniqodoResponseData.promotion.endDate),
     };
+  }
+
+  private async createHeaders(): Promise<UniqodoHeaders> {
+    const uniqodoApiKey = await this.fetchUniqodoApiKey();
+
+    return {
+      'Content-Type': 'application/json',
+      'UQD-ACCESS-KEY': uniqodoApiKey,
+    };
+  }
+
+  private createRequestBody(memberId: string, memberEmail: string, promotionId: string) {
+    const requestBody: UniqodoRequestBody = {
+      customer: {
+        id: memberId,
+        email: memberEmail,
+      },
+      promotionId: promotionId,
+    };
+
+    return JSON.stringify(requestBody);
+  }
+
+  private async fetchUniqodoApiKey() {
+    let uniqodoApiJson;
+    const secretId = getEnv(RedemptionsStackEnvironmentKeys.UNIQODO_SECRETS_MANAGER_NAME);
+    try {
+      uniqodoApiJson = await this.awsSecretsMangerClient.getSecretValueJson(secretId);
+    } catch (error) {
+      this.logger.error({
+        message: 'Failed to fetch Uniqodo secrets',
+        context: { secretId },
+      });
+
+      throw new Error('failed to fetch Uniqodo api secrets');
+    }
+
+    return `${SecretsSchema.parse(uniqodoApiJson).apiKey}`;
   }
 }

@@ -3,14 +3,17 @@ import nock from 'nock';
 import { Brand } from '@blc-mono/core/schemas/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { ILogger, ILoggerDetail } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { ISecretsManager } from '@blc-mono/redemptions/libs/SecretsManager/SecretsManager';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { EagleEyeApiConfigSuccess, EagleEyeApiRepository } from './EagleEyeApiRepository';
+import { IntegrationCode } from '../services/redeem/strategies/redeemVaultStrategy/RedeemIntegrationVaultHandler';
 
-const logger = createTestLogger();
+import { EagleEyeApiRepository } from './EagleEyeApiRepository';
+
+let mockLogger: ILogger<ILoggerDetail>;
 const mockSecretsManager: Partial<ISecretsManager> = {};
 
 jest.mock('@blc-mono/core/utils/checkBrand');
@@ -19,7 +22,7 @@ const mockGetBrandFromEnv = jest.mocked(getBrandFromEnv);
 jest.mock('@blc-mono/core/utils/getEnv');
 const mockGetEnv = getEnv as jest.Mock;
 
-const eagleEyeApiRepository = new EagleEyeApiRepository(logger, as(mockSecretsManager));
+let eagleEyeApiRepository: EagleEyeApiRepository;
 
 const eagleEyeJsonResponse = {
   accountId: 27972831719,
@@ -55,6 +58,8 @@ const eagleEyeApi = 'https://consumer.uk.eagleeye.com';
 beforeEach(() => {
   jest.clearAllMocks();
   nock.cleanAll();
+  mockLogger = createTestLogger();
+  eagleEyeApiRepository = new EagleEyeApiRepository(mockLogger, as(mockSecretsManager));
 });
 
 describe('getCode', () => {
@@ -81,15 +86,12 @@ describe('getCode', () => {
       .times(1)
       .reply(200, eagleEyeJsonResponse);
 
-    const actualResult = await eagleEyeApiRepository.getCode(resourceId, memberId);
+    const actualResult: IntegrationCode = await eagleEyeApiRepository.getCode(resourceId, memberId);
 
-    const expectedResult: EagleEyeApiConfigSuccess = {
-      kind: 'Ok',
-      data: {
-        code: eagleEyeJsonResponse.token,
-        createdAt: new Date(eagleEyeJsonResponse.tokenDates.start),
-        expiresAt: new Date(eagleEyeJsonResponse.tokenDates.end),
-      },
+    const expectedResult: IntegrationCode = {
+      code: eagleEyeJsonResponse.token,
+      createdAt: new Date(eagleEyeJsonResponse.tokenDates.start),
+      expiresAt: new Date(eagleEyeJsonResponse.tokenDates.end),
     };
 
     expect(actualResult).toEqual(expectedResult);
@@ -156,29 +158,28 @@ describe('getCode', () => {
     },
   );
 
-  it('returns error if secrets manager throws error', async () => {
+  it('throws error if secrets manager throws error', async () => {
     whenGetEagleEyeApiUrlThenReturn(eagleEyeApi);
     mockGetBrandFromEnv.mockReturnValue('BLC_UK');
 
     mockSecretsManager.getSecretValueJson = jest.fn().mockRejectedValue(new Error('error'));
 
-    logger.error = jest.fn();
+    mockLogger.error = jest.fn();
 
-    const result = await eagleEyeApiRepository.getCode(resourceId, memberId);
+    await expect(() => eagleEyeApiRepository.getCode(resourceId, memberId)).rejects.toThrow(
+      'failed to fetch eagle eye api secrets',
+    );
 
-    expect(result).toEqual({
-      kind: 'Error',
-      data: {
-        message: 'Failed to fetch Eagle Eye API secrets',
-      },
-    });
-
-    expect(logger.error).toHaveBeenCalledWith({
+    expect(mockLogger.error).toHaveBeenCalledWith({
       message: 'Failed to fetch Eagle Eye API secrets',
+      context: {
+        brand: 'BLC_UK',
+        secretId: 'blc-mono-redemptions/eagle-eye-api-blc-uk',
+      },
     });
   });
 
-  it('returns error if fetch returns 500', async () => {
+  it('throws error if fetch returns 500', async () => {
     whenGetEagleEyeApiUrlThenReturn(eagleEyeApi);
     mockGetBrandFromEnv.mockReturnValue('BLC_UK');
 
@@ -202,17 +203,14 @@ describe('getCode', () => {
 
     nock(eagleEyeApi).post('/2.0/token/create', requestBody).times(1).reply(500, eagleEyeApiResponse);
 
-    logger.error = jest.fn();
+    mockLogger.error = jest.fn();
 
-    const result = await eagleEyeApiRepository.getCode(resourceId, memberId);
+    await expect(() => eagleEyeApiRepository.getCode(resourceId, memberId)).rejects.toThrow(
+      'Failed to get code from EagleEye API',
+    );
 
-    expect(result).toEqual({
-      kind: 'EagleEyeAPIRequestError',
-      data: { message: 'Eagle Eye API request failed - {"errorCode":"U","errorMessage":"Unknown Server Error"}' },
-    });
-
-    expect(logger.error).toHaveBeenCalledWith({
-      message: `Eagle Eye API request failed`,
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      message: 'Eagle Eye API request failed',
       context: {
         response: {
           status: 500,

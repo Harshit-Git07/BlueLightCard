@@ -7,7 +7,7 @@ import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastru
 import { ISecretsManager, SecretsManager } from '../SecretsManager/SecretsManager';
 
 const BrazeCredentialsSecretSchema = z.object({
-  brazeApiKey: z.string().nonempty(),
+  brazeApiKey: z.string().min(1),
 });
 export type BrazeCredentials = z.infer<typeof BrazeCredentialsSecretSchema>;
 

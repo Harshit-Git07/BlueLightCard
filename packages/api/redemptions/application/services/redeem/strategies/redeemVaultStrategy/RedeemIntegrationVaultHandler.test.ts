@@ -13,7 +13,7 @@ import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger
 import { RedeemVaultStrategyResult } from '../IRedeemStrategy';
 
 import { MaxPerUserReachedError } from './helpers/MaxPerUserReachedError';
-import { RedeemIntegrationVaultHandler } from './RedeemIntegrationVaultHandler';
+import { IntegrationCode, RedeemIntegrationVaultHandler } from './RedeemIntegrationVaultHandler';
 import { RedeemVaultStrategyRedemptionDetailsBuilder } from './RedeemVaultStrategyRedemptionDetailsBuilder';
 
 const mockUniqodoRepository: Partial<UniqodoApiRepository> = {
@@ -54,21 +54,10 @@ const eagleEyeApiConfigSuccess = {
   },
 };
 
-const uniqodoApiConfigSuccess = {
-  kind: 'Ok',
-  data: {
-    code: faker.string.alphanumeric(),
-    createdAt: faker.date.recent(),
-    expiresAt: faker.date.recent(),
-    promotionId: faker.string.alphanumeric(),
-  },
-};
-
-const apiConfigError = {
-  kind: 'Error',
-  data: {
-    message: faker.lorem.sentence(),
-  },
+const integrationCode: IntegrationCode = {
+  code: faker.string.alphanumeric(),
+  createdAt: faker.date.recent(),
+  expiresAt: faker.date.recent(),
 };
 
 beforeEach(() => {
@@ -81,7 +70,7 @@ describe('handleRedeemIntegrationVault', () => {
 
     mockIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(0);
 
-    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(uniqodoApiConfigSuccess);
+    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(integrationCode);
 
     const redeemVaultStrategyRedemptionDetails = redeemVaultStrategyRedemptionDetailsFactory.build();
     mockRedeemVaultStrategyRedemptionDetailsBuilder.buildRedeemVaultStrategyRedemptionDetails = jest
@@ -106,12 +95,12 @@ describe('handleRedeemIntegrationVault', () => {
     expect(actualRedeemVaultStrategyResult).toEqual(expectedRedeemVaultStrategyResult);
   });
 
-  it('calls buildRedeemVaultStrategyRedemptionDetails  with correct arguments', async () => {
+  it('calls buildRedeemVaultStrategyRedemptionDetails with correct arguments', async () => {
     const vaultEntity: VaultEntity = vaultEntityFactory.build({ integration: 'uniqodo', maxPerUser: 10 });
 
     mockIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(0);
 
-    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(uniqodoApiConfigSuccess);
+    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(integrationCode);
 
     await redeemIntegrationVaultHandler.handleRedeemIntegrationVault(
       vaultEntity,
@@ -123,7 +112,7 @@ describe('handleRedeemIntegrationVault', () => {
 
     expect(
       mockRedeemVaultStrategyRedemptionDetailsBuilder.buildRedeemVaultStrategyRedemptionDetails,
-    ).toHaveBeenCalledWith(vaultEntity, redemptionType, redemptionUrl, memberId, uniqodoApiConfigSuccess.data.code);
+    ).toHaveBeenCalledWith(vaultEntity, redemptionType, redemptionUrl, memberId, integrationCode.code);
   });
 
   it('calls integrationCodesRepository create with correct arguments', async () => {
@@ -131,7 +120,7 @@ describe('handleRedeemIntegrationVault', () => {
 
     mockIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(0);
 
-    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(uniqodoApiConfigSuccess);
+    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(integrationCode);
 
     await redeemIntegrationVaultHandler.handleRedeemIntegrationVault(
       vaultEntity,
@@ -144,9 +133,9 @@ describe('handleRedeemIntegrationVault', () => {
     expect(mockIntegrationCodesRepository.create).toHaveBeenCalledWith({
       vaultId: vaultEntity.id,
       memberId: memberId,
-      code: uniqodoApiConfigSuccess.data.code,
-      created: uniqodoApiConfigSuccess.data.createdAt,
-      expiry: uniqodoApiConfigSuccess.data.expiresAt,
+      code: integrationCode.code,
+      created: integrationCode.createdAt,
+      expiry: integrationCode.expiresAt,
       integration: vaultEntity.integration,
       integrationId: String(vaultEntity.integrationId),
     });
@@ -171,32 +160,12 @@ describe('handleRedeemIntegrationVault', () => {
     ).rejects.toThrow(`Integration must be either eagleEye or uniqodo`);
   });
 
-  it('throws an error if uniqodoRepository getCode returns not ok', async () => {
-    const vaultEntity: VaultEntity = vaultEntityFactory.build({ integration: 'uniqodo', maxPerUser: 10 });
-
-    mockIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(0);
-
-    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(apiConfigError);
-
-    mockLogger.error = jest.fn();
-
-    await expect(() =>
-      redeemIntegrationVaultHandler.handleRedeemIntegrationVault(
-        vaultEntity,
-        redemptionType,
-        redemptionUrl,
-        memberId,
-        memberEmail,
-      ),
-    ).rejects.toThrow(`No vault code retrieved for ${vaultEntity.integration} vault`);
-  });
-
   it('calls uniqodoRepository getCode with correct arguments when integration is Uniqodo', async () => {
     const vaultEntity: VaultEntity = vaultEntityFactory.build({ integration: 'uniqodo', maxPerUser: 10 });
 
     mockIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(0);
 
-    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(uniqodoApiConfigSuccess);
+    mockUniqodoRepository.getCode = jest.fn().mockResolvedValue(integrationCode);
 
     await redeemIntegrationVaultHandler.handleRedeemIntegrationVault(
       vaultEntity,
@@ -211,30 +180,6 @@ describe('handleRedeemIntegrationVault', () => {
       memberId,
       memberEmail,
     );
-  });
-
-  it('throws an error if eagleEyeRepository getCode returns not ok', async () => {
-    const vaultEntity: VaultEntity = vaultEntityFactory.build({
-      integration: 'eagleeye',
-      integrationId: faker.number.int().toString(),
-      maxPerUser: 10,
-    });
-
-    mockIntegrationCodesRepository.countCodesClaimedByMember = jest.fn().mockResolvedValue(0);
-
-    mockEagleEyeRepository.getCode = jest.fn().mockResolvedValue(apiConfigError);
-
-    mockLogger.error = jest.fn();
-
-    await expect(() =>
-      redeemIntegrationVaultHandler.handleRedeemIntegrationVault(
-        vaultEntity,
-        redemptionType,
-        redemptionUrl,
-        memberId,
-        memberEmail,
-      ),
-    ).rejects.toThrow(`No vault code retrieved for ${vaultEntity.integration} vault`);
   });
 
   it('calls eagleEye Repository getCode with correct arguments when integration is EagleEye', async () => {
@@ -291,6 +236,20 @@ describe('handleRedeemIntegrationVault', () => {
       );
     },
   );
+
+  it('throws an error if integration is null', async () => {
+    const vaultEntity: VaultEntity = vaultEntityFactory.build({ integration: null, integrationId: '23456' });
+
+    await expect(() =>
+      redeemIntegrationVaultHandler.handleRedeemIntegrationVault(
+        vaultEntity,
+        redemptionType,
+        redemptionUrl,
+        memberId,
+        memberEmail,
+      ),
+    ).rejects.toThrow(`Integration must be either eagleEye or uniqodo`);
+  });
 
   it('throws an error if integrationId is null', async () => {
     const vaultEntity: VaultEntity = vaultEntityFactory.build({ integration: 'uniqodo', integrationId: null });

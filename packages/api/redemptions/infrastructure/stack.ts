@@ -114,7 +114,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
   const postRedeemModel = apiGatewayModelGenerator.generateModel(PostRedeemModel);
 
   //set up S3 bucket for vault code files uploaded to S3
-  const vaultCodesUpload = new VaultCodesUpload(stack);
+  const vaultCodesUpload = new VaultCodesUpload(stack, config);
 
   //params: stack, custom EventBus rule sets, default EventBus rule sets
   new EventBridge(

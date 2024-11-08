@@ -1,17 +1,21 @@
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Bucket } from 'aws-cdk-lib/aws-s3';
+import { Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
 import { Stack } from 'sst/constructs';
 
 import { MAP_BRAND } from '@blc-mono/core/constants/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 
+import { RedemptionsStackConfig } from '../config/config';
+
 import { IVaultCodesUploadAdapter } from './adapter';
 
 export class VaultCodesUpload {
   public readonly setUp: IVaultCodesUploadAdapter;
-
-  constructor(private readonly stack: Stack) {
+  constructor(
+    private readonly stack: Stack,
+    public readonly config: RedemptionsStackConfig,
+  ) {
     this.setUp = this.setup();
   }
 
@@ -31,6 +35,15 @@ export class VaultCodesUpload {
       autoDeleteObjects: false,
       bucketName,
       eventBridgeEnabled: true,
+      cors: [
+        {
+          allowedHeaders: ['*'],
+          allowedOrigins: this.config.networkConfig.adminApiDefaultAllowedOrigins,
+          allowedMethods: [HttpMethods.PUT],
+          exposedHeaders: [],
+          maxAge: 600,
+        },
+      ],
     });
   }
 

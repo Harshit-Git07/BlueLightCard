@@ -50,7 +50,7 @@ const OfferCardList: FC<OfferCardListProps> = ({
         return (
           <div key={offer.offerID}>
             <ResponsiveOfferCard
-              id={offer.offerID}
+              id={offer.offerID.toString()}
               type={offer.offerType}
               name={offer.offerName}
               image={
@@ -58,7 +58,7 @@ const OfferCardList: FC<OfferCardListProps> = ({
                   ? offer.imageURL
                   : getCDNUrl(`/companyimages/complarge/retina/${offer.companyID}.jpg`)
               }
-              companyId={Number(offer.companyID)}
+              companyId={offer.companyID}
               companyName={offer.companyName}
               onClick={() => onOfferClick(offer)}
               variant={variant}

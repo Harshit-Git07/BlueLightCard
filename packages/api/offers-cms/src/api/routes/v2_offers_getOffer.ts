@@ -56,9 +56,9 @@ export const registerV2OffersGetOffer = (app: App) =>
       name: item.name,
       description: item.offerDescription,
       type: item.offerType.offerType,
-      expires: item.expires || null,
+      expires: item.expires ?? null,
       termsAndConditions: item.termsAndConditions || null,
-      image: item.image?.default?.asset?.url || null,
-      companyId: item.company?._id || null,
+      image: item.image?.default?.asset?.url ?? null,
+      companyId: item.company?._id ?? null,
     });
   });

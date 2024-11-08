@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from 'react';
 import { Control, Controller, ErrorOption, FieldErrors, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ObjectShape } from 'yup/lib/object';
+import { ObjectShape } from 'yup';
 import flatten from 'lodash/flatten';
 import { FormProps, FormField, FormSubmitSchema } from './types';
 import Button from '../Button/Button';

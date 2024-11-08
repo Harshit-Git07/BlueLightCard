@@ -1,4 +1,10 @@
-import { GatewayVpcEndpointAwsService, IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
+import {
+  GatewayVpcEndpointAwsService,
+  IVpc,
+  SubnetType,
+  Vpc,
+  SubnetConfiguration,
+} from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
 import {
   isDevelopment,
@@ -7,7 +13,6 @@ import {
   isStaging,
 } from '@blc-mono/core/src/utils/checkEnvironment';
 import { isDdsUkBrand } from '@blc-mono/core/src/utils/checkBrand';
-import { SubnetConfiguration } from 'aws-cdk-lib/aws-ec2/lib/vpc';
 
 enum VpcName {
   BLC = 'vpc-shared',
@@ -66,7 +71,7 @@ export class Network {
 
     return Vpc.fromLookup(this.stack, vpcName, {
       tags: {
-        'Name': vpcName,
+        Name: vpcName,
       },
     });
   }

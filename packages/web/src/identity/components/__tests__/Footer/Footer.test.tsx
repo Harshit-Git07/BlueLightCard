@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import Footer from '../../Footer/Footer';
 import { FooterProps } from '../../Footer/Types';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
 
 describe('Footer component', () => {

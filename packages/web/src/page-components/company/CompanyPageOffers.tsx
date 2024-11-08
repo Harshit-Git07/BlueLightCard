@@ -1,54 +1,64 @@
-import { Heading, ResponsiveOfferCard } from '@bluelightcard/shared-ui/index';
-import React, { FC } from 'react';
-import { useMedia } from 'react-use';
-import { OfferData } from './types';
+import {
+  getCompanyOffersQuery,
+  getCompanyQuery,
+  Heading,
+  ResponsiveOfferCard,
+} from '@bluelightcard/shared-ui/index';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useCmsEnabled } from '../../common/hooks/useCmsEnabled';
 
-type props = {
-  offers: OfferData[];
-  companyName: string;
-  companyId: string;
-  onOfferClick: (offerId: number, companyId: number, companyName: string) => void;
+type Props = {
+  isMobile: boolean;
+  companyId: string | null;
+  filter: string | null;
+  onOfferClick: (offerId: string, companyId: string, companyName: string) => void;
 };
 
-const CompanyPageOffers: FC<props> = ({ offers, companyName, companyId, onOfferClick }) => {
-  const isMobile = useMedia('(max-width: 500px)');
+const CompanyPageOffers = ({ companyId, onOfferClick, filter, isMobile }: Props) => {
+  const cmsEnabled = useCmsEnabled();
+
+  const offers = useSuspenseQuery({
+    ...getCompanyOffersQuery(companyId, cmsEnabled),
+    select: (data) => data.filter((i) => filter === null || i.type === filter),
+  });
+  const company = useSuspenseQuery(getCompanyQuery(companyId, cmsEnabled));
+
+  if (offers.data.length === 0) {
+    return (
+      <div className="mb-0 desktop:mb-[71px]">
+        <Heading headingLevel="h1">No offers have been found.</Heading>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {offers && offers.length > 0 && (
-        <div className="mb-0 desktop:mb-[71px]">
-          <div
-            className={`flex flex-col ${
-              isMobile ? 'gap-2' : 'gap-10'
-            } tablet:gap-10 desktop:grid desktop:grid-cols-2`}
-          >
-            {offers?.map((offer: OfferData, index: number) => {
-              return (
-                <button
-                  className="text-left"
-                  key={offer.id}
-                  onClick={() => onOfferClick(offer.id, Number(companyId), companyName)}
-                >
-                  <ResponsiveOfferCard
-                    id={offer.id}
-                    type={offer.type}
-                    name={offer.name}
-                    image={offer.image}
-                    companyId={Number(companyId)}
-                    companyName={companyName}
-                    variant={isMobile ? 'horizontal' : 'vertical'}
-                  />
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
-      {(!offers || offers.length <= 0) && (
-        <div className="mb-0 desktop:mb-[71px]">
-          <Heading headingLevel="h1">No offers have been found.</Heading>
-        </div>
-      )}
-    </>
+    <div className="mb-0 desktop:mb-[71px]">
+      <div
+        className={`flex flex-col ${
+          isMobile ? 'gap-2' : 'gap-10'
+        } tablet:gap-10 desktop:grid desktop:grid-cols-2`}
+      >
+        {offers.data.map((offer) => {
+          return (
+            <button
+              className="text-left"
+              key={offer.id}
+              onClick={() => onOfferClick(offer.id, company.data.id, company.data.name)}
+            >
+              <ResponsiveOfferCard
+                id={offer.id}
+                type={offer.type}
+                name={offer.name}
+                image={offer.image}
+                companyId={company.data.id}
+                companyName={company.data.name}
+                variant={isMobile ? 'horizontal' : 'vertical'}
+              />
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 

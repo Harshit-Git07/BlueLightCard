@@ -48,12 +48,12 @@ type BannerDataType = {
   link: string;
 };
 
-const onSearchCategoryChange = async (categoryId: string, categoryName: string) => {
-  await logSearchCategoryEvent(categoryId, categoryName);
+const onSearchCategoryChange = (categoryId: string, categoryName: string) => {
+  logSearchCategoryEvent(categoryId, categoryName);
   window.location.href = getOffersByCategoryUrl(categoryId);
 };
 
-const onSearchCardClick = async (
+const onSearchCardClick = (
   companyId: number | string,
   companyName: string,
   offerId: number | string,
@@ -62,7 +62,7 @@ const onSearchCardClick = async (
   numberOfResults: number,
   searchResultNumber: number
 ) => {
-  await logSearchCardClicked(
+  logSearchCardClicked(
     companyId,
     companyName,
     offerId,
@@ -204,14 +204,14 @@ export const TokenisedSearch: NextPage = () => {
   const getOfferTypeFromIndex = (tagIndex: number) => {
     switch (tagIndex) {
       case 0:
-        return 'Online';
+        return 'online';
       case 2:
-        return 'Giftcards';
+        return 'gift-card';
       case 5:
       case 6:
-        return 'In-store';
+        return 'in-store';
       default:
-        return 'Online';
+        return 'online';
     }
   };
 
@@ -277,7 +277,7 @@ export const TokenisedSearch: NextPage = () => {
                 return (
                   <div key={result.ID}>
                     <ResponsiveOfferCard
-                      id={result.ID}
+                      id={result.ID.toString()}
                       type={getOfferTypeFromIndex(result.OfferType)}
                       name={he.decode(result.OfferName)}
                       image={
@@ -285,7 +285,7 @@ export const TokenisedSearch: NextPage = () => {
                           ? imageSrc
                           : getCDNUrl(`/companyimages/complarge/retina/${result.CompID}.jpg`)
                       }
-                      companyId={result.CompID}
+                      companyId={result.CompID.toString()}
                       companyName={result.CompanyName}
                       onClick={onOfferCardClick}
                     />

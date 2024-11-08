@@ -1,12 +1,11 @@
 import { FC } from 'react';
-import { PortableTextBlock } from '@portabletext/types';
-import { toPlainText } from '@portabletext/react';
+import { PortableText } from '@portabletext/react';
 import { SharedProps, PlatformVariant } from '../../types';
 import { useCSSConditional, useCSSMerge } from '../../hooks/useCSS';
 import Heading from '../Heading';
 
 export type Props = SharedProps & {
-  CompanyDescription: string | PortableTextBlock;
+  CompanyDescription: any;
   CompanyName?: string;
 };
 
@@ -42,11 +41,9 @@ const CompanyAbout: FC<Props> = ({ CompanyName, CompanyDescription, platform }) 
         </Heading>
       )}
 
-      <p className={cssDescription}>
-        {typeof CompanyDescription === 'string'
-          ? CompanyDescription
-          : toPlainText(CompanyDescription)}
-      </p>
+      <div className={cssDescription}>
+        <PortableText value={CompanyDescription.content} />
+      </div>
     </div>
   );
 };

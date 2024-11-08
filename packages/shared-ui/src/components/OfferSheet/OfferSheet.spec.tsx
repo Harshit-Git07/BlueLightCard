@@ -5,6 +5,7 @@ import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../adapters'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
+import { convertStringToRichtextModule } from 'src/utils/rich-text-utils';
 
 const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType: 'vault' } });
 const mockQueryClient = new QueryClient();
@@ -13,7 +14,7 @@ const props: Props = {
   height: '90%',
 };
 
-// Mock the useQuery hook from @tanstack/react-query
+const mockedUseQuery = jest.mocked(useQuery);
 jest.mock('@tanstack/react-query', () => {
   const actualReactQuery = jest.requireActual('@tanstack/react-query');
   return {
@@ -21,22 +22,6 @@ jest.mock('@tanstack/react-query', () => {
     useQuery: jest.fn(),
   };
 });
-
-jest.mock('../../hooks/useQueryCustomHook', () => ({
-  useQueryCustomHook: jest.fn().mockReturnValue({
-    data: {
-      id: 1,
-      companyId: 1,
-      companyLogo: 'text',
-      description: 'text',
-      expiry: 'text',
-      name: 'text',
-      terms: 'text',
-      type: 'text',
-    },
-    status: 'success',
-  }),
-}));
 
 function renderComponent() {
   return render(
@@ -52,11 +37,29 @@ function renderComponent() {
 
 describe('smoke test', () => {
   beforeEach(() => {
-    // Set up the mock data for useQuery
-    (useQuery as jest.Mock).mockReturnValue({
-      data: {
-        canRedeemOffer: true,
-      },
+    mockedUseQuery.mockImplementation(({ queryKey }) => {
+      if (queryKey[0] === 'offer') {
+        return {
+          data: {
+            id: '1',
+            companyId: '1',
+            description: convertStringToRichtextModule('text'),
+            expires: 'text',
+            name: 'text',
+            termsAndConditions: convertStringToRichtextModule('text'),
+            type: 'text',
+            image: 'text',
+          },
+          status: 'success',
+        } as ReturnType<typeof useQuery>;
+      } else if (queryKey[0] === 'user') {
+        return {
+          data: {
+            canRedeemOffer: true,
+          },
+        } as ReturnType<typeof useQuery>;
+      }
+      return { data: null, status: 'idle' } as unknown as ReturnType<typeof useQuery>;
     });
   });
 

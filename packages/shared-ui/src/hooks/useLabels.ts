@@ -1,7 +1,7 @@
-import { OfferDetails } from '../components/OfferSheet/types';
+import type { V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
 import { formatDateDMMMYYYY } from '../utils/dates';
 
-export function useLabels(offerData: OfferDetails) {
-  if (!offerData.expiry) return [offerData.type].filter(Boolean);
-  return [offerData.type, `Expiry: ${formatDateDMMMYYYY(offerData.expiry)}`].filter(Boolean);
+export function useLabels(offerData: V2ApisGetOfferResponse) {
+  if (!offerData.expires) return [offerData.type].filter(Boolean);
+  return [offerData.type, `Expiry: ${formatDateDMMMYYYY(offerData.expires)}`].filter(Boolean);
 }

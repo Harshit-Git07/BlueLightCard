@@ -7,7 +7,8 @@ import { OfferSheetAtom, offerSheetAtom } from '../../store';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../adapters';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
-import { PlatformVariant } from '../../../../types';
+import { convertStringToRichtextModule } from 'src/utils/rich-text-utils';
+import { createFactoryMethod } from 'src/utils/createFactoryMethod';
 
 const HydrateAtoms = ({ initialValues, children }: any) => {
   useHydrateAtoms(initialValues);
@@ -24,6 +25,21 @@ type OfferTopDetailsHeaderProviderProps = {
   value?: Partial<OfferSheetAtom>;
 };
 
+const createOfferDetails = createFactoryMethod({
+  id: '100',
+  description: convertStringToRichtextModule(
+    'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
+  ),
+  expires: '2024-01-01',
+  name: 'Save with SEAT',
+  termsAndConditions: convertStringToRichtextModule(
+    'Must be a Blue Light Card member in order to receive the discount.',
+  ),
+  type: 'gift-card',
+  image: 'companyimages/complarge/retina/cats.jpg',
+  companyId: '101',
+} as const);
+
 const OfferTopDetailsHeaderProvider = (props: OfferTopDetailsHeaderProviderProps) => {
   return (
     <TestProvider
@@ -31,17 +47,7 @@ const OfferTopDetailsHeaderProvider = (props: OfferTopDetailsHeaderProviderProps
         [
           offerSheetAtom,
           {
-            offerDetails: {
-              companyId: 4016,
-              companyLogo: 'companyimages/complarge/retina/',
-              description:
-                'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
-              expiry: '2030-06-30T23:59:59.000Z',
-              id: 3802,
-              name: 'Save with SEAT',
-              terms: 'Must be a Blue Light Card member in order to receive the discount.',
-              type: 'Online',
-            },
+            offerDetails: createOfferDetails(),
             offerMeta: {
               companyId: '4016',
               companyName: 'SEAT',
@@ -83,20 +89,12 @@ describe('smoke test', () => {
     },
   ];
 
-  testCases.forEach(
-    ({
-      description,
-      companyPageExperiment: companyPageExperiment,
-      companyId,
-      offerId,
-      expected,
-    }) => {
-      it(description, () => {
-        const result = getShareButtonTargetPage(companyPageExperiment, companyId, offerId);
-        expect(result).toBe(expected);
-      });
-    },
-  );
+  testCases.forEach(({ description, companyPageExperiment, companyId, offerId, expected }) => {
+    it(description, () => {
+      const result = getShareButtonTargetPage(companyPageExperiment, companyId, offerId);
+      expect(result).toBe(expected);
+    });
+  });
 
   it('should render component without error', () => {
     const platformAdapter = useMockPlatformAdapter();
@@ -163,7 +161,7 @@ describe('smoke test', () => {
 
   it('should display a QR code if state provides value', () => {
     const platformAdapter = useMockPlatformAdapter();
-    const { getByRole, getByText, getByLabelText } = render(
+    const { getByText, getByLabelText } = render(
       <SharedUIConfigProvider value={MockSharedUiConfig}>
         <PlatformAdapterProvider adapter={platformAdapter}>
           <OfferTopDetailsHeaderProvider value={{ qrCodeValue: '123456' }} />
@@ -186,5 +184,29 @@ describe('smoke test', () => {
     );
 
     expect(queryByLabelText(/QR code/i)).toBeNull();
+  });
+
+  it('Should show more/less button when description is long', () => {
+    const platformAdapter = useMockPlatformAdapter();
+    const { getByText } = render(
+      <SharedUIConfigProvider value={MockSharedUiConfig}>
+        <PlatformAdapterProvider adapter={platformAdapter}>
+          <OfferTopDetailsHeaderProvider
+            value={{
+              offerDetails: createOfferDetails({
+                description: convertStringToRichtextModule('help'.repeat(100)),
+              }),
+            }}
+          />
+        </PlatformAdapterProvider>
+      </SharedUIConfigProvider>,
+    );
+
+    const seeMoreButton = getByText('See more...');
+    fireEvent.click(seeMoreButton);
+    expect(getByText('See less')).toBeTruthy();
+
+    fireEvent.click(getByText('See less'));
+    expect(getByText('See more...')).toBeTruthy();
   });
 });

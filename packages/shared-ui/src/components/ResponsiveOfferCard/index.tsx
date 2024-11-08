@@ -4,17 +4,18 @@ import Badge from '../Badge';
 import getCDNUrl from '../../utils/getCDNUrl';
 import { PlatformVariant, SharedProps, OfferTypeStrLiterals } from '../../types';
 import { useCSSConditional, useCSSMerge } from '../../hooks/useCSS';
-import { offerTypeParser } from '../../utils/offers/offerSheetParser';
+import { offerTypeLabelMap } from '../../utils/offers/offerTypeLabelMap';
 import { useOfferSheetControls } from '../../context/OfferSheet/hooks';
+import { V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
 
 export type BgColorString = `bg-${string}`;
 
 export type Props = SharedProps & {
-  id: number | string;
+  id: string;
   type: OfferTypeStrLiterals;
   name: string;
   image: string | null;
-  companyId: number | string;
+  companyId: string;
   companyName: string;
   variant?: 'vertical' | 'horizontal';
   quality?: number;
@@ -64,13 +65,13 @@ const ResponsiveOfferCard: FC<Props> = ({
     onCardInteraction();
   };
 
-  const tagBackground: BgColorTagParser = {
-    [offerTypeParser.Online.type]:
-      'bg-badge-online-bg-colour-light dark:bg-badge-online-bg-colour-dark',
-    [offerTypeParser['In-store'].type]:
-      'bg-badge-instore-bg-colour-light dark:bg-badge-instore-bg-colour-dark',
-    [offerTypeParser.Giftcards.type]:
-      'bg-badge-giftcard-bg-colour-light dark:bg-badge-giftcard-bg-colour-dark',
+  const tagBackground: { [key in V2ApisGetOfferResponse['type']]: string } = {
+    online: 'bg-badge-online-bg-colour-light dark:bg-badge-online-bg-colour-dark',
+    local: 'bg-badge-online-bg-colour-light dark:bg-badge-online-bg-colour-dark',
+    other: 'bg-badge-online-bg-colour-light dark:bg-badge-online-bg-colour-dark',
+    ticket: 'bg-badge-online-bg-colour-light dark:bg-badge-online-bg-colour-dark',
+    'in-store': 'bg-badge-instore-bg-colour-light dark:bg-badge-instore-bg-colour-dark',
+    'gift-card': 'bg-badge-giftcard-bg-colour-light dark:bg-badge-giftcard-bg-colour-dark',
   } as const;
 
   useEffect(() => {
@@ -115,9 +116,9 @@ const ResponsiveOfferCard: FC<Props> = ({
         />
       </div>
 
-      {Object.keys(offerTypeParser).includes(type) && (
+      {offerTypeLabelMap[type] && (
         <Badge
-          label={offerTypeParser[type].label}
+          label={offerTypeLabelMap[type]}
           color={tagBackground[type]}
           size={variant === 'vertical' ? 'large' : 'small'}
         />

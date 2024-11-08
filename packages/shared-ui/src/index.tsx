@@ -44,7 +44,7 @@ export * from './utils/ageUtils';
 export * from './lib/rewriters';
 export * from './lib/invoke';
 export * from './types';
-export * from './utils/offers/offerSheetParser';
+export * from './utils/offers/offerTypeLabelMap';
 export * from './context/OfferSheet/OfferSheetContext';
 export * from './context/OfferSheet/hooks';
 export * from './providers';

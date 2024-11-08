@@ -1,4 +1,4 @@
-import * as target from './useBrazeContentCards';
+import * as target from '../useBrazeContentCards';
 import { useAmplitudeExperiment, Variant } from '@/context/AmplitudeExperiment';
 import { UseDerivedQueryResult } from '@/hooks/useDerivedQuery';
 import { renderHook, RenderHookResult, waitFor } from '@testing-library/react';

@@ -2,7 +2,7 @@ import InfoCard from '@/components/InfoCard/InfoCard';
 import { InfoCardProps } from '@/components/InfoCard/types';
 import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
 
 jest.mock(

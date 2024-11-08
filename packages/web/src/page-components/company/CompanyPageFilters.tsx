@@ -1,60 +1,58 @@
 import {
-  offerTypeParser,
-  OfferTypeStrLiterals,
+  getCompanyOffersQuery,
+  offerTypeLabelMap,
   PillButtons,
   PlatformVariant,
 } from '@bluelightcard/shared-ui/index';
-import React, { FC, useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMedia } from 'react-use';
+import { useCmsEnabled } from '../../common/hooks/useCmsEnabled';
 
-export type companyPageFilterAllType = 'All';
-export const companyPageFilterAllLabel: companyPageFilterAllType = 'All';
-
-export type CompanyPageFilterOptions = OfferTypeStrLiterals | companyPageFilterAllType;
-
-type props = {
-  enabledFilters: CompanyPageFilterOptions[];
-  onSelected: (pillType: CompanyPageFilterOptions) => void;
+type Props = {
+  companyId: string | null;
+  value: string | null;
+  onChange: (value: string | null) => void;
 };
 
-const offerTypesArray = Object.keys(offerTypeParser) as Array<keyof typeof offerTypeParser>;
-export const CompanyPageFiltersTypes: CompanyPageFilterOptions[] = [
-  companyPageFilterAllLabel,
-  ...offerTypesArray,
-];
-
-const CompanyPageFilters: FC<props> = ({ enabledFilters, onSelected }) => {
+const CompanyPageFilters = (props: Props) => {
   const isMobile = useMedia('(max-width: 500px)');
+  const cmsEnabled = useCmsEnabled();
 
-  const [selected, setSelected] = useState<CompanyPageFilterOptions>(companyPageFilterAllLabel);
-  const selectionHandler = (pillType: CompanyPageFilterOptions) => {
-    if (![companyPageFilterAllLabel, ...enabledFilters].includes(pillType)) {
-      return;
-    }
+  const offerTypes = useSuspenseQuery({
+    ...getCompanyOffersQuery(props.companyId, cmsEnabled),
+    select: (data) => {
+      const types = data?.map((offer) => offer.type) ?? [];
 
-    const newType = selected === pillType ? companyPageFilterAllLabel : pillType;
+      return Array.from(new Set(types));
+    },
+  });
 
-    setSelected(newType);
-    onSelected(newType);
+  const onSelect = (type: string | null) => {
+    props.onChange(type);
   };
+
+  if (offerTypes.data.length === 0) {
+    return <div className="py-6"></div>;
+  }
 
   return (
     <div className="py-6 flex gap-3 overflow-x-auto">
-      {CompanyPageFiltersTypes.map((pillType, index) => {
+      <div key={'Filter-all'}>
+        <PillButtons
+          text={'All'}
+          onSelected={() => onSelect(null)}
+          isSelected={props.value === null}
+          platform={isMobile ? PlatformVariant.MobileHybrid : PlatformVariant.Web}
+        />
+      </div>
+      {offerTypes.data.map((type, index) => {
         return (
           <div key={'Filter-' + index}>
             <PillButtons
-              text={
-                pillType === offerTypeParser.Giftcards.type
-                  ? offerTypeParser.Giftcards.label
-                  : CompanyPageFiltersTypes[index]
-              }
-              onSelected={() => selectionHandler(pillType)}
-              isSelected={selected === pillType}
+              text={offerTypeLabelMap[type]}
+              onSelected={() => onSelect(type)}
+              isSelected={props.value === type}
               platform={isMobile ? PlatformVariant.MobileHybrid : PlatformVariant.Web}
-              disabled={
-                pillType !== companyPageFilterAllLabel && !enabledFilters.includes(pillType)
-              }
             />
           </div>
         );

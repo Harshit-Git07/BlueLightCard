@@ -10,8 +10,7 @@
     "resolveJsonModule": true,
     "paths": {
       "@blc-mono/shared/*": ["../../../stacks/*"],
-      "@blc-mono/core/*": ["../core/src/*"],
-      "@blc-mono/offers-cms/*": ["./*"]
+      "@blc-mono/core/*": ["../core/src/*"]
     }
   }
 }

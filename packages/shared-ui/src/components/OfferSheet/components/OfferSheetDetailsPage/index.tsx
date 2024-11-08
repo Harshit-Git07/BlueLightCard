@@ -12,7 +12,7 @@ import {
   isRedeemDataErrorResponse,
   usePlatformAdapter,
   RedeemResultKind,
-  offerTypeParser,
+  offerTypeLabelMap,
 } from '../../../../index';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import type { RedemptionType } from '../../types';
@@ -75,7 +75,7 @@ const OfferSheetDetailsPage: FC = () => {
     const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redeem', {
       method: 'POST',
       body: JSON.stringify({
-        offerId: Number(offerData.id),
+        offerId: offerData.id,
         companyName: offerMeta?.companyName || '',
         offerName: offerData.name || '',
       }),
@@ -232,7 +232,7 @@ const OfferSheetDetailsPage: FC = () => {
         primaryButtonTextValue = 'Copy discount code';
         break;
       case 'preApplied':
-        if (offerData.type === offerTypeParser.Giftcards.type) {
+        if (offerData.type === offerTypeLabelMap['gift-card']) {
           primaryButtonTextValue = 'Get voucher';
         } else {
           primaryButtonTextValue = 'Get discount';
@@ -269,7 +269,7 @@ const OfferSheetDetailsPage: FC = () => {
         break;
       case 'preApplied':
         // TODO ADD if statement for giftcards offer type that are pre-applied redemption type
-        if (offerData.type === offerTypeParser.Giftcards.type) {
+        if (offerData.type === offerTypeLabelMap['gift-card']) {
           secondaryButtonTextValue = 'Get instant savings';
           secondaryButtonSubtextValue = 'Redirecting to voucher shop';
         } else {
@@ -303,7 +303,7 @@ const OfferSheetDetailsPage: FC = () => {
 
     switch (redemptionType) {
       case 'preApplied':
-        if (offerData.type === offerTypeParser.Giftcards.type) {
+        if (offerData.type === offerTypeLabelMap['gift-card']) {
           webSecondaryButtonTextValue = 'Continue to voucher shop';
           webSecondaryButtonSubtextValue = 'Get instant savings';
         } else {
@@ -410,6 +410,16 @@ const OfferSheetDetailsPage: FC = () => {
     );
   };
 
+  const mappedLabels = labels.map((label) => {
+    if (label === 'gift-card') {
+      return 'Voucher';
+    }
+    if (label in offerTypeLabelMap) {
+      return offerTypeLabelMap[label as keyof typeof offerTypeLabelMap];
+    }
+    return label;
+  });
+
   return (
     <div className={css}>
       {showErrorPage && <OfferDetailsErrorPage />}
@@ -418,13 +428,8 @@ const OfferSheetDetailsPage: FC = () => {
           <OfferTopDetailsHeader />
           <div className="w-full h-fit pt-3 pb-4 px-4 shadow-offerSheetTop fixed bottom-0 bg-colour-surface-light dark:bg-colour-surface-dark">
             <div className="w-full flex flex-wrap mb-2 justify-center">
-              {labels.map((label) => (
-                <Label
-                  key={label}
-                  type="normal"
-                  text={label === offerTypeParser.Giftcards.type ? 'Voucher' : label}
-                  className="m-1"
-                />
+              {mappedLabels.map((label) => (
+                <Label key={label} type="normal" text={label} className="m-1" />
               ))}
             </div>
             {renderButton()}

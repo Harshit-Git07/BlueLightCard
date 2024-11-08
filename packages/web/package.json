@@ -34,7 +34,7 @@
     "@fortawesome/pro-thin-svg-icons": "6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@fortawesome/sharp-solid-svg-icons": "6.5.1",
-    "@hookform/resolvers": "^2.9.11",
+    "@hookform/resolvers": "^3.9.1",
     "@nextui-org/react": "^2.0.19",
     "@portabletext/react": "3.1.0",
     "@storybook/addon-controls": "7.1.0",
@@ -45,6 +45,7 @@
     "eslint": "8.27.0",
     "eslint-config-next": "13.4.9",
     "flagsmith": "3.23.2",
+    "i": "0.3.7",
     "i18next": "^22.0.5",
     "js-base64": "^3.7.5",
     "js-cookie": "3.0.5",
@@ -54,8 +55,11 @@
     "next": "14.1.1",
     "next-i18next": "^12.1.0",
     "next-seo": "^6.1.0",
+    "npm": "10.9.0",
+    "nuqs": "1.20.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "4.1.2",
     "react-hook-form": "^7.39.5",
     "react-i18next": "^12.0.0",
     "react-swipeable": "^7.0.1",
@@ -67,7 +71,7 @@
     "swiper": "11.1.10",
     "swr": "^2.2.0",
     "typescript": "5.6.3",
-    "yup": "^0.32.11"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",

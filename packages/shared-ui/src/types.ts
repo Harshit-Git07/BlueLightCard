@@ -2,6 +2,8 @@
  * Shared types go in this file
  */
 
+import type { V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
+
 export enum PlatformVariant {
   MobileHybrid = 'mobile-hybrid',
   Web = 'web',
@@ -50,7 +52,7 @@ export type AmplitudeArg = {
 
 export type ComponentStatus = 'loading' | 'error' | 'success';
 
-export type OfferTypeStrLiterals = 'Online' | 'In-store' | 'Giftcards';
+export type OfferTypeStrLiterals = V2ApisGetOfferResponse['type'];
 
 /**
  * New offer type from CMS data sources to use going forward

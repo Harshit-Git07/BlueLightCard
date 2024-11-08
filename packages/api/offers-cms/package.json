@@ -2,6 +2,10 @@
   "name": "@blc-mono/offers-cms",
   "version": "1.0.0",
   "type": "module",
+  "exports": {
+    "./api": "./src/api/index.ts",
+    "./stack": "./stack.ts"
+  },
   "scripts": {
     "build": "sst build",
     "deploy": "sst deploy",

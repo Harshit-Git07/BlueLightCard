@@ -10,7 +10,7 @@ export const flexibleOfferMock: FlexibleOfferData = {
     {
       offerID: 23283,
       offerName: 'Deal of the Week 1',
-      offerType: 'Online',
+      offerType: 'online',
       imageURL: 'http://example.com/image1.jpg',
       companyID: '23638',
       companyName: 'Company 1',

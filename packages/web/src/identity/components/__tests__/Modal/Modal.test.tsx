@@ -2,7 +2,7 @@ import { render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Modal from '../../Modal/Modal';
 import { ModalProps, ModalTypes } from '../../Modal/Types';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
 
 describe('Modal component', () => {

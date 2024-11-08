@@ -1,19 +1,22 @@
+import { type RichtextModule } from '@bluelightcard/sanity-types';
 import { z } from '@hono/zod-openapi';
 
-const RichtextModuleSchema = (description: string) =>
+function schemaForType<T>() {
+  return (schema: z.ZodTypeAny) => schema as z.ZodType<T>;
+}
+
+export const richtextModule = schemaForType<RichtextModule | null>()(
   z
-    .any()
+    .unknown()
     .nullable()
     .openapi({
-      description,
       format: 'PortableText',
       externalDocs: {
         url: 'https://www.sanity.io/docs/presenting-block-text',
         description: 'Sanity Docs',
       },
-      example:
-        'Save 20% off every single Fortnite skin. Adorn a new look and take on the competition in style!',
-    });
+    }),
+);
 
 export const CompanySchema = z.object({
   id: z.string().openapi({
@@ -24,7 +27,16 @@ export const CompanySchema = z.object({
     description: 'Company Name',
     example: 'Epic Games',
   }),
-  description: RichtextModuleSchema('Description of company'),
+  description: z
+    .any()
+    .nullable()
+    .openapi({
+      format: 'PortableText',
+      externalDocs: {
+        url: 'https://www.sanity.io/docs/presenting-block-text',
+        description: 'Sanity Docs',
+      },
+    }),
 });
 
 export const OfferSchema = z.object({
@@ -36,7 +48,7 @@ export const OfferSchema = z.object({
     description: 'Company Name',
     example: '20% off all Fortnite skins',
   }),
-  description: RichtextModuleSchema('Description of offer'),
+  description: richtextModule,
   type: z.enum(['gift-card', 'in-store', 'local', 'online', 'ticket', 'other']).openapi({
     description: 'Type of offer',
     example: 'gift-card',
@@ -44,7 +56,7 @@ export const OfferSchema = z.object({
   expires: z.string().nullable().openapi({
     description: 'Date the offer expires ',
   }),
-  termsAndConditions: RichtextModuleSchema('terms and conditions of offer'),
+  termsAndConditions: richtextModule,
   image: z.string().nullable().openapi({
     description: 'Offer image',
   }),

@@ -2,7 +2,7 @@ import { render, screen, act, queryByAttribute } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import EligibilityCard from '../../EligibilityCard/EligibilityCard';
 import { EligibilityCardProps } from '../../EligibilityCard/Types';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/router';
 const getById = queryByAttribute.bind(null, 'id');

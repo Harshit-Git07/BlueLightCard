@@ -7,11 +7,11 @@ import { OfferSheetAtom, offerSheetAtom } from '../../store';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
-import { PlatformVariant } from 'src/types';
 import { RedemptionType } from '../../types';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { convertStringToRichtextModule } from 'src/utils/rich-text-utils';
+import { createFactoryMethod } from 'src/utils/createFactoryMethod';
 
-// Mock the useQuery hook from @tanstack/react-query
 jest.mock('@tanstack/react-query', () => {
   const actualReactQuery = jest.requireActual('@tanstack/react-query');
   return {
@@ -22,25 +22,23 @@ jest.mock('@tanstack/react-query', () => {
 
 const queryClient = new QueryClient();
 
-function createFactoryMethod<T>(defaults: T) {
-  return (overrides?: Partial<T>): T => ({
-    ...defaults,
-    ...overrides,
-  });
-}
+const createOfferDetails = createFactoryMethod({
+  companyId: '4016',
+  image: 'companyimages/complarge/retina/',
+  description: convertStringToRichtextModule(
+    'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
+  ),
+  expires: '2030-06-30T23:59:59.000Z',
+  id: '3802',
+  name: 'Save with SEAT',
+  termsAndConditions: convertStringToRichtextModule(
+    'Must be a Blue Light Card member in order to receive the discount.',
+  ),
+  type: 'online',
+} as const);
 
 const createOfferSheetAtom = createFactoryMethod<OfferSheetAtom>({
-  offerDetails: {
-    companyId: 4016,
-    companyLogo: 'companyimages/complarge/retina/',
-    description:
-      'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
-    expiry: '2030-06-30T23:59:59.000Z',
-    id: 3802,
-    name: 'Save with SEAT',
-    terms: 'Must be a Blue Light Card member in order to receive the discount.',
-    type: 'Online',
-  },
+  offerDetails: createOfferDetails(),
   offerMeta: {
     companyId: 4016,
     companyName: 'SEAT',
@@ -96,7 +94,6 @@ const OfferSheetDetailsPageProvider = ({
 
 describe('smoke test', () => {
   beforeEach(() => {
-    // Set up the mock data for useQuery
     (useQuery as jest.Mock).mockReturnValue({
       data: {
         canRedeemOffer: true,
@@ -159,20 +156,32 @@ describe('smoke test', () => {
   //   debug();
   // });
 
-  it('should display labels with jotai state management', () => {
+  it.each([
+    ['gift-card', 'Voucher'],
+    ['in-store', 'In-store'],
+    ['online', 'Online'],
+    ['local', 'Local'],
+    ['other', 'Other'],
+    ['ticket', 'Ticket'],
+    ['something ELSE', 'something ELSE'],
+  ])('should display labels with jotai state management', (offerType, label) => {
     const { getByText } = render(
       <QueryClientProvider client={queryClient}>
         <SharedUIConfigProvider value={MockSharedUiConfig}>
           <PlatformAdapterProvider adapter={mockPlatformAdapter}>
             <OfferSheetDetailsPageProvider
-              offerSheetAtomData={createOfferSheetAtom({ redemptionType: 'vault' })}
+              offerSheetAtomData={createOfferSheetAtom({
+                offerDetails: createOfferDetails({
+                  type: offerType as keyof typeof createOfferDetails,
+                }),
+              })}
             />
           </PlatformAdapterProvider>
         </SharedUIConfigProvider>
       </QueryClientProvider>,
     );
 
-    const label1 = getByText(/online/i);
+    const label1 = getByText(label);
     const label2 = getByText(/expiry: 30 Jun 2030/i);
 
     expect(label1).toBeTruthy();

@@ -1,8 +1,8 @@
 import { type Stack, Table } from 'sst/constructs';
 
-const RAW_DATA_TABLE_NAME = 'cmsAll';
-const OFFERS_DATA_TABLE_NAME = 'cmsOffer';
-const COMPANY_DATA_TABLE_NAME = 'cmsCompany';
+export const RAW_DATA_TABLE_NAME = 'cmsAll';
+export const OFFERS_DATA_TABLE_NAME = 'cmsOffer';
+export const COMPANY_DATA_TABLE_NAME = 'cmsCompany';
 
 const createRawDataTable = (stack: Stack) =>
   new Table(stack, RAW_DATA_TABLE_NAME, {

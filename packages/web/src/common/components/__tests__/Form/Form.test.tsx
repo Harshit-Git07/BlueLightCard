@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import * as yup from 'yup';
 import '@testing-library/jest-dom';
 import { FC, forwardRef } from 'react';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { UserEvent } from '@testing-library/user-event';
 import { FormField, FormProps } from '@/components/Form/types';
 import Form from '@/components/Form/Form';
 

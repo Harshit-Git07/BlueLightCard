@@ -70,10 +70,10 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
         name: offer.name,
         description: offer.offerDescription,
         type: offer.offerType.offerType,
-        expires: offer.expires || null,
+        expires: offer.expires ?? null,
         termsAndConditions: offer.termsAndConditions || null,
-        image: offer.image?.default?.asset?.url || null,
-        companyId: offer.company?._id || null,
+        image: offer.image?.default?.asset?.url ?? null,
+        companyId: offer.company?._id ?? null,
       };
     });
 

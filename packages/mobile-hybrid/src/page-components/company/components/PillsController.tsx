@@ -1,10 +1,10 @@
-import { offerTypeParser, PillButtons, PlatformVariant } from '@bluelightcard/shared-ui';
+import { offerTypeLabelMap, PillButtons, PlatformVariant } from '@bluelightcard/shared-ui';
 import { useAtom } from 'jotai';
 import { FC } from 'react';
 import { selectedFilter, companyDataAtom } from '../atoms';
 import { filtersType, OfferModel, CMSOfferModel } from '../types';
 
-const offerTypesArray = Object.keys(offerTypeParser) as Array<keyof typeof offerTypeParser>;
+const offerTypesArray = Object.keys(offerTypeLabelMap) as Array<keyof typeof offerTypeLabelMap>;
 const filterArray: filtersType[] = ['All', ...offerTypesArray];
 
 const PillsController: FC = () => {
@@ -28,7 +28,7 @@ const PillsController: FC = () => {
           return (
             <div key={index}>
               <PillButtons
-                text={pillType === 'All' ? pillType : offerTypeParser[pillType].label}
+                text={pillType === 'All' ? pillType : offerTypeLabelMap[pillType]}
                 onSelected={() => toggleFilter(pillType)}
                 isSelected={selectedType === pillType}
                 disabled={

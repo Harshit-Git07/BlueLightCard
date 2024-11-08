@@ -1,18 +1,18 @@
-import Image from '../../../Image';
-import { type FC, useEffect, useState } from 'react';
-import Heading from '../../../Heading';
+import { PortableText, PortableTextBlock, toPlainText } from '@portabletext/react';
 import { useAtomValue } from 'jotai';
+import { type FC, useEffect, useState } from 'react';
+import QRCode from 'react-qr-code';
+import Image from '../../../Image';
+import Heading from '../../../Heading';
 import { offerSheetAtom } from '../../store';
 import Button from '../../../Button';
 import { PlatformVariant, ThemeVariant } from '../../../../types';
 import ShareButton from '../../../ShareButton';
 import Accordion from '../../../Accordion';
-import Markdown from 'markdown-to-jsx';
 import amplitudeEvents from '../../../../utils/amplitude/events';
 import { useSharedUIConfig } from '../../../../providers';
 import decodeEntities from '../../../../utils/decodeEntities';
 import { usePlatformAdapter } from '../../../../adapters';
-import QRCode from 'react-qr-code';
 
 export type Props = {
   showOfferDescription?: boolean;
@@ -23,7 +23,7 @@ export type Props = {
 
 export const getShareButtonTargetPage = (
   companyPageExperiment: string | undefined,
-  companyId: number | string | undefined,
+  companyId: number | string | null,
   offerId: number | string | undefined,
 ) => {
   let targetUrl = '/';
@@ -50,6 +50,9 @@ const OfferTopDetailsHeader: FC<Props> = ({
   const [expanded, setExpanded] = useState(false);
   // TODO CDN URL could be replaced with global var?
   const finalFallbackImage = `${config.globalConfig.cdnUrl}/misc/Logo_coming_soon.jpg`;
+  const isDescriptionLong =
+    offerData.description &&
+    toPlainText(offerData.description.content as unknown as PortableTextBlock).length > 300;
 
   const hostname = adapter.getBrandURL();
 
@@ -58,14 +61,14 @@ const OfferTopDetailsHeader: FC<Props> = ({
   };
 
   useEffect(() => {
-    const urlContainsImage = /\.(jpe?g|png|gif|bmp)$/i.test(offerData.companyLogo ?? '');
-    if (offerData.companyLogo && urlContainsImage) {
-      setImageSource(offerData.companyLogo);
+    const urlContainsImage = /\.(jpe?g|png|gif|bmp)$/i.test(offerData.image ?? '');
+    if (offerData.image && urlContainsImage) {
+      setImageSource(offerData.image);
     } else if (offerData.companyId) {
       const imageUrl = `${config.globalConfig.cdnUrl}/companyimages/complarge/retina/${offerData.companyId}.jpg`;
       setImageSource(imageUrl);
     }
-  }, [offerData?.companyLogo, offerData.companyId, config.globalConfig.cdnUrl]);
+  }, [offerData?.image, offerData.companyId, config.globalConfig.cdnUrl]);
 
   return (
     <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 bg-colour-surface-light dark:bg-colour-surface-dark">
@@ -96,20 +99,23 @@ const OfferTopDetailsHeader: FC<Props> = ({
 
         {/* Offer description */}
         {showOfferDescription &&
+          offerData.description &&
           !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
             <>
-              <p
+              <div
                 className={`mt-2 text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light ${
-                  offerData.description && offerData.description.length > 300 && !expanded
+                  isDescriptionLong && !expanded
                     ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
                     : ''
                 }`}
               >
-                {decodeEntities(offerData.description || '')}
-              </p>
+                <PortableText
+                  value={offerData.description.content as unknown as PortableTextBlock}
+                />
+              </div>
 
               {/* Show more/less button for description */}
-              {offerData.description && offerData.description.length > 300 && (
+              {offerData.description && isDescriptionLong && (
                 <Button
                   variant={ThemeVariant.Tertiary}
                   slim
@@ -132,7 +138,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                 {...{
                   shareDetails: {
                     name: offerData.name,
-                    description: offerData.description,
+                    description: offerData.description as PortableTextBlock,
                     url: `${
                       typeof window !== 'undefined'
                         ? `${window.location.protocol}//${hostname}`
@@ -193,7 +199,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
 
         {/* Offer Terms & Conditions */}
         {showTerms &&
-          offerData.terms &&
+          offerData.termsAndConditions &&
           !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
             <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
               <Accordion
@@ -209,7 +215,9 @@ const OfferTopDetailsHeader: FC<Props> = ({
                   },
                 }}
               >
-                <Markdown>{decodeEntities(offerData.terms || '')}</Markdown>
+                <PortableText
+                  value={offerData.termsAndConditions.content as unknown as PortableTextBlock}
+                />
               </Accordion>
             </div>
           )}

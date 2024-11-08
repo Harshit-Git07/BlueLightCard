@@ -2,11 +2,9 @@ import { FC } from 'react';
 import { useCSSConditional, useCSSMerge } from '../../hooks/useCSS';
 import { PlatformVariant, SharedProps } from '../../types';
 
-export type BgColorString = `bg-${string}`;
-
 export type Props = SharedProps & {
   label: string;
-  color: BgColorString;
+  color: string;
   size: 'small' | 'large';
 };
 

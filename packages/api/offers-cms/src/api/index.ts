@@ -3,6 +3,10 @@ import { registerV2CompaniesGetCompany } from './routes/v2_companies_getCompany'
 import { registerV2CompaniesGetCompanyOffers } from './routes/v2_companies_getCompanyOffers';
 import { registerV2OffersGetOffer } from './routes/v2_offers_getOffer';
 
+export type { V2CompaniesGetCompanyResponse } from './routes/v2_companies_getCompany';
+export type { V2CompaniesGetCompanyOffersResponse } from './routes/v2_companies_getCompanyOffers';
+export type { V2ApisGetOfferResponse } from './routes/v2_offers_getOffer';
+
 const app = newApp();
 
 // company apis

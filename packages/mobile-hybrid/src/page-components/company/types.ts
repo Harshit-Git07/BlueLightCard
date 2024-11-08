@@ -1,8 +1,7 @@
-import { OfferTypeStrLiterals, offerTypeParser } from '@bluelightcard/shared-ui';
+import { OfferTypeStrLiterals, offerTypeLabelMap } from '@bluelightcard/shared-ui';
 import { PortableTextBlock } from '@portabletext/types';
 import { z } from 'zod';
 
-// Model
 export type OfferModel = {
   id: number;
   description: string;
@@ -30,7 +29,6 @@ export type CompanyModel = {
   offers: OfferModel[] | CMSOfferModel[];
 };
 
-// Zod Types
 export const ZodCompanyModel = z.object({
   description: z.any(), // TODO: Fix this any type
   name: z.string(),
@@ -72,4 +70,4 @@ export const ZodCompanyResponseModel = z.object({
 });
 
 // Pill/Filter types
-export type filtersType = 'All' | keyof typeof offerTypeParser;
+export type filtersType = 'All' | keyof typeof offerTypeLabelMap;

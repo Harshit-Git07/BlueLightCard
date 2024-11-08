@@ -3,9 +3,9 @@ import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../ada
 import OfferSheetControler from '.';
 import { render, waitFor } from '@testing-library/react';
 import { QueryClientProvider, QueryClient, useQuery } from '@tanstack/react-query';
-import { useQueryCustomHook } from '../../../../hooks/useQueryCustomHook';
 import { SharedUIConfigProvider } from 'src/providers';
 import { MockSharedUiConfig } from 'src/test';
+import { convertStringToRichtextModule } from 'src/utils/rich-text-utils';
 
 jest.mock('next/router', () => ({
   useRouter: () => ({
@@ -17,7 +17,7 @@ jest.mock('next/router', () => ({
   }),
 }));
 
-// Mock the useQuery hook from @tanstack/react-query
+const mockedUseQuery = jest.mocked(useQuery);
 jest.mock('@tanstack/react-query', () => {
   const actualReactQuery = jest.requireActual('@tanstack/react-query');
   return {
@@ -41,8 +41,6 @@ function renderComponent() {
   );
 }
 
-jest.mock('../../../../hooks/useQueryCustomHook');
-
 describe('smoke test', () => {
   beforeEach(() => {
     // Set up the mock data for useQuery
@@ -58,17 +56,17 @@ describe('smoke test', () => {
   });
 
   it('should render correct screen for pending offer status', () => {
-    jest.mocked(useQueryCustomHook as jest.Mock).mockReturnValue({
+    mockedUseQuery.mockReturnValue({
       status: 'pending',
-    });
+    } as ReturnType<typeof useQuery>);
     const { container } = renderComponent();
     expect(container.querySelector('div > div > svg > path')).toBeTruthy();
   });
 
   it('should render correct screen for error offer status', () => {
-    jest.mocked(useQueryCustomHook as jest.Mock).mockReturnValue({
+    mockedUseQuery.mockReturnValue({
       status: 'error',
-    });
+    } as ReturnType<typeof useQuery>);
     const { getByRole, getByText } = renderComponent();
 
     expect(
@@ -79,19 +77,19 @@ describe('smoke test', () => {
   });
 
   it('should render correct screen for success offer status', async () => {
-    jest.mocked(useQueryCustomHook as jest.Mock).mockReturnValue({
+    mockedUseQuery.mockReturnValue({
       data: {
-        id: 1,
-        companyId: 1,
-        companyLogo: 'text',
-        description: 'text',
-        expiry: 'text',
+        id: '1',
+        companyId: '1',
+        description: convertStringToRichtextModule('text'),
+        expires: 'text',
         name: 'text',
-        terms: 'text',
+        termsAndConditions: convertStringToRichtextModule('text'),
         type: 'text',
+        image: 'text',
       },
       status: 'success',
-    });
+    } as ReturnType<typeof useQuery>);
     const { getByRole } = renderComponent();
     await waitFor(() => {
       expect(getByRole('button', { name: /get discount/i })).toBeTruthy();

@@ -10,6 +10,7 @@ import OfferSheetDetailsPage from './components/OfferSheetDetailsPage';
 import { SharedUIConfigProvider } from 'src/providers';
 import OfferDetailsErrorPage from './components/OfferDetailsErrorPage';
 import LoadingSpinner from '../LoadingSpinner';
+import { convertStringToRichtextModule } from 'src/utils/rich-text-utils';
 
 const componentMeta: Meta<typeof OfferSheet> = {
   title: 'Component System/Offer Sheet',
@@ -46,15 +47,18 @@ const DefaultTemplate: StoryFn<OfferSheetProps> = (args) => {
       isMobileHybrid: false,
       offerMeta: { offerId: 3802, companyId: 4016, companyName: 'SEAT' },
       offerDetails: {
-        companyId: 4016,
-        companyLogo: 'companyimages/complarge/retina/',
-        description:
-          'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
-        expiry: '2030-06-30T23:59:59.000Z',
-        id: 3802,
+        id: '3802',
         name: 'Save with SEAT',
-        terms: 'Must be a Blue Light Card member in order to receive the discount.',
-        type: 'Online',
+        companyId: '4016',
+        description: convertStringToRichtextModule(
+          'SEAT have put together a discount on the price of a new car.  Visit the link to see some example pricing and your enquiry will be passed to a SEAT approved agent.',
+        ),
+        expires: '2030-06-30T23:59:59.000Z',
+        termsAndConditions: convertStringToRichtextModule(
+          'Must be a Blue Light Card member in order to receive the discount.',
+        ),
+        image: 'companyimages/complarge/retina/',
+        type: 'online',
       },
     }));
   }, [setOfferSheetAtom]);

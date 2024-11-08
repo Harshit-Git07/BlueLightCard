@@ -19,7 +19,9 @@
     "paths": {
       "@/data/*": ["./data/*"],
       "@/*": ["./src/*"],
-      "@storybook-config/*": ["./.storybook/*"]
+      "@storybook-config/*": ["./.storybook/*"],
+      "@blc/offers-cms/*": ["../api/offers-cms/src/*"],
+      "@blc/offers-legacy/*": ["../api/offers/src/*"]
     }
   },
   "include": [

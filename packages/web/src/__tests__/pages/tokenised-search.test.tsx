@@ -27,6 +27,7 @@ import {
 } from '@bluelightcard/shared-ui/adapters';
 import { experimentMakeSearch } from '@/utils/API/experimentMakeSearch';
 import { PlatformVariant } from '@bluelightcard/shared-ui/types';
+import { offerTypeLabelMap } from '@bluelightcard/shared-ui/index';
 
 expect.extend(toHaveNoViolations);
 
@@ -214,7 +215,7 @@ describe('SearchPage', () => {
 
         whenSearchPageIsRendered();
 
-        const [giftcardOffer] = await screen.findAllByText('Gift card');
+        const [giftcardOffer] = await screen.findAllByText(offerTypeLabelMap['gift-card']);
         expect(giftcardOffer).toBeInTheDocument();
         expect(giftcardOffer.parentElement).toHaveTextContent('Gift Card Offer 1');
       });

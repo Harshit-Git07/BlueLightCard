@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.16.0...bluelightcard/discovery-v1.17.0) (2024-11-11)
+
+
+### Features
+
+* [DISCO-1036] Get Category service ([#2813](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2813)) ([c9b47e7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c9b47e73f8ec6cbbf363bdccf568dcc5c2631330))
+* [DISCO-1163] Add "All Companies" request ([#2821](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2821)) ([86bf6b7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/86bf6b7e2d632eb23b42673d043ab34a1308aaae))
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+
 ## [1.16.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.15.0...bluelightcard/discovery-v1.16.0) (2024-11-07)
 
 

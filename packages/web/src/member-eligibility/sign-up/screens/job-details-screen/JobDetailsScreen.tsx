@@ -112,7 +112,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
             onClick={() => {
               setEligibilityDetails({
                 ...eligibilityDetails,
-                currentScreen: 'Delivery Address Screen',
+                currentScreen: 'Verification Method Screen',
               });
             }}
           >

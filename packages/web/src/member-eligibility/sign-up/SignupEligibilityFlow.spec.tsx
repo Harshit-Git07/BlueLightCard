@@ -78,16 +78,16 @@ describe('given a signing up member that needs to prove their eligibility to use
             act(() => nextButton.click());
           });
 
-          it('should navigate to the method selection screen', () => {
-            const title = screen.getByTestId('fuzzy-frontend-title');
-            expect(title.textContent).toEqual('Verification Method Screen');
+          it('should navigate to the verify eligibility screen', () => {
+            const title = screen.getByText('Verify Eligibility');
+            expect(title).toBeInTheDocument();
           });
 
           describe('given the signing-up member wants to verify via email', () => {
             describe('when they select the email verification method', () => {
               beforeEach(async () => {
-                const nextButton = screen.getByTestId('next-button-1');
-                act(() => nextButton.click());
+                const workEmailButton = screen.getByText('Work Email');
+                act(() => workEmailButton.click());
               });
 
               it('should navigate to the verify email screen', () => {
@@ -152,8 +152,40 @@ describe('given a signing up member that needs to prove their eligibility to use
           describe('given the signing-up member wants to verify via file upload', () => {
             describe('when they select the file verification method', () => {
               beforeEach(async () => {
-                const nextButton = screen.getByTestId('next-button-2');
-                act(() => nextButton.click());
+                const payslipButton = screen.getByText('Payslip');
+                act(() => payslipButton.click());
+              });
+
+              it('should navigate to the file upload screen', () => {
+                const subTitle = screen.getByText(
+                  'Upload the required ID to verify your eligibility'
+                );
+                expect(subTitle).toBeInTheDocument();
+              });
+            });
+          });
+
+          describe('given the signing-up member wants to verify via file upload', () => {
+            describe('when they select the Work ID Card verification method', () => {
+              beforeEach(async () => {
+                const workIdButton = screen.getByText('Work ID Card');
+                act(() => workIdButton.click());
+              });
+
+              it('should navigate to the file upload screen', () => {
+                const subTitle = screen.getByText(
+                  'Upload the required ID to verify your eligibility'
+                );
+                expect(subTitle).toBeInTheDocument();
+              });
+            });
+          });
+
+          describe('given the signing-up member wants to verify via file upload', () => {
+            describe('when they select the NHS Smart Card verification method', () => {
+              beforeEach(async () => {
+                const nhsSmartButton = screen.getByText('NHS Smart Card');
+                act(() => nhsSmartButton.click());
               });
 
               it('should navigate to the file upload screen', () => {
@@ -207,20 +239,23 @@ describe('given a signing up member that needs to prove their eligibility to use
 
         describe('when the job details screen is completed, and multi-id verification is required', () => {
           beforeEach(async () => {
-            fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+            fireEvent.keyDown(window, {
+              key: '.',
+              ctrlKey: true,
+            });
             const nextButton = screen.getByTestId('next-button-2');
             act(() => nextButton.click());
           });
 
           it('should navigate to the method selection screen', () => {
-            const title = screen.getByTestId('fuzzy-frontend-title');
-            expect(title.textContent).toEqual('Verification Method Screen');
+            const subTitle = screen.getByText('Verify your eligibility by providing a valid ID');
+            expect(subTitle).toBeInTheDocument();
           });
 
           describe('given the signing-up member has selected a secondary file verification method', () => {
             beforeEach(async () => {
-              const nextButton = screen.getByTestId('next-button-1');
-              act(() => nextButton.click());
+              const nhsSmartButton = screen.getByText('NHS Smart Card');
+              act(() => nhsSmartButton.click());
             });
 
             it('should navigate to the file upload screen', () => {

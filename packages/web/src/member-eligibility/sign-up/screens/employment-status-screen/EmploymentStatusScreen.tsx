@@ -34,7 +34,7 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <EligibilityScreen>
-      <EligibilityBody>
+      <EligibilityBody className="gap-[24px]">
         <EligibilityHeading
           title="Verify Eligibility"
           subtitle="Provide details about your employment status and job role"
@@ -45,12 +45,14 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
           <ListSelector title="Employed" onClick={() => onEmploymentStatusSelect('Employed')} />
+
           <ListSelector title="Retired" onClick={() => onEmploymentStatusSelect('Retired')} />
+
           <ListSelector title="Volunteer" onClick={() => onEmploymentStatusSelect('Volunteer')} />
         </div>
 
         <Button
-          className="max-h-10 w-fit self-start"
+          className="w-fit self-start"
           variant={ThemeVariant.Secondary}
           size="Large"
           onClick={onBack}

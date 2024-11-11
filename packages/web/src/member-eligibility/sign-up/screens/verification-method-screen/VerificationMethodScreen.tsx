@@ -1,59 +1,19 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
-import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
+import { EligibilityScreen } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/EligibilityScreen';
+import { EligibilityBody } from '@/root/src/member-eligibility/sign-up/screens/shared/components/body/EligibilityBody';
+import { ThemeVariant } from '@bluelightcard/shared-ui/index';
+import Button from '@bluelightcard/shared-ui/components/Button-V2';
+import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
+import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
+import { EligibilityHeading } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/components/EligibilityHeading';
+import { useVerificationMethods } from '@/root/src/member-eligibility/sign-up/screens/verification-method-screen/hooks/useVerificationMethods';
 
 export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
-
-  const figmaLink = useMemo(() => {
-    if (eligibilityDetails.requireMultipleIds) {
-      return 'https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=9246-36598&t=5yk6aK1RLuraH17S-4';
-    }
-
-    return 'https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-53008&t=XRae5vPnKJi8i8kq-4';
-  }, [eligibilityDetails.requireMultipleIds]);
-
-  const buttons = useMemo(() => {
-    if (eligibilityDetails.requireMultipleIds) {
-      return [
-        {
-          onClick: () => {
-            setEligibilityDetails({
-              ...eligibilityDetails,
-              currentScreen: 'File Upload Verification Screen',
-              fileVerificationType: ['Work Contract', 'Bank Statement'],
-            });
-          },
-          text: 'Go to "File Upload Verification" screen',
-        },
-      ];
-    }
-
-    return [
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...eligibilityDetails,
-            currentScreen: 'Work Email Verification Screen',
-          });
-        },
-        text: 'Go to "Work Email Verification" screen',
-      },
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...eligibilityDetails,
-            currentScreen: 'File Upload Verification Screen',
-            fileVerificationType: 'Work Contract',
-          });
-        },
-        text: 'Go to "File Upload Verification" screen',
-      },
-    ];
-  }, [eligibilityDetails, setEligibilityDetails]);
+  const verificationMethods = useVerificationMethods(eligibilityDetailsState);
 
   const onBack = useCallback(() => {
     setEligibilityDetails({
@@ -63,17 +23,33 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails, setEligibilityDetails]);
 
   return (
-    <>
-      <FuzzyFrontend
-        numberOfStepsCompleted={2}
-        screenTitle="Verification Method Screen"
-        figmaLink={figmaLink}
-        eligibilityDetailsState={eligibilityDetailsState}
-        buttons={buttons}
-        onBack={onBack}
-      />
+    <EligibilityScreen>
+      <EligibilityBody>
+        <EligibilityHeading
+          title="Verify Eligibility"
+          subtitle="Verify your eligibility by providing a valid ID"
+          numberOfCompletedSteps={2}
+        />
 
-      <FuzzyFrontendButtons buttons={buttons} putInFloatingDock />
-    </>
+        <div className="flex flex-col gap-[8px]">
+          <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>
+            CHOOSE VERIFICATION METHOD
+          </p>
+
+          {verificationMethods.map((method) => (
+            <ListSelector key={method.title} {...method} />
+          ))}
+        </div>
+
+        <Button
+          className="w-fit self-start"
+          variant={ThemeVariant.Secondary}
+          size="Large"
+          onClick={onBack}
+        >
+          Back
+        </Button>
+      </EligibilityBody>
+    </EligibilityScreen>
   );
 };

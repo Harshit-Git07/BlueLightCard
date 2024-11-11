@@ -28,6 +28,7 @@ import {
 import { experimentMakeSearch } from '@/utils/API/experimentMakeSearch';
 import { PlatformVariant } from '@bluelightcard/shared-ui/types';
 import { offerTypeLabelMap } from '@bluelightcard/shared-ui/index';
+import { ExperimentClient } from '@amplitude/experiment-js-client';
 
 expect.extend(toHaveNoViolations);
 
@@ -452,11 +453,18 @@ const whenSearchPageIsRendered = () => {
   };
   const userContext = userContextTypeFactory.build();
 
+  const mockExperimentClient = {
+    variant: jest.fn().mockReturnValue({ value: 'off' }),
+  } satisfies Pick<ExperimentClient, 'variant'>;
+
+  const experimentClientMock: () => Promise<ExperimentClient> = () =>
+    Promise.resolve(as(mockExperimentClient));
+
   return render(
     <QueryClientProvider client={new QueryClient()}>
       <UserContext.Provider value={userContext}>
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <AuthedAmplitudeExperimentProvider>
+          <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
             <RouterContext.Provider value={mockRouter as NextRouter}>
               <AuthContext.Provider value={mockAuthContext as AuthContextType}>
                 <UserContext.Provider value={userContext}>

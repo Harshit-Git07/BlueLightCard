@@ -6,7 +6,7 @@ describe('Category Factory', () => {
     expect(category).toEqual({
       id: 1,
       name: 'Skiing',
-      parentCategoryIds: ['12'],
+      parentCategoryIds: [12],
       level: 3,
       updatedAt: '2024-09-01T00:00:00',
     });

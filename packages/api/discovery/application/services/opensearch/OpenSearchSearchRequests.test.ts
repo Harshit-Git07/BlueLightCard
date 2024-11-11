@@ -143,7 +143,7 @@ describe('OpenSearchSearchRequests', () => {
     },
   };
 
-  const target = new OpenSearchSearchRequests(indexName, dob, searchTerm, offerType);
+  const target = new OpenSearchSearchRequests(indexName, dob);
 
   const buildSearchRequest = (expectedQueries: QueryDslQueryContainer[]): SearchRequest => ({
     body: {
@@ -157,7 +157,7 @@ describe('OpenSearchSearchRequests', () => {
   });
 
   it('should return a list of Search Requests', () => {
-    const result = target.build();
+    const result = target.build(searchTerm, offerType);
 
     expect(result).toHaveLength(5);
   });
@@ -170,7 +170,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build();
+    const result = target.build(searchTerm, offerType);
 
     expect(result[0]).toEqual(expectedSearch);
   });
@@ -182,7 +182,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedCompaniesAllQuery,
     ]);
 
-    const result = target.build();
+    const result = target.build(searchTerm, offerType);
 
     expect(result[1]).toEqual(expectedSearch);
   });
@@ -195,7 +195,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build();
+    const result = target.build(searchTerm, offerType);
 
     expect(result[2]).toEqual(expectedSearch);
   });
@@ -208,7 +208,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build();
+    const result = target.build(searchTerm, offerType);
 
     expect(result[3]).toEqual(expectedSearch);
   });
@@ -221,8 +221,27 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build();
+    const result = target.build(searchTerm, offerType);
 
     expect(result[4]).toEqual(expectedSearch);
+  });
+
+  describe('Category Search', () => {
+    it('should return a Category Search Request', () => {
+      const categoryId = '123';
+      const expectedSearchRequest = buildSearchRequest([
+        expectedAgeRestrictedQuery,
+        expectedOfferNotExpiredAndEvergreenQuery,
+        {
+          match: {
+            category_id: categoryId,
+          },
+        },
+      ]);
+
+      const result = target.buildCategorySearch(categoryId);
+
+      expect(result).toEqual(expectedSearchRequest);
+    });
   });
 });

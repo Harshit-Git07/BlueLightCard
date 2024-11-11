@@ -3,6 +3,7 @@ import { SearchRequest } from '@opensearch-project/opensearch/api/types';
 import { AgeRestriction, getAgeRestrictions } from '@blc-mono/discovery/application/models/AgeRestrictions';
 import {
   ageRestrictionsQuery,
+  categoryIdQuery,
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
@@ -16,18 +17,20 @@ const MAX_RESULTS = 10000;
 
 export class OpenSearchSearchRequests {
   private readonly index: string;
-  private readonly searchTerm: string;
-  private readonly offerType?: string;
+  private searchTerm: string;
+  private offerType?: string;
   private readonly ageRestrictions: AgeRestriction[];
 
-  constructor(index: string, dob: string, searchTerm: string, offerType?: string) {
+  constructor(index: string, dob: string) {
     this.index = index;
-    this.offerType = offerType;
-    this.searchTerm = searchTerm;
+    this.searchTerm = '';
     this.ageRestrictions = getAgeRestrictions(dob);
   }
 
-  public build(): SearchRequest[] {
+  public build(searchTerm: string, offerType?: string): SearchRequest[] {
+    this.offerType = offerType;
+    this.searchTerm = searchTerm;
+
     return [
       this.buildActiveOffersAndCompanyNameSearch(),
       this.buildCompanyNameInCompaniesAllSearch(),
@@ -35,6 +38,10 @@ export class OpenSearchSearchRequests {
       this.buildOfferNameSearch(),
       this.buildCompanyNameFuzzySearch(),
     ];
+  }
+
+  public buildCategorySearch(categoryId: string): SearchRequest {
+    return this.buildCategoryIdSearch(categoryId);
   }
 
   private buildBaseSearch(): SearchRequest {
@@ -141,6 +148,24 @@ export class OpenSearchSearchRequests {
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
     }
+    return {
+      ...this.buildBaseSearch(),
+      body: {
+        query: {
+          bool: {
+            must: mustQueries,
+          },
+        },
+      },
+    };
+  }
+
+  private buildCategoryIdSearch(categoryId: string): SearchRequest {
+    const mustQueries = [
+      ageRestrictionsQuery(this.ageRestrictions),
+      offerNotExpiredAndEvergreenQuery(),
+      categoryIdQuery(categoryId),
+    ];
     return {
       ...this.buildBaseSearch(),
       body: {

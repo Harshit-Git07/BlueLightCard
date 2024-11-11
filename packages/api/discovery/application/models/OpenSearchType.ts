@@ -28,10 +28,7 @@ export type OpenSearchBody = {
   included_trusts: string[];
   excluded_trusts: string[];
   category_name: string;
-  new_category_1: string;
-  category_level_2: string;
-  category_level_3: string;
-  category_level_4: string;
+  category_id: number;
   date_offer_last_updated: string;
 };
 
@@ -57,9 +54,6 @@ export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
   included_trusts: offer.company.includedTrusts,
   excluded_trusts: offer.company.excludedTrusts,
   category_name: offer.categories.length > 0 ? offer.categories[0].name : '',
-  new_category_1: offer.categories.find((category) => category.level === 1)?.name ?? '',
-  category_level_2: offer.categories.find((category) => category.level === 2)?.name ?? '',
-  category_level_3: offer.categories.find((category) => category.level === 3)?.name ?? '',
-  category_level_4: offer.categories.find((category) => category.level === 4)?.name ?? '',
+  category_id: offer.categories.length > 0 ? offer.categories[0].id : 0,
   date_offer_last_updated: offer.updatedAt,
 });

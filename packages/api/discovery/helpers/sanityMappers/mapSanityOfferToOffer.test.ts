@@ -403,6 +403,8 @@ const validSanityOffer: SanityOffer = {
         _updatedAt: '2023-01-01',
         _rev: 'rev-id',
         level: 1,
+        id: 1,
+        name: 'Category Item Name',
       },
       categoryItem: {
         _id: 'item-id',

@@ -113,7 +113,7 @@ export const offerEvergreenQuery = (): QueryDslQueryContainer => {
     bool: {
       must_not: {
         exists: {
-          field: 'offer_expires', // Condition for documents without offer_expires
+          field: 'offer_expires',
         },
       },
     },
@@ -127,7 +127,7 @@ export const offerNotExpiredQuery = (): QueryDslQueryContainer => {
         {
           range: {
             offer_expires: {
-              gte: 'now', // Condition for future dates
+              gte: 'now',
             },
           },
         },
@@ -143,6 +143,14 @@ export const companyNameFuzzyQuery = (searchTerm: string): QueryDslQueryContaine
         query: searchTerm,
         fuzziness: 1,
       },
+    },
+  };
+};
+
+export const categoryIdQuery = (categoryId: string): QueryDslQueryContainer => {
+  return {
+    match: {
+      category_id: categoryId,
     },
   };
 };

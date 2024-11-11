@@ -5,7 +5,7 @@
     "pre:dev": "npm run opensearch:up",
     "test": "npm run test:unit",
     "test:coverage": "npm run test:unit -- --coverage",
-    "test:unit": "jest",
+    "test:unit": "jest --runInBand",
     "e2e:discovery": "dotenv -e ../../../.env -- npx sst bind vitest e2e",
     "e2e:discovery:staging": "dotenv -e ../../../.env -- npx sst bind vitest e2e/staging",
     "typecheck": "tsc --noEmit",

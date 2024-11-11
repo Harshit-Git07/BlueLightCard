@@ -8,6 +8,7 @@ export interface SearchResult {
   OfferName: string;
   OfferType: string;
   offerimg: string;
+  OfferDescription?: string;
   CompID: string;
   LegacyCompanyID?: number;
   CompanyName: string;
@@ -24,6 +25,7 @@ export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
         LegacyID: hit._source?.legacy_offer_id,
         OfferName: hit._source?.offer_name ?? '',
         OfferType: hit._source?.offer_type ?? '',
+        OfferDescription: hit._source?.offer_description ?? '',
         offerimg: hit._source?.offer_image ?? '',
         CompID: hit._source?.company_id ?? '',
         LegacyCompanyID: hit._source?.legacy_company_id,

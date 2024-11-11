@@ -131,6 +131,12 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       functionName: 'GetCategoryHandler',
       handler: 'packages/api/discovery/application/handlers/categories/getCategory.handler',
       requestValidatorName: 'GetCategoryValidator',
+      permissions: ['es'],
+      environment: {
+        OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
+        STAGE: stack.stage,
+      },
+      vpc,
     }),
     'GET /companies': Route.createRoute({
       ...baseRouteParams,

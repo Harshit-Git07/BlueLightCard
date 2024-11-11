@@ -154,6 +154,7 @@ describe('OpenSearchService', () => {
       {
         ID: '123',
         LegacyID: undefined,
+        OfferDescription: '',
         OfferName: 'OfferName',
         OfferType: '1',
         offerimg: 'img',
@@ -195,6 +196,7 @@ describe('OpenSearchService', () => {
       {
         ID: '123',
         LegacyID: 456,
+        OfferDescription: '',
         OfferName: 'OfferName',
         OfferType: '1',
         offerimg: 'img',
@@ -206,15 +208,7 @@ describe('OpenSearchService', () => {
   });
 
   it('should return max 40 search results', async () => {
-    const searchHits = [];
-    for (let i = 0; i < 41; i++) {
-      const searchHit = {
-        _source: {
-          offer_id: `${i}`,
-        },
-      };
-      searchHits.push({ ...searchHit });
-    }
+    const searchHits = givenSearchResultsReturned(40);
     const mockSearchWith41Results = jest.fn().mockResolvedValue({
       body: {
         hits: {
@@ -268,6 +262,40 @@ describe('OpenSearchService', () => {
       const result = await openSearchService.getPublishedIndicesForDeletion();
 
       expect(result).toEqual(['service-stage-offers-010202000']);
+    });
+  });
+
+  describe('Search By Cateogry', () => {
+    const categoryId = '1';
+    const dob = '1990-01-01';
+    it('should search by category ID', async () => {
+      const results = await openSearchService.queryIndexByCategory(indexName, dob, categoryId);
+
+      expect(mockSearch).toHaveBeenCalled();
+      expect(results[0]).toMatchObject({
+        ID: '123',
+        OfferName: 'OfferName',
+        OfferType: '1',
+        offerimg: 'img',
+        CompID: '456',
+        CompanyName: 'CompanyName',
+      });
+    });
+
+    it('should return max 1000 search results', async () => {
+      const searchHits = givenSearchResultsReturned(1000);
+      const mockSearchWith1001Results = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: searchHits,
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith1001Results);
+
+      const results = await openSearchService.queryIndexByCategory(indexName, dob, categoryId);
+
+      expect(results.length).toBe(1000);
     });
   });
 
@@ -361,3 +389,16 @@ describe('OpenSearchService', () => {
     expect(result).toEqual('service-stage-offers-010202001');
   });
 });
+
+const givenSearchResultsReturned = (numberOfOffers: number) => {
+  const searchHits = [];
+  for (let i = 0; i < numberOfOffers + 1; i++) {
+    const searchHit = {
+      _source: {
+        offer_id: `${i}`,
+      },
+    };
+    searchHits.push({ ...searchHit });
+  }
+  return searchHits;
+};

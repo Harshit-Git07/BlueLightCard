@@ -110,7 +110,7 @@ export class OpenSearchService {
   }
 
   public async queryIndex(term: string, indexName: string, dob: string, offerType?: string): Promise<SearchResult[]> {
-    const searchResults = new OpenSearchSearchRequests(indexName, dob, term, offerType).build().map(async (search) => {
+    const searchResults = new OpenSearchSearchRequests(indexName, dob).build(term, offerType).map(async (search) => {
       return this.openSearchClient.search({
         index: indexName,
         body: search.body,
@@ -131,9 +131,20 @@ export class OpenSearchService {
     return this.buildUniqueSearchResults(allSearchResults);
   }
 
-  private buildUniqueSearchResults(allSearchResults: SearchResult[]): SearchResult[] {
-    const MAX_RESULTS = 40;
+  public async queryIndexByCategory(indexName: string, dob: string, categoryId: string): Promise<SearchResult[]> {
+    const MAX_RESULTS_PER_CATEGORY = 1000;
+    const searchRequest = new OpenSearchSearchRequests(indexName, dob).buildCategorySearch(categoryId);
+    const searchResults = await this.openSearchClient.search({
+      index: indexName,
+      body: searchRequest.body,
+    });
 
+    const mappedSearchResults = mapSearchResults(searchResults.body as SearchResponse);
+
+    return this.buildUniqueSearchResults(mappedSearchResults, MAX_RESULTS_PER_CATEGORY);
+  }
+
+  private buildUniqueSearchResults(allSearchResults: SearchResult[], maxResults = 40): SearchResult[] {
     const uniqueSearchResults: SearchResult[] = [];
 
     allSearchResults.forEach((searchResult) => {
@@ -146,7 +157,7 @@ export class OpenSearchService {
       message: `Found ${uniqueSearchResults.length} unique search results`,
     });
 
-    const uniqueResultsSubset = uniqueSearchResults.slice(0, MAX_RESULTS);
+    const uniqueResultsSubset = uniqueSearchResults.slice(0, maxResults);
     logger.info({
       message: `Returning ${uniqueResultsSubset.length} unique search results`,
     });

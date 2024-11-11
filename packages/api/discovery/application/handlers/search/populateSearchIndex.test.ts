@@ -116,7 +116,7 @@ describe('populateSearchIndex', () => {
               {
                 id: 1,
                 name: 'Category 1',
-                parentCategoryIds: ['parent-1'],
+                parentCategoryIds: [2],
                 level: 1,
                 updatedAt: TODAY,
               },
@@ -128,7 +128,7 @@ describe('populateSearchIndex', () => {
             {
               id: 1,
               name: 'Category 1',
-              parentCategoryIds: ['parent-1'],
+              parentCategoryIds: [2],
               level: 1,
               updatedAt: TODAY,
             },
@@ -170,10 +170,7 @@ describe('populateSearchIndex', () => {
           included_trusts: ['restriction1', 'restriction2'],
           excluded_trusts: [],
           category_name: 'Category 1',
-          new_category_1: 'Category 1',
-          category_level_2: '',
-          category_level_3: '',
-          category_level_4: '',
+          category_id: 1,
           date_offer_last_updated: offer.updatedAt,
         };
 

@@ -49,11 +49,11 @@ export const mapSanityOfferToOffer = (sanityOffer: SanityOffer): Offer => {
     company: mapSanityCompanyToCompany(sanityOffer.company),
     categories:
       sanityOffer.categorySelection?.map((category) => ({
-        id: category.categoryItem?.id ?? 0,
-        name: category.categoryItem?.name ?? '',
-        parentCategoryIds: [],
+        id: category.category1?.id ?? 0,
+        name: category.category1?.name ?? '',
+        parentCategoryIds: category.category1?.parentCategoryIds ?? [],
         level: category.category1?.level ?? 0,
-        updatedAt: new Date().toISOString(),
+        updatedAt: category.category1?._updatedAt ?? '',
       })) || [],
     local: sanityOffer.local ?? false,
     discount: sanityOffer.discountDetails ? mapSanityDiscountToDiscount(sanityOffer.discountDetails) : undefined,

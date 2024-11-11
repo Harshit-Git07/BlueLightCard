@@ -3,6 +3,7 @@ import { AgeRestriction } from '@blc-mono/discovery/application/models/AgeRestri
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import {
   ageRestrictionsQuery,
+  categoryIdQuery,
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
@@ -189,6 +190,18 @@ describe('OpenSearchQueries', () => {
       },
     };
     const query = companyNameFuzzyQuery(searchTerm);
+
+    expect(query).toEqual(expectedQuery);
+  });
+
+  it('should build a category ID query', () => {
+    const categoryId = '1';
+    const expectedQuery = {
+      match: {
+        category_id: categoryId,
+      },
+    };
+    const query = categoryIdQuery(categoryId);
 
     expect(query).toEqual(expectedQuery);
   });

@@ -1,9 +1,16 @@
+import { randomUUID } from 'node:crypto';
+
+import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
-import { buildDummyOffer } from '@blc-mono/discovery/application/handlers/categories/getCategory';
 import { CategoryResponse } from '@blc-mono/discovery/application/models/CategoryResponse';
+import { OfferType } from '@blc-mono/discovery/application/models/Offer';
+import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 import { SimpleCategory } from '@blc-mono/discovery/application/models/SimpleCategory';
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
+import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
+import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
+import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 
 describe('GET /categories', async () => {
   const testUserTokens = await TestUser.authenticate();
@@ -108,16 +115,9 @@ describe('GET /categories', async () => {
 
 describe('GET /categories/${id}', async () => {
   const testUserTokens = await TestUser.authenticate();
-
-  const whenCategoryIsCalledWith = async (headers: Record<string, string>, categoryId: string) => {
-    const categoriesEndpoint = `${ApiGatewayV1Api.discovery.url}categories/${categoryId}`;
-    return fetch(categoriesEndpoint, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...headers,
-      },
-    });
+  const queryParams = {
+    dob: '2001-01-01',
+    organisation: 'blc',
   };
 
   it.each([
@@ -126,24 +126,135 @@ describe('GET /categories/${id}', async () => {
     [401, 'Invalid authorization header is provided', { Authorization: `Bearer invalidToken` }, '1'],
     [400, 'Invalid category ID is provided', { Authorization: `Bearer ${testUserTokens.idToken}` }, 'Invalid'],
   ])('should return with response code %s when %s', async (statusCode, _description, headers, categoryId) => {
-    const result = await whenCategoryIsCalledWith(headers, categoryId);
+    const result = await whenCategoryIsCalledWith(queryParams, headers, categoryId);
     expect(result.status).toBe(statusCode);
   });
 
   it('should return the expected category', async () => {
-    const expectedCategories = [
-      buildDummyOffer(1),
-      buildDummyOffer(2),
-      buildDummyOffer(3),
-      buildDummyOffer(4),
-      buildDummyOffer(5),
-    ];
-
-    const result = await whenCategoryIsCalledWith({ Authorization: `Bearer ${testUserTokens.idToken}` }, '1');
+    const result = await whenCategoryIsCalledWith(
+      queryParams,
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+      '1',
+    );
     const resultBody = (await result.json()) as { data: CategoryResponse };
 
     expect(resultBody.data.id).toStrictEqual('1');
     expect(resultBody.data.name).toStrictEqual('Electrical and phones');
-    expect(resultBody.data.data).toStrictEqual(expectedCategories);
   });
 });
+
+describe('Categories E2E Event Handling', async () => {
+  const testUserTokens = await TestUser.authenticate();
+  const generatedCompanyUUID = `test-company-${randomUUID().toString()}`;
+  const activeOfferUUID = `test-${randomUUID().toString()}`;
+  const activeOfferUUID2 = `test-${randomUUID().toString()}`;
+
+  const offers: SanityOffer[] = [
+    {
+      ...buildTestSanityOffer(activeOfferUUID, generatedCompanyUUID),
+      name: activeOfferUUID,
+      categorySelection: [
+        {
+          _key: '',
+          category1: {
+            _id: '1',
+            _type: 'category',
+            _createdAt: '',
+            _updatedAt: '',
+            _rev: '',
+            id: 2,
+            name: 'Test Category 2',
+            level: 3,
+            parentCategoryIds: [],
+          },
+        },
+      ],
+      start: new Date(Date.now()).toISOString(),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
+    },
+    {
+      ...buildTestSanityOffer(activeOfferUUID2, generatedCompanyUUID),
+      name: activeOfferUUID2,
+      categorySelection: [
+        {
+          _key: '',
+          category1: {
+            _id: '1',
+            _type: 'category',
+            _createdAt: '',
+            _updatedAt: '',
+            _rev: '',
+            id: 3,
+            name: 'Test Category 3',
+            level: 3,
+            parentCategoryIds: [],
+          },
+        },
+      ],
+      start: new Date(Date.now()).toISOString(),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
+    },
+  ];
+
+  afterAll(async () => {
+    await sendTestEvents({
+      source: Events.OFFER_DELETED,
+      events: offers.map((offer) => ({ ...offer, _updatedAt: new Date(Date.now()).toISOString() })),
+    });
+  });
+
+  beforeAll(async () => {
+    await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    await sendTestEvents({ source: Events.OPENSEARCH_POPULATE_INDEX, events: offers });
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  });
+
+  it('should consume offer and return it when queries by category', async () => {
+    const companyName = offers[0].company?.brandCompanyDetails?.[0]?.companyName ?? '';
+    const expectedSearchResult: OfferResponse = {
+      offerID: activeOfferUUID,
+      offerName: activeOfferUUID,
+      offerType: OfferType.ONLINE,
+      imageURL: 'https://testimage.com',
+      companyID: generatedCompanyUUID,
+      legacyOfferID: 1,
+      offerDescription: 'Test to see if all linked to webhook - attempt n',
+      legacyCompanyID: 1,
+      companyName: companyName,
+    };
+
+    const result = await whenCategoryIsCalledWith(
+      {
+        dob: '2001-01-01',
+        organisation: 'blc',
+      },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+      '2',
+    );
+
+    const results = (await result.json()) as { data: { data: OfferResponse[] } };
+
+    const searchResult = results.data.data.find((result) => result.offerID === activeOfferUUID);
+
+    expect(searchResult).toStrictEqual(expectedSearchResult);
+    expect(results.data.data.length).toStrictEqual(1);
+  });
+});
+
+const whenCategoryIsCalledWith = async (
+  params: Record<string, string>,
+  headers: Record<string, string>,
+  categoryId: string,
+) => {
+  const urlParams = new URLSearchParams(params);
+  const categoriesEndpoint = `${ApiGatewayV1Api.discovery.url}categories/${categoryId}?${urlParams.toString()}`;
+  return fetch(categoriesEndpoint, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+  });
+};

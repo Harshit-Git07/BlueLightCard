@@ -1,52 +1,74 @@
 import 'dd-trace/init';
 
 import { APIGatewayEvent } from 'aws-lambda';
-import { APIGatewayProxyEventPathParameters } from 'aws-lambda/trigger/api-gateway-proxy';
+import {
+  APIGatewayProxyEventPathParameters,
+  APIGatewayProxyEventQueryStringParameters,
+} from 'aws-lambda/trigger/api-gateway-proxy';
 import { datadog } from 'datadog-lambda-js';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { categories } from '@blc-mono/discovery/application/handlers/categories/getCategories';
-import { CategoryResponse } from '@blc-mono/discovery/application/models/CategoryResponse';
 import { OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
+import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
+import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const logger = new LambdaLogger({ serviceName: 'categories-get' });
 
+const openSearchService = new OpenSearchService();
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   const categoryId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id ?? '';
+  const { dob } = getQueryParams(event);
 
   logger.info({ message: `Getting category for id ${categoryId}` });
 
   if (isValidCategory(categoryId)) {
-    return Response.OK({ message: 'Success', data: getCategory(categoryId) });
+    const results = await openSearchService.queryIndexByCategory(
+      await openSearchService.getLatestIndexName(),
+      dob,
+      categoryId,
+    );
+    const mappedResults = results.map((result) => mapSearchResultToOfferResponse(result));
+    return Response.OK({
+      message: 'Success',
+      data: {
+        id: categoryId,
+        name: getCategoryName(categoryId),
+        data: mappedResults,
+      },
+    });
   } else {
     return Response.BadRequest({ message: 'Invalid category ID', data: {} });
   }
 };
 
 const isValidCategory = (categoryId: string) => categories.find((category) => category.id === categoryId);
-
-const getCategory = (categoryId: string): CategoryResponse => {
-  return {
-    id: categoryId,
-    name: categories.find((category) => category.id === categoryId)?.name ?? 'Unknown Category',
-    data: [buildDummyOffer(1), buildDummyOffer(2), buildDummyOffer(3), buildDummyOffer(4), buildDummyOffer(5)],
-  };
+const getCategoryName = (categoryId: string) => {
+  const category = categories.find((category) => category.id === categoryId);
+  return category?.name ?? 'Unknown Category';
 };
 
-export const buildDummyOffer = (id: number): OfferResponse => {
+const getQueryParams = (event: APIGatewayEvent) => {
+  const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
+  const dob = queryParams?.dob;
+
+  return { dob: dob ?? '' };
+};
+
+const mapSearchResultToOfferResponse = (result: SearchResult): OfferResponse => {
   return {
-    offerID: '189f3060626368d0a716f0e795d8f2c7',
-    legacyOfferID: 9487,
-    offerName: `Get 20% off your food bill, valid Monday - Friday = ${id}`,
-    offerType: OfferType.IN_STORE,
-    offerDescription: 'Offer Description',
-    imageURL: 'https://cdn.sanity.io/images/td1j6hke/staging/c92d0d548e09b08e4659cb5a4a2a55fa9fc2f11c-640x320.jpg',
-    companyID: '24069b9c8eb7591046d066ef57e26a94',
-    legacyCompanyID: 9694,
-    companyName: 'Stonehouse Pizza & Carvery',
+    offerID: result.ID,
+    legacyOfferID: result.LegacyID,
+    offerName: result.OfferName,
+    offerDescription: result.OfferDescription ?? '',
+    offerType: result.OfferType as OfferType,
+    imageURL: result.offerimg,
+    companyID: result.CompID,
+    legacyCompanyID: result.LegacyCompanyID,
+    companyName: result.CompanyName,
   };
 };
 

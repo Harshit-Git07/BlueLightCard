@@ -33,9 +33,6 @@ export const openSearchFieldMapping: OpenSearchFieldMapping = {
   included_trusts: { type: 'text' },
   excluded_trusts: { type: 'text' },
   category_name: { type: 'text' },
-  new_category_1: { type: 'text' },
-  category_level_2: { type: 'text' },
-  category_level_3: { type: 'text' },
-  category_level_4: { type: 'text' },
+  category_id: { type: 'text' },
   date_offer_last_updated: { type: 'date' },
 };

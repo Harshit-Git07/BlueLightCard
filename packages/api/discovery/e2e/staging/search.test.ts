@@ -121,6 +121,7 @@ describe('Search E2E Event Handling', async () => {
       offerimg: 'https://testimage.com',
       CompID: generatedCompanyUUID,
       LegacyID: 1,
+      OfferDescription: 'Test to see if all linked to webhook - attempt n',
       LegacyCompanyID: 1,
       CompanyName: companyName,
     };
@@ -162,6 +163,7 @@ describe('Search E2E Event Handling', async () => {
         offerimg: 'https://testimage.com',
         CompID: companyId.toString(),
         LegacyID: 1,
+        OfferDescription: 'Test to see if all linked to webhook - attempt n',
         LegacyCompanyID: 1,
         CompanyName: companyName,
       },

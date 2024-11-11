@@ -1,7 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import TextInput from './';
-import { TextInputState } from './types';
 
 const meta: Meta<typeof TextInput> = {
   title: 'Component System/TextInput',
@@ -10,24 +9,59 @@ const meta: Meta<typeof TextInput> = {
     status: 'done',
   },
   argTypes: {
-    state: {
-      control: 'select',
-      options: ['Default', 'Active', 'Filled', 'Error', 'Disabled'],
+    id: {
+      description: 'The input element id, if not supplied a random one will be used',
     },
-    showLabel: {
-      control: 'boolean',
+    name: {
+      description: 'The name of the element if supplied',
     },
-    showIcon: {
+    isValid: {
       control: 'boolean',
+      description: 'Sets the element to show in error state',
+    },
+    isDisabled: {
+      control: 'boolean',
+      description: 'Sets the element to disabled',
+    },
+    value: {
+      description: 'The value of the element',
     },
     required: {
       control: 'boolean',
     },
-    showHelpMessage: {
-      control: 'boolean',
+    maxLength: {
+      control: 'number',
+      description: 'The max length of string allowed',
     },
-    showInfoMessage: {
+    showCharCount: {
       control: 'boolean',
+      description: 'Show the number of remaining characters',
+    },
+    onChange: {
+      control: { disable: true },
+      description: 'Will be called when the element changes',
+    },
+    onKeyDown: {
+      control: { disable: true },
+      description: 'Will be called when a key is pressed and the element is in focus',
+    },
+    placeholder: {
+      description: 'The placeholder text',
+    },
+    min: { control: 'number' },
+    max: { control: 'number' },
+    label: {
+      description: 'The label text',
+    },
+    tooltipText: {
+      description: 'If helpText is supplied then an (i) icon will show and display the help text',
+    },
+    message: {
+      description:
+        'Additional information or error message details displayed immediately below the input element',
+    },
+    helpText: {
+      description: 'Additional information to be displayed between the label and the input itself',
     },
   },
 };
@@ -41,90 +75,62 @@ const Template: StoryFn<typeof TextInput> = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  name: 'default-input',
+  name: 'my-input-name',
   placeholder: 'Enter text here',
-  label: 'Default Input',
-  ariaLabel: 'This is a example aria text for screen readers',
-  state: 'Default' as TextInputState,
-  showLabel: true,
-};
-
-export const Active = Template.bind({});
-Active.args = {
-  ...Default.args,
-  state: 'Active' as TextInputState,
+  label: 'Enter some text',
 };
 
 export const Filled = Template.bind({});
 Filled.args = {
   ...Default.args,
-  state: 'Filled' as TextInputState,
   value: 'This is a filled input',
 };
 
 export const Error = Template.bind({});
 Error.args = {
   ...Default.args,
-  state: 'Error' as TextInputState,
-  required: true,
-  infoMessage: 'This field is required',
-  showInfoMessage: true,
+  isValid: false,
+  message: 'This field is inValid',
 };
 
 export const Disabled = Template.bind({});
 Disabled.args = {
   ...Default.args,
-  state: 'Disabled' as TextInputState,
-};
-
-export const ShowLabelWithIcon = Template.bind({});
-ShowLabelWithIcon.args = {
-  ...Default.args,
-  showLabel: true,
-};
-
-export const ShowLabelWithoutIcon = Template.bind({});
-ShowLabelWithoutIcon.args = {
-  ...Default.args,
-  showIcon: true,
-  helpMessage: 'This is a help message',
+  isDisabled: true,
 };
 
 export const ShowHelpMessage = Template.bind({});
 ShowHelpMessage.args = {
   ...Default.args,
-  helpMessage: 'This is a help message',
-  showHelpMessage: true,
+  tooltipText: 'This is a help message',
 };
 
 export const ShowInfoMessage = Template.bind({});
 ShowInfoMessage.args = {
   ...Default.args,
-  infoMessage: 'Additional information about this field',
-  showInfoMessage: true,
+  message: 'Additional information about this field',
 };
 
 export const WithMaxChars = Template.bind({});
 WithMaxChars.args = {
   ...Default.args,
-  maxChars: 20,
+  maxLength: 20,
   showCharCount: true,
 };
 
 export const WithAllFeatures = Template.bind({});
 WithAllFeatures.args = {
-  name: 'all-features-input',
-  placeholder: 'Enter text here',
-  label: 'Input with All Features',
-  state: 'Default' as TextInputState,
-  showLabel: true,
-  showIcon: true,
+  id: 'my-id',
+  name: 'my-name',
+  isValid: true,
+  isDisabled: false,
+  value: 'Bob',
   required: true,
-  maxChars: 50,
-  helpMessage: 'This is a help message',
-  showHelpMessage: true,
-  infoMessage: 'Additional information about this field',
-  showInfoMessage: true,
-  ariaLabel: 'This is a example aria text for screen readers',
+  maxLength: 5,
   showCharCount: true,
+  placeholder: 'short name',
+  label: 'A short string here',
+  tooltipText: 'This is limited to 5 chars',
+  message: 'Some info text',
+  helpText: 'This is a description',
 };

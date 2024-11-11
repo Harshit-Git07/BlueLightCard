@@ -6,17 +6,15 @@ const componentMeta: Meta<typeof InfoWrapper> = {
   component: InfoWrapper,
   argTypes: {
     label: {
-      description:
-        'Optional heading style label to be display name to the children (required when helpIcon is True)',
+      description: 'Optional heading style label to be display name to the children',
       control: 'string',
     },
-    description: { description: 'Optional text to describe the children', control: 'string' },
-    helpIcon: {
-      description: 'Optional help icon from which a tooltip will appear',
-      control: 'boolean',
+    description: {
+      description: 'Optional text to describe the children',
+      control: 'string',
     },
     helpText: {
-      description: 'Optional help text to be displayed in tooltip (required when helpIcon is True)',
+      description: 'Optional help text to be displayed in tooltip',
       control: 'string',
     },
     helpPosition: {
@@ -46,7 +44,6 @@ export const AllProps = DefaultTemplate.bind({});
 AllProps.args = {
   label: 'Example Info Wrapper',
   description: 'This is a description',
-  helpIcon: true,
   helpText: 'This is help text',
 };
 
@@ -63,14 +60,12 @@ Description.args = {
 export const LabelAndHelp = DefaultTemplate.bind({});
 LabelAndHelp.args = {
   label: 'Example Info Wrapper',
-  helpIcon: true,
   helpText: 'This is a help text',
 };
 
 export const LabelAndHelpOnTop = PaddedTemplate.bind({});
 LabelAndHelpOnTop.args = {
   label: 'Example Info Wrapper',
-  helpIcon: true,
   helpText: 'This is a help text',
   helpPosition: 'top',
 };
@@ -88,7 +83,6 @@ export const ExampleUsage: StoryFn<typeof InfoWrapper> = () => {
         label="Username"
         htmlFor="username"
         description="You cannot change this later"
-        helpIcon
         helpText="Cannot contain spaces"
       >
         <input

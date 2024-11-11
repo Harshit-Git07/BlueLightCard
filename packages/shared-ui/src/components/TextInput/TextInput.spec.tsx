@@ -1,128 +1,186 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import renderer from 'react-test-renderer';
-import { TextInputProps } from './types';
+import { fireEvent, render, screen } from '@testing-library/react';
 import TextInput from './index';
-import { jest } from '@jest/globals';
+import { TextInputProps } from './types';
+import { colours } from '../../tailwind/theme';
+import '@testing-library/jest-dom';
+
+const testRender = (props: Partial<TextInputProps>) => {
+  const onChange = jest.fn();
+  props.onChange = onChange;
+  render(<TextInput {...props} />);
+  return { onChange };
+};
+
+const defaultProps = {
+  id: 'test-input',
+  label: 'Test-label',
+  name: 'test-input',
+  placeholder: 'Enter text',
+  value: '',
+};
 
 describe('TextInput component', () => {
-  let props: TextInputProps;
-
-  beforeEach(() => {
-    props = {
-      label: 'Test-label',
-      state: 'Default',
-      name: 'test-input',
-      placeholder: 'Enter text',
-      value: '',
-      onChange: jest.fn(),
-    };
-  });
-
   describe('smoke test', () => {
-    it('should render component without error', () => {
-      render(<TextInput {...props} />);
-      const input = screen.getByRole('textbox');
-      expect(input).toBeTruthy();
+    it('should render basic props', () => {
+      testRender({
+        ...defaultProps,
+        id: 'foobar',
+        name: 'foo',
+        required: true,
+        maxLength: 100,
+        min: 10,
+        max: 100,
+      });
+      const input = screen.getByRole('textbox', {});
+      expect(input).toHaveAttribute('id', 'foobar');
+      expect(input).toHaveAttribute('name', 'foo');
+      expect(input).toHaveAttribute('required');
+      expect(input).toHaveAttribute('maxLength', '100');
+      expect(input).toHaveAttribute('min', '10');
+      expect(input).toHaveAttribute('max', '100');
+    });
+
+    it('should render no props', () => {
+      testRender({});
+      const input = screen.getByRole('textbox', {});
+      expect(input).toHaveAttribute('id', expect.any(String));
+      expect(input).not.toHaveAttribute('name');
+      expect(input).not.toHaveAttribute('required');
+      expect(input).toHaveAttribute('maxLength', '200');
+      expect(input).not.toHaveAttribute('min');
+      expect(input).not.toHaveAttribute('max');
     });
   });
 
   describe('functionality tests', () => {
     it('should call onChange when input value changes', () => {
-      render(<TextInput {...props} />);
-      const input = screen.getByRole('textbox');
+      const { onChange } = testRender(defaultProps);
+      const input = screen.getByRole('textbox', {});
       fireEvent.change(input, { target: { value: 'test' } });
-      expect(props.onChange).toHaveBeenCalled();
+      expect(onChange).toHaveBeenCalled();
     });
 
     it('should limit input to maxChars', () => {
-      const maxChars = 5;
-      render(<TextInput {...props} maxChars={maxChars} />);
-      const input = screen.getByRole('textbox') as HTMLInputElement;
+      testRender({
+        ...defaultProps,
+        maxLength: 5,
+      });
+      const input = screen.getByRole('textbox', {}) as HTMLInputElement;
       fireEvent.change(input, { target: { value: '123456' } });
-      expect(input.value.length).toBeLessThanOrEqual(maxChars);
+      expect(input.value.length).toBeLessThanOrEqual(5);
     });
 
     it('should handle disabled state', () => {
-      render(<TextInput {...props} state="Disabled" />);
-      const input = screen.getByRole('textbox') as HTMLInputElement;
+      testRender({
+        ...defaultProps,
+        isDisabled: true,
+      });
+      const input = screen.getByRole('textbox', {}) as HTMLInputElement;
       expect(input.disabled).toBeTruthy();
     });
 
     it('should set aria-describedby correctly', () => {
-      render(
-        <TextInput {...props} showInfoMessage={true} infoMessage="Info" showCharCount={true} />,
-      );
-      const input = screen.getByRole('textbox');
+      testRender({
+        ...defaultProps,
+        message: 'Info',
+        showCharCount: true,
+      });
+      const input = screen.getByRole('textbox', {});
       expect(input.getAttribute('aria-describedby')).toBe('test-input-info test-input-char-count');
     });
   });
 
   describe('visual tests', () => {
-    it('should show label when showLabel is true', () => {
-      render(<TextInput {...props} showLabel={true} />);
-      const label = screen.getByText('Test-label');
+    it('should show label when supplied', () => {
+      testRender({
+        ...defaultProps,
+        label: undefined,
+      });
+      const noLabel = screen.queryByText('Test-label', {});
+      expect(noLabel).toBeNull();
+
+      testRender(defaultProps);
+      const label = screen.getByText('Test-label', {});
       expect(label).toBeTruthy();
     });
 
-    it('should show icon only when both showIcon and showLabel are true', () => {
-      render(<TextInput {...props} showIcon={true} showLabel={true} />);
+    it('should show icon when helpText is supplied', () => {
+      testRender({
+        ...defaultProps,
+        tooltipText: 'help',
+        showCharCount: true,
+      });
       const icon = screen.queryByRole('img', { hidden: true });
       expect(icon).toBeTruthy();
     });
 
-    it('should show info message when showInfoMessage is true', () => {
-      render(<TextInput {...props} showInfoMessage={true} infoMessage="Test message" />);
-      const message = screen.getByText('Test message');
+    it('should show info message when supplied', () => {
+      testRender({
+        ...defaultProps,
+        message: 'Info message',
+      });
+      const message = screen.getByText('Info message', {});
       expect(message).toBeTruthy();
     });
 
     it('should display character count when showCharCount is true', () => {
-      render(<TextInput {...props} showCharCount={true} value="Test" maxChars={10} />);
-      expect(screen.getByText('6 characters remaining')).toBeTruthy();
+      testRender({
+        ...defaultProps,
+        value: 'abc',
+        maxLength: 9,
+        showCharCount: true,
+      });
+      expect(screen.getByText('6 characters remaining', {})).toBeTruthy();
     });
 
-    it('should display help message when showHelpMessage is true', () => {
-      render(<TextInput {...props} showHelpMessage={true} helpMessage="This is a help message" />);
-      expect(screen.getByText('This is a help message')).toBeTruthy();
+    it('should display description when supplied', () => {
+      testRender({
+        ...defaultProps,
+        helpText: 'Description',
+        showCharCount: true,
+      });
+      expect(screen.getByText('Description', {})).toBeTruthy();
     });
   });
 
   describe('state changes', () => {
-    it('should change to Active state on focus', () => {
-      render(<TextInput {...props} />);
-      const input = screen.getByRole('textbox');
-      fireEvent.focus(input);
-      expect(input.classList.contains('border-colour-primary')).toBeTruthy();
+    it('should have default classes', () => {
+      testRender({
+        ...defaultProps,
+        value: 'foobar',
+      });
+      const input = screen.getByRole('textbox', {});
+      expect(input).toHaveClass(colours.borderOnSurfaceOutline);
+      expect(input).toHaveClass(
+        'focus:border-colour-primary focus:dark:border-colour-primary-dark',
+      );
     });
 
-    it('should change to Filled state when value is present', () => {
-      render(<TextInput {...props} value="Test" />);
-      const input = screen.getByRole('textbox');
-      expect(input.classList.contains('border-colour-onSurface-outline')).toBeTruthy();
-    });
-  });
-
-  describe('snapshot tests', () => {
-    it('renders default input correctly', () => {
-      const tree = renderer.create(<TextInput {...props} />).toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-
-    it('renders input with label and icon', () => {
-      const tree = renderer
-        .create(<TextInput {...props} showLabel={true} showIcon={true} />)
-        .toJSON();
-      expect(tree).toMatchSnapshot();
+    it('should have disabled classes', () => {
+      testRender({
+        ...defaultProps,
+        value: 'foobar',
+        isDisabled: true,
+      });
+      const input = screen.getByRole('textbox', {});
+      expect(input).toHaveClass(colours.borderOnSurfaceOutlineSubtle);
+      expect(input).not.toHaveClass(
+        'focus:border-colour-primary focus:dark:border-colour-primary-dark',
+      );
     });
 
-    it('renders input in error state', () => {
-      const tree = renderer
-        .create(
-          <TextInput {...props} state="Error" infoMessage="Error message" showInfoMessage={true} />,
-        )
-        .toJSON();
-      expect(tree).toMatchSnapshot();
+    it('should have error classes', () => {
+      testRender({
+        ...defaultProps,
+        value: 'foobar',
+        isValid: false,
+      });
+      const input = screen.getByRole('textbox', {});
+      expect(input).toHaveClass(colours.borderError);
+      expect(input).not.toHaveClass(
+        'focus:border-colour-primary focus:dark:border-colour-primary-dark',
+      );
     });
   });
 });

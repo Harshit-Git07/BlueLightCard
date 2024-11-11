@@ -37,10 +37,6 @@ const componentMeta: Meta<typeof PhoneNumberInput> = {
       control: 'text',
       description: '`string`: Help text to assist the user. (default: ``)',
     },
-    helpIcon: {
-      control: 'boolean',
-      description: '`boolean`: Whether to display a help icon. (default: `false`)',
-    },
     messageText: {
       control: 'text',
       description: '`string`: Additional message text. (default: ``)',
@@ -76,7 +72,12 @@ ClickableDropdown.args = {
 
 ClickableDropdown.decorators = [
   (Story) => (
-    <div style={{ height: '300px', margin: '0 auto' }}>
+    <div
+      style={{
+        height: '300px',
+        margin: '0 auto',
+      }}
+    >
       <Story />
     </div>
   ),
@@ -86,7 +87,6 @@ export const HelpTextWithMessage = DefaultTemplate.bind({});
 HelpTextWithMessage.args = {
   ...Default.args,
   helpText: 'Enter your phone number',
-  helpIcon: true,
   label: 'Label',
   messageText: 'Message',
   showErrors: true,

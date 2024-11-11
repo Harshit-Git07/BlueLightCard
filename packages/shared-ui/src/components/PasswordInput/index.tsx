@@ -1,6 +1,6 @@
-import { FC, useState, ChangeEvent, useId } from 'react';
+import { ChangeEvent, FC, useId, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faEye, faEyeSlash } from '@fortawesome/pro-solid-svg-icons';
+import { faEye, faEyeSlash, faInfoCircle } from '@fortawesome/pro-solid-svg-icons';
 import { borders, colours, fonts } from '../../tailwind/theme';
 import FloatingPlaceholder from '../FloatingPlaceholder';
 import PasswordRequirements from './components/PasswordRequirements';
@@ -98,25 +98,28 @@ const PasswordInput: FC<Props> = ({
       </p>
 
       <div className={classes.fieldWrapper}>
+        <input
+          className={`${classes.input}`}
+          id={`password-${componentId}`}
+          type={showPassword ? 'text' : 'password'}
+          onChange={onPasswordChange}
+          onFocus={onPasswordFocus}
+          onBlur={onPasswordBlur}
+          disabled={isDisabled}
+          aria-required="true"
+          aria-disabled={isDisabled}
+          aria-describedby={helpMessage ? `helpMessage-${componentId}` : undefined}
+          aria-invalid={isValid === false ? 'true' : undefined}
+        />
         <FloatingPlaceholder
-          text="Password"
-          targetId={`password-${componentId}`}
-          isFieldDisabled={isDisabled}
+          htmlFor={`password-${componentId}`}
+          hasValue={!!password}
+          isValid={isValid}
+          isDisabled={isDisabled}
         >
-          <input
-            className={`${classes.input}`}
-            id={`password-${componentId}`}
-            type={showPassword ? 'text' : 'password'}
-            onChange={onPasswordChange}
-            onFocus={onPasswordFocus}
-            onBlur={onPasswordBlur}
-            disabled={isDisabled}
-            aria-required="true"
-            aria-disabled={isDisabled}
-            aria-describedby={helpMessage ? `helpMessage-${componentId}` : undefined}
-            aria-invalid={isValid === false ? 'true' : undefined}
-          />
+          Password
         </FloatingPlaceholder>
+
         <button
           type="button"
           className={classes.eyeIconButton}

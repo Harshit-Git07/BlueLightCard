@@ -5,7 +5,6 @@ import { faChevronDown, faChevronUp } from '@fortawesome/pro-solid-svg-icons';
 import { faCircleBolt } from '@fortawesome/pro-duotone-svg-icons';
 import TextInput from '../../../TextInput';
 import Button from '../../../Button-V2';
-import { TextInputState } from '../../../TextInput/types';
 import { PromoCodeVariant } from '../../types';
 
 interface PromoCodeEntryProps {
@@ -41,15 +40,7 @@ const PromoCodeEntry: React.FC<PromoCodeEntryProps> = ({
   currentVariant,
   onToggle,
 }) => {
-  const getTextInputState = (): TextInputState => {
-    if (currentVariant === 'error' || errorMessage) {
-      return 'Error';
-    }
-    if (value) {
-      return 'Filled';
-    }
-    return 'Default';
-  };
+  const hasError = currentVariant === 'error' || errorMessage;
 
   return (
     <div className="px-3 py-2">
@@ -65,9 +56,12 @@ const PromoCodeEntry: React.FC<PromoCodeEntryProps> = ({
                   />
                 )}
 
-                <span className="text-colour-primary dark:text-colour-primary-dark font-typography-body font-typography-body-weight text-typography-body leading-typography-body transition-colors duration-200">
+                <label
+                  htmlFor="promoCodeEntry"
+                  className="text-colour-primary dark:text-colour-primary-dark font-typography-body font-typography-body-weight text-typography-body leading-typography-body transition-colors duration-200"
+                >
                   {label}
-                </span>
+                </label>
               </div>
               <FontAwesomeIcon
                 className={`w-3 h-3 text-colour-onSurface dark:text-colour-onSurface-dark transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
@@ -88,18 +82,15 @@ const PromoCodeEntry: React.FC<PromoCodeEntryProps> = ({
             <div className="flex gap-2 mt-2">
               <div className="flex-grow">
                 <TextInput
+                  id="promoCodeEntry"
                   name={name}
-                  state={getTextInputState()}
+                  isValid={!hasError}
                   value={value}
-                  maxChars={maxChars}
+                  maxLength={maxChars}
                   onChange={onChange}
                   onKeyDown={onKeyDown}
                   placeholder={placeholder}
-                  ariaLabel={'Promo code input'}
-                  showLabel={false}
-                  showIcon={false}
-                  infoMessage={errorMessage}
-                  showInfoMessage={currentVariant === 'error'}
+                  message={errorMessage}
                 />
               </div>
               <Button

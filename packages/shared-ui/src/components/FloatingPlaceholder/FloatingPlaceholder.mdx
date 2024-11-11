@@ -1,11 +1,7 @@
-import { Meta, Canvas, Controls, ComponentStatus } from "@storybook/blocks";
-import * as FloatingPlaceholder from "./FloatingPlaceholder.stories";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faInfoCircle,
-} from '@fortawesome/pro-solid-svg-icons';
+import { Canvas, Controls, Meta } from '@storybook/blocks'
+import * as FloatingPlaceholder from './FloatingPlaceholder.stories'
 
-<Meta of={FloatingPlaceholder} />
+<Meta of={FloatingPlaceholder}/>
 
 # FloatingPlaceholder
 
@@ -18,45 +14,48 @@ import {
 
 The FloatingPlaceholder is intended to replace the native `placeholder` attribute on `<input/>` elements to achieve the dynamic placement of the placeholder text when the field is active.
 
-<Canvas of={FloatingPlaceholder.Default} />
+<Canvas of={FloatingPlaceholder.Default}/>
 
 ## Props
 
-<Controls />
+<Controls/>
 
 ## State
 
 ### Default State
 
-<Canvas of={FloatingPlaceholder.Default} />
+<Canvas of={FloatingPlaceholder.Default}/>
 
 ### Disabled State
 
-<Canvas of={FloatingPlaceholder.Disabled} />
+<Canvas of={FloatingPlaceholder.Disabled}/>
 
 ## Implementation
 
 Usage example using jsx
 
+The class *peer* must be added to the input element
+
+The FloatingPlaceholder must be the next sibling of the input element
+
+Both should be wrapped in a class of `absolute | relative | fixed` etc
+
 ```jsx
 const FloatingPlaceholder: FC = () => {
+  const value = 'abc'
   return (
     <div className="relative">
-        <FloatingPlaceholder text="Placeholder" targetId="fieldName" isFieldDisabled={false}>
-          <input
-            className="w-full px-[16px] py-[12px]"
-            id="fieldName"
-            type="text"
-            disabled={false}
-          />
-        </FloatingPlaceholder>
-        <span className="absolute top-1/2 right-4 -translate-y-1/2">
-          <FontAwesomeIcon
-            icon={faInfoCircle}
-            className={`w-[16px] h-[16px]`}
-          />
-        </span>
-      </div>);
+      <input
+        className="w-full px-[16px] py-[12px] peer"
+        id="fieldName"
+        type="text"
+        disabled={false}
+        value={value}
+      />
+      <FloatingPlaceholder htmlFor="fieldName" isDisabled={false} isValid={true} hasValue={!!value}>
+        Placeholder
+      </FloatingPlaceholder>
+    </div>);
 };
 ```
 **NOTE:** a dynamic top-margin will need to be applied to the FloatingPlaceholder or wrapper element so that space above the transformed placeholder remains consistent.

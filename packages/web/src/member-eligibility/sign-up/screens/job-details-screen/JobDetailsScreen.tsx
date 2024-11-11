@@ -86,12 +86,8 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           )}
 
           {(employers?.length === 0 || eligibilityDetails.employer) && (
-            <>
-              <TextInput
-                className={'mt-[16px] w-full'}
-                placeholder={'Enter job title'}
-                onChange={onJobTitleChange}
-              />
+            <div className={'mt-[16px]'}>
+              <TextInput placeholder={'Enter job title'} onChange={onJobTitleChange} />
               {showPromoCode && (
                 <PromoCode
                   onApply={() => {}}
@@ -102,7 +98,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
                   value={promoCode}
                 />
               )}
-            </>
+            </div>
           )}
 
           <Button

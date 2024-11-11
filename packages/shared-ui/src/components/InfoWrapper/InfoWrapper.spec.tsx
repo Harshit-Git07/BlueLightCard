@@ -1,26 +1,21 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InfoWrapper from '.';
 import { ComponentProps } from 'react';
 
+const { getByText, getByRole, queryByRole, queryByLabelText, getByLabelText } = screen;
+
 describe('Info component', () => {
-  let props: ComponentProps<typeof InfoWrapper> = {};
-
-  beforeEach(() => {
-    props = {};
-  });
-
   it('should render component without error', () => {
     const { baseElement } = render(<InfoWrapper />);
     expect(baseElement).toBeTruthy();
   });
 
   it('should only render a label', () => {
-    props = {
+    const props: ComponentProps<typeof InfoWrapper> = {
       label: 'Example label',
     };
-
-    const { getByText, queryByRole, queryByLabelText } = render(<InfoWrapper {...props} />);
+    render(<InfoWrapper {...props} />);
 
     expect(getByText('Example label')).toBeInTheDocument();
     expect(queryByRole('p')).not.toBeInTheDocument();
@@ -28,11 +23,11 @@ describe('Info component', () => {
   });
 
   it('should only render a description', () => {
-    props = {
+    const props: ComponentProps<typeof InfoWrapper> = {
       description: 'Example description',
     };
 
-    const { getByText, queryByRole, queryByLabelText } = render(<InfoWrapper {...props} />);
+    render(<InfoWrapper {...props} />);
 
     expect(getByText('Example description')).toBeInTheDocument();
     expect(queryByRole('label')).not.toBeInTheDocument();
@@ -40,27 +35,25 @@ describe('Info component', () => {
   });
 
   it('should render an icon if the label present', () => {
-    props = {
+    const props: ComponentProps<typeof InfoWrapper> = {
       label: 'Example label',
-      helpIcon: true,
       helpText: 'Example help text',
     };
 
-    const { getByText, getByLabelText } = render(<InfoWrapper {...props} />);
+    render(<InfoWrapper {...props} />);
 
     expect(getByText('Example label')).toBeInTheDocument();
     expect(getByLabelText('information')).toBeInTheDocument();
   });
 
   it('should render label, help icon and description', () => {
-    props = {
+    const props: ComponentProps<typeof InfoWrapper> = {
       label: 'Example label',
-      helpIcon: true,
       helpText: 'Example help text',
       description: 'Example description',
     };
 
-    const { getByText, getByLabelText } = render(<InfoWrapper {...props} />);
+    render(<InfoWrapper {...props} />);
 
     expect(getByText('Example label')).toBeInTheDocument();
     expect(getByText('Example description')).toBeInTheDocument();
@@ -68,28 +61,26 @@ describe('Info component', () => {
   });
 
   it('should not render an icon if the label is empty/undefined', () => {
-    props = {
+    const props: ComponentProps<typeof InfoWrapper> = {
       label: '',
-      helpIcon: true,
       helpText: 'Example help text',
     };
 
-    const { queryByLabelText, queryByRole } = render(<InfoWrapper {...props} />);
+    render(<InfoWrapper {...props} />);
 
     expect(queryByRole('label')).not.toBeInTheDocument();
-    expect(queryByLabelText('information')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('information')).not.toBeInTheDocument();
   });
 
   it('should render a tooltip when a help icon is present and hovered over', async () => {
-    props = {
+    const props: ComponentProps<typeof InfoWrapper> = {
       label: 'Example label',
-      helpIcon: true,
       helpText: 'Example help text',
     };
 
-    const { getByLabelText, getByRole } = render(<InfoWrapper {...props} />);
-    const icon = getByLabelText('information');
-    const tooltip = getByRole('tooltip');
+    render(<InfoWrapper {...props} />);
+    const icon = getByLabelText('information', {});
+    const tooltip = getByRole('tooltip', {});
 
     expect(icon).toBeInTheDocument();
     expect(tooltip).toBeInTheDocument();
@@ -97,7 +88,7 @@ describe('Info component', () => {
   });
 
   it('should render children', () => {
-    const { getByRole } = render(
+    render(
       <InfoWrapper>
         <input role="textbox" type="text" />
       </InfoWrapper>,

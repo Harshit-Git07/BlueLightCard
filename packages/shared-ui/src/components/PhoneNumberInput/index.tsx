@@ -1,5 +1,14 @@
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
-import { ChangeEvent, ChangeEventHandler, FC, ReactNode, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  FC,
+  ReactNode,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import {
   CountryIso2,
   defaultCountries,
@@ -12,6 +21,7 @@ import InfoWrapper from '../InfoWrapper';
 import { env } from '../../env';
 
 type Props = {
+  id?: string;
   disabled?: boolean;
   showErrors?: boolean;
   defaultCountry?: string;
@@ -19,7 +29,6 @@ type Props = {
   invalidErrorMessage?: string;
   label?: string;
   helpText?: string;
-  helpIcon?: boolean;
   messageText?: string;
   isSelectable?: boolean;
   onChange?: (dialCode: string, phoneNumber: string) => void;
@@ -46,6 +55,7 @@ export const getLocalCountryCode = (): string => {
 };
 
 const PhoneNumberInputDataManager: FC<Props> = ({
+  id,
   disabled,
   showErrors = false,
   defaultCountry,
@@ -53,7 +63,6 @@ const PhoneNumberInputDataManager: FC<Props> = ({
   invalidErrorMessage = 'Please enter a valid phone number',
   label = '',
   helpText = '',
-  helpIcon = false,
   messageText,
   isSelectable = false,
   onChange,
@@ -71,15 +80,20 @@ const PhoneNumberInputDataManager: FC<Props> = ({
   });
 
   const [dialCode, setDialCode] = useState(`+${country.dialCode}`);
+  const randomId = useId();
+  const elementId = id ?? randomId;
+
+  console.log({ PhoneNumberInputDataManager: elementId });
 
   return (
     <PhoneNumberInputWrapper>
       <InfoWrapper
+        htmlFor={elementId}
         label={disabled ? '' : label}
         helpText={disabled ? '' : helpText}
-        helpIcon={disabled ? false : helpIcon}
       >
         <PhoneNumberInput
+          id={elementId}
           disabled={disabled}
           dialCode={dialCode}
           setDialCode={setDialCode}
@@ -106,6 +120,7 @@ const PhoneNumberInputWrapper: FC<WrapperProps> = ({ children }) => (
 );
 
 type InputProps = {
+  id?: string;
   dialCode: string;
   setDialCode: (dialCode: string) => void;
   selectedCountry: ParsedCountry;
@@ -122,6 +137,7 @@ type InputProps = {
 };
 
 const PhoneNumberInput: FC<InputProps> = ({
+  id,
   dialCode,
   setDialCode,
   selectedCountry,
@@ -280,6 +296,8 @@ const PhoneNumberInput: FC<InputProps> = ({
     return null;
   };
 
+  console.log({ PhoneNumberInput: id });
+
   return (
     <div className="relative" ref={containerRef}>
       <span
@@ -314,6 +332,7 @@ const PhoneNumberInput: FC<InputProps> = ({
           onFocus={handleInputFocus}
         />
         <input
+          id={id}
           className={`outline-none w-full py-3 mr-2 rounded 
             ${disabled && 'text-colour-onSurface-disabled'} 
             text-typography-body-large font-typography-body-large-weight leading-typography-body-large font-typography-body-large

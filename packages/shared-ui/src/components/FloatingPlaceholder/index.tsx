@@ -1,73 +1,51 @@
-import React, { useState, cloneElement } from 'react';
-import { colours, fonts } from 'src/tailwind/theme';
+import React, { FC, ReactNode } from 'react';
+import { colours, fonts } from '../../tailwind/theme';
+import { conditionalStrings } from '../../utils/conditionalStrings';
 
 export type FloatingPlaceholderProps = {
-  text: string;
-  targetId: string;
-  children: React.ReactElement;
-  isFieldDisabled: boolean;
+  htmlFor: string;
+  children: ReactNode;
+  hasValue: boolean;
+  isDisabled?: boolean;
+  isValid?: boolean;
 };
 
-/**
- * @param text {string} The placeholder text
- * @param targetId {string} The ID of the input that this placeholder is for. Use `useId` to ensure uniqueness when building multi-input forms
- * @param isFieldDisabled {boolean} whether or not the field this component wraps is disabled or not
- */
-const FloatingPlaceholder: React.FC<FloatingPlaceholderProps> = ({
-  text,
-  targetId,
+const peerFocusBodyLight = [
+  'peer-focus:font-typography-body-light',
+  'peer-focus:font-typography-body-light-weight',
+  'peer-focus:text-typography-body-light',
+  'peer-focus:leading-typography-body-light',
+  'peer-focus:tracking-typography-body-light',
+].join(' ');
+
+const FloatingPlaceholder: FC<FloatingPlaceholderProps> = ({
+  htmlFor,
+  hasValue,
   children,
-  isFieldDisabled,
+  isDisabled = false,
+  isValid = false,
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [hasValue, setHasValue] = useState(false);
+  const validButDisabled = isDisabled && isValid;
+  const validAndEnabled = !isDisabled && isValid;
 
-  const handleFocus = () => {
-    setIsFocused(true);
-    if (children.props.onFocus) {
-      children.props.onFocus();
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    setIsFocused(false);
-    setHasValue(!!e.target.value);
-    if (children.props.onBlur) {
-      children.props.onBlur(e);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHasValue(!!e.target.value);
-    if (children.props.onChange) {
-      children.props.onChange(e);
-    }
-  };
-
-  const clonedChild = cloneElement(children, {
-    onFocus: handleFocus,
-    onBlur: handleBlur,
-    onChange: handleChange,
-    id: targetId,
+  const placeHolderClasses = conditionalStrings({
+    ['left-4 -translate-y-1/2 absolute transition-all pointer-events-none']: true,
+    [`top-[25px] peer-focus:top-4 ${fonts.body} ${peerFocusBodyLight} peer-focus:text-xs`]:
+      !hasValue,
+    [`top-4 text-xs ${fonts.bodyLight}`]: hasValue,
+    [colours.textOnSurfaceDisabled]: validButDisabled,
+    [colours.textOnSurfaceSubtle]: validAndEnabled,
+    [colours.textError]: !isValid,
   });
-
-  const classes = {
-    div: 'relative',
-    label: `absolute left-[16px] transition-all duration-200 ease-in-out pointer-events-none ${fonts.body} ${isFieldDisabled ? colours.textOnSurfaceDisabled : colours.textOnSurfaceSubtle} ${isFocused || hasValue ? `top-[4px] text-xs ${fonts.bodyLight}` : 'top-1/2 -translate-y-1/2 py-[12px]'}`,
-  };
-
   return (
-    <div className={classes.div}>
-      {clonedChild}
-      <label
-        htmlFor={targetId}
-        className={classes.label}
-        aria-hidden={isFieldDisabled}
-        aria-disabled={isFieldDisabled}
-      >
-        {text}
-      </label>
-    </div>
+    <label
+      htmlFor={htmlFor}
+      className={placeHolderClasses}
+      aria-disabled={isDisabled}
+      aria-hidden={isDisabled}
+    >
+      {children}
+    </label>
   );
 };
 

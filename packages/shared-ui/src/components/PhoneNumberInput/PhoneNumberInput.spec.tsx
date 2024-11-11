@@ -1,10 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PhoneNumberInputDataManager, { getLocalCountryCode } from './';
 import { env } from '../../env';
 
 describe('PhoneNumberInput', () => {
   const defaultProps = {
+    id: 'my-phone-number',
     disabled: false,
     showErrors: false,
     defaultCountry: 'us',
@@ -20,22 +21,16 @@ describe('PhoneNumberInput', () => {
     isSelectable: true,
   };
 
-  it('matches snapshots', () => {
-    const { container } = render(<PhoneNumberInputDataManager {...defaultProps} />);
-
-    expect(container).toMatchSnapshot();
-  });
-
   it('should render correctly', () => {
     render(<PhoneNumberInputDataManager {...defaultProps} />);
-    const label = screen.getByLabelText(/Phone Number/i);
+    const label = screen.getByLabelText(/Phone Number/i, {});
     expect(label).toBeInTheDocument();
   });
 
   it('should render input fields with initial values', () => {
     render(<PhoneNumberInputDataManager {...defaultProps} />);
-    const dialCodeInput = screen.getByPlaceholderText('+XX');
-    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX');
+    const dialCodeInput = screen.getByPlaceholderText('+XX', {});
+    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX', {});
 
     expect(dialCodeInput).toBeInTheDocument();
     expect(phoneNumberInput).toBeInTheDocument();
@@ -44,7 +39,7 @@ describe('PhoneNumberInput', () => {
 
   it('should handle phone number change', () => {
     render(<PhoneNumberInputDataManager {...defaultProps} />);
-    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX');
+    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX', {});
 
     fireEvent.change(phoneNumberInput, { target: { value: '1234567890' } });
     expect(phoneNumberInput).toHaveValue('(123) 456-7890');
@@ -52,27 +47,27 @@ describe('PhoneNumberInput', () => {
 
   it('should show error when phone number is invalid', () => {
     render(<PhoneNumberInputDataManager {...defaultProps} showErrors={true} />);
-    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX');
+    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX', {});
 
     fireEvent.change(phoneNumberInput, { target: { value: '123' } });
     fireEvent.blur(phoneNumberInput);
 
-    expect(screen.getByText(/Please enter a valid phone number/i)).toBeInTheDocument();
+    expect(screen.getByText(/Please enter a valid phone number/i, {})).toBeInTheDocument();
   });
 
   it('should show empty error message when no phone number is entered', () => {
     render(<PhoneNumberInputDataManager {...defaultProps} showErrors={true} />);
-    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX');
+    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX', {});
 
     fireEvent.change(phoneNumberInput, { target: { value: '' } });
     fireEvent.blur(phoneNumberInput);
 
-    expect(screen.getByText(/Please enter a phone number/i)).toBeInTheDocument();
+    expect(screen.getByText(/Please enter a phone number/i, {})).toBeInTheDocument();
   });
 
   it('should handle dial code change', () => {
     render(<PhoneNumberInputDataManager {...defaultProps} />);
-    const dialCodeInput = screen.getByPlaceholderText('+XX');
+    const dialCodeInput = screen.getByPlaceholderText('+XX', {});
 
     fireEvent.change(dialCodeInput, { target: { value: '+44' } });
     expect(dialCodeInput).toHaveValue('+44');
@@ -80,7 +75,7 @@ describe('PhoneNumberInput', () => {
 
   it('should not allow interaction when disabled', () => {
     render(<PhoneNumberInputDataManager {...defaultProps} disabled={true} />);
-    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX');
+    const phoneNumberInput = screen.getByPlaceholderText('XXXXXXXXXX', {});
     expect(phoneNumberInput).toBeDisabled();
   });
 
@@ -91,7 +86,7 @@ describe('PhoneNumberInput', () => {
 
     fireEvent.click(countryButton);
 
-    expect(screen.getByLabelText(/Country selector/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Country selector/i, {})).toBeInTheDocument();
   });
 
   it('should render country dropdown when isSelectable is true', () => {
@@ -117,14 +112,20 @@ describe('PhoneNumberInput', () => {
 
     it('returns "gb" for APP_BRAND "blc-uk"', () => {
       env.APP_BRAND = 'blc-uk';
-      Object.defineProperty(navigator, 'language', { value: 'en-GB', configurable: true });
+      Object.defineProperty(navigator, 'language', {
+        value: 'en-GB',
+        configurable: true,
+      });
 
       expect(getLocalCountryCode()).toBe('gb');
     });
 
     it('returns "au" for APP_BRAND "blc-au"', () => {
       env.APP_BRAND = 'blc-au';
-      Object.defineProperty(navigator, 'language', { value: 'en-AU', configurable: true });
+      Object.defineProperty(navigator, 'language', {
+        value: 'en-AU',
+        configurable: true,
+      });
 
       expect(getLocalCountryCode()).toBe('au');
     });

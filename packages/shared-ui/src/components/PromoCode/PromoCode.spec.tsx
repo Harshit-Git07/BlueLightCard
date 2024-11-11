@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PromoCode from './index';
 
@@ -12,7 +12,7 @@ describe('PromoCode component', () => {
     it('should render component without error', () => {
       render(<PromoCode {...defaultProps} />);
 
-      expect(screen.getByText('Add your promo code')).toBeInTheDocument();
+      expect(screen.getByText('Add your promo code', {})).toBeInTheDocument();
     });
   });
 
@@ -20,7 +20,7 @@ describe('PromoCode component', () => {
     it('should toggle open state when clicked', () => {
       const onStateChange = jest.fn();
       render(<PromoCode {...defaultProps} onStateChange={onStateChange} />);
-      const toggleButton = screen.getByText('Add your promo code');
+      const toggleButton = screen.getByText('Add your promo code', {});
 
       fireEvent.click(toggleButton);
 
@@ -29,17 +29,17 @@ describe('PromoCode component', () => {
 
     it('should call onApply when Apply button is clicked', () => {
       render(<PromoCode {...defaultProps} variant="open" />);
-      const applyButton = screen.getByText('Apply');
+      const applyButton = screen.getByText('Apply', {});
 
       fireEvent.click(applyButton);
 
       expect(defaultProps.onApply).toHaveBeenCalled();
     });
 
-    it('should call onChange when input value changes', () => {
+    it('should call onChange when input value changes', async () => {
       const onChange = jest.fn();
       render(<PromoCode {...defaultProps} variant="open" onChange={onChange} />);
-      const input = screen.getByLabelText('Promo code input');
+      const input = screen.getByLabelText('Add your promo code', {});
 
       fireEvent.change(input, { target: { value: 'TEST123' } });
 
@@ -58,7 +58,7 @@ describe('PromoCode component', () => {
           onStateChange={onStateChangeMock}
         />,
       );
-      const removeButton = screen.getByText('Remove');
+      const removeButton = screen.getByText('Remove', {});
 
       fireEvent.click(removeButton);
 
@@ -73,7 +73,7 @@ describe('PromoCode component', () => {
 
       render(<PromoCode {...defaultProps} infoMessage={infoMessage} />);
 
-      expect(screen.getByText(infoMessage)).toBeInTheDocument();
+      expect(screen.getByText(infoMessage, {})).toBeInTheDocument();
     });
 
     it('should show error message when in error state', () => {
@@ -81,7 +81,7 @@ describe('PromoCode component', () => {
 
       render(<PromoCode {...defaultProps} variant="error" errorMessage={errorMessage} />);
 
-      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+      expect(screen.getByText(errorMessage, {})).toBeInTheDocument();
     });
 
     it('should show success message in success state', () => {
@@ -89,7 +89,7 @@ describe('PromoCode component', () => {
 
       render(<PromoCode {...defaultProps} variant="success" value={value} />);
 
-      expect(screen.getByText('ID Upload Skipped!')).toBeInTheDocument();
+      expect(screen.getByText('ID Upload Skipped!', {})).toBeInTheDocument();
     });
 
     it('should show icon when icon prop is true', () => {
@@ -111,13 +111,13 @@ describe('PromoCode component', () => {
     it('should be open when variant is "open"', () => {
       render(<PromoCode {...defaultProps} variant="open" />);
 
-      expect(screen.getByLabelText('Promo code input')).toBeInTheDocument();
+      expect(screen.getByLabelText('Add your promo code', {})).toBeInTheDocument();
     });
 
     it('should be open when variant is "error"', () => {
       render(<PromoCode {...defaultProps} variant="error" />);
 
-      expect(screen.getByLabelText('Promo code input')).toBeInTheDocument();
+      expect(screen.getByLabelText('Add your promo code', {})).toBeInTheDocument();
     });
 
     it('should show success state when variant is "success"', () => {
@@ -125,8 +125,8 @@ describe('PromoCode component', () => {
 
       render(<PromoCode {...defaultProps} variant="success" value={value} />);
 
-      expect(screen.getByText(value)).toBeInTheDocument();
-      expect(screen.getByText('Remove')).toBeInTheDocument();
+      expect(screen.getByText(value, {})).toBeInTheDocument();
+      expect(screen.getByText('Remove', {})).toBeInTheDocument();
     });
   });
 
@@ -141,8 +141,9 @@ describe('PromoCode component', () => {
     it('should have accessible input when open', () => {
       render(<PromoCode {...defaultProps} variant="open" />);
 
-      const input = screen.getByRole('textbox');
-      expect(input).toHaveAttribute('aria-label', 'Promo code input');
+      const input = screen.getByLabelText('Add your promo code', {});
+      expect(input).toBeInTheDocument();
+      expect(input).toBeVisible();
     });
 
     it('should have accessible apply button when open', () => {
@@ -157,7 +158,7 @@ describe('PromoCode component', () => {
     it('should use default label when not provided', () => {
       render(<PromoCode {...defaultProps} />);
 
-      expect(screen.getByText('Add your promo code')).toBeInTheDocument();
+      expect(screen.getByText('Add your promo code', {})).toBeInTheDocument();
     });
 
     it('should not show promo code icon by default', () => {

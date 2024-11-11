@@ -77,14 +77,17 @@ const ListSelector: FC<ListSelectorProps> = ({
           <h4 className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal">
             {title}
           </h4>
+
           {tag && <span>{tag}</span>}
         </div>
+
         {description && (
           <p className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left">
             {description}
           </p>
         )}
       </div>
+
       {showTrailingIcon && (
         <FontAwesomeIcon
           icon={currentState === ListSelectorState.Selected ? faPen : faArrowRight}

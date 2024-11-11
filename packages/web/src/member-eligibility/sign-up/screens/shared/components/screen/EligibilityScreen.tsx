@@ -7,7 +7,7 @@ interface Props extends PropsWithChildren {
   'data-testid'?: string;
 }
 
-export const EligibilityScreen: FC<Props> = ({ className, children, ...props }) => (
+export const EligibilityScreen: FC<Props> = ({ className = '', children, ...props }) => (
   <div
     className={`${className} min-h-screen flex flex-col justify-between`}
     data-testid={props['data-testid']}

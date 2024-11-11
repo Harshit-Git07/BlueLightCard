@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { EligibilityDetailsAddress } from '@/root/src/member-eligibility/sign-up/hooks/use-eligibility-details/types/EligibilityDetails';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
 import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
@@ -46,23 +46,26 @@ export const DeliveryAddressScreen: FC<VerifyEligibilityScreenProps> = ({
     ];
   }, [eligibilityDetails, setEligibilityDetails]);
 
-  const onBack = useCallback(() => {
+  const onBack = useMemo(() => {
     if (!eligibilityDetails.canSkipIdVerification || !eligibilityDetails.canSkipPayment) {
-      return;
+      return undefined;
     }
 
     if (eligibilityDetails.canSkipIdVerification) {
-      setEligibilityDetails({
-        ...eligibilityDetails,
-        currentScreen: 'Job Details Screen',
-      });
-      return;
+      return () => {
+        setEligibilityDetails({
+          ...eligibilityDetails,
+          currentScreen: 'Job Details Screen',
+        });
+      };
     }
 
-    setEligibilityDetails({
-      ...eligibilityDetails,
-      currentScreen: 'Verification Method Screen',
-    });
+    return () => {
+      setEligibilityDetails({
+        ...eligibilityDetails,
+        currentScreen: 'Verification Method Screen',
+      });
+    };
   }, [eligibilityDetails, setEligibilityDetails]);
 
   return (

@@ -5,7 +5,7 @@ export enum InfoCardLayout {
 
 export interface InfoCardProps {
   ariaLabel: string;
-  id: string;
+  id?: string;
   title?: string;
   text?: string;
   textAlign?: 'text-center' | 'text-left' | 'text-right';

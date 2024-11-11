@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { getCopyrightText, getNavigationItems } from './helper';
+import { useNavigationItems } from './hooks/UseNavigationItems';
+import { useCopyrightText } from './hooks/UseCopyrightText';
 
 const MinimalFooter = () => {
-  const copyrightText = getCopyrightText(),
-    navigationItems = getNavigationItems();
+  const copyrightText = useCopyrightText();
+  const navigationItems = useNavigationItems();
 
   //changing the line height if uneven number of navigation items
   const lineHeight =
@@ -20,6 +21,7 @@ const MinimalFooter = () => {
         >
           {copyrightText}
         </p>
+
         <div className="grid grid-cols-2 justify-items-center w-full text-center md:grid-cols-none md:grid-rows-none md:flex md:flex-row md:justify-center lg:justify-end  md:gap-4">
           {navigationItems.map((item, index) => (
             <Link

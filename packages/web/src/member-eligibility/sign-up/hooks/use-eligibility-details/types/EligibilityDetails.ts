@@ -9,7 +9,8 @@ export interface EligibilityDetails {
   canSkipIdVerification?: boolean;
   canSkipPayment?: boolean;
   emailVerification?: string;
-  fileVerification?: Blob;
+  fileVerificationType?: string | [string, string];
+  fileVerification?: Blob[];
   address?: EligibilityDetailsAddress;
 }
 

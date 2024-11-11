@@ -1,11 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import FileSelectionBody, { Props } from '.';
+import FileSelectionBody from '.';
 import { userEvent } from '@testing-library/user-event';
+import { FileSelectionProps } from './types';
 
 const mockFilesSelected = jest.fn();
 describe('FileSelectionBody component', () => {
-  const defaultProps: Props = {
+  const defaultProps: FileSelectionProps = {
     onFilesSelected: mockFilesSelected,
   };
   const pngFile = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' }); // react testing lib docs

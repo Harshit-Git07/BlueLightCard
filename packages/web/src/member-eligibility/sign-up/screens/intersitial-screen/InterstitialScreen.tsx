@@ -55,7 +55,7 @@ export const InterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
           before you can start saving
         </div>
 
-        <div className="flex flex-col md:w-[450px] sm:w-[400px] gap-[24px]">
+        <div className="flex flex-col self-center md:w-[450px] sm:w-[400px] gap-[24px]">
           <Card
             data-testid="verify-eligibility-card"
             cardTitle="Verify Eligibility"

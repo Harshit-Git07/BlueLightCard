@@ -1,11 +1,16 @@
 import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
 import { SignupEligibilityFlow } from './SignupEligibilityFlow';
 
 jest.mock('react-use');
 
+const pngFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
+const pdfFile = new File(['(⌐□_□)'], 'test.pdf', { type: 'application/pdf' });
+
 // TODO: Test back button behaviour too
 describe('given a signing up member that needs to prove their eligibility to use the service', () => {
+  // TODO: Will need another flow here for providing the "skip to address / payment flow"
   describe("given they haven't submitted enough details to skip straight to delivery address", () => {
     beforeEach(() => {
       render(<SignupEligibilityFlow />);
@@ -62,7 +67,6 @@ describe('given a signing up member that needs to prove their eligibility to use
           expect(jobDetailsScreen).toBeInTheDocument();
         });
 
-        // TODO: Multi-ID tests
         describe('when the job details screen is completed, and single id verification is required', () => {
           // TODO: Fill this in with real behaviour once end to end flow is implemented
           beforeEach(async () => {
@@ -74,7 +78,7 @@ describe('given a signing up member that needs to prove their eligibility to use
             act(() => nextButton.click());
           });
 
-          it('should navigate to the verify eligibility screen', () => {
+          it('should navigate to the method selection screen', () => {
             const title = screen.getByTestId('fuzzy-frontend-title');
             expect(title.textContent).toEqual('Verification Method Screen');
           });
@@ -145,20 +149,23 @@ describe('given a signing up member that needs to prove their eligibility to use
           });
 
           describe('given the signing-up member wants to verify via file upload', () => {
-            describe('when they select the email verification method', () => {
+            describe('when they select the file verification method', () => {
               beforeEach(async () => {
                 const nextButton = screen.getByTestId('next-button-2');
                 act(() => nextButton.click());
               });
 
               it('should navigate to the file upload screen', () => {
-                const title = screen.getByTestId('fuzzy-frontend-title');
-                expect(title.textContent).toEqual('File Upload Verification Screen');
+                const title = screen.getByText('Upload the required ID to verify your eligibility');
+                expect(title).toBeInTheDocument();
               });
 
               describe('when they upload a file', () => {
                 beforeEach(async () => {
-                  const nextButton = screen.getByTestId('next-button-1');
+                  const uploadButton = screen.getByLabelText('Choose file');
+                  await userEvent.upload(uploadButton, pngFile);
+
+                  const nextButton = screen.getByText('Submit ID');
                   act(() => nextButton.click());
                 });
 
@@ -190,6 +197,74 @@ describe('given a signing up member that needs to prove their eligibility to use
                         'Success Screen (really a model, not a screen)'
                       );
                     });
+                  });
+                });
+              });
+            });
+          });
+        });
+
+        describe('when the job details screen is completed, and multi-id verification is required', () => {
+          beforeEach(async () => {
+            fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+            const nextButton = screen.getByTestId('next-button-2');
+            act(() => nextButton.click());
+          });
+
+          it('should navigate to the method selection screen', () => {
+            const title = screen.getByTestId('fuzzy-frontend-title');
+            expect(title.textContent).toEqual('Verification Method Screen');
+          });
+
+          describe('given the signing-up member has selected a secondary file verification method', () => {
+            beforeEach(async () => {
+              const nextButton = screen.getByTestId('next-button-1');
+              act(() => nextButton.click());
+            });
+
+            it('should navigate to the file upload screen', () => {
+              const title = screen.getByText('Upload the required ID to verify your eligibility');
+              expect(title).toBeInTheDocument();
+            });
+
+            describe('when they upload a file', () => {
+              beforeEach(async () => {
+                const uploadButton = screen.getByLabelText('Choose file');
+
+                await userEvent.upload(uploadButton, pngFile);
+                await userEvent.upload(uploadButton, pdfFile);
+
+                const nextButton = screen.getByText('Submit ID');
+                act(() => nextButton.click());
+              });
+
+              it('should navigate to the delivery address screen', () => {
+                const title = screen.getByTestId('fuzzy-frontend-title');
+                expect(title.textContent).toEqual('Delivery Address Screen');
+              });
+
+              describe('when they submit their address', () => {
+                beforeEach(async () => {
+                  const nextButton = screen.getByTestId('next-button-1');
+                  act(() => nextButton.click());
+                });
+
+                it('should navigate to the payment screen', () => {
+                  const title = screen.getByTestId('fuzzy-frontend-title');
+                  expect(title.textContent).toEqual('Payment Screen');
+                });
+
+                describe('when they submit their payment details', () => {
+                  beforeEach(async () => {
+                    const nextButton = screen.getByTestId('next-button-1');
+                    act(() => nextButton.click());
+                  });
+
+                  it('should navigate to the success screen', () => {
+                    const title = screen.getByTestId('fuzzy-frontend-title');
+                    expect(title.textContent).toEqual(
+                      'Success Screen (really a model, not a screen)'
+                    );
                   });
                 });
               });

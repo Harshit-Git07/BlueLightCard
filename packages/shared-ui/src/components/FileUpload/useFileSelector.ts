@@ -1,17 +1,37 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FileInfo } from './types';
 
-export const useFileSelector = () => {
-  const [selectedFiles, setSelectedFiles] = useState<Array<FileInfo>>([]);
+interface FileSelector {
+  selectedFiles: FileInfo[];
+  addFiles: AddFiles;
+  updateFile: UpdateFiles;
+  removeFiles: RemoveFiles;
+}
 
-  const addFiles = (filesToAdd: FileInfo[]) =>
-    setSelectedFiles((prevState) => [...prevState, ...filesToAdd]);
+type AddFiles = (filesToAdd: FileInfo[]) => void;
+type UpdateFiles = (fileId: string, newFile: FileInfo) => void;
+type RemoveFiles = (fileIdsToRemove: string[]) => void;
 
-  const updateFile = (fileId: string, newFile: FileInfo) =>
-    setSelectedFiles((prevState) => prevState.map((file) => (file.id === fileId ? newFile : file)));
+export function useFileSelector(): FileSelector {
+  const [selectedFiles, setSelectedFiles] = useState<FileInfo[]>([]);
 
-  const removeFiles = (fileIdsToRemove: string[]) =>
-    setSelectedFiles((prevState) => prevState.filter((file) => !fileIdsToRemove.includes(file.id)));
+  const addFiles: AddFiles = useCallback((filesToAdd) => {
+    setSelectedFiles((files) => [...files, ...filesToAdd]);
+  }, []);
+
+  const updateFile: UpdateFiles = useCallback((fileId, updatedFile) => {
+    setSelectedFiles((files) => {
+      return files.map((file) => {
+        return file.id === fileId ? updatedFile : file;
+      });
+    });
+  }, []);
+
+  const removeFiles: RemoveFiles = useCallback((fileIdsToRemove) => {
+    setSelectedFiles((files) => {
+      return files.filter((file) => !fileIdsToRemove.includes(file.id));
+    });
+  }, []);
 
   return {
     selectedFiles,
@@ -19,4 +39,4 @@ export const useFileSelector = () => {
     updateFile,
     removeFiles,
   };
-};
+}

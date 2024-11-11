@@ -12,7 +12,7 @@ export interface ListSelectorProps {
   state?: ListSelectorState;
   onClick?: () => void;
   tag?: ReactNode;
-  description?: string;
+  description?: ReactNode;
   showTrailingIcon?: boolean;
   className?: string;
 }

@@ -13,6 +13,7 @@ const Alert: FC<AlertProps> = ({
   iconAccentColor,
   alertBackgroundColor,
   children,
+  isFullWidth,
   ...props
 }) => {
   const [visible, setVisible] = useState(true);
@@ -40,7 +41,7 @@ const Alert: FC<AlertProps> = ({
       iconSize: 'pt-1 tablet:pt-[0px] tablet:text-[24px]',
     },
     Inline: {
-      fullWidth: 'mx-auto',
+      fullWidth: isFullWidth ? 'w-full' : 'mx-auto',
       variant: 'relative  px-[0.75rem] py-[0.75rem]',
       title:
         'font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold  ',

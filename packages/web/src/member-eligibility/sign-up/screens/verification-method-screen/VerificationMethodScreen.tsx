@@ -24,6 +24,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
             setEligibilityDetails({
               ...eligibilityDetails,
               currentScreen: 'File Upload Verification Screen',
+              fileVerificationType: ['Work Contract', 'Bank Statement'],
             });
           },
           text: 'Go to "File Upload Verification" screen',
@@ -46,6 +47,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
           setEligibilityDetails({
             ...eligibilityDetails,
             currentScreen: 'File Upload Verification Screen',
+            fileVerificationType: 'Work Contract',
           });
         },
         text: 'Go to "File Upload Verification" screen',

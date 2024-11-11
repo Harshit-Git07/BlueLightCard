@@ -10,12 +10,33 @@ const componentMeta: Meta<typeof FileUploadVerificationScreen> = {
   },
 };
 
-const ScreenTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
-  const eligibilityDetailsState = useEligibilityDetails();
+const SingleIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
+  const eligibilityDetailsState = useEligibilityDetails({
+    currentScreen: 'File Upload Verification Screen',
+    employmentStatus: 'Employed',
+    organisation: 'NHS',
+    employer: 'Abbey Hospitals',
+    jobTitle: 'Nurse',
+    fileVerificationType: 'Work Contract',
+  });
 
   return <FileUploadVerificationScreen eligibilityDetailsState={eligibilityDetailsState} />;
 };
+export const SingleId = SingleIdTemplate.bind({});
 
-export const Screen = ScreenTemplate.bind({});
+const MultiIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
+  const eligibilityDetailsState = useEligibilityDetails({
+    currentScreen: 'File Upload Verification Screen',
+    employmentStatus: 'Employed',
+    organisation: 'NHS',
+    employer: 'Abbey Hospitals',
+    jobTitle: 'Nurse',
+    requireMultipleIds: true,
+    fileVerificationType: ['Work Contract', 'Bank Statement'],
+  });
+
+  return <FileUploadVerificationScreen eligibilityDetailsState={eligibilityDetailsState} />;
+};
+export const MultiId = MultiIdTemplate.bind({});
 
 export default componentMeta;

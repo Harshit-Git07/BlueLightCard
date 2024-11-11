@@ -86,23 +86,6 @@ describe('Alert Component', () => {
     expect(screen.queryByText('Error!')).toBeNull();
   });
 
-  test('renders full width alert', () => {
-    render(
-      <Alert
-        variant="Banner"
-        state="Success"
-        title="Full Width Alert!"
-        subtext={<p>This alert takes the full width.</p>}
-        isFullWidth={true}
-      />,
-    );
-
-    const bannerElement = screen.getByTestId('alertBanner');
-    expect(bannerElement).toBeInTheDocument();
-    const alert = screen.getByText('Full Width Alert!');
-    expect(alert).toHaveClass('w-full');
-  });
-
   const iconTests: Array<{ state: Exclude<State, 'Default'>; expectedIcon: IconDefinition }> = [
     { state: 'Success', expectedIcon: fas.faCheckCircle },
     { state: 'Info', expectedIcon: fas.faInfoCircle },
@@ -217,6 +200,23 @@ describe('Alert Component', () => {
 
     const icon = screen.getByTestId('icon');
     expect(icon).toHaveAttribute('data-icon', 'circle');
+  });
+
+  test('renders full width alert when inline', () => {
+    render(
+      <Alert
+        variant="Inline"
+        state="Success"
+        title="Full Width Alert!"
+        subtext={<p>This alert takes the full width.</p>}
+        isFullWidth
+      />,
+    );
+
+    const bannerElement = screen.getByTestId('alertInline');
+    expect(bannerElement).toBeInTheDocument();
+    const alert = screen.getByText('Full Width Alert!');
+    expect(alert).toHaveClass('w-full');
   });
 
   test('renders with custom background color', () => {

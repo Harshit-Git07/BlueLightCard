@@ -1,18 +1,12 @@
 import { FC, DragEvent, ChangeEvent } from 'react';
 import FileSelectionDragAndDropWrapper from './DragAndDropWrapper';
+import { FileSelectionProps } from './types';
 
 export const defaultFileTypes = ['image/png', 'image/jpeg', 'application/pdf'];
 export const defaultMaxUploads = 3;
 export const defaultMaxFileSize = 2e7;
 
-export type Props = {
-  onFilesSelected: (files: File[]) => void;
-  disabled?: boolean;
-  allowedFileTypes?: string[]; // e.g. ['image/png', 'image/jpeg']
-  maxFileSize?: number;
-};
-
-const FileSelectionBody: FC<Props> = ({
+const FileSelectionBody: FC<FileSelectionProps> = ({
   onFilesSelected,
   disabled = false,
   allowedFileTypes = defaultFileTypes,

@@ -1,57 +1,69 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/sign-up/screens/shared/types/VerifyEligibilityScreenProps';
-import { FuzzyFrontend } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
-import { FuzzyFrontendButtonProps } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
+import { EligibilityScreen } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/EligibilityScreen';
+import { EligibilityBody } from '@/root/src/member-eligibility/sign-up/screens/shared/components/body/EligibilityBody';
+import { EligibilityHeading } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/components/EligibilityHeading';
+import Button from '@bluelightcard/shared-ui/components/Button-V2';
+import { ThemeVariant } from '@bluelightcard/shared-ui/types';
+import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
+import { useCountDownInSeconds } from '@/root/src/member-eligibility/sign-up/screens/work-email-retry-screen/hooks/UseCountDownInSecs';
+import { useOnEditEmail } from '@/root/src/member-eligibility/sign-up/screens/work-email-retry-screen/hooks/UseOnEditEmail';
+import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/work-email-retry-screen/hooks/UseFuzzyFrontEndButtons';
+import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 
 export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
-  const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
+  const [eligibilityDetails] = eligibilityDetailsState;
+  const { formattedTime, countDownFinished, restartTimer } = useCountDownInSeconds(30);
+  const isEmailResendButtonDisabled = !countDownFinished;
+  const editEmail = useOnEditEmail(eligibilityDetailsState);
 
-  const buttons = useMemo<FuzzyFrontendButtonProps[]>(() => {
-    if (!eligibilityDetails.requireMultipleIds || eligibilityDetails.fileVerification) {
-      return [
-        {
-          onClick: () => {
-            setEligibilityDetailsState({
-              ...eligibilityDetails,
-              currentScreen: 'Delivery Address Screen',
-            });
-          },
-          text: 'Go to "Delivery Address" screen',
-        },
-      ];
-    }
+  //TODO These will be replaced by logic from APIs
+  const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
-    return [
-      {
-        onClick: () => {
-          setEligibilityDetailsState({
-            ...eligibilityDetails,
-            currentScreen: 'Verification Method Screen',
-          });
-        },
-        text: 'Go back to do another verification',
-      },
-    ];
-  }, [eligibilityDetails, setEligibilityDetailsState]);
-
-  const onBack = useCallback(() => {
-    setEligibilityDetailsState({
-      ...eligibilityDetails,
-      currentScreen: 'Work Email Verification Screen',
-      emailVerification: undefined,
-    });
-  }, [eligibilityDetails, setEligibilityDetailsState]);
+  //TODO This will need to be updated to add with the logic to resend the email via API
+  const reSendLink = () => {
+    restartTimer();
+  };
 
   return (
-    <FuzzyFrontend
-      numberOfStepsCompleted={3}
-      screenTitle="Work Email Retry Screen"
-      figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-53246&t=XRae5vPnKJi8i8kq-4"
-      eligibilityDetailsState={eligibilityDetailsState}
-      buttons={buttons}
-      onBack={onBack}
-    />
+    <EligibilityScreen data-testid="work-email-retry-screen">
+      <EligibilityBody>
+        <EligibilityHeading
+          className="gap-[24px]"
+          numberOfCompletedSteps={4}
+          title="Verify Eligibility"
+          subtitle="Provide details about your employment status and job role"
+        />
+        <p className={`${fonts.body} ${colours.textOnSurface}`}>
+          We’ve sent an email to <b>{eligibilityDetails.emailVerification}</b> with a link to
+          confirm your eligibility.{' '}
+          <button
+            className={`${fonts.body} ${colours.textPrimary} underline cursor-pointer bg-transparent border-none`}
+            aria-label="Edit email"
+            type="button"
+            onClick={editEmail}
+          >
+            Edit Email
+          </button>
+        </p>
+
+        <p className={`w-full ${fonts.body} ${colours.textOnSurfaceSubtle}`}>
+          Didn’t get an email? Please check your junk folder or resend it.
+        </p>
+
+        <Button
+          className="w-full"
+          variant={ThemeVariant.Primary}
+          disabled={isEmailResendButtonDisabled}
+          size="Large"
+          onClick={reSendLink}
+        >
+          {isEmailResendButtonDisabled ? `Resend link in ${formattedTime}` : 'Resend email'}
+        </Button>
+      </EligibilityBody>
+      <FuzzyFrontendButtons buttons={fuzzyFrontEndButtons} putInFloatingDock />
+    </EligibilityScreen>
   );
 };

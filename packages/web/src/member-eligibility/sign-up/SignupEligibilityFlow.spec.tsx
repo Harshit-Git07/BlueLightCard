@@ -102,13 +102,14 @@ describe('given a signing up member that needs to prove their eligibility to use
                 });
 
                 it('should navigate to the resend email screen', () => {
-                  const title = screen.getByTestId('fuzzy-frontend-title');
-                  expect(title.textContent).toEqual('Work Email Retry Screen');
+                  const emailRetryScreen = screen.getByTestId('work-email-retry-screen');
+                  expect(emailRetryScreen).toBeInTheDocument();
                 });
 
                 // TODO: This will require probably a new render with state injected in
                 describe('when they click the verification link on the email', () => {
                   beforeEach(async () => {
+                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });

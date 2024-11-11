@@ -5,9 +5,11 @@ import { isBefore, subWeeks } from 'date-fns';
 
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { CompanySummary } from '@blc-mono/discovery/application/models/CompaniesResponse';
 import { openSearchFieldMapping } from '@blc-mono/discovery/application/models/OpenSearchFieldMapping';
 import { OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
 import {
+  mapAllCompanies,
   mapSearchResults,
   SearchResult,
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
@@ -109,13 +111,20 @@ export class OpenSearchService {
     });
   }
 
-  public async queryIndex(term: string, indexName: string, dob: string, offerType?: string): Promise<SearchResult[]> {
-    const searchResults = new OpenSearchSearchRequests(indexName, dob).build(term, offerType).map(async (search) => {
-      return this.openSearchClient.search({
-        index: indexName,
-        body: search.body,
+  public async queryBySearchTerm(
+    term: string,
+    indexName: string,
+    dob: string,
+    offerType?: string,
+  ): Promise<SearchResult[]> {
+    const searchResults = new OpenSearchSearchRequests(indexName, dob)
+      .buildSearchRequest(term, offerType)
+      .map(async (search) => {
+        return this.openSearchClient.search({
+          index: indexName,
+          body: search.body,
+        });
       });
-    });
 
     let allSearchResults: SearchResult[] = [];
     await Promise.all(searchResults).then((results) => {
@@ -131,7 +140,18 @@ export class OpenSearchService {
     return this.buildUniqueSearchResults(allSearchResults);
   }
 
-  public async queryIndexByCategory(indexName: string, dob: string, categoryId: string): Promise<SearchResult[]> {
+  public async queryAllCompanies(indexName: string, dob: string): Promise<CompanySummary[]> {
+    const allCompaniesRequest = new OpenSearchSearchRequests(indexName, dob).buildAllCompaniesRequest();
+
+    const allCompaniesResults = await this.openSearchClient.search({
+      index: indexName,
+      body: allCompaniesRequest.body,
+    });
+
+    return mapAllCompanies(allCompaniesResults.body as SearchResponse);
+  }
+
+  public async queryByCategory(indexName: string, dob: string, categoryId: string): Promise<SearchResult[]> {
     const MAX_RESULTS_PER_CATEGORY = 1000;
     const searchRequest = new OpenSearchSearchRequests(indexName, dob).buildCategorySearch(categoryId);
     const searchResults = await this.openSearchClient.search({

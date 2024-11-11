@@ -27,7 +27,7 @@ export class OpenSearchSearchRequests {
     this.ageRestrictions = getAgeRestrictions(dob);
   }
 
-  public build(searchTerm: string, offerType?: string): SearchRequest[] {
+  public buildSearchRequest(searchTerm: string, offerType?: string): SearchRequest[] {
     this.offerType = offerType;
     this.searchTerm = searchTerm;
 
@@ -38,6 +38,10 @@ export class OpenSearchSearchRequests {
       this.buildOfferNameSearch(),
       this.buildCompanyNameFuzzySearch(),
     ];
+  }
+
+  public buildAllCompaniesRequest(): SearchRequest {
+    return this.buildAllCompaniesSearch();
   }
 
   public buildCategorySearch(categoryId: string): SearchRequest {
@@ -70,6 +74,32 @@ export class OpenSearchSearchRequests {
         query: {
           bool: {
             must: mustQueries,
+          },
+        },
+      },
+    };
+  }
+
+  private buildAllCompaniesSearch(): SearchRequest {
+    const mustQueries = [ageRestrictionsQuery(this.ageRestrictions), offerNotExpiredAndEvergreenQuery()];
+
+    return {
+      index: this.index,
+      body: {
+        size: 0,
+        query: {
+          bool: {
+            must: mustQueries,
+          },
+        },
+        aggs: {
+          companies: {
+            terms: { field: 'company_name.raw', size: MAX_RESULTS },
+            aggs: {
+              company: {
+                top_hits: { size: 1, _source: { includes: ['company_id', 'legacy_company_id', 'company_name'] } },
+              },
+            },
           },
         },
       },

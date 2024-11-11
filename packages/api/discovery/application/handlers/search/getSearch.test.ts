@@ -29,7 +29,7 @@ describe('getSearch Handler', () => {
   beforeEach(() => {
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
 
-    jest.spyOn(OpenSearchService.prototype, 'queryIndex').mockResolvedValue(searchResults);
+    jest.spyOn(OpenSearchService.prototype, 'queryBySearchTerm').mockResolvedValue(searchResults);
     jest.spyOn(OpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
   });
 
@@ -45,7 +45,7 @@ describe('getSearch Handler', () => {
   });
 
   it('should return empty results when none found', async () => {
-    jest.spyOn(OpenSearchService.prototype, 'queryIndex').mockResolvedValue([]);
+    jest.spyOn(OpenSearchService.prototype, 'queryBySearchTerm').mockResolvedValue([]);
 
     const results = await whenSearchCalled();
 

@@ -26,7 +26,7 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
   logger.info({ message: `Getting category for id ${categoryId}` });
 
   if (isValidCategory(categoryId)) {
-    const results = await openSearchService.queryIndexByCategory(
+    const results = await openSearchService.queryByCategory(
       await openSearchService.getLatestIndexName(),
       dob,
       categoryId,

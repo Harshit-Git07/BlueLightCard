@@ -3,48 +3,77 @@ import 'dd-trace/init';
 import { APIGatewayEvent } from 'aws-lambda';
 import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda/trigger/api-gateway-proxy';
 import { datadog } from 'datadog-lambda-js';
+import { isAfter, subMinutes } from 'date-fns';
 
+import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
-import { CompaniesResponse, CompanySummary } from '@blc-mono/discovery/application/models/CompaniesResponse';
+import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
+
+import { CompanySummary } from '../../models/CompaniesResponse';
+
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const logger = new LambdaLogger({ serviceName: 'companies-get' });
 
+const CACHE_TTL_MINUTES = 5;
+
+interface AllCompanies {
+  timestamp?: Date;
+  companies?: CompanySummary[];
+}
+
+let ALL_COMPANIES_CACHE: AllCompanies = {};
+
+const openSearchService = new OpenSearchService();
+
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   logger.info({ message: `Getting all companies` });
-  const { organisation, dob } = getQueryParams(event);
+  const { organisation, dob, skipCache } = getQueryParams(event);
 
-  return Response.OK({ message: 'Success', data: getCompanies(dob, organisation) });
-};
+  if (!organisation || !dob) {
+    return Response.BadRequest({
+      message: `Missing data on request - organisation: ${organisation}, dob: ${dob}`,
+    });
+  }
 
-const getCompanies = (dob?: string, organisation?: string): CompaniesResponse => {
-  logger.debug({ message: `Getting all companies for dob=${dob} organisation=${organisation}` });
-  return {
-    data: [
-      buildDummyCompany(1),
-      buildDummyCompany(2),
-      buildDummyCompany(3),
-      buildDummyCompany(4),
-      buildDummyCompany(5),
-    ],
-  };
-};
+  if (isCacheValid(ALL_COMPANIES_CACHE, skipCache)) {
+    return Response.OK({ message: 'Success', data: ALL_COMPANIES_CACHE.companies });
+  } else {
+    try {
+      const results = await openSearchService.queryAllCompanies(await openSearchService.getLatestIndexName(), dob);
 
-export const buildDummyCompany = (id: number): CompanySummary => {
-  return {
-    companyID: '24069b9c8eb7591046d066ef57e26a94',
-    legacyCompanyID: 9694,
-    companyName: `Stonehouse Pizza & Carvery ${id}`,
-  };
+      updateCache(results);
+
+      return Response.OK({ message: 'Success', data: results });
+    } catch (error) {
+      logger.error({ message: `Error querying OpenSearch: ${JSON.stringify(error)}` });
+      return Response.Error(new Error('Error querying OpenSearch'), HttpStatusCode.INTERNAL_SERVER_ERROR);
+    }
+  }
 };
 
 const getQueryParams = (event: APIGatewayEvent) => {
   const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
   const organisation = queryParams?.organisation;
   const dob = queryParams?.dob;
+  const skipCache = queryParams?.skipCache === 'true';
 
-  return { organisation, dob };
+  return { organisation, dob, skipCache };
+};
+
+const isCacheValid = (companiesCache: AllCompanies, skipCache: boolean): boolean => {
+  if (skipCache || !companiesCache.timestamp) return false;
+
+  return companiesCache && isAfter(companiesCache.timestamp, subMinutes(new Date(), CACHE_TTL_MINUTES));
+};
+
+const updateCache = (companies: CompanySummary[]): void => {
+  if (companies.length > 0) ALL_COMPANIES_CACHE = { timestamp: new Date(), companies };
+};
+
+export const resetCache = (): void => {
+  ALL_COMPANIES_CACHE = {};
 };
 
 export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

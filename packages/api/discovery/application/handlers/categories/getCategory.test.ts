@@ -35,7 +35,7 @@ describe('getCategory Handler', () => {
   beforeEach(() => {
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
 
-    jest.spyOn(OpenSearchService.prototype, 'queryIndexByCategory').mockResolvedValue(searchResults);
+    jest.spyOn(OpenSearchService.prototype, 'queryByCategory').mockResolvedValue(searchResults);
     jest.spyOn(OpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
   });
 

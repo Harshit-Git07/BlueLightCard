@@ -21,7 +21,11 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
     logger.info({ message: `Search term: ${searchTerm}, service: ${service}, dob: ${dob}` });
 
     try {
-      const results = await openSearchService.queryIndex(searchTerm, await openSearchService.getLatestIndexName(), dob);
+      const results = await openSearchService.queryBySearchTerm(
+        searchTerm,
+        await openSearchService.getLatestIndexName(),
+        dob,
+      );
 
       return Response.OK({ message: 'Success', data: results });
     } catch (error) {

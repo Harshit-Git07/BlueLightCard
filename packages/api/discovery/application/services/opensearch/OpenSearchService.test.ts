@@ -1,6 +1,7 @@
 import { subDays } from 'date-fns';
 
 import * as getEnvModule from '@blc-mono/core/utils/getEnv';
+
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import { openSearchFieldMapping } from '@blc-mono/discovery/application/models/OpenSearchFieldMapping';
 
@@ -31,6 +32,31 @@ const mockSearch = jest.fn().mockResolvedValue({
     },
   },
 });
+const mockAllCompaniesHit = {
+  _source: {
+    company_id: '456',
+    company_name: 'CompanyName',
+    legacy_company_id: 100,
+  },
+};
+const mockAllCompanies = jest.fn().mockResolvedValue({
+  body: {
+    aggregations: {
+      companies: {
+        buckets: [
+          {
+            key: '456',
+            company: {
+              hits: {
+                hits: [mockAllCompaniesHit],
+              },
+            },
+          },
+        ],
+      },
+    },
+  },
+});
 const mockDelete = jest.fn().mockResolvedValue({ acknowledged: true });
 const mockExists = jest.fn().mockResolvedValue({ body: true });
 const mockGetLatestWithPublishedIndices = (numberOfIndices: number) => {
@@ -41,12 +67,22 @@ const mockGetLatestWithPublishedIndices = (numberOfIndices: number) => {
   return jest.fn().mockResolvedValue({ body: indices });
 };
 const mockGetLatestWithPRIndices = (creationDate: string) =>
-  jest
-    .fn()
-    .mockResolvedValue({ body: [{ index: `service-pr-101-offers-010202000`, 'creation.date.string': creationDate }] });
+  jest.fn().mockResolvedValue({
+    body: [
+      {
+        index: `service-pr-101-offers-010202000`,
+        'creation.date.string': creationDate,
+      },
+    ],
+  });
 const mockGetLatestWithDraftIndices = (creationDate: string) =>
   jest.fn().mockResolvedValue({
-    body: [{ index: `draft-service-stage-offers-010202000`, 'creation.date.string': creationDate }],
+    body: [
+      {
+        index: `draft-service-stage-offers-010202000`,
+        'creation.date.string': creationDate,
+      },
+    ],
   });
 const mockBulkCreate = jest.fn().mockResolvedValue({ statusCode: 200 });
 
@@ -124,103 +160,120 @@ describe('OpenSearchService', () => {
     });
   });
 
-  it('should Search Index', async () => {
-    const results = await openSearchService.queryIndex(sampleDocument.title, indexName, '2001-01-01');
+  describe('Search', () => {
+    it('should Search Index', async () => {
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
 
-    expect(mockSearch).toHaveBeenCalledTimes(5);
-    expect(results[0]).toMatchObject({
-      ID: '123',
-      OfferName: 'OfferName',
-      OfferType: '1',
-      offerimg: 'img',
-      CompID: '456',
-      CompanyName: 'CompanyName',
-    });
-  });
-
-  it('should return unique search results', async () => {
-    const mockSearchWithDuplicates = jest.fn().mockResolvedValue({
-      body: {
-        hits: {
-          hits: [mockSearchHit, mockSearchHit],
-        },
-      },
-    });
-    jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
-
-    const results = await openSearchService.queryIndex(sampleDocument.title, indexName, '2001-01-01');
-
-    expect(results).toStrictEqual([
-      {
+      expect(mockSearch).toHaveBeenCalledTimes(5);
+      expect(results[0]).toMatchObject({
         ID: '123',
-        LegacyID: undefined,
-        OfferDescription: '',
         OfferName: 'OfferName',
         OfferType: '1',
         offerimg: 'img',
         CompID: '456',
-        LegacyCompanyID: undefined,
         CompanyName: 'CompanyName',
-      },
-    ]);
+      });
+    });
+
+    it('should return unique search results', async () => {
+      const mockSearchWithDuplicates = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: [mockSearchHit, mockSearchHit],
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
+
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
+
+      expect(results).toStrictEqual([
+        {
+          ID: '123',
+          LegacyID: undefined,
+          OfferDescription: '',
+          OfferName: 'OfferName',
+          OfferType: '1',
+          offerimg: 'img',
+          CompID: '456',
+          LegacyCompanyID: undefined,
+          CompanyName: 'CompanyName',
+        },
+      ]);
+    });
+
+    it('should return unique search results with legacy ID', async () => {
+      const mockSearchHitWithLegacyID = {
+        _source: {
+          title: 'dummyTitle',
+          description: 'dummyDescription',
+          offer_id: '123',
+          legacy_offer_id: 456,
+          offer_name: 'OfferName',
+          offer_type: '1',
+          offer_image: 'img',
+          company_id: '456',
+          legacy_company_id: 789,
+          company_name: 'CompanyName',
+          restricted_to: [],
+        },
+      };
+      const mockSearchWithDuplicates = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: [mockSearchHitWithLegacyID, mockSearchHitWithLegacyID],
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
+
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
+
+      expect(results).toStrictEqual([
+        {
+          ID: '123',
+          LegacyID: 456,
+          OfferDescription: '',
+          OfferName: 'OfferName',
+          OfferType: '1',
+          offerimg: 'img',
+          CompID: '456',
+          LegacyCompanyID: 789,
+          CompanyName: 'CompanyName',
+        },
+      ]);
+    });
+
+    it('should return max 40 search results', async () => {
+      const searchHits = givenSearchResultsReturned(40);
+      const mockSearchWith41Results = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: searchHits,
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith41Results);
+
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
+
+      expect(results.length).toBe(40);
+    });
   });
 
-  it('should return unique search results with legacy ID', async () => {
-    const mockSearchHitWithLegacyID = {
-      _source: {
-        title: 'dummyTitle',
-        description: 'dummyDescription',
-        offer_id: '123',
-        legacy_offer_id: 456,
-        offer_name: 'OfferName',
-        offer_type: '1',
-        offer_image: 'img',
-        company_id: '456',
-        legacy_company_id: 789,
-        company_name: 'CompanyName',
-        restricted_to: [],
-      },
-    };
-    const mockSearchWithDuplicates = jest.fn().mockResolvedValue({
-      body: {
-        hits: {
-          hits: [mockSearchHitWithLegacyID, mockSearchHitWithLegacyID],
-        },
-      },
+  describe('All Companies', () => {
+    it('should get all companies', async () => {
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockAllCompanies);
+
+      const results = await openSearchService.queryAllCompanies(indexName, '2001-01-01');
+
+      expect(mockAllCompanies).toHaveBeenCalled();
+      expect(results[0]).toMatchObject({
+        companyID: '456',
+        legacyCompanyID: 100,
+        companyName: 'CompanyName',
+      });
     });
-    jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
-
-    const results = await openSearchService.queryIndex(sampleDocument.title, indexName, '2001-01-01');
-
-    expect(results).toStrictEqual([
-      {
-        ID: '123',
-        LegacyID: 456,
-        OfferDescription: '',
-        OfferName: 'OfferName',
-        OfferType: '1',
-        offerimg: 'img',
-        CompID: '456',
-        LegacyCompanyID: 789,
-        CompanyName: 'CompanyName',
-      },
-    ]);
-  });
-
-  it('should return max 40 search results', async () => {
-    const searchHits = givenSearchResultsReturned(40);
-    const mockSearchWith41Results = jest.fn().mockResolvedValue({
-      body: {
-        hits: {
-          hits: searchHits,
-        },
-      },
-    });
-    jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith41Results);
-
-    const results = await openSearchService.queryIndex(sampleDocument.title, indexName, '2001-01-01');
-
-    expect(results.length).toBe(40);
   });
 
   it('should delete an index', async () => {
@@ -269,7 +322,7 @@ describe('OpenSearchService', () => {
     const categoryId = '1';
     const dob = '1990-01-01';
     it('should search by category ID', async () => {
-      const results = await openSearchService.queryIndexByCategory(indexName, dob, categoryId);
+      const results = await openSearchService.queryByCategory(indexName, dob, categoryId);
 
       expect(mockSearch).toHaveBeenCalled();
       expect(results[0]).toMatchObject({
@@ -293,7 +346,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith1001Results);
 
-      const results = await openSearchService.queryIndexByCategory(indexName, dob, categoryId);
+      const results = await openSearchService.queryByCategory(indexName, dob, categoryId);
 
       expect(results.length).toBe(1000);
     });
@@ -376,7 +429,11 @@ describe('OpenSearchService', () => {
   it('should add multiple documents to an index', async () => {
     await openSearchService.addDocumentsToIndex([], indexName);
     expect(mockBulkCreate).toHaveBeenCalledTimes(1);
-    expect(mockBulkCreate).toHaveBeenCalledWith({ body: [], index: indexName, refresh: true });
+    expect(mockBulkCreate).toHaveBeenCalledWith({
+      body: [],
+      index: indexName,
+      refresh: true,
+    });
   });
 
   it('should generate index name', () => {

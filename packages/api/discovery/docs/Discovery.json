@@ -267,6 +267,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "skipCache",
+            "in": "query",
+            "description": "Choose whether to skip cache within the lambda",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {

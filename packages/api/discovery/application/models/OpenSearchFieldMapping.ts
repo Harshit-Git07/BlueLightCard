@@ -1,6 +1,8 @@
+import { MappingProperty } from '@opensearch-project/opensearch/api/types';
+
 import { OpenSearchBody } from '@blc-mono/discovery/application/models/OpenSearchType';
 
-type OpenSearchFieldMapping = Record<keyof OpenSearchBody, { type: string; analyzer?: string }>;
+type OpenSearchFieldMapping = Record<keyof OpenSearchBody, MappingProperty>;
 
 export const openSearchFieldMapping: OpenSearchFieldMapping = {
   offer_id: { type: 'text' },
@@ -25,7 +27,14 @@ export const openSearchFieldMapping: OpenSearchFieldMapping = {
   offer_tags: { type: 'text' },
   company_id: { type: 'text' },
   legacy_company_id: { type: 'long' },
-  company_name: { type: 'text' },
+  company_name: {
+    type: 'text',
+    fields: {
+      raw: {
+        type: 'keyword',
+      },
+    },
+  },
   company_name_stripped: { type: 'text' },
   company_small_logo: { type: 'text' },
   company_tags: { type: 'text' },

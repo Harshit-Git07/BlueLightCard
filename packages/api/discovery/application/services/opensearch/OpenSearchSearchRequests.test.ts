@@ -1,8 +1,9 @@
 import { QueryDslQueryContainer, SearchRequest } from '@opensearch-project/opensearch/api/types';
 
 import * as getEnvModule from '@blc-mono/core/utils/getEnv';
-jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
+
+jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 
 jest.mock('@blc-mono/discovery/application/models/AgeRestrictions', () => {
   return {
@@ -157,7 +158,7 @@ describe('OpenSearchSearchRequests', () => {
   });
 
   it('should return a list of Search Requests', () => {
-    const result = target.build(searchTerm, offerType);
+    const result = target.buildSearchRequest(searchTerm, offerType);
 
     expect(result).toHaveLength(5);
   });
@@ -170,7 +171,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build(searchTerm, offerType);
+    const result = target.buildSearchRequest(searchTerm, offerType);
 
     expect(result[0]).toEqual(expectedSearch);
   });
@@ -182,7 +183,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedCompaniesAllQuery,
     ]);
 
-    const result = target.build(searchTerm, offerType);
+    const result = target.buildSearchRequest(searchTerm, offerType);
 
     expect(result[1]).toEqual(expectedSearch);
   });
@@ -195,7 +196,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build(searchTerm, offerType);
+    const result = target.buildSearchRequest(searchTerm, offerType);
 
     expect(result[2]).toEqual(expectedSearch);
   });
@@ -208,7 +209,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build(searchTerm, offerType);
+    const result = target.buildSearchRequest(searchTerm, offerType);
 
     expect(result[3]).toEqual(expectedSearch);
   });
@@ -221,7 +222,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferNotExpiredAndEvergreenQuery,
     ]);
 
-    const result = target.build(searchTerm, offerType);
+    const result = target.buildSearchRequest(searchTerm, offerType);
 
     expect(result[4]).toEqual(expectedSearch);
   });
@@ -242,6 +243,36 @@ describe('OpenSearchSearchRequests', () => {
       const result = target.buildCategorySearch(categoryId);
 
       expect(result).toEqual(expectedSearchRequest);
+    });
+  });
+
+  describe('buildAllCompaniesRequest', () => {
+    const expectedSearch: SearchRequest = {
+      index: indexName,
+      body: {
+        query: {
+          bool: {
+            must: [expectedAgeRestrictedQuery, expectedOfferNotExpiredAndEvergreenQuery],
+          },
+        },
+        size: 0,
+        aggs: {
+          companies: {
+            terms: { field: 'company_name.raw', size: 10000 },
+            aggs: {
+              company: {
+                top_hits: { size: 1, _source: { includes: ['company_id', 'legacy_company_id', 'company_name'] } },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    it('should return an All Companies Search', () => {
+      const result = target.buildAllCompaniesRequest();
+
+      expect(result).toEqual(expectedSearch);
     });
   });
 });

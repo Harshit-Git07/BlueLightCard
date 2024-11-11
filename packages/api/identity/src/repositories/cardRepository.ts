@@ -1,8 +1,13 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand, PutCommand, QueryCommandOutput } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, QueryCommand, PutCommand, QueryCommandOutput , DeleteCommand} from '@aws-sdk/lib-dynamodb';
 import { getCardStatus } from "@blc-mono/core/utils/getCardStatus";
 import { setDate } from "@blc-mono/core/utils/setDate";
+import { Logger } from '@aws-lambda-powertools/logger';
+import { getEnv } from '@blc-mono/core/utils/getEnv';
+import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
 
+const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
+const logger = new Logger({ serviceName: `${service}-ICardRepository` });
 export interface ICardRepository {
   getUserCurrentCard(uuid: any, legacyCardId: any): Promise<any>;
   updateUsersCard(
@@ -69,6 +74,23 @@ export class CardRepository implements ICardRepository {
       TableName: this.tableName,
     };
     return await this.dynamodb.send(new PutCommand(cardParams));
+  }
+
+  async deleteCard(uuid: any, legacyCardId: any) {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        pk: `MEMBER#${uuid}`,
+        sk: `CARD#${legacyCardId}`,
+      },
+    };
+    try {
+      const command = new DeleteCommand(params);
+      const data = await this.dynamodb.send(command);
+      logger.info('Deleted card:', { data });
+    } catch (error) {
+      logger.error('Unable to delete card. Error:', { error });
+    }
   }
 
 }

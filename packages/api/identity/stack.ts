@@ -18,6 +18,7 @@ import { GetUserByIdRoute } from './src/routes/getUserByIdRoute';
 import { userSignInMigratedRule } from './src/eventRules/userSignInMigratedRule';
 import { cardStatusUpdatedRule } from './src/eventRules/cardStatusUpdatedRule';
 import { userProfileUpdatedRule } from './src/eventRules/userProfileUpdatedRule';
+import { cardDeleteRule } from './src/eventRules/cardDeleteRule';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { companyFollowsUpdatedRule } from './src/eventRules/companyFollowsUpdatedRule';
 import { userGdprRule } from './src/eventRules/userGdprRule';
@@ -453,6 +454,16 @@ export function Identity({ stack }: StackContext) {
     bus.addRules(
       stack,
       userProfileUpdatedRule(
+        dlq.queueUrl,
+        identityTable.tableName,
+        idMappingTable.tableName,
+        region,
+        identityAdministratorRole,
+      ),
+    );
+    bus.addRules(
+      stack,
+      cardDeleteRule(
         dlq.queueUrl,
         identityTable.tableName,
         idMappingTable.tableName,

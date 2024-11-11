@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.84.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.83.0...bluelightcard/web-v1.84.0) (2024-11-11)
+
+
+### Features
+
+* [MER-162] Add progress bar logic and some tweaks to the progress bar component ([#2747](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2747)) ([8f14da5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8f14da56d73821fe40312bd2f1cbfa745f30d324))
+* [MER-162] Update progress bar logic to match desired behaviour and add a way to show / hide fuzzy frontend buttons easily ([#2766](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2766)) ([5acfff0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5acfff03d8fd32d89dcc36234d04da44cab8f7a1))
+* [MER-175] Add initial fuzzy frontend with end to end flows ([#2734](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2734)) ([a7fb6ec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a7fb6ecceac9c4207709fe884f06e9461afa274f))
+* [MER-22] verify eligibility employment status ([#2759](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2759)) ([28d614d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/28d614d13e4b570533ee1917cc512f6921f54b42))
+* [MER-31] Add initial single and multiple id upload screens ([#2790](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2790)) ([da7944b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/da7944bcfee80d732db42ded54e559ac22a99d71))
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* DISCO-1078 Added Amplitude events to Web Flexible Offers page ([#2709](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2709)) ([d3934fc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d3934fc390ea7da2eaf79b230d238ea604bb47f4))
+* DISCO-970 Productionised Web Braze tenancy banner experiment ([#2760](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2760)) ([ca974e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ca974e40d0cead375b36525a59e1d3ada38300fb))
+* Mama 169 text input changes ([#2837](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2837)) ([36ca3f5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/36ca3f5b78712eef33b65619c848e881443c2687))
+* MAMA-44: page skeleton ([#2583](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2583)) ([4b768c7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b768c73e52bfc8f6772ac0f12d55f8efce05d24))
+* MER-14-Job-details-screen ([#2772](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2772)) ([5bb913a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5bb913ab45f4b672282c5e56498e20541424bb5b))
+* MER-2-dropdown-component-update-replace - replace existing ([#2574](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2574)) ([4bc95b6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4bc95b6f96a1c4a50dff7e42c8f8034e125b905c))
+* MER-35-Interstital-Screen ([#2659](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2659)) ([b01c14e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b01c14e737bd319dead8e71611534d14009b6d42))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* TO-1092 CMS Feature Flag ([#2700](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2700)) ([5480460](https://github.com/bluelightcard/BlueLightCard-2.0/commit/54804606fb08cc11bdfe22b53e4f64033b830c52))
+* TO-1092 CMS feature flags - type validation ([#2718](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2718)) ([b3b45d4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b3b45d408684b6bc13d07361c0fc8a0dfd062c53))
+
+
+### Bug Fixes
+
+* Adjusting redemptions to use core unpack jwt ([#2733](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2733)) ([9eb9b99](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9eb9b998694cf65f459e5c17ba696d42ea0449cc))
+* responsive design issues in sign up flow ([#2822](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2822)) ([95f186e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/95f186e6743d7d7700f3d37d1d37d88a1b62ef51))
+* To 1367 cms offer sheet fix portable text issues ([#2791](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2791)) ([d9f8009](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9f8009dd1202a7cdf4af073027d5cfa3cb593cd))
+
+
+### Other Changes
+
+* [DISCO-1051] Add in Offers CMS feature flag to mapping of ID's for search ([#2758](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2758)) ([5193aab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5193aabcc00d9e7a2d9f454142236ba0008ab388))
+* [MER-22] Small cleanup to make reusing components a bit easier on the eligibility flow ([#2798](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2798)) ([0866df0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0866df00bf4c0fc065b231047e1be45268f738d1))
+* [None] Update sanity types package ([#2817](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2817)) ([7fc64d7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7fc64d7b290e72b15d83f9e7f5e519e476fa4c5d))
+* bump typescript to `5.6.3` ([#2743](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2743)) ([d6fc9c8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d6fc9c8e3e2a4fa4fc42ebbe25a9fd0177b24778))
+
 ## [1.83.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.82.0...bluelightcard/web-v1.83.0) (2024-10-31)
 
 

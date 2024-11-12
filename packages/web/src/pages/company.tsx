@@ -25,7 +25,6 @@ import type { BannerDataType } from '../page-components/company/types';
 import CompanyPageWebHeader from '../page-components/company/CompanyPageWebHeader';
 import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { useQueryState } from 'nuqs';
 import { useCmsEnabled } from '../common/hooks/useCmsEnabled';
 import CompanyPageOffers from '../page-components/company/CompanyPageOffers';
 import CompanyPageFilters from '../page-components/company/CompanyPageFilters';
@@ -44,7 +43,9 @@ const getBrand = () => {
 };
 
 const CompanyPage = () => {
-  const [cid] = useQueryState('cid');
+  const router = useRouter();
+
+  const cid = router.query.cid as string | undefined;
 
   const isMobile = useMedia('(max-width: 500px)');
 
@@ -247,7 +248,9 @@ type SheetHandlerProps = {
 
 const SheetHandler = ({ companyId, onSelectOffer }: SheetHandlerProps) => {
   const cmsEnabled = useCmsEnabled();
-  const [oid] = useQueryState('oid');
+
+  const router = useRouter();
+  const oid = router.query.oid as string | undefined;
 
   const company = useSuspenseQuery(getCompanyQuery(companyId, cmsEnabled));
 

@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.39.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.38.0...bluelightcard/mobile-hybrid-v1.39.0) (2024-11-12)
+
+
+### Features
+
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* conv blc 5.0 search ([#2460](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2460)) ([55327e8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/55327e855cca7ac738ae983612d35d74f03e45ee))
+* DISCO-1156 Added `ErrorState` to Web `/flexible-offers` ([#2852](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2852)) ([97a08a7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/97a08a7f6b69af49e5b94f1220670775a44b1f11))
+* DISCO-779 Hybrid Notifications page ([#2578](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2578)) ([fd661cd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fd661cdb0542bae85d974c5ab05b6255400a9306))
+* MAMA-44: page skeleton ([#2583](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2583)) ([4b768c7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b768c73e52bfc8f6772ac0f12d55f8efce05d24))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* TO-1092 CMS Feature Flag ([#2700](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2700)) ([5480460](https://github.com/bluelightcard/BlueLightCard-2.0/commit/54804606fb08cc11bdfe22b53e4f64033b830c52))
+* TO-1092 CMS feature flags - type validation ([#2718](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2718)) ([b3b45d4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b3b45d408684b6bc13d07361c0fc8a0dfd062c53))
+* TO-1277 offer sheet on url offer ([#2651](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2651)) ([94a9878](https://github.com/bluelightcard/BlueLightCard-2.0/commit/94a9878150cee3ff12b57c50e1f228271a2f772a))
+
+
+### Bug Fixes
+
+* removal of work for CONV BLC 5.0 Search ([#2783](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2783)) ([dd5d21a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd5d21a7cc8bf72bd4854a05b86a7a4e528694f3))
+* To 1367 cms offer sheet fix portable text issues ([#2791](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2791)) ([d9f8009](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9f8009dd1202a7cdf4af073027d5cfa3cb593cd))
+* TO-1365 Zod validation for image coming from CMS should be string or null ([#2732](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2732)) ([40dd10f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/40dd10ff99d599ba88bf839eed4e6f1c8511b07e))
+
 ## [1.38.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.37.0...bluelightcard/mobile-hybrid-v1.38.0) (2024-10-24)
 
 

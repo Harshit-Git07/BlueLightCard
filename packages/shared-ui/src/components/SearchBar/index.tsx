@@ -17,7 +17,7 @@ const SearchBar: FC<SearchProps> = ({
   onClear,
   onBackButtonClick,
   onFocus,
-  placeholderText,
+  placeholderText = 'Search for offers or brands',
   value,
   showBackArrow,
 }) => {

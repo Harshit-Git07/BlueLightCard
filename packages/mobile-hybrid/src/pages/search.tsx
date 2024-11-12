@@ -41,7 +41,7 @@ const SearchPage: NextPage = () => {
 
   return (
     <div>
-      <SearchModule placeholder="Search for an offer" />
+      <SearchModule />
       <div className="mt-4 mb-5 ml-2">
         <Amplitude keyName={FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK} value="on">
           <button

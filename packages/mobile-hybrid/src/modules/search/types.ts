@@ -1,5 +1,6 @@
 export interface SearchModuleProps {
   placeholder?: string;
+  showOverlay?: boolean;
   children?: React.ReactNode;
 }
 

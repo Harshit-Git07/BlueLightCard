@@ -48,7 +48,8 @@ describe('SearchModule', () => {
   });
 
   describe('search overlay', () => {
-    it('should display search overlay', async () => {
+    it('should not display search overlay', async () => {
+      // This has been disabled for the moment due to the recent searches being hard coded and causing a stickiness issue
       const mockPlatformAdapter = useMockPlatformAdapter();
       givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
         [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
@@ -56,7 +57,7 @@ describe('SearchModule', () => {
 
       await whenSearchInputIsClicked(user);
 
-      expect(screen.getByText('Your recent searches')).toBeInTheDocument();
+      expect(screen.queryByText('Your recent searches')).not.toBeInTheDocument();
     });
 
     it('should not display search overlay when feature is off', async () => {

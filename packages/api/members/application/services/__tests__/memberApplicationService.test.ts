@@ -9,6 +9,7 @@ import {
 import { MemberApplicationModel } from '../../models/memberApplicationModel';
 import { ApplicationReason } from '../../enums/ApplicationReason';
 import { APIError } from '@blc-mono/members/application/models/APIError';
+import { RejectionReason } from '../../enums/RejectionReason';
 
 // Mock the dependencies
 jest.mock('../../repositories/memberApplicationRepository');
@@ -62,7 +63,7 @@ describe('MemberApplicationService', () => {
       nameChangeFirstName: 'John',
       nameChangeLastName: 'Doe',
       nameChangeDocType: 'Passport',
-      rejectionReason: 'Incomplete application',
+      rejectionReason: RejectionReason.DECLINE_INCORRECT_ID,
       promoCode: null,
       trustedDomainValidated: false,
     };
@@ -167,7 +168,7 @@ describe('MemberApplicationService', () => {
         nameChangeFirstName: 'John',
         nameChangeLastName: 'Doe',
         nameChangeDocType: 'Passport',
-        rejectionReason: 'Incomplete application',
+        rejectionReason: RejectionReason.DECLINE_INCORRECT_ID,
         promoCode: null,
         trustedDomainValidated: false,
       },
@@ -213,7 +214,7 @@ describe('MemberApplicationService', () => {
         nameChangeFirstName: 'John',
         nameChangeLastName: 'Doe',
         nameChangeDocType: 'Passport',
-        rejectionReason: 'Incomplete application',
+        rejectionReason: RejectionReason.DECLINE_INCORRECT_ID,
         promoCode: null,
         trustedDomainValidated: false,
       },
@@ -236,7 +237,7 @@ describe('MemberApplicationService', () => {
         nameChangeFirstName: 'John',
         nameChangeLastName: 'Doe',
         nameChangeDocType: 'Passport',
-        rejectionReason: 'Incomplete application',
+        rejectionReason: RejectionReason.DECLINE_INCORRECT_ID,
         promoCode: null,
         trustedDomainValidated: false,
       },

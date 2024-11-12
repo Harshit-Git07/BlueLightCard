@@ -74,8 +74,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     } catch (error) {
       if (
         error instanceof Error &&
-        'code' in error &&
-        (error as any).code === 'ConditionalCheckFailedException'
+        'name' in error &&
+        (error as any).name === 'ConditionalCheckFailedException'
       ) {
         if (isInsert) {
           return Response.BadRequest({
@@ -117,7 +117,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     logger.error({ message: 'Error updating member application', error });
 
     if (error instanceof Error) {
-      if ('code' in error && (error as any).code === 'ConditionalCheckFailedException') {
+      if ('name' in error && (error as any).name === 'ConditionalCheckFailedException') {
         return Response.NotFound({
           message: 'Member profile and/or application not found',
           errors: [

@@ -3,4 +3,5 @@ export enum ApplicationReason {
   RENEWAL = 'RENEWAL',
   NAME_CHANGE = 'NAME_CHANGE',
   LOST_CARD = 'LOST_CARD',
+  REPRINT = 'REPRINT',
 }

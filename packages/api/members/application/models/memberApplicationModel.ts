@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { transformDateToFormatYYYYMMDD } from '@blc-mono/core/utils/date';
 import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { ApplicationReason } from '../enums/ApplicationReason';
+import { RejectionReason } from '../enums/RejectionReason';
 
 export const MemberApplicationModel = createZodNamedType(
   'MemberApplicationModel',
@@ -53,7 +54,7 @@ export const MemberApplicationModel = createZodNamedType(
       nameChangeFirstName: z.string().nullable().optional(),
       nameChangeLastName: z.string().nullable().optional(),
       nameChangeDocType: z.string().nullable().optional(),
-      rejectionReason: z.string().nullable().optional(),
+      rejectionReason: z.nativeEnum(RejectionReason).nullable().optional(),
     })
     .transform((application) => ({
       memberUuid: application.pk.replace('MEMBER#', ''),

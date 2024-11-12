@@ -1,6 +1,7 @@
 import { render, renderHook, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { useAtom } from 'jotai';
+import InvokeNativeAPICall from '@/invoke/apiCall';
 import UserProfileProvider from '@/components/UserProfileProvider/UserProfileProvider';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import { UserProfile, userProfile } from '@/components/UserProfileProvider/store';
@@ -77,6 +78,28 @@ describe('User Profile Provider component', () => {
       expect(result.current[0]?.service).toStrictEqual(serviceValue);
     });
 
+    it('should not call the user service multiple times', async () => {
+      const serviceValue = 'serviceValue';
+      useUserServiceMock.mockReturnValue(serviceValue);
+      const requestMock = jest.spyOn(InvokeNativeAPICall.prototype, 'requestData');
+
+      renderHook(() => useAtom(userProfile));
+
+      const result = whenUserProfileProviderComponentIsRendered();
+      result.rerender(
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <UserProfileProvider>Test Component 2</UserProfileProvider>
+        </PlatformAdapterProvider>,
+      );
+      result.rerender(
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <UserProfileProvider>Test Component 3</UserProfileProvider>
+        </PlatformAdapterProvider>,
+      );
+
+      expect(requestMock).toHaveBeenCalledTimes(1);
+    });
+
     it('should set user profile when user profile received from api', async () => {
       const testUserProfile: UserProfile = {
         firstname: 'string',
@@ -144,7 +167,7 @@ describe('User Profile Provider component', () => {
     amplitudeStore = defaultAmplitudeStore,
   ) => {
     givenAmplitudeStoreSet(amplitudeStore);
-    render(
+    return render(
       <PlatformAdapterProvider adapter={platformAdapter}>
         <UserProfileProvider>Test Component</UserProfileProvider>
       </PlatformAdapterProvider>,

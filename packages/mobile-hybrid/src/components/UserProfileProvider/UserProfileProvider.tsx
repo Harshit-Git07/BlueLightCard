@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect } from 'react';
+import { FC, PropsWithChildren, useEffect, useRef } from 'react';
 import { userProfile } from './store';
 import { useSetAtom, useAtomValue } from 'jotai';
 import { APIUrl, V5_API_URL } from '@/globals';
@@ -15,6 +15,8 @@ const UserProfileProvider: FC<PropsWithChildren> = ({ children }) => {
   const setUserProfile = useSetAtom(userProfile);
   const amplitudeExperiments = useAtomValue(experimentsAndFeatureFlags);
   const userServiceValue = useUserService();
+
+  const userServiceCalled = useRef<boolean>(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -42,13 +44,18 @@ const UserProfileProvider: FC<PropsWithChildren> = ({ children }) => {
     };
 
     const fetchUserService = async () => {
-      invokeNativeAPICall.requestData(APIUrl.UserService);
       if (userServiceValue) {
         setUserProfile({
           ...userProfile,
           service: userServiceValue,
         });
       }
+
+      // Don't call the user service API more than once
+      if (userServiceCalled.current) return;
+
+      invokeNativeAPICall.requestData(APIUrl.UserService);
+      userServiceCalled.current = true;
     };
 
     fetchUserProfile();

@@ -73,16 +73,6 @@ function PaymentsStack({ app, stack }: StackContext) {
           stageName: 'v1',
           metricsEnabled: true,
         },
-        //TODO: we don't need CORS right?
-
-        // // IMPORTANT: If you need to update these settings, remember to also
-        // //            update them in APIGatewayController
-        // defaultCorsPreflightOptions: {
-        //   allowOrigins: config.apiDefaultAllowedOrigins,
-        //   allowHeaders: ['*'],
-        //   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        //   allowCredentials: true,
-        // },
       },
     },
   });
@@ -140,6 +130,28 @@ function PaymentsStack({ app, stack }: StackContext) {
           actions: ['events:PutEvents'],
           effect: Effect.ALLOW,
           resources: [bus.eventBusArn],
+        }),
+      ],
+      layers,
+    }),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    'GET /payment-events': Route.createRoute({
+      model: postPaymentInitiationModel,
+      apiGatewayModelGenerator,
+      stack,
+      functionName: 'GetPaymentEventsHandler',
+      restApi,
+      handler: 'packages/api/payments/application/handlers/apiGateway/paymentEvents/getPaymentEvents.handler',
+      requestValidatorName: 'GetPaymentEventsValidator',
+      environment: {
+        [PaymentsStackEnvironmentKeys.TRANSACTIONS_EVENTS_TABLE]: transactionsEventsTable.tableName ?? '',
+      },
+      permissions: [
+        new PolicyStatement({
+          actions: ['dynamodb:*'],
+          effect: Effect.ALLOW,
+          resources: [transactionsEventsTable.tableArn],
         }),
       ],
       layers,

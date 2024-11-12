@@ -29,6 +29,7 @@ describe('PaymentEventHandlerService', () => {
       writePaymentEvent: jest.fn(),
       queryPaymentEventsByMemberIdAndEventType: jest.fn(),
       queryEventsByTypeAndObjectId: jest.fn(),
+      queryPaymentEventsByMemberId: jest.fn(),
     };
     const paymentEventsRepository = {
       publishPaymentInitiatedEvent: jest.fn(),
@@ -94,6 +95,7 @@ describe('PaymentEventHandlerService', () => {
       writePaymentEvent: jest.fn(),
       queryPaymentEventsByMemberIdAndEventType: jest.fn(),
       queryEventsByTypeAndObjectId: jest.fn(),
+      queryPaymentEventsByMemberId: jest.fn(),
     };
     const paymentEventsRepository = {
       publishPaymentInitiatedEvent: jest.fn(),
@@ -159,6 +161,7 @@ describe('PaymentEventHandlerService', () => {
       writePaymentEvent: jest.fn(),
       queryPaymentEventsByMemberIdAndEventType: jest.fn(),
       queryEventsByTypeAndObjectId: jest.fn(),
+      queryPaymentEventsByMemberId: jest.fn(),
     };
     const paymentEventsRepository = {
       publishPaymentInitiatedEvent: jest.fn(),
@@ -217,6 +220,7 @@ describe('PaymentEventHandlerService', () => {
       writePaymentEvent: jest.fn(),
       queryPaymentEventsByMemberIdAndEventType: jest.fn(),
       queryEventsByTypeAndObjectId: jest.fn(),
+      queryPaymentEventsByMemberId: jest.fn(),
     };
     const paymentEventsRepository = {
       publishPaymentInitiatedEvent: jest.fn(),

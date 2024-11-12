@@ -3,10 +3,16 @@ import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-d
 
 import { PaymentEvent } from '../models/paymentEvent';
 
+type ReturnPaymentEvent = PaymentEvent & { pk: string; sk: string; objectId: string };
+
 export interface IPaymentEventStoreRepository {
   writePaymentEvent(memberId: string, paymentEvent: PaymentEvent): Promise<void>;
-  queryPaymentEventsByMemberIdAndEventType(memberId: string, eventType: PaymentEvent['type']): Promise<any>; //TODO: strengthen these types
-  queryEventsByTypeAndObjectId(eventType: PaymentEvent['type'], objectId: string): Promise<any>;
+  queryPaymentEventsByMemberIdAndEventType(
+    memberId: string,
+    eventType: PaymentEvent['type'],
+  ): Promise<ReturnPaymentEvent[]>;
+  queryEventsByTypeAndObjectId(eventType: PaymentEvent['type'], objectId: string): Promise<ReturnPaymentEvent[]>;
+  queryPaymentEventsByMemberId(memberId: string): Promise<ReturnPaymentEvent[]>;
 }
 
 export class PaymentEventStoreRepository implements IPaymentEventStoreRepository {
@@ -52,7 +58,7 @@ export class PaymentEventStoreRepository implements IPaymentEventStoreRepository
     await this.dynamodb.send(new PutCommand(params));
   }
 
-  async queryEventsByTypeAndObjectId(eventType: PaymentEvent['type'], objectId: string): Promise<any> {
+  async queryEventsByTypeAndObjectId(eventType: PaymentEvent['type'], objectId: string): Promise<ReturnPaymentEvent[]> {
     const params = {
       TableName: this.tableName,
       IndexName: 'gsi1',
@@ -66,10 +72,13 @@ export class PaymentEventStoreRepository implements IPaymentEventStoreRepository
 
     //TODO: error handling
     const result = await this.dynamodb.send(new QueryCommand(params));
-    return result.Items;
+    return (result.Items || []) as ReturnPaymentEvent[];
   }
 
-  async queryPaymentEventsByMemberIdAndEventType(memberId: string, eventType: PaymentEvent['type']): Promise<any> {
+  async queryPaymentEventsByMemberIdAndEventType(
+    memberId: string,
+    eventType: PaymentEvent['type'],
+  ): Promise<ReturnPaymentEvent[]> {
     const prefix = `${eventType}#`;
     const params = {
       TableName: this.tableName,
@@ -87,6 +96,24 @@ export class PaymentEventStoreRepository implements IPaymentEventStoreRepository
 
     //TODO: error handling
     const result = await this.dynamodb.send(new QueryCommand(params));
-    return result.Items;
+    return (result.Items || []) as ReturnPaymentEvent[];
+  }
+
+  async queryPaymentEventsByMemberId(memberId: string): Promise<ReturnPaymentEvent[]> {
+    const params = {
+      TableName: this.tableName,
+      KeyConditionExpression: '#pk = :pk',
+      ExpressionAttributeValues: {
+        ':pk': `MEMBER#${memberId}`,
+      },
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ScanIndexForward: true, // Sort by latest written
+    };
+
+    //TODO: error handling
+    const result = await this.dynamodb.send(new QueryCommand(params));
+    return (result.Items || []) as ReturnPaymentEvent[];
   }
 }

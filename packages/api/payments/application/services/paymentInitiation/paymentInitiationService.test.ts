@@ -23,6 +23,7 @@ describe('PaymentInitiationService', () => {
       writePaymentEvent: jest.fn(),
       queryPaymentEventsByMemberIdAndEventType: jest.fn(),
       queryEventsByTypeAndObjectId: jest.fn(),
+      queryPaymentEventsByMemberId: jest.fn(),
     };
     const paymentEventsRepository = {
       publishPaymentInitiatedEvent: jest.fn(),
@@ -55,7 +56,6 @@ describe('PaymentInitiationService', () => {
       clientSecret: 'client_secret',
       publishableKey: 'publishable_key',
     });
-    stripeRepository.createEphemeralKey.mockResolvedValue('ephemeral_key');
 
     // Act
     const result: PaymentInitiationResult = await paymentInitiationService.InitiatePayment(
@@ -73,7 +73,6 @@ describe('PaymentInitiationService', () => {
       clientSecret: 'client_secret',
       publishableKey: 'publishable_key',
       externalCustomer: 'customer_id',
-      ephemeralKey: 'ephemeral_key',
     });
     expect(paymentEventStoreRepository.queryPaymentEventsByMemberIdAndEventType).toHaveBeenCalledWith(
       user.memberId,
@@ -88,7 +87,6 @@ describe('PaymentInitiationService', () => {
       eventId: expect.any(String),
       created: expect.any(Number),
     });
-    expect(stripeRepository.createEphemeralKey).toHaveBeenCalledWith('customer_id');
     expect(stripeRepository.createPaymentIntent).toHaveBeenCalledWith(
       idempotencyKey,
       'gbp',
@@ -131,6 +129,7 @@ describe('PaymentInitiationService', () => {
       writePaymentEvent: jest.fn(),
       queryPaymentEventsByMemberIdAndEventType: jest.fn(),
       queryEventsByTypeAndObjectId: jest.fn(),
+      queryPaymentEventsByMemberId: jest.fn(),
     };
     const paymentEventsRepository = {
       publishPaymentInitiatedEvent: jest.fn(),
@@ -164,7 +163,6 @@ describe('PaymentInitiationService', () => {
       clientSecret: 'client_secret',
       publishableKey: 'publishable_key',
     });
-    stripeRepository.createEphemeralKey.mockResolvedValue('ephemeral_key');
 
     // Act
     await paymentInitiationService.InitiatePayment(idempotencyKey, user, amount, metadata, description);
@@ -172,7 +170,6 @@ describe('PaymentInitiationService', () => {
     const metaddataToAssert = { ...metadata, memberId: user.memberId, brazeExternalId: user.brazeExternalId };
     // Assert
     expect(stripeRepository.createCustomer).not.toHaveBeenCalled();
-    expect(stripeRepository.createEphemeralKey).toHaveBeenCalledWith('existing_customer_id');
     expect(stripeRepository.createPaymentIntent).toHaveBeenCalledWith(
       idempotencyKey,
       'gbp',

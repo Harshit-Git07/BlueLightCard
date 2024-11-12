@@ -37,7 +37,6 @@ describe('ReusableCrudRepository', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
 
@@ -71,7 +70,6 @@ describe('ReusableCrudRepository', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
 
@@ -105,7 +103,6 @@ describe('ReusableCrudRepository', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
 
@@ -126,7 +123,6 @@ describe('ReusableCrudRepository', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
 

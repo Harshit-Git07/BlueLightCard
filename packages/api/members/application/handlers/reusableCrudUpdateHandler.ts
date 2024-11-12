@@ -1,7 +1,5 @@
 import { APIGatewayEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { Response } from '../utils/restResponse/response';
 import { APIErrorCode } from '../enums/APIErrorCode';
 import { APIError } from '../models/APIError';
@@ -15,9 +13,20 @@ import * as reusableCrudPayloadTypes from '../types/reusableCrudPayloadTypes';
 import * as reusableCrudPayloadModels from '../models/reusableCrudPayloadModels';
 import { validateRequest } from '../utils/requestValidator';
 import { ReusableCrudRepository } from '../repositories/reusableCrudRepository';
+import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
+import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { PromoCodeResponse } from '@blc-mono/members/application/types/promoCodeResponse';
+import { LambdaLogger } from '@blc-mono/core/utils/logger';
+import { MemberProfileRepository } from '@blc-mono/members/application/repositories/memberProfileRepository';
+import { MemberProfileService } from '@blc-mono/members/application/services/memberProfileService';
+import { OrganisationsRepository } from '@blc-mono/members/application/repositories/organisationsRepository';
+import { EmployersRepository } from '@blc-mono/members/application/repositories/employersRepository';
 
 const service: string = process.env.SERVICE as string;
 const entityName: string = process.env.ENTITY_NAME as string;
+const lambdaLogger = new LambdaLogger({ serviceName: `${service}-update${entityName}` });
 const logger = new Logger({ serviceName: `${service}-update${entityName}` });
 
 const pkPrefix = process.env.PK_PREFIX as string;
@@ -26,7 +35,26 @@ const pkQueryKey = process.env.PK_QUERY_KEY as string;
 const skQueryKey = process.env.SK_QUERY_KEY as string;
 
 const tableName = process.env.ENTITY_TABLE_NAME as string;
-const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
+const memberProfilesTableName = process.env.MEMBER_PROFILES_TABLE_NAME as string;
+const promoCodeTableName = process.env.PROMO_CODE_TABLE_NAME as string;
+const dynamoDB = DynamoDBDocumentClient.from(
+  new DynamoDBClient({ region: process.env.REGION ?? 'eu-west-2' }),
+);
+const memberProfilesRepository = new MemberProfileRepository(dynamoDB, memberProfilesTableName);
+const organisationsRepository = new OrganisationsRepository(dynamoDB, memberProfilesTableName);
+const employersRepository = new EmployersRepository(dynamoDB, memberProfilesTableName);
+const memberProfilesService = new MemberProfileService(
+  memberProfilesRepository,
+  organisationsRepository,
+  employersRepository,
+  logger,
+);
+const promoCodesRepository = new PromoCodesRepository(dynamoDB, promoCodeTableName);
+const promoCodesService = new PromoCodesService(
+  promoCodesRepository,
+  lambdaLogger,
+  memberProfilesService,
+);
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) => {
   try {
@@ -54,12 +82,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
       skQueryKey,
     );
 
-    if (
-      (!query.pk && query.pk.length == 0) ||
-      (!query.brand && query.brand.length == 0) ||
-      !query.sk ||
-      (query.sk && query.sk.length == 0)
-    ) {
+    if ((!query.pk && query.pk.length == 0) || !query.sk || (query.sk && query.sk.length == 0)) {
       logger.error({ message: 'Missing required query parameters' });
       return Response.BadRequest({
         message: 'Error: Missing required query parameters',
@@ -69,7 +92,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
             pkQueryKey,
             `${pkQueryKey} is required`,
           ),
-          new APIError(APIErrorCode.MISSING_REQUIRED_PARAMETER, 'brand', 'brand is required'),
           new APIError(
             APIErrorCode.MISSING_REQUIRED_PARAMETER,
             skQueryKey,
@@ -89,6 +111,23 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
 
     const { body } = validationResult;
 
+    let promoCodeResponse: PromoCodeResponse | undefined = undefined;
+    const promoCodeErrorSet: APIError[] = [];
+    if (body.promoCode) {
+      promoCodeResponse = await promoCodesService.validatePromoCode(
+        query.pk,
+        validationResult.body.promoCode,
+        promoCodeErrorSet,
+      );
+    }
+
+    if (promoCodeErrorSet.length > 0) {
+      return Response.BadRequest({
+        message: 'Promo code is not valid',
+        errors: promoCodeErrorSet,
+      });
+    }
+
     await crudService.upsert(query, body, event.httpMethod === 'POST', errorSet);
 
     if (errorSet.length > 0) {
@@ -97,7 +136,16 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
         errors: errorSet,
       });
     } else {
-      return Response.OK({ message: `${entityName} updated successfully` });
+      if (promoCodeResponse) {
+        return Response.OK({
+          message: `Promo code updated successfully`,
+          data: promoCodeResponse,
+        });
+      } else {
+        return Response.OK({
+          message: `${entityName} updated successfully`,
+        });
+      }
     }
   } catch (error) {
     logger.error({ message: `Error updating ${entityName}`, error });

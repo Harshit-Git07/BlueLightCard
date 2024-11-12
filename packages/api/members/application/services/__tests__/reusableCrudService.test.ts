@@ -51,7 +51,6 @@ describe('ReusableCrudService', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
       const errorSet: APIError[] = [];
@@ -74,7 +73,6 @@ describe('ReusableCrudService', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
       const errorSet: APIError[] = [];
@@ -97,7 +95,6 @@ describe('ReusableCrudService', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
       const errorSet: APIError[] = [];
@@ -124,7 +121,6 @@ describe('ReusableCrudService', () => {
       const query: ReusableCrudQueryPayload = {
         pk: '123',
         sk: '456',
-        brand: 'blc-uk',
       };
       const payload = { data: 'test' };
       const errorSet: APIError[] = [];

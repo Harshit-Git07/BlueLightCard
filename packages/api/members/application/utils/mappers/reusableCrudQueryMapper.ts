@@ -10,14 +10,10 @@ export class ReusableCrudQueryMapper {
     if (!pathParameters) {
       throw new Error('Event path parameters are required');
     }
-    if (!pathParameters['brand']) {
-      throw new Error('Brand is required');
-    }
     if (!pathParameters[pkKey]) {
       throw new Error(`${pkKey} is required`);
     }
     return {
-      brand: pathParameters['brand']!,
       pk: pathParameters[pkKey]!,
       sk: pathParameters[skKey] || null,
     };

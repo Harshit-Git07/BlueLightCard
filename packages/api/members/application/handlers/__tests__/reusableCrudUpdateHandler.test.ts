@@ -15,16 +15,20 @@ import { ReusableCrudQueryMapper } from '../../utils/mappers/reusableCrudQueryMa
 import { validateRequest } from '../../utils/requestValidator';
 import { ReusableCrudRepository } from '../../repositories/reusableCrudRepository';
 import { mockClient } from 'aws-sdk-client-mock';
+import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 
 jest.mock('@aws-lambda-powertools/logger');
 jest.mock('../../services/reusableCrudService');
 jest.mock('../../utils/restResponse/response');
 jest.mock('../../utils/mappers/reusableCrudQueryMapper');
 jest.mock('../../utils/requestValidator');
+jest.mock('../../services/promoCodesService');
 
 describe('reusableCrudUpdateHandler', () => {
-  let mockLogger: jest.Mocked<Logger>;
   const mockDynamoDB = mockClient(DynamoDBDocumentClient);
+  const mockValidatePromoCode = jest.fn();
+  PromoCodesService.prototype.validatePromoCode = mockValidatePromoCode;
+  let mockLogger: jest.Mocked<Logger>;
   let mockCrudService: jest.Mocked<ReusableCrudService<any, any>>;
   let mockResponse: jest.Mocked<typeof Response>;
 
@@ -83,7 +87,7 @@ describe('reusableCrudUpdateHandler', () => {
       body: JSON.stringify({ data: 'test' }),
       httpMethod: 'PUT',
     } as any;
-    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456', brand: 'blc-uk' };
+    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456' };
 
     (ReusableCrudQueryMapper.fromPathParameters as jest.Mock).mockReturnValue(query);
     (validateRequest as jest.Mock).mockReturnValue({ body: { data: 'test' } });
@@ -96,6 +100,7 @@ describe('reusableCrudUpdateHandler', () => {
     const context = {} as any;
     const result = await handler(event, context, () => {});
 
+    expect(mockValidatePromoCode).not.toHaveBeenCalled();
     expect(result!.statusCode).toBe(200);
     expect(result!.body).toBe(JSON.stringify({ message: 'TestEntity updated successfully' }));
   });
@@ -108,7 +113,7 @@ describe('reusableCrudUpdateHandler', () => {
     const context = {} as any;
     const callback = jest.fn();
 
-    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: '', brand: '' };
+    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: '' };
     (ReusableCrudQueryMapper.fromPathParameters as jest.Mock).mockReturnValue(query);
 
     (Response.BadRequest as jest.Mock).mockReturnValue({
@@ -148,11 +153,11 @@ describe('reusableCrudUpdateHandler', () => {
 
   it('should return errors if update fails', async () => {
     const event: APIGatewayEvent = {
-      pathParameters: { pk: 'PK#123', sk: 'SK#456', brand: 'blc-uk' },
+      pathParameters: { pk: 'PK#123', sk: 'SK#456' },
       body: JSON.stringify({ data: 'test' }),
       httpMethod: 'PUT',
     } as any;
-    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456', brand: 'blc-uk' };
+    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456' };
 
     (ReusableCrudQueryMapper.fromPathParameters as jest.Mock).mockReturnValue(query);
     (validateRequest as jest.Mock).mockReturnValue({ body: { data: 'test' } });
@@ -173,5 +178,43 @@ describe('reusableCrudUpdateHandler', () => {
     const result = (await handler(event, context, () => {})) as APIGatewayProxyResult;
 
     expect(result.statusCode).toBe(500);
+  });
+
+  describe('and the request body includes promo code', () => {
+    it('expect validate promo code to be called', async () => {
+      const event: APIGatewayEvent = {
+        pathParameters: {
+          pk: '86112105-6268-4ac4-a17a-83d32fd7f2b3',
+          sk: '302a3bf8-5b55-468c-8403-baf6492751a3',
+        },
+        body: JSON.stringify({ promoCode: 'CODE123' }),
+        httpMethod: 'PUT',
+      } as any;
+      const query: ReusableCrudQueryPayload = {
+        pk: 'PK#86112105-6268-4ac4-a17a-83d32fd7f2b3',
+        sk: 'SK#302a3bf8-5b55-468c-8403-baf6492751a3',
+      };
+      const mockPromoCodeResponse = {
+        bypassPayment: true,
+        bypassVerification: false,
+      };
+      const context = {} as any;
+      (ReusableCrudQueryMapper.fromPathParameters as jest.Mock).mockReturnValue(query);
+      (validateRequest as jest.Mock).mockReturnValue({
+        memberUuid: 'memberUuid',
+        body: JSON.parse(<string>event!.body),
+      });
+      (Response.OK as jest.Mock).mockReturnValue({
+        statusCode: 200,
+        body: JSON.stringify({ message: 'Promo code updated successfully' }),
+      });
+      mockValidatePromoCode.mockResolvedValue(mockPromoCodeResponse);
+
+      const result = await handler(event, context, () => {});
+
+      expect(mockValidatePromoCode).toHaveBeenCalled();
+      expect(result!.statusCode).toBe(200);
+      expect(result!.body).toBe(JSON.stringify({ message: 'Promo code updated successfully' }));
+    });
   });
 });

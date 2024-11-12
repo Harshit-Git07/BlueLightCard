@@ -1,5 +1,5 @@
 import {
-  DynamoDBDocument,
+  DynamoDBDocumentClient,
   QueryCommand,
   QueryCommandInput,
   UpdateCommand,
@@ -11,7 +11,7 @@ import { ReusableCrudQueryPayload } from '../types/reusableCrudQueryPayload';
 
 export class ReusableCrudRepository<T1 extends NamedZodType<z.ZodEffects<z.ZodObject<any>>>, T2> {
   constructor(
-    private readonly dynamoDB: DynamoDBDocument,
+    private readonly dynamoDB: DynamoDBDocumentClient,
     private readonly tableName: string,
     private readonly zodType: T1,
     private readonly pkPrefix: string,

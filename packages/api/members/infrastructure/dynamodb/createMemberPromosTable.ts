@@ -5,6 +5,7 @@ export function createMemberPromosTable(stack: Stack): Table {
     fields: {
       pk: 'string',
       sk: 'string',
+      code: 'string',
     },
     primaryIndex: {
       partitionKey: 'pk',
@@ -15,6 +16,7 @@ export function createMemberPromosTable(stack: Stack): Table {
         partitionKey: 'sk',
         sortKey: 'pk',
       },
+      gsi2: { partitionKey: 'code', sortKey: 'pk' },
     },
   });
 }

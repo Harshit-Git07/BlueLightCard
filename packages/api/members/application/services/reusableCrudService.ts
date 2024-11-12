@@ -48,7 +48,7 @@ export class ReusableCrudService<
         new APIError(
           APIErrorCode.GENERIC_ERROR,
           'reusableCrudService.upsert',
-          'Error occurred when ${action}ating ${this.entityName}',
+          `Error occurred when ${action}ating ${this.entityName}`,
         ),
       );
       throw error;

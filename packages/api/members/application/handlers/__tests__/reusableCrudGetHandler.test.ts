@@ -63,10 +63,10 @@ describe('reusableCrudGetHandler', () => {
 
   it('should successfully retrieve entities', async () => {
     const event: APIGatewayEvent = {
-      pathParameters: { pk: 'PK#123', sk: 'SK#456', brand: 'blc-uk' },
+      pathParameters: { pk: 'PK#123', sk: 'SK#456' },
     } as any;
 
-    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456', brand: 'blc-uk' };
+    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456' };
     (ReusableCrudQueryMapper.fromPathParameters as jest.Mock).mockReturnValue(query);
 
     (Response.OK as jest.Mock).mockReturnValue({
@@ -83,10 +83,10 @@ describe('reusableCrudGetHandler', () => {
 
   it('should return bad request if required query parameters are missing', async () => {
     const event: APIGatewayEvent = {
-      pathParameters: { pk: '123' },
+      pathParameters: { sk: '123' },
     } as any;
 
-    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: '', brand: '' };
+    const query: ReusableCrudQueryPayload = { pk: '', sk: '123' };
     (ReusableCrudQueryMapper.fromPathParameters as jest.Mock).mockReturnValue(query);
 
     (Response.BadRequest as jest.Mock).mockReturnValue({
@@ -101,9 +101,9 @@ describe('reusableCrudGetHandler', () => {
 
   it('should return not found (404) if retrieval fails', async () => {
     const event: APIGatewayEvent = {
-      pathParameters: { pk: 'PK#123', sk: 'SK#456', brand: 'blc-uk' },
+      pathParameters: { pk: 'PK#123', sk: 'SK#456' },
     } as any;
-    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456', brand: 'blc-uk' };
+    const query: ReusableCrudQueryPayload = { pk: 'PK#123', sk: 'SK#456' };
 
     (ReusableCrudQueryMapper.fromPathParameters as jest.Mock).mockReturnValue(query);
     (Response.OK as jest.Mock).mockImplementation(() => {

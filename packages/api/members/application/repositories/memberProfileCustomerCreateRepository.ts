@@ -1,5 +1,5 @@
 import {
-  DynamoDBDocument,
+  DynamoDBDocumentClient,
   QueryCommand,
   TransactWriteCommand,
   UpdateCommand,
@@ -17,7 +17,7 @@ import { ApplicationReason } from '../enums/ApplicationReason';
 import { v4 as uuidv4 } from 'uuid';
 export class memberProfileCustomerCreateRepository {
   constructor(
-    private dynamoDB: DynamoDBDocument,
+    private dynamoDB: DynamoDBDocumentClient,
     private tableName: string,
   ) {}
 

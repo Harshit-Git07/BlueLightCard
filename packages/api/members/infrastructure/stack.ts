@@ -43,7 +43,8 @@ import { GetCustomerProfileRoute } from './routes/GetCustomerProfileRoute';
 import { CustomerProfileModel } from '../application/models/customer/customerProfileModel';
 
 async function MembersStack({ stack, app }: StackContext) {
-  const identityTableName = `${stack.stage}-${app.name}-memberProfiles`;
+  const memberProfilesTableName = `${stack.stage}-${app.name}-memberProfiles`;
+  const promoCodeTableName = `${stack.stage}-${app.name}-memberPromos`;
 
   const { certificateArn } = use(Shared);
 
@@ -135,78 +136,79 @@ async function MembersStack({ stack, app }: StackContext) {
     'POST /members/v5/customers/{brand}': new CreateMemberProfileCustomerRoute(
       apiGatewayModelGenerator,
       agMemberProfileModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'PUT /members/v5/customers/{brand}/{memberUUID}/{profileId}':
       new UpdateMemberProfileCustomerRoute(
         apiGatewayModelGenerator,
         agMemberProfileModel,
-        identityTableName,
+        memberProfilesTableName,
       ).getRouteDetails(),
     'GET /members/v5/cards/{brand}/{uuid}': new GetMemberCardRoute(
       apiGatewayModelGenerator,
       agMemberCardModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'GET /members/v5/cards/{brand}/{uuid}/{cardNumber}': new GetMemberCardRoute(
       apiGatewayModelGenerator,
       agMemberCardModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'PUT /members/v5/cards/{brand}/{uuid}/{cardNumber}': new UpdateMemberCardRoute(
       apiGatewayModelGenerator,
       agMemberCardModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'GET /members/v5/applications/{brand}/{memberUUID}': new GetMemberApplicationRoute(
       apiGatewayModelGenerator,
       agMemberApplicationModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'GET /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new GetMemberApplicationRoute(
         apiGatewayModelGenerator,
         agMemberApplicationModel,
-        identityTableName,
+        memberProfilesTableName,
       ).getRouteDetails(),
     'PUT /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new UpdateMemberApplicationRoute(
         apiGatewayModelGenerator,
         agMemberApplicationModel,
-        identityTableName,
+        memberProfilesTableName,
       ).getRouteDetails(),
     'PUT /members/v5/profiles/{memberUUID}/{profileId}': new UpdateMemberProfileRoute(
       apiGatewayModelGenerator,
       agMemberProfileModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'POST /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new UpdateMemberApplicationRoute(
         apiGatewayModelGenerator,
         agMemberApplicationModel,
-        identityTableName,
+        memberProfilesTableName,
       ).getRouteDetails(),
-    'GET /members/v5/customers/applications/{brand}/{memberUUID}/{applicationId}':
-      new ReusableCrudGetRoute(
-        apiGatewayModelGenerator,
-        agMemberApplicationExternalModel,
-        identityTableName,
-        'application',
-        'applications',
-        'MEMBER',
-        'APPLICATION',
-        'memberUUID',
-        'applicationId',
-        'MemberApplicationExternalModel',
-        'MemberApplicationCustomerPayload',
-      ).getRouteDetails(),
-    'PUT /members/v5/customers/applications/{brand}/{memberUUID}/{applicationId}':
+    'GET /members/v5/customers/applications/{memberUUID}/{applicationId}': new ReusableCrudGetRoute(
+      apiGatewayModelGenerator,
+      agMemberApplicationExternalModel,
+      memberProfilesTableName,
+      'application',
+      'applications',
+      'MEMBER',
+      'APPLICATION',
+      'memberUUID',
+      'applicationId',
+      'MemberApplicationExternalModel',
+      'MemberApplicationCustomerPayload',
+    ).getRouteDetails(),
+    'PUT /members/v5/customers/applications/{memberUUID}/{applicationId}':
       new ReusableCrudUpdateRoute(
         apiGatewayModelGenerator,
         agMemberApplicationExternalModel,
-        identityTableName,
+        memberProfilesTableName,
         'application',
         'applications',
+        memberProfilesTableName,
+        promoCodeTableName,
         'MEMBER',
         'APPLICATION',
         'memberUUID',
@@ -217,27 +219,27 @@ async function MembersStack({ stack, app }: StackContext) {
     'GET /members/v5/orgs/{brand}': new GetOrganisationsRoute(
       apiGatewayModelGenerator,
       agOrganisationModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'GET /members/v5/orgs/{brand}/{organisationId}': new GetOrganisationsRoute(
       apiGatewayModelGenerator,
       agOrganisationModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'GET /members/v5/customer/{brand}/{memberUuid}/{profileUuid}': new GetCustomerProfileRoute(
       apiGatewayModelGenerator,
       agCustomerProfileModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'GET /members/v5/orgs/employers/{brand}/{organisationId}': new GetEmployersRoute(
       apiGatewayModelGenerator,
       agEmployerModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
     'GET /members/v5/orgs/employers/{brand}/{organisationId}/{employerId}': new GetEmployersRoute(
       apiGatewayModelGenerator,
       agEmployerModel,
-      identityTableName,
+      memberProfilesTableName,
     ).getRouteDetails(),
   });
 

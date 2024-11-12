@@ -1,7 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '../utils/restResponse/response';
 import { APIErrorCode } from '../enums/APIErrorCode';
 import { APIError } from '../models/APIError';
@@ -27,8 +27,9 @@ const pkQueryKey = process.env.PK_QUERY_KEY as string;
 const skQueryKey = process.env.SK_QUERY_KEY as string;
 
 const tableName = process.env.ENTITY_TABLE_NAME as string;
-const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
-
+const dynamoDB = DynamoDBDocumentClient.from(
+  new DynamoDBClient({ region: process.env.REGION ?? 'eu-west-2' }),
+);
 export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   type PayloadTypeName = keyof typeof reusableCrudPayloadTypes;
   const payloadTypeName = process.env.PAYLOAD_TYPE_NAME as PayloadTypeName;
@@ -54,7 +55,7 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     skQueryKey,
   );
 
-  if ((!query.pk && query.pk.length == 0) || (!query.brand && query.brand.length == 0)) {
+  if (!query.pk && query.pk.length == 0) {
     logger.error({ message: 'Missing required query parameters' });
     return Response.BadRequest({
       message: 'Error: Missing required query parameters',
@@ -64,7 +65,6 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
           pkQueryKey,
           `${pkQueryKey} is required`,
         ),
-        new APIError(APIErrorCode.MISSING_REQUIRED_PARAMETER, 'brand', 'brand is required'),
       ],
     });
   }

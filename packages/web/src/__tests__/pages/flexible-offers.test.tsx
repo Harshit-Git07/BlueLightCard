@@ -50,7 +50,7 @@ describe('Flexible Offers page', () => {
     });
 
     test('and renders an error message', async () => {
-      const errorMessage = await within(container).findByText('Something went wrong');
+      const errorMessage = await within(container).findByText('Oops! Something went wrong.');
       expect(errorMessage).toBeInTheDocument();
     });
 

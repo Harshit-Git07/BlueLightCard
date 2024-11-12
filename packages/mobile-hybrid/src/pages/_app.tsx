@@ -10,6 +10,7 @@ import '@/nativeReceive';
 import { museoFont, sourceSansPro } from '@/font';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
+import { BRAND, CDN_URL } from '@/globals';
 import { SharedUIConfigProvider, ViewOfferProvider } from '@bluelightcard/shared-ui';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
@@ -32,8 +33,8 @@ export default function App({ Component, pageProps }: AppProps) {
       <SharedUIConfigProvider
         value={{
           globalConfig: {
-            cdnUrl: 'https://cdn.bluelightcard.co.uk',
-            brand: 'blc-uk',
+            cdnUrl: CDN_URL,
+            brand: BRAND,
           },
         }}
       >

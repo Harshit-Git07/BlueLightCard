@@ -1,6 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
 import FlexibleOffersPage from '@/pages/flexible-offers';
-import { StorybookPlatformAdapterDecorator, flexibleOfferMock } from '@bluelightcard/shared-ui';
+import {
+  StorybookPlatformAdapterDecorator,
+  StorybookSharedUIConfigDecorator,
+  flexibleOfferMock,
+} from '@bluelightcard/shared-ui';
 
 const componentMeta: Meta<typeof FlexibleOffersPage> = {
   title: 'Pages/Flexible Offers',
@@ -27,7 +31,7 @@ const componentMeta: Meta<typeof FlexibleOffersPage> = {
         }),
     },
   },
-  decorators: [StorybookPlatformAdapterDecorator],
+  decorators: [StorybookSharedUIConfigDecorator, StorybookPlatformAdapterDecorator],
 };
 
 const DefaultTemplate: StoryFn<typeof FlexibleOffersPage> = (args) => {

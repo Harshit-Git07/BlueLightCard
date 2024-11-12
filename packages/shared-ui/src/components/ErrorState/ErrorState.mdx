@@ -1,11 +1,12 @@
 import { Meta, Canvas, Controls } from '@storybook/blocks';
+import AmplitudeEvents from '../../utils/amplitude/events';
 import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
 import FigmaEmbed from '../../../.storybook/blocks/FigmaEmbed';
 import * as ErrorState from './ErrorState.stories';
 
 <Meta of={ErrorState} />
 
-# ErrorState
+# Error State
 
 - [Status](#status)
 - [Overview](#overview)
@@ -34,6 +35,15 @@ This component uses default values and behaviour that can be customised if you w
 
 This component uses no state.
 
+## Analytics
+
+This component logs two analytics events to Amplitude:
+
+- <code>{AmplitudeEvents.ERROR_STATE.VIEWED}</code> is logged once when the error state is viewed for
+  the given `page`
+- <code>{AmplitudeEvents.ERROR_STATE.CTA_CLICKED}</code> is logged every time a user clicks on the error
+  state call to action
+
 ## Variants and States
 
 List of variants can be shown below here.
@@ -48,15 +58,13 @@ List of variants can be shown below here.
 
 ## Implementation
 
-Usage example using jsx
-
 ```jsx
 import ErrorBoundary from 'react-error-boundary';
 import { ErrorState } from '@bluelightcard/shared-ui';
 
 const Page: FC = () => {
   return (
-    <ErrorBoundary fallback={<ErrorState />}>
+    <ErrorBoundary fallback={<ErrorState page="example_page" />}>
       <ChildComponent />
     </ErrorBoundary>
   );

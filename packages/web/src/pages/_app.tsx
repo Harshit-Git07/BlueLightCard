@@ -15,6 +15,7 @@ import {
   DATADOG_DEFAULT_SERVICE,
   DATADOG_SITE,
   FLAGSMITH_KEY,
+  BRAND,
   CDN_URL,
 } from '@/global-vars';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -110,7 +111,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           value={{
             globalConfig: {
               cdnUrl: CDN_URL,
-              brand: 'blc-uk',
+              brand: BRAND,
             },
           }}
         >

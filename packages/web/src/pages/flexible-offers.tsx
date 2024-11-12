@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
   AmplitudeEvents,
+  ErrorState,
   Image,
   Offer,
   OfferCardList,
@@ -129,7 +130,7 @@ const FlexibleOffersPage: NextPage = () => {
       className="py-0 mb-0 laptop:py-6"
       nestedClassName="mx-0 px-0 laptop:mx-auto laptop:px-5 flex flex-col gap-6"
     >
-      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+      <ErrorBoundary fallback={<ErrorState page="flexi_menu" />}>
         <Suspense fallback={<FlexibleOffersSkeleton />}>
           <FlexibleOffersContent />
         </Suspense>

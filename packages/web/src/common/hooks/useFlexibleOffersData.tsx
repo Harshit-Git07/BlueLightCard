@@ -6,7 +6,8 @@ import type { FlexibleOfferData } from '@bluelightcard/shared-ui';
 const useFlexibleOffersData = (flexiMenuId: string) => {
   const platformAdapter = usePlatformAdapter();
 
-  if (!flexiMenuId || flexiMenuId === '') throw new Error('Valid flexi menu ID not provided');
+  if (!flexiMenuId || flexiMenuId === '' || flexiMenuId === 'undefined')
+    throw new Error('Valid flexi menu ID not provided');
 
   return useSuspenseQuery({
     queryKey: ['flexibleOffersData', flexiMenuId],

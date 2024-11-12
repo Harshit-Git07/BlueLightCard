@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 export type SharedUIConfig = {
   globalConfig: {
     cdnUrl: string;
-    brand: 'blc-uk';
+    brand: string;
   };
 };
 

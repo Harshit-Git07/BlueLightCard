@@ -26,6 +26,7 @@ export const V5_API_URL = {
   Search: `/${V5_REGION}/discovery/search`,
   CampaignEvents: `/${V5_REGION}/discovery/campaigns`,
   User: `/${V5_REGION}/identity/user`,
+  FlexibleOffers: `/${V5_REGION}/discovery/menu`,
 } as const;
 
 export const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcard.co.uk';

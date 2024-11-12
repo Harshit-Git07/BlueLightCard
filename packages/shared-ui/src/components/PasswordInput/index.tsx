@@ -71,7 +71,7 @@ const PasswordInput: FC<Props> = ({
     infoIcon: `h-[14px] w-[14px] ${colours.textOnSurfaceSubtle} ${isDisabled && 'pointer-events-none'}`,
     helpMessage: `mt-[6px] ${colours.textOnSurfaceSubtle} ${fonts.body}`,
     fieldWrapper: `relative mt-[6px]`,
-    input: `w-full h-[50px] px-[16px] pt-[16px] ${fonts.body} ${isDisabled ? colours.textOnSurfaceDisabled : colours.textOnSurface} ${isDisabled ? colours.backgroundSurfaceContainer : 'bg-transparent'} ${getBorderClasses()}`,
+    input: `peer w-full h-[50px] px-[16px] pt-[16px] ${fonts.body} ${isDisabled ? colours.textOnSurfaceDisabled : colours.textOnSurface} ${isDisabled ? colours.backgroundSurfaceContainer : 'bg-transparent'} ${getBorderClasses()}`,
     eyeIconButton: `absolute top-1/2 right-4 -translate-y-1/2 ${isDisabled && 'pointer-events-none'}`,
     eyeIcon: `w-[16px] h-[16px] ${isDisabled ? colours.textOnSurfaceDisabled : colours.textOnSurface}`,
     infoMessage: `mt-[8px] ${isValid ? colours.textSuccess : colours.textError} ${fonts.bodySmall}`,
@@ -114,7 +114,7 @@ const PasswordInput: FC<Props> = ({
         <FloatingPlaceholder
           htmlFor={`password-${componentId}`}
           hasValue={!!password}
-          isValid={isValid}
+          isValid={isValid || !isInputDirty}
           isDisabled={isDisabled}
         >
           Password

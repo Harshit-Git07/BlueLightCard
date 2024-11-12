@@ -368,9 +368,7 @@ describe('Analytics', () => {
   it.each(['treatment', 'control'])('should logSearchCardClicked event', async (variant) => {
     givenResultsAreReturned();
     givenExperimentsReturn(variant, 'control');
-
     whenSearchPageIsRendered();
-
     await whenOfferCardClicked();
     thenAmplitudeEventFired();
   });

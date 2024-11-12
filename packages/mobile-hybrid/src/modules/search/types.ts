@@ -12,5 +12,4 @@ export interface SearchProps {
   onClear?: () => void;
   onFocus?: () => void;
   placeholderText?: string;
-  searchVariant?: string;
 }

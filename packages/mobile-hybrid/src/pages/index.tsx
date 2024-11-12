@@ -24,7 +24,6 @@ import USPBanner from '@/components/UspBanner/UspBanner';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
-import { GetSearchVariant } from '../experiments/getSearchVariant';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -88,8 +87,6 @@ const Home: NextPage<any> = () => {
     );
   };
 
-  const searchVariant = GetSearchVariant();
-
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
@@ -108,7 +105,6 @@ const Home: NextPage<any> = () => {
             )
           }
           placeholderText="Search stores or brands"
-          experimentalSearchVariant={searchVariant}
         />
 
         <PromoBanner />

@@ -1,4 +1,8 @@
 export function maskUsername(username: string) {
+  if (!username) {
+    return '';
+  }
+
   const usernameLength = username.length;
 
   if (usernameLength < 3) {

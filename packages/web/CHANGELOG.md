@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.85.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.85.0...bluelightcard/web-v1.85.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* company page again ([#2885](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2885)) ([947fde4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/947fde4f0667555c460dbb09777b6e6798427a57))
+
 ## [1.85.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.84.0...bluelightcard/web-v1.85.0) (2024-11-12)
 
 

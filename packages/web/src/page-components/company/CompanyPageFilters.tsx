@@ -1,23 +1,29 @@
 import {
   getCompanyOffersQuery,
+  getCompanyQuery,
   offerTypeLabelMap,
   PillButtons,
   PlatformVariant,
-} from '@bluelightcard/shared-ui/index';
+} from '@bluelightcard/shared-ui';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMedia } from 'react-use';
 import { useCmsEnabled } from '../../common/hooks/useCmsEnabled';
+import { useContext } from 'react';
+import AmplitudeContext from '../../common/context/AmplitudeContext';
+import amplitudeEvents from '@/utils/amplitude/events';
 
 type Props = {
-  companyId: string | null;
+  companyId: string;
   value: string | null;
   onChange: (value: string | null) => void;
 };
 
 const CompanyPageFilters = (props: Props) => {
+  const amplitude = useContext(AmplitudeContext);
   const isMobile = useMedia('(max-width: 500px)');
   const cmsEnabled = useCmsEnabled();
 
+  const company = useSuspenseQuery(getCompanyQuery(props.companyId, cmsEnabled));
   const offerTypes = useSuspenseQuery({
     ...getCompanyOffersQuery(props.companyId, cmsEnabled),
     select: (data) => {
@@ -29,6 +35,14 @@ const CompanyPageFilters = (props: Props) => {
 
   const onSelect = (type: string | null) => {
     props.onChange(type);
+
+    if (amplitude) {
+      amplitude.trackEventAsync(amplitudeEvents.COMPANY_FILTER_CLICKED, {
+        company_id: company.data.id,
+        company_name: company.data.name,
+        filter_name: props.value ?? 'All',
+      });
+    }
   };
 
   if (offerTypes.data.length === 0) {

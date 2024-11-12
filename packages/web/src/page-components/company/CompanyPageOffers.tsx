@@ -9,7 +9,7 @@ import { useCmsEnabled } from '../../common/hooks/useCmsEnabled';
 
 type Props = {
   isMobile: boolean;
-  companyId: string | null;
+  companyId: string;
   filter: string | null;
   onOfferClick: (offerId: string, companyId: string, companyName: string) => void;
 };

@@ -91,11 +91,11 @@ const sizeSpecificPadding: Record<ButtonSize, string> = {
 };
 
 const Button: FC<ButtonProps> = ({
+  className = '',
   iconLeft,
   iconRight,
   disabled,
   children,
-  className,
   href,
   type = 'button',
   variant = ThemeVariant.Primary,
@@ -128,19 +128,19 @@ const Button: FC<ButtonProps> = ({
     !withoutFocus ? colourToken.focus : '',
     colourToken.bg ?? '',
     colourToken.border ?? '',
-    className ?? '',
+    className,
   ]);
 
   const ButtonTag = href ? 'a' : 'button';
 
   return (
     <ButtonTag
+      className={`${classes} text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font`}
+      data-testid={props['data-testid']}
       href={ButtonTag === 'a' ? href : undefined} // Only apply href when anchor tag is used
       type={ButtonTag === 'button' ? type : undefined} // Only apply type when it's a button
       disabled={ButtonTag === 'button' ? disabled : undefined} // Apply disabled only for buttons
-      className={`${classes} text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font`}
       onClick={ButtonTag === 'button' ? onClick : undefined} // Apply onClick only for buttons
-      data-testid={props['data-testid']}
     >
       {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
       {children}

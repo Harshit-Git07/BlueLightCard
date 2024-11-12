@@ -1,15 +1,16 @@
-import { ReactNode, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-eligibility-details/types/EligibilityDetails';
+import Tag from '@bluelightcard/shared-ui/components/Tag';
+import { ListSelectorProps } from '@bluelightcard/shared-ui/components/ListSelector/types';
+import { TagProps } from '@bluelightcard/shared-ui/components/Tag/types';
+import { faCircleInfo } from '@fortawesome/pro-solid-svg-icons';
 
 interface VerificationMethodDetails {
-  firstVerificationMethod: VerificationMethodTitleAndDescription;
-  secondVerificationMethod?: VerificationMethodTitleAndDescription;
+  firstVerificationMethod: Details;
+  secondVerificationMethod?: Details;
 }
 
-interface VerificationMethodTitleAndDescription {
-  title: string;
-  description?: ReactNode;
-}
+type Details = Pick<ListSelectorProps, 'title' | 'description' | 'tag' | 'showTrailingIcon'>;
 
 export function useVerificationMethodDetails(
   eligibilityDetails: EligibilityDetails
@@ -21,10 +22,8 @@ export function useVerificationMethodDetails(
   };
 }
 
-function useFirstVerificationMethodDetails(
-  eligibilityDetails: EligibilityDetails
-): VerificationMethodTitleAndDescription {
-  const firstVerificationMethodTitle = useMemo(() => {
+function useFirstVerificationMethodDetails(eligibilityDetails: EligibilityDetails): Details {
+  const title = useMemo(() => {
     if (Array.isArray(eligibilityDetails.fileVerificationType)) {
       return eligibilityDetails.fileVerificationType[0];
     }
@@ -32,8 +31,8 @@ function useFirstVerificationMethodDetails(
     return eligibilityDetails.fileVerificationType ?? 'Unknown verification method selected';
   }, [eligibilityDetails.fileVerificationType]);
 
-  const firstVerificationMethodDescription = useMemo(() => {
-    if (firstVerificationMethodTitle === 'Work Contract') {
+  const description = useMemo(() => {
+    if (title === 'Work Contract') {
       return (
         <>
           Must show NHS/HSC
@@ -44,18 +43,32 @@ function useFirstVerificationMethodDetails(
     }
 
     return undefined;
-  }, [firstVerificationMethodTitle]);
+  }, [title]);
+
+  const tag = useMemo(() => {
+    if (Array.isArray(eligibilityDetails.fileVerificationType)) {
+      return <VerificationMethodDetailsTag infoMessage="Primary document" />;
+    }
+
+    return undefined;
+  }, [eligibilityDetails.fileVerificationType]);
+
+  const showTrailingIcon = useMemo(() => {
+    return !Array.isArray(eligibilityDetails.fileVerificationType);
+  }, [eligibilityDetails.fileVerificationType]);
 
   return {
-    title: firstVerificationMethodTitle,
-    description: firstVerificationMethodDescription,
+    title,
+    description,
+    tag,
+    showTrailingIcon,
   };
 }
 
 function useSecondVerificationMethodDetails(
   eligibilityDetails: EligibilityDetails
-): VerificationMethodTitleAndDescription | undefined {
-  const secondVerificationMethodTitle = useMemo(() => {
+): Details | undefined {
+  const title = useMemo(() => {
     if (
       !Array.isArray(eligibilityDetails.fileVerificationType) ||
       eligibilityDetails.fileVerificationType.length !== 2
@@ -66,18 +79,33 @@ function useSecondVerificationMethodDetails(
     return eligibilityDetails.fileVerificationType[1];
   }, [eligibilityDetails.fileVerificationType]);
 
-  const secondVerificationMethodDescription = useMemo(() => {
-    if (secondVerificationMethodTitle === 'Bank Statement') {
+  const description = useMemo(() => {
+    if (title === 'Bank Statement') {
       return 'Must show the social care department within the council\nMust show your full name';
     }
 
     return undefined;
-  }, [secondVerificationMethodTitle]);
+  }, [title]);
 
-  if (!secondVerificationMethodTitle) return undefined;
+  const tag = useMemo(() => {
+    if (Array.isArray(eligibilityDetails.fileVerificationType)) {
+      return <VerificationMethodDetailsTag infoMessage="Supporting document" />;
+    }
+
+    return undefined;
+  }, [eligibilityDetails.fileVerificationType]);
+
+  if (!title) return undefined;
 
   return {
-    title: secondVerificationMethodTitle,
-    description: secondVerificationMethodDescription,
+    title,
+    description,
+    tag,
   };
 }
+
+type VerificationMethodDetailsTagProps = Pick<TagProps, 'infoMessage'>;
+
+const VerificationMethodDetailsTag: FC<VerificationMethodDetailsTagProps> = (props) => (
+  <Tag {...props} state="Info" iconLeft={faCircleInfo} />
+);

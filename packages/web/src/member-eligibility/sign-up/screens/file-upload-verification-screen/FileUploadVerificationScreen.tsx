@@ -7,7 +7,6 @@ import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { ListSelectorState } from '@bluelightcard/shared-ui/components/ListSelector/types';
 import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/file-upload-verification-screen/hooks/FuzzyFrontendButtons';
-import Link from '@/components/Link/Link';
 import Alert from '@bluelightcard/shared-ui/components/Alert';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { useVerificationMethodDetails } from '@/root/src/member-eligibility/sign-up/screens/file-upload-verification-screen/hooks/VeificationMethodDetails';
@@ -17,6 +16,7 @@ import {
   OnFilesChanged,
 } from '@/root/src/member-eligibility/sign-up/screens/file-upload-verification-screen/components/EligibilityFileUpload';
 import { EligibilityHeading } from '@/root/src/member-eligibility/sign-up/screens/shared/components/screen/components/EligibilityHeading';
+import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 
 export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -93,8 +93,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
             </p>
 
             <ListSelector
-              title={firstVerificationMethod.title}
-              description={firstVerificationMethod.description}
+              {...firstVerificationMethod}
               state={ListSelectorState.Selected}
               onClick={onBack}
             />
@@ -104,8 +103,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
                 <div className={`${fonts.bodySmallSemiBold} ${colours.textOnSurface}`}>AND</div>
 
                 <ListSelector
-                  title={secondVerificationMethod.title}
-                  description={secondVerificationMethod.description}
+                  {...secondVerificationMethod}
                   state={ListSelectorState.Selected}
                   onClick={onBack}
                 />
@@ -142,7 +140,14 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
               icon="fa-solid fa-circle-info"
               isFullWidth
             >
-              <Link href={privacyPolicyUrl}>Read candidate privacy policy</Link>
+              <Button
+                className="!px-0"
+                variant={ThemeVariant.Tertiary}
+                size="XSmall"
+                href={privacyPolicyUrl}
+              >
+                Read candidate privacy policy
+              </Button>
             </Alert>
           )}
 

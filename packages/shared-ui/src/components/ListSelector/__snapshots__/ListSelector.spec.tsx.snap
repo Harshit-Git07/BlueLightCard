@@ -10,7 +10,7 @@ exports[`ListSelector component should render default list selector with hidden 
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col items-start w-full text-left"
+    className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
       className="flex items-center gap-2 w-full"
@@ -61,7 +61,7 @@ exports[`ListSelector component should render default list selector with hidden 
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col items-start w-full text-left"
+    className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
       className="flex items-center gap-2 w-full"
@@ -108,7 +108,7 @@ exports[`ListSelector component should render default list selector with hidden 
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col items-start w-full text-left"
+    className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
       className="flex items-center gap-2 w-full"
@@ -148,7 +148,7 @@ exports[`ListSelector component should render default list selector with in hove
   role="button"
 >
   <div
-    className="flex flex-col items-start w-full text-left"
+    className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
       className="flex items-center gap-2 w-full"
@@ -199,7 +199,7 @@ exports[`ListSelector component should render default list selector with in sele
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col items-start w-full text-left"
+    className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
       className="flex items-center gap-2 w-full"
@@ -250,7 +250,7 @@ exports[`ListSelector component should render default list selector with title, 
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col items-start w-full text-left"
+    className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
       className="flex items-center gap-2 w-full"

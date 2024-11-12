@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { TagProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cssUtil } from '../../utils/cssUtil';
+
 const Tag: FC<TagProps> = ({ state = 'Default', iconLeft, iconRight, infoMessage }) => {
   const colorTokens: Record<string, any> = {
     Default: {

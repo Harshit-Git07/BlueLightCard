@@ -72,7 +72,7 @@ const ListSelector: FC<ListSelectorProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="flex flex-col items-start w-full text-left">
+      <div className="flex flex-col gap-1 items-start w-full text-left">
         <div className="flex items-center gap-2 w-full">
           <h4 className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal">
             {title}

@@ -47,8 +47,8 @@ const Alert: FC<AlertProps> = ({
         'font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold  ',
       subtext:
         'pt-1 font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small',
-      layout: '',
-      children: 'mt-[0.75rem] tablet:mt-3',
+      layout: 'flex flex-col gap-0',
+      children: 'flex flex-col gap-1',
       icon: '',
       iconSize: `pt-1 tablet:pt-[5px]`,
     },
@@ -67,8 +67,7 @@ const Alert: FC<AlertProps> = ({
         ${variantStyle.fullWidth}
         ${backgroundAlertColor} 
         ${variantStyle.variant} 
-        flex-col rounded 
-        justify-between 
+        flex flex-col rounded justify-between 
       `}
       data-testid="alert"
     >
@@ -84,7 +83,7 @@ const Alert: FC<AlertProps> = ({
             </div>
           </div>
         ) : null}
-        <div className={`${variantStyle.layout} mx-4 m-auto tablet:justify-between w-full`}>
+        <div className={`${variantStyle.layout} mx-4 m-auto w-full`}>
           <div className="flex-col content-center tablet:pr-[16px] max-w-[750px]">
             <p
               className={`w-full text-colour-onSurface-light dark:text-colour-onSurface-dark break-words ${variantStyle.title}`}
@@ -102,7 +101,7 @@ const Alert: FC<AlertProps> = ({
           </div>
           {children && (
             <div
-              className={`flex max-w-[250px] text-base w-full items-center justify-start ${variantStyle.children}`}
+              className={`flex flex-col justify-start items-start max-w-[250px] text-base w-full ${variantStyle.children}`}
             >
               {children}
             </div>

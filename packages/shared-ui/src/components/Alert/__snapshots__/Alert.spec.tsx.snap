@@ -7,8 +7,7 @@ exports[`Alert Component renders correctly for Banner variant 1`] = `
         w-full
         bg-colour-success-bright-light dark:bg-colour-success-container-dark 
         sticky top-0 left-0 z-50 px-[1rem] tablet:px-[3.5rem] laptop:px-[6.5rem] py-[1rem] 
-        flex-col rounded 
-        justify-between 
+        flex flex-col rounded justify-between 
       "
   data-testid="alert"
 >
@@ -44,7 +43,7 @@ exports[`Alert Component renders correctly for Banner variant 1`] = `
       </div>
     </div>
     <div
-      className="tablet:flex tablet:mx-6 mx-4 m-auto tablet:justify-between w-full"
+      className="tablet:flex tablet:mx-6 mx-4 m-auto w-full"
     >
       <div
         className="flex-col content-center tablet:pr-[16px] max-w-[750px]"
@@ -101,8 +100,7 @@ exports[`Alert Component renders correctly for Inline variant 1`] = `
         mx-auto
         bg-colour-info-bright-light dark:bg-colour-info-bright-dark 
         relative  px-[0.75rem] py-[0.75rem] 
-        flex-col rounded 
-        justify-between 
+        flex flex-col rounded justify-between 
       "
   data-testid="alert"
 >
@@ -138,7 +136,7 @@ exports[`Alert Component renders correctly for Inline variant 1`] = `
       </div>
     </div>
     <div
-      className=" mx-4 m-auto tablet:justify-between w-full"
+      className="flex flex-col gap-0 mx-4 m-auto w-full"
     >
       <div
         className="flex-col content-center tablet:pr-[16px] max-w-[750px]"

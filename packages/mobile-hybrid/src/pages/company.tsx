@@ -9,6 +9,7 @@ import {
   CompanyAbout,
   PlatformVariant,
   apiDynamicPath,
+  useOfferDetails,
 } from '@bluelightcard/shared-ui';
 import { companyDataAtom } from '@/page-components/company/atoms';
 import CompanyPageHeader from '@/page-components/company/components/CompanyPageHeader';
@@ -35,7 +36,8 @@ const analytics = new InvokeNativeAnalytics();
 
 const Company: NextPage<any> = () => {
   const router = useRouter();
-  const { cid } = router.query;
+  const { cid, oid } = router.query;
+  const { viewOffer } = useOfferDetails();
 
   const setSpinner = useSetAtom(spinner);
   const [company, setCompany] = useAtom(companyDataAtom);
@@ -48,6 +50,20 @@ const Company: NextPage<any> = () => {
   const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
   let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
   let isCmsFlagOn = amplitudeExperiments[FeatureFlags.CMS_OFFERS] === 'on';
+
+  useEffect(() => {
+    // if oid=null, null would be a string in the url, so we need to handle that as string
+    if (oid && oid !== 'null' && cid && company?.companyName) {
+      viewOffer({
+        offerId: oid as string,
+        companyId: cid as string,
+        companyName: company?.companyName || '',
+        platform: PlatformVariant.MobileHybrid,
+      });
+    }
+    // viewOffer is a dependency of this useEffect, but we only want to run it once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [oid, cid, company?.companyName]);
 
   useEffect(() => {
     const getOffers = async () => {

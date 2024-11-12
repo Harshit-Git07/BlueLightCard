@@ -73,6 +73,7 @@ const Header = (props: { isMobile: boolean }) => {
 const CompanyPage = () => {
   const pathname = usePathname();
   const [cid] = useQueryState('cid');
+  const [oid] = useQueryState('oid');
 
   const isMobile = useMedia('(max-width: 500px)');
 
@@ -124,6 +125,14 @@ const CompanyPage = () => {
       amplitudeCtx: amplitude,
     });
   }
+
+  useEffect(() => {
+    if (oid && cid && company.data?.name) {
+      onSelectOffer(oid, cid, company.data?.name);
+    }
+    // onSelectOfer is a dependency, but we don't want to run it on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [oid, cid, company.data?.name]);
 
   useEffect(() => {
     const handleCompanyView = (eventSource: string, companyId: string, companyName: string) => {

@@ -14,7 +14,7 @@ export function checkBallotsCron(stack: Stack, database: IDatabase): Cron {
   const queue = new Queue(stack, 'checkBallotDeadLetterQueue');
   const vaultCreatedHandler = new SSTFunction(stack, 'checkBallotHandler', {
     database,
-    handler: 'packages/api/redemptions/application/handlers/cron/ballots/checkBallotHandler.handler',
+    handler: 'packages/api/redemptions/application/handlers/cron/ballots/checkBallotsHandler.handler',
     retryAttempts: 2,
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,

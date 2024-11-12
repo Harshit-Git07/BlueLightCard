@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.85.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.84.0...bluelightcard/web-v1.85.0) (2024-11-12)
+
+
+### Features
+
+* [MER-182] Add design tweaks for multi-ID screen ([#2853](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2853)) ([cf04a70](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cf04a70143b628bba6aee9315f7894e2d3b7d52c))
+* [MER-23] verify eligibility choose verification method ([#2800](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2800)) ([a4f5537](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a4f5537614c3343f11bec55e26470fd69d3f6dc2))
+* [MER-29] Trusted-Domain-Screen ([#2859](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2859)) ([1cbe0e8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1cbe0e81d0b20e8f8f5386a482b933ac04530f58))
+* DISCO-1156 Added `ErrorState` to Web `/flexible-offers` ([#2852](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2852)) ([97a08a7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/97a08a7f6b69af49e5b94f1220670775a44b1f11))
+* MER-33 Email retry screen ([#2840](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2840)) ([2336d32](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2336d32fb8e000df23f2e035e8c6f227c38f7130))
+* Prevent dark mode on eligibility flow ([#2855](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2855)) ([df1a81a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/df1a81a0226183558086b92e89276fe27443f0d8))
+* remove legacy footer ([#2642](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2642)) ([98ecc82](https://github.com/bluelightcard/BlueLightCard-2.0/commit/98ecc82e7b073acd8e9b2ba58eee41ac3d33dd18))
+* TO-1277 offer sheet on url offer ([#2651](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2651)) ([94a9878](https://github.com/bluelightcard/BlueLightCard-2.0/commit/94a9878150cee3ff12b57c50e1f228271a2f772a))
+
+
+### Bug Fixes
+
+* company page ([#2882](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2882)) ([5333b74](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5333b74b10ee359bd7f486fd5e8a36b070152135))
+* removal of work for CONV BLC 5.0 Search ([#2783](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2783)) ([dd5d21a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd5d21a7cc8bf72bd4854a05b86a7a4e528694f3))
+
 ## [1.84.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.83.0...bluelightcard/web-v1.84.0) (2024-11-11)
 
 

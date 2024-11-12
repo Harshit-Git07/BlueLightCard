@@ -80,21 +80,31 @@ jobs:
               exit 1
             fi
           done
-
-      # Upload Playwright report if the test fails
-      - name: Upload Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: packages/web-playwright-tests/html-report
-
-      # Send Slack message if all retries fail
+        # Send Slack message if all retries fail
       - name: Send Slack message on fail
         if: failure()
         run: |
           WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "*Playwright Web test `Login to DDS home page` has failed after 3 attempts against production - Login may not be functioning correctly. Check the workflow run report ('"$WORKFLOW_URL"') for further details.*",
-            "mrkdwn": true
-          }' ${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}
+            "attachments": [
+              {
+                "color": "#FF0000",
+                "text": "Playwright Web test `Login to DDS home page` has failed after 2 attempts on Firefox against production. Check the workflow run report ('${WORKFLOW_URL}') for further details.",
+                "mrkdwn_in": ["text"]
+              }
+            ]
+          }' "${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}"
+
+      # Send Slack message on test passing
+      - name: Send Slack message on pass
+        if: success()
+        run: |
+          WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "attachments": [
+              {
+                "color": "#36A64F",
+                "text": "Playwright Web test `Login to DDS home page` has passed successfully on Firefox against production. Check the workflow run report ('${WORKFLOW_URL}') for details.",
+                "mrkdwn_in": ["text"]
+              }
+            ]

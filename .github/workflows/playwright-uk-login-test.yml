@@ -5,7 +5,6 @@ on:
     - cron: '*/50 * * * *' # Run every 50 minutes
   workflow_dispatch:
 
-
 jobs:
   test:
     runs-on: ui-automation
@@ -92,6 +91,26 @@ jobs:
         run: |
           WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           curl -X POST -H 'Content-type: application/json' --data '{
-            "text": "Playwright Web test `Login to UK home page` has failed after 2 attempts on Firefox against production. Check the workflow run report ('"$WORKFLOW_URL"') for further details.",
-            "mrkdwn": true
-          }' ${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}
+            "attachments": [
+              {
+                "color": "#FF0000",
+                "text": "Playwright Web test `Login to UK home page` has failed after 2 attempts on Firefox against production. Check the workflow run report ('${WORKFLOW_URL}') for further details.",
+                "mrkdwn_in": ["text"]
+              }
+            ]
+          }' "${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}"
+
+      # Send Slack message on test passing
+      - name: Send Slack message on pass
+        if: success()
+        run: |
+          WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "attachments": [
+              {
+                "color": "#36A64F",
+                "text": "Playwright Web test `Login to UK home page` has passed successfully on Firefox against production. Check the workflow run report ('${WORKFLOW_URL}') for details.",
+                "mrkdwn_in": ["text"]
+              }
+            ]
+          }' "${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}"

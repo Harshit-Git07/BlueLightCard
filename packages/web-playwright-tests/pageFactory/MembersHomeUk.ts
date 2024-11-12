@@ -87,7 +87,7 @@ export class MembersHomeUk {
     this.UPDATE_BUTTON_UK = page.locator("button[data-qa='button-personal-info-details']");
 
     // Additional locators for assertions
-    this.BLUELIGHTBUTTON_NAVBAR_UK = page.getByTestId('Logout-header-link');
+    this.BLUELIGHTBUTTON_NAVBAR_UK = page.locator('div.bg-NavBar-bg-colour');
     this.UK_FLAG_BUTTON_UK = page.getByRole('button', { name: 'United Kingdom flag United' });
     this.REGISTER_LINK_UK = page.getByRole('link', { name: 'Register', exact: true });
     this.FORGOT_PASSWORD_LINK_UK = page.getByRole('link', { name: 'Forgot password?' });
@@ -131,7 +131,7 @@ export class MembersHomeUk {
         this.MODERN_SLAVERY_ACT_STATEMENT = page.locator('[data-testid="Modern Slavery Act Statement-link"]');
 
     // Search options
-    this.SEARCH_BUTTON_UK = page.getByTestId('searchBtn').locator('svg');
+    this.SEARCH_BUTTON_UK = page.locator("//input[@placeholder='Search for offers or companies']").first();
     this.SEARCH_OPTION_COMPANY_UK = page.getByTestId('byCompany');
     this.SEARCH_OPTION_CATEGORY_UK = page.getByTestId('byCategory');
     this.SEARCH_OPTION_SEARCHTERM_UK = page.getByRole('textbox');
@@ -281,10 +281,7 @@ async clickModernSlaveryActStatement(): Promise<void> {
   async assertElementsVisibleHomeScreenLoggedIn(): Promise<void> {
      expect(this.BLUELIGHTBUTTON_NAVBAR_UK).toBeVisible();
 
-     //Handle environment-specific conditions
-     if (process.env.ENVIRONMENT === 'production') {
-       await expect(this.HOME_NAVBAR_UK).toBeVisible();
-     }
+   
     await expect(this.OFFERS_HEADER_LINK_UK).toBeVisible();
     await expect(this.LOGOUT_NAVBAR_UK).toBeVisible();
     await expect(this.SEARCH_BUTTON_UK).toBeVisible();

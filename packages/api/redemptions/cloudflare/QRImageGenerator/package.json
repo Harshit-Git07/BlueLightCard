@@ -1,6 +1,6 @@
 {
   "name": "cloudflare-worker-image-qr",
-  "version": "1.0.0",
+  "version": "1.32.0",
   "main": "src/worker.ts",
   "private": true,
   "scripts": {

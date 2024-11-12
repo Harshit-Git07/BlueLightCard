@@ -1,4 +1,4 @@
-import { BRANDS } from '../../../../types/brands.enum';
+import { BRANDS } from '../../../types/brands.enum';
 import {
   AUS_FOOTER_CONFIG_AUTHENTICATED,
   AUS_FOOTER_CONFIG_UNAUTHENTICATED,

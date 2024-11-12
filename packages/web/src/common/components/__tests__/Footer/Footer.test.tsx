@@ -1,101 +1,122 @@
+import Footer from '@/components/Footer/Footer';
+import { FooterNavigationSection } from '@/components/Footer/types';
+import SocialMediaIconProps from '@/components/SocialMediaIcon/types';
 import { render, screen } from '@testing-library/react';
-import Footer from '@/root/src/common/components/Footer/Footer';
-import * as footerConfigHelper from '../../Footer/helpers/getFooterDetails';
 import '@testing-library/jest-dom';
-import { FooterConfig } from '../../Footer/types';
-
-jest.mock('../../Footer/helpers/getFooterDetails', () => ({
-  getFooterDetails: jest.fn(),
-}));
 
 jest.mock('../../../context/AmplitudeExperiment/hooks', () => ({
   ...jest.requireActual('../../../context/AmplitudeExperiment/hooks'), // This retains other exports
   useAmplitudeExperiment: jest.fn().mockResolvedValue({ data: { variantName: 'off' } }),
 }));
 
-const mockFooterConfig: FooterConfig = {
-  navigationItems: [
-    {
-      title: 'Mock Nav Item',
-      navLinks: [{ label: 'Sub Item One', url: '/mock-sub-item' }],
-    },
-  ],
-  copyrightText: 'mock copyright text',
-};
+const oneNavSection = [
+  {
+    title: 'Company Info',
+    navLinks: [
+      { label: 'Blue Light Card Foundation', url: '/' },
+      { label: 'Latest News & Blogs', url: '/' },
+      { label: 'About Us', url: '/' },
+      { label: 'Free Tickets', url: '/' },
+      { label: 'Compliance', url: '/' },
+    ],
+  },
+];
 
-describe('FooterV2 component', () => {
+const twoNavSections: FooterNavigationSection[] = [
+  ...oneNavSection,
+  {
+    title: 'Links',
+    navLinks: [
+      { label: 'Add a discount', url: '/' },
+      { label: 'Mobile App', url: '/' },
+      { label: 'Competitions', url: '/' },
+      { label: 'Sitemap', url: '/' },
+      { label: 'Contact Us', url: '/' },
+    ],
+  },
+];
+
+const socialLinks: SocialMediaIconProps[] = [
+  {
+    iconName: 'facebook',
+    link: 'https://facebook.com',
+    helpText: 'Blue light card on Facebook',
+  },
+  {
+    iconName: 'x-twitter',
+    link: 'https://twitter.com',
+    helpText: 'Blue light card on Twitter',
+  },
+
+  {
+    iconName: 'instagram',
+    link: 'https://instagram.com',
+    helpText: 'Blue light card on instagram',
+  },
+];
+
+const downloadLinks = [
+  {
+    imageUrl: '/web/assets/google-play-badge.png',
+    downloadUrl:
+      'https://play.google.com/store/apps/details?id=com.bluelightcard.user&amp;hl=en_GB',
+    linkTitle: 'Get the Blue Light Card app on Google Play',
+  },
+];
+
+const loginSection = (
+  <div data-testid="login-sect">
+    <h1>Test</h1>
+  </div>
+);
+
+const copyrightText = 'test text';
+
+describe('components/Footer', () => {
+  let props: any;
   beforeEach(() => {
-    jest.clearAllMocks();
+    props = {};
   });
 
-  const mockFooterDetails = jest.fn();
-  jest.spyOn(footerConfigHelper, 'getFooterDetails').mockImplementation(mockFooterDetails);
-  describe('Render tests', () => {
-    it('should render navigation items and copyright text', () => {
-      mockFooterDetails.mockReturnValueOnce(mockFooterConfig);
+  describe('smoke test', () => {
+    it('should render component without error', () => {
+      render(<Footer {...props} navigationItems={oneNavSection} />);
+    });
+  });
 
-      const { container } = render(<Footer isAuthenticated />);
-      expect(container).toMatchSnapshot();
-      expect(screen.getByText(mockFooterConfig.navigationItems[0].title)).toBeDefined();
-      expect(screen.getByText(mockFooterConfig.copyrightText)).toBeDefined();
+  describe('Component rendering', () => {
+    it('renders a footer with the multiple sections', () => {
+      render(<Footer navigationItems={twoNavSections} />);
+
+      expect(screen.getByText(/Links/i)).toBeTruthy();
+      expect(screen.getByText(/Competitions/i)).toBeTruthy();
     });
 
-    it('should not render a text block if textBlock is NOT in the config', () => {
-      mockFooterDetails.mockReturnValueOnce(mockFooterConfig);
-      render(<Footer isAuthenticated />);
-      expect(screen.queryByTestId('text-block')).toBeNull();
-      expect(screen.queryByTestId('mobile-text-block')).toBeNull();
+    it('renders a footer with the login section', async () => {
+      render(<Footer loginForm={loginSection} navigationItems={oneNavSection} />);
+
+      expect(screen.getByTestId('login-sect')).toBeTruthy();
     });
 
-    it('should render a text block if its in the config', () => {
-      const configWithTextBlock: FooterConfig = {
-        ...mockFooterConfig,
-        textBlock: 'This is a mock text block',
-      };
-      mockFooterDetails.mockReturnValueOnce(configWithTextBlock);
-      render(<Footer isAuthenticated />);
-      expect(screen.getByTestId('desktop-text-block')).toBeDefined();
-      expect(screen.getByTestId('mobile-text-block')).toBeDefined();
+    it('renders a footer with the social links', () => {
+      render(<Footer navigationItems={oneNavSection} socialLinks={socialLinks} />);
+
+      const image = screen.getByTitle(socialLinks[0].helpText);
+      expect(image).toBeTruthy();
     });
 
-    it('should render social links if in the config', () => {
-      const configWithSocialLinks: FooterConfig = {
-        ...mockFooterConfig,
-        socialLinks: [
-          {
-            iconName: 'facebook',
-            link: 'https://www.facebook.com/bluelightcarddiscounts',
-            helpText: 'Mock help text',
-          },
-        ],
-      };
-      mockFooterDetails.mockReturnValueOnce(configWithSocialLinks);
-      render(<Footer isAuthenticated />);
-      expect(screen.getAllByTitle('Mock help text')).toBeDefined();
+    it('renders a footer with the download links', () => {
+      render(<Footer navigationItems={oneNavSection} downloadLinks={downloadLinks} />);
+
+      const image = screen.getByAltText(downloadLinks[0].linkTitle);
+      expect(image).toBeTruthy();
     });
 
-    it('should not render social links if NOT in the config', () => {
-      mockFooterDetails.mockReturnValueOnce(mockFooterConfig);
-      render(<Footer isAuthenticated />);
-      expect(screen.queryByTitle('Mock help text')).not.toBeInTheDocument();
-    });
+    it('renders the copyright section when provided', () => {
+      render(<Footer navigationItems={oneNavSection} copyrightText={copyrightText} />);
 
-    it('should render download links', () => {
-      mockFooterDetails.mockReturnValueOnce(mockFooterConfig);
-      render(<Footer isAuthenticated />);
-
-      const mobileDownloadLinks = screen.getByTestId('download-links');
-
-      expect(mobileDownloadLinks).toBeDefined();
-    });
-
-    it('should render the logo without error', () => {
-      mockFooterDetails.mockReturnValueOnce(mockFooterConfig);
-      render(<Footer isAuthenticated />);
-
-      const logo = screen.getByTestId('brandLogo');
-
-      expect(logo).toBeDefined();
+      const copyText = screen.getByText(copyrightText);
+      expect(copyText).toBeTruthy();
     });
   });
 });

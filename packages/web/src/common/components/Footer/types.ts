@@ -1,24 +1,27 @@
 import SocialMediaIconProps from '../SocialMediaIcon/types';
 
-export type FooterConfig = {
-  copyrightText: string;
-  textBlock?: string;
+export type FooterProps = {
+  copyrightText?: string;
+  loginForm?: any;
   navigationItems: FooterNavigationSection[];
   socialLinks?: SocialMediaIconProps[];
-  googlePlayStoreLink?: string;
-  appleStoreLink?: string;
-};
-
-export type FooterProps = {
-  isAuthenticated: boolean;
+  downloadLinks?: downloadLink[];
+  loggedIn?: boolean;
 };
 
 export type FooterNavigationSection = {
   title: string;
   navLinks: FooterNavigationLink[];
+  requiresLogin?: boolean;
 };
 
 export type FooterNavigationLink = {
   label: string;
   url: string;
+};
+
+export type downloadLink = {
+  imageUrl: string;
+  downloadUrl: string;
+  linkTitle?: string;
 };

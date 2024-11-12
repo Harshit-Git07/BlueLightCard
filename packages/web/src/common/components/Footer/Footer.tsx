@@ -1,30 +1,27 @@
 import { FC } from 'react';
-import { FooterNavigationLink, FooterNavigationSection, FooterProps } from './types';
+import { FooterNavigationLink, FooterNavigationSection, FooterProps, downloadLink } from './types';
 import Link from 'next/link';
+import Image from '../Image/Image';
 import SocialMediaIcon from '../SocialMediaIcon/SocialMediaIcon';
 import SocialMediaIconProps from '../SocialMediaIcon/types';
-import AppleSVG from '@assets/apple.svg';
-import GooglePlaySVG from '@assets/googleplay.svg';
-import Logo from '../Logo';
-import { BRANDS } from '../../types/brands.enum';
-import { getFooterDetails } from './helpers/getFooterDetails';
-import { BRAND, ZENDESK_V1_BLC_UK_URL } from '@/root/global-vars';
-import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
+import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment/hooks';
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
-import { faker } from '@faker-js/faker';
+import { ZENDESK_V1_BLC_UK_URL } from '@/root/global-vars';
 
-const Footer: FC<FooterProps> = ({ isAuthenticated }) => {
-  const {
-    copyrightText,
-    textBlock,
-    navigationItems,
-    socialLinks,
-    appleStoreLink,
-    googlePlayStoreLink,
-  } = getFooterDetails(BRAND as BRANDS, isAuthenticated);
-
-  const footerLinkTextClasses =
-    'text-footer-text-colour hover:opacity-100 dark:text-footer-text-colour-dark hover:text-footer-link-hover-colour dark:hover:text-footer-link-hover-colour-dark font-footer-text-font text-footer-text-font font-footer-text-font-weight tracking-footer-text-font leading-footer-text-font';
+/**
+ ** Modular Footer component
+ ** @TODO Footer tokens need to be white labeled
+ ** @returns
+ **/
+const Footer: FC<FooterProps> = ({
+  copyrightText,
+  loginForm,
+  navigationItems,
+  socialLinks,
+  downloadLinks,
+  loggedIn,
+}) => {
+  const horizPadding = 'mobile:px-4 laptop:px-0 laptop:container laptop:mx-auto';
 
   // Calling amplitude experiment to check if zendesk is enabled
   const zendeskExperiment = useAmplitudeExperiment(
@@ -35,108 +32,110 @@ const Footer: FC<FooterProps> = ({ isAuthenticated }) => {
   const isZendeskV1BlcUkEnabled = zendeskExperiment.data?.variantName === 'on';
 
   return (
-    <div className="bg-footer-bg-colour-light dark:bg-footer-bg-colour-dark text-footer-text-colour dark:text-footer-text-colour-dark pt-11 px-5 w-auto">
-      <div className="desktop:container desktop:mx-auto grid grid-cols-3 items-center justify-items-center">
-        <div className="col-span-3 laptop:justify-self-start laptop:col-span-1 laptop:order-1 h-12 mobile-xl:h-16">
-          <Logo url={isAuthenticated ? '/members-home' : '/'} className="h-full" />
-        </div>
-        <div className="col-span-3 order-5 justify-self-center laptop:col-span-1 laptop:order-2">
-          {socialLinks && (
-            <div className="flex gap-10">
-              {socialLinks.map((link: SocialMediaIconProps, index) => {
-                return (
-                  <SocialMediaIcon
-                    key={index}
-                    iconName={link.iconName}
-                    link={link.link}
-                    helpText={link.helpText}
-                    id={link.iconName + '-link'}
-                  />
-                );
-              })}
-            </div>
-          )}
-        </div>
+    <div className="bg-components-footer-primary w-full text-white" data-testid="app-footer">
+      {/* Main body */}
+      {((navigationItems && navigationItems.length > 0) || loginForm) && (
         <div
-          data-testid="download-links"
-          className="col-span-3 order-4 my-4 mb-6 laptop:justify-self-end laptop:mb-0 laptop:my-0 laptop:col-span-1 laptop:order-3 flex gap-[23px]"
+          className={`${horizPadding} py-8 grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4`}
         >
-          {appleStoreLink && (
-            <Link href={appleStoreLink} title={'Get the app on Apple store'}>
-              <AppleSVG className="fill-black w-28 dark:fill-white" />
-            </Link>
-          )}
-          {googlePlayStoreLink && (
-            <Link href={googlePlayStoreLink} title={'Get the app on Google Play store'}>
-              <GooglePlaySVG className="fill-black w-28 dark:fill-white" />
-            </Link>
-          )}
-        </div>
-
-        <hr className="col-span-3 order-2 w-full laptop:order-4 tablet:mb-11 mb-[28px] mt-6 border-footer-divider-colour dark:border-footer-divider-colour-dark" />
-
-        <div className="col-span-3 order-3 laptop:order-5 desktop:container desktop:gap-x-44 flex laptop:gap-x-12 laptop:flex w-full desktop:mx-auto mx-6">
-          {textBlock && (
-            <div
-              data-testid="desktop-text-block"
-              className="hidden laptop:inline-block w-1/2 tablet:w-96 pb-6 text-footer-text-colour dark:text-footer-text-colour-dark font-footer-text-font text-footer-text-font font-footer-text-font-weight tracking-footer-text-font leading-footer-text-font"
-            >
-              {textBlock}
-            </div>
-          )}
-
-          {navigationItems.length > 0 && (
-            <div
-              data-testid="footer-nav-links"
-              className="desktop:flex laptop:grid-cols-3 grid grid-cols-1 mobile-xl:grid-cols-2 laptop:flex-row flex-col flex-auto flex-1 justify-between"
-            >
-              {navigationItems.length > 0 &&
-                navigationItems.map((section: FooterNavigationSection) => {
-                  return (
-                    <div
-                      key={faker.string.uuid()}
-                      className="pb-6 min-w-34 flex-col flex space-y-2"
-                    >
-                      <h2 className="mb-2 font-footer-sectionHeading-font text-footer-text-colour dark:text-footer-text-colour-dark font-footer-sectionHeading-font font-footer-sectionHeading-font-weight text-footer-sectionHeading-font tracking-footer-sectionHeading-font leading-footer-sectionHeading-font">
-                        {section.title}
-                      </h2>
-                      {section.navLinks.map((navLink: FooterNavigationLink, navLinkIndex) => {
+          {loginForm}
+          {((navigationItems && navigationItems.length > 0) || loginForm) &&
+            navigationItems
+              .filter((navItem) => navItem.requiresLogin === loggedIn || !navItem.requiresLogin)
+              .map((section: FooterNavigationSection, index) => {
+                return (
+                  <div key={index} className="p-2 flex flex-col space-y-2 grow">
+                    <h1 className="text-3xl font-semibold">{section.title}</h1>
+                    {section.navLinks.map((navLink: FooterNavigationLink, navLinkIndex) => {
+                      if (navLink.label === 'Contact Us') {
                         return (
                           <Link
                             key={navLinkIndex}
-                            href={
-                              isZendeskV1BlcUkEnabled && navLink.label === 'Contact Us'
-                                ? ZENDESK_V1_BLC_UK_URL
-                                : navLink.url
-                            }
-                            className={footerLinkTextClasses}
+                            href={isZendeskV1BlcUkEnabled ? ZENDESK_V1_BLC_UK_URL : navLink.url}
+                            data-testid={navLink.label + '-link'}
+                            className="text-components-footer-text hover:opacity-100 hover:underline"
                           >
                             {navLink.label}
                           </Link>
                         );
-                      })}
+                      }
+                      return (
+                        <Link
+                          key={navLinkIndex}
+                          href={navLink.url}
+                          data-testid={navLink.label + '-link'}
+                          className="text-components-footer-text hover:opacity-100 hover:underline"
+                        >
+                          {navLink.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+        </div>
+      )}
+      {/* Socials and mobile download section */}
+      {(socialLinks || downloadLinks) && (
+        <div className="bg-components-footer-secondary">
+          <div
+            className={`${horizPadding} py-6 w-full grid grid-cols-1 tablet:grid-cols-2 space-y-2 tablet:space-y-0`}
+          >
+            {socialLinks && (
+              <div className="flex flex-row m-auto tablet:mx-0 space-x-2">
+                <p className="tablet:block hidden h-fit my-auto">Follow us:</p>
+                {socialLinks.map((link: SocialMediaIconProps, index) => {
+                  return (
+                    <SocialMediaIcon
+                      key={index}
+                      iconName={link.iconName}
+                      link={link.link}
+                      helpText={link.helpText}
+                      id={link.iconName + '-link'}
+                    />
+                  );
+                })}
+              </div>
+            )}
+
+            {downloadLinks && (
+              <div className="m-auto tablet:mx-0 flex flex-row justify-center space-x-2">
+                <p className="tablet:inline-block hidden h-fit my-auto">Download our apps:</p>
+                {downloadLinks.map((link: downloadLink, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="relative w-[80px] mobile:w-[100px] mobile-xl:w-[150px] h-[50px] my-2"
+                    >
+                      <Link
+                        className="flex object-contain absolute top-0 left-0 w-full h-full"
+                        href={link.downloadUrl}
+                        title={link.linkTitle}
+                        data-testid={link.linkTitle + '-link'}
+                      >
+                        <Image
+                          alt={link.linkTitle || ''}
+                          src={link.imageUrl}
+                          responsive={true}
+                          className="object-contain object-center"
+                        />
+                      </Link>
                     </div>
                   );
                 })}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
-
-        <div className="col-span-3 order-6 py-10 laptop:pt-6 w-full text-center">
-          {textBlock && (
-            <div
-              data-testid="mobile-text-block"
-              className="text-center laptop:hidden mx-auto pb-6 text-footer-text-colour dark:text-footer-text-colour-dark font-footer-text-font text-footer-text-font font-footer-text-font-weight tracking-footer-text-font leading-footer-text-font"
-            >
-              {textBlock}
-            </div>
-          )}
-          <p className="desktop:mx-auto text-footer-text-colour dark:text-footer-text-colour-dark font-footer-copyright-font font-footer-copyright-font-weight text-footer-copyright-font tracking-footer-copyright-font leading-footer-copyright-font">
-            {copyrightText}
-          </p>
+      )}
+      {/* Copyright */}
+      {copyrightText && (
+        <div className="p-2 w-full bg-components-footer-secondary text-center">
+          <p>{copyrightText}</p>
         </div>
-      </div>
+      )}
     </div>
   );
 };
+
 export default Footer;

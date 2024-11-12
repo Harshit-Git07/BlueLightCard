@@ -2,16 +2,16 @@ import { BRANDS } from '@/root/src/common/types/brands.enum';
 import {
   AUS_FOOTER_CONFIG_AUTHENTICATED,
   AUS_FOOTER_CONFIG_UNAUTHENTICATED,
-} from '../../../Footer/constants/ausFooterConfig';
+} from '../../../Footer/v2/constants/ausFooterConfig';
 import {
   DDS_FOOTER_CONFIG_AUTHENTICATED,
   DDS_FOOTER_CONFIG_UNAUTHENTICATED,
-} from '../../../Footer/constants/ddsFooterConfig';
+} from '../../../Footer/v2/constants/ddsFooterConfig';
 import {
   UK_FOOTER_CONFIG_AUTHENTICATED,
   UK_FOOTER_CONFIG_UNAUTHENTICATED,
-} from '../../../Footer/constants/ukFooterConfig';
-import { getFooterDetails } from '../../../Footer/helpers/getFooterDetails';
+} from '../../../Footer/v2/constants/ukFooterConfig';
+import { getFooterDetails } from '../../../Footer/v2/helpers/getFooterDetails';
 
 const footerConfigs = [
   {

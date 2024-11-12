@@ -1,6 +1,7 @@
 // components/Layout.tsx
 import Header from '@/components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import Footer from '@/components/Footer/Footer';
+import Footerv2 from '../../components/Footer/v2/Footer';
 import NavBar from '@/components/NavBar/NavBar';
 import {
   logSearchCompanyEvent,
@@ -12,6 +13,8 @@ import {
   getOffersByCategoryUrl,
   getOffersBySearchTermUrl,
 } from '@/utils/externalPageUrls';
+
+import footerConfig from '@/data/footerConfig';
 import { LayoutProps } from './types';
 import { useContext } from 'react';
 import AuthContext from '@/context/Auth/AuthContext';
@@ -26,6 +29,7 @@ const BaseLayout: React.FC<LayoutProps> = ({
   children,
   translationNamespace,
   headerOverride = undefined,
+  footerOverride = undefined,
 }) => {
   // Converts brand codes to text using the brand translation file
   // Uses data from locales folder as data source
@@ -73,10 +77,18 @@ const BaseLayout: React.FC<LayoutProps> = ({
       );
     }
   };
+  const switchOldWithNewFooter = () => {
+    if (showNewHeaderAndFooter.data?.variantName === 'on') {
+      return <Footerv2 isAuthenticated />;
+    } else {
+      return <Footer {...footerConfig} loggedIn={loggedIn} />;
+    }
+  };
 
   return (
     <div>
       {seo && <MetaData seo={seo} translationNamespace={translationNamespace} />}
+
       {headerOverride ? headerOverride : switchOldWithNewHeader()}
       <div>{children}</div>
       <ToastContainer
@@ -87,7 +99,7 @@ const BaseLayout: React.FC<LayoutProps> = ({
         toastClassName="!bg-[#202125] !text-white !font-['MuseoSans'] !text-base !font-normal !rounded !px-4 !py-3.5"
         pauseOnHover={false}
       />
-      <Footer isAuthenticated />;
+      {footerOverride ? footerOverride : switchOldWithNewFooter()}
     </div>
   );
 };

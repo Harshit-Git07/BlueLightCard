@@ -7,6 +7,7 @@ import axios from 'axios';
 import parsePhoneNumber from 'libphonenumber-js';
 import { transformDateToFormatYYYYMMDD } from './../../../core/src/utils/date';
 import { setDate } from './../../../core/src/utils/setDate';
+import { maskUsername } from './../../../core/src/utils/maskUsername';
 import { createHmac } from 'crypto';
 import { ProfileService } from 'src/services/ProfileService';
 import { BrandService } from 'src/services/BrandService';
@@ -57,6 +58,7 @@ export const generateSecretHash = async (
 };
 
 export const handler = async (event: UserMigrationTriggerEvent) => {
+  const maskedUsername = maskUsername(event.userName);
   logger.info('audit', {
     audit: true,
     action: event.triggerSource,
@@ -64,8 +66,7 @@ export const handler = async (event: UserMigrationTriggerEvent) => {
   });
   if (event.triggerSource == 'UserMigration_Authentication') {
     if (!isValidEmail(event.userName)) {
-      // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-      logger.error('Invalid email entered', { userName: event.userName });
+      logger.error('Invalid email entered', { userName: maskedUsername });
       throw Error('\nThe email you have entered is invalid, please enter a valid email');
     }
 
@@ -113,21 +114,23 @@ export const handler = async (event: UserMigrationTriggerEvent) => {
         event.response.messageAction = 'SUPPRESS';
       } else {
         logger.debug('User not found when attempting to match UUID to the legacy ID', {
-          user: event.userName,
+          user: maskedUsername,
           uuid: uuid,
         });
         throw new Error(':\nUser Not Found.');
       }
     } else {
-      logger.debug('User not found when searching for profile document', { user: event.userName });
+      logger.debug('User not found when searching for profile document', { user: maskedUsername });
       throw new Error(':\nUser Not Found.');
     }
   }
   return event;
 };
 const authenticateUserOldPool = async (username: string, password: string) => {
-  // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-  logger.info('Attempting to authenticate user against old user pool', { username });
+  const maskedUsername = maskUsername(username);
+  logger.info('Attempting to authenticate user against old user pool', {
+    username: maskedUsername,
+  });
   const cognitoISP = new CognitoIdentityServiceProvider();
   try {
     const cognitoResponse = await cognitoISP
@@ -146,8 +149,7 @@ const authenticateUserOldPool = async (username: string, password: string) => {
       const accessToken = cognitoResponse.AuthenticationResult?.AccessToken;
       if (accessToken) {
         try {
-          // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-          logger.info('Attempting to get user from old user pool', { username });
+          logger.info('Attempting to get user from old user pool', { username: maskedUsername });
           const user = await cognitoISP.getUser({ AccessToken: accessToken }).promise();
           if (user) {
             const attributesObject = user.UserAttributes.reduce(
@@ -162,8 +164,9 @@ const authenticateUserOldPool = async (username: string, password: string) => {
               {},
             );
             attributesObject['custom:migrated_old_pool'] = true;
-            // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-            logger.info('Successfully migrated user from old user pool', { username });
+            logger.info('Successfully migrated user from old user pool', {
+              username: maskedUsername,
+            });
             return attributesObject;
           }
         } catch (e: any) {
@@ -171,7 +174,7 @@ const authenticateUserOldPool = async (username: string, password: string) => {
         }
       } else {
         logger.debug('No accessToken returned from Cognito for user and pool: ', {
-          user: username,
+          user: maskedUsername,
           pool: oldUserPoolId,
         });
         // Check for challenges or sessions
@@ -186,25 +189,24 @@ const authenticateUserOldPool = async (username: string, password: string) => {
       }
     } else {
       logger.debug('No cognitoResponse received for user and pool: ', {
-        user: username,
+        user: maskedUsername,
         pool: oldUserPoolId,
       });
     }
   } catch (err) {
-    // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-    logger.error('User not found in old user pool', { username, error: err });
+    logger.error('User not found in old user pool', { username: maskedUsername, error: err });
   }
 };
 const authenticateUser = async (username: string, password: string) => {
-  // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-  logger.info('Attempting to authenticate user against legacy', { username });
+  const maskedUsername = maskUsername(username);
+  logger.info('Attempting to authenticate user against legacy', { username: maskedUsername });
 
   if (!isValidPasswordForCognito(password)) {
-    logger.warn('Entered password does not match Cognito regex', { username });
+    logger.warn('Entered password does not match Cognito regex', { username: maskedUsername });
   }
 
   if (!isValidPasswordForLegacy(password)) {
-    logger.error('Entered password does not match legacy regex', { username });
+    logger.error('Entered password does not match legacy regex', { username: maskedUsername });
     throw new Error('The password you have entered is invalid, please enter a valid password');
   }
 
@@ -222,8 +224,9 @@ const authenticateUser = async (username: string, password: string) => {
       if (!response.data.success && response.data.code !== 1013) {
         throw new Error(response.data.message);
       }
-      // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
-      logger.info('User successfully authenticated and fetched from legacy', { username });
+      logger.info('User successfully authenticated and fetched from legacy', {
+        username: maskedUsername,
+      });
       //add to event bus
       await addUserSignInMigratedEvent(response.data.data);
       return {
@@ -237,11 +240,11 @@ const authenticateUser = async (username: string, password: string) => {
     } else {
       logger.debug(
         'No response or response data when authenticating against legacy received for user: ',
-        { user: username },
+        { user: maskedUsername },
       );
     }
   } catch (error: any) {
-    logger.error('Error during legacy login', { error, username });
+    logger.error('Error during legacy login', { error, username: maskedUsername });
     throw new Error(error.message);
   }
 };
@@ -319,9 +322,8 @@ const addUserSignInMigratedEvent = async (data: any) => {
   try {
     const command = new PutEventsCommand(input);
     await client.send(command);
-    // TODO: Remove PII: Adding extra logging with temporary PII for investigation purposes
     logger.info('Successfully sent legacy migrated user to eventbus to be processed', {
-      username: data.email,
+      username: maskUsername(data.email),
     });
   } catch (err: any) {
     logger.error('error adding user sign in migrated event', { uuid, err });

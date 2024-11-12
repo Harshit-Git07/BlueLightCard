@@ -1,6 +1,7 @@
 import { ChangeEventHandler, KeyboardEventHandler } from 'react';
 
 export interface TextInputProps {
+  className?: string;
   id?: string;
   name?: string;
   isValid?: boolean;

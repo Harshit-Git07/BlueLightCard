@@ -34,7 +34,7 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
           className="gap-[24px]"
           numberOfCompletedSteps={4}
           title="Verify Eligibility"
-          subtitle="Provide details about your employment status and job role"
+          subtitle="Enter your work email address to verify your eligibility"
         />
         <p className={`${fonts.body} ${colours.textOnSurface}`}>
           We’ve sent an email to <b>{eligibilityDetails.emailVerification}</b> with a link to

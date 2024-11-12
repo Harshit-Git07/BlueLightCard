@@ -7,6 +7,7 @@ import { conditionalStrings } from '../../utils/conditionalStrings';
 import FloatingPlaceholder from '../FloatingPlaceholder';
 
 const TextInput: FC<TextInputProps> = ({
+  className = '',
   id,
   name,
   isValid = true,
@@ -63,7 +64,7 @@ const TextInput: FC<TextInputProps> = ({
   const hasValue = !!value;
 
   return (
-    <div>
+    <div className={className}>
       <InfoWrapper htmlFor={elementId} label={label} description={helpText} helpText={tooltipText}>
         <div className="relative h-[50px]">
           <input

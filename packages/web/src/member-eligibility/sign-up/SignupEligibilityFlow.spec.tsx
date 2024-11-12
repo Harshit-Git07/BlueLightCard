@@ -91,13 +91,15 @@ describe('given a signing up member that needs to prove their eligibility to use
               });
 
               it('should navigate to the verify email screen', () => {
-                const title = screen.getByTestId('fuzzy-frontend-title');
-                expect(title.textContent).toEqual('Work Email Verification Screen');
+                const workEmailScreen = screen.getByTestId('work-email-verification-screen');
+                expect(workEmailScreen).toBeInTheDocument();
               });
 
               describe('when they submit an email', () => {
                 beforeEach(async () => {
-                  const nextButton = screen.getByTestId('next-button-1');
+                  const input = screen.getByRole('textbox');
+                  await userEvent.type(input, 'test@NHS.com');
+                  const nextButton = screen.getByTestId('send-verification-link-button');
                   act(() => nextButton.click());
                 });
 

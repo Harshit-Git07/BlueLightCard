@@ -1,4 +1,13 @@
-import { BALLOT, GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
+import {
+  BALLOT,
+  CREDITCARD,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
@@ -21,6 +30,7 @@ describe('RedeemStrategyResolver', () => {
     [GENERIC, redeemGenericStrategy],
     [GIFTCARD, redeemAffiliateStrategy],
     [PREAPPLIED, redeemAffiliateStrategy],
+    [CREDITCARD, redeemAffiliateStrategy],
     [SHOWCARD, redeemShowCardStrategy],
     [VAULT, redeemVaultStrategy],
     [VAULTQR, redeemVaultStrategy],

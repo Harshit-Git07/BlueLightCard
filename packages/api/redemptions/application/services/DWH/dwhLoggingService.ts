@@ -1,4 +1,13 @@
-import { BALLOT, GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
+import {
+  BALLOT,
+  CREDITCARD,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
@@ -49,7 +58,7 @@ export type MemberRedemptionParams = MemberRedemptionBaseParams &
         integrationId: string | null | undefined;
       }
     | {
-        redemptionType: typeof GIFTCARD | typeof PREAPPLIED | typeof SHOWCARD | typeof BALLOT;
+        redemptionType: typeof GIFTCARD | typeof PREAPPLIED | typeof SHOWCARD | typeof BALLOT | typeof CREDITCARD;
         code?: never;
         integration?: never;
         integrationId?: never;
@@ -87,6 +96,7 @@ export class MemberRedemptionParamsDto {
       case GIFTCARD:
       case PREAPPLIED:
       case SHOWCARD:
+      case CREDITCARD:
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,

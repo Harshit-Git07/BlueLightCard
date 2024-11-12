@@ -1,4 +1,13 @@
-import { BALLOT, GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
+import {
+  BALLOT,
+  CREDITCARD,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 
@@ -31,6 +40,7 @@ export type RedeemAffiliateStrategyResult<AffiliateRedemptionType extends Redemp
 };
 
 export type RedeemPreAppliedStrategyResult = RedeemAffiliateStrategyResult<typeof PREAPPLIED>;
+export type RedeemCreditCardStrategyResult = RedeemAffiliateStrategyResult<typeof CREDITCARD>;
 export type RedeemGiftCardStrategyResult = RedeemAffiliateStrategyResult<typeof GIFTCARD>;
 
 export type RedeemShowCardStrategyResult = {
@@ -68,7 +78,8 @@ export type RedeemedStrategyResult =
   | RedeemPreAppliedStrategyResult
   | RedeemShowCardStrategyResult
   | RedeemVaultStrategyResult
-  | RedeemBallotStrategyResult;
+  | RedeemBallotStrategyResult
+  | RedeemCreditCardStrategyResult;
 
 export type RedeemParams = {
   memberId: string;

@@ -1,4 +1,4 @@
-import { GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
+import { CREDITCARD, GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
@@ -9,6 +9,7 @@ import {
 
 import {
   IRedeemStrategy,
+  RedeemCreditCardStrategyResult,
   RedeemGiftCardStrategyResult,
   RedeemParams,
   RedeemPreAppliedStrategyResult,
@@ -34,8 +35,12 @@ export class RedeemAffiliateStrategy implements IRedeemStrategy {
   async redeem(
     redemptionConfigEntity: RedemptionConfigEntity,
     params: RedeemParams,
-  ): Promise<RedeemGiftCardStrategyResult | RedeemPreAppliedStrategyResult> {
-    if (redemptionConfigEntity.redemptionType !== GIFTCARD && redemptionConfigEntity.redemptionType !== PREAPPLIED) {
+  ): Promise<RedeemGiftCardStrategyResult | RedeemPreAppliedStrategyResult | RedeemCreditCardStrategyResult> {
+    if (
+      redemptionConfigEntity.redemptionType !== GIFTCARD &&
+      redemptionConfigEntity.redemptionType !== PREAPPLIED &&
+      redemptionConfigEntity.redemptionType !== CREDITCARD
+    ) {
       throw new Error('Unexpected redemption type');
     }
 

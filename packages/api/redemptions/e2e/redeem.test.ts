@@ -318,34 +318,37 @@ describe('POST /member/redeem', () => {
     expect(body).toHaveProperty('data.redemptionDetails.code'); //this will be a random value we cannot assess
   });
 
-  test.each(['giftCard', 'preApplied'] as const)('should redeem a %s Affiliate offer', async (redemptionType) => {
-    // Arrange
-    const { redemption, ...redemptionTestHooks } = buildTestRedemption(redemptionType);
+  test.each(['giftCard', 'preApplied', 'creditCard'] as const)(
+    'should redeem a %s Affiliate offer',
+    async (redemptionType) => {
+      // Arrange
+      const { redemption, ...redemptionTestHooks } = buildTestRedemption(redemptionType);
 
-    onTestFinished(redemptionTestHooks.cleanup);
-    await redemptionTestHooks.insert();
+      onTestFinished(redemptionTestHooks.cleanup);
+      await redemptionTestHooks.insert();
 
-    // Act
-    const result = await sendRedemptionRequest({
-      offerId: redemption.offerId,
-      companyName: faker.company.name(),
-      offerName: faker.commerce.productName(),
-    });
+      // Act
+      const result = await sendRedemptionRequest({
+        offerId: redemption.offerId,
+        companyName: faker.company.name(),
+        offerName: faker.commerce.productName(),
+      });
 
-    // Assert
-    const body = await result.json();
-    expect(body).toEqual({
-      data: {
-        kind: 'Ok',
-        redemptionType: redemptionType,
-        redemptionDetails: {
-          url: redemption.url,
+      // Assert
+      const body = await result.json();
+      expect(body).toEqual({
+        data: {
+          kind: 'Ok',
+          redemptionType: redemptionType,
+          redemptionDetails: {
+            url: redemption.url,
+          },
         },
-      },
-      statusCode: 200,
-    });
-    expect(result.status).toBe(200);
-  });
+        statusCode: 200,
+      });
+      expect(result.status).toBe(200);
+    },
+  );
 
   test('should redeem a show card offer', async () => {
     // Arrange

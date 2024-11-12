@@ -82,6 +82,16 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       redemptionType: 'giftCard',
       url: 'https://www.awin1.com/',
     },
+    {
+      id: `${redemptionsPrefix}-1s245ga-13a8-4cf3-a072-creditcardconf`,
+      affiliate: 'awin',
+      companyId: 'company-9179',
+      connection: 'affiliate',
+      offerId: '8726',
+      offerType: 'online',
+      redemptionType: 'creditCard',
+      url: 'https://www.awin1.com/',
+    },
   ] satisfies (typeof redemptionsTable.$inferInsert)[];
   await db.insert(redemptionsTable).values(redemptionsData).onConflictDoNothing();
 

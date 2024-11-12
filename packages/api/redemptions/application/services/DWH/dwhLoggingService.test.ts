@@ -221,7 +221,7 @@ describe('DwhLoggingService', () => {
   });
 
   describe('MemberRedemptionParamsDto', () => {
-    it.each(['generic', 'preApplied', 'showCard', 'vault'] as const)(
+    it.each(['generic', 'preApplied', 'showCard', 'vault', 'creditCard'] as const)(
       'allows creation of a DTO from a %s redemption event',
       (redemptionType) => {
         const event = memberRedemptionEventFactory.build({

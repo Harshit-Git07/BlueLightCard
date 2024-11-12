@@ -1,6 +1,16 @@
-export const REDEMPTION_TYPES = ['generic', 'vault', 'vaultQR', 'showCard', 'preApplied', 'ballot', 'giftCard'] as const;
-export type RedemptionTypes = typeof REDEMPTION_TYPES[number];
-export const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED, BALLOT, GIFTCARD] = REDEMPTION_TYPES;
+export const REDEMPTION_TYPES = [
+  'generic',
+  'vault',
+  'vaultQR',
+  'showCard',
+  'preApplied',
+  'ballot',
+  'giftCard',
+  'creditCard',
+] as const;
+export type RedemptionTypes = (typeof REDEMPTION_TYPES)[number];
+export const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED, BALLOT, GIFTCARD, CREDITCARD] =
+  REDEMPTION_TYPES;
 
 // Events
 export const REDEMPTIONS_EVENT_SOURCE = 'redemptions';

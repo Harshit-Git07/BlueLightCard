@@ -1,4 +1,4 @@
-import { conditionalStrings } from './conditionalStrings';
+import { conditionalStrings } from '../conditionalStrings';
 
 describe('conditionalStrings', () => {
   it('should return the keys if the values are true', () => {

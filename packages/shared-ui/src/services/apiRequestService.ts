@@ -1,4 +1,5 @@
 import { HttpMethod, IPlatformAdapter } from '../adapters';
+import { getBrandedOffersPath } from '../utils/pathUtils';
 import { z } from 'zod';
 
 export enum CMS_SERVICES {
@@ -103,15 +104,15 @@ export function apiDynamicPath({
   // ALL ENDPOINTS FOR V5 AND CMS WILL BE LISTED BELOW
   // ****
   const v5Endpoints: Endpoints = {
-    COMPANY_DATA: `/eu/offers/company/${companyId}`,
-    OFFER_DETAILS_DATA: `/eu/offers/offers/${offerId}`,
-    OFFERS_BY_COMPANY_DATA: `/eu/offers/company/${companyId}/offers`,
+    COMPANY_DATA: `${getBrandedOffersPath()}/company/${companyId}`,
+    OFFER_DETAILS_DATA: `${getBrandedOffersPath()}/offers/${offerId}`,
+    OFFERS_BY_COMPANY_DATA: `${getBrandedOffersPath()}/company/${companyId}/offers`,
   };
 
   const cmsEndpoints: Endpoints = {
-    COMPANY_DATA: `/eu/offers/v2/v2/companies/${companyId}`,
-    OFFER_DETAILS_DATA: `/eu/offers/v2/v2/offers/${offerId}`,
-    OFFERS_BY_COMPANY_DATA: `/eu/offers/v2/v2/companies/${companyId}/offers`,
+    COMPANY_DATA: `${getBrandedOffersPath()}/v2/v2/companies/${companyId}`,
+    OFFER_DETAILS_DATA: `${getBrandedOffersPath()}/v2/v2/offers/${offerId}`,
+    OFFERS_BY_COMPANY_DATA: `${getBrandedOffersPath()}/v2/v2/companies/${companyId}/offers`,
   };
 
   if (!service) {

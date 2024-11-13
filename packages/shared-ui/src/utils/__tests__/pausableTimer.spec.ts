@@ -1,4 +1,4 @@
-import { createTimer } from './pausableTimer';
+import { createTimer } from '../pausableTimer';
 import { waitFor } from '@testing-library/react';
 
 describe('pausableTimer', () => {

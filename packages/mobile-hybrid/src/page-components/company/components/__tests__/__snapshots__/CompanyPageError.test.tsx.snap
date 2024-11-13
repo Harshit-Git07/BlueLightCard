@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Company Page Error Component should render correctly 1`] = `
+<div>
+  <h2
+    class="text-2xl text-heading-colour dark:text-heading-colour-dark mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark
+    tablet:font-typography-headline-weight tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline dark:text-white text-black pt-8"
+  >
+    Failed to load
+  </h2>
+  <a
+    class="inline-block py-1.5 px-5 rounded-md transition border-2 focus:outline outline-2 outline-offset-2  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-transparent , text-button-label-font, font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+    href="/"
+  >
+    Return Home
+  </a>
+</div>
+`;

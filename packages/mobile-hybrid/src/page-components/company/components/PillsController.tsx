@@ -23,7 +23,7 @@ const PillsController: FC = () => {
 
   return (
     <>
-      <div className="py-4 flex gap-3">
+      <div className="py-4 flex gap-3 overflow-x-auto">
         {filterArray.map((pillType, index) => {
           return (
             <div key={index}>

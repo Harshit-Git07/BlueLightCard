@@ -23,13 +23,13 @@ import { logCompanyView } from '@/utils/amplitude/logCompanyView';
 import { BRANDS } from '../common/types/brands.enum';
 import type { BannerDataType } from '../page-components/company/types';
 import CompanyPageWebHeader from '../page-components/company/CompanyPageWebHeader';
-import LoadingSpinner from '@/offers/components/LoadingSpinner/LoadingSpinner';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useCmsEnabled } from '../common/hooks/useCmsEnabled';
 import CompanyPageOffers from '../page-components/company/CompanyPageOffers';
 import CompanyPageFilters from '../page-components/company/CompanyPageFilters';
 import { ErrorBoundary } from 'react-error-boundary';
 import CompanyPageError from '../page-components/company/CompanyPageError';
+import LoadingSpinner from '@bluelightcard/shared-ui/components/LoadingSpinner';
 import { useRouter } from 'next/router';
 
 const getBrand = () => {

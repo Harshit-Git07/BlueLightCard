@@ -2,7 +2,7 @@ import { spinner } from '@/modules/Spinner/store';
 import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { PortableTextBlock, toPlainText } from '@portabletext/react';
 import {
   CMS_SERVICES,
@@ -31,6 +31,8 @@ import CompanyPageError from '@/page-components/company/components/CompanyPageEr
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { ToastContainer } from 'react-toastify';
+import { ErrorBoundary } from 'react-error-boundary';
+import LoadingSpinner from '../../../shared-ui/src/components/LoadingSpinner';
 
 const analytics = new InvokeNativeAnalytics();
 
@@ -44,8 +46,6 @@ const Company: NextPage<any> = () => {
 
   const [retries, setRetries] = useState<number>(0);
   const maxRetries = 150; // maxRetries * 100ms is the timeout for the page load
-
-  const [hasError, setHasError] = useState<boolean>(false);
 
   const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
   let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
@@ -96,7 +96,6 @@ const Company: NextPage<any> = () => {
 
       // Offer probably doesnt exist or at least somethings gone wrong with the data
       if (!companyResponse.data || !offersResponse.data) {
-        setHasError(true);
         setSpinner(false);
         return;
       }
@@ -145,7 +144,6 @@ const Company: NextPage<any> = () => {
 
     // Give up trying to refetch the data from the hybrid event-bus after maxRetry count
     if (retries > maxRetries) {
-      setHasError(true);
       setSpinner(false);
       return;
     }
@@ -168,9 +166,15 @@ const Company: NextPage<any> = () => {
 
   return (
     <div className="px-4">
-      {hasError && <CompanyPageError />}
-      {!hasError && (
-        <>
+      <ErrorBoundary fallback={<CompanyPageError message="Failed to load company" />}>
+        <Suspense
+          fallback={
+            <LoadingSpinner
+              containerClassName="w-full h-[100vh]"
+              spinnerClassName="text-[5em] text-palette-primary dark:text-palette-secondary"
+            />
+          }
+        >
           <CompanyPageHeader />
           <PillsController />
           <CompanyOffers />
@@ -187,8 +191,8 @@ const Company: NextPage<any> = () => {
             />
           </div>
           <ToastContainer hideProgressBar />
-        </>
-      )}
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };

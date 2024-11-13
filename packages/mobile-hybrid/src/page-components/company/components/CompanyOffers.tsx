@@ -1,4 +1,9 @@
-import { ResponsiveOfferCard, PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
+import {
+  ResponsiveOfferCard,
+  PlatformVariant,
+  useOfferDetails,
+  Heading,
+} from '@bluelightcard/shared-ui';
 import { useAtom } from 'jotai';
 import { FC } from 'react';
 import { companyDataAtom, selectedFilter } from '../atoms';
@@ -45,6 +50,14 @@ const CompanyOffers: FC = () => {
       }
     }
   };
+
+  if (filteredOffers?.length === 0) {
+    return (
+      <div className="mb-0 desktop:mb-[71px]">
+        <Heading headingLevel="h1">No offers have been found.</Heading>
+      </div>
+    );
+  }
 
   return (
     <>

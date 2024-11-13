@@ -1,16 +1,22 @@
 import InvokeNativeLifecycle from '@/invoke/lifecycle';
 import { Button, Heading } from '@bluelightcard/shared-ui';
-import React from 'react';
+import React, { FC } from 'react';
 
 const lifecycleEvent = new InvokeNativeLifecycle();
 
-const CompanyPageError = () => {
+type props = {
+  message: string;
+};
+
+const CompanyPageError: FC<props> = ({ message }) => {
   return (
     <>
       <Heading headingLevel={'h2'} className="dark:text-white text-black pt-8">
-        Something went wrong. Please try again later
+        {message}
       </Heading>
-      <Button onClick={() => lifecycleEvent.lifecycleEvent('onBackPressed')}>Return Home</Button>
+      <Button type="link" href="/" onClick={() => lifecycleEvent.lifecycleEvent('onBackPressed')}>
+        Return Home
+      </Button>
     </>
   );
 };

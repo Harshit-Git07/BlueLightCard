@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Company Offers Component should render offers when available on desktop 1`] = `
+<div>
+  <div
+    class="pb-2"
+  >
+    <div
+      aria-label=": Offer 1"
+      class="w-full h-full relative overflow-hidden cursor-pointer pb-0 "
+      data-testid="offer-card-1"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="rounded-t-lg overflow-hidden "
+      >
+        <img
+          alt="Offer 1 offer"
+          class="h-auto w-full !relative"
+          data-nimg="fill"
+          decoding="async"
+          height="0"
+          loading="lazy"
+          sizes="100vw"
+          src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg"
+          srcset="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 3840w"
+          style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+          width="0"
+        />
+      </div>
+      <p
+        class="text-card-description-colour-light dark:text-card-description-colour-dark line-clamp-2 mt-2 text-card-vertical-small-text-font font-card-vertical-small-text-font font-card-vertical-small-text-font-weight tracking-card-vertical-small-text-font leading-card-vertical-small-text-font laptop:text-card-vertical-large-text-font laptop:font-card-vertical-large-text-font laptop:font-card-vertical-large-text-font-weight laptop:leading-font-card-vertical-large-text-font laptop:tracking-font-card-vertical-large-text-font"
+      >
+        Offer 1
+      </p>
+    </div>
+  </div>
+  <div
+    class="pb-2"
+  >
+    <div
+      aria-label=": Offer 2"
+      class="w-full h-full relative overflow-hidden cursor-pointer pb-0 "
+      data-testid="offer-card-2"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="rounded-t-lg overflow-hidden "
+      >
+        <img
+          alt="Offer 2 offer"
+          class="h-auto w-full !relative"
+          data-nimg="fill"
+          decoding="async"
+          height="0"
+          loading="lazy"
+          sizes="100vw"
+          src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg"
+          srcset="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 3840w"
+          style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+          width="0"
+        />
+      </div>
+      <p
+        class="text-card-description-colour-light dark:text-card-description-colour-dark line-clamp-2 mt-2 text-card-vertical-small-text-font font-card-vertical-small-text-font font-card-vertical-small-text-font-weight tracking-card-vertical-small-text-font leading-card-vertical-small-text-font laptop:text-card-vertical-large-text-font laptop:font-card-vertical-large-text-font laptop:font-card-vertical-large-text-font-weight laptop:leading-font-card-vertical-large-text-font laptop:tracking-font-card-vertical-large-text-font"
+      >
+        Offer 2
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Company Offers Component should render offers when available on mobile 1`] = `
+<div>
+  <div
+    class="pb-2"
+  >
+    <div
+      aria-label=": Offer 1"
+      class="w-full h-full relative overflow-hidden cursor-pointer py-3 flow-root"
+      data-testid="offer-card-1"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="rounded-t-lg overflow-hidden rounded-lg h-16 float-left mr-3 max-w-[100px] tablet:max-w-full"
+      >
+        <img
+          alt="Offer 1 offer"
+          class="h-auto w-full !relative"
+          data-nimg="fill"
+          decoding="async"
+          height="0"
+          loading="lazy"
+          sizes="100vw"
+          src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg"
+          srcset="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image1.jpg 3840w"
+          style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+          width="0"
+        />
+      </div>
+      <p
+        class="text-card-description-colour-light dark:text-card-description-colour-dark line-clamp-2 mt-0.5 text-card-horizontal-text-font font-card-horizontal-text-font font-card-horizontal-text-font-weight tracking-card-horizontal-text-font leading-card-horizontal-text-font justify-self-start self-end"
+      >
+        Offer 1
+      </p>
+    </div>
+  </div>
+  <div
+    class="pb-2"
+  >
+    <div
+      aria-label=": Offer 2"
+      class="w-full h-full relative overflow-hidden cursor-pointer py-3 flow-root"
+      data-testid="offer-card-2"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="rounded-t-lg overflow-hidden rounded-lg h-16 float-left mr-3 max-w-[100px] tablet:max-w-full"
+      >
+        <img
+          alt="Offer 2 offer"
+          class="h-auto w-full !relative"
+          data-nimg="fill"
+          decoding="async"
+          height="0"
+          loading="lazy"
+          sizes="100vw"
+          src="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg"
+          srcset="https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=640,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 640w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=750,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 750w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=828,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 828w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1080,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 1080w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1200,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 1200w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=1920,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 1920w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=2048,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 2048w, https://cdn.bluelightcard.co.uk/cdn-cgi/image/width=3840,quality=75,format=webp/https://cdn.bluelightcard.co.uk/image2.jpg 3840w"
+          style="position: absolute; height: 100%; width: 100%; left: 0px; top: 0px; right: 0px; bottom: 0px; color: transparent; background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"
+          width="0"
+        />
+      </div>
+      <p
+        class="text-card-description-colour-light dark:text-card-description-colour-dark line-clamp-2 mt-0.5 text-card-horizontal-text-font font-card-horizontal-text-font font-card-horizontal-text-font-weight tracking-card-horizontal-text-font leading-card-horizontal-text-font justify-self-start self-end"
+      >
+        Offer 2
+      </p>
+    </div>
+  </div>
+</div>
+`;

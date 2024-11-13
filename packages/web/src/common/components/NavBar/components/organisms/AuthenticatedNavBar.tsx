@@ -116,13 +116,15 @@ const AuthenticatedNavBar = ({
                 />
               </div>
 
-              {/* this is a temporary button to display the left navigation drawer for the purpose of the Skeleton page */}
-              <button
-                className={`flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark`}
-                onClick={onToggleMobileSideBar}
-              >
-                <FontAwesomeIcon icon={faWindowFrameOpen} />
-              </button>
+              {/* this is a temporary button to display the left navigation drawer for the purpose of the Skeleton page until the newly designed top navigation is available */}
+              {process.env.NODE_ENV !== 'production' ? (
+                <button
+                  className={`flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark`}
+                  onClick={onToggleMobileSideBar}
+                >
+                  <FontAwesomeIcon icon={faWindowFrameOpen} />
+                </button>
+              ) : null}
 
               <NotificationButton href="/notifications.php" />
 

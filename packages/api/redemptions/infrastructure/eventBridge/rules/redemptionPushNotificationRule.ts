@@ -49,6 +49,8 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionShowCardPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID]:
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionGiftCardPushNotificationCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID]:
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionCreditCardPushNotificationCampaignId,
     },
     permissions: [getSecretValueSecretsManager],
   });

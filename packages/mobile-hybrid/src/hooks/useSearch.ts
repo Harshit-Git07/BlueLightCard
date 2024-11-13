@@ -21,10 +21,10 @@ export interface SearchResult {
 
 export interface SearchResultV5 {
   ID: number | string;
-  LegacyID: number;
+  LegacyID?: number;
   CatID: number;
   CompID: number | string;
-  LegacyCompanyID: number;
+  LegacyCompanyID?: number;
   TypeID: number;
   OfferName: string;
   CompanyName: string;
@@ -60,10 +60,10 @@ const mapV5SearchResults = (
   useLegacyIds: boolean,
 ): SearchResult[] => {
   return searchResults.map((offer) => ({
-    id: useLegacyIds ? offer.LegacyID : offer.ID,
+    id: useLegacyIds && offer.LegacyID ? offer.LegacyID : offer.ID,
     offername: offer.OfferName,
     companyname: offer.CompanyName,
-    compid: useLegacyIds ? offer.LegacyCompanyID : offer.CompID,
+    compid: useLegacyIds && offer.LegacyCompanyID ? offer.LegacyCompanyID : offer.CompID,
     s3logos: offer.offerimg,
     logos: offer.offerimg,
     absoluteLogos: offer.offerimg,
@@ -94,7 +94,13 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
         },
         async () => v4Search(term),
         async () =>
-          v5Search(platformAdapter, term, userProfileValue?.service, userProfileValue?.dob),
+          v5Search(
+            platformAdapter,
+            term,
+            userProfileValue?.service,
+            userProfileValue?.dob,
+            platformAdapter.getAmplitudeFeatureFlag(FeatureFlags.CMS_OFFERS) !== 'on',
+          ),
       );
 
       setSearchResults(results.data);

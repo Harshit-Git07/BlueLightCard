@@ -5,6 +5,7 @@ import InvokeNativeAPICall from '@/invoke/apiCall';
 import useSearch, { statusAtom, searchTermAtom, searchResultsAtom } from '../useSearch';
 import { IPlatformAdapter, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import { userProfile } from '@/components/UserProfileProvider/store';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const renderWithHydratedAtoms = (mockPlatformAdapter: IPlatformAdapter, atomValues: any[] = []) => {
   return renderHook(() => {
@@ -94,7 +95,7 @@ describe('useSearch', () => {
     expect(state.result.current.status).toEqual('ERROR');
   });
 
-  it('executes V5 searches for searchV5 experiment', async () => {
+  describe('searchV5 experiment', () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, {
       data: [
         {
@@ -108,44 +109,83 @@ describe('useSearch', () => {
         },
       ],
     });
-    mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
+    it('executes V5 searches for searchV5 experiment', async () => {
+      mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
 
-    const state = renderWithHydratedAtoms(mockPlatformAdapter, [
-      [
-        userProfile,
-        {
-          service: 'test-organisation',
+      const state = renderWithHydratedAtoms(mockPlatformAdapter, [
+        [
+          userProfile,
+          {
+            service: 'test-organisation',
+            dob: '1990-01-01',
+          },
+        ],
+      ]);
+
+      await act(async () => {
+        await state.result.current.doSearch('test V5 search value');
+      });
+
+      expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/eu/discovery/search', {
+        method: 'GET',
+        queryParameters: {
+          query: 'test V5 search value',
+          organisation: 'test-organisation',
           dob: '1990-01-01',
         },
-      ],
-    ]);
-
-    await act(async () => {
-      await state.result.current.doSearch('test V5 search value');
+        cachePolicy: 'auto',
+      });
+      expect(state.result.current.searchTerm).toEqual('test V5 search value');
+      expect(state.result.current.status).toEqual('SUCCESS');
+      expect(state.result.current.searchResults).toEqual([
+        {
+          id: 2,
+          offername: 'Test Offer 2',
+          companyname: 'Test Company Name 2',
+          compid: 4,
+          s3logos: 's3-logo-2.jpg',
+          logos: 's3-logo-2.jpg',
+          absoluteLogos: 's3-logo-2.jpg',
+        },
+      ]);
     });
 
-    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/eu/discovery/search', {
-      method: 'GET',
-      queryParameters: {
-        query: 'test V5 search value',
-        organisation: 'test-organisation',
-        dob: '1990-01-01',
-      },
-      cachePolicy: 'auto',
+    it('executes V5 searches for searchV5 experiment with modern IDs', async () => {
+      mockPlatformAdapter.getAmplitudeFeatureFlag.mockImplementation((flag: string) => {
+        if (flag === FeatureFlags.SEARCH_V5_ENABLED) {
+          return 'treatment';
+        } else if (flag === FeatureFlags.CMS_OFFERS) {
+          return 'on';
+        }
+        return 'off';
+      });
+
+      const state = renderWithHydratedAtoms(mockPlatformAdapter, [
+        [
+          userProfile,
+          {
+            service: 'test-organisation',
+            dob: '1990-01-01',
+          },
+        ],
+      ]);
+
+      await act(async () => {
+        await state.result.current.doSearch('test V5 search value');
+      });
+
+      expect(state.result.current.searchResults).toEqual([
+        {
+          id: '3',
+          offername: 'Test Offer 2',
+          companyname: 'Test Company Name 2',
+          compid: 'test-company-id-2',
+          s3logos: 's3-logo-2.jpg',
+          logos: 's3-logo-2.jpg',
+          absoluteLogos: 's3-logo-2.jpg',
+        },
+      ]);
     });
-    expect(state.result.current.searchTerm).toEqual('test V5 search value');
-    expect(state.result.current.status).toEqual('SUCCESS');
-    expect(state.result.current.searchResults).toEqual([
-      {
-        id: 2,
-        offername: 'Test Offer 2',
-        companyname: 'Test Company Name 2',
-        compid: 4,
-        s3logos: 's3-logo-2.jpg',
-        logos: 's3-logo-2.jpg',
-        absoluteLogos: 's3-logo-2.jpg',
-      },
-    ]);
   });
 
   it('resets the search state', async () => {

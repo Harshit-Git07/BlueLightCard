@@ -3,6 +3,7 @@ import { act, fireEvent, getByRole, render, screen, waitFor } from '@testing-lib
 import { userEvent } from '@testing-library/user-event';
 import { SignupEligibilityFlow } from './SignupEligibilityFlow';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
+
 jest.mock('react-use');
 
 const pngFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
@@ -140,6 +141,7 @@ describe('given a signing up member that needs to prove their eligibility to use
                       expect(subTitle).toBeInTheDocument();
                     });
 
+                    // TODO: Re-enable this during payment story
                     // describe('when they submit their payment details', () => {
                     //   beforeEach(async () => {
                     //     const nextButton = await screen.findByRole('button', { name: /pay/i });
@@ -228,6 +230,7 @@ describe('given a signing up member that needs to prove their eligibility to use
                     expect(subTitle).toBeInTheDocument();
                   });
 
+                  // TODO: Re-enable this during payment story
                   // describe('when they submit their payment details', () => {
                   //   beforeEach(async () => {
                   //     const nextButton = screen.getByRole('button', { name: /pay/i });
@@ -300,6 +303,7 @@ describe('given a signing up member that needs to prove their eligibility to use
                   expect(subTitle).toBeInTheDocument();
                 });
 
+                // TODO: Re-enable this during payment story
                 // describe('when they submit their payment details', () => {
                 //   beforeEach(async () => {
                 //     const nextButton = screen.getByRole('button', { name: /pay/i });
@@ -345,6 +349,7 @@ describe('given a signing up member that needs to prove their eligibility to use
               expect(subTitle).toBeInTheDocument();
             });
 
+            // TODO: Re-enable this during payment story
             // describe('when they submit their payment details', () => {
             //   beforeEach(async () => {
             //     const nextButton = screen.getByRole('button', { name: /pay/i });

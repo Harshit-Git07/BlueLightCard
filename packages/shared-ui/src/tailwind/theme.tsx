@@ -15,6 +15,7 @@ export const colours = {
     'bg-colour-primary-container-light dark:bg-colour-primary-container-dark',
   backgroundSurfaceContainer:
     'bg-colour-surface-container-light dark:bg-colour-surface-container-dark',
+  backgroundSurface: 'bg-colour-surface-light dark:bg-colour-surface-dark',
 
   borderPrimaryOnFocus: 'focus:border-colour-primary dark:focus:border-colour-primary-dark',
   borderPrimaryHover: 'border-colour-primary-hover dark:border-colour-primary-hover-dark',

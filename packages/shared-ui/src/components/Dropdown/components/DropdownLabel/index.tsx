@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { DropdownLabelProps, TooltipItemProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo } from '@fortawesome/pro-solid-svg-icons';
+import { colours, fonts } from '../../../../tailwind/theme';
 
 const DropdownLabel: FC<DropdownLabelProps> = ({
   labelId,
@@ -14,18 +15,14 @@ const DropdownLabel: FC<DropdownLabelProps> = ({
   onTooltipClicked,
 }) => (
   <div className="gap-[7px] flex items-center">
-    <label
-      id={labelId}
-      htmlFor={dropdownId}
-      className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
-    >
+    <label className={`${colours.textOnSurface} ${fonts.body}`} id={labelId} htmlFor={dropdownId}>
       {label}
     </label>
 
     {showTooltipIcon && tooltipText && (
       <TooltipItem tooltipText={tooltipText} isOpen={tooltipOpen}>
         <FontAwesomeIcon
-          className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          className={`${colours.textOnSurfaceSubtle}`}
           width={14}
           height={14}
           icon={tooltipIcon === undefined || {} ? faCircleInfo : tooltipIcon}

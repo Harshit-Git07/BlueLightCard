@@ -12,7 +12,7 @@ const DropdownList: FC<DropdownListProps> = ({
   onSelected,
   onOptionKeyDown,
 }) => {
-  const style: CSSProperties = useMemo(() => {
+  const listboxStyles: CSSProperties = useMemo(() => {
     const height = !maxItemsShown ? 'auto' : `calc(${40 * maxItemsShown}px)`;
 
     return { height };
@@ -22,8 +22,8 @@ const DropdownList: FC<DropdownListProps> = ({
     <div
       ref={listboxRef}
       id={`dropdown-listbox-${dropdownId}`}
-      className={`${className} z-50 absolute w-full mt-2 overflow-y-auto focus:outline-none rounded-[4px] cursor-pointer border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark border bg-colour-surface-light dark:bg-colour-surface-dark text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body`}
-      style={style}
+      className={`${className} z-50 mt-2 overflow-y-auto focus:outline-none rounded-[4px] cursor-pointer border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark border bg-colour-surface-light dark:bg-colour-surface-dark text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body`}
+      style={listboxStyles}
       role="listbox"
       tabIndex={0}
       data-testid="dropdownList"

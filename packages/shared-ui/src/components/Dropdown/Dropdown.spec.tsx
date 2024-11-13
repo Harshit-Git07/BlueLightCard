@@ -182,7 +182,6 @@ describe('given initial render of searchable component', () => {
 
     beforeEach(async () => {
       const combobox = await screen.getByTestId('combobox');
-
       await act(() => userEvent.type(combobox, 'Option T'));
 
       dropdownList = screen.getByTestId('dropdownList');
@@ -211,6 +210,31 @@ describe('given initial render of searchable component', () => {
       it('should call the onSelect function with the selected option', () => {
         expect(onSelectMock).toHaveBeenCalledWith({ id: '2', label: 'Option Two' });
       });
+    });
+
+    describe('when the combo box is cleared', () => {
+      beforeEach(async () => {
+        const combobox = await screen.getByTestId('combobox');
+        await act(() => userEvent.type(combobox, '{Backspace}'.repeat(8)));
+      });
+
+      it('then the full options list will be shown', async () => {
+        const optionThree = await within(dropdownList).queryByText('Option Three');
+
+        expect(optionThree).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('when the expand button is clicked', () => {
+    beforeEach(async () => {
+      const expandIcon = await screen.getByTestId('dropdown-expand-icon');
+      await act(() => userEvent.click(expandIcon));
+    });
+
+    it('should focus the text field', async () => {
+      const combobox = await screen.getByTestId('combobox');
+      expect(combobox).toHaveFocus();
     });
   });
 });

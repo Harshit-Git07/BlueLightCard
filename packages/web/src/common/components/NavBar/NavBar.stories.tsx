@@ -38,7 +38,7 @@ const CUSTOM_VIEWPORTS = {
 };
 
 const componentMeta: Meta = {
-  title: 'Component System/Modernised-NavBar',
+  title: 'Organisms/NavBar',
   component: NavBar,
   argTypes: {},
   parameters: {

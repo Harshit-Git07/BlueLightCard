@@ -1,6 +1,5 @@
 // components/Layout.tsx
-import Header from '@/components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import Footer from '@/components/Footer/Footer';
 import NavBar from '@/components/NavBar/NavBar';
 import {
   logSearchCompanyEvent,
@@ -18,15 +17,8 @@ import AuthContext from '@/context/Auth/AuthContext';
 import MetaData from '@/components/MetaData/MetaData';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
-import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
 
-const BaseLayout: React.FC<LayoutProps> = ({
-  seo,
-  children,
-  translationNamespace,
-  headerOverride = undefined,
-}) => {
+const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace }) => {
   // Converts brand codes to text using the brand translation file
   // Uses data from locales folder as data source
   const authContext = useContext(AuthContext);
@@ -47,37 +39,15 @@ const BaseLayout: React.FC<LayoutProps> = ({
     window.location.href = getOffersBySearchTermUrl(searchTerm);
   };
 
-  const showNewHeaderAndFooter = useAmplitudeExperiment(
-    AmplitudeExperimentFlags.ENABLE_NEW_HEADER_AND_FOOTER,
-    'off'
-  );
-
-  const switchOldWithNewHeader = () => {
-    if (showNewHeaderAndFooter.data?.variantName === 'on') {
-      return (
-        <NavBar
-          isAuthenticated
-          onSearchCompanyChange={onSearchCompanyChange}
-          onSearchCategoryChange={onSearchCategoryChange}
-          onSearchTerm={onSearchTerm}
-        />
-      );
-    } else {
-      return (
-        <Header
-          loggedIn={loggedIn}
-          onSearchCompanyChange={onSearchCompanyChange}
-          onSearchCategoryChange={onSearchCategoryChange}
-          onSearchTerm={onSearchTerm}
-        />
-      );
-    }
-  };
-
   return (
     <div>
       {seo && <MetaData seo={seo} translationNamespace={translationNamespace} />}
-      {headerOverride ? headerOverride : switchOldWithNewHeader()}
+      <NavBar
+        isAuthenticated={loggedIn}
+        onSearchCompanyChange={onSearchCompanyChange}
+        onSearchCategoryChange={onSearchCategoryChange}
+        onSearchTerm={onSearchTerm}
+      />
       <div>{children}</div>
       <ToastContainer
         transition={Slide}

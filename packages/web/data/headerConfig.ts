@@ -1,4 +1,3 @@
-import { NavItems } from '@/components/Header/types';
 import {
   BLACK_FRIDAY_TIME_LOCK_END_DATE,
   BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -7,6 +6,22 @@ import {
 } from '@/global-vars';
 import { redirect } from '@/utils/externalRedirect';
 import { AuthProviderFlags, getLoginUrl, getLogoutUrl } from '@/root/src/common/auth/authUrls';
+
+export interface NavItem {
+  text: string;
+  link?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  startTime?: string;
+  endTime?: string;
+  dropdown?: { text: string; link: string; onClickLink?: (target: string) => Promise<void> }[];
+  onClickLink?: (target: string) => Promise<void>;
+}
+
+export interface NavItems {
+  loggedIn: NavItem[];
+  loggedOut: NavItem[];
+}
 
 const blackFridayLink = {
   text: 'Black Friday',

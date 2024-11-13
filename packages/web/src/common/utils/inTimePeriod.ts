@@ -1,5 +1,3 @@
-import { NavItem } from '@/components/Header/types';
-
 interface TimePeriod {
   startTime?: string;
   endTime?: string;

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.40.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.40.0...bluelightcard/mobile-hybrid-v1.40.1) (2024-11-13)
+
+
+### Bug Fixes
+
+* [DISCO-1215] Add legacy/modern ID mapping to search results ([#2899](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2899)) ([f8cd4bc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8cd4bcc1b625eb6906928417610e567ea8c511c))
+
 ## [1.40.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.39.0...bluelightcard/mobile-hybrid-v1.40.0) (2024-11-13)
 
 

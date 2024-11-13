@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.40.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.39.0...bluelightcard/mobile-hybrid-v1.40.0) (2024-11-13)
+
+
+### Features
+
+* [DISCO-751] add hybrid flexi menu page ([#2788](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2788)) ([c76b801](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c76b801f303b172db3efb01caf6a4d5f04f73447))
+* Disco 1072 - Use Search Module on homepage ([#2856](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2856)) ([d0b2dd6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d0b2dd67ca8a04e105e089a0eb80b033e103b57b))
+* TO-1316 mobile hybrid company page error ([#2848](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2848)) ([78db4a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/78db4a1967bf560bdb758f81af34fad14c6d0de9))
+
+
+### Bug Fixes
+
+* DISCO-1109 Fixed `UserProfileProvider` to only call user service API once ([#2872](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2872)) ([36bb5e5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/36bb5e5880b786e645e9f340cfa4159a1bacc0fe))
+* offer cms table ref ([#2854](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2854)) ([2ab5787](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ab578709a7b43d33ac2d6c7267b2384bf1b69a7))
+
 ## [1.39.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.38.0...bluelightcard/mobile-hybrid-v1.39.0) (2024-11-12)
 
 

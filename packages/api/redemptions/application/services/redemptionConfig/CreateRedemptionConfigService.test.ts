@@ -155,7 +155,7 @@ describe('CreateRedemptionConfigService', () => {
     expect(result.data).toStrictEqual(validRedemptionConfigResponse);
   });
 
-  it.each(['showCard', 'preApplied'] as const)(
+  it.each(['showCard', 'preApplied', 'giftCard', 'creditCard'] as const)(
     'calls transformToRedemptionConfig with correct values for %s redemption type',
     async (redemptionType) => {
       const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({

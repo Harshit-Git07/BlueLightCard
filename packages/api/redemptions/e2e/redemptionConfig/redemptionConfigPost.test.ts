@@ -43,6 +43,7 @@ describe('POST Redemption Config', () => {
       '104',
       '105',
       '106',
+      '107',
     ]);
 
     // Set a conservative timeout
@@ -144,6 +145,37 @@ describe('POST Redemption Config', () => {
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: '106',
+          id: expect.any(String),
+          redemptionType: redemptionConfigRequest.redemptionType,
+          url: redemptionConfigRequest.url,
+        },
+      };
+      expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    });
+
+    it('POST /redemptions returns 200 for creditCard redemptionType', async () => {
+      const redemptionConfigRequest = {
+        affiliate: 'awin',
+        companyId: faker.string.uuid(),
+        connection: 'affiliate',
+        offerId: 107,
+        redemptionType: 'creditCard',
+        url: 'https://www.credit-cards.co.uk/',
+      };
+
+      const result = await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
+
+      expect(result.status).toBe(200);
+
+      const actualResponseBody = await result.json();
+
+      const expectedResponseBody = {
+        statusCode: 200,
+        data: {
+          affiliate: 'awin',
+          companyId: redemptionConfigRequest.companyId,
+          connection: redemptionConfigRequest.connection,
+          offerId: '107',
           id: expect.any(String),
           redemptionType: redemptionConfigRequest.redemptionType,
           url: redemptionConfigRequest.url,

@@ -60,6 +60,16 @@ export const PostGiftCardModel = createZodNamedType(
     .strict(),
 );
 
+export const PostCreditCardModel = createZodNamedType(
+  'PostCreditCardModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[7]),
+      url: z.string().url(),
+    })
+    .strict(),
+);
+
 export const PostGenericModel = createZodNamedType(
   'PostGenericModel',
   z
@@ -133,6 +143,11 @@ export const PostRedemptionConfigPreAppliedModel = createZodNamedType(
   PostRedemptionConfigBaseModel.merge(PostPreAppliedModel),
 );
 
+export const PostRedemptionConfigCreditCardModel = createZodNamedType(
+  'PostRedemptionConfigCreditCardModel',
+  PostRedemptionConfigBaseModel.merge(PostCreditCardModel),
+);
+
 export const PostRedemptionConfigGiftCardModel = createZodNamedType(
   'PostRedemptionConfigGiftCardModel',
   PostRedemptionConfigBaseModel.merge(PostGiftCardModel),
@@ -159,6 +174,7 @@ export const PostRedemptionConfigModel = createZodNamedType(
     PostRedemptionConfigShowCardModel,
     PostRedemptionConfigPreAppliedModel,
     PostRedemptionConfigGiftCardModel,
+    PostRedemptionConfigCreditCardModel,
     PostRedemptionConfigGenericModel,
     PostRedemptionConfigVaultModel,
     PostRedemptionConfigVaultQRModel,

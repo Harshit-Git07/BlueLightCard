@@ -10,9 +10,24 @@ import {
 import { amplitudeServiceAtom, experimentsAndFeatureFlags } from './amplitude/store';
 import Router from 'next/router';
 import { amplitudeStore } from '../context/AmplitudeExperiment';
-import { API_PROXY_URL, BRAND_URL } from '@/root/global-vars';
+import { API_PROXY_URL, BRAND, BRAND_URL, BRANDS } from '@/root/global-vars';
 import assert from 'assert';
 import { refreshIdTokenIfRequired } from '@/utils/refreshIdTokenIfRequired';
+
+const getBrandHeaderValue = (): string => {
+  assert(BRANDS.includes(BRAND), 'NEXT_PUBLIC_APP_BRAND is not defined correctly');
+
+  switch (BRAND) {
+    case 'blc-uk':
+      return 'BLC_UK';
+    case 'dds-uk':
+      return 'DDS_UK';
+    case 'blc-au':
+      return 'BLC_AU';
+    default:
+      return '';
+  }
+};
 
 export class WebPlatformAdapter implements IPlatformAdapter {
   platform = PlatformVariant.Web;
@@ -23,12 +38,18 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     const queryParameters = options.queryParameters
       ? '?' + new URLSearchParams(options.queryParameters).toString()
       : '';
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`,
+    };
+
+    const brandHeaderValue = getBrandHeaderValue();
+    if (brandHeaderValue) headers['x-brand'] = brandHeaderValue;
+
     const response = await fetch(endpoint + queryParameters, {
       method: options.method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${idToken}`,
-      },
+      headers,
       body: options.body,
     });
 

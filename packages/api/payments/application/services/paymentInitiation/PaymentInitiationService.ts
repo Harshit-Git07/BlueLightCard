@@ -16,7 +16,6 @@ export type PaymentInitiationResult = {
   paymentIntentId: string;
   clientSecret: string;
   publishableKey: string;
-  ephemeralKey: string;
   externalCustomer: string;
 };
 
@@ -90,13 +89,6 @@ export class PaymentInitiationService implements IPaymentInitiationService {
 
     const customerid = await this.createExternalCustomerIfNotExist(user);
 
-    const ephemeralKey = await this.stripeRepository.createEphemeralKey(customerid);
-
-    this.logger.info({
-      message: 'Created Ephemeral key from stripe customer',
-      context: { memberId, ephemeralKey, stripeCustomerId: customerid },
-    });
-
     const currency = getEnv(PaymentsStackEnvironmentKeys.CURRENCY_CODE) as Currency;
 
     const metadataToUse = { ...metadata, memberId, brazeExternalId: user.brazeExternalId };
@@ -131,6 +123,6 @@ export class PaymentInitiationService implements IPaymentInitiationService {
       externalCustomerId: customerid,
     });
 
-    return { ...paymentInitiation, externalCustomer: customerid, ephemeralKey };
+    return { ...paymentInitiation, externalCustomer: customerid };
   }
 }

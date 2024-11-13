@@ -193,6 +193,9 @@ jobs:
             auth0_redirect_url: 'https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'RykFoOxMBh3AGX8o13qSkT063SuUOn58'
             auth0_client_secret: 'BLC_UK_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_test_51QACN4S9N5NHrlGYTj7qmy768u9A2lqFqL2AWQbOX3tbJhJO3tjDS74KuBcOwyiz6Dov35tox4aMi97bWX4Z2MCM00boCBdcYs'
+            currency_symbol: '£'
+            membership_price: '4.99'
           - brand: 'blc-au'
             brand_url: 'www.develop.bluelightcard.com.au'
             identity_brand: 'blc_au'
@@ -211,6 +214,9 @@ jobs:
             auth0_redirect_url: 'https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4'
             auth0_client_secret: 'BLC_AU_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_test_51QDnRh4I1xKGJ9IaK8cbogDKvzETPhdg8d5OaWzYnKx3RfC2OLKKjeWyEy2GP1Y6yziqaphIpX5tsiW56Sz2efVN00m9FM9UTI'
+            currency_symbol: '$'
+            membership_price: '4.99'
           - brand: 'dds-uk'
             brand_url: 'ddsstaging.bluelightcard.tech'
             identity_brand: 'dds_uk'
@@ -229,6 +235,9 @@ jobs:
             auth0_redirect_url: 'https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf'
             auth0_client_secret: 'DDS_UK_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_test_51QDnVMRKWQ2ywD57QCtBLA63lMYr0atSNttufBF3pMmmFE6sI7cl4Pghi54yoeO1Twgv69ri1BaKZNwmTagRJxiF00iOOLy93p'
+            currency_symbol: '£'
+            membership_price: '4.99'
     runs-on: ubuntu-latest
     needs:
       - install
@@ -277,6 +286,9 @@ jobs:
       NEXT_PUBLIC_BRAND_URL: ${{matrix.brand_url}}
       NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
       NEXT_PUBLIC_ENV: 'staging'
+      NEXT_PUBLIC_STRIPE_KEY: ${{matrix.stripe_publishable_key}}
+      NEXT_PUBLIC_CURRENCY_SYMBOL: ${{matrix.currency_symbol}}
+      NEXT_PUBLIC_MEMBERSHIP_PRICE: ${{matrix.membership_price}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -341,6 +353,9 @@ jobs:
             auth0_redirect_url: 'https://www.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'pU6O3irGF7dKqSmFHXyzvogwH4gEmkyz'
             auth0_client_secret: 'BLC_UK_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_live_ZADbD9UHEB5dAv9vBQpYM6UW'
+            currency_symbol: '£'
+            membership_price: '4.99'
           - brand: 'blc-au'
             brand_url: 'bluelightcard.com.au'
             identity_brand: 'blc_au'
@@ -359,6 +374,9 @@ jobs:
             auth0_redirect_url: 'https://www.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'IE1gORi8ZUHdy8gUoEOLRT9bEHjso0SM'
             auth0_client_secret: 'BLC_AU_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_live_51LLwlnKV9X4dfU6lCzTMukXhQkEca1VkVQPzQjmUqBAg5lDx2Pi1b4S1a9zaih6etCdXod22vL44Vvo6vELcW7x800Uw7cWM3i'
+            currency_symbol: '$'
+            membership_price: '4.99'
           - brand: 'dds-uk'
             brand_url: 'defencediscountservice.co.uk'
             identity_brand: 'dds_uk'
@@ -377,6 +395,9 @@ jobs:
             auth0_redirect_url: 'https://www.defencediscountservice.co.uk/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'j2IUeRhSBUO1ySiSHi8YZ4NEifaHv40p'
             auth0_client_secret: 'DDS_UK_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_live_51LMpvQIvjtDL9My5OBGmtfhXZHtgP3nDdDnBF10zSOPHXGg66aAy0aT8KgDKyNu9prQGATto5Fu9v2OVrFvk7fvj00uybc1zZe'
+            currency_symbol: '£'
+            membership_price: '4.99'
     environment: Production
     runs-on: ubuntu-latest
     needs:
@@ -423,6 +444,9 @@ jobs:
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
       NEXT_PUBLIC_BRAND_URL: ${{matrix.brand_url}}
       NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
+      NEXT_PUBLIC_STRIPE_KEY: ${{matrix.stripe_publishable_key}}
+      NEXT_PUBLIC_CURRENCY_SYMBOL: ${{matrix.currency_symbol}}
+      NEXT_PUBLIC_MEMBERSHIP_PRICE: ${{matrix.membership_price}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

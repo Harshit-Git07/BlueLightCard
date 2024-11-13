@@ -9,6 +9,8 @@ jest.mock('@/root/global-vars', () => ({
   BRAND_URL: 'https://bluelightcard.co.uk',
 }));
 
+import vars from '@/root/global-vars';
+
 jest.mock('next/router', () => ({
   __esModule: true,
   default: {
@@ -37,12 +39,36 @@ describe('Web Platform Adapter', () => {
       );
     });
 
+    it.each([
+      ['blc-uk', 'BLC_UK'],
+      ['dds-uk', 'DDS_UK'],
+      ['blc-au', 'BLC_AU'],
+    ])('should map brand: %s to x-brand header %s', async (brand, header) => {
+      vars.BRAND = brand;
+
+      await platformAdapter.invokeV5Api('/mock-endpoint', { method: 'GET' });
+
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/mock-endpoint'), {
+        body: undefined,
+        headers: {
+          Authorization: 'Bearer null',
+          'Content-Type': 'application/json',
+          'x-brand': header,
+        },
+        method: 'GET',
+      });
+    });
+
     it('makes a fetch request', async () => {
       await platformAdapter.invokeV5Api('/mock-endpoint', { method: 'GET' });
 
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/mock-endpoint'), {
         body: undefined,
-        headers: { Authorization: 'Bearer null', 'Content-Type': 'application/json' },
+        headers: {
+          Authorization: 'Bearer null',
+          'Content-Type': 'application/json',
+          'x-brand': expect.any(String),
+        },
         method: 'GET',
       });
     });
@@ -57,7 +83,11 @@ describe('Web Platform Adapter', () => {
         expect.stringContaining('/mock-endpoint?id=test-id'),
         {
           body: undefined,
-          headers: { Authorization: 'Bearer null', 'Content-Type': 'application/json' },
+          headers: {
+            Authorization: 'Bearer null',
+            'Content-Type': 'application/json',
+            'x-brand': expect.any(String),
+          },
           method: 'GET',
         }
       );

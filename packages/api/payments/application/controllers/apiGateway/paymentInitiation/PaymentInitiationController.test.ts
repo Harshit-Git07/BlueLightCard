@@ -73,7 +73,6 @@ describe('PaymentInitiationController', () => {
       paymentIntentId: 'paymentIntentId',
       clientSecret: 'clientSecret',
       publishableKey: 'publishableKey',
-      ephemeralKey: 'ephemeralKey',
       externalCustomer: 'externalCustomer',
     });
 

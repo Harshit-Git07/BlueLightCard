@@ -15,9 +15,9 @@ describe('PaymentInitiationService', () => {
     const logger = createTestLogger();
     const stripeRepository = {
       createPaymentIntent: jest.fn(),
-      createEphemeralKey: jest.fn(),
       createCustomer: jest.fn(),
       translateEvent: jest.fn(),
+      createEphemeralKey: jest.fn(),
     };
     const paymentEventStoreRepository = {
       writePaymentEvent: jest.fn(),
@@ -121,9 +121,9 @@ describe('PaymentInitiationService', () => {
     const logger = createTestLogger();
     const stripeRepository = {
       createPaymentIntent: jest.fn(),
-      createEphemeralKey: jest.fn(),
       createCustomer: jest.fn(),
       translateEvent: jest.fn(),
+      createEphemeralKey: jest.fn(),
     };
     const paymentEventStoreRepository = {
       writePaymentEvent: jest.fn(),

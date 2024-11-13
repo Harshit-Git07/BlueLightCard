@@ -9,7 +9,6 @@ import { PostCheckoutModel } from '../../models/postCheckout';
 
 export type CheckoutResult = {
   clientSecret: string;
-  ephemeralKey: string;
   externalCustomer: string;
   publishableKey: string;
 };
@@ -44,7 +43,6 @@ export class CheckoutService implements ICheckoutService {
     return {
       clientSecret: responseData.clientSecret,
       publishableKey: responseData.publishableKey,
-      ephemeralKey: responseData.ephemeralKey,
       externalCustomer: responseData.externalCustomer,
     };
   }

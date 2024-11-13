@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/payments-v1.1.0...bluelightcard/payments-v1.2.0) (2024-11-13)
+
+
+### Features
+
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* Member transactions endpoint ([#2866](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2866)) ([40ff860](https://github.com/bluelightcard/BlueLightCard-2.0/commit/40ff86020d291077deb3e03484cbe3e0af6bc572))
+* payment component ([#2698](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2698)) ([77aa9af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/77aa9af1cf3db371d158862edff0e319ee1f8cff))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+
+
+### Bug Fixes
+
+* To 1367 cms offer sheet fix portable text issues ([#2791](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2791)) ([d9f8009](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9f8009dd1202a7cdf4af073027d5cfa3cb593cd))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/payments-v1.0.0...bluelightcard/payments-v1.1.0) (2024-10-31)
 
 

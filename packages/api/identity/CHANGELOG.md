@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.106.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.105.0...bluelightcard/identity-v1.106.0) (2024-11-12)
+
+
+### Features
+
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* COT-814 Adding event listener for card delete ([#2610](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2610)) ([f29bee7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f29bee78672ba07ba75d551276d968a0b22c0a96))
+* COT-958 adding masking for username for PII ([#2771](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2771)) ([cac69a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cac69a9f4beaea64ce9c49bd042aac43df1b069a))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+
+
+### Bug Fixes
+
+* Adjusting redemptions to use core unpack jwt ([#2733](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2733)) ([9eb9b99](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9eb9b998694cf65f459e5c17ba696d42ea0449cc))
+
+
+### Other Changes
+
+* bump typescript to `5.6.3` ([#2743](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2743)) ([d6fc9c8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d6fc9c8e3e2a4fa4fc42ebbe25a9fd0177b24778))
+
 ## [1.105.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.104.0...bluelightcard/identity-v1.105.0) (2024-10-31)
 
 
